@@ -67,8 +67,9 @@ namespace JoJoStands.Items
 
         public override void HoldItem(Player player)
         {
-            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TheWorldCoolDown")))
+            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TheWorldCoolDown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")))
             {
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_start"));
                 player.AddBuff(mod.BuffType("TheWorldBuff"), 540, true);
             }
         }
@@ -77,16 +78,24 @@ namespace JoJoStands.Items
         {
             if (player.altFunctionUse == 2)     // eventually, change this to if (player.altFunctionUse == 2 && MyPlayer.TheWorldEffect == false) and add a if (player.altFunctionUse == 2 && MyPlayer.TheWorldEffect == true) for a Roada Roller Da
             {
-                item.damage = 89;
-                item.ranged = true;
-                item.width = 100;
-                item.height = 8;
-                item.useTime = 10;
-                item.useAnimation = 10;
-                item.useStyle = 5;
-                item.knockBack = 2;
-                item.autoReuse = false;
-                item.shoot = mod.ProjectileType("Knife");
+                if (player.HasItem(mod.ItemType("Knife")))
+                {
+                    item.damage = 96;
+                    item.ranged = true;
+                    item.width = 100;
+                    item.height = 8;
+                    item.useTime = 13;
+                    item.useAnimation = 13;
+                    item.useStyle = 5;
+                    item.knockBack = 2;
+                    item.autoReuse = true;
+                    item.shoot = mod.ProjectileType("Knife");
+                    player.ConsumeItem(mod.ItemType("Knife"));
+                }
+                if (!player.HasItem(mod.ItemType("Knife")))
+                {
+                    return false;
+                }
             }
             else
             {
