@@ -34,7 +34,7 @@ namespace JoJoStands.Projectiles
                 MyPlayer.SHAactive = true;
             }
             Player player = Main.LocalPlayer;
-            if (JoJoStands.ItemHotKey.JustPressed && player.HeldItem.type == mod.ItemType("KillerQueenT3") || player.HeldItem.type == mod.ItemType("KillerQueenFinal") && projectile.active)
+            if (JoJoStands.ItemHotKey.JustPressed && (player.HeldItem.type == mod.ItemType("KillerQueenT3") || player.HeldItem.type == mod.ItemType("KillerQueenFinal")) && projectile.active)
             {
                 projectile.position = player.position;
                 return true;
