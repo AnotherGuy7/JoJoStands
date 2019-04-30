@@ -117,7 +117,8 @@ namespace JoJoStands.Items
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.HallowedBar, 26);
+            recipe.AddIngredient(mod.ItemType("TheWorldT3"));
+            recipe.AddIngredient(ItemID.HallowedBar, 26);
             recipe.AddIngredient(mod.ItemType("SoulofTime"), 7);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

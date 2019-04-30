@@ -115,7 +115,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StarPlatinumT2"));
+            recipe.AddIngredient(mod.ItemType("TheWorldT2"));
             recipe.AddIngredient(ItemID.Hellstone, 25);
             recipe.AddIngredient(ItemID.GoldenClock, 1);
             recipe.SetResult(this);
