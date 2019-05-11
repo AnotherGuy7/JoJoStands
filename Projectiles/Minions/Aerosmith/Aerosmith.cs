@@ -28,7 +28,7 @@ namespace JoJoStands.Projectiles.Minions.Aerosmith
             ProjectileID.Sets.Homing[projectile.type] = true;
             inertia = 3f;
             shoot = 14;
-            shootSpeed = 16f;
+            shootSpeed = 22f;
             ProjectileID.Sets.LightPet[projectile.type] = true;
             Main.projPet[projectile.type] = true;
             projectile.melee = true;
