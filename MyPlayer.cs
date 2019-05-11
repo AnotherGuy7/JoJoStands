@@ -30,6 +30,7 @@ namespace JoJoStands
         public static bool TheWorldAfterEffect;     //the worlds secondary ability, forgot whether I used it or not
         public static bool MinionCurrentlyActive = false;       //to determine if a stand minion is currently active
         public static bool SHAactive = false;      //to determine if SHA is active at the moment
+        public static bool BitesTheDust = false;
 
         public override void ResetEffects()
         {
@@ -62,10 +63,40 @@ namespace JoJoStands
         public override void SetupStartInventory (IList<Item> items)
         {
 			Item item = new Item();
-            item.SetDefaults(mod.ItemType("MysteriousPicture"));
+            item.SetDefaults(mod.ItemType("WrappedPicture"));
             item.stack = 1;
             items.Add(item);
         }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)     //don't even know what I did here, nor if it even works...
+        {
+            ModPacket packet = mod.GetPacket();
+            packet.Write(TheWorldEffect);
+            packet.Write((byte)player.whoAmI);
+            packet.Send(toWho, fromWho);
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)      //same comment as above...
+        {
+            if (TheWorldEffect && !player.HasBuff(mod.BuffType("TheWorldBUff")))
+            {
+                player.gravity = 3f;
+                player.controlLeft = false;
+                player.controlJump = false;
+                player.controlRight = false;
+                player.controlDown = false;
+                player.controlQuickHeal = false;
+                player.controlQuickMana = false;
+                player.controlRight = false;
+                player.controlUseTile = false;
+                player.controlUp = false;
+                player.maxRunSpeed *= 0;
+                player.moveSpeed *= 0;
+            }
+        }
+
+        public override void PreUpdate()
+        {}
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
