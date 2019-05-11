@@ -21,12 +21,22 @@ namespace JoJoStands.Buffs.ItemBuff
         {
             if (player.HasBuff(mod.BuffType("TheWorldBuff")))
             {
+                for (int i = 0; i < 255; i++)
+                {
+                    if (Main.player[i].active && !Main.player[i].HasBuff(mod.BuffType("TheWorldBuff")))     //i is the other players, use player.whoamI to say 'you'
+                    {
+                        Main.player[i].AddBuff(mod.BuffType("FrozeninTime"), 10);
+                    }
+                }
                 MyPlayer.TheWorldEffect = true;
             }
             else
             {
-                player.AddBuff(mod.BuffType("TheWorldCoolDown"), 1800);
                 player.AddBuff(mod.BuffType("TheWorldAfterBuff"), 10);
+                for (int i = 0; i < 255; i++)
+                {
+                    Main.player[i].AddBuff(mod.BuffType("TheWorldAfterBuff"), 10);
+                }
                 MyPlayer.TheWorldEffect = false;
             }
         }
