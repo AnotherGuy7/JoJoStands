@@ -16,7 +16,7 @@ namespace JoJoStands.Items
 		}
 		public override void SetDefaults()
 		{
-			item.damage = 201;
+			item.damage = 201;      //endgame
 			item.ranged = true;
 			item.width = 100;
 			item.height = 8;
@@ -34,19 +34,16 @@ namespace JoJoStands.Items
 			item.channel = true;
 		}
 
-		public override bool AltFunctionUse(Player player)
+        public override bool AltFunctionUse(Player player)
         {
             return true;
         }
 
         public override bool CanUseItem(Player player)
         {
-			if (player.altFunctionUse == 2)
+			if (player.altFunctionUse == 2 && !player.HasBuff(mod.BuffType("BitesTheDustCoolDown")) && !player.HasBuff(mod.BuffType("BitesTheDust")))
             {
-                Main.time = 1600.0;
-                item.useTime = 600;
-                player.statLife += 500;
-				player.Spawn();
+                player.AddBuff(mod.BuffType("BitesTheDust"), 10);             //make it last
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BiteTheDustEffect"));
             }
 			else
@@ -61,7 +58,7 @@ namespace JoJoStands.Items
 				item.knockBack = 2;
 				item.autoReuse = false;
 	        	item.shoot = mod.ProjectileType("Bubble");
-	            item.shootSpeed = 0.7f;
+	            item.shootSpeed = 2.1f;
 			}
 			return true;
 		}
@@ -69,7 +66,8 @@ namespace JoJoStands.Items
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("StandArrow"));
+			recipe.AddIngredient(ItemID.LunarBar, 5);
+            recipe.AddIngredient(mod.ItemType("SoulofTime"), 3);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

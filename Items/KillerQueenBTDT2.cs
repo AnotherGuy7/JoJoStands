@@ -12,11 +12,11 @@ namespace JoJoStands.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Killer Queen (Stray Cat Tier 2)");
-			Tooltip.SetDefault("Shoot bubbles that explode and right-click to bite the dust! \nNext Tier: ");
+			Tooltip.SetDefault("Shoot bubbles that explode! \nNext Tier: 6 Hallowed Bars, 1 Soul of Time");
 		}
 		public override void SetDefaults()
 		{
-			item.damage = 42;     //Around mid-prehardmode
+			item.damage = 84;     //Around late-prehardmode
 			item.ranged = true;
 			item.width = 100;
 			item.height = 8;

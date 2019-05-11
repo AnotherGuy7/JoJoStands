@@ -67,7 +67,7 @@ namespace JoJoStands.Items
 
         public override void HoldItem(Player player)
         {
-            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TheWorldCoolDown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")))
+            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TheWorldCoolDown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")) && !player.HasBuff(mod.BuffType("TheWorldAfterBuff")))
             {
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_start"));
                 player.AddBuff(mod.BuffType("TheWorldBuff"), 540, true);

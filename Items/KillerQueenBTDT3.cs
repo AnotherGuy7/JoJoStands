@@ -12,16 +12,16 @@ namespace JoJoStands.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Killer Queen (Stray Cat Tier 3)");
-			Tooltip.SetDefault("Shoot bubbles that explode and right-click to bite the dust!");
+			Tooltip.SetDefault("Shoot bubbles that explode and right-click to bite the dust! \nNext Tier: 5 Luminite Bars, 3 Souls of Time");
 		}
 		public override void SetDefaults()
 		{
-			item.damage = 201;
+			item.damage = 147;      //post mechs
 			item.ranged = true;
 			item.width = 100;
 			item.height = 8;
-			item.useTime = 60;
-			item.useAnimation = 60;
+			item.useTime = 70;
+			item.useAnimation = 70;
 			item.useStyle = 5;
 			item.knockBack = 5;
 			item.value = 10000;
@@ -30,23 +30,20 @@ namespace JoJoStands.Items
 			item.autoReuse = false;
             item.shoot = mod.ProjectileType("Bubble");
 			item.maxStack = 1;
-            item.shootSpeed = 2f;
+            item.shootSpeed = 1.4f;
 			item.channel = true;
 		}
 
-		public override bool AltFunctionUse(Player player)
+        public override bool AltFunctionUse(Player player)
         {
             return true;
         }
 
         public override bool CanUseItem(Player player)
         {
-            if (player.altFunctionUse == 2)
+            if (player.altFunctionUse == 2 && !player.HasBuff(mod.BuffType("BitesTheDustCoolDown")) && !player.HasBuff(mod.BuffType("BitesTheDust")))
             {
-                Main.time = 1600.0;
-                item.useTime = 600;
-                player.statLife += 500;
-                player.Spawn();
+                player.AddBuff(mod.BuffType("BitesTheDust"), 10);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BiteTheDustEffect"));
             }
             else
@@ -61,7 +58,7 @@ namespace JoJoStands.Items
 				item.knockBack = 2;
 				item.autoReuse = false;
 	        	item.shoot = mod.ProjectileType("Bubble");
-	            item.shootSpeed = 0.7f;
+	            item.shootSpeed = 1.4f;
 			}
 			return true;
 		}
@@ -69,7 +66,8 @@ namespace JoJoStands.Items
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("StandArrow"));
+			recipe.AddIngredient(ItemID.HallowedBar, 6);
+            recipe.AddIngredient(mod.ItemType("SoulofTime"));
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
