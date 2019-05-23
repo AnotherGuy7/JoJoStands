@@ -16,6 +16,7 @@ namespace JoJoStands
     public class MyPlayer : ModPlayer
     {
         private const int saveVersion = 0;
+        public int cooldown = 0;
         public bool StarPlatinumMinion = false;
         public bool SheerHeartAttackMinion = false;
         public bool Aerosmith = false;
@@ -47,15 +48,17 @@ namespace JoJoStands
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (!SHAactive)
+            if (!SHAactive && cooldown == 0)
             {
                 if (JoJoStands.ItemHotKey.JustPressed && player.HeldItem.type == mod.ItemType("KillerQueenT3"))       //KQ Tier 3 Sheer Heart Attack spawning
                 {
                     Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SheerHeartAttack"), 107, 7f, player.whoAmI);
+                    cooldown += 600;
                 }
                 if (JoJoStands.ItemHotKey.JustPressed && player.HeldItem.type == mod.ItemType("KillerQueenFinal"))    //KQ Final Tier Sheer Heart Attack spawning
                 {
                     Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SheerHeartAttack"), 142, 7f, player.whoAmI);
+                    cooldown += 240;
                 }
             }
         }
@@ -96,7 +99,16 @@ namespace JoJoStands
         }
 
         public override void PreUpdate()
-        {}
+        {
+            if (cooldown != 0)
+            {
+                cooldown -= 1;
+            }
+            if (cooldown == 0)
+            {
+                cooldown = 0;       //to make sure it doesn't randomly start making negative values
+            }
+        }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
