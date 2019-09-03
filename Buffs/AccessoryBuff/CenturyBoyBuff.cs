@@ -4,7 +4,8 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
- 
+using Terraria.DataStructures;
+
 namespace JoJoStands.Buffs.AccessoryBuff
 {
     public class CenturyBoyBuff : ModBuff
@@ -22,7 +23,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.moveSpeed = 0;
             player.lifeRegen = 0;
             player.immune = true;
-            player.manaRegen = 0;   //make it so that weapons aren't useable
+            player.manaRegen = 0;
         }
     }
 }
