@@ -5,31 +5,27 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class AerosmithDisc : ModItem
+	public class MagiciansRedDisc : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Aerosmith's Disc");
-			Tooltip.SetDefault("Summon Aerosmith to help you shoot down enemies!");
+			DisplayName.SetDefault("Magician Red's Disc");
+			Tooltip.SetDefault("Summon Magicians Red to help you fight!");
 		}
 
 		public override void SetDefaults()
 		{
-			item.damage = 87;
 			item.summon = true;
 			item.width = 26;
 			item.height = 28;
-			item.useTime = 36;
-			item.useAnimation = 36;
+			item.useTime = 60;
+			item.useAnimation = 60;
 			item.useStyle = 1;
 			item.noMelee = true;
-			item.knockBack = 3;
 			item.value = Item.buyPrice(2, 45, 0, 0);
 			item.rare = 9;
-			item.shoot = mod.ProjectileType("Aerosmith");
+			item.shoot = mod.ProjectileType("MagiciansRedMinion");
 			item.shootSpeed = 10f;
-			item.buffType = mod.BuffType("StarPlatinumBuff");
-			item.buffTime = 3600;
 		}
 
 		public override bool AltFunctionUse(Player player)
@@ -42,7 +38,8 @@ namespace JoJoStands.Items
 		}
 
 		public override bool UseItem(Player player) {
-			if (player.altFunctionUse == 2) {
+			if (player.altFunctionUse == 2)
+            {
 				player.MinionNPCTargetAim();
 			}
 			return base.UseItem(player);

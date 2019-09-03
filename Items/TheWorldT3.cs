@@ -7,14 +7,20 @@ namespace JoJoStands.Items
 {
     public class TheWorldT3 : ModItem
     {
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/TheWorldT1"; }
+        }
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The World (Tier 3)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw knives! \nSpecial: Stop time for 3 seconds! \nNext Tier: 26 Hallowed Bars, 7 Souls of Time");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw knives! \nSpecial: Stop time for 5 seconds!");
         }
+
         public override void SetDefaults()
         {
-            item.damage = 91;  
+            item.damage = 92;  
             item.width = 100;
             item.height = 8;
             item.useTime = 11;
@@ -43,9 +49,9 @@ namespace JoJoStands.Items
                 for (int i = 0; i < numberKnives; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberKnives - 1))) * .2f;
-                    Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
+                    Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Knife"), 82, knockBack, player.whoAmI);
                 }
-                return true;
+                return false;
             }
 
             position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;
@@ -59,10 +65,10 @@ namespace JoJoStands.Items
 
         public override void HoldItem(Player player)
         {
-            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TheWorldCoolDown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")) && !player.HasBuff(mod.BuffType("TheWorldAfterBuff")))
+            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TimeCooldown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")))
             {
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_start"));
-                player.AddBuff(mod.BuffType("TheWorldBuff"), 180, true);
+                player.AddBuff(mod.BuffType("TheWorldBuff"), 300, true);
             }
         }
 
@@ -78,16 +84,13 @@ namespace JoJoStands.Items
                 if (player.HasItem(mod.ItemType("Knife")))
                 {
                     item.damage = 82;
-                    item.ranged = true;
-                    item.width = 100;
-                    item.height = 8;
                     item.useTime = 15;
                     item.useAnimation = 15;
                     item.useStyle = 5;
                     item.knockBack = 2;
                     item.autoReuse = false;
-                    item.shoot = mod.ProjectileType("Knife");
-                    item.shootSpeed = 55f;
+                    player.ConsumeItem(mod.ItemType("Knife"));
+                    player.ConsumeItem(mod.ItemType("Knife"));
                     player.ConsumeItem(mod.ItemType("Knife"));
                 }
                 if (!player.HasItem(mod.ItemType("Knife")))
@@ -98,7 +101,6 @@ namespace JoJoStands.Items
             else
             {
                 item.damage = 91;
-                item.ranged = true;
                 item.width = 10;
                 item.height = 8;
                 item.useTime = 11;
@@ -116,8 +118,16 @@ namespace JoJoStands.Items
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("TheWorldT2"));
-            recipe.AddIngredient(ItemID.Hellstone, 25);
-            recipe.AddIngredient(ItemID.GoldenClock, 1);
+            recipe.AddIngredient(ItemID.HallowedBar, 19);
+            recipe.AddIngredient(ItemID.GoldBar, 15);
+            recipe.AddIngredient(mod.ItemType("SoulofTime"), 2);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("TheWorldT2"));
+            recipe.AddIngredient(ItemID.HallowedBar, 19);
+            recipe.AddIngredient(ItemID.PlatinumBar, 15);
+            recipe.AddIngredient(mod.ItemType("SoulofTime"), 2);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

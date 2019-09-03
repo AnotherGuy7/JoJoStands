@@ -11,7 +11,7 @@ namespace JoJoStands.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Hierophant Green (Tier 1)");
-			Tooltip.SetDefault("Shoot emeralds at the enemies! \nNext Tier: 2 Emeralds, 10 Hellstone");
+			Tooltip.SetDefault("Shoot emeralds at the enemies!");
         }
 
 		public override void SetDefaults()
@@ -20,8 +20,8 @@ namespace JoJoStands.Items
 			item.ranged = true;
 			item.width = 100;
 			item.height = 8;
-			item.useTime = 12;
-			item.useAnimation = 12;
+			item.useTime = 80;
+			item.useAnimation = 80;
 			item.useStyle = 5;
 			item.knockBack = 2;
 			item.value = 10000;

@@ -7,10 +7,15 @@ namespace JoJoStands.Items
 {
 	public class HierophantGreenT2 : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/HierophantGreenT1"; }
+        }
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Hierophant Green (Tier 2)");
-			Tooltip.SetDefault("Shoot emeralds at the enemies! \nNext Tier: Large Emerald, 12 Chlorophyte Ore");
+			Tooltip.SetDefault("Shoot emeralds at the enemies!");
 		}
 
 		public override void SetDefaults()
@@ -19,8 +24,8 @@ namespace JoJoStands.Items
 			item.ranged = true;
 			item.width = 100;
 			item.height = 8;
-			item.useTime = 11;
-			item.useAnimation = 11;
+			item.useTime = 60;
+			item.useAnimation = 60;
 			item.useStyle = 5;
 			item.knockBack = 2;
 			item.value = 10000;

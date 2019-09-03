@@ -9,16 +9,22 @@ namespace JoJoStands.Items
 {
 	public class TheWorldFinal : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/TheWorldT1"; }
+        }
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("The World (Final Tier)");
 			Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to throw knives! \nSpecial: Stop time for 9 seconds!");
 		}
+
 		public override void SetDefaults()
 		{
             item.damage = 138;
-            item.width = 100;
-            item.height = 8;
+            item.width = 32;
+            item.height = 32;
             item.useTime = 10;
             item.useAnimation = 10;
             item.useStyle = 5;
@@ -30,7 +36,6 @@ namespace JoJoStands.Items
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.shoot = mod.ProjectileType("TheWorldFist");
-            item.shootSpeed = 50f;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -41,14 +46,14 @@ namespace JoJoStands.Items
             if (player.altFunctionUse == 2)
             {
                 float rotationk = MathHelper.ToRadians(15);
-                float numberKnives = 3;
+                float numberKnives = 4;
                 position += Vector2.Normalize(new Vector2(speedX, speedY));
                 for (int i = 0; i < numberKnives; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotationk, rotationk, i / (numberKnives - 1))) * .2f;
-                    Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
+                    Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Knife"), 96, knockBack, player.whoAmI);
                 }
-                return true;
+                return false;
             }
 
             position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;
@@ -67,7 +72,7 @@ namespace JoJoStands.Items
 
         public override void HoldItem(Player player)
         {
-            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TheWorldCoolDown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")) && !player.HasBuff(mod.BuffType("TheWorldAfterBuff")))
+            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TimeCooldown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")))
             {
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_start"));
                 player.AddBuff(mod.BuffType("TheWorldBuff"), 540, true);
@@ -76,20 +81,20 @@ namespace JoJoStands.Items
 
         public override bool CanUseItem(Player player)
         {
-            if (player.altFunctionUse == 2)     // eventually, change this to if (player.altFunctionUse == 2 && MyPlayer.TheWorldEffect == false) and add a if (player.altFunctionUse == 2 && MyPlayer.TheWorldEffect == true) for a Roada Roller Da
+            if (player.altFunctionUse == 2)     // eventually, change this to if (player.altFunctionUse == 2 && player.GetModPlayer<MyPlayer>().TheWorldEffect == false) and add a if (player.altFunctionUse == 2 && player.GetModPlayer<MyPlayer>().TheWorldEffect == true) for a Roada Roller Da
             {
                 if (player.HasItem(mod.ItemType("Knife")))
                 {
                     item.damage = 96;
-                    item.ranged = true;
-                    item.width = 100;
-                    item.height = 8;
                     item.useTime = 13;
                     item.useAnimation = 13;
                     item.useStyle = 5;
-                    item.knockBack = 2;
                     item.autoReuse = true;
                     item.shoot = mod.ProjectileType("Knife");
+                    item.shootSpeed = 50f;
+                    player.ConsumeItem(mod.ItemType("Knife"));
+                    player.ConsumeItem(mod.ItemType("Knife"));
+                    player.ConsumeItem(mod.ItemType("Knife"));
                     player.ConsumeItem(mod.ItemType("Knife"));
                 }
                 if (!player.HasItem(mod.ItemType("Knife")))
@@ -100,7 +105,6 @@ namespace JoJoStands.Items
             else
             {
                 item.damage = 138;
-                item.ranged = true;
                 item.width = 10;
                 item.height = 8;
                 item.useTime = 10;
@@ -118,7 +122,7 @@ namespace JoJoStands.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("TheWorldT3"));
-            recipe.AddIngredient(ItemID.HallowedBar, 26);
+            recipe.AddIngredient(ItemID.Ectoplasm, 15);
             recipe.AddIngredient(mod.ItemType("SoulofTime"), 7);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

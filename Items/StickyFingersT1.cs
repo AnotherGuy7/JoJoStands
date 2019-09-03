@@ -10,7 +10,7 @@ namespace JoJoStands.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Sticky Fingers (Tier 1)");
-			Tooltip.SetDefault("Punch enemies at a really fast rate and zip them open! \nNext Tier: 16 Sapphire");
+			Tooltip.SetDefault("Punch enemies at a really fast rate and zip them open!");
 		}
 		public override void SetDefaults()
 		{
@@ -30,12 +30,6 @@ namespace JoJoStands.Items
 			item.shoot = mod.ProjectileType("StickyFingersFist");
 			item.shootSpeed = 50f;
 		}
-
-        public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
-        {
-            target.AddBuff(mod.BuffType("Zipped"), 180);
-            base.ModifyHitNPC(player, target, ref damage, ref knockBack, ref crit);
-        }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
@@ -73,8 +67,6 @@ namespace JoJoStands.Items
                 item.autoReuse = true;
                 item.shoot = mod.ProjectileType("StickyFingersFistExtended");
                 item.shootSpeed = 50f;
-                item.buffType = BuffID.Confused;
-                item.buffTime = 180;
             }
             else
             {

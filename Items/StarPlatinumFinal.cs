@@ -8,11 +8,17 @@ namespace JoJoStands.Items
 {
 	public class StarPlatinumFinal : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/StarPlatinumT1"; }
+        }
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Star Platinum (Final)");
-			Tooltip.SetDefault("Punch enemies at a really fast rate and use Star Finger to kill enemies from a distance. Special to stop time for 4 seconds!");
+			Tooltip.SetDefault("Punch enemies at a really fast rate and use Star Finger to kill enemies from a distance. \nSpecial: Stop time for 4 seconds!");
 		}
+
 		public override void SetDefaults()
 		{
 			item.damage = 153;	//thanks Joser for the idea of making this a gun...
@@ -22,7 +28,7 @@ namespace JoJoStands.Items
 			item.useAnimation = 4;
 			item.useStyle = 5;
 			item.maxStack = 1;
-			item.knockBack = 2;
+			item.knockBack = 2f;
 			item.value = 10000;
 			item.rare = 6;
 			item.melee = true;
@@ -53,7 +59,7 @@ namespace JoJoStands.Items
 
         public override void HoldItem(Player player)
         {
-            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TheWorldCoolDown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")) && !player.HasBuff(mod.BuffType("TheWorldAfterBuff")))
+            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TimeCooldown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")))
             {
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_start"));
                 player.AddBuff(mod.BuffType("TheWorldBuff"), 240, true);
@@ -70,13 +76,9 @@ namespace JoJoStands.Items
 			if (player.altFunctionUse == 2)
             {
 				item.damage = 89;
-				item.ranged = true;
-				item.width = 100;
-				item.height = 8;
 				item.useTime = 100;
-				item.useAnimation = 10;
+				item.useAnimation = 100;
 				item.useStyle = 5;
-				item.knockBack = 2;
 				item.autoReuse = false;
 	        	item.shoot = mod.ProjectileType("StarFinger");
 	            item.shootSpeed = 16f;
@@ -84,26 +86,15 @@ namespace JoJoStands.Items
 			else
 			{
 				item.damage = 153;
-				item.ranged = true;
-				item.width = 10;
-				item.height = 8;
 				item.useTime = 8;
 				item.useAnimation = 4;
 				item.useStyle = 5;
-				item.knockBack = 2;
 				item.autoReuse = true;
 	        	item.shoot = mod.ProjectileType("StarPlatinumFist");
 	            item.shootSpeed = 50f;
 			}
 			return true;
 		}
-
-        public override bool UseItem(Player player)
-        {
-            //timer for half a second?
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BiteTheDustEffect"));
-            return true;
-        }
 
         public override void AddRecipes()
 		{

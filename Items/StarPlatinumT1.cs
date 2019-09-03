@@ -7,11 +7,13 @@ namespace JoJoStands.Items
 {
 	public class StarPlatinumT1 : ModItem
 	{
-		public override void SetStaticDefaults()
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Star Platinum (Tier 1)");
-			Tooltip.SetDefault("Punch enemies at a really fast rate. \nNext Tier: 12 Platinum Bars, 4 Stars");
+			Tooltip.SetDefault("Punch enemies at a really fast rate.");
 		}
+
 		public override void SetDefaults()
 		{
 			item.damage = 22;	//thanks Joser for the idea of making this a gun...
@@ -21,7 +23,7 @@ namespace JoJoStands.Items
 			item.useAnimation = 12;
 			item.useStyle = 5;
 			item.maxStack = 1;
-			item.knockBack = 2;
+			item.knockBack = 2f;
 			item.value = 10000;
 			item.rare = 6;
 			item.melee = true;

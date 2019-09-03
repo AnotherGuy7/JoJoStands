@@ -17,9 +17,9 @@ namespace JoJoStands.Items
         {
 			item.width = 20;
 			item.height = 20;
-			item.maxStack = 1;
-			item.value = 9;
-			item.rare = 8;
+			item.maxStack = 99;
+            item.value = Item.buyPrice(0, 0, 24, 0);
+            item.rare = 8;
 		}
     }
 }

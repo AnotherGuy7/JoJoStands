@@ -41,9 +41,15 @@ namespace JoJoStands.Items
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.IronBar);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
+            recipe.AddIngredient(ItemID.IronBar, 3);
+			recipe.SetResult(this, 75);
+            recipe.AddTile(TileID.Anvils);
+            recipe.AddRecipe();
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.LeadBar, 3);
+            recipe.SetResult(this, 75);
+            recipe.AddTile(TileID.Anvils);
+            recipe.AddRecipe();
+        }
 	}
 }

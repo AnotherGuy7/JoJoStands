@@ -7,11 +7,17 @@ namespace JoJoStands.Items
 {
 	public class StickyFingersT2 : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/StickyFingersT1"; }
+        }
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Sticky Fingers (Tier 2)");
-			Tooltip.SetDefault("Punch enemies at a really fast rate! \nNext Tier: Large Sapphire, 12 Hellstone");
+			Tooltip.SetDefault("Punch enemies at a really fast rate and zip them open!");
 		}
+
 		public override void SetDefaults()
 		{
 			item.damage = 32;	//Around middle of pre-hardmode
@@ -30,12 +36,6 @@ namespace JoJoStands.Items
 			item.shoot = mod.ProjectileType("StickyFingersFist");
 			item.shootSpeed = 50f;
 		}
-
-        public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
-        {
-            target.AddBuff(mod.BuffType("Zipped"), 240);
-            base.ModifyHitNPC(player, target, ref damage, ref knockBack, ref crit);
-        }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
@@ -73,8 +73,6 @@ namespace JoJoStands.Items
                 item.autoReuse = true;
                 item.shoot = mod.ProjectileType("StickyFingersFistExtended");
                 item.shootSpeed = 50f;
-                item.buffType = BuffID.Confused;
-                item.buffTime = 180;
             }
             else
             {
@@ -95,7 +93,8 @@ namespace JoJoStands.Items
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Sapphire, 16);
+            recipe.AddIngredient(mod.ItemType("StickyFingersT1"));
+            recipe.AddIngredient(ItemID.Sapphire, 16);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

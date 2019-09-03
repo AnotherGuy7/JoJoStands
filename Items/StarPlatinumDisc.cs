@@ -28,8 +28,6 @@ namespace JoJoStands.Items
 			item.rare = 9;
 			item.shoot = mod.ProjectileType("StarPlatinumMinion");
 			item.shootSpeed = 10f;
-			item.buffType = mod.BuffType("StarPlatinumBuff");
-			item.buffTime = 3600;
 		}
 
 		public override bool AltFunctionUse(Player player)
@@ -46,17 +44,6 @@ namespace JoJoStands.Items
 				player.MinionNPCTargetAim();
 			}
 			return base.UseItem(player);
-		}
-        
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.SoulofLight, 54);
-			recipe.AddIngredient(ItemID.SoulofSight, 15);
-			recipe.AddIngredient(ItemID.Emerald, 8);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
 		}
 	}
 }

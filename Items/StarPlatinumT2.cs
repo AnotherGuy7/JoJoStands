@@ -7,11 +7,17 @@ namespace JoJoStands.Items
 {
 	public class StarPlatinumT2 : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/StarPlatinumT1"; }
+        }
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Star Platinum (Tier 2)");
-			Tooltip.SetDefault("Punch enemies at a really fast rate. \nNext Tier: 20 Hellstone, 2 Topaz, 5 Fallen Stars");
+			Tooltip.SetDefault("Punch enemies at a really fast rate.");
 		}
+
 		public override void SetDefaults()
 		{
 			item.damage = 82;	//thanks Joser for the idea of making this a gun...
@@ -21,7 +27,7 @@ namespace JoJoStands.Items
 			item.useAnimation = 11;
 			item.useStyle = 5;
 			item.maxStack = 1;
-			item.knockBack = 2;
+			item.knockBack = 2f;
 			item.value = 10000;
 			item.rare = 6;
 			item.melee = true;
@@ -53,6 +59,12 @@ namespace JoJoStands.Items
             recipe.AddIngredient(ItemID.FallenStar, 4);
             recipe.SetResult(this);
 			recipe.AddRecipe();
-		}
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("StarPlatinumT1"));
+            recipe.AddIngredient(ItemID.GoldBar, 12);
+            recipe.AddIngredient(ItemID.FallenStar, 4);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
 	}
 }

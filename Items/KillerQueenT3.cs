@@ -9,11 +9,23 @@ namespace JoJoStands.Items
 {
 	public class KillerQueenT3 : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/KillerQueenT1"; }
+        }
+
+        public float npcDistance = 0f;
+        public float mouseDistance = 0f;
+        public Vector2 savedPosition = Vector2.Zero;
+        public bool touchedTile = false;
+        public int timeAfterTouch = 0;
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Killer Queen (1st Bomb Tier 3)");
-			Tooltip.SetDefault("Shoot items that explode and right-click to trigger any block! \nSpecial: Sheer Heart Attack! \nNext Tier: 7 Chlorophyte Bars, Rocket Launcher (for now)");
+			Tooltip.SetDefault("Shoot items that explode and right-click to trigger any block! \nRange: 14 blocks \nSpecial: Sheer Heart Attack!");
 		}
+
 		public override void SetDefaults()
 		{
             item.damage = 94;//Around Mechs
@@ -31,21 +43,51 @@ namespace JoJoStands.Items
             item.crit = 35;
         }
 
+        public override void HoldItem(Player player)
+        {
+            timeAfterTouch--;
+            if (timeAfterTouch <= 0)
+            {
+                timeAfterTouch = 0;
+            }
+            if (!touchedTile)
+            {
+                mouseDistance = Vector2.Distance(Main.MouseWorld, player.Center);
+            }
+            if (touchedTile)
+            {
+                for (int i = 0; i < 200; i++)
+                {
+                    npcDistance = Vector2.Distance(Main.npc[i].Center, savedPosition);
+                    if (npcDistance < 50f && touchedTile)       //or youd need to go from its center, add half its width to the direction its facing, and then add 16 (also with direction) -- Direwolf
+                    {
+                        int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, 13, 50f, Main.myPlayer);
+                        Main.projectile[projectile].friendly = true;
+                        Main.projectile[projectile].timeLeft = 2;
+                        Main.projectile[projectile].netUpdate = true;
+                        touchedTile = false;
+                        savedPosition = Vector2.Zero;
+                    }
+                }
+            }
+        }
+
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            if (player.altFunctionUse == 2)
+            if (player.altFunctionUse == 2 && Collision.SolidCollision(Main.MouseWorld, 1, 1) && mouseDistance < 232f && timeAfterTouch <= 0 && !touchedTile)
             {
-                if (Collision.SolidCollision(Main.MouseWorld, 1, 1))
-                {
-                    Vector2 velocity = default(Vector2);
-                    int projectile = Projectile.NewProjectile(Main.MouseWorld, velocity, ProjectileID.GrenadeIII, 87, 50f, Main.myPlayer);
-                    Main.projectile[projectile].friendly = true;
-                    Main.projectile[projectile].timeLeft = 2;
-                    Main.projectile[projectile].netUpdate = true;
-
-                    return true;
-                }
-                return false;
+                timeAfterTouch = 45;
+                savedPosition = Main.MouseWorld;
+                touchedTile = true;
+            }
+            if (player.altFunctionUse == 2 && timeAfterTouch <= 0 && touchedTile)
+            {
+                int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, 87, 50f, Main.myPlayer);
+                Main.projectile[projectile].friendly = true;
+                Main.projectile[projectile].timeLeft = 2;
+                Main.projectile[projectile].netUpdate = true;
+                touchedTile = false;
+                savedPosition = Vector2.Zero;
             }
 
             float numberProjectiles = 3 + Main.rand.Next(5);
@@ -97,7 +139,8 @@ namespace JoJoStands.Items
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.HallowedBar, 6);
+            recipe.AddIngredient(mod.ItemType("KillerQueenT2"));
+            recipe.AddIngredient(ItemID.HallowedBar, 6);
             recipe.AddIngredient(mod.ItemType("Hand"), 1);
             recipe.AddIngredient(ItemID.SoulofMight, 8);
 			recipe.SetResult(this);

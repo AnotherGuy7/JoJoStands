@@ -7,11 +7,17 @@ namespace JoJoStands.Items
 {
 	public class StarPlatinumT3 : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/StarPlatinumT1"; }
+        }
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Star Platinum (Tier 3)");
-			Tooltip.SetDefault("Punch enemies at a really fast rate and use Star Finger to kill enemies from a distance \nNext Tier: 15 Chlorophyte Ore, 1 Large Topaz, 7 Fallen Stars");
+			Tooltip.SetDefault("Punch enemies at a really fast rate and use Star Finger to kill enemies from a distance");
 		}
+
 		public override void SetDefaults()
 		{
 			item.damage = 102;	//thanks Joser for the idea of making this a gun...
@@ -60,11 +66,8 @@ namespace JoJoStands.Items
 			if (player.altFunctionUse == 2)
             {
 				item.damage = 89;
-				item.ranged = true;
-				item.width = 100;
-				item.height = 8;
 				item.useTime = 120;
-				item.useAnimation = 10;
+				item.useAnimation = 120;
 				item.useStyle = 5;
 				item.knockBack = 2;
 				item.autoReuse = false;
@@ -74,13 +77,9 @@ namespace JoJoStands.Items
 			else
 			{
 				item.damage = 102;
-				item.ranged = true;
-				item.width = 10;
-				item.height = 8;
 				item.useTime = 9;
 				item.useAnimation = 9;
 				item.useStyle = 5;
-				item.knockBack = 2;
 				item.autoReuse = true;
 	        	item.shoot = mod.ProjectileType("StarPlatinumFist");
 	            item.shootSpeed = 50f;
@@ -88,7 +87,7 @@ namespace JoJoStands.Items
 			return true;
 		}
 
-		public override void AddRecipes()
+        public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("StarPlatinumT2"));

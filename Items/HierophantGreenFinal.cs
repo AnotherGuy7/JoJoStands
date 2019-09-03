@@ -7,7 +7,12 @@ namespace JoJoStands.Items
 {
 	public class HierophantGreenFinal : ModItem
 	{
-		public override void SetStaticDefaults()
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/HierophantGreenT1"; }
+        }
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Hierophant Green (Final)");
 			Tooltip.SetDefault("Shoot emeralds at the enemies and right click to shoot more accurate emralds!");
@@ -19,8 +24,8 @@ namespace JoJoStands.Items
 			item.ranged = true;
 			item.width = 100;
 			item.height = 8;
-			item.useTime = 10;
-			item.useAnimation = 10;
+			item.useTime = 40;
+			item.useAnimation = 40;
 			item.useStyle = 5;
 			item.knockBack = 2;
 			item.value = 10000;

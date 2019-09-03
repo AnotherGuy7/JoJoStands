@@ -10,13 +10,14 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The World (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate! \nNext Tier: 24 Gold Bars");
+            Tooltip.SetDefault("Punch enemies at a really fast rate!");
         }
+
         public override void SetDefaults()
         {
             item.damage = 19;
-            item.width = 100;
-            item.height = 8;
+            item.width = 32;
+            item.height = 32;
             item.useTime = 12;
             item.useAnimation = 12;
             item.useStyle = 5;
@@ -33,7 +34,6 @@ namespace JoJoStands.Items
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-
             float numberProjectiles = 3 + Main.rand.Next(5);
             float rotation = MathHelper.ToRadians(45);
             position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;

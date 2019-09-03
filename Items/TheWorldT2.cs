@@ -7,14 +7,20 @@ namespace JoJoStands.Items
 {
     public class TheWorldT2 : ModItem
     {
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/TheWorldT1"; }
+        }
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The World (Tier 2)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate! \nNext Tier: 25 Hellstone, Golden Clock");
+            Tooltip.SetDefault("Punch enemies at a really fast rate! \nSpecial: Stop time for 2 seconds! \nSpecial: Stop time for 2 seconds!");
         }
+
         public override void SetDefaults()
         {
-            item.damage = 73;   //thanks Joser for the idea of making this a gun...
+            item.damage = 73;
             item.width = 100;
             item.height = 8;
             item.useTime = 12;
@@ -45,11 +51,27 @@ namespace JoJoStands.Items
             return false;
         }
 
+        public override void HoldItem(Player player)
+        {
+            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TimeCooldown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")))
+            {
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_start"));
+                player.AddBuff(mod.BuffType("TheWorldBuff"), 120, true);
+            }
+        }
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("TheWorldT1"));
-            recipe.AddIngredient(ItemID.GoldBar, 24);
+            recipe.AddIngredient(ItemID.HellstoneBar, 25);
+            recipe.AddIngredient(ItemID.GoldWatch);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("TheWorldT1"));
+            recipe.AddIngredient(ItemID.HellstoneBar, 25);
+            recipe.AddIngredient(ItemID.PlatinumWatch);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
