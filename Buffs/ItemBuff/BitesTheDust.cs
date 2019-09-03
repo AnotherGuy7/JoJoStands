@@ -12,7 +12,7 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void SetDefaults()
         {
 			DisplayName.SetDefault("Bite The Dust");
-            Description.SetDefault("You are now restarting the day");           //draw the icon as a sun going backwards with lines representing it's speed going back
+            Description.SetDefault("You are now restarting the day");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
@@ -36,9 +36,9 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 if (Main.time == 1600)
                 {
-                    player.AddBuff(mod.BuffType("BitesTheDustCoolDown"), 25200);
+                    player.AddBuff(mod.BuffType("TimeCooldown"), 25200);
                     player.ClearBuff(mod.BuffType("BitesTheDust"));
-                    player.statLife += 500;
+                    player.statLife = player.statLifeMax;
                     player.Spawn();
                     if (!Main.dayTime)
                     {
@@ -59,8 +59,6 @@ namespace JoJoStands.Buffs.ItemBuff
                         }
                         if (Main.time == 1600)
                         {
-                            player.statLife += 500;
-                            player.Spawn();
                             if (!Main.dayTime)
                             {
                                 Main.dayTime = true;

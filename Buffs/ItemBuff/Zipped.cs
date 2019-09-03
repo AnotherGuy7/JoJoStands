@@ -13,6 +13,7 @@ namespace JoJoStands.Buffs.ItemBuff
         {
 			DisplayName.SetDefault("Zipped!");
             Description.SetDefault("A zipper has been placed on your body, blood is spilling quickly!");
+            Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;
         }
