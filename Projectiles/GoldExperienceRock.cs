@@ -1,31 +1,33 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles
 {
-    public class Emrald : ModProjectile
+    public class GoldExperienceRock : ModProjectile
     {
         public override void SetDefaults()
         {
-            projectile.width = 6;
-            projectile.height = 10;
+            projectile.width = 15;
+            projectile.height = 6;
             projectile.aiStyle = 0;
-            projectile.ranged = true;
-            projectile.timeLeft = 300;
+            projectile.timeLeft = 600;
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
-            projectile.scale = 1.25f;
+            projectile.scale = 1.5f;
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("GEScorpion"), 1, 0f, Main.myPlayer);
+            Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire);
         }
 
         public override void AI()
         {
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
-            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 61, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
         }
     }
 }

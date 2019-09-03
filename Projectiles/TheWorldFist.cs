@@ -1,8 +1,5 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles
@@ -19,6 +16,7 @@ namespace JoJoStands.Projectiles
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
+            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public override void AI()

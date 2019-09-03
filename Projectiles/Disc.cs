@@ -1,31 +1,25 @@
-using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles
 {
-    public class Nail : ModProjectile
+    public class Disc : ModProjectile
     {
-        public override string Texture
-        {
-            get { return mod.Name + "/Projectiles/GeneralBullet"; }
-        }
-
         public override void SetDefaults()
         {
-            projectile.width = 10;
-            projectile.height = 12;
+            projectile.width = 36;
+            projectile.height = 36;
             projectile.aiStyle = 0;
             projectile.ranged = true;
             projectile.timeLeft = 300;
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
+            projectile.scale = 0.5f;
         }
 
         public override void AI()
         {
-            projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
+            projectile.rotation = projectile.direction * 180f;
         }
     }
 }

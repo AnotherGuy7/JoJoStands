@@ -40,6 +40,10 @@ namespace JoJoStands.Projectiles
 
         public override void Kill(int timeLeft)
         {
+            Player player = Main.LocalPlayer;
+            var p = Projectile.NewProjectile(projectile.position, projectile.velocity, ProjectileID.GrenadeIII, 150, 8f, player.whoAmI);
+            Main.projectile[p].timeLeft = 2;
+            Main.projectile[p].netUpdate = true;
             Main.PlaySound(SoundID.Item62);
         }
     }

@@ -25,7 +25,12 @@ namespace JoJoStands.Projectiles
         {
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, DustID.FlameBurst, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
             Main.PlaySound(SoundID.Item62);
+            if (Main.LocalPlayer.HeldItem.type == mod.ItemType("KillerQueenBTD"))
+            {
+                Items.KillerQueenBTD.taggedAnything = true;
+            }
         }
+
         public override void AI()
         {
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);

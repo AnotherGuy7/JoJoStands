@@ -9,14 +9,20 @@ namespace JoJoStands.Projectiles
 {
     public class SPBullet : ModProjectile
     {
+        public override string Texture
+        {
+            get { return mod.Name + "/Projectiles/GeneralBullet"; }
+        }
+
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.Homing[projectile.type] = true;
         }
+
         public override void SetDefaults()
         {
-            projectile.width = 10;
-            projectile.height = 10;
+            projectile.width = 5;
+            projectile.height = 12;
             projectile.aiStyle = 0;
             projectile.ranged = true;
             projectile.timeLeft = 300;

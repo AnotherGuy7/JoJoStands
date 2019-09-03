@@ -17,24 +17,23 @@ namespace JoJoStands.Projectiles
         {
             
             projectile.CloneDefaults(ProjectileID.LightDisc);
-            projectile.width = 32;
-            projectile.height = 32;
+            projectile.width = 14;
+            projectile.height = 14;
             projectile.melee = true;
             projectile.aiStyle = 3;
-            projectile.scale = 0.5f;
             projectile.ranged = true;
             projectile.timeLeft = 600;
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.maxPenetrate = 2;
-            projectile.rotation = 0f;
-            Main.projFrames[projectile.type] = 7;
-
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            target.AddBuff(mod.BuffType("Spin"), 120);
+            if (Main.rand.Next(0, 101) <= 25)
+            {
+                target.AddBuff(mod.BuffType("Spin"), 40);
+            }
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }
 
@@ -46,9 +45,7 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            projectile.frame++;
-            if (projectile.frame >= Main.projFrames[projectile.type]) projectile.frame = 0;
-
+            projectile.rotation += (float)projectile.direction * 0.8f;
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 128, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
         }
     }

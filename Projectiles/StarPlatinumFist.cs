@@ -1,8 +1,5 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles
@@ -19,6 +16,40 @@ namespace JoJoStands.Projectiles
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
+            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            if (MyPlayer.Sounds == true)
+            {
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
+            }
+        }
+
+        public override void OnHitPlayer(Player target, int damage, bool crit)
+        {
+            if (MyPlayer.Sounds == true)
+            {
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
+            }
+        }
+
+        public override void OnHitPvp(Player target, int damage, bool crit)
+        {
+            if (MyPlayer.Sounds == true)
+            {
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
+            }
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            if (MyPlayer.Sounds == true)
+            {
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
+            }
+            return base.OnTileCollide(oldVelocity);
         }
 
         public override void AI()

@@ -9,10 +9,15 @@ namespace JoJoStands.Projectiles
 {
     public class ReqNail : ModProjectile
     {
+        public override string Texture
+        {
+            get { return mod.Name + "/Projectiles/ControllableNail"; }
+        }
+
         public override void SetDefaults()
         {
-            projectile.width = 10;
-            projectile.height = 10;
+            projectile.width = 5;
+            projectile.height = 12;
             projectile.aiStyle = 0;
             projectile.ranged = true;
             projectile.timeLeft = 300;
@@ -23,9 +28,7 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(mod.BuffType("Spin"), 1, true);
-            target.velocity.Y += 80f;
-            target.noTileCollide = true;
+            target.AddBuff(mod.BuffType("Spin"), 999999999, true);
             base.OnHitNPC(target, damage, knockback, crit);
         }
 
