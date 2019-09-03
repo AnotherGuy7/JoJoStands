@@ -30,7 +30,8 @@ namespace JoJoStands.Items.Vanities
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.Silk, 2);
-			recipe.SetResult(this);
+            recipe.AddTile(TileID.Loom);
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 	}

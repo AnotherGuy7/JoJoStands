@@ -7,12 +7,13 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Vanities
 {
-	[AutoloadEquip(EquipType.Body)]
-	public class KoichiShirt : ModItem
+	[AutoloadEquip(EquipType.Legs)]
+	public class DIOPants : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Koichi's Shirt");
+			DisplayName.SetDefault("DIO's Pants");
+            Tooltip.SetDefault("A pair of stylish yellow pants, with heart-adorned knees as well as tassels from the waist.");
 		}
 
 		public override void SetDefaults()
@@ -26,9 +27,9 @@ namespace JoJoStands.Items.Vanities
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 10);
+			recipe.AddIngredient(ItemID.Silk, 5);
             recipe.AddTile(TileID.Loom);
-            recipe.SetResult(this);
+			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 	}

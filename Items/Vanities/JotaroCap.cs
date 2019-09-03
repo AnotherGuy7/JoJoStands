@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Vanities
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Jotaro's Cap");
-            Tooltip.SetDefault("Smells like coffee...");
+            Tooltip.SetDefault("Is it hat or hair? Yare Yare Daze...");
 		}
 
 		public override void SetDefaults() {
@@ -31,7 +31,8 @@ namespace JoJoStands.Items.Vanities
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.Silk, 2);
-			recipe.SetResult(this);
+            recipe.AddTile(TileID.Loom);
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 	}

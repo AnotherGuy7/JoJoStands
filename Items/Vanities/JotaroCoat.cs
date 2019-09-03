@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Vanities
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Jotaro's Coat");
-            Tooltip.SetDefault("Yaaare Yare Daze...");
+            Tooltip.SetDefault("A black school uniform. Very unique.");
 		}
 
 		public override void SetDefaults()
@@ -27,8 +27,9 @@ namespace JoJoStands.Items.Vanities
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 2);
-			recipe.SetResult(this);
+			recipe.AddIngredient(ItemID.Silk, 10);
+            recipe.AddTile(TileID.Loom);
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 	}

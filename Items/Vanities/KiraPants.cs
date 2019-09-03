@@ -13,6 +13,7 @@ namespace JoJoStands.Items.Vanities
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Kira's Pants");
+            Tooltip.SetDefault("A simple pair of pants for a quiet lifestyle.");
 		}
 
 		public override void SetDefaults() {
@@ -29,8 +30,9 @@ namespace JoJoStands.Items.Vanities
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 2);
-			recipe.SetResult(this);
+			recipe.AddIngredient(ItemID.Silk, 5);
+            recipe.AddTile(TileID.Loom);
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 	}

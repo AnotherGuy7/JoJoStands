@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Jotaro's 200,000 Yen Pants");
-            Tooltip.SetDefault("They're worthless now...");
+			DisplayName.SetDefault("Jotaro's 200K Yen Pants");
+            Tooltip.SetDefault("An expensive pair of pants. Be careful not to rip them.");
 		}
 
 		public override void SetDefaults()
@@ -27,7 +27,8 @@ namespace JoJoStands.Items.Vanities
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 2);
+			recipe.AddIngredient(ItemID.Silk, 5);
+            recipe.AddTile(TileID.Loom);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

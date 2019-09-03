@@ -13,6 +13,7 @@ namespace JoJoStands.Items.Vanities
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Kira's Shirt");
+            Tooltip.SetDefault("A well-tended jacket, perfect for work.");
 		}
 
 		public override void SetDefaults() {
@@ -25,8 +26,9 @@ namespace JoJoStands.Items.Vanities
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 2);
-			recipe.SetResult(this);
+			recipe.AddIngredient(ItemID.Silk, 10);
+            recipe.AddTile(TileID.Loom);
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 	}

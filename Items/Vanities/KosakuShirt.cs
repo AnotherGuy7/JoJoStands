@@ -8,15 +8,15 @@ using Terraria.ModLoader;
 namespace JoJoStands.Items.Vanities
 {
 	[AutoloadEquip(EquipType.Body)]
-	public class KoichiShirt : ModItem
+	public class KosakuShirt : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Koichi's Shirt");
+			DisplayName.SetDefault("Kira's (Kosaku) Shirt");
+            Tooltip.SetDefault("A nice jacket, complete with custom tie.");
 		}
 
-		public override void SetDefaults()
-        {
+		public override void SetDefaults() {
 			item.width = 18;
 			item.height = 18;
 			item.rare = 6;

@@ -8,11 +8,12 @@ using Terraria.ModLoader;
 namespace JoJoStands.Items.Vanities
 {
 	[AutoloadEquip(EquipType.Body)]
-	public class KoichiShirt : ModItem
+    public class DIOJacket : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Koichi's Shirt");
+			DisplayName.SetDefault("DIO's Jacket");
+            Tooltip.SetDefault("An open-front jacket. The undershirt is skintight.");
 		}
 
 		public override void SetDefaults()
@@ -23,7 +24,7 @@ namespace JoJoStands.Items.Vanities
 			item.vanity = true;
 		}
 
-		public override void AddRecipes()
+        public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.Silk, 10);
