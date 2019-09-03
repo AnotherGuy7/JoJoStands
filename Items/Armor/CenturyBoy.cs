@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 
 namespace JoJoStands.Items.Armor
 {
     public class CenturyBoy : ModItem
     {
+        int limitTimer = 36000;       //like 10 minutes
+        int breathSave = 0;
+
         public void SetStaticDefault()
         {
             DisplayName.SetDefault("20th Century Boy");
@@ -30,17 +30,58 @@ namespace JoJoStands.Items.Armor
             {
                 player.controlUseItem = false;
                 player.dash *= 0;
-                player.bodyVelocity = new Vector2(0);
+                player.bodyVelocity = Vector2.Zero;
                 player.controlLeft = false;
                 player.controlJump = false;
                 player.controlRight = false;
                 player.controlDown = false;
                 player.controlQuickHeal = false;
                 player.controlQuickMana = false;
+                player.controlRight = false;
+                player.controlUseTile = false;
                 player.controlUp = false;
-                player.maxRunSpeed *= 0;
-                player.moveSpeed *= 0;
-                player.AddBuff(mod.BuffType("CenturyBoyBuff"), 1, true);
+                player.maxRunSpeed = 0f;
+                player.moveSpeed = 0f;
+                player.noFallDmg = true;
+                player.AddBuff(mod.BuffType("CenturyBoyBuff"), 2, true);
+                mod.GetEquipSlot("CenturyBoy_Body", EquipType.Body);
+                limitTimer--;
+                if (player.wet && player.ZoneSnow)
+                {
+                    limitTimer -= 6;
+                    if (breathSave == 0)
+                    {
+                        breathSave = player.breath;
+                    }
+                }
+                if (player.wet)
+                {
+                    limitTimer -= 3;
+                    if (breathSave == 0)
+                    {
+                        breathSave = player.breath;
+                    }
+                }
+                if (breathSave != 0)
+                {
+                    player.breath = breathSave;
+                }
+                if (limitTimer <= 0)
+                {
+                    if (player.wet || (player.wet && player.ZoneSnow))
+                    {
+                        player.KillMe(PlayerDeathReason.ByCustomReason("The water kept it's constant rythm and " + player.name + " has stopped waiting. And stopped thinking."), player.statLife - 1, 1);
+                    }
+                    else
+                    {
+                        player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " has stopped thinking."), player.statLife - 1, 1);
+                    }
+                }
+            }
+            else
+            {
+                limitTimer = 36000;
+                breathSave = 0;
             }
         }
 
