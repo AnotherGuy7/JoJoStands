@@ -11,6 +11,8 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
     [AutoloadHead]
     public class Priest : ModNPC    //It's name is 'priest' so that when it dies, it says "Pucci the priest"
     {
+        public static bool userIsAlive = false;
+
         public override void SetDefaults()
         {
             npc.townNPC = true; //This defines if the npc is a town Npc or not
@@ -26,13 +28,24 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
             Main.npcFrameCount[npc.type] = 26; //this defines how many frames the npc sprite sheet has
             NPCID.Sets.ExtraFramesCount[npc.type] = 9;
             NPCID.Sets.AttackFrameCount[npc.type] = 4;
-            NPCID.Sets.DangerDetectRange[npc.type] = 150; //this defines the npc danger detect range
-            NPCID.Sets.AttackType[npc.type] = 3; //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
-            NPCID.Sets.AttackTime[npc.type] = 30; //this defines the npc attack speed
-            NPCID.Sets.AttackAverageChance[npc.type] = 10;//this defines the npc atack chance
+            NPCID.Sets.DangerDetectRange[npc.type] = 250; //this defines the npc danger detect range
+            NPCID.Sets.AttackType[npc.type] = 1; //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
             NPCID.Sets.HatOffsetY[npc.type] = 4; //this defines the party hat position
             animationType = NPCID.Guide;  //this copy the guide animation
         }
+
+        public override bool CheckActive()
+        {
+            userIsAlive = true;
+            return base.CheckActive();
+        }
+
+        public override bool CheckDead()
+        {
+            userIsAlive = false;
+            return base.CheckDead();
+        }
+
         public override bool CanTownNPCSpawn(int numTownNPCs, int money) //Whether or not the conditions have been met for this town NPC to be able to move into town.
         {
             return Main.hardMode;
@@ -49,7 +62,6 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
         }
         public override void OnChatButtonClicked(bool firstButton, ref bool openShop) //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
         {
-
             if (firstButton)
             {
                 openShop = true;   //so when you click on buy button opens the shop
@@ -60,8 +72,17 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
         {
             shop.item[nextSlot].SetDefaults(mod.ItemType("StarPlatinumDisc"));  //this is an example of how to add a modded item
             nextSlot++;
-            shop.item[nextSlot].SetDefaults(mod.ItemType("AerosmithDisc"));
+            shop.item[nextSlot].SetDefaults(mod.ItemType("HierophantGreenDisc"));
             nextSlot++;
+            shop.item[nextSlot].SetDefaults(mod.ItemType("KillerQueenDisc"));
+            nextSlot++;
+            shop.item[nextSlot].SetDefaults(mod.ItemType("MagiciansRedDisc"));
+            nextSlot++;
+            if (NPC.downedPlantBoss)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType("AerosmithDisc"));
+                nextSlot++;
+            }
         }
 
         public override string GetChat()       //Allows you to give this town NPC a chat message when a player talks to it.
@@ -85,6 +106,7 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
 
             }
         }
+
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)//  Allows you to determine the damage and knockback of this town NPC attack
         {
             damage = 40;  //npc damage
@@ -96,39 +118,14 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
             cooldown = 5;
             randExtraCooldown = 10;
         }
-        //------------------------------------This is an example of how to make the npc use a sword attack-------------------------------
-        public override void DrawTownAttackSwing(ref Texture2D item, ref int itemSize, ref float scale, ref Vector2 offset)//Allows you to customize how this town NPC's weapon is drawn when this NPC is swinging it (this NPC must have an attack type of 3). Item is the Texture2D instance of the item to be drawn (use Main.itemTexture[id of item]), itemSize is the width and height of the item's hitbox
+
+        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)//Allows you to determine the projectile type of this town NPC's attack, and how long it takes for the projectile to actually appear
         {
-            scale = 1f;
-            item = Main.itemTexture[mod.ItemType("WhiteSnake")]; //this defines the item that this npc will use
-            itemSize = 56;
+            if (!Projectiles.NPCStands.Whitesnake.whitesnakeActive)
+            {
+                projType = mod.ProjectileType("Whitesnake");
+                attackDelay = 1;
+            }
         }
-
-        public override void TownNPCAttackSwing(ref int itemWidth, ref int itemHeight) //  Allows you to determine the width and height of the item this town NPC swings when it attacks, which controls the range of this NPC's swung weapon.
-        {
-            itemWidth = 56;
-            itemHeight = 56;
-        }
-
-        //----------------------------------This is an example of how to make the npc use a gun and a projectile ----------------------------------
-        /*public override void DrawTownAttackGun(ref float scale, ref int item, ref int closeness) //Allows you to customize how this town NPC's weapon is drawn when this NPC is shooting (this NPC must have an attack type of 1). Scale is a multiplier for the item's drawing size, item is the ID of the item to be drawn, and closeness is how close the item should be drawn to the NPC.
-          {
-              scale = 1f;
-              item = mod.ItemType("GunName");  
-              closeness = 20;
-          }
-          public override void TownNPCAttackProj(ref int projType, ref int attackDelay)//Allows you to determine the projectile type of this town NPC's attack, and how long it takes for the projectile to actually appear
-          {
-              projType = ProjectileID.CrystalBullet;
-              attackDelay = 1;
-          }
-
-          public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)//Allows you to determine the speed at which this town NPC throws a projectile when it attacks. Multiplier is the speed of the projectile, gravityCorrection is how much extra the projectile gets thrown upwards, and randomOffset allows you to randomize the projectile's velocity in a square centered around the original velocity
-          {
-              multiplier = 7f;
-             // randomOffset = 4f;
-
-          }   */
-
     }
 }

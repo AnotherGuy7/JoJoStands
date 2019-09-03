@@ -35,7 +35,7 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
         }
         public override bool CanTownNPCSpawn(int numTownNPCs, int money) //Whether or not the conditions have been met for this town NPC to be able to move into town.
         {
-            return Main.hardMode && numTownNPCs == 5;
+            return Main.hardMode && numTownNPCs >= 5;
         }
 
         public override string TownNPCName()     //Allows you to give this town NPC any name when it spawns

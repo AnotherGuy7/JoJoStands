@@ -237,15 +237,6 @@ namespace JoJoStands.NPCs
             }
         }
 
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            if (spawnInfo.player.ZoneOverworldHeight) //NPC.waveNumber for an event one, also make it so that he only has this chance if he wasn't killed before
-            {
-                return 0.02f;
-            }
-            return 0f;
-        }
-
         public override void NPCLoot()
         {
             Item.NewItem(npc.getRect(), mod.ItemType("StandArrow"), 1);
