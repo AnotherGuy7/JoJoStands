@@ -7,7 +7,6 @@ namespace JoJoStands.Items
 {
 	public class StarPlatinumT1 : ModItem
 	{
-
         public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Star Platinum (Tier 1)");
@@ -17,40 +16,30 @@ namespace JoJoStands.Items
 		public override void SetDefaults()
 		{
 			item.damage = 22;	//thanks Joser for the idea of making this a gun...
-			item.width = 100;
-			item.height = 8;
+			item.width = 32;
+			item.height = 32;
 			item.useTime = 12;
 			item.useAnimation = 12;
 			item.useStyle = 5;
+            item.noUseGraphic = true;
 			item.maxStack = 1;
-			item.knockBack = 2f;
-			item.value = 10000;
+			item.knockBack = 3f;
+			item.value = 0;
 			item.rare = 6;
-			item.melee = true;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-			item.shoot = mod.ProjectileType("StarPlatinumFist");
-			item.shootSpeed = 50f;
-		}
-
-    	public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-
-			float numberProjectiles = 3 + Main.rand.Next(5);
-			float rotation = MathHelper.ToRadians(45);
-			position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;
-			for (int i = 0; i < numberProjectiles; i++)
-			{
-				Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-				Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
-			}
-			return false;
+            MyPlayer.standTier1List.Add(mod.ItemType(Name));
         }
 
-        public override bool UseItem(Player player)
+        public override void HoldItem(Player player)
         {
-            Main.PlaySound(2, -1, -1, mod.GetSoundSlot(SoundType.Item, "Sounds/sound/ora"));
-            return base.UseItem(player);
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (player.whoAmI == Main.myPlayer)
+            {
+                mPlayer.StandOut = true;
+                if (player.ownedProjectileCounts[mod.ProjectileType("StarPlatinumStand")] <= 0 && mPlayer.StandOut)
+                {
+                    Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StarPlatinumStand"), 0, 0f, Main.myPlayer);
+                }
+            }
         }
 
         public override void AddRecipes()
