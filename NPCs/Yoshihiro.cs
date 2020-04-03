@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using System.IO;
 
 namespace JoJoStands.NPCs
 {
@@ -12,229 +13,374 @@ namespace JoJoStands.NPCs
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 11; //this defines how many frames the npc sprite sheet has
+            Main.npcFrameCount[npc.type] = 12; //this defines how many frames the npc sprite sheet has
         }
 
         public override void SetDefaults()
         {
             npc.width = 38; //the npc sprite width
             npc.height = 32;  //the npc sprite height
-            //this is the npc ai style, 7 is Pasive Ai. 3 is the fighter AI
             npc.defense = 13;  //the npc defense
             npc.lifeMax = 180;  // the npc life
             npc.HitSound = SoundID.NPCHit1;  //the npc sound when is hit
             npc.DeathSound = SoundID.NPCDeath1;  //the npc sound when he dies
             npc.knockBackResist = 2f;  //the npc knockback resistance
             npc.chaseable = true;       //whether or not minions can chase this npc
-            npc.damage = 37;       //the damage the npc does
-            animationType = 122;
+            npc.damage = 14;       //the damage the npc does
             npc.aiStyle = 0;        //no AI, to run void AI()
             npc.noGravity = true;
         }
 
+        public float targetDistance = 0f;
+        public bool dashFrames = false;
+        public bool throwFrames = false;
+        public bool paperFrames = false;
+        public int frame = 0;
+        public int yosarrowWhoAmI = -1;
+        public float baseSpeed = 1.8f;
+        public bool hasNoArrow = false;
+        public bool dashing = false;
+        public bool throwingArrow = false;
+        public int timesDashed = 0;
+        public bool runningAway = false;
+        public int tileDetectionAddition = 0;
+
         public override void AI()
         {
-            bool flag19 = false;        ////recreating aiStyle 22 directly from source, type 122
-            if (npc.justHit)
+            Player target = Main.player[npc.target];
+            if (npc.life <= npc.lifeMax * 0.1)
             {
-                npc.ai[2] = 0f;
+                runningAway = true;
+                npc.netUpdate = true;
             }
-            int num284 = (int)((npc.position.X + (float)(npc.width / 2)) / 16f) + npc.direction * 2;
-            int num285 = (int)((npc.position.Y + (float)npc.height) / 16f);
-            bool flag23 = true;
-            bool flag24 = false;
-            int num286 = 3;
-            if (npc.type == 122 || true)
+            if (npc.position.X > target.position.X)
             {
-                if (npc.justHit)
+                npc.velocity.X = baseSpeed + 0.2f;
+            }
+            if (npc.position.X <= target.position.X)
+            {
+                npc.velocity.X = -baseSpeed;
+            }
+            if (runningAway)
+            {
+                if (npc.position.X > target.position.X)
                 {
-                    npc.ai[3] = 0f;
-                    npc.localAI[1] = 0f;
+                    npc.velocity.X = baseSpeed + 0.2f;
                 }
-                float num287 = 7f;
-                Vector2 vector33 = new Vector2(npc.position.X + (float)npc.width * 0.5f, npc.position.Y + (float)npc.height * 0.5f);
-                float num288 = Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) - vector33.X;
-                float num289 = Main.player[npc.target].position.Y + (float)(Main.player[npc.target].height / 2) - vector33.Y;
-                float num290 = (float)Math.Sqrt((double)(num288 * num288 + num289 * num289));
-                num290 = num287 / num290;
-                num288 *= num290;
-                num289 *= num290;
-                if (Main.netMode != 1 && npc.ai[3] == 32f && !Main.player[npc.target].npcTypeNoAggro[npc.type])
+                if (npc.position.X <= target.position.X)
                 {
-                    int num291 = 25;
-                    int num292 = mod.ProjectileType("Yosarrow");        //what Yoshihiro will shoot
-                    Projectile.NewProjectile(vector33.X, vector33.Y, num288, num289, num292, num291, 0f, Main.myPlayer, 0f, 0f);
+                    npc.velocity.X = -baseSpeed;
                 }
-                num286 = 8;
-                if (npc.ai[3] > 0f)
+            }
+            if (!runningAway && !hasNoArrow && !dashing)
+            {
+                if (npc.Center.X < target.position.X - 3f)
                 {
-                    npc.ai[3] += 1f;
-                    if (npc.ai[3] >= 64f)
+                    npc.velocity.X = baseSpeed;
+                }
+                if (npc.Center.X > target.position.X + 3f)
+                {
+                    npc.velocity.X = -baseSpeed;
+                }
+                if (npc.Center.X > target.position.X - 3f && npc.Center.X < target.position.X + 3f)
+                {
+                    npc.velocity.X = 0f;
+                }
+                if (npc.Center.Y > target.position.Y + 3f)
+                {
+                    npc.velocity.Y = -baseSpeed;
+                }
+                if (npc.Center.Y < target.position.Y - 3f)
+                {
+                    npc.velocity.Y = baseSpeed;
+                }
+                if (npc.Center.Y < target.position.Y + 3f && npc.Center.Y > target.position.Y - 3f)       //so that he keeps going until he reaches target.position.Y +- 5f
+                {
+                    npc.velocity.Y = 0f;
+                }
+                npc.netUpdate = true;
+            }
+            if (!dashing)
+            {
+                if (npc.velocity.X > 0)
+                {
+                    npc.direction = 1;
+                    tileDetectionAddition = 3;
+                }
+                if (npc.velocity.X < 0)
+                {
+                    npc.direction = -1;
+                    tileDetectionAddition = -1;
+                }
+            }
+            npc.spriteDirection = npc.direction;
+            if (npc.ai[0] > 0f)     //an attack timer
+            {
+                npc.ai[0] -= 1f;
+            }
+            if (npc.ai[1] > 0f)     //dash timer
+            {
+                npc.velocity.X = 15 * npc.direction;
+                npc.ai[1] -= 1f;
+            }
+            if (WorldGen.SolidTile((int)(npc.position.X / 16) + tileDetectionAddition, (int)(npc.position.Y / 16f)) || WorldGen.SolidTile((int)(npc.position.X / 16) + tileDetectionAddition, (int)(npc.position.Y / 16f) + 1) || WorldGen.SolidTile((int)(npc.position.X / 16) + tileDetectionAddition, (int)(npc.position.Y / 16f) + 2))
+            {
+                npc.ai[3] += 1f;
+            }
+            if (npc.ai[3] >= 180f)
+            {
+                paperFrames = true;
+                npc.noTileCollide = true;
+            }
+            if (paperFrames)
+            {
+                npc.ai[3] -= 1f;
+                npc.noTileCollide = true;
+                if (npc.ai[3] <= 0)
+                {
+                    npc.noTileCollide = false;
+                    paperFrames = false;
+                }
+                npc.netUpdate = true;
+            }
+            if (npc.ai[0] <= 0f && !hasNoArrow && !dashing && !throwingArrow && !paperFrames && !runningAway)
+            {
+                targetDistance = Vector2.Distance(npc.Center, target.Center);
+                if (targetDistance < 180f)
+                {
+                    dashing = true;
+                }
+                if (targetDistance >= 180f)
+                {
+                    throwingArrow = true;
+                    throwFrames = true;
+                }
+            }
+            if (throwingArrow)
+            {
+                if (frame == 7 && yosarrowWhoAmI == -1)
+                {
+                    npc.ai[0] += 30f;
+                    Vector2 shootVel = target.Center - npc.Center;
+                    if (shootVel == Vector2.Zero)
                     {
-                        npc.ai[3] = 0f;
+                        shootVel = new Vector2(0f, 1f);
                     }
+                    shootVel.Normalize();
+                    shootVel *= 16f;
+                    yosarrowWhoAmI = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Yosarrow"), 21, 1f);
+                    Main.projectile[yosarrowWhoAmI].netUpdate = true;
+                    npc.netUpdate = true;
                 }
-                if (Main.netMode != 1 && npc.ai[3] == 0f)
+                if (!throwFrames)       //goes false at the 10th frame
                 {
-                    npc.localAI[1] += 1f;
-                    if (npc.localAI[1] > 120f && Collision.CanHit(npc.position, npc.width, npc.height, Main.player[npc.target].position, Main.player[npc.target].width, Main.player[npc.target].height) && !Main.player[npc.target].npcTypeNoAggro[npc.type])
+                    hasNoArrow = true;
+                    throwingArrow = false;
+                }
+            }
+            if (hasNoArrow)
+            {
+                dashFrames = false;
+                if (yosarrowWhoAmI != -1)
+                {
+                    Projectile targetProjectile = Main.projectile[yosarrowWhoAmI];
+                    targetProjectile.timeLeft++;
+                    targetDistance = Vector2.Distance(npc.Center, targetProjectile.Center);
+                    if (npc.Center.X < targetProjectile.position.X - 5f)
                     {
-                        npc.localAI[1] = 0f;
-                        npc.ai[3] = 1f;
+                        npc.velocity.X = 5f;
+                    }
+                    if (npc.Center.X > targetProjectile.position.X + 5f)
+                    {
+                        npc.velocity.X = -5f;
+                    }
+                    if (npc.Center.X > targetProjectile.position.X - 5f && npc.Center.X < targetProjectile.position.X + 5f)
+                    {
+                        npc.velocity.X = 0f;
+                    }
+                    if (npc.Center.Y > targetProjectile.position.Y + 5f)
+                    {
+                        npc.velocity.Y = -5f;
+                    }
+                    if (npc.Center.Y < targetProjectile.position.Y - 5f)
+                    {
+                        npc.velocity.Y = 5f;
+                    }
+                    if (npc.Center.Y < targetProjectile.position.Y + 5f && npc.Center.Y > targetProjectile.position.Y - 5f)
+                    {
+                        npc.velocity.Y = 0f;
+                    }
+                    if (targetDistance < 20f)
+                    {
+                        Main.projectile[yosarrowWhoAmI].Kill();
+                        yosarrowWhoAmI = -1;
+                        npc.ai[0] += 150f + Main.rand.Next(0, 31);
                         npc.netUpdate = true;
+                        hasNoArrow = false;
                     }
                 }
-            }
-            int num;
-            for (int num309 = num285; num309 < num285 + num286; num309 = num + 1)
-            {
-                if (Main.tile[num284, num309] == null)
+                if (yosarrowWhoAmI == -1)       //in case the projectlie dies somehow
                 {
-                    Main.tile[num284, num309] = new Tile();
+                    npc.ai[0] += 150f + Main.rand.Next(0, 31);
+                    hasNoArrow = false;
+                    npc.netUpdate = true;
                 }
-                if ((Main.tile[num284, num309].nactive() && Main.tileSolid[(int)Main.tile[num284, num309].type]) || Main.tile[num284, num309].liquid > 0)
+            }
+            if (dashing)
+            {
+                dashFrames = true;
+                if (npc.ai[1] <= 0f)
                 {
-                    if (num309 <= num285 + 1)
+                    npc.ai[1] += 45f;
+                    if (npc.Center.X < target.Center.X)
                     {
-                        flag24 = true;
+                        timesDashed += 1;
+                        npc.ai[2] = 1f;
                     }
-                    flag23 = false;
-                    break;
-                }
-                num = num309;
-            }
-            if (Main.player[npc.target].npcTypeNoAggro[npc.type])
-            {
-                bool flag25 = false;
-                for (int num310 = num285; num310 < num285 + num286 - 2; num310 = num + 1)
-                {
-                    if (Main.tile[num284, num310] == null)
+                    if (npc.Center.X > target.Center.X)
                     {
-                        Main.tile[num284, num310] = new Tile();
+                        timesDashed += 1;
+                        npc.ai[2] = -1f;
                     }
-                    if ((Main.tile[num284, num310].nactive() && Main.tileSolid[(int)Main.tile[num284, num310].type]) || Main.tile[num284, num310].liquid > 0)
+                }
+                if (npc.ai[2] == 1f)
+                {
+                    npc.velocity.X = 15f;
+                    npc.velocity.Y = 0f;
+                    npc.direction = 1;
+                }
+                if (npc.ai[2] == -1f)
+                {
+                    npc.velocity.X = -15f;
+                    npc.velocity.Y = 0f;
+                    npc.direction = -1;
+                }
+                if (npc.ai[2] != 0 && npc.ai[1] <= 10f)
+                {
+                    npc.ai[2] = 0f;
+                    npc.velocity = Vector2.Zero;
+                }
+                if (timesDashed >= 3)
+                {
+                    timesDashed = 0;
+                    npc.ai[0] += 150f + Main.rand.Next(0, 31);
+                    dashFrames = false;
+                    dashing = false;
+                }
+                npc.netUpdate = true;
+            }
+        }
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(dashing);
+            writer.Write(throwingArrow);
+            writer.Write(runningAway);
+            writer.Write(hasNoArrow);
+            writer.Write(paperFrames);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            dashing = reader.ReadBoolean();
+            throwingArrow = reader.ReadBoolean();
+            runningAway = reader.ReadBoolean();
+            hasNoArrow = reader.ReadBoolean();
+            paperFrames = reader.ReadBoolean();
+        }
+
+        public override void FindFrame(int frameHeight)
+        {
+            frameHeight = 38;
+            npc.spriteDirection = npc.direction;
+            npc.frameCounter++;
+            if (!hasNoArrow && !dashFrames && !throwFrames && !paperFrames)
+            {
+                if (npc.frameCounter >= 12)
+                {
+                    frame += 1;
+                    npc.frameCounter = 0;
+                }
+                if (frame >= 4)
+                {
+                    frame = 2;
+                }
+                if (frame >= 1)
+                {
+                    frame = 2;
+                }
+            }
+            if (dashFrames)
+            {
+                if (npc.frameCounter >= 12 && frame > 5)
+                {
+                    frame += 1;
+                    npc.frameCounter = 0;
+                }
+                if (frame >= 6)
+                {
+                    frame = 4;
+                }
+                if (frame <= 3)
+                {
+                    frame = 4;
+                }
+            }
+            if (throwFrames)
+            {
+                if (npc.frameCounter >= 20)
+                {
+                    if (frame != 9)
                     {
-                        flag25 = true;
-                        break;
+                        frame += 1;
+                        npc.frameCounter = 0;
                     }
-                    num = num310;
+                    if (frame == 9)
+                    {
+                        npc.frameCounter = 0;
+                        frame = 9;
+                        throwFrames = false;
+                    }
                 }
-                npc.directionY = (!flag25).ToDirectionInt();
+                if (frame <= 5)
+                {
+                    frame = 6;
+                }
+                if (frame >= 10)
+                {
+                    frame = 9;
+                    throwFrames = false;
+                }
             }
-            if (flag19)
+            if (hasNoArrow)
             {
-                flag24 = false;
-                flag23 = true;
+                if (npc.frameCounter >= 12)
+                {
+                    frame += 1;
+                    npc.frameCounter = 0;
+                }
+                if (frame >= 2)
+                {
+                    frame = 0;
+                }
             }
-            if (flag23)
+            if (paperFrames)
             {
-                npc.velocity.Y = npc.velocity.Y + 0.1f;
-                if (npc.velocity.Y > 3f)
+                if (npc.frameCounter >= 12)
                 {
-                    npc.velocity.Y = 3f;
+                    frame += 1;
+                    npc.frameCounter = 0;
+                }
+                if (frame <= 9)
+                {
+                    frame = 10;
+                }
+                if (frame >= 12)
+                {
+                    frame = 10;
                 }
             }
-            else
-            {
-                if (npc.directionY < 0 && npc.velocity.Y > 0f)
-                {
-                    npc.velocity.Y = npc.velocity.Y - 0.1f;
-                }
-                if (npc.velocity.Y < -4f)
-                {
-                    npc.velocity.Y = -4f;
-                }
-            }
-            if (npc.collideX)
-            {
-                npc.velocity.X = npc.oldVelocity.X * -0.4f;
-                if (npc.direction == -1 && npc.velocity.X > 0f && npc.velocity.X < 1f)
-                {
-                    npc.velocity.X = 1f;
-                }
-                if (npc.direction == 1 && npc.velocity.X < 0f && npc.velocity.X > -1f)
-                {
-                    npc.velocity.X = -1f;
-                }
-            }
-            if (npc.collideY)
-            {
-                npc.velocity.Y = npc.oldVelocity.Y * -0.25f;
-                if (npc.velocity.Y > 0f && npc.velocity.Y < 1f)
-                {
-                    npc.velocity.Y = 1f;
-                }
-                if (npc.velocity.Y < 0f && npc.velocity.Y > -1f)
-                {
-                    npc.velocity.Y = -1f;
-                }
-            }
-            float num312 = 2f;     //this was originally 2f
-            if (npc.direction == -1 && npc.velocity.X > -num312)        //if it's facing the left
-            {
-                npc.velocity.X = -1.5f;
-                if (npc.velocity.X > num312)
-                {
-                    npc.velocity.X = npc.velocity.X - 0.1f;
-                }
-                if (npc.velocity.X > -1.5f)
-                {
-                    npc.velocity.X = npc.velocity.X + 1f;
-                }
-                if (npc.velocity.X < -num312)
-                {
-                    npc.velocity.X = -num312;
-                }
-            }
-            else if (npc.direction == 1 && npc.velocity.X < num312)     //if it's facing the right
-            {
-                npc.velocity.X = 1.5f;
-                if (npc.velocity.X < -num312)
-                {
-                    npc.velocity.X = npc.velocity.X + 0.1f;
-                }
-                if (npc.velocity.X < 1.5f)
-                {
-                    npc.velocity.X = npc.velocity.X - 1f;
-                }
-                if (npc.velocity.X > num312)
-                {
-                    npc.velocity.X = num312;
-                }
-            }
-            num312 = 1.5f;      //this was originally if (npc.type == 490) {num312 = 1f;} else {num312 = 1.5f}
-            if (npc.directionY == -1 && npc.velocity.Y > -num312)
-            {
-                npc.velocity.Y = npc.velocity.Y - 0.04f;
-                if (npc.velocity.Y > num312)
-                {
-                    npc.velocity.Y = npc.velocity.Y - 0.05f;
-                }
-                else if (npc.velocity.Y > 0f)
-                {
-                    npc.velocity.Y = npc.velocity.Y + 0.03f;
-                }
-                if (npc.velocity.Y < -num312)
-                {
-                    npc.velocity.Y = -num312;
-                }
-            }
-            else if (npc.directionY == 1 && npc.velocity.Y < num312)
-            {
-                npc.velocity.Y = npc.velocity.Y + 0.04f;
-                if (npc.velocity.Y < -num312)
-                {
-                    npc.velocity.Y = npc.velocity.Y + 0.05f;
-                }
-                else if (npc.velocity.Y < 0f)
-                {
-                    npc.velocity.Y = npc.velocity.Y - 0.03f;
-                }
-                if (npc.velocity.Y > num312)
-                {
-                    npc.velocity.Y = num312;
-                }
-            }
+            npc.frame.Y = frame * frameHeight;
         }
 
         public override void NPCLoot()

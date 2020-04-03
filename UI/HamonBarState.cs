@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.UI;
 using Terraria.UI.Chat;
 
@@ -18,6 +19,8 @@ namespace JoJoStands.UI
 
         public override void Update(GameTime gameTime)
         {
+            Player player = Main.player[Main.myPlayer];
+            Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
             if (sizeMode >= 4)
             {
                 sizeMode = 3;
@@ -54,15 +57,16 @@ namespace JoJoStands.UI
                 hamonDisplay.Left.Set(90f, 0f);
                 hamonDisplay.Top.Set(150f, 0f);
             }
-            hamonDisplay.SetText(Main.LocalPlayer.GetModPlayer<MyPlayer>().HamonCounter + "/" + Main.LocalPlayer.GetModPlayer<MyPlayer>().maxHamon);
+            hamonDisplay.SetText(hamonPlayer.HamonCounter + "/" + hamonPlayer.maxHamon);
+
             base.Update(gameTime);
         }
 
         public override void OnInitialize()
         {
             HamonBar = new DragableUIPanel();
-            HamonBar.Left.Set(400f, 0f);
-            HamonBar.Top.Set(100f, 0f);
+            HamonBar.Left.Set(MyPlayer.HamonBarPositionX, 0f);
+            HamonBar.Top.Set(MyPlayer.HamonBarPositionY, 0f);
             HamonBar.Width.Set(140f, 0f);
             HamonBar.Height.Set(96f, 0f);
             HamonBar.BackgroundColor = new Color(0, 0, 0, 0);       //make it invisible so that the image is there itself
@@ -87,102 +91,103 @@ namespace JoJoStands.UI
 
         protected override void DrawSelf(SpriteBatch spriteBatch)       //from ExampleMod's ExampleUI
         {
-            Player player = Main.LocalPlayer;
+            Player player = Main.player[Main.myPlayer];
+            Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
             int frame = 0;
             int frameHeight = hamonBarTexture.Height / 24;      //24 frames in that sheet
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 3 && player.GetModPlayer<MyPlayer>().HamonCounter <= 12)
+            if (hamonPlayer.HamonCounter >= 3 && hamonPlayer.HamonCounter <= 12)
             {
                 frame = 0;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 13 && player.GetModPlayer<MyPlayer>().HamonCounter <= 24)
+            if (hamonPlayer.HamonCounter >= 13 && hamonPlayer.HamonCounter <= 24)
             {
                 frame = 1;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 25 && player.GetModPlayer<MyPlayer>().HamonCounter <= 36)
+            if (hamonPlayer.HamonCounter >= 25 && hamonPlayer.HamonCounter <= 36)
             {
                 frame = 2;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 37 && player.GetModPlayer<MyPlayer>().HamonCounter <= 48)
+            if (hamonPlayer.HamonCounter >= 37 && hamonPlayer.HamonCounter <= 48)
             {
                 frame = 3;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 49 && player.GetModPlayer<MyPlayer>().HamonCounter <= 60)
+            if (hamonPlayer.HamonCounter >= 49 && hamonPlayer.HamonCounter <= 60)
             {
                 frame = 4;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 61 && player.GetModPlayer<MyPlayer>().HamonCounter <= 75)
+            if (hamonPlayer.HamonCounter >= 61 && hamonPlayer.HamonCounter <= 75)
             {
                 frame = 5;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 76 && player.GetModPlayer<MyPlayer>().HamonCounter <= 90)
+            if (hamonPlayer.HamonCounter >= 76 && hamonPlayer.HamonCounter <= 90)
             {
                 frame = 6;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 91 && player.GetModPlayer<MyPlayer>().HamonCounter <= 105)
+            if (hamonPlayer.HamonCounter >= 91 && hamonPlayer.HamonCounter <= 105)
             {
                 frame = 7;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 106 && player.GetModPlayer<MyPlayer>().HamonCounter <= 120)
+            if (hamonPlayer.HamonCounter >= 106 && hamonPlayer.HamonCounter <= 120)
             {
                 frame = 8;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 121 && player.GetModPlayer<MyPlayer>().HamonCounter <= 140)
+            if (hamonPlayer.HamonCounter >= 121 && hamonPlayer.HamonCounter <= 140)
             {
                 frame = 9;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 141 && player.GetModPlayer<MyPlayer>().HamonCounter <= 160)
+            if (hamonPlayer.HamonCounter >= 141 && hamonPlayer.HamonCounter <= 160)
             {
                 frame = 10;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 161 && player.GetModPlayer<MyPlayer>().HamonCounter <= 180)
+            if (hamonPlayer.HamonCounter >= 161 && hamonPlayer.HamonCounter <= 180)
             {
                 frame = 11;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 181 && player.GetModPlayer<MyPlayer>().HamonCounter <= 192)   //Aja stone frames
+            if (hamonPlayer.HamonCounter >= 181 && hamonPlayer.HamonCounter <= 192)   //Aja stone frames
             {
                 frame = 12;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 193 && player.GetModPlayer<MyPlayer>().HamonCounter <= 204)
+            if (hamonPlayer.HamonCounter >= 193 && hamonPlayer.HamonCounter <= 204)
             {
                 frame = 13;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 205 && player.GetModPlayer<MyPlayer>().HamonCounter <= 216)
+            if (hamonPlayer.HamonCounter >= 205 && hamonPlayer.HamonCounter <= 216)
             {
                 frame = 14;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 217 && player.GetModPlayer<MyPlayer>().HamonCounter <= 228)
+            if (hamonPlayer.HamonCounter >= 217 && hamonPlayer.HamonCounter <= 228)
             {
                 frame = 15;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 229 && player.GetModPlayer<MyPlayer>().HamonCounter <= 240)       //last of the first row
+            if (hamonPlayer.HamonCounter >= 229 && hamonPlayer.HamonCounter <= 240)       //last of the first row
             {
                 frame = 16;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 241 && player.GetModPlayer<MyPlayer>().HamonCounter <= 255)       //2nd row starts here
+            if (hamonPlayer.HamonCounter >= 241 && hamonPlayer.HamonCounter <= 255)       //2nd row starts here
             {
                 frame = 17;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 256 && player.GetModPlayer<MyPlayer>().HamonCounter <= 270)
+            if (hamonPlayer.HamonCounter >= 256 && hamonPlayer.HamonCounter <= 270)
             {
                 frame = 18;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 271 && player.GetModPlayer<MyPlayer>().HamonCounter <= 285)
+            if (hamonPlayer.HamonCounter >= 271 && hamonPlayer.HamonCounter <= 285)
             {
                 frame = 19;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 286 && player.GetModPlayer<MyPlayer>().HamonCounter <= 300)       //3rd row starts here
+            if (hamonPlayer.HamonCounter >= 286 && hamonPlayer.HamonCounter <= 300)       //3rd row starts here
             {
                 frame = 20;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 301 && player.GetModPlayer<MyPlayer>().HamonCounter <= 320)
+            if (hamonPlayer.HamonCounter >= 301 && hamonPlayer.HamonCounter <= 320)
             {
                 frame = 21;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 321 && player.GetModPlayer<MyPlayer>().HamonCounter <= 340)
+            if (hamonPlayer.HamonCounter >= 321 && hamonPlayer.HamonCounter <= 340)
             {
                 frame = 22;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= 341 && player.GetModPlayer<MyPlayer>().HamonCounter <= 360)
+            if (hamonPlayer.HamonCounter >= 341 && hamonPlayer.HamonCounter <= 360)
             {
                 frame = 23;
             }

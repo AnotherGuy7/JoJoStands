@@ -4,6 +4,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
+using JoJoStands.Networking;
  
 namespace JoJoStands.Buffs.ItemBuff
 {
@@ -17,6 +18,9 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
+
+        public bool setToTrue = false;
+        public bool sendFalse = false;
  
         public override void Update(Player player, ref int buffIndex)
         {
@@ -47,21 +51,60 @@ namespace JoJoStands.Buffs.ItemBuff
                         Main.player[i].controlTorch = false;
                     }
                 }
-                player.GetModPlayer<MyPlayer>().TimeSkipEffect = true;
+                if (!setToTrue)
+                {
+                    player.GetModPlayer<MyPlayer>().TimeSkipEffect = true;
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        ModNetHandler.effectSync.SendTimeskip(256, player.whoAmI, true, player.whoAmI);
+                    }
+                    setToTrue = true;
+                }
             }
             else
             {
+                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
                 for (int i = 0; i < 255; i++)
                 {
                     Array.Clear(PreTimeSkip.playerVelocity, i, 1);
                     if (Main.player[i].active && i != player.whoAmI)
                     {
-                        Main.player[i].AddBuff(BuffID.Confused, 240);
+                        Main.player[i].AddBuff(mod.BuffType("TimeSkipConfusion"), 240);
                     }
                 }
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    Main.npc[i].AddBuff(mod.BuffType("TimeSkipConfusion"), 120);
+                }
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timeskip_end"));
-                player.AddBuff(mod.BuffType("TimeCooldown"), 1800);
-                player.GetModPlayer<MyPlayer>().TimeSkipEffect = false;
+                player.AddBuff(mod.BuffType("AbilityCooldown"), 1800);
+                if (Main.netMode == NetmodeID.SinglePlayer)
+                {
+                    mPlayer.TimeSkipEffect = false;
+                }
+                else
+                {
+                    for (int i = 0; i < Main.maxPlayers; i++)
+                    {
+                        Player otherPlayers = Main.player[i];
+                        if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
+                        {
+                            if (otherPlayers.HasBuff(mod.BuffType(Name)))
+                            {
+                                sendFalse = false;      //don't send the packet and let the buff end if you weren't the only timestop owner
+                            }
+                            else
+                            {
+                                sendFalse = true;       //send the packet if no one is owning timestop
+                            }
+                        }
+                    }
+                }
+                if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)
+                {
+                    mPlayer.TimeSkipEffect = false;
+                    ModNetHandler.effectSync.SendTimeskip(256, player.whoAmI, false, player.whoAmI);
+                }
                 PreTimeSkip.userIndex = -1;
             }
         }

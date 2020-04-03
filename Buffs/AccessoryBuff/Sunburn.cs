@@ -23,9 +23,9 @@ namespace JoJoStands.Buffs.AccessoryBuff
             {
                 player.lifeRegen = 0;
             }
-                player.lifeRegenTime = 0;
-                player.lifeRegen -= 60;
-                player.moveSpeed *= 0.5f;
+            player.lifeRegenTime = 0;
+            player.lifeRegen -= 60;     //losing 30 health
+            player.moveSpeed *= 0.5f;
         }
     }
 }

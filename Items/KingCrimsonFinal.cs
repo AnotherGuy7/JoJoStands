@@ -15,71 +15,27 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("King Crimson (Final Tier)");
-			Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to do a more powerful donut! \nSpecial: Skip 10 seconds of time!");
+			Tooltip.SetDefault("Donut enemies with a powerful punch and right-click to use Epitaph for 9 seconds!\nSpecial: Skip 10 seconds of time!\nUsed in Stand Slot");
 		}
 
-		public override void SetDefaults()      //maybe make an Epitaph special? (What'll it do is the question I'm thinking right now)
-		{
-			item.damage = 151;	//Plantera
-			item.width = 32;
-			item.height = 32;
-			item.useTime = 20;
-			item.useAnimation = 20;
-			item.useStyle = 5;
-			item.maxStack = 1;
+        public override void SetDefaults()
+        {
+            item.damage = 186;
+            item.width = 32;
+            item.height = 32;
+            item.useTime = 12;
+            item.useAnimation = 12;
+            item.useStyle = 5;
+            item.maxStack = 1;
             item.knockBack = 5f;
-            item.rare = 6;
+            item.value = 0;
             item.noUseGraphic = true;
-            item.useTurn = true;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-			item.shoot = mod.ProjectileType("KingCrimsonFist");
-			item.shootSpeed = 50f;
-		}
-
-        public override void HoldItem(Player player)
-        {
-            if (JoJoStands.ItemHotKey.JustPressed && !player.HasBuff(mod.BuffType("TimeCooldown")) && !player.HasBuff(mod.BuffType("SkippingTime")) && player.whoAmI == Main.myPlayer)
-            {
-                player.AddBuff(mod.BuffType("PreTimeSkip"), 10);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip"));
-            }
+            item.rare = 6;
         }
 
-        public override bool AltFunctionUse(Player player)
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
         {
-            return true;
-        }
-
-        public override bool CanUseItem(Player player)
-        {
-            if (player.altFunctionUse == 2)
-            {
-                item.damage = 172;
-                item.useTime = 60;
-                item.useAnimation = 60;
-                item.reuseDelay = 40;
-                item.knockBack = 4f;
-                item.noUseGraphic = true;
-                item.UseSound = SoundID.Item1;
-                item.shoot = mod.ProjectileType("KingCrimsonDonut");
-                item.shootSpeed = 50f;
-            }
-            else
-            {
-                item.damage = 151;
-                item.useTime = 12;
-                item.useAnimation = 12;
-                item.reuseDelay = 35;
-                item.knockBack = 5f;
-                item.UseSound = SoundID.Item1;
-                item.shoot = mod.ProjectileType("KingCrimsonDonut");
-                item.useTurn = true;
-                item.noUseGraphic = true;
-                item.shootSpeed = 50f;
-                player.velocity.X = 5f * (float)player.direction;
-            }
-            return true;
+            mult *= (float)player.GetModPlayer<MyPlayer>().standDamageBoosts;
         }
 
         public override void AddRecipes()
@@ -89,7 +45,11 @@ namespace JoJoStands.Items
             recipe.AddIngredient(ItemID.ChlorophyteBar, 13);
             recipe.AddIngredient(ItemID.GoldCrown);
             recipe.AddIngredient(mod.ItemType("SoulofTime"), 2);
-			recipe.SetResult(this);
+            recipe.AddIngredient(mod.ItemType("WillToControl"), 3);
+            recipe.AddIngredient(mod.ItemType("WillToEscape"), 3);
+            recipe.AddIngredient(mod.ItemType("TaintedLifeforce"));
+            recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 	}

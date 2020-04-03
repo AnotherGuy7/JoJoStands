@@ -11,7 +11,7 @@ using Terraria.UI.Chat;
 
 namespace JoJoStands.UI
 {
-    internal class BetUI : UIState
+    internal class BetUI : UIState      //where you left off, finish adding D'Arby cheating in games and make it noticable, make Game 3
     {
         public DragableUIPanel Bet;
         public UIPanel playArea;
@@ -37,16 +37,39 @@ namespace JoJoStands.UI
         public UIImage rollResult2;
         public UIImage rollResult3;
         public bool Rolling = false;
-        public int rollTurn = 0;        //0 is player, 1 is NPC
+        public int rollTurn = 0;        //1 is player, 2 is NPC
         public int rollCounter = 0;
+        public int roll1;
+        public int roll2;
+        public int roll3;
 
-        public bool gameActive = false;
+        public Texture2D playerCardTexture1;
+        public Texture2D playerCardTexture2;
+        public Texture2D npcCardTexture1;
+        public Texture2D npcCardTexture2;
+        public UIImageButton drawPile;
+        public UIImageButton PlayerCard1Button;
+        public UIImageButton PlayerCard2Button;
+        public UIImage NPCCard1Image;
+        public UIImage NPCCard2Image;
+        public UIImageButton ShowCardsButton;
+        public int playerCard1;
+        public int playerCard2;
+        public int NPCCard1;
+        public int NPCCard2;
+        public bool waitingForCardSwap = false;
+        public bool swappeOutCard = false;
+        public bool showingCards = false;
+
         public bool won = false;
         public int chosenGame = 0;
         public static bool Visible;
         public int resultCounter = 0;
         public bool buttonsInitialized = false;
         public bool resultsInitialized = false;
+        public int cheatChance = 0; //every win, cheat chance goes up by a random number of 2-7
+        public bool accuseOfCheating = false;
+        public static bool cheating = false;
 
         public int pCoins = 0;
         public int gCoins = 0;
@@ -64,6 +87,10 @@ namespace JoJoStands.UI
 
         public override void OnInitialize()
         {
+            Texture2D UpArrow = ModContent.GetTexture("JoJoStands/Extras/UpArrow");
+            Texture2D DownArrow = ModContent.GetTexture("JoJoStands/Extras/DownArrow");
+            Texture2D playTexture = ModContent.GetTexture("Terraria/UI/ButtonPlay");
+
             Bet = new DragableUIPanel();
             Bet.HAlign = 0.5f;
             Bet.VAlign = 0.5f;
@@ -79,12 +106,11 @@ namespace JoJoStands.UI
             playArea.Height.Set(260f, 0f);
             Bet.Append(playArea);
 
-            Texture2D playTexture = ModContent.GetTexture("Terraria/UI/ButtonPlay");
             UIImageButton betButton = new UIImageButton(playTexture);
             betButton.Top.Set(260f, 0f);
             betButton.Left.Set(30f, 0f);
-            betButton.Width.Set(30f, 0f);
-            betButton.Height.Set(30f, 0f);
+            betButton.Width.Set(22f, 0f);
+            betButton.Height.Set(22f, 0f);
             betButton.OnClick += new MouseEvent(BetButtonClicked);
             Bet.Append(betButton);
 
@@ -92,48 +118,55 @@ namespace JoJoStands.UI
             UIImageButton closeButton = new UIImageButton(closeTexture);
             closeButton.Top.Set(0f, 0f);
             closeButton.Left.Set(0f, 0f);
-            closeButton.Width.Set(20f, 0f);
-            closeButton.Height.Set(20f, 0f);
+            closeButton.Width.Set(22f, 0f);
+            closeButton.Height.Set(22f, 0f);
             closeButton.OnClick += new MouseEvent(CloseButtonClicked);
             Bet.Append(closeButton);
 
-            Texture2D pCoinTexture = ModContent.GetTexture("Terraria/UI/ButtonPlay");
-            UIImageButton pCoinButton = new UIImageButton(pCoinTexture);
-            pCoinButton.Top.Set(100f, 0f);
+            UIImageButton pCoinButton = new UIImageButton(UpArrow);
+            pCoinButton.Top.Set(104f, 0f);
             pCoinButton.Left.Set(5f, 0f);
-            pCoinButton.Width.Set(20f, 0f);
-            pCoinButton.Height.Set(20f, 0f);
+            pCoinButton.Width.Set(22f, 0f);
+            pCoinButton.Height.Set(14f, 0f);
             pCoinButton.OnClick += new MouseEvent(PlatinumCoinButtonClicked);
             Bet.Append(pCoinButton);
 
-            UIImageButton nPCoinButton = new UIImageButton(pCoinTexture);
-            nPCoinButton.Top.Set(120f, 0f);
+            UIImageButton nPCoinButton = new UIImageButton(DownArrow);
+            nPCoinButton.Top.Set(116f, 0f);
             nPCoinButton.Left.Set(5f, 0f);
-            nPCoinButton.Width.Set(20f, 0f);
-            nPCoinButton.Height.Set(20f, 0f);
+            nPCoinButton.Width.Set(22f, 0f);
+            nPCoinButton.Height.Set(14f, 0f);
             nPCoinButton.OnClick += new MouseEvent(NPlatinumCoinButtonClicked);
             Bet.Append(nPCoinButton);
 
-            Texture2D gCoinTexture = ModContent.GetTexture("Terraria/UI/ButtonPlay");
-            UIImageButton gCoinButton = new UIImageButton(pCoinTexture);
-            gCoinButton.Top.Set(50f, 0f);
+            UIImageButton gCoinButton = new UIImageButton(UpArrow);
+            gCoinButton.Top.Set(54f, 0f);
             gCoinButton.Left.Set(5f, 0f);
-            gCoinButton.Width.Set(20f, 0f);
-            gCoinButton.Height.Set(20f, 0f);
+            gCoinButton.Width.Set(22f, 0f);
+            gCoinButton.Height.Set(14f, 0f);
             gCoinButton.OnClick += new MouseEvent(GoldCoinButtonClicked);
             Bet.Append(gCoinButton);
 
-            UIImageButton nGCoinButton = new UIImageButton(gCoinTexture);
-            nGCoinButton.Top.Set(70f, 0f);
+            UIImageButton nGCoinButton = new UIImageButton(DownArrow);
+            nGCoinButton.Top.Set(66f, 0f);
             nGCoinButton.Left.Set(5f, 0f);
-            nGCoinButton.Width.Set(20f, 0f);
-            nGCoinButton.Height.Set(20f, 0f);
+            nGCoinButton.Width.Set(22f, 0f);
+            nGCoinButton.Height.Set(14f, 0f);
             nGCoinButton.OnClick += new MouseEvent(NGoldCoinButtonClicked);
             Bet.Append(nGCoinButton);
 
+            UIImageButton accuseButton = new UIImageButton(playTexture);
+            accuseButton.Top.Set(150f, 0f);
+            accuseButton.Left.Set(210f, 0f);
+            accuseButton.Width.Set(playTexture.Width, 0f);
+            accuseButton.Height.Set(playTexture.Height, 0f);
+            accuseButton.OnClick += new MouseEvent(AccuseButtonClicked);
+            Bet.Append(accuseButton);
+
+
             UIText GambleText = new UIText("Gamble");
-            GambleText.Top.Set(280f, 0f);
-            GambleText.Left.Set(30f, 0f);
+            GambleText.Top.Set(265f, 0f);
+            GambleText.Left.Set(60f, 0f);
             Bet.Append(GambleText);
 
             pCoinText = new UIText("0");
@@ -146,6 +179,11 @@ namespace JoJoStands.UI
             gCoinText.Left.Set(30f, 0f);
             Bet.Append(gCoinText);
 
+            UIText AccuseText = new UIText("Accuse of Cheating");
+            AccuseText.Top.Set(150f, 0f);
+            AccuseText.Left.Set(50f, 0f);
+            Bet.Append(AccuseText);
+
             Append(Bet);
             base.OnInitialize();
         }
@@ -154,7 +192,7 @@ namespace JoJoStands.UI
         {
             Player player = Main.player[Main.myPlayer];
             Main.PlaySound(SoundID.MenuTick);
-            if (player.CountItem(ItemID.PlatinumCoin) > pCoins)
+            if (player.CountItem(ItemID.PlatinumCoin) > pCoins && chosenGame == 0)
             {
                 pCoins += 1;
             }
@@ -163,7 +201,7 @@ namespace JoJoStands.UI
         private void NPlatinumCoinButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             Main.PlaySound(SoundID.MenuTick);
-            if (pCoins > 0)
+            if (pCoins > 0 && chosenGame == 0)
             {
                 pCoins -= 1;
             }
@@ -173,7 +211,7 @@ namespace JoJoStands.UI
         {
             Player player = Main.player[Main.myPlayer];
             Main.PlaySound(SoundID.MenuTick);
-            if (player.CountItem(ItemID.GoldCoin) > gCoins)
+            if (player.CountItem(ItemID.GoldCoin) > gCoins && chosenGame == 0)
             {
                 gCoins += 1;
             }
@@ -182,29 +220,62 @@ namespace JoJoStands.UI
         private void NGoldCoinButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             Main.PlaySound(SoundID.MenuTick);
-            if (gCoins > 0)
+            if (gCoins > 0 && chosenGame == 0)
             {
                 gCoins -= 1;
+            }
+        }
+
+        private void AccuseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Main.PlaySound(SoundID.MenuTick);
+            if (chosenGame != 0)
+            {
+                accuseOfCheating = true;
+                if (cheating)
+                {
+                    won = true;
+                    Main.NewText("*D'Arby is sweating a lot and is looking like very, very pale...\nPlease don't tell Jotaro! I'll give you 2x the money!");
+
+                }
+                if (!cheating)
+                {
+                    won = false;
+                    Main.NewText("I'm no cheater! You're accusing the me of the past! I'm a whole new gambler now!");
+                }
+                GameEnd();
+
+            }
+            if (chosenGame == 0)
+            {
+                Main.NewText("What am I cheating at? We're not even betting!");
             }
         }
 
         private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             Main.PlaySound(SoundID.MenuClose);
-            Visible = false;
+            if (chosenGame == 0)
+            {
+                Visible = false;
+            }
         }
 
         private void BetButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             Player player = Main.player[Main.myPlayer];
             Main.PlaySound(SoundID.MenuTick);
-            if (pCoins != 0 || gCoins != 0)
+            if (pCoins != 0 || gCoins != 0 && chosenGame == 0)
             {
-                chosenGame = /*Main.rand.Next(1, 4)*/ 2;
+                chosenGame = Main.rand.Next(1, 4);
             }
             else
             {
                 Main.NewText("It wouldn't be gambling without some loss and gain.");
+            }
+            if (chosenGame != 0)
+            {
+                Main.NewText("We are already betting... Can't you see that?");
             }
         }
 
@@ -233,14 +304,52 @@ namespace JoJoStands.UI
             rollButton.Remove();
         }
 
-        public int roll1;
-        public int roll2;
-        public int roll3;
-        public bool rollsInitialized = false;
+        private void DrawPileClicked(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Main.NewText("Click the card you'd like to switch out");
+            if (!swappeOutCard)
+            {
+                Main.PlaySound(SoundID.MenuTick);
+                waitingForCardSwap = true;
+            }
+        }
+
+        private void SwapOutCard1(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (waitingForCardSwap && !swappeOutCard)
+            {
+                Main.PlaySound(SoundID.MenuTick);
+                playerCard1 = Main.rand.Next(1, 11);
+                playerCardTexture1 = ModContent.GetTexture("JoJoStands/Extras/card_" + playerCard1 + "s" + Main.rand.Next(1, 5));
+                PlayerCard1Button.SetImage(playerCardTexture1);
+                waitingForCardSwap = false;
+                swappeOutCard = true;
+            }
+        }
+
+        private void SwapOutCard2(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (waitingForCardSwap && !swappeOutCard)
+            {
+                Main.PlaySound(SoundID.MenuTick);
+                playerCard2 = Main.rand.Next(1, 11);
+                playerCardTexture2 = ModContent.GetTexture("JoJoStands/Extras/card_" + playerCard2 + "s" + Main.rand.Next(1, 5));
+                PlayerCard2Button.SetImage(playerCardTexture2);
+                waitingForCardSwap = false;
+                swappeOutCard = true;
+            }
+        }
+
+        private void ShowCardsClicked(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Main.PlaySound(SoundID.MenuTick);
+            showingCards = true;
+        }
+
 
         public virtual void GameActive()
         {
-            if (chosenGame == 1)
+            if (chosenGame == 1)        //Ro-Sham-Bo game
             {
                 if (!buttonsInitialized)
                 {
@@ -290,144 +399,218 @@ namespace JoJoStands.UI
                     }
                 }
             }
-            if (chosenGame == 2)
+            if (chosenGame == 2)        //the rolling game
             {
+                dieTexture1 = ModContent.GetTexture("JoJoStands/Extras/Die_" + roll1);
+                dieTexture2 = ModContent.GetTexture("JoJoStands/Extras/Die_" + roll2);
+                dieTexture3 = ModContent.GetTexture("JoJoStands/Extras/Die_" + roll3);
+
                 if (!buttonsInitialized)
                 {
                     ReInitialize(2);
                     buttonsInitialized = true;
+                    rollTurn = 1;
                 }
-                if (Rolling)
+                if (Rolling)        
                 {
                     rollCounter++;
-                    dieTexture1 = ModContent.GetTexture("JoJoStands/Extras/Die_" + roll1);
-                    dieTexture2 = ModContent.GetTexture("JoJoStands/Extras/Die_" + roll2);
-                    dieTexture3 = ModContent.GetTexture("JoJoStands/Extras/Die_" + roll3);
-                    rollResult1.Left.Pixels = rollResult1.Left.Pixels + Main.rand.Next(-1, 2);
-                    rollResult2.Left.Pixels = rollResult2.Left.Pixels + Main.rand.Next(-1, 2);
-                    rollResult3.Left.Pixels = rollResult3.Left.Pixels + Main.rand.Next(-1, 2);
-                    rollResult1.Top.Pixels = rollResult1.Top.Pixels + Main.rand.Next(-1, 2);
-                    rollResult2.Top.Pixels = rollResult2.Top.Pixels + Main.rand.Next(-1, 2);
-                    rollResult3.Top.Pixels = rollResult3.Top.Pixels + Main.rand.Next(-1, 2);
-                    roll1 = Main.rand.Next(1, 7);
-                    roll2 = Main.rand.Next(1, 7);
-                    roll3 = Main.rand.Next(1, 7);
-                    if (!rollsInitialized)
+                    if (!resultsInitialized)
                     {
                         ReInitialize(5);
-                        rollsInitialized = true;
+                        resultsInitialized = true;
                     }
-                    if (rollTurn == 0)
+                    if (resultsInitialized)
+                    {
+                        rollResult1.SetImage(dieTexture1);
+                        rollResult2.SetImage(dieTexture2);
+                        rollResult3.SetImage(dieTexture3);
+
+                        rollResult1.Left.Pixels += Main.rand.Next(-1, 2);
+                        rollResult2.Left.Pixels += Main.rand.Next(-1, 2);
+                        rollResult3.Left.Pixels += Main.rand.Next(-1, 2);
+                        rollResult1.Top.Pixels += Main.rand.Next(-1, 2);
+                        rollResult2.Top.Pixels += Main.rand.Next(-1, 2);
+                        rollResult3.Top.Pixels += Main.rand.Next(-1, 2);
+
+                        roll1 = Main.rand.Next(1, 7);
+                        roll2 = Main.rand.Next(1, 7);
+                        roll3 = Main.rand.Next(1, 7);
+
+                        rollResult1.Left.Pixels = 20f;
+                        rollResult2.Left.Pixels = 70f;
+                        rollResult3.Left.Pixels = 110f;
+                        rollResult1.Top.Pixels = rollResult2.Top.Pixels = rollResult3.Top.Pixels = 104f;
+                    }
+                    if (rollTurn == 1)      //if it's your turn
                     {
                         rollText.SetText("You are Rolling...");
                     }
-                    if (rollTurn == 1)
+                    if (rollTurn == 2)      //if it's D'Arbys turn
                     {
                         rollText.SetText("D'Arby is Rolling...");
                     }
                     if (rollCounter >= 90)
                     {
-                        rollResult1.Left.Pixels = 60f;
-                        rollResult2.Left.Pixels = 110f;
-                        rollResult3.Left.Pixels = 160f;
+                        if (rollTurn == 2 && Main.rand.Next(0, 100) <= cheatChance)
+                        {
+                            cheating = true;
+                            roll1 = 6;
+                            roll2 = 6;
+                            roll3 = 6;
+                            dieTexture1 = dieTexture2 = dieTexture3 = ModContent.GetTexture("JoJoStands/Extras/WeightedDie");
+                        }
+                        rollResult1.Left.Pixels = 20f;
+                        rollResult2.Left.Pixels = 70f;
+                        rollResult3.Left.Pixels = 110f;
                         rollResult1.Top.Pixels = rollResult2.Top.Pixels = rollResult3.Top.Pixels = 104f;
                         Rolling = false;
-                        rollText.Remove();
+                        rollText.SetText("");
                     }
                 }
-                if (rollCounter > 89)
+                if (rollCounter == 90)
                 {
+                    rollResult1.SetImage(dieTexture1);      //so that it doesn't stay stuck at the previous numbers
+                    rollResult2.SetImage(dieTexture2);
+                    rollResult3.SetImage(dieTexture3);
+
                     resultCounter++;
-                    if (rollTurn == 0)
+                    if (rollTurn == 1 && resultCounter >= 160)
                     {
                         if (roll1 == roll2 && roll2 == roll3 && (roll3 == 4 || roll3 == 5 || roll3 == 6))
                         {
                             won = true;
-                            GameEnd();
                         }
                         else if ((roll1 + roll2 + roll3) == 6)
                         {
                             won = true;
-                            GameEnd();
                         }
                         else if (roll1 > 3 && roll2 > 3 && roll3 > 3)
                         {
                             won = true;
-                            GameEnd();
                         }
                         else if (roll1 == roll2 && roll2 == roll3 && (roll3 == 1 || roll3 == 2 || roll3 == 3))
                         {
                             won = false;
-                            GameEnd();
                         }
                         else if (roll1 <= 3 && roll2 <= 3 && roll3 <= 3)
                         {
                             won = false;
-                            GameEnd();
                         }
                         else
                         {
-                            rollTurn = 1;
+                            rollResult1.Remove();
+                            rollResult2.Remove();
+                            rollResult3.Remove();
+                            resultCounter = 0;
+                            rollTurn = 2;
                             roll1 = 0;
                             roll2 = 0;
                             roll3 = 0;
                             rollCounter = 0;
+                            resultCounter = 0;
                             Rolling = true;
+                            resultsInitialized = false;
                         }
                     }
-                    if (rollTurn == 1)
+                    if (rollTurn == 2 && resultCounter >= 160)
                     {
                         if (roll1 == roll2 && roll2 == roll3 && (roll3 == 4 || roll3 == 5 || roll3 == 6))
                         {
                             won = false;
-                            GameEnd();
                         }
                         else if ((roll1 + roll2 + roll3) == 6)
                         {
                             won = false;
-                            GameEnd();
                         }
                         else if (roll1 > 3 && roll2 > 3 && roll3 > 3)
                         {
                             won = false;
-                            GameEnd();
                         }
                         else if (roll1 == roll2 && roll2 == roll3 && (roll3 == 1 || roll3 == 2 || roll3 == 3))
                         {
                             won = true;
-                            GameEnd();
                         }
                         else if (roll1 <= 3 && roll2 <= 3 && roll3 <= 3)
                         {
                             won = true;
-                            GameEnd();
                         }
                         else
                         {
-                            rollTurn = 0;
+                            rollResult1.Remove();
+                            rollResult2.Remove();
+                            rollResult3.Remove();
                             roll1 = 0;
                             roll2 = 0;
                             roll3 = 0;
                             buttonsInitialized = false;
                             rollCounter = 0;
+                            resultsInitialized = false;
+                            resultCounter = 0;
                         }
                     }
                 }
-                if (resultCounter >= 160)
-                {
-                    rollResult1.Remove();
-                    rollResult2.Remove();
-                    rollResult3.Remove();
-                    rollsInitialized = false;
-                    resultCounter = 0;
-                }
             }
-            if (chosenGame == 3)
+            if (chosenGame == 3)        //the mini-poker game
             {
+                if (!buttonsInitialized)
+                {
+                    playerCard1 = Main.rand.Next(1, 11);
+                    playerCard2 = Main.rand.Next(1, 11);
+                    NPCCard1 = Main.rand.Next(1, 11);
+                    NPCCard2 = Main.rand.Next(1, 11);
+                    if (Main.rand.Next(0, 100) <= cheatChance)
+                    {
+                        cheating = true;
+                        NPCCard1 = NPCCard2 = 10;
+                    }
+                    playerCardTexture1 = ModContent.GetTexture("JoJoStands/Extras/card_" + playerCard1 + "s" + Main.rand.Next(1, 5));
+                    playerCardTexture2 = ModContent.GetTexture("JoJoStands/Extras/card_" + playerCard2 + "s" + Main.rand.Next(1, 5));
+                    npcCardTexture1 = npcCardTexture2 = ModContent.GetTexture("JoJoStands/Extras/card_back");
+                    ReInitialize(3);
+                    buttonsInitialized = true;
+                }
 
+                if (showingCards)
+                {
+                    resultCounter++;
+                    if (npcCardTexture1 == ModContent.GetTexture("JoJoStands/Extras/card_back"))
+                    {
+                        if (!cheating)
+                        {
+                            npcCardTexture1 = ModContent.GetTexture("JoJoStands/Extras/card_" + NPCCard1 + "s" + Main.rand.Next(1, 5));
+                            npcCardTexture2 = ModContent.GetTexture("JoJoStands/Extras/card_" + NPCCard2 + "s" + Main.rand.Next(1, 5));
+                        }
+                        if (cheating)
+                        {
+                            npcCardTexture1 = npcCardTexture2 = ModContent.GetTexture("JoJoStands/Extras/cheatCard_" + Main.rand.Next(1, 5));
+                        }
+                        NPCCard1Image.SetImage(npcCardTexture1);
+                        NPCCard2Image.SetImage(npcCardTexture2);
+                    }
+                    if ((playerCard1 + playerCard2) > (NPCCard1 + NPCCard2))
+                    {
+                        won = true;
+                    }
+                    if ((playerCard1 + playerCard2) < (NPCCard1 + NPCCard2))
+                    {
+                        won = false;
+                    }
+                    if ((playerCard1 + playerCard2) == (NPCCard1 + NPCCard2))
+                    {
+                        resultCounter++;
+                        if (resultCounter >= 160)
+                        {
+                            resultCounter = 0;
+                        }
+                    }
+                }
             }
             if (resultCounter >= 180)
             {
+                if (!accuseOfCheating && cheating)
+                {
+                    Main.NewText("*D'Arby smiles...");
+                }
                 GameEnd();
             }
         }
@@ -435,36 +618,42 @@ namespace JoJoStands.UI
         public virtual void GameEnd()
         {
             Player player = Main.player[Main.myPlayer];
-            chosenGame = 0;
             playerChoice = 0;
             resultCounter = 0;
             randomSign = 0;
-            buttonsInitialized = false;
-            resultsInitialized = false;
-            roll1 = 0;
-            roll2 = 0;
-            roll3 = 0;
-            rollTurn = 0;
-            Rolling = false;
 
             if (won)
             {
+                cheatChance += Main.rand.Next(2, 8);
                 if (pCoins != 0)
                 {
-                    Item.NewItem(player.position, ItemID.PlatinumCoin, pCoins * Main.rand.Next(1, 3));
+                    Item.NewItem(player.position, ItemID.PlatinumCoin, pCoins);
                 }
                 if (gCoins != 0)
                 {
-                    Item.NewItem(player.position, ItemID.GoldCoin, gCoins * Main.rand.Next(1, 3));
+                    Item.NewItem(player.position, ItemID.GoldCoin, gCoins);
                 }
-                Main.NewText("Dang it... No! How is this possible!? Fine, just take the coins, I have much more anyway.");
+                if (accuseOfCheating && cheating)
+                {
+                    if (pCoins != 0)
+                    {
+                        Item.NewItem(player.position, ItemID.PlatinumCoin, pCoins * 2);
+                    }
+                    if (gCoins != 0)
+                    {
+                        Item.NewItem(player.position, ItemID.GoldCoin, gCoins * 2);
+                    }
+                }
+                if (!cheating)
+                {
+                    Main.NewText("Dang it... No! How is this possible!? Fine, just take the coins, I have much more anyway.");
+                }
                 pCoins = 0;
                 gCoins = 0;
 
             }
             else
             {
-                Visible = false;
                 for (int c = 0; c < Main.maxInventory; c++)
                 {
                     if (player.inventory[c].type == ItemID.PlatinumCoin)
@@ -480,28 +669,69 @@ namespace JoJoStands.UI
                 pCoins = 0;
                 gCoins = 0;
             }
+            if (cheating)
+            {
+                cheatChance = 0;
+                cheating = false;
+            }
+            if (accuseOfCheating)
+            {
+                accuseOfCheating = false;
+            }
 
             if (chosenGame == 1)
             {
-                playerResult.Remove();
-                npcResult.Remove();
+                if (resultsInitialized)
+                {
+                    playerResult.Remove();
+                    npcResult.Remove();
+                    resultsInitialized = false;
+                }
+                chosenGame = 0;     //here in each one so that chosenGame doesn't turn 0 first
             }
             if (chosenGame == 2)
             {
-                rollResult1.Remove();
-                rollResult2.Remove();
-                rollResult3.Remove();
-                rollButton.Remove();
-                rollText.Remove();
+                if (buttonsInitialized)
+                {
+                    rollButton.Remove();
+                    rollText.Remove();
+                    buttonsInitialized = false;
+                }
+                if (resultsInitialized)
+                {
+                    rollResult1.Remove();
+                    rollResult2.Remove();
+                    rollResult3.Remove();
+                    resultsInitialized = false;
+                }
                 roll1 = 0;
                 roll2 = 0;
                 roll3 = 0;
                 rollTurn = 0;
                 Rolling = false;
+                chosenGame = 0;
+                rollCounter = 0;
             }
             if (chosenGame == 3)
             {
-
+                if (buttonsInitialized)
+                {
+                    PlayerCard1Button.Remove();
+                    PlayerCard2Button.Remove();
+                    NPCCard1Image.Remove();
+                    NPCCard2Image.Remove();
+                    ShowCardsButton.Remove();
+                    drawPile.Remove();
+                    buttonsInitialized = false;
+                }
+                playerCard1 = 0;
+                playerCard2 = 0;
+                NPCCard1 = 0;
+                NPCCard2 = 0;
+                chosenGame = 0;
+                waitingForCardSwap = false;
+                showingCards = false;
+                swappeOutCard = false;
             }
         }
 
@@ -536,7 +766,7 @@ namespace JoJoStands.UI
                 scissorsButton.OnClick += new MouseEvent(ScissorButtonClicked);
                 playArea.Append(scissorsButton);
             }
-            else if (set == 2)
+            else if (set == 2)      //Roll button
             {
                 Texture2D playTexture = ModContent.GetTexture("Terraria/UI/ButtonPlay");
                 rollButton = new UIImageButton(playTexture);
@@ -548,13 +778,60 @@ namespace JoJoStands.UI
                 playArea.Append(rollButton);
 
                 rollText = new UIText("Roll");
-                rollText.HAlign = 0.5f;
-                rollText.VAlign = 0.8f;
+                rollText.HAlign = 0.58f;
+                rollText.VAlign = 0.76f;
                 playArea.Append(rollText);
             }
             else if (set == 3)
             {
+                drawPile = new UIImageButton(ModContent.GetTexture("JoJoStands/Extras/card_back"));
+                drawPile.HAlign = 0.9f;
+                drawPile.VAlign = 0.4f;
+                drawPile.Height.Set(58f, 0f);
+                drawPile.Width.Set(42f, 0f);
+                drawPile.SetVisibility(1f, 1f);
+                drawPile.OnClick += new MouseEvent(DrawPileClicked);
+                playArea.Append(drawPile);
 
+                PlayerCard1Button = new UIImageButton(playerCardTexture1);
+                PlayerCard1Button.HAlign = 0.15f;
+                PlayerCard1Button.VAlign = 0.7f;
+                PlayerCard1Button.Height.Set(playerCardTexture1.Height, 0f);
+                PlayerCard1Button.Width.Set(playerCardTexture1.Width, 0f);
+                PlayerCard1Button.SetVisibility(1f, 1f);
+                PlayerCard1Button.OnClick += new MouseEvent(SwapOutCard1);
+                playArea.Append(PlayerCard1Button);
+
+                PlayerCard2Button = new UIImageButton(playerCardTexture2);
+                PlayerCard2Button.HAlign = 0.55f;
+                PlayerCard2Button.VAlign = 0.7f;
+                PlayerCard2Button.Height.Set(playerCardTexture2.Height, 0f);
+                PlayerCard2Button.Width.Set(playerCardTexture2.Width, 0f);
+                PlayerCard2Button.SetVisibility(1f, 1f);
+                PlayerCard2Button.OnClick += new MouseEvent(SwapOutCard2);
+                playArea.Append(PlayerCard2Button);
+
+                NPCCard1Image = new UIImage(npcCardTexture1);
+                NPCCard1Image.HAlign = 0.15f;
+                NPCCard1Image.VAlign = 0.3f;
+                NPCCard1Image.Height.Set(npcCardTexture1.Height, 0f);
+                NPCCard1Image.Width.Set(npcCardTexture1.Width, 0f);
+                playArea.Append(NPCCard1Image);
+
+                NPCCard2Image = new UIImage(npcCardTexture2);
+                NPCCard2Image.HAlign = 0.55f;
+                NPCCard2Image.VAlign = 0.3f;
+                NPCCard2Image.Height.Set(npcCardTexture2.Height, 0f);
+                NPCCard2Image.Width.Set(npcCardTexture2.Width, 0f);
+                playArea.Append(NPCCard2Image);
+
+                ShowCardsButton = new UIImageButton(ModContent.GetTexture("Terraria/UI/ButtonPlay"));
+                ShowCardsButton.HAlign = 0.9f;
+                ShowCardsButton.VAlign = 0.65f;
+                ShowCardsButton.Height.Set(30f, 0f);
+                ShowCardsButton.Width.Set(30f, 0f);
+                ShowCardsButton.OnClick += new MouseEvent(ShowCardsClicked);
+                playArea.Append(ShowCardsButton);
             }
             else if (set == 4)      //Result UIImages of Rock, Paper, Scissors
             {
@@ -605,25 +882,25 @@ namespace JoJoStands.UI
                     playArea.Append(npcResult);
                 }
             }
-            else if (set == 5)
+            else if (set == 5)      //Rolling results
             {
                 rollResult1 = new UIImage(dieTexture1);
                 rollResult1.Top.Set(104f, 0f);
-                rollResult1.Left.Set(60f, 0f);
+                rollResult1.Left.Set(20f, 0f);
                 rollResult1.Height.Set(dieTexture1.Height, 0f);
                 rollResult1.Width.Set(dieTexture1.Width, 0f);
                 playArea.Append(rollResult1);
 
                 rollResult2 = new UIImage(dieTexture2);
                 rollResult2.Top.Set(104f, 0f);
-                rollResult2.Left.Set(110f, 0f);
+                rollResult2.Left.Set(70f, 0f);
                 rollResult2.Height.Set(dieTexture2.Height, 0f);
                 rollResult2.Width.Set(dieTexture2.Width, 0f);
                 playArea.Append(rollResult2);
 
                 rollResult3 = new UIImage(dieTexture3);
                 rollResult3.Top.Set(104f, 0f);
-                rollResult3.Left.Set(160f, 0f);
+                rollResult3.Left.Set(110f, 0f);
                 rollResult3.Height.Set(dieTexture3.Height, 0f);
                 rollResult3.Width.Set(dieTexture3.Width, 0f);
                 playArea.Append(rollResult3);

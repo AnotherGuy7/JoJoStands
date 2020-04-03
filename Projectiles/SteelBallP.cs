@@ -15,11 +15,9 @@ namespace JoJoStands.Projectiles
         }
         public override void SetDefaults()
         {
-            
             projectile.CloneDefaults(ProjectileID.LightDisc);
             projectile.width = 14;
             projectile.height = 14;
-            projectile.melee = true;
             projectile.aiStyle = 3;
             projectile.ranged = true;
             projectile.timeLeft = 600;
@@ -30,7 +28,8 @@ namespace JoJoStands.Projectiles
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            if (Main.rand.Next(0, 101) <= 25)
+            Items.Hamon.HamonPlayer hamonPlayer = Main.player[projectile.owner].GetModPlayer<Items.Hamon.HamonPlayer>();
+            if (hamonPlayer.HamonCounter >= 5 && Main.rand.Next(0, 101) <= 25)
             {
                 target.AddBuff(mod.BuffType("Spin"), 40);
             }

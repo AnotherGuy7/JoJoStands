@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -30,14 +31,15 @@ namespace JoJoStands.Projectiles.Minions
             projectile.timeLeft = 1;
             projectile.tileCollide = false; ;
             projectile.ignoreWater = true;
-            projectile.melee = true;
             MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         protected float shootSpeed = 16f;
         protected float shootCool = 6f;
-        static bool normalFrames = false;
-        static bool attackFrames = false;
+        public bool normalFrames = false;
+        public bool attackFrames = false;
+        public bool justSpawned = false;
+        public int goldenRectangleEffectTimer = 256;
 
         public override void AI()       //changed this to ExampleMod's HoverShooter...
         {
@@ -55,6 +57,19 @@ namespace JoJoStands.Projectiles.Minions
             if (modPlayer.TuskAct4Minion)
             {
                 projectile.timeLeft = 2;
+            }
+            if (goldenRectangleEffectTimer >= 215)
+            {
+                Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X, projectile.velocity.Y);
+                Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X - 5f, projectile.velocity.Y + 5f);
+                Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X + 5f, projectile.velocity.Y - 5f);
+                Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X + 5f, projectile.velocity.Y + 5f);
+                Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X - 5f, projectile.velocity.Y - 5f);
+                //Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 169, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+            }
+            if (goldenRectangleEffectTimer > 0)
+            {
+                goldenRectangleEffectTimer -= 2;
             }
 
             for (int k = 0; k < 200; k++)
@@ -133,9 +148,28 @@ namespace JoJoStands.Projectiles.Minions
                 projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
                 projectile.velocity *= 0.8f;
                 projectile.direction = (projectile.spriteDirection = player.direction);
+                projectile.netUpdate = true;
             }
         }
- 
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            if (goldenRectangleEffectTimer > 0)
+            {
+                Vector2 rectangleOffset = Vector2.Zero;
+                if (projectile.spriteDirection == 1)
+                {
+                    rectangleOffset = new Vector2(-30f, 0f);
+                }
+                /*if (projectile.direction == -1)
+                {
+                    rectangleOffset = V
+                }*/
+                spriteBatch.Draw(mod.GetTexture("Extras/GoldenSpinComplete"), (projectile.position + rectangleOffset) - Main.screenPosition, Color.White * (((float)goldenRectangleEffectTimer * 3.9215f) / 1000f));
+            }
+            return true;
+        }
+
         public virtual void SelectFrame()
         {
             projectile.frameCounter++;

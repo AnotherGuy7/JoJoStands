@@ -9,12 +9,16 @@ namespace JoJoStands.Projectiles
 {
     public class HamonSodaBottleCap : ModProjectile
     {
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[projectile.type] = 3;
+        }
+
         public override void SetDefaults()
         {
             projectile.width = 3;
             projectile.height = 6;
             projectile.aiStyle = 0;
-            projectile.ranged = true;
             projectile.timeLeft = 300;
             projectile.friendly = true;
             projectile.tileCollide = true;
@@ -29,7 +33,17 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
+            projectile.frameCounter++;
+            if (projectile.frameCounter >= 12)
+            {
+                projectile.frame += 1;
+                projectile.frameCounter = 0;
+            }
+            if (projectile.frame >= 3)
+            {
+                projectile.frame = 0;
+            }
+            projectile.rotation = projectile.velocity.ToRotation();
         }
     }
 }

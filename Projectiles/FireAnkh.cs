@@ -11,10 +11,9 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 12;      //had to give it a bad hitbox cause it wasn't hitting anything
+            projectile.width = 12;
             projectile.height = 20;
             projectile.aiStyle = 0;
-            projectile.ranged = true;
             projectile.timeLeft = 360;
             projectile.friendly = true;
             projectile.tileCollide = true;
@@ -29,9 +28,19 @@ namespace JoJoStands.Projectiles
             }
             if (projectile.scale <= 0f)
             {
-                projectile.timeLeft = 1;
+                projectile.Kill();
             }
-            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 35, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+            int num109 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 3.5f);
+            Main.dust[num109].noGravity = true;
+            Main.dust[num109].velocity *= 1.4f;
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            if (Main.rand.Next(0, 101) < projectile.ai[0])
+            {
+                target.AddBuff(BuffID.OnFire, (int)projectile.ai[1]);
+            }
         }
     }
 }

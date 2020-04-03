@@ -15,89 +15,38 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Sticky Fingers (Final Tier)");
-			Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use an extended punch!");
+			Tooltip.SetDefault("Punch enemies at a really fast rate and zip them open! Right-click to use an extended punch!\nSpecial: Zip in the direction of your mouse for a distance of 30 tiles!\nUsed in Stand Slot");
 		}
 
-		public override void SetDefaults()
-		{
-			item.damage = 128;     	//Around the Mechs
-			item.width = 100;
-			item.height = 8;
-			item.useTime = 10;
-			item.useAnimation = 10;
-			item.useStyle = 5;
-			item.maxStack = 1;
-			item.knockBack = 2;
-			item.value = 10000;
-			item.rare = 6;
-			item.melee = true;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-			item.shoot = mod.ProjectileType("StickyFingersFist");
-			item.shootSpeed = 50f;
-		}
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-            if (player.altFunctionUse == 2)
-            {
-                return true;
-            }
-            float numberProjectiles = 3 + Main.rand.Next(5);
-			float rotation = MathHelper.ToRadians(45);
-			position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;
-			for (int i = 0; i < numberProjectiles; i++)
-			{
-				Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-				Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
-			}
-			return false;
+        public override void SetDefaults()
+        {
+            item.damage = 76;
+            item.width = 32;
+            item.height = 32;
+            item.useTime = 12;
+            item.useAnimation = 12;
+            item.useStyle = 5;
+            item.maxStack = 1;
+            item.knockBack = 2f;
+            item.value = 0;
+            item.noUseGraphic = true;
+            item.rare = 6;
         }
 
-        public override bool AltFunctionUse(Player player)
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
         {
-            return true;
-        }
-
-        public override bool CanUseItem(Player player)
-        {
-            if (player.altFunctionUse == 2)
-            {
-                item.damage = 156;
-                item.width = 10;
-                item.height = 8;
-                item.useTime = 20;
-                item.useAnimation = 20;
-                item.useStyle = 5;
-                item.knockBack = 2;
-                item.autoReuse = true;
-                item.shoot = mod.ProjectileType("StickyFingersFistExtended");
-                item.shootSpeed = 50f;
-            }
-            else
-            {
-                item.damage = 128;
-                item.width = 10;
-                item.height = 8;
-                item.useTime = 10;
-                item.useAnimation = 10;
-                item.useStyle = 5;
-                item.knockBack = 2;
-                item.autoReuse = true;
-                item.shoot = mod.ProjectileType("StickyFingersFist");
-                item.shootSpeed = 50f;
-            }
-            return true;
+            mult *= (float)player.GetModPlayer<MyPlayer>().standDamageBoosts;
         }
 
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("StickyFingersT3"));
-            recipe.AddIngredient(ItemID.HallowedBar, 6);
-            recipe.AddIngredient(ItemID.SoulofSight, 10);
-            recipe.AddIngredient(ItemID.SoulofLight, 5);
-			recipe.SetResult(this);
+            recipe.AddIngredient(ItemID.Ectoplasm, 4);
+            recipe.AddIngredient(mod.ItemType("CaringLifeforce"));
+            recipe.AddIngredient(ItemID.LargeSapphire);
+            recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 	}

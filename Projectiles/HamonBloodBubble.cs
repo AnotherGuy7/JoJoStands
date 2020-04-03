@@ -24,11 +24,13 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
+            Player player = Main.player[projectile.owner];
+            Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
             if (projectile.timeLeft == 790)
             {
                 projectile.velocity *= 0;
             }
-            if (Main.LocalPlayer.GetModPlayer<MyPlayer>().HamonCounter >= 1)
+            if (hamonPlayer.HamonCounter >= 1)
             {
                 Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 169, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
             }

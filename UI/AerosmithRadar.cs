@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.ID;
 
 namespace JoJoStands.UI
 {
@@ -13,12 +14,9 @@ namespace JoJoStands.UI
         public UIImage centerDot;
         public static bool Visible;
         public static Texture2D aerosmithRadarTexture;
-        public int radarRefreshTimer = 0;
 
         public override void Update(GameTime gameTime)
         {
-            radarRefreshTimer++;
-
             base.Update(gameTime);
         }
 
@@ -45,19 +43,46 @@ namespace JoJoStands.UI
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
+            Player player = Main.player[Main.myPlayer];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Texture2D redDot = ModContent.GetTexture("JoJoStands/UI/RedDot");
             spriteBatch.Draw(aerosmithRadarTexture, aerosmithRadarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 1, aerosmithRadarTexture.Width, aerosmithRadarTexture.Height), new Color(255f, 255f, 255f, 255f));
             for (int k = 0; k < Main.maxNPCs; k++)
             {
-                if (Main.npc[k].active)
+                if (Main.npc[k].active && Main.npc[k].lifeMax > 5 && !Main.npc[k].townNPC)
                 {
-                    float xDistance = Main.projectile[Projectiles.Minions.Aerosmith.aerosmithWhoAmI].position.X - Main.npc[k].position.X;       //gettng 
-                    float yDistance = Main.projectile[Projectiles.Minions.Aerosmith.aerosmithWhoAmI].position.Y - Main.npc[k].position.Y;
+                    float xDistance = Main.projectile[mPlayer.aerosmithWhoAmI].position.X - Main.npc[k].position.X;
+                    float yDistance = Main.projectile[mPlayer.aerosmithWhoAmI].position.Y - Main.npc[k].position.Y;
                     float xMaxDetectionDistance = Main.screenWidth + 120f;
                     float yMaxDetectionDistance = Main.screenHeight + 120f;
-                    if (Main.npc[k].active && Main.npc[k].lifeMax > 5 && !Main.npc[k].townNPC && xDistance < xMaxDetectionDistance && yDistance < yMaxDetectionDistance && xDistance > -xMaxDetectionDistance && yDistance > -yMaxDetectionDistance)
+                    if (xDistance < xMaxDetectionDistance && yDistance < yMaxDetectionDistance && xDistance > -xMaxDetectionDistance && yDistance > -yMaxDetectionDistance)
                     {
-                        spriteBatch.Draw(redDot, new Rectangle((int)(centerDot.Left.Pixels + 13f + (-xDistance / 18f)) + (int)aerosmithRadarUI.Left.Pixels, (int)(centerDot.Top.Pixels + 13f + (-yDistance / 18f)) + (int)aerosmithRadarUI.Top.Pixels, 10, 10), new Rectangle(0, 1, 10, 10), new Color(255f, 255f, 255f, 255f));
+                        if (xDistance < 675f && xDistance > -675f && yDistance < 675f && yDistance > -675f)
+                        {
+                            spriteBatch.Draw(redDot, new Rectangle((int)(centerDot.Left.Pixels + 13f + (-xDistance / 18f)) + (int)aerosmithRadarUI.Left.Pixels, (int)(centerDot.Top.Pixels + 13f + (-yDistance / 18f)) + (int)aerosmithRadarUI.Top.Pixels, 10, 10), new Rectangle(0, 1, 10, 10), new Color(255f, 255f, 255f, 255f));
+                        }
+                    }
+                }
+            }
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                for (int i = 0; i < Main.maxPlayers; i++)
+                {
+                    Player detectedPlayer = Main.player[i];
+                    Texture2D orangeDot = ModContent.GetTexture("JoJoStands/UI/OrangeDot");
+                    if (detectedPlayer.active && detectedPlayer.team != player.team)
+                    {
+                        float xDistance = Main.projectile[mPlayer.aerosmithWhoAmI].position.X - detectedPlayer.position.X;
+                        float yDistance = Main.projectile[mPlayer.aerosmithWhoAmI].position.Y - detectedPlayer.position.Y;
+                        float xMaxDetectionDistance = Main.screenWidth + 120f;
+                        float yMaxDetectionDistance = Main.screenHeight + 120f;
+                        if (detectedPlayer.active && xDistance < xMaxDetectionDistance && yDistance < yMaxDetectionDistance && xDistance > -xMaxDetectionDistance && yDistance > -yMaxDetectionDistance)
+                        {
+                            if (xDistance < 675f && xDistance > -675f && yDistance < 675f && yDistance > -675f)
+                            {
+                                spriteBatch.Draw(orangeDot, new Rectangle((int)(centerDot.Left.Pixels + 13f + (-xDistance / 18f)) + (int)aerosmithRadarUI.Left.Pixels, (int)(centerDot.Top.Pixels + 13f + (-yDistance / 18f)) + (int)aerosmithRadarUI.Top.Pixels, 10, 10), new Rectangle(0, 1, 10, 10), new Color(255f, 255f, 255f, 255f));
+                            }
+                        }
                     }
                 }
             }

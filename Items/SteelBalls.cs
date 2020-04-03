@@ -10,27 +10,56 @@ namespace JoJoStands.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Steel Balls");
-			Tooltip.SetDefault("These steel balls have been passed down from generation to generation... ");
+			Tooltip.SetDefault("These steel balls have been passed down from generation to generation...\nRequires 5 hamon to throw effectively.");
 		}
 		public override void SetDefaults()
 		{
-			item.damage = 107;
+			item.damage = 74;
 			item.width = 32;
 			item.height = 32;
-            item.ranged = true;
 			item.useTime = 45;
 			item.useAnimation = 45;
 			item.useStyle = 3;
             item.noUseGraphic = true;
 			item.maxStack = 1;
-			item.knockBack = 2;
+			item.knockBack = 2f;
 			item.value = 7;
 			item.rare = 6;
 			item.autoReuse = true;
             item.shoot = mod.ProjectileType("SteelBallP");
-			item.shootSpeed = 32f;
+			item.shootSpeed = 16f;
             item.useTurn = true;
 		}
+
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
+        {
+            Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
+            if (hamonPlayer.HamonCounter >= 5)
+            {
+                flat += 33f;
+            }
+        }
+
+        public override void GetWeaponKnockback(Player player, ref float knockback)
+        {
+            Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
+            if (hamonPlayer.HamonCounter >= 5)
+            {
+                knockback += 1f;
+            }
+        }
+
+        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        {
+            Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
+            if (hamonPlayer.HamonCounter >= 5)
+            {
+                speedX *= 2f;
+                speedY *= 2f;
+                hamonPlayer.HamonCounter -= 5;
+            }
+            return true;
+        }
 
         public override bool CanUseItem(Player player)
         {

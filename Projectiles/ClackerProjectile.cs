@@ -18,7 +18,6 @@ namespace JoJoStands.Projectiles
             projectile.CloneDefaults(ProjectileID.WoodenBoomerang);
             projectile.width = 18;
             projectile.height = 12;
-            projectile.melee = true;
             projectile.aiStyle = 3;
             projectile.ranged = true;
             projectile.timeLeft = 180;

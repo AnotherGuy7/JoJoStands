@@ -12,6 +12,7 @@ namespace JoJoStands
         [Tooltip("Allows you to choose which deathsound to use. Use /deathsoundlist to see the available sounds!")]
         public int deathsound;
 
+        [DefaultValue(1)]
         [Label("Hamon Bar's Size")]
         public int HamonBarSize;
 
@@ -19,26 +20,66 @@ namespace JoJoStands
         [Tooltip("Determines whether or not you want to hear custom sounds or vanilla sounds.")]
         public bool Sounds;
 
-        [Label("Stand Control Style: Mouse")]
-        [Tooltip("Changes the Stand Control Style to Mouse.")]
-        public bool StandControlMouse;
+        [DefaultValue(true)]
+        [Label("Hamon Effects")]
+        [Tooltip("Determines whether or not you want to see Hamon effects.")]
+        public bool HamonEffects;
 
-        [Label("Stand Control Style: Binds")]
-        [Tooltip("Changes the Stand Control Style to Binds.")]
-        public bool StandControlBinds;
+        [DefaultValue(true)]
+        [Label("Timestop Effects")]
+        [Tooltip("Determines whether or not you want to see the timestop effects.")]
+        public bool TimestopEffects;
 
-        [Label("Player Effects")]
-        [Tooltip("Determines whether or not you want to see hamon effects, stand effects, etc.")]
-        public bool PlayerEffects;
+        [DefaultValue(false)]
+        [Label("Range Indicators")]
+        [Tooltip("Determines whether or not you want to see the range indicators for stands that need them.")]
+        public bool RangeIndicators;
+
+        [DefaultValue(true)]
+        [Label("Automatic Usages")]
+        [Tooltip("Determines whether or not you want abilities to automatically activate, such as Killer Queen's bomb and The World's (Auto Mode) Knives")]
+        public bool AutomaticActivations;
+
+        [Label("Range Indicator Visibility")]
+        [Tooltip("Allows you to choose how transparent the Range Indicator is.")]
+        public int RangeIndicatorVisibility;
+
+        [DefaultValue(500)]
+        [Label("Stand Slot X Position")]
+        public int StandSlotPositionX;
+
+        [DefaultValue(300)]
+        [Label("Stand Slot Y Position")]
+        public int StandSlotPositionY;
+
+        [DefaultValue(1225)]
+        [Label("Hamon Bar X Position")]
+        public int HamonBarPositionX;
+
+        [DefaultValue(575)]
+        [Label("Hamon Bar Y Position")]
+        public int HamonBarPositionY;
+
+        [DefaultValue(false)]
+        [Label("Hidden References")]
+        [Tooltip("Whether or not you want to see hidden references. (Some of these references can cause you to die)")]
+        public bool SecretReferences;
 
         public override void OnChanged()        //couldn't use Player player = Main.LocalPlayer cause it wasn't set to an instance of an object
         {
+            MyPlayer.RangeIndicatorAlpha = RangeIndicatorVisibility;
             MyPlayer.deathsoundint = deathsound;
             UI.HamonBarState.sizeMode = HamonBarSize;
             MyPlayer.Sounds = Sounds;
-            MyPlayer.StandControlBinds = StandControlBinds;
-            MyPlayer.StandControlMouse = StandControlMouse;
-            MyPlayer.PlayerEffects = PlayerEffects;
+            MyPlayer.HamonEffects = HamonEffects;
+            MyPlayer.TimestopEffects = TimestopEffects;
+            MyPlayer.RangeIndicators = RangeIndicators;
+            MyPlayer.AutomaticActivations = AutomaticActivations;
+            MyPlayer.StandSlotPositionX = StandSlotPositionX;
+            MyPlayer.StandSlotPositionY = StandSlotPositionY;
+            MyPlayer.HamonBarPositionX = HamonBarPositionX;
+            MyPlayer.HamonBarPositionY = HamonBarPositionY;
+            MyPlayer.SecretReferences = SecretReferences;
             if (deathsound >= 6)
             {
                 Main.NewText("There is are no deathsounds over 5!");
@@ -63,25 +104,6 @@ namespace JoJoStands
             if (HamonBarSize != 0)
             {
                 UI.HamonBarState.Visible = true;
-            }
-            if (StandControlBinds && StandControlMouse)
-            {
-                Main.NewText("You can only choose 1 control style!");
-                StandControlMouse = false;
-                StandControlBinds = true;
-            }
-            if (!StandControlBinds && !StandControlMouse)
-            {
-                StandControlMouse = false;
-                StandControlBinds = true;
-            }
-            if (StandControlBinds)
-            {
-                StandControlMouse = false;
-            }
-            if (StandControlMouse)
-            {
-                StandControlBinds = false;
             }
         }
     }

@@ -9,15 +9,14 @@ namespace JoJoStands.Items
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Knife");
+			DisplayName.SetDefault("Hunter's Knife");
 			Tooltip.SetDefault("A sharp knife that is best suited to be thrown.");
 		}
 		public override void SetDefaults()
 		{
-			item.damage = 35;
+			item.damage = 6;
 			item.width = 9;
 			item.height = 29;
-            item.ranged = true;
 			item.useTime = 16;
 			item.useAnimation = 16;
 			item.useStyle = 1;
@@ -29,7 +28,7 @@ namespace JoJoStands.Items
 			item.rare = 1;
 			item.autoReuse = true;
             item.shoot = mod.ProjectileType("Knife");
-			item.shootSpeed = 32f;
+			item.shootSpeed = 25f;
 		}
 
         public override bool UseItem(Player player)

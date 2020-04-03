@@ -2,6 +2,7 @@ using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace JoJoStands.Items
 {
@@ -15,92 +16,39 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Hierophant Green (Final)");
-			Tooltip.SetDefault("Shoot emeralds at the enemies and right click to shoot more accurate emralds!");
+			Tooltip.SetDefault("Shoot emeralds at the enemies and right click to shoot more accurate emralds!\nSpecial: 20 Meter Emerald Splash!\nUsed in Stand Slot");
 		}
 
-		public override void SetDefaults()
-		{
-			item.damage = 57;
-			item.ranged = true;
-			item.width = 100;
-			item.height = 8;
-			item.useTime = 40;
-			item.useAnimation = 40;
-			item.useStyle = 5;
-			item.knockBack = 2;
-			item.value = 10000;
-			item.rare = 6;
-            item.UseSound = SoundID.Item21;
-            item.autoReuse = true;
-            item.shoot = mod.ProjectileType("Emrald");
-			item.maxStack = 1;
-            item.shootSpeed = 24f;
-		}
-
-    	public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-
-			if (player.altFunctionUse == 2)
-			{
-				return true;
-			}
-
-			float numberProjectiles = 3 + Main.rand.Next(3);
-			float rotation = MathHelper.ToRadians(45);
-			position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;
-			for (int i = 0; i < numberProjectiles; i++)
-			{
-				Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-				Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
-			}
-			return false;
+        public override void SetDefaults()
+        {
+            item.damage = 72;
+            item.width = 32;
+            item.height = 32;
+            item.useTime = 12;
+            item.useAnimation = 12;
+            item.useStyle = 5;
+            item.maxStack = 1;
+            item.knockBack = 3f;
+            item.value = 0;
+            item.noUseGraphic = true;
+            item.rare = 6;
         }
 
-		public override bool AltFunctionUse(Player player)
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
         {
-            return true;
+            mult *= (float)player.GetModPlayer<MyPlayer>().standDamageBoosts;
         }
 
-        public override bool CanUseItem(Player player)
-        {
-			if (player.altFunctionUse == 2)
-            {
-				item.damage = 57;
-				item.ranged = true;
-				item.width = 100;
-				item.height = 8;
-				item.useTime = 10;
-				item.useAnimation = 10;
-				item.useStyle = 5;
-				item.knockBack = 2;
-				item.autoReuse = true;
-                item.UseSound = SoundID.Item20;
-                item.shoot = mod.ProjectileType("Emrald");
-	            item.shootSpeed = 32f;
-			}
-			else
-			{
-				item.damage = 57;
-				item.ranged = true;
-				item.width = 100;
-				item.height = 8;
-				item.useTime = 10;
-				item.useAnimation = 10;
-				item.useStyle = 5;
-				item.knockBack = 2;
-				item.autoReuse = true;
-	        	item.shoot = mod.ProjectileType("Emrald");
-	            item.shootSpeed = 24f;
-			}
-			return true;
-		}
-
-		public override void AddRecipes()
+        public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("HierophantGreenT2"));
             recipe.AddIngredient(ItemID.LargeEmerald, 1);
             recipe.AddIngredient(ItemID.ChlorophyteOre, 12);
+            recipe.AddIngredient(mod.ItemType("WillToProtect"), 3);
+            recipe.AddIngredient(mod.ItemType("WillToChange"), 3);
+            recipe.AddIngredient(mod.ItemType("RighteousLifeforce"));
+            recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

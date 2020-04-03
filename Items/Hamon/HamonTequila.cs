@@ -28,7 +28,7 @@ namespace JoJoStands.Items.Hamon
             item.useStyle = 3;
             item.knockBack = 4f;
             item.UseSound = null;
-            item.shoot = mod.ProjectileType("HamonSodaBottleCap");
+            item.shoot = mod.ProjectileType("HamonTequilaBottleCap");
             item.shootSpeed = 24f;
             item.potion = false;
         }
@@ -48,7 +48,7 @@ namespace JoJoStands.Items.Hamon
                 item.useStyle = 3;
                 item.knockBack = 4f;
                 item.UseSound = null;
-                item.shoot = mod.ProjectileType("HamonSodaBottleCap");
+                item.shoot = mod.ProjectileType("HamonTequilaBottleCap");
                 item.shootSpeed = 24f;
                 item.potion = false;
             }
@@ -62,7 +62,7 @@ namespace JoJoStands.Items.Hamon
                 player.AddBuff(BuffID.Ironskin, 1800);
                 item.UseSound = SoundID.Item3;
                 item.potion = true;
-                player.GetModPlayer<MyPlayer>().HamonCounter += 40;
+                player.GetModPlayer<HamonPlayer>().HamonCounter += 40;
             }
 			return true;
 		}

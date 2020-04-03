@@ -11,26 +11,41 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 20;
-            projectile.height = 18;
+            projectile.width = 14;
+            projectile.height = 14;
             projectile.aiStyle = 0;
-            projectile.ranged = true;
             projectile.timeLeft = 300;
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
-            projectile.penetrate = 7;
         }
 
         public override void AI()
         {
+            Player player = Main.player[projectile.owner];
+            Projectile ownerProj = Main.projectile[(int)projectile.ai[1]];
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 21, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.damage = 201;
-            base.OnHitNPC(target, damage, knockback, crit);
+            if (Main.mouseRight && projectile.owner == Main.myPlayer && projectile.ai[0] == 1f && player.ownedProjectileCounts[mod.ProjectileType("KillerQueenBTDStand")] == 1 && ownerProj.ai[0] == 1f)
+            {
+                projectile.Kill();
+                projectile.netUpdate = true;
+            }
+            if (!ownerProj.active)
+            {
+                projectile.Kill();
+                projectile.netUpdate = true;
+            }
+            if (MyPlayer.AutomaticActivations)
+            {
+                for (int i = 0; i < 200; i++)
+                {
+                    float npcDistance = Vector2.Distance(Main.npc[i].Center, projectile.Center);
+                    if (npcDistance < 30f && Main.npc[i].active && !Main.npc[i].immortal && !Main.npc[i].hide)
+                    {
+                        projectile.Kill();
+                    }
+                }
+            }
         }
 
         public virtual void OnHitAnything()
@@ -40,10 +55,11 @@ namespace JoJoStands.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Player player = Main.LocalPlayer;
-            var p = Projectile.NewProjectile(projectile.position, projectile.velocity, ProjectileID.GrenadeIII, 150, 8f, player.whoAmI);
-            Main.projectile[p].timeLeft = 2;
-            Main.projectile[p].netUpdate = true;
+            Player player = Main.player[projectile.owner];
+            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
+            var explosion = Projectile.NewProjectile(projectile.position, projectile.velocity, ProjectileID.GrenadeIII, (int)(180f * Mplayer.standDamageBoosts), 8f, Main.myPlayer);
+            Main.projectile[explosion].timeLeft = 2;
+            Main.projectile[explosion].netUpdate = true;
             Main.PlaySound(SoundID.Item62);
         }
     }

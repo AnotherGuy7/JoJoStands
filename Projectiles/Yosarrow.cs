@@ -14,7 +14,6 @@ namespace JoJoStands.Projectiles
             projectile.width = 9;
             projectile.height = 29;
             projectile.aiStyle = 1;
-            projectile.ranged = true;
             projectile.timeLeft = 900;
             projectile.friendly = false;
             projectile.arrow = true;
@@ -25,13 +24,14 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
+            projectile.velocity.Y += 0.3f;
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            target.damage += 20;
-            base.OnHitNPC(target, damage, knockback, crit);
+            projectile.velocity = Vector2.Zero;
+            return false;
         }
     }
 }

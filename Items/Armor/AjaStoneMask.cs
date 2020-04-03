@@ -11,14 +11,15 @@ namespace JoJoStands.Items.Armor
 	[AutoloadEquip(EquipType.Head)]
 	public class AjaStoneMask : ModItem
 	{
-		public override void SetStaticDefaults() {
+		public override void SetStaticDefaults()
+        {
 			Tooltip.SetDefault("The mask now merged with the stone seems to give off tremendous power...");
 		}
 
 		public override void SetDefaults() {
 			item.width = 18;
 			item.height = 18;
-			item.value = Item.buyPrice(9, 0, 0, 0);
+			item.value = Item.buyPrice(2, 50, 0, 0);
 			item.rare = 10;
 			item.defense = 20;
 		}

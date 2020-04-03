@@ -110,6 +110,7 @@ namespace JoJoStands.Projectiles.Pets
             {
                 projectile.localAI[0] = 0f;
             }
+            projectile.netUpdate = true;
         }
     }
 }

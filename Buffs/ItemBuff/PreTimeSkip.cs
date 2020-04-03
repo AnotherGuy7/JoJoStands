@@ -47,21 +47,17 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             else
             {
-                if (player.HeldItem.type == mod.ItemType("KingCrimsonT2"))
+                if (player.ownedProjectileCounts[mod.ProjectileType("KingCrimsonStandT2")] == 1)
                 {
                     player.AddBuff(mod.BuffType("SkippingTime"), 180);
                 }
-                if (player.HeldItem.type == mod.ItemType("KingCrimsonT3"))
+                else if (player.ownedProjectileCounts[mod.ProjectileType("KingCrimsonStandT3")] == 1)
                 {
                     player.AddBuff(mod.BuffType("SkippingTime"), 300);
                 }
-                if (player.HeldItem.type == mod.ItemType("KingCrimsonFinal"))
+                else if (player.ownedProjectileCounts[mod.ProjectileType("KingCrimsonStandFinal")] == 1)
                 {
                     player.AddBuff(mod.BuffType("SkippingTime"), 600);
-                }
-                if (player.HeldItem.type != mod.ItemType("KingCrimsonT2") && player.HeldItem.type != mod.ItemType("KingCrimsonT3") && player.HeldItem.type != mod.ItemType("KingCrimsonFinal"))
-                {
-                    player.AddBuff(mod.BuffType("SkippingTime"), 180);
                 }
                 player.GetModPlayer<MyPlayer>().TimeSkipPreEffect = false;
             }

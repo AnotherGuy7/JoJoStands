@@ -9,8 +9,6 @@ namespace JoJoStands.Items
 {
 	public class GoldExperienceT2 : ModItem
 	{
-        public bool saidAbility = false;
-
         public override string Texture
         {
             get { return mod.Name + "/Items/GoldExperienceFinal"; }
@@ -19,107 +17,27 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Gold Experience (Tier 2)");
-			Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use abilities! \nSpecial: Switches the abilities used for right-click!");
+			Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use abilities! \nSpecial: Switches the abilities used for right-click!\nUsed in Stand Slot");
         }
-		public override void SetDefaults()
-		{
+
+        public override void SetDefaults()
+        {
             item.damage = 41;
             item.width = 32;
             item.height = 32;
-            item.useTime = 13;
-            item.useAnimation = 13;
+            item.useTime = 12;
+            item.useAnimation = 12;
             item.useStyle = 5;
             item.maxStack = 1;
-            item.knockBack = 1f;
-            item.value = Item.buyPrice(0,58, 26, 82);
-            item.rare = 8;
-            item.melee = true;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-            item.shoot = mod.ProjectileType("GoldExperienceFist");
-            item.shootSpeed = 50f;
+            item.knockBack = 2f;
+            item.value = 0;
+            item.noUseGraphic = true;
+            item.rare = 6;
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
         {
-            float numberProjectiles = 3 + Main.rand.Next(5);
-            float rotation = MathHelper.ToRadians(45);
-            position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;
-            for (int i = 0; i < numberProjectiles; i++)
-            {
-                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
-            }
-            return false;
-        }
-
-        public override bool AltFunctionUse(Player player)
-        {
-            return true;
-        }
-
-        public override void HoldItem(Player player)
-        {
-            if (player.whoAmI == Main.myPlayer)
-            {
-                MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-                if (JoJoStands.ItemHotKey.JustPressed)
-                {
-                    Mplayer.GEAbilityNumber += 1;
-                    saidAbility = false;
-                }
-                if (Mplayer.GEAbilityNumber >= 2)
-                {
-                    Mplayer.GEAbilityNumber = 0;
-                }
-                if (Mplayer.GEAbilityNumber == 0)
-                {
-                    if (!saidAbility)
-                    {
-                        Main.NewText("Ability: Frog");
-                        saidAbility = true;
-                    }
-                }
-                if (Mplayer.GEAbilityNumber == 1)
-                {
-                    if (!saidAbility)
-                    {
-                        Main.NewText("Ability: Tree");
-                        saidAbility = true;
-                    }
-                }
-            }
-        }
-
-        public override bool CanUseItem(Player player)
-        {
-            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            if (player.altFunctionUse == 2 && Mplayer.GEAbilityNumber == 0 && !player.HasBuff(mod.BuffType("GEAbilityCooldown")))
-            {
-                Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("GEFrog"), 1, 0f, Main.myPlayer, 1f, 1f);
-                player.AddBuff(mod.BuffType("GEAbilityCooldown"), 360);
-            }
-            if (player.altFunctionUse == 2 && Mplayer.GEAbilityNumber == 1 && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !player.HasBuff(mod.BuffType("GEAbilityCooldown")))
-            {
-                Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 65f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, Main.myPlayer, 0f, 0f);
-                player.AddBuff(mod.BuffType("GEAbilityCooldown"), 720);
-            }
-            if (player.altFunctionUse == 2)
-            {
-                item.shoot = 0;
-            }
-            if (player.altFunctionUse != 2)
-            {
-                item.damage = 41;
-                item.useTime = 10;
-                item.useAnimation = 10;
-                item.useStyle = 5;
-                item.knockBack = 2f;
-                item.autoReuse = true;
-                item.shoot = mod.ProjectileType("GoldExperienceFist");
-                item.shootSpeed = 50f;
-            }
-            return true;
+            mult *= (float)player.GetModPlayer<MyPlayer>().standDamageBoosts;
         }
 
         public override void AddRecipes()
@@ -127,15 +45,21 @@ namespace JoJoStands.Items
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("GoldExperienceT1"));
             recipe.AddIngredient(ItemID.GoldBar, 12);
-            recipe.AddIngredient(ItemID.Acorn, 5);
+            recipe.AddIngredient(ItemID.Acorn, 20);
             recipe.AddIngredient(ItemID.LifeCrystal);
-			recipe.SetResult(this);
+            recipe.AddIngredient(mod.ItemType("WillToControl"));
+            recipe.AddIngredient(mod.ItemType("WillToFight"));
+            recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.SetResult(this);
 			recipe.AddRecipe();
             recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("GoldExperienceT1"));
             recipe.AddIngredient(ItemID.PlatinumBar, 12);
-            recipe.AddIngredient(ItemID.Acorn, 5);
+            recipe.AddIngredient(ItemID.Acorn, 20);
             recipe.AddIngredient(ItemID.LifeCrystal);
+            recipe.AddIngredient(mod.ItemType("WillToControl"));
+            recipe.AddIngredient(mod.ItemType("WillToFight"));
+            recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

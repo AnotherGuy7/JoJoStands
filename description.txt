@@ -1,17 +1,10 @@
 JoJo Stands:
 
-Star Platinum(weapon) - 153 Damage, range of 4 blocks, star finger (right-click) penetrates up to 3 enemies at once (tiers 3-Final)
+JoJoStands Wiki... in the forum post
 
-Hierophant Green - 57 Damage, shoots 3-5 bullets, shoot in a straight line (right-click) with more damage (tier Final)
+Discord Link... also in the forum post.
 
-Tusk - 184 Damage, shoots a controllable nail
-
-Star Platinum(minion) - 84 Damage at a really fast rate (sprite by Boiwiththemwafflez)
-
-Sex Pistols - 187 Damage at a slow fire rate, bullets target enemies
-
-Aerosmith(minion) - 87 Damage at a really fast fire rate (sprite by Yoshikage Kira)
-
-And more, check out the website to see all of the stands currently in-game.
-
-If you have a stand idea or feel like contributing to the mod, you can join the "JoJoStands" server on Discord https://discord.gg/EYKBhpK
+Credits:
+The JoJoStands Contributors: Placement, Phil, Techno, Blu, Hey Mister, Joser, Niker, D.Storm, Benney, NekroSektor, Ozi, StringsArn'tRealNumbers, Xenon, Com-Obie, Gundam_Belphagor, and KrimsonHeadshot
+Alana Gilston, for making TerraUI which helped us make the Stand Slot
+The ExampleMod devs, cause it's a good everything reference

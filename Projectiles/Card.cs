@@ -26,6 +26,7 @@ namespace JoJoStands.Projectiles
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
             projectile.penetrate = 2;
+            projectile.scale = 0.5f;
         }
 
         public override void AI()

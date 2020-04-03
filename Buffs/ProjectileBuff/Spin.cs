@@ -9,7 +9,7 @@ namespace JoJoStands.Buffs.ProjectileBuff
 {
     public class Spin : ModBuff
     {
-        int directionCounter = 0;
+        public static int directionCounter = 0;
         public override void SetDefaults()
         {
 			DisplayName.SetDefault("Spin");
@@ -22,7 +22,7 @@ namespace JoJoStands.Buffs.ProjectileBuff
         public override void Update(Player player, ref int buffIndex)
         {
             player.direction *= -1;
-            player.lifeRegen -= 60;
+            player.lifeRegen = -60;
             player.moveSpeed /= 2;
         }
 

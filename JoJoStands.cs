@@ -9,59 +9,53 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
+using JoJoStands.Networking;
 
 namespace JoJoStands
 {
 	public class JoJoStands : Mod
 	{
-        public static ModHotKey ItemHotKey;
-        public static ModHotKey AccessoryHotKey;
-        public static ModHotKey StandControl;
-        public static ModHotKey StandControlUp;
-        public static ModHotKey StandControlDown;
-        public static ModHotKey StandControlLeft;
-        public static ModHotKey StandControlRight;
-        public static ModHotKey StandControlAttack;
+        public static ModHotKey SpecialHotKey;
+        public static ModHotKey StandOut;
+        public static ModHotKey StandAutoMode;
         public static ModHotKey PoseHotKey;
-        static internal JoJoStands Instance;
+        internal static JoJoStands Instance => ModContent.GetInstance<JoJoStands>();
         internal static CustomizableOptions customizableConfig;
 
-        internal UserInterface Bet;     //for later use
+        private UserInterface _betUI;
         private UserInterface _hamonbarInterface;
+        private UserInterface _goldenSpinInterface;
         private UserInterface _tbcarrow;
         private UserInterface _bulletcounter;
+        private UserInterface _aerosmithRadar;
 
         internal ToBeContinued TBCarrow;
         internal HamonBarState HamonBarInterface;
+        internal GoldenSpinMeter GoldenSpinInterface;
         internal BulletCounter bulletCounter;
-
-        public JoJoStands()
-        {
-            Instance = this;
-        }
+        internal AerosmithRadar aerosmithRadar;
+        internal BetUI betUI;
 
         public override void Load()
 		{
             HamonBarState.hamonBarTexture = ModContent.GetTexture("JoJoStands/UI/HamonBar");
             ToBeContinued.TBCArrowTexture = ModContent.GetTexture("JoJoStands/UI/TBCArrow");
             BulletCounter.bulletCounterTexture = ModContent.GetTexture("JoJoStands/UI/BulletCounter");
-            Items.SexPistolsFinal.usesound = GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Shoot");
+            AerosmithRadar.aerosmithRadarTexture = ModContent.GetTexture("JoJoStands/UI/AerosmithRadar");
+            GoldenSpinMeter.goldenRectangleTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeter");
+            GoldenSpinMeter.goldenRectangleSpinLineTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeterLine");
 
             // Registers a new hotkey
-            ItemHotKey = RegisterHotKey("Item Special", "P"); // See https://docs.microsoft.com/en-us/previous-versions/windows/xna/bb197781(v%3dxnagamestudio.41) for special keys
-            AccessoryHotKey = RegisterHotKey("Accessory Special", "k");
-            StandControl = RegisterHotKey("Stand Control", "j");
-            StandControlUp = RegisterHotKey("Stand Control Up", "Up");
-            StandControlDown = RegisterHotKey("Stand Control Down", "Down");
-            StandControlLeft = RegisterHotKey("Stand Control Left", "Left");
-            StandControlRight = RegisterHotKey("Stand Control Right", "Right");
-            StandControlAttack = RegisterHotKey("Stand Control Attack", "RightShift");
-            PoseHotKey = RegisterHotKey("Pose", "v");
+            SpecialHotKey = RegisterHotKey("Special Ability", "P");        // See https://docs.microsoft.com/en-us/previous-versions/windows/xna/bb197781(v%3dxnagamestudio.41) for special keys
+            StandOut = RegisterHotKey("Stand Out", "G");
+            PoseHotKey = RegisterHotKey("Pose", "V");
+            StandAutoMode = RegisterHotKey("Stand Auto Mode", "L");
 
-
-            //UI Stuff
-            if (!Main.dedServ)
+            if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
             {
+                //UI Stuff
                 HamonBarInterface = new HamonBarState();
                 HamonBarInterface.Activate();
                 _hamonbarInterface = new UserInterface();
@@ -74,6 +68,29 @@ namespace JoJoStands
                 bulletCounter.Activate();
                 _bulletcounter = new UserInterface();
                 _bulletcounter.SetState(bulletCounter);
+                aerosmithRadar = new AerosmithRadar();
+                aerosmithRadar.Activate();
+                _aerosmithRadar = new UserInterface();
+                _aerosmithRadar.SetState(aerosmithRadar);
+                betUI = new BetUI();
+                betUI.Activate();
+                _betUI = new UserInterface();
+                _betUI.SetState(betUI);
+                GoldenSpinInterface = new GoldenSpinMeter();
+                GoldenSpinInterface.Activate();
+                _goldenSpinInterface = new UserInterface();
+                _goldenSpinInterface.SetState(GoldenSpinInterface);
+
+                //Shader Stuff
+                Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect")); // The path to the compiled shader file.
+                Filters.Scene["TimestopEffectShader"] = new Filter(new ScreenShaderData(timestopShader, "TimestopEffectShader"), EffectPriority.VeryHigh);
+                Filters.Scene["TimestopEffectShader"].Load();
+                Ref<Effect> greyscaleShader = new Ref<Effect>(GetEffect("Effects/Greyscale"));
+                Filters.Scene["GreyscaleEffect"] = new Filter(new ScreenShaderData(greyscaleShader, "GreyscaleEffect"), EffectPriority.VeryHigh);
+                Filters.Scene["GreyscaleEffect"].Load();
+                Ref<Effect> greenShader = new Ref<Effect>(GetEffect("Effects/GreenEffect"));
+                Filters.Scene["GreenEffect"] = new Filter(new ScreenShaderData(greenShader, "GreenEffect"), EffectPriority.VeryHigh);
+                Filters.Scene["GreenEffect"].Load();
             }
         }
 
@@ -82,19 +99,47 @@ namespace JoJoStands
             ToBeContinued.TBCArrowTexture = null;
             HamonBarState.hamonBarTexture = null;
             BulletCounter.bulletCounterTexture = null;
-            Items.SexPistolsFinal.usesound = null;
-            Instance = null;
-            ItemHotKey = null;
-            AccessoryHotKey = null;
-            StandControl = null;
-            StandControlUp = null;
-            StandControlDown = null;
-            StandControlLeft = null;
-            StandControlRight = null;
-            StandControlAttack = null;
+            AerosmithRadar.aerosmithRadarTexture = null;
+            GoldenSpinMeter.goldenRectangleTexture = null;
+            GoldenSpinMeter.goldenRectangleSpinLineTexture = null;
+            SpecialHotKey = null;
             PoseHotKey = null;
+            StandAutoMode = null;
+            StandOut = null;
             customizableConfig = null;
             base.Unload();
+        }
+
+        public override void AddRecipeGroups()
+        {
+            RecipeGroup willsGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "Wills", new int[]
+            {
+                ItemType("WillToFight"),
+                ItemType("WillToChange"),
+                ItemType("WillToControl"),
+                ItemType("WillToDestroy"),
+                ItemType("WillToEscape"),
+                ItemType("WillToProtect")
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsWills", willsGroup);
+        }
+
+        public override void UpdateMusic(ref int music, ref MusicPriority priority)
+        {
+            Player player = Main.player[Main.myPlayer];
+            if (Main.myPlayer != -1 && !Main.gameMenu)
+            {
+                if (player.active && player.GetModPlayer<MyPlayer>().ZoneViralMeteorite)
+                {
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic");
+                }
+            }
+        }
+
+        public override void PostDrawInterface(SpriteBatch spriteBatch)
+        {
+            MyPlayer Mplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            Mplayer.Draw(spriteBatch);
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -110,6 +155,18 @@ namespace JoJoStands
             if (BulletCounter.Visible)
             {
                 _bulletcounter.Update(gameTime);
+            }
+            if (AerosmithRadar.Visible)
+            {
+                _aerosmithRadar.Update(gameTime);
+            }
+            if (BetUI.Visible)
+            {
+                _betUI.Update(gameTime);
+            }
+            if (GoldenSpinMeter.Visible)
+            {
+                _goldenSpinInterface.Update(gameTime);
             }
         }
 
@@ -132,73 +189,147 @@ namespace JoJoStands
             {
                 _bulletcounter.Draw(Main.spriteBatch, new GameTime());
             }
+            if (AerosmithRadar.Visible)
+            {
+                _aerosmithRadar.Draw(Main.spriteBatch, new GameTime());
+            }
+            if (BetUI.Visible)
+            {
+                _betUI.Draw(Main.spriteBatch, new GameTime());
+            }
+            if (GoldenSpinMeter.Visible)
+            {
+                _goldenSpinInterface.Draw(Main.spriteBatch, new GameTime());
+            }
             return true;
         }
 
-        public override void HandlePacket(BinaryReader reader, int whoAmI)      //from ExampleMod
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            ModNetHandler.HandlePacket(reader, whoAmI);
+        }
+
+        /*public override void HandlePacket(BinaryReader reader, int whoAmI)      //from ExampleMod
         {
             JoJoMessageType msgType = (JoJoMessageType)reader.ReadByte();
             switch (msgType)
             {
                 case JoJoMessageType.SyncPlayer:
                     byte playernumber = reader.ReadByte();
-                    MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-                    player.TheWorldEffect = reader.ReadBoolean();
-                    player.TimeSkipEffect = reader.ReadBoolean();
-                    player.BackToZero = reader.ReadBoolean();
-                    player.poseMode = reader.ReadBoolean();
+                    MyPlayer modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();      //use Main.myPlayer to apply bools and playerNumber to read bools
+                    modPlayer.TheWorldEffect = reader.ReadBoolean();
+                    modPlayer.TimeSkipEffect = reader.ReadBoolean();
+                    modPlayer.BackToZero = reader.ReadBoolean();
+                    modPlayer.poseMode = reader.ReadBoolean();
+                    modPlayer.StandOut = reader.ReadBoolean();
+                    modPlayer.StandAutoMode = reader.ReadBoolean();
+                    modPlayer.Foresight = reader.ReadBoolean();
+					modPlayer.showingCBLayer = reader.ReadBoolean();
                     // SyncPlayer will be called automatically, so there is no need to forward this data to other clients.
                     break;
                 case JoJoMessageType.TheWorld:
                     playernumber = reader.ReadByte();
-                    player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-                    player.TheWorldEffect = reader.ReadBoolean();
+                    modPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+                    modPlayer.TheWorldEffect = reader.ReadBoolean();
                     // Unlike SyncPlayer, here we have to relay/forward these changes to all other connected clients
                     if (Main.netMode == NetmodeID.Server)
                     {
                         var packet = GetPacket();
                         packet.Write((byte)JoJoMessageType.TheWorld);
                         packet.Write(playernumber);
-                        packet.Write(player.TheWorldEffect);
+                        packet.Write(modPlayer.TheWorldEffect);
                         packet.Send(-1, playernumber);
                     }
+                    //Main.NewText("HandlePacket", Color.Red);
                     break;
                 case JoJoMessageType.Timeskip:
                     playernumber = reader.ReadByte();
-                    player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-                    player.TimeSkipEffect = reader.ReadBoolean();
+                    modPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+                    modPlayer.TimeSkipEffect = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
                         var packet = GetPacket();
                         packet.Write((byte)JoJoMessageType.Timeskip);
                         packet.Write(playernumber);
-                        packet.Write(player.TimeSkipEffect);
+                        packet.Write(modPlayer.TimeSkipEffect);
                         packet.Send(-1, playernumber);
                     }
                     break;
                 case JoJoMessageType.BacktoZero:
                     playernumber = reader.ReadByte();
-                    player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-                    player.BackToZero = reader.ReadBoolean();
+                    modPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();       //setting YOUR (Main.myPlayer) value to what's read
+                    modPlayer.BackToZero = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
                         var packet = GetPacket();
                         packet.Write((byte)JoJoMessageType.BacktoZero);
                         packet.Write(playernumber);
-                        packet.Write(player.BackToZero);
+                        packet.Write(modPlayer.BackToZero);
                         packet.Send(-1, playernumber);
                     }
                     break;
-                case JoJoMessageType.PoseMode:      //the only thing that works
+                case JoJoMessageType.PoseMode:
                     playernumber = reader.ReadByte();
-                    player = Main.player[playernumber].GetModPlayer<MyPlayer>();
-                    player.poseMode = reader.ReadBoolean();
+                    modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();        //ONLY READING the value
+                    modPlayer.poseMode = reader.ReadBoolean();
                     if (Main.netMode == NetmodeID.Server)
                     {
                         var packet = GetPacket();
                         packet.Write((byte)JoJoMessageType.PoseMode);
                         packet.Write(playernumber);
-                        packet.Write(player.poseMode);
+                        packet.Write(modPlayer.poseMode);
+                        packet.Send(-1, playernumber);
+                    }
+                    break;
+                case JoJoMessageType.StandOut:
+                    playernumber = reader.ReadByte();
+                    modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();
+                    modPlayer.StandOut = reader.ReadBoolean();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        var packet = GetPacket();
+                        packet.Write((byte)JoJoMessageType.StandOut);
+                        packet.Write(playernumber);
+                        packet.Write(modPlayer.StandOut);
+                        packet.Send(-1, playernumber);
+                    }
+                    break;
+                case JoJoMessageType.StandAutoMode:
+                    playernumber = reader.ReadByte();
+                    modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();
+                    modPlayer.StandAutoMode = reader.ReadBoolean();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        var packet = GetPacket();
+                        packet.Write((byte)JoJoMessageType.StandAutoMode);
+                        packet.Write(playernumber);
+                        packet.Write(modPlayer.StandAutoMode);
+                        packet.Send(-1, playernumber);
+                    }
+                    break;
+                case JoJoMessageType.Foresight:
+                    playernumber = reader.ReadByte();
+                    modPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+                    modPlayer.Foresight = reader.ReadBoolean();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        var packet = GetPacket();
+                        packet.Write((byte)JoJoMessageType.Foresight);
+                        packet.Write(playernumber);
+                        packet.Write(modPlayer.Foresight);
+                        packet.Send(-1, playernumber);
+                    }
+                    break;
+                case JoJoMessageType.CBLayer:
+                    playernumber = reader.ReadByte();
+                    modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();
+                    modPlayer.Foresight = reader.ReadBoolean();
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        var packet = GetPacket();
+                        packet.Write((byte)JoJoMessageType.CBLayer);
+                        packet.Write(playernumber);
+                        packet.Write(modPlayer.showingCBLayer);
                         packet.Send(-1, playernumber);
                     }
                     break;
@@ -214,7 +345,11 @@ namespace JoJoStands
             TheWorld,
             Timeskip,
             BacktoZero,
-            PoseMode
-        }
+            PoseMode,
+            StandOut,
+            StandAutoMode,
+            Foresight,
+            CBLayer
+        }*/
     }
 }

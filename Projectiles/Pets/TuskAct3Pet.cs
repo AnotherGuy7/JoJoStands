@@ -47,6 +47,7 @@ namespace JoJoStands.Projectiles.Pets
             {
                 projectile.frame = 0;
             }
+            projectile.netUpdate = true;
         }
     }
 }

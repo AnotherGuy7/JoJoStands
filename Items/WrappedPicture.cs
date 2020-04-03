@@ -10,7 +10,6 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(8, 6));
             DisplayName.SetDefault("Wrapped Picture");
             Tooltip.SetDefault("This wrapped photo vibrates and small sounds come from it...");
         }
@@ -32,8 +31,8 @@ namespace JoJoStands.Items
 
         public override bool UseItem(Player player)
         {
-            NPC.NewNPC((int)(player.Center.X), (int)player.Center.Y - 10, mod.NPCType("Yoshihiro"));
-            player.ConsumeItem(mod.ItemType("WrappedPicture"), true);
+            int npc = NPC.NewNPC((int)(player.Center.X), (int)player.Center.Y - 25, mod.NPCType("Yoshihiro"));
+            Main.npc[npc].netUpdate = true;
             return true;
         }
     }

@@ -15,22 +15,22 @@ namespace JoJoStands.Items
 
 		public override void SetDefaults()
 		{
-			item.damage = 102;
+			item.damage = 74;
 			item.ranged = true;
-			item.width = 100;
-			item.height = 8;
-			item.useTime = 10;
-			item.useAnimation = 10;
+			item.width = 32;
+			item.height = 32;
+			item.useTime = 15;
+			item.useAnimation = 15;
 			item.useStyle = 5;
-			item.knockBack = 2;
-			item.value = Item.buyPrice(0, 23, 0, 0);
+			item.knockBack = 3f;
+			item.value = Item.buyPrice(0, 25, 0, 0);
             item.noUseGraphic = true;
 			item.rare = 8;
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.shoot = mod.ProjectileType("Card");
 			item.maxStack = 1;
-            item.shootSpeed = 36f;
+            item.shootSpeed = 28f;
 		}
 	}
 }

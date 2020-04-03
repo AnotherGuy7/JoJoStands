@@ -11,9 +11,9 @@ namespace JoJoStands.Items.Hamon
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Hamon");
-			Tooltip.SetDefault("Punch enemies with the power that circulates in you. \nExperience goes up after each conquer... \nRight-click requires more than 5 hamon");
+			Tooltip.SetDefault("Punch enemies with the power that circulates in you. \nExperience goes up after each conquer... \nRight-click requires more than 5 hamon\nSpecial: Hamon Breathing");
 		}
-		public override void SafeSetDefaults()      //make it like ItemID.3368
+		public override void SafeSetDefaults()
 		{
 			item.damage = 14;
 			item.width = 32;
@@ -41,20 +41,25 @@ namespace JoJoStands.Items.Hamon
 
         public override bool CanUseItem(Player player)
         {
-            if (player.altFunctionUse == 2 && player.GetModPlayer<MyPlayer>().HamonCounter >= 5)
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            if (!mPlayer.StandOut || (mPlayer.StandOut && mPlayer.StandAutoMode))
             {
-                item.noUseGraphic = true;
-                item.useTime = 180;
-                item.useAnimation = 180;
-                item.shoot = -1;
-                int healamount = Main.rand.Next(10, 20);
-                player.HealEffect(healamount);
-                player.statLife += healamount;
-                player.GetModPlayer<MyPlayer>().HamonCounter -= 5;
-            }
-            if (player.altFunctionUse == 2 && player.GetModPlayer<MyPlayer>().HamonCounter <= 5)
-            {
-                return false;
+                if (player.altFunctionUse == 2 && hamonPlayer.HamonCounter >= 5)
+                {
+                    item.noUseGraphic = true;
+                    item.useTime = 180;
+                    item.useAnimation = 180;
+                    item.shoot = 0;
+                    int healamount = Main.rand.Next(10, 20);
+                    player.HealEffect(healamount);
+                    player.statLife += healamount;
+                    hamonPlayer.HamonCounter -= 5;
+                }
+                if (player.altFunctionUse == 2 && hamonPlayer.HamonCounter <= 5)
+                {
+                    return false;
+                }
             }
             if (player.altFunctionUse != 2)
             {
@@ -71,19 +76,24 @@ namespace JoJoStands.Items.Hamon
 
         public override void HoldItem(Player player)
         {
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             player.waterWalk = true;
             player.waterWalk2 = true;
             if (player.statLife <= 25)
             {
                 player.AddBuff(mod.BuffType("RUUUN"), 360);
             }
-		}
-
-        public override void ModifyHitPvp(Player player, Player target, ref int damage, ref bool crit)
-        {
-            if (target.HasBuff(mod.BuffType("Vampire")))
+            if (JoJoStands.SpecialHotKey.Current)
             {
-                target.AddBuff(mod.BuffType("Sunburn"), 180);
+                increaseCounter++;
+                player.velocity.X /= 3f;
+                hamonPlayer.counter = 0;
+                Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
+            }
+            if (increaseCounter >= 30)
+            {
+                hamonPlayer.HamonCounter += 1;
+                increaseCounter = 0;
             }
         }
 

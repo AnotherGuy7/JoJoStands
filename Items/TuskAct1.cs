@@ -16,7 +16,6 @@ namespace JoJoStands.Items
 		public override void SetDefaults()
 		{
 			item.damage = 21;
-			item.magic = true;
 			item.width = 32;
 			item.height = 32;
 			item.useTime = 35;
@@ -30,23 +29,33 @@ namespace JoJoStands.Items
 			item.maxStack = 1;
             item.shootSpeed = 30f;
 			item.channel = true;
-		}
-
-        public override void HoldItem(Player player)
-        {
-            player.GetModPlayer<MyPlayer>().TuskAct1Pet = true;
-            if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct1Pet")] <= 0 && player.GetModPlayer<MyPlayer>().TuskAct1Pet)
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct1Pet"), 0, 0f, Main.myPlayer);
-            }
-            base.HoldItem(player);
+			item.noUseGraphic = true;
+            MyPlayer.standTier1List.Add(mod.ItemType(Name));
         }
 
-        public override void AddRecipes()
+		public override void HoldItem(Player player)
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.TuskActNumber == 1 && player.whoAmI == Main.myPlayer)
+            {
+                mPlayer.TuskAct1Pet = true;
+                if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct1Pet")] <= 0 && mPlayer.TuskAct1Pet)
+                {
+                    Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct1Pet"), 0, 0f, Main.myPlayer);
+                }
+            }
+        }
+
+		public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
 		{
-            Player player = Main.LocalPlayer;
+			mult *= (float)player.GetModPlayer<MyPlayer>().standDamageBoosts;
+		}
+
+		public override void AddRecipes()
+		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("StandArrow"));
+			recipe.AddTile(mod.TileType("RemixTableTile"));
 			recipe.SetResult(this);
 			recipe.AddRecipe();
         }

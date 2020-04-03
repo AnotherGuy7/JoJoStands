@@ -19,82 +19,60 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Killer Queen (Stray Cat)");
-			Tooltip.SetDefault("Shoot bubbles that explode and right-click to bite the dust!");
+			Tooltip.SetDefault("Left-click to shoot bubbles and right-click to detonate them!\nSpecial: Bite The Dust!\nRight-Click while holding the item to revert back to Killer Queen Final (You can revert back to BTD)\nUsed in Stand Slot");
 		}
 
-		public override void SetDefaults()
-		{
-			item.damage = 201;      //endgame
-			item.ranged = true;
-			item.width = 100;
-			item.height = 8;
-			item.useTime = 60;
-			item.useAnimation = 60;
-			item.useStyle = 5;
-			item.knockBack = 5;
-			item.value = 10000;
-			item.rare = 6;
-            item.UseSound = SoundID.Item85;
-			item.autoReuse = false;
-            item.shoot = mod.ProjectileType("Bubble");
-			item.maxStack = 1;
-            item.shootSpeed = 2f;
-			item.channel = true;
-		}
+        public override void SetDefaults()
+        {
+            item.damage = 180;
+            item.width = 32;
+            item.height = 32;
+            item.useTime = 12;
+            item.useAnimation = 12;
+            item.useStyle = 5;
+            item.maxStack = 1;
+            item.knockBack = 2f;
+            item.value = 0;
+            item.noUseGraphic = true;
+            item.rare = 6;
+        }
+
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
+        {
+            mult *= (float)player.GetModPlayer<MyPlayer>().standDamageBoosts;
+        }
+
+        public override void OnCraft(Recipe recipe)
+        {
+            Main.LocalPlayer.GetModPlayer<MyPlayer>().canRevertFromKQBTD = true;
+        }
 
         public override bool AltFunctionUse(Player player)
         {
-            return true;
+            return player.GetModPlayer<MyPlayer>().canRevertFromKQBTD;
         }
 
         public override bool CanUseItem(Player player)
         {
-			if (player.altFunctionUse == 2 && !player.HasBuff(mod.BuffType("TimeCooldown")) && !player.HasBuff(mod.BuffType("BitesTheDust")) && taggedAnything)
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (player.altFunctionUse == 2 && mPlayer.revertTimer <= 0)
             {
-                item.shoot = 0;
-                player.AddBuff(mod.BuffType("BitesTheDust"), 10);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BiteTheDustEffect"));
-                for (int k = 0; k < 200; k++)
-                {
-                    if (Main.npc[k].active && !Main.npc[k].friendly)
-                    {
-                        Main.npc[k].life -= Main.rand.Next(90, 136);
-                        Main.npc[k].netUpdate = true;
-                    }
-                }
-                taggedAnything = false;
+                item.TurnToAir();
+                Item.NewItem(player.Center, mod.ItemType("KillerQueenFinal"));
+                mPlayer.revertTimer += 30;
             }
-            if (player.altFunctionUse == 2 && !taggedAnything && !player.HasBuff(mod.BuffType("BitesTheDustCoolDown")))
-            {
-                item.damage = 1;
-                item.useTime = 80;
-                item.useAnimation = 80;
-                item.useStyle = 5;
-                item.UseSound = SoundID.Item1;
-                item.autoReuse = false;
-                item.shoot = mod.ProjectileType("KQBombFist");
-                item.shootSpeed = 25f;
-            }
-			if (player.altFunctionUse != 2)
-			{
-				item.damage = 201;
-				item.useTime = 60;
-				item.useAnimation = 60;
-				item.useStyle = 5;
-				item.knockBack = 2f;
-				item.autoReuse = false;
-	        	item.shoot = mod.ProjectileType("Bubble");
-	            item.shootSpeed = 2.1f;
-			}
-			return true;
-		}
+            return true;
+        }
 
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("KillerQueenFinal"));
             recipe.AddIngredient(mod.ItemType("RequiemArrow"));
-			recipe.SetResult(this);
+            recipe.AddIngredient(mod.ItemType("TaintedLifeforce"));
+            recipe.AddIngredient(mod.ItemType("StrayCat"));
+            recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 	}

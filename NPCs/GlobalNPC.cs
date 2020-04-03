@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using JoJoStands.Items;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace JoJoStands.NPCs
 {
@@ -11,6 +12,11 @@ namespace JoJoStands.NPCs
     {
         public bool affectedbyBtz = false;
         public bool taggedByButterfly = false;
+        public bool applyingForesightPositions = false;
+        public bool foresightResetIndex = false;
+        public int foresightSaveTimer = 0;
+        public int foresightPositionIndex = 0;
+        public int foresightPositionIndexMax = 0;
         public int BtZSaveTimer = 0;
         public int aiStyleSave = 0;
         public bool forceDeath = false;
@@ -19,6 +25,9 @@ namespace JoJoStands.NPCs
         public int deathTimer = 0;
         public Vector2 playerPositionOnSkip = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[999];
+        public Vector2[] foresightPosition = new Vector2[50];
+        public Rectangle[] foresightFrames = new Rectangle[50];
+        public Vector2[] foresightRotations = new Vector2[50];      //although this is a Vector2, I'm storing rotations in X and Direction in Y
 
         public override bool InstancePerEntity
         {
@@ -27,27 +36,60 @@ namespace JoJoStands.NPCs
 
         public override void NPCLoot(NPC npc)
         {
-            if (npc.type == NPCID.MoonLordCore && Main.rand.NextFloat() < 0.0574f) //5.74% is .0574f chance
+            if (npc.type == NPCID.MoonLordCore && Main.rand.NextFloat(0, 101) < 33f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("RequiemArrow"));
             }
-
-            if(Main.hardMode && Main.rand.NextFloat() < 0.0238f) //should be a 4.38% chance of dropping from any enemy in hardmode
+            if (Main.hardMode && Main.rand.NextFloat(0, 101) < 7f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("SoulofTime"), Main.rand.Next(1,3));      //mininum amount = 1, maximum amount = 3
             }
-
-            if(Main.dayTime && Main.rand.NextFloat() < 0.0327f)     //should be a 3.27% chance of dropping from an enemy
+            if (Main.dayTime && Main.rand.NextFloat(0, 101) < 10f)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("SunDroplet"), Main.rand.Next(1,3));     //Main.rand.Next counts zeroes as well. Now changed to a minimum value of 1 and a maximum value of 3.
+                Item.NewItem(npc.getRect(), mod.ItemType("SunDroplet"), Main.rand.Next(1, 3));
             }
-            if ((npc.type == NPCID.Bird || npc.type == NPCID.BirdBlue || npc.type == NPCID.BirdRed || npc.type == NPCID.GoldBird) && Main.rand.NextFloat() < 0.0301f)
+            if ((npc.type == NPCID.Bird || npc.type == NPCID.BirdBlue || npc.type == NPCID.BirdRed || npc.type == NPCID.GoldBird) && Main.rand.NextFloat(0, 101) < 8f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("WrappedPicture"));
             }
-            if ((npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC) && Main.rand.NextFloat() < 0.0121f)
+            if ((npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC) && Main.rand.NextFloat(0, 101) < 14f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("Hand"));
+            }
+            if (Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
+            {
+                Item.NewItem(npc.getRect(), mod.ItemType("WillToFight"));
+            }
+            if (!Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
+            {
+                Item.NewItem(npc.getRect(), mod.ItemType("WillToProtect"));
+            }
+            if (Main.player[Main.myPlayer].ZoneUnderworldHeight && Main.rand.NextFloat(0, 101) <= 4f)
+            {
+                Item.NewItem(npc.getRect(), mod.ItemType("WillToDestroy"));
+            }
+            if ((Main.player[Main.myPlayer].ZoneCorrupt || Main.player[Main.myPlayer].ZoneCrimson) && Main.rand.NextFloat(0, 101) <= 4f)
+            {
+                Item.NewItem(npc.getRect(), mod.ItemType("WillToControl"));
+            }
+            if (Main.player[Main.myPlayer].ZoneDungeon && Main.rand.NextFloat(0, 101) <= 4f)
+            {
+                Item.NewItem(npc.getRect(), mod.ItemType("WillToEscape"));
+            }
+            if (Main.player[Main.myPlayer].ZoneJungle && Main.rand.NextFloat(0, 101) <= 4f)
+            {
+                Item.NewItem(npc.getRect(), mod.ItemType("WillToChange"));
+            }
+            if (npc.type == NPCID.WallofFlesh)
+            {
+                if (Main.rand.NextFloat(0, 101) < 50f)
+                {
+                    Item.NewItem(npc.getRect(), mod.ItemType("StandEmblem"));
+                }
+                else
+                {
+                    Item.NewItem(npc.getRect(), mod.ItemType("HamonEmblem"));
+                }
             }
         }
 
@@ -63,13 +105,54 @@ namespace JoJoStands.NPCs
 
         public override void GetChat(NPC npc, ref string chat)
         {
-            if (npc.type == NPCID.Nurse && Main.rand.Next(0, 100) <= 5)
+            if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Placement contributor reference
+            {
+                chat = "I knew a guy who loved to name things. He’s still around, and he’s probably still naming everything he can find. I wonder what kind of Placement he went through in the dimension shift...";
+            }
+            if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Nekro contributor reference
+            {
+                chat = "There was a man with splt personalities named Nekro and Sektor, they named about 10 of the stands you have access to, kinda reminds me of a friend from Egypt...";
+            }
+            if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 5)      //Techno contributor reference
+            {
+                chat = "Some weirdo with an afro once zoomed past me at the speed of a train, with his Stand carrying him in a box. Gramps seemed to approve. Who knows where that lunatic is now.";
+            }
+            if (npc.type == NPCID.Nurse && Main.rand.Next(0, 100) <= 5)     //ciocollata reference
             {
                 chat = "I heard there was a surgeon fired for killing patients and recording it, there are some sick people in this world.";
             }
-            if (npc.type == NPCID.Demolitionist && Main.rand.Next(0, 100) <= 10)
+            if (npc.type == NPCID.Demolitionist && Main.rand.Next(0, 100) <= 10)        //obviously, a Killer Queen reference
             {
                 chat = Main.LocalPlayer.name + " do you know what a 'Killer Queen' is? I heard it can make anything explode...";
+            }
+			if (npc.type == NPCID.Guide && Main.rand.Next(0, 100) <= 4)		//Betty contributor reference
+			{
+				chat = "Hey " + Main.LocalPlayer.name + ", the other day one small girl calling herself 'The Dead Princess' came to me asking for the release date of a 1.4 version... I'm not sure what was she talking about...";
+			}
+			if (npc.type == NPCID.Mechanic && Main.rand.Next(0, 100) <= 5)		//Phil contributer reference
+			{
+				chat = "I've heard of someone named Phil selling something called 'Flex Tape' that can fix everything, mind if you get some for me?";
+			}
+            if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 1)      //AG's contributor reference
+            {
+                chat = "I am being possessed by something... 'Yo! I hope you enjoy the mod!' (Jotaro said, but it seems like it wasn't him). It felt like my memory disc was taken away from me and I was watching myself in third-person... Yare Yare Daze...";
+            }
+        }
+
+        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        {
+            if (type == NPCID.Painter)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType("IWouldntLose"));
+                nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("OfficersRegret"));
+                nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("QuietLife"));
+                nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("ShotintheDark"));
+                nextSlot++;
+                shop.item[nextSlot].SetDefaults(mod.ItemType("BloodForTheKing"));
+                nextSlot++;
             }
         }
 
@@ -81,7 +164,7 @@ namespace JoJoStands.NPCs
                 npc.velocity.X *= 0f;
                 npc.velocity.Y *= 0f;               //negative X is to the left, negative Y is UP
                 npc.frameCounter = 1;
-                if (npc.noGravity == false)
+                if (!npc.noGravity)
                 {
                     npc.velocity.Y -= 0.3f;     //the default gravity value, so that if enemies have gravity enabled, this velocity counters that gravity
                 }
@@ -214,6 +297,72 @@ namespace JoJoStands.NPCs
                 aiStyleSave = 0;
                 return true;
             }
+            if (player.Foresight && !npc.immortal)
+            {
+                applyingForesightPositions = true;
+                if (foresightSaveTimer > 0)
+                {
+                    foresightSaveTimer--;
+                }
+                if (foresightSaveTimer <= 1)
+                {
+                    foresightPosition[foresightPositionIndex] = npc.position;
+                    foresightFrames[foresightPositionIndex] = npc.frame;
+                    foresightRotations[foresightPositionIndex].X = npc.rotation;
+                    foresightRotations[foresightPositionIndex].Y = npc.direction;
+                    foresightPositionIndex++;       //second so that something saves in [0] and goes up from there
+                    foresightPositionIndexMax++;
+                    foresightSaveTimer = 15;
+                }
+            }
+            if (!player.Foresight && applyingForesightPositions)
+            {
+                if (!foresightResetIndex)
+                {
+                    foresightPositionIndex = 0;
+                    foresightResetIndex = true;
+                }
+                npc.velocity = Vector2.Zero;
+                npc.position = foresightPosition[foresightPositionIndex];
+                npc.rotation = foresightRotations[foresightPositionIndex].X;
+                if (foresightSaveTimer > 0)
+                {
+                    foresightSaveTimer--;
+                }
+                if (foresightSaveTimer <= 1)
+                {
+                    foresightPositionIndex++;
+                    foresightSaveTimer = 15;
+                    if (foresightPositionIndex >= 1)
+                    {
+                        if (foresightPosition[foresightPositionIndex - 1] != Vector2.Zero)
+                        {
+                            foresightPosition[foresightPositionIndex - 1] = Vector2.Zero;
+                        }
+                        if (foresightRotations[foresightPositionIndex - 1].X != 0f)
+                        {
+                            foresightRotations[foresightPositionIndex - 1].X = 0f;
+                        }
+                        if (foresightRotations[foresightPositionIndex - 1].Y != 0f)
+                        {
+                            foresightRotations[foresightPositionIndex - 1].Y = 0f;
+                        }
+                    }
+                }
+                if (foresightPositionIndex >= foresightPositionIndexMax)
+                {
+                    applyingForesightPositions = false;
+                    foresightPositionIndex = 0;
+                    foresightPositionIndexMax = 0;
+                    foresightResetIndex = false;
+                }
+                if (foresightPositionIndex >= 49)       //a failsafe to prevent Index Out of Bounds in extended multiplayer timeskips
+                {
+                    foresightPositionIndex = 0;
+                    foresightPositionIndexMax = 0;
+                }
+                return false;
+            }
             if (spawnedByDeathLoop)
             {
                 deathTimer++;
@@ -229,6 +378,10 @@ namespace JoJoStands.NPCs
                     }
                     deathTimer = 0;
                 }
+            }
+            if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
+            {
+                return false;
             }
             return true;
         }
@@ -257,6 +410,36 @@ namespace JoJoStands.NPCs
             return true;
         }
 
+        public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
+        {
+            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            if (player.Foresight || applyingForesightPositions)
+            {
+                for (int i = 0; i < 50; i++)
+                {
+                    SpriteEffects effects = SpriteEffects.None;
+                    if (foresightRotations[i].Y == 1)
+                    {
+                        effects = SpriteEffects.FlipHorizontally;
+                    }
+                    if (foresightPosition[i] != Vector2.Zero)
+                    {
+                        spriteBatch.Draw(Main.npcTexture[npc.type], (foresightPosition[i] - Main.screenPosition) + new Vector2(-5f, 30f), foresightFrames[i], Color.DarkRed, foresightRotations[i].X, foresightFrames[i].Size() / 2f, npc.scale, effects, 0f);
+                    }
+                }
+            }
+            return true;
+        }
+
+        public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
+        {
+            if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
+            {
+                Texture2D texture = mod.GetTexture("Extras/BoundByRedBind");
+                spriteBatch.Draw(texture, (npc.Center - Main.screenPosition), null, Color.White, npc.rotation, npc.Size / 2f, npc.scale, SpriteEffects.None, 0f);
+            }
+        }
+
         public override void OnHitPlayer(NPC npc, Player target, int damage, bool crit)
         {
             if (target.HasBuff(mod.BuffType("BacktoZero")))     //only affects the ones with the buff, everyone's bool should turn on and save positions normally
@@ -274,6 +457,15 @@ namespace JoJoStands.NPCs
                     forceDeath = true;
                 }
             }
+            if (target.HeldItem.type == mod.ItemType("DollyDagger"))
+            {
+                npc.StrikeNPC((int)(damage * 0.7), 2f, npc.direction * -1);
+                damage = (int)(damage * 0.3);
+            }
+            if (target.GetModPlayer<MyPlayer>().Vampire)
+            {
+                npc.AddBuff(BuffID.Frostburn, 240);
+            }
         }
 
         public override void OnHitByProjectile(NPC npc, Projectile projectile, int damage, float knockback, bool crit)
@@ -290,7 +482,6 @@ namespace JoJoStands.NPCs
             {
                 npc.lifeRegen = -4;
             }
-            base.UpdateLifeRegen(npc, ref damage);
         }
     }
 }

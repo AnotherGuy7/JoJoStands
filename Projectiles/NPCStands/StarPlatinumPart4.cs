@@ -37,8 +37,8 @@ namespace JoJoStands.Projectiles.NPCStands
 
         protected float shootCool = 6f;       //how fast the minion can shoot
         protected float shootSpeed = 9f;     //how fast the projectile the minion shoots goes
-        static bool normalFrames = false;
-        static bool attackFrames = false;
+        public bool normalFrames = false;
+        public bool attackFrames = false;
 
         public override void Kill(int timeLeft)
         {
@@ -136,7 +136,7 @@ namespace JoJoStands.Projectiles.NPCStands
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), NPCs.MarineBiologist.attackPower, 1f, Main.myPlayer, 0, 0);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("NPCStandFists"), NPCs.MarineBiologist.attackPower, 1f, Main.myPlayer, 0, 0);
                         Main.projectile[proj].npcProj = true;
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;

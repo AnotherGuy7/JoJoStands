@@ -60,7 +60,7 @@ namespace JoJoStands.Items.Hamon
                 player.AddBuff(BuffID.Regeneration, 1500);
                 item.UseSound = SoundID.Item3;
                 item.potion = true;
-                player.GetModPlayer<MyPlayer>().HamonCounter += 10;
+                player.GetModPlayer<HamonPlayer>().HamonCounter += 10;
             }
 			return true;
 		}

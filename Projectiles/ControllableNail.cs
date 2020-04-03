@@ -19,7 +19,6 @@ namespace JoJoStands.Projectiles
             projectile.width = 10;
             projectile.height = 10;
             projectile.aiStyle = 0;
-            projectile.ranged = true;
             projectile.timeLeft = 300;
             projectile.friendly = true;
             projectile.tileCollide = true;
@@ -30,7 +29,7 @@ namespace JoJoStands.Projectiles
         {
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 202, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
 
-            if (Main.myPlayer == projectile.owner && projectile.ai[0] == 0f)
+            if (projectile.owner == Main.myPlayer && projectile.ai[0] == 0f)
             {
                 projectile.rotation += (float)projectile.direction * 0.8f;
                 if (Main.player[projectile.owner].channel)

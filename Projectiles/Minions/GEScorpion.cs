@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
  
@@ -95,6 +96,35 @@ namespace JoJoStands.Projectiles.Minions
             else
             {
                 projectile.velocity.X = 0f;
+            }
+
+            Player player = Main.player[projectile.owner];
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                for (int p = 0; p < Main.maxProjectiles; p++)
+                {
+                    Projectile otherProj = Main.projectile[p];
+                    Player otherPlayer = Main.player[otherProj.owner];
+                    if (otherProj.active && projectile.Hitbox.Intersects(otherProj.Hitbox))
+                    {
+                        if (projectile.owner != otherProj.owner && player.team != otherPlayer.team && projectile.damage < 75)
+                        {
+                            Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, projectile.width, projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
+                            if (MyPlayer.Sounds)
+                            {
+                                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
+                            }
+                            otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " couldn't resist hurting " + player.name + "'s damage-reflecting scorpion."), otherProj.damage, 1, true);
+                            otherProj.Kill();
+                            projectile.Kill();
+                        }
+                        if (projectile.owner != otherProj.owner && player.team != otherPlayer.team && projectile.damage > 75)
+                        {
+                            otherProj.Kill();
+                            projectile.Kill();
+                        }
+                    }
+                }
             }
         }
 

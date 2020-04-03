@@ -10,10 +10,8 @@ namespace JoJoStands.NPCs
 {
     public class Yuya : ModNPC
     {
-        internal static bool standisAlive;
-        internal static bool userisAlive = false;
-        int standcounter = 0;
-        int frame = 0;
+        public int standcounter = 0;
+        public int frame = 0;
 
         public override void SetStaticDefaults()
         {
@@ -28,22 +26,25 @@ namespace JoJoStands.NPCs
             npc.lifeMax = 110;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 12f;
+            npc.knockBackResist = 1f;
             npc.chaseable = true;
             npc.damage = 37;
             npc.aiStyle = 0;
         }
 
+        //npc.ai[2] = is stand alive
+        //npc.ai[3] = is user alive
+
         public override bool CheckActive()
         {
-            userisAlive = true;
+            npc.ai[3] = 1f;
             return base.CheckActive();
         }
 
         public override bool CheckDead()
         {
-            userisAlive = false;
-            standisAlive = false;
+            npc.ai[3] = 0f;
+            npc.ai[2] = 0f;
             return base.CheckDead();
         }
 
@@ -54,11 +55,11 @@ namespace JoJoStands.NPCs
             {
                 npc.ai[0]++;
             }
-            if (npc.ai[0] == 1f && !standisAlive)
+            if (npc.ai[0] == 1f && npc.ai[2] == 0f)
             {
-                NPC.NewNPC((int)(npc.Center.X), (int)npc.Center.Y, mod.NPCType("HighwayStar"));
+                NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType("HighwayStar"), 0, 0f, 0f, npc.whoAmI, 0f, npc.target);
             }
-            if (!standisAlive)
+            if (npc.ai[2] == 0f)
             {
                 standcounter++;
             }

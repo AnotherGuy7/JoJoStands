@@ -10,16 +10,9 @@ namespace JoJoStands.Projectiles.Minions
     {
         public override string Texture { get { return "Terraria/NPC_" + NPCID.Butterfly; } }
 
-        public int frame = 0;
-
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 24;
-            Main.projPet[projectile.type] = true;
-            ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
-            ProjectileID.Sets.Homing[projectile.type] = true;
-            ProjectileID.Sets.LightPet[projectile.type] = true;
-            Main.projPet[projectile.type] = true;
         }
 
         public override void SetDefaults()
@@ -28,27 +21,26 @@ namespace JoJoStands.Projectiles.Minions
             projectile.width = 45;
             projectile.height = 28;
             projectile.friendly = true;
-            projectile.minion = true;
             projectile.netImportant = true;
-            projectile.minionSlots = 1;
-            projectile.penetrate = 1;
-            projectile.timeLeft = 0;
-            projectile.tileCollide = false;
+            projectile.timeLeft = 1200;
+            projectile.tileCollide = true;
             projectile.ignoreWater = true;
-            projectile.melee = true;
+            projectile.hostile = false;
             MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
+        public NPC npcTarget = null;
+        public bool Up = false;
+
         public override void AI()
         {
-            NPC npcTarget = null;
             if (projectile.direction == -1)     //sprite turns depending on direction
             {
-                projectile.spriteDirection = -1;
+                projectile.spriteDirection = 1;
             }
             if (projectile.direction == 1)
             {
-                projectile.spriteDirection = 1;
+                projectile.spriteDirection = -1;
             }
             Vector2 move = Vector2.Zero;
             float distance = 400f;
@@ -69,6 +61,25 @@ namespace JoJoStands.Projectiles.Minions
                     {
                         projectile.ai[0] = 0f;
                     }
+                }
+            }
+            if (projectile.ai[0] == 0f)
+            {
+                if (projectile.velocity.Y <= -0.3f)
+                {
+                    Up = false;
+                }
+                if (projectile.velocity.Y >= 0.3f)
+                {
+                    Up = true;
+                }
+                if (!Up)
+                {
+                    projectile.velocity.Y += 0.05f;
+                }
+                if (Up)
+                {
+                    projectile.velocity.Y -= 0.05f;
                 }
             }
             if (projectile.ai[0] == 1f)
@@ -100,24 +111,25 @@ namespace JoJoStands.Projectiles.Minions
                     projectile.direction = -1;
                 }
             }
-        }
- 
-        public void SelectFrame()
-        {
             projectile.frameCounter++;
             if (projectile.frameCounter >= 8)
             {
-                frame += 1;
+                projectile.frame += 1;
                 projectile.frameCounter = 0;
             }
-            if (frame >= 12)
+            if (projectile.frame >= 12)
             {
-                frame = 9;
+                projectile.frame = 9;
             }
-            if (frame <= 8)
+            if (projectile.frame <= 8)
             {
-                frame = 9;
+                projectile.frame = 9;
             }
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            return false;
         }
     }
 }

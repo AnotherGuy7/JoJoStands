@@ -37,8 +37,8 @@ namespace JoJoStands.Projectiles.NPCStands
 
         protected float shootCool = 80f;       //how fast the minion can shoot
         protected float shootSpeed = 9f;     //how fast the projectile the minion shoots goes
-        static bool normalFrames = false;
-        static bool attackFrames = false;
+        public bool normalFrames = false;
+        public bool attackFrames = false;
 
         public override void Kill(int timeLeft)
         {

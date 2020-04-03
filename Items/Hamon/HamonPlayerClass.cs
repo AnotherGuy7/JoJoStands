@@ -3,21 +3,22 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Hamon
 {
-    // This class stores necessary player info for our custom damage class, such as damage multipliers and additions to knockback and crit.
-    public class HamonPlayerClass : ModPlayer
+    public class HamonPlayer : ModPlayer
     {
-        public static HamonPlayerClass ModPlayer(Player player)
+        public static HamonPlayer ModPlayer(Player player)
         {
-            return player.GetModPlayer<HamonPlayerClass>();
+            return player.GetModPlayer<HamonPlayer>();
         }
+        public float hamonDamageBoosts = 1f;
+        public float hamonKnockbackBoosts = 1f;
+        public int hamonLevel = 0;
+        public int HamonCounter = 0;
+        public int maxHamon = 60;
+        public int counter = 0;
+        public int maxHamonCounter = 0;
 
-        // Vanilla only really has damage multipliers in code
-        // And crit and knockback is usually just added to
-        // As a modder, you could make separate variables for multipliers and simple addition bonuses
-        public float HamonDamage = 1f;
-        public float HamonKnockback;
-        public int HamonCrit;
-        public int hamonLevel;
+        public bool AjaStone = false;
+
 
         public override void ResetEffects()
         {
@@ -31,54 +32,162 @@ namespace JoJoStands.Items.Hamon
 
         public override void PreUpdate()
         {
-            if (NPC.downedBoss1)    //eye of cthulu. I had to do this with levels cause I couldn't get it to only add to an amount, instead, it continuously added it
+            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            if (NPC.downedBoss1)
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 72;
+                hamonLevel = 1;
             }
             if (NPC.downedBoss2)      //the crimson/corruption bosses
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 84;
+                hamonLevel = 2;
             }
             if (NPC.downedBoss3)       //skeletron
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 96;
+                hamonLevel = 3;
             }
             if (Main.hardMode)      //wall of flesh
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 108;
+                hamonLevel = 4;
             }
             if (NPC.downedMechBoss1)
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 120;
+                hamonLevel = 5;
             }
             if (NPC.downedMechBoss2)
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 132;
+                hamonLevel = 6;
             }
             if (NPC.downedMechBoss3)
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 144;
+                hamonLevel = 7;
             }
             if (NPC.downedPlantBoss)       //plantera
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 156;
+                hamonLevel = 8;
             }
             if (NPC.downedGolemBoss)
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 168;
+                hamonLevel = 9;
             }
             if (NPC.downedMoonlord)     //you are an expert with hamon by moon lord
             {
-                player.GetModPlayer<MyPlayer>().maxHamon = 180;
+                hamonLevel = 10;
             }
-            base.PreUpdate();
+
+
+            if (hamonLevel == 1)
+            {
+                hamonPlayer.maxHamon = 72;
+            }
+            if (hamonLevel == 2)
+            {
+                hamonPlayer.maxHamon = 84;
+            }
+            if (hamonLevel == 3)
+            {
+                hamonPlayer.maxHamon = 96;
+            }
+            if (hamonLevel == 4)
+            {
+                hamonPlayer.maxHamon = 108;
+            }
+            if (hamonLevel == 5)
+            {
+                hamonPlayer.maxHamon = 120;
+            }
+            if (hamonLevel == 6)
+            {
+                hamonPlayer.maxHamon = 132;
+            }
+            if (hamonLevel == 7)
+            {
+                hamonPlayer.maxHamon = 144;
+            }
+            if (hamonLevel == 8)
+            {
+                hamonPlayer.maxHamon = 156;
+            }
+            if (hamonLevel == 9)
+            {
+                hamonPlayer.maxHamon = 168;
+            }
+            if (hamonLevel == 10)
+            {
+                hamonPlayer.maxHamon = 180;
+            }
+
+            if (AjaStone)           //Hamon charging stuff
+            {
+                maxHamon *= 2;
+                maxHamonCounter = 120;
+            }
+            if (Mplayer.Vampire)
+            {
+                HamonCounter = 0;
+                counter = 0;
+            }
+            if (counter >= maxHamonCounter)      //the one that increases Hamon
+            {
+                if (AjaStone)       //or any other decrease-preventing accessories
+                {
+                    counter = 0;
+                    HamonCounter += 1;
+                }
+                if (HamonCounter <= 60)
+                {
+                    counter = 0;
+                    HamonCounter += 1;
+                }
+            }
+            if (counter >= maxHamonCounter && HamonCounter > 60 && !AjaStone)      //the one that decreases Hamon
+            {
+                counter = 0;
+                HamonCounter -= 1;
+            }
+            if (!Mplayer.Vampire && player.breath == player.breathMax && HamonCounter <= 60)       //in general, to increase Hamon while it can still be increased, no speeding up decreasing
+            {
+                if (player.velocity.X != 0f || player.velocity.Y != 0f)
+                {
+                    counter++;
+                }
+                if (player.velocity.X == 0f && player.velocity.Y == 0f)
+                {
+                    counter += 2;
+                }
+                if (player.lavaWet && !player.lavaImmune)
+                {
+                    counter--;
+                }
+
+            }
+            if (!AjaStone)          //list maxHamonCounter decreasing things in here
+            {
+                maxHamonCounter = 240;
+            }
+            if (HamonCounter > 60 && HamonCounter < 120 && !AjaStone)      //every 6 seconds, while Hamon is at the UI's second row, it decreases. Only if you don't have the Aja Stone
+            {
+                maxHamonCounter = 360;
+            }
+            if (HamonCounter >= 120 && !AjaStone)      //same as top but every 3 seconds
+            {
+                maxHamonCounter = 180;
+            }
+
+            if (HamonCounter >= maxHamon)       //hamon limit stuff
+            {
+                HamonCounter = maxHamon;
+            }
+            if (HamonCounter <= 0)
+            {
+                HamonCounter = 0;
+            }
         }
 
         private void ResetVariables()
         {
-            HamonDamage = 1f;
-            HamonKnockback = 0f;
-            HamonCrit = 0;
+            hamonDamageBoosts = 1f;
+            hamonKnockbackBoosts = 1f;
         }
     }
 }

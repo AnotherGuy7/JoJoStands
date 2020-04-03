@@ -11,20 +11,21 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 10;
-            projectile.height = 10;
+            projectile.width = 24;
+            projectile.height = 28;
             projectile.aiStyle = 0;
             projectile.ranged = true;
             projectile.timeLeft = 1800;
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
+            projectile.maxPenetrate = 25;
         }
 
         public override void AI()
         {
-            projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
-            base.AI();
+            projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(45f);
+            projectile.velocity.Y += 0.3f;
         }
     }
 }

@@ -23,37 +23,27 @@ namespace JoJoStands.Projectiles
 
         public override void AI()       //make them very slightly controllable
         {
+            Player player = Main.player[projectile.owner];
+            Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
             hamonLossCounter++;
-            if (projectile.timeLeft <= 550 && Main.mouseRight && Main.LocalPlayer.GetModPlayer<MyPlayer>().HamonCounter >= 1)
+            if (projectile.timeLeft <= 550 && Main.mouseRight && hamonPlayer.HamonCounter >= 1)
             {
                 beingControlled = true;
             }
             if (beingControlled)
             {
                 hamonLossCounter++;
-                if (projectile.position.X <= Main.MouseWorld.X)        //if it's more to the right, go left
-                {
-                    projectile.velocity.X = 5f;
-                }
-                else if (projectile.position.X >= Main.MouseWorld.X)       //if it's more to the left, stay the same...
-                {
-                    projectile.velocity.X = -5f;
-                }
-                if (projectile.position.Y >= Main.MouseWorld.Y)       //if it's lower, go up to it
-                {
-                    projectile.velocity.Y = -5f;
-                }
-                else if (projectile.position.Y <= Main.MouseWorld.Y)      //if it's higher, go down to it
-                {
-                    projectile.velocity.Y = 5f;
-                }
+                if (projectile.owner == Main.myPlayer)
+                projectile.velocity = Main.MouseWorld - projectile.Center;
+                projectile.velocity.Normalize();
+                projectile.velocity *= 10f;
             }
             if (hamonLossCounter >= 120)
             {
                 hamonLossCounter = 0;
-                Main.LocalPlayer.GetModPlayer<MyPlayer>().HamonCounter -= 1;
+                hamonPlayer.HamonCounter -= 1;
             }
-            if (Main.LocalPlayer.GetModPlayer<MyPlayer>().HamonCounter <= 1)
+            if (hamonPlayer.HamonCounter <= 1)
             {
                 beingControlled = false;
                 projectile.timeLeft--;

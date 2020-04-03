@@ -40,13 +40,22 @@ namespace JoJoStands.Items.Hamon
             }
         }
 
-        // As a modder, you could also opt to make the Get overrides also sealed. Up to the modder
-        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult)       //when making the base damage values, make sure they are around the 10-20's cause otherwise, at MoonLord they'd go over 250
+        public override void ModifyHitPvp(Player player, Player target, ref int damage, ref bool crit)
         {
-            if (player.GetModPlayer<MyPlayer>().AjaStone)
+            if (target.HasBuff(mod.BuffType("Vampire")))
             {
-                mult *= 1.5f;
+                damage = (int)(damage * 1.3);
+                target.AddBuff(mod.BuffType("Sunburn"), 90);
             }
+        }
+
+        public int increaseCounter = 0;
+
+        // As a modder, you could also opt to make the Get overrides also sealed. Up to the modder
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)       //when making the base damage values, make sure they are around the 10-20's cause otherwise, at MoonLord they'd go over 250
+        {
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             if (NPC.downedBoss1)    //eye of cthulu
             {
                 add += 1.15f;     //this is 14%
@@ -87,28 +96,17 @@ namespace JoJoStands.Items.Hamon
             {
                 add += 1.29f;
             }
-            if (player.GetModPlayer<MyPlayer>().HamonCounter >= player.GetModPlayer<MyPlayer>().maxHamon / 2)     //more than half of maxHamon
+            if (hamonPlayer.HamonCounter >= hamonPlayer.maxHamon / 2)     //more than half of maxHamon
             {
                 mult *= 1.5f;
             }
+            mult *= hamonPlayer.hamonDamageBoosts;
         }
 
         public override void GetWeaponKnockback(Player player, ref float knockback)
         {
-            // Adds knockback bonuses
-            if (player.GetModPlayer<MyPlayer>().AjaStone)
-            {
-                knockback *= 1.5f;
-            }
-        }
-
-        public override void GetWeaponCrit(Player player, ref int crit)
-        {
-            // Adds crit bonuses
-            if (player.GetModPlayer<MyPlayer>().AjaStone)
-            {
-                crit *= (int)1.5;
-            }
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            knockback *= hamonPlayer.hamonKnockbackBoosts;
         }
     }
 }

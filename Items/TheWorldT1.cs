@@ -10,7 +10,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The World (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate!");
+            Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -22,33 +22,24 @@ namespace JoJoStands.Items
             item.useAnimation = 12;
             item.useStyle = 5;
             item.maxStack = 1;
-            item.knockBack = 2;
-            item.value = 10000;
+            item.knockBack = 2f;
+            item.value = 0;
+            item.noUseGraphic = true;
             item.rare = 6;
-            item.melee = true;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-            item.shoot = mod.ProjectileType("TheWorldFist");
-            item.shootSpeed = 50f;
+            MyPlayer.standTier1List.Add(mod.ItemType(Name));
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
         {
-            float numberProjectiles = 3 + Main.rand.Next(5);
-            float rotation = MathHelper.ToRadians(45);
-            position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f;
-            for (int i = 0; i < numberProjectiles; i++)
-            {
-                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
-            }
-            return false;
+            mult *= (float)player.GetModPlayer<MyPlayer>().standDamageBoosts;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("StandArrow"));
+            recipe.AddIngredient(mod.ItemType("WillToFight"));
+            recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

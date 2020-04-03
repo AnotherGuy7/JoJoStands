@@ -25,10 +25,15 @@ namespace JoJoStands.Items.Vanities
             item.vanity = true;
 		}
 
-        public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
+		public override void UpdateVanity(Player player, EquipType type)
+		{
+			MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+			mPlayer.wearingEpitaph = true;
+		}
+
+		public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
         {
             drawHair = true;
-            base.DrawHair(ref drawHair, ref drawAltHair);
         }
 
         public override void AddRecipes()

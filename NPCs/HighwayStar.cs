@@ -10,12 +10,13 @@ namespace JoJoStands.NPCs
 {
     public class HighwayStar : ModNPC
     {
-        static bool walkFrames = false;
-        static bool chaseFrames = false;
-        static bool transformFramesInto = false;
-        static bool transformFramesOutof = false;
-        int frame = 0;
-        float velocity = 0f;
+        public bool walkFrames = false;
+        public bool chaseFrames = false;
+        public bool transformFramesInto = false;
+        public bool transformFramesOutof = false;
+        public int frame = 0;
+        public float velocity = 0f;
+        public NPC npcOwner;
 
         public override void SetStaticDefaults()
         {
@@ -39,28 +40,30 @@ namespace JoJoStands.NPCs
 
         public override bool CheckActive()
         {
-            Yuya.standisAlive = true;
+            npcOwner = Main.npc[(int)npc.ai[2]];
+            npcOwner.ai[2] = 1f;
             return base.CheckActive();
         }
 
         public override bool CheckDead()
         {
-            Yuya.standisAlive = false;
+            npcOwner.ai[2] = 0f;
             return base.CheckDead();
         }
 
         public override void AI()       //aiStyle of Wyverns(87), I just needed the base AI of it and changed it to what I actually wanted it to do
         {
-            var target = Main.player[npc.target];
+            Player target = Main.player[npc.target];
+            npcOwner = Main.npc[(int)npc.ai[2]];
             npc.noGravity = true;
-            if (!Yuya.userisAlive)      //if Yuya is dead
+            if (npcOwner.ai[3] == 0f)      //if Yuya is dead
             {
                 npc.active = false;
                 npc.life = -1;
             }
             if (!npc.active)        //if Highway Star is dead
             {
-                Yuya.standisAlive = false;
+                npc.ai[2] = 0f;
             }
             if (npc.target < 0 || npc.target == 255 || Main.player[npc.target].dead)        //if no target or that target is dead
             {

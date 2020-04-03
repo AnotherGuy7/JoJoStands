@@ -21,7 +21,7 @@ namespace JoJoStands.Items.Tiles
             item.useTime = 30;
             item.useStyle = 1;
             item.consumable = true;
-            item.value = Item.buyPrice(0, 0, 50, 0);
+            item.value = Item.buyPrice(0, 2, 0, 0);
             item.rare = 1;
             item.createTile = mod.TileType("OfficersRegretTile");
         }

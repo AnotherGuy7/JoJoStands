@@ -20,7 +20,6 @@ namespace JoJoStands.Projectiles
             projectile.friendly = true;
             projectile.aiStyle = 0;
             projectile.tileCollide = false;
-            projectile.melee = true;
             projectile.penetrate = -1;
             projectile.ownerHitCheck = true;
             projectile.friendly = true;

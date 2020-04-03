@@ -91,7 +91,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 deathLoopTimer = 0;
                 Looping10x = false;
                 player.ClearBuff(mod.BuffType("DeathLoop"));
-                player.AddBuff(mod.BuffType("GERAbilityCooldown"), 3600);
+                player.AddBuff(mod.BuffType("AbilityCooldown"), 3600);
                 deathPositionX = 0f;
                 deathPositionY = 0f;
                 LoopNPC = 0;

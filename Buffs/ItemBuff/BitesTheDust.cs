@@ -20,11 +20,35 @@ namespace JoJoStands.Buffs.ItemBuff
  
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.HasBuff(mod.BuffType("BitesTheDust")))
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (player.HasBuff(mod.BuffType(Name)))
             {
+                for (int i = 0; i < Main.maxPlayers; i++)       //first, get rid of all effect owners
+                {
+                    Player otherPlayer = Main.player[i];
+                    if (otherPlayer.active && otherPlayer.team != player.team)
+                    {
+                        if (otherPlayer.HasBuff(mod.BuffType("TheWorldBuff")))
+                        {
+                            otherPlayer.ClearBuff(mod.BuffType("TheWorldBuff"));
+                        }
+                        if (otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
+                        {
+                            otherPlayer.ClearBuff(mod.BuffType("SkippingTime"));
+                        }
+                        if (otherPlayer.HasBuff(mod.BuffType("ForesightBuff")))
+                        {
+                            otherPlayer.ClearBuff(mod.BuffType("ForesightBuff"));
+                        }
+                    }
+                }
+                mPlayer.TheWorldEffect = false;     //second, get rid of the effects from everyone
+                mPlayer.TimeSkipEffect = false;
+                mPlayer.TimeSkipPreEffect = false;
+                mPlayer.Foresight = false;
                 if (Main.time != 1600)
                 {
-                    player.AddBuff(mod.BuffType("BitesTheDust"), 10);       //to constantly refresh the buff
+                    player.AddBuff(mod.BuffType(Name), 10);       //to constantly refresh the buff
                 }
                 if (Main.time <= 1600)
                 {
@@ -36,8 +60,8 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 if (Main.time == 1600)
                 {
-                    player.AddBuff(mod.BuffType("TimeCooldown"), 25200);
-                    player.ClearBuff(mod.BuffType("BitesTheDust"));
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), 25200);
+                    player.ClearBuff(mod.BuffType(Name));
                     player.statLife = player.statLifeMax;
                     player.Spawn();
                     if (!Main.dayTime)

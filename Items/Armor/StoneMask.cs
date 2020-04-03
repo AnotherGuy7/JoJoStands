@@ -11,11 +11,13 @@ namespace JoJoStands.Items.Armor
 	[AutoloadEquip(EquipType.Head)]
 	public class StoneMask : ModItem
 	{
-		public override void SetStaticDefaults() {
+		public override void SetStaticDefaults()
+        {
 			Tooltip.SetDefault("An odd archaeological find. When worn, you gain superhuman abilities, but burns you in the sunlight.");
 		}
 
-		public override void SetDefaults() {
+		public override void SetDefaults()
+        {
 			item.width = 18;
 			item.height = 18;
 			item.value = Item.buyPrice(1, 0, 0, 0);
