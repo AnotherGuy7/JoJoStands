@@ -44,19 +44,19 @@ namespace JoJoStands
         [Tooltip("Allows you to choose how transparent the Range Indicator is.")]
         public int RangeIndicatorVisibility;
 
-        [DefaultValue(500)]
+        [DefaultValue(39)]
         [Label("Stand Slot X Position")]
         public int StandSlotPositionX;
 
-        [DefaultValue(300)]
+        [DefaultValue(42)]
         [Label("Stand Slot Y Position")]
         public int StandSlotPositionY;
 
-        [DefaultValue(1225)]
+        [DefaultValue(90)]
         [Label("Hamon Bar X Position")]
         public int HamonBarPositionX;
 
-        [DefaultValue(575)]
+        [DefaultValue(80)]
         [Label("Hamon Bar Y Position")]
         public int HamonBarPositionY;
 
@@ -80,6 +80,7 @@ namespace JoJoStands
             MyPlayer.HamonBarPositionX = HamonBarPositionX;
             MyPlayer.HamonBarPositionY = HamonBarPositionY;
             MyPlayer.SecretReferences = SecretReferences;
+            UI.HamonBarState.changedInConfig = true;
             if (deathsound >= 6)
             {
                 Main.NewText("There is are no deathsounds over 5!");

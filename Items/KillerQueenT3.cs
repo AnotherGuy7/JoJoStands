@@ -4,6 +4,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
+using System.Collections.Generic;
 
 namespace JoJoStands.Items
 {
@@ -33,6 +34,13 @@ namespace JoJoStands.Items
             item.value = 0;
             item.noUseGraphic = true;
             item.rare = 6;
+        }
+
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", "Punch Speed: " + (10 - mPlayer.standSpeedBoosts));
+            tooltips.Add(tooltipAddition);
         }
 
         public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)

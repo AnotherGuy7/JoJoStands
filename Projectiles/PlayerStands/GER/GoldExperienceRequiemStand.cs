@@ -39,7 +39,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
         public float maxDistance = 0f;
         public int punchDamage = 138;
         public int shootCount = 0;
-        public int punchTime = 11;
+        public int punchTime = 9;
         public int halfStandHeight = 34;
         public float fistWhoAmI = 3f;
         public float tierNumber = 5f;
@@ -125,7 +125,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
                     }
                     if (shootCount <= 0)
                     {
-                        shootCount += punchTime;
+                        shootCount += punchTime - modPlayer.standSpeedBoosts - modPlayer.standSpeedBoosts;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -261,7 +261,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
                     projectile.netUpdate = true;
                     if (projectile.frame == 8 && shootCount <= 0)
                     {
-                        shootCount += punchTime;
+                        shootCount += punchTime - modPlayer.standSpeedBoosts;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -349,7 +349,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += punchTime;
+                            shootCount += punchTime - modPlayer.standSpeedBoosts;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {

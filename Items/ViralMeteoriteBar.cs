@@ -27,7 +27,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("ViralMeteorite"), 15);
+			recipe.AddIngredient(mod.ItemType("ViralMeteorite"), 3);
 			recipe.AddTile(TileID.Furnaces);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

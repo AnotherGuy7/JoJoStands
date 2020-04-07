@@ -97,11 +97,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                         projectile.velocity = Main.MouseWorld - projectile.Center;
                         projectile.velocity.Normalize();
                         projectile.velocity *= 10f;
-                        if (Main.MouseWorld.X > projectile.position.X)
+                        if (Main.MouseWorld.X > projectile.position.X + 5f)
                         {
                             projectile.direction = 1;
                         }
-                        if (Main.MouseWorld.X <= projectile.position.X)
+                        if (Main.MouseWorld.X <= projectile.position.X - 5f)
                         {
                             projectile.direction = -1;
                         }
@@ -125,7 +125,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     Main.mouseRight = false;
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime;
+                        shootCount += shootTime - modPlayer.standSpeedBoosts;
                         Main.PlaySound(SoundID.Item11, projectile.position);
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
@@ -141,7 +141,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (JoJoStands.SpecialHotKey.JustPressed && !bombless && projectile.owner == Main.myPlayer)
                 {
                     player.AddBuff(mod.BuffType("AbilityCooldown"), 900);
-                    shootCount += shootTime;
+                    shootCount += shootTime - modPlayer.standSpeedBoosts;
                     int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, projectile.velocity.X, projectile.velocity.Y, mod.ProjectileType("AerosmithBomb"), 0, 3f, projectile.owner, (projectileDamage + 21f) * (float)modPlayer.standDamageBoosts);
                     Main.projectile[proj].netUpdate = true;
                 }
@@ -238,7 +238,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += shootTime;
+                            shootCount += shootTime - modPlayer.standSpeedBoosts;
                             Main.PlaySound(SoundID.Item11, projectile.position);
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)

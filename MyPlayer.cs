@@ -49,6 +49,7 @@ namespace JoJoStands
         public int revertTimer = 0;     //for all requiems that can change forms back to previous forms
         public double standDamageBoosts = 1;
         public float standRangeBoosts = 0f;
+        public int standSpeedBoosts = 0;
 
         public bool TuskAct1Pet = false;
         public bool TuskAct2Pet = false;
@@ -97,6 +98,7 @@ namespace JoJoStands
 
             standDamageBoosts = 1;
             standRangeBoosts = 0f;
+            standSpeedBoosts = 0;
         }
 
         public override void OnEnterWorld(Player player)
@@ -278,7 +280,10 @@ namespace JoJoStands
 
                 Main.inventoryScale = 0.85f;
 
-                StandSlot.Position = new Vector2(StandSlotPositionX, StandSlotPositionY);
+                int slotPosX = StandSlotPositionX * (Main.screenWidth / 100);
+                int slotPosY = StandSlotPositionY * (Main.screenHeight / 100);
+
+                StandSlot.Position = new Vector2(slotPosX, slotPosY);
 
                 StandSlot.Draw(spriteBatch);
 

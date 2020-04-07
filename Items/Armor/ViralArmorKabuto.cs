@@ -14,7 +14,7 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Viral Kabuto");
-            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Damage Increase: +4%\nSet Bonus: +5% Stand Damage");
+            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Damage Increase: +4%\nStand Speed Increase: +1\nSet Bonus: +5% Stand Damage");
         }
 
         public override void SetDefaults()
@@ -39,6 +39,7 @@ namespace JoJoStands.Items.Armor
         public override void UpdateEquip(Player player)
         {
             player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.04;
+            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 1;
         }
 
         public override void AddRecipes()

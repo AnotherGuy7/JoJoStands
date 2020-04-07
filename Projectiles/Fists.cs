@@ -27,7 +27,8 @@ namespace JoJoStands.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             Player player = Main.player[projectile.owner];
-            if (projectile.ai[0] == 3f)
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (projectile.ai[0] == 3f && mPlayer.BackToZero)
             {
                 target.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
                 target.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
@@ -74,7 +75,9 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            if (projectile.ai[0] == 3f)
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (projectile.ai[0] == 3f && mPlayer.BackToZero)
             {
                 target.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
             }

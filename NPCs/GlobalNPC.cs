@@ -36,11 +36,12 @@ namespace JoJoStands.NPCs
 
         public override void NPCLoot(NPC npc)
         {
+            Player player = Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)];
             if (npc.type == NPCID.MoonLordCore && Main.rand.NextFloat(0, 101) < 33f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("RequiemArrow"));
             }
-            if (Main.hardMode && Main.rand.NextFloat(0, 101) < 7f)
+            if (Main.hardMode && (player.position.Y < (Main.worldSurface * 0.35) * 16f) && Main.rand.NextFloat(0, 101) < 7f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("SoulofTime"), Main.rand.Next(1,3));      //mininum amount = 1, maximum amount = 3
             }
@@ -56,27 +57,30 @@ namespace JoJoStands.NPCs
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("Hand"));
             }
-            if (Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
+            if (player.ZoneOverworldHeight && !player.ZoneCorrupt && !player.ZoneCrimson && !player.ZoneDungeon && !player.ZoneJungle && !player.ZoneSnow && !player.ZoneDesert && !player.ZoneBeach && !player.ZoneHoly)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("WillToFight"));
+                if (Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
+                {
+                    Item.NewItem(npc.getRect(), mod.ItemType("WillToFight"));
+                }
+                if (!Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
+                {
+                    Item.NewItem(npc.getRect(), mod.ItemType("WillToProtect"));
+                }
             }
-            if (!Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
-            {
-                Item.NewItem(npc.getRect(), mod.ItemType("WillToProtect"));
-            }
-            if (Main.player[Main.myPlayer].ZoneUnderworldHeight && Main.rand.NextFloat(0, 101) <= 4f)
+            if (player.ZoneUnderworldHeight && Main.rand.NextFloat(0, 101) <= 4f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("WillToDestroy"));
             }
-            if ((Main.player[Main.myPlayer].ZoneCorrupt || Main.player[Main.myPlayer].ZoneCrimson) && Main.rand.NextFloat(0, 101) <= 4f)
+            if ((player.ZoneCorrupt || player.ZoneCrimson) && Main.rand.NextFloat(0, 101) <= 4f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("WillToControl"));
             }
-            if (Main.player[Main.myPlayer].ZoneDungeon && Main.rand.NextFloat(0, 101) <= 4f)
+            if (player.ZoneDungeon && Main.rand.NextFloat(0, 101) <= 4f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("WillToEscape"));
             }
-            if (Main.player[Main.myPlayer].ZoneJungle && Main.rand.NextFloat(0, 101) <= 4f)
+            if (player.ZoneJungle && Main.rand.NextFloat(0, 101) <= 4f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("WillToChange"));
             }
@@ -105,37 +109,40 @@ namespace JoJoStands.NPCs
 
         public override void GetChat(NPC npc, ref string chat)
         {
-            if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Placement contributor reference
+            if (MyPlayer.SecretReferences)
             {
-                chat = "I knew a guy who loved to name things. He’s still around, and he’s probably still naming everything he can find. I wonder what kind of Placement he went through in the dimension shift...";
-            }
-            if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Nekro contributor reference
-            {
-                chat = "There was a man with splt personalities named Nekro and Sektor, they named about 10 of the stands you have access to, kinda reminds me of a friend from Egypt...";
-            }
-            if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 5)      //Techno contributor reference
-            {
-                chat = "Some weirdo with an afro once zoomed past me at the speed of a train, with his Stand carrying him in a box. Gramps seemed to approve. Who knows where that lunatic is now.";
-            }
-            if (npc.type == NPCID.Nurse && Main.rand.Next(0, 100) <= 5)     //ciocollata reference
-            {
-                chat = "I heard there was a surgeon fired for killing patients and recording it, there are some sick people in this world.";
-            }
-            if (npc.type == NPCID.Demolitionist && Main.rand.Next(0, 100) <= 10)        //obviously, a Killer Queen reference
-            {
-                chat = Main.LocalPlayer.name + " do you know what a 'Killer Queen' is? I heard it can make anything explode...";
-            }
-			if (npc.type == NPCID.Guide && Main.rand.Next(0, 100) <= 4)		//Betty contributor reference
-			{
-				chat = "Hey " + Main.LocalPlayer.name + ", the other day one small girl calling herself 'The Dead Princess' came to me asking for the release date of a 1.4 version... I'm not sure what was she talking about...";
-			}
-			if (npc.type == NPCID.Mechanic && Main.rand.Next(0, 100) <= 5)		//Phil contributer reference
-			{
-				chat = "I've heard of someone named Phil selling something called 'Flex Tape' that can fix everything, mind if you get some for me?";
-			}
-            if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 1)      //AG's contributor reference
-            {
-                chat = "I am being possessed by something... 'Yo! I hope you enjoy the mod!' (Jotaro said, but it seems like it wasn't him). It felt like my memory disc was taken away from me and I was watching myself in third-person... Yare Yare Daze...";
+                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Placement contributor reference
+                {
+                    chat = "I knew a guy who loved to name things. He’s still around, and he’s probably still naming everything he can find. I wonder what kind of Placement he went through in the dimension shift...";
+                }
+                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Nekro contributor reference
+                {
+                    chat = "There was a man with splt personalities named Nekro and Sektor, they named about 10 of the stands you have access to, kinda reminds me of a friend from Egypt...";
+                }
+                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 5)      //Techno contributor reference
+                {
+                    chat = "Some weirdo with an afro once zoomed past me at the speed of a train, with his Stand carrying him in a box. Gramps seemed to approve. Who knows where that lunatic is now.";
+                }
+                if (npc.type == NPCID.Nurse && Main.rand.Next(0, 100) <= 5)     //ciocollata reference
+                {
+                    chat = "I heard there was a surgeon fired for killing patients and recording it, there are some sick people in this world.";
+                }
+                if (npc.type == NPCID.Demolitionist && Main.rand.Next(0, 100) <= 10)        //obviously, a Killer Queen reference
+                {
+                    chat = Main.LocalPlayer.name + " do you know what a 'Killer Queen' is? I heard it can make anything explode...";
+                }
+                if (npc.type == NPCID.Guide && Main.rand.Next(0, 100) <= 4)     //Betty contributor reference
+                {
+                    chat = "Hey " + Main.LocalPlayer.name + ", the other day one small girl calling herself 'The Dead Princess' came to me asking for the release date of a 1.4 version... I'm not sure what was she talking about...";
+                }
+                if (npc.type == NPCID.Mechanic && Main.rand.Next(0, 100) <= 5)      //Phil contributer reference
+                {
+                    chat = "I've heard of someone named Phil selling something called 'Flex Tape' that can fix everything, mind if you get some for me?";
+                }
+                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 1)      //AG's contributor reference
+                {
+                    chat = "I am being possessed by something... 'Yo! I hope you enjoy the mod!' (Jotaro said, but it seems like it wasn't him). It felt like my memory disc was taken away from me and I was watching myself in third-person... Yare Yare Daze...";
+                }
             }
         }
 

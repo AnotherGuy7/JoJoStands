@@ -133,7 +133,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                     if (shootCount <= 0 && (projectile.frame == 8 || projectile.frame == 4))
                     {
-                        shootCount += punchTime;
+                        shootCount += punchTime - modPlayer.standSpeedBoosts;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -237,7 +237,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += punchTime;
+                            shootCount += punchTime - modPlayer.standSpeedBoosts;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
@@ -321,11 +321,12 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public virtual void SelectFrame()
         {
+            Player player = Main.player[projectile.owner];
             projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= 23)
+                if (projectile.frameCounter >= 21 - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
                 {
                     projectile.frame += 1;
                     projectile.frameCounter = 0;

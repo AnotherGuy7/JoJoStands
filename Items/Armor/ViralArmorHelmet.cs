@@ -14,7 +14,7 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Viral Helmet");
-            Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus. \nStand Damage Increase: -4%\nStand Range Increase: +0.5 Radius\nSet Bonus: +0.5 Radius");
+            Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus. \nStand Damage Increase: -4%\nStand Range Increase: +0.5 Radius\nStand Speed Increase: +2\nSet Bonus: +0.5 Radius");
         }
 
         public override void SetDefaults()
@@ -40,6 +40,8 @@ namespace JoJoStands.Items.Armor
         {
             player.GetModPlayer<MyPlayer>().standDamageBoosts -= 0.04;
             player.GetModPlayer<MyPlayer>().standRangeBoosts += 8f;       //8% range increase
+            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 2;
+
         }
 
         public override void AddRecipes()

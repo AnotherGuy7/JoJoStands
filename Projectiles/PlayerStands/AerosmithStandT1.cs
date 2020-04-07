@@ -90,11 +90,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                         projectile.velocity = Main.MouseWorld - projectile.Center;
                         projectile.velocity.Normalize();
                         projectile.velocity *= 10f;
-                        if (Main.MouseWorld.X > projectile.position.X)
+                        if (Main.MouseWorld.X > projectile.position.X + 5)
                         {
                             projectile.direction = 1;
                         }
-                        if (Main.MouseWorld.X <= projectile.position.X)
+                        if (Main.MouseWorld.X < projectile.position.X - 5)
                         {
                             projectile.direction = -1;
                         }
@@ -107,7 +107,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 else
                 {
-                    projectile.velocity = Vector2.Zero;
+                    if (!fallingFromSpace)
+                    {
+                        projectile.velocity = Vector2.Zero;
+                    }
+                    projectile.rotation = 0f;
                 }
                 if (Main.mouseRight && projectile.owner == Main.myPlayer)
                 {
@@ -115,7 +119,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     projectile.netUpdate = true;
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime;
+                        shootCount += shootTime - modPlayer.standSpeedBoosts;
                         Main.PlaySound(SoundID.Item11, projectile.position);
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
@@ -221,7 +225,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += shootTime;
+                            shootCount += shootTime - modPlayer.standSpeedBoosts;
                             Main.PlaySound(SoundID.Item11, projectile.position);
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)

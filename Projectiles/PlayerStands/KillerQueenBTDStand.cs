@@ -169,7 +169,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += shootTime;
+                            shootCount += shootTime - modPlayer.standSpeedBoosts;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
@@ -232,7 +232,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 normalFrames = false;
                 clickFrames = false;
                 projectile.frameCounter++;
-                if (projectile.frameCounter >= shootTime)
+                if (projectile.frameCounter >= shootTime - modPlayer.standSpeedBoosts)
                 {
                     projectile.frame += 1;
                     projectile.frameCounter = 0;
@@ -245,7 +245,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime;
+                        shootCount += shootTime - modPlayer.standSpeedBoosts;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {

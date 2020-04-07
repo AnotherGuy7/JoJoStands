@@ -31,8 +31,18 @@ namespace JoJoStands.Items
 
         public override bool UseItem(Player player)
         {
-            int npc = NPC.NewNPC((int)(player.Center.X), (int)player.Center.Y - 25, mod.NPCType("Yoshihiro"));
-            Main.npc[npc].netUpdate = true;
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 25, mod.NPCType("Yoshihiro"));
+            }
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                int npc = NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 25, mod.NPCType("Yoshihiro"));
+                if (Main.netMode == NetmodeID.Server)
+                {
+                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc);
+                }
+            }
             return true;
         }
     }

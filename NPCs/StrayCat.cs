@@ -64,17 +64,19 @@ namespace JoJoStands.NPCs
                     shootVel *= 2f;
                     int proj = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("AirBubble"), npc.damage, 1f);
                     Main.projectile[proj].netUpdate = true;
+					npc.netUpdate = true;
                     npc.ai[2] = 2f;
-
                 }
             }
             if (target.position.X > npc.position.X)
             {
                 npc.direction = -1;
+				npc.netUpdate = true;
             }
             if (target.position.X < npc.position.X)
             {
                 npc.direction = 1;
+				npc.netUpdate = true;
             }
         }
 

@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands
 {
@@ -133,7 +134,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                     if (shootCount <= 0 && (projectile.frame == 8 || projectile.frame == 4))
                     {
-                        shootCount += punchTime;
+                        shootCount += punchTime - modPlayer.standSpeedBoosts;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -166,6 +167,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (Main.mouseRight && projectile.owner == Main.myPlayer && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("ForesightBuff")) && !player.HasBuff(mod.BuffType("SkippingTime")))
                 {
                     player.AddBuff(mod.BuffType("ForesightBuff"), 540);
+                    modPlayer.Foresight = true;
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        ModNetHandler.effectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
+                    }
                 }
             }
             if (modPlayer.StandAutoMode)
@@ -241,7 +247,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += punchTime;
+                            shootCount += punchTime - modPlayer.standSpeedBoosts;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
@@ -325,11 +331,12 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public virtual void SelectFrame()
         {
+            Player player = Main.player[projectile.owner];
             projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= 19)
+                if (projectile.frameCounter >= 17 - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
                 {
                     projectile.frame += 1;
                     projectile.frameCounter = 0;

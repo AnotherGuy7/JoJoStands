@@ -15,7 +15,6 @@ namespace JoJoStands.Buffs.ItemBuff
 			DisplayName.SetDefault("Skipping Time");
             Description.SetDefault("Time is skipping");
             Main.persistentBuff[Type] = true;
-            Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
 
@@ -64,14 +63,6 @@ namespace JoJoStands.Buffs.ItemBuff
             else
             {
                 MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                for (int i = 0; i < 255; i++)
-                {
-                    Array.Clear(PreTimeSkip.playerVelocity, i, 1);
-                    if (Main.player[i].active && i != player.whoAmI)
-                    {
-                        Main.player[i].AddBuff(mod.BuffType("TimeSkipConfusion"), 240);
-                    }
-                }
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     Main.npc[i].AddBuff(mod.BuffType("TimeSkipConfusion"), 120);
@@ -97,6 +88,15 @@ namespace JoJoStands.Buffs.ItemBuff
                             {
                                 sendFalse = true;       //send the packet if no one is owning timestop
                             }
+                        }
+                        if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
+                        {
+                            sendFalse = true;
+                        }
+                        Array.Clear(PreTimeSkip.playerVelocity, i, 1);
+                        if (Main.player[i].active && i != player.whoAmI)
+                        {
+                            Main.player[i].AddBuff(mod.BuffType("TimeSkipConfusion"), 240);
                         }
                     }
                 }

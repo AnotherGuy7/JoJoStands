@@ -18,24 +18,11 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
 
-        public bool setToTrue = false;
         public bool sendFalse = false;
  
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.HasBuff(mod.BuffType(Name)))
-            {
-                if (!setToTrue)
-                {
-                    player.GetModPlayer<MyPlayer>().Foresight = true;
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        ModNetHandler.effectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
-                    }
-                    setToTrue = true;
-                }
-            }
-            else
+            if (!player.HasBuff(mod.BuffType(Name)))
             {
                 MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
                 player.AddBuff(mod.BuffType("AbilityCooldown"), 1800);
@@ -58,6 +45,10 @@ namespace JoJoStands.Buffs.ItemBuff
                             {
                                 sendFalse = true;       //send the packet if no one is owning timestop
                             }
+                        }
+                        if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
+                        {
+                            sendFalse = true;
                         }
                     }
                 }

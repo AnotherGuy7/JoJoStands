@@ -52,6 +52,10 @@ namespace JoJoStands.Buffs.ItemBuff
                                 sendFalse = true;       //send the packet if no one is owning timestop
                             }
                         }
+                        if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
+                        {
+                            sendFalse = true;
+                        }
                     }
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)

@@ -2,6 +2,7 @@ using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
+using System.Collections.Generic;
 
 namespace JoJoStands.Items
 {
@@ -27,6 +28,13 @@ namespace JoJoStands.Items
             item.noUseGraphic = true;
             item.rare = 6;
             MyPlayer.standTier1List.Add(mod.ItemType(Name));
+        }
+
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", "Donut Speed: " + (26 - mPlayer.standSpeedBoosts));
+            tooltips.Add(tooltipAddition);
         }
 
         public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)

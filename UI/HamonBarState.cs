@@ -16,6 +16,7 @@ namespace JoJoStands.UI
         public static bool Visible;
         public UIText hamonDisplay;
         public static Texture2D hamonBarTexture;
+        public static bool changedInConfig = false;
 
         public override void Update(GameTime gameTime)
         {
@@ -58,6 +59,13 @@ namespace JoJoStands.UI
                 hamonDisplay.Top.Set(150f, 0f);
             }
             hamonDisplay.SetText(hamonPlayer.HamonCounter + "/" + hamonPlayer.maxHamon);
+            if (changedInConfig)
+            {
+                HamonBar.Left.Set(MyPlayer.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
+                HamonBar.Top.Set(MyPlayer.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
+                changedInConfig = false;
+            }
+			
 
             base.Update(gameTime);
         }
@@ -65,8 +73,8 @@ namespace JoJoStands.UI
         public override void OnInitialize()
         {
             HamonBar = new DragableUIPanel();
-            HamonBar.Left.Set(MyPlayer.HamonBarPositionX, 0f);
-            HamonBar.Top.Set(MyPlayer.HamonBarPositionY, 0f);
+            HamonBar.Left.Set(MyPlayer.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
+            HamonBar.Top.Set(MyPlayer.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
             HamonBar.Width.Set(140f, 0f);
             HamonBar.Height.Set(96f, 0f);
             HamonBar.BackgroundColor = new Color(0, 0, 0, 0);       //make it invisible so that the image is there itself

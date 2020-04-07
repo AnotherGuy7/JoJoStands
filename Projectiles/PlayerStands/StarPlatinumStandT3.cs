@@ -47,7 +47,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public float maxDistance = 0f;
         public int punchDamage = 83;
         public int shootCount = 0;
-        public int punchTime = 9;
+        public int punchTime = 7;
         public int altDamage = 68;
         public int halfStandHeight = 37;
         public float fistWhoAmI = 0f;
@@ -138,7 +138,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                     if (shootCount <= 0)
                     {
-                        shootCount += punchTime;
+                        shootCount += punchTime - modPlayer.standSpeedBoosts;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -277,7 +277,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         {
                             if (Main.myPlayer == projectile.owner)
                             {
-                                shootCount += punchTime;
+                                shootCount += punchTime - modPlayer.standSpeedBoosts;
                                 Vector2 shootVel = targetPos - projectile.Center;
                                 if (shootVel == Vector2.Zero)
                                 {
@@ -404,7 +404,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= punchTime)
+                if (projectile.frameCounter >= punchTime - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
                 {
                     projectile.frame += 1;
                     projectile.frameCounter = 0;

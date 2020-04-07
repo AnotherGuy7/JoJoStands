@@ -86,7 +86,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     projectile.netUpdate = true;
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime;
+                        shootCount += shootTime - modPlayer.standSpeedBoosts;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -171,7 +171,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += shootTime;
+                            shootCount += shootTime - modPlayer.standSpeedBoosts;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
