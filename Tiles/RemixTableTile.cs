@@ -15,9 +15,13 @@ namespace JoJoStands.Tiles
 			Main.tileLavaDeath[Type] = true;
 			dustType = DustID.Lead;
 			animationFrameHeight = 34;
+			disableSmartCursor = true;
 
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 			TileObjectData.addTile(Type);
+			ModTranslation name = CreateMapEntryName();
+			name.SetDefault("Remix Table");
+			AddMapEntry(Color.Black, name);
 		}
 
 		public override void AnimateTile(ref int frame, ref int frameCounter)

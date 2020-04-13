@@ -10,6 +10,7 @@ namespace JoJoStands.NPCs
 {
     public class JoJoGlobalNPC : GlobalNPC
     {
+        public bool frozenInTime = false;
         public bool affectedbyBtz = false;
         public bool taggedByButterfly = false;
         public bool applyingForesightPositions = false;
@@ -139,10 +140,10 @@ namespace JoJoStands.NPCs
                 {
                     chat = "I've heard of someone named Phil selling something called 'Flex Tape' that can fix everything, mind if you get some for me?";
                 }
-                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 1)      //AG's contributor reference
+                /*if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 1)      //AG's contributor reference
                 {
                     chat = "I am being possessed by something... 'Yo! I hope you enjoy the mod!' (Jotaro said, but it seems like it wasn't him). It felt like my memory disc was taken away from me and I was watching myself in third-person... Yare Yare Daze...";
-                }
+                }*/
             }
         }
 
@@ -165,8 +166,8 @@ namespace JoJoStands.NPCs
 
         public override bool PreAI(NPC npc)
         {
-            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.TheWorldEffect)
+            MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            if (player.TheWorldEffect || frozenInTime)
             {
                 npc.velocity.X *= 0f;
                 npc.velocity.Y *= 0f;               //negative X is to the left, negative Y is UP
@@ -289,20 +290,17 @@ namespace JoJoStands.NPCs
                             npc.netUpdate = true;
                         }
                     }
-                    return true;
                 }
             }
             if (player.TimeSkipEffect && npc.boss)
             {
                 npc.defense /= 2;
-                return true;
             }
             if (!player.TimeSkipEffect && npc.aiStyle == 0)
             {
                 playerPositionOnSkip = Vector2.Zero;
                 npc.aiStyle = aiStyleSave;
                 aiStyleSave = 0;
-                return true;
             }
             if (player.Foresight && !npc.immortal)
             {
@@ -393,7 +391,7 @@ namespace JoJoStands.NPCs
             return true;
         }
 
-        public override bool CheckDead(NPC npc)     //check if this updates every frame, if not, move what's in this method to PreAI()
+        public override bool CheckDead(NPC npc)
         {
             for (int i = 0; i < 255; i++)
             {
@@ -414,7 +412,7 @@ namespace JoJoStands.NPCs
                     Buffs.ItemBuff.DeathLoop.Looping10x = true;
                 }
             }
-            return true;
+            return base.CheckDead(npc);
         }
 
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
@@ -435,7 +433,7 @@ namespace JoJoStands.NPCs
                     }
                 }
             }
-            return true;
+            return base.PreDraw(npc, spriteBatch, drawColor);
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)

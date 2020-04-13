@@ -150,7 +150,7 @@ namespace JoJoStands.NPCs
                 }
                 if (firstButton && (mPlayer.StandSlot.Item.type == mod.ItemType("StickyFingersT3") || mPlayer.StandSlot.Item.type == mod.ItemType("StickyFingersFinal")))
                 {
-                    Main.npcChatText = "Now, you can unzip your own arms to throw out an extended reach punch. Think of it as a flail, because your fists do have mass, remember. Ah, you can also now throw a zipper in the direction of this thing called a 'cursor' is and zip 30 tiles in that direciton";
+                    Main.npcChatText = "Now, you can unzip your own arms to throw out an extended reach punch. Think of it as a flail, because your fists do have mass, remember. Ah, you can also now throw a zipper in the direction of this thing called a 'cursor' is and zip 30 tiles in that direction";
                 }
                 if (firstButton && mPlayer.StandSlot.Item.type == mod.ItemType("SexPistolsT1"))
                 {

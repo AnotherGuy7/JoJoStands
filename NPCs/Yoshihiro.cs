@@ -189,10 +189,12 @@ namespace JoJoStands.NPCs
                     if (npc.Center.X < targetProjectile.position.X - 5f)
                     {
                         npc.velocity.X = 5f;
+                        npc.direction = 1;
                     }
                     if (npc.Center.X > targetProjectile.position.X + 5f)
                     {
                         npc.velocity.X = -5f;
+                        npc.direction = -1;
                     }
                     if (npc.Center.X > targetProjectile.position.X - 5f && npc.Center.X < targetProjectile.position.X + 5f)
                     {

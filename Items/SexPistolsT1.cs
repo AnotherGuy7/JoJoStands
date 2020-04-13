@@ -27,7 +27,6 @@ namespace JoJoStands.Items
             item.value = 0;
             item.noUseGraphic = true;
             item.rare = 6;
-            MyPlayer.standTier1List.Add(mod.ItemType(Name));
         }
 
         public override void AddRecipes()

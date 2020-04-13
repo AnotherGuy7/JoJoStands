@@ -80,6 +80,13 @@ namespace JoJoStands.Networking
 			}
 			else
 			{
+				foreach (NPC npc in Main.npc)
+				{
+					if (npc.active)
+					{
+						npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().frozenInTime = timestopValue;
+					}
+				}
 				SendTimestop(-1, fromWho, timestopValue, timestopOwner);
 			}
 		}

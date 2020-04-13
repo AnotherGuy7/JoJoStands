@@ -30,7 +30,6 @@ namespace JoJoStands.Items
             item.shootSpeed = 30f;
 			item.channel = true;
 			item.noUseGraphic = true;
-            MyPlayer.standTier1List.Add(mod.ItemType(Name));
         }
 
 		public override void HoldItem(Player player)

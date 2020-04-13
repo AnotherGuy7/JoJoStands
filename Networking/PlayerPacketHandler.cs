@@ -2,6 +2,7 @@ using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using Microsoft.Xna.Framework;
 
 namespace JoJoStands.Networking
 {
@@ -11,6 +12,7 @@ namespace JoJoStands.Networking
 		public const byte StandOut = 1;		//needed because some stands don't spawn without it
 		public const byte StandAutoMode = 2;
 		public const byte CBLayer = 3;
+		public const byte Yoshihiro = 4;
 		
 		public PlayerPacketHandler(byte handlerType) : base(handlerType)
 		{
@@ -32,6 +34,9 @@ namespace JoJoStands.Networking
 					break;
 				case CBLayer:
 					ReceiveCBLayer(reader, fromWho);
+					break;
+				case Yoshihiro:
+					ReceiveYoshihiroSpawn(reader, fromWho);
 					break;
 			}
 		}
@@ -128,6 +133,26 @@ namespace JoJoStands.Networking
 			else
 			{
 				SendCBLayer(-1, fromWho, visibiltyValue, whoAmI);
+			}
+		}
+
+		public void SendYoshihiroToSpawn(int toWho, int fromWho, int NPCType, Vector2 position)
+		{
+			ModPacket packet = GetPacket(Yoshihiro, fromWho);
+			packet.Write(NPCType);
+			packet.WriteVector2(position);
+			packet.Send(toWho, fromWho);
+		}
+
+		public void ReceiveYoshihiroSpawn(BinaryReader reader, int fromWho)
+		{
+			int type = reader.ReadInt32();
+			Vector2 pos = reader.ReadVector2();
+			if (Main.netMode == NetmodeID.Server)
+			{
+				if (!NPC.AnyNPCs(type))
+					NPC.NewNPC((int)pos.X, (int)pos.Y, type);
+				SendYoshihiroToSpawn(-1, fromWho, type, pos);
 			}
 		}
 	}

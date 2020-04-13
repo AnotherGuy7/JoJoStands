@@ -46,6 +46,18 @@ namespace JoJoStands
             AerosmithRadar.aerosmithRadarTexture = ModContent.GetTexture("JoJoStands/UI/AerosmithRadar");
             GoldenSpinMeter.goldenRectangleTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeter");
             GoldenSpinMeter.goldenRectangleSpinLineTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeterLine");
+            MyPlayer.standTier1List.Add(ItemType("AerosmithT1"));
+            MyPlayer.standTier1List.Add(ItemType("GoldExperienceT1"));
+            MyPlayer.standTier1List.Add(ItemType("HierophantGreenT1"));
+            MyPlayer.standTier1List.Add(ItemType("KillerQueenT1"));
+            MyPlayer.standTier1List.Add(ItemType("KingCrimsonT1"));
+            MyPlayer.standTier1List.Add(ItemType("MagiciansRedT1"));
+            MyPlayer.standTier1List.Add(ItemType("SexPistolsT1"));
+            MyPlayer.standTier1List.Add(ItemType("StarPlatinumT1"));
+            MyPlayer.standTier1List.Add(ItemType("StickyFingersT1"));
+            MyPlayer.standTier1List.Add(ItemType("TheWorldT1"));
+            MyPlayer.standTier1List.Add(ItemType("TuskAct1"));
+
 
             // Registers a new hotkey
             SpecialHotKey = RegisterHotKey("Special Ability", "P");        // See https://docs.microsoft.com/en-us/previous-versions/windows/xna/bb197781(v%3dxnagamestudio.41) for special keys
@@ -107,6 +119,7 @@ namespace JoJoStands
             StandAutoMode = null;
             StandOut = null;
             customizableConfig = null;
+            MyPlayer.standTier1List.Clear();
             base.Unload();
         }
 
