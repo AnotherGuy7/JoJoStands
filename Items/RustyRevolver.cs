@@ -46,6 +46,10 @@ namespace JoJoStands.Items
             recipe.AddIngredient(ItemID.IronBar, 7);
             recipe.SetResult(this);
 			recipe.AddRecipe();
+			recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.LeadBar, 7);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace JoJoStands.Items.Armor
 {
     public class StandEmblem : ModItem
     {
-        public void SetStaticDefault()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Stand Emblem");
             Tooltip.SetDefault("15% increased stand damage");
@@ -21,6 +21,7 @@ namespace JoJoStands.Items.Armor
             item.accessory = true;
             item.rare = ItemRarityID.LightRed;
             item.value = Item.buyPrice(0, 2, 0, 0);
+            item.maxStack = 1;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

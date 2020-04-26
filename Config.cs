@@ -65,7 +65,7 @@ namespace JoJoStands
         [Tooltip("Whether or not you want to see hidden references. (Some of these references can cause you to die)")]
         public bool SecretReferences;
 
-        [DefaultValue(4)]
+        [DefaultValue(0.4f)]
         [Label("Sound Volume")]
         [Tooltip("Volume of barrage sounds")]
         public float soundVolume;

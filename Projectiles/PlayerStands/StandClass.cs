@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using JoJoStands.Networking;
 using Terraria.Graphics.Shaders;
+using Microsoft.Xna.Framework.Audio;
 
 namespace JoJoStands.Projectiles.PlayerStands
 {
@@ -51,6 +52,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         private float mouseDistance;
         public bool secondaryAbility = false;
         private bool playedBeginning = false;
+        private SoundEffectInstance beginningSoundInstance = null;
+        private SoundEffectInstance punchingSoundInstance = null;
 
         public void Timestop(int seconds)
         {
@@ -149,7 +152,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             LimitDistance();
             if (playedBeginning)
             {
-                JoJoStands.killSounds = true;
+                if (beginningSoundInstance != null)
+                {
+                    beginningSoundInstance.Stop();
+                }
+                if (punchingSoundInstance != null)
+                {
+                    punchingSoundInstance.Stop();
+                }
                 playedBeginning = false;
             }
         }
@@ -174,7 +184,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             LimitDistance();
             if (playedBeginning)
             {
-                JoJoStands.killSounds = true;
+                if (beginningSoundInstance != null)
+                {
+                    beginningSoundInstance.Stop();
+                }
+                if (punchingSoundInstance != null)
+                {
+                    punchingSoundInstance.Stop();
+                }
                 playedBeginning = false;
             }
         }
@@ -463,18 +480,50 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void PlayPunchSound()
         {
-            if (punchSoundName != "" && !playedBeginning)
+            if (punchSoundName != "" && punchingSoundInstance == null)
             {
-                Terraria.Audio.LegacySoundStyle sound = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/BattleCries/" + punchSoundName + "_Beginning");
-                sound.WithVolume(MyPlayer.soundVolume);
-                //Main.PlaySound(sound, projectile.position);
-                playedBeginning = true;
+                InitializeSounds();
             }
-            if (punchSoundName != "" && playedBeginning)
+            if (punchSoundName != "")
             {
-                Terraria.Audio.LegacySoundStyle sound = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/BattleCries/" + punchSoundName);
-                sound.WithVolume(MyPlayer.soundVolume);
-                Main.PlaySound(sound, projectile.position);
+                if (beginningSoundInstance != null)
+                {
+                    if (!playedBeginning)
+                    {
+                        beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        if (beginningSoundInstance.State == SoundState.Stopped)
+                        {
+                            playedBeginning = true;
+                        }
+                    }
+                    if (playedBeginning)
+                    {
+                        punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                    }
+                }
+                else
+                {
+                    punchingSoundInstance.Play();
+                }
+            }
+        }
+
+        public void InitializeSounds()
+        {
+            if (beginningSoundInstance == null)
+            {
+                SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName + "_Beginning");
+                if (sound != null)
+                {
+                    beginningSoundInstance = sound.CreateInstance();
+                    beginningSoundInstance.Volume = MyPlayer.soundVolume;
+                }
+            }
+            if (punchingSoundInstance == null)
+            {
+                SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName + "_Beginning");
+                punchingSoundInstance = sound.CreateInstance();
+                punchingSoundInstance.Volume = MyPlayer.soundVolume;
             }
         }
 

@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Armor
             get { return mod.Name + "/Items/Armor/CenturyBoy"; }
         }
 
-        public void SetStaticDefault()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("20th Century Boy (Tier 2)");
             Tooltip.SetDefault("Use the special ability key to make yourself immune to damage, but unable to move or use items.\nSpecial + Right-click: Set off an explosion! (Dynamite required)\nUsed in Stand Slot.");

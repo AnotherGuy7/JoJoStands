@@ -8,7 +8,7 @@ namespace JoJoStands.Items.Armor
 {
     public class HamonEmblem : ModItem
     {
-        public void SetStaticDefault()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hamon Emblem");
             Tooltip.SetDefault("15% increased hamon damage");

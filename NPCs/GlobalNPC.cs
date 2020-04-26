@@ -447,6 +447,8 @@ namespace JoJoStands.NPCs
 
         public override void OnHitPlayer(NPC npc, Player target, int damage, bool crit)
         {
+            MyPlayer mPlayer = target.GetModPlayer<MyPlayer>();
+            int standSlotType = mPlayer.StandSlot.Item.type;
             if (target.HasBuff(mod.BuffType("BacktoZero")))     //only affects the ones with the buff, everyone's bool should turn on and save positions normally
             {
                 npc.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
@@ -470,6 +472,44 @@ namespace JoJoStands.NPCs
             if (target.GetModPlayer<MyPlayer>().Vampire)
             {
                 npc.AddBuff(BuffID.Frostburn, 240);
+            }
+            if (npc.boss)
+            {
+                if (standSlotType == mod.ItemType("LockT1"))
+                {
+                    npc.AddBuff(mod.BuffType("Locked"), 3 * 60);
+                }
+                if (standSlotType == mod.ItemType("LockT2"))
+                {
+                    npc.AddBuff(mod.BuffType("Locked"), 6 * 60);
+                }
+                if (standSlotType == mod.ItemType("LockT3"))
+                {
+                    npc.AddBuff(mod.BuffType("Locked"), 9 * 60);
+                }
+                if (standSlotType == mod.ItemType("LockT4"))
+                {
+                    npc.AddBuff(mod.BuffType("Locked"), 12 * 60);
+                }
+            }
+            if (!npc.boss)
+            {
+                if (standSlotType == mod.ItemType("LockT1"))
+                {
+                    npc.AddBuff(mod.BuffType("Locked"), 5 * 60);
+                }
+                if (standSlotType == mod.ItemType("LockT2"))
+                {
+                    npc.AddBuff(mod.BuffType("Locked"), 10 * 60);
+                }
+                if (standSlotType == mod.ItemType("LockT3"))
+                {
+                    npc.AddBuff(mod.BuffType("Locked"), 15 * 60);
+                }
+                if (standSlotType == mod.ItemType("LockT4"))
+                {
+                    npc.AddBuff(mod.BuffType("Locked"), 20 * 60);
+                }
             }
         }
 

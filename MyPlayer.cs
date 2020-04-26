@@ -223,6 +223,60 @@ namespace JoJoStands
                 {
                     player.AddBuff(mod.BuffType("CenturyBoyBuff"), 2, true);
                 }
+                if (StandSlot.Item.type == mod.ItemType("LockT3"))
+                {
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+                        NPC npc = Main.npc[i];
+                        float distance = Vector2.Distance(player.Center, npc.Center);
+                        if (distance < (98f * 4f) && npc.boss && !npc.townNPC && !npc.immortal && !npc.hide)
+                        {
+                            npc.AddBuff(mod.BuffType("Locked"), 60 * 10);
+                        }
+                        if (distance < (98f * 4f) && !npc.boss && !npc.townNPC && !npc.immortal && !npc.hide && npc.lifeMax > 5)
+                        {
+                            npc.AddBuff(mod.BuffType("Locked"), 60 * 30);
+                        }
+                    }
+                    player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " was over-guilted."), 50, player.direction);
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), 20 * 60);
+                    for (int i = 0; i < Main.maxPlayers; i++)
+                    {
+                        Player otherPlayer = Main.player[i];
+                        float distance = Vector2.Distance(player.Center, otherPlayer.Center);
+                        if (distance < (98f * 4f) && player.whoAmI != otherPlayer.whoAmI)
+                        {
+                            otherPlayer.AddBuff(mod.BuffType("Locked"), 60 * 15);
+                        }
+                    }
+                }
+                if (StandSlot.Item.type == mod.ItemType("LockT4"))
+                {
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+                        NPC npc = Main.npc[i];
+                        float distance = Vector2.Distance(player.Center, npc.Center);
+                        if (distance < (98f * 4f) && npc.boss && !npc.townNPC && !npc.immortal && !npc.hide)
+                        {
+                            npc.AddBuff(mod.BuffType("Locked"), 60 * 15);
+                        }
+                        if (distance < (98f * 4f) && !npc.boss && !npc.townNPC && !npc.immortal && !npc.hide && npc.lifeMax > 5)
+                        {
+                            npc.AddBuff(mod.BuffType("Locked"), 60 * 45);
+                        }
+                    }
+                    player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " was over-guilted."), 25, player.direction);
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), 20 * 60);
+                    for (int i = 0; i < Main.maxPlayers; i++)
+                    {
+                        Player otherPlayer = Main.player[i];
+                        float distance = Vector2.Distance(player.Center, otherPlayer.Center);
+                        if (distance < (98f * 4f) && player.whoAmI != otherPlayer.whoAmI)
+                        {
+                            otherPlayer.AddBuff(mod.BuffType("Locked"), 60 * 30);
+                        }
+                    }
+                }
             }
             if (JoJoStands.StandOut.JustPressed && StandOut && ActivationTimer <= 0)
             {
@@ -632,6 +686,22 @@ namespace JoJoStands
                 {
                     Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, true, player.whoAmI);
                 }
+            }
+            else if (inputItem.type == mod.ItemType("LockT1"))
+            {
+                standAccessory = true;
+            }
+            else if (inputItem.type == mod.ItemType("LockT2"))
+            {
+                standAccessory = true;
+            }
+            else if (inputItem.type == mod.ItemType("LockT3"))
+            {
+                standAccessory = true;
+            }
+            else if (inputItem.type == mod.ItemType("LockT4"))
+            {
+                standAccessory = true;
             }
             else if (inputItem.type == mod.ItemType("StarPlatinumT1"))       //the normal stands
             {
