@@ -29,7 +29,6 @@ namespace JoJoStands.Projectiles.Minions
             projectile.timeLeft = 600;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public override void AI()

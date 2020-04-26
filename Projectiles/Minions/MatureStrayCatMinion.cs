@@ -26,7 +26,6 @@ namespace JoJoStands.Projectiles.Minions
             projectile.minion = true;
             projectile.timeLeft = 2;
             projectile.minionSlots = 0.5f;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
             drawOffsetX = 8;
             drawOriginOffsetY = 6;
             projectile.penetrate = -1;

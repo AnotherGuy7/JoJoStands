@@ -23,6 +23,8 @@ namespace JoJoStands.Projectiles
         public int[] foresightFrames = new int[50];
         public Vector2[] foresightRotations = new Vector2[50];      //although this is a Vector2, I'm storing rotations in X and Direction in Y
         public bool stoppedInTime = false;
+        //public bool checkedForImmunity = false;
+        public bool timestopImmune = false;
 
         public override bool InstancePerEntity
         {
@@ -33,7 +35,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            if (Mplayer.TheWorldEffect)        //the ones who can move in Za Warudo's projectiles, like minions, fists, every other projectile should freeze
+            if (Mplayer.TheWorldEffect)
             {
                 timeLeftSave++;
                 if (timeLeftSave >= 6 && timeLeft == 0)
@@ -43,28 +45,35 @@ namespace JoJoStands.Projectiles
                 if (!stoppedInTime)
                 {
                     projectile.damage = (int)(projectile.damage * 0.8f);        //projectiles in timestop lose 20% damage, so it's not as OP
-                    stoppedInTime = true;
-                }
-                if (player.HasBuff(mod.BuffType("TheWorldBuff")) && projectile.timeLeft <= timeLeft)
-                {
-                    foreach (int going in MyPlayer.stopimmune)      //Things in stopimmune are mostly stands and timestop-breaking projectiles
+                    if (player.HasBuff(mod.BuffType("TheWorldBuff")))
                     {
-                        if ((projectile.type == going) || projectile.type == mod.ProjectileType("RoadRoller"))       //if it's in the list, keep it going
+                        for (int i = 0; i < MyPlayer.stopImmune.Count; i++)
                         {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
+                            if (projectile.type == MyPlayer.stopImmune[i])
+                            {
+                                timestopImmune = true;
+                            }
                         }
                     }
+                    stoppedInTime = true;
+                }
+                if (timestopImmune)
+                {
+                    return true;
                 }
                 else
                 {
-                    if (projectile.timeLeft <= timeLeft)
+                    if ((projectile.timeLeft <= timeLeft) || projectile.minion)
                     {
                         projectile.frameCounter = 1;
-                        projectile.timeLeft = timeLeft;
+                        if (timeLeft > 0)      //for the projectiles that don't have enough time left before they die
+                        {
+                            projectile.timeLeft = timeLeft;
+                        }
+                        else
+                        {
+                            projectile.timeLeft = 2;
+                        }
                         return false;
                     }
                 }
@@ -170,7 +179,7 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            return true;
+            return base.PreAI(projectile);
         }
 
         public override void OnHitPlayer(Projectile projectile, Player target, int damage, bool crit)
@@ -183,30 +192,19 @@ namespace JoJoStands.Projectiles
 
         public override bool ShouldUpdatePosition(Projectile projectile)        //thanks, HellGoesOn for telling me this hook even existed
         {
-            Player player = Main.player[projectile.owner];
             MyPlayer Mplayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
             if (Mplayer.TheWorldEffect && projectile.timeLeft <= timeLeft)        //the ones who can move in Za Warudo's projectiles, like minions, fists, every other projectile should freeze
             {
-                if (player.HasBuff(mod.BuffType("TheWorldBuff")))
+                if (timestopImmune)
                 {
-                    foreach (int going in MyPlayer.stopimmune)
-                    {
-                        if (projectile.type == going)       //if it's in the list, keep it going
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
+                    return true;
                 }
                 else      //if it's owner isn't a timestop owner, always stop the projectile
                 {
                     return false;
                 }
             }
-            return true;
+            return base.ShouldUpdatePosition(projectile);
         }
     }
 }

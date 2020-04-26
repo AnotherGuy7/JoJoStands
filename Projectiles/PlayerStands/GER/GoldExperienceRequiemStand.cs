@@ -25,7 +25,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
             projectile.timeLeft = 2;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public Texture2D standTexture;

@@ -6,7 +6,7 @@ using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles.PlayerStands
 {  
-    public class AerosmithStandFinal : ModProjectile
+    public class AerosmithStandFinal : StandClass   //Aerosmith is special so I'll just leave him the same but with the shader stuff included in the Stand Class
     {
         public override string Texture
         {
@@ -34,12 +34,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             projectile.penetrate = 1;
             projectile.timeLeft = 0;
             projectile.ignoreWater = true;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
-        protected float shootSpeed = 12f;       //how fast the projectile the minion shoots goes
+        public override float shootSpeed => 12f;       //how fast the projectile the minion shoots goes
+
         public bool bombless = false;
-        public int shootCount = 0;
         public int projectileDamage = 75;
         public int shootTime = 6;      //+2 every tier
 

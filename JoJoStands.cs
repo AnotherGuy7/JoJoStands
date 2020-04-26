@@ -17,10 +17,13 @@ namespace JoJoStands
 {
 	public class JoJoStands : Mod
 	{
+        public static bool killSounds = false;
+
         public static ModHotKey SpecialHotKey;
         public static ModHotKey StandOut;
         public static ModHotKey StandAutoMode;
         public static ModHotKey PoseHotKey;
+        public static Mod JoJoStandsSounds;
         internal static JoJoStands Instance => ModContent.GetInstance<JoJoStands>();
         internal static CustomizableOptions customizableConfig;
 
@@ -40,6 +43,7 @@ namespace JoJoStands
 
         public override void Load()
 		{
+            JoJoStandsSounds = ModLoader.GetMod("JoJoStandsSounds");        //would just return null if nothing is there
             HamonBarState.hamonBarTexture = ModContent.GetTexture("JoJoStands/UI/HamonBar");
             ToBeContinued.TBCArrowTexture = ModContent.GetTexture("JoJoStands/UI/TBCArrow");
             BulletCounter.bulletCounterTexture = ModContent.GetTexture("JoJoStands/UI/BulletCounter");
@@ -57,6 +61,17 @@ namespace JoJoStands
             MyPlayer.standTier1List.Add(ItemType("StickyFingersT1"));
             MyPlayer.standTier1List.Add(ItemType("TheWorldT1"));
             MyPlayer.standTier1List.Add(ItemType("TuskAct1"));
+
+            MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
+            MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT3"));
+            MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandFinal"));
+            MyPlayer.stopImmune.Add(ProjectileType("StarPlatinumStandFinal"));
+            //MyPlayer.stopImmune.Add(ProjectileType("StickyFingersFistExtended"));
+            MyPlayer.stopImmune.Add(ProjectileType("RoadRoller"));
+            MyPlayer.stopImmune.Add(ProjectileType("HamonPunches"));
+            MyPlayer.stopImmune.Add(ProjectileType("Fists"));
+            MyPlayer.stopImmune.Add(ProjectileType("GoldExperienceRequiemStand"));
+            MyPlayer.stopImmune.Add(ProjectileType("TuskAct4Minion"));
 
 
             // Registers a new hotkey
@@ -103,6 +118,11 @@ namespace JoJoStands
                 Ref<Effect> greenShader = new Ref<Effect>(GetEffect("Effects/GreenEffect"));
                 Filters.Scene["GreenEffect"] = new Filter(new ScreenShaderData(greenShader, "GreenEffect"), EffectPriority.VeryHigh);
                 Filters.Scene["GreenEffect"].Load();
+
+                /*MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
+                MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT3"));
+                MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandFinal"));
+                MyPlayer.stopImmune.Add(ProjectileType("StarPlatinumStandFinal"));/*/
             }
         }
 
@@ -120,6 +140,7 @@ namespace JoJoStands
             StandOut = null;
             customizableConfig = null;
             MyPlayer.standTier1List.Clear();
+            MyPlayer.stopImmune.Clear();
             base.Unload();
         }
 
@@ -141,12 +162,8 @@ namespace JoJoStands
         {
             Player player = Main.player[Main.myPlayer];
             if (Main.myPlayer != -1 && !Main.gameMenu)
-            {
                 if (player.active && player.GetModPlayer<MyPlayer>().ZoneViralMeteorite)
-                {
                     music = GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic");
-                }
-            }
         }
 
         public override void PostDrawInterface(SpriteBatch spriteBatch)

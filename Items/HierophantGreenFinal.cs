@@ -50,7 +50,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("HierophantGreenT2"));
+			recipe.AddIngredient(mod.ItemType("HierophantGreenT3"));
             recipe.AddIngredient(ItemID.LargeEmerald, 1);
             recipe.AddIngredient(ItemID.ChlorophyteOre, 12);
             recipe.AddIngredient(mod.ItemType("WillToProtect"), 3);

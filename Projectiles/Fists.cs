@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using System.Drawing;
 using Terraria;
 using Terraria.ID;
@@ -21,7 +22,6 @@ namespace JoJoStands.Projectiles
             projectile.ignoreWater = true;
             projectile.timeLeft = 4;
             projectile.alpha = 255;     //completely transparent
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -114,7 +114,7 @@ namespace JoJoStands.Projectiles
                     {
                         if (otherProj.type == projectile.type && projectile.owner != otherProj.owner && player.team != Main.player[otherProj.owner].team)
                         {
-                            Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, projectile.width, projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
+                            Dust.NewDust(otherProj.position + otherProj.velocity, projectile.width, projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
                             if (MyPlayer.Sounds)
                             {
                                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
@@ -124,7 +124,7 @@ namespace JoJoStands.Projectiles
                         {
                             otherProj.owner = projectile.owner;
                             otherProj.velocity = -otherProj.velocity * 0.4f;
-                            Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, projectile.width, projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
+                            Dust.NewDust(otherProj.position + otherProj.velocity, projectile.width, projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
                             if (MyPlayer.Sounds)
                             {
                                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));

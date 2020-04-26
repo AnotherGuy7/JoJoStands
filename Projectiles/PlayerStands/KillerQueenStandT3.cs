@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands
 {
-    public class KillerQueenStandT3 : ModProjectile      //has 2 poses
+    public class KillerQueenStandT3 : StandClass
     {
         public override string Texture
         {
@@ -22,45 +22,22 @@ namespace JoJoStands.Projectiles.PlayerStands
             Main.projFrames[projectile.type] = 10;
         }
 
-        public override void SetDefaults()
-        {
-            projectile.netImportant = true;
-            projectile.width = 38;
-            projectile.height = 1;
-            projectile.friendly = true;
-            projectile.minion = true;
-            projectile.netImportant = true;
-            projectile.minionSlots = 1;
-            projectile.penetrate = 1;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
-        }
-
-        public Vector2 velocityAddition = Vector2.Zero;
-        public float mouseDistance = 0f;
-        protected float shootSpeed = 16f;
-        public bool normalFrames = false;
-        public bool attackFrames = false;
-        public bool clickFrames = false;
-        public float maxDistance = 0f;
-        public int punchDamage = 59;
-        public int altDamage = 68;
-        public int shootCount = 0;
-        public int punchTime = 10;
-        public int explosionTimer = 0;
-        public int halfStandHeight = 37;
+        public override int punchDamage => 59;
+        public override int altDamage => 68;
+        public override int punchTime => 10;
+        public override int halfStandHeight => 37;
+        public override float fistWhoAmI => 5f;
+        public override float maxAltDistance => 232f;     //about 10 tiles
 
         public float npcDistance = 0f;
         public float mouseToPlayerDistance = 0f;
         public Vector2 savedPosition = Vector2.Zero;
         public bool touchedTile = false;
         public int timeAfterTouch = 0;
-        public float maxAltDistance = 0f;     //about 10 tiles
+        public int explosionTimer = 0;
 
         public static NPC savedTarget = null;
         public int npcExplosionTimer = 0;
-        public float fistWhoAmI = 5f;
         public int updateTimer = 0;
 
         public override void AI()
@@ -101,70 +78,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
-                    attackFrames = true;
-                    normalFrames = false;
-                    clickFrames = false;
-                    Main.mouseRight = false;
-                    projectile.netUpdate = true;
-                    float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
-                    projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
-                    if (Main.MouseWorld.X > projectile.position.X)
-                    {
-                        projectile.spriteDirection = 1;
-                        projectile.direction = 1;
-                    }
-                    if (Main.MouseWorld.X < projectile.position.X)
-                    {
-                        projectile.spriteDirection = -1;
-                        projectile.direction = -1;
-                    }
-                    if (projectile.position.X < Main.MouseWorld.X - 5f)
-                    {
-                        velocityAddition.X = 5f;
-                    }
-                    if (projectile.position.X > Main.MouseWorld.X + 5f)
-                    {
-                        velocityAddition.X = -5f;
-                    }
-                    if (projectile.position.X > Main.MouseWorld.X - 5f && projectile.position.X < Main.MouseWorld.X + 5f)
-                    {
-                        velocityAddition.X = 0f;
-                    }
-                    if (projectile.position.Y > Main.MouseWorld.Y + 5f)
-                    {
-                        velocityAddition.Y = -5f;
-                    }
-                    if (projectile.position.Y < Main.MouseWorld.Y - 5f)
-                    {
-                        velocityAddition.Y = 5f;
-                    }
-                    if (projectile.position.Y < Main.MouseWorld.Y + 5f && projectile.position.Y > Main.MouseWorld.Y - 5f)
-                    {
-                        velocityAddition.Y = 0f;
-                    }
-                    mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
-                    if (mouseDistance > 40f)
-                    {
-                        projectile.velocity = player.velocity + velocityAddition;
-                    }
-                    if (mouseDistance <= 40f)
-                    {
-                        projectile.velocity = Vector2.Zero;
-                    }
-                    if (shootCount <= 0)
-                    {
-                        shootCount += punchTime - modPlayer.standSpeedBoosts;
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                        {
-                            shootVel = new Vector2(0f, 1f);
-                        }
-                        shootVel.Normalize();
-                        shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(punchDamage * modPlayer.standDamageBoosts), 5f, Main.myPlayer, fistWhoAmI, 3f);
-                        Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
-                    }
+                    Punch();
                 }
                 else
                 {
@@ -173,15 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 if (!attackFrames)
                 {
-                    Vector2 vector131 = player.Center;
-                    vector131.X -= (float)((12 + player.width / 2) * player.direction);
-                    vector131.Y -= -35f + halfStandHeight;
-                    projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
-                    projectile.velocity *= 0.8f;
-                    projectile.direction = (projectile.spriteDirection = player.direction);
-                    projectile.rotation = 0;
-                    normalFrames = true;
-                    attackFrames = false;
+                    StayBehind();
                 }
                 if (Main.mouseRight && shootCount <= 0 && projectile.owner == Main.myPlayer)
                 {
@@ -197,7 +103,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                     if (timeAfterTouch <= 0 && touchedTile)
                     {
-                        clickFrames = true;
+                        secondaryAbilityFrames = true;
                         int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, Main.myPlayer);
                         Main.projectile[projectile].friendly = true;
                         Main.projectile[projectile].timeLeft = 2;
@@ -208,7 +114,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 else
                 {
-                    clickFrames = false;
+                    secondaryAbilityFrames = false;
                 }
             }
             if (modPlayer.StandAutoMode)
@@ -272,7 +178,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 if (savedTarget != null && touchedTargetDistance > maxDistance + 8f && npcExplosionTimer <= 0)       //if the target leaves and the bomb won't damage you, detonate the enemy
                 {
-                    clickFrames = true;
+                    secondaryAbilityFrames = true;
                     attackFrames = false;
                     normalFrames = false;
                     explosionTimer++;
@@ -365,70 +271,26 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                 }
             }
-
-            Vector2 direction = player.Center - projectile.Center;
-            float distanceTo = direction.Length();
-            maxDistance = 98f + modPlayer.standRangeBoosts;
-            maxAltDistance = 232f + modPlayer.standRangeBoosts;
-            if (distanceTo > maxDistance)
-            {
-                if (projectile.position.X <= player.position.X - 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(0.8f, 0f);
-                }
-                if (projectile.position.X >= player.position.X + 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(-0.8f, 0f);
-                }
-                if (projectile.position.Y >= player.position.Y + 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(0f, -0.8f);
-                }
-                if (projectile.position.Y <= player.position.Y - 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(0f, 0.8f);
-                }
-            }
-            if (distanceTo >= maxDistance + 22f)
-            {
-                if (!modPlayer.StandAutoMode)
-                {
-                    Main.mouseLeft = false;
-                    Main.mouseRight = false;
-                }
-                projectile.Center = player.Center;
-            }
         }
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (MyPlayer.RangeIndicators)
             {
                 Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), maxDistance / 122.5f, SpriteEffects.None, 0);
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), maxAltDistance / 160f, SpriteEffects.None, 0);
-
+                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxDistance + mPlayer.standRangeBoosts) / 122.5f, SpriteEffects.None, 0);
+                if (maxAltDistance != 0f)
+                {
+                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxAltDistance + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
+                }
             }
             if (touchedTile)
             {
                 Texture2D texture = mod.GetTexture("Extras/Bomb");
                 spriteBatch.Draw(texture, savedPosition - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
             }
-        }
-
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write(normalFrames);
-            writer.Write(attackFrames);
-            writer.Write(clickFrames);
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            normalFrames = reader.ReadBoolean();
-            attackFrames = reader.ReadBoolean();
-            clickFrames = reader.ReadBoolean();
         }
 
         public virtual void SelectFrame()
@@ -438,7 +300,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (attackFrames)
             {
                 normalFrames = false;
-                clickFrames = false;
+                secondaryAbilityFrames = false;
                 projectile.frameCounter++;
                 if (projectile.frameCounter >= punchTime - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
                 {
@@ -454,7 +316,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     projectile.frame = 7;
                 }
             }
-            if (clickFrames)
+            if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
@@ -471,13 +333,13 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (projectile.frame >= 7)      //cause it should only click once
                 {
                     projectile.frame = 2;
-                    clickFrames = false;
+                    secondaryAbilityFrames = false;
                 }
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                clickFrames = false;
+                secondaryAbilityFrames = false;
                 projectile.frameCounter++;
                 if (projectile.frameCounter >= 30)
                 {
@@ -493,7 +355,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 normalFrames = false;
                 attackFrames = false;
-                clickFrames = false;
+                secondaryAbilityFrames = false;
                 projectile.frame = 9;
             }
         }

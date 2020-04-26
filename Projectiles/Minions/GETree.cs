@@ -29,7 +29,6 @@ namespace JoJoStands.Projectiles.Minions
             projectile.scale = 3f;
             drawOriginOffsetX = -10;
             drawOriginOffsetY = 41;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public override void AI()

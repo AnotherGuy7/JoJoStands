@@ -26,7 +26,6 @@ namespace JoJoStands.Projectiles.Minions
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
             projectile.hostile = false;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public NPC npcTarget = null;

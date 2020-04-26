@@ -65,6 +65,11 @@ namespace JoJoStands
         [Tooltip("Whether or not you want to see hidden references. (Some of these references can cause you to die)")]
         public bool SecretReferences;
 
+        [DefaultValue(4)]
+        [Label("Sound Volume")]
+        [Tooltip("Volume of barrage sounds")]
+        public float soundVolume;
+
         public override void OnChanged()        //couldn't use Player player = Main.LocalPlayer cause it wasn't set to an instance of an object
         {
             MyPlayer.RangeIndicatorAlpha = RangeIndicatorVisibility;
@@ -80,6 +85,7 @@ namespace JoJoStands
             MyPlayer.HamonBarPositionX = HamonBarPositionX;
             MyPlayer.HamonBarPositionY = HamonBarPositionY;
             MyPlayer.SecretReferences = SecretReferences;
+            MyPlayer.soundVolume = soundVolume;
             UI.HamonBarState.changedInConfig = true;
             if (deathsound >= 6)
             {

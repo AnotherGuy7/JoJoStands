@@ -18,19 +18,11 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
-
-        public bool setTimestopTimer = false;
  
         public override void Update(Player player, ref int buffIndex)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (player.HasBuff(mod.BuffType(Name)))
             {
-                if (!setTimestopTimer)
-                {
-                    mPlayer.TimestopEffectDurationTimer = 60;
-                    setTimestopTimer = true;
-                }
                 player.controlUseItem = false;
                 player.dash *= 0;       //tried to get them gray but the stayed gray forever...Don't try again
                 player.bodyVelocity = Vector2.Zero;
@@ -48,7 +40,6 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             else
             {
-                mPlayer.TimestopEffectDurationTimer = 0;
                 if (Filters.Scene["GreyscaleEffect"].IsActive())
                 {
                     Filters.Scene["GreyscaleEffect"].Deactivate();

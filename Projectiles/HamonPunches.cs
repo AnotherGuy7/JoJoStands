@@ -25,7 +25,6 @@ namespace JoJoStands.Projectiles
             projectile.friendly = true;
             drawOriginOffsetY = 20;
             projectile.scale = (int)1.5;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public override void AI()

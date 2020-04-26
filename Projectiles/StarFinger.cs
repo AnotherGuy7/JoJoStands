@@ -17,7 +17,6 @@ namespace JoJoStands.Projectiles
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public Projectile ownerProj;

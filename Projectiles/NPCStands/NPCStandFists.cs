@@ -19,7 +19,6 @@ namespace JoJoStands.Projectiles.Minions
             projectile.ignoreWater = true;
             projectile.timeLeft = 6;
             projectile.alpha = 255;     //completely transparent
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
     }
 }

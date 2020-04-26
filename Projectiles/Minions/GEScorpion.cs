@@ -29,7 +29,6 @@ namespace JoJoStands.Projectiles.Minions
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
             drawOriginOffsetY = -5;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public override void AI()

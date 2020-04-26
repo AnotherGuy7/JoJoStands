@@ -10,8 +10,6 @@ namespace JoJoStands.Projectiles
 {
     public class ReqNail : ModProjectile
     {
-        public int targetWhoAmI = 0;
-
         public override string Texture
         {
             get { return mod.Name + "/Projectiles/ControllableNail"; }
@@ -31,7 +29,6 @@ namespace JoJoStands.Projectiles
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             target.AddBuff(mod.BuffType("Spin"), 999999999, true);
-            base.OnHitPlayer(target, damage, crit);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

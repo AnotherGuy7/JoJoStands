@@ -31,7 +31,6 @@ namespace JoJoStands.Projectiles.Minions
             projectile.timeLeft = 1;
             projectile.tileCollide = false; ;
             projectile.ignoreWater = true;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         protected float shootSpeed = 16f;

@@ -6,7 +6,7 @@ using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles.PlayerStands
 {  
-    public class HierophantGreenStandT1 : ModProjectile
+    public class HierophantGreenStandT1 : StandClass
     {
         public override void SetStaticDefaults()
         {
@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             Main.projPet[projectile.type] = true;
         }
 
-        public override void SetDefaults()
+        /*public override void SetDefaults()
         {
             projectile.netImportant = true;
             projectile.width = 32;
@@ -31,18 +31,12 @@ namespace JoJoStands.Projectiles.PlayerStands
             projectile.timeLeft = 0;
             projectile.tileCollide = false;
             projectile.ignoreWater = true;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
-        }
+        }*/
 
-        public Vector2 velocityAddition = Vector2.Zero;
-        public float mouseDistance = 0f;
-        protected float shootSpeed = 16f;       //how fast the projectile the minion shoots goes
-        public bool normalFrames = false;
-        public bool attackFrames = false;
-        public int shootCount = 0;
-        public int shootTime = 40;
-        public int projectileDamage = 12;
-        public bool front = false;
+        public override int shootTime => 40;
+        public override int projectileDamage => 12;
+        public override int halfStandHeight => 20;
+
 
         public override void AI()
         {
@@ -52,11 +46,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 shootCount--;
             }
             Player player = Main.player[projectile.owner];
-            Vector2 vector131 = player.Center;
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             Lighting.AddLight((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 35, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
-            if (!front)
+            /*if (!front)
             {
                 vector131.X -= (float)((15 + player.width / 2) * player.direction);
             }
@@ -67,7 +60,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             vector131.Y -= 15f;
             projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
             projectile.velocity *= 0.8f;
-            projectile.direction = (projectile.spriteDirection = player.direction);
+            projectile.direction = (projectile.spriteDirection = player.direction);*/
+            if (!attackFrames)
+                StayBehind();
+            else
+                GoInFront();
 
             if (modPlayer.StandOut)
             {
@@ -80,7 +77,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     attackFrames = true;
                     normalFrames = false;
-                    front = true;
                     Main.mouseRight = false;        //so that the player can't just stop time while punching
                     projectile.netUpdate = true;
                     if (shootCount <= 0)
@@ -110,7 +106,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     if (player.whoAmI == Main.myPlayer)
                     {
-                        front = false;
                         normalFrames = true;
                         attackFrames = false;
                     }
@@ -149,7 +144,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 if (target != null)
                 {
-                    front = true;
                     attackFrames = true;
                     normalFrames = false;
                     if ((targetPos - projectile.Center).X > 0f)
@@ -188,25 +182,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 else
                 {
-                    front = false;
                     normalFrames = true;
                     attackFrames = false;
                 }
             }
-        }
-
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write(normalFrames);
-            writer.Write(attackFrames);
-            writer.Write(front);
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            normalFrames = reader.ReadBoolean();
-            attackFrames = reader.ReadBoolean();
-            front = reader.ReadBoolean();
         }
 
         public void SelectFrame()

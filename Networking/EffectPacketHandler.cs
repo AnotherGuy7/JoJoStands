@@ -2,6 +2,7 @@ using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.Graphics.Effects;
 
 namespace JoJoStands.Networking
 {
@@ -76,6 +77,18 @@ namespace JoJoStands.Networking
 			{
 				Main.player[timestopOwner].GetModPlayer<MyPlayer>().TheWorldEffect = timestopValue;
 				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().TheWorldEffect = timestopValue;
+				if (timestopValue)
+				{
+					Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().TimestopEffectDurationTimer = 60;
+				}
+				else
+				{
+					Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().TimestopEffectDurationTimer = 60;
+					if (Filters.Scene["GreyscaleEffect"].IsActive())
+					{
+						Filters.Scene["GreyscaleEffect"].Deactivate();
+					}
+				}
 				SendTimestopBackToOwner(timestopOwner, Main.myPlayer, timestopValue, Main.myPlayer);
 			}
 			else

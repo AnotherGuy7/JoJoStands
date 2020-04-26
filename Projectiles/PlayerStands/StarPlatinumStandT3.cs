@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands
 {
-    public class StarPlatinumStandT3 : ModProjectile      //has 2 poses
+    public class StarPlatinumStandT3 : StandClass
     {
         public override string Texture
         {
@@ -22,35 +22,13 @@ namespace JoJoStands.Projectiles.PlayerStands
             Main.projFrames[projectile.type] = 10;
         }
 
-        public override void SetDefaults()
-        {
-            projectile.netImportant = true;
-            projectile.width = 38;
-            projectile.height = 1;
-            projectile.friendly = true;
-            projectile.minion = true;
-            projectile.netImportant = true;
-            projectile.minionSlots = 1;
-            projectile.penetrate = 1;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
-        }
+        public override int punchDamage => 83;
+        public override int punchTime => 7;
+        public override int altDamage => 68;
+        public override int halfStandHeight => 37;
+        public override float fistWhoAmI => 0f;
+        public override string punchSoundName => "Ora";
 
-        public Vector2 velocityAddition = Vector2.Zero;
-        public float mouseDistance = 0f;
-        protected float shootSpeed = 16f;
-        public bool normalFrames = false;
-        public bool attackFrames = false;
-        public bool abilityFrame = false;
-        public bool starFinger = false;
-        public float maxDistance = 0f;
-        public int punchDamage = 83;
-        public int shootCount = 0;
-        public int punchTime = 7;
-        public int altDamage = 68;
-        public int halfStandHeight = 37;
-        public float fistWhoAmI = 0f;
         public int updateTimer = 0;
 
         public override void AI()
@@ -68,15 +46,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 projectile.timeLeft = 2;
             }
-            if (projectile.spriteDirection == 1)
-            {
-                drawOffsetX = -10;
-            }
-            if (projectile.spriteDirection == -1)
-            {
-                drawOffsetX = -60;
-            }
-            drawOriginOffsetY = -halfStandHeight;
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
@@ -87,69 +56,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
                 {
-                    attackFrames = true;
-                    normalFrames = false;
-                    Main.mouseRight = false;
-                    projectile.netUpdate = true;
-                    float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
-                    projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
-                    if (Main.MouseWorld.X > projectile.position.X)
-                    {
-                        projectile.spriteDirection = 1;
-                        projectile.direction = 1;
-                    }
-                    if (Main.MouseWorld.X < projectile.position.X)
-                    {
-                        projectile.spriteDirection = -1;
-                        projectile.direction = -1;
-                    }
-                    if (projectile.position.X < Main.MouseWorld.X - 5f)
-                    {
-                        velocityAddition.X = 5f;
-                    }
-                    if (projectile.position.X > Main.MouseWorld.X + 5f)
-                    {
-                        velocityAddition.X = -5f;
-                    }
-                    if (projectile.position.X > Main.MouseWorld.X - 5f && projectile.position.X < Main.MouseWorld.X + 5f)
-                    {
-                        velocityAddition.X = 0f;
-                    }
-                    if (projectile.position.Y > Main.MouseWorld.Y + 5f)
-                    {
-                        velocityAddition.Y = -5f;
-                    }
-                    if (projectile.position.Y < Main.MouseWorld.Y - 5f)
-                    {
-                        velocityAddition.Y = 5f;
-                    }
-                    if (projectile.position.Y < Main.MouseWorld.Y + 5f && projectile.position.Y > Main.MouseWorld.Y - 5f)
-                    {
-                        velocityAddition.Y = 0f;
-                    }
-                    mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
-                    if (mouseDistance > 40f)
-                    {
-                        projectile.velocity = player.velocity + velocityAddition;
-                    }
-                    if (mouseDistance <= 40f)
-                    {
-                        projectile.velocity = Vector2.Zero;
-                    }
-                    if (shootCount <= 0)
-                    {
-                        shootCount += punchTime - modPlayer.standSpeedBoosts;
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                        {
-                            shootVel = new Vector2(0f, 1f);
-                        }
-                        shootVel.Normalize();
-                        shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(punchDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer, fistWhoAmI);
-                        Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
-                    }
+                    Punch();
                 }
                 else
                 {
@@ -158,18 +65,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 if (!attackFrames)
                 {
-                    Vector2 vector131 = player.Center;
-                    vector131.X -= (float)((12 + player.width / 2) * player.direction);
-                    vector131.Y -= -35f + halfStandHeight;
-                    projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
-                    projectile.velocity *= 0.8f;
-                    if (player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
-                    {
-                        projectile.direction = (projectile.spriteDirection = player.direction);
-                    }
-                    projectile.rotation = 0;
-                    normalFrames = true;
-                    attackFrames = false;
+                    StayBehindWithAbility();
                 }
                 if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0 && projectile.owner == Main.myPlayer)
                 {
@@ -188,213 +84,15 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 if (player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] != 0)
                 {
-                    abilityFrame = true;
+                    secondaryAbilityFrames = true;
                     Main.mouseLeft = false;
                     projectile.netUpdate = true;
                 }
             }
             if (modPlayer.StandAutoMode)
             {
-                NPC target = null;
-                Vector2 targetPos = projectile.position;
-                Vector2 vector131 = player.Center;
-                float targetDist = maxDistance * 3f;
-                if (target == null)
-                {
-                    for (int k = 0; k < 200; k++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[k];
-                        if (npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
-                            {
-                                if (npc.boss)       //is gonna try to detect bosses over anything
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
-                                else        //if it fails to detect a boss, it'll detect the next best thing
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (targetDist > (maxDistance * 1.5f) || starFinger || target == null)
-                {
-                    normalFrames = true;
-                    attackFrames = false;
-                    if (starFinger)
-                    {
-                        vector131.X += (float)((12 + player.width / 2) * player.direction);
-                    }
-                    else
-                    {
-                        vector131.X -= (float)((12 + player.width / 2) * player.direction);
-                        projectile.spriteDirection = projectile.direction = player.direction;
-                    }
-                    vector131.Y -= -35f + halfStandHeight;
-                    projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
-                    projectile.velocity *= 0.8f;
-                    projectile.rotation = 0;
-                }
-                if (target != null)
-                {
-                    if (targetDist < (maxDistance * 1.5f))
-                    {
-                        attackFrames = true;
-                        normalFrames = false;
-                        if ((targetPos - projectile.Center).X > 0f)
-                        {
-                            projectile.spriteDirection = projectile.direction = 1;
-                        }
-                        else if ((targetPos - projectile.Center).X < 0f)
-                        {
-                            projectile.spriteDirection = projectile.direction = -1;
-                        }
-                        if (targetPos.X > projectile.position.X)
-                        {
-                            projectile.velocity.X = 4f;
-                        }
-                        if (targetPos.X < projectile.position.X)
-                        {
-                            projectile.velocity.X = -4f;
-                        }
-                        if (targetPos.Y > projectile.position.Y)
-                        {
-                            projectile.velocity.Y = 4f;
-                        }
-                        if (targetPos.Y < projectile.position.Y)
-                        {
-                            projectile.velocity.Y = -4f;
-                        }
-                        if (shootCount <= 0)
-                        {
-                            if (Main.myPlayer == projectile.owner)
-                            {
-                                shootCount += punchTime - modPlayer.standSpeedBoosts;
-                                Vector2 shootVel = targetPos - projectile.Center;
-                                if (shootVel == Vector2.Zero)
-                                {
-                                    shootVel = new Vector2(0f, 1f);
-                                }
-                                shootVel.Normalize();
-                                if (projectile.direction == 1)
-                                {
-                                    shootVel *= shootSpeed;
-                                }
-                                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, Main.myPlayer, fistWhoAmI);
-                                Main.projectile[proj].netUpdate = true;
-                                projectile.netUpdate = true;
-                            }
-                        }
-                    }
-                    else if (Main.rand.Next(0, 101) <= 1 && targetDist > (maxDistance * 1.5f))
-                    {
-                        starFinger = true;
-                    }
-                }
-                if (starFinger)
-                {
-                    abilityFrame = true;
-                    starFinger = true;
-                    attackFrames = false;
-                    normalFrames = false;
-                    if ((targetPos - projectile.Center).X > 0f)
-                    {
-                        projectile.spriteDirection = projectile.direction = 1;
-                    }
-                    else if ((targetPos - projectile.Center).X < 0f)
-                    {
-                        projectile.spriteDirection = projectile.direction = -1;
-                    }
-                    if (shootCount <= 0)
-                    {
-                        if (Main.myPlayer == projectile.owner)
-                        {
-                            if (shootCount <= 0)
-                            {
-                                shootCount += 28;
-                                Vector2 shootVel = targetPos - projectile.Center - new Vector2(0f, 2f);
-                                if (shootVel == Vector2.Zero)
-                                {
-                                    shootVel = new Vector2(0f, 1f);
-                                }
-                                shootVel.Normalize();
-                                shootVel *= shootSpeed;
-                                int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, mod.ProjectileType("StarFinger"), (int)((altDamage * modPlayer.standDamageBoosts) * 0.9f), 2f, Main.myPlayer, projectile.whoAmI);
-                                Main.projectile[proj].netUpdate = true;
-                                projectile.netUpdate = true;
-                            }
-                        }
-                    }
-                }
-                if (starFinger && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
-                {
-                    starFinger = false;
-                }
+                PunchAndShootAI(mod.ProjectileType("StarFinger"));
             }
-
-            Vector2 direction = player.Center - projectile.Center;
-            float distanceTo = direction.Length();
-            maxDistance = 98f + modPlayer.standRangeBoosts;
-            if (distanceTo > maxDistance)
-            {
-                if (projectile.position.X <= player.position.X - 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(0.8f, 0f);
-                }
-                if (projectile.position.X >= player.position.X + 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(-0.8f, 0f);
-                }
-                if (projectile.position.Y >= player.position.Y + 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(0f, -0.8f);
-                }
-                if (projectile.position.Y <= player.position.Y - 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(0f, 0.8f);
-                }
-            }
-            if (distanceTo >= maxDistance + 22f)
-            {
-                if (!modPlayer.StandAutoMode)
-                {
-                    Main.mouseLeft = false;
-                    Main.mouseRight = false;
-                }
-                projectile.Center = player.Center;
-            }
-        }
-
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
-        {
-            Player player = Main.player[projectile.owner];
-            if (MyPlayer.RangeIndicators)
-            {
-                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), maxDistance / 122.5f, SpriteEffects.None, 0);
-            }
-        }
-
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write(normalFrames);
-            writer.Write(attackFrames);
-            writer.Write(abilityFrame);
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            normalFrames = reader.ReadBoolean();
-            attackFrames = reader.ReadBoolean();
-            abilityFrame = reader.ReadBoolean();
         }
 
         public virtual void SelectFrame()
@@ -430,14 +128,14 @@ namespace JoJoStands.Projectiles.PlayerStands
                     projectile.frame = 0;
                 }
             }
-            if (abilityFrame)
+            if (secondaryAbilityFrames)
             {
                 projectile.frame = 8;
                 normalFrames = false;
                 attackFrames = false;
                 if (player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
                 {
-                    abilityFrame = false;
+                    secondaryAbilityFrames = false;
                 }
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)

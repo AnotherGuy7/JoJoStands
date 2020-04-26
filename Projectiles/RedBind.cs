@@ -17,7 +17,6 @@ namespace JoJoStands.Projectiles
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public override void AI()       //all this so that the other chain doesn't draw... yare yare. It was mostly just picking out types

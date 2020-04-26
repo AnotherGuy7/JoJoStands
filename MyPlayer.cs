@@ -28,6 +28,7 @@ namespace JoJoStands
         public static int StandSlotPositionY;
         public static float HamonBarPositionX;
         public static float HamonBarPositionY;
+        public static float soundVolume;
 
         public int goldenSpinCounter = 0;
         public int spinSubtractionTimer = 0;
@@ -78,8 +79,9 @@ namespace JoJoStands
         public bool ZoneViralMeteorite;
 
         public UIItemSlot StandSlot;
+        public UIItemSlot StandDyeSlot;
 
-        public static List<int> stopimmune = new List<int>();
+        public static List<int> stopImmune = new List<int>();
         public static List<int> standTier1List = new List<int>();
 
 
@@ -255,6 +257,11 @@ namespace JoJoStands
             StandSlot.BackOpacity = .8f;
             StandSlot.Item = new Item();
             StandSlot.Item.SetDefaults(0);
+
+            StandDyeSlot = new UIItemSlot(StandSlot.Position - new Vector2(60f, 0f), 52, context: ItemSlot.Context.EquipDye, "Enter Dye Here");
+            StandDyeSlot.BackOpacity = .8f;
+            StandDyeSlot.Item = new Item();
+            StandDyeSlot.Item.SetDefaults(0);
         }
 
         public override TagCompound Save()
@@ -262,7 +269,8 @@ namespace JoJoStands
             return new TagCompound
             {
                 { "StandInSlot", ItemIO.Save(StandSlot.Item) },
-                { "canRevertBTD", canRevertFromKQBTD }
+                { "canRevertBTD", canRevertFromKQBTD },
+                { "DyeInDyeSlot", ItemIO.Save(StandDyeSlot.Item) }
             };
         }
 
@@ -270,6 +278,7 @@ namespace JoJoStands
         {
             StandSlot.Item = ItemIO.Load(tag.GetCompound("StandInSlot")).Clone();
             canRevertFromKQBTD = tag.GetBool("canRevertBTD");
+            StandDyeSlot.Item = ItemIO.Load(tag.GetCompound("DyeInDyeSlot")).Clone();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -284,12 +293,18 @@ namespace JoJoStands
                 int slotPosY = StandSlotPositionY * (Main.screenHeight / 100);
 
                 StandSlot.Position = new Vector2(slotPosX, slotPosY);
+                StandDyeSlot.Position = new Vector2(slotPosX - 60f, slotPosY);
 
                 StandSlot.Draw(spriteBatch);
+                StandDyeSlot.Draw(spriteBatch);
 
                 Main.inventoryScale = origScale;
 
-                StandSlot.Update();
+                if (!TheWorldEffect)        //so that it's not interactable during a timestop, cause switching stands during a timestop is... not good
+                {
+                    StandSlot.Update();
+                    StandDyeSlot.Update();
+                }
             }
         }
 

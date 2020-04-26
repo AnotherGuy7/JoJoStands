@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands
 {
-    public class MagiciansRedStandT2 : ModProjectile      //has 2 poses
+    public class MagiciansRedStandT2 : StandClass
     {
         public override string Texture
         {
@@ -34,17 +34,16 @@ namespace JoJoStands.Projectiles.PlayerStands
             projectile.penetrate = 1;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
-        protected float shootSpeed = 8f;
-        public bool normalFrames = false;
-        public bool attackFrames = false;
+        public override float shootSpeed => 8f;
+        public override int projectileDamage => 48;
+        public override int shootTime => 18;
+        public override int halfStandHeight => 35;
+        public override int drawOffsetRight => -10;
+        public override int drawOffsetLeft => 0;
+
         public bool abilityPose = false;
-        public int projectileDamage = 48;
-        public int shootCount = 0;
-        public int shootTime = 18;
-        public int halfStandHeight = 35;
         public int chanceToDebuff = 35;
         public int debuffDuration = 360;
 
@@ -62,26 +61,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 projectile.timeLeft = 2;
             }
-            if (projectile.spriteDirection == 1)
-            {
-                drawOffsetX = -10;
-            }
-            drawOriginOffsetY = -halfStandHeight;
-
-            Vector2 vector131 = player.Center;
             if (!attackFrames)
-            {
-                vector131.X -= (float)((15 + player.width / 2) * player.direction);
-            }
-            if (attackFrames)
-            {
-                vector131.X -= (float)((15 + player.width / 2) * (player.direction * -1));
-            }
-            vector131.Y -= -35f + halfStandHeight;
-            projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
-            projectile.velocity *= 0.8f;
-            projectile.direction = (projectile.spriteDirection = player.direction);
-            projectile.rotation = 0;
+                StayBehind();
+            else
+                GoInFront();
 
             if (player.ownedProjectileCounts[mod.ProjectileType("RedBind")] == 0)
             {

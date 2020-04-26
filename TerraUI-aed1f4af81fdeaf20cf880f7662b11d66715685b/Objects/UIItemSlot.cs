@@ -135,14 +135,14 @@ namespace TerraUI.Objects {
         /// <summary>
         /// The default right click event.
         /// </summary>
-        public override void OnRightClick() {
+        /*public override void OnRightClick() {         just for now, it won't be needed and it seems to cause crashes upon being called
             if(Conditions(Main.mouseItem)) {
                 Swap(ref item, ref Main.mouseItem);
             }
             else if(Partner != null && (Item.stack > 0 || Partner.Item.stack > 0)) {
                 Swap(ref item, ref Partner.item);
             }
-        }
+        }*/
 
         /// <summary>
         /// Swap two items between slots or the slot and the mouse cursor.

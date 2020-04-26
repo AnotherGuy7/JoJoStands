@@ -24,7 +24,6 @@ namespace JoJoStands.Projectiles
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
             projectile.penetrate = -1;
-            MyPlayer.stopimmune.Add(mod.ProjectileType(Name));
         }
 
         public override void AI()
