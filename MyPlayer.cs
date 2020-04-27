@@ -102,6 +102,7 @@ namespace JoJoStands
             standDamageBoosts = 1;
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
+            standCritChangeBoosts = 5;
         }
 
         public override void OnEnterWorld(Player player)
