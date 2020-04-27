@@ -33,6 +33,10 @@ namespace JoJoStands.Projectiles
                 target.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
                 target.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
             }
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            {
+                crit = true;
+            }
             if (projectile.ai[0] == 4f)
             {
                 if (projectile.ai[1] == 1f)
