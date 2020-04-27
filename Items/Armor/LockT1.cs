@@ -9,8 +9,8 @@ namespace JoJoStands.Items.Armor
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Lock (Tier 1)");
-            Tooltip.SetDefault("Hell if i knew");
+            DisplayName.SetDefault("The Lock (Tier 1)");
+            Tooltip.SetDefault("Make people that harm you overwhelmed with Guilt!");
         }
 
         public override void SetDefaults()
