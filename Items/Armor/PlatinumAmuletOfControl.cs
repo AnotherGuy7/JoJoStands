@@ -6,13 +6,13 @@ using Terraria.DataStructures;
 
 namespace JoJoStands.Items.Armor
 {
-    public class PlatinumAmuletOfEscape : ModItem
+    public class PlatinumAmuletOfControl : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Escape");
-            Tooltip.SetDefault("Increased Stand Attack Speed.");
+            DisplayName.SetDefault("Amulet of Control");
+            Tooltip.SetDefault("Lowered Stand Special Ability Cooldowns.");
         }
         public override void SetDefaults()
         {
@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 1;
+            player.GetModPlayer<MyPlayer>().standCooldownReduction += 0.5f;
         }
 
         public override void AddRecipes()
@@ -34,7 +34,7 @@ namespace JoJoStands.Items.Armor
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Chain, 1);
             recipe.AddIngredient(ItemID.PlatinumBar, 3);
-            recipe.AddIngredient(mod.ItemType("WillToEscape"), 3);
+            recipe.AddIngredient(mod.ItemType("WillToControl"), 3);
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();

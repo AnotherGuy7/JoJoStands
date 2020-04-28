@@ -55,6 +55,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         private SoundEffectInstance beginningSoundInstance = null;
         private SoundEffectInstance punchingSoundInstance = null;
 
+
         public void Timestop(int seconds)
         {
             Player player = Main.player[projectile.owner];

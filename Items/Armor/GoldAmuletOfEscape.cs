@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 
 namespace JoJoStands.Items.Armor
 {
-    public class PlatinumAmuletOfEscape : ModItem
+    public class GoldAmuletOfEscape : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -33,7 +33,7 @@ namespace JoJoStands.Items.Armor
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Chain, 1);
-            recipe.AddIngredient(ItemID.PlatinumBar, 3);
+            recipe.AddIngredient(ItemID.GoldBar, 3);
             recipe.AddIngredient(mod.ItemType("WillToEscape"), 3);
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
