@@ -37,6 +37,10 @@ namespace JoJoStands.Projectiles
             {
                 crit = true;
             }
+            if (mPlayer.destroyAmuletEquipped == true)
+            {
+                target.AddBuff(BuffID.OnFire, 60 * 3);
+            }
             if (projectile.ai[0] == 4f)
             {
                 if (projectile.ai[1] == 1f)

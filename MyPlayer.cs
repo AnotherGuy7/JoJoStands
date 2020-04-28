@@ -62,6 +62,7 @@ namespace JoJoStands
         public bool achievedInfiniteSpin = false;
         public bool StandOut = false;
         public bool StandAutoMode = false;
+        public bool destroyAmuletEquipped = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
