@@ -28,6 +28,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override int punchTime => 8;
         public override int halfStandHeight => 44;
         public override float fistWhoAmI => 1f;
+        public override string punchSoundName => "Muda";
 
         public bool abilityPose = false;
         public int timestopPoseTimer = 0;

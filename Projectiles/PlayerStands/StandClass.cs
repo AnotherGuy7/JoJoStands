@@ -481,6 +481,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void PlayPunchSound()
         {
+            ////Main.NewText(playedBeginning);
             if (punchSoundName != "" && punchingSoundInstance == null)
             {
                 InitializeSounds();
@@ -491,20 +492,21 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     if (!playedBeginning)
                     {
-                        beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                        if (beginningSoundInstance.State == SoundState.Stopped)
-                        {
-                            playedBeginning = true;
-                        }
+                        //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        Main.PlaySoundInstance(beginningSoundInstance);
+                        playedBeginning = true;
                     }
-                    if (playedBeginning)
+                    if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
                     {
-                        punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        Main.PlaySoundInstance(punchingSoundInstance);
                     }
                 }
                 else
                 {
-                    punchingSoundInstance.Play();
+                    //punchingSoundInstance.Play();
+                    Main.PlaySoundInstance(punchingSoundInstance);
+                    playedBeginning = true;
                 }
             }
         }
@@ -522,7 +524,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (punchingSoundInstance == null)
             {
-                SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName + "_Beginning");
+                SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName);
                 punchingSoundInstance = sound.CreateInstance();
                 punchingSoundInstance.Volume = MyPlayer.soundVolume;
             }
