@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Vanities
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Mista's Cap");
-            Tooltip.SetDefault("[Tooltip here]");
+            Tooltip.SetDefault("A patterned red and white hat, with an arrow in the center. It has a secret pocket for bullets.");
 		}
 
 		public override void SetDefaults()

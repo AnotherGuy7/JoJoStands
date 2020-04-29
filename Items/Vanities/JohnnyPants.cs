@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Johnny's Pants");
-            Tooltip.SetDefault("[Tooltip here]");
+			DisplayName.SetDefault("Jockey's Pants");
+            Tooltip.SetDefault("A pair of sky blue pants, adorned with stars. There's almost no damage.");
 		}
 
 		public override void SetDefaults()

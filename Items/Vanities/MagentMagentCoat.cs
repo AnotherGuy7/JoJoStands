@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Vanities
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Magent Magent's Coat");
-            Tooltip.SetDefault("[Tooltip here]");
+            Tooltip.SetDefault("A bizarre magenta suit, resembling a magician's. Has several pockets for tricks and dynamite.");
 		}
 
 		public override void SetDefaults()

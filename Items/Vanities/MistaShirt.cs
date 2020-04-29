@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Johnny's Shirt");
-            Tooltip.SetDefault("[Tooltip here]");
+			DisplayName.SetDefault("Mista's Shirt");
+            Tooltip.SetDefault("A blue and white patterned shirt, seemingly patched up from bullet holes.");
 		}
 
 		public override void SetDefaults()

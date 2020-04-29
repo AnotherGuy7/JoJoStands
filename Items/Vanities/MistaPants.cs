@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Vanities
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Mista's Pants");
-            Tooltip.SetDefault("[Tooltip here]");
+            Tooltip.SetDefault("A tacky pair of red pants with black boots. Your fashion sense is odd.");
 		}
 
 		public override void SetDefaults()

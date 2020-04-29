@@ -107,6 +107,7 @@ namespace JoJoStands
             UI.BulletCounter.Visible = false;
             controllingAerosmith = false;
             wearingEpitaph = false;
+            destroyAmuletEquipped = false;
 
             standDamageBoosts = 1;
             standRangeBoosts = 0f;
