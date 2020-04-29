@@ -14,12 +14,15 @@ namespace JoJoStands.NPCs
         public bool affectedbyBtz = false;
         public bool taggedByButterfly = false;
         public bool applyingForesightPositions = false;
+        public bool Locked = false;
         public bool foresightResetIndex = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
         public int BtZSaveTimer = 0;
         public int aiStyleSave = 0;
+        public int lifeRegenIncrement = 0;
+        public int Counter = 0;
         public bool forceDeath = false;
         public int indexPosition = 0;
         public bool spawnedByDeathLoop = false;
@@ -167,6 +170,20 @@ namespace JoJoStands.NPCs
         public override bool PreAI(NPC npc)
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            if (npc.HasBuff(mod.BuffType("Locked")))
+            {
+                npc.lifeRegen = -4;
+                npc.velocity *= 0.95f;
+                Counter++;
+                npc.defense = (int)(npc.defense * 0.95);
+                if (Counter >= 60)    //increases lifeRegen damage every second
+                {
+                    Counter = 0;
+                    lifeRegenIncrement += 2;
+                    npc.StrikeNPC(lifeRegenIncrement, 0f, 1);
+                }
+            }
+
             if (player.TheWorldEffect || frozenInTime)
             {
                 npc.velocity.X *= 0f;

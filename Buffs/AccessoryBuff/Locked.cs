@@ -20,31 +20,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             Main.persistentBuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
-        {
-            player.lifeRegen = -4;
-            player.moveSpeed *= 0.95f;
-            Counter++;
-            player.statDefense = (int)(player.statDefense * 0.95);
-            if (Counter >= 60)    //increases lifeRegen damage every second
-            {
-                Counter = 0;
-                lifeRegenIncrement += 2;
-            }
-            player.lifeRegen = -4 - lifeRegenIncrement;
-        }
-        public override void Update(NPC npc, ref int buffIndex)
-        {
-            npc.lifeRegen = -4;
-            npc.velocity *= 0.95f;
-            Counter++;
-            npc.defense = (int)(npc.defense * 0.95);
-            if (Counter >= 60)    //increases lifeRegen damage every second
-            {
-                Counter = 0;
-                lifeRegenIncrement += 2;
-                npc.StrikeNPC(lifeRegenIncrement, 0f, 1);
-            }
-        }
+
+
     }
 }
