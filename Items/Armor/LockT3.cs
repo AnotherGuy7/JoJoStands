@@ -13,8 +13,8 @@ namespace JoJoStands.Items.Armor
         }
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Lock (Tier 3)");
-            Tooltip.SetDefault("Hell if i knew");
+            DisplayName.SetDefault("The Lock (Tier 3)");
+            Tooltip.SetDefault("Make people that harm you overwhelmed with Guilt! \nSpecial: Damage yourself and make everyone in a 40 block radius guilty about it.");
         }
 
         public override void SetDefaults()

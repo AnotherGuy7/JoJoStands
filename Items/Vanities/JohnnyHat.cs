@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Johnny's Cap");
-            Tooltip.SetDefault("[Tooltip here]");
+			DisplayName.SetDefault("Jockey's Bandana");
+            Tooltip.SetDefault("A sky blue bandana, adorned with stars. There is a horseshoe in the center.");
 		}
 
 		public override void SetDefaults()

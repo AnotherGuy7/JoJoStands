@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Vanities
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Magent Magent's Cap");
-            Tooltip.SetDefault("[Tooltip here]");
+            Tooltip.SetDefault("A magenta colored hat, resembling a magician's. It makes you zone out.");
 		}
 
 		public override void SetDefaults()

@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Johnny's Shirt");
-            Tooltip.SetDefault("[Tooltip here]");
+			DisplayName.SetDefault("Jockey's Top");
+            Tooltip.SetDefault("A sky blue top worn by a famous horse jockey. Makes you want to spin.");
 		}
 
 		public override void SetDefaults()

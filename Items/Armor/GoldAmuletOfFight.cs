@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Gold Amulet of Fight");
-            Tooltip.SetDefault("Wear this stone to walk on water, increase your regenerative capabilities, and increase your max hamon!");
+            DisplayName.SetDefault("Amulet of Fight");
+            Tooltip.SetDefault("Increased Stand Attack Damage");
         }
         public override void SetDefaults()
         {
@@ -26,14 +26,16 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.15;
+            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.10;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LargeRuby, 1);
-            recipe.AddIngredient(ItemID.SunStone, 1);
+            recipe.AddIngredient(ItemID.Chain, 1);
+            recipe.AddIngredient(ItemID.GoldBar, 3);
+            recipe.AddIngredient(mod.ItemType("WillToFight"), 3);
+            recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standSpeedBoosts += -2;
+            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 1;
         }
 
         public override void AddRecipes()

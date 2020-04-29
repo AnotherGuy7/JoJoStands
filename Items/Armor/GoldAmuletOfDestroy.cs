@@ -6,13 +6,13 @@ using Terraria.DataStructures;
 
 namespace JoJoStands.Items.Armor
 {
-    public class PlatinumAmuletOfFight : ModItem
+    public class GoldAmuletOfDestroy : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Fight");
-            Tooltip.SetDefault("%15 increased Stand damage.");
+            DisplayName.SetDefault("Amulet of Destroy");
+            Tooltip.SetDefault("Burn, bitch.");
         }
         public override void SetDefaults()
         {
@@ -26,18 +26,19 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.10;
+            player.GetModPlayer<MyPlayer>().destroyAmuletEquipped = true;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Chain, 1);
-            recipe.AddIngredient(ItemID.PlatinumBar, 3);
-            recipe.AddIngredient(mod.ItemType("WillToFight"), 3);
+            recipe.AddIngredient(ItemID.GoldBar, 3);
+            recipe.AddIngredient(mod.ItemType("WillToDestroy"), 3);
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
     }
 }
+

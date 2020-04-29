@@ -52,6 +52,7 @@ namespace JoJoStands
         public float standRangeBoosts = 0f;
         public float standCritChangeBoosts = 0f;
         public int standSpeedBoosts = 0;
+        public float standCooldownReduction = 0f;
 
         public bool TuskAct1Pet = false;
         public bool TuskAct2Pet = false;
@@ -61,6 +62,7 @@ namespace JoJoStands
         public bool achievedInfiniteSpin = false;
         public bool StandOut = false;
         public bool StandAutoMode = false;
+        public bool destroyAmuletEquipped = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -88,7 +90,14 @@ namespace JoJoStands
 
         public Vector2 aerosmithCamPosition;
 
-
+        public int AbilityCooldownTime(float seconds, float reduction = 0) //Sometimes we won't want to reduce the cooldown so that's why reduction defaults to 0
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            int timeToReturn = 0;
+            Main.NewText(reduction);
+            timeToReturn = (int)((seconds * 60f) * (1f - reduction));
+            return timeToReturn;
+        }
         public override void ResetEffects()
         {
             TuskAct1Pet = false;
@@ -98,11 +107,15 @@ namespace JoJoStands
             UI.BulletCounter.Visible = false;
             controllingAerosmith = false;
             wearingEpitaph = false;
+            destroyAmuletEquipped = false;
 
             standDamageBoosts = 1;
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
+            standCritChangeBoosts = 5;
+            standCooldownReduction = 0f;
         }
+
 
         public override void OnEnterWorld(Player player)
         {

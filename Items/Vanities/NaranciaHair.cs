@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Narancia's Hair");
-			Tooltip.SetDefault("[Tooltip here]");
+			DisplayName.SetDefault("Narancia's Wig");
+			Tooltip.SetDefault("A wig resembling the hairstyle of Narancia Ghirga. Smells like gunpowder.");
 		}
 
 		public override void SetDefaults()
