@@ -41,6 +41,10 @@ namespace JoJoStands.Projectiles
             {
                 target.AddBuff(BuffID.OnFire, 60 * 3);
             }
+            if (mPlayer.greaterDestroyEquipped == true)
+            {
+                target.AddBuff(BuffID.CursedInferno, 60 * 10);
+            }
             if (projectile.ai[0] == 4f)
             {
                 if (projectile.ai[1] == 1f)

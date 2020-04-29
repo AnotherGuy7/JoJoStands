@@ -6,12 +6,12 @@ using Terraria.DataStructures;
 
 namespace JoJoStands.Items.Armor
 {
-    public class GoldAmuletOfChange : ModItem
+    public class GreaterGoldAmuletOfChange : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Change");
+            DisplayName.SetDefault("Greater Amulet of Change");
             Tooltip.SetDefault("Increased Stand Crit Change.");
         }
         public override void SetDefaults()
@@ -26,16 +26,17 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 10f;
+            player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 20f;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Chain, 1);
-            recipe.AddIngredient(ItemID.GoldBar, 3);
-            recipe.AddIngredient(mod.ItemType("WillToChange"), 3);
+            recipe.AddIngredient(ItemID.HallowedBar, 5);
+            recipe.AddIngredient(mod.ItemType("WillToChange"), 5);
             recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.AddIngredient(mod.ItemType("GoldAmuletOfChange"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

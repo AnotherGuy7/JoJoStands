@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 15f;
+            player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 10f;
         }
 
         public override void AddRecipes()

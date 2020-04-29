@@ -63,6 +63,7 @@ namespace JoJoStands
         public bool StandOut = false;
         public bool StandAutoMode = false;
         public bool destroyAmuletEquipped = false;
+        public bool greaterDestroyEquipped = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -108,6 +109,8 @@ namespace JoJoStands
             controllingAerosmith = false;
             wearingEpitaph = false;
             destroyAmuletEquipped = false;
+            greaterDestroyEquipped = false;
+
 
             standDamageBoosts = 1;
             standRangeBoosts = 0f;
