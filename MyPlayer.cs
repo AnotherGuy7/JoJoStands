@@ -91,14 +91,6 @@ namespace JoJoStands
 
         public Vector2 aerosmithCamPosition;
 
-        public int AbilityCooldownTime(float seconds, float reduction = 0) //Sometimes we won't want to reduce the cooldown so that's why reduction defaults to 0
-        {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            int timeToReturn = 0;
-            Main.NewText(reduction);
-            timeToReturn = (int)((seconds * 60f) * (1f - reduction));
-            return timeToReturn;
-        }
         public override void ResetEffects()
         {
             TuskAct1Pet = false;
@@ -115,8 +107,7 @@ namespace JoJoStands
             standDamageBoosts = 1;
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
-            standCritChangeBoosts = 5;
-            standCooldownReduction = 0f;
+            standCritChangeBoosts = 5;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
         }
 
 
@@ -256,7 +247,7 @@ namespace JoJoStands
                         }
                     }
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " was over-guilted."), 50, player.direction);
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), 20 * 60);
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(20));
                     for (int i = 0; i < Main.maxPlayers; i++)
                     {
                         Player otherPlayer = Main.player[i];
@@ -283,7 +274,7 @@ namespace JoJoStands
                         }
                     }
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " was over-guilted."), 25, player.direction);
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), 20 * 60);
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(20));
                     for (int i = 0; i < Main.maxPlayers; i++)
                     {
                         Player otherPlayer = Main.player[i];
@@ -946,6 +937,19 @@ namespace JoJoStands
             }
         }
 
+        public override void PostUpdateBuffs()
+        {
+            standCooldownReduction = 0f;        //it's here because it resets before the buffs can use it when its in ResetEffects()
+        }
+
+        public int AbilityCooldownTime(int seconds) //Sometimes we won't want to reduce the cooldown so that's why reduction defaults to 0
+        {
+            int timeToReturn;
+            timeToReturn = (int)((seconds * 60f) * (1f - standCooldownReduction));
+            Main.NewText(timeToReturn / 60 + "s");
+            return timeToReturn;
+        }
+
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)        //already only runs for melee weapons
         {
             if (Vampire && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
@@ -1037,25 +1041,32 @@ namespace JoJoStands
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)       //that 1 last frame before you completely die
         {
-            if (deathsoundint == 1 && player.whoAmI == Main.myPlayer)
+            if (player.whoAmI == Main.myPlayer)
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/ToBeContinued4"));
-            }
-            if (deathsoundint == 2 && player.whoAmI == Main.myPlayer)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/CAESAAAAAAAR"));
-            }
-            if (deathsoundint == 3 && player.whoAmI == Main.myPlayer)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/GangTortureDance"));
-            }
-            if (deathsoundint == 4 && player.whoAmI == Main.myPlayer)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/LastTrainHome"));
-            }
-            if (deathsoundint == 5 && player.whoAmI == Main.myPlayer)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/KORE GA... WAGA KING CRIMSON NO NORIO KU"));
+                if (deathsoundint == 1)
+                {
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/ToBeContinued4"));
+                }
+                if (deathsoundint == 2)
+                {
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/CAESAAAAAAAR"));
+                }
+                if (deathsoundint == 3)
+                {
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/GangTortureDance"));
+                }
+                if (deathsoundint == 4)
+                {
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/LastTrainHome"));
+                }
+                if (deathsoundint == 5)
+                {
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/KORE GA... WAGA KING CRIMSON NO NORIO KU"));
+                }
+                if (deathsoundint != 1)
+                {
+                    UI.ToBeContinued.Visible = true;
+                }
             }
             if (player.HasItem(mod.ItemType("PokerChip")))
             {
@@ -1066,10 +1077,6 @@ namespace JoJoStands
             if (BackToZero)
             {
                 return false;
-            }
-            if (deathsoundint != 1 && player.whoAmI == Main.myPlayer)
-            {
-                UI.ToBeContinued.Visible = true;
             }
             /*if (Vampire && !dyingVampire)
             {

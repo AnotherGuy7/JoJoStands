@@ -41,7 +41,7 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             else
             {
-                player.AddBuff(mod.BuffType("AbilityCooldown"), 1800);
+                player.AddBuff(mod.BuffType("AbilityCooldown"), player.GetModPlayer<MyPlayer>().AbilityCooldownTime(30));
             }
         }
     }

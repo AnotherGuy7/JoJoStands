@@ -22,7 +22,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
  
         public override void Update(Player player, ref int buffIndex)
         {
-            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             player.controlUseItem = false;
             player.moveSpeed = 0f;
             player.lifeRegen = 0;
@@ -68,14 +68,14 @@ namespace JoJoStands.Buffs.AccessoryBuff
                     player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " has stopped thinking."), player.statLife - 1, 1);
                 }
             }
-            if (Main.mouseRight && Mplayer.StandSlot.Item.type == mod.ItemType("CenturyBoyT2") && player.HasItem(ItemID.Dynamite) && !player.HasBuff(mod.BuffType("AbilityCooldown")))
+            if (Main.mouseRight && mPlayer.StandSlot.Item.type == mod.ItemType("CenturyBoyT2") && player.HasItem(ItemID.Dynamite) && !player.HasBuff(mod.BuffType("AbilityCooldown")))
             {
                 player.ConsumeItem(ItemID.Dynamite);
                 var explosion = Projectile.NewProjectile(player.position, Vector2.Zero, ProjectileID.GrenadeIII, 49, 8f, Main.myPlayer);
                 Main.projectile[explosion].timeLeft = 2;
                 Main.projectile[explosion].netUpdate = true;
                 Main.PlaySound(SoundID.Item62);
-                player.AddBuff(mod.BuffType("AbilityCooldown"), 720);
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
             }
         }
     }

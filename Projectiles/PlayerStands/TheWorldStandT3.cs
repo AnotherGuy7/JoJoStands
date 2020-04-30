@@ -31,9 +31,10 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override float fistWhoAmI => 1f;
         public override string punchSoundName => "Muda";
 
-        public bool abilityPose = false;
-        public int timestopPoseTimer = 0;
-        public int updateTimer = 0;
+        private bool abilityPose = false;
+        private int timestopPoseTimer = 0;
+        private int updateTimer = 0;
+        private int timestopStartDelay = 0;
 
         public override void AI()
         {
@@ -56,8 +57,24 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")) && projectile.owner == Main.myPlayer)
             {
-                timestopPoseTimer = 60;
-                Timestop(5);
+                if (JoJoStands.JoJoStandsSounds == null)
+                    timestopStartDelay = 120;
+                else
+                {
+                    Terraria.Audio.LegacySoundStyle zawarudo = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/TheWorld");
+                    zawarudo.WithVolume(MyPlayer.soundVolume);
+                    Main.PlaySound(zawarudo, projectile.position);
+                    timestopStartDelay = 1;
+                }
+            }
+            if (timestopStartDelay != 0)
+            {
+                timestopStartDelay++;
+                if (timestopStartDelay >= 120)
+                {
+                    Timestop(5);
+                    timestopStartDelay = 0;
+                }
             }
 
             if (!modPlayer.StandAutoMode)

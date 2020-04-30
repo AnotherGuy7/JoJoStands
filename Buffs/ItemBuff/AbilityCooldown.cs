@@ -15,6 +15,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Description.SetDefault("You can no longer use any stand abilities...");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
+            canBeCleared = false;
         }
     }
 }

@@ -169,7 +169,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
                     if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && modPlayer.GEAbilityNumber == 1)
                     {
                         Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 65f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, Main.myPlayer, tierNumber);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), 600);
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
                     }
                     if (Main.mouseRight && modPlayer.GEAbilityNumber == 2 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("DeathLoop")))
                     {
@@ -271,7 +271,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
                         int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("GoldExperienceRock"), (int)(punchDamage * modPlayer.standDamageBoosts) + 11, 6f, Main.myPlayer);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), 180);
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(3));
                     }
                 }
             }

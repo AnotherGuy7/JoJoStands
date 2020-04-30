@@ -6,13 +6,13 @@ using Terraria.DataStructures;
 
 namespace JoJoStands.Items.Armor
 {
-    public class PlatinumAmuletOfControl : ModItem
+    public class GreaterPlatinumAmuletOfControl : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Control");
-            Tooltip.SetDefault("Lowered Stand Special Ability Cooldowns by 5%");
+            DisplayName.SetDefault("Greater Amulet of Control");
+            Tooltip.SetDefault("Lowered Stand Special Ability Cooldowns by 10%");
         }
         public override void SetDefaults()
         {
@@ -20,13 +20,13 @@ namespace JoJoStands.Items.Armor
             item.height = 16;
             item.maxStack = 1;
             item.value = Item.buyPrice(0, 50, 0, 0);
-            item.rare = ItemRarityID.Blue;
+            item.rare = ItemRarityID.Pink;
             item.accessory = true;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standCooldownReduction += 0.05f;
+            player.GetModPlayer<MyPlayer>().standCooldownReduction += 0.1f;
         }
 
         public override void AddRecipes()

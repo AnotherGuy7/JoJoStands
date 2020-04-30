@@ -96,12 +96,14 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (projectile.ai[0] == 0f)
             {
                 int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, 107, 7f, Main.myPlayer);
                 Main.projectile[proj].timeLeft = 2;
                 Main.projectile[proj].netUpdate = true;
-                Main.player[projectile.owner].AddBuff(mod.BuffType("AbilityCooldown"), 600);
+                Main.player[projectile.owner].AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
                 projectile.active = false;
             }
             if (projectile.ai[0] == 1f)
@@ -110,7 +112,7 @@ namespace JoJoStands.Projectiles.Minions
                 Main.projectile[proj].timeLeft = 2;
                 Main.projectile[proj].netUpdate = true;
                 projectile.active = false;
-                Main.player[projectile.owner].AddBuff(mod.BuffType("AbilityCooldown"), 240);
+                Main.player[projectile.owner].AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(4));
             }
         }
     }

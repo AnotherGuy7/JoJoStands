@@ -9,18 +9,12 @@ namespace JoJoStands.Buffs.AccessoryBuff
 {
     public class Locked : ModBuff
     {
-        public int Counter = 0;
-        public int lifeRegenIncrement = 0;
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Locked");
             Description.SetDefault("Your guilt is increasing and it hurts.");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
-            Main.persistentBuff[Type] = true;
         }
-
-
-
     }
 }

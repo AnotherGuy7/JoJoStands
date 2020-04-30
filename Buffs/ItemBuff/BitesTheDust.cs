@@ -60,7 +60,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 if (Main.time == 1600)
                 {
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), 25200);
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(420));
                     player.ClearBuff(mod.BuffType(Name));
                     player.statLife = player.statLifeMax;
                     player.Spawn();

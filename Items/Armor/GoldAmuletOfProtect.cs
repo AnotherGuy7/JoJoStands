@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            if (player.GetModPlayer<MyPlayer>().StandOut == true)
+            if (player.GetModPlayer<MyPlayer>().StandOut)
             {
                 player.statDefense += 5;
             }

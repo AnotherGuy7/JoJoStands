@@ -31,7 +31,7 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             else
             {
-                player.AddBuff(mod.BuffType("AbilityCooldown"), 2100);
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(35));
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     mPlayer.BackToZero = false;

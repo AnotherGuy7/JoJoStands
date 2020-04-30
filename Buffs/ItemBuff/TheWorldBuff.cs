@@ -56,7 +56,7 @@ namespace JoJoStands.Buffs.ItemBuff
                     ModNetHandler.effectSync.SendTimestop(256, player.whoAmI, false, player.whoAmI);
                 }
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_stop"));
-                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(1800 / 60, mPlayer.standCooldownReduction));
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
                 Main.NewText(player.GetModPlayer<MyPlayer>().standCooldownReduction);
                 if (Filters.Scene["GreyscaleEffect"].IsActive())
                 {

@@ -119,7 +119,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer)
                 {
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), 1500);
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(25));
                     for (int p = 1; p <= 50; p++)
                     {
                         float radius = p * 5;

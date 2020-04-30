@@ -29,7 +29,8 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<MyPlayer>().DeathLoop = true;
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.DeathLoop = true;
             if (Main.netMode == NetmodeID.Server)
             {
                 deathTimeAdd = 1;
@@ -85,13 +86,13 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             if ((deathTimes >= (3 + deathTimeAdd) && Looping3x) || (deathTimes >= (10 + deathTimeAdd) && Looping10x))
             {
-                player.GetModPlayer<MyPlayer>().DeathLoop = false;
+                mPlayer.DeathLoop = false;
                 deathTimes = 0;
                 Looping3x = false;
                 deathLoopTimer = 0;
                 Looping10x = false;
                 player.ClearBuff(mod.BuffType("DeathLoop"));
-                player.AddBuff(mod.BuffType("AbilityCooldown"), 3600);
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(60));
                 deathPositionX = 0f;
                 deathPositionY = 0f;
                 LoopNPC = 0;

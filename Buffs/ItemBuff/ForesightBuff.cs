@@ -25,7 +25,7 @@ namespace JoJoStands.Buffs.ItemBuff
             if (!player.HasBuff(mod.BuffType(Name)))
             {
                 MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                player.AddBuff(mod.BuffType("AbilityCooldown"), 1800);
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     mPlayer.Foresight = false;

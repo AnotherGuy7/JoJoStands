@@ -177,7 +177,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                     if (numberSpawned >= 70f)
                     {
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), 1800);
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(30));
                         spawningField = false;
                         formPosition = Vector2.Zero;
                     }

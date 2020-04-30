@@ -139,7 +139,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 if (JoJoStands.SpecialHotKey.JustPressed && !bombless && player.whoAmI == Main.myPlayer)
                 {
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), 600);
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
                     shootCount += shootTime - modPlayer.standSpeedBoosts;
                     int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, projectile.velocity.X, projectile.velocity.Y, mod.ProjectileType("AerosmithBomb"), 0, 3f, projectile.owner, (projectileDamage + 21f) * (float)modPlayer.standDamageBoosts);
                     Main.projectile[proj].netUpdate = true;

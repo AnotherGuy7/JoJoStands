@@ -14,7 +14,6 @@ namespace JoJoStands.NPCs
         public bool affectedbyBtz = false;
         public bool taggedByButterfly = false;
         public bool applyingForesightPositions = false;
-        public bool Locked = false;
         public bool foresightResetIndex = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
@@ -170,20 +169,6 @@ namespace JoJoStands.NPCs
         public override bool PreAI(NPC npc)
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-            if (npc.HasBuff(mod.BuffType("Locked")))
-            {
-                npc.lifeRegen = -4;
-                npc.velocity *= 0.95f;
-                Counter++;
-                npc.defense = (int)(npc.defense * 0.95);
-                if (Counter >= 60)    //increases lifeRegen damage every second
-                {
-                    Counter = 0;
-                    lifeRegenIncrement += 2;
-                    npc.StrikeNPC(lifeRegenIncrement, 0f, 1);
-                }
-            }
-
             if (player.TheWorldEffect || frozenInTime)
             {
                 npc.velocity.X *= 0f;
@@ -404,6 +389,19 @@ namespace JoJoStands.NPCs
             if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
             {
                 return false;
+            }
+            if (npc.HasBuff(mod.BuffType("Locked")))
+            {
+                npc.lifeRegen = -4;
+                npc.velocity *= 0.95f;
+                Counter++;
+                npc.defense = (int)(npc.defense * 0.95);
+                if (Counter >= 60)    //increases lifeRegen damage every second
+                {
+                    Counter = 0;
+                    lifeRegenIncrement += 2;
+                    npc.StrikeNPC(lifeRegenIncrement, 0f, 1);
+                }
             }
             return true;
         }
