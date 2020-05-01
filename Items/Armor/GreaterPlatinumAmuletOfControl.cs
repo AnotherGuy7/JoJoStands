@@ -33,9 +33,10 @@ namespace JoJoStands.Items.Armor
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Chain, 1);
-            recipe.AddIngredient(ItemID.PlatinumBar, 3);
-            recipe.AddIngredient(mod.ItemType("WillToControl"), 3);
+            recipe.AddIngredient(ItemID.HallowedBar, 5);
+            recipe.AddIngredient(mod.ItemType("WillToControl"), 5);
             recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.AddIngredient(mod.ItemType("PlatinumAmuletOfControl"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
