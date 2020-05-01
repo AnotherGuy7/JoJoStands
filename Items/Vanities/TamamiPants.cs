@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Vanities
 {
-	[AutoloadEquip(EquipType.Body)]
+	[AutoloadEquip(EquipType.Legs)]
 	public class TamamiPants : ModItem
 	{
 		public override void SetStaticDefaults()
