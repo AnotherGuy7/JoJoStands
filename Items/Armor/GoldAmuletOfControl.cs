@@ -6,13 +6,13 @@ using Terraria.DataStructures;
 
 namespace JoJoStands.Items.Armor
 {
-    public class GoldAmuletOfDestroy : ModItem
+    public class GoldAmuletOfControl : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Destroy");
-            Tooltip.SetDefault("Makes melee stands inflict On Fire on enemies.");
+            DisplayName.SetDefault("Amulet of Control");
+            Tooltip.SetDefault("Lowered Stand Special Ability Cooldowns by 5%");
         }
         public override void SetDefaults()
         {
@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().destroyAmuletEquipped = true;
+            player.GetModPlayer<MyPlayer>().standCooldownReduction += 0.05f;
         }
 
         public override void AddRecipes()
@@ -34,11 +34,10 @@ namespace JoJoStands.Items.Armor
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Chain, 1);
             recipe.AddIngredient(ItemID.GoldBar, 3);
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"), 3);
+            recipe.AddIngredient(mod.ItemType("WillToControl"), 3);
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
     }
 }
-

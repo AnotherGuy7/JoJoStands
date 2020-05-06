@@ -12,7 +12,7 @@ namespace JoJoStands.Items.Armor
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Greater Amulet of Destroy");
-            Tooltip.SetDefault("Get Cursed, Fucker.");
+            Tooltip.SetDefault("Makes melee stands inflict Cursed Flames on enemies.");
         }
         public override void SetDefaults()
         {

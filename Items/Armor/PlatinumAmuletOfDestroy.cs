@@ -12,7 +12,7 @@ namespace JoJoStands.Items.Armor
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Amulet of Destroy");
-            Tooltip.SetDefault("Burn, bitch.");
+            Tooltip.SetDefault("Makes melee stands inflict On Fire on enemies.");
         }
         public override void SetDefaults()
         {
