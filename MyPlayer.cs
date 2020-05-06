@@ -125,7 +125,6 @@ namespace JoJoStands
             {
                 TuskActNumber = 1;
             }
-            base.OnEnterWorld(player);
         }
 
         public override void PlayerDisconnect(Player player)        //runs for everyone that hasn't left
@@ -518,56 +517,59 @@ namespace JoJoStands
             {
                 revertTimer--;
             }
-            if (TimestopEffectDurationTimer > 0)
+            if (!Main.dedServ)      //if this isn't the (dedicated server) cause shaders don't exist serverside
             {
-                if (TimestopEffectDurationTimer >= 15 && !Filters.Scene["TimestopEffectShader"].IsActive() && TimestopEffects)
+                if (TimestopEffectDurationTimer > 0)
                 {
-                    Filters.Scene.Activate("TimestopEffectShader");
-                }
-                if (TimestopEffectDurationTimer == 14)
-                {
-                    Filters.Scene["TimestopEffectShader"].Deactivate();
-                    if (!Filters.Scene["GreyscaleEffect"].IsActive())
+                    if (TimestopEffectDurationTimer >= 15 && !Filters.Scene["TimestopEffectShader"].IsActive() && TimestopEffects)
                     {
-                        Filters.Scene.Activate("GreyscaleEffect");
+                        Filters.Scene.Activate("TimestopEffectShader");
                     }
+                    if (TimestopEffectDurationTimer == 14)
+                    {
+                        Filters.Scene["TimestopEffectShader"].Deactivate();
+                        if (!Filters.Scene["GreyscaleEffect"].IsActive())
+                        {
+                            Filters.Scene.Activate("GreyscaleEffect");
+                        }
+                    }
+                    TimestopEffectDurationTimer--;
                 }
-                TimestopEffectDurationTimer--;
-            }
-            if (BackToZero)
-            {
-                if (!Filters.Scene["GreenEffect"].IsActive())
+                if (BackToZero)
                 {
-                    Filters.Scene.Activate("GreenEffect");
+                    if (!Filters.Scene["GreenEffect"].IsActive())
+                    {
+                        Filters.Scene.Activate("GreenEffect");
+                    }
+                    if (Filters.Scene["GreyscaleEffect"].IsActive())
+                    {
+                        Filters.Scene["GreyscaleEffect"].Deactivate();
+                    }
+                    if (Filters.Scene["TimestopEffectShader"].IsActive())
+                    {
+                        Filters.Scene["TimestopEffectShader"].Deactivate();
+                    }
+                    if (player.HasBuff(mod.BuffType("TheWorldBuff")))
+                    {
+                        player.ClearBuff(mod.BuffType("TheWorldBuff"));
+                    }
+                    if (player.HasBuff(mod.BuffType("SkippingTime")))
+                    {
+                        player.ClearBuff(mod.BuffType("SkippingTime"));
+                    }
+                    if (player.HasBuff(mod.BuffType("ForesightBuff")))
+                    {
+                        player.ClearBuff(mod.BuffType("ForesightBuff"));
+                    }
+                    TheWorldEffect = false;     //second, get rid of the effects from everyone
+                    TimeSkipEffect = false;
+                    TimeSkipPreEffect = false;
+                    Foresight = false;
                 }
-                if (Filters.Scene["GreyscaleEffect"].IsActive())
+                if (!BackToZero && Filters.Scene["GreenEffect"].IsActive())
                 {
-                    Filters.Scene["GreyscaleEffect"].Deactivate();
+                    Filters.Scene["GreenEffect"].Deactivate();
                 }
-                if (Filters.Scene["TimestopEffectShader"].IsActive())
-                {
-                    Filters.Scene["TimestopEffectShader"].Deactivate();
-                }
-                if (player.HasBuff(mod.BuffType("TheWorldBuff")))
-                {
-                    player.ClearBuff(mod.BuffType("TheWorldBuff"));
-                }
-                if (player.HasBuff(mod.BuffType("SkippingTime")))
-                {
-                    player.ClearBuff(mod.BuffType("SkippingTime"));
-                }
-                if (player.HasBuff(mod.BuffType("ForesightBuff")))
-                {
-                    player.ClearBuff(mod.BuffType("ForesightBuff"));
-                }
-                TheWorldEffect = false;     //second, get rid of the effects from everyone
-                TimeSkipEffect = false;
-                TimeSkipPreEffect = false;
-                Foresight = false;
-            }
-            if (!BackToZero && Filters.Scene["GreenEffect"].IsActive())
-            {
-                Filters.Scene["GreenEffect"].Deactivate();
             }
             if (controllingAerosmith)
             {
@@ -946,7 +948,6 @@ namespace JoJoStands
         {
             int timeToReturn;
             timeToReturn = (int)((seconds * 60f) * (1f - standCooldownReduction));
-            Main.NewText(timeToReturn / 60 + "s");
             return timeToReturn;
         }
 

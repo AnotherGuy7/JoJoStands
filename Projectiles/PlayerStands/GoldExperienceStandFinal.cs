@@ -73,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
                 if (projectile.owner == Main.myPlayer)
                 {
-                    if (JoJoStands.SpecialHotKey.JustPressed)
+                    if (SpecialKeyPressedNoCooldown())
                     {
                         modPlayer.GEAbilityNumber += 1;
                         saidAbility = false;

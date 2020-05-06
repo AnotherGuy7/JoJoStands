@@ -48,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
-            if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("SkippingTime")) && projectile.owner == Main.myPlayer)
+            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("SkippingTime")))
             {
                 player.AddBuff(mod.BuffType("PreTimeSkip"), 10);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip"));

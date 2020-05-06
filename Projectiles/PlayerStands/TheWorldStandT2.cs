@@ -63,7 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
-            if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")) && projectile.owner == Main.myPlayer)
+            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("TheWorldBuff")))
             {
                 if (JoJoStands.JoJoStandsSounds == null)
                     timestopStartDelay = 120;
@@ -81,7 +81,21 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (timestopStartDelay >= 120)
                 {
                     Timestop(2);
+                    timestopPoseTimer = 60;
                     timestopStartDelay = 0;
+                }
+            }
+            if (timestopPoseTimer > 0)
+            {
+                timestopPoseTimer--;
+                normalFrames = false;
+                attackFrames = false;
+                abilityPose = true;
+                Main.mouseLeft = false;
+                Main.mouseRight = false;
+                if (timestopPoseTimer <= 1)
+                {
+                    abilityPose = false;
                 }
             }
 
@@ -99,19 +113,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (!attackFrames)
                 {
                     StayBehind();
-                }
-                if (timestopPoseTimer > 0)
-                {
-                    timestopPoseTimer--;
-                    normalFrames = false;
-                    attackFrames = false;
-                    abilityPose = true;
-                    Main.mouseLeft = false;
-                    Main.mouseRight = false;
-                    if (timestopPoseTimer <= 1)
-                    {
-                        abilityPose = false;
-                    }
                 }
             }
             if (modPlayer.StandAutoMode)

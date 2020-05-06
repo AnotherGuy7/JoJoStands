@@ -10,7 +10,6 @@ namespace JoJoStands.Projectiles.NPCStands
     public class StarPlatinumPart4 : ModProjectile
     {
         public static bool SPActive = false;
-        public int targetTimer = 600;
 
         public override void SetStaticDefaults()
         {
@@ -53,20 +52,27 @@ namespace JoJoStands.Projectiles.NPCStands
                 for (int k = 0; k < 200; k++)
                 {
                     NPC npc = Main.npc[k];
-                    if (Main.npc[k].type == mod.NPCType("MarineBiologist"))
+                    if (npc.type == mod.NPCType("MarineBiologist"))
                     {
-                        jotaro = Main.npc[k];
+                        jotaro = npc;
                     }
                 }
             }
-            targetTimer--;
             if (projectile.active)
             {
                 SPActive = true;
             }
-            if (targetTimer <= 0 || !NPCs.MarineBiologist.userIsAlive)
+            if (!NPCs.MarineBiologist.userIsAlive)
             {
                 projectile.Kill();
+            }
+            if (projectile.spriteDirection == 1)
+            {
+                drawOffsetX = -10;
+            }
+            if (projectile.spriteDirection == -1)
+            {
+                drawOffsetX = -60;
             }
             if (jotaro != null)
             {
@@ -76,6 +82,10 @@ namespace JoJoStands.Projectiles.NPCStands
                 projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
                 projectile.velocity *= 0.8f;
                 projectile.direction = (projectile.spriteDirection = jotaro.direction);
+            }
+            if (projectile.timeLeft < 256)
+            {
+                projectile.alpha = -projectile.timeLeft + 255;
             }
 
             Vector2 targetPos = projectile.position;
@@ -94,7 +104,8 @@ namespace JoJoStands.Projectiles.NPCStands
                         targetDist = distance;
                         targetPos = npc.Center;
                         target = true;
-                        targetTimer = 600;
+                        projectile.timeLeft = 600;
+                        projectile.alpha = 0;
                     }
                 }
             }

@@ -93,8 +93,9 @@ namespace JoJoStands.Networking
 			}
 			else
 			{
-				foreach (NPC npc in Main.npc)
+				for (int i = 0; i < Main.maxNPCs; i++)
 				{
+					NPC npc = Main.npc[i];
 					if (npc.active)
 					{
 						npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().frozenInTime = timestopValue;

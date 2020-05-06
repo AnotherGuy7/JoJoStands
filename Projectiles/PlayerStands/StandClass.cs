@@ -74,6 +74,22 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        public bool SpecialKeyPressed()     //checks for if this isn't the server, if the key is pressed, and if the player has no cooldown (is the owner check even needed?)
+        {
+            bool specialPressed = false;
+            if (!Main.dedServ)      //if it's the clinet, as hotkeys don't exist on the server
+                specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+            return specialPressed && !Main.player[projectile.owner].HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer;
+        }
+
+        public bool SpecialKeyPressedNoCooldown()
+        {
+            bool specialPressed = false;
+            if (!Main.dedServ)
+                specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+            return specialPressed && projectile.owner == Main.myPlayer;
+        }
+
         public void Punch(float movementSpeed = 5f)
         {
             Player player = Main.player[projectile.owner];

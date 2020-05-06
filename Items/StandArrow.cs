@@ -31,14 +31,13 @@ namespace JoJoStands.Items
         {
 			if (player.whoAmI == Main.myPlayer)
 			{
-				if (Main.rand.Next(0, 101) > 107)
+				if (Main.rand.Next(0, 101) <= 55)
 				{
-					player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " was deemed unworthy."), player.statLife + 1, player.direction);
+					player.QuickSpawnItem(Main.rand.Next(MyPlayer.standTier1List.ToArray()));
 				}
 				else
 				{
-					//Item.NewItem(player.position, MyPlayer.standTier1List[Main.rand.Next(0, MyPlayer.standTier1List.Count)]);
-					player.QuickSpawnItem(Main.rand.Next(MyPlayer.standTier1List.ToArray()));
+					player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " was deemed unworthy."), player.statLife + 1, player.direction);
 				}
 			}
             return true;

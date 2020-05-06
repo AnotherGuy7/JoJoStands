@@ -13,6 +13,7 @@ namespace JoJoStands.Projectiles
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
+            projectile.hostile = false;
             projectile.scale = 0.5f;
         }
 

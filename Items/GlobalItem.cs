@@ -7,14 +7,12 @@ namespace JoJoStands.Items
 {
     public class JoJoGlobalItem : GlobalItem
     {
-        public override bool InstancePerEntity
-        {
-            get { return true; }
-        }
-        public override bool CloneNewInstances
-        {
-            get { return true; }
-        }
+       public override bool InstancePerEntity => true;
+        public override bool CloneNewInstances => true;
+
+        public float normalGravity = 0f;
+        public float normalFallSpeed = 0f;
+        public bool gravitySaved = false;
 
         public override void ModifyWeaponDamage(Item item, Player player, ref float add, ref float mult, ref float flat)
         {
@@ -85,10 +83,6 @@ namespace JoJoStands.Items
             return true;
         }
 
-        public float normalGravity = 0f;
-        public float normalFallSpeed = 0f;
-        public bool gravitySaved = false;
-
         public override void Update(Item item, ref float gravity, ref float maxFallSpeed)
         {
             Player player = Main.player[Main.myPlayer];
@@ -122,6 +116,11 @@ namespace JoJoStands.Items
             ModRecipe revolverRecipe = new ModRecipe(mod);
             revolverRecipe.AddIngredient(mod.ItemType("RustyRevolver"));
             revolverRecipe.AddIngredient(ItemID.IronBar, 16);
+            revolverRecipe.SetResult(ItemID.Revolver);
+            revolverRecipe.AddRecipe();
+            revolverRecipe = new ModRecipe(mod);
+            revolverRecipe.AddIngredient(mod.ItemType("RustyRevolver"));
+            revolverRecipe.AddIngredient(ItemID.LeadBar, 16);
             revolverRecipe.SetResult(ItemID.Revolver);
             revolverRecipe.AddRecipe();
         }

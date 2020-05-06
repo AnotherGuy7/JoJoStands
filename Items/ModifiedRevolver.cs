@@ -48,6 +48,9 @@ namespace JoJoStands.Items
         public override void HoldItem(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            bool specialPressed = false;
+            if (!Main.dedServ)
+                specialPressed = JoJoStands.SpecialHotKey.JustPressed;
             if (reloadCounter > 0)
             {
                 reloadCounter--;
@@ -68,7 +71,7 @@ namespace JoJoStands.Items
                 }
                 reloadCounter = 60;
             }
-            if (JoJoStands.SpecialHotKey.JustPressed && reloadCounter <= 1 && player.whoAmI == Main.myPlayer)
+            if (specialPressed && reloadCounter <= 1 && player.whoAmI == Main.myPlayer)
             {
                 if (MyPlayer.Sounds)
                 {

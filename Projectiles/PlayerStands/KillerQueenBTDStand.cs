@@ -79,7 +79,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             projectile.direction = projectile.spriteDirection = player.direction;
             projectile.rotation = 0;
 
-            if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("BitesTheDust")))
+            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("BitesTheDust")))
             {
                 player.AddBuff(mod.BuffType("BitesTheDust"), 10);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BiteTheDustEffect"));

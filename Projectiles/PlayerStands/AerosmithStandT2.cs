@@ -137,7 +137,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
-                if (JoJoStands.SpecialHotKey.JustPressed && !bombless && projectile.owner == Main.myPlayer)
+                if (SpecialKeyPressedNoCooldown() && !bombless && projectile.owner == Main.myPlayer)
                 {
                     player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(15));
                     shootCount += shootTime - modPlayer.standSpeedBoosts;

@@ -55,7 +55,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
-            if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")) && projectile.owner == Main.myPlayer)
+            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("TheWorldBuff")))
             {
                 if (JoJoStands.JoJoStandsSounds == null)
                     timestopStartDelay = 120;
@@ -73,7 +73,22 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (timestopStartDelay >= 120)
                 {
                     Timestop(9);
+                    timestopPoseTimer = 60;
                     timestopStartDelay = 0;
+                }
+            }
+            if (timestopPoseTimer > 0)
+            {
+                timestopPoseTimer--;
+                normalFrames = false;
+                attackFrames = false;
+                secondaryAbilityFrames = false;
+                abilityPose = true;
+                Main.mouseLeft = false;
+                Main.mouseRight = false;
+                if (timestopPoseTimer <= 1)
+                {
+                    abilityPose = false;
                 }
             }
 
@@ -142,7 +157,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         player.ConsumeItem(mod.ItemType("Knife"));
                     }
                 }
-                if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && player.HasBuff(mod.BuffType("TheWorldBuff")) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[mod.ProjectileType("RoadRoller")] == 0 && projectile.owner == Main.myPlayer)
+                if (SpecialKeyPressed() && player.HasBuff(mod.BuffType("TheWorldBuff")) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[mod.ProjectileType("RoadRoller")] == 0)
                 {
                     shootCount += 12;
                     Vector2 shootVel = Main.MouseWorld - projectile.Center;
@@ -155,20 +170,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                     int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RoadRoller"), 120, 5f, Main.myPlayer);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
-                }
-                if (timestopPoseTimer > 0)
-                {
-                    timestopPoseTimer--;
-                    normalFrames = false;
-                    attackFrames = false;
-                    secondaryAbilityFrames = false;
-                    abilityPose = true;
-                    Main.mouseLeft = false;
-                    Main.mouseRight = false;
-                    if (timestopPoseTimer <= 1)
-                    {
-                        abilityPose = false;
-                    }
                 }
             }
             if (modPlayer.StandAutoMode)

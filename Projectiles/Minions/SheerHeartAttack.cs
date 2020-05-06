@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.Minions
 {  
-    public class SheerHeartAttack : ModProjectile
+    public class SheerHeartAttack : PlayerStands.StandClass     //so it takes dyes
     {
         public bool saidKocchiwomiro = false;
 
@@ -30,10 +30,11 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void AI()
         {
+            Player player = Main.player[projectile.owner];
             NPC npcTarget = null;
-            if (JoJoStands.SpecialHotKey.JustPressed)
+            if (SpecialKeyPressedNoCooldown())
             {
-                projectile.position = Main.LocalPlayer.position;
+                projectile.position = player.position;
                 projectile.netUpdate = true;
             }
             projectile.velocity.Y += 1.5f;
@@ -104,15 +105,15 @@ namespace JoJoStands.Projectiles.Minions
                 Main.projectile[proj].timeLeft = 2;
                 Main.projectile[proj].netUpdate = true;
                 Main.player[projectile.owner].AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
-                projectile.active = false;
+                projectile.Kill();
             }
             if (projectile.ai[0] == 1f)
             {
                 int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, 142, 7f, Main.myPlayer);
                 Main.projectile[proj].timeLeft = 2;
                 Main.projectile[proj].netUpdate = true;
-                projectile.active = false;
                 Main.player[projectile.owner].AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(4));
+                projectile.Kill();
             }
         }
     }

@@ -117,7 +117,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
                 }
-                if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer)
+                if (SpecialKeyPressed())
                 {
                     player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(25));
                     for (int p = 1; p <= 50; p++)

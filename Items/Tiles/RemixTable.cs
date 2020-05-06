@@ -32,24 +32,32 @@ namespace JoJoStands.Items.Tiles
         {
             ModRecipe recipe = new ModRecipe(mod);      //anvil + copper + any will
             recipe.AddIngredient(ItemID.IronBar, 5);
-            recipe.AddIngredient(mod.ItemType("WillToFight"));
-            recipe.AddIngredient(mod.ItemType("WillToChange"));
-            recipe.AddIngredient(mod.ItemType("WillToControl"));
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
-            recipe.AddIngredient(mod.ItemType("WillToEscape"));
-            recipe.AddIngredient(mod.ItemType("WillToProtect"));
+            recipe.AddIngredient(ItemID.ShadowScale, 3);
+            recipe.AddRecipeGroup("JoJoStandsWills");
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
 
             recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.LeadBar, 5);
-            recipe.AddIngredient(mod.ItemType("WillToFight"));
-            recipe.AddIngredient(mod.ItemType("WillToChange"));
-            recipe.AddIngredient(mod.ItemType("WillToControl"));
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
-            recipe.AddIngredient(mod.ItemType("WillToEscape"));
-            recipe.AddIngredient(mod.ItemType("WillToProtect"));
+            recipe.AddIngredient(ItemID.ShadowScale, 3);
+            recipe.AddRecipeGroup("JoJoStandsWills");
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.IronBar, 5);
+            recipe.AddIngredient(ItemID.TissueSample, 3);
+            recipe.AddRecipeGroup("JoJoStandsWills");
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.LeadBar, 5);
+            recipe.AddIngredient(ItemID.TissueSample, 3);
+            recipe.AddRecipeGroup("JoJoStandsWills");
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

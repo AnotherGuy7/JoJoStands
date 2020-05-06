@@ -144,7 +144,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("EmeraldStringPoint2"), 0, 3f, player.whoAmI, 24f);
                     Main.projectile[proj].netUpdate = true;
                 }
-                if (JoJoStands.SpecialHotKey.JustPressed && player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPoint2")] <= 0 && !spawningField && !player.HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer)
+                if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPoint2")] <= 0 && !spawningField)
                 {
                     spawningField = true;
                     formPosition = projectile.position;

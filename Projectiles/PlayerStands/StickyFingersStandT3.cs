@@ -97,7 +97,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     attackFrames = false;
                     projectile.netUpdate = true;
                 }
-                if (JoJoStands.SpecialHotKey.JustPressed && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersZipperPoint2")] == 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer)
+                if (SpecialKeyPressed() && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersZipperPoint2")] == 0)
                 {
                     shootCount += 20;
                     Vector2 shootVel = Main.MouseWorld - projectile.Center;

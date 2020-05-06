@@ -57,7 +57,6 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_stop"));
                 player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
-                Main.NewText(player.GetModPlayer<MyPlayer>().standCooldownReduction);
                 if (Filters.Scene["GreyscaleEffect"].IsActive())
                 {
                     Filters.Scene["GreyscaleEffect"].Deactivate();

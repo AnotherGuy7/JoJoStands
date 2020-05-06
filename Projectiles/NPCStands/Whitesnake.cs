@@ -10,7 +10,6 @@ namespace JoJoStands.Projectiles.NPCStands
     public class Whitesnake : ModProjectile
     {
         public static bool whitesnakeActive = false;
-        public int targetTimer = 600;
 
         public override void SetStaticDefaults()
         {
@@ -35,10 +34,11 @@ namespace JoJoStands.Projectiles.NPCStands
             projectile.npcProj = true;
         }
 
-        protected float shootCool = 80f;       //how fast the minion can shoot
-        protected float shootSpeed = 9f;     //how fast the projectile the minion shoots goes
-        public bool normalFrames = false;
-        public bool attackFrames = false;
+        private int shootTime = 30;
+        private float shootSpeed = 9f;     //how fast the projectile the minion shoots goes
+        private bool normalFrames = false;
+        private bool attackFrames = false;
+        private float shootCount = 0f;
 
         public override void Kill(int timeLeft)
         {
@@ -53,25 +53,27 @@ namespace JoJoStands.Projectiles.NPCStands
                 for (int k = 0; k < 200; k++)
                 {
                     NPC npc = Main.npc[k];
-                    if (Main.npc[k].type == mod.NPCType("Priest"))
+                    if (npc.type == mod.NPCType("Priest"))
                     {
-                        pucci = Main.npc[k];
+                        pucci = npc;
                     }
                 }
             }
-            targetTimer--;
+            if (shootCount > 0)
+            {
+                shootCount--;
+            }
             if (projectile.active)
             {
                 whitesnakeActive = true;
             }
-            if (targetTimer <= 0 || !NPCs.Priest.userIsAlive)
+            if (!NPCs.Priest.userIsAlive)
             {
-                projectile.alpha++;
+                projectile.Kill();
             }
-            if (projectile.alpha >= 255)
+            if (projectile.timeLeft < 256)
             {
-                whitesnakeActive = false;
-                projectile.active = false;
+                projectile.alpha = -projectile.timeLeft + 255;
             }
             if (pucci != null)
             {
@@ -86,7 +88,6 @@ namespace JoJoStands.Projectiles.NPCStands
             Vector2 targetPos = projectile.position;
             float targetDist = 150f;
             bool target = false;
-            projectile.tileCollide = true;
             for (int k = 0; k < 200; k++)
             {
                 NPC npc = Main.npc[k];
@@ -99,72 +100,41 @@ namespace JoJoStands.Projectiles.NPCStands
                         targetDist = distance;
                         targetPos = npc.Center;
                         target = true;
-                        attackFrames = true;
-                        normalFrames = false;
-                        targetTimer = 600;
-                    }
-                    else
-                    {
-                        attackFrames = false;
+                        projectile.timeLeft = 600;
+                        projectile.alpha = 0;
                     }
                 }
             }
             SelectFrame();
-            if (projectile.ai[1] > 0f)
+            attackFrames = target;
+            if (target && shootCount <= 0 && projectile.frame == 4)
             {
-                projectile.ai[1] += 1f;
-                if (Main.rand.Next(3) == 0)
+                shootCount += shootTime;
+                if ((targetPos - projectile.Center).X > 0f)
                 {
-                    projectile.ai[1] += 1f;
+                    projectile.spriteDirection = projectile.direction = 1;
                 }
-            }
-            if (projectile.ai[1] > shootCool)
-            {
-                projectile.ai[1] = 0f;
+                else if ((targetPos - projectile.Center).X < 0f)
+                {
+                    projectile.spriteDirection = projectile.direction = -1;
+                }
+                Vector2 shootVel = targetPos - projectile.Center;
+                if (shootVel == Vector2.Zero)
+                {
+                    shootVel = new Vector2(0f, 1f);
+                }
+                shootVel.Normalize();
+                shootVel *= shootSpeed;
+                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Disc"), 40, 4f);
+                Main.projectile[proj].npcProj = true;
+                Main.projectile[proj].netUpdate = true;
                 projectile.netUpdate = true;
-            }
-            if (projectile.ai[0] == 0f)
-            {
-                if (target)
-                {
-                    if ((targetPos - projectile.Center).X > 0f)
-                    {
-                        projectile.spriteDirection = (projectile.direction = 1);
-                    }
-                    else if ((targetPos - projectile.Center).X < 0f)
-                    {
-                        projectile.spriteDirection = (projectile.direction = -1);
-                    }
-                    if (projectile.ai[1] == 0f)
-                    {
-                        projectile.ai[1] = 1f;
-                        Vector2 shootVel = targetPos - projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                        {
-                            shootVel = new Vector2(0f, 1f);
-                        }
-                        shootVel.Normalize();
-                        shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Disc"), 42, 1f, Main.myPlayer, 0, 0);
-                        Main.projectile[proj].npcProj = true;
-                        Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
-                    }
-                }
-            }
-            if (projectile.frame >= 4 && projectile.frame <= 7)
-            {
-                projectile.ai[0] = 0f;
-            }
-            else
-            {
-                projectile.ai[0] = 1f;
             }
         }
 
-        public virtual void SelectFrame()       //you can't forget that there is a frame 0!!!
+        public virtual void SelectFrame()
         {
-            if (attackFrames)       //2-3 are the attack frames
+            if (attackFrames)
             {
                 normalFrames = false;
                 projectile.frameCounter++;
@@ -178,7 +148,7 @@ namespace JoJoStands.Projectiles.NPCStands
                     projectile.frame = 0;
                 }
             }
-            if (normalFrames)       //first 2 frames are the idle frames
+            if (normalFrames)
             {
                 attackFrames = false;
                 projectile.frame = 1;

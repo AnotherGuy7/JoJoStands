@@ -10,7 +10,7 @@ using System.IO;
 
 namespace JoJoStands.Projectiles.PlayerStands.GER
 {
-    public class GoldExperienceRequiemStand : ModProjectile      //has 2 poses
+    public class GoldExperienceRequiemStand : StandClass
     {
         public override void SetDefaults()
         {
@@ -203,7 +203,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
 
                 if (projectile.owner == Main.myPlayer)
                 {
-                    if (JoJoStands.SpecialHotKey.JustPressed)
+                    if (SpecialKeyPressedNoCooldown())
                     {
                         modPlayer.GEAbilityNumber += 1;
                         saidAbility = false;

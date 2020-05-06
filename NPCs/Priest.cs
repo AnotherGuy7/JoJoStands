@@ -58,7 +58,7 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
 
         public override void SetChatButtons(ref string button, ref string button2)  //Allows you to set the text for the buttons that appear on this town NPC's chat window. 
         {
-            button = "Buy Stand Discs";   //this defines the buy button name
+            button = "Buy Stands";   //this defines the buy button name
         }
         public override void OnChatButtonClicked(bool firstButton, ref bool openShop) //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
         {
@@ -70,18 +70,10 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
 
         public override void SetupShop(Chest shop, ref int nextSlot)       //Allows you to add items to this town NPC's shop. Add an item by setting the defaults of shop.item[nextSlot] then incrementing nextSlot.
         {
-            shop.item[nextSlot].SetDefaults(mod.ItemType("StarPlatinumDisc"));  //this is an example of how to add a modded item
-            nextSlot++;
-            shop.item[nextSlot].SetDefaults(mod.ItemType("HierophantGreenDisc"));
-            nextSlot++;
-            shop.item[nextSlot].SetDefaults(mod.ItemType("KillerQueenDisc"));
-            nextSlot++;
-            shop.item[nextSlot].SetDefaults(mod.ItemType("MagiciansRedDisc"));
-            nextSlot++;
-            if (NPC.downedPlantBoss)
+            for (int i = 0; i < MyPlayer.standTier1List.Count; i++)     //auto builds the list of items, also sets their price to 1 platinum without affecting original items
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType("AerosmithDisc"));
-                nextSlot++;
+                shop.item[i].SetDefaults(MyPlayer.standTier1List[i]);
+                shop.item[i].value = Item.buyPrice(0, 50, 0, 0);
             }
         }
 

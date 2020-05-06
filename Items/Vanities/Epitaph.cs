@@ -20,7 +20,6 @@ namespace JoJoStands.Items.Vanities
         {
 			item.width = 18;
 			item.height = 18;
-			item.value = Item.buyPrice(1, 0, 0, 0);
 			item.rare = 8;
             item.vanity = true;
 		}
