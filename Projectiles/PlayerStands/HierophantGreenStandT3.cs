@@ -40,7 +40,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override int shootTime => 20;
         public override int projectileDamage => 56;
-        public override int halfStandHeight => 20;
+        public override int halfStandHeight => 25;
+        public override int drawOffsetLeft => 0;
+        public override int drawOffsetRight => 0;
 
         public bool spawningField = false;
         public float numberSpawned = 0;
@@ -56,7 +58,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                 shootCount--;
             }
             Player player = Main.player[projectile.owner];
-            Vector2 vector131 = player.Center;
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             Lighting.AddLight((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 35, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);

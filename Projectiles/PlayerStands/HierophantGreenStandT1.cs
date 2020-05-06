@@ -35,8 +35,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override int shootTime => 40;
         public override int projectileDamage => 12;
-        public override int halfStandHeight => 20;
-
+        public override int halfStandHeight => 25;
+        public override int drawOffsetLeft => 0;
+        public override int drawOffsetRight => 0;
 
         public override void AI()
         {

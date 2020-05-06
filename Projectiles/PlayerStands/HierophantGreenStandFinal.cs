@@ -40,6 +40,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override int shootTime => 15;
         public override int projectileDamage => 72;
+        public override int halfStandHeight => 25;
+        public override int drawOffsetLeft => 0;
+        public override int drawOffsetRight => 0;
 
         public bool spawningField = false;
         public float numberSpawned = 0;

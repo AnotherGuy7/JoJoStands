@@ -6,7 +6,7 @@ using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles.Minions
 {  
-    public class TuskAct4Minion : ModProjectile
+    public class TuskAct4Minion : PlayerStands.StandClass
     {
         public override void SetStaticDefaults()
         {
@@ -49,11 +49,7 @@ namespace JoJoStands.Projectiles.Minions
             bool target = false;
             float targetDist = 98f;
             projectile.frameCounter++;
-            if (player.dead)
-            {
-                modPlayer.TuskAct4Minion = false;
-            }
-            if (modPlayer.TuskAct4Minion)
+            if (modPlayer.TuskActNumber == 4)
             {
                 projectile.timeLeft = 2;
             }
@@ -151,7 +147,7 @@ namespace JoJoStands.Projectiles.Minions
             }
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDrawExtras(SpriteBatch spriteBatch)
         {
             if (goldenRectangleEffectTimer > 0)
             {

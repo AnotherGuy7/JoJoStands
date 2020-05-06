@@ -14,6 +14,7 @@ namespace JoJoStands.Mounts
 	{
 		public override void SetDefaults()			//basically the unicorn mount
 		{
+			mountData.buff = mod.BuffType("SlowDancerBuff");
 			mountData.heightBoost = 34;
 			mountData.flightTimeMax = 0;
 			mountData.fallDamage = 0.2f;

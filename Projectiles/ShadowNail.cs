@@ -23,36 +23,16 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             projectile.rotation += (float)projectile.direction * 0.8f;
-            if (projectile.position != Main.MouseWorld)
+            if (projectile.owner == Main.myPlayer)
             {
-                if (projectile.position.X < Main.MouseWorld.X)        //if it's more to the right, go left
+                projectile.netUpdate = true;
+                projectile.velocity = Main.MouseWorld - projectile.position;
+                projectile.velocity.Normalize();
+                projectile.velocity *= 5f;
+                if (projectile.timeLeft <= 275 && Main.mouseRight)
                 {
-                    projectile.velocity.X = 5f;
+                    projectile.Kill();
                 }
-                else if (projectile.position.X > Main.MouseWorld.X)       //if it's more to the left, stay the same...
-                {
-                    projectile.velocity.X = -5f;
-                }
-                if (projectile.position.Y > Main.MouseWorld.Y)       //if it's lower, go up to it
-                {
-                    projectile.velocity.Y = -5f;
-                }
-                else if (projectile.position.Y < Main.MouseWorld.Y)      //if it's higher, go down to it
-                {
-                    projectile.velocity.Y = 5f;
-                }
-                if (projectile.position.Y == Main.MouseWorld.Y)
-                {
-                    projectile.velocity.Y = 0f;
-                }
-                if (projectile.position.X == Main.MouseWorld.X)
-                {
-                    projectile.velocity.X = 0f;
-                }
-            }
-            if (projectile.timeLeft <= 275 && Main.mouseRight)
-            {
-                projectile.Kill();
             }
         }
 

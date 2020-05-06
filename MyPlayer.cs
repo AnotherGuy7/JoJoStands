@@ -36,10 +36,12 @@ namespace JoJoStands
         public int poseDuration = 300;
         public int poseDurationMinus = 290;
         public int menacingFrames = 0;
-        int tbcCounter = 0;
+        public int tbcCounter = 0;
         public int ActivationTimer = 0;
         public int GEAbilityNumber = 0;
         public int TuskActNumber = 0;
+        public int equippedTuskAct = 0;
+        public int tuskShootCooldown = 0;
         public int TimestopEffectDurationTimer = 0;
         public int hamonChargeCounter = 0;
         public int sexPistolsLeft = 6;
@@ -54,10 +56,6 @@ namespace JoJoStands
         public int standSpeedBoosts = 0;
         public float standCooldownReduction = 0f;
 
-        public bool TuskAct1Pet = false;
-        public bool TuskAct2Pet = false;
-        public bool TuskAct3Pet = false;
-        public bool TuskAct4Minion = false;
         public bool wearingEpitaph = false;
         public bool achievedInfiniteSpin = false;
         public bool StandOut = false;
@@ -79,6 +77,7 @@ namespace JoJoStands
         public bool canRevertFromKQBTD = false;
         public bool showingCBLayer = false;     //this is a bool that's needed to sync so that the Century Boy layer shows up for other clients in Multiplayer
         //public bool dyingVampire = false;
+        private bool forceChangedTusk = false;
 
         public bool ZoneViralMeteorite;
 
@@ -93,10 +92,6 @@ namespace JoJoStands
 
         public override void ResetEffects()
         {
-            TuskAct1Pet = false;
-            TuskAct2Pet = false;
-            TuskAct3Pet = false;
-            TuskAct4Minion = false;
             UI.BulletCounter.Visible = false;
             controllingAerosmith = false;
             wearingEpitaph = false;
@@ -296,6 +291,11 @@ namespace JoJoStands
                 {
                     sexPistolsTier = 0;
                 }
+                if (equippedTuskAct != 0)
+                {
+                    equippedTuskAct = 0;
+                    TuskActNumber = 0;
+                }
                 if (showingCBLayer)
                 {
                     showingCBLayer = false;
@@ -377,7 +377,7 @@ namespace JoJoStands
             items.Add(item);
             if (Main.rand.Next(0, 101) <= 20)
             {
-                int inheritanceStandChance = Main.rand.Next(0, standTier1List.Count /*+ 1*/);
+                int inheritanceStandChance = Main.rand.Next(0, standTier1List.Count);
                 Item standTier1 = new Item();
                 standTier1.SetDefaults(standTier1List[inheritanceStandChance]);
                 standTier1.stack = 1;
@@ -633,7 +633,7 @@ namespace JoJoStands
                 tbcCounter = 0;
             }
 
-            if (goldenSpinCounter > 0)
+            if (goldenSpinCounter > 0)          //golden spin stuff
             {
                 spinSubtractionTimer++;
                 if (spinSubtractionTimer >= 90 && player.mount.Type == mod.GetMount("SlowDancerMount").Type)
@@ -654,6 +654,25 @@ namespace JoJoStands
                         UI.GoldenSpinMeter.Visible = false;
                     }
                 }
+                if (equippedTuskAct != 0)
+                {
+                    if (goldenSpinCounter > 0)
+                    {
+                        if (!UI.GoldenSpinMeter.Visible)
+                        {
+                            UI.GoldenSpinMeter.Visible = true;
+                        }
+                        if (achievedInfiniteSpin && !forceChangedTusk)
+                        {
+                            TuskActNumber = 4;
+                            forceChangedTusk = true;
+                        }
+                        if (goldenSpinCounter <= 1)     //would reset anyway if the player isn't holding Tusk, cause it resets whenever you hold the item again
+                        {
+                            forceChangedTusk = false;
+                        }
+                    }
+                }
             }
             if (goldenSpinCounter >= 300)
             {
@@ -661,7 +680,7 @@ namespace JoJoStands
                 achievedInfiniteSpin = true;
             }
 
-            if (sexPistolsTier != 0)
+            if (sexPistolsTier != 0)        //sex pistols reload stuff
             {
                 if (sexPistolsLeft < 6)
                 {
@@ -670,6 +689,118 @@ namespace JoJoStands
                     {
                         sexPistolsLeft++;
                         sexPistolsRecoveryTimer = 0;
+                    }
+                }
+            }
+
+            if (equippedTuskAct != 0 && player.whoAmI == Main.myPlayer)     //Tusk stuff
+            {
+                bool specialPressed = false;
+                if (!Main.dedServ)
+                    specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+                if (specialPressed)
+                {
+                    TuskActNumber += 1;
+                }
+                if (equippedTuskAct >= 3)
+                {
+                    if (TuskActNumber > equippedTuskAct)
+                        TuskActNumber = 1;
+                }
+                if (equippedTuskAct == 4)
+                {
+                    if (achievedInfiniteSpin)
+                    {
+                        if (TuskActNumber > equippedTuskAct)
+                            TuskActNumber = 1;
+                    }
+                    else
+                    {
+                        if (TuskActNumber > 3)
+                            TuskActNumber = 1;
+                    }
+                }
+                if (tuskShootCooldown > 0)
+                    tuskShootCooldown--;
+                if (TuskActNumber <= 3)
+                {
+                    if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct" + TuskActNumber + "Pet")] <= 0)
+                    {
+                        Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct" + TuskActNumber + "Pet"), 0, 0f, Main.myPlayer);
+                    }
+                }
+                else
+                {
+                    if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct4Minion")] <= 0)
+                        Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct4Minion"), 0, 0f, Main.myPlayer);
+                }
+                if (TuskActNumber == 1)
+                {
+                    if (Main.mouseLeft && tuskShootCooldown <= 0)
+                    {
+                        tuskShootCooldown += 35 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item67);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();      //to normalize is to turn it into an angle
+                        shootVelocity *= 30f;       //multiply the angle by the speed to get the effect
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts), 4f, Main.myPlayer);
+                    }
+                }
+                if (TuskActNumber == 2)
+                {
+                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
+                    {
+                        player.channel = true;
+                        tuskShootCooldown += 35 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item67);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 4f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(49 * standDamageBoosts), 5f, Main.myPlayer);
+                    }
+                }
+                if (TuskActNumber == 3)
+                {
+                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
+                    {
+                        player.channel = true;
+                        tuskShootCooldown += 35 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item67);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 4f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * standDamageBoosts), 6f, Main.myPlayer);
+                    }
+                    if (Main.mouseRight && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0 && tuskShootCooldown <= 0)
+                    {
+                        tuskShootCooldown += 120 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item78);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 5f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 0, 0f, Main.myPlayer);
+                    }
+                }
+                if (TuskActNumber == 4)
+                {
+                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
+                    {
+                        player.channel = true;
+                        tuskShootCooldown += 15 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item67);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 60f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(305 * standDamageBoosts), 7f, Main.myPlayer);
+                    }
+                    if (Main.mouseRight && tuskShootCooldown <= 0)
+                    {
+                        tuskShootCooldown += 120 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item78);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 30f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, Main.myPlayer);
                     }
                 }
             }
@@ -849,6 +980,26 @@ namespace JoJoStands
             {
                 sexPistolsTier = 4;
             }
+            else if (inputItem.type == mod.ItemType("TuskAct1"))
+            {
+                equippedTuskAct = 1;
+                TuskActNumber = 1;
+            }
+            else if (inputItem.type == mod.ItemType("TuskAct2"))
+            {
+                equippedTuskAct = 2;
+                TuskActNumber = 2;
+            }
+            else if (inputItem.type == mod.ItemType("TuskcAct3"))
+            {
+                equippedTuskAct = 3;
+                TuskActNumber = 3;
+            }
+            else if (inputItem.type == mod.ItemType("TuskAct4"))
+            {
+                equippedTuskAct = 4;
+                TuskActNumber = 3;
+            }
             else if (inputItem.type == mod.ItemType("MagiciansRedT1"))
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("MagiciansRedStandT1"), 0, 0f, Main.myPlayer);
@@ -902,19 +1053,11 @@ namespace JoJoStands
                 StandOut = false;
                 if (!inputItem.IsAir)
                 {
-                    if (inputItem.type == mod.ItemType("TuskAct1") || inputItem.type == mod.ItemType("TuskAct2") || inputItem.type == mod.ItemType("TuskAct3") || inputItem.type == mod.ItemType("TuskAct4"))
-                    {
-                        Main.NewText(inputItem.Name + " is not a stand that belongs in the Stand Slot! (Check the item tooltips)", Color.Red);
-                    }
-                    else
-                    {
-                        Main.NewText(inputItem.Name + " is not a stand!", Color.Red);
-                    }
+                    Main.NewText(inputItem.Name + " is not a stand!", Color.Red);
                 }
                 if (inputItem.IsAir)
                 {
                     Main.NewText("There is no stand in the Stand Slot!", Color.Red);
-
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {

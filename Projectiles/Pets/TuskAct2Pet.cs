@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.Pets
 {
-    public class TuskAct2Pet : ModProjectile
+    public class TuskAct2Pet : PlayerStands.StandClass
     {
         public override void SetStaticDefaults()
         {
@@ -31,11 +31,7 @@ namespace JoJoStands.Projectiles.Pets
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             projectile.frameCounter++;
-            if (player.dead)
-            {
-                modPlayer.TuskAct2Pet = false;
-            }
-            if (modPlayer.TuskAct2Pet)
+            if (modPlayer.TuskActNumber == 2)
             {
                 projectile.timeLeft = 2;
             }
