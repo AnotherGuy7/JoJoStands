@@ -14,7 +14,7 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.GetModPlayer<MyPlayer>().standAccessory)
+            if (player.GetModPlayer<MyPlayer>().standAccessory)     //rather than having to check the Stand Slot for any 4 items
             {
                 player.buffTime[buffIndex] = 10;
             }

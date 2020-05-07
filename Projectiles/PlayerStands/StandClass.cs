@@ -137,7 +137,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (shootCount <= 0)
             {
-                shootCount += punchTime - modPlayer.standSpeedBoosts;
+                if ((punchTime - modPlayer.standSpeedBoosts) >= 2)      //a punch speed cap of 2
+                    shootCount += punchTime - modPlayer.standSpeedBoosts;
+                else
+                    shootCount += 2;
                 Vector2 shootVel = Main.MouseWorld - projectile.Center;
                 if (shootVel == Vector2.Zero)
                 {
@@ -313,7 +316,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 PlayPunchSound();
                             }
-                            shootCount += punchTime - modPlayer.standSpeedBoosts;
+                            if ((punchTime - modPlayer.standSpeedBoosts) >= 2)
+                                shootCount += punchTime - modPlayer.standSpeedBoosts;
+                            else
+                                shootCount += 2;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
@@ -431,7 +437,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 PlayPunchSound();
                             }
-                            shootCount += punchTime - modPlayer.standSpeedBoosts;
+                            if ((punchTime - modPlayer.standSpeedBoosts) >= 2)
+                                shootCount += punchTime - modPlayer.standSpeedBoosts;
+                            else
+                                shootCount += 2;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {

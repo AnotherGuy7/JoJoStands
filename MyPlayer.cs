@@ -831,18 +831,22 @@ namespace JoJoStands
             else if (inputItem.type == mod.ItemType("LockT1"))
             {
                 standAccessory = true;
+                player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT2"))
             {
                 standAccessory = true;
+                player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT3"))
             {
                 standAccessory = true;
+                player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT4"))
             {
                 standAccessory = true;
+                player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("StarPlatinumT1"))       //the normal stands
             {

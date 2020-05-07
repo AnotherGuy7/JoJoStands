@@ -19,8 +19,8 @@ namespace JoJoStands.Items.Armor
             item.width = 16;
             item.height = 16;
             item.maxStack = 1;
-            item.value = Item.buyPrice(0, 50, 0, 0);
-            item.rare = ItemRarityID.Blue;
+            item.value = Item.buyPrice(0, 10, 0, 0);
+            item.rare = ItemRarityID.Pink;
             item.accessory = true;
         }
 

@@ -12,14 +12,14 @@ namespace JoJoStands.Items.Armor
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Greater Amulet of Control");
-            Tooltip.SetDefault("Lowered Stand Special Ability Cooldowns by 10%");
+            Tooltip.SetDefault("10% Stand Ability cooldown reduction");
         }
         public override void SetDefaults()
         {
             item.width = 16;
             item.height = 16;
             item.maxStack = 1;
-            item.value = Item.buyPrice(0, 50, 0, 0);
+            item.value = Item.buyPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Pink;
             item.accessory = true;
         }

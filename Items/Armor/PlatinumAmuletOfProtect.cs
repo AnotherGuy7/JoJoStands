@@ -12,21 +12,21 @@ namespace JoJoStands.Items.Armor
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Amulet of Protect");
-            Tooltip.SetDefault("Increased Defense while Stand is out.");
+            Tooltip.SetDefault("Increased defense while Stand is out");
         }
         public override void SetDefaults()
         {
             item.width = 16;
             item.height = 16;
             item.maxStack = 1;
-            item.value = Item.buyPrice(0, 50, 0, 0);
+            item.value = Item.buyPrice(0, 0, 25, 0);
             item.rare = ItemRarityID.Blue;
             item.accessory = true;
         }
 
         public override void UpdateEquip(Player player)
         {
-            if (player.GetModPlayer<MyPlayer>().StandOut == true)
+            if (player.GetModPlayer<MyPlayer>().StandOut)
             {
                 player.statDefense += 5;
             }

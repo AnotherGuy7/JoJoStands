@@ -12,15 +12,15 @@ namespace JoJoStands.Items.Armor
         {
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Greater Amulet of Escape");
-            Tooltip.SetDefault("Increased Stand Attack Speed.");
+            Tooltip.SetDefault("2 increased Stand attack speed");
         }
         public override void SetDefaults()
         {
             item.width = 16;
             item.height = 16;
             item.maxStack = 1;
-            item.value = Item.buyPrice(0, 50, 0, 0);
-            item.rare = ItemRarityID.Blue;
+            item.value = Item.buyPrice(0, 10, 0, 0);
+            item.rare = ItemRarityID.Pink;
             item.accessory = true;
         }
 
