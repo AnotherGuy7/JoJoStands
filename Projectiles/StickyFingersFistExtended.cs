@@ -19,7 +19,8 @@ namespace JoJoStands.Projectiles
             projectile.ignoreWater = true;
         }
 
-        public bool living = true;
+        private bool living = true;
+        private bool playedSound = false;
 
         public override void AI()       //all this so that the other chain doesn't draw... yare yare. It was mostly just picking out types
         {
@@ -38,6 +39,11 @@ namespace JoJoStands.Projectiles
             projectile.spriteDirection = projectile.direction;
             Vector2 rota = ownerProj.Center - projectile.Center;
             projectile.rotation = (-rota * projectile.direction).ToRotation();
+            if (!playedSound && JoJoStands.JoJoStandsSounds != null)
+            {
+                Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Zip"));
+                playedSound = true;
+            }
             //projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
 
             /*if (JoJoStands.StandControlUp.JustPressed)

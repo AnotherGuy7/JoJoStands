@@ -159,6 +159,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 if (SpecialKeyPressed() && player.HasBuff(mod.BuffType("TheWorldBuff")) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[mod.ProjectileType("RoadRoller")] == 0)
                 {
+                    if (JoJoStands.JoJoStandsSounds != null)
+                    {
+                        Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/RoadRollerDa"));
+                    }
                     shootCount += 12;
                     Vector2 shootVel = Main.MouseWorld - projectile.Center;
                     if (shootVel == Vector2.Zero)

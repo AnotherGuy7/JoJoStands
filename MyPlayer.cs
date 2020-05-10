@@ -535,6 +535,17 @@ namespace JoJoStands
                     }
                     TimestopEffectDurationTimer--;
                 }
+                if (!TheWorldEffect)
+                {
+                    if (Filters.Scene["GreyscaleEffect"].IsActive())
+                    {
+                        Filters.Scene["GreyscaleEffect"].Deactivate();
+                    }
+                    if (Filters.Scene["TimestopEffectShader"].IsActive())
+                    {
+                        Filters.Scene["TimestopEffectShader"].Deactivate();
+                    }
+                }
                 if (BackToZero)
                 {
                     if (!Filters.Scene["GreenEffect"].IsActive())
@@ -994,7 +1005,7 @@ namespace JoJoStands
                 equippedTuskAct = 2;
                 TuskActNumber = 2;
             }
-            else if (inputItem.type == mod.ItemType("TuskcAct3"))
+            else if (inputItem.type == mod.ItemType("TuskAct3"))
             {
                 equippedTuskAct = 3;
                 TuskActNumber = 3;

@@ -51,7 +51,7 @@ namespace JoJoStands.Items
         public override bool AltFunctionUse(Item item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.StandOut)
+            if (mPlayer.StandOut && !mPlayer.StandAutoMode && !mPlayer.standAccessory)
             {
                 return false;
             }
@@ -61,7 +61,7 @@ namespace JoJoStands.Items
         public override bool CanUseItem(Item item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.StandOut && !mPlayer.StandAutoMode && mPlayer.sexPistolsTier == 0)
+            if (mPlayer.StandOut && !mPlayer.StandAutoMode && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory)
             {
                 if (item.potion || (item.mountType != -1))      //default value for mountType is -1
                 {

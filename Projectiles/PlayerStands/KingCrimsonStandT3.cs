@@ -32,11 +32,15 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override int drawOffsetLeft => 0;
 
         public int updateTimer = 0;
+        private Vector2 velocityAddition;
+        private float mouseDistance;
 
         public override void AI()
         {
             SelectFrame();
             updateTimer = 0;
+            if (shootCount > 0)
+                shootCount--;
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             projectile.frameCounter++;
@@ -59,7 +63,50 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
-                    Punch();
+                    HandleDrawOffsets();
+                    attackFrames = true;
+                    normalFrames = false;
+                    Main.mouseRight = false;
+                    projectile.netUpdate = true;
+                    float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
+                    projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
+                    if (Main.MouseWorld.X > projectile.position.X)
+                    {
+                        projectile.spriteDirection = 1;
+                        projectile.direction = 1;
+                    }
+                    if (Main.MouseWorld.X < projectile.position.X)
+                    {
+                        projectile.spriteDirection = -1;
+                        projectile.direction = -1;
+                    }
+                    velocityAddition = Main.MouseWorld - projectile.position;
+                    velocityAddition.Normalize();
+                    velocityAddition *= 5f;
+                    mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
+                    if (mouseDistance > 40f)
+                    {
+                        projectile.velocity = player.velocity + velocityAddition;
+                    }
+                    if (mouseDistance <= 40f)
+                    {
+                        projectile.velocity = Vector2.Zero;
+                    }
+                    if (shootCount <= 0 && (projectile.frame == 8 || projectile.frame == 4))
+                    {
+                        shootCount += punchTime - modPlayer.standSpeedBoosts;
+                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        if (shootVel == Vector2.Zero)
+                        {
+                            shootVel = new Vector2(0f, 1f);
+                        }
+                        shootVel.Normalize();
+                        shootVel *= shootSpeed;
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(punchDamage * modPlayer.standDamageBoosts), punchKnockback, Main.myPlayer, fistWhoAmI);
+                        Main.projectile[proj].netUpdate = true;
+                        projectile.netUpdate = true;
+                    }
+                    LimitDistance();
                 }
                 else
                 {

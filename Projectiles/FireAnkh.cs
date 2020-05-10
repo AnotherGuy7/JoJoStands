@@ -20,8 +20,15 @@ namespace JoJoStands.Projectiles
             projectile.penetrate = 2;
         }
 
+        private bool playedSound = false;
+
         public override void AI()
         {
+            if (!playedSound)
+            {
+                Main.PlaySound(SoundID.Item20);
+                playedSound = true;
+            }
             if (projectile.wet || projectile.honeyWet)
             {
                 projectile.scale -= 0.05f;

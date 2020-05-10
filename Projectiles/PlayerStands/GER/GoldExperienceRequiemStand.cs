@@ -45,6 +45,8 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
         public bool saidAbility = true;
         public int regencounter = 0;
         public int updateTimer = 0;
+        public override string punchSoundName => "GER_Muda";
+
 
         public override void AI()
         {
@@ -75,6 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
                     rockFlickFrames = false;
                     Main.mouseRight = false;
                     projectile.netUpdate = true;
+                    PlayPunchSound();
                     float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
                     projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
                     if (Main.MouseWorld.X > projectile.position.X)
@@ -89,30 +92,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
                         projectile.direction = -1;
                         drawOffsetX = -20;
                     }
-                    if (projectile.position.X < Main.MouseWorld.X - 5f)
-                    {
-                        velocityAddition.X = 5f;
-                    }
-                    if (projectile.position.X > Main.MouseWorld.X + 5f)
-                    {
-                        velocityAddition.X = -5f;
-                    }
-                    if (projectile.position.X > Main.MouseWorld.X - 5f && projectile.position.X < Main.MouseWorld.X + 5f)
-                    {
-                        velocityAddition.X = 0f;
-                    }
-                    if (projectile.position.Y > Main.MouseWorld.Y + 5f)
-                    {
-                        velocityAddition.Y = -5f;
-                    }
-                    if (projectile.position.Y < Main.MouseWorld.Y - 5f)
-                    {
-                        velocityAddition.Y = 5f;
-                    }
-                    if (projectile.position.Y < Main.MouseWorld.Y + 5f && projectile.position.Y > Main.MouseWorld.Y - 5f)
-                    {
-                        velocityAddition.Y = 0f;
-                    }
+                    velocityAddition = Main.MouseWorld - projectile.position;
+                    velocityAddition.Normalize();
+                    velocityAddition *= 5f;
                     mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
                     if (mouseDistance > 40f)
                     {
@@ -157,6 +139,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GER
                     projectile.direction = (projectile.spriteDirection = player.direction);
                     projectile.rotation = 0;
                     drawOffsetX = 0;
+                    StopSounds();
                 }
                 if (!attackFrames && projectile.owner == Main.myPlayer)
                 {

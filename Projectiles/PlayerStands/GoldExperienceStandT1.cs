@@ -24,6 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override float tierNumber => 1f;
         public override int drawOffsetRight => -10;
         public override int drawOffsetLeft => -30;
+        public override string punchSoundName => "GER_Muda";
 
         public int updateTimer = 0;
 

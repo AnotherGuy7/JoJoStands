@@ -170,18 +170,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             normalFrames = true;
             attackFrames = false;
             LimitDistance();
-            if (playedBeginning)
-            {
-                if (beginningSoundInstance != null)
-                {
-                    beginningSoundInstance.Stop();
-                }
-                if (punchingSoundInstance != null)
-                {
-                    punchingSoundInstance.Stop();
-                }
-                playedBeginning = false;
-            }
+            StopSounds();
         }
 
         public void StayBehindWithAbility()
@@ -202,18 +191,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             normalFrames = true;
             attackFrames = false;
             LimitDistance();
-            if (playedBeginning)
-            {
-                if (beginningSoundInstance != null)
-                {
-                    beginningSoundInstance.Stop();
-                }
-                if (punchingSoundInstance != null)
-                {
-                    punchingSoundInstance.Stop();
-                }
-                playedBeginning = false;
-            }
+            StopSounds();
         }
 
         public void GoInFront()
@@ -533,6 +511,22 @@ namespace JoJoStands.Projectiles.PlayerStands
                     Main.PlaySoundInstance(punchingSoundInstance);
                     playedBeginning = true;
                 }
+            }
+        }
+
+        public void StopSounds()
+        {
+            if (playedBeginning)
+            {
+                if (beginningSoundInstance != null)
+                {
+                    beginningSoundInstance.Stop();
+                }
+                if (punchingSoundInstance != null)
+                {
+                    punchingSoundInstance.Stop();
+                }
+                playedBeginning = false;
             }
         }
 

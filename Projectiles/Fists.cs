@@ -37,11 +37,11 @@ namespace JoJoStands.Projectiles
             {
                 crit = true;
             }
-            if (mPlayer.destroyAmuletEquipped == true)
+            if (mPlayer.destroyAmuletEquipped)
             {
                 target.AddBuff(BuffID.OnFire, 60 * 3);
             }
-            if (mPlayer.greaterDestroyEquipped == true)
+            if (mPlayer.greaterDestroyEquipped)
             {
                 target.AddBuff(BuffID.CursedInferno, 60 * 10);
             }
@@ -114,9 +114,16 @@ namespace JoJoStands.Projectiles
             }
         }
 
+        public bool playedSound = false;
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+            if (!playedSound)
+            {
+                Main.PlaySound(SoundID.Item1);
+                playedSound = true;
+            }
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int p = 0; p < Main.maxProjectiles; p++)

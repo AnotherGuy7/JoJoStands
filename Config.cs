@@ -87,15 +87,18 @@ namespace JoJoStands
             MyPlayer.SecretReferences = SecretReferences;
             MyPlayer.soundVolume = soundVolume;
             UI.HamonBarState.changedInConfig = true;
-            if (deathsound >= 6)
+            if (JoJoStands.JoJoStandsSounds == null)
             {
-                Main.NewText("There is are no deathsounds over 5!");
-                deathsound = 0;
-            }
-            if (deathsound <= -1)
-            {
-                Main.NewText("There is are no deathsounds under 0!");
-                deathsound = 0;
+                if (deathsound >= 6)
+                {
+                    Main.NewText("There are no deathsounds over 5!");
+                    deathsound = 0;
+                }
+                if (deathsound <= -1)
+                {
+                    Main.NewText("There are no deathsounds under 0!");
+                    deathsound = 0;
+                }
             }
             if (HamonBarSize >= 4)
             {

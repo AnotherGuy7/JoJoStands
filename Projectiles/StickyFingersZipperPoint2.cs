@@ -22,9 +22,10 @@ namespace JoJoStands.Projectiles
             projectile.damage = 0;
         }
 
-        public bool stopped = false;
-        public float recoveredTime = 0f;
-        public Vector2 zipperLine = Vector2.Zero;
+        private bool stopped = false;
+        private float recoveredTime = 0f;
+        private Vector2 zipperLine = Vector2.Zero;
+        private bool playedSound = false;
 
         public override void AI()
         {
@@ -33,6 +34,11 @@ namespace JoJoStands.Projectiles
             zipperLine = projectile.Center - player.Center;
             zipperLine.Normalize();
             float dist = Vector2.Distance(player.Center, projectile.Center);
+            if (!playedSound && JoJoStands.JoJoStandsSounds != null)
+            {
+                Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Zip"));
+                playedSound = true;
+            }
             if (dist >= 495f)       //about 30 tiles
             {
                 stopped = true;
