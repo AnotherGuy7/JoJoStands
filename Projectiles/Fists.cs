@@ -13,7 +13,7 @@ namespace JoJoStands.Projectiles
             get { return mod.Name + "/Projectiles/Fists"; }
         }
 
-        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 
+        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 7 = TH;
         {
             projectile.width = 30;
             projectile.height = 30;

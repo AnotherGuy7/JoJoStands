@@ -1047,6 +1047,18 @@ namespace JoJoStands
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("AerosmithStandFinal"), 0, 0f, Main.myPlayer);
             }
+            else if (inputItem.type == mod.ItemType("TheHandT1"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheHandStandT1"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("TheHandT2"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheHandStandT2"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("TheHandT3"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheHandStandT3"), 0, 0f, Main.myPlayer);
+            }
             else if (inputItem.type == mod.ItemType("TestStand"))
             {
                 if (player.name == "Mod Test Shadow")
