@@ -44,9 +44,25 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(0, 101) < projectile.ai[0])
             {
                 target.AddBuff(BuffID.OnFire, (int)projectile.ai[1]);
+            }
+            if (mPlayer.destroyAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 93)
+                {
+                    target.AddBuff(BuffID.OnFire, 60 * 3);
+                }
+            }
+            if (mPlayer.greaterDestroyEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(BuffID.CursedInferno, 60 * 10);
+                }
             }
         }
     }

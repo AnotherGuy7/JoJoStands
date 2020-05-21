@@ -39,11 +39,17 @@ namespace JoJoStands.Projectiles
             }
             if (mPlayer.destroyAmuletEquipped)
             {
-                target.AddBuff(BuffID.OnFire, 60 * 3);
+                if (Main.rand.NextFloat(0, 101) >= 93)
+                {
+                    target.AddBuff(BuffID.OnFire, 60 * 3);
+                }
             }
             if (mPlayer.greaterDestroyEquipped)
             {
-                target.AddBuff(BuffID.CursedInferno, 60 * 10);
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(BuffID.CursedInferno, 60 * 10);
+                }
             }
             if (projectile.ai[0] == 4f)
             {

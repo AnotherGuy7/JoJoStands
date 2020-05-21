@@ -119,5 +119,24 @@ namespace JoJoStands.Projectiles
                 }
 			}
         }
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.destroyAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 93)
+                {
+                    target.AddBuff(BuffID.OnFire, 60 * 3);
+                }
+            }
+            if (mPlayer.greaterDestroyEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(BuffID.CursedInferno, 60 * 10);
+                }
+            }
+        }
     }
 }
