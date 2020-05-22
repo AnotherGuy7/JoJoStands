@@ -13,7 +13,7 @@ namespace JoJoStands.Projectiles
             get { return mod.Name + "/Projectiles/Fists"; }
         }
 
-        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 
+        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 7 = TH;
         {
             projectile.width = 30;
             projectile.height = 30;
@@ -39,11 +39,17 @@ namespace JoJoStands.Projectiles
             }
             if (mPlayer.destroyAmuletEquipped)
             {
-                target.AddBuff(BuffID.OnFire, 60 * 3);
+                if (Main.rand.NextFloat(0, 101) >= 93)
+                {
+                    target.AddBuff(BuffID.OnFire, 60 * 3);
+                }
             }
             if (mPlayer.greaterDestroyEquipped)
             {
-                target.AddBuff(BuffID.CursedInferno, 60 * 10);
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(BuffID.CursedInferno, 60 * 10);
+                }
             }
             if (projectile.ai[0] == 4f)
             {

@@ -26,5 +26,24 @@ namespace JoJoStands.Projectiles
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 61, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
         }
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.destroyAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 93)
+                {
+                    target.AddBuff(BuffID.OnFire, 60 * 3);
+                }
+            }
+            if (mPlayer.greaterDestroyEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(BuffID.CursedInferno, 60 * 10);
+                }
+            }
+        }
     }
 }
