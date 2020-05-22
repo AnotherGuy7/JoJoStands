@@ -26,6 +26,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             projectile.ignoreWater = true;
         }
 
+        public override string Texture => mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
         public virtual float shootSpeed { get; } = 16f;       //how fast the projectile the minion shoots goes
         public virtual int punchDamage { get; }     //virtual is what allows that to be overridden
         public virtual int projectileDamage { get; }
@@ -41,6 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual float tierNumber { get; }
         public virtual float punchKnockback { get; }
         public virtual string punchSoundName { get; } = "";
+        public virtual Texture2D standTexture { get; set; }
 
 
         public bool normalFrames = false;       //all other animations handled in the stands themselves
@@ -579,6 +581,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             return true;
         }
 
+        public SpriteEffects effects = SpriteEffects.None;
+
         public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
         {
             Player player = Main.player[projectile.owner];
@@ -586,7 +590,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             Main.spriteBatch.End();     //ending the spriteBatch that started in PreDraw (it's a guess)
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);     //starting a new one for Post
 
-
+            if (projectile.spriteDirection == -1)
+            {
+                effects = SpriteEffects.FlipHorizontally;
+            }
+            if (projectile.spriteDirection == 1)
+            {
+                effects = SpriteEffects.None;
+            }
             if (MyPlayer.RangeIndicators)
             {
                 Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
@@ -598,6 +609,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxAltDistance + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
                 }
+            }
+            if (standTexture != null)
+            {
+                int frameHeight = standTexture.Height / Main.projFrames[projectile.whoAmI];
+                spriteBatch.Draw(standTexture, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX, drawOriginOffsetY), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
             }
         }
 
@@ -651,6 +667,32 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 projectile.Center = player.Center;
             }
+        }
+
+        public void AnimationStates(string stateName, int frameAmount, int frameCounterLimit, bool loop, bool loopCertainFrames = false, int loopFrameStart = 0, int loopFrameEnd = 0)
+        {
+            Main.projFrames[projectile.whoAmI] = frameAmount;
+            projectile.frameCounter++;
+            if (projectile.frameCounter >= frameCounterLimit)
+            {
+                projectile.frameCounter = 0;
+                projectile.frame += 1;
+            }
+            if (loopCertainFrames)
+            {
+                if (projectile.frame >= loopFrameEnd)
+                {
+                    projectile.frame = loopFrameStart;
+                }
+            }
+            if (projectile.frame >= frameAmount && loop)
+            {
+                projectile.frame = 0;
+            }
+            /*if (projectile.frame >= frameAmount && !loop)     //breaks because the state info isn't defined that way, it's only in PlayAnimation
+            {
+                stateName = "Idle";
+            }*/
         }
     }
 }

@@ -131,5 +131,26 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
             }
         }
+
+        public virtual void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/TestStand/TestStand_" + animationName);
+            if (animationName == "Idle")
+            {
+                AnimationStates(animationName, 2, 12, true);
+            }
+            if (animationName == "Attack")
+            {
+                AnimationStates(animationName, 4, punchTime, true);
+            }
+            if (animationName == "Secondary")
+            {
+                AnimationStates(animationName, 17, 11, false);
+            }
+            if (animationName == "Pose")
+            {
+                AnimationStates(animationName, 1, 200, true, true);     //will loop that frame
+            }
+        }
     }
 }

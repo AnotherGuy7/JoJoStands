@@ -1049,7 +1049,7 @@ namespace JoJoStands
             }
             else if (inputItem.type == mod.ItemType("TestStand"))
             {
-                if (player.name == "Mod Test Shadow")
+                if (player.name.Contains("Test Shadow"))
                 {
                     Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TestStand"), 0, 0f, Main.myPlayer);
                 }
