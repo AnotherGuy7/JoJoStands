@@ -104,52 +104,24 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= punchTime)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 1)
-                {
-                    projectile.frame = 2;
-                }
-                if (projectile.frame >= 6)
-                {
-                    projectile.frame = 2;
-                }
+                PlayAnimation("Attack");;
             }
             if (normalFrames)
             {
-                if (projectile.frameCounter >= 30)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 2)
-                {
-                    projectile.frame = 0;
-                }
+                PlayAnimation("Idle");
             }
         }
 
-        public virtual void PlayAnimation(string animationName)
+        public override void PlayAnimation(string animationName)
         {
             standTexture = mod.GetTexture("Projectiles/PlayerStands/TestStand/TestStand_" + animationName);
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 2, 12, true);
+                AnimationStates(animationName, 2, 30, true);
             }
             if (animationName == "Attack")
             {
                 AnimationStates(animationName, 4, punchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
-                AnimationStates(animationName, 17, 11, false);
-            }
-            if (animationName == "Pose")
-            {
-                AnimationStates(animationName, 1, 200, true, true);     //will loop that frame
             }
         }
     }

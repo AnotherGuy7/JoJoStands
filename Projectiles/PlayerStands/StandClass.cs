@@ -669,6 +669,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        public virtual void PlayAnimation(string animationName)
+        {}
+
         public void AnimationStates(string stateName, int frameAmount, int frameCounterLimit, bool loop, bool loopCertainFrames = false, int loopFrameStart = 0, int loopFrameEnd = 0)
         {
             Main.projFrames[projectile.whoAmI] = frameAmount;
