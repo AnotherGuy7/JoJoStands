@@ -979,6 +979,14 @@ namespace JoJoStands
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StickyFingersStandFinal"), 0, 0f, Main.myPlayer);
             }
+            else if (inputItem.type == mod.ItemType("GratefulDeadT1"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT1"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("GratefulDeadT2"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT2"), 0, 0f, Main.myPlayer);
+            }
             else if (inputItem.type == mod.ItemType("SexPistolsT1"))
             {
                 sexPistolsTier = 1;

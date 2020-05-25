@@ -13,7 +13,7 @@ namespace JoJoStands.Projectiles
             get { return mod.Name + "/Projectiles/Fists"; }
         }
 
-        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 7 = TH;
+        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 7 = TH; 8 = GD;
         {
             projectile.width = 30;
             projectile.height = 30;
@@ -70,23 +70,27 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(mod.BuffType("Zipped"), 480);
                 }
             }
+            if (projectile.ai[0] == 8f)
+            {
+                target.AddBuff(mod.BuffType("Old"), 540);
+            }
             if (projectile.ai[0] == 5f)
             {
                 if (projectile.ai[1] == 1f)
                 {
-                    PlayerStands.KillerQueenStandT1.savedTarget = target;
+                    PlayerStands.KillerQueen.KillerQueenStandT1.savedTarget = target;
                 }
                 if (projectile.ai[1] == 2f)
                 {
-                    PlayerStands.KillerQueenStandT2.savedTarget = target;
+                    PlayerStands.KillerQueen.KillerQueenStandT2.savedTarget = target;
                 }
                 if (projectile.ai[1] == 3f)
                 {
-                    PlayerStands.KillerQueenStandT3.savedTarget = target;
+                    PlayerStands.KillerQueen.KillerQueenStandT3.savedTarget = target;
                 }
                 if (projectile.ai[1] == 4f)
                 {
-                    PlayerStands.KillerQueenStandFinal.savedTarget = target;
+                    PlayerStands.KillerQueen.KillerQueenStandFinal.savedTarget = target;
                 }
             }
         }
