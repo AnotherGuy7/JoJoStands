@@ -28,28 +28,14 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (projectile.ai[0] == 3f && mPlayer.BackToZero)
-            {
-                target.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
-                target.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
-            }
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
             {
                 crit = true;
             }
-            if (mPlayer.destroyAmuletEquipped)
+            if (projectile.ai[0] == 3f && mPlayer.BackToZero)
             {
-                if (Main.rand.NextFloat(0, 101) >= 93)
-                {
-                    target.AddBuff(BuffID.OnFire, 60 * 3);
-                }
-            }
-            if (mPlayer.greaterDestroyEquipped)
-            {
-                if (Main.rand.NextFloat(0, 101) >= 80)
-                {
-                    target.AddBuff(BuffID.CursedInferno, 60 * 10);
-                }
+                target.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
+                target.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
             }
             if (projectile.ai[0] == 4f)
             {
@@ -70,10 +56,6 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(mod.BuffType("Zipped"), 480);
                 }
             }
-            if (projectile.ai[0] == 8f)
-            {
-                target.AddBuff(mod.BuffType("Old"), 540);
-            }
             if (projectile.ai[0] == 5f)
             {
                 if (projectile.ai[1] == 1f)
@@ -91,6 +73,25 @@ namespace JoJoStands.Projectiles
                 if (projectile.ai[1] == 4f)
                 {
                     PlayerStands.KillerQueen.KillerQueenStandFinal.savedTarget = target;
+                }
+            }
+            if (projectile.ai[0] == 8f)
+            {
+                target.AddBuff(mod.BuffType("Old"), 540);
+            }
+
+            if (mPlayer.destroyAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 93)
+                {
+                    target.AddBuff(BuffID.OnFire, 60 * 3);
+                }
+            }
+            if (mPlayer.greaterDestroyEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(BuffID.CursedInferno, 60 * 10);
                 }
             }
         }

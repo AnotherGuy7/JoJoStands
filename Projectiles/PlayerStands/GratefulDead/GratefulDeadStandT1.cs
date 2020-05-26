@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
     public class GratefulDeadStandT1 : StandClass
     {
-        public override void SetDefaults()
+        public override void SetDefaults()      //Already defined in Stand Class
         {
             projectile.netImportant = true;
             projectile.width = 38;
@@ -27,12 +27,12 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             projectile.timeLeft = 2;
         }
 
-        public Texture2D standTexture;
+        public Texture2D standTexture;      //override all of these, they're already variables in Stand Class, not much sense in making new ones when they already exist
 
         public Vector2 velocityAddition = Vector2.Zero;
         public float mouseDistance = 0f;
         protected float shootSpeed = 16f;
-        public bool normalFrames = false;       //these bools are needed to sync
+        public bool normalFrames = false;
         public bool attackFrames = false;
         public bool grabFrames = false;
         public bool secondaryFrames = false;
@@ -69,7 +69,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
             if (!modPlayer.StandAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !grabFrames)
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !grabFrames)     //simplify this using Punch()
                 {
                     attackFrames = true;
                     normalFrames = false;
@@ -84,7 +84,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     {
                         projectile.spriteDirection = 1;
                         projectile.direction = 1;
-                        drawOffsetX = 20;
+                        drawOffsetX = 20;       //these are handled with drawOffsetLeft and drawOffsetY, just override those
                     }
                     if (Main.MouseWorld.X < projectile.position.X)
                     {
@@ -132,7 +132,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         grabFrames = false;
                         attackFrames = false;
                     }
-                    Vector2 vector131 = player.Center;
+                    Vector2 vector131 = player.Center;      //can be simplified with StayBehind()
                     vector131.X -= (float)((12 + player.width / 2) * player.direction);
                     vector131.Y -= -35f + halfStandHeight;
                     projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
@@ -142,7 +142,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     drawOffsetX = 0;
                     StopSounds();
                 }
-                if (modPlayer.StandAutoMode)
+                if (modPlayer.StandAutoMode)        //can be simplified with BasicPunchAI()
                 {
                     NPC target = null;
                     Vector2 targetPos = projectile.position;
@@ -240,7 +240,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         attackFrames = false;
                     }
                 }
-                Vector2 direction = player.Center - projectile.Center;
+                Vector2 direction = player.Center - projectile.Center;      //no need for this as the Stand Class covers these UNLESS you're using an alt attack, in which case you call LimitDistance()
                 float distanceTo = direction.Length();
                 maxDistance = 98f + modPlayer.standRangeBoosts;
                 if (distanceTo > maxDistance)
@@ -271,7 +271,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     }
                     projectile.Center = player.Center;
                 }
-                if (attackFrames)
+                if (attackFrames)       //handle these in SelectAnimation
                 {
                     normalFrames = false;
                     grabFrames = false;
@@ -314,9 +314,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
         }
 
-        public SpriteEffects effects = SpriteEffects.None;
+        public SpriteEffects effects = SpriteEffects.None;      //Already exists
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)        //already handled in Stand Class
         {
             Player player = Main.player[projectile.owner];
             if (projectile.spriteDirection == -1)
@@ -336,7 +336,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             spriteBatch.Draw(standTexture, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX, drawOriginOffsetY), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), lightColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
         }
 
-        public override void SendExtraAI(BinaryWriter writer)
+        public override void SendExtraAI(BinaryWriter writer)       //already synced in Stand Class (not grabFrames)
         {
             writer.Write(attackFrames);
             writer.Write(normalFrames);
@@ -344,7 +344,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             writer.Write(secondaryFrames);
         }
 
-        public override void ReceiveExtraAI(BinaryReader reader)
+        public override void ReceiveExtraAI(BinaryReader reader)    //already synced in Stand Class (not grabFrames)
         {
             attackFrames = reader.ReadBoolean();
             normalFrames = reader.ReadBoolean();
@@ -352,12 +352,12 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             secondaryFrames = reader.ReadBoolean();
         }
 
-        public override bool OnTileCollide(Vector2 oldVelocity)
+        public override bool OnTileCollide(Vector2 oldVelocity)     //already done in SC
         {
             return false;
         }
 
-        public virtual void SwitchStatesTo(string animationName)
+        public virtual void SwitchStatesTo(string animationName)        //this should be managed in SelectAnimations
         {
             if (animationName == "Idle")
             {
@@ -381,7 +381,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
         }
 
-        public virtual void AnimationStates(string stateName, int frameAmount, int frameCounterLimit, bool loop, bool loopCertainFrames = false, int loopFrameStart = 0, int loopFrameEnd = 0)
+        public virtual void AnimationStates(string stateName, int frameAmount, int frameCounterLimit, bool loop, bool loopCertainFrames = false, int loopFrameStart = 0, int loopFrameEnd = 0)      //why is this here
         {
             Main.projFrames[projectile.whoAmI] = frameAmount;
             projectile.frameCounter++;

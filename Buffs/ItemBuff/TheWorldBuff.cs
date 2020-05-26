@@ -14,7 +14,8 @@ namespace JoJoStands.Buffs.ItemBuff
 			DisplayName.SetDefault("The World");
             Description.SetDefault("Time... has been stopped");
             Main.persistentBuff[Type] = true;
-            Main.debuff[Type] = true;       //so that it can't be canceled
+            Main.debuff[Type] = true;
+            canBeCleared = false;
         }
 
         public bool sendFalse = false;

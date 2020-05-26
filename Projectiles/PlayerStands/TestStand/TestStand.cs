@@ -33,7 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             //rippleEffectTimer--;
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
@@ -41,6 +41,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             if (modPlayer.StandOut)
             {
                 projectile.timeLeft = 2;
+            }
+            if (shootCount > 0)
+            {
+                shootCount--;
             }
 
             if (!modPlayer.StandAutoMode)
@@ -98,13 +102,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             }
         }
 
-        public virtual void SelectFrame()
+        public override void SelectAnimation()
         {
-            projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");;
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
