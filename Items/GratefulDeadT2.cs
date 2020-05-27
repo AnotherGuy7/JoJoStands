@@ -11,7 +11,7 @@ namespace JoJoStands.Items
     {
         public override string Texture
         {
-            get { return mod.Name + "/Items/HierophantGreenT1"; }
+            get { return mod.Name + "/Items/GratefulDeadT1"; }
         }
 
         public override void SetStaticDefaults()

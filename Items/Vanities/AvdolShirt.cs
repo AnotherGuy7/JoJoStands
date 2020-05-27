@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Avdol's Shirt");
-			Tooltip.SetDefault("An open-front jacket. The undershirt is skintight.");
+			DisplayName.SetDefault("Fortuneteller Robes");
+			Tooltip.SetDefault("Large red robes, accessorized with a golden necklace.");
 		}
 
 		public override void SetDefaults()

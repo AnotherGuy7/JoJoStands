@@ -8,12 +8,12 @@ using Terraria.ModLoader;
 namespace JoJoStands.Items.Vanities
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class BucciaratiHair : ModItem
+	public class ProsciuttoHair : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bowl-Haired Wig");
-			Tooltip.SetDefault("A black wig in a bowl cut style, resembling a certain mafioso.");
+			DisplayName.SetDefault("Brotherly Wig");
+			Tooltip.SetDefault("A slicked back blond wig, resembling a certain assassin.");
 		}
 
 		public override void SetDefaults()

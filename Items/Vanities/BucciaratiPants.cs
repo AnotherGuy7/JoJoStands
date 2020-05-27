@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bucciarati's Pants");
-			Tooltip.SetDefault("A pair of stylish yellow pants, with heart-adorned knees as well as tassels from the waist.");
+			DisplayName.SetDefault("Zipper Patterned Pants");
+			Tooltip.SetDefault("A pair of white pants, patterned with many zippers.");
 		}
 
 		public override void SetDefaults()

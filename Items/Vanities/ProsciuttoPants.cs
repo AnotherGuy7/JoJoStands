@@ -7,13 +7,13 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Vanities
 {
-	[AutoloadEquip(EquipType.Head)]
-	public class BucciaratiHair : ModItem
+	[AutoloadEquip(EquipType.Legs)]
+	public class ProsciuttoPants : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bowl-Haired Wig");
-			Tooltip.SetDefault("A black wig in a bowl cut style, resembling a certain mafioso.");
+			DisplayName.SetDefault("Brotherly Pants");
+			Tooltip.SetDefault("Navy pants with white stripes, and a few grey hairs.");
 		}
 
 		public override void SetDefaults()
@@ -32,7 +32,7 @@ namespace JoJoStands.Items.Vanities
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 2);
+			recipe.AddIngredient(ItemID.Silk, 5);
 			recipe.AddTile(TileID.Loom);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

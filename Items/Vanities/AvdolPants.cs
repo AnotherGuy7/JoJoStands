@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Avdol's Pants");
-			Tooltip.SetDefault("A pair of stylish yellow pants, with heart-adorned knees as well as tassels from the waist.");
+			DisplayName.SetDefault("Fortuneteller Pants");
+			Tooltip.SetDefault("A pair of pants with a grey waist piece.");
 		}
 
 		public override void SetDefaults()

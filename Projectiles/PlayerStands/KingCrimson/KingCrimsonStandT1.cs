@@ -141,7 +141,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 6, punchTime - modPlayer.standSpeedBoosts, true);
+                AnimationStates(animationName, 6, punchTime - Main.player[projectile.owner].GetModPlayer<MyPlayer>().standSpeedBoosts, true);
             }
             if (animationName == "Pose")
             {

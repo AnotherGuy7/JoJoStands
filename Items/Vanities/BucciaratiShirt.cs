@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bucciarati's Shirt");
-			Tooltip.SetDefault("An open-front jacket. The undershirt is skintight.");
+			DisplayName.SetDefault("Zipper Patterned Suit");
+			Tooltip.SetDefault("A white suit adorned  with several golden zippers, and a large chest window.");
 		}
 
 		public override void SetDefaults()

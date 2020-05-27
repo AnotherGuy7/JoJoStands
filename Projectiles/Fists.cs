@@ -77,7 +77,22 @@ namespace JoJoStands.Projectiles
             }
             if (projectile.ai[0] == 8f)
             {
-                target.AddBuff(mod.BuffType("Old"), 540);
+                if (projectile.ai[1] == 1f)
+                {
+                    target.AddBuff(mod.BuffType("Old"), 540);
+                }
+                if (projectile.ai[1] == 2f)
+                {
+                    target.AddBuff(mod.BuffType("Old"), 660);
+                }
+                if (projectile.ai[1] == 3f)
+                {
+                    target.AddBuff(mod.BuffType("Old"), 780);
+                }
+                if (projectile.ai[1] == 4f)
+                {
+                    target.AddBuff(mod.BuffType("Old"), 900);
+                }
             }
 
             if (mPlayer.destroyAmuletEquipped)

@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Avdol's Hair");
-			Tooltip.SetDefault("The outside-in part of Doppio's Hair...");
+			DisplayName.SetDefault("Fortuneteller Wig");
+			Tooltip.SetDefault("A wig, styled after a fortuneteller, and Stand user.");
 		}
 
 		public override void SetDefaults()

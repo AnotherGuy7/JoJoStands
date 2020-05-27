@@ -29,7 +29,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 player.lifeRegenTime = 120;
                 player.lifeRegen -= 4;
             }
-            player.moveSpeed *= 0.4f;
+            player.moveSpeed *= 0.8f;
             player.meleeDamage *= 0.75f;
             player.rangedDamage *= 0.75f;
             player.magicDamage *= 0.75f;

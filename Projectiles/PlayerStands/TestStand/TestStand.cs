@@ -111,6 +111,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             }
             if (normalFrames)
             {
+                attackFrames = false;
                 PlayAnimation("Idle");
             }
         }
