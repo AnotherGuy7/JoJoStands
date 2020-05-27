@@ -84,7 +84,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     {
                         projectile.spriteDirection = 1;
                         projectile.direction = 1;
-                        drawOffsetX = 20;       //these are handled with drawOffsetLeft and drawOffsetY, just override those
+                        drawOffsetX = 20;       //these are handled with standOffset and drawOffsetY, just override those
                     }
                     if (Main.MouseWorld.X < projectile.position.X)
                     {

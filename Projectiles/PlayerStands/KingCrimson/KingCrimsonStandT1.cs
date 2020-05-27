@@ -22,16 +22,15 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override int punchTime => 26;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
         public override int halfStandHeight => 32;
         public override float fistWhoAmI => 6f;
-        public override int drawOffsetRight => -10;
-        public override int drawOffsetLeft => 0;
+        public override int standOffset => 0;
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
         private Vector2 velocityAddition;
         private float mouseDistance;
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             updateTimer++;
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
@@ -81,7 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     {
                         projectile.velocity = Vector2.Zero;
                     }
-                    if (shootCount <= 0 && (projectile.frame == 8 || projectile.frame == 4))
+                    if (shootCount <= 0 && (projectile.frame == 0 || projectile.frame == 4))
                     {
                         shootCount += punchTime - modPlayer.standSpeedBoosts;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
@@ -113,44 +112,40 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             }
         }
 
-        public virtual void SelectFrame()
+        public override void SelectAnimation()
         {
-            Player player = Main.player[projectile.owner];
-            projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= 23 - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 3)
-                {
-                    projectile.frame = 4;
-                }
-                if (projectile.frame >= 10)
-                {
-                    projectile.frame = 4;
-                }
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
-                if (projectile.frameCounter >= 30)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 4)
-                {
-                    projectile.frame = 0;
-                }
+                attackFrames = false;
+                PlayAnimation("Idle");
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                projectile.frame = 10;
+                PlayAnimation("Pose");
+            }
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/KingCrimson/KingCrimson_" + animationName);
+            if (animationName == "Idle")
+            {
+                AnimationStates(animationName, 4, 30, true);
+            }
+            if (animationName == "Attack")
+            {
+                AnimationStates(animationName, 6, punchTime - modPlayer.standSpeedBoosts, true);
+            }
+            if (animationName == "Pose")
+            {
+                AnimationStates(animationName, 1, 2, true);
             }
         }
     }

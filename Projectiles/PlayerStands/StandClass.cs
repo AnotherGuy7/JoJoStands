@@ -36,10 +36,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual float maxDistance { get; } = 98f;
         public virtual float maxAltDistance { get; } = 0f;
         public virtual int altDamage { get; }
-        public virtual float fistWhoAmI { get; }
-        public virtual int drawOffsetLeft { get; } = -60;
-        public virtual int drawOffsetRight { get; } = -10;
-        public virtual int attackOffsetX { get; } = -30;
+        public virtual float fistWhoAmI { get; }        //this is used in Fists.cs for effects
+        public virtual int standOffset { get; } = 60;            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
         public virtual float tierNumber { get; }
         public virtual float punchKnockback { get; }
         public virtual string punchSoundName { get; } = "";
@@ -554,31 +552,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void HandleDrawOffsets()
         {
-            if (normalFrames)
-            {
-                drawOffsetX = attackOffsetX * projectile.spriteDirection;
-            }
-            else
-            {
-                /*if (projectile.spriteDirection == 1)
-                {
-                    drawOffsetX = drawOffsetRight;
-                }
-                if (projectile.spriteDirection == -1)
-                {
-                    drawOffsetX = drawOffsetLeft;
-                }*/
-                drawOffsetX = 0;
-            }
-            if (JoJoStands.StandAutoMode.JustPressed)
-            {
-                drawOffsetX += 5;
-            }
-            if (JoJoStands.PoseHotKey.JustPressed)
-            {
-                drawOffsetX -= 5;
-            }
-            Main.NewText(drawOffsetX);
+            drawOffsetX = standOffset * projectile.spriteDirection;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
@@ -630,7 +604,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (standTexture != null)
             {
                 int frameHeight = standTexture.Height / Main.projFrames[projectile.whoAmI];
-                spriteBatch.Draw(standTexture, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
+                spriteBatch.Draw(standTexture, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
             }
         }
 

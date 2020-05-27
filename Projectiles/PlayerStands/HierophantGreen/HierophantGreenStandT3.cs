@@ -36,8 +36,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int shootTime => 20;
         public override int projectileDamage => 56;
         public override int halfStandHeight => 25;
-        public override int drawOffsetLeft => 0;
-        public override int drawOffsetRight => 0;
+        public override int standOffset => 0;
 
         public bool spawningField = false;
         public float numberSpawned = 0;

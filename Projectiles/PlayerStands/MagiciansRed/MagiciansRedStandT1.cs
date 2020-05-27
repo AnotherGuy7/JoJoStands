@@ -35,15 +35,14 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override int projectileDamage => 16;
         public override int shootTime => 20;
         public override int halfStandHeight => 35;
-        public override int drawOffsetRight => -10;
-        public override int drawOffsetLeft => 0;
+        public override int standOffset => 0;
 
         public int chanceToDebuff = 25;
         public int debuffDuration = 300;
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             if (shootCount > 0)
             {
                 shootCount--;
@@ -176,76 +175,40 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             }
         }
 
-        public override void SendExtraAI(BinaryWriter writer)
+        public override void SelectAnimation()
         {
-            writer.Write(normalFrames);
-            writer.Write(attackFrames);
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            normalFrames = reader.ReadBoolean();
-            attackFrames = reader.ReadBoolean();
-        }
-
-        /*public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
-        {
-            Player player = Main.player[projectile.owner];
-            if (MyPlayer.RangeIndicators)
-            {
-                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), maxDistance / 122.5f, SpriteEffects.None, 0);
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), maxAltDistance / 160f, SpriteEffects.None, 0);
-
-            }
-            if (touchedTile)
-            {
-                Texture2D texture = mod.GetTexture("Extras/Bomb");
-                spriteBatch.Draw(texture, savedPosition - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
-            }
-        }*/
-
-        public virtual void SelectFrame()
-        {
-            projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= shootTime)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 1)
-                {
-                    projectile.frame = 2;
-                }
-                if (projectile.frame >= 4)
-                {
-                    projectile.frame = 2;
-                    attackFrames = false;
-                }
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= 30)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 2)
-                {
-                    projectile.frame = 0;
-                }
+                PlayAnimation("Idle");
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                projectile.frame = 4;
+                PlayAnimation("Pose");
+            }
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
+            if (animationName == "Idle")
+            {
+                AnimationStates(animationName, 2, 30, true);
+            }
+            if (animationName == "Attack")
+            {
+                AnimationStates(animationName, 2, shootTime, true);
+            }
+            if (animationName == "Pose")
+            {
+                AnimationStates(animationName, 1, 2, true);
             }
         }
     }

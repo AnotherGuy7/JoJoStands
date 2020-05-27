@@ -39,9 +39,17 @@ namespace JoJoStands.Projectiles
 
             if (projectile.owner == Main.myPlayer)
             {
-                projectile.velocity = Main.MouseWorld - projectile.Center;
-                projectile.velocity.Normalize();
-                projectile.velocity *= 10f;
+                float distance = projectile.Distance(Main.MouseWorld);
+                if (distance >= 20f)
+                {
+                    projectile.velocity = Main.MouseWorld - projectile.Center;
+                    projectile.velocity.Normalize();
+                    projectile.velocity *= 10f;
+                }
+                else
+                {
+                    projectile.velocity = Vector2.Zero;
+                }
                 projectile.netUpdate = true;
             }
 
