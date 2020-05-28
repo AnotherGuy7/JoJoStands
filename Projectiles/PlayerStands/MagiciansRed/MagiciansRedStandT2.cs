@@ -73,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     projectile.netUpdate = true;
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime - modPlayer.standSpeedBoosts;
+                        shootCount += newShootTime;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -173,7 +173,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += shootTime - modPlayer.standSpeedBoosts;
+                            shootCount += newShootTime;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {

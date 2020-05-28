@@ -164,7 +164,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += shootTime - modPlayer.standSpeedBoosts;
+                            shootCount += newShootTime;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
@@ -196,7 +196,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 normalFrames = false;
                 secondaryAbilityFrames = false;
                 projectile.frameCounter++;
-                if (projectile.frameCounter >= shootTime - modPlayer.standSpeedBoosts)
+                if (projectile.frameCounter >= newShootTime)
                 {
                     projectile.frame += 1;
                     projectile.frameCounter = 0;
@@ -209,7 +209,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime - modPlayer.standSpeedBoosts;
+                        shootCount += newShootTime;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {

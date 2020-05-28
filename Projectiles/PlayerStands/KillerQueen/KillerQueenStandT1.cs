@@ -228,7 +228,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += punchTime - modPlayer.standSpeedBoosts;
+                            shootCount += newPunchTime;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {

@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     }
                     if (shootCount <= 0 && (projectile.frame == 8 || projectile.frame == 4))
                     {
-                        shootCount += punchTime - modPlayer.standSpeedBoosts;
+                        shootCount += newPunchTime;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {

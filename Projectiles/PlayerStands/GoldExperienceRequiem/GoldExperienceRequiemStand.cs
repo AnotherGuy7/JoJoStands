@@ -106,7 +106,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     }
                     if (shootCount <= 0)
                     {
-                        shootCount += punchTime - modPlayer.standSpeedBoosts - modPlayer.standSpeedBoosts;
+                        shootCount += newPunchTime - modPlayer.standSpeedBoosts;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -243,7 +243,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     projectile.netUpdate = true;
                     if (projectile.frame == 8 && shootCount <= 0)
                     {
-                        shootCount += punchTime - modPlayer.standSpeedBoosts;
+                        shootCount += newPunchTime;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -331,7 +331,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += punchTime - modPlayer.standSpeedBoosts;
+                            shootCount += newPunchTime;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {

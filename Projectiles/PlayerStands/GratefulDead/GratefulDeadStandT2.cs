@@ -68,9 +68,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             {
                 BasicPunchAI();
             }
-            if (Main.mouseRight && projectile.owner == Main.myPlayer && shootCount <= 0 && !grabFrames)
+            if (Main.mouseRight && projectile.owner == Main.myPlayer && shootCount <= 0 && !grabFrames)     //this should be under if (!modPlayer.StandAutoMode); Why 
             {
-                secondaryFrames = true;
+                secondaryFrames = true;     //what is the purpose of this? All this does is make it not work (as it sets grabFrames to false and grabFrames needs to be true for grabs to work)
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC npc = Main.npc[i];
@@ -78,30 +78,30 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     {
                         if (projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
                         {
-
                             projectile.ai[0] = npc.whoAmI;
                             grabFrames = true;
                         }
                     }
                 }
             }
-            if (grabFrames && projectile.ai[0] != -1f)
+            if (grabFrames && projectile.ai[0] != -1f)    
             {
                 projectile.velocity = Vector2.Zero;
                 NPC npc = Main.npc[(int)projectile.ai[0]];
                 npc.direction = -projectile.direction;
                 npc.position = projectile.position + new Vector2(5f * projectile.direction, -2f - npc.height / 3f);
                 npc.velocity = Vector2.Zero;
-                if (projectile.frame == 7)
+                if (projectile.frame == 7)      //This can't be reached, grab sheet only has 3 frames; Also why is GD supposed to punch the enemy away anyway?
                 {
                     npc.StrikeNPC(punchDamage, 7f, projectile.direction, true);
                     shootCount += 180;
                     projectile.ai[0] = -1f;
                     grabFrames = false;
                 }
-                PlayAnimation("Grab");
+                PlayAnimation("Grab");      //this is handled in SelectAnimation automatically
             }
         }
+
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(grabFrames);

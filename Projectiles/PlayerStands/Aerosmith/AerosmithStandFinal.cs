@@ -105,7 +105,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     if (shootCount <= 0)
                     {
                         Main.PlaySound(SoundID.Item11, projectile.position);
-                        shootCount += shootTime - modPlayer.standSpeedBoosts;
+                        shootCount += newShootTime;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -120,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 if (SpecialKeyPressedNoCooldown() && !bombless)
                 {
                     player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(5));
-                    shootCount += shootTime - modPlayer.standSpeedBoosts;
+                    shootCount += newShootTime;
                     int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, projectile.velocity.X, projectile.velocity.Y, mod.ProjectileType("AerosmithBomb"), 0, 3f, projectile.owner, (projectileDamage + 21f) * (float)modPlayer.standDamageBoosts);
                     Main.projectile[proj].netUpdate = true;
                 }
@@ -217,7 +217,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += shootTime - modPlayer.standSpeedBoosts;
+                            shootCount += newShootTime;
                             Main.PlaySound(SoundID.Item11, projectile.position);
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)

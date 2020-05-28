@@ -97,7 +97,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, punchTime - Main.player[projectile.owner].GetModPlayer<MyPlayer>().standSpeedBoosts, true);
+                AnimationStates(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Pose")
             {

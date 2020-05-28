@@ -77,7 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     if (shootCount <= 0)
                     {
                         Main.PlaySound(SoundID.Item21, projectile.position);
-                        shootCount += shootTime - modPlayer.standSpeedBoosts;
+                        shootCount += newShootTime;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -226,7 +226,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     }
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime - modPlayer.standSpeedBoosts;
+                        shootCount += newShootTime;
                         Main.PlaySound(SoundID.Item21, projectile.position);
                         if (Main.myPlayer == projectile.owner)
                         {

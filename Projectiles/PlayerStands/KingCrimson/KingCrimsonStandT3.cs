@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     }
                     if (shootCount <= 0 && (projectile.frame == 0 || projectile.frame == 4))
                     {
-                        shootCount += punchTime - modPlayer.standSpeedBoosts;
+                        shootCount += newPunchTime;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -156,7 +156,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 6, punchTime, true);
+                AnimationStates(animationName, 6, newPunchTime, true);
             }
             if (animationName == "Pose")
             {

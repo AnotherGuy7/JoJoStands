@@ -47,6 +47,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         public bool normalFrames = false;       //Much easier to sync animations this way rather than syncing everything about it
         public bool attackFrames = false;
         public bool secondaryAbilityFrames = false;
+        public int newPunchTime = 0;       //so we don't have to type newPunchTime all the time
+        public int newShootTime = 0;
 
         public int shootCount = 0;
         private Vector2 velocityAddition;
@@ -138,8 +140,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (shootCount <= 0)
             {
-                if ((punchTime - modPlayer.standSpeedBoosts) >= 2)      //a punch speed cap of 2
-                    shootCount += punchTime - modPlayer.standSpeedBoosts;
+                if ((newPunchTime) >= 2)      //a punch speed cap of 2
+                    shootCount += newPunchTime;
                 else
                     shootCount += 2;
                 Vector2 shootVel = Main.MouseWorld - projectile.Center;
@@ -295,8 +297,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 PlayPunchSound();
                             }
-                            if ((punchTime - modPlayer.standSpeedBoosts) >= 2)
-                                shootCount += punchTime - modPlayer.standSpeedBoosts;
+                            if ((newPunchTime) >= 2)
+                                shootCount += newPunchTime;
                             else
                                 shootCount += 2;
                             Vector2 shootVel = targetPos - projectile.Center;
@@ -416,8 +418,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 PlayPunchSound();
                             }
-                            if ((punchTime - modPlayer.standSpeedBoosts) >= 2)
-                                shootCount += punchTime - modPlayer.standSpeedBoosts;
+                            if ((newPunchTime) >= 2)
+                                shootCount += newPunchTime;
                             else
                                 shootCount += 2;
                             Vector2 shootVel = targetPos - projectile.Center;
@@ -552,7 +554,14 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void HandleDrawOffsets()
         {
+            Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+
             drawOffsetX = standOffset * projectile.spriteDirection;
+            newPunchTime = punchTime - modPlayer.standSpeedBoosts;
+            newShootTime = shootTime - modPlayer.standSpeedBoosts;
+
+            Main.NewText(punchTime + ";" + newPunchTime);
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
