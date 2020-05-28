@@ -22,7 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int halfStandHeight => 34;
         public override float fistWhoAmI => 8f;
         public override float tierNumber => 1f;
-        public override int standOffset => -30;
+        public override int standOffset => -4;
         public int updateTimer = 0;
 
 

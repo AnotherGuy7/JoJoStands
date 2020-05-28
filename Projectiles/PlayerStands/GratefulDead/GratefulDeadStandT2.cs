@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using JoJoStands.Networking;
 using System.IO;
+using JoJoStands.Buffs.ItemBuff;
 
 namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
@@ -22,7 +23,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int halfStandHeight => 34;
         public override float fistWhoAmI => 8f;
         public override float tierNumber => 1f;
-        public override int standOffset => -30;
+        public override int standOffset => -4;
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            return false;
+        }
         public int updateTimer = 0;
 
 
@@ -58,47 +63,62 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (!attackFrames && !secondaryFrames)
+                if (!attackFrames && !secondaryFrames && !grabFrames)
                 {
                     StayBehind();
                 }
-
+                if (Main.mouseRight && projectile.owner == Main.myPlayer && shootCount <= 0  && !grabFrames)
+                {
+                    LimitDistance();
+                    projectile.velocity = Main.MouseWorld - projectile.position;
+                    projectile.velocity.Normalize();
+                    projectile.velocity *= 5f;
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
+                    if (mouseDistance > 40f)
+                    {
+                        projectile.velocity = player.velocity + projectile.velocity;
+                    }
+                    if (mouseDistance <= 40f)
+                    {
+                        projectile.velocity = Vector2.Zero;
+                    }
+                    secondaryFrames = true;
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+                        NPC npc = Main.npc[i];
+                        if (npc.active)
+                        {
+                            if (projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
+                            {
+                                projectile.ai[0] = npc.whoAmI;
+                                grabFrames = true;
+                            }
+                        }
+                    }
+                    if (!Main.mouseRight)
+                    {
+                        shootCount += 30;
+                    }
+                }
+                if (grabFrames && projectile.ai[0] != -1f)
+                {
+                    LimitDistance();
+                    projectile.velocity = Vector2.Zero;
+                    NPC npc = Main.npc[(int)projectile.ai[0]];
+                    npc.direction = -projectile.direction;
+                    npc.position = projectile.position + new Vector2(5f * projectile.direction, -2f - npc.height / 3f);
+                    npc.velocity = Vector2.Zero;
+                    npc.AddBuff(mod.BuffType("Old2"), 10);
+                    if (!Main.mouseRight)
+                    {
+                        grabFrames = false;
+                        projectile.ai[0] = -1f;
+                    }
+                }
             }
             if (modPlayer.StandAutoMode)
             {
                 BasicPunchAI();
-            }
-            if (Main.mouseRight && projectile.owner == Main.myPlayer && shootCount <= 0 && !grabFrames)     //this should be under if (!modPlayer.StandAutoMode); Why 
-            {
-                secondaryFrames = true;     //what is the purpose of this? All this does is make it not work (as it sets grabFrames to false and grabFrames needs to be true for grabs to work)
-                for (int i = 0; i < Main.maxNPCs; i++)
-                {
-                    NPC npc = Main.npc[i];
-                    if (npc.active)
-                    {
-                        if (projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
-                        {
-                            projectile.ai[0] = npc.whoAmI;
-                            grabFrames = true;
-                        }
-                    }
-                }
-            }
-            if (grabFrames && projectile.ai[0] != -1f)    
-            {
-                projectile.velocity = Vector2.Zero;
-                NPC npc = Main.npc[(int)projectile.ai[0]];
-                npc.direction = -projectile.direction;
-                npc.position = projectile.position + new Vector2(5f * projectile.direction, -2f - npc.height / 3f);
-                npc.velocity = Vector2.Zero;
-                if (projectile.frame == 7)      //This can't be reached, grab sheet only has 3 frames; Also why is GD supposed to punch the enemy away anyway?
-                {
-                    npc.StrikeNPC(punchDamage, 7f, projectile.direction, true);
-                    shootCount += 180;
-                    projectile.ai[0] = -1f;
-                    grabFrames = false;
-                }
-                PlayAnimation("Grab");      //this is handled in SelectAnimation automatically
             }
         }
 
@@ -155,7 +175,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, punchTime, true);
+                AnimationStates(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Secondary")
             {
@@ -163,11 +183,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
             if (animationName == "Grab")
             {
-                AnimationStates(animationName, 3, 12, true, true, 3, 3);
+                AnimationStates(animationName, 3, 12, true, true, 2, 2);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 2, 12, true);
+                AnimationStates(animationName, 1, 12, true);
             }
         }
 
