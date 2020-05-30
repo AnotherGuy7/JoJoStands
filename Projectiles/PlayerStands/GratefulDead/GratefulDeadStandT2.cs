@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public bool grabFrames = false;
         public bool secondaryFrames = false;
         public override float maxDistance => 98f;
-        public override int punchDamage => 16;
+        public override int punchDamage => 41;
         public override int punchTime => 12;
         public override int halfStandHeight => 34;
         public override float fistWhoAmI => 8f;
@@ -98,21 +98,24 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     if (!Main.mouseRight)
                     {
                         shootCount += 30;
+                        secondaryFrames = false;
+                        projectile.ai[0] = -1f;
                     }
                 }
                 if (grabFrames && projectile.ai[0] != -1f)
                 {
-                    LimitDistance();
                     projectile.velocity = Vector2.Zero;
                     NPC npc = Main.npc[(int)projectile.ai[0]];
                     npc.direction = -projectile.direction;
                     npc.position = projectile.position + new Vector2(5f * projectile.direction, -2f - npc.height / 3f);
                     npc.velocity = Vector2.Zero;
                     npc.AddBuff(mod.BuffType("Old2"), 10);
-                    if (!Main.mouseRight)
+                    if (!Main.mouseRight || !npc.active)
                     {
+                        LimitDistance();
                         grabFrames = false;
                         projectile.ai[0] = -1f;
+                        shootCount += 30;
                     }
                 }
             }
