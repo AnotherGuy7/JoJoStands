@@ -32,7 +32,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             updateTimer++;
             if (shootCount > 0)
             {
@@ -127,7 +127,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     secondaryAbilityFrames = true;
                     normalFrames = false;
                     attackFrames = false;
-                    if (shootCount <= 0 && projectile.frame == 9)
+                    if (shootCount <= 0 && projectile.frame == 1)
                     {
                         shootCount += 13;       // has to be half if the framecounter + 1 (2 if shootCount goes to -1)
                         float rotationk = MathHelper.ToRadians(15);
@@ -177,75 +177,78 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             }
         }
 
-        public override void SendExtraAI(BinaryWriter writer)
+        public override void SendExtraAI(BinaryWriter writer)       //since this is overriden you have to sync the normal stuff
         {
+            writer.Write(normalFrames);
+            writer.Write(attackFrames);
+            writer.Write(secondaryAbilityFrames);
             writer.Write(abilityPose);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
+            normalFrames = reader.ReadBoolean();
+            attackFrames = reader.ReadBoolean();
+            secondaryAbilityFrames = reader.ReadBoolean();
             abilityPose = reader.ReadBoolean();
         }
 
-        public virtual void SelectFrame()
+        public override void SelectAnimation()
         {
-            Player player = Main.player[projectile.owner];
-            projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= punchTime - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 1)
-                {
-                    projectile.frame = 2;
-                }
-                if (projectile.frame >= 6)
-                {
-                    projectile.frame = 2;
-                }
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
-                if (projectile.frameCounter >= 30)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 2)
-                {
-                    projectile.frame = 0;
-                }
+                attackFrames = false;
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                if (projectile.frameCounter >= 24)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 10)
-                {
-                    projectile.frame = 8;
-                }
-                if (projectile.frame <= 7)
-                {
-                    projectile.frame = 8;
-                }
+                normalFrames = false;
+                attackFrames = false;
+                PlayAnimation("Secondary");
             }
             if (abilityPose)
             {
-                projectile.frame = 6;
+                normalFrames = false;
+                attackFrames = false;
+                secondaryAbilityFrames = false;
+                PlayAnimation("AbilityPose");
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                projectile.frame = 7;
+                PlayAnimation("Pose");
+            }
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
+            if (animationName == "Idle")
+            {
+                AnimationStates(animationName, 2, 30, true);
+            }
+            if (animationName == "Attack")
+            {
+                AnimationStates(animationName, 4, newPunchTime, true);
+            }
+            if (animationName == "Secondary")
+            {
+                AnimationStates(animationName, 2, 24, true);
+            }
+            if (animationName == "AbilityPose")
+            {
+                AnimationStates(animationName, 1, 10, true);
+            }
+            if (animationName == "Pose")
+            {
+                AnimationStates(animationName, 1, 10, true);
             }
         }
     }

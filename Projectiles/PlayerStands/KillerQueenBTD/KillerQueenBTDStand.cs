@@ -32,13 +32,16 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         }
 
         public override float shootSpeed => 4f;
-        public int projectileDamage = 180;      //not overriden cause it has to change sometimes
         public override int shootTime => 60;
         public override int halfStandHeight => 37;
+        public override int standOffset => -10;
+
+        private int projectileDamage = 180;      //not overriden cause it has to change sometimes
+
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             if (shootCount > 0)
             {
                 shootCount--;
@@ -50,10 +53,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             {
                 projectile.timeLeft = 2;
             }
-            if (projectile.spriteDirection == 1)
-            {
-                drawOffsetX = -10;
-            }
             if (Main.dayTime)
             {
                 projectileDamage = 180;
@@ -64,20 +63,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             }
             drawOriginOffsetY = -halfStandHeight;
 
-            Vector2 vector131 = player.Center;
             if (!attackFrames)
-            {
-                vector131.X -= (float)((15 + player.width / 2) * player.direction);
-            }
+                StayBehind();
             if (attackFrames)
-            {
-                vector131.X -= (float)((15 + player.width / 2) * (player.direction * -1));
-            }
-            vector131.Y -= -35f + halfStandHeight;
-            projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
-            projectile.velocity *= 0.8f;
-            projectile.direction = projectile.spriteDirection = player.direction;
-            projectile.rotation = 0;
+                GoInFront();
 
             if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("BitesTheDust")))
             {
@@ -101,6 +90,27 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     attackFrames = true;
                     Main.mouseRight = false;
                     projectile.netUpdate = true;
+                    if (projectile.frame == 4 && !modPlayer.StandAutoMode)
+                    {
+                        if (shootCount <= 0)
+                        {
+                            shootCount += newShootTime;
+                            Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                            {
+                                shootVel = new Vector2(0f, 1f);
+                            }
+                            shootVel.Normalize();
+                            shootVel *= shootSpeed;
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), (int)(projectileDamage * modPlayer.standDamageBoosts), 5f, Main.myPlayer, 1f, projectile.whoAmI);
+                            Main.projectile[proj].netUpdate = true;
+                            projectile.netUpdate = true;
+                        }
+                    }
+                    if (projectile.frame >= 5)
+                    {
+                        attackFrames = false;
+                    }
                 }
                 else if (!secondaryAbilityFrames)
                 {
@@ -115,6 +125,15 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     secondaryAbilityFrames = true;
                     projectile.ai[0] = 1f;      //to detonate all bombos
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
+                }
+                if (secondaryAbilityFrames && projectile.ai[0] == 1f)
+                {
+                    if (projectile.frame >= 2)
+                    {
+                        projectile.ai[0] = 0f;
+                        normalFrames = true;
+                        secondaryAbilityFrames = false;
+                    }
                 }
             }
             if (modPlayer.StandAutoMode)
@@ -160,7 +179,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     {
                         projectile.spriteDirection = projectile.direction = -1;
                     }
-                    if (attackFrames && projectile.frame == 6 && shootCount <= 0)
+                    if (attackFrames && projectile.frame == 5 && shootCount <= 0)
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
@@ -186,91 +205,42 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             }
         }
 
-        public virtual void SelectFrame()
+
+        public override void SelectAnimation()
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                secondaryAbilityFrames = false;
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= newShootTime)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 1)
-                {
-                    projectile.frame = 2;
-                }
-                if (projectile.frame == 6 && !modPlayer.StandAutoMode)
-                {
-                    if (shootCount <= 0)
-                    {
-                        shootCount += newShootTime;
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                        {
-                            shootVel = new Vector2(0f, 1f);
-                        }
-                        shootVel.Normalize();
-                        shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), (int)(projectileDamage * modPlayer.standDamageBoosts), 5f, Main.myPlayer, 1f, projectile.whoAmI);
-                        Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
-                    }
-                }
-                if (projectile.frame >= 9)
-                {
-                    projectile.frame = 2;
-                    attackFrames = false;
-                }
+                PlayAnimation("Attack");
+            }
+            if (normalFrames)
+            {
+                attackFrames = false;
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= 18)      //18 to match it up with the explosion if you want
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 8)
-                {
-                    projectile.frame = 9;
-                }
-                if (projectile.frame >= 12)      //cause it should only click once
-                {
-                    projectile.frame = 9;
-                    projectile.ai[0] = 0f;
-                    secondaryAbilityFrames = false;
-                }
+                PlayAnimation("Secondary");
             }
-            if (normalFrames)
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/KillerQueenBTD/KQBTD_" + animationName);
+            if (animationName == "Idle")
             {
-                attackFrames = false;
-                secondaryAbilityFrames = false;
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= 30)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 2)
-                {
-                    projectile.frame = 0;
-                }
+                AnimationStates(animationName, 2, 30, true);
             }
-            /*if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode && normalFrames)
+            if (animationName == "Attack")
             {
-                normalFrames = false;
-                attackFrames = false;
-                clickFrames = false;
-                projectile.frame = 9;
-            }*/
+                AnimationStates(animationName, 6, newShootTime, true);
+            }
+            if (animationName == "Secondary")
+            {
+                AnimationStates(animationName, 4, 18 - Main.player[projectile.whoAmI].GetModPlayer<MyPlayer>().standSpeedBoosts, false);
+            }
         }
     }
 }

@@ -125,7 +125,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, punchTime, true);
+                AnimationStates(animationName, 4, newPunchTime, true);
             }
         }
     }

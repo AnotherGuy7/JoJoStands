@@ -29,7 +29,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             if (shootCount > 0)
             {
                 shootCount--;
@@ -63,13 +63,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 if (!attackFrames)
                 {
                     if (player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] == 0)
-                    {
                         StayBehind();
-                    }
                     if (player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] != 0)
-                    {
                         GoInFront();
-                    }
                 }
                 if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] == 0 && projectile.owner == Main.myPlayer)
                 {
@@ -88,10 +84,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 }
                 if (player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] != 0)
                 {
-                    projectile.frame = 8;
                     Main.mouseLeft = false;
-                    normalFrames = false;
-                    attackFrames = false;
+                    secondaryAbilityFrames = true;
                     projectile.netUpdate = true;
                 }
                 if (SpecialKeyPressed() && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersZipperPoint2")] == 0)
@@ -115,44 +109,50 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             }
         }
 
-        public virtual void SelectFrame()
+        public override void SelectAnimation()
         {
-            Player player = Main.player[projectile.owner];
-            projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= punchTime - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 3)
-                {
-                    projectile.frame = 4;
-                }
-                if (projectile.frame >= 8)
-                {
-                    projectile.frame = 4;
-                }
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
-                if (projectile.frameCounter >= 30)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 4)
-                {
-                    projectile.frame = 0;
-                }
+                attackFrames = false;
+                PlayAnimation("Idle");
+            }
+            if (secondaryAbilityFrames)
+            {
+                normalFrames = false;
+                attackFrames = false;
+                PlayAnimation("Secondary");
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                projectile.frame = 9;
+                PlayAnimation("Pose");
+            }
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
+            if (animationName == "Idle")
+            {
+                AnimationStates(animationName, 4, 30, true);
+            }
+            if (animationName == "Attack")
+            {
+                AnimationStates(animationName, 4, newPunchTime, true);
+            }
+            if (animationName == "Secondary")
+            {
+                AnimationStates(animationName, 1, 10, true);
+            }
+            if (animationName == "Pose")
+            {
+                AnimationStates(animationName, 1, 10, true);
             }
         }
     }

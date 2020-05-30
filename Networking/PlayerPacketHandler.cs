@@ -13,6 +13,7 @@ namespace JoJoStands.Networking
 		public const byte StandAutoMode = 2;
 		public const byte CBLayer = 3;
 		public const byte Yoshihiro = 4;
+		private const byte DyeItem = 5;
 		
 		public PlayerPacketHandler(byte handlerType) : base(handlerType)
 		{
@@ -37,6 +38,9 @@ namespace JoJoStands.Networking
 					break;
 				case Yoshihiro:
 					ReceiveYoshihiroSpawn(reader, fromWho);
+					break;
+				case DyeItem:
+					ReceiveDyeItem(reader, fromWho);
 					break;
 			}
 		}
@@ -153,6 +157,30 @@ namespace JoJoStands.Networking
 				if (!NPC.AnyNPCs(type))
 					NPC.NewNPC((int)pos.X, (int)pos.Y, type);
 				SendYoshihiroToSpawn(-1, fromWho, type, pos);
+			}
+		}
+
+		public void SendDyeItem(int toWho, int fromWho, int dyeItemType, int whoAmI)
+		{
+			ModPacket packet = GetPacket(DyeItem, fromWho);
+			packet.Write(dyeItemType);
+			packet.Write(whoAmI);
+			packet.Send(toWho, fromWho);
+		}
+
+		public void ReceiveDyeItem(BinaryReader reader, int fromWho)
+		{
+			int dyeItemType = reader.ReadInt32();
+			int oneWhoEquipped = reader.ReadInt32();
+			if (Main.netMode != NetmodeID.Server)
+			{
+				Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.Item.type = dyeItemType;
+
+			}
+			else
+			{
+				SendDyeItem(-1, fromWho, dyeItemType, oneWhoEquipped);
+
 			}
 		}
 	}

@@ -27,7 +27,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             updateTimer++;
             if (shootCount > 0)
             {
@@ -68,56 +68,40 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             }
         }
 
-        public virtual void SelectFrame()
+        public override void SelectAnimation()
         {
-            Player player = Main.player[projectile.owner];
-            projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= punchTime - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 3)
-                {
-                    projectile.frame = 4;
-                }
-                if (projectile.frame >= 8)
-                {
-                    projectile.frame = 4;
-                }
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
-                if (projectile.frameCounter >= 12)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 4)
-                {
-                    projectile.frame = 0;
-                }
+                attackFrames = false;
+                PlayAnimation("Idle");
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                if (projectile.frameCounter >= 12)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 10)
-                {
-                    projectile.frame = 8;
-                }
-                if (projectile.frame <= 7)
-                {
-                    projectile.frame = 8;
-                }
+                PlayAnimation("Pose");
+            }
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
+            if (animationName == "Idle")
+            {
+                AnimationStates(animationName, 4, 12, true);
+            }
+            if (animationName == "Attack")
+            {
+                AnimationStates(animationName, 4, newPunchTime, true);
+            }
+            if (animationName == "Pose")
+            {
+                AnimationStates(animationName, 2, 12, true);
             }
         }
     }

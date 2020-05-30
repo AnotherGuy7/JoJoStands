@@ -55,6 +55,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         private float mouseDistance;
         public bool secondaryAbility = false;
         private bool playedBeginning = false;
+        private bool sentDyePacket = false;
         private SoundEffectInstance beginningSoundInstance = null;
         private SoundEffectInstance punchingSoundInstance = null;
 
@@ -499,7 +500,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     if (!playedBeginning)
                     {
                         //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                        Main.PlaySoundInstance(beginningSoundInstance);
+                        Main.PlaySoundInstance(beginningSoundInstance);                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
                         playedBeginning = true;
                     }
                     if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
@@ -560,8 +561,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             drawOffsetX = standOffset * projectile.spriteDirection;
             newPunchTime = punchTime - modPlayer.standSpeedBoosts;
             newShootTime = shootTime - modPlayer.standSpeedBoosts;
+        }
 
-            Main.NewText(punchTime + ";" + newPunchTime);
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            return false;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
@@ -577,6 +581,25 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 var shader = GameShaders.Armor.GetShaderFromItemId(mPlayer.StandDyeSlot.Item.type);
                 shader.Apply(null);
+                if (!sentDyePacket)       //we sync dye slot item here
+                {
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        Networking.ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.Item.type, player.whoAmI);
+                    }
+                    sentDyePacket = true;
+                }
+            }
+            else
+            {
+                if (sentDyePacket)
+                {
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        Networking.ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.Item.type, player.whoAmI);
+                    }
+                    sentDyePacket = false;
+                }
             }
             return true;
         }
