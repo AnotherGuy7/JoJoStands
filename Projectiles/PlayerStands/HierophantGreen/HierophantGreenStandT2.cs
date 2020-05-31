@@ -41,7 +41,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             if (shootCount > 0)
             {
                 shootCount--;
@@ -51,10 +51,22 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             Lighting.AddLight((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 35, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
             projectile.scale = ((50 - player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPoint2")]) * 2f) / 100f;
+            newShootTime = shootTime - modPlayer.standSpeedBoosts;
+
+            Vector2 vector131 = player.Center;
             if (!attackFrames)
-                StayBehind();
-            else
-                GoInFront();
+            {
+                vector131.X -= (float)((15 + player.width / 2) * player.direction);
+            }
+            if (attackFrames)
+            {
+                vector131.X -= (float)((15 + player.width / 2) * (player.direction * -1));
+            }
+            vector131.Y -= 5f;
+            projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
+            projectile.velocity *= 0.8f;
+            projectile.direction = (projectile.spriteDirection = player.direction);
+
             if (modPlayer.StandOut)
             {
                 projectile.timeLeft = 2;
@@ -211,36 +223,40 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             }
         }
 
-        public void SelectFrame()
+        public override void SelectAnimation()
         {
-            projectile.frameCounter++;
-            if (normalFrames)
-            {
-                if (projectile.frameCounter >= 20)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 3)
-                {
-                    projectile.frame = 0;
-                }
-            }
             if (attackFrames)
             {
-                if (projectile.frameCounter >= 15)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 6)
-                {
-                    projectile.frame = 3;
-                }
-                if (projectile.frame <= 2)
-                {
-                    projectile.frame = 3;
-                }
+                normalFrames = false;
+                PlayAnimation("Attack");
+            }
+            if (normalFrames)
+            {
+                attackFrames = false;
+                PlayAnimation("Idle");
+            }
+            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            {
+                normalFrames = false;
+                attackFrames = false;
+                PlayAnimation("Pose");
+            }
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/HierophantGreen/HierophantGreen_" + animationName);
+            if (animationName == "Idle")
+            {
+                AnimationStates(animationName, 3, 20, true);
+            }
+            if (animationName == "Attack")
+            {
+                AnimationStates(animationName, 3, 15, true);
+            }
+            if (animationName == "Pose")
+            {
+                AnimationStates(animationName, 2, 15, true);
             }
         }
     }

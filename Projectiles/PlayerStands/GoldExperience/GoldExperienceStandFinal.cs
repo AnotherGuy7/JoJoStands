@@ -31,7 +31,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             updateTimer++;
             if (shootCount > 0)
             {
@@ -150,44 +150,40 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
             }
         }
 
-        public virtual void SelectFrame()
+        public override void SelectAnimation()
         {
-            Player player = Main.player[projectile.owner];
-            projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= punchTime - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 7)
-                {
-                    projectile.frame = 8;
-                }
-                if (projectile.frame >= 12)
-                {
-                    projectile.frame = 8;
-                }
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
-                if (projectile.frameCounter >= 30)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 8)
-                {
-                    projectile.frame = 0;
-                }
+                attackFrames = false;
+                PlayAnimation("Idle");
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                projectile.frame = 12;
+                PlayAnimation("Pose");
+            }
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/GoldExperience/GoldExperience_" + animationName);
+            if (animationName == "Idle")
+            {
+                AnimationStates(animationName, 4, 30, true);
+            }
+            if (animationName == "Attack")
+            {
+                AnimationStates(animationName, 4, newPunchTime, true);
+            }
+            if (animationName == "Pose")
+            {
+                AnimationStates(animationName, 1, 12, true);
             }
         }
     }

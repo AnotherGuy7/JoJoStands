@@ -37,10 +37,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         }
 
         public override float shootSpeed => 12f;       //how fast the projectile the minion shoots goes
+        public override int projectileDamage => 75;
+        public override int shootTime => 6;      //+2 every tier
 
-        public bool bombless = false;
-        public int projectileDamage = 75;
-        public int shootTime = 6;      //+2 every tier
+        private bool bombless = false;
 
         public override void AI()
         {
@@ -57,6 +57,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 projectile.timeLeft = 2;
             }
             modPlayer.aerosmithWhoAmI = projectile.whoAmI;
+            newShootTime = shootTime - modPlayer.standSpeedBoosts;
+
             Vector2 rota = projectile.Center - Main.MouseWorld;
             projectile.rotation = (-rota * projectile.direction).ToRotation();
             bombless = player.HasBuff(mod.BuffType("AbilityCooldown"));

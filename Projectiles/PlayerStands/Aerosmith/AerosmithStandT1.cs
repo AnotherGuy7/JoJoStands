@@ -8,6 +8,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 {  
     public class AerosmithStandT1 : StandClass
     {
+        public override string Texture
+        {
+            get { return mod.Name + "/Projectiles/PlayerStands/Aerosmith/AerosmithStandT1"; }
+        }
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 4;
@@ -33,10 +38,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         }
 
         public override float shootSpeed => 12f;
+        public override int projectileDamage => 10;
+        public override int shootTime => 12;      //+2 every tier
 
-        public int projectileDamage = 10;
-        public int shootTime = 12;      //+2 every tier
-        public bool fallingFromSpace = false;
+        private bool fallingFromSpace = false;
 
         public override void AI()
         {
@@ -53,6 +58,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 projectile.timeLeft = 2;
             }
             modPlayer.aerosmithWhoAmI = projectile.whoAmI;
+            newShootTime = shootTime - modPlayer.standSpeedBoosts;
 
             if (projectile.position.Y < (Main.worldSurface * 0.35) * 16f)
             {

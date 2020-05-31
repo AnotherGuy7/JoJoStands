@@ -37,7 +37,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
         public override void AI()
         {
-            SelectFrame();
+            SelectAnimation();
             updateTimer++;
             if (shootCount > 0)
             {
@@ -259,90 +259,65 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
             }
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDrawExtras(SpriteBatch spriteBatch)
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (MyPlayer.RangeIndicators)
-            {
-                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxDistance + mPlayer.standRangeBoosts) / 122.5f, SpriteEffects.None, 0);
-                if (maxAltDistance != 0f)
-                {
-                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxAltDistance + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
-                }
-            }
             if (touchedTile)
             {
                 Texture2D texture = mod.GetTexture("Extras/Bomb");
                 spriteBatch.Draw(texture, savedPosition - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
             }
+            return true;
         }
 
-        public virtual void SelectFrame()
+        public override void SelectAnimation()
         {
-            Player player = Main.player[projectile.owner];
-            projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                secondaryAbilityFrames = false;
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= punchTime - player.GetModPlayer<MyPlayer>().standSpeedBoosts)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 6)
-                {
-                    projectile.frame = 7;
-                }
-                if (projectile.frame >= 9)
-                {
-                    projectile.frame = 7;
-                }
+                PlayAnimation("Attack");
+            }
+            if (normalFrames)
+            {
+                attackFrames = false;
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= 18)      //18 to match it up with the explosion if you want
+                PlayAnimation("Secondary");
+                if (projectile.frame >= 4)      //cause it should only click once
                 {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame <= 1)
-                {
-                    projectile.frame = 2;
-                }
-                if (projectile.frame >= 7)      //cause it should only click once
-                {
-                    projectile.frame = 2;
                     secondaryAbilityFrames = false;
-                }
-            }
-            if (normalFrames)
-            {
-                attackFrames = false;
-                secondaryAbilityFrames = false;
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= 30)
-                {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 2)
-                {
-                    projectile.frame = 0;
                 }
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                secondaryAbilityFrames = false;
-                projectile.frame = 9;
+                PlayAnimation("Pose");
+            }
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            standTexture = mod.GetTexture("Projectiles/PlayerStands/KillerQueen/KillerQueen_" + animationName);
+            if (animationName == "Idle")
+            {
+                AnimationStates(animationName, 2, 30, true);
+            }
+            if (animationName == "Attack")
+            {
+                AnimationStates(animationName, 2, newPunchTime, true);
+            }
+            if (animationName == "Secondary")
+            {
+                AnimationStates(animationName, 5, 18, true);
+            }
+            if (animationName == "Pose")
+            {
+                AnimationStates(animationName, 1, 2, true);
             }
         }
     }

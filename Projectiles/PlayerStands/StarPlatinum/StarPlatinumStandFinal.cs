@@ -38,7 +38,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             }
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
             if (modPlayer.StandOut)
             {
                 projectile.timeLeft = 2;

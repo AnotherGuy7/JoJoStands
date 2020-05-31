@@ -585,7 +585,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        Networking.ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.Item.type, player.whoAmI);
+                        ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.Item.type, player.whoAmI);
                     }
                     sentDyePacket = true;
                 }
@@ -596,7 +596,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        Networking.ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.Item.type, player.whoAmI);
+                        ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.Item.type, player.whoAmI);
                     }
                     sentDyePacket = false;
                 }

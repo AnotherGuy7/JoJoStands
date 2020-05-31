@@ -40,9 +40,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         public override float shootSpeed => 12f;
 
         public bool bombless = false;
-        public int projectileDamage = 63;
-        public int shootTime = 8;      //+2 every tier
-        public bool fallingFromSpace = false;
+        public override int projectileDamage => 63;
+        public override int shootTime => 8;      //+2 every tier
+
+        private bool fallingFromSpace = false;
 
         public override void AI()
         {
@@ -59,6 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 projectile.timeLeft = 2;
             }
             modPlayer.aerosmithWhoAmI = projectile.whoAmI;
+            newShootTime = shootTime - modPlayer.standSpeedBoosts;
 
             if (projectile.position.Y < (Main.worldSurface * 0.35) * 16f)
             {
