@@ -67,9 +67,8 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 {
                     StayBehind();
                 }
-                if (Main.mouseRight && projectile.owner == Main.myPlayer && shootCount <= 0  && !grabFrames)
+                if (Main.mouseRight && projectile.owner == Main.myPlayer && shootCount <= 0 && !grabFrames)
                 {
-                    LimitDistance();        //has to be in the bottom of the method so that it applies to velocity
                     projectile.velocity = Main.MouseWorld - projectile.position;
                     projectile.velocity.Normalize();
                     projectile.velocity *= 5f;
@@ -95,20 +94,8 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                             }
                         }
                     }
-                    if (!Main.mouseRight)
-                    {
-                        shootCount += 30;
-                        secondaryFrames = false;
-                        projectile.ai[0] = -1f;
-                    }
+                    LimitDistance();
                 }
-                ///If the player is holding right click, the player is the owner of the projectile, GD can shoot, and the GD isn't grabbing
-                ///Limit the Distance it can go out for
-                ///Move toward the mouse at a speed of 5
-                ///Get the distance between GD and the mouse, if it's greater than 40 allow GD to move and if it's less than 40 stop him from moving
-                ///Start animating GD with Secondary frames
-                ///Search for NPCs near GD that he can grab and if so, make projectile.ai[0] the targets index, as well as start grabbing
-                ///If ricght click isn't being held anymore, add 30 to shootCount so that GD can't grab immediately after, stop his animation, and make it so he stops grabbing the NPC he's grabbing
                 if (grabFrames && projectile.ai[0] != -1f)
                 {
                     projectile.velocity = Vector2.Zero;
@@ -116,14 +103,21 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     npc.direction = -projectile.direction;
                     npc.position = projectile.position + new Vector2(5f * projectile.direction, -2f - npc.height / 3f);
                     npc.velocity = Vector2.Zero;
-                    npc.AddBuff(mod.BuffType("Old2"), 10);
-                    if (!Main.mouseRight || !npc.active)
+                    npc.AddBuff(mod.BuffType("Old2"), 2);
+                    if (!npc.active)
                     {
-                        LimitDistance();            //what... why. This would limit the distance only when grab stops, so it runs just once when you stop grabbing
                         grabFrames = false;
                         projectile.ai[0] = -1f;
                         shootCount += 30;
                     }
+                    LimitDistance();
+                }
+                if (!Main.mouseRight && (grabFrames || secondaryFrames))
+                {
+                    grabFrames = false;
+                    projectile.ai[0] = -1f;
+                    shootCount += 30;
+                    secondaryFrames = false;
                 }
             }
             if (modPlayer.StandAutoMode)
@@ -200,5 +194,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 AnimationStates(animationName, 1, 12, true);
             }
         }
+
     }
 }
