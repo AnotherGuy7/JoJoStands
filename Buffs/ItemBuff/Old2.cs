@@ -39,6 +39,8 @@ namespace JoJoStands.Buffs.ItemBuff
         }
         public override void Update(NPC npc, ref int buffIndex)
         {
+            Player player = Main.player[Main.myPlayer];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             if (npc.boss)
             {
                 npc.lifeRegen = -20;
@@ -46,13 +48,20 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             else
             {
-                npc.AddBuff(mod.BuffType("Old2"), 2);
-                npc.lifeRegen = -80;
+                npc.lifeRegen = -250;
                 npc.velocity.X *= 0.8f;
                 if (!alreadyChangeApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.2f);
                 }
+            }
+            if (modPlayer.gratefulDeadTier == 3)
+            {
+                npc.lifeRegen = -350;
+            }
+            if (modPlayer.gratefulDeadTier == 4)
+            {
+                npc.lifeRegen = -500;
             }
         }
     }
