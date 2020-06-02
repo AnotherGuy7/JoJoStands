@@ -50,8 +50,7 @@ namespace JoJoStands.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("HierophantGreenT1"));
-            recipe.AddIngredient(ItemID.Emerald, 2);
-            recipe.AddIngredient(ItemID.Hellstone, 10);
+            recipe.AddIngredient(ItemID.Emerald, 7);
             recipe.AddIngredient(mod.ItemType("WillToProtect"));
             recipe.AddIngredient(mod.ItemType("WillToChange"));
             recipe.AddTile(mod.TileType("RemixTableTile"));

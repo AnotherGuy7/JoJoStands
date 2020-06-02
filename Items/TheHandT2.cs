@@ -12,10 +12,11 @@ namespace JoJoStands.Items
         {
             get { return mod.Name + "/Items/TheHandT1"; }
         }
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The Hand (Tier 2)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and zip them open!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click in different areads to scrape!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

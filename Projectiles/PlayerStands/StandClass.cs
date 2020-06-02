@@ -49,6 +49,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public bool secondaryAbilityFrames = false;
         public int newPunchTime = 0;       //so we don't have to type newPunchTime all the time
         public int newShootTime = 0;
+        public bool currentAnimationDone = false;
 
         public int shootCount = 0;
         private Vector2 velocityAddition;
@@ -91,6 +92,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             bool specialPressed = false;
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+            return specialPressed && projectile.owner == Main.myPlayer;
+        }
+
+        public bool SpecialKeyCurrent()
+        {
+            bool specialPressed = false;
+            if (!Main.dedServ)
+                specialPressed = JoJoStands.SpecialHotKey.Current;
             return specialPressed && projectile.owner == Main.myPlayer;
         }
 
@@ -579,6 +588,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             //var shader = GameShaders.Armor.GetSecondaryShader(Main.player[projectile.owner].cLight, Main.player[projectile.owner]);
             if (mPlayer.StandDyeSlot.Item.dye != 0)
             {
+                Main.NewText("Dye Detected");
                 var shader = GameShaders.Armor.GetShaderFromItemId(mPlayer.StandDyeSlot.Item.type);
                 shader.Apply(null);
                 if (!sentDyePacket)       //we sync dye slot item here
@@ -590,7 +600,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     sentDyePacket = true;
                 }
             }
-            else
+            if (mPlayer.StandDyeSlot.Item.dye == 0)
             {
                 if (sentDyePacket)
                 {
@@ -717,11 +727,12 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (projectile.frame >= frameAmount && loop)
             {
                 projectile.frame = 0;
+                currentAnimationDone = false;
             }
-            /*if (projectile.frame >= frameAmount && !loop)     //breaks because the state info isn't defined that way, it's only in PlayAnimation
+            if (projectile.frame >= frameAmount && !loop)
             {
-                stateName = "Idle";
-            }*/
+                currentAnimationDone = true;
+            }
         }
     }
 }
