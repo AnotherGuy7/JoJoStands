@@ -22,32 +22,40 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
+            if (!player.HasBuff(mod.BuffType("CooledOut")))
             {
-                if (player.lifeRegen > 0)
                 {
-                    player.lifeRegen = 0;
+                    if (player.lifeRegen > 0)
+                    {
+                        player.lifeRegen = 0;
+                    }
+                    player.lifeRegenTime = 120;
+                    player.lifeRegen -= 4 * damageMultiplication;
                 }
-                player.lifeRegenTime = 120;
-                player.lifeRegen -= 4 * damageMultiplication;
+                player.moveSpeed *= 0.8f;
+                player.meleeDamage *= 0.75f;
+                player.rangedDamage *= 0.75f;
+                player.magicDamage *= 0.75f;
+                player.meleeSpeed *= 0.5f;
+                player.statDefense = (int)(player.statDefense * 0.8f);
+                if (player.ZoneSnow || player.ZoneSkyHeight)
+                {
+                    damageMultiplication = 0;
+                }
+                if (player.ZoneUnderworldHeight)
+                {
+                    damageMultiplication = 3;
+                }
+                if (player.ZoneDesert || player.ZoneUndergroundDesert)
+                {
+                    damageMultiplication = 2;
+                }
+                if (!player.ZoneDesert || !player.ZoneUndergroundDesert || !player.ZoneUnderworldHeight || !player.ZoneSnow || !player.ZoneSkyHeight)
+                {
+                    damageMultiplication = 1;
+                }
             }
-            player.moveSpeed *= 0.8f;
-            player.meleeDamage *= 0.75f;
-            player.rangedDamage *= 0.75f;
-            player.magicDamage *= 0.75f;
-            player.meleeSpeed *= 0.5f;
-            player.statDefense = (int)(player.statDefense * 0.8f);
-            if (player.ZoneSnow || player.ZoneSkyHeight)
-            {
-                damageMultiplication = 0;
-            }
-            if (player.ZoneUnderworldHeight)
-            {
-                damageMultiplication = 3;
-            }
-            if (player.ZoneDesert || player.ZoneUndergroundDesert)
-            {
-                damageMultiplication = 2;
-            }
+
         }
         public override void Update(NPC npc, ref int buffIndex)
         {
@@ -78,6 +86,10 @@ namespace JoJoStands.Buffs.ItemBuff
             if (player.ZoneDesert || player.ZoneUndergroundDesert)
             {
                 damageMultiplication = 2;
+            }
+            if (!player.ZoneDesert || !player.ZoneUndergroundDesert || !player.ZoneUnderworldHeight || !player.ZoneSnow || !player.ZoneSkyHeight)
+            {
+                damageMultiplication = 1;
             }
             if (modPlayer.gratefulDeadTier == 2)
             {
