@@ -11,14 +11,15 @@ using JoJoStands.Buffs.ItemBuff;
 
 namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
-    public class GratefulDeadStandT2 : StandClass
+    public class GratefulDeadStandT4 : StandClass
     {
 
         public override float shootSpeed => 16f;
         public bool grabFrames = false;
         public bool secondaryFrames = false;
+        public bool ActivatedGas = false;
         public override float maxDistance => 98f;
-        public override int punchDamage => 41;
+        public override int punchDamage => 90;
         public override int punchTime => 12;
         public override int halfStandHeight => 34;
         public override float fistWhoAmI => 8f;
@@ -118,6 +119,49 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     projectile.ai[0] = -1f;
                     shootCount += 30;
                     secondaryFrames = false;
+                }
+            }
+            if (SpecialKeyPressed())
+            {
+                if (!ActivatedGas && shootCount <= 0)
+                {
+                    ActivatedGas = true;
+                    shootCount += 30;
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), 1);
+                    Main.NewText("Gas Spread: On");
+                }
+                if (ActivatedGas && shootCount <= 0)
+                {
+                    ActivatedGas = false;
+                    shootCount += 30;
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), 1);
+                    Main.NewText("Gas Spread: Off");
+                }
+            }
+            if (ActivatedGas)
+            {
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    NPC npc = Main.npc[i];
+                    float distance = Vector2.Distance(player.Center, npc.Center);
+                    if (distance < (126f * 4f) && npc.boss && !npc.townNPC && !npc.immortal && !npc.hide)
+                    {
+                        npc.AddBuff(mod.BuffType("Old"), 2);
+                    }
+                    if (distance < (126f * 4f) && !npc.boss && !npc.immortal && !npc.hide && npc.lifeMax > 5)
+                    {
+                        npc.AddBuff(mod.BuffType("Old"), 2);
+                    }
+                }
+                player.AddBuff(mod.BuffType("Old"), 2);
+                for (int i = 0; i < Main.maxPlayers; i++)
+                {
+                    Player otherPlayer = Main.player[i];
+                    float distance = Vector2.Distance(player.Center, otherPlayer.Center);
+                    if (distance < (126f * 4f) && player.whoAmI != otherPlayer.whoAmI)
+                    {
+                        otherPlayer.AddBuff(mod.BuffType("Old"), 2);
+                    }
                 }
             }
             if (modPlayer.StandAutoMode)

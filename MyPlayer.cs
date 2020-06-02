@@ -46,6 +46,7 @@ namespace JoJoStands
         public int hamonChargeCounter = 0;
         public int sexPistolsLeft = 6;
         public int sexPistolsTier = 0;
+        public int gratefulDeadTier = 0;
         public int revolverBulletsShot = 0;
         public int sexPistolsRecoveryTimer = 0;
         public int aerosmithWhoAmI = 0;
@@ -290,6 +291,10 @@ namespace JoJoStands
                 if (sexPistolsTier != 0)
                 {
                     sexPistolsTier = 0;
+                }
+                if (gratefulDeadTier != 0)
+                {
+                    gratefulDeadTier = 0;
                 }
                 if (equippedTuskAct != 0)
                 {
@@ -982,10 +987,22 @@ namespace JoJoStands
             else if (inputItem.type == mod.ItemType("GratefulDeadT1"))
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT1"), 0, 0f, Main.myPlayer);
+                gratefulDeadTier = 1;
             }
             else if (inputItem.type == mod.ItemType("GratefulDeadT2"))
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT2"), 0, 0f, Main.myPlayer);
+                gratefulDeadTier = 2;
+            }
+            else if (inputItem.type == mod.ItemType("GratefulDeadT3"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT3"), 0, 0f, Main.myPlayer);
+                gratefulDeadTier = 3;
+            }
+            else if (inputItem.type == mod.ItemType("GratefulDeadT4"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT4"), 0, 0f, Main.myPlayer);
+                gratefulDeadTier = 4;
             }
             else if (inputItem.type == mod.ItemType("SexPistolsT1"))
             {
