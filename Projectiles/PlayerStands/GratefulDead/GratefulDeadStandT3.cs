@@ -144,11 +144,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 {
                     NPC npc = Main.npc[i];
                     float distance = Vector2.Distance(player.Center, npc.Center);
-                    if (distance < (126f * 4f) && npc.boss && !npc.townNPC && !npc.immortal && !npc.hide)
+                    if (distance < (30f * 16f) && npc.boss && !npc.townNPC && !npc.immortal && !npc.hide)
                     {
                         npc.AddBuff(mod.BuffType("Old"), 2);
                     }
-                    if (distance < (126f * 4f) && !npc.boss && !npc.immortal && !npc.hide && npc.lifeMax > 5)
+                    if (distance < (30f * 16f) && !npc.boss && !npc.immortal && !npc.hide && npc.lifeMax > 5)
                     {
                         npc.AddBuff(mod.BuffType("Old"), 2);
                     }
