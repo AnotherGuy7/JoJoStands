@@ -17,7 +17,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Grateful Dead (Tier 2)");
-            Tooltip.SetDefault("Sup boomers\nUsed in Stand Slot");
+            Tooltip.SetDefault("Punch enemies to make them age and right-click to grab them!\nMore effective on hot biomes.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
