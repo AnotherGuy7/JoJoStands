@@ -161,7 +161,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 shootVel.Normalize();
                 shootVel *= shootSpeed;
-                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(punchDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer, shootCount);
+                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(punchDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer, fistWhoAmI, tierNumber);
                 Main.projectile[proj].netUpdate = true;
                 projectile.netUpdate = true;
             }
@@ -321,7 +321,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 shootVel *= shootSpeed;
                             }
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, Main.myPlayer, fistWhoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, Main.myPlayer, fistWhoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -442,7 +442,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 shootVel *= shootSpeed;
                             }
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, Main.myPlayer, fistWhoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, Main.myPlayer, fistWhoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -481,7 +481,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * modPlayer.standDamageBoosts) * 0.9f), 2f, Main.myPlayer, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * modPlayer.standDamageBoosts) * 0.9f), 2f, Main.myPlayer, projectile.whoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -579,18 +579,73 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
         {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+
+            DrawRangeIndicators(spriteBatch);       //not affected by dyes since it's starting a new batch with no effect
+
+            return true;
+        }
+
+        public SpriteEffects effects = SpriteEffects.None;
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)     //manually drawing stands cause sometimes stands had too many frames, it's easier to manage this way, and dye effects didn't work for stands that were overriding PostDraw
+        {
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 
-            // Retrieve reference to shader
-            //var shader = GameShaders.Armor.GetSecondaryShader(Main.player[projectile.owner].cLight, Main.player[projectile.owner]);
+            spriteBatch.End();     //ending the spriteBatch that started in PreDraw
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
+
+            SyncAndApplyDyeSlot();
+            DrawStand(spriteBatch, drawColor);
+        }
+
+        private void DrawStand(SpriteBatch spriteBatch, Color drawColor)
+        {
+            if (projectile.spriteDirection == -1)
+            {
+                effects = SpriteEffects.FlipHorizontally;
+            }
+            if (projectile.spriteDirection == 1)
+            {
+                effects = SpriteEffects.None;
+            }
+            if (standTexture != null && Main.netMode != NetmodeID.Server)
+            {
+                int frameHeight = standTexture.Height / Main.projFrames[projectile.whoAmI];
+                spriteBatch.Draw(standTexture, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
+            }
+        }
+
+        private void DrawRangeIndicators(SpriteBatch spriteBatch)
+        {
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (MyPlayer.RangeIndicators && Main.netMode != NetmodeID.Server)
+            {
+                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
+                if (maxDistance != 0f)
+                {
+                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxDistance + mPlayer.standRangeBoosts) / 122.5f, SpriteEffects.None, 0);
+                }
+                if (maxAltDistance != 0f)
+                {
+                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxAltDistance + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
+                }
+            }
+        }
+
+        private void SyncAndApplyDyeSlot()
+        {
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
             if (mPlayer.StandDyeSlot.Item.dye != 0)
             {
-                Main.NewText("Dye Detected");
-                var shader = GameShaders.Armor.GetShaderFromItemId(mPlayer.StandDyeSlot.Item.type);
-                shader.Apply(null);
+                ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(mPlayer.StandDyeSlot.Item.type);
+                shader.Apply(null);     //has to be on top of whatever it's applying to (I spent hours and hours trying to find a solution and the only problem was that this was under it)
                 if (!sentDyePacket)       //we sync dye slot item here
                 {
                     if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -610,43 +665,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                     sentDyePacket = false;
                 }
-            }
-            return true;
-        }
-
-        public SpriteEffects effects = SpriteEffects.None;
-
-        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)     //manually drawing stands cause sometimes stands had too many frames, it's easier to manage this way, and dye effects didn't work for stands that were overriding PostDraw
-        {
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            Main.spriteBatch.End();     //ending the spriteBatch that started in PreDraw (it's a guess)
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);     //starting a new one for Post
-
-            if (projectile.spriteDirection == -1)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
-            if (projectile.spriteDirection == 1)
-            {
-                effects = SpriteEffects.None;
-            }
-            if (MyPlayer.RangeIndicators)
-            {
-                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
-                if (maxDistance != 0f)
-                {
-                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxDistance + mPlayer.standRangeBoosts) / 122.5f, SpriteEffects.None, 0);
-                }
-                if (maxAltDistance != 0f)
-                {
-                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxAltDistance + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
-                }
-            }
-            if (standTexture != null)
-            {
-                int frameHeight = standTexture.Height / Main.projFrames[projectile.whoAmI];
-                spriteBatch.Draw(standTexture, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
             }
         }
 

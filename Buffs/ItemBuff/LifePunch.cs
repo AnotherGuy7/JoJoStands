@@ -28,7 +28,6 @@ namespace JoJoStands.Buffs.ItemBuff
         {
             npc.velocity /= 1.5f;
             npc.defense -= 5;
-            base.Update(npc, ref buffIndex);
         }
     }
 }

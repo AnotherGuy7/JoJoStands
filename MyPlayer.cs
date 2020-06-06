@@ -1084,6 +1084,10 @@ namespace JoJoStands
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheHandStandT3"), 0, 0f, Main.myPlayer);
             }
+            else if (inputItem.type == mod.ItemType("TheHandFinal"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheHandStandFinal"), 0, 0f, Main.myPlayer);
+            }
             else if (inputItem.type == mod.ItemType("TestStand"))
             {
                 if (player.name.Contains("Test Shadow"))

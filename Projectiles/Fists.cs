@@ -75,6 +75,25 @@ namespace JoJoStands.Projectiles
                     PlayerStands.KillerQueen.KillerQueenStandFinal.savedTarget = target;
                 }
             }
+            if (projectile.ai[0] == 9f)
+            {
+                if (projectile.ai[1] == 1f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 300);
+                }
+                if (projectile.ai[1] == 2f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 360);
+                }
+                if (projectile.ai[1] == 3f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 420);
+                }
+                if (projectile.ai[1] == 4f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 480);
+                }
+            }
             if (projectile.ai[0] == 8f)
             {
                 if (projectile.ai[1] == 1f)
