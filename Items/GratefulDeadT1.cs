@@ -46,11 +46,8 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("KillerQueenT1"));
-            recipe.AddIngredient(ItemID.Dynamite, 12);
-            recipe.AddIngredient(ItemID.HellstoneBar, 5);
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
-            recipe.AddIngredient(mod.ItemType("WillToEscape"));
+            recipe.AddIngredient(mod.ItemType("WillToChange"));
+            recipe.AddIngredient(mod.ItemType("StandArrow"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
