@@ -27,7 +27,7 @@ namespace JoJoStands.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("StandArrow"));
             recipe.AddIngredient(mod.ItemType("ViralPearl"));
-            recipe.AddTile(TileID.AncientManipulator);
+            recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
