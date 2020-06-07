@@ -17,7 +17,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Grateful Dead (Tier 3)");
-            Tooltip.SetDefault("Sup boomers\nUsed in Stand Slot");
+            Tooltip.SetDefault("Sup boomers\nSpecial: Spread Gas\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
