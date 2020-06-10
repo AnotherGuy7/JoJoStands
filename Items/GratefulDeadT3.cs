@@ -60,7 +60,7 @@ namespace JoJoStands.Items
             recipe.AddRecipe();
             recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("GratefulDeadT2"));
-            recipe.AddIngredient(ItemID.CursedFlames, 10);
+            recipe.AddIngredient(ItemID.CursedFlame, 10);
             recipe.AddIngredient(ItemID.Bone, 15);
             recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
             recipe.AddIngredient(mod.ItemType("WillToChange"), 2);
