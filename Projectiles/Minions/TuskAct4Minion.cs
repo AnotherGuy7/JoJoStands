@@ -2,12 +2,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
+using JoJoStands.Projectiles.PlayerStands;
  
 namespace JoJoStands.Projectiles.Minions
 {  
-    public class TuskAct4Minion : PlayerStands.StandClass
+    public class TuskAct4Minion : StandClass
     {
+        public override string Texture => mod.Name + "/Projectiles/Minions/TuskAct4Minion";
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 8;
@@ -35,10 +37,8 @@ namespace JoJoStands.Projectiles.Minions
 
         protected float shootSpeed = 16f;
         protected float shootCool = 6f;
-        public bool normalFrames = false;
-        public bool attackFrames = false;
-        public bool justSpawned = false;
-        public int goldenRectangleEffectTimer = 256;
+        private bool justSpawned = false;
+        private int goldenRectangleEffectTimer = 256;
 
         public override void AI()       //changed this to ExampleMod's HoverShooter...
         {
@@ -156,16 +156,12 @@ namespace JoJoStands.Projectiles.Minions
                 {
                     rectangleOffset = new Vector2(-30f, 0f);
                 }
-                /*if (projectile.direction == -1)
-                {
-                    rectangleOffset = V
-                }*/
                 spriteBatch.Draw(mod.GetTexture("Extras/GoldenSpinComplete"), (projectile.position + rectangleOffset) - Main.screenPosition, Color.White * (((float)goldenRectangleEffectTimer * 3.9215f) / 1000f));
             }
             return true;
         }
 
-        public virtual void SelectFrame()
+        public virtual void SelectFrame()   //too lazy to change, not like it has many states anyway
         {
             projectile.frameCounter++;
             if (attackFrames)

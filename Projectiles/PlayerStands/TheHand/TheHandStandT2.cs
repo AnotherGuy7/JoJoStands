@@ -27,7 +27,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         private int updateTimer = 0;
         private bool scrapeFrames = false;
         private int chargeTimer = 0;
-        private int specialTimer = 0;
 
         public override void AI()
         {
@@ -110,7 +109,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 }*/
                 if (!attackFrames)
                 {
-                    if (!scrapeFrames)
+                    if (!scrapeFrames && !secondaryAbilityFrames)
                         StayBehind();
                     else
                         GoInFront();
@@ -138,6 +137,16 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             return true;
         }
 
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(scrapeFrames);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            scrapeFrames = reader.ReadBoolean();
+        }
+
         public override void SelectAnimation()
         {
             if (attackFrames)
@@ -155,6 +164,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 normalFrames = false;
                 attackFrames = false;
                 PlayAnimation("Charge");
+                projectile.frame = 0;
             }
             if (scrapeFrames)
             {
@@ -193,11 +203,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (animationName == "Scrape")
             {
-                AnimationStates(animationName, 2, 180, false);
+                AnimationStates(animationName, 2, 500, false);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 2, 12, true);
+                AnimationStates(animationName, 1, 12, true);
             }
         }
     }

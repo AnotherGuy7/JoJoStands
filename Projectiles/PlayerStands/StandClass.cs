@@ -591,9 +591,6 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)     //manually drawing stands cause sometimes stands had too many frames, it's easier to manage this way, and dye effects didn't work for stands that were overriding PostDraw
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-
             spriteBatch.End();     //ending the spriteBatch that started in PreDraw
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
 
@@ -673,6 +670,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             writer.Write(normalFrames);
             writer.Write(attackFrames);
             writer.Write(secondaryAbilityFrames);
+            SendExtraStates(writer);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
@@ -680,7 +678,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             normalFrames = reader.ReadBoolean();
             attackFrames = reader.ReadBoolean();
             secondaryAbilityFrames = reader.ReadBoolean();
+            ReceiveExtraStates(reader);
         }
+
+        public virtual void SendExtraStates(BinaryWriter writer)        //for those extra special 4th states (TH Charge, TW Pose, GER Rock Flick)
+        {}
+
+        public virtual void ReceiveExtraStates(BinaryReader reader)
+        {}
 
         public void LimitDistance()
         {
@@ -730,6 +735,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Main.projFrames[projectile.whoAmI] = frameAmount;
             projectile.frameCounter++;
+            currentAnimationDone = false;
             if (projectile.frameCounter >= frameCounterLimit)
             {
                 projectile.frameCounter = 0;
@@ -745,7 +751,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (projectile.frame >= frameAmount && loop)
             {
                 projectile.frame = 0;
-                currentAnimationDone = false;
             }
             if (projectile.frame >= frameAmount && !loop)
             {

@@ -13,7 +13,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
     public class GratefulDeadStandT2 : StandClass
     {
-
         public override float shootSpeed => 16f;
         public bool grabFrames = false;
         public bool secondaryFrames = false;
@@ -126,12 +125,12 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
         }
 
-        public override void SendExtraAI(BinaryWriter writer)
+        public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(grabFrames);
         }
 
-        public override void ReceiveExtraAI(BinaryReader reader)
+        public override void ReceiveExtraStates(BinaryReader reader)
         {
             grabFrames = reader.ReadBoolean();
         }

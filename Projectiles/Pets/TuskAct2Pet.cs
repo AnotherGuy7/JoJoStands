@@ -1,13 +1,13 @@
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
+using JoJoStands.Projectiles.PlayerStands;
 namespace JoJoStands.Projectiles.Pets
 {
-    public class TuskAct2Pet : PlayerStands.StandClass
+    public class TuskAct2Pet : StandClass
     {
+        public override string Texture => mod.Name + "/Projectiles/Pets/TuskAct2Pet";
+
         public override void SetStaticDefaults()
         {
             Main.projPet[projectile.type] = true;

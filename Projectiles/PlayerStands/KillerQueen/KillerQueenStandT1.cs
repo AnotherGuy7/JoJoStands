@@ -296,7 +296,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
         public override bool PreDrawExtras(SpriteBatch spriteBatch)
         {
-            Player player = Main.player[projectile.owner];
             if (touchedTile)
             {
                 Texture2D texture = mod.GetTexture("Extras/Bomb");

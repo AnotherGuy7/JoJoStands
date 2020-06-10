@@ -1,14 +1,16 @@
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using JoJoStands.Projectiles.PlayerStands;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.Minions
 {  
-    public class SheerHeartAttack : PlayerStands.StandClass     //so it takes dyes
+    public class SheerHeartAttack : StandClass     //so it takes dyes
     {
+        public override string Texture => mod.Name + "/Projectiles/Minions/SheerHeartAttack";
+
         public bool saidKocchiwomiro = false;
 
         public override void SetStaticDefaults()

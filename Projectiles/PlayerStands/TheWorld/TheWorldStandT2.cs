@@ -116,17 +116,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             }
         }
 
-        public override void SendExtraAI(BinaryWriter writer)       //since this is overriden you have to sync the normal stuff
+        public override void SendExtraStates(BinaryWriter writer)
         {
-            writer.Write(normalFrames);
-            writer.Write(attackFrames);
             writer.Write(abilityPose);
         }
 
-        public override void ReceiveExtraAI(BinaryReader reader)
+        public override void ReceiveExtraStates(BinaryReader reader)
         {
-            normalFrames = reader.ReadBoolean();
-            attackFrames = reader.ReadBoolean();
             abilityPose = reader.ReadBoolean();
         }
 

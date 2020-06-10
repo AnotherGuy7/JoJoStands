@@ -110,7 +110,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             NPC npc = Main.npc[i];
                             if (npc.active && Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), projectile.position, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
                             {
-                                npc.StrikeNPC(60 * (specialTimer / 120), 0f, player.direction);
+                                npc.StrikeNPC(60 * (specialTimer / 60), 0f, player.direction);      //damage goes up at a rate of 60dmg/s
                                 //npc.AddBuff(mod.BuffType("MissingOrgans"), 900);
                             }
                         }
@@ -145,6 +145,16 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 spriteBatch.Draw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f));
             }
             return true;
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(scrapeFrames);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            scrapeFrames = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()
@@ -206,7 +216,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 2, 12, true);
+                AnimationStates(animationName, 1, 12, true);
             }
         }
     }
