@@ -751,8 +751,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             currentAnimationDone = false;
             if (projectile.frameCounter >= frameCounterLimit)
             {
-                projectile.frameCounter = 0;
                 projectile.frame += 1;
+                projectile.frameCounter = 0;
             }
             if (loopCertainFrames)
             {

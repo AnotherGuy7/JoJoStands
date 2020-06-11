@@ -31,6 +31,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
         public override void AI()
         {
+            if (scrapeFrames)       //seems to not actually do this in SelectAnim
+            {
+                normalFrames = false;
+                attackFrames = false;
+                secondaryAbilityFrames = false;
+            }
             SelectAnimation();
             UpdateStandInfo();
             updateTimer++;
@@ -40,7 +46,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
             if (modPlayer.StandOut)
             {
                 projectile.timeLeft = 2;
@@ -73,6 +78,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 if (!Main.mouseRight && chargeTimer != 0 && projectile.owner == Main.myPlayer)
                 {
                     scrapeFrames = true;
+                }
+                if (!Main.mouseRight && chargeTimer != 0 && projectile.owner == Main.myPlayer && scrapeFrames && projectile.frame == 1)
+                {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                     distanceToTeleport.Normalize();
@@ -136,6 +144,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 distanceToTeleport *= 98f * (chargeTimer / 60f);
                 spriteBatch.Draw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f));
             }
+            if (scrapeFrames)
+            {
+                Texture2D scrapeTrail = mod.GetTexture("Extras/ScrapeTrail");
+                //spriteBatch.Draw(scrapeTrail, projectile.Center - Main.screenPosition, new Rectangle(0, 2 - projectile.frame, scrapeTrail.Width, scrapeTrail.Height / (projectile.frame + 1)), Color.White);
+                int frameHeight = standTexture.Height / 2;
+                spriteBatch.Draw(scrapeTrail, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), Color.White, 0f, new Vector2(scrapeTrail.Width / 2f, frameHeight / 2f), 1f, effects, 0);
+            }
             return true;
         }
 
@@ -148,6 +163,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         {
             scrapeFrames = reader.ReadBoolean();
         }
+
+        private bool resetFrame = false;
 
         public override void SelectAnimation()
         {
@@ -166,24 +183,35 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 normalFrames = false;
                 attackFrames = false;
                 PlayAnimation("Charge");
-                projectile.frame = 0;
             }
             if (scrapeFrames)
             {
+                if (!resetFrame)
+                {
+                    projectile.frame = 0;
+                    projectile.frameCounter = 0;
+                    resetFrame = true;
+                }
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Scrape");
-                if (currentAnimationDone)
+                if (resetFrame)
                 {
-                    normalFrames = true;
-                    scrapeFrames = false;
+                    if (currentAnimationDone)
+                    {
+                        normalFrames = true;
+                        scrapeFrames = false;
+                        resetFrame = false;
+                    }
                 }
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
+                secondaryAbilityFrames = false;
+                scrapeFrames = false;
                 PlayAnimation("Pose");
             }
         }
@@ -205,7 +233,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (animationName == "Scrape")
             {
-                AnimationStates(animationName, 2, 500, false);
+                AnimationStates(animationName, 2, 10, false);
             }
             if (animationName == "Pose")
             {
