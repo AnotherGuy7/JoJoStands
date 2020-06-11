@@ -17,6 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override int halfStandHeight => 32;
         public override float fistWhoAmI => 6f;
         public override int standOffset => 0;
+        public override int standType => 1;
 
         private int updateTimer = 0;
         private Vector2 velocityAddition;

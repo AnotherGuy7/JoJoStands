@@ -39,6 +39,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         public override float shootSpeed => 12f;
         public override int projectileDamage => 42;
         public override int shootTime => 10;      //+2 every tier
+        public override int standType => 2;
 
         private bool bombless = false;
         private bool fallingFromSpace = false;

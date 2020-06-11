@@ -1,6 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using Terraria;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.IO;
+using System.Runtime.InteropServices;
+using Terraria;
+using Terraria.Graphics.Effects;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
@@ -17,6 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override float fistWhoAmI => 8f;
         public override float tierNumber => 1f;
         public override int standOffset => -4;
+        public override int standType => 1;
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             return false;
@@ -162,6 +169,17 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 BasicPunchAI();
             }
         }
+        public override bool PreDrawExtras(SpriteBatch spriteBatch)
+        {
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (MyPlayer.RangeIndicators)
+            {
+                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");
+                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), ((126f * 4f) + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
+            }
+            return base.PreDrawExtras(spriteBatch);
+        }
 
         public override void SendExtraStates(BinaryWriter writer)
         {
@@ -172,7 +190,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         {
             grabFrames = reader.ReadBoolean();
         }
-
 
         public override void SelectAnimation()
         {

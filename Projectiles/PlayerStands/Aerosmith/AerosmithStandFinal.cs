@@ -38,6 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         public override float shootSpeed => 12f;       //how fast the projectile the minion shoots goes
         public override int projectileDamage => 75;
         public override int shootTime => 6;      //+2 every tier
+        public override int standType => 2;
 
         private bool bombless = false;
 

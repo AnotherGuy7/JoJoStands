@@ -26,6 +26,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         }
 
         public override float shootSpeed => 8f;
+        public override int standType => 2;
         public override int projectileDamage => 48;
         public override int shootTime => 18;
         public override int halfStandHeight => 35;

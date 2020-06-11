@@ -16,6 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override float fistWhoAmI => 8f;
         public override float tierNumber => 1f;
         public override int standOffset => -4;
+        public override int standType => 1;
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             return false;

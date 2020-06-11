@@ -35,12 +35,14 @@ namespace JoJoStands.Projectiles.Minions
             projectile.ignoreWater = true;
         }
 
+        public override int standType => 2;
         protected float shootSpeed = 16f;
         protected float shootCool = 6f;
         private int goldenRectangleEffectTimer = 256;
 
         public override void AI()       //changed this to ExampleMod's HoverShooter...
         {
+            UpdateStandInfo();
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             Vector2 targetPos = projectile.position;

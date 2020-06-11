@@ -20,6 +20,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
         public override float maxDistance => 98f;
         public override float maxAltDistance => 490f;
+        public override int standType => 1;
         public override int punchDamage => 78;
         public override int punchTime => 10;
         public override int halfStandHeight => 37;

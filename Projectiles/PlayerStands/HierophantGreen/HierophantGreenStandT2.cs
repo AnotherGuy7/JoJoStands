@@ -35,6 +35,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int projectileDamage => 32;
         public override int halfStandHeight => 25;
         public override int standOffset => 0;
+        public override int standType => 2;
         public bool linkShot = false;
 
         public override void AI()

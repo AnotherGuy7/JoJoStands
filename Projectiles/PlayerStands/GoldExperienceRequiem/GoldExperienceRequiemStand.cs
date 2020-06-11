@@ -21,6 +21,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override float tierNumber => 5f;
         public override int standOffset => 28;
         public override string punchSoundName => "GER_Muda";
+        public override int standType => 1;
 
         private bool saidAbility = true;
         private int regencounter = 0;

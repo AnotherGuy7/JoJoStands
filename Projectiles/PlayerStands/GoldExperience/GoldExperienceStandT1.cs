@@ -18,6 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
         public override float tierNumber => 1f;
         public override int standOffset => -30;
         public override string punchSoundName => "GER_Muda";
+        public override int standType => 1;
 
         public int updateTimer = 0;
 

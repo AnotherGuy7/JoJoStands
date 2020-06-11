@@ -831,6 +831,7 @@ namespace JoJoStands
             if (inputItem.type == mod.ItemType("CenturyBoy"))       //the accessory stands
             {
                 standAccessory = true;
+                standType = 1;
                 showingCBLayer = true;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
@@ -840,6 +841,7 @@ namespace JoJoStands
             else if (inputItem.type == mod.ItemType("CenturyBoyT2"))
             {
                 standAccessory = true;
+                standType = 1;
                 showingCBLayer = true;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
@@ -849,21 +851,25 @@ namespace JoJoStands
             else if (inputItem.type == mod.ItemType("LockT1"))
             {
                 standAccessory = true;
+                standType = 1;
                 player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT2"))
             {
                 standAccessory = true;
+                standType = 1;
                 player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT3"))
             {
                 standAccessory = true;
+                standType = 1;
                 player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT4"))
             {
                 standAccessory = true;
+                standType = 1;
                 player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("StarPlatinumT1"))       //the normal stands
@@ -1008,37 +1014,45 @@ namespace JoJoStands
             }
             else if (inputItem.type == mod.ItemType("SexPistolsT1"))
             {
+                standType = 2;
                 sexPistolsTier = 1;
             }
             else if (inputItem.type == mod.ItemType("SexPistolsT2"))
             {
+                standType = 2;
                 sexPistolsTier = 2;
             }
             else if (inputItem.type == mod.ItemType("SexPistolsT3"))
             {
+                standType = 2;
                 sexPistolsTier = 3;
             }
             else if (inputItem.type == mod.ItemType("SexPistolsFinal"))
             {
+                standType = 2;
                 sexPistolsTier = 4;
             }
             else if (inputItem.type == mod.ItemType("TuskAct1"))
             {
+                standType = 2;
                 equippedTuskAct = 1;
                 TuskActNumber = 1;
             }
             else if (inputItem.type == mod.ItemType("TuskAct2"))
             {
+                standType = 2;
                 equippedTuskAct = 2;
                 TuskActNumber = 2;
             }
             else if (inputItem.type == mod.ItemType("TuskAct3"))
             {
+                standType = 2;
                 equippedTuskAct = 3;
                 TuskActNumber = 3;
             }
             else if (inputItem.type == mod.ItemType("TuskAct4"))
             {
+                standType = 2;
                 equippedTuskAct = 4;
                 TuskActNumber = 3;
             }

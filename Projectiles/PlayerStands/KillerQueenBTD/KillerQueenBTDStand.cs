@@ -29,6 +29,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override float shootSpeed => 4f;
         public override int shootTime => 60;
         public override int halfStandHeight => 37;
+        public override int standType => 2;
         public override int standOffset => -10;
 
         private int projectileDamage = 180;      //not overriden cause it has to change sometimes

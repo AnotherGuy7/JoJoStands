@@ -19,6 +19,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override int punchTime => 11;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 5f;
+        public override int standType => 1;
         public override float maxAltDistance => 201f;     //about 10 tiles
 
 
