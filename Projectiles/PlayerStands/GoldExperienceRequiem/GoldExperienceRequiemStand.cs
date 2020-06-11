@@ -1,12 +1,7 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
-using Terraria.ModLoader;
 using JoJoStands.Networking;
-using System.IO;
 
 namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 {
@@ -35,6 +30,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
             {
@@ -177,7 +173,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         }
                         shootVel.Normalize();
                         shootVel *= 12f;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("GoldExperienceRock"), (int)(punchDamage * modPlayer.standDamageBoosts) + 11, 6f, Main.myPlayer);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("GoldExperienceRock"), newPunchDamage + 11, 6f, Main.myPlayer);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                         player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(3));

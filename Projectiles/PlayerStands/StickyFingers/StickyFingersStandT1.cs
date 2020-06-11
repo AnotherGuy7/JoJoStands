@@ -29,6 +29,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
             {

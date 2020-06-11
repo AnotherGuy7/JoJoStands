@@ -37,7 +37,6 @@ namespace JoJoStands.Projectiles.Minions
 
         protected float shootSpeed = 16f;
         protected float shootCool = 6f;
-        private bool justSpawned = false;
         private int goldenRectangleEffectTimer = 256;
 
         public override void AI()       //changed this to ExampleMod's HoverShooter...
@@ -159,6 +158,20 @@ namespace JoJoStands.Projectiles.Minions
                 spriteBatch.Draw(mod.GetTexture("Extras/GoldenSpinComplete"), (projectile.position + rectangleOffset) - Main.screenPosition, Color.White * (((float)goldenRectangleEffectTimer * 3.9215f) / 1000f));
             }
             return true;
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            SyncAndApplyDyeSlot();
+            return true;
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
         }
 
         public virtual void SelectFrame()   //too lazy to change, not like it has many states anyway

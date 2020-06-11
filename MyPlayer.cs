@@ -56,6 +56,7 @@ namespace JoJoStands
         public float standCritChangeBoosts = 0f;
         public int standSpeedBoosts = 0;
         public float standCooldownReduction = 0f;
+        public int standType = 0;           //0 = no type; 1 = Melee; 2 = Ranged;
 
         public bool wearingEpitaph = false;
         public bool achievedInfiniteSpin = false;
@@ -284,6 +285,7 @@ namespace JoJoStands
             if (JoJoStands.StandOut.JustPressed && StandOut && ActivationTimer <= 0)
             {
                 StandOut = false;
+                standType = 0;
                 if (standAccessory)
                 {
                     standAccessory = false;

@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
-using System.IO;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 {  
@@ -46,6 +44,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         public override void AI()
         {
             SelectFrame();
+            UpdateStandInfo();
             if (shootCount > 0)
             {
                 shootCount--;
@@ -58,7 +57,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 projectile.timeLeft = 2;
             }
             modPlayer.aerosmithWhoAmI = projectile.whoAmI;
-            newShootTime = shootTime - modPlayer.standSpeedBoosts;
 
             if (projectile.position.Y < (Main.worldSurface * 0.35) * 16f)
             {
@@ -133,7 +131,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, (int)(projectileDamage * modPlayer.standDamageBoosts), 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, newProjectileDamage, 3f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -239,7 +237,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, (int)(projectileDamage * modPlayer.standDamageBoosts), 3f, projectile.owner);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, newProjectileDamage, 3f, projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                         }
                     }

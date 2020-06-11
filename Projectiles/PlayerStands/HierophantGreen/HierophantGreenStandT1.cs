@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
-using System.IO;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles.PlayerStands
 {  
@@ -41,6 +39,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             if (shootCount > 0)
             {
                 shootCount--;
@@ -49,7 +48,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             Lighting.AddLight((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 35, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
-            newShootTime = shootTime - modPlayer.standSpeedBoosts;      //HandleDrawOffsets isn't used here, so this is 0
 
             Vector2 vector131 = player.Center;
             if (!attackFrames)
@@ -95,7 +93,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         for (int i = 0; i < numberProjectiles; i++)
                         {
                             Vector2 perturbedSpeed = new Vector2(shootVel.X + random, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Emerald"), (int)(projectileDamage * modPlayer.standDamageBoosts), 2f, player.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Emerald"), newProjectileDamage, 2f, player.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                         }
                         projectile.netUpdate = true;

@@ -41,6 +41,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual float tierNumber { get; }
         public virtual float punchKnockback { get; }
         public virtual string punchSoundName { get; } = "";
+        public virtual int standType { get; } = 0;
         public virtual Texture2D standTexture { get; set; }
 
 
@@ -49,6 +50,10 @@ namespace JoJoStands.Projectiles.PlayerStands
         public bool secondaryAbilityFrames = false;
         public int newPunchTime = 0;       //so we don't have to type newPunchTime all the time
         public int newShootTime = 0;
+        public float newMaxDistance = 0f;
+        public float newAltMaxDistance = 0f;
+        public int newPunchDamage = 0;
+        public int newProjectileDamage = 0;
         public bool currentAnimationDone = false;
 
         public int shootCount = 0;
@@ -161,7 +166,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 shootVel.Normalize();
                 shootVel *= shootSpeed;
-                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(punchDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer, fistWhoAmI, tierNumber);
+                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, 2f, Main.myPlayer, fistWhoAmI, tierNumber);
                 Main.projectile[proj].netUpdate = true;
                 projectile.netUpdate = true;
             }
@@ -232,7 +237,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             HandleDrawOffsets();
             NPC target = null;
             Vector2 targetPos = projectile.position;
-            float targetDist = maxDistance * 3f;
+            float targetDist = newMaxDistance * 3f;
             if (!attackFrames)
             {
                 Vector2 vector131 = player.Center;
@@ -271,7 +276,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (target != null)
             {
-                if (targetDist < (maxDistance * 1.5f))
+                if (targetDist < (newMaxDistance * 1.5f))
                 {
                     attackFrames = true;
                     normalFrames = false;
@@ -344,7 +349,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             HandleDrawOffsets();
             NPC target = null;
             Vector2 targetPos = projectile.position;
-            float targetDist = maxDistance * 3f;
+            float targetDist = newMaxDistance * 3f;
             if (target == null)
             {
                 for (int k = 0; k < 200; k++)       //the targeting system
@@ -371,7 +376,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                 }
             }
-            if (targetDist > (maxDistance * 1.5f) || secondaryAbility || target == null)
+            if (targetDist > (newMaxDistance * 1.5f) || secondaryAbility || target == null)
             {
                 Vector2 vector131 = player.Center;
                 normalFrames = true;
@@ -392,7 +397,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (target != null)
             {
-                if (targetDist < (maxDistance * 1.5f))
+                if (targetDist < (newMaxDistance * 1.5f))
                 {
                     attackFrames = true;
                     normalFrames = false;
@@ -448,7 +453,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                 }
-                else if (Main.rand.Next(0, 101) <= 1 && targetDist > (maxDistance * 1.5f))
+                else if (Main.rand.Next(0, 101) <= 1 && targetDist > (newMaxDistance * 1.5f))
                 {
                     secondaryAbility = true;
                 }
@@ -562,14 +567,24 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
-        public void HandleDrawOffsets()
+        public void HandleDrawOffsets()     //this method kind of lost its usage when we found a better way to do offsets but whatever
+        {
+            drawOffsetX = standOffset * projectile.spriteDirection;
+        }
+
+        public void UpdateStandInfo()
         {
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
-            drawOffsetX = standOffset * projectile.spriteDirection;
             newPunchTime = punchTime - modPlayer.standSpeedBoosts;
             newShootTime = shootTime - modPlayer.standSpeedBoosts;
+            newMaxDistance = maxDistance + modPlayer.standRangeBoosts;
+            newAltMaxDistance = maxAltDistance + modPlayer.standRangeBoosts;
+            newPunchDamage = (int)(punchDamage * modPlayer.standDamageBoosts);
+            newProjectileDamage = (int)(projectileDamage * modPlayer.standDamageBoosts);
+            if (modPlayer.standType != standType)
+                modPlayer.standType = standType;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -618,23 +633,22 @@ namespace JoJoStands.Projectiles.PlayerStands
         private void DrawRangeIndicators(SpriteBatch spriteBatch)
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             if (MyPlayer.RangeIndicators && Main.netMode != NetmodeID.Server)
             {
                 Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
                 if (maxDistance != 0f)
                 {
-                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxDistance + mPlayer.standRangeBoosts) / 122.5f, SpriteEffects.None, 0);
+                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), newMaxDistance / 122.5f, SpriteEffects.None, 0);
                 }
                 if (maxAltDistance != 0f)
                 {
-                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (maxAltDistance + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
+                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), newAltMaxDistance / 160f, SpriteEffects.None, 0);
                 }
             }
         }
 
-        private void SyncAndApplyDyeSlot()
+        public void SyncAndApplyDyeSlot()
         {
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -694,8 +708,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             Vector2 direction = player.Center - projectile.Center;
             float distanceTo = direction.Length();
-            float maxDist = maxDistance + modPlayer.standRangeBoosts;
-            if (distanceTo > maxDist)
+            if (distanceTo > newMaxDistance)
             {
                 if (projectile.position.X <= player.position.X - 15f)
                 {
@@ -714,7 +727,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     projectile.velocity = player.velocity + new Vector2(0f, 0.8f);
                 }
             }
-            if (distanceTo >= maxDist + 22f)
+            if (distanceTo >= newMaxDistance + 22f)
             {
                 if (!modPlayer.StandAutoMode)
                 {

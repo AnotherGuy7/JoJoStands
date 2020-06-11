@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
-using System.IO;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 {  
@@ -47,6 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             if (shootCount > 0)
             {
                 shootCount--;
@@ -56,7 +55,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             Lighting.AddLight((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 35, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
             projectile.scale = ((50 - player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPoint2")]) * 2f) / 100f;
-            newShootTime = shootTime - modPlayer.standSpeedBoosts;
 
             Vector2 vector131 = player.Center;
             if (!attackFrames)
@@ -102,7 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         for (int i = 0; i < numberProjectiles; i++)
                         {
                             Vector2 perturbedSpeed = new Vector2(shootVel.X + Main.rand.NextFloat(-6f, 6f), shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Emerald"), (int)(projectileDamage * modPlayer.standDamageBoosts), 3f, player.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Emerald"), newProjectileDamage, 3f, player.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                         }
                     }

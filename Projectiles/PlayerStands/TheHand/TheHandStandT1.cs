@@ -28,6 +28,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
             {

@@ -19,6 +19,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         }
 
         public override float maxDistance => 98f;
+        public override float maxAltDistance => 327f;
         public override int punchDamage => 52;
         public override int punchTime => 11;
         public override int halfStandHeight => 37;
@@ -32,6 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
             {
@@ -88,6 +90,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 if (!SpecialKeyCurrent() && specialTimer != 0)
                 {
                     scrapeFrames = true;
+                    float mouseDistance = Vector2.Distance(player.Center, Main.MouseWorld);
                     if (specialTimer <= 60)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
@@ -102,7 +105,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         }
                         player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(20));
                     }
-                    if (specialTimer > 60)
+                    if (specialTimer > 60 && mouseDistance <= newMaxDistance * 2.5f)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
                         for (int i = 0; i < Main.maxNPCs; i++)
@@ -110,7 +113,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             NPC npc = Main.npc[i];
                             if (npc.active && Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), projectile.position, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
                             {
-                                npc.StrikeNPC(60 * (specialTimer / 120), 0f, player.direction);     //damage goes up at a rate of 30dmg/s
+                                npc.StrikeNPC(60 * (specialTimer / 60), 0f, player.direction);     //damage goes up at a rate of 60dmg/s
                                 //npc.AddBuff(mod.BuffType("MissingOrgans"), 900);
                             }
                         }
@@ -144,6 +147,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 distanceToTeleport.Normalize();
                 distanceToTeleport *= 98f * (chargeTimer / 45f);
                 spriteBatch.Draw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f));
+            }
+            if (MyPlayer.RangeIndicators)
+            {
+                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");
+                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (newMaxDistance * 2.5f) / 160f, SpriteEffects.None, 0);
             }
             return true;
         }

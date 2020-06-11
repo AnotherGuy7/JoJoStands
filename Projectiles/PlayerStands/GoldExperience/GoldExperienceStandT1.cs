@@ -1,11 +1,5 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 {
@@ -30,6 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
             {

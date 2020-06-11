@@ -5,10 +5,6 @@ namespace JoJoStands.Items.Hamon
 {
     public class HamonPlayer : ModPlayer
     {
-        public static HamonPlayer ModPlayer(Player player)
-        {
-            return player.GetModPlayer<HamonPlayer>();
-        }
         public float hamonDamageBoosts = 1f;
         public float hamonKnockbackBoosts = 1f;
         public int hamonLevel = 0;
@@ -33,7 +29,6 @@ namespace JoJoStands.Items.Hamon
         public override void PreUpdate()
         {
             MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             if (NPC.downedBoss1)
             {
                 hamonLevel = 1;
@@ -76,45 +71,45 @@ namespace JoJoStands.Items.Hamon
             }
 
 
-            if (hamonLevel == 1)
+            if (hamonLevel == 1)        //different things will be added here later
             {
-                hamonPlayer.maxHamon = 72;
+                maxHamon = 72;
             }
             if (hamonLevel == 2)
             {
-                hamonPlayer.maxHamon = 84;
+                maxHamon = 84;
             }
             if (hamonLevel == 3)
             {
-                hamonPlayer.maxHamon = 96;
+                maxHamon = 96;
             }
             if (hamonLevel == 4)
             {
-                hamonPlayer.maxHamon = 108;
+                maxHamon = 108;
             }
             if (hamonLevel == 5)
             {
-                hamonPlayer.maxHamon = 120;
+                maxHamon = 120;
             }
             if (hamonLevel == 6)
             {
-                hamonPlayer.maxHamon = 132;
+                maxHamon = 132;
             }
             if (hamonLevel == 7)
             {
-                hamonPlayer.maxHamon = 144;
+                maxHamon = 144;
             }
             if (hamonLevel == 8)
             {
-                hamonPlayer.maxHamon = 156;
+                maxHamon = 156;
             }
             if (hamonLevel == 9)
             {
-                hamonPlayer.maxHamon = 168;
+                maxHamon = 168;
             }
             if (hamonLevel == 10)
             {
-                hamonPlayer.maxHamon = 180;
+                maxHamon = 180;
             }
 
             if (AjaStone)           //Hamon charging stuff
@@ -134,7 +129,7 @@ namespace JoJoStands.Items.Hamon
                     counter = 0;
                     HamonCounter += 1;
                 }
-                if (HamonCounter <= 60)
+                if (HamonCounter < 60)
                 {
                     counter = 0;
                     HamonCounter += 1;

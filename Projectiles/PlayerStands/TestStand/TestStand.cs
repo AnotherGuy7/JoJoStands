@@ -34,6 +34,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             //rippleEffectTimer--;
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();

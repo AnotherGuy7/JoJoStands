@@ -1,11 +1,5 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 {
@@ -43,6 +37,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             if (shootCount > 0)
             {
                 shootCount--;
@@ -81,7 +76,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("FireAnkh"), (int)(projectileDamage * modPlayer.standDamageBoosts), 3f, Main.myPlayer, chanceToDebuff, debuffDuration);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("FireAnkh"), newProjectileDamage, 3f, Main.myPlayer, chanceToDebuff, debuffDuration);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }
@@ -106,7 +101,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     }
                     shootVel.Normalize();
                     shootVel *= 16f;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RedBind"), (int)(projectileDamage * modPlayer.standDamageBoosts), 3f, Main.myPlayer, projectile.whoAmI, debuffDuration - 60);
+                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RedBind"), newProjectileDamage, 3f, Main.myPlayer, projectile.whoAmI, debuffDuration - 60);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
                 }
@@ -117,7 +112,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     {
                         float radius = p * 5;
                         Vector2 offset = player.Center + (radius.ToRotationVector2() * 48f);
-                        int proj = Projectile.NewProjectile(offset.X, offset.Y, 0f, 0f, mod.ProjectileType("CrossfireHurricaneAnkh"), (int)(projectileDamage * modPlayer.standDamageBoosts), 5f, Main.myPlayer, 48f, radius);
+                        int proj = Projectile.NewProjectile(offset.X, offset.Y, 0f, 0f, mod.ProjectileType("CrossfireHurricaneAnkh"), newProjectileDamage, 5f, Main.myPlayer, 48f, radius);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }
@@ -194,7 +189,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("FireAnkh"), (int)(projectileDamage * modPlayer.standDamageBoosts), 3f, Main.myPlayer, chanceToDebuff, debuffDuration);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("FireAnkh"), newProjectileDamage, 3f, Main.myPlayer, chanceToDebuff, debuffDuration);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }

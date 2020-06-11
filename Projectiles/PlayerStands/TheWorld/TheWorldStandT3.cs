@@ -34,6 +34,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
             {

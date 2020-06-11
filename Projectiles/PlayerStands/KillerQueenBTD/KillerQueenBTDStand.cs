@@ -1,10 +1,5 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
@@ -42,6 +37,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             if (shootCount > 0)
             {
                 shootCount--;
@@ -102,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), (int)(projectileDamage * modPlayer.standDamageBoosts), 5f, Main.myPlayer, 1f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newProjectileDamage, 5f, Main.myPlayer, 1f, projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -191,7 +187,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), (int)(projectileDamage * modPlayer.standDamageBoosts), 3f, Main.myPlayer, 0f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newProjectileDamage, 3f, Main.myPlayer, 0f, projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }

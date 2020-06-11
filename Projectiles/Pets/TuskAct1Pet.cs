@@ -2,10 +2,12 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using JoJoStands.Projectiles.PlayerStands;
+using Terraria.ModLoader;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace JoJoStands.Projectiles.Pets
 {
-    public class TuskAct1Pet : StandClass
+    public class TuskAct1Pet : StandClass   //for SyncAndApplyDyeSlot method
     {
         public override string Texture => mod.Name + "/Projectiles/Pets/TuskAct1Pet";
 
@@ -108,6 +110,20 @@ namespace JoJoStands.Projectiles.Pets
                 projectile.localAI[0] = 0f;
             }
             projectile.netUpdate = true;
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            SyncAndApplyDyeSlot();
+            return true;
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
         }
     }
 }

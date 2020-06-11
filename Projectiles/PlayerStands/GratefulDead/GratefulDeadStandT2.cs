@@ -1,13 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
-using Terraria.Graphics.Effects;
-using Terraria.ID;
-using Terraria.ModLoader;
-using JoJoStands.Networking;
 using System.IO;
-using JoJoStands.Buffs.ItemBuff;
 
 namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
@@ -33,6 +26,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override void AI()
         {
             SelectAnimation();
+            UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
             {

@@ -4,10 +4,11 @@ using JoJoStands.Projectiles.PlayerStands;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace JoJoStands.Projectiles.Minions
 {  
-    public class SheerHeartAttack : StandClass     //so it takes dyes
+    public class SheerHeartAttack : StandClass
     {
         public override string Texture => mod.Name + "/Projectiles/Minions/SheerHeartAttack";
 
@@ -106,7 +107,7 @@ namespace JoJoStands.Projectiles.Minions
                 int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, 107, 7f, Main.myPlayer);
                 Main.projectile[proj].timeLeft = 2;
                 Main.projectile[proj].netUpdate = true;
-                Main.player[projectile.owner].AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
                 projectile.Kill();
             }
             if (projectile.ai[0] == 1f)
@@ -114,9 +115,23 @@ namespace JoJoStands.Projectiles.Minions
                 int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, 142, 7f, Main.myPlayer);
                 Main.projectile[proj].timeLeft = 2;
                 Main.projectile[proj].netUpdate = true;
-                Main.player[projectile.owner].AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(4));
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(4));
                 projectile.Kill();
             }
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            SyncAndApplyDyeSlot();
+            return true;
+        }
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
         }
     }
 }
