@@ -21,5 +21,5 @@ namespace JoJoStands.Items.CraftingMaterials
             item.value = Item.buyPrice(0, 0, 24, 0);
             item.rare = ItemRarityID.Red;
 		}
-    }
+	}
 }

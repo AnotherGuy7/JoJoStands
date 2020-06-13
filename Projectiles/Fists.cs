@@ -128,6 +128,13 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(BuffID.CursedInferno, 60 * 10);
                 }
             }
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                {
+                    target.AddBuff(mod.BuffType("Infected"), 10 * 60);
+                }
+            }
         }
 
         public override void OnHitPvp(Player target, int damage, bool crit)

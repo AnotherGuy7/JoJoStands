@@ -64,6 +64,9 @@ namespace JoJoStands
         public bool StandAutoMode = false;
         public bool destroyAmuletEquipped = false;
         public bool greaterDestroyEquipped = false;
+        public bool crystalArmorBonus = false;
+        public bool crackedPearlEquipped = false;
+        public bool usedEctoPearl = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -1183,6 +1186,10 @@ namespace JoJoStands
                     player.statLife += healingAmount;
                     player.HealEffect(healingAmount, true);
                 }
+            }
+            if (crystalArmorBonus)
+            {
+
             }
         }
 
