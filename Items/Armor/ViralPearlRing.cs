@@ -21,6 +21,7 @@ namespace JoJoStands.Items.Armor
             item.accessory = true;
             item.rare = ItemRarityID.LightRed;
             item.value = Item.buyPrice(0, 2, 0, 0);
+            item.useStyle = ItemUseStyleID.EatingUsing;
             item.maxStack = 1;
             item.consumable = true;
         }
@@ -33,10 +34,15 @@ namespace JoJoStands.Items.Armor
         {
             if (player.altFunctionUse == 2)
             {
+                item.stack = 0;
                 Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("ViralPearl"), 0, 0f);
+                player.ConsumeItem(mod.ItemType("ViralPearlRing"));
             }
-            player.ConsumeItem(mod.ItemType("ViralPearlRing"));
-            return base.CanUseItem(player);
+            else
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

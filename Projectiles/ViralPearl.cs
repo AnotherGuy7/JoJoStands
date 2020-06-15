@@ -31,6 +31,7 @@ namespace JoJoStands.Projectiles
             {
                 Dust.NewDust(projectile.Center, 1, 1, 215);
                 projectile.position.X += (float)Math.Sin(counter * 180);
+                projectile.velocity = Vector2.Zero;
             }
             if (counter >= 240)
             {

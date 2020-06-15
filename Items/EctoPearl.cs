@@ -21,16 +21,25 @@ namespace JoJoStands.Items
 			item.value = Item.buyPrice(0, 0, 0, 60);
 			item.rare = ItemRarityID.Orange;
 			item.consumable = true;
+			item.useStyle = ItemUseStyleID.EatingUsing;
 			item.useAnimation = 15;
 			item.useTime = 15;
 			item.useTurn = true;
 		}
 		public override bool UseItem(Player player)
 		{
-			player.GetModPlayer<MyPlayer>().standRangeBoosts += 8f;
 			player.GetModPlayer<MyPlayer>().usedEctoPearl = true;
 			player.ConsumeItem(mod.ItemType("EctoPearl"));
 			return base.UseItem(player);
+		}
+		public override void PostUpdate()
+		{
+			Player player = Main.player[Main.myPlayer];
+			MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+			if (modPlayer.usedEctoPearl)
+			{
+				modPlayer.standRangeBoosts += 8f;
+			}
 		}
 	}
 }

@@ -164,6 +164,10 @@ namespace JoJoStands.NPCs
                 shop.item[nextSlot].SetDefaults(mod.ItemType("BloodForTheKing"));
                 nextSlot++;
             }
+            if (type == NPCID.TravellingMerchant && ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss))
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType("ViralPearlRing"));
+            }
         }
 
         public override bool PreAI(NPC npc)
