@@ -14,8 +14,6 @@ namespace JoJoStands.Buffs.AccessoryBuff
             DisplayName.SetDefault("Infected");
             Description.SetDefault("Some sort of otherworldly virus is spreading inside your body.");
             Main.debuff[Type] = true;
-            Main.buffNoTimeDisplay[Type] = true;
-            Main.persistentBuff[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)
@@ -26,20 +24,11 @@ namespace JoJoStands.Buffs.AccessoryBuff
             }
             player.lifeRegenTime = 120;
             player.lifeRegen -= 4;
-
         }
+
         public override void Update(NPC npc, ref int buffIndex)
         {
-            Player player = Main.player[Main.myPlayer];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (npc.boss)
-            {
-                npc.lifeRegen = -12;
-            }
-            else
-            {
-                npc.lifeRegen = -12;
-            }
+            npc.lifeRegen = -12;
         }
     }
 }

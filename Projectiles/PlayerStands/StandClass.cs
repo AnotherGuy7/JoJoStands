@@ -583,8 +583,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             newAltMaxDistance = maxAltDistance + modPlayer.standRangeBoosts;
             newPunchDamage = (int)(punchDamage * modPlayer.standDamageBoosts);
             newProjectileDamage = (int)(projectileDamage * modPlayer.standDamageBoosts);
-            if (modPlayer.standType != standType)
-                modPlayer.standType = standType;
+            modPlayer.standType = standType;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

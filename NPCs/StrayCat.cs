@@ -27,6 +27,7 @@ namespace JoJoStands.NPCs
             npc.chaseable = true;       //whether or not minions can chase this npc
             npc.damage = 21;       //the damage the npc does
             npc.aiStyle = 0;        //no AI, to run void AI()
+            npc.value = Item.buyPrice(0, 0, 6, 60);
         }
 
         //npc.ai[0] = timer before the NPC shoots
@@ -80,7 +81,7 @@ namespace JoJoStands.NPCs
             }
         }
 
-        public int frame = 0;
+        private int frame = 0;
 
         public override void FindFrame(int frameHeight)
         {
@@ -110,7 +111,7 @@ namespace JoJoStands.NPCs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (!NPC.downedPlantBoss)
+            if (!NPC.downedPlantBoss && !spawnInfo.player.ZoneBeach && !spawnInfo.player.ZoneDesert && !spawnInfo.player.ZoneDungeon && spawnInfo.player.ZoneOverworldHeight)
             {
                 return 0.04f;
             }

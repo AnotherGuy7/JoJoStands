@@ -141,6 +141,10 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            {
+                crit = true;
+            }
             if (projectile.ai[0] == 3f && mPlayer.BackToZero)
             {
                 target.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
@@ -149,24 +153,84 @@ namespace JoJoStands.Projectiles
             {
                 if (projectile.ai[1] == 1f)
                 {
-                    target.AddBuff(mod.BuffType("Zipped"), 180);
+                    target.AddBuff(mod.BuffType("Zipped"), 60);
                 }
                 if (projectile.ai[1] == 2f)
                 {
-                    target.AddBuff(mod.BuffType("Zipped"), 240);
+                    target.AddBuff(mod.BuffType("Zipped"), 120);
                 }
                 if (projectile.ai[1] == 3f)
                 {
-                    target.AddBuff(mod.BuffType("Zipped"), 360);
+                    target.AddBuff(mod.BuffType("Zipped"), 180);
                 }
                 if (projectile.ai[1] == 4f)
                 {
-                    target.AddBuff(mod.BuffType("Zipped"), 480);
+                    target.AddBuff(mod.BuffType("Zipped"), 240);
+                }
+            }
+            if (projectile.ai[0] == 8f)
+            {
+                if (projectile.ai[1] == 1f)
+                {
+                    target.AddBuff(mod.BuffType("Old"), 120);
+                }
+                if (projectile.ai[1] == 2f)
+                {
+                    target.AddBuff(mod.BuffType("Old"), 180);
+                }
+                if (projectile.ai[1] == 3f)
+                {
+                    target.AddBuff(mod.BuffType("Old"), 240);
+                }
+                if (projectile.ai[1] == 4f)
+                {
+                    target.AddBuff(mod.BuffType("Old"), 300);
+                }
+            }
+            if (projectile.ai[0] == 9f)
+            {
+                if (projectile.ai[1] == 1f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 60);
+                }
+                if (projectile.ai[1] == 2f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 120);
+                }
+                if (projectile.ai[1] == 3f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 180);
+                }
+                if (projectile.ai[1] == 4f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 240);
+                }
+            }
+
+            if (mPlayer.destroyAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 93)
+                {
+                    target.AddBuff(BuffID.OnFire, 3 * 60);
+                }
+            }
+            if (mPlayer.greaterDestroyEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(BuffID.CursedInferno, 10 * 60);
+                }
+            }
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                {
+                    target.AddBuff(mod.BuffType("Infected"), 10 * 60);
                 }
             }
         }
 
-        public bool playedSound = false;
+        private bool playedSound = false;
 
         public override void AI()
         {

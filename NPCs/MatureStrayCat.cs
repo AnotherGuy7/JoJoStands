@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
@@ -27,6 +24,7 @@ namespace JoJoStands.NPCs
             npc.chaseable = true;       //whether or not minions can chase this npc
             npc.damage = 120;       //the damage the npc does
             npc.aiStyle = 0;        //no AI, to run void AI()
+            npc.value = Item.buyPrice(0, 0, 82, 40);
             npc.catchItem = (short)mod.ItemType("StrayCat");
         }
 
@@ -79,7 +77,7 @@ namespace JoJoStands.NPCs
             }
         }
 
-        public int frame = 0;
+        private int frame = 0;
 
         public override void FindFrame(int frameHeight)
         {
@@ -109,7 +107,7 @@ namespace JoJoStands.NPCs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (NPC.downedPlantBoss)
+            if (NPC.downedPlantBoss && !spawnInfo.player.ZoneBeach && !spawnInfo.player.ZoneDesert && !spawnInfo.player.ZoneDungeon && spawnInfo.player.ZoneOverworldHeight)
             {
                 return 0.04f;
             }

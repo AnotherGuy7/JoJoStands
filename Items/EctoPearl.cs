@@ -11,7 +11,7 @@ namespace JoJoStands.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Ecto Pearl");
-			Tooltip.SetDefault("A otherworldly pearl that has been inherited by a trapped soul from the dungeon.");
+			Tooltip.SetDefault("A otherworldly pearl that has been inherited by a trapped soul from the dungeon.\nPermanently incrases stand range radius by 0.5 tiles");
 		}
 
 		public override void SetDefaults()
@@ -26,20 +26,12 @@ namespace JoJoStands.Items
 			item.useTime = 15;
 			item.useTurn = true;
 		}
+
 		public override bool UseItem(Player player)
 		{
 			player.GetModPlayer<MyPlayer>().usedEctoPearl = true;
 			player.ConsumeItem(mod.ItemType("EctoPearl"));
-			return base.UseItem(player);
-		}
-		public override void PostUpdate()
-		{
-			Player player = Main.player[Main.myPlayer];
-			MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-			if (modPlayer.usedEctoPearl)
-			{
-				modPlayer.standRangeBoosts += 8f;
-			}
+			return true;
 		}
 	}
 }
