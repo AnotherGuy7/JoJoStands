@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Okuyasu Hair");
-			Tooltip.SetDefault("A wig resembling the hairstyle of Narancia Ghirga. Smells like gunpowder.");
+			DisplayName.SetDefault("Okuyasu Wig");
+			Tooltip.SetDefault("A wig in the hairstyle of Okuyasu Nijimura, minus the facial scars.");
 		}
 
 		public override void SetDefaults()

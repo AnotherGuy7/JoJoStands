@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Vanities
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Okuyasu Shirt");
-			Tooltip.SetDefault("A dark, slim-fitting vest with a collar and straps. Perfect for flexing your arms like a runway.");
+			DisplayName.SetDefault("Okuyasu Uniform");
+			Tooltip.SetDefault("A school uniform worn by Okuyasu Nijimura, adorned with money symbols.");
 		}
 
 		public override void SetDefaults()
