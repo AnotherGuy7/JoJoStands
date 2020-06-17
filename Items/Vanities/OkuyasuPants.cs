@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Vanities
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Okuyasu's Pants");
-			Tooltip.SetDefault("Dark, slim-fitting pants paired with an orange skirt. The shoes are surprisingly durable.");
+			Tooltip.SetDefault("A pair of pants worn by Okuyasu Nijimura, with two belts.");
 		}
 
 		public override void SetDefaults()

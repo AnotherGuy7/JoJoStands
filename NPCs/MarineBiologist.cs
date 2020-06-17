@@ -216,6 +216,22 @@ namespace JoJoStands.NPCs
                 {
                     Main.npcChatText = "With this, Aerosmith can now find enemies using a CO2 detecting radar. If it breathes, make sure it won't anymore.";
                 }
+                if (firstButton && mPlayer.StandSlot.Item.type == mod.ItemType("TheHandT1"))
+                {
+                    Main.npcChatText = "Right now, The Hand is weak, only able to punch your opponents. It may be a good punch, but there’s not much else right now.";
+                }
+                if (firstButton && mPlayer.StandSlot.Item.type == mod.ItemType("TheHandT2"))
+                {
+                    Main.npcChatText = "The Hand can now use its signature ability… its right hand. You can use The Hand’s hand to scrape away space itself and teleport short distances. The Hand can now cause enemies to, perhaps, miss a few organs.";
+                }
+                if (firstButton && mPlayer.StandSlot.Item.type == mod.ItemType("TheHandT3"))
+                {
+                    Main.npcChatText = "With your increased mastery of The Hand, you can now pull enemies towards you by tapping" + JoJoStands.SpecialHotKey + ", and you can perform a very powerful attack with The Hand’s Hand by holding" + JoJoStands.SpecialHotKey;
+                }
+                if (firstButton && mPlayer.StandSlot.Item.type == mod.ItemType("TheHandFinal"))
+                {
+                    Main.npcChatText = "The Hand has reached its maximum potential, and is more powerful than ever. Of course, you seem to have more IQ than its previous user. I’m not saying he was a bad kid, or anything. Wonder where he is now…";
+                }
             }
             if (firstButton && mPlayer.StandSlot.Item.IsAir)
             {
