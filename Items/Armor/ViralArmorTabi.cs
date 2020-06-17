@@ -1,10 +1,6 @@
-using System;
 using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
-
 
 namespace JoJoStands.Items.Armor
 {
@@ -14,7 +10,7 @@ namespace JoJoStands.Items.Armor
 		public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Viral Tabi");
-			Tooltip.SetDefault("A pair of light boots from a surprisingly nimble meteor, powered by a strange virus.\nProvides a 3% stand damage boost");
+			Tooltip.SetDefault("A pair of light boots from a surprisingly nimble meteor, powered by a strange virus.\nProvides a 4% Stand Crit Chance boost");
 		}
 
 		public override void SetDefaults()
@@ -22,13 +18,13 @@ namespace JoJoStands.Items.Armor
 			item.width = 22;
 			item.height = 16;
 			item.value = Item.buyPrice(0, 3, 50, 0);
-			item.rare = 8;
-			item.defense = 7;
+			item.rare = ItemRarityID.Green;
+			item.defense = 5;
 		}
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.03;       //3% damage increase
+            player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 4f;
         }
 
         public override void AddRecipes()

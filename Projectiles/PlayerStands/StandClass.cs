@@ -583,7 +583,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             newAltMaxDistance = maxAltDistance + modPlayer.standRangeBoosts;
             newPunchDamage = (int)(punchDamage * modPlayer.standDamageBoosts);
             newProjectileDamage = (int)(projectileDamage * modPlayer.standDamageBoosts);
-            modPlayer.standType = standType;
+            if (modPlayer.standType != standType)
+            {
+                modPlayer.standType = standType;
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -676,6 +679,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                     sentDyePacket = false;
                 }
             }
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            Main.player[projectile.owner].GetModPlayer<MyPlayer>().standType = 0;
         }
 
         public override void SendExtraAI(BinaryWriter writer)

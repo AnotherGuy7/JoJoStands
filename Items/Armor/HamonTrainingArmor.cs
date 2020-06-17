@@ -1,8 +1,5 @@
-using System;
 using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Armor
@@ -13,18 +10,25 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hamon Training Armor");
-            Tooltip.SetDefault("You can feel your lungs becoming mightier...");
+            Tooltip.SetDefault("You can feel your lungs becoming mightier...\nIncreases Hamon Damage by 10%");
         }
 
-		public override void SetDefaults() {
+		public override void SetDefaults()
+		{
 			item.width = 18;
 			item.height = 18;
 			item.value = Item.buyPrice(0, 0, 75, 0);
-            item.rare = 2;
-			item.defense = 10;
+            item.rare = ItemRarityID.Green;
+			item.defense = 5;
 		}
 
-		public override void AddRecipes() {
+		public override void UpdateEquip(Player player)
+		{
+			player.GetModPlayer<Hamon.HamonPlayer>().hamonDamageBoosts += 0.1f;
+		}
+
+		public override void AddRecipes()
+		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.Silk, 20);
 			recipe.AddIngredient(mod.ItemType("SunDroplet"), 25);

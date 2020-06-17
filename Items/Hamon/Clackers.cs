@@ -38,7 +38,7 @@ namespace JoJoStands.Items.Hamon
             {
                 increaseCounter++;
                 player.velocity.X /= 3f;
-                hamonPlayer.counter = 0;
+                hamonPlayer.hamonIncreaseCounter = 0;
                 Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
             }
             if (increaseCounter >= 30)

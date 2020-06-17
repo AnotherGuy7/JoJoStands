@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -7,21 +8,17 @@ namespace JoJoStands.Items.Hamon
     {
         public float hamonDamageBoosts = 1f;
         public float hamonKnockbackBoosts = 1f;
+        public int hamonIncreaseBonus = 0;
+
         public int hamonLevel = 0;
         public int HamonCounter = 0;
         public int maxHamon = 60;
-        public int counter = 0;
+        public int hamonIncreaseCounter = 0;
         public int maxHamonCounter = 0;
 
         public bool AjaStone = false;
 
-
         public override void ResetEffects()
-        {
-            ResetVariables();
-        }
-
-        public override void UpdateDead()
         {
             ResetVariables();
         }
@@ -120,41 +117,42 @@ namespace JoJoStands.Items.Hamon
             if (Mplayer.Vampire)
             {
                 HamonCounter = 0;
-                counter = 0;
+                hamonIncreaseCounter = 0;
             }
-            if (counter >= maxHamonCounter)      //the one that increases Hamon
+
+            if (hamonIncreaseCounter >= maxHamonCounter)      //the one that increases Hamon
             {
                 if (AjaStone)       //or any other decrease-preventing accessories
                 {
-                    counter = 0;
+                    hamonIncreaseCounter = 0;
                     HamonCounter += 1;
                 }
                 if (HamonCounter < 60)
                 {
-                    counter = 0;
+                    hamonIncreaseCounter = 0;
                     HamonCounter += 1;
                 }
             }
-            if (counter >= maxHamonCounter && HamonCounter > 60 && !AjaStone)      //the one that decreases Hamon
+            if (hamonIncreaseCounter >= maxHamonCounter && HamonCounter > 60 && !AjaStone)      //the one that decreases Hamon
             {
-                counter = 0;
+                hamonIncreaseCounter = 0;
                 HamonCounter -= 1;
             }
             if (!Mplayer.Vampire && player.breath == player.breathMax && HamonCounter <= 60)       //in general, to increase Hamon while it can still be increased, no speeding up decreasing
             {
-                if (player.velocity.X != 0f || player.velocity.Y != 0f)
+                if (player.velocity != Vector2.Zero)
                 {
-                    counter++;
+                    hamonIncreaseCounter++;
                 }
-                if (player.velocity.X == 0f && player.velocity.Y == 0f)
+                else
                 {
-                    counter += 2;
+                    hamonIncreaseCounter += 2;
                 }
+                hamonIncreaseCounter += hamonIncreaseBonus;
                 if (player.lavaWet && !player.lavaImmune)
                 {
-                    counter--;
+                    hamonIncreaseCounter--;
                 }
-
             }
             if (!AjaStone)          //list maxHamonCounter decreasing things in here
             {
@@ -179,10 +177,16 @@ namespace JoJoStands.Items.Hamon
             }
         }
 
+        public override void UpdateDead()
+        {
+            ResetVariables();
+        }
+
         private void ResetVariables()
         {
             hamonDamageBoosts = 1f;
             hamonKnockbackBoosts = 1f;
+            hamonIncreaseBonus = 0;
         }
     }
 }

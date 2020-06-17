@@ -1,8 +1,5 @@
-using System;
 using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Armor
@@ -10,21 +7,34 @@ namespace JoJoStands.Items.Armor
 	[AutoloadEquip(EquipType.Head)]
 	public class HamonTrainingHelmet : ModItem      //by Comobie
 	{
-		public override void SetStaticDefaults() {
-            Tooltip.SetDefault("A comfy hat that gives your head a clear concious...");
+		public override void SetStaticDefaults()
+		{
 			DisplayName.SetDefault("Hamon Training Helmet");
+			Tooltip.SetDefault("A comfy hat that gives your head a clear concious...\nIncreases Hamon Damage by 5%");
 		}
 
-		public override void SetDefaults() {
+		public override void SetDefaults()
+		{
 			item.width = 18;
 			item.height = 18;
 			item.value = Item.buyPrice(0, 0, 50, 0);
-            item.rare = 2;
+            item.rare = ItemRarityID.Green;
 			item.defense = 4;
 		}
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<Hamon.HamonPlayer>().hamonDamageBoosts += 0.1f;
+			player.GetModPlayer<Hamon.HamonPlayer>().hamonDamageBoosts += 0.05f;
+		}
+
+		public override bool IsArmorSet(Item head, Item body, Item legs)
+		{
+			return body.type == mod.ItemType("HamonTrainingArmor") && legs.type == mod.ItemType("HamonTrainingLeggings");
+		}
+
+		public override void UpdateArmorSet(Player player)
+		{
+			player.setBonus = "Set bonus: Faster Hamon Regen";
+			player.GetModPlayer<Hamon.HamonPlayer>().hamonIncreaseBonus += 1;
 		}
 
 		public override void AddRecipes() {
