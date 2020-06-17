@@ -9,7 +9,7 @@ namespace JoJoStands.Projectiles
 {
     public class ViralPearl : ModProjectile
     {
-        public int counter;
+        private int counter;
         public override void SetDefaults()
         {
             projectile.width = 14;
@@ -29,7 +29,7 @@ namespace JoJoStands.Projectiles
             }
             if (counter <= 240 && counter >= 120)
             {
-                Dust.NewDust(projectile.Center, 1, 1, 215);
+                Dust.NewDust(projectile.Center, 1, 1, 105);
                 projectile.position.X += (float)Math.Sin(counter * 180);
                 projectile.velocity = Vector2.Zero;
             }
@@ -52,7 +52,7 @@ namespace JoJoStands.Projectiles
                     Item.NewItem(projectile.getRect(), mod.ItemType("CrackedPearl"));
                 }
             }
-            if (player.ZoneDungeon)
+            else
             {
                 Item.NewItem(projectile.getRect(), mod.ItemType("EctoPearl"));
             }

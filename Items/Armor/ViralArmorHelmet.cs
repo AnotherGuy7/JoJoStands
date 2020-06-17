@@ -13,8 +13,8 @@ namespace JoJoStands.Items.Armor
 	{
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Helmet");
-            Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus. \nStand Damage Increase: -4%\nStand Range Increase: +0.5 Radius\nStand Speed Increase: +2\nSet Bonus: +0.5 Radius");
+            DisplayName.SetDefault("Viral Helmet (Ranged)");
+            Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus. \nStand Damage Increase: -4%\nStand Range Increase: +0.5 Radius\nSet Bonus: +0.5 Radius");
         }
 
         public override void SetDefaults()
@@ -38,10 +38,28 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts -= 0.04;
-            player.GetModPlayer<MyPlayer>().standRangeBoosts += 8f;       //8% range increase
-            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 2;
-
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.standDamageBoosts -= 0.04;
+            mPlayer.standRangeBoosts += 8f;       //8% range increase
+            /*if (mPlayer.standType == 0)
+            {
+                player.inventory[item.type].type = mod.ItemType("ViralArmorHelmetNeutral");
+            }
+            if (mPlayer.standType == 2)
+            {
+                player.inventory[item.type].type = mod.ItemType("ViralArmorHelmet");
+            }
+            for (int i = 0; i < player.inventory.Length; i++)
+            {
+                if (mPlayer.standType == 0 && player.inventory[i].type == item.type)
+                {
+                    player.inventory[i].type = mod.ItemType("ViralArmorHelmetNeutral");
+                }
+                if (mPlayer.standType == 1 && player.inventory[i].type == item.type)
+                {
+                    player.inventory[i].type = mod.ItemType("ViralArmorKabuto");
+                }
+            }*/
         }
 
         public override void AddRecipes()

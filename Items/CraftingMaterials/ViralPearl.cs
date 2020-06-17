@@ -1,6 +1,5 @@
 using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.CraftingMaterials

@@ -5,11 +5,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
+using System.Data.SqlTypes;
 
 namespace JoJoStands.Buffs.AccessoryBuff
 {
     public class CenturyBoyBuff : ModBuff
     {
+        private bool resetLimitTimer = false;
         public int limitTimer = 36000;       //like 10 minutes
         public int breathSave = 0;
 
@@ -36,7 +38,15 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.controlUseTile = false;
             player.maxRunSpeed = 0f;
             player.noFallDmg = true;
-            limitTimer--;
+            if (!resetLimitTimer && limitTimer > 0)
+            {
+                limitTimer = 0;
+                resetLimitTimer = true;
+            }
+            if (MyPlayer.SecretReferences)
+            {
+                limitTimer--;
+            }
             if (player.wet && player.ZoneSnow)
             {
                 limitTimer -= 6;

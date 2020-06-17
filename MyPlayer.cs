@@ -108,6 +108,7 @@ namespace JoJoStands
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
             standCritChangeBoosts = 5;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
+            standType = 0;
         }
 
 
@@ -341,7 +342,8 @@ namespace JoJoStands
             {
                 { "StandInSlot", ItemIO.Save(StandSlot.Item) },
                 { "canRevertBTD", canRevertFromKQBTD },
-                { "DyeInDyeSlot", ItemIO.Save(StandDyeSlot.Item) }
+                { "DyeInDyeSlot", ItemIO.Save(StandDyeSlot.Item) },
+                { "usedEctoPearl", usedEctoPearl }
             };
         }
 
@@ -350,6 +352,7 @@ namespace JoJoStands
             StandSlot.Item = ItemIO.Load(tag.GetCompound("StandInSlot")).Clone();
             canRevertFromKQBTD = tag.GetBool("canRevertBTD");
             StandDyeSlot.Item = ItemIO.Load(tag.GetCompound("DyeInDyeSlot")).Clone();
+            usedEctoPearl = tag.GetBool("usedEctoPearl");
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -824,6 +827,14 @@ namespace JoJoStands
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, Main.myPlayer);
                     }
                 }
+            }
+        }
+
+        public override void PostUpdateMiscEffects()
+        {
+            if (usedEctoPearl)
+            {
+                standRangeBoosts += 8f;
             }
         }
 
