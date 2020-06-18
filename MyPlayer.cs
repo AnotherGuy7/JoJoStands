@@ -833,7 +833,7 @@ namespace JoJoStands
         {
             if (usedEctoPearl)
             {
-                standRangeBoosts += 8f;
+                standRangeBoosts += 16f;
             }
         }
 
