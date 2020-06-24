@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                     distanceToTeleport.Normalize();
-                    distanceToTeleport *= 98f * (chargeTimer / 45f);
+                    distanceToTeleport *= (98f + modPlayer.standRangeBoosts) * (chargeTimer / 45f);
                     player.position = player.Center + distanceToTeleport;
                     player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(chargeTimer / 15));       //10s max cooldown
                     chargeTimer = 0;
@@ -151,6 +151,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override bool PreDrawExtras(SpriteBatch spriteBatch)
         {
             Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && MyPlayer.RangeIndicators && chargeTimer != 0)
             {
                 Texture2D positionIndicator = mod.GetTexture("Extras/PositionIndicator");
@@ -158,7 +159,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 if (projectile.owner == Main.myPlayer)
                     distanceToTeleport = Main.MouseWorld - player.position;
                 distanceToTeleport.Normalize();
-                distanceToTeleport *= 98f * (chargeTimer / 45f);
+                distanceToTeleport *= (98f + modPlayer.standRangeBoosts) * (chargeTimer / 45f);
                 spriteBatch.Draw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f));
             }
             if (MyPlayer.RangeIndicators)

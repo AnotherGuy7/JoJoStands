@@ -1,6 +1,5 @@
 ﻿using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 
@@ -26,7 +25,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.10;
+            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.1f;
         }
 
         public override void AddRecipes()

@@ -1,8 +1,5 @@
-﻿using System;
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 
@@ -14,7 +11,7 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Crystal Chestplate");
-            Tooltip.SetDefault("A suit of armor made from a mysterious meteoric alloy, powered up by a strange virus.\nProvides a 5% stand damage boost");
+            Tooltip.SetDefault("A shiny chestplate that uses crystals to sharpen your soul...\n10% Stand Crit Chance");
         }
 
         public override void SetDefaults()
@@ -22,22 +19,21 @@ namespace JoJoStands.Items.Armor
             item.width = 22;
             item.height = 24;
             item.value = Item.buyPrice(0, 4, 0, 0);
-            item.rare = 8;
-            item.defense = 9;
+            item.rare = ItemRarityID.LightPurple;
+            item.defense = 10;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.05;
-            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 1;
+            player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 10f;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.CrystalShard, 20);
-            recipe.AddIngredient(ItemID.Silk, 25);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 3);
+            recipe.AddIngredient(ItemID.CrystalShard, 15);
+            recipe.AddIngredient(ItemID.Silk, 15);
+            recipe.AddIngredient(mod.ItemType("WillToProtect"));
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

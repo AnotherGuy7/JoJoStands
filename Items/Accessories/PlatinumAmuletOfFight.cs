@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.10;
+            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.1f;
         }
 
         public override void AddRecipes()

@@ -1,8 +1,5 @@
-﻿using System;
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 
@@ -25,6 +22,7 @@ namespace JoJoStands.Items.Armor
             item.rare = 8;
             item.defense = 4;
         }
+
         public override void UpdateEquip(Player player)
         {
             player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 4f;

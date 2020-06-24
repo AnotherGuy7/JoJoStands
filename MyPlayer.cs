@@ -32,6 +32,7 @@ namespace JoJoStands
 
         public int goldenSpinCounter = 0;
         public int spinSubtractionTimer = 0;
+        public int shadowDodgeCooldownTimer = 0;        //does Vanilla not have one of these?
         public int aerosmithRadarCounter = 0;
         public int poseDuration = 300;
         public int poseDurationMinus = 290;
@@ -51,7 +52,7 @@ namespace JoJoStands
         public int sexPistolsRecoveryTimer = 0;
         public int aerosmithWhoAmI = 0;
         public int revertTimer = 0;     //for all requiems that can change forms back to previous forms
-        public double standDamageBoosts = 1;
+        public float standDamageBoosts = 1;
         public float standRangeBoosts = 0f;
         public float standCritChangeBoosts = 0f;
         public int standSpeedBoosts = 0;
@@ -59,12 +60,13 @@ namespace JoJoStands
         public int standType = 0;           //0 = no type; 1 = Melee; 2 = Ranged;
 
         public bool wearingEpitaph = false;
+        public bool wearingTitaniumMask = false;
         public bool achievedInfiniteSpin = false;
         public bool StandOut = false;
         public bool StandAutoMode = false;
         public bool destroyAmuletEquipped = false;
         public bool greaterDestroyEquipped = false;
-        public bool crystalArmorBonus = false;
+        public bool crystalArmorSetEquipped = false;
         public bool crackedPearlEquipped = false;
         public bool usedEctoPearl = false;
 
@@ -102,9 +104,10 @@ namespace JoJoStands
             wearingEpitaph = false;
             destroyAmuletEquipped = false;
             greaterDestroyEquipped = false;
+            crystalArmorSetEquipped = false;
+            wearingTitaniumMask = false;
 
-
-            standDamageBoosts = 1;
+            standDamageBoosts = 1f;
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
             standCritChangeBoosts = 5;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
@@ -529,6 +532,10 @@ namespace JoJoStands
             {
                 revertTimer--;
             }
+            if (shadowDodgeCooldownTimer > 0)
+            {
+                shadowDodgeCooldownTimer--;
+            }
             if (!Main.dedServ)      //if this isn't the (dedicated server) cause shaders don't exist serverside
             {
                 if (TimestopEffectDurationTimer > 0)
@@ -725,7 +732,7 @@ namespace JoJoStands
                 {
                     TuskActNumber += 1;
                 }
-                if (equippedTuskAct >= 3)
+                if (equippedTuskAct <= 3)
                 {
                     if (TuskActNumber > equippedTuskAct)
                         TuskActNumber = 1;
@@ -833,7 +840,7 @@ namespace JoJoStands
         {
             if (usedEctoPearl)
             {
-                standRangeBoosts += 16f;
+                standRangeBoosts += 64f;
             }
         }
 
@@ -1197,9 +1204,10 @@ namespace JoJoStands
                     player.HealEffect(healingAmount, true);
                 }
             }
-            if (crystalArmorBonus)
+            if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
             {
-
+                player.AddBuff(BuffID.ShadowDodge, 30 * 60);
+                shadowDodgeCooldownTimer += 90 * 60;
             }
         }
 
@@ -1219,6 +1227,29 @@ namespace JoJoStands
                     int healingAmount = newDamage - healthReduction;
                     player.statLife += healingAmount;
                     player.HealEffect(healingAmount, true);
+                }
+            }
+            if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
+            {
+                player.AddBuff(BuffID.ShadowDodge, 30 * 60);
+                shadowDodgeCooldownTimer += 90 * 60;
+            }
+        }
+
+        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        {
+            if (crystalArmorSetEquipped)
+            {
+                Vector2 shootVel = player.Center + new Vector2(0f, -8f);
+                shootVel.Normalize();
+                shootVel *= 10f;
+                float numberProjectiles = 8;
+                float rotation = MathHelper.ToRadians(80);
+                for (int i = 0; i < numberProjectiles; i++)
+                {
+                    Vector2 perturbedSpeed = new Vector2(shootVel.X, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                    int proj = Projectile.NewProjectile(player.Center, perturbedSpeed, mod.ProjectileType("CrystalShard"), 15, 2f, player.whoAmI);
+                    Main.projectile[proj].netUpdate = true;
                 }
             }
         }

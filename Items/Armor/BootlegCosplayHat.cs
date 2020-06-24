@@ -36,7 +36,7 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateArmorSet(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.1;
+            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.1f;
         }
 
         public override void AddRecipes()

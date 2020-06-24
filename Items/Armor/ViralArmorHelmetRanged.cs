@@ -31,7 +31,7 @@ namespace JoJoStands.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "+5% Stand Damage";
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.05;
+            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.05f;
         }
 
         public override void UpdateEquip(Player player)
