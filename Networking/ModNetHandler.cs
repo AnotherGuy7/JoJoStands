@@ -9,6 +9,7 @@ namespace JoJoStands.Networking
 
 		internal static EffectPacketHandler effectSync = new EffectPacketHandler(Effect);
 		internal static PlayerPacketHandler playerSync = new PlayerPacketHandler(Player);
+
 		public static void HandlePacket(BinaryReader reader, int fromWho)
 		{
 			byte messageType = reader.ReadByte();

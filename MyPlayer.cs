@@ -29,6 +29,7 @@ namespace JoJoStands
         public static float HamonBarPositionX;
         public static float HamonBarPositionY;
         public static float soundVolume;
+        public static bool spawningOtherStands = false;     //this is used for the extra stands like FanStands so that those can spawn
 
         public int goldenSpinCounter = 0;
         public int spinSubtractionTimer = 0;
@@ -1142,18 +1143,21 @@ namespace JoJoStands
             }
             else
             {
-                StandOut = false;
-                if (!inputItem.IsAir)
+                if (!spawningOtherStands)
                 {
-                    Main.NewText(inputItem.Name + " is not a stand!", Color.Red);
-                }
-                if (inputItem.IsAir)
-                {
-                    Main.NewText("There is no stand in the Stand Slot!", Color.Red);
-                }
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
+                    StandOut = false;
+                    if (!inputItem.IsAir)
+                    {
+                        Main.NewText(inputItem.Name + " is not a stand!", Color.Red);
+                    }
+                    if (inputItem.IsAir)
+                    {
+                        Main.NewText("There is no stand in the Stand Slot!", Color.Red);
+                    }
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
+                    }
                 }
             }
         }
