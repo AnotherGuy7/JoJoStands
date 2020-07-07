@@ -31,7 +31,7 @@ namespace JoJoStands.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Summons a Crystal Leaf";
-            player.crystalLeaf = true;
+            player.AddBuff(BuffID.LeafCrystal, 2);
         }
         public override void UpdateEquip(Player player)
         {

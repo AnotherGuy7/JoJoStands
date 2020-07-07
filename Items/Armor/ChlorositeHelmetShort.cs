@@ -32,7 +32,7 @@ namespace JoJoStands.Items.Armor
         {
             player.setBonus = "+3 Stand Speed\nSummons a Crystal Leaf";
             player.GetModPlayer<MyPlayer>().standSpeedBoosts += 3;
-            player.crystalLeaf = true;
+            player.AddBuff(BuffID.LeafCrystal, 2);
         }
 
         public override void UpdateEquip(Player player)
