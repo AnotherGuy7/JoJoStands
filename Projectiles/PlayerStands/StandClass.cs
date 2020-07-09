@@ -38,6 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual int altDamage { get; }
         public virtual float fistWhoAmI { get; }        //this is used in Fists.cs for effects
         public virtual int standOffset { get; } = 60;            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
+        //public virtual int standYOffset { get; } = 0;
         public virtual float tierNumber { get; }
         public virtual float punchKnockback { get; }
         public virtual string punchSoundName { get; } = "";
@@ -341,7 +342,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             LimitDistance();
         }
 
-        public void PunchAndShootAI(int projToShoot)
+        public void PunchAndShootAI(int projToShoot, int itemToConsumeType = 0, bool consumeItem = false)
         {
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
@@ -489,6 +490,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                             int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * modPlayer.standDamageBoosts) * 0.9f), 2f, Main.myPlayer, projectile.whoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
+                        }
+                        if (consumeItem)
+                        {
+                            player.ConsumeItem(itemToConsumeType);
                         }
                     }
                 }

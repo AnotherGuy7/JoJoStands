@@ -635,6 +635,10 @@ namespace JoJoStands
                 poseDuration = 300;
                 poseDurationMinus = 290;
                 menacingFrames = 0;
+                if (poseDuration <= 0)
+                {
+                    player.AddBuff(mod.BuffType("Motivated"), 60 * 60);
+                }
             }
             if (poseDuration < poseDurationMinus)
             {

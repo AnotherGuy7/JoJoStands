@@ -30,7 +30,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             updateTimer++;
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
             if (shootCount > 0)
                 shootCount--;
             if (modPlayer.StandOut)
