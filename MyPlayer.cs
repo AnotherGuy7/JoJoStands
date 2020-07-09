@@ -67,6 +67,7 @@ namespace JoJoStands
         public bool StandAutoMode = false;
         public bool destroyAmuletEquipped = false;
         public bool greaterDestroyEquipped = false;
+        public bool chlorositeShortEqquipped = false;
         public bool crystalArmorSetEquipped = false;
         public bool crackedPearlEquipped = false;
         public bool usedEctoPearl = false;
@@ -1211,6 +1212,10 @@ namespace JoJoStands
                     player.statLife += healingAmount;
                     player.HealEffect(healingAmount, true);
                 }
+            }
+            if (chlorositeShortEqquipped)
+            {
+                damage = (int)(damage * 0.9f);
             }
             if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
             {
