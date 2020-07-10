@@ -156,7 +156,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             }
             if (modPlayer.StandAutoMode)
             {
-                PunchAndShootAI(mod.ProjectileType("Knife"));
+                PunchAndShootAI(mod.ProjectileType("Knife"), mod.ItemType("Knife"), true);
             }
         }
 
