@@ -241,7 +241,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 4, 12, true);

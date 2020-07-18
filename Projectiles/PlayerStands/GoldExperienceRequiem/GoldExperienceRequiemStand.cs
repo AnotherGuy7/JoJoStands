@@ -178,6 +178,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                         player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(3));
+                        secondaryAbilityFrames = false;
                     }
                 }
             }
@@ -216,7 +217,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/GoldExperienceRequiem/GER_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/GoldExperienceRequiem/GER_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 4, 12, true);

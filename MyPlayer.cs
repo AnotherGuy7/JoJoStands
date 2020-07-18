@@ -87,6 +87,7 @@ namespace JoJoStands
         public bool showingCBLayer = false;     //this is a bool that's needed to sync so that the Century Boy layer shows up for other clients in Multiplayer
         //public bool dyingVampire = false;
         private bool forceChangedTusk = false;
+        public bool revived = false;
 
         public bool ZoneViralMeteorite;
 
@@ -630,16 +631,16 @@ namespace JoJoStands
             {
                 poseDuration--;
             }
-            if (poseMode && (poseDuration <= 0 || player.velocity.X > 1f || player.velocity.Y > 1f || player.velocity.X < -1f || player.velocity.Y < -1f))
+            if (poseMode && (poseDuration <= 0 || player.velocity != Vector2.Zero))
             {
-                poseMode = false;
-                poseDuration = 300;
                 poseDurationMinus = 290;
                 menacingFrames = 0;
                 if (poseDuration <= 0)
                 {
-                    player.AddBuff(mod.BuffType("Motivated"), 60 * 60);
+                    player.AddBuff(mod.BuffType("Motivated"), 30 * 60);
                 }
+                poseDuration = 300;
+                poseMode = false;
             }
             if (poseDuration < poseDurationMinus)
             {
@@ -839,6 +840,12 @@ namespace JoJoStands
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, Main.myPlayer);
                     }
                 }
+            }
+
+            if (revived && !player.HasBuff(mod.BuffType("ArtificialSoul")))
+            {
+                player.KillMe(PlayerDeathReason.ByCustomReason(player.name + "'s artificial soul has left him."), player.statLife + 1, player.direction);
+                revived = false;
             }
         }
 
@@ -1345,11 +1352,17 @@ namespace JoJoStands
                     UI.ToBeContinued.Visible = true;
                 }
             }
-            if (player.HasItem(mod.ItemType("PokerChip")))
+            if (!revived && player.HasItem(mod.ItemType("PokerChip")))
             {
+                revived = true;
+                player.AddBuff(mod.BuffType("ArtificialSoul"), 3600);
                 player.ConsumeItem(mod.ItemType("PokerChip"), true);
                 Main.NewText("The chip has given you new life!");
                 return false;
+            }
+            if (revived)        //so if the player dies without the buff ending
+            {
+                revived = false;
             }
             if (BackToZero)
             {

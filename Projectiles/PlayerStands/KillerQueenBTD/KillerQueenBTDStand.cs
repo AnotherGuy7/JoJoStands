@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
@@ -32,7 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override int standType => 2;
         public override int standOffset => -10;
 
-        private int projectileDamage = 180;      //not overriden cause it has to change sometimes
+        private int bubbleDamage = 180;      //not using projectileDamage cause this one changes
 
 
         public override void AI()
@@ -44,21 +45,22 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 shootCount--;
             }
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             projectile.frameCounter++;
-            if (modPlayer.StandOut)
+            if (mPlayer.StandOut)
             {
                 projectile.timeLeft = 2;
             }
             if (Main.dayTime)
             {
-                projectileDamage = 180;
+                bubbleDamage = 180;
             }
             if (!Main.dayTime)
             {
-                projectileDamage = 158;
+                bubbleDamage = 158;
             }
             drawOriginOffsetY = -halfStandHeight;
+            int newBubbleDamage = (int)(bubbleDamage * mPlayer.standDamageBoosts);
 
             if (!attackFrames)
                 StayBehind();
@@ -80,14 +82,14 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 }
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.StandAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && projectile.ai[0] == 0f)
                 {
                     attackFrames = true;
                     Main.mouseRight = false;
                     projectile.netUpdate = true;
-                    if (projectile.frame == 4 && !modPlayer.StandAutoMode)
+                    if (projectile.frame == 4 && !mPlayer.StandAutoMode)
                     {
                         if (shootCount <= 0)
                         {
@@ -99,7 +101,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newProjectileDamage, 5f, Main.myPlayer, 1f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, Main.myPlayer, 1f, projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -133,7 +135,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     }
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.StandAutoMode)
             {
                 NPC target = null;
                 Vector2 targetPos = projectile.position;
@@ -188,7 +190,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newProjectileDamage, 3f, Main.myPlayer, 0f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, Main.myPlayer, 0f, projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -225,7 +227,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/KillerQueenBTD/KQBTD_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/KillerQueenBTD/KQBTD_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 2, 30, true);

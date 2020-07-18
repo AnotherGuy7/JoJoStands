@@ -120,7 +120,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/TestStand/TestStand_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/TestStand/TestStand_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 2, 30, true);

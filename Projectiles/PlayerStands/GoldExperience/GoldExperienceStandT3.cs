@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 {
@@ -143,7 +144,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/GoldExperience/GoldExperience_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/GoldExperience/GoldExperience_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 4, 30, true);

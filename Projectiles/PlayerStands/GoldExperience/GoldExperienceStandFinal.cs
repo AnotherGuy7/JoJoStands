@@ -1,16 +1,11 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 {
     public class GoldExperienceStandFinal : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 13;
-        }
-
         public override int punchDamage => 98;
         public override int punchTime => 9;
         public override int halfStandHeight => 35;
@@ -168,7 +163,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/GoldExperience/GoldExperience_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/GoldExperience/GoldExperience_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 4, 30, true);

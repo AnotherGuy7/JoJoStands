@@ -156,7 +156,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 2, 30, true);
