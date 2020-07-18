@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 {
@@ -136,7 +138,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/KingCrimson/KingCrimson_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/KingCrimson/KingCrimson_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 4, 30, true);

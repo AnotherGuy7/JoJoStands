@@ -1,5 +1,8 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 {
@@ -193,7 +196,9 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 2, 30, true);

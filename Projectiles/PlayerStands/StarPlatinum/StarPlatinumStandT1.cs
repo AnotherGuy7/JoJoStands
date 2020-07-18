@@ -1,4 +1,8 @@
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 {
@@ -85,7 +89,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 4, 12, true);

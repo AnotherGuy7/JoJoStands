@@ -137,7 +137,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
         public override void PlayAnimation(string animationName)
         {
-            standTexture = mod.GetTexture("Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
+
             if (animationName == "Idle")
             {
                 AnimationStates(animationName, 4, 30, true);
