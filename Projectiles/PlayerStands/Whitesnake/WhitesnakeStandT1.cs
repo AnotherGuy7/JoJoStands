@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
@@ -7,9 +7,9 @@ using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace JoJoStands.Projectiles.PlayerStands.TheHand
+namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
-    public class TheHandStandT1 : StandClass
+    public class Whitesnake : StandClass
     {
         public override void SetStaticDefaults()
         {
@@ -17,14 +17,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             Main.projFrames[projectile.type] = 10;
         }
 
-        public override float maxDistance => 98f;
-        public override int punchDamage => 17;
+        public override int punchDamage => 16;
         public override int punchTime => 13;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 7f;
+        public override int halfStandHeight => 44;
+        public override float fistWhoAmI => 9f;
         public override int standType => 1;
 
-        private int updateTimer = 0;
+        public int updateTimer = 0;
 
         public override void AI()
         {
@@ -93,11 +92,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
+                standTexture = mod.GetTexture("Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 12, true);
+                AnimationStates(animationName, 2, 30, true);
             }
             if (animationName == "Attack")
             {
@@ -105,7 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 12, true);
+                AnimationStates(animationName, 1, 10, true);
             }
         }
     }
