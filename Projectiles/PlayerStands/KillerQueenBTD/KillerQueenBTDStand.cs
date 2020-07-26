@@ -7,26 +7,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 {
     public class KillerQueenBTDStand : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 12;
-        }
-
-        public override void SetDefaults()
-        {
-            projectile.netImportant = true;
-            projectile.width = 38;
-            projectile.height = 1;
-            projectile.friendly = true;
-            projectile.minion = true;
-            projectile.netImportant = true;
-            projectile.minionSlots = 1;
-            projectile.penetrate = 1;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-        }
-
         public override float shootSpeed => 4f;
         public override int shootTime => 60;
         public override int halfStandHeight => 37;

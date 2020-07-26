@@ -631,7 +631,7 @@ namespace JoJoStands
             {
                 poseDuration--;
             }
-            if (poseMode && (poseDuration <= 0 || player.velocity != Vector2.Zero))
+            if (poseMode && (poseDuration <= 0 || player.velocity != Vector2.Zero) && !Main.mouseLeft && !Main.mouseRight)
             {
                 poseDurationMinus = 290;
                 menacingFrames = 0;
