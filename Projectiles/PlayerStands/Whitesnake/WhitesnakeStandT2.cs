@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
-    public class WhitesnakeStandT1 : StandClass
+    public class WhitesnakeStandT2 : StandClass
     {
         public override void SetStaticDefaults()
         {
@@ -17,8 +17,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             Main.projFrames[projectile.type] = 10;
         }
 
-        public override int punchDamage => 16;
-        public override int punchTime => 13;
+        public override int punchDamage => 32;
+        public override int punchTime => 12;
         public override int halfStandHeight => 44;
         public override float fistWhoAmI => 9f;
         public override int standType => 1;
@@ -46,7 +46,27 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
-
+            if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("MeltYourHeart")] == 0 && projectile.owner == Main.myPlayer)
+            {
+                shootCount += 120;
+                Main.mouseLeft = false;
+                Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                if (shootVel == Vector2.Zero)
+                {
+                    shootVel = new Vector2(0f, 1f);
+                }
+                shootVel.Normalize();
+                shootVel *= shootSpeed;
+                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer, projectile.whoAmI);
+                Main.projectile[proj].netUpdate = true;
+                projectile.netUpdate = true;
+            }
+            if (player.ownedProjectileCounts[mod.ProjectileType("MeltYourHeart")] != 0)
+            {
+                Main.mouseLeft = false;
+                secondaryAbilityFrames = true;
+                projectile.netUpdate = true;
+            }
             if (!modPlayer.StandAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
@@ -81,6 +101,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
+            if (secondaryAbilityFrames)
+            {
+                normalFrames = false;
+                attackFrames = false;
+                PlayAnimation("Secondary");
+            }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
@@ -101,6 +127,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             if (animationName == "Attack")
             {
                 AnimationStates(animationName, 4, newPunchTime, true);
+            }
+            if (animationName == "Secondary")
+            {
+                AnimationStates(animationName, 5, 10, true);
             }
             if (animationName == "Pose")
             {
