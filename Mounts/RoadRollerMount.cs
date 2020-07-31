@@ -17,24 +17,23 @@ namespace JoJoStands.Mounts
 			mountData.buff = mod.BuffType("RoadRollerBuff");
 			mountData.heightBoost = 0;
 			mountData.flightTimeMax = 0;
-			mountData.fallDamage = 0.2f;
-			mountData.runSpeed = 5f;
-			mountData.dashSpeed = 14f;
-			mountData.acceleration = 0.5f;
-			mountData.jumpHeight = 6;
-			mountData.jumpSpeed = 6f;
+			mountData.fallDamage = 1f;
+			mountData.runSpeed = 2f;
+			mountData.dashSpeed = 3f;
+			mountData.acceleration = 0.03f;
+			mountData.jumpHeight = 3;
+			mountData.jumpSpeed = 3f;
 			mountData.totalFrames = 2;
 			mountData.constantJump = false;
-			int[] array = new int[mountData.totalFrames];
-			for (int num6 = 0; num6 < array.Length; num6++)
+			int[] totalFrames = new int[mountData.totalFrames];
+			for (int frame = 0; frame < totalFrames.Length; frame++)
 			{
-				array[num6] = 28;
+				totalFrames[frame] = 44;
 			}
-			array[1] += 2;
-			mountData.playerYOffsets = array;
+			mountData.playerYOffsets = totalFrames;
 			mountData.xOffset = 5;
 			mountData.bodyFrame = 3;
-			mountData.yOffset = 1;
+			mountData.yOffset = -16;
 			mountData.playerHeadOffset = 22;
 			mountData.standingFrameCount = 1;
 			mountData.standingFrameDelay = 17;
@@ -69,10 +68,25 @@ namespace JoJoStands.Mounts
 
 		public override void UpdateEffects(Player player)
 		{
-			Tile tilesToDestroy = Main.tile[(int)(player.Center.X + (mountData.textureWidth / 2) + 1) / 16, (int)player.Center.Y / 16];
-			if (tilesToDestroy.active() && tilesToDestroy.type != 0)
+			int Xdetection = (int)(player.position.X + (mountData.textureWidth / 2 * player.direction) + 1) / 16;
+			int Ydetection = (int)(player.position.Y / 16f) + 1;
+			Tile tileToDestroy1 = Main.tile[Xdetection, Ydetection];
+			if (tileToDestroy1.active())
 			{
-				tilesToDestroy.ClearTile();
+				WorldGen.KillTile(Xdetection, Ydetection);
+				NetMessage.SendTileSquare(-1, Xdetection, Ydetection, 1);
+			}
+			Tile tileToDestroy2 = Main.tile[Xdetection, Ydetection + 1];
+			if (tileToDestroy2.active())
+			{
+				WorldGen.KillTile(Xdetection, Ydetection + 1);
+				NetMessage.SendTileSquare(-1, Xdetection, Ydetection + 1, 1);
+			}
+			Tile tileToDestroy3 = Main.tile[Xdetection, Ydetection - 1];
+			if (tileToDestroy3.active())
+			{
+				WorldGen.KillTile(Xdetection, Ydetection - 1);
+				NetMessage.SendTileSquare(-1, Xdetection, Ydetection - 1, 1);
 			}
 		}
 	}

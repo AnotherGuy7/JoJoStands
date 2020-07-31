@@ -11,17 +11,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
     public class WhitesnakeStandT2 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
-        }
-
-        public override int punchDamage => 32;
+        public override int punchDamage => 38;
         public override int punchTime => 12;
         public override int halfStandHeight => 44;
         public override float fistWhoAmI => 9f;
         public override int standType => 1;
+        public override float maxDistance => 147f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
 
         public int updateTimer = 0;
 
@@ -46,27 +41,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
-            if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("MeltYourHeart")] == 0 && projectile.owner == Main.myPlayer)
-            {
-                shootCount += 120;
-                Main.mouseLeft = false;
-                Vector2 shootVel = Main.MouseWorld - projectile.Center;
-                if (shootVel == Vector2.Zero)
-                {
-                    shootVel = new Vector2(0f, 1f);
-                }
-                shootVel.Normalize();
-                shootVel *= shootSpeed;
-                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer, projectile.whoAmI);
-                Main.projectile[proj].netUpdate = true;
-                projectile.netUpdate = true;
-            }
-            if (player.ownedProjectileCounts[mod.ProjectileType("MeltYourHeart")] != 0)
-            {
-                Main.mouseLeft = false;
-                secondaryAbilityFrames = true;
-                projectile.netUpdate = true;
-            }
             if (!modPlayer.StandAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
@@ -78,9 +52,35 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
+                if (Main.mouseRight && shootCount <= 0 && projectile.owner == Main.myPlayer)
+                {
+                    projectile.frame = 0;
+                    secondaryAbilityFrames = true;
+                }
+                if (secondaryAbilityFrames)
+                {
+                    Main.mouseLeft = false;
+                    if (projectile.frame >= 4)
+                    {
+                        shootCount += 120;
+                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        if (shootVel == Vector2.Zero)
+                        {
+                            shootVel = new Vector2(0f, 1f);
+                        }
+                        shootVel.Normalize();
+                        shootVel *= 8f;
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer, projectile.whoAmI);
+                        Main.projectile[proj].netUpdate = true;
+                        projectile.netUpdate = true;
+                    }
+                }
                 if (!attackFrames)
                 {
-                    StayBehind();
+                    if (!secondaryAbilityFrames)
+                        StayBehind();
+                    else
+                        GoInFront();
                 }
             }
             if (modPlayer.StandAutoMode)
