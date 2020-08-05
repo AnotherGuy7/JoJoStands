@@ -6,17 +6,22 @@ using System.Collections.Generic;
 
 namespace JoJoStands.Items
 {
-    public class WhitesnakeT1 : ModItem
+    public class WhitesnakeFinal : ModItem
     {
+        public override string Texture
+        {
+            get { return mod.Name + "/Items/WhitesnakeT1"; }
+        }
+
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Whitesnake (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
+            DisplayName.SetDefault("Whitesnake (Final Tier)");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw some acid!\nSpecial: Take any enemies discs!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
         {
-            item.damage = 19;
+            item.damage = 88;
             item.width = 32;
             item.height = 32;
             item.useTime = 12;
@@ -32,7 +37,7 @@ namespace JoJoStands.Items
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-            TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", "Punch Speed: " + (14 - mPlayer.standSpeedBoosts));
+            TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", "Punch Speed: " + (11 - mPlayer.standSpeedBoosts));
             tooltips.Add(tooltipAddition);
         }
 
@@ -44,8 +49,18 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StandArrow"));
-            recipe.AddIngredient(mod.ItemType("WillToControl"));
+            recipe.AddIngredient(ItemID.Ectoplasm, 7);
+            recipe.AddIngredient(ItemID.CursedFlame, 5);
+            recipe.AddIngredient(ItemID.VialofVenom);
+            recipe.AddIngredient(mod.ItemType("TaintedLifeforce"));
+            recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.Ectoplasm, 7);
+            recipe.AddIngredient(ItemID.Ichor, 5);
+            recipe.AddIngredient(ItemID.VialofVenom);
+            recipe.AddIngredient(mod.ItemType("TaintedLifeforce"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();

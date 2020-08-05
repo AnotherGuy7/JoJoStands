@@ -21,7 +21,7 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 68;
+            item.damage = 70;
             item.width = 32;
             item.height = 32;
             item.useTime = 12;

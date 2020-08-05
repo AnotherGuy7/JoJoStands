@@ -389,17 +389,17 @@ namespace JoJoStands
 
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
-            Item item = new Item();
+            /*Item item = new Item();
             item.SetDefaults(mod.ItemType("WrappedPicture"));
             item.stack = 1;
-            items.Add(item);
+            items.Add(item);*/
             if (Main.rand.Next(0, 101) <= 20)
             {
                 int inheritanceStandChance = Main.rand.Next(0, standTier1List.Count);
                 Item standTier1 = new Item();
                 standTier1.SetDefaults(standTier1List[inheritanceStandChance]);
                 standTier1.stack = 1;
-                items.Add(item);
+                items.Add(standTier1);
             }
         }
 
@@ -1048,6 +1048,18 @@ namespace JoJoStands
             else if (inputItem.type == mod.ItemType("WhitesnakeT1"))
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("WhitesnakeStandT1"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("WhitesnakeT2"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("WhitesnakeStandT2"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("WhitesnakeT3"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("WhitesnakeStandT3"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("WhitesnakeFinal"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("WhitesnakeStandFinal"), 0, 0f, Main.myPlayer);
             }
             else if (inputItem.type == mod.ItemType("SexPistolsT1"))
             {

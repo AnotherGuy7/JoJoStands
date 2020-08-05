@@ -19,23 +19,24 @@ namespace JoJoStands.Projectiles
 
         public override void SetDefaults()
         {
-            projectile.width = 24;
-            projectile.height = 28;
+            projectile.width = 16;
+            projectile.height = 16;
             projectile.aiStyle = 0;
             projectile.timeLeft = 1800;
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
+            projectile.penetrate = -1;
             projectile.maxPenetrate = -1;
         }
-
 
         public override void AI()
         {
             if (projectile.ai[0] != 0f)
             {
                 dripTimer++;
-                if (projectile.ai[0] == 0f)     //stuck to the top
+                drawOriginOffsetY = -4;
+                if (projectile.ai[0] == 4f)     //stuck to the top
                 {
                     projectile.rotation = 0f;
                     projectile.frameCounter++;
@@ -45,20 +46,18 @@ namespace JoJoStands.Projectiles
                         projectile.frameCounter = 0;
                         if (projectile.frame >= 5)
                         {
-                            projectile.frame = 0;
+                            int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 3f, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, Main.myPlayer, projectile.whoAmI);
+                            Main.projectile[drip].netUpdate = true;
+                            projectile.netUpdate = true;
+                            projectile.frame = 1;
                         }
                     }
-                    if (dripTimer >= 90)
-                    {
-                        int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, Main.myPlayer, projectile.whoAmI);
-                        Main.projectile[drip].netUpdate = true;
-                        projectile.netUpdate = true; 
-                        dripTimer = 0;
-                    }
                 }
-                if (projectile.ai[0] == 1f)     //stuck to the right
+                if (projectile.ai[0] == 3f)     //stuck to the right
                 {
-                    projectile.rotation = 90f;
+                    drawOffsetX = -8;
+                    projectile.frame = 1;
+                    projectile.rotation = MathHelper.ToRadians(270f);
                     if (dripTimer >= 90)
                     {
                         int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, Main.myPlayer, projectile.whoAmI);
@@ -69,12 +68,13 @@ namespace JoJoStands.Projectiles
                 }
                 if (projectile.ai[0] == 2f)     //stuck to the bottom
                 {
-                    projectile.rotation = 180f;
-
+                    projectile.frame = 1;
+                    projectile.rotation = MathHelper.ToRadians(180f);
                 }
-                if (projectile.ai[0] == 3f)     //stuck to the left
+                if (projectile.ai[0] == 1f)     //stuck to the left
                 {
-                    projectile.rotation = 270f;
+                    projectile.frame = 1;
+                    projectile.rotation = MathHelper.ToRadians(90f);
                     if (dripTimer >= 90)
                     {
                         int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, Main.myPlayer, projectile.whoAmI);
@@ -124,13 +124,14 @@ namespace JoJoStands.Projectiles
                     Xadd = 0;
                     Yadd = -1;
                 }
-                Tile tileTarget = Main.tile[(int)projectile.position.X + Xadd, (int)projectile.position.Y + Yadd];
-                if (tileTarget.type != 0)
+                Tile tileTarget = Main.tile[(int)(projectile.Center.X /16f) + Xadd, (int)(projectile.Center.Y / 16f) + Yadd];
+                if (tileTarget.active())
                 {
-                    projectile.ai[0] = checkNumber;
+                    projectile.ai[0] = checkNumber + 1;
                     projectile.frame = 0;
                 }
             }
+            projectile.velocity = Vector2.Zero;
             return false;
         }
     }

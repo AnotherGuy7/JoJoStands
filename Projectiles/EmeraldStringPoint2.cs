@@ -58,7 +58,7 @@ namespace JoJoStands.Projectiles
                 for (int k = 0; k < Main.maxNPCs; k++)
                 {
                     NPC npc = Main.npc[k];
-                    if (Collision.CheckAABBvLineCollision(npc.Center, new Vector2(npc.width, npc.height), projectile.Center, Main.projectile[linkWhoAmI].Center))
+                    if (npc.active && Collision.CheckAABBvLineCollision(npc.Center, new Vector2(npc.width, npc.height), projectile.Center, Main.projectile[linkWhoAmI].Center))
                     {
                         projectile.Kill();
                         Main.projectile[linkWhoAmI].Kill();
@@ -68,6 +68,25 @@ namespace JoJoStands.Projectiles
                             int proj = Projectile.NewProjectile(player.position.X + (Main.screenWidth / 2) * npc.direction, npc.position.Y + Main.rand.NextFloat(-10f, 11f), (10f * -npc.direction) - Main.rand.NextFloat(0f, 3f), 0f, mod.ProjectileType("Emerald"), 32 + (int)projectile.ai[0], 3f, Main.myPlayer);
                             Main.projectile[proj].netUpdate = true;
                             Main.projectile[proj].tileCollide = false;
+                        }
+                    }
+                }
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                {
+                    for (int p = 0; p < Main.maxPlayers; p++)
+                    {
+                        Player otherPlayer = Main.player[p];
+                        if (otherPlayer.active && Collision.CheckAABBvLineCollision(otherPlayer.Center, new Vector2(otherPlayer.width, otherPlayer.height), projectile.Center, Main.projectile[linkWhoAmI].Center))
+                        {
+                            projectile.Kill();
+                            Main.projectile[linkWhoAmI].Kill();
+                            float numberProjectiles = 6;
+                            for (int i = 0; i < numberProjectiles; i++)
+                            {
+                                int proj = Projectile.NewProjectile(player.position.X + (Main.screenWidth / 2) * otherPlayer.direction, otherPlayer.position.Y + Main.rand.NextFloat(-10f, 11f), (10f * -otherPlayer.direction) - Main.rand.NextFloat(0f, 3f), 0f, mod.ProjectileType("Emerald"), 32 + (int)projectile.ai[0], 3f, Main.myPlayer);
+                                Main.projectile[proj].netUpdate = true;
+                                Main.projectile[proj].tileCollide = false;
+                            }
                         }
                     }
                 }

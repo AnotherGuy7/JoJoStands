@@ -36,8 +36,7 @@ namespace JoJoStands.Projectiles.Minions
         }
 
         public override int standType => 2;
-        protected float shootSpeed = 16f;
-        protected float shootCool = 6f;
+        private readonly float shootCool = 6f;
         private int goldenRectangleEffectTimer = 256;
 
         public override void AI()       //changed this to ExampleMod's HoverShooter...

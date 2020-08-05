@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace JoJoStands.Items
 {
-    public class WhitesnakeT2 : ModItem
+    public class WhitesnakeT3 : ModItem
     {
         public override string Texture
         {
@@ -15,13 +15,13 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Whitesnake (Tier 2)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw some acid!\nUsed in Stand Slot");
+            DisplayName.SetDefault("Whitesnake (Tier 3)");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw some acid!\nSpecial: Take any enemies discs!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
         {
-            item.damage = 38;
+            item.damage = 69;
             item.width = 32;
             item.height = 32;
             item.useTime = 12;
@@ -37,7 +37,7 @@ namespace JoJoStands.Items
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-            TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", "Punch Speed: " + (13 - mPlayer.standSpeedBoosts));
+            TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", "Punch Speed: " + (12 - mPlayer.standSpeedBoosts));
             tooltips.Add(tooltipAddition);
         }
 
@@ -49,20 +49,22 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.DemoniteBar, 9);
-            recipe.AddIngredient(ItemID.Diamond);
-            recipe.AddIngredient(ItemID.RottenChunk, 5);
-            recipe.AddIngredient(mod.ItemType("WillToControl"));
-            recipe.AddIngredient(mod.ItemType("WillToChange"));
+            recipe.AddIngredient(ItemID.SoulofNight, 14);
+            recipe.AddIngredient(ItemID.SoulofLight, 3);
+            recipe.AddIngredient(ItemID.Diamond, 2);
+            recipe.AddIngredient(ItemID.CursedFlame, 3);
+            recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
+            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
             recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.CrimtaneBar, 9);
-            recipe.AddIngredient(ItemID.Diamond);
-            recipe.AddIngredient(ItemID.Vertebrae, 5);
-            recipe.AddIngredient(mod.ItemType("WillToControl"));
-            recipe.AddIngredient(mod.ItemType("WillToChange"));
+            recipe.AddIngredient(ItemID.SoulofNight, 14);
+            recipe.AddIngredient(ItemID.SoulofLight, 3);
+            recipe.AddIngredient(ItemID.Diamond, 2);
+            recipe.AddIngredient(ItemID.Ichor, 3);
+            recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
+            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -9,17 +9,19 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
-    public class WhitesnakeStandT2 : StandClass
+    public class WhitesnakeStandT3 : StandClass
     {
-        public override int punchDamage => 38;
-        public override int altDamage => 25;
-        public override int punchTime => 13;
+        public override int punchDamage => 69;
+        public override int altDamage => 63;
+        public override int punchTime => 12;
         public override int halfStandHeight => 44;
         public override float fistWhoAmI => 9f;
         public override int standType => 1;
         public override float maxDistance => 147f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
+        private bool grabFrames = false;
+        private bool secondaryFrames = false;
 
         public override void AI()
         {
@@ -85,11 +87,73 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     else
                         GoInFront();
                 }
+                if (SpecialKeyCurrent() && projectile.owner == Main.myPlayer && shootCount <= 0 && !grabFrames)
+                {
+                    projectile.velocity = Main.MouseWorld - projectile.position;
+                    projectile.velocity.Normalize();
+                    projectile.velocity *= 5f;
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
+                    if (mouseDistance > 40f)
+                    {
+                        projectile.velocity = player.velocity + projectile.velocity;
+                    }
+                    if (mouseDistance <= 40f)
+                    {
+                        projectile.velocity = Vector2.Zero;
+                    }
+                    secondaryFrames = true;
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+                        NPC npc = Main.npc[i];
+                        if (npc.active)
+                        {
+                            if (projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
+                            {
+                                projectile.ai[0] = npc.whoAmI;
+                                grabFrames = true;
+                            }
+                        }
+                    }
+                    LimitDistance();
+                }
+                if (grabFrames && projectile.ai[0] != -1f)
+                {
+                    projectile.velocity = Vector2.Zero;
+                    NPC npc = Main.npc[(int)projectile.ai[0]];
+                    npc.direction = -projectile.direction;
+                    npc.position = projectile.position + new Vector2(5f * projectile.direction, -2f - npc.height / 3f);
+                    npc.velocity = Vector2.Zero;
+                    npc.AddBuff(BuffID.Confused, 2);
+                    if (!npc.active)
+                    {
+                        grabFrames = false;
+                        projectile.ai[0] = -1f;
+                        shootCount += 30;
+                    }
+                    LimitDistance();
+                }
+                if (!SpecialKeyCurrent() && (grabFrames || secondaryFrames))
+                {
+                    grabFrames = false;
+                    projectile.ai[0] = -1f;
+                    shootCount += 30;
+                    secondaryFrames = false;
+                }
             }
             if (modPlayer.StandAutoMode)
             {
                 BasicPunchAI();
             }
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(grabFrames);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            grabFrames = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

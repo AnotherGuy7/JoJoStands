@@ -12,7 +12,7 @@ namespace JoJoStands.Mounts
 {
 	public class RoadRollerMount : ModMountData
 	{
-		public override void SetDefaults()			//basically the unicorn mount
+		public override void SetDefaults()
 		{
 			mountData.buff = mod.BuffType("RoadRollerBuff");
 			mountData.heightBoost = 0;

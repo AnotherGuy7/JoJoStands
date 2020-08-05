@@ -52,10 +52,10 @@ namespace JoJoStands.NPCs
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("SunDroplet"), Main.rand.Next(1, 3));
             }
-            if ((npc.type == NPCID.Bird || npc.type == NPCID.BirdBlue || npc.type == NPCID.BirdRed || npc.type == NPCID.GoldBird) && Main.rand.NextFloat(0, 101) < 8f)
+            /*if ((npc.type == NPCID.Bird || npc.type == NPCID.BirdBlue || npc.type == NPCID.BirdRed || npc.type == NPCID.GoldBird) && Main.rand.NextFloat(0, 101) < 8f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("WrappedPicture"));
-            }
+            }*/
             if ((npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC) && Main.rand.NextFloat(0, 101) < 14f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("Hand"));
