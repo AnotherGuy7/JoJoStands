@@ -129,7 +129,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, newPunchTime, true);
+                AnimationStates(animationName, 3, newPunchTime, true);
             }
             if (animationName == "Secondary")
             {
