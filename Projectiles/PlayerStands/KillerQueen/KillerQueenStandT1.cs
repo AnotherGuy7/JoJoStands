@@ -340,7 +340,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 2, 30, true);
+                AnimationStates(animationName, 4, 20, true);
             }
             if (animationName == "Attack")
             {

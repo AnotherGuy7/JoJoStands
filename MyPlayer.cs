@@ -210,7 +210,6 @@ namespace JoJoStands
             }
             if (JoJoStands.PoseHotKey.JustPressed && !poseMode)
             {
-                poseMode = true;
                 if (Sounds)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/menacing"));
@@ -219,15 +218,16 @@ namespace JoJoStands
                 {
                     Networking.ModNetHandler.playerSync.SendPoseMode(256, player.whoAmI, true, player.whoAmI);
                 }
+                poseMode = true;
             }
-            if (JoJoStands.StandOut.JustPressed && !StandOut && ActivationTimer <= 0)
+            if (JoJoStands.StandOut.JustPressed && !StandOut && ActivationTimer <= 0 && !player.HasBuff(mod.BuffType("Stolen")))
             {
                 StandOut = true;
                 ActivationTimer += 30;
                 SpawnStand();
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, true, player.whoAmI);      //we send it to 256 cause it's the server?
+                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, true, player.whoAmI);      //we send it to 256 cause it's the server
                 }
             }
             if (JoJoStands.SpecialHotKey.Current && standAccessory)
@@ -1209,6 +1209,8 @@ namespace JoJoStands
         public override void PostUpdateBuffs()
         {
             standCooldownReduction = 0f;        //it's here because it resets before the buffs can use it when its in ResetEffects()
+            if (player.HasBuff(mod.BuffType("Stolen")))
+                StandOut = false;
         }
 
         public int AbilityCooldownTime(int seconds) //Sometimes we won't want to reduce the cooldown so that's why reduction defaults to 0

@@ -390,10 +390,6 @@ namespace JoJoStands.NPCs
                     deathTimer = 0;
                 }
             }
-            if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
-            {
-                return false;
-            }
             if (npc.HasBuff(mod.BuffType("Locked")))
             {
                 npc.lifeRegen = -4;
@@ -407,6 +403,11 @@ namespace JoJoStands.NPCs
                     npc.StrikeNPC(lifeRegenIncrement, 0f, 1);
                 }
             }
+
+            if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
+                return false;
+            if (npc.HasBuff(mod.BuffType("Stolen")))
+                return false;
             return true;
         }
 

@@ -9,11 +9,11 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
-    public class WhitesnakeStandT3 : StandClass
+    public class WhitesnakeStandFinal : StandClass
     {
-        public override int punchDamage => 69;
-        public override int altDamage => 63;
-        public override int punchTime => 12;
+        public override int punchDamage => 88;
+        public override int altDamage => 82;
+        public override int punchTime => 11;
         public override int halfStandHeight => 44;
         public override float fistWhoAmI => 9f;
         public override int standType => 1;

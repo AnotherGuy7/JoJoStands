@@ -22,6 +22,7 @@ namespace JoJoStands.Items
 			item.useStyle = 1;
 			item.rare = ItemRarityID.Pink;
 			item.noMelee = true;
+			item.noUseGraphic = true;
 			item.mountType = mod.MountType("RoadRollerMount");
         }
 
