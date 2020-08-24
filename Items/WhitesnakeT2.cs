@@ -49,6 +49,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("WhitesnakeT1"));
             recipe.AddIngredient(ItemID.DemoniteBar, 9);
             recipe.AddIngredient(ItemID.Diamond);
             recipe.AddIngredient(ItemID.RottenChunk, 5);
@@ -58,6 +59,7 @@ namespace JoJoStands.Items
             recipe.SetResult(this);
             recipe.AddRecipe();
             recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("WhitesnakeT1"));
             recipe.AddIngredient(ItemID.CrimtaneBar, 9);
             recipe.AddIngredient(ItemID.Diamond);
             recipe.AddIngredient(ItemID.Vertebrae, 5);

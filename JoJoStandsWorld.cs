@@ -1,15 +1,8 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using System.IO;
-using JoJoStands.Tiles;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using JoJoStands;
 using System;
 using Terraria.ModLoader.IO;
 
@@ -25,8 +18,8 @@ namespace JoJoStands
         {
             if (NPC.downedBoss3 && !meteorDropped && Main.dayTime)
             {
-                meteorDropped = true;
                 dropViralMeteor();
+                meteorDropped = true;
             }
         }
 
@@ -71,7 +64,7 @@ namespace JoJoStands
         public static void dropViralMeteor()        //directly from Terraria/WorldGen.cs, about 22~~
         {
             bool flag = true;
-            if (Main.netMode == 1)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 return;
             }

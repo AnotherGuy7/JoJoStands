@@ -38,6 +38,7 @@ namespace JoJoStands.Items.Armor
             recipe.AddTile(TileID.Loom);
             recipe.SetResult(this);
             recipe.AddRecipe();
+			recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Silk, 15);
             recipe.AddIngredient(ItemID.LeadBar, 5);
             recipe.AddTile(TileID.Loom);

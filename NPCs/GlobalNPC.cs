@@ -136,7 +136,7 @@ namespace JoJoStands.NPCs
                 }
                 if (npc.type == NPCID.Guide && Main.rand.Next(0, 100) <= 4)     //Betty contributor reference
                 {
-                    chat = "Hey " + Main.LocalPlayer.name + ", the other day one small girl calling herself 'The Dead Princess' came to me asking for the release date of a 1.4 version... I'm not sure what was she talking about...";
+                    chat = "Hey " + Main.LocalPlayer.name + ", the other day one small girl calling herself 'The Dead Princess' came to me asking for a new name to her list... I'm not sure what was she talking about...";
                 }
                 if (npc.type == NPCID.Mechanic && Main.rand.Next(0, 100) <= 5)      //Phil contributer reference
                 {

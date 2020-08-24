@@ -1,12 +1,12 @@
+using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.Networking;
-using Terraria.Graphics.Shaders;
-using Microsoft.Xna.Framework.Audio;
 
 namespace JoJoStands.Projectiles.PlayerStands
 {
@@ -313,7 +313,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 PlayPunchSound();
                             }
-                            if ((newPunchTime) >= 2)
+                            if (newPunchTime >= 2)
                                 shootCount += newPunchTime;
                             else
                                 shootCount += 2;
@@ -599,7 +599,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             return false;
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
+        /*public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
         {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
@@ -618,6 +618,26 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             SyncAndApplyDyeSlot();
             DrawStand(spriteBatch, drawColor);
+        }*/
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
+
+            DrawRangeIndicators(spriteBatch);       //not affected by dyes since it's starting a new batch with no effect
+            SyncAndApplyDyeSlot();
+            DrawStand(spriteBatch, drawColor);
+
+            return true;
+        }
+
+        public SpriteEffects effects = SpriteEffects.None;
+
+        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)     //manually drawing stands cause sometimes stands had too many frames, it's easier to manage this way, and dye effects didn't work for stands that were overriding PostDraw
+        {
+            spriteBatch.End();     //ending the spriteBatch that started in PreDraw
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
         }
 
         private void DrawStand(SpriteBatch spriteBatch, Color drawColor)
@@ -708,10 +728,10 @@ namespace JoJoStands.Projectiles.PlayerStands
         }
 
         public virtual void SendExtraStates(BinaryWriter writer)        //for those extra special 4th states (TH Charge, TW Pose, GER Rock Flick)
-        {}
+        { }
 
         public virtual void ReceiveExtraStates(BinaryReader reader)
-        {}
+        { }
 
         public void LimitDistance()
         {
@@ -751,10 +771,10 @@ namespace JoJoStands.Projectiles.PlayerStands
         }
 
         public virtual void SelectAnimation()       //what you override to use normalFrames, attackFrames, etc. and make the animations play
-        {}
+        { }
 
         public virtual void PlayAnimation(string animationName)     //What you override to set each animations information
-        {}
+        { }
 
         public void AnimationStates(string stateName, int frameAmount, int frameCounterLimit, bool loop, bool loopCertainFrames = false, int loopFrameStart = 0, int loopFrameEnd = 0)
         {

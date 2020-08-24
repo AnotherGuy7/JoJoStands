@@ -85,8 +85,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                     distanceToTeleport.Normalize();
-                    distanceToTeleport *= 98f * (chargeTimer / 60f);
-                    player.position = player.Center + distanceToTeleport;
+                    /*distanceToTeleport *= 98f * (chargeTimer / 60f);
+                    player.position = player.Center + distanceToTeleport;*/
+                    distanceToTeleport *= chargeTimer / 60f;
+                    player.velocity += distanceToTeleport * 5f;
+
                     player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(chargeTimer / 10));       //15s max cooldown
                     chargeTimer = 0;
                 }

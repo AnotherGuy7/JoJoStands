@@ -34,6 +34,12 @@ namespace JoJoStands.Items
 			recipe.AddIngredient(ItemID.SoulofNight);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
+			recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.LeadBar, 20);
+			recipe.AddIngredient(ItemID.PalladiumBar, 13);
+			recipe.AddIngredient(ItemID.SoulofNight);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
         }
 	}
 }

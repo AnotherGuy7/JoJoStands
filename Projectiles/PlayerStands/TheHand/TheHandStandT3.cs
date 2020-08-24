@@ -87,8 +87,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                     distanceToTeleport.Normalize();
-                    distanceToTeleport *= (98f + modPlayer.standRangeBoosts) * (chargeTimer / 45f);
-                    player.position = player.Center + distanceToTeleport;
+                    distanceToTeleport *= chargeTimer / 45f;
+                    player.velocity += distanceToTeleport * 4.5f;
                     player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(chargeTimer / 15));       //10s max cooldown
                     chargeTimer = 0;
                 }
@@ -127,7 +127,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             if (npc.active && Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), projectile.position, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
                             {
                                 npc.StrikeNPC(60 * (specialTimer / 60), 0f, player.direction);     //damage goes up at a rate of 60dmg/s
-                                //npc.AddBuff(mod.BuffType("MissingOrgans"), 900);
+                                npc.AddBuff(mod.BuffType("MissingOrgans"), 600);
                             }
                         }
                         player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(30));

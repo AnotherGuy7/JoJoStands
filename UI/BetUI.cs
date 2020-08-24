@@ -347,7 +347,7 @@ namespace JoJoStands.UI
         }
 
 
-        public virtual void GameActive()
+        private void GameActive()
         {
             if (chosenGame == 1)        //Ro-Sham-Bo game
             {
@@ -615,7 +615,7 @@ namespace JoJoStands.UI
             }
         }
 
-        public virtual void GameEnd()
+        private void GameEnd()
         {
             Player player = Main.player[Main.myPlayer];
             playerChoice = 0;
@@ -627,21 +627,26 @@ namespace JoJoStands.UI
                 cheatChance += Main.rand.Next(2, 8);
                 if (pCoins != 0)
                 {
-                    Item.NewItem(player.position, ItemID.PlatinumCoin, pCoins);
+                    //Item.NewItem(player.position, ItemID.PlatinumCoin, pCoins);
+                    player.QuickSpawnItem(ItemID.PlatinumCoin, pCoins);
                 }
                 if (gCoins != 0)
                 {
-                    Item.NewItem(player.position, ItemID.GoldCoin, gCoins);
+                    //Item.NewItem(player.position, ItemID.GoldCoin, gCoins);
+                    player.QuickSpawnItem(ItemID.GoldCoin, gCoins);
+
                 }
                 if (accuseOfCheating && cheating)
                 {
                     if (pCoins != 0)
                     {
-                        Item.NewItem(player.position, ItemID.PlatinumCoin, pCoins * 2);
+                        //Item.NewItem(player.position, ItemID.PlatinumCoin, pCoins * 2);
+                        player.QuickSpawnItem(ItemID.PlatinumCoin, pCoins * 2);
                     }
                     if (gCoins != 0)
                     {
-                        Item.NewItem(player.position, ItemID.GoldCoin, gCoins * 2);
+                        //Item.NewItem(player.position, ItemID.GoldCoin, gCoins * 2);
+                        player.QuickSpawnItem(ItemID.GoldCoin, gCoins * 2);
                     }
                 }
                 if (!cheating)

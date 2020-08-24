@@ -38,6 +38,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.controlUseTile = false;
             player.maxRunSpeed = 0f;
             player.noFallDmg = true;
+
             if (!resetLimitTimer && limitTimer > 0)
             {
                 limitTimer = 0;
@@ -46,36 +47,33 @@ namespace JoJoStands.Buffs.AccessoryBuff
             if (MyPlayer.SecretReferences)
             {
                 limitTimer--;
-            }
-            if (player.wet && player.ZoneSnow)
-            {
-                limitTimer -= 6;
-                if (breathSave == 0)
+                if (player.wet)
                 {
-                    breathSave = player.breath;
+                    limitTimer -= 3;
+                    if (player.ZoneSnow)
+                    {
+                        limitTimer -= 6;
+                    }
+                    if (breathSave == 0)
+                    {
+                        breathSave = player.breath;
+                    }
                 }
-            }
-            if (player.wet)
-            {
-                limitTimer -= 3;
-                if (breathSave == 0)
+                if (breathSave != 0)
                 {
-                    breathSave = player.breath;
+                    player.breath = breathSave;
                 }
-            }
-            if (breathSave != 0)
-            {
-                player.breath = breathSave;
-            }
-            if (limitTimer <= 0)
-            {
-                if (player.wet || (player.wet && player.ZoneSnow))
+                if (limitTimer <= 0)
                 {
-                    player.KillMe(PlayerDeathReason.ByCustomReason("The water kept it's constant rythm and " + player.name + " has stopped waiting. And stopped thinking."), player.statLife - 1, 1);
-                }
-                else
-                {
-                    player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " has stopped thinking."), player.statLife - 1, 1);
+                    if (player.wet || (player.wet && player.ZoneSnow))
+                    {
+                        player.KillMe(PlayerDeathReason.ByCustomReason("The water kept it's constant rythm and " + player.name + " has stopped waiting. And stopped thinking."), player.statLife - 1, 1);
+                    }
+                    else
+                    {
+                        player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " has stopped thinking."), player.statLife - 1, 1);
+                    }
+                    limitTimer = 36000;
                 }
             }
             if (Main.mouseRight && mPlayer.StandSlot.Item.type == mod.ItemType("CenturyBoyT2") && player.HasItem(ItemID.Dynamite) && !player.HasBuff(mod.BuffType("AbilityCooldown")))
