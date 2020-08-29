@@ -67,46 +67,38 @@ namespace JoJoStands.Items.Hamon
                 hamonLevel = 10;
             }
 
-
-            if (hamonLevel == 1)        //different things will be added here later
+            switch (hamonLevel)     //done this way cause different things will be done with it
             {
-                maxHamon = 72;
-            }
-            if (hamonLevel == 2)
-            {
-                maxHamon = 84;
-            }
-            if (hamonLevel == 3)
-            {
-                maxHamon = 96;
-            }
-            if (hamonLevel == 4)
-            {
-                maxHamon = 108;
-            }
-            if (hamonLevel == 5)
-            {
-                maxHamon = 120;
-            }
-            if (hamonLevel == 6)
-            {
-                maxHamon = 132;
-            }
-            if (hamonLevel == 7)
-            {
-                maxHamon = 144;
-            }
-            if (hamonLevel == 8)
-            {
-                maxHamon = 156;
-            }
-            if (hamonLevel == 9)
-            {
-                maxHamon = 168;
-            }
-            if (hamonLevel == 10)
-            {
-                maxHamon = 180;
+                case 1:
+                    maxHamon = 72;
+                    break;
+                case 2:
+                    maxHamon = 84;
+                    break;
+                case 3:
+                    maxHamon = 96;
+                    break;
+                case 4:
+                    maxHamon = 108;
+                    break;
+                case 5:
+                    maxHamon = 120;
+                    break;
+                case 6:
+                    maxHamon = 132;
+                    break;
+                case 7:
+                    maxHamon = 144;
+                    break;
+                case 8:
+                    maxHamon = 156;
+                    break;
+                case 9:
+                    maxHamon = 168;
+                    break;
+                case 10:
+                    maxHamon = 180;
+                    break;
             }
 
             if (AjaStone)           //Hamon charging stuff

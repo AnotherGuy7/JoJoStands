@@ -1,8 +1,4 @@
-using System;
-using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System;using Terraria;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Buffs.ItemBuff
@@ -12,7 +8,7 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void SetDefaults()
         {
 			DisplayName.SetDefault("Bite The Dust");
-            Description.SetDefault("You are now restarting the day");
+            Description.SetDefault("The day is now restarting.");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
@@ -48,13 +44,13 @@ namespace JoJoStands.Buffs.ItemBuff
                 mPlayer.Foresight = false;
                 if (Main.time != 1600)
                 {
-                    player.AddBuff(mod.BuffType(Name), 10);       //to constantly refresh the buff
+                    player.AddBuff(mod.BuffType(Name), 2);       //to constantly refresh the buff
                 }
-                if (Main.time <= 1600)
+                if (Main.time < 1600)
                 {
                     Main.time += 60;        //drag time down to 1600
                 }
-                if (Main.time >= 1600)
+                if (Main.time > 1600)
                 {
                     Main.time -= 60;
                 }
@@ -69,15 +65,15 @@ namespace JoJoStands.Buffs.ItemBuff
                         Main.dayTime = true;
                     }
                 }
-                for (int i = 0; i < 255; i++)
+                /*for (int i = 0; i < 255; i++)
                 {
                     if (Main.player[i].active)
                     {
-                        if (Main.time <= 1600)
+                        if (Main.time < 1600)
                         {
                             Main.time += 60;
                         }
-                        if (Main.time >= 1600)
+                        if (Main.time > 1600)
                         {
                             Main.time -= 60;
                         }
@@ -89,7 +85,7 @@ namespace JoJoStands.Buffs.ItemBuff
                             }
                         }
                     }
-                }
+                }*/
             }
         }
     }

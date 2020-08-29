@@ -1,7 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using Terraria.ID;
  
 namespace JoJoStands.Buffs.ItemBuff
 {
@@ -48,6 +47,7 @@ namespace JoJoStands.Buffs.ItemBuff
             player.maxRunSpeed *= 0;
             player.moveSpeed *= 0;
             player.gravity = 0f;
+
             int newDust = Dust.NewDust(player.position, player.width, player.height, 220);
             Main.dust[newDust].noGravity = true;
             Main.dust[newDust].velocity = Vector2.Zero;
@@ -55,11 +55,11 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
-            npc.AddBuff(mod.BuffType(Name), 1);
             int newDust = Dust.NewDust(npc.position, npc.width, npc.height, 220);
             Main.dust[newDust].noGravity = true;
             Main.dust[newDust].velocity = Vector2.Zero;
+            npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
+            npc.AddBuff(mod.BuffType(Name), 1);
         }
     }
 }

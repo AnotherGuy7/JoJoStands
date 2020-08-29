@@ -252,6 +252,12 @@ namespace JoJoStands.NPCs
                     {
                         Main.npcChatText = "To move during another users timestop, hold a time-stopping capable stand and use it's timestop. If the duration of your timestop exceeds the duration of the other users timestop, you can take over that users timestop as well!";
                     }
+                    if (!mPlayer.receivedArrowShard)
+                    {
+                        Main.npcChatText = "You seem... reliable. Here, I want you to take this and use it on yourself when you can, I think you'll like what happens when you do.";
+                        player.QuickSpawnItem(mod.ItemType("ArrowShard"));
+                        mPlayer.receivedArrowShard = true;
+                    }
                 }
             }
         }

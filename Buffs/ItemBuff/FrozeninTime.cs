@@ -1,10 +1,8 @@
-using System;
-using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using Terraria.Graphics.Effects;
+using Terraria.ID;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
@@ -24,7 +22,7 @@ namespace JoJoStands.Buffs.ItemBuff
             if (player.HasBuff(mod.BuffType(Name)))
             {
                 player.controlUseItem = false;
-                player.dash *= 0;       //tried to get them gray but the stayed gray forever...Don't try again
+                player.dash = 0;
                 player.bodyVelocity = Vector2.Zero;
                 player.controlLeft = false;
                 player.controlJump = false;
@@ -35,15 +33,14 @@ namespace JoJoStands.Buffs.ItemBuff
                 player.controlRight = false;
                 player.controlUseTile = false;
                 player.controlUp = false;
-                player.maxRunSpeed *= 0;
-                player.moveSpeed *= 0;
+                player.maxRunSpeed = 0;
+                player.moveSpeed = 0;
             }
             else
             {
-                if (Filters.Scene["GreyscaleEffect"].IsActive())
-                {
-                    Filters.Scene["GreyscaleEffect"].Deactivate();
-                }
+                if (Main.netMode != NetmodeID.Server)
+                    if (Filters.Scene["GreyscaleEffect"].IsActive())
+                        Filters.Scene["GreyscaleEffect"].Deactivate();
             }
         }
     }

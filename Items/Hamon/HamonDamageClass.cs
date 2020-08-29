@@ -44,17 +44,16 @@ namespace JoJoStands.Items.Hamon
         {
             if (target.HasBuff(mod.BuffType("Vampire")))
             {
-                damage = (int)(damage * 1.3);
+                damage = (int)(damage * 1.3f);
                 target.AddBuff(mod.BuffType("Sunburn"), 90);
             }
         }
 
-        public int increaseCounter = 0;
+        private int increaseCounter = 0;
 
         // As a modder, you could also opt to make the Get overrides also sealed. Up to the modder
         public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)       //when making the base damage values, make sure they are around the 10-20's cause otherwise, at MoonLord they'd go over 250
         {
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             if (NPC.downedBoss1)    //eye of cthulu
             {

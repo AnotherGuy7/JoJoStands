@@ -1,8 +1,4 @@
-using System;
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Buffs.AccessoryBuff
@@ -20,7 +16,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
  
         public override void Update(Player player, ref int buffIndex)
         {
-            player.AddBuff(mod.BuffType("AjaVampire"), 2, true);
+            player.AddBuff(mod.BuffType("AjaVampire"), 2);
             player.allDamage *= 2f;
             player.moveSpeed *= 2f;
             player.jumpBoost = true;

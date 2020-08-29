@@ -1,7 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
-using Microsoft.Xna.Framework;
 using JoJoStands.Networking;
 using Terraria.Graphics.Effects;
 
@@ -63,9 +62,12 @@ namespace JoJoStands.Buffs.ItemBuff
                     mPlayer.BackToZero = false;
                     ModNetHandler.effectSync.SendBTZ(256, player.whoAmI, false, player.whoAmI);
                 }
-                if (Filters.Scene["GreenEffect"].IsActive())
+                if (Main.netMode != NetmodeID.Server)
                 {
-                    Filters.Scene["GreenEffect"].Deactivate();
+                    if (Filters.Scene["GreenEffect"].IsActive())
+                    {
+                        Filters.Scene["GreenEffect"].Deactivate();
+                    }
                 }
             }
         }

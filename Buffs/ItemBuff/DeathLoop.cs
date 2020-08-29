@@ -1,8 +1,5 @@
-using System;
 using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Buffs.ItemBuff
@@ -43,7 +40,7 @@ namespace JoJoStands.Buffs.ItemBuff
             {
                 player.AddBuff(mod.BuffType("DeathLoop"), 2);
             }
-            if (deathLoopTimer >= 61)       //sometimes it w
+            if (deathLoopTimer >= 60)       //sometimes it w
             {
                 deathLoopTimer = 0;
             }

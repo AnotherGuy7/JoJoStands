@@ -59,6 +59,7 @@ namespace JoJoStands
         public int standSpeedBoosts = 0;
         public float standCooldownReduction = 0f;
         public int standType = 0;           //0 = no type; 1 = Melee; 2 = Ranged;
+        public int piercedTimer = 36000;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -71,6 +72,7 @@ namespace JoJoStands
         public bool crystalArmorSetEquipped = false;
         public bool crackedPearlEquipped = false;
         public bool usedEctoPearl = false;
+        public bool receivedArrowShard = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -119,15 +121,16 @@ namespace JoJoStands
 
         public override void OnEnterWorld(Player player)
         {
-            if (player.HasItem(mod.ItemType("TuskAct3")) || player.HasItem(mod.ItemType("TuskAct4")))
+            int type = StandSlot.Item.type;
+            if (type == mod.ItemType("TuskAct3") || type == mod.ItemType("TuskAct4"))
             {
                 TuskActNumber = 3;
             }
-            else if (player.HasItem(mod.ItemType("TuskAct2")))
+            else if (type == mod.ItemType("TuskAct2"))
             {
                 TuskActNumber = 2;
             }
-            else if (player.HasItem(mod.ItemType("TuskAct1")))
+            else if (type == mod.ItemType("TuskAct1"))
             {
                 TuskActNumber = 1;
             }
@@ -348,7 +351,9 @@ namespace JoJoStands
                 { "StandInSlot", ItemIO.Save(StandSlot.Item) },
                 { "canRevertBTD", canRevertFromKQBTD },
                 { "DyeInDyeSlot", ItemIO.Save(StandDyeSlot.Item) },
-                { "usedEctoPearl", usedEctoPearl }
+                { "usedEctoPearl", usedEctoPearl },
+                { "receivedArrowShard", receivedArrowShard },
+                { "piercedTimer", piercedTimer }
             };
         }
 
@@ -358,6 +363,8 @@ namespace JoJoStands
             canRevertFromKQBTD = tag.GetBool("canRevertBTD");
             StandDyeSlot.Item = ItemIO.Load(tag.GetCompound("DyeInDyeSlot")).Clone();
             usedEctoPearl = tag.GetBool("usedEctoPearl");
+            receivedArrowShard = tag.GetBool("receivedArrowShard");
+            piercedTimer = tag.GetInt("piercedTimer");
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -1370,6 +1377,13 @@ namespace JoJoStands
                     UI.ToBeContinued.Visible = true;
                 }
             }
+
+            if (player.HasBuff(mod.BuffType("Pierced")))
+            {
+                receivedArrowShard = false;
+                piercedTimer = 36000;
+            }
+
             if (!revived && player.HasItem(mod.ItemType("PokerChip")))
             {
                 revived = true;
@@ -1386,6 +1400,7 @@ namespace JoJoStands
             {
                 return false;
             }
+
             /*if (Vampire && !dyingVampire)
             {
                 player.AddBuff(mod.BuffType("DyingVampire"), 60);
@@ -1397,6 +1412,7 @@ namespace JoJoStands
             {
                 dyingVampire = false;
             }*/
+
             if (player.ZoneSkyHeight && Vampire)
             {
                 int karsText = Main.rand.Next(0, 3);

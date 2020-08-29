@@ -78,12 +78,12 @@ namespace JoJoStands.Buffs.AccessoryBuff
             }
             if (Main.mouseRight && mPlayer.StandSlot.Item.type == mod.ItemType("CenturyBoyT2") && player.HasItem(ItemID.Dynamite) && !player.HasBuff(mod.BuffType("AbilityCooldown")))
             {
-                player.ConsumeItem(ItemID.Dynamite);
+                Main.PlaySound(SoundID.Item62);
                 var explosion = Projectile.NewProjectile(player.position, Vector2.Zero, ProjectileID.GrenadeIII, 49, 8f, Main.myPlayer);
                 Main.projectile[explosion].timeLeft = 2;
                 Main.projectile[explosion].netUpdate = true;
-                Main.PlaySound(SoundID.Item62);
                 player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
+                player.ConsumeItem(ItemID.Dynamite);
             }
         }
     }

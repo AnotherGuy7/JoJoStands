@@ -1,8 +1,4 @@
-using System;
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Buffs.AccessoryBuff
@@ -19,12 +15,12 @@ namespace JoJoStands.Buffs.AccessoryBuff
  
         public override void Update(Player player, ref int buffIndex)
         {
-            player.velocity.Y += -0.2f;
-            player.velocity.X += -0.2f;
             if (player.lifeRegen > 0)
             {
                 player.lifeRegen = 0;
             }
+            player.velocity.Y += -0.2f;
+            player.velocity.X += -0.2f;
             player.lifeRegenTime = 0;
             player.lifeRegen -= 120;
             player.moveSpeed *= 0.5f;
