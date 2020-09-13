@@ -68,6 +68,7 @@ namespace JoJoStands
         public bool StandAutoMode = false;
         public bool destroyAmuletEquipped = false;
         public bool greaterDestroyEquipped = false;
+        public bool awakenedAmuletEquipped = false;
         public bool chlorositeShortEqquipped = false;
         public bool crystalArmorSetEquipped = false;
         public bool crackedPearlEquipped = false;
@@ -111,6 +112,7 @@ namespace JoJoStands
             greaterDestroyEquipped = false;
             crystalArmorSetEquipped = false;
             wearingTitaniumMask = false;
+            awakenedAmuletEquipped = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -333,12 +335,12 @@ namespace JoJoStands
 
         public override void Initialize()
         {
-            StandSlot = new UIItemSlot(Vector2.Zero, 52, 0, "Enter Stand Here");
+            StandSlot = new UIItemSlot(Vector2.Zero, hoverText: "Enter Stand Here", scaleToInventory: true);
             StandSlot.BackOpacity = .8f;
             StandSlot.Item = new Item();
             StandSlot.Item.SetDefaults(0);
 
-            StandDyeSlot = new UIItemSlot(StandSlot.Position - new Vector2(60f, 0f), 52, context: ItemSlot.Context.EquipDye, "Enter Dye Here");
+            StandDyeSlot = new UIItemSlot(StandSlot.Position - new Vector2(60f, 0f), 52, context: ItemSlot.Context.EquipDye, "Enter Dye Here", scaleToInventory: true);
             StandDyeSlot.BackOpacity = .8f;
             StandDyeSlot.Item = new Item();
             StandDyeSlot.Item.SetDefaults(0);
@@ -410,106 +412,6 @@ namespace JoJoStands
             }
         }
 
-        /*public override void clientClone(ModPlayer clientClone)     //these 3 mehtods are from ExampleMod
-        {
-            MyPlayer clone = clientClone as MyPlayer;
-            clone.TheWorldEffect = TheWorldEffect;
-            clone.TimeSkipEffect = TimeSkipEffect;
-            clone.BackToZero = BackToZero;
-            clone.poseMode = poseMode;
-            clone.StandOut = StandOut;
-            clone.StandAutoMode = StandAutoMode;
-            clone.Foresight = Foresight;
-            clone.showingCBLayer = showingCBLayer;
-        }
-
-        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-        {
-            ModPacket packet = mod.GetPacket();
-            packet.Write((byte)JoJoStands.JoJoMessageType.SyncPlayer);
-            packet.Write((byte)player.whoAmI);
-            packet.Write(TheWorldEffect);
-            packet.Write(TimeSkipEffect);
-            packet.Write(BackToZero);
-            packet.Write(poseMode);
-            packet.Write(StandOut);
-            packet.Write(StandAutoMode);
-            packet.Write(Foresight);
-            packet.Write(showingCBLayer);
-            packet.Send(toWho, fromWho);
-        }
-
-        public override void SendClientChanges(ModPlayer clientPlayer)
-        {
-            MyPlayer clone = clientPlayer as MyPlayer;
-            if (clone.TheWorldEffect != TheWorldEffect)
-            {
-                // Send a Mod Packet with the changes.
-                var packet = mod.GetPacket();
-                packet.Write((byte)JoJoStands.JoJoMessageType.TheWorld);
-                packet.Write((byte)player.whoAmI);
-                packet.Write(TheWorldEffect);
-                packet.Send();
-                //Main.NewText("SendClientChanges", Color.Red);
-            }
-            if (clone.TimeSkipEffect != TimeSkipEffect)
-            {
-                var packet = mod.GetPacket();
-                packet.Write((byte)JoJoStands.JoJoMessageType.Timeskip);
-                packet.Write((byte)player.whoAmI);
-                packet.Write(TimeSkipEffect);
-                packet.Send();
-            }
-            if (clone.BackToZero != BackToZero)
-            {
-                var packet = mod.GetPacket();
-                packet.Write((byte)JoJoStands.JoJoMessageType.BacktoZero);
-                packet.Write((byte)player.whoAmI);
-                packet.Write(BackToZero);
-                packet.Send();
-            }
-            if (clone.poseMode != poseMode)
-            {
-                var packet = mod.GetPacket();
-                packet.Write((byte)JoJoStands.JoJoMessageType.PoseMode);
-                packet.Write((byte)player.whoAmI);
-                packet.Write(poseMode);
-                packet.Send();
-            }
-            if (clone.StandOut != StandOut)
-            {
-                var packet = mod.GetPacket();
-                packet.Write((byte)JoJoStands.JoJoMessageType.StandOut);
-                packet.Write((byte)player.whoAmI);
-                packet.Write(StandOut);
-                packet.Send();
-            }
-            if (clone.StandAutoMode != StandAutoMode)
-            {
-                var packet = mod.GetPacket();
-                packet.Write((byte)JoJoStands.JoJoMessageType.StandAutoMode);
-                packet.Write((byte)player.whoAmI);
-                packet.Write(StandAutoMode);
-                packet.Send();
-            }
-            if (clone.Foresight != Foresight)
-            {
-                var packet = mod.GetPacket();
-                packet.Write((byte)JoJoStands.JoJoMessageType.Foresight);
-                packet.Write((byte)player.whoAmI);
-                packet.Write(Foresight);
-                packet.Send();
-            }
-            if (clone.showingCBLayer != showingCBLayer)
-            {
-                var packet = mod.GetPacket();
-                packet.Write((byte)JoJoStands.JoJoMessageType.CBLayer);
-                packet.Write((byte)player.whoAmI);
-                packet.Write(showingCBLayer);
-                packet.Send();
-            }
-        }*/
-
         public override void SetControls()
         {
             if (controllingAerosmith || player.HasBuff(mod.BuffType("CenturyBoyBuff")))
@@ -524,15 +426,6 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
-            /*if (player.whoAmI == Main.myPlayer)
-            {
-                Main.NewText(player.whoAmI);
-                Main.NewText(TheWorldEffect, Color.Blue);
-                Main.NewText(TimeSkipEffect, Color.Red);
-                Main.NewText(BackToZero, Color.Green);
-                Main.NewText(Foresight, Color.Cyan);
-            }*/
-            //Main.NewText(TheWorldEffect + "; " + player.whoAmI, Color.Blue);
             hamonChargeCounter++;
             if (ActivationTimer > 0)
             {
@@ -546,7 +439,7 @@ namespace JoJoStands
             {
                 shadowDodgeCooldownTimer--;
             }
-            if (!Main.dedServ)      //if this isn't the (dedicated server) cause shaders don't exist serverside
+            if (!Main.dedServ)      //if (this isn't the (dedicated server)) cause shaders don't exist serverside
             {
                 if (TimestopEffectDurationTimer > 0)
                 {

@@ -28,7 +28,7 @@ namespace JoJoStands.NPCs
             npc.DeathSound = SoundID.NPCDeath1;
             npc.knockBackResist = 1f;
             npc.chaseable = true;
-            npc.damage = 37;
+            npc.damage = 5;
             npc.aiStyle = 0;
         }
 

@@ -31,7 +31,7 @@ namespace JoJoStands.NPCs
             npc.lifeMax = 260;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 12f;
+            npc.knockBackResist = 3f;
             npc.chaseable = true;
             npc.damage = 37;
             npc.aiStyle = 0;

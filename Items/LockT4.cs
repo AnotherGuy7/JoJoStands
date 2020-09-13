@@ -1,13 +1,15 @@
-﻿using Terraria.ModLoader;
+﻿using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class LockT4 : ModItem
+    public class LockT4 : StandItemClass
     {
         public override string Texture
         {
             get { return mod.Name + "/Items/LockT1"; }
         }
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The Lock (Final Tier)");
@@ -18,7 +20,7 @@ namespace JoJoStands.Items
         {
             item.width = 30;
             item.height = 30;
-            item.rare = 6;
+            item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()

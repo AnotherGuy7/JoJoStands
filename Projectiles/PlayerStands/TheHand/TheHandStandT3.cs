@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                     distanceToTeleport.Normalize();
                     distanceToTeleport *= chargeTimer / 45f;
-                    player.velocity += distanceToTeleport * 4.5f;
+                    player.velocity += distanceToTeleport * 5f;
                     player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(chargeTimer / 15));       //10s max cooldown
                     chargeTimer = 0;
                 }

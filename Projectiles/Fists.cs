@@ -1,3 +1,4 @@
+using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using System.Drawing;
 using Terraria;
@@ -144,7 +145,14 @@ namespace JoJoStands.Projectiles
             {
                 if (Main.rand.NextFloat(0, 101) >= 80)
                 {
-                    target.AddBuff(BuffID.CursedInferno, 60 * 10);
+                    target.AddBuff(BuffID.CursedInferno, 60 * 6);
+                }
+            }
+            if (mPlayer.awakenedAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(mod.BuffType("Infected"), 60 * 9);
                 }
             }
             if (mPlayer.crackedPearlEquipped)

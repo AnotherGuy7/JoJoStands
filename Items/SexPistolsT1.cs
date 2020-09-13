@@ -1,19 +1,15 @@
-using System;
 using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class SexPistolsT1 : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Sex Pistols (Tier 1)");
-			Tooltip.SetDefault("Use a gun and have its bullets home! Increases bullet damages by 5%\nUsed in Stand Slot");
-		}
+    public class SexPistolsT1 : StandItemClass
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Sex Pistols (Tier 1)");
+            Tooltip.SetDefault("Use a gun and have its bullets home! Increases bullet damages by 5%\nUsed in Stand Slot");
+        }
 
         public override void SetDefaults()
         {
@@ -26,17 +22,17 @@ namespace JoJoStands.Items
             item.knockBack = 2f;
             item.value = 0;
             item.noUseGraphic = true;
-            item.rare = 6;
+            item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("StandArrow"));
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("StandArrow"));
             recipe.AddIngredient(mod.ItemType("WillToFight"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
-	}
+            recipe.AddRecipe();
+        }
+    }
 }

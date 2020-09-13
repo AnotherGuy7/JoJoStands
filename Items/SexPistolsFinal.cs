@@ -1,22 +1,18 @@
-using System;
 using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class SexPistolsFinal : ModItem
-	{
+    public class SexPistolsFinal : StandItemClass
+    {
         public override string Texture
         {
             get { return mod.Name + "/Items/SexPistolsT1"; }
         }
 
         public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Sex Pistols (Final)");
+        {
+            DisplayName.SetDefault("Sex Pistols (Final)");
             Tooltip.SetDefault("Use a gun and have its bullets home! Increases bullet damages by 20%\nUsed in Stand Slot");
         }
         public override void SetDefaults()
@@ -30,13 +26,13 @@ namespace JoJoStands.Items
             item.knockBack = 2f;
             item.value = 0;
             item.noUseGraphic = true;
-            item.rare = 6;
+            item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("SexPistolsT3"));
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("SexPistolsT3"));
             recipe.AddIngredient(ItemID.Ectoplasm, 15);
             recipe.AddIngredient(ItemID.LargeTopaz);
             recipe.AddIngredient(ItemID.FallenStar, 7);
@@ -46,7 +42,7 @@ namespace JoJoStands.Items
             recipe.AddIngredient(mod.ItemType("DeterminedLifeforce"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
-	}
+            recipe.AddRecipe();
+        }
+    }
 }

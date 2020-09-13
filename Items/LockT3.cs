@@ -1,8 +1,9 @@
-﻿using Terraria.ModLoader;
+﻿using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class LockT3 : ModItem
+    public class LockT3 : StandItemClass
     {
         public override string Texture
         {
@@ -18,7 +19,7 @@ namespace JoJoStands.Items
         {
             item.width = 30;
             item.height = 30;
-            item.rare = 6;
+            item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()

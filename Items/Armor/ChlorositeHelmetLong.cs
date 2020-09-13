@@ -30,9 +30,9 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "+5% Stand Damage\nSummons a Crystal Leaf";
+            player.setBonus = "+5% Stand Damage\nSummons a Viral Crystal";
             player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.5f;
-            player.AddBuff(BuffID.LeafCrystal, 2);
+            player.AddBuff(mod.BuffType("ViralCrystalBuff"), 2);
         }
 
         public override void UpdateEquip(Player player)

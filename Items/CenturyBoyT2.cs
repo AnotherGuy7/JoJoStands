@@ -1,9 +1,9 @@
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class CenturyBoyT2 : ModItem
+    public class CenturyBoyT2 : StandItemClass
     {
         public override string Texture
         {
@@ -20,18 +20,18 @@ namespace JoJoStands.Items
         {
             item.width = 30;
             item.height = 30;
-            item.rare = 6;
+            item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("CenturyBoy"));
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("CenturyBoy"));
             recipe.AddIngredient(ItemID.CobaltBar, 6);
             recipe.AddIngredient(ItemID.Dynamite, 5);
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
-			recipe.AddRecipe();
+            recipe.AddRecipe();
             recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("CenturyBoy"));
             recipe.AddIngredient(ItemID.PalladiumBar, 6);

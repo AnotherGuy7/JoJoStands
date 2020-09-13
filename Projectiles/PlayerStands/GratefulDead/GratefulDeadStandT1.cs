@@ -1,11 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
+﻿using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
@@ -16,7 +11,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public bool secondaryFrames = false;
         public override float maxDistance => 98f;
         public override int punchDamage => 16;
-        public override int punchTime => 12;
+        public override int punchTime => 13;
         public override int halfStandHeight => 34;
         public override float fistWhoAmI => 8f;
         public override float tierNumber => 1f;

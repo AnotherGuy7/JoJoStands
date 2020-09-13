@@ -27,7 +27,7 @@ namespace JoJoStands.Items
 			item.value = Item.buyPrice(0, 2, 0, 0);
 		}
 
-        public int stabDamage = 0;
+        private int stabDamage = 0;
 
         public override bool UseItem(Player player)     //non-stab reflection code is in GlobalNPC and in GlobalProjectile
         {

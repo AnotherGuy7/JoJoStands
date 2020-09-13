@@ -1,8 +1,9 @@
-﻿using Terraria.ModLoader;
+﻿using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class LockT1 : ModItem
+    public class LockT1 : StandItemClass
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +15,7 @@ namespace JoJoStands.Items
         {
             item.width = 30;
             item.height = 30;
-            item.rare = 6;
+            item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()

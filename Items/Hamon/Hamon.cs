@@ -74,6 +74,8 @@ namespace JoJoStands.Items.Hamon
             return true;
         }
 
+        private int increaseCounter = 0;
+
         public override void HoldItem(Player player)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();

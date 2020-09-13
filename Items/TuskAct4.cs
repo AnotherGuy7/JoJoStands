@@ -1,20 +1,20 @@
-using System;
-using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader;
 using System.Collections.Generic;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class TuskAct4 : ModItem
-	{
+    public class TuskAct4 : StandItemClass
+    {
+        public override int standSpeed => 15;
+        public override int standType => 2;
+
         public override void SetStaticDefaults()
-		{
+        {
             DisplayName.SetDefault("Tusk (ACT 4)");
             Tooltip.SetDefault("Use the infinite energy inside you... \nSpecial: Switch to previous acts!");
-		}
+        }
 
         public override void SetDefaults()
         {
@@ -28,30 +28,18 @@ namespace JoJoStands.Items
             item.knockBack = 2f;
             item.value = 0;
             item.noUseGraphic = true;
-            item.rare = 6;
-        }
-
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
-            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-            TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", "Shoot Speed: " + (15 - mPlayer.standSpeedBoosts));
-            tooltips.Add(tooltipAddition);
-        }
-
-        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
-        {
-            mult *= (float)player.GetModPlayer<MyPlayer>().standDamageBoosts;
+            item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
+        {
+            ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("TuskAct3"));
             recipe.AddIngredient(mod.ItemType("RequiemArrow"));
             recipe.AddIngredient(mod.ItemType("DeterminedLifeforce"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
-			recipe.AddRecipe();
+            recipe.AddRecipe();
         }
-	}
+    }
 }

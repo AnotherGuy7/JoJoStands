@@ -5,8 +5,11 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class TuskAct1 : ModItem
+	public class TuskAct1 : StandItemClass
 	{
+        public override int standSpeed => 15;
+        public override int standType => 2;
+
         public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Tusk (ACT 1)");
@@ -25,19 +28,7 @@ namespace JoJoStands.Items
             item.knockBack = 2f;
             item.value = 0;
             item.noUseGraphic = true;
-            item.rare = 6;
-        }
-
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
-            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-            TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", "Shoot Speed: " + (15 - mPlayer.standSpeedBoosts));
-            tooltips.Add(tooltipAddition);
-        }
-
-        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
-        {
-            mult *= (float)player.GetModPlayer<MyPlayer>().standDamageBoosts;
+            item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()

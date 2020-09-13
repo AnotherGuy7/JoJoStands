@@ -121,10 +121,8 @@ namespace JoJoStands
                 Filters.Scene["GreenEffect"] = new Filter(new ScreenShaderData(greenShader, "GreenEffect"), EffectPriority.VeryHigh);
                 Filters.Scene["GreenEffect"].Load();
 
-                /*MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
-                MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT3"));
-                MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandFinal"));
-                MyPlayer.stopImmune.Add(ProjectileType("StarPlatinumStandFinal"));/*/
+                //Misc
+                AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic"), ItemType("ViralMusicBox"), TileType("ViralMusicBoxTile"));
             }
         }
 
@@ -161,10 +159,19 @@ namespace JoJoStands
 
         public override void UpdateMusic(ref int music, ref MusicPriority priority)
         {
-            Player player = Main.player[Main.myPlayer];
+			if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
+				return;
+			
+            Player player = Main.LocalPlayer;
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.myPlayer != -1 && !Main.gameMenu)
-                if (player.active && player.GetModPlayer<MyPlayer>().ZoneViralMeteorite)
+            {
+                if (player.active && mPlayer.ZoneViralMeteorite)
+                {
                     music = GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic");
+                    priority = MusicPriority.BiomeMedium;
+                }
+            }
         }
 
         public override void PostDrawInterface(SpriteBatch spriteBatch)
