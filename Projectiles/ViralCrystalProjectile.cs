@@ -25,7 +25,7 @@ namespace JoJoStands.Projectiles
         {
             projectile.rotation = projectile.velocity.ToRotation();
             if (Main.rand.Next(1, 101) >= 45)
-                Dust.NewDust(projectile.Center, projectile.width, projectile.height, 42);
+                Dust.NewDust(projectile.Center, projectile.width, projectile.height, 204);
         }
     }
 }

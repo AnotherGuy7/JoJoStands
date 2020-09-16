@@ -246,8 +246,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            float numberProjectiles = 5;
-                            float rotation = MathHelper.ToRadians(25);
+                            float numberProjectiles = 6;
+                            float rotation = MathHelper.ToRadians(30);
                             float random = Main.rand.NextFloat(-6f, 6f);
                             for (int i = 0; i < numberProjectiles; i++)
                             {

@@ -117,7 +117,7 @@ namespace JoJoStands
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
-            standCritChangeBoosts = 5;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
+            standCritChangeBoosts = 5f;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
         }
 
 

@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Steamworks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -40,7 +41,7 @@ namespace JoJoStands.Projectiles.Minions
                 shootTimer--;
             }
             Lighting.AddLight(projectile.Center, 1f, 1f, 0.5f);
-            projectile.position = player.Center - new Vector2(projectile.width / 2f, player.height + 16f + ((float)Math.Sin(projectileYOffset) * 4f));
+            projectile.position = player.Center - new Vector2(projectile.width / 2f, player.height + 18f + ((float)Math.Sin(projectileYOffset) * 4f));
             projectile.spriteDirection = player.direction;
 
             NPC target = null;
@@ -62,6 +63,7 @@ namespace JoJoStands.Projectiles.Minions
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
                     Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("ViralCrystalProjectile"), 81, 4f, projectile.owner);
+                    Main.PlaySound(3, projectile.Center, 5);
                 }
             }
         }

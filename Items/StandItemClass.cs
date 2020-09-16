@@ -35,6 +35,11 @@ namespace JoJoStands.Items
             mult *= player.GetModPlayer<MyPlayer>().standDamageBoosts;
         }
 
+        public override void GetWeaponCrit(Player player, ref int crit)
+        {
+            crit = (int)player.GetModPlayer<MyPlayer>().standCritChangeBoosts;
+        }
+
         public override bool CanRightClick()
         {
             return true;

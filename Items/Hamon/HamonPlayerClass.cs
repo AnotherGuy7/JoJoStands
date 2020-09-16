@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Hamon
         public override void PreUpdate()
         {
             MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            if (NPC.downedBoss1)
+            if (NPC.downedBoss1)      //It's written this way so that by the time it gets to the bottom it would have the actual Hamon Level
             {
                 hamonLevel = 1;
             }
@@ -71,6 +71,7 @@ namespace JoJoStands.Items.Hamon
             {
                 case 1:
                     maxHamon = 72;
+
                     break;
                 case 2:
                     maxHamon = 84;
@@ -80,24 +81,31 @@ namespace JoJoStands.Items.Hamon
                     break;
                 case 4:
                     maxHamon = 108;
+                    hamonIncreaseBonus += 1;
                     break;
                 case 5:
                     maxHamon = 120;
+                    hamonIncreaseBonus += 1;
                     break;
                 case 6:
                     maxHamon = 132;
+                    hamonIncreaseBonus += 1;
                     break;
                 case 7:
                     maxHamon = 144;
+                    hamonIncreaseBonus += 2;
                     break;
                 case 8:
                     maxHamon = 156;
+                    hamonIncreaseBonus += 2;
                     break;
                 case 9:
                     maxHamon = 168;
+                    hamonIncreaseBonus += 2;
                     break;
                 case 10:
                     maxHamon = 180;
+                    hamonIncreaseBonus += 3;
                     break;
             }
 

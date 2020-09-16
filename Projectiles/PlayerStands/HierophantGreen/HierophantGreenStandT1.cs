@@ -165,13 +165,13 @@ namespace JoJoStands.Projectiles.PlayerStands
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            float numberProjectiles = 5;
-                            float rotation = MathHelper.ToRadians(25);
+                            float numberProjectiles = 3;
+                            float rotation = MathHelper.ToRadians(15);
                             float random = Main.rand.NextFloat(-6f, 6f);
                             for (int i = 0; i < numberProjectiles; i++)
                             {
                                 Vector2 perturbedSpeed = new Vector2(shootVel.X + random, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Emerald"), (int)((projectileDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, player.whoAmI);
+                                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Emerald"), (int)((projectileDamage * modPlayer.standDamageBoosts) * 0.9f), 2f, player.whoAmI);
                                 Main.projectile[proj].netUpdate = true;
                             }
                             projectile.netUpdate = true;
