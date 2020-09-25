@@ -38,7 +38,7 @@ namespace JoJoStands.Projectiles
                 rotationMultIncrementTimer = 0;
             }
             projectile.ai[1] += 0.1f;
-            projectile.ai[0] += (1 * rotationMult);
+            projectile.ai[0] += 1 * rotationMult;
             Vector2 offset = player.Center + (projectile.ai[1].ToRotationVector2() * projectile.ai[0]);
             projectile.position = offset;
             int num109 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 3.5f);

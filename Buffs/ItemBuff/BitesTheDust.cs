@@ -1,19 +1,21 @@
-using System;using Terraria;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class BitesTheDust : ModBuff
     {
         public override void SetDefaults()
         {
-			DisplayName.SetDefault("Bite The Dust");
+            DisplayName.SetDefault("Bite The Dust");
             Description.SetDefault("The day is now restarting.");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
         }
- 
+
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -63,6 +65,16 @@ namespace JoJoStands.Buffs.ItemBuff
                     if (!Main.dayTime)
                     {
                         Main.dayTime = true;
+                    }
+                }
+                for (int n = 0; n < 255; n++)
+                {
+                    NPC npc = Main.npc[n];
+                    if (npc.active && !npc.dontTakeDamage && !npc.friendly && npc.lifeMax > 5 && Main.rand.Next(1, 16) == 1)
+                    {
+                        int bomb = Projectile.NewProjectile(npc.Center + new Vector2(Main.rand.NextFloat(0f, 10f), Main.rand.NextFloat(0f, 10f)), Vector2.Zero, ProjectileID.GrenadeIII, 102, 3f, player.whoAmI);
+                        Main.projectile[bomb].timeLeft = 2;
+                        Main.projectile[bomb].netUpdate = true;
                     }
                 }
                 /*for (int i = 0; i < 255; i++)

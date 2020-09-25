@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 {
@@ -93,7 +91,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                         attackFrames = false;
                     }
                 }
-                if (Main.mouseRight && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("RedBind")] == 0)
+                if (Main.mouseRight && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("RedBind")] == 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
                 {
                     secondaryAbilityFrames = true;
                     Main.mouseLeft = false;
@@ -108,11 +106,12 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RedBind"), newProjectileDamage, 3f, Main.myPlayer, projectile.whoAmI, debuffDuration - 60);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(15));
                 }
                 if (SpecialKeyPressed())
                 {
                     player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(30));
-                    for (int p = 1; p <= 30; p++)
+                    for (int p = 1; p <= 50; p++)
                     {
                         float radius = p * 5;
                         Vector2 offset = player.Center + (radius.ToRotationVector2() * 48f);

@@ -1,8 +1,6 @@
-﻿using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.Buffs.ItemBuff;
 
 namespace JoJoStands.Items
 {

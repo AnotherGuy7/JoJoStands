@@ -35,6 +35,7 @@ namespace JoJoStands.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("StandArrow"));
+			recipe.AddIngredient(mod.ItemType("WillToFight"));
 			recipe.AddTile(mod.TileType("RemixTableTile"));
 			recipe.SetResult(this);
 			recipe.AddRecipe();

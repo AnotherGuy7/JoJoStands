@@ -51,15 +51,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             {
                 player.AddBuff(mod.BuffType("BitesTheDust"), 10);
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BiteTheDustEffect"));
-                for (int k = 0; k < 200; k++)
-                {
-                    if (Main.npc[k].active && !Main.npc[k].friendly)
-                    {
-                        Main.npc[k].life -= Main.rand.Next(90, 136);
-                        Main.npc[k].StrikeNPC(Main.rand.Next(90, 136), 0f, Main.npc[k].direction, true);
-                        Main.npc[k].netUpdate = true;
-                    }
-                }
             }
 
             if (!mPlayer.StandAutoMode)

@@ -15,6 +15,7 @@ namespace JoJoStands.NPCs
         public bool taggedByButterfly = false;
         public bool applyingForesightPositions = false;
         public bool foresightResetIndex = false;
+        public bool taggedWithPhantomMarker = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -52,10 +53,6 @@ namespace JoJoStands.NPCs
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("SunDroplet"), Main.rand.Next(1, 3));
             }
-            /*if ((npc.type == NPCID.Bird || npc.type == NPCID.BirdBlue || npc.type == NPCID.BirdRed || npc.type == NPCID.GoldBird) && Main.rand.NextFloat(0, 101) < 8f)
-            {
-                Item.NewItem(npc.getRect(), mod.ItemType("WrappedPicture"));
-            }*/
             if ((npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC) && Main.rand.NextFloat(0, 101) < 14f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("Hand"));
@@ -405,7 +402,12 @@ namespace JoJoStands.NPCs
             }
 
             if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
+            {
+                npc.velocity.X = 0f;
+                if (npc.velocity.Y > 8f)
+                    npc.velocity.Y += 0.3f;
                 return false;
+            }
             if (npc.HasBuff(mod.BuffType("Stolen")))
                 return false;
             return true;

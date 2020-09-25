@@ -10,8 +10,7 @@ namespace JoJoStands.Projectiles
     {
         public int timeLeft = 0;
         public int timeLeftSave = 0;
-        public float velocityX = 0f;
-        public float velocityY = 0f;
+        public Vector2 preSkipVel = Vector2.Zero;
 
         //Epitaph stuff
         public bool applyingForesightPositions = false;
@@ -57,11 +56,7 @@ namespace JoJoStands.Projectiles
                     }
                     stoppedInTime = true;
                 }
-                if (timestopImmune)
-                {
-                    return true;
-                }
-                else
+                if (!timestopImmune)
                 {
                     if ((projectile.timeLeft <= timeLeft) || projectile.minion)
                     {
@@ -81,18 +76,15 @@ namespace JoJoStands.Projectiles
 
             if (Mplayer.TimeSkipPreEffect)     //saves it, this is for projectiles like minions, controllable projectiles, etc.
             {
-                velocityX = projectile.velocity.X;
-                velocityY = projectile.velocity.Y;
+                preSkipVel = projectile.velocity;
             }
             if (Mplayer.TimeSkipEffect)        //deploys it
             {
-                projectile.velocity.X = velocityX;
-                projectile.velocity.Y = velocityY;
+                projectile.velocity = preSkipVel;
             }
             else
             {
-                velocityX = 0;
-                velocityY = 0;
+                preSkipVel = Vector2.Zero;
             }
 
             if (Mplayer.Foresight && !projectile.minion)

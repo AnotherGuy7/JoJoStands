@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 {

@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 {
@@ -35,8 +33,9 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override int halfStandHeight => 35;
         public override int standOffset => 0;
 
-        public int chanceToDebuff = 60;
-        public int debuffDuration = 480;
+        private int chanceToDebuff = 60;
+        private int debuffDuration = 480;
+        private int secondRingTimer = 0;
 
         public override void AI()
         {
@@ -93,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                         attackFrames = false;
                     }
                 }
-                if (Main.mouseRight && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("RedBind")] == 0)
+                if (Main.mouseRight && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("RedBind")] == 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
                 {
                     secondaryAbilityFrames = true;
                     Main.mouseLeft = false;
@@ -108,6 +107,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RedBind"), newProjectileDamage, 3f, Main.myPlayer, projectile.whoAmI, debuffDuration - 60);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
                 }
                 if (SpecialKeyPressed())
                 {
@@ -119,6 +119,23 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                         int proj = Projectile.NewProjectile(offset.X, offset.Y, 0f, 0f, mod.ProjectileType("CrossfireHurricaneAnkh"), newProjectileDamage, 5f, Main.myPlayer, 48f, radius);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
+                    }
+                    secondRingTimer = 1;
+                }
+                if (secondRingTimer != 0)
+                {
+                    secondRingTimer++;
+                    if (secondRingTimer >= 40)
+                    {
+                        for (int p = 1; p <= 25; p++)
+                        {
+                            float radius = p * 5;
+                            Vector2 offset = player.Center + (radius.ToRotationVector2() * 48f);
+                            int proj = Projectile.NewProjectile(offset.X, offset.Y, 0f, 0f, mod.ProjectileType("CrossfireHurricaneAnkh"), newProjectileDamage, 5f, Main.myPlayer, 48f, -radius);
+                            Main.projectile[proj].netUpdate = true;
+                            projectile.netUpdate = true;
+                        }
+                        secondRingTimer = 0;
                     }
                 }
             }

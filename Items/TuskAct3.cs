@@ -36,6 +36,8 @@ namespace JoJoStands.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("TuskAct2"));
             recipe.AddIngredient(ItemID.SpectreBar, 4);
+			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
+			recipe.AddIngredient(mod.ItemType("WillToProtect"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -1,9 +1,6 @@
-﻿using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace JoJoStands.Items.CraftingMaterials
 {
@@ -25,9 +22,10 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ViralMeteorite"), 2);
-            recipe.AddIngredient(ItemID.ChlorophyteBar, 1);
-            recipe.SetResult(this);
+            recipe.AddIngredient(ItemID.ChlorophyteBar);
+            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"));
+            recipe.AddTile(TileID.AdamantiteForge);
+            recipe.SetResult(this, 2);
             recipe.AddRecipe();
         }
     }
