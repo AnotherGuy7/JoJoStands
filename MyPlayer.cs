@@ -72,6 +72,7 @@ namespace JoJoStands
         public bool chlorositeShortEqquipped = false;
         public bool crystalArmorSetEquipped = false;
         public bool crackedPearlEquipped = false;
+        public bool phantomChestplateEquipped = false;
         public bool usedEctoPearl = false;
         public bool receivedArrowShard = false;
 
@@ -113,6 +114,7 @@ namespace JoJoStands
             crystalArmorSetEquipped = false;
             wearingTitaniumMask = false;
             awakenedAmuletEquipped = false;
+            phantomChestplateEquipped = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -1189,6 +1191,10 @@ namespace JoJoStands
                     int proj = Projectile.NewProjectile(player.Center, perturbedSpeed, mod.ProjectileType("CrystalShard"), 15, 2f, player.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                 }
+            }
+            if (phantomChestplateEquipped)
+            {
+                damage -= (int)(damage * 1.12f);
             }
         }
 

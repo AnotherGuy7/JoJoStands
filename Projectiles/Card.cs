@@ -1,20 +1,18 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Utilities;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class Card : ModProjectile
     {
+        private bool setFrame = false;
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 2;
-            base.SetStaticDefaults();
         }
+
         public override void SetDefaults()
         {
             projectile.width = 20;
@@ -29,10 +27,15 @@ namespace JoJoStands.Projectiles
             projectile.scale = 0.5f;
         }
 
+
         public override void AI()
         {
+            if (!setFrame)
+            {
+                projectile.frame = Main.rand.Next(2);
+                setFrame = true;
+            }
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
-            projectile.frame = Main.rand.Next(2); // either 0 or 1
         }
     }
 }

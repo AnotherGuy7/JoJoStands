@@ -22,7 +22,7 @@ namespace JoJoStands.Items.Armor
             item.height = 24;
             item.value = Item.buyPrice(0, 3, 0, 0);
             item.rare = ItemRarityID.Yellow;
-            item.defense = 14;
+            item.defense = 8;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)

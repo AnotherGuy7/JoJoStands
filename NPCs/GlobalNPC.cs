@@ -139,10 +139,6 @@ namespace JoJoStands.NPCs
                 {
                     chat = "I've heard of someone named Phil selling something called 'Flex Tape' that can fix everything, mind if you get some for me?";
                 }
-                /*if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 1)      //AG's contributor reference
-                {
-                    chat = "I am being possessed by something... 'Yo! I hope you enjoy the mod!' (Jotaro said, but it seems like it wasn't him). It felt like my memory disc was taken away from me and I was watching myself in third-person... Yare Yare Daze...";
-                }*/
             }
         }
 
@@ -463,7 +459,7 @@ namespace JoJoStands.NPCs
             if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
             {
                 Texture2D texture = mod.GetTexture("Extras/BoundByRedBind");
-                spriteBatch.Draw(texture, (npc.Center - Main.screenPosition), null, Color.White, npc.rotation, npc.Size / 2f, npc.scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, npc.Size / 2f, npc.scale, SpriteEffects.None, 0f);
             }
         }
 

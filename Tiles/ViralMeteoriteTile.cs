@@ -24,7 +24,7 @@ namespace JoJoStands.Tiles
             dustType = DustID.Silver;
             drop = mod.ItemType("ViralMeteorite");
             mineResist = 3f;
-            minPick = 70;
+            minPick = 65;
 
             disableSmartCursor = true;
             ModTranslation name = CreateMapEntryName();

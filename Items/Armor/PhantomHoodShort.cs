@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Phantom Hood (Short-Ranged)");
-            Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.\n+10% Stand Crit change\n+1 Stand Speed");
+            Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.\n+18% Stand Damage\n+2 Stand Speed");
         }
 
         public override void SetDefaults()
@@ -22,7 +22,7 @@ namespace JoJoStands.Items.Armor
             item.height = 24;
             item.value = Item.buyPrice(0, 3, 0, 0);
             item.rare = ItemRarityID.Yellow;
-            item.defense = 22;
+            item.defense = 24;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)

@@ -11,7 +11,7 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Phantom Greaves");
-            Tooltip.SetDefault("A couple of greaves that is made with ectoplasm and a strong virus.\n-5% Stand Ability Cooldown Reduction");
+            Tooltip.SetDefault("A couple of greaves that is made with ectoplasm and a strong virus.\n+10% Movement Speed\n+5% Stand Crit Chance");
         }
 
         public override void SetDefaults()
@@ -20,13 +20,14 @@ namespace JoJoStands.Items.Armor
             item.height = 24;
             item.value = Item.buyPrice(0, 2, 0, 0);
             item.rare = ItemRarityID.Yellow;
-            item.defense = 13;
+            item.defense = 15;
         }
 
         public override void UpdateEquip(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.standCooldownReduction += 0.05f;
+            mPlayer.standCritChangeBoosts += 5f;
+            player.moveSpeed += player.moveSpeed * 1.08f;
         }
 
 

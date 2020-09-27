@@ -358,7 +358,7 @@ namespace JoJoStands.UI
                 }
                 if (randomSign == 0)
                 {
-                    randomSign = Main.rand.Next(1, 3);
+                    randomSign = Main.rand.Next(1, 4);
                 }
                 if (playerChoice != 0)      //1 is rock, 2 is paper, 3 is scissor
                 {

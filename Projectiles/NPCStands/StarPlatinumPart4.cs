@@ -77,7 +77,7 @@ namespace JoJoStands.Projectiles.NPCStands
             if (jotaro != null)
             {
                 Vector2 vector131 = jotaro.Center;
-                vector131.X -= (float)((5 + jotaro.width / 2) * jotaro.direction);
+                vector131.X -= (float)((15 + jotaro.width / 2) * jotaro.direction);
                 vector131.Y -= 15f;
                 projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
                 projectile.velocity *= 0.8f;
