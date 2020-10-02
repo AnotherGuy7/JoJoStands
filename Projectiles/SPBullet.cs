@@ -110,5 +110,14 @@ namespace JoJoStands.Projectiles
                 projectile.velocity.Y = (projectile.velocity.Y * (float)(num149 - 2) + num147) / (float)num149;
             }
         }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            Player player = Main.player[projectile.owner];
+            if (Main.rand.Next(0, 101) < player.GetModPlayer<MyPlayer>().standCritChangeBoosts + 20f)
+            {
+                crit = true;
+            }
+        }
     }
 }

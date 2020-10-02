@@ -1,16 +1,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
-using Terraria.ModLoader;
-using Terraria.ID;
-using System.IO;
 using Terraria.Graphics.Effects;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.UI;
 using TerraUI.Objects;
-using Terraria.ModLoader.IO;
 
 namespace JoJoStands
 {
@@ -72,7 +72,11 @@ namespace JoJoStands
         public bool chlorositeShortEqquipped = false;
         public bool crystalArmorSetEquipped = false;
         public bool crackedPearlEquipped = false;
+        public bool phantomHoodLongEquipped = false;
+        public bool phantomHoodNeutralEquipped = false;
+        public bool phantomHoodShortEquipped = false;
         public bool phantomChestplateEquipped = false;
+        public bool phantomLeggingsEquipped = false;
         public bool usedEctoPearl = false;
         public bool receivedArrowShard = false;
 
@@ -114,7 +118,11 @@ namespace JoJoStands
             crystalArmorSetEquipped = false;
             wearingTitaniumMask = false;
             awakenedAmuletEquipped = false;
+            phantomHoodLongEquipped = false;
+            phantomHoodNeutralEquipped = false;
+            phantomHoodShortEquipped = false;
             phantomChestplateEquipped = false;
+            phantomLeggingsEquipped = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -400,10 +408,6 @@ namespace JoJoStands
 
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
-            /*Item item = new Item();
-            item.SetDefaults(mod.ItemType("WrappedPicture"));
-            item.stack = 1;
-            items.Add(item);*/
             if (Main.rand.Next(0, 101) <= 20)
             {
                 int inheritanceStandChance = Main.rand.Next(0, standTier1List.Count);
@@ -539,7 +543,7 @@ namespace JoJoStands
                 menacingFrames = 0;
                 if (poseDuration <= 0)
                 {
-                    player.AddBuff(mod.BuffType("Motivated"), 30 * 60);
+                    player.AddBuff(mod.BuffType("StrongWill"), 30 * 60);
                 }
                 poseDuration = 300;
                 poseMode = false;
@@ -782,6 +786,18 @@ namespace JoJoStands
                 {
                     Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, true, player.whoAmI);
                 }
+            }
+            else if (inputItem.type == mod.ItemType("DollyDaggerT1"))
+            {
+                standAccessory = true;
+                standType = 1;
+                player.AddBuff(mod.BuffType("DollyDaggerActiveBuff"), 10);
+            }
+            else if (inputItem.type == mod.ItemType("DollyDaggerT2"))
+            {
+                standAccessory = true;
+                standType = 1;
+                player.AddBuff(mod.BuffType("DollyDaggerActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT1"))
             {
@@ -1192,10 +1208,6 @@ namespace JoJoStands
                     Main.projectile[proj].netUpdate = true;
                 }
             }
-            if (phantomChestplateEquipped)
-            {
-                damage -= (int)(damage * 1.12f);
-            }
         }
 
         public override void UpdateBiomes()     //from ExampleMod ZoneExample
@@ -1530,32 +1542,139 @@ namespace JoJoStands
             }
         });
 
-        /*public static readonly PlayerLayer TimestopOverlay = new PlayerLayer("JoJoStands", "TimestopOverlay", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer PhantomHoodLongGlowmask = new PlayerLayer("JoJoStands", "Phantom Hood Long Glowmask", PlayerLayer.Head, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-            int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
-            if (modPlayer.TheWorldEffect && modPlayer.TimestopEffectDurationTimer <= 5)
+            if (drawPlayer.active && modPlayer.phantomHoodLongEquipped)
             {
-                Main.NewText("Active");
-                Texture2D texture = mod.GetTexture("Extras/TimestopEffectGrey");
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Gray, 0f, new Vector2(drawX, drawY), new Vector2(texture.Width * 3f, texture.Height * 3f), SpriteEffects.None, 0);
+                Texture2D texture = mod.GetTexture("Extras/PhantomHoodLong_Head_Glowmask");
+                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
+                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
+                int drawY = (int)(drawInfo.position.Y - Main.screenPosition.Y) - 1;
+                SpriteEffects effects = SpriteEffects.None;
+                if (drawPlayer.direction == -1)
+                {
+                    effects = SpriteEffects.FlipHorizontally;
+                }
+                Vector2 offset = new Vector2(0f, 12f);
+                Vector2 pos = new Vector2(drawX, drawY) + offset;
+
+                DrawData data = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 Main.playerDrawData.Add(data);
             }
-        });*/
+        });
+
+        public static readonly PlayerLayer PhantomHoodNeutralGlowmask = new PlayerLayer("JoJoStands", "Phantom Hood Neutral Glowmask", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = ModLoader.GetMod("JoJoStands");
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && modPlayer.phantomHoodNeutralEquipped)
+            {
+                Texture2D texture = mod.GetTexture("Extras/PhantomHoodNeutral_Head_Glowmask");
+                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
+                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
+                int drawY = (int)(drawInfo.position.Y - Main.screenPosition.Y) - 1;
+                SpriteEffects effects = SpriteEffects.None;
+                if (drawPlayer.direction == -1)
+                {
+                    //drawX -= 2;
+                    effects = SpriteEffects.FlipHorizontally;
+                }
+                Vector2 offset = new Vector2(0f, 12f);
+                Vector2 pos = new Vector2(drawX, drawY) + offset;
+
+                DrawData data = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White , 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                Main.playerDrawData.Add(data);
+            }
+        });
+
+        public static readonly PlayerLayer PhantomHoodShortGlowmask = new PlayerLayer("JoJoStands", "Phantom Hood Short Glowmask", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = ModLoader.GetMod("JoJoStands");
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && modPlayer.phantomHoodShortEquipped)
+            {
+                Texture2D texture = mod.GetTexture("Extras/PhantomHoodShort_Head_Glowmask");
+                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
+                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
+                int drawY = (int)(drawInfo.position.Y - Main.screenPosition.Y) - 1;
+                SpriteEffects effects = SpriteEffects.None;
+                if (drawPlayer.direction == -1)
+                {
+                    effects = SpriteEffects.FlipHorizontally;
+                }
+                Vector2 offset = new Vector2(0f, 12f);
+                Vector2 pos = new Vector2(drawX, drawY) + offset;
+
+                DrawData data = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White * alpha, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                Main.playerDrawData.Add(data);
+            }
+        });
+
+        public static readonly PlayerLayer PhantomChestplateGlowmask = new PlayerLayer("JoJoStands", "Phantom Chestplate Glowmask", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = ModLoader.GetMod("JoJoStands");
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && modPlayer.phantomChestplateEquipped)
+            {
+                Texture2D texture = mod.GetTexture("Extras/PhantomChestplate_Body_Glowmask");
+                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
+                float drawX = (int)drawInfo.position.X + drawPlayer.width / 2;
+                float drawY = (int)drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
+                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
+
+                DrawData data = new DrawData(texture, position, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, drawInfo.bodyOrigin, 1f, drawInfo.spriteEffects, 0);
+                data.shader = drawInfo.bodyArmorShader;
+                Main.playerDrawData.Add(data);
+            }
+        });
+
+        public static readonly PlayerLayer PhantomArmsGlowmask = new PlayerLayer("JoJoStands", "Phantom Chestplate Arms Glowmask", PlayerLayer.Arms, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = ModLoader.GetMod("JoJoStands");
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && modPlayer.phantomChestplateEquipped)
+            {
+                Texture2D texture = mod.GetTexture("Extras/PhantomChestplate_Arms_Glowmask");
+                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
+			    float drawX = (int)drawInfo.position.X + drawPlayer.width / 2;
+			    float drawY = (int)drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
+                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
+
+                DrawData data = new DrawData(texture, position, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, drawInfo.bodyOrigin, 1f, drawInfo.spriteEffects, 0);
+                data.shader = drawInfo.bodyArmorShader;
+                Main.playerDrawData.Add(data);
+            }
+        });
+
+        public static readonly PlayerLayer PhantomLeggingsGlowmask = new PlayerLayer("JoJoStands", "Phantom Leggings Glowmask", PlayerLayer.Legs, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = ModLoader.GetMod("JoJoStands");
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && modPlayer.phantomLeggingsEquipped)
+            {
+                Texture2D texture = mod.GetTexture("Extras/PhantomLeggings_Legs_Glowmask");
+                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
+                Vector2 offset = new Vector2(0f, 18f);
+                float drawX = (int)drawInfo.position.X + drawPlayer.width / 2;      //The reason we do this is cause position as a float moves the glowmask around too much
+                float drawY = (int)drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2;
+                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.legPosition - Main.screenPosition + offset;
+
+                DrawData data = new DrawData(texture, position, drawPlayer.legFrame, Color.White * alpha, drawPlayer.legRotation, drawInfo.legOrigin, 1f, drawInfo.spriteEffects, 0);
+                data.shader = drawInfo.legArmorShader;
+                Main.playerDrawData.Add(data);
+            }
+        });
 
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
-            if (HamonEffects)
-            {
-                HamonChargesFront.visible = true;
-            }
-            else
-            {
-                HamonChargesFront.visible = false;
-            }
             if (player.dead || (player.mount.Type != -1))
             {
                 KCArm.visible = false;
@@ -1564,6 +1683,12 @@ namespace JoJoStands
                 AerosmithRadarCam.visible = false;
                 CenturyBoyActivated.visible = false;
                 SexPistolsLayer.visible = false;
+                PhantomHoodLongGlowmask.visible = false;
+                PhantomHoodNeutralGlowmask.visible = false;
+                PhantomHoodShortGlowmask.visible = false;
+                PhantomChestplateGlowmask.visible = false;
+                PhantomArmsGlowmask.visible = false;
+                PhantomLeggingsGlowmask.visible = false;
             }
             else
             {
@@ -1572,14 +1697,44 @@ namespace JoJoStands
                 MenacingPose.visible = true;
                 AerosmithRadarCam.visible = true;
                 CenturyBoyActivated.visible = true;
+                HamonChargesFront.visible = HamonEffects;
+                PhantomHoodLongGlowmask.visible = phantomHoodLongEquipped;
+                PhantomHoodNeutralGlowmask.visible = phantomHoodNeutralEquipped;
+                PhantomHoodShortGlowmask.visible = phantomHoodShortEquipped;
+                PhantomChestplateGlowmask.visible = phantomChestplateEquipped;
+                PhantomArmsGlowmask.visible = phantomChestplateEquipped;
+                PhantomLeggingsGlowmask.visible = phantomLeggingsEquipped;
             }
+
+            int headLayer = layers.FindIndex(l => l == PlayerLayer.Head);       //Finding the head layer then as long as it exists we insert the armor over it
+            if (headLayer > -1)
+            {
+                layers.Insert(headLayer + 1, PhantomHoodLongGlowmask);
+                layers.Insert(headLayer + 1, PhantomHoodNeutralGlowmask);
+                layers.Insert(headLayer + 1, PhantomHoodShortGlowmask);
+            }
+            int bodyLayer = layers.FindIndex(l => l == PlayerLayer.Body);
+            if (bodyLayer > -1)
+            {
+                layers.Insert(bodyLayer + 1, PhantomChestplateGlowmask);
+                int armsLayer = layers.FindIndex(l => l == PlayerLayer.Arms);
+                if (armsLayer > -1)
+                {
+                    layers.Insert(armsLayer + 1, PhantomArmsGlowmask);
+                }
+            }
+            int legsLayer = layers.FindIndex(l => l == PlayerLayer.Legs);
+            if (legsLayer > -1)
+            {
+                layers.Insert(legsLayer + 1, PhantomLeggingsGlowmask);
+            }
+
             layers.Add(AerosmithRadarCam);
             layers.Add(KCArm);
             layers.Add(HamonChargesFront);
             layers.Add(MenacingPose);
             layers.Add(CenturyBoyActivated);
             layers.Add(SexPistolsLayer);
-            //layers.Add(TimestopOverlay);
         }
     }
 }

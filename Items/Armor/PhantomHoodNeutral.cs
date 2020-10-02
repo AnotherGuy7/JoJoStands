@@ -53,11 +53,13 @@ namespace JoJoStands.Items.Armor
                 }
                 detectionTimer = 0;
             }
+            Lighting.AddLight(player.Center, 1.73f / 2f, 2.24f / 2f, 2.3f / 2f);
         }
 
         public override void UpdateEquip(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.phantomHoodNeutralEquipped = true;
 
             if (mPlayer.standType == 2)
             {

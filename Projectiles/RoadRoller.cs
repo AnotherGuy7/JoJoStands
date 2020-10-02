@@ -1,18 +1,15 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class RoadRoller : ModProjectile
     {
-        public Vector2 velocityAdd = Vector2.Zero;
-        public float damageMult = 1f;
-        public int sparkDust = 0;
-        public bool landed = false;
+        private Vector2 velocityAdd = Vector2.Zero;
+        private float damageMult = 1f;
+        private bool landed = false;
 
         public override void SetDefaults()
         {
@@ -28,7 +25,7 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            
+
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             if (projectile.timeLeft < 256)
@@ -41,47 +38,42 @@ namespace JoJoStands.Projectiles
 
             for (int p = 0; p < Main.maxProjectiles; p++)
             {
-                if (Main.projectile[p].active && Main.projectile[p].type == mod.ProjectileType("Fists"))
+                Projectile otherProj = Main.projectile[p];
+                if (otherProj.active && otherProj.type == mod.ProjectileType("Fists"))
                 {
-                    if (projectile.Hitbox.Intersects(Main.projectile[p].Hitbox) && modPlayer.TheWorldEffect)
+                    if (projectile.Hitbox.Intersects(otherProj.Hitbox) && modPlayer.TheWorldEffect)
                     {
-                        velocityAdd.X += Main.projectile[p].velocity.X / 100f;
-                        velocityAdd.Y += Main.projectile[p].velocity.Y / 100f;
-                        if (damageMult <= 2f)
+                        velocityAdd.X += otherProj.velocity.X / 75f;
+                        velocityAdd.Y += otherProj.velocity.Y / 75f;
+                        if (damageMult <= 4f)
                         {
-                            damageMult += Main.projectile[p].damage / 75;
+                            damageMult += otherProj.damage / 50;
                         }
                         //Main.NewText("Mult: " + damageMult + "; Current Vel: " + projectile.velocity + "; X: " + velocityAdd.X + "; Y: " + velocityAdd.Y);
-                        sparkDust = Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, projectile.width, projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
+                        Dust.NewDust(otherProj.position, projectile.width, projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
-                        Main.projectile[p].Kill();
+                        otherProj.Kill();
                         //Main.NewText(projectile.velocity + velocityAdd);
                     }
                 }
             }
-            if (landed && projectile.ai[0] < 120f)
-            {
-                projectile.ai[0]++;
-            }
-            if (projectile.ai[0] >= 120f)
+
+            if (landed && projectile.timeLeft < 180)
             {
                 projectile.damage = 0;
-            }
-            if (sparkDust != 0)
-            {
-                Main.dust[sparkDust].scale -= 0.017f;
-            }
-            if (!modPlayer.TheWorldEffect && velocityAdd != Vector2.Zero)
-            {
-                projectile.velocity += velocityAdd;
-                projectile.damage += (int)damageMult;
-                //Main.NewText("New Vel: " + projectile.velocity + "; New D: " + projectile.damage);
-                damageMult = 1f;
-                velocityAdd = Vector2.Zero;
             }
             if (!modPlayer.TheWorldEffect)
             {
                 projectile.velocity.Y += 0.1f;
+                if (velocityAdd != Vector2.Zero)
+                {
+                    //Main.NewText("Vel: " + projectile.velocity + "; D: " + projectile.damage);
+                    projectile.velocity += velocityAdd;
+                    projectile.damage *= (int)damageMult;
+                    //Main.NewText("New Vel: " + projectile.velocity + "; New D: " + projectile.damage);
+                    damageMult = 1f;
+                    velocityAdd = Vector2.Zero;
+                }
             }
         }
 
@@ -95,14 +87,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.TheWorldEffect)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return !modPlayer.TheWorldEffect;
         }
     }
 }

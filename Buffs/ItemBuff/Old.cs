@@ -1,8 +1,4 @@
-﻿using System;
-using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
@@ -15,44 +11,43 @@ namespace JoJoStands.Buffs.ItemBuff
             Description.SetDefault("Your knees are shaking, you feel powerless and tired.");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
-            Main.persistentBuff[Type] = true;
         }
-        public bool alreadyChangeApplied = false;
-        public int damageMultiplication = 1;
+
+        private bool oneTimeEffectsApplied = false;
+        private int damageMultiplication = 1;
 
         public override void Update(Player player, ref int buffIndex)
         {
             if (!player.HasBuff(mod.BuffType("CooledOut")))
             {
+                if (player.lifeRegen > 0)
                 {
-                    if (player.lifeRegen > 0)
-                    {
-                        player.lifeRegen = 0;
-                    }
-                    player.lifeRegenTime = 120;
-                    player.lifeRegen -= 4 * damageMultiplication;
+                    player.lifeRegen = 0;
                 }
+                player.lifeRegenTime = 120;
+                player.lifeRegen -= 4 * damageMultiplication;
                 player.moveSpeed *= 0.8f;
                 player.meleeDamage *= 0.75f;
                 player.rangedDamage *= 0.75f;
                 player.magicDamage *= 0.75f;
                 player.meleeSpeed *= 0.5f;
                 player.statDefense = (int)(player.statDefense * 0.8f);
+
                 if (player.ZoneSnow || player.ZoneSkyHeight)
                 {
                     damageMultiplication = 0;
                 }
-                if (player.ZoneUnderworldHeight)
+                if (player.ZoneUndergroundDesert)
                 {
-                    damageMultiplication = 3;
+                    damageMultiplication = 1;
                 }
-                if (player.ZoneDesert || player.ZoneUndergroundDesert)
+                if (player.ZoneDesert)
                 {
                     damageMultiplication = 2;
                 }
-                if (!player.ZoneDesert || !player.ZoneUndergroundDesert || !player.ZoneUnderworldHeight || !player.ZoneSnow || !player.ZoneSkyHeight)
+                if (player.ZoneUnderworldHeight)
                 {
-                    damageMultiplication = 1;
+                    damageMultiplication = 3;
                 }
             }
 
@@ -64,58 +59,68 @@ namespace JoJoStands.Buffs.ItemBuff
             if (npc.boss)
             {
                 npc.lifeRegen = -2 * damageMultiplication;
-                npc.damage -= 15;
+                if (!oneTimeEffectsApplied)
+                {
+                    npc.damage -= 15;
+                    oneTimeEffectsApplied = true;
+                }
             }
             else
             {
                 npc.lifeRegen = -4 * damageMultiplication;
                 npc.velocity.X *= 0.9f;
-                if(!alreadyChangeApplied)
+                if (!oneTimeEffectsApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.9f);
+                    oneTimeEffectsApplied = true;
                 }
             }
+
             if (player.ZoneSnow || player.ZoneSkyHeight)
             {
                 damageMultiplication = 0;
+            }
+            if (!player.ZoneUndergroundDesert)
+            {
+                damageMultiplication = 1;
+            }
+            if (player.ZoneDesert)
+            {
+                damageMultiplication = 2;
             }
             if (player.ZoneUnderworldHeight)
             {
                 damageMultiplication = 3;
             }
-            if (player.ZoneDesert || player.ZoneUndergroundDesert)
-            {
-                damageMultiplication = 2;
-            }
-            if (!player.ZoneDesert || !player.ZoneUndergroundDesert || !player.ZoneUnderworldHeight || !player.ZoneSnow || !player.ZoneSkyHeight)
-            {
-                damageMultiplication = 1;
-            }
+
             if (modPlayer.gratefulDeadTier == 2)
             {
                 npc.lifeRegen = -4 * damageMultiplication;
                 npc.velocity.X *= 0.8f;
-                if (!alreadyChangeApplied)
+                if (!oneTimeEffectsApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.8f);
+                    oneTimeEffectsApplied = true;
                 }
             }
             if (modPlayer.gratefulDeadTier == 3)
             {
                 npc.lifeRegen = -8 * damageMultiplication;
                 npc.velocity.X *= 0.6f;
-                if (!alreadyChangeApplied)
+                if (!oneTimeEffectsApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.6f);
+                    oneTimeEffectsApplied = true;
                 }
             }
             if (modPlayer.gratefulDeadTier == 4)
             {
                 npc.lifeRegen = -16 * damageMultiplication;
                 npc.velocity.X *= 0.4f;
-                if (!alreadyChangeApplied)
+                if (!oneTimeEffectsApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.4f);
+                    oneTimeEffectsApplied = true;
                 }
             }
         }

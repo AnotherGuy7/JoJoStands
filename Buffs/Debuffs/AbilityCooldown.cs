@@ -1,7 +1,7 @@
 using Terraria;
 using Terraria.ModLoader;
  
-namespace JoJoStands.Buffs.ItemBuff
+namespace JoJoStands.Buffs.Debuffs
 {
     public class AbilityCooldown : ModBuff
     {

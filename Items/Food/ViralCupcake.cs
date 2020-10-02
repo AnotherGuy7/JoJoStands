@@ -18,6 +18,7 @@ namespace JoJoStands.Items.Food
             item.useTime = 20;
             item.useAnimation = 20;
             item.value = Item.buyPrice(0, 0, 12, 50);
+            item.UseSound = SoundID.Item2;
             item.rare = ItemRarityID.Green;
             item.useStyle = ItemUseStyleID.EatingUsing;
             item.consumable = true;
@@ -25,16 +26,12 @@ namespace JoJoStands.Items.Food
 
         public override bool UseItem(Player player)
         {
-            if (player.whoAmI == Main.myPlayer)
-            {
-                player.ConsumeItem(item.type);
-            }
             return true;
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(mod.BuffType("Motivated"), (2 * 60) * 60);
+            player.AddBuff(mod.BuffType("StrongWill"), (2 * 60) * 60);
             player.AddBuff(mod.BuffType("SharpMind"), (2 * 60) * 60);
         }
 

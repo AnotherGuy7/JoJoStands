@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
  
-namespace JoJoStands.Buffs.NPCBuff
+namespace JoJoStands.Buffs.Debuffs
 {
     public class TimeSkipConfusion : ModBuff
     {
@@ -25,7 +25,6 @@ namespace JoJoStands.Buffs.NPCBuff
         {
             player.velocity = Vector2.Zero;
             player.AddBuff(BuffID.Confused, 2);
-            base.Update(player, ref buffIndex);
         }
     }
 }

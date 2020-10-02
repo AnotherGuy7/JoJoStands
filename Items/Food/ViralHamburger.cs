@@ -17,7 +17,8 @@ namespace JoJoStands.Items.Food
             item.height = 10;
             item.useTime = 20;
             item.useAnimation = 20;
-            item.value = Item.buyPrice(0, 0, 12, 50);
+            item.value = Item.buyPrice(0, 0, 60, 0);
+            item.UseSound = SoundID.Item2;
             item.rare = ItemRarityID.Green;
             item.useStyle = ItemUseStyleID.EatingUsing;
             item.consumable = true;
@@ -25,23 +26,23 @@ namespace JoJoStands.Items.Food
 
         public override bool UseItem(Player player)
         {
-            if (player.whoAmI == Main.myPlayer)
-            {
-                player.ConsumeItem(item.type);
-            }
             return true;
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(mod.BuffType("Motivated"), (4 * 60) * 60);
+            player.AddBuff(mod.BuffType("StrongWill"), (4 * 60) * 60);
             player.AddBuff(mod.BuffType("SharpMind"), (4 * 60) * 60);
+            player.AddBuff(mod.BuffType("QuickThinking"), (4 * 60) * 60);
+            player.AddBuff(mod.BuffType("MentalFortitude"), (4 * 60) * 60);
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("ViralPowder"), 4);
+            recipe.AddIngredient(ItemID.Hay, 4);
+            recipe.AddIngredient(ItemID.Vine, 5);
             recipe.AddIngredient(ItemID.Bunny);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -26,10 +26,10 @@ namespace JoJoStands.Items.Armor
         public override void UpdateEquip(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.phantomChestplateEquipped = true;
             mPlayer.standCritChangeBoosts += 8f;
             mPlayer.standSpeedBoosts += 1;
-            mPlayer.phantomChestplateEquipped = true;
-            Lighting.AddLight(player.Center, 0.173f, 0.224f, 0.230f);
+            player.endurance += 0.12f;
         }
 
         public override void AddRecipes()

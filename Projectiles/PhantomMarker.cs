@@ -46,7 +46,7 @@ namespace JoJoStands.Projectiles
                 NPC npc = Main.npc[n];
                 if (npc.active)
                 {
-                    if (npc.Distance(projectile.position) <= 10 * 16 && npc.lifeMax > 5 && !npc.friendly)
+                    if (npc.Distance(projectile.position) <= 10 * 16 && npc.lifeMax > 5 && !npc.friendly && !npc.immortal && !npc.hide)
                     {
                         npc.StrikeNPC(78, 5f, projectile.direction);
                     }

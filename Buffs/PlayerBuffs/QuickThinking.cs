@@ -1,14 +1,14 @@
 using Terraria;
 using Terraria.ModLoader;
  
-namespace JoJoStands.Buffs.ItemBuff
+namespace JoJoStands.Buffs.PlayerBuffs
 {
-    public class SharpMind : ModBuff
+    public class QuickThinking : ModBuff
     {
         public override void SetDefaults()
         {
-            DisplayName.SetDefault("Sharp Mind");
-            Description.SetDefault("Your mental reflexes have sharpened and thus, your Stand Speed increased by 1");
+            DisplayName.SetDefault("Quick Thinking");
+            Description.SetDefault("You are much quicker on knowing what to do and how to do it.\nStand Speed incrased by 1.");
             Main.buffNoTimeDisplay[Type] = false;
         }
  

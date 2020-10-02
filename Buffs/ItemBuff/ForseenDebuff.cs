@@ -1,17 +1,14 @@
-using System;
-using Terraria.ID;
-using Terraria;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class ForeseenDebuff : ModBuff
     {
         public override void SetDefaults()
         {
-			DisplayName.SetDefault("Foreseen");
+            DisplayName.SetDefault("Foreseen");
             Description.SetDefault("Your actions have already been seen...");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled

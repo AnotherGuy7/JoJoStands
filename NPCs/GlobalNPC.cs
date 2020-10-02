@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.Items;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace JoJoStands.NPCs
 {
@@ -22,7 +20,7 @@ namespace JoJoStands.NPCs
         public int BtZSaveTimer = 0;
         public int aiStyleSave = 0;
         public int lifeRegenIncrement = 0;
-        public int Counter = 0;
+        public int lockRegenCounter = 0;
         public bool forceDeath = false;
         public int indexPosition = 0;
         public bool spawnedByDeathLoop = false;
@@ -47,7 +45,7 @@ namespace JoJoStands.NPCs
             }
             if (Main.hardMode && (player.position.Y < (Main.worldSurface * 0.35) * 16f) && Main.rand.NextFloat(0, 101) < 7f)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("SoulofTime"), Main.rand.Next(1,3));      //mininum amount = 1, maximum amount = 3
+                Item.NewItem(npc.getRect(), mod.ItemType("SoulofTime"), Main.rand.Next(1, 3));      //mininum amount = 1, maximum amount = 3
             }
             if (Main.dayTime && Main.rand.NextFloat(0, 101) < 10f)
             {
@@ -387,11 +385,11 @@ namespace JoJoStands.NPCs
             {
                 npc.lifeRegen = -4;
                 npc.velocity *= 0.95f;
-                Counter++;
+                lockRegenCounter++;
                 npc.defense = (int)(npc.defense * 0.95);
-                if (Counter >= 60)    //increases lifeRegen damage every second
+                if (lockRegenCounter >= 60)    //increases lifeRegen damage every second
                 {
-                    Counter = 0;
+                    lockRegenCounter = 0;
                     lifeRegenIncrement += 2;
                     npc.StrikeNPC(lifeRegenIncrement, 0f, 1);
                 }
@@ -470,22 +468,15 @@ namespace JoJoStands.NPCs
             if (target.HasBuff(mod.BuffType("BacktoZero")))     //only affects the ones with the buff, everyone's bool should turn on and save positions normally
             {
                 npc.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
-                damage = 0;
-                if (damage < npc.life)
-                {
-                    npc.life -= damage;
-                }
-                if (damage >= npc.life)
-                {
-                    damage = 1;
-                    npc.life = 1;
-                    forceDeath = true;
-                }
+                npc.StrikeNPC(damage, npc.knockBackResist, -npc.direction);
             }
-            if (target.HeldItem.type == mod.ItemType("DollyDagger"))
+            if (mPlayer.StandSlot.Item.type == mod.ItemType("DollyDaggerT1"))
             {
-                npc.StrikeNPC((int)(damage * 0.7), 2f, npc.direction * -1);
-                damage = (int)(damage * 0.3);
+                npc.StrikeNPC((int)(npc.damage * 0.35f), 4f, -npc.direction);       //Dolly dagger is reflecting 35% of damage here, 70% in tier 2
+            }
+            if (mPlayer.StandSlot.Item.type == mod.ItemType("DollyDaggerT2"))
+            {
+                npc.StrikeNPC((int)(npc.damage * 0.7f), 6f, -npc.direction);
             }
             if (target.GetModPlayer<MyPlayer>().Vampire)
             {
@@ -510,7 +501,7 @@ namespace JoJoStands.NPCs
                     npc.AddBuff(mod.BuffType("Locked"), 12 * 60);
                 }
             }
-            if (!npc.boss)
+            else
             {
                 if (standSlotType == mod.ItemType("LockT1"))
                 {
@@ -528,14 +519,6 @@ namespace JoJoStands.NPCs
                 {
                     npc.AddBuff(mod.BuffType("Locked"), 20 * 60);
                 }
-            }
-        }
-
-        public override void OnHitByProjectile(NPC npc, Projectile projectile, int damage, float knockback, bool crit)
-        {
-            if (projectile.type == mod.ProjectileType("GEButterfly"))
-            {
-                taggedByButterfly = true;
             }
         }
 

@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -124,6 +126,11 @@ namespace JoJoStands.Projectiles.Minions
             {
                 projectile.frame = 9;
             }
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.GetGlobalNPC<JoJoGlobalNPC>().taggedByButterfly = true;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

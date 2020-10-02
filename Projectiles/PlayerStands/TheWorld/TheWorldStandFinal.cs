@@ -168,7 +168,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed + 4f;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RoadRoller"), 360, 5f, Main.myPlayer);
+                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RoadRoller"), 512, 12f, player.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
                 }

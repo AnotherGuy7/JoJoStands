@@ -39,7 +39,7 @@ namespace JoJoStands.Projectiles.Minions
         private readonly float shootCool = 6f;
         private int goldenRectangleEffectTimer = 256;
 
-        public override void AI()       //changed this to ExampleMod's HoverShooter...
+        public override void AI()
         {
             UpdateStandInfo();
             Player player = Main.player[projectile.owner];
@@ -142,7 +142,7 @@ namespace JoJoStands.Projectiles.Minions
                 vector131.Y -= 25f;
                 projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
                 projectile.velocity *= 0.8f;
-                projectile.direction = (projectile.spriteDirection = player.direction);
+                projectile.direction = projectile.spriteDirection = player.direction;
                 projectile.netUpdate = true;
             }
         }

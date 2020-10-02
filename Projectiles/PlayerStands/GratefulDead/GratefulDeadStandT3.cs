@@ -11,7 +11,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override float shootSpeed => 16f;
         public bool grabFrames = false;
         public bool secondaryFrames = false;
-        public bool ActivatedGas = false;
+        public bool activatedGas = false;
         public override float maxDistance => 98f;
         public override int punchDamage => 67;
         public override int punchTime => 11;
@@ -117,48 +117,46 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     secondaryFrames = false;
                 }
             }
-            if (SpecialKeyPressed())
+            if (SpecialKeyPressed() && shootCount <= 0)
             {
-                if (!ActivatedGas && shootCount <= 0)
+                shootCount += 30;
+                activatedGas = !activatedGas;
+                if (activatedGas)
                 {
-                    ActivatedGas = true;
-                    shootCount += 30;
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), 1);
                     Main.NewText("Gas Spread: On");
                 }
-                if (ActivatedGas && shootCount <= 0)
+                else
                 {
-                    ActivatedGas = false;
-                    shootCount += 30;
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), 1);
                     Main.NewText("Gas Spread: Off");
                 }
             }
-            if (ActivatedGas)
+            if (activatedGas)
             {
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC npc = Main.npc[i];
-                    float distance = Vector2.Distance(player.Center, npc.Center);
-                    if (distance < (30f * 16f) && npc.boss && !npc.townNPC && !npc.immortal && !npc.hide)
+                    if (npc.active)
                     {
-                        npc.AddBuff(mod.BuffType("Old"), 2);
-                    }
-                    if (distance < (30f * 16f) && !npc.boss && !npc.immortal && !npc.hide && npc.lifeMax > 5)
-                    {
-                        npc.AddBuff(mod.BuffType("Old"), 2);
+                        float distance = Vector2.Distance(player.Center, npc.Center);
+                        if (distance < (20f * 16f) && !npc.immortal && !npc.hide)
+                        {
+                            npc.AddBuff(mod.BuffType("Old"), 2);
+                        }
                     }
                 }
-                player.AddBuff(mod.BuffType("Old"), 2);
                 for (int i = 0; i < Main.maxPlayers; i++)
                 {
                     Player otherPlayer = Main.player[i];
-                    float distance = Vector2.Distance(player.Center, otherPlayer.Center);
-                    if (distance < (126f * 4f) && player.whoAmI != otherPlayer.whoAmI)
+                    if (otherPlayer.active)
                     {
-                        otherPlayer.AddBuff(mod.BuffType("Old"), 2);
+                        float distance = Vector2.Distance(player.Center, otherPlayer.Center);
+                        if (distance < (20f * 16f) && otherPlayer.whoAmI != player.whoAmI)
+                        {
+                            otherPlayer.AddBuff(mod.BuffType("Old"), 2);
+                        }
                     }
                 }
+                player.AddBuff(mod.BuffType("Old"), 2);
             }
             if (modPlayer.StandAutoMode)
             {
@@ -172,7 +170,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             if (MyPlayer.RangeIndicators)
             {
                 Texture2D texture = mod.GetTexture("Extras/RangeIndicator");
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), ((126f * 4f) + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
+                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), ((20f * 16f) + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
             }
             return base.PreDrawExtras(spriteBatch);
         }

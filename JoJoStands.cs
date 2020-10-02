@@ -63,6 +63,7 @@ namespace JoJoStands
             MyPlayer.standTier1List.Add(ItemType("GratefulDeadT1"));
             MyPlayer.standTier1List.Add(ItemType("TheHandT1"));
             MyPlayer.standTier1List.Add(ItemType("WhitesnakeT1"));
+            MyPlayer.standTier1List.Add(ItemType("DollyDaggerT1"));
 
             MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
             MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT3"));

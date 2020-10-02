@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
  
-namespace JoJoStands.Buffs.ItemBuff
+namespace JoJoStands.Buffs.Debuffs
 {
     public class AffectedByBtZ : ModBuff
     {
@@ -14,8 +14,8 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.debuff[Type] = true;
         }
 
-        public Vector2 zeroPosition;
-        public bool savedZeroPos = false;
+        private Vector2 zeroPosition;
+        private bool savedZeroPos = false;
 
         public override void Update(Player player, ref int buffIndex)
         {
@@ -30,7 +30,7 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             if (player.GetModPlayer<MyPlayer>().BackToZero)
             {
-                player.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
+                player.AddBuff(mod.BuffType(Name), 2);
             }
             player.controlUseItem = false;
             player.dash *= 0;

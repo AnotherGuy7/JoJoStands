@@ -1,10 +1,8 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class CrossfireHurricaneAnkh : ModProjectile
@@ -25,8 +23,8 @@ namespace JoJoStands.Projectiles
             projectile.penetrate = 2;
         }
 
-        public float rotationMultIncrementTimer = 0f;
-        public float rotationMult = 1f;
+        private float rotationMultIncrementTimer = 0f;
+        private float rotationMult = 1f;
 
         public override void AI()
         {
