@@ -66,7 +66,7 @@ namespace JoJoStands.NPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("StarPlatinumFinal"))
                 {
-                    Main.npcChatText = "At its fourth tier, Star Platinum awakens its dormant ability, Star Platinum: The World. I learned this on my trip to Egypt in the 80s, but even I don't know why both Star Platinum and The World can stop time, but it sure worked out in my favor either way.";
+                    Main.npcChatText = "At its fourth tier, Star Platinum awakens its dormant ability, Star Platinum: The World. I learned this on my trip to Egypt in the 80s, but even I don't know why both Star Platinum and The World can stop time, though it sure worked out in my favor either way.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("HierophantGreenT1"))
                 {
@@ -98,11 +98,11 @@ namespace JoJoStands.NPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("KillerQueenBTD"))
                 {
-                    Main.npcChatText = "You've unlocked yet another power... Bites The Dust. It allows you to rewind time back to the beginning of the day, but you need to remember to tag someone before using it. Not only that, you can now shoot bubbles that you've touched and have them pierce up to 7 enemies before exploding.";
+                    Main.npcChatText = "You've unlocked yet another power... Bites The Dust. It allows you to rewind time back to the beginning of the day, causing enemies to explode during the rewind. Not only that, you can now shoot bubbles that you've touched and have them pierce up to 7 enemies before exploding.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("AchtungBaby"))
                 {
-                    Main.npcChatText = "Wha... Frankly, I'm not gonna ask how that's even possible. Perhaps the universal rupture caused the stand's power to transfer into the sunglasses. Either way, that Stand makes you invisible";
+                    Main.npcChatText = "Wha... Frankly, I'm not gonna ask how that's even possible. Perhaps the universal rupture caused the stand's power to transfer into the sunglasses. Either way, that Stand makes you invisible.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("GoldExperienceT1"))
                 {
@@ -162,7 +162,7 @@ namespace JoJoStands.NPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("SexPistolsFinal"))
                 {
-                    Main.npcChatText = "Sex Pistols has reached max power, and now you can reload at lightning speed. Just remember to keep some food in your pockets...";
+                    Main.npcChatText = "Sex Pistols has reached max power, they come back to you almost instantly now. Just remember to keep some food in your pockets...";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("KingCrimsonT1"))
                 {
@@ -184,9 +184,13 @@ namespace JoJoStands.NPCs
                 {
                     Main.npcChatText = "Looks like you learned that starting a dynamite then going invincible hurts your enemies and not you. What was stopping you from doing this earlier?";
                 }
-                if (player.HeldItem.type == mod.ItemType("DollyDagger"))
+                if (player.HeldItem.type == mod.ItemType("DollyDaggerT1"))
                 {
-                    Main.npcChatText = "Intel from the SPW suggests that this stand merely reflects 70% of damage taken in the form of a beam.";
+                    Main.npcChatText = "Intel from the SPW suggests that this stand merely reflects 35% of damage taken.";
+                }
+                if (player.HeldItem.type == mod.ItemType("DollyDaggerT2"))
+                {
+                    Main.npcChatText = "Now that you've honed your Dolly Dagger, it can relflect about 70% of damage taken. Even I would have trouble fighting you with that amount of reflection. Oh, you can also stab yourself with the dagger to send that damage to the nearest enemy. That stand of yours has lots of potential.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("MagiciansRedT1"))
                 {
@@ -218,16 +222,57 @@ namespace JoJoStands.NPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("TheHandT2"))
                 {
-                    Main.npcChatText = "The Hand can now use its signature ability… its right hand. You can use The Hand’s hand to scrape away space itself and teleport short distances. The Hand can now cause enemies to, perhaps, miss a few organs.";
+                    Main.npcChatText = "The Hand can now use its signature ability... its right hand. You can use The Hand’s hand to scrape away space itself and teleport short distances. The Hand can now cause enemies to, perhaps, lose a few organs.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("TheHandT3"))
                 {
-                    Main.npcChatText = "With your increased mastery of The Hand, you can now pull enemies towards you by tapping" + JoJoStands.SpecialHotKey + ", and you can perform a very powerful attack with The Hand’s Hand by holding" + JoJoStands.SpecialHotKey;
+                    Main.npcChatText = "With your increased mastery of The Hand, you can now pull enemies towards you by tapping " + JoJoStands.SpecialHotKey + ", and you can perform a very powerful attack with The Hand’s Hand by holding" + JoJoStands.SpecialHotKey + ", given that they are in range.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("TheHandFinal"))
                 {
-                    Main.npcChatText = "The Hand has reached its maximum potential, and is more powerful than ever. Of course, you seem to have more IQ than its previous user. I’m not saying he was a bad kid, or anything. Wonder where he is now…";
+                    Main.npcChatText = "The Hand has reached its maximum potential, and is more powerful than ever. Of course, you seem to be smarter than its previous user. I’m not saying he was a bad kid, or anything. Wonder where he is now...";
                 }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("GratefulDeadT1"))
+                {
+					Main.npcChatText = "Just seeing that Stand is making me feel older than I already am. That’s the ability of Grateful Dead, so be careful using it around people you wanna keep around.\nRight now, Grateful Dead can only punch things. Not exactly unusual. Just keep going.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("GratefulDeadT2"))
+                {
+					Main.npcChatText = "Now, Grateful Dead can grab a target and forcefully age them. The amount of time aged depends on how long you hold them. Don’t do handshakes.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("GratefulDeadT3"))
+                {
+					Main.npcChatText = "So, this Stand just became even more of a safety hazard to any allies, because now it can spread the aging effect as a mist. It’s not as immediate, but now multiple people can be aged forwards at once.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("GratefulDeadT4"))
+                {
+					Main.npcChatText = "Finally, Grateful Dead is at maximum power. Just… stay a few feet away from me. I already have a couple of gray hairs.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("LockT1") || mPlayer.StandSlot.Item.type == mod.ItemType("LockT2"))
+                {
+					Main.npcChatText = "Oh. The Lock. I feel bad that you have to use this one… wait a minute. The Lock has the ability to make others’ hearts heavy with guilt, literally. Use it, and anything that harms you will start to feel that immense weight. Some things may be immune to that guilt, and it can be overcome.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("LockT3") || mPlayer.StandSlot.Item.type == mod.ItemType("LockT4"))
+                {
+					Main.npcChatText = "The Lock can now force others to feel guilty without any action against you… by harming yourself. Use this ability with caution.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeT1"))
+                {
+					Main.npcChatText = "Okay, you need to step away before I crush you. Get that Stand out of my sight. If you think I’m joking, come and find out.\n*sigh* Well, fine. Whitesnake, at this stage, can only throw punches. That’s it.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("WhiteshankeT2"))
+                {
+					Main.npcChatText = "Now, Whitesnake can secrete a gooey substance that damages enemies and sticks to surfaces. It’s not a pleasant experience.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeT3"))
+                {
+					Main.npcChatText = "Whitesnake has unlocked the ability to steal discs from opponents. If your enemy isn’t a Stand user, then they’ll be devoid of thought for a few moments. If they are, then you’ll disable their Stand temporarily- do all of this with " + JoJoStands.SpecialHotKey;
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeFinal"))
+                {
+					Main.npcChatText = "Due to your annoying persistence, Whitesnake has reached its maximum potential. Now, keep it away from me, I mean it.";
+                }
+
 
                 if (mPlayer.StandSlot.Item.IsAir)
                 {

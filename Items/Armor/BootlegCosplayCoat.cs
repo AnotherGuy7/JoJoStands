@@ -11,21 +11,21 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bootleg Cosplay Coat");
-            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Critical Hit Chance Increase: +4%");
+            Tooltip.SetDefault("A coat that's the length of a robe but still counts as a coat.\n+1 Stand Speed");
         }
 
         public override void SetDefaults()
         {
             item.width = 26;
             item.height = 28;
-            item.value = Item.buyPrice(0, 0, 1, 0);
-            item.rare = 8;
+            item.value = Item.buyPrice(0, 0, 10, 0);
+            item.rare = ItemRarityID.Blue;
             item.defense = 4;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 4f;
+            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 1;
         }
 
         public override void AddRecipes()

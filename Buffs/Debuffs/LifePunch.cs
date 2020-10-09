@@ -1,33 +1,35 @@
-using System;
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
- 
-namespace JoJoStands.Buffs.ItemBuff
+
+namespace JoJoStands.Buffs.Debuffs
 {
     public class LifePunch : ModBuff
     {
         public override void SetDefaults()
         {
-			DisplayName.SetDefault("Life Punched");
+            DisplayName.SetDefault("Life Punched");
             Description.SetDefault("Your senses are accellarated and your body can't keep up with you!");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
         }
- 
+
+        private bool appliedChange = false;
+
         public override void Update(Player player, ref int buffIndex)
         {
-            player.velocity /= 1.5f;
+            player.velocity.X *= 0.5f;
             player.statDefense -= 5;
         }
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.velocity /= 1.5f;
-            npc.defense -= 5;
+            npc.velocity.X *= 0.5f;
+            if (!appliedChange)
+            {
+                npc.defense -= 5;
+                appliedChange = true;
+            }
         }
     }
 }

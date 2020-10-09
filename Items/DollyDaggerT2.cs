@@ -63,6 +63,7 @@ namespace JoJoStands.Items
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.HallowedBar, 4);
 			recipe.AddIngredient(mod.ItemType("WillToChange"), 2);
+			recipe.AddTile(mod.TileType("RemixTableTile"));
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

@@ -23,6 +23,7 @@ namespace JoJoStands.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("StandArrow"));
             recipe.AddIngredient(mod.ItemType("WillToEscape"), 1);
+            recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

@@ -1,10 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -165,7 +162,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             if (MyPlayer.RangeIndicators)
             {
                 Texture2D texture = mod.GetTexture("Extras/RangeIndicator");
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (newMaxDistance * 2.5f) / 160f, SpriteEffects.None, 0);
+                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), newMaxDistance / 10 * 16f, SpriteEffects.None, 0);
             }
             if (scrapeFrames)
             {

@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Terraria;
 using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 
@@ -14,21 +11,22 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bootleg Cosplay Hat");
-            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Critical Hit Chance Increase: +4%\nSet Bonus: +10% Stand Damage");
+            Tooltip.SetDefault("A hat that tends to merge with your hair.\n+4% Stand Critical Hit Chance");
         }
 
         public override void SetDefaults()
         {
             item.width = 26;
             item.height = 28;
-            item.value = Item.buyPrice(0, 0, 1, 0);
-            item.rare = 8;
+            item.value = Item.buyPrice(0, 0, 10, 0);
+            item.rare = ItemRarityID.Blue;
             item.defense = 3;
         }
         public override void UpdateEquip(Player player)
         {
             player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 4f;
         }
+
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
             return body.type == mod.ItemType("BootlegCosplayCoat") && legs.type == mod.ItemType("BootlegCosplayPants");
@@ -36,6 +34,7 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateArmorSet(Player player)
         {
+            player.setBonus = "+10% Stand Damage";
             player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.1f;
         }
 
@@ -47,7 +46,7 @@ namespace JoJoStands.Items.Armor
             recipe.AddTile(TileID.Loom);
             recipe.SetResult(this);
             recipe.AddRecipe();
-			recipe = new ModRecipe(mod);
+            recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Silk, 10);
             recipe.AddIngredient(ItemID.LeadBar, 3);
             recipe.AddTile(TileID.Loom);

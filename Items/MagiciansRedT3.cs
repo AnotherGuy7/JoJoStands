@@ -37,6 +37,7 @@ namespace JoJoStands.Items
             recipe.AddIngredient(mod.ItemType("WillToEscape"));
             recipe.AddIngredient(mod.ItemType("WillToProtect"));
             recipe.AddIngredient(ItemID.LivingFireBlock, 32);
+            recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

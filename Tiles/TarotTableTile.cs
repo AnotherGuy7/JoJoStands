@@ -14,15 +14,15 @@ namespace JoJoStands.Tiles
 			Main.tileFrameImportant[Type] = true;
 			Main.tileLavaDeath[Type] = true;
 			dustType = DustID.Lead;
-			animationFrameHeight = 66;		//you put the entre animation frame size here, not in tiles
+			animationFrameHeight = 54;		//you put the entre animation frame size here, not in tiles
 			disableSmartCursor = true;
 
+			TileObjectData.newTile.CoordinatePadding = 2;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-			TileObjectData.newTile.Width = 4;
-			TileObjectData.newTile.Height = 4;
+			TileObjectData.newTile.Width = 2;
+			TileObjectData.newTile.Height = 3;
 			TileObjectData.newTile.CoordinateHeights = new int[]
 			{
-				16,
 				16,
 				16,
 				18
@@ -34,10 +34,6 @@ namespace JoJoStands.Tiles
 			AddMapEntry(Color.Brown, name);
 		}
 
-		public override void MouseOver(int i, int j)
-		{
-			base.MouseOver(i, j);
-		}
 
 		public override void AnimateTile(ref int frame, ref int frameCounter)
 		{
@@ -46,7 +42,7 @@ namespace JoJoStands.Tiles
 			{
 				frame++;
 				frameCounter = 0;
-				if (frame >= 14)
+				if (frame >= 13)
 				{
 					frame = 0;
 				}
@@ -56,7 +52,7 @@ namespace JoJoStands.Tiles
 		public override bool NewRightClick(int i, int j)
 		{
 			Player player = Main.player[Main.myPlayer];
-			player.AddBuff(mod.BuffType("Motivated"), 300 * 60);
+			player.AddBuff(mod.BuffType("StrongWill"), 300 * 60);
 			return true;
 		}
 

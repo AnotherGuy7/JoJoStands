@@ -1,19 +1,21 @@
-using Terraria.ID;
-using Terraria;
 using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
- 
-namespace JoJoStands.Buffs.ItemBuff
+
+namespace JoJoStands.Buffs.Debuffs
 {
-    public class MissingOrgans : ModBuff
+    public class Zipped : ModBuff
     {
         public override void SetDefaults()
         {
-			DisplayName.SetDefault("Missing Organs!");
-            Description.SetDefault("Parts of your body have been scraped away!");
+            DisplayName.SetDefault("Zipped!");
+            Description.SetDefault("A zipper has been placed on your body, blood is spilling quickly!");
             Main.debuff[Type] = true;
+            Main.buffNoTimeDisplay[Type] = true;
+            Main.persistentBuff[Type] = true;
         }
- 
+
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.lifeRegen > 0)
@@ -22,8 +24,6 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             player.lifeRegenTime = 0;
             player.lifeRegen -= 20;
-            player.moveSpeed *= 0.6f;
-            Dust.NewDust(player.position, player.width, player.height, DustID.Blood, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
         }
 
         public override void Update(NPC npc, ref int buffIndex)
@@ -32,10 +32,10 @@ namespace JoJoStands.Buffs.ItemBuff
             {
                 npc.lifeRegen = 0;
             }
-            Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f);
+            Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f, 0, default(Color), 2);
             npc.lifeRegenExpectedLossPerSecond = 20;
             npc.lifeRegen -= 60;
-            npc.velocity *= 0.6f;
+            npc.velocity *= 0.75f;
         }
     }
 }

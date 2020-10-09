@@ -1,10 +1,4 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -23,7 +17,7 @@ namespace JoJoStands.Mounts
 			mountData.acceleration = 0.03f;
 			mountData.jumpHeight = 3;
 			mountData.jumpSpeed = 3f;
-			mountData.totalFrames = 2;
+			mountData.totalFrames = 4;
 			mountData.constantJump = false;
 			int[] totalFrames = new int[mountData.totalFrames];
 			for (int frame = 0; frame < totalFrames.Length; frame++)
@@ -31,18 +25,18 @@ namespace JoJoStands.Mounts
 				totalFrames[frame] = 44;
 			}
 			mountData.playerYOffsets = totalFrames;
-			mountData.xOffset = 5;
+			mountData.xOffset = -15;
 			mountData.bodyFrame = 3;
 			mountData.yOffset = -16;
 			mountData.playerHeadOffset = 22;
 			mountData.standingFrameCount = 1;
 			mountData.standingFrameDelay = 17;
 			mountData.standingFrameStart = 0;
-			mountData.runningFrameCount = 1;
-			mountData.runningFrameDelay = 11;
+			mountData.runningFrameCount = 4;
+			mountData.runningFrameDelay = 10;
 			mountData.runningFrameStart = 0;
-			mountData.dashingFrameCount = 0;
-			mountData.dashingFrameDelay = 0;
+			mountData.dashingFrameCount = 4;
+			mountData.dashingFrameDelay = 10;
 			mountData.dashingFrameStart = 0;
 			mountData.flyingFrameCount = 0;
 			mountData.flyingFrameDelay = 0;
@@ -62,7 +56,7 @@ namespace JoJoStands.Mounts
 				return;
 			}
 
-			mountData.textureWidth = mountData.backTexture.Width + 20;
+			mountData.textureWidth = mountData.backTexture.Width;
 			mountData.textureHeight = mountData.backTexture.Height;
 		}
 

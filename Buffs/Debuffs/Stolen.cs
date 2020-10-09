@@ -1,18 +1,13 @@
-using System;
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
-using JoJoStands.Networking;
- 
-namespace JoJoStands.Buffs.ItemBuff
+
+namespace JoJoStands.Buffs.Debuffs
 {
     public class Stolen : ModBuff
     {
         public override void SetDefaults()
         {
-			DisplayName.SetDefault("Stolen");
+            DisplayName.SetDefault("Stolen");
             Description.SetDefault("Your stand disc has been stolen!");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled

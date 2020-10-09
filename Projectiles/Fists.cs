@@ -33,6 +33,21 @@ namespace JoJoStands.Projectiles
             {
                 crit = true;
             }
+            if (projectile.ai[0] == 2f)
+            {
+                if (projectile.ai[1] == 3f)
+                {
+                    target.AddBuff(mod.BuffType("LifePunch"), 4 * 60);
+                }
+                if (projectile.ai[1] == 4f)
+                {
+                    target.AddBuff(mod.BuffType("LifePunch"), 6 * 60);
+                }
+                if (projectile.ai[1] == 5f)
+                {
+                    target.AddBuff(mod.BuffType("LifePunch"), 8 * 60);
+                }
+            }
             if (projectile.ai[0] == 3f && mPlayer.BackToZero)
             {
                 target.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
@@ -168,9 +183,24 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            /*if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)     //Unlike in ModifyHitNPC, this one doesn't actually change if it's a crit or not, just detects
             {
                 crit = true;
+            }*/
+            if (projectile.ai[0] == 2f)
+            {
+                if (projectile.ai[1] == 3f)
+                {
+                    target.AddBuff(mod.BuffType("LifePunch"), 4 * 60);
+                }
+                if (projectile.ai[1] == 4f)
+                {
+                    target.AddBuff(mod.BuffType("LifePunch"), 6 * 60);
+                }
+                if (projectile.ai[1] == 5f)
+                {
+                    target.AddBuff(mod.BuffType("LifePunch"), 8 * 60);
+                }
             }
             if (projectile.ai[0] == 3f && mPlayer.BackToZero)
             {
@@ -195,6 +225,25 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(mod.BuffType("Zipped"), 240);
                 }
             }
+            if (projectile.ai[0] == 7f)
+            {
+                if (projectile.ai[1] == 1f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 60);
+                }
+                if (projectile.ai[1] == 2f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 120);
+                }
+                if (projectile.ai[1] == 3f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 180);
+                }
+                if (projectile.ai[1] == 4f)
+                {
+                    target.AddBuff(mod.BuffType("MissingOrgans"), 240);
+                }
+            }
             if (projectile.ai[0] == 8f)
             {
                 if (projectile.ai[1] == 1f)
@@ -216,21 +265,21 @@ namespace JoJoStands.Projectiles
             }
             if (projectile.ai[0] == 9f)
             {
-                if (projectile.ai[1] == 1f)
+                if (projectile.ai[1] == 1f && Main.rand.NextFloat(0, 101) >= 94)
                 {
-                    target.AddBuff(mod.BuffType("MissingOrgans"), 60);
+                    target.AddBuff(BuffID.Confused, 60 * 3);
                 }
                 if (projectile.ai[1] == 2f)
                 {
-                    target.AddBuff(mod.BuffType("MissingOrgans"), 120);
+                    target.AddBuff(BuffID.Confused, 60 * 4);
                 }
                 if (projectile.ai[1] == 3f)
                 {
-                    target.AddBuff(mod.BuffType("MissingOrgans"), 180);
+                    target.AddBuff(BuffID.Confused, 60 * 5);
                 }
                 if (projectile.ai[1] == 4f)
                 {
-                    target.AddBuff(mod.BuffType("MissingOrgans"), 240);
+                    target.AddBuff(BuffID.Confused, 60 * 6);
                 }
             }
 
@@ -246,6 +295,21 @@ namespace JoJoStands.Projectiles
                 if (Main.rand.NextFloat(0, 101) >= 80)
                 {
                     target.AddBuff(BuffID.CursedInferno, 10 * 60);
+                }
+            }
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                {
+                    target.AddBuff(mod.BuffType("Infected"), 10 * 60);
+                }
+            }
+
+            if (mPlayer.awakenedAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(mod.BuffType("Infected"), 60 * 9);
                 }
             }
             if (mPlayer.crackedPearlEquipped)

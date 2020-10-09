@@ -37,6 +37,7 @@ namespace JoJoStands.Items
             recipe.AddIngredient(mod.ItemType("WillToFight"));
             recipe.AddIngredient(ItemID.FireFeather);
             recipe.AddIngredient(mod.ItemType("CaringLifeforce"));
+            recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

@@ -67,9 +67,10 @@ namespace JoJoStands.Projectiles
                 Projectile otherProj = Main.projectile[p];
                 if (otherProj.active)
                 {
-                    if (otherProj.owner != player.whoAmI && otherProj.hostile && projectile.Hitbox.Intersects(otherProj.Hitbox))
+                    if (projectile.Hitbox.Intersects(otherProj.Hitbox) && otherProj.type != projectile.type && (otherProj.hostile || !otherProj.friendly))
                     {
-                        otherProj.Kill();
+                        otherProj.velocity *= -1f;
+                        otherProj.penetrate -= 1;
                         projectile.penetrate -= 1;
                     }
                 }

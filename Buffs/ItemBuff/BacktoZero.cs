@@ -25,6 +25,7 @@ namespace JoJoStands.Buffs.ItemBuff
             if (player.HasBuff(mod.BuffType(Name)))
             {
                 player.statDefense += 99999;
+                player.endurance = 1f;
                 player.lifeRegen += 2;
                 player.noKnockback = true;
             }

@@ -49,9 +49,9 @@ namespace JoJoStands.Projectiles.Minions
             bool target = false;
             float targetDist = 98f;
             projectile.frameCounter++;
-            if (modPlayer.TuskActNumber == 4)
+            if (player.whoAmI == Main.myPlayer && modPlayer.TuskActNumber == 4)         //Making an owner check cause tuskActNumber isn't in sync with other players, causing TA4 to die for everyone else
             {
-                projectile.timeLeft = 2;
+                projectile.timeLeft = 10;
             }
             if (goldenRectangleEffectTimer >= 215)
             {

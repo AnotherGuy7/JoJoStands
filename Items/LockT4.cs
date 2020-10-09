@@ -26,8 +26,10 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StandArrow"));
-            recipe.AddIngredient(mod.ItemType("WillToEscape"), 1);
+            recipe.AddIngredient(ItemID.ShroomiteBar, 6);
+            recipe.AddIngredient(mod.ItemType("WillToEscape"), 2);
+			recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
+            recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

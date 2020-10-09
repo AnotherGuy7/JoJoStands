@@ -40,11 +40,14 @@ namespace JoJoStands.Items
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
+            recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("GratefulDeadT3"));
             recipe.AddIngredient(ItemID.ShroomiteBar, 14);
             recipe.AddIngredient(ItemID.CursedFlame, 20);
             recipe.AddIngredient(mod.ItemType("DeterminedLifeForce"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }

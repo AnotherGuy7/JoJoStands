@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Terraria;
 using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 
@@ -14,15 +11,15 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bootleg Cosplay Pants");
-            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Critical Hit Chance Increase: +4%");
+            Tooltip.SetDefault("Pants that, when worn, give you the feeling that you're someone else. Unfortunately, they didn't cost 100000 yen...\n+4% Stand Critical Hit Chance");
         }
 
         public override void SetDefaults()
         {
             item.width = 26;
             item.height = 28;
-            item.value = Item.buyPrice(0, 0, 1, 0);
-            item.rare = 8;
+            item.value = Item.buyPrice(0, 0, 10, 0);
+            item.rare = ItemRarityID.Blue;
             item.defense = 3;
         }
         public override void UpdateEquip(Player player)
@@ -38,7 +35,7 @@ namespace JoJoStands.Items.Armor
             recipe.AddTile(TileID.Loom);
             recipe.SetResult(this);
             recipe.AddRecipe();
-			recipe = new ModRecipe(mod);
+            recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Silk, 15);
             recipe.AddIngredient(ItemID.LeadBar, 5);
             recipe.AddTile(TileID.Loom);

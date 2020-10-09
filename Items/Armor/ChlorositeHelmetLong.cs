@@ -31,15 +31,14 @@ namespace JoJoStands.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "+5% Stand Damage\nSummons a Viral Crystal";
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.5f;
+            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.05f;
             player.AddBuff(mod.BuffType("ViralCrystalBuff"), 2);
         }
 
         public override void UpdateEquip(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.standCritChangeBoosts += 15f;
-            mPlayer.standDamageBoosts += 0.18f;
+            mPlayer.standDamageBoosts += 0.15f;
 
             if (mPlayer.standType == 0)
             {

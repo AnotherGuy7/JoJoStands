@@ -34,6 +34,7 @@ namespace JoJoStands.Items
 			recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 4);
 			recipe.AddIngredient(ItemID.Wood, 3);
 			recipe.AddIngredient(mod.ItemType("WillToChange"));
+			recipe.AddTile(mod.TileType("RemixTableTile"));
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
