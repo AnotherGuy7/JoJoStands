@@ -127,6 +127,22 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            if (Main.rand.Next(0, 101) <= 50)
+            {
+                target.AddBuff(mod.BuffType("Zipped"), 300);
+            }
+        }
+
+        public override void OnHitPvp(Player target, int damage, bool crit)
+        {
+            if (Main.rand.Next(0, 101) <= 50)
+            {
+                target.AddBuff(mod.BuffType("Zipped"), 300);
+            }
+        }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
         {
             Projectile ownerProj = Main.projectile[(int)projectile.ai[0]];

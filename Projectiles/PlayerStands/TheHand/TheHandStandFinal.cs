@@ -93,6 +93,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 {
                     specialTimer++;
                     secondaryAbilityFrames = true;
+
                 }
                 if (!SpecialKeyCurrent() && specialTimer != 0)
                 {
@@ -112,7 +113,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         }
                         player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(15));
                     }
-                    if (specialTimer > 60 && mouseDistance <= newMaxDistance * 2.5f)
+                    if (specialTimer > 60 && mouseDistance <= newMaxDistance * 2f)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
                         for (int i = 0; i < Main.maxNPCs; i++)
@@ -151,14 +152,15 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 Texture2D positionIndicator = mod.GetTexture("Extras/PositionIndicator");
                 Vector2 distanceToTeleport = Vector2.Zero;
                 if (projectile.owner == Main.myPlayer)
-                    distanceToTeleport = Main.MouseWorld - player.position; distanceToTeleport.Normalize();
+                    distanceToTeleport = Main.MouseWorld - player.position; 
+                distanceToTeleport.Normalize();
                 distanceToTeleport *= 98f * (chargeTimer / 30f);
                 spriteBatch.Draw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f));
             }
             if (MyPlayer.RangeIndicators)
             {
                 Texture2D texture = mod.GetTexture("Extras/RangeIndicator");
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), (newMaxDistance * 2.5f) * 0.81f, SpriteEffects.None, 0);
+                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), newMaxDistance * 2 / 150F, SpriteEffects.None, 0);
             }
             if (scrapeFrames)
             {

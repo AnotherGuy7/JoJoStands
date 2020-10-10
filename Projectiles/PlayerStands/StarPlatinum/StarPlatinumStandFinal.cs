@@ -106,7 +106,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             }
             if (modPlayer.StandAutoMode)
             {
-                PunchAndShootAI(mod.ProjectileType("StarFinger"));
+                PunchAndShootAI(mod.ProjectileType("StarFinger"), shootMax: 1);
             }
         }
 

@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         }
                         shootVel.Normalize();
                         shootVel *= 8f;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer, projectile.whoAmI);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                         secondaryAbilityFrames = false;

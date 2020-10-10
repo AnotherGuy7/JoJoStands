@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.ID;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.NPCs
@@ -112,7 +109,7 @@ namespace JoJoStands.NPCs
             }
         }
 
-        public int frame = 0;
+        private int frame = 0;
 
         public override void FindFrame(int frameHeight)
         {
@@ -142,7 +139,7 @@ namespace JoJoStands.NPCs
         {
             if (spawnInfo.player.GetModPlayer<MyPlayer>().ZoneViralMeteorite)
             {
-                return 1f;
+                return 2f;
             }
             else
             {

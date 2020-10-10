@@ -1,23 +1,20 @@
-using System;
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria.ID;
 using Terraria.ModLoader;
- 
-namespace JoJoStands.Buffs.ItemBuff
+
+namespace JoJoStands.Buffs.Debuffs
 {
     public class RedBindDebuff : ModBuff
     {
         public override void SetDefaults()
         {
-			DisplayName.SetDefault("Red Bind");
-            Description.SetDefault("You are bound by fire....");
+            DisplayName.SetDefault("Red Bind");
+            Description.SetDefault("You are bound by fire...");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
         }
- 
+
         public override void Update(Player player, ref int buffIndex)
         {
             player.velocity /= 1.5f;

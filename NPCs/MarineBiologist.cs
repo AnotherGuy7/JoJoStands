@@ -218,31 +218,31 @@ namespace JoJoStands.NPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("TheHandT1"))
                 {
-                    Main.npcChatText = "Right now, The Hand is weak, only able to punch your opponents. It may be a good punch, but there’s not much else right now.";
+                    Main.npcChatText = "Right now, The Hand is weak, only able to punch your opponents. It may be a good punch, but there's not much else right now.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("TheHandT2"))
                 {
-                    Main.npcChatText = "The Hand can now use its signature ability... its right hand. You can use The Hand’s hand to scrape away space itself and teleport short distances. The Hand can now cause enemies to, perhaps, lose a few organs.";
+                    Main.npcChatText = "The Hand can now use its signature ability... its right hand. You can use The Hand's hand to scrape away space itself and teleport short distances. The Hand can now cause enemies to, perhaps, lose a few organs.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("TheHandT3"))
                 {
-                    Main.npcChatText = "With your increased mastery of The Hand, you can now pull enemies towards you by tapping " + JoJoStands.SpecialHotKey + ", and you can perform a very powerful attack with The Hand’s Hand by holding" + JoJoStands.SpecialHotKey + ", given that they are in range.";
+                    Main.npcChatText = "With your increased mastery of The Hand, you can now pull enemies towards you by tapping " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + ", and you can perform a very powerful attack with The Hand's Hand by holding" + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + ", given that they are in range.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("TheHandFinal"))
                 {
-                    Main.npcChatText = "The Hand has reached its maximum potential, and is more powerful than ever. Of course, you seem to be smarter than its previous user. I’m not saying he was a bad kid, or anything. Wonder where he is now...";
+                    Main.npcChatText = "The Hand has reached its maximum potential, and is more powerful than ever. Of course, you seem to be smarter than its previous user. I'm not saying he was a bad kid, or anything. Wonder where he is now...";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("GratefulDeadT1"))
                 {
-					Main.npcChatText = "Just seeing that Stand is making me feel older than I already am. That’s the ability of Grateful Dead, so be careful using it around people you wanna keep around.\nRight now, Grateful Dead can only punch things. Not exactly unusual. Just keep going.";
+					Main.npcChatText = "Just seeing that Stand is making me feel older than I already am. That's the ability of Grateful Dead, so be careful using it around people you wanna keep around.\nRight now, Grateful Dead can only punch things. Not exactly unusual. Just keep going.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("GratefulDeadT2"))
                 {
-					Main.npcChatText = "Now, Grateful Dead can grab a target and forcefully age them. The amount of time aged depends on how long you hold them. Don’t do handshakes.";
+					Main.npcChatText = "Now, Grateful Dead can grab a target and forcefully age them. The amount of time aged depends on how long you hold them. Don't do handshakes.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("GratefulDeadT3"))
                 {
-					Main.npcChatText = "So, this Stand just became even more of a safety hazard to any allies, because now it can spread the aging effect as a mist. It’s not as immediate, but now multiple people can be aged forwards at once.";
+					Main.npcChatText = "So, this Stand just became even more of a safety hazard to any allies, because now it can spread the aging effect as a mist. It's not as immediate, but now multiple people can be aged forwards at once.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("GratefulDeadT4"))
                 {
@@ -250,7 +250,7 @@ namespace JoJoStands.NPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("LockT1") || mPlayer.StandSlot.Item.type == mod.ItemType("LockT2"))
                 {
-					Main.npcChatText = "Oh. The Lock. I feel bad that you have to use this one… wait a minute. The Lock has the ability to make others’ hearts heavy with guilt, literally. Use it, and anything that harms you will start to feel that immense weight. Some things may be immune to that guilt, and it can be overcome.";
+					Main.npcChatText = "Oh. The Lock. I feel bad that you have to use this one… wait a minute. The Lock has the ability to make others' hearts heavy with guilt, literally. Use it, and anything that harms you will start to feel that immense weight. Some things may be immune to that guilt, and it can be overcome.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("LockT3") || mPlayer.StandSlot.Item.type == mod.ItemType("LockT4"))
                 {
@@ -258,15 +258,15 @@ namespace JoJoStands.NPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeT1"))
                 {
-					Main.npcChatText = "Okay, you need to step away before I crush you. Get that Stand out of my sight. If you think I’m joking, come and find out.\n*sigh* Well, fine. Whitesnake, at this stage, can only throw punches. That’s it.";
+					Main.npcChatText = "Okay, you need to step away before I crush you. Get that Stand out of my sight. If you think I'm joking, come and find out.\n*sigh* Well, fine. Whitesnake, at this stage, can only throw punches. That's it.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("WhiteshankeT2"))
                 {
-					Main.npcChatText = "Now, Whitesnake can secrete a gooey substance that damages enemies and sticks to surfaces. It’s not a pleasant experience.";
+					Main.npcChatText = "Now, Whitesnake can secrete a gooey substance that damages enemies and sticks to surfaces. It's not a pleasant experience.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeT3"))
                 {
-					Main.npcChatText = "Whitesnake has unlocked the ability to steal discs from opponents. If your enemy isn’t a Stand user, then they’ll be devoid of thought for a few moments. If they are, then you’ll disable their Stand temporarily- do all of this with " + JoJoStands.SpecialHotKey;
+					Main.npcChatText = "Whitesnake has unlocked the ability to steal discs from opponents. If your enemy isn't a Stand user, then they'll be devoid of thought for a few moments. If they are, then you'll disable their Stand temporarily- do all of this by pressing " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0];
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeFinal"))
                 {

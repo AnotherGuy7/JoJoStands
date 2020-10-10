@@ -1,6 +1,9 @@
+using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace JoJoStands.Mounts
 {
@@ -81,6 +84,23 @@ namespace JoJoStands.Mounts
 			{
 				WorldGen.KillTile(Xdetection, Ydetection - 1);
 				NetMessage.SendTileSquare(-1, Xdetection, Ydetection - 1, 1);
+			}
+			Rectangle roadRollerRect = new Rectangle((int)player.position.X - mountData.textureWidth / 2, (int)player.position.Y, mountData.textureWidth, mountData.textureHeight);
+			float positiveVel = Math.Abs(player.velocity.X);
+			if (positiveVel > 0)
+			{
+				for (int n = 0; n < Main.maxNPCs; n++)
+				{
+					NPC npc = Main.npc[n];
+					if (npc.active)
+					{
+						if (npc.lifeMax > 5 && !npc.townNPC && !npc.friendly && !npc.immortal && !npc.hide && roadRollerRect.Intersects(npc.Hitbox))
+						{
+							npc.StrikeNPC(35 + (int)(positiveVel * 2f), 7f + positiveVel, player.direction);
+							player.velocity *= 0.5f;
+						}
+					}
+				}
 			}
 		}
 	}

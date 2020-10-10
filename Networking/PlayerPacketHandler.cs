@@ -13,7 +13,7 @@ namespace JoJoStands.Networking
 		public const byte StandAutoMode = 2;
 		public const byte CBLayer = 3;
 		public const byte Yoshihiro = 4;
-		private const byte DyeItem = 5;
+		public const byte DyeItem = 5;
 		
 		public PlayerPacketHandler(byte handlerType) : base(handlerType)
 		{
@@ -172,15 +172,10 @@ namespace JoJoStands.Networking
 		{
 			int dyeItemType = reader.ReadInt32();
 			int oneWhoEquipped = reader.ReadInt32();
-			if (Main.netMode != NetmodeID.Server)
-			{
-				Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.Item.type = dyeItemType;
-
-			}
-			else
+			Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.Item.type = dyeItemType;
+			if (Main.netMode == NetmodeID.Server)
 			{
 				SendDyeItem(-1, fromWho, dyeItemType, oneWhoEquipped);
-
 			}
 		}
 	}

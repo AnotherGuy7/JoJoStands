@@ -40,7 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual int standOffset { get; } = 60;            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
         //public virtual int standYOffset { get; } = 0;
         public virtual float tierNumber { get; }
-        public virtual float punchKnockback { get; }
+        public virtual float punchKnockback { get; } = 4f;
         public virtual string punchSoundName { get; } = "";
         public virtual int standType { get; } = 0;
         public virtual Texture2D standTexture { get; set; }
@@ -238,7 +238,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             HandleDrawOffsets();
             NPC target = null;
             Vector2 targetPos = projectile.position;
-            float targetDist = newMaxDistance * 3f;
+            float targetDist = newMaxDistance * 1.2f;
             if (!attackFrames)
             {
                 Vector2 vector131 = player.Center;
@@ -257,7 +257,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     if (npc.CanBeChasedBy(this, false))
                     {
                         float distance = Vector2.Distance(npc.Center, player.Center);
-                        if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
+                        if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                         {
                             if (npc.boss)       //is gonna try to detect bosses over anything
                             {
@@ -277,60 +277,44 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (target != null)
             {
-                if (targetDist < (newMaxDistance * 1.5f))
+                attackFrames = true;
+                normalFrames = false;
+                if ((targetPos - projectile.Center).X > 0f)
                 {
-                    attackFrames = true;
-                    normalFrames = false;
-                    if ((targetPos - projectile.Center).X > 0f)
+                    projectile.spriteDirection = projectile.direction = 1;
+                }
+                else if ((targetPos - projectile.Center).X < 0f)
+                {
+                    projectile.spriteDirection = projectile.direction = -1;
+                }
+                Vector2 velocity = targetPos - projectile.position;
+                velocity.Normalize();
+                projectile.velocity = velocity * 4f;
+                if (shootCount <= 0)
+                {
+                    if (Main.myPlayer == projectile.owner)
                     {
-                        projectile.spriteDirection = projectile.direction = 1;
-                    }
-                    else if ((targetPos - projectile.Center).X < 0f)
-                    {
-                        projectile.spriteDirection = projectile.direction = -1;
-                    }
-                    if (targetPos.X > projectile.position.X)
-                    {
-                        projectile.velocity.X = 4f;
-                    }
-                    if (targetPos.X < projectile.position.X)
-                    {
-                        projectile.velocity.X = -4f;
-                    }
-                    if (targetPos.Y > projectile.position.Y)
-                    {
-                        projectile.velocity.Y = 4f;
-                    }
-                    if (targetPos.Y < projectile.position.Y)
-                    {
-                        projectile.velocity.Y = -4f;
-                    }
-                    if (shootCount <= 0)
-                    {
-                        if (Main.myPlayer == projectile.owner)
+                        if (JoJoStands.JoJoStandsSounds != null)
                         {
-                            if (JoJoStands.JoJoStandsSounds != null)
-                            {
-                                PlayPunchSound();
-                            }
-                            if (newPunchTime >= 2)
-                                shootCount += newPunchTime;
-                            else
-                                shootCount += 2;
-                            Vector2 shootVel = targetPos - projectile.Center;
-                            if (shootVel == Vector2.Zero)
-                            {
-                                shootVel = new Vector2(0f, 1f);
-                            }
-                            shootVel.Normalize();
-                            if (projectile.direction == 1)
-                            {
-                                shootVel *= shootSpeed;
-                            }
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, Main.myPlayer, fistWhoAmI, tierNumber);
-                            Main.projectile[proj].netUpdate = true;
-                            projectile.netUpdate = true;
+                            PlayPunchSound();
                         }
+                        if (newPunchTime >= 2)
+                            shootCount += newPunchTime;
+                        else
+                            shootCount += 2;
+                        Vector2 shootVel = targetPos - projectile.Center;
+                        if (shootVel == Vector2.Zero)
+                        {
+                            shootVel = new Vector2(0f, 1f);
+                        }
+                        shootVel.Normalize();
+                        if (projectile.direction == 1)
+                        {
+                            shootVel *= shootSpeed;
+                        }
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), punchKnockback, Main.myPlayer, fistWhoAmI, tierNumber);
+                        Main.projectile[proj].netUpdate = true;
+                        projectile.netUpdate = true;
                     }
                 }
             }
@@ -342,7 +326,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             LimitDistance();
         }
 
-        public void PunchAndShootAI(int projToShoot, int itemToConsumeType = 0, bool consumeItem = false)
+        public void PunchAndShootAI(int projToShoot, int itemToConsumeType = -1, bool gravityAccounting = false, int shootMax = 999)
         {
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
@@ -359,7 +343,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     if (npc.CanBeChasedBy(this, false))
                     {
                         float distance = Vector2.Distance(npc.Center, player.Center);
-                        if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
+                        if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                         {
                             if (npc.boss)       //is gonna try to detect bosses over anything
                             {
@@ -398,10 +382,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (target != null)
             {
-                if (targetDist < (newMaxDistance * 1.5f))
+                if (targetDist < (newMaxDistance * 1.5f) && !secondaryAbility)
                 {
                     attackFrames = true;
                     normalFrames = false;
+                    secondaryAbilityFrames = false;
                     if ((targetPos - projectile.Center).X > 0f)
                     {
                         projectile.spriteDirection = projectile.direction = 1;
@@ -410,22 +395,9 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         projectile.spriteDirection = projectile.direction = -1;
                     }
-                    if (targetPos.X > projectile.position.X)
-                    {
-                        projectile.velocity.X = 4f;
-                    }
-                    if (targetPos.X < projectile.position.X)
-                    {
-                        projectile.velocity.X = -4f;
-                    }
-                    if (targetPos.Y > projectile.position.Y)
-                    {
-                        projectile.velocity.Y = 4f;
-                    }
-                    if (targetPos.Y < projectile.position.Y)
-                    {
-                        projectile.velocity.Y = -4f;
-                    }
+                    Vector2 velocity = targetPos - projectile.position;
+                    velocity.Normalize();
+                    projectile.velocity = velocity * 4f;
                     if (shootCount <= 0)
                     {
                         if (Main.myPlayer == projectile.owner)
@@ -448,7 +420,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 shootVel *= shootSpeed;
                             }
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, Main.myPlayer, fistWhoAmI, tierNumber);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), 3f, Main.myPlayer, fistWhoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -456,15 +428,21 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 else if (Main.rand.Next(0, 101) <= 1 && targetDist > (newMaxDistance * 1.5f))
                 {
-                    secondaryAbility = true;
+                    if (itemToConsumeType != -1 && MyPlayer.AutomaticActivations && player.HasItem(itemToConsumeType))
+                    {
+                        secondaryAbility = true;
+                    }
+                    else if (itemToConsumeType == -1)
+                    {
+                        secondaryAbility = true;
+                    }
                 }
             }
             if (secondaryAbility)
             {
-                secondaryAbilityFrames = true;
-                secondaryAbility = true;
                 attackFrames = false;
                 normalFrames = false;
+                secondaryAbilityFrames = true;
                 if ((targetPos - projectile.Center).X > 0f)
                 {
                     projectile.spriteDirection = projectile.direction = 1;
@@ -473,7 +451,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     projectile.spriteDirection = projectile.direction = -1;
                 }
-                if (shootCount <= 0)
+                if (shootCount <= 0 && player.ownedProjectileCounts[projToShoot] < shootMax)
                 {
                     if (Main.myPlayer == projectile.owner)
                     {
@@ -487,27 +465,33 @@ namespace JoJoStands.Projectiles.PlayerStands
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
+                            if (gravityAccounting)
+                            {
+                                shootVel.Y -= projectile.Distance(targetPos) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
+                            }
                             int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * modPlayer.standDamageBoosts) * 0.9f), 2f, Main.myPlayer, projectile.whoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
-                        if (consumeItem)
+                        if (itemToConsumeType != -1)
                         {
                             player.ConsumeItem(itemToConsumeType);
                         }
                     }
                 }
-            }
-            if (secondaryAbility && player.ownedProjectileCounts[projToShoot] == 0)
-            {
-                secondaryAbility = false;
+                if ((!gravityAccounting && player.ownedProjectileCounts[projToShoot] == 0) || targetDist > (newMaxDistance * 3f))     //!gravityAccounting and 0 of that projectile cause it's usually no gravity projectiles that are just 1 shot (star finger, zipper punch), while things like knives have gravity (meant to be thrown in succession)
+                {
+                    secondaryAbility = false;
+                    secondaryAbilityFrames = false;
+                    normalFrames = true;
+                }
             }
             LimitDistance();
         }
 
         public void PlayPunchSound()
         {
-            ////Main.NewText(playedBeginning);
+            //Main.NewText(playedBeginning);
             if (punchSoundName != "" && punchingSoundInstance == null)
             {
                 InitializeSounds();

@@ -105,7 +105,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             }
             if (modPlayer.StandAutoMode)
             {
-                PunchAndShootAI(mod.ProjectileType("StickyFingersFistExtended"));
+                PunchAndShootAI(mod.ProjectileType("StickyFingersFistExtended"), shootMax: 1);
             }
         }
 

@@ -5,6 +5,6 @@ JoJoStands Wiki... in the forum post
 Discord Link... also in the forum post.
 
 Credits:
-The JoJoStands Contributors: Placement, Phil, Techno, Blu, Hey Mister, Joser, Niker, D.Storm, Benney, NekroSektor, Ozi, StringsArn'tRealNumbers, Xenon, Com-Obie, Gundam_Belphagor, and KrimsonHeadshot
+The JoJoStands Contributors: Placement, Phil, Techno, Blu, Hey Mister, Joser, Niker, D.Storm, Benney, NekroSektor, Ozi, StringsArn'tRealNumbers, Xenon, Com-Obie, Gundam_Belphagor, KrimsonHeadshot, and Sicco-Jo
 Alana Gilston, for making TerraUI which helped us make the Stand Slot
 The ExampleMod devs, cause it's a good everything reference

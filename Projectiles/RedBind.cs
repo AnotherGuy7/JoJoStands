@@ -86,6 +86,12 @@ namespace JoJoStands.Projectiles
             projectile.Kill();
         }
 
+        public override void OnHitPvp(Player target, int damage, bool crit)
+        {
+            target.AddBuff(mod.BuffType("RedBindDebuff"), (int)projectile.ai[1]);
+            projectile.Kill();
+        }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
         {
             Projectile ownerProj = Main.projectile[(int)projectile.ai[0]];

@@ -94,7 +94,8 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(BuffID.Confused, 120);
+            if (Main.rand.Next(0, 101) < 20)
+                target.AddBuff(BuffID.Confused, 120);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

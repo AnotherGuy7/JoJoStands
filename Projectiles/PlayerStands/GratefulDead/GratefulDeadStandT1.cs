@@ -109,7 +109,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 2, 12, true);
+                AnimationStates(animationName, 1, 12, true);
             }
         }
 

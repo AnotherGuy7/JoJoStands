@@ -11,7 +11,7 @@ namespace JoJoStands.Items.Armor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Crystal Helmet (Short-Ranged)");
-            Tooltip.SetDefault("A helmet made to empower the force of the wills\n2 Stand Speed");
+            Tooltip.SetDefault("A helmet made to empower the force of the wills\n+2 Stand Speed");
         }
 
         public override void SetDefaults()
@@ -30,7 +30,7 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "8% Stand Damage; Crystal Shards are released when hit";
+            player.setBonus = "+8% Stand Damage; Crystal Shards are released when hit";
             player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.08f;
             player.GetModPlayer<MyPlayer>().crystalArmorSetEquipped = true;
         }

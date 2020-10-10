@@ -30,7 +30,7 @@ namespace JoJoStands.Items.Armor
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "8% Stand Damage; Crystal Shards are released when hit";
+            player.setBonus = "+8% Stand Damage; Crystal Shards are released when hit";
             player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.08f;
             player.GetModPlayer<MyPlayer>().crystalArmorSetEquipped = true;
         }
