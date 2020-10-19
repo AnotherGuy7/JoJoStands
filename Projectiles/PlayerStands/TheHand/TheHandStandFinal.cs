@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -123,6 +124,18 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             {
                                 npc.StrikeNPC(60 * (specialTimer / 30), 0f, player.direction);      //damage goes up at a rate of 120dmg/s
                                 npc.AddBuff(mod.BuffType("MissingOrgans"), 900);
+                            }
+                        }
+                        for (int p = 0; p < Main.maxPlayers; p++)
+                        {
+                            Player otherPlayer = Main.player[p];
+                            if (otherPlayer.active)
+                            {
+                                if (otherPlayer.team != player.team && otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), projectile.position, Main.MouseWorld))
+                                {
+                                    otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " was scraped out of existence by " + player.name + "."), 60 * (specialTimer / 30), 1);
+                                    otherPlayer.AddBuff(mod.BuffType("MissingOrgans"), 600);
+                                }
                             }
                         }
                         player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(25));

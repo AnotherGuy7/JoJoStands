@@ -3,7 +3,6 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Utilities;
 
 namespace JoJoStands.Mounts
 {
@@ -68,19 +67,19 @@ namespace JoJoStands.Mounts
 			int Xdetection = (int)(player.position.X + (mountData.textureWidth / 2 * player.direction) + 1) / 16;
 			int Ydetection = (int)(player.position.Y / 16f) + 1;
 			Tile tileToDestroy1 = Main.tile[Xdetection, Ydetection];
-			if (tileToDestroy1.active())
+			if (tileToDestroy1.active() && tileToDestroy1.type != TileID.LihzahrdBrick && tileToDestroy1.type != TileID.Chlorophyte)
 			{
 				WorldGen.KillTile(Xdetection, Ydetection);
 				NetMessage.SendTileSquare(-1, Xdetection, Ydetection, 1);
 			}
 			Tile tileToDestroy2 = Main.tile[Xdetection, Ydetection + 1];
-			if (tileToDestroy2.active())
+			if (tileToDestroy2.active() && tileToDestroy1.type != TileID.LihzahrdBrick && tileToDestroy1.type != TileID.Chlorophyte)
 			{
 				WorldGen.KillTile(Xdetection, Ydetection + 1);
 				NetMessage.SendTileSquare(-1, Xdetection, Ydetection + 1, 1);
 			}
 			Tile tileToDestroy3 = Main.tile[Xdetection, Ydetection - 1];
-			if (tileToDestroy3.active())
+			if (tileToDestroy3.active() && tileToDestroy1.type != TileID.LihzahrdBrick && tileToDestroy1.type != TileID.Chlorophyte)
 			{
 				WorldGen.KillTile(Xdetection, Ydetection - 1);
 				NetMessage.SendTileSquare(-1, Xdetection, Ydetection - 1, 1);

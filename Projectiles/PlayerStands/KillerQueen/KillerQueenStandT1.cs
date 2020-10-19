@@ -126,13 +126,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 }
                 if (!attackFrames)
                 {
-                    Vector2 vector131 = player.Center;
-                    vector131.X -= (float)((12 + player.width / 2) * player.direction);
-                    projectile.direction = (projectile.spriteDirection = player.direction);
-                    vector131.Y -= -35f + halfStandHeight;
-                    projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
-                    projectile.velocity *= 0.8f;
-                    projectile.rotation = 0;
+                    StayBehind();
                 }
                 float targetDist = maxDistance * 1.5f;
                 if (target == null)
@@ -207,22 +201,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     {
                         projectile.spriteDirection = projectile.direction = -1;
                     }
-                    if (targetPos.X > projectile.position.X)
-                    {
-                        projectile.velocity.X = 4f;
-                    }
-                    if (targetPos.X < projectile.position.X)
-                    {
-                        projectile.velocity.X = -4f;
-                    }
-                    if (targetPos.Y > projectile.position.Y)
-                    {
-                        projectile.velocity.Y = 4f;
-                    }
-                    if (targetPos.Y < projectile.position.Y)
-                    {
-                        projectile.velocity.Y = -4f;
-                    }
+                    Vector2 velocity = targetPos - projectile.position;
+                    velocity.Normalize();
+                    projectile.velocity = velocity * 4f;
                     if (shootCount <= 0)
                     {
                         if (Main.myPlayer == projectile.owner)
@@ -238,7 +219,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             {
                                 shootVel *= shootSpeed;
                             }
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, Main.myPlayer, fistWhoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), 3f, Main.myPlayer, fistWhoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }

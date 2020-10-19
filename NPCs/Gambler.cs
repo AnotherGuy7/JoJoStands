@@ -68,6 +68,8 @@ namespace JoJoStands.NPCs            //We need this to basically indicate the fo
             nextSlot++;
             shop.item[nextSlot].SetDefaults(mod.ItemType("PokerChip"));
             nextSlot++;
+			shop.item[nextSlot].SetDefaults(mod.ItemType("TarotTable"));
+            nextSlot++;
         }
 
         public override string GetChat()       //Allows you to give this town NPC a chat message when a player talks to it.

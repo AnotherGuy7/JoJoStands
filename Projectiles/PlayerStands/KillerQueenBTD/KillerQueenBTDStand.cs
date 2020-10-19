@@ -98,10 +98,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 }
                 if (secondaryAbilityFrames && projectile.ai[0] == 1f)
                 {
-                    if (projectile.frame >= 3)
+                    if (projectile.frame >= 2)
                     {
                         projectile.ai[0] = 0f;
                         normalFrames = true;
+                        attackFrames = false;
                         secondaryAbilityFrames = false;
                     }
                 }
