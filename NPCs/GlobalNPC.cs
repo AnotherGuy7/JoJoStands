@@ -39,10 +39,6 @@ namespace JoJoStands.NPCs
         public override void NPCLoot(NPC npc)
         {
             Player player = Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)];
-            if (npc.type == NPCID.MoonLordCore && Main.rand.NextFloat(0, 101) < 33f)
-            {
-                Item.NewItem(npc.getRect(), mod.ItemType("RequiemArrow"));
-            }
             if (Main.hardMode && (player.position.Y < (Main.worldSurface * 0.35) * 16f) && Main.rand.NextFloat(0, 101) < 7f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("SoulofTime"), Main.rand.Next(1, 3));      //mininum amount = 1, maximum amount = 3

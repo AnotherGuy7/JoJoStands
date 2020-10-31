@@ -6,7 +6,7 @@ using Terraria.Graphics.Effects;
 
 namespace JoJoStands.Networking
 {
-	internal class EffectPacketHandler : PacketHandler
+	public class EffectPacketHandler : PacketHandler
 	{
 		public const byte Timestop = 0;
 		public const byte Timestop2 = 1;

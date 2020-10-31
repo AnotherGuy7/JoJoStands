@@ -2,13 +2,13 @@ using System.IO;
 
 namespace JoJoStands.Networking
 {
-	internal class ModNetHandler
+	public class ModNetHandler
 	{
 		public const byte Effect = 0;
 		public const byte Player = 1;
 
-		internal static EffectPacketHandler effectSync = new EffectPacketHandler(Effect);
-		internal static PlayerPacketHandler playerSync = new PlayerPacketHandler(Player);
+		public static EffectPacketHandler effectSync = new EffectPacketHandler(Effect);
+		public static PlayerPacketHandler playerSync = new PlayerPacketHandler(Player);
 
 		public static void HandlePacket(BinaryReader reader, int fromWho)
 		{

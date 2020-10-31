@@ -1,7 +1,7 @@
+using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 {
@@ -21,6 +21,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override float tierNumber => 5f;
         public override int standOffset => 28;
         public override string punchSoundName => "GER_Muda";
+        public override string poseSoundName => "ThisIsRequiem";
         public override int standType => 1;
 
         private bool saidAbility = true;

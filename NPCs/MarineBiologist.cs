@@ -260,7 +260,7 @@ namespace JoJoStands.NPCs
                 {
 					Main.npcChatText = "Okay, you need to step away before I crush you. Get that Stand out of my sight. If you think I'm joking, come and find out.\n*sigh* Well, fine. Whitesnake, at this stage, can only throw punches. That's it.";
                 }
-                if (mPlayer.StandSlot.Item.type == mod.ItemType("WhiteshankeT2"))
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeT2"))
                 {
 					Main.npcChatText = "Now, Whitesnake can secrete a gooey substance that damages enemies and sticks to surfaces. It's not a pleasant experience.";
                 }
@@ -276,27 +276,32 @@ namespace JoJoStands.NPCs
 
                 if (mPlayer.StandSlot.Item.IsAir)
                 {
-                    int helpText = Main.rand.Next(0, 6);
-                    if (helpText == 0)
+                    int helpText = Main.rand.Next(0, 7);
+                    switch (helpText)
                     {
-                        Main.npcChatText = "Havea a stand item in the 'Stand Slot' then press 'Stand Help' and I'll tell you what it can do and how to get it's tiers OR keep pressing 'Stand Help' and I'll tell you how to get specific items and do certain actions.";
+                        case 0:
+                            Main.npcChatText = "Have a stand item in the 'Stand Slot' then press 'Stand Help' and I'll tell you what it can do and how to get it's tiers OR keep pressing 'Stand Help' and I'll tell you how to get specific items and do certain actions.";
+                            break;
+                        case 1:
+                            Main.npcChatText = "To use Stand Specials, in controls, you need to bind a key to 'JoJoStands: Special' then while the stand is activated you press the key to use the special";
+                            break;
+                        case 2:
+                            Main.npcChatText = "Requiem Arrows can be obtained by getting a viral pearl and merging it with a Stand Arrow. This happens because all the Viral Meteorite involved starts to morph and have a different use alltogether.";
+                            break;
+                        case 3:
+                            Main.npcChatText = "To move during another users timestop, hold a time-stopping capable stand and use it's timestop. If the duration of your timestop exceeds the duration of the other users timestop, you can take over that users timestop as well!";
+                            break;
+                        case 4:
+                            Main.npcChatText = "You can dye your stand by putting a dye in the 'Dye Slot.'";
+                            break;
+                        case 5:
+                            Main.npcChatText = "To use a stand you have to put it in the 'Stand Slot' then press the 'Stand Out' bind, which you have to bind a key to in 'Controls.'";
+                            break;
+                        case 6:
+                            Main.npcChatText = "Most stands will require crafting materials called 'Wills' in order to be made. You can get the Will to Fight in Forests during Daytime, the Will to Protect in Forests at night, the Will to Change in the Jungle, the Will to Control in the Corruption/Crimson, the Will to Destory in the Underworld, and finally, the Will to Escape from the dungeon.";
+                            break;
                     }
-                    if (helpText == 1)
-                    {
-                        Main.npcChatText = "To get a Stand Arrow, if you created a new character, in your inventory should be a 'Wrapped Picture', use it to spawn Yoshihiro. You can also kill birds to get a 'Wrapped Picture'. Kill Yoshihiro and he drops the arrow";
-                    }
-                    if (helpText == 2)
-                    {
-                        Main.npcChatText = "To use Stand Specials, in controls, you need to bind a key to 'JoJoStands: Special' then while the stand is activated you press the key to use the special";
-                    }
-                    if (helpText == 3)
-                    {
-                        Main.npcChatText = "Requiem arrows are drops from the Moon Lord, though they are pretty rare...";
-                    }
-                    if (helpText == 6)
-                    {
-                        Main.npcChatText = "To move during another users timestop, hold a time-stopping capable stand and use it's timestop. If the duration of your timestop exceeds the duration of the other users timestop, you can take over that users timestop as well!";
-                    }
+                    
                     if (!mPlayer.receivedArrowShard)
                     {
                         Main.npcChatText = "You seem... reliable. Here, I want you to take this and use it on yourself when you can, I think you'll like what happens when you do.";

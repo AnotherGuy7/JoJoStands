@@ -3,10 +3,11 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 
 namespace JoJoStands.Networking
 {
-	internal class PlayerPacketHandler : PacketHandler
+	public class PlayerPacketHandler : PacketHandler
 	{
 		public const byte PoseMode = 0;
 		public const byte StandOut = 1;		//needed because some stands don't spawn without it
@@ -14,6 +15,7 @@ namespace JoJoStands.Networking
 		public const byte CBLayer = 3;
 		public const byte Yoshihiro = 4;
 		public const byte DyeItem = 5;
+		//public const byte Sounds = 6;
 		
 		public PlayerPacketHandler(byte handlerType) : base(handlerType)
 		{
@@ -178,5 +180,28 @@ namespace JoJoStands.Networking
 				SendDyeItem(-1, fromWho, dyeItemType, oneWhoEquipped);
 			}
 		}
+
+		/*public void SendSoundInstance(int toWho, int fromWho, string soundName, Vector2 pos, int travelDist = 10, SoundState state = SoundState.Paused)
+		{
+			ModPacket packet = GetPacket(Sounds, fromWho);
+			packet.Write(soundName);
+			packet.WriteVector2(pos);
+			packet.Write(travelDist);
+			packet.Write((byte)state);
+			packet.Send(toWho, fromWho);
+		}
+
+		public void ReceiveSoundInstance(BinaryReader reader, int fromWho)
+		{
+			string sound = reader.ReadString();
+			Vector2 pos = reader.ReadVector2();
+			int travelDist = reader.ReadInt32();
+			SoundState state = (SoundState)reader.ReadByte();
+			JoJoStands.PlaySound(sound, pos, travelDist);
+			if (Main.netMode == NetmodeID.Server)
+			{
+				SendSoundInstance(-1, fromWho, sound, pos);
+			}
+		}*/
 	}
 }

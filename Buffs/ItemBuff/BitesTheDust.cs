@@ -10,7 +10,7 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Bite The Dust");
-            Description.SetDefault("The day is now restarting.");
+            Description.SetDefault("The day is now restarting and your enemies are disappearing.");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
@@ -19,7 +19,7 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (player.HasBuff(mod.BuffType(Name)))
+            if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int i = 0; i < Main.maxPlayers; i++)       //first, get rid of all effect owners
                 {
@@ -40,64 +40,44 @@ namespace JoJoStands.Buffs.ItemBuff
                         }
                     }
                 }
-                mPlayer.TheWorldEffect = false;     //second, get rid of the effects from everyone
-                mPlayer.TimeSkipEffect = false;
-                mPlayer.TimeSkipPreEffect = false;
-                mPlayer.Foresight = false;
-                if (Main.time != 1600)
+            }
+            mPlayer.TheWorldEffect = false;     //second, get rid of the effects from everyone
+            mPlayer.TimeSkipEffect = false;
+            mPlayer.TimeSkipPreEffect = false;
+            mPlayer.Foresight = false;
+            if (Main.time != 1600)
+            {
+                player.AddBuff(mod.BuffType(Name), 2);       //to constantly refresh the buff
+            }
+            if (Main.time < 1600)
+            {
+                Main.time += 60;        //drag time down to 1600
+            }
+            if (Main.time > 1600)
+            {
+                Main.time -= 60;
+            }
+            if (Main.time == 1600)
+            {
+                if (!Main.dayTime)
                 {
-                    player.AddBuff(mod.BuffType(Name), 2);       //to constantly refresh the buff
+                    Main.dayTime = true;
                 }
-                if (Main.time < 1600)
+                player.statLife = player.statLifeMax;
+                player.Spawn();
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(420));
+                player.ClearBuff(mod.BuffType(Name));
+
+            }
+            for (int n = 0; n < Main.maxNPCs; n++)
+            {
+                NPC npc = Main.npc[n];
+                if (npc.active && !npc.dontTakeDamage && !npc.friendly && npc.lifeMax > 5 && Main.rand.Next(1, 16) == 1)
                 {
-                    Main.time += 60;        //drag time down to 1600
+                    int bomb = Projectile.NewProjectile(npc.Center + new Vector2(Main.rand.NextFloat(0f, 10f), Main.rand.NextFloat(0f, 10f)), Vector2.Zero, ProjectileID.GrenadeIII, 102, 3f, player.whoAmI);
+                    Main.projectile[bomb].timeLeft = 2;
+                    Main.projectile[bomb].netUpdate = true;
                 }
-                if (Main.time > 1600)
-                {
-                    Main.time -= 60;
-                }
-                if (Main.time == 1600)
-                {
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(420));
-                    player.ClearBuff(mod.BuffType(Name));
-                    player.statLife = player.statLifeMax;
-                    player.Spawn();
-                    if (!Main.dayTime)
-                    {
-                        Main.dayTime = true;
-                    }
-                }
-                for (int n = 0; n < 255; n++)
-                {
-                    NPC npc = Main.npc[n];
-                    if (npc.active && !npc.dontTakeDamage && !npc.friendly && npc.lifeMax > 5 && Main.rand.Next(1, 16) == 1)
-                    {
-                        int bomb = Projectile.NewProjectile(npc.Center + new Vector2(Main.rand.NextFloat(0f, 10f), Main.rand.NextFloat(0f, 10f)), Vector2.Zero, ProjectileID.GrenadeIII, 102, 3f, player.whoAmI);
-                        Main.projectile[bomb].timeLeft = 2;
-                        Main.projectile[bomb].netUpdate = true;
-                    }
-                }
-                /*for (int i = 0; i < 255; i++)
-                {
-                    if (Main.player[i].active)
-                    {
-                        if (Main.time < 1600)
-                        {
-                            Main.time += 60;
-                        }
-                        if (Main.time > 1600)
-                        {
-                            Main.time -= 60;
-                        }
-                        if (Main.time == 1600)
-                        {
-                            if (!Main.dayTime)
-                            {
-                                Main.dayTime = true;
-                            }
-                        }
-                    }
-                }*/
             }
         }
     }

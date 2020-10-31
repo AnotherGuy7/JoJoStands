@@ -105,8 +105,9 @@ namespace JoJoStands
         public static List<int> stopImmune = new List<int>();
         public static List<int> standTier1List = new List<int>();
 
-
         public Vector2 aerosmithCamPosition;
+
+        public string poseSoundName = "";       //This is for JoJoStandsSoudns
 
         public override void ResetEffects()
         {

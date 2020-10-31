@@ -34,9 +34,8 @@ namespace JoJoStands.Items.Accessories
         {
             if (player.altFunctionUse == 2)
             {
-                item.stack = 0;
                 Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("ViralPearl"), 0, 0f);
-                player.ConsumeItem(mod.ItemType("ViralPearlRing"));
+                item.TurnToAir();
             }
             else
             {

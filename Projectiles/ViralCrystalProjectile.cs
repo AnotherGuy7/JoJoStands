@@ -10,7 +10,7 @@ namespace JoJoStands.Projectiles
             projectile.width = 30;
             projectile.height = 14;
             projectile.aiStyle = 0;
-            projectile.timeLeft = 600;
+            projectile.timeLeft = 300;
             projectile.friendly = true;
             projectile.tileCollide = false;
             projectile.ignoreWater = true;

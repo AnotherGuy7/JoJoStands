@@ -26,6 +26,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("LockT1"));
             recipe.AddIngredient(ItemID.HellstoneBar, 5);
             recipe.AddIngredient(mod.ItemType("WillToEscape"), 2);
             recipe.AddTile(mod.TileType("RemixTableTile"));

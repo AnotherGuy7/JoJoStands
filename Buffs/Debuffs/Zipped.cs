@@ -35,7 +35,7 @@ namespace JoJoStands.Buffs.Debuffs
             Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f, 0, default(Color), 2);
             npc.lifeRegenExpectedLossPerSecond = 20;
             npc.lifeRegen -= 60;
-            npc.velocity *= 0.75f;
+            npc.velocity *= 0.9975f;    //Because of how often this code runs we need to apply a very small 
         }
     }
 }

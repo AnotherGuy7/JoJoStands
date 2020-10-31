@@ -1,22 +1,20 @@
+using JoJoStands.Networking;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
-using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
-using JoJoStands.Networking;
 
 namespace JoJoStands
 {
-	public class JoJoStands : Mod
-	{
-        public static bool killSounds = false;
-
+    public class JoJoStands : Mod
+    {
         public static ModHotKey SpecialHotKey;
         public static ModHotKey StandOut;
         public static ModHotKey StandAutoMode;
@@ -40,7 +38,7 @@ namespace JoJoStands
         internal BetUI betUI;
 
         public override void Load()
-		{
+        {
             JoJoStandsSounds = ModLoader.GetMod("JoJoStandsSounds");        //would just return null if nothing is there
             HamonBarState.hamonBarTexture = ModContent.GetTexture("JoJoStands/UI/HamonBar");
             ToBeContinued.TBCArrowTexture = ModContent.GetTexture("JoJoStands/UI/TBCArrow");
@@ -64,6 +62,7 @@ namespace JoJoStands
             MyPlayer.standTier1List.Add(ItemType("TheHandT1"));
             MyPlayer.standTier1List.Add(ItemType("WhitesnakeT1"));
             MyPlayer.standTier1List.Add(ItemType("DollyDaggerT1"));
+            MyPlayer.standTier1List.Add(ItemType("CenturyBoyT1"));
 
             MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
             MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT3"));
@@ -160,9 +159,9 @@ namespace JoJoStands
 
         public override void UpdateMusic(ref int music, ref MusicPriority priority)
         {
-			if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
-				return;
-			
+            if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
+                return;
+
             Player player = Main.LocalPlayer;
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.myPlayer != -1 && !Main.gameMenu)
@@ -247,148 +246,5 @@ namespace JoJoStands
         {
             ModNetHandler.HandlePacket(reader, whoAmI);
         }
-
-        /*public override void HandlePacket(BinaryReader reader, int whoAmI)      //from ExampleMod
-        {
-            JoJoMessageType msgType = (JoJoMessageType)reader.ReadByte();
-            switch (msgType)
-            {
-                case JoJoMessageType.SyncPlayer:
-                    byte playernumber = reader.ReadByte();
-                    MyPlayer modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();      //use Main.myPlayer to apply bools and playerNumber to read bools
-                    modPlayer.TheWorldEffect = reader.ReadBoolean();
-                    modPlayer.TimeSkipEffect = reader.ReadBoolean();
-                    modPlayer.BackToZero = reader.ReadBoolean();
-                    modPlayer.poseMode = reader.ReadBoolean();
-                    modPlayer.StandOut = reader.ReadBoolean();
-                    modPlayer.StandAutoMode = reader.ReadBoolean();
-                    modPlayer.Foresight = reader.ReadBoolean();
-					modPlayer.showingCBLayer = reader.ReadBoolean();
-                    // SyncPlayer will be called automatically, so there is no need to forward this data to other clients.
-                    break;
-                case JoJoMessageType.TheWorld:
-                    playernumber = reader.ReadByte();
-                    modPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-                    modPlayer.TheWorldEffect = reader.ReadBoolean();
-                    // Unlike SyncPlayer, here we have to relay/forward these changes to all other connected clients
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        var packet = GetPacket();
-                        packet.Write((byte)JoJoMessageType.TheWorld);
-                        packet.Write(playernumber);
-                        packet.Write(modPlayer.TheWorldEffect);
-                        packet.Send(-1, playernumber);
-                    }
-                    //Main.NewText("HandlePacket", Color.Red);
-                    break;
-                case JoJoMessageType.Timeskip:
-                    playernumber = reader.ReadByte();
-                    modPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-                    modPlayer.TimeSkipEffect = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        var packet = GetPacket();
-                        packet.Write((byte)JoJoMessageType.Timeskip);
-                        packet.Write(playernumber);
-                        packet.Write(modPlayer.TimeSkipEffect);
-                        packet.Send(-1, playernumber);
-                    }
-                    break;
-                case JoJoMessageType.BacktoZero:
-                    playernumber = reader.ReadByte();
-                    modPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();       //setting YOUR (Main.myPlayer) value to what's read
-                    modPlayer.BackToZero = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        var packet = GetPacket();
-                        packet.Write((byte)JoJoMessageType.BacktoZero);
-                        packet.Write(playernumber);
-                        packet.Write(modPlayer.BackToZero);
-                        packet.Send(-1, playernumber);
-                    }
-                    break;
-                case JoJoMessageType.PoseMode:
-                    playernumber = reader.ReadByte();
-                    modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();        //ONLY READING the value
-                    modPlayer.poseMode = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        var packet = GetPacket();
-                        packet.Write((byte)JoJoMessageType.PoseMode);
-                        packet.Write(playernumber);
-                        packet.Write(modPlayer.poseMode);
-                        packet.Send(-1, playernumber);
-                    }
-                    break;
-                case JoJoMessageType.StandOut:
-                    playernumber = reader.ReadByte();
-                    modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();
-                    modPlayer.StandOut = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        var packet = GetPacket();
-                        packet.Write((byte)JoJoMessageType.StandOut);
-                        packet.Write(playernumber);
-                        packet.Write(modPlayer.StandOut);
-                        packet.Send(-1, playernumber);
-                    }
-                    break;
-                case JoJoMessageType.StandAutoMode:
-                    playernumber = reader.ReadByte();
-                    modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();
-                    modPlayer.StandAutoMode = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        var packet = GetPacket();
-                        packet.Write((byte)JoJoMessageType.StandAutoMode);
-                        packet.Write(playernumber);
-                        packet.Write(modPlayer.StandAutoMode);
-                        packet.Send(-1, playernumber);
-                    }
-                    break;
-                case JoJoMessageType.Foresight:
-                    playernumber = reader.ReadByte();
-                    modPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-                    modPlayer.Foresight = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        var packet = GetPacket();
-                        packet.Write((byte)JoJoMessageType.Foresight);
-                        packet.Write(playernumber);
-                        packet.Write(modPlayer.Foresight);
-                        packet.Send(-1, playernumber);
-                    }
-                    break;
-                case JoJoMessageType.CBLayer:
-                    playernumber = reader.ReadByte();
-                    modPlayer = Main.player[playernumber].GetModPlayer<MyPlayer>();
-                    modPlayer.Foresight = reader.ReadBoolean();
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        var packet = GetPacket();
-                        packet.Write((byte)JoJoMessageType.CBLayer);
-                        packet.Write(playernumber);
-                        packet.Write(modPlayer.showingCBLayer);
-                        packet.Send(-1, playernumber);
-                    }
-                    break;
-                default:
-                    Logger.WarnFormat("JoJoStands: Unknown Message type:" + msgType);
-                    break;
-            }
-        }
-
-        internal enum JoJoMessageType : byte
-        {
-            SyncPlayer,
-            TheWorld,
-            Timeskip,
-            BacktoZero,
-            PoseMode,
-            StandOut,
-            StandAutoMode,
-            Foresight,
-            CBLayer
-        }*/
     }
 }

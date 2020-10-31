@@ -12,8 +12,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override int halfStandHeight => 37;
         public override int standType => 2;
         public override int standOffset => -10;
+        public override string poseSoundName => "IWouldntLose";
 
         private int bubbleDamage = 180;      //not using projectileDamage cause this one changes
+        private int btdStartDelay = 0;
 
 
         public override void AI()
@@ -49,9 +51,29 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
             if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("BitesTheDust")))
             {
-                player.AddBuff(mod.BuffType("BitesTheDust"), 10);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BiteTheDustEffect"));
+                if (JoJoStands.JoJoStandsSounds == null)
+                {
+                    btdStartDelay = 205;
+                }
+                else
+                {
+                    Terraria.Audio.LegacySoundStyle biteTheDust = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/BiteTheDust");
+                    biteTheDust.WithVolume(MyPlayer.soundVolume);
+                    Main.PlaySound(biteTheDust, projectile.position);
+                    btdStartDelay = 1;
+                }
             }
+            if (btdStartDelay != 0)
+            {
+                btdStartDelay++;
+                if (btdStartDelay >= 205)
+                {
+                    player.AddBuff(mod.BuffType("BitesTheDust"), 10);
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BiteTheDustEffect"));
+                    btdStartDelay = 0;
+                }
+            }
+
 
             if (!mPlayer.StandAutoMode)
             {

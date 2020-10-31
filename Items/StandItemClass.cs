@@ -7,7 +7,7 @@ namespace JoJoStands.Items
     public class StandItemClass : ModItem
     {
         public virtual int standSpeed { get; }
-        public virtual int standType { get; }
+        public virtual int standType { get; } = 0;
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
@@ -26,8 +26,11 @@ namespace JoJoStands.Items
             {
                 speed = 2;
             }
-            TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", speedType + speed);
-            tooltips.Add(tooltipAddition);
+            if (standType != 0)
+            {
+                TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", speedType + speed);
+                tooltips.Add(tooltipAddition);
+            }
         }
 
         public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)

@@ -42,6 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual float tierNumber { get; }
         public virtual float punchKnockback { get; } = 4f;
         public virtual string punchSoundName { get; } = "";
+        public virtual string poseSoundName { get; } = "";
         public virtual int standType { get; } = 0;
         public virtual Texture2D standTexture { get; set; }
 
@@ -491,11 +492,6 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void PlayPunchSound()
         {
-            //Main.NewText(playedBeginning);
-            if (punchSoundName != "" && punchingSoundInstance == null)
-            {
-                InitializeSounds();
-            }
             if (punchSoundName != "")
             {
                 if (beginningSoundInstance != null)
@@ -503,12 +499,14 @@ namespace JoJoStands.Projectiles.PlayerStands
                     if (!playedBeginning)
                     {
                         //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        beginningSoundInstance.Volume = MyPlayer.soundVolume;
                         Main.PlaySoundInstance(beginningSoundInstance);                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
                         playedBeginning = true;
                     }
                     if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
                     {
                         //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        punchingSoundInstance.Volume = MyPlayer.soundVolume;
                         Main.PlaySoundInstance(punchingSoundInstance);
                     }
                 }
@@ -519,6 +517,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     playedBeginning = true;
                 }
             }
+            projectile.netUpdate = true;
         }
 
         public void StopSounds()
@@ -572,9 +571,15 @@ namespace JoJoStands.Projectiles.PlayerStands
             newAltMaxDistance = maxAltDistance + modPlayer.standRangeBoosts;
             newPunchDamage = (int)(punchDamage * modPlayer.standDamageBoosts);
             newProjectileDamage = (int)(projectileDamage * modPlayer.standDamageBoosts);
+            modPlayer.poseSoundName = poseSoundName;
             if (modPlayer.standType != standType)
             {
                 modPlayer.standType = standType;
+            }
+
+            if (punchSoundName != "" && punchingSoundInstance == null)
+            {
+                InitializeSounds();
             }
         }
 
@@ -693,6 +698,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override void Kill(int timeLeft)
         {
             Main.player[projectile.owner].GetModPlayer<MyPlayer>().standType = 0;
+            Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseSoundName = "";
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -700,6 +706,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             writer.Write(normalFrames);
             writer.Write(attackFrames);
             writer.Write(secondaryAbilityFrames);
+            if (beginningSoundInstance != null)
+            {
+                writer.Write((byte)beginningSoundInstance.State);
+            }
+            if (punchingSoundInstance != null)
+            {
+                writer.Write((byte)punchingSoundInstance.State);
+            }
             SendExtraStates(writer);
         }
 
@@ -708,6 +722,21 @@ namespace JoJoStands.Projectiles.PlayerStands
             normalFrames = reader.ReadBoolean();
             attackFrames = reader.ReadBoolean();
             secondaryAbilityFrames = reader.ReadBoolean();
+
+            //Sound sync stuff
+            SoundState beginningSoundState = (SoundState)reader.ReadByte();
+            SoundState punchingSoundState = (SoundState)reader.ReadByte();
+            if (beginningSoundInstance != null || punchingSoundInstance != null)
+            {
+                if (beginningSoundState != SoundState.Stopped || punchingSoundState != SoundState.Stopped)
+                {
+                    PlayPunchSound();
+                }
+                if (beginningSoundState == SoundState.Stopped && punchingSoundState == SoundState.Stopped)
+                {
+                    StopSounds();
+                }
+            }
             ReceiveExtraStates(reader);
         }
 

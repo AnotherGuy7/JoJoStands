@@ -1,12 +1,7 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 {
@@ -23,6 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override int halfStandHeight => 44;
         public override float fistWhoAmI => 1f;
         public override string punchSoundName => "Muda";
+        public override string poseSoundName => "ComeAsCloseAsYouLike";
         public override int standType => 1;
 
         private bool abilityPose = false;

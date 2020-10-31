@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 {
@@ -20,11 +19,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override int halfStandHeight => 32;
         public override float fistWhoAmI => 6f;
         public override int standOffset => 0;
+        public override string poseSoundName => "AllThatRemainsAreTheResults";
         public override int standType => 1;
 
         private int updateTimer = 0;
         private Vector2 velocityAddition;
         private float mouseDistance;
+        private int timeskipStartDelay = 0;
 
         public override void AI()
         {
@@ -47,8 +48,25 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             }
             if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("SkippingTime")))
             {
-                player.AddBuff(mod.BuffType("PreTimeSkip"), 10);
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip"));
+                if (JoJoStands.JoJoStandsSounds == null)
+                    timeskipStartDelay = 80;
+                else
+                {
+                    Terraria.Audio.LegacySoundStyle kingCrimson = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/KingCrimson");
+                    kingCrimson.WithVolume(MyPlayer.soundVolume);
+                    Main.PlaySound(kingCrimson, projectile.position);
+                    timeskipStartDelay = 1;
+                }
+            }
+            if (timeskipStartDelay != 0)
+            {
+                timeskipStartDelay++;
+                if (timeskipStartDelay >= 80)
+                {
+                    player.AddBuff(mod.BuffType("PreTimeSkip"), 10);
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip"));
+                    timeskipStartDelay = 0;
+                }
             }
 
             if (!modPlayer.StandAutoMode)

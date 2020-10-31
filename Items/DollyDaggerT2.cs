@@ -41,6 +41,9 @@ namespace JoJoStands.Items
 
 		public override bool CanUseItem(Player player)
 		{
+			if (player.GetModPlayer<MyPlayer>().StandOut)
+				return false;
+
 			if (player.altFunctionUse == 2)
 			{
 				int stabDamage = Main.rand.Next(50, 81);
