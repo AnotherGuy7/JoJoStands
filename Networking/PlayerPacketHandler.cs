@@ -175,6 +175,7 @@ namespace JoJoStands.Networking
 			int dyeItemType = reader.ReadInt32();
 			int oneWhoEquipped = reader.ReadInt32();
 			Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.Item.type = dyeItemType;
+			Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.Item.SetDefaults(dyeItemType);
 			if (Main.netMode == NetmodeID.Server)
 			{
 				SendDyeItem(-1, fromWho, dyeItemType, oneWhoEquipped);

@@ -24,6 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override float tierNumber => 1f;
         public override int standType => 1;
         public override string punchSoundName => "Ari";
+		public override string poseSoundName => "Arrivederci";
 
         public int updateTimer = 0;
 

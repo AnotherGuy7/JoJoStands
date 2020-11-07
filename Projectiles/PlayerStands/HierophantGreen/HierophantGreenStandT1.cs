@@ -36,6 +36,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override int halfStandHeight => 25;
         public override int standOffset => 0;
         public override int standType => 2;
+        public override string poseSoundName => "ItsTheVictorWhoHasJustice";
 
         public override void AI()
         {

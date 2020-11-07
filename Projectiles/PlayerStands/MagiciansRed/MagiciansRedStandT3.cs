@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 {
@@ -32,6 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override int shootTime => 16;
         public override int halfStandHeight => 35;
         public override int standOffset => 0;
+        public override string poseSoundName => "ThePowerToWieldFlameAtWill";
 
         public int chanceToDebuff = 50;
         public int debuffDuration = 420;
@@ -96,6 +98,12 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     secondaryAbilityFrames = true;
                     Main.mouseLeft = false;
                     projectile.netUpdate = true;
+                    if (JoJoStands.SoundsLoaded)
+                    {
+                        Terraria.Audio.LegacySoundStyle redBind = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/RedBind");
+                        redBind.WithVolume(MyPlayer.soundVolume);
+                        Main.PlaySound(redBind, projectile.position);
+                    }
                     Vector2 shootVel = Main.MouseWorld - projectile.Center;
                     if (shootVel == Vector2.Zero)
                     {
@@ -110,7 +118,6 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 }
                 if (SpecialKeyPressed())
                 {
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(30));
                     for (int p = 1; p <= 50; p++)
                     {
                         float radius = p * 5;
@@ -119,6 +126,13 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }
+                    if (JoJoStands.SoundsLoaded)
+                    {
+                        Terraria.Audio.LegacySoundStyle crossFireHurricane = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/CrossfireHurricaneSpecial");
+                        crossFireHurricane.WithVolume(MyPlayer.soundVolume);
+                        Main.PlaySound(crossFireHurricane, projectile.position);
+                    }
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(30));
                 }
             }
             if (modPlayer.StandAutoMode)

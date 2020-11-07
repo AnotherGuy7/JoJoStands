@@ -8,6 +8,7 @@ namespace JoJoStands.Projectiles.Pets
     public class TuskAct3Pet : StandClass
     {
         public override string Texture => mod.Name + "/Projectiles/Pets/TuskAct3Pet";
+		public override string poseSoundName => "ItsBeenARoundaboutPath";
 
         public override void SetStaticDefaults()
         {
@@ -26,6 +27,7 @@ namespace JoJoStands.Projectiles.Pets
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             projectile.frameCounter++;
+			modPlayer.poseSoundName = poseSoundName;
             if (modPlayer.TuskActNumber == 3)
             {
                 projectile.timeLeft = 2;

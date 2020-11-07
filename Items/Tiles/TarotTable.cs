@@ -20,7 +20,7 @@ namespace JoJoStands.Items.Tiles
             item.autoReuse = true;
             item.useAnimation = 30;
             item.useTime = 30;
-            item.useStyle = 1;
+            item.useStyle = ItemUseStyleID.SwingThrow;
             item.consumable = true;
             item.value = Item.buyPrice(0, 20, 50, 0);
             item.rare = ItemRarityID.Blue;

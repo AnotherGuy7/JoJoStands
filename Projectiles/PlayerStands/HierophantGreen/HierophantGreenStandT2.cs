@@ -36,7 +36,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int halfStandHeight => 25;
         public override int standOffset => 0;
         public override int standType => 2;
-        public bool linkShot = false;
+        public override string poseSoundName => "ItsTheVictorWhoHasJustice";
+
+        private bool linkShot = false;
 
         public override void AI()
         {

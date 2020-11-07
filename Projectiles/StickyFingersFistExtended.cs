@@ -39,7 +39,7 @@ namespace JoJoStands.Projectiles
             projectile.spriteDirection = projectile.direction;
             Vector2 rota = ownerProj.Center - projectile.Center;
             projectile.rotation = (-rota * projectile.direction).ToRotation();
-            if (!playedSound && JoJoStands.JoJoStandsSounds != null)
+            if (!playedSound && JoJoStands.SoundsLoaded)
             {
                 Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Zip"));
                 playedSound = true;

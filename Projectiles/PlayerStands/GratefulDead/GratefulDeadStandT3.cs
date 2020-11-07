@@ -20,6 +20,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override float tierNumber => 1f;
         public override int standOffset => -4;
         public override int standType => 1;
+        public override string poseSoundName => "OnceWeDecideToKillItsDone";
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             return false;

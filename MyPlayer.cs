@@ -311,6 +311,7 @@ namespace JoJoStands
             {
                 StandOut = false;
                 standType = 0;
+                poseSoundName = "";
                 if (standAccessory)
                 {
                     standAccessory = false;
@@ -804,24 +805,28 @@ namespace JoJoStands
             {
                 standAccessory = true;
                 standType = 1;
+                poseSoundName = "TheGuiltierYouFeel";
                 player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT2"))
             {
                 standAccessory = true;
                 standType = 1;
+                poseSoundName = "TheGuiltierYouFeel";
                 player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT3"))
             {
                 standAccessory = true;
                 standType = 1;
+                poseSoundName = "TheGuiltierYouFeel";
                 player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("LockT4"))
             {
                 standAccessory = true;
                 standType = 1;
+                poseSoundName = "TheGuiltierYouFeel";
                 player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
             }
             else if (inputItem.type == mod.ItemType("StarPlatinumT1"))       //the normal stands
@@ -984,21 +989,25 @@ namespace JoJoStands
             {
                 standType = 2;
                 sexPistolsTier = 1;
+                poseSoundName = "SexPistolsIsDesignedToKill";
             }
             else if (inputItem.type == mod.ItemType("SexPistolsT2"))
             {
                 standType = 2;
                 sexPistolsTier = 2;
+                poseSoundName = "SexPistolsIsDesignedToKill";
             }
             else if (inputItem.type == mod.ItemType("SexPistolsT3"))
             {
                 standType = 2;
                 sexPistolsTier = 3;
+                poseSoundName = "SexPistolsIsDesignedToKill";
             }
             else if (inputItem.type == mod.ItemType("SexPistolsFinal"))
             {
                 standType = 2;
                 sexPistolsTier = 4;
+                poseSoundName = "SexPistolsIsDesignedToKill";
             }
             else if (inputItem.type == mod.ItemType("TuskAct1"))
             {

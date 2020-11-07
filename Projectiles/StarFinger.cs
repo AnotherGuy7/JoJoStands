@@ -26,7 +26,7 @@ namespace JoJoStands.Projectiles
         public override void AI()       //all this so that the other chain doesn't draw... yare yare. It was mostly just picking out types
         {
             //projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);     //aiStyle 13 without the types
-            if (!playedSound && JoJoStands.JoJoStandsSounds != null)
+            if (!playedSound && JoJoStands.SoundsLoaded)
             {
                 Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/StarFinger"));
                 playedSound = true;

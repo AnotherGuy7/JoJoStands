@@ -42,6 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         public override int projectileDamage => 63;
         public override int shootTime => 8;      //+2 every tier
         public override int standType => 2;
+        public override string poseSoundName => "VolareVia";
 
         private bool fallingFromSpace = false;
 

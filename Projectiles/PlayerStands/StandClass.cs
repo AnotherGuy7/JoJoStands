@@ -151,7 +151,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 projectile.velocity = Vector2.Zero;
             }
-            if (JoJoStands.JoJoStandsSounds != null)
+            if (JoJoStands.SoundsLoaded)
             {
                 PlayPunchSound();
             }
@@ -295,7 +295,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     if (Main.myPlayer == projectile.owner)
                     {
-                        if (JoJoStands.JoJoStandsSounds != null)
+                        if (JoJoStands.SoundsLoaded)
                         {
                             PlayPunchSound();
                         }
@@ -403,7 +403,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
-                            if (JoJoStands.JoJoStandsSounds != null)
+                            if (JoJoStands.SoundsLoaded)
                             {
                                 PlayPunchSound();
                             }
@@ -490,52 +490,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             LimitDistance();
         }
 
-        public void PlayPunchSound()
-        {
-            if (punchSoundName != "")
-            {
-                if (beginningSoundInstance != null)
-                {
-                    if (!playedBeginning)
-                    {
-                        //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                        beginningSoundInstance.Volume = MyPlayer.soundVolume;
-                        Main.PlaySoundInstance(beginningSoundInstance);                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
-                        playedBeginning = true;
-                    }
-                    if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
-                    {
-                        //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                        punchingSoundInstance.Volume = MyPlayer.soundVolume;
-                        Main.PlaySoundInstance(punchingSoundInstance);
-                    }
-                }
-                else
-                {
-                    //punchingSoundInstance.Play();
-                    Main.PlaySoundInstance(punchingSoundInstance);
-                    playedBeginning = true;
-                }
-            }
-            projectile.netUpdate = true;
-        }
-
-        public void StopSounds()
-        {
-            if (playedBeginning)
-            {
-                if (beginningSoundInstance != null)
-                {
-                    beginningSoundInstance.Stop();
-                }
-                if (punchingSoundInstance != null)
-                {
-                    punchingSoundInstance.Stop();
-                }
-                playedBeginning = false;
-            }
-        }
-
         public void InitializeSounds()
         {
             if (beginningSoundInstance == null)
@@ -552,6 +506,80 @@ namespace JoJoStands.Projectiles.PlayerStands
                 SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName);
                 punchingSoundInstance = sound.CreateInstance();
                 punchingSoundInstance.Volume = MyPlayer.soundVolume;
+            }
+        }
+
+        public void PlayPunchSound()
+        {
+			if (punchSoundName != "" && punchingSoundInstance == null)
+            {
+                InitializeSounds();
+            }
+            if (punchSoundName != "")
+            {
+                if (beginningSoundInstance != null)
+                {
+                    if (!playedBeginning)
+                    {
+                        //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        beginningSoundInstance.Volume = MyPlayer.soundVolume;
+                        Main.PlaySoundInstance(beginningSoundInstance);                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
+                        SyncSounds(true);
+                        playedBeginning = true;
+                    }
+                    if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
+                    {
+                        //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        punchingSoundInstance.Volume = MyPlayer.soundVolume;
+                        Main.PlaySoundInstance(punchingSoundInstance);
+                        SyncSounds(false);
+                    }
+                }
+                else
+                {
+                    //punchingSoundInstance.Play();
+                    Main.PlaySoundInstance(punchingSoundInstance);
+                    SyncSounds(false);
+                    playedBeginning = true;
+                }
+            }
+        }
+
+        public void SyncSounds(bool beginningSound)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient && Main.netMode != NetmodeID.Server)
+            {
+                if (JoJoStands.SoundsLoaded)
+                {
+                    Player player = Main.player[projectile.owner];
+                    string path = "Sounds/BattleCries/" + punchSoundName;
+                    SoundState state = punchingSoundInstance.State;
+                    if (beginningSound)
+                    {
+                        path += "_Beginning";
+                        state = beginningSoundInstance.State;
+                    }
+                    //SendSoundInstance(int sender, string soundPath, SoundState state, Vector2 pos (this one has to be sent as individual float values), float soundTravelDistance = 10f), which is the method called here
+                    JoJoStands.JoJoStandsSounds.Call("SendSoundInstance", player.whoAmI, path, state, projectile.Center.X, projectile.Center.Y, 9f);
+                }
+            }
+        }
+
+        public void StopSounds()
+        {
+            if (playedBeginning)
+            {
+                if (beginningSoundInstance != null)
+                {
+                    beginningSoundInstance.Stop();
+                    SyncSounds(true);
+                }
+                if (punchingSoundInstance != null)
+                {
+                    punchingSoundInstance.Stop();
+                    SyncSounds(false);
+                }
+                playedBeginning = false;
             }
         }
 
@@ -576,38 +604,12 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 modPlayer.standType = standType;
             }
-
-            if (punchSoundName != "" && punchingSoundInstance == null)
-            {
-                InitializeSounds();
-            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             return false;
         }
-
-        /*public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
-        {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-
-            DrawRangeIndicators(spriteBatch);       //not affected by dyes since it's starting a new batch with no effect
-
-            return true;
-        }
-
-        public SpriteEffects effects = SpriteEffects.None;
-
-        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)     //manually drawing stands cause sometimes stands had too many frames, it's easier to manage this way, and dye effects didn't work for stands that were overriding PostDraw
-        {
-            spriteBatch.End();     //ending the spriteBatch that started in PreDraw
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
-
-            SyncAndApplyDyeSlot();
-            DrawStand(spriteBatch, drawColor);
-        }*/
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
         {
@@ -706,14 +708,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             writer.Write(normalFrames);
             writer.Write(attackFrames);
             writer.Write(secondaryAbilityFrames);
-            if (beginningSoundInstance != null)
-            {
-                writer.Write((byte)beginningSoundInstance.State);
-            }
-            if (punchingSoundInstance != null)
-            {
-                writer.Write((byte)punchingSoundInstance.State);
-            }
             SendExtraStates(writer);
         }
 
@@ -722,21 +716,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             normalFrames = reader.ReadBoolean();
             attackFrames = reader.ReadBoolean();
             secondaryAbilityFrames = reader.ReadBoolean();
-
-            //Sound sync stuff
-            SoundState beginningSoundState = (SoundState)reader.ReadByte();
-            SoundState punchingSoundState = (SoundState)reader.ReadByte();
-            if (beginningSoundInstance != null || punchingSoundInstance != null)
-            {
-                if (beginningSoundState != SoundState.Stopped || punchingSoundState != SoundState.Stopped)
-                {
-                    PlayPunchSound();
-                }
-                if (beginningSoundState == SoundState.Stopped && punchingSoundState == SoundState.Stopped)
-                {
-                    StopSounds();
-                }
-            }
             ReceiveExtraStates(reader);
         }
 

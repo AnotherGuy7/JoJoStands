@@ -153,7 +153,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 }
                 if (SpecialKeyPressed() && player.HasBuff(mod.BuffType("TheWorldBuff")) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[mod.ProjectileType("RoadRoller")] == 0)
                 {
-                    if (JoJoStands.JoJoStandsSounds != null)
+                    if (JoJoStands.SoundsLoaded)
                     {
                         Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/RoadRollerDa"));
                     }

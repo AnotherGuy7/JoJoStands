@@ -34,7 +34,7 @@ namespace JoJoStands.Projectiles
             zipperLine = projectile.Center - player.Center;
             zipperLine.Normalize();
             float dist = Vector2.Distance(player.Center, projectile.Center);
-            if (!playedSound && JoJoStands.JoJoStandsSounds != null)
+            if (!playedSound && JoJoStands.SoundsLoaded)
             {
                 Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Zip"));
                 playedSound = true;

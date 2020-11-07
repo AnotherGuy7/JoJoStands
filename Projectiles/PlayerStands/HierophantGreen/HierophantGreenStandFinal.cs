@@ -1,7 +1,8 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
- 
+using Terraria.ModLoader;
+
 namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 {  
     public class HierophantGreenStandFinal : StandClass
@@ -36,6 +37,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int halfStandHeight => 25;
         public override int standOffset => 0;
         public override int standType => 2;
+        public override string poseSoundName => "ItsTheVictorWhoHasJustice";
 
         public bool spawningField = false;
         public float numberSpawned = 0;
@@ -152,6 +154,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     spawningField = true;
                     formPosition = projectile.position;
+                    if (JoJoStands.SoundsLoaded)
+                    {
+                        Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/EmeraldSplash"));
+                    }
                 }
                 if (spawningField)
                 {

@@ -36,12 +36,13 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int halfStandHeight => 25;
         public override int standOffset => 0;
         public override int standType => 2;
+        public override string poseSoundName => "ItsTheVictorWhoHasJustice";
 
-        public bool spawningField = false;
-        public float numberSpawned = 0;
-        public bool linkShot = false;
-        public bool linkShotForSpecial = false;
-        public Vector2 formPosition = Vector2.Zero;
+        private bool spawningField = false;
+        private float numberSpawned = 0;
+        private bool linkShot = false;
+        private bool linkShotForSpecial = false;
+        private Vector2 formPosition = Vector2.Zero;
 
         public override void AI()
         {
@@ -153,6 +154,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     spawningField = true;
                     formPosition = projectile.position;
+                    if (JoJoStands.SoundsLoaded)
+                    {
+                        Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/EmeraldSplash"));
+                    }
                 }
                 if (spawningField)
                 {

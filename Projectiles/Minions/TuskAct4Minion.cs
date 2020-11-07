@@ -9,6 +9,7 @@ namespace JoJoStands.Projectiles.Minions
     public class TuskAct4Minion : StandClass
     {
         public override string Texture => mod.Name + "/Projectiles/Minions/TuskAct4Minion";
+		public override string poseSoundName => "ItsBeenARoundaboutPath";
 
         public override void SetStaticDefaults()
         {
@@ -49,6 +50,7 @@ namespace JoJoStands.Projectiles.Minions
             bool target = false;
             float targetDist = 98f;
             projectile.frameCounter++;
+			modPlayer.poseSoundName = poseSoundName;
             if (player.whoAmI == Main.myPlayer && modPlayer.TuskActNumber == 4)         //Making an owner check cause tuskActNumber isn't in sync with other players, causing TA4 to die for everyone else
             {
                 projectile.timeLeft = 10;
