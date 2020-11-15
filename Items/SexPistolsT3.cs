@@ -13,7 +13,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sex Pistols (Tier 3)");
-            Tooltip.SetDefault("Use a gun and have its bullets home! Increases bullet damages by 15%\nUsed in Stand Slot");
+            Tooltip.SetDefault("Use a gun and have its bullets home! Increases bullet damages by 15%\nRight-Click to have controlled bullets go in the direction of the mouse.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -35,6 +35,17 @@ namespace JoJoStands.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("SexPistolsT2"));
             recipe.AddIngredient(ItemID.PalladiumOre, 20);
+            recipe.AddIngredient(ItemID.Topaz, 2);
+            recipe.AddIngredient(ItemID.FallenStar, 5);
+            recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
+            recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);
+            recipe.AddIngredient(ItemID.MeteorShot, 160);
+            recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("SexPistolsT2"));
+            recipe.AddIngredient(ItemID.CobaltBar, 20);
             recipe.AddIngredient(ItemID.Topaz, 2);
             recipe.AddIngredient(ItemID.FallenStar, 5);
             recipe.AddIngredient(mod.ItemType("WillToFight"), 2);

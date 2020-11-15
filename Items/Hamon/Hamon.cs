@@ -74,28 +74,14 @@ namespace JoJoStands.Items.Hamon
             return true;
         }
 
-        private int increaseCounter = 0;
-
         public override void HoldItem(Player player)
         {
-            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            ChargeHamon();
             player.waterWalk = true;
             player.waterWalk2 = true;
             if (player.statLife <= 25)
             {
                 player.AddBuff(mod.BuffType("RUUUN"), 360);
-            }
-            if (JoJoStands.SpecialHotKey.Current)
-            {
-                increaseCounter++;
-                player.velocity.X /= 3f;
-                hamonPlayer.hamonIncreaseCounter = 0;
-                Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
-            }
-            if (increaseCounter >= 30)
-            {
-                hamonPlayer.HamonCounter += 1;
-                increaseCounter = 0;
             }
         }
 

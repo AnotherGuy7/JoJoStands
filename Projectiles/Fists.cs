@@ -340,8 +340,9 @@ namespace JoJoStands.Projectiles
                     {
                         if (otherProj.type == projectile.type && projectile.owner != otherProj.owner && player.team != Main.player[otherProj.owner].team)
                         {
-                            Dust.NewDust(otherProj.position + otherProj.velocity, projectile.width, projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
-                            if (MyPlayer.Sounds)
+                            int dust = Dust.NewDust(otherProj.position + otherProj.velocity, projectile.width, projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
+                            Main.dust[dust].noGravity = false;
+                            if (MyPlayer.Sounds && Main.netMode != NetmodeID.Server)
                             {
                                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
                             }
@@ -350,8 +351,9 @@ namespace JoJoStands.Projectiles
                         {
                             otherProj.owner = projectile.owner;
                             otherProj.velocity = -otherProj.velocity * 0.4f;
-                            Dust.NewDust(otherProj.position + otherProj.velocity, projectile.width, projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
-                            if (MyPlayer.Sounds)
+                            int dust = Dust.NewDust(otherProj.position + otherProj.velocity, projectile.width, projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
+                            Main.dust[dust].noGravity = false;
+                            if (MyPlayer.Sounds && Main.netMode != NetmodeID.Server)
                             {
                                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
                             }

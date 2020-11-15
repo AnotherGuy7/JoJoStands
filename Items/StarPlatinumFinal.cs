@@ -34,7 +34,7 @@ namespace JoJoStands.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("StarPlatinumT3"));
-			recipe.AddIngredient(ItemID.ChlorophyteOre, 15);
+			recipe.AddIngredient(ItemID.Ectoplasm, 8);
 			recipe.AddIngredient(ItemID.LargeAmethyst, 1);
 			recipe.AddIngredient(ItemID.FallenStar, 7);
 			recipe.AddIngredient(mod.ItemType("RighteousLifeforce"));

@@ -26,6 +26,30 @@ namespace JoJoStands.Items.Hamon
             item.summon = false;
         }
 
+        private int increaseCounter = 0;
+
+        public void ChargeHamon()
+        {
+            Player player = Main.player[item.owner];
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            bool specialPressed = false;
+            if (!Main.dedServ)
+                specialPressed = JoJoStands.SpecialHotKey.Current;
+
+            if (specialPressed)
+            {
+                increaseCounter++;
+                player.velocity.X /= 3f;
+                hamonPlayer.hamonIncreaseCounter = 0;
+                Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
+            }
+            if (increaseCounter >= 30)
+            {
+                hamonPlayer.HamonCounter += 1;
+                increaseCounter = 0;
+            }
+        }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             // Get the vanilla damage tooltip
@@ -48,8 +72,6 @@ namespace JoJoStands.Items.Hamon
                 target.AddBuff(mod.BuffType("Sunburn"), 90);
             }
         }
-
-        private int increaseCounter = 0;
 
         // As a modder, you could also opt to make the Get overrides also sealed. Up to the modder
         public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)       //when making the base damage values, make sure they are around the 10-20's cause otherwise, at MoonLord they'd go over 250

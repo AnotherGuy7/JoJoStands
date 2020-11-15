@@ -30,6 +30,7 @@ namespace JoJoStands
         private UserInterface _tbcarrow;
         private UserInterface _bulletcounter;
         private UserInterface _aerosmithRadar;
+        private UserInterface _sexPistolsUI;
 
         internal ToBeContinued TBCarrow;
         internal HamonBarState HamonBarInterface;
@@ -37,6 +38,7 @@ namespace JoJoStands
         internal BulletCounter bulletCounter;
         internal AerosmithRadar aerosmithRadar;
         internal BetUI betUI;
+        internal SexPistolsUI sexPistolsUI;
 
         public override void Load()
         {
@@ -48,6 +50,7 @@ namespace JoJoStands
             AerosmithRadar.aerosmithRadarTexture = ModContent.GetTexture("JoJoStands/UI/AerosmithRadar");
             GoldenSpinMeter.goldenRectangleTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeter");
             GoldenSpinMeter.goldenRectangleSpinLineTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeterLine");
+            SexPistolsUI.sexPistolsUITexture = ModContent.GetTexture("JoJoStands/UI/SexPistolsUI");
             MyPlayer.standTier1List.Add(ItemType("AerosmithT1"));
             MyPlayer.standTier1List.Add(ItemType("GoldExperienceT1"));
             MyPlayer.standTier1List.Add(ItemType("HierophantGreenT1"));
@@ -110,10 +113,14 @@ namespace JoJoStands
                 GoldenSpinInterface = new GoldenSpinMeter();
                 GoldenSpinInterface.Activate();
                 _goldenSpinInterface = new UserInterface();
+                sexPistolsUI = new SexPistolsUI();
+                sexPistolsUI.Activate();
+                _sexPistolsUI = new UserInterface();
+                _sexPistolsUI.SetState(sexPistolsUI);
                 _goldenSpinInterface.SetState(GoldenSpinInterface);
 
                 //Shader Stuff
-                Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect")); // The path to the compiled shader file.
+                Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect"));      // The path to the compiled shader file.
                 Filters.Scene["TimestopEffectShader"] = new Filter(new ScreenShaderData(timestopShader, "TimestopEffectShader"), EffectPriority.VeryHigh);
                 Filters.Scene["TimestopEffectShader"].Load();
                 Ref<Effect> greyscaleShader = new Ref<Effect>(GetEffect("Effects/Greyscale"));
@@ -122,6 +129,9 @@ namespace JoJoStands
                 Ref<Effect> greenShader = new Ref<Effect>(GetEffect("Effects/GreenEffect"));
                 Filters.Scene["GreenEffect"] = new Filter(new ScreenShaderData(greenShader, "GreenEffect"), EffectPriority.VeryHigh);
                 Filters.Scene["GreenEffect"].Load();
+                Ref<Effect> redShader = new Ref<Effect>(GetEffect("Effects/RedEffect"));
+                Filters.Scene["RedEffect"] = new Filter(new ScreenShaderData(redShader, "RedEffect"), EffectPriority.VeryHigh);
+                Filters.Scene["RedEffect"].Load();
 
                 //Misc
                 AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic"), ItemType("ViralMusicBox"), TileType("ViralMusicBoxTile"));
@@ -136,6 +146,7 @@ namespace JoJoStands
             AerosmithRadar.aerosmithRadarTexture = null;
             GoldenSpinMeter.goldenRectangleTexture = null;
             GoldenSpinMeter.goldenRectangleSpinLineTexture = null;
+            SexPistolsUI.sexPistolsUITexture = null;
             SpecialHotKey = null;
             PoseHotKey = null;
             StandAutoMode = null;
@@ -178,8 +189,8 @@ namespace JoJoStands
 
         public override void PostDrawInterface(SpriteBatch spriteBatch)
         {
-            MyPlayer Mplayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            Mplayer.Draw(spriteBatch);
+            MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            mPlayer.Draw(spriteBatch);
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -207,6 +218,10 @@ namespace JoJoStands
             if (GoldenSpinMeter.Visible)
             {
                 _goldenSpinInterface.Update(gameTime);
+            }
+            if (SexPistolsUI.Visible)
+            {
+                _sexPistolsUI.Update(gameTime);
             }
         }
 
@@ -240,6 +255,10 @@ namespace JoJoStands
             if (GoldenSpinMeter.Visible)
             {
                 _goldenSpinInterface.Draw(Main.spriteBatch, new GameTime());
+            }
+            if (SexPistolsUI.Visible)
+            {
+                _sexPistolsUI.Draw(Main.spriteBatch, new GameTime());
             }
             return true;
         }

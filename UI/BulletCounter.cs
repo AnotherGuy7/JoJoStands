@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
 using Terraria.UI;
-using Terraria.UI.Chat;
 
 namespace JoJoStands.UI
 {
@@ -24,8 +21,8 @@ namespace JoJoStands.UI
             bulletCountUI = new DragableUIPanel();
             bulletCountUI.Left.Set(800f, 0f);
             bulletCountUI.Top.Set(510f, 0f);
-            bulletCountUI.Width.Set(100f, 0f);
-            bulletCountUI.Height.Set(100f, 0f);
+            bulletCountUI.Width.Set(150f, 0f);
+            bulletCountUI.Height.Set(150f, 0f);
             bulletCountUI.BackgroundColor = new Color(0, 0, 0, 0);
             bulletCountUI.BorderColor = new Color(0, 0, 0, 0);
 

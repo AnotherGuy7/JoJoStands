@@ -26,10 +26,10 @@ namespace JoJoStands.NPCs
         public bool spawnedByDeathLoop = false;
         public int deathTimer = 0;
         public Vector2 playerPositionOnSkip = Vector2.Zero;
-        public Vector2[] BtZPositions = new Vector2[999];
-        public Vector2[] foresightPosition = new Vector2[50];
-        public Rectangle[] foresightFrames = new Rectangle[50];
-        public Vector2[] foresightRotations = new Vector2[50];      //although this is a Vector2, I'm storing rotations in X and Direction in Y
+        public Vector2[] BtZPositions = new Vector2[400];
+        public Vector2[] foresightPosition = new Vector2[400];
+        public Rectangle[] foresightFrames = new Rectangle[400];
+        public Vector2[] foresightRotations = new Vector2[400];      //although this is a Vector2, I'm storing rotations in X and Direction in Y
 
         public override bool InstancePerEntity
         {
@@ -213,8 +213,8 @@ namespace JoJoStands.NPCs
             {
                 if (npc.HasBuff(mod.BuffType("AffectedByBtZ")))
                 {
-                    int b = npc.FindBuffIndex(mod.BuffType("AffectedByBtZ"));
-                    npc.DelBuff(b);
+                    int buffIndex = npc.FindBuffIndex(mod.BuffType("AffectedByBtZ"));
+                    npc.DelBuff(buffIndex);
                 }
                 BtZSaveTimer = 0;
                 indexPosition = 0;
@@ -222,7 +222,7 @@ namespace JoJoStands.NPCs
             }
             if (player.TimeSkipPreEffect)
             {
-                for (int i = 0; i < 255; i++)
+                for (int i = 0; i < Main.maxPlayers; i++)
                 {
                     if (Main.player[i].active && playerPositionOnSkip == Vector2.Zero && Main.player[i].GetModPlayer<MyPlayer>().TimeSkipPreEffect)
                     {
@@ -310,7 +310,7 @@ namespace JoJoStands.NPCs
                     foresightRotations[foresightPositionIndex].Y = npc.direction;
                     foresightPositionIndex++;       //second so that something saves in [0] and goes up from there
                     foresightPositionIndexMax++;
-                    foresightSaveTimer = 15;
+                    foresightSaveTimer = 5;
                 }
             }
             if (!player.Foresight && applyingForesightPositions)
@@ -322,7 +322,9 @@ namespace JoJoStands.NPCs
                 }
                 npc.velocity = Vector2.Zero;
                 npc.position = foresightPosition[foresightPositionIndex];
+                npc.frame = foresightFrames[foresightPositionIndex];
                 npc.rotation = foresightRotations[foresightPositionIndex].X;
+                npc.direction = (int)foresightRotations[foresightPositionIndex].Y;
                 if (foresightSaveTimer > 0)
                 {
                     foresightSaveTimer--;
@@ -330,7 +332,7 @@ namespace JoJoStands.NPCs
                 if (foresightSaveTimer <= 1)
                 {
                     foresightPositionIndex++;
-                    foresightSaveTimer = 15;
+                    foresightSaveTimer = 5;
                     if (foresightPositionIndex >= 1)
                     {
                         if (foresightPosition[foresightPositionIndex - 1] != Vector2.Zero)
@@ -354,11 +356,11 @@ namespace JoJoStands.NPCs
                     foresightPositionIndexMax = 0;
                     foresightResetIndex = false;
                 }
-                if (foresightPositionIndex >= 49)       //a failsafe to prevent Index Out of Bounds in extended multiplayer timeskips
+                /*if (foresightPositionIndex >= 49)       //a failsafe to prevent Index Out of Bounds in extended multiplayer timeskips
                 {
                     foresightPositionIndex = 0;
                     foresightPositionIndexMax = 0;
-                }
+                }*/
                 return false;
             }
             if (spawnedByDeathLoop)
@@ -432,7 +434,7 @@ namespace JoJoStands.NPCs
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if (player.Foresight || applyingForesightPositions)
             {
-                for (int i = 0; i < 50; i++)
+                for (int i = 0; i < foresightPositionIndexMax; i++)
                 {
                     SpriteEffects effects = SpriteEffects.None;
                     if (foresightRotations[i].Y == 1)

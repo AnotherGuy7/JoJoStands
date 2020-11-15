@@ -64,6 +64,7 @@ namespace JoJoStands.Items
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(mod.ItemType("DollyDaggerT1"));
 			recipe.AddIngredient(ItemID.HallowedBar, 4);
 			recipe.AddIngredient(mod.ItemType("WillToChange"), 2);
 			recipe.AddTile(mod.TileType("RemixTableTile"));

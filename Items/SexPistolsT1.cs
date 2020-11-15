@@ -8,7 +8,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sex Pistols (Tier 1)");
-            Tooltip.SetDefault("Use a gun and have its bullets home! Increases bullet damages by 5%\nUsed in Stand Slot");
+            Tooltip.SetDefault("Use a gun and have its bullets home! Increases bullet damages by 5%\nRight-Click to have controlled bullets go in the direction of the mouse.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

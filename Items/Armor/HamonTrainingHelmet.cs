@@ -33,7 +33,7 @@ namespace JoJoStands.Items.Armor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Set bonus: Faster Hamon Regen";
+			player.setBonus = "Faster Hamon Regen";
 			player.GetModPlayer<Hamon.HamonPlayer>().hamonIncreaseBonus += 1;
 		}
 

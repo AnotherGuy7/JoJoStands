@@ -3,13 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using JoJoStands.Projectiles.PlayerStands;
- 
+using Terraria.ModLoader;
+
 namespace JoJoStands.Projectiles.Minions
 {  
     public class TuskAct4Minion : StandClass
     {
         public override string Texture => mod.Name + "/Projectiles/Minions/TuskAct4Minion";
 		public override string poseSoundName => "ItsBeenARoundaboutPath";
+        public override string punchSoundName => "Tusk_Ora";
 
         public override void SetStaticDefaults()
         {
@@ -31,14 +33,15 @@ namespace JoJoStands.Projectiles.Minions
             projectile.netImportant = true;
             projectile.minionSlots = 1;
             projectile.penetrate = 1;
-            projectile.timeLeft = 1;
-            projectile.tileCollide = false; ;
+            projectile.timeLeft = 2;
+            projectile.tileCollide = false;
             projectile.ignoreWater = true;
         }
 
         public override int standType => 2;
         private readonly float shootCool = 6f;
         private int goldenRectangleEffectTimer = 256;
+        private bool playedSound = false;
 
         public override void AI()
         {
@@ -57,6 +60,13 @@ namespace JoJoStands.Projectiles.Minions
             }
             if (goldenRectangleEffectTimer >= 215)
             {
+                if (JoJoStands.SoundsLoaded && !playedSound)
+                {
+                    Terraria.Audio.LegacySoundStyle chumimiiin = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Chumimiiin");
+                    chumimiiin.WithVolume(MyPlayer.soundVolume);
+                    Main.PlaySound(chumimiiin, projectile.position);
+                    playedSound = true;
+                }
                 Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X, projectile.velocity.Y);
                 Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X - 5f, projectile.velocity.Y + 5f);
                 Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X + 5f, projectile.velocity.Y - 5f);
@@ -103,6 +113,7 @@ namespace JoJoStands.Projectiles.Minions
             {
                 attackFrames = true;
                 normalFrames = false;
+                PlayPunchSound();
                 if (projectile.ai[1] == 0f)
                 {
                     projectile.ai[1] = 1f;
@@ -146,6 +157,7 @@ namespace JoJoStands.Projectiles.Minions
                 projectile.velocity *= 0.8f;
                 projectile.direction = projectile.spriteDirection = player.direction;
                 projectile.netUpdate = true;
+                StopSounds();
             }
         }
 

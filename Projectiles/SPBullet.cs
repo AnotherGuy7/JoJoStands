@@ -30,10 +30,20 @@ namespace JoJoStands.Projectiles
             projectile.ignoreWater = true;
         }
 
+        private bool kickedBullet = false;
+
         public override void AI()
         {
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 204, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+
+            if (projectile.owner == Main.myPlayer && Main.mouseRight && !kickedBullet)
+            {
+                Vector2 direction = Main.MouseWorld - projectile.Center;
+                direction.Normalize();
+                projectile.velocity = direction * 12f;
+                kickedBullet = true;
+            }
 
             float num132 = (float)Math.Sqrt((double)(projectile.velocity.X * projectile.velocity.X + projectile.velocity.Y * projectile.velocity.Y));
             float num133 = projectile.localAI[0];

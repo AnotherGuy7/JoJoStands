@@ -35,19 +35,7 @@ namespace JoJoStands.Items.Hamon
 
         public override void HoldItem(Player player)
         {
-            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            if (JoJoStands.SpecialHotKey.Current)
-            {
-                increaseCounter++;
-                player.velocity.X /= 3f;
-                hamonPlayer.hamonIncreaseCounter = 0;
-                Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
-            }
-            if (increaseCounter >= 30)
-            {
-                hamonPlayer.HamonCounter += 1;
-                increaseCounter = 0;
-            }
+            ChargeHamon();
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)

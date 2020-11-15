@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -211,17 +212,6 @@ namespace JoJoStands
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
                     Networking.ModNetHandler.playerSync.SendStandAutoMode(256, player.whoAmI, true, player.whoAmI);
-                }
-            }
-            if (!player.HasBuff(mod.BuffType("AbilityCooldown")) && player.ownedProjectileCounts[mod.ProjectileType("SheerHeartAttack")] == 0)
-            {
-                if (JoJoStands.SpecialHotKey.JustPressed && StandSlot.Item.type == mod.ItemType("KillerQueenT3"))       //KQ Tier 3 Sheer Heart Attack spawning
-                {
-                    Projectile.NewProjectile(player.position.X + 10f * player.direction, player.position.Y, 0f, 0f, mod.ProjectileType("SheerHeartAttack"), 1, 0f, Main.myPlayer, 0f);
-                }
-                if (JoJoStands.SpecialHotKey.JustPressed && StandSlot.Item.type == mod.ItemType("KillerQueenFinal"))    //KQ Final Tier Sheer Heart Attack spawning
-                {
-                    Projectile.NewProjectile(player.position.X + 10f * player.direction, player.position.Y, 0f, 0f, mod.ProjectileType("SheerHeartAttack"), 1, 0f, Main.myPlayer, 1f);
                 }
             }
             if (JoJoStands.PoseHotKey.JustPressed && !poseMode)
@@ -447,7 +437,7 @@ namespace JoJoStands
             {
                 shadowDodgeCooldownTimer--;
             }
-            if (!Main.dedServ)      //if (this isn't the (dedicated server)) cause shaders don't exist serverside
+            if (!Main.dedServ)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside
             {
                 if (TimestopEffectDurationTimer > 0)
                 {
@@ -490,6 +480,10 @@ namespace JoJoStands
                     {
                         Filters.Scene["TimestopEffectShader"].Deactivate();
                     }
+                    if (Filters.Scene["RedEffect"].IsActive())
+                    {
+                        Filters.Scene["RedEffect"].Deactivate();
+                    }
                     if (player.HasBuff(mod.BuffType("TheWorldBuff")))
                     {
                         player.ClearBuff(mod.BuffType("TheWorldBuff"));
@@ -510,6 +504,17 @@ namespace JoJoStands
                 if (!BackToZero && Filters.Scene["GreenEffect"].IsActive())
                 {
                     Filters.Scene["GreenEffect"].Deactivate();
+                }
+                if (Foresight)
+                {
+                    if (!Filters.Scene["RedEffect"].IsActive())
+                    {
+                        Filters.Scene.Activate("RedEffect");
+                    }
+                }
+                if (!Foresight && Filters.Scene["RedEffect"].IsActive())
+                {
+                    Filters.Scene["RedEffect"].Deactivate();
                 }
             }
             if (controllingAerosmith)
@@ -627,6 +632,7 @@ namespace JoJoStands
 
             if (sexPistolsTier != 0)        //sex pistols reload stuff
             {
+                UI.SexPistolsUI.Visible = true;
                 if (sexPistolsLeft < 6)
                 {
                     sexPistolsRecoveryTimer += sexPistolsTier;
@@ -636,6 +642,10 @@ namespace JoJoStands
                         sexPistolsRecoveryTimer = 0;
                     }
                 }
+            }
+            else
+            {
+                UI.SexPistolsUI.Visible = false;
             }
 
             if (equippedTuskAct != 0 && player.whoAmI == Main.myPlayer)     //Tusk stuff
@@ -1525,6 +1535,11 @@ namespace JoJoStands
                 if (drawPlayer.direction == 1)
                 {
                     effects = SpriteEffects.None;
+                }
+                if (modPlayer.StandDyeSlot.Item.dye != 0)
+                {
+                    ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(modPlayer.StandDyeSlot.Item.type);
+                    shader.Apply(null);
                 }
                 DrawData data = new DrawData(texture, new Vector2(drawX, drawY - 9f), drawPlayer.bodyFrame, Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 Main.playerDrawData.Add(data);

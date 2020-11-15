@@ -34,11 +34,11 @@ namespace JoJoStands.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("StarPlatinumT2"));
-			recipe.AddIngredient(ItemID.Hellstone, 20);
-			recipe.AddIngredient(ItemID.Amethyst, 2);
-			recipe.AddIngredient(ItemID.FallenStar, 5);
+			recipe.AddIngredient(ItemID.HallowedBar, 14);
+			recipe.AddIngredient(ItemID.Amethyst, 4);
+			recipe.AddIngredient(ItemID.FallenStar, 6);
 			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
-			recipe.AddIngredient(mod.ItemType("WillToProtect"), 4);
+			recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);
 			recipe.AddTile(mod.TileType("RemixTableTile"));
 			recipe.SetResult(this);
 			recipe.AddRecipe();

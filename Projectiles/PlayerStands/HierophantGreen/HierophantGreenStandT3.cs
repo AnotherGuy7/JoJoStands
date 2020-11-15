@@ -1,7 +1,8 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
- 
+using Terraria.ModLoader;
+
 namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 {  
     public class HierophantGreenStandT3 : StandClass

@@ -41,6 +41,13 @@ namespace JoJoStands.Items
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("TheHandT2"));
+            recipe.AddIngredient(ItemID.AdamantiteBar, 18);
+            recipe.AddIngredient(mod.ItemType("WillToDestroy"), 2);
+            recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }

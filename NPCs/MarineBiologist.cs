@@ -80,13 +80,21 @@ namespace JoJoStands.NPCs
                 {
                     Main.npcChatText = "Ah, 20m Emerald Splash. The Old Man told me that my old friend used it during our fight against DIO. It sets up multiple tripwires around the player, covering about 30 tiles but at the cost of not being able to normally use your Hierophant Green.";
                 }
-                if (mPlayer.StandSlot.Item.type == mod.ItemType("TheWorldT1") || mPlayer.StandSlot.Item.type == mod.ItemType("TheWorldT2"))
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("TheWorldT1"))
                 {
                     Main.npcChatText = "...Get that thing away from me... Well, I guess I could tell you a bit about it, considering it's the same type of stand as my Star Platinum, but I won't enjoy it. \nIn its first tier, I would guess that The World would just be able to punch, like Star Platinum, while getting stronger and faster in its second. Talk to me again when it's a bit stronger.";
                 }
-                if (mPlayer.StandSlot.Item.type == mod.ItemType("TheWorldT3") || mPlayer.StandSlot.Item.type == mod.ItemType("TheWorldFinal"))
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("TheWorldT2"))
                 {
-                    Main.npcChatText = "When The World reaches its third tier, I would assume that it learns its signature ability Time Stop, although I'm not sure why it doesn't learn it sooner. Use your special key to activate it. \nAt its fourth tier, The World learns the ability to throw deadly knives. I'm pretty sure those monsters outside aren't smart enough to hide Shonen Jump underneath their clothes, so the knives are pretty effective.";
+                    Main.npcChatText = "Now that your The World got a bit stronger, I would assume that it learned its signature ability Time Stop, although I'm not sure why it doesn't learn it sooner. Use your special key to activate it.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("TheWorldT3"))
+                {
+                    Main.npcChatText = "Now that The World is at its third tier, The World can to throw deadly knives. I'm pretty sure those monsters outside aren't smart enough to hide Shonen Jump underneath their clothes, so the knives are pretty effective.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("TheWorldFinal"))
+                {
+                    Main.npcChatText = "Now this is The World I remember. You have fully learned The World's extents, and can now stop time for 9 seconds while throwing flurrys of knives at your enemies. You can even throw Road Rollers at your enemies while time is stopped too! Do me a favor and stay away from me.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("KillerQueenT1") || mPlayer.StandSlot.Item.type == mod.ItemType("KillerQueenT2"))
                 {
