@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
@@ -14,6 +15,7 @@ namespace JoJoStands.Buffs.Debuffs
         }
 
         private bool oneTimeEffectsApplied = false;
+        private float savedVelocityX = -1f;
 
         public override void Update(Player player, ref int buffIndex)
         {
@@ -34,12 +36,20 @@ namespace JoJoStands.Buffs.Debuffs
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            npc.lifeRegen = -250;
-            npc.velocity.X *= 0.8f;
+            if (savedVelocityX == -1f)
+            {
+                savedVelocityX = Math.Abs(npc.velocity.X) / 2f;
+            }
             if (!oneTimeEffectsApplied)
             {
                 npc.defense = (int)(npc.defense * 0.2f);
                 oneTimeEffectsApplied = true;
+            }
+
+            npc.lifeRegen = -250;
+            if (Math.Abs(npc.velocity.X) > savedVelocityX)
+            {
+                npc.velocity.X *= 0.8f;
             }
             if (modPlayer.gratefulDeadTier == 3)
             {

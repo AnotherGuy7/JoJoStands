@@ -21,11 +21,6 @@ namespace JoJoStands.Projectiles
             projectile.ignoreWater = true;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
-        {
-            projectile.Kill();
-        }
-
         public override void AI()
         {
             if (projectile.ai[0] == 0f)
@@ -44,6 +39,11 @@ namespace JoJoStands.Projectiles
             {
                 projectile.ai[0] = 0f;
             }
+        }
+
+        public override void OnHitPlayer(Player target, int damage, bool crit)
+        {
+            projectile.Kill();
         }
     }
 }

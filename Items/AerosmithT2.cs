@@ -35,7 +35,6 @@ namespace JoJoStands.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("AerosmithT1"));
             recipe.AddIngredient(ItemID.Hellstone, 18);
-            recipe.AddIngredient(ItemID.SoulofFlight, 3);
             recipe.AddIngredient(mod.ItemType("WillToFight"));
             recipe.AddIngredient(mod.ItemType("WillToProtect"));
             recipe.AddTile(mod.TileType("RemixTableTile"));

@@ -7,6 +7,7 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class Zipped : ModBuff
     {
+        private Vector2 savedVelocity = Vector2.Zero;
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Zipped!");
@@ -28,14 +29,38 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
+            if (savedVelocity == Vector2.Zero)
+            {
+                savedVelocity = npc.velocity * 0.5f;
+            }
+
             if (npc.lifeRegen > 0)
             {
                 npc.lifeRegen = 0;
             }
-            Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f, 0, default(Color), 2);
+            Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f, 0, Scale: 2f);
             npc.lifeRegenExpectedLossPerSecond = 20;
             npc.lifeRegen -= 60;
-            npc.velocity *= 0.9975f;    //Because of how often this code runs we need to apply a very small 
+
+            if (npc.velocity.X > savedVelocity.X)
+            {
+                npc.velocity.X = savedVelocity.X;
+            }
+            if (npc.velocity.X < -savedVelocity.X)
+            {
+                npc.velocity.X = -savedVelocity.X;
+            }
+            if (npc.noGravity)
+            {
+                if (npc.velocity.Y > savedVelocity.X)
+                {
+                    npc.velocity.Y = savedVelocity.Y;
+                }
+                if (npc.velocity.Y < -savedVelocity.X)
+                {
+                    npc.velocity.Y = -savedVelocity.Y;
+                }
+            }
         }
     }
 }

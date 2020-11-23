@@ -64,7 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                 if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer)
                 {
                     Main.mouseLeft = false;
-                    int proj = Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("GEFrog"), 1, 0f, Main.myPlayer, tierNumber, tierNumber - 1f);
+                    int proj = Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("GEFrog"), 1, 0f, projectile.owner, tierNumber, tierNumber - 1f);
                     Main.projectile[proj].netUpdate = true;
                     player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(6));
                 }

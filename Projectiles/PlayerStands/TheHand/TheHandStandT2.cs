@@ -1,10 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,12 +9,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 {
     public class TheHandStandT2 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
-        }
-
         public override float maxDistance => 98f;
         public override float maxAltDistance => 245f;
         public override int punchDamage => 34;
@@ -25,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override int punchTime => 12;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 7f;
-		public override string poseSoundName => "NobodyCanFoolMeTwice";
+        public override string poseSoundName => "NobodyCanFoolMeTwice";
 
         private int updateTimer = 0;
         private bool scrapeFrames = false;

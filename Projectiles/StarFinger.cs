@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles
@@ -19,7 +20,7 @@ namespace JoJoStands.Projectiles
             projectile.ignoreWater = true;
         }
 
-        public Projectile ownerProj;
+        private Projectile ownerProj;
         private bool living = true;
         private bool playedSound = false;
 
@@ -32,6 +33,11 @@ namespace JoJoStands.Projectiles
                 playedSound = true;
             }
             ownerProj = Main.projectile[(int)projectile.ai[0]];
+            if (Main.player[projectile.owner].dead || !ownerProj.active)
+            {
+                projectile.Kill();
+                return;
+            }
             float direction = ownerProj.Center.X - projectile.Center.X;
             if (direction > 0)
             {
@@ -46,11 +52,6 @@ namespace JoJoStands.Projectiles
             //projectile.spriteDirection = projectile.direction;
             Vector2 rota = ownerProj.Center - projectile.Center;
             projectile.rotation = (-rota).ToRotation();
-            if (Main.player[projectile.owner].dead || !ownerProj.active)
-            {
-                projectile.Kill();
-                return;
-            }
             if (projectile.alpha == 0)
             {
                 if (projectile.position.X + (float)(projectile.width / 2) > ownerProj.position.X + (float)(ownerProj.width / 2))
@@ -106,7 +107,8 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        public Vector2 offset;
+        private Vector2 offset;
+        private Texture2D starFingerPartTexture;
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
@@ -118,14 +120,17 @@ namespace JoJoStands.Projectiles
             {
                 offset = new Vector2(-31f, -2f);
             }
+            if (Main.netMode != NetmodeID.Server)
+                starFingerPartTexture = mod.GetTexture("Projectiles/StarFingerPart");
+
             Vector2 linkCenter = ownerProj.Center + offset;
             Vector2 center = projectile.Center;
             float rotation = (linkCenter - center).ToRotation();
-            Texture2D texture = mod.GetTexture("Projectiles/StarFingerPart");
-            for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / texture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
+
+            for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / starFingerPartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(texture, pos, new Rectangle(0, 0, texture.Width, texture.Height), lightColor, rotation, new Vector2(texture.Width * 0.5f, texture.Height * 0.5f), projectile.scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(starFingerPartTexture, pos, new Rectangle(0, 0, starFingerPartTexture.Width, starFingerPartTexture.Height), lightColor, rotation, new Vector2(starFingerPartTexture.Width * 0.5f, starFingerPartTexture.Height * 0.5f), projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

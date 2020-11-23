@@ -8,13 +8,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 {
     public class TheWorldStandT3 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
-        }
-
-
         public override int punchDamage => 68;
         public override int altDamage => 47;
         public override int punchTime => 9;
@@ -143,11 +136,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                             Vector2 perturbedSpeed = new Vector2(shootVel.X, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotationk, rotationk, i / (numberKnives - 1))) * .2f;
                             int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Knife"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, player.whoAmI);
                             Main.projectile[proj].netUpdate = true;
+                            player.ConsumeItem(mod.ItemType("Knife"));
                             projectile.netUpdate = true;
                         }
-                        player.ConsumeItem(mod.ItemType("Knife"));
-                        player.ConsumeItem(mod.ItemType("Knife"));
-                        player.ConsumeItem(mod.ItemType("Knife"));
                     }
                 }
             }

@@ -696,7 +696,7 @@ namespace JoJoStands
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         Main.PlaySound(SoundID.Item67);
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();      //to normalize is to turn it into an angle
+                        shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
                         shootVelocity *= 30f;       //multiply the angle by the speed to get the effect
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts), 4f, Main.myPlayer);
                     }
@@ -726,14 +726,15 @@ namespace JoJoStands
                         shootVelocity *= 4f;
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * standDamageBoosts), 6f, Main.myPlayer);
                     }
-                    if (Main.mouseRight && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0 && tuskShootCooldown <= 0)
+                    if (Main.mouseRight && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
                     {
                         tuskShootCooldown += 120 - standSpeedBoosts;
                         Main.PlaySound(SoundID.Item78);
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 5f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 0, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 210, 8f, Main.myPlayer);
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(15));
                     }
                 }
                 if (TuskActNumber == 4)
@@ -748,7 +749,7 @@ namespace JoJoStands
                         shootVelocity *= 60f;
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(305 * standDamageBoosts), 7f, Main.myPlayer);
                     }
-                    if (Main.mouseRight && tuskShootCooldown <= 0)
+                    if (Main.mouseRight && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
                     {
                         tuskShootCooldown += 120 - standSpeedBoosts;
                         Main.PlaySound(SoundID.Item78);
@@ -756,7 +757,12 @@ namespace JoJoStands
                         shootVelocity.Normalize();
                         shootVelocity *= 30f;
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, Main.myPlayer);
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(10));
                     }
+                }
+                if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] > 0)
+                {
+                    tuskShootCooldown = 30;
                 }
             }
 
@@ -1279,6 +1285,15 @@ namespace JoJoStands
             }
         }
 
+        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        {
+            if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)       //that 1 last frame before you completely die
         {
             if (player.whoAmI == Main.myPlayer)
@@ -1377,7 +1392,7 @@ namespace JoJoStands
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && drawPlayer.velocity.X == 0f && drawPlayer.velocity.Y == 0f && modPlayer.poseMode)
+            if (drawPlayer.active && drawPlayer.velocity == Vector2.Zero && modPlayer.poseMode)
             {
                 Texture2D texture = mod.GetTexture("Extras/Menacing");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
@@ -1432,7 +1447,7 @@ namespace JoJoStands
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             Items.Hamon.HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<Items.Hamon.HamonPlayer>();
             SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && hamonPlayer.HamonCounter >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity.X == 0f && drawPlayer.velocity.Y == 0f)
+            if (drawPlayer.active && hamonPlayer.HamonCounter >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
             {
                 Texture2D texture = mod.GetTexture("Extras/HamonChargeI");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
@@ -1611,7 +1626,7 @@ namespace JoJoStands
                 Vector2 offset = new Vector2(0f, 12f);
                 Vector2 pos = new Vector2(drawX, drawY) + offset;
 
-                DrawData data = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White , 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                DrawData data = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 Main.playerDrawData.Add(data);
             }
         });
@@ -1668,8 +1683,8 @@ namespace JoJoStands
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomChestplate_Arms_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-			    float drawX = (int)drawInfo.position.X + drawPlayer.width / 2;
-			    float drawY = (int)drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
+                float drawX = (int)drawInfo.position.X + drawPlayer.width / 2;
+                float drawY = (int)drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
                 Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
 
                 DrawData data = new DrawData(texture, position, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, drawInfo.bodyOrigin, 1f, drawInfo.spriteEffects, 0);
@@ -1729,6 +1744,14 @@ namespace JoJoStands
                 PhantomChestplateGlowmask.visible = phantomChestplateEquipped;
                 PhantomArmsGlowmask.visible = phantomChestplateEquipped;
                 PhantomLeggingsGlowmask.visible = phantomLeggingsEquipped;
+
+                if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] != 0)
+                {
+                    for (int i = 0; i < layers.Count; i++)
+                    {
+                        layers[i].visible = false;
+                    }
+                }
             }
 
             int headLayer = layers.FindIndex(l => l == PlayerLayer.Head);       //Finding the head layer then as long as it exists we insert the armor over it

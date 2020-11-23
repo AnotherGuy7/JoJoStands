@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, Main.myPlayer, fistWhoAmI);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }

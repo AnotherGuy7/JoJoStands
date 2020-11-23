@@ -40,7 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual int standOffset { get; } = 60;            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
         //public virtual int standYOffset { get; } = 0;
         public virtual float tierNumber { get; }
-        public virtual float punchKnockback { get; } = 4f;
+        public virtual float punchKnockback { get; } = 3f;
         public virtual string punchSoundName { get; } = "";
         public virtual string poseSoundName { get; } = "";
         public virtual int standType { get; } = 0;
@@ -168,7 +168,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 shootVel.Normalize();
                 shootVel *= shootSpeed;
-                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, 2f, Main.myPlayer, fistWhoAmI, tierNumber);
+                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
                 Main.projectile[proj].netUpdate = true;
                 projectile.netUpdate = true;
             }
@@ -313,7 +313,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         {
                             shootVel *= shootSpeed;
                         }
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)((punchDamage * modPlayer.standDamageBoosts) * 0.9f), punchKnockback, Main.myPlayer, fistWhoAmI, tierNumber);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }
@@ -421,7 +421,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 shootVel *= shootSpeed;
                             }
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), 3f, Main.myPlayer, fistWhoAmI, tierNumber);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -470,7 +470,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 shootVel.Y -= projectile.Distance(targetPos) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
                             }
-                            int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * modPlayer.standDamageBoosts) * 0.9f), 2f, Main.myPlayer, projectile.whoAmI, tierNumber);
+                            int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * modPlayer.standDamageBoosts) * 0.9f), 2f, projectile.owner, projectile.whoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -524,7 +524,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                         //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
                         beginningSoundInstance.Volume = MyPlayer.soundVolume;
                         Main.PlaySoundInstance(beginningSoundInstance);                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
-                        SyncSounds(true);
                         playedBeginning = true;
                     }
                     if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
@@ -532,35 +531,30 @@ namespace JoJoStands.Projectiles.PlayerStands
                         //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
                         punchingSoundInstance.Volume = MyPlayer.soundVolume;
                         Main.PlaySoundInstance(punchingSoundInstance);
-                        SyncSounds(false);
+                        SyncSounds();
                     }
                 }
                 else
                 {
                     //punchingSoundInstance.Play();
                     Main.PlaySoundInstance(punchingSoundInstance);
-                    SyncSounds(false);
+                    SyncSounds();
                     playedBeginning = true;
                 }
             }
         }
 
-        public void SyncSounds(bool beginningSound)
+        public void SyncSounds()
         {
-            if (Main.netMode == NetmodeID.MultiplayerClient && Main.netMode != NetmodeID.Server)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                if (JoJoStands.SoundsLoaded)
+                if (JoJoStands.SoundsLoaded && punchingSoundInstance != null)
                 {
                     Player player = Main.player[projectile.owner];
                     string path = "Sounds/BattleCries/" + punchSoundName;
                     SoundState state = punchingSoundInstance.State;
-                    if (beginningSound)
-                    {
-                        path += "_Beginning";
-                        state = beginningSoundInstance.State;
-                    }
                     //SendSoundInstance(int sender, string soundPath, SoundState state, Vector2 pos (this one has to be sent as individual float values), float soundTravelDistance = 10f), which is the method called here
-                    JoJoStands.JoJoStandsSounds.Call("SendSoundInstance", player.whoAmI, path, state, projectile.Center.X, projectile.Center.Y, 9f);
+                    JoJoStands.JoJoStandsSounds.Call("SendSoundInstance", player.whoAmI, path, state, projectile.Center.X, projectile.Center.Y, 40);
                 }
             }
         }
@@ -572,12 +566,12 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (beginningSoundInstance != null)
                 {
                     beginningSoundInstance.Stop();
-                    SyncSounds(true);
+                    SyncSounds();
                 }
                 if (punchingSoundInstance != null)
                 {
                     punchingSoundInstance.Stop();
-                    SyncSounds(false);
+                    SyncSounds();
                 }
                 playedBeginning = false;
             }

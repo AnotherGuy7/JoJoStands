@@ -10,12 +10,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 {
     public class TheHandStandFinal : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
-        }
-
         public override float maxDistance => 98f;
         public override float maxAltDistance => 490f;
         public override int standType => 1;

@@ -99,10 +99,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     if (timeAfterTouch <= 0 && touchedTile)
                     {
                         secondaryAbilityFrames = true;
-                        int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, Main.myPlayer);
-                        Main.projectile[projectile].friendly = true;
-                        Main.projectile[projectile].timeLeft = 2;
-                        Main.projectile[projectile].netUpdate = true;
+                        int bomb = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, projectile.owner);
+                        Main.projectile[bomb].friendly = true;
+                        Main.projectile[bomb].timeLeft = 2;
+                        Main.projectile[bomb].netUpdate = true;
                         touchedTile = false;
                         savedPosition = Vector2.Zero;
                     }
@@ -113,7 +113,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 }
                 if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("SheerHeartAttack")] == 0)
                 {
-                    Projectile.NewProjectile(projectile.position.X + 10f * projectile.direction, projectile.position.Y, 0f, 0f, mod.ProjectileType("SheerHeartAttack"), 1, 0f, Main.myPlayer, 0f);
+                    Projectile.NewProjectile(projectile.position.X + 10f * projectile.direction, projectile.position.Y, 0f, 0f, mod.ProjectileType("SheerHeartAttack"), 1, 0f, projectile.owner, 0f);
                 }
             }
             if (modPlayer.StandAutoMode)
@@ -181,7 +181,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     }
                     if (explosionTimer >= 90)
                     {
-                        int bomb = Projectile.NewProjectile(savedTarget.position, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 3f, Main.myPlayer);
+                        int bomb = Projectile.NewProjectile(savedTarget.position, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 3f, projectile.owner);
                         Main.projectile[bomb].timeLeft = 2;
                         Main.projectile[bomb].netUpdate = true;
                         explosionTimer = 0;
@@ -219,7 +219,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             {
                                 shootVel *= shootSpeed;
                             }
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), 3f, Main.myPlayer, fistWhoAmI, tierNumber);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), 3f, projectile.owner, fistWhoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -242,10 +242,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     npcDistance = Vector2.Distance(Main.npc[i].Center, savedPosition);
                     if (npcDistance < 50f && touchedTile)       //or youd need to go from its center, add half its width to the direction its facing, and then add 16 (also with direction) -- Direwolf
                     {
-                        int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, Main.myPlayer);
-                        Main.projectile[projectile].friendly = true;
-                        Main.projectile[projectile].timeLeft = 2;
-                        Main.projectile[projectile].netUpdate = true;
+                        int bomb = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, projectile.owner);
+                        Main.projectile[bomb].friendly = true;
+                        Main.projectile[bomb].timeLeft = 2;
+                        Main.projectile[bomb].netUpdate = true;
                         touchedTile = false;
                         savedPosition = Vector2.Zero;
                     }

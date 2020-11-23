@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
@@ -15,6 +16,7 @@ namespace JoJoStands.Buffs.Debuffs
 
         private bool oneTimeEffectsApplied = false;
         private int damageMultiplication = 1;
+        private float savedVelocityX = -1f;
 
         public override void Update(Player player, ref int buffIndex)
         {
@@ -26,7 +28,7 @@ namespace JoJoStands.Buffs.Debuffs
                 }
                 player.lifeRegenTime = 120;
                 player.lifeRegen -= 4 * damageMultiplication;
-                player.moveSpeed *= 0.8f;
+                player.moveSpeed *= 0.94f;
                 player.meleeDamage *= 0.75f;
                 player.rangedDamage *= 0.75f;
                 player.magicDamage *= 0.75f;
@@ -56,6 +58,11 @@ namespace JoJoStands.Buffs.Debuffs
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            if (savedVelocityX == -1)
+            {
+                savedVelocityX = Math.Abs(npc.velocity.X) / modPlayer.gratefulDeadTier;
+            }
+
             if (npc.boss)
             {
                 npc.lifeRegen = -2 * damageMultiplication;
@@ -68,7 +75,10 @@ namespace JoJoStands.Buffs.Debuffs
             else
             {
                 npc.lifeRegen = -4 * damageMultiplication;
-                npc.velocity.X *= 0.9f;
+                if (Math.Abs(npc.velocity.X) > savedVelocityX)
+                {
+                    npc.velocity.X *= 0.9f;
+                }
                 if (!oneTimeEffectsApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.9f);
@@ -93,10 +103,13 @@ namespace JoJoStands.Buffs.Debuffs
                 damageMultiplication = 3;
             }
 
+            if (Math.Abs(npc.velocity.X) > savedVelocityX)
+            {
+                npc.velocity.X *= 0.9f;
+            }
             if (modPlayer.gratefulDeadTier == 2)
             {
                 npc.lifeRegen = -4 * damageMultiplication;
-                npc.velocity.X *= 0.8f;
                 if (!oneTimeEffectsApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.8f);
@@ -106,7 +119,6 @@ namespace JoJoStands.Buffs.Debuffs
             if (modPlayer.gratefulDeadTier == 3)
             {
                 npc.lifeRegen = -8 * damageMultiplication;
-                npc.velocity.X *= 0.6f;
                 if (!oneTimeEffectsApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.6f);
@@ -116,7 +128,6 @@ namespace JoJoStands.Buffs.Debuffs
             if (modPlayer.gratefulDeadTier == 4)
             {
                 npc.lifeRegen = -16 * damageMultiplication;
-                npc.velocity.X *= 0.4f;
                 if (!oneTimeEffectsApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.4f);

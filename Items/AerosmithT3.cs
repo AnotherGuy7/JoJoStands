@@ -34,11 +34,11 @@ namespace JoJoStands.Items
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("AerosmithT2"));
+            recipe.AddIngredient(ItemID.Radar);
             recipe.AddIngredient(ItemID.HallowedBar, 10);
-            recipe.AddIngredient(ItemID.SoulofFlight, 3);
+            recipe.AddIngredient(ItemID.SoulofFlight, 8);
             recipe.AddIngredient(mod.ItemType("WillToFight"));
             recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);
-            recipe.AddIngredient(ItemID.Radar);
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -28,12 +28,12 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            target.AddBuff(mod.BuffType("Spin"), 999999999, true);
+            target.AddBuff(mod.BuffType("Spin"), 60);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(mod.BuffType("Spin"), 999999999, true);
+            target.AddBuff(mod.BuffType("Spin"), 60);
         }
 
         public override void AI()

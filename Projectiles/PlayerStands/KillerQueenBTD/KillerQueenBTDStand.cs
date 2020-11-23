@@ -94,7 +94,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, Main.myPlayer, 1f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, projectile.owner, 1f, projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -184,7 +184,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, Main.myPlayer, 0f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, projectile.owner, 0f, projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }

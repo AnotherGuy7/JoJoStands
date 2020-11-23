@@ -30,11 +30,13 @@ namespace JoJoStands.Items.Accessories
         {
             return true;
         }
+
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
             {
-                Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("ViralPearl"), 0, 0f);
+                int proj = Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("ViralPearl"), 0, 0f);
+                Main.projectile[proj].netUpdate = true;
                 item.TurnToAir();
             }
             else

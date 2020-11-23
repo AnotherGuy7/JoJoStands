@@ -7,31 +7,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 {  
     public class HierophantGreenStandFinal : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[projectile.type] = 9;
-            Main.projPet[projectile.type] = true;
-            ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
-            ProjectileID.Sets.Homing[projectile.type] = true;
-            ProjectileID.Sets.LightPet[projectile.type] = true;
-            Main.projPet[projectile.type] = true;
-        }
-
-        public override void SetDefaults()
-        {
-            projectile.netImportant = true;
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.friendly = true;
-            projectile.minion = true;
-            projectile.netImportant = true;
-            projectile.minionSlots = 1;
-            projectile.penetrate = 1;
-            projectile.timeLeft = 0;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-        }
-
         public override int shootTime => 15;
         public override int projectileDamage => 72;
         public override int halfStandHeight => 25;
@@ -39,11 +14,11 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int standType => 2;
         public override string poseSoundName => "ItsTheVictorWhoHasJustice";
 
-        public bool spawningField = false;
-        public float numberSpawned = 0;
-        public bool linkShot = false;
-        public bool linkShotForSpecial = false;
-        public Vector2 formPosition = Vector2.Zero;
+        private bool spawningField = false;
+        private float numberSpawned = 0;
+        private bool linkShot = false;
+        private bool linkShotForSpecial = false;
+        private Vector2 formPosition = Vector2.Zero;
 
         public override void AI()
         {

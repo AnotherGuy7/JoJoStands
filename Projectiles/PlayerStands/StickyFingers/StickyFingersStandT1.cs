@@ -1,22 +1,10 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 {
     public class StickyFingersStandT1 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
-        }
-
         public override int punchDamage => 15;
         public override int punchTime => 12;
         public override int halfStandHeight => 39;
@@ -24,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override float tierNumber => 1f;
         public override int standType => 1;
         public override string punchSoundName => "Ari";
-		public override string poseSoundName => "Arrivederci";
+        public override string poseSoundName => "Arrivederci";
 
         public int updateTimer = 0;
 

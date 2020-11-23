@@ -35,9 +35,9 @@ namespace JoJoStands.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("AerosmithT3"));
             recipe.AddIngredient(ItemID.ShroomiteBar, 10);
+            recipe.AddIngredient(ItemID.MartianConduitPlating, 75);
             recipe.AddIngredient(mod.ItemType("CaringLifeforce"));
             recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);
-            recipe.AddIngredient(ItemID.MartianConduitPlating, 75);
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();

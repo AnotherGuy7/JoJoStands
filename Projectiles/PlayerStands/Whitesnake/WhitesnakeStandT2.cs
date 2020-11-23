@@ -1,11 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
@@ -18,9 +13,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override float fistWhoAmI => 9f;
         public override int standType => 1;
         public override float maxDistance => 147f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
-		public override string poseSoundName => "YouWereTwoSecondsTooLate";
+        public override string poseSoundName => "YouWereTwoSecondsTooLate";
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
 
         public override void AI()
         {
@@ -73,7 +68,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         }
                         shootVel.Normalize();
                         shootVel *= 8f;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                         secondaryAbilityFrames = false;

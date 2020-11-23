@@ -26,7 +26,7 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[projectile.owner];
             Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
             hamonLossCounter++;
-            if (projectile.timeLeft <= 550 && Main.mouseRight && hamonPlayer.HamonCounter >= 1)
+            if (projectile.timeLeft <= 550 && Main.mouseRight && hamonPlayer.HamonCounter >= 1 && player.whoAmI == Main.myPlayer)
             {
                 beingControlled = true;
             }
@@ -34,9 +34,12 @@ namespace JoJoStands.Projectiles
             {
                 hamonLossCounter++;
                 if (projectile.owner == Main.myPlayer)
-                projectile.velocity = Main.MouseWorld - projectile.Center;
-                projectile.velocity.Normalize();
-                projectile.velocity *= 10f;
+                {
+                    projectile.velocity = Main.MouseWorld - projectile.Center;
+                    projectile.velocity.Normalize();
+                    projectile.velocity *= 10f;
+                }
+                projectile.netUpdate = true;
             }
             if (hamonLossCounter >= 120)
             {

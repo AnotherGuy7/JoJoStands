@@ -7,31 +7,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 {  
     public class HierophantGreenStandT3 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[projectile.type] = 9;
-            Main.projPet[projectile.type] = true;
-            ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
-            ProjectileID.Sets.Homing[projectile.type] = true;
-            ProjectileID.Sets.LightPet[projectile.type] = true;
-            Main.projPet[projectile.type] = true;
-        }
-
-        public override void SetDefaults()
-        {
-            projectile.netImportant = true;
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.friendly = true;
-            projectile.minion = true;
-            projectile.netImportant = true;
-            projectile.minionSlots = 1;
-            projectile.penetrate = 1;
-            projectile.timeLeft = 0;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-        }
-
         public override int shootTime => 20;
         public override int projectileDamage => 56;
         public override int halfStandHeight => 25;

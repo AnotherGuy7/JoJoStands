@@ -46,7 +46,7 @@ namespace JoJoStands.Projectiles
                         projectile.frameCounter = 0;
                         if (projectile.frame >= 5)
                         {
-                            int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 3f, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, Main.myPlayer, projectile.whoAmI);
+                            int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 3f, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, projectile.owner, projectile.whoAmI);
                             Main.projectile[drip].netUpdate = true;
                             projectile.netUpdate = true;
                             projectile.frame = 1;
@@ -60,7 +60,7 @@ namespace JoJoStands.Projectiles
                     projectile.rotation = MathHelper.ToRadians(270f);
                     if (dripTimer >= 90)
                     {
-                        int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, Main.myPlayer, projectile.whoAmI);
+                        int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, projectile.owner, projectile.whoAmI);
                         Main.projectile[drip].netUpdate = true;
                         projectile.netUpdate = true;
                         dripTimer = 0;
@@ -77,7 +77,7 @@ namespace JoJoStands.Projectiles
                     projectile.rotation = MathHelper.ToRadians(90f);
                     if (dripTimer >= 90)
                     {
-                        int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, Main.myPlayer, projectile.whoAmI);
+                        int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, projectile.owner, projectile.whoAmI);
                         Main.projectile[drip].netUpdate = true;
                         projectile.netUpdate = true;
                         dripTimer = 0;

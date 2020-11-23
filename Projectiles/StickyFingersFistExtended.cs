@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -25,6 +26,11 @@ namespace JoJoStands.Projectiles
         public override void AI()       //all this so that the other chain doesn't draw... yare yare. It was mostly just picking out types
         {
             Projectile ownerProj = Main.projectile[(int)projectile.ai[0]];
+            if (Main.player[projectile.owner].dead || !ownerProj.active)
+            {
+                projectile.Kill();
+                return;
+            }
             float direction = ownerProj.Center.X - projectile.Center.X;
             if (direction > 0)
             {
@@ -44,34 +50,7 @@ namespace JoJoStands.Projectiles
                 Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Zip"));
                 playedSound = true;
             }
-            //projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
 
-            /*if (JoJoStands.StandControlUp.JustPressed)
-            {
-                incY += 0.5f;
-                Main.NewText(incY);
-            }
-            if (JoJoStands.StandControlDown.JustPressed)
-            {
-                incY -= 0.5f;
-                Main.NewText(incY);
-            }
-            if (JoJoStands.StandControlRight.JustPressed)
-            {
-                incX += 0.5f;
-                Main.NewText(incX);
-            }
-            if (JoJoStands.StandControlLeft.JustPressed)
-            {
-                incX -= 0.5f;
-                Main.NewText(incX);
-            }*/
-
-            if (!ownerProj.active)
-            {
-                projectile.Kill();
-                return;
-            }
             if (projectile.alpha == 0)
             {
                 if (projectile.position.X + (float)(projectile.width / 2) > ownerProj.position.X + (float)(ownerProj.width / 2))
@@ -143,6 +122,8 @@ namespace JoJoStands.Projectiles
             }
         }
 
+        private Texture2D stickyFingersZipperPart;
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
         {
             Projectile ownerProj = Main.projectile[(int)projectile.ai[0]];
@@ -155,13 +136,15 @@ namespace JoJoStands.Projectiles
             {
                 ownerCenterOffset = new Vector2(4f, -4.5f);
             }
+            if (Main.netMode != NetmodeID.Server)
+                stickyFingersZipperPart = mod.GetTexture("Projectiles/Zipper_Part");
+
             Vector2 ownerCenter = ownerProj.Center + ownerCenterOffset;
             Vector2 center = projectile.Center + new Vector2(0f, -1f);
-            Texture2D texture = mod.GetTexture("Projectiles/Zipper_Part");
-            for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, ownerCenter) / texture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
+            for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, ownerCenter) / stickyFingersZipperPart.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, ownerCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(texture, pos, new Rectangle(0, 0, texture.Width, texture.Height), lightColor, projectile.rotation, new Vector2(texture.Width * 0.5f, texture.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(stickyFingersZipperPart, pos, new Rectangle(0, 0, stickyFingersZipperPart.Width, stickyFingersZipperPart.Height), lightColor, projectile.rotation, new Vector2(stickyFingersZipperPart.Width * 0.5f, stickyFingersZipperPart.Height * 0.5f), 1f, SpriteEffects.None, 0f);
             }
             return true;
         }

@@ -1,3 +1,4 @@
+using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -24,7 +25,10 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.velocity.X *= 0.5f;
+            if (Math.Abs(npc.velocity.X) > 0.5f)
+            {
+                npc.velocity.X *= 0.9f;
+            }
             if (!appliedChange)
             {
                 npc.defense -= 5;

@@ -1,3 +1,4 @@
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -6,6 +7,8 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class MissingOrgans : ModBuff
     {
+        private float savedVelocityX = -1f;
+
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Missing Organs!");
@@ -27,6 +30,11 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
+            if (savedVelocityX == -1f)
+            {
+                savedVelocityX = Math.Abs(npc.velocity.X) / 2f;
+            }
+
             if (npc.lifeRegen > 0)
             {
                 npc.lifeRegen = 0;
@@ -34,7 +42,10 @@ namespace JoJoStands.Buffs.Debuffs
             Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f);
             npc.lifeRegenExpectedLossPerSecond = 20;
             npc.lifeRegen -= 60;
-            npc.velocity *= 0.6f;
+            if (Math.Abs(npc.velocity.X) > savedVelocityX)
+            {
+                npc.velocity.X *= 0.9f;
+            }
         }
     }
 }

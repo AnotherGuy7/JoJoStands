@@ -30,37 +30,41 @@ namespace JoJoStands.Projectiles
                 projectile.Kill();
                 projectile.netUpdate = true;
             }
-            if (!ownerProj.active)
-            {
-                projectile.Kill();
-                projectile.netUpdate = true;
-            }
             if (MyPlayer.AutomaticActivations)
             {
-                for (int i = 0; i < 200; i++)
+                for (int i = 0; i < Main.maxNPCs; i++)
                 {
-                    float npcDistance = Vector2.Distance(Main.npc[i].Center, projectile.Center);
-                    if (npcDistance < 30f && Main.npc[i].active && !Main.npc[i].immortal && !Main.npc[i].hide)
+                    NPC npc = Main.npc[i];
+                    if (npc.active)
                     {
-                        projectile.Kill();
+                        float npcDistance = Vector2.Distance(npc.Center, projectile.Center);
+                        if (npcDistance < 30f && !npc.immortal && !npc.hide && !npc.friendly && npc.lifeMax > 5)
+                        {
+                            projectile.Kill();
+                        }
                     }
                 }
             }
-        }
-
-        public virtual void OnHitAnything()
-        {
-            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 17, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
         }
 
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
             MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            var explosion = Projectile.NewProjectile(projectile.position, projectile.velocity, ProjectileID.GrenadeIII, (int)(180f * Mplayer.standDamageBoosts), 8f, Main.myPlayer);
+            int explosion = Projectile.NewProjectile(projectile.position, projectile.velocity, ProjectileID.GrenadeIII, (int)(180f * Mplayer.standDamageBoosts), 8f, projectile.owner);
             Main.projectile[explosion].timeLeft = 2;
             Main.projectile[explosion].netUpdate = true;
             Main.PlaySound(SoundID.Item62);
+
+            for (int i = 0; i < 60; i++)
+            {
+                float circlePos = i;
+                Vector2 spawnPos = projectile.Center + (circlePos.ToRotationVector2() * 90f);
+                Vector2 velocity = projectile.Center + (circlePos.ToRotationVector2() * 90f);
+                velocity.Normalize();
+                Dust dustIndex = Dust.NewDustPerfect(spawnPos, 17, velocity * 3f, Scale: Main.rand.NextFloat(0.8f, 1.2f));
+                dustIndex.noGravity = true;
+            }
         }
     }
 }

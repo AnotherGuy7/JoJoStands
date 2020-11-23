@@ -23,7 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override string poseSoundName => "AllThatRemainsAreTheResults";
         public override int standType => 1;
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
         private Vector2 velocityAddition;
         private float mouseDistance;
         private int timeskipStartDelay = 0;
@@ -113,7 +113,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, Main.myPlayer, fistWhoAmI);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }

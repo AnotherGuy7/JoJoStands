@@ -12,8 +12,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
     public class CenturyBoyBuff : ModBuff
     {
         private bool resetLimitTimer = false;
-        public int limitTimer = 36000;       //like 10 minutes
-        public int breathSave = 0;
+        private int limitTimer = 36000;       //like 10 minutes
+        private int breathSave = 0;
 
         public override void SetDefaults()
         {
@@ -30,7 +30,6 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.lifeRegen = 0;
             player.immune = true;
             player.manaRegen = 0;
-            player.controlUseItem = false;
             player.dash = 0;
             player.controlQuickHeal = false;
             player.controlQuickMana = false;

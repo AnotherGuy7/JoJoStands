@@ -25,51 +25,56 @@ namespace JoJoStands.Projectiles
             projectile.ignoreWater = true;
         }
 
-        public bool search = false;
-        public int linkWhoAmI = 0;
-        public Vector2 collisionLine = Vector2.Zero;
+        private bool searchingForLink = true;
+        private int linkWhoAmI = -1;
 
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (!search)
+            if (searchingForLink)
             {
                 for (int i = 0; i < Main.maxProjectiles; i++)
                 {
                     Projectile otherProj = Main.projectile[i];
                     if (otherProj.active)
                     {
-                        if (otherProj.type == mod.ProjectileType("EmeraldStringPoint"))
+                        if (otherProj.type == mod.ProjectileType("EmeraldStringPoint") && otherProj.ai[0] == 0f)
                         {
-                            if (otherProj.ai[0] == 0f)
-                            {
-                                linkWhoAmI = otherProj.whoAmI;
-                                otherProj.ai[0] = 1f;      //meaning, linked
-                            }
+                            linkWhoAmI = otherProj.whoAmI;
+                            otherProj.ai[0] = 1f;      //meaning, linked
                         }
                     }
                 }
-                search = true;
+                if (linkWhoAmI == -1)
+                {
+                    projectile.Kill();
+                    return;
+                }
+                searchingForLink = false;
             }
-            if (search && linkWhoAmI != 0)
+            if (!Main.projectile[linkWhoAmI].active || Main.projectile[linkWhoAmI].timeLeft <= 0)
+            {
+                projectile.Kill();
+                return;
+            }
+            if (!searchingForLink && linkWhoAmI != -1)
             {
                 if (projectile.ai[1] == 0f)
                 {
                     projectile.timeLeft = 1200;
                     projectile.ai[1] = 1f;
                 }
-                collisionLine = projectile.position + (Main.projectile[linkWhoAmI].Center - projectile.Center);
                 for (int k = 0; k < Main.maxNPCs; k++)
                 {
                     NPC npc = Main.npc[k];
                     if (npc.active)
                     {
-                        if (Collision.CheckAABBvLineCollision(npc.Center, new Vector2(npc.width, npc.height), projectile.Center, Main.projectile[linkWhoAmI].Center))
+                        if (Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), projectile.Center, Main.projectile[linkWhoAmI].Center))
                         {
                             float numberProjectiles = 6;
                             for (int i = 0; i < numberProjectiles; i++)
                             {
-                                int proj = Projectile.NewProjectile(player.position.X + (Main.screenWidth / 2) * npc.direction, npc.position.Y + Main.rand.NextFloat(-10f, 11f), (10f * -npc.direction) - Main.rand.NextFloat(0f, 3f), 0f, mod.ProjectileType("Emerald"), 32 + (int)projectile.ai[0], 3f, Main.myPlayer);
+                                int proj = Projectile.NewProjectile(player.position.X + (Main.screenWidth / 2) * npc.direction, npc.position.Y + Main.rand.NextFloat(-10f, 11f), (10f * -npc.direction) - Main.rand.NextFloat(0f, 3f), 0f, mod.ProjectileType("Emerald"), 32 + (int)projectile.ai[0], 7f, projectile.owner);
                                 Main.projectile[proj].netUpdate = true;
                                 Main.projectile[proj].tileCollide = false;
                             }
@@ -84,12 +89,12 @@ namespace JoJoStands.Projectiles
                         Player otherPlayer = Main.player[p];
                         if (otherPlayer.active)
                         {
-                            if (Collision.CheckAABBvLineCollision(otherPlayer.Center, new Vector2(otherPlayer.width, otherPlayer.height), projectile.Center, Main.projectile[linkWhoAmI].Center))
+                            if (otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), projectile.Center, Main.projectile[linkWhoAmI].Center))
                             {
                                 float numberProjectiles = 6;
                                 for (int i = 0; i < numberProjectiles; i++)
                                 {
-                                    int proj = Projectile.NewProjectile(player.position.X + (Main.screenWidth / 2) * otherPlayer.direction, otherPlayer.position.Y + Main.rand.NextFloat(-10f, 11f), (10f * -otherPlayer.direction) - Main.rand.NextFloat(0f, 3f), 0f, mod.ProjectileType("Emerald"), 32 + (int)projectile.ai[0], 3f, Main.myPlayer);
+                                    int proj = Projectile.NewProjectile(player.position.X + (Main.screenWidth / 2) * otherPlayer.direction, otherPlayer.position.Y + Main.rand.NextFloat(-10f, 11f), (10f * -otherPlayer.direction) - Main.rand.NextFloat(0f, 3f), 0f, mod.ProjectileType("Emerald"), 32 + (int)projectile.ai[0], 7f, projectile.owner);
                                     Main.projectile[proj].netUpdate = true;
                                     Main.projectile[proj].tileCollide = false;
                                 }
@@ -99,26 +104,11 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            if (search && linkWhoAmI == 0)
-            {
-                projectile.Kill();
-            }
-        }
-
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            projectile.velocity = Vector2.Zero;
-            return false;
-        }
-
-        public override void Kill(int timeLeft)
-        {
-            Main.projectile[linkWhoAmI].Kill();
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            if (linkWhoAmI != 0)
+            if (linkWhoAmI != -1)
             {
                 Vector2 linkCenter = Main.projectile[linkWhoAmI].Center;
                 Vector2 center = projectile.Center;
@@ -131,6 +121,17 @@ namespace JoJoStands.Projectiles
                 }
             }
             return true;
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            projectile.velocity = Vector2.Zero;
+            return false;
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            Main.projectile[linkWhoAmI].Kill();
         }
     }
 }

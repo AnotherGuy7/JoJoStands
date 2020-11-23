@@ -8,12 +8,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 {
     public class KillerQueenStandT2 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
-        }
-
         public override int punchDamage => 35;
         public override int altDamage => 40;
         public override int punchTime => 11;
@@ -23,16 +17,16 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override string poseSoundName => "IWouldntLose";
         public override int standType => 1;
 
-        public float npcDistance = 0f;
-        public float mouseToPlayerDistance = 0f;
-        public Vector2 savedPosition = Vector2.Zero;
-        public bool touchedTile = false;
-        public int timeAfterTouch = 0;
-        public int explosionTimer = 0;
+        private float npcDistance = 0f;
+        private float mouseToPlayerDistance = 0f;
+        private Vector2 savedPosition = Vector2.Zero;
+        private bool touchedTile = false;
+        private int timeAfterTouch = 0;
+        private int explosionTimer = 0;
 
         public static NPC savedTarget = null;
-        public int npcExplosionTimer = 0;
-        public int updateTimer = 0;
+        private int npcExplosionTimer = 0;
+        private int updateTimer = 0;
 
         public override void AI()
         {
@@ -98,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     if (timeAfterTouch <= 0 && touchedTile)
                     {
                         secondaryAbilityFrames = true;
-                        int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, Main.myPlayer);
+                        int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, player.whoAmI);
                         Main.projectile[projectile].friendly = true;
                         Main.projectile[projectile].timeLeft = 2;
                         Main.projectile[projectile].netUpdate = true;
@@ -176,7 +170,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     }
                     if (explosionTimer >= 90)
                     {
-                        int bomb = Projectile.NewProjectile(savedTarget.position, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 3f, Main.myPlayer);
+                        int bomb = Projectile.NewProjectile(savedTarget.position, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 3f, projectile.owner);
                         Main.projectile[bomb].timeLeft = 2;
                         Main.projectile[bomb].netUpdate = true;
                         explosionTimer = 0;
@@ -214,7 +208,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             {
                                 shootVel *= shootSpeed;
                             }
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), 3f, Main.myPlayer, fistWhoAmI, tierNumber);
+                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), 3f, projectile.owner, fistWhoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -237,10 +231,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     npcDistance = Vector2.Distance(Main.npc[i].Center, savedPosition);
                     if (npcDistance < 50f && touchedTile)       //or youd need to go from its center, add half its width to the direction its facing, and then add 16 (also with direction) -- Direwolf
                     {
-                        int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, Main.myPlayer);
-                        Main.projectile[projectile].friendly = true;
-                        Main.projectile[projectile].timeLeft = 2;
-                        Main.projectile[projectile].netUpdate = true;
+                        int bomb = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, projectile.owner);
+                        Main.projectile[bomb].friendly = true;
+                        Main.projectile[bomb].timeLeft = 2;
+                        Main.projectile[bomb].netUpdate = true;
                         touchedTile = false;
                         savedPosition = Vector2.Zero;
                     }

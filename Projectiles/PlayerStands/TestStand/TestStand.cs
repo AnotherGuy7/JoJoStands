@@ -11,11 +11,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
 {
     public class TestStand : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 6;
-        }
 
         //public override float shootSpeed => 16f;
         //public override float maxDistance { get; } = 98f;
@@ -79,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed + 4f;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RoadRoller"), 120, 5f, Main.myPlayer);
+                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RoadRoller"), 120, 5f, projectile.owner);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
                 }

@@ -1,22 +1,11 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 {
     public class StickyFingersStandT2 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
-        }
-
         public override int punchDamage => 37;
         public override int altDamage => 31;
         public override int punchTime => 11;
@@ -25,9 +14,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override float tierNumber => 2f;
         public override int standType => 1;
         public override string punchSoundName => "Ari";
-		public override string poseSoundName => "Arrivederci";
+        public override string poseSoundName => "Arrivederci";
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
 
         public override void AI()
         {
@@ -52,6 +41,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
             if (!modPlayer.StandAutoMode)
             {
+                secondaryAbilityFrames = player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] != 0;
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] == 0)
                 {
                     Punch();
@@ -63,15 +53,14 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 }
                 if (!attackFrames)
                 {
-                    if (player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] == 0)
+                    if (!secondaryAbilityFrames)
                         StayBehind();
-                    if (player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] != 0)
+                    else
                         GoInFront();
                 }
                 if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] == 0 && projectile.owner == Main.myPlayer)
                 {
                     shootCount += 120;
-                    Main.mouseLeft = false;
                     Vector2 shootVel = Main.MouseWorld - projectile.Center;
                     if (shootVel == Vector2.Zero)
                     {
@@ -79,14 +68,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("StickyFingersFistExtended"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, Main.myPlayer, projectile.whoAmI);
+                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("StickyFingersFistExtended"), (int)(altDamage * modPlayer.standDamageBoosts), 6f, projectile.owner, projectile.whoAmI);
                     Main.projectile[proj].netUpdate = true;
-                    projectile.netUpdate = true;
-                }
-                if (player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] != 0)
-                {
-                    Main.mouseLeft = false;
-                    secondaryAbilityFrames = true;
                     projectile.netUpdate = true;
                 }
             }

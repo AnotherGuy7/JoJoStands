@@ -40,13 +40,11 @@ namespace JoJoStands.Tiles
             Lighting.AddLight(new Vector2(i, j), r, g, b);
         }
 
-        public int checkNumber = 0;
-
         public override void RandomUpdate(int i, int j)
         {
             int Xadd = 0;
             int Yadd = 0;
-            checkNumber = Main.rand.Next(0, 4);     //just detects one side of a tile whenever this updates
+            int checkNumber = Main.rand.Next(0, 4);     //just detects one side of a tile whenever this updates
             if (checkNumber == 0)
             {
                 Xadd = 1;
@@ -71,6 +69,11 @@ namespace JoJoStands.Tiles
             if (tileTarget.type == TileID.Meteorite)
             {
                 tileTarget.type = (ushort)mod.TileType(Name);
+                WorldGen.SquareTileFrame(i + Xadd, j + Yadd, true);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    NetMessage.SendTileSquare(-1, i + Xadd, j + Yadd, 1);
+                }
             }
         }
     }

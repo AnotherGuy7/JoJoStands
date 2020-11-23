@@ -30,7 +30,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            var explosion = Projectile.NewProjectile(projectile.position, projectile.velocity, ProjectileID.GrenadeIII, (int)(projectile.ai[0] * Mplayer.standDamageBoosts), 8f, Main.myPlayer);
+            var explosion = Projectile.NewProjectile(projectile.position, projectile.velocity, ProjectileID.GrenadeIII, (int)(projectile.ai[0] * Mplayer.standDamageBoosts), 8f, projectile.owner);
             Main.projectile[explosion].timeLeft = 2;
             Main.projectile[explosion].netUpdate = true;
             Main.PlaySound(SoundID.Item62);

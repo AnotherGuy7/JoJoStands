@@ -25,7 +25,6 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             if (projectile.timeLeft < 256)
@@ -74,6 +73,14 @@ namespace JoJoStands.Projectiles
                     damageMult = 1f;
                     velocityAdd = Vector2.Zero;
                 }
+            }
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            if (target.boss)
+            {
+                target.StrikeNPC(damage * 3, projectile.knockBack, projectile.direction);
             }
         }
 

@@ -1,3 +1,4 @@
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -21,6 +22,7 @@ namespace JoJoStands.Buffs.Debuffs
             player.direction *= -1;
             player.lifeRegen = -60;
             player.moveSpeed /= 2;
+            player.buffTime[buffIndex] = 2;
         }
 
         public override void Update(NPC npc, ref int buffIndex)
@@ -37,7 +39,11 @@ namespace JoJoStands.Buffs.Debuffs
             }
             npc.AddBuff(BuffID.Confused, 95);
             npc.lifeRegen = (npc.lifeMax / 8) * -1;
-            npc.velocity /= 2;
+            npc.buffTime[buffIndex] = 2;
+            if (Math.Abs(npc.velocity.X) > 1f)
+            {
+                npc.velocity.X /= 2f;
+            }
         }
     }
 }

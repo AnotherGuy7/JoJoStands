@@ -5,12 +5,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 {
     public class TheWorldStandT1 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
-        }
-
         public override int punchDamage => 19;
         public override int punchTime => 11;
         public override int halfStandHeight => 44;
@@ -19,7 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override string poseSoundName => "ComeAsCloseAsYouLike";
         public override int standType => 1;
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
 
         public override void AI()
         {

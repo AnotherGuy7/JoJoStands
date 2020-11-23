@@ -1,38 +1,68 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class ShadowNail : ModProjectile
     {
-        public override void SetDefaults()      //I couldn't get it to stick to tiles so I will leave this for another time
+        public override void SetDefaults()
         {
             projectile.width = 25;
             projectile.height = 25;
             projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
+            projectile.penetrate = -1;
+            projectile.timeLeft = 3600;
             projectile.friendly = true;
-            projectile.tileCollide = true;
+            projectile.tileCollide = false;
             projectile.ignoreWater = true;
         }
 
         public override void AI()
         {
-            projectile.rotation += (float)projectile.direction * 0.8f;
+            Player player = Main.player[projectile.owner];
+            projectile.rotation += MathHelper.ToRadians(13f * projectile.direction);
+            player.AddBuff(BuffID.Obstructed, 2);
+            player.position = projectile.Center;
+            player.immune = true;
+            player.noFallDmg = true;
+            player.controlUseItem = false;
+            if (player.mount.Type != 0)
+            {
+                player.mount.Dismount(player);
+            }
+            Lighting.AddLight(projectile.Center, 2f, 2f, 2f);
             if (projectile.owner == Main.myPlayer)
             {
-                projectile.netUpdate = true;
-                projectile.velocity = Main.MouseWorld - projectile.position;
-                projectile.velocity.Normalize();
-                projectile.velocity *= 5f;
-                if (projectile.timeLeft <= 275 && Main.mouseRight)
+                if (Main.mouseLeft && !WorldGen.TileEmpty((int)(projectile.position.X / 16f), (int)(projectile.position.Y / 16f)))
+                {
+                    projectile.velocity = Main.MouseWorld - projectile.position;
+                    projectile.velocity.Normalize();
+                    projectile.velocity *= 5f;
+
+                    if (Main.MouseWorld.X > projectile.position.X)
+                        player.ChangeDir(1);
+                    else
+                        player.ChangeDir(-1);
+                }
+                else
+                {
+                    if (WorldGen.TileEmpty((int)(projectile.position.X / 16f), (int)(projectile.position.Y / 16f)))
+                    {
+                        projectile.velocity.Y += 0.1f;
+                        projectile.velocity.X *= 0.04f;
+                    }
+                    else
+                    {
+                        projectile.velocity = Vector2.Zero;
+                    }
+                }
+                if ((projectile.timeLeft <= 3540 && Main.mouseRight) || player.dead)
                 {
                     projectile.Kill();
                 }
+                projectile.netUpdate = true;
             }
         }
 
@@ -41,10 +71,16 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        public override bool PreKill(int timeLeft)
+        public override void Kill(int timeLeft)
         {
-            Main.player[projectile.owner].position = projectile.position;
-            return false;
+            Player player = Main.player[projectile.owner];
+
+            while (!WorldGen.TileEmpty((int)(projectile.position.X / 16f), (int)(projectile.position.Y / 16f)))
+            {
+                projectile.position.Y -= 10f;
+            }
+            player.position = projectile.position + new Vector2(0f, -35f);
+            player.velocity.Y -= 6f;
         }
     }
 }

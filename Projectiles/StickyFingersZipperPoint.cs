@@ -7,7 +7,7 @@ using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles
 {
-    public class StickyFingersZipperPoint2 : ModProjectile
+    public class StickyFingersZipperPoint : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -70,12 +70,16 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
+        private Texture2D stickyFingersZipperPart;
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
+            if (Main.netMode != NetmodeID.Server)
+                stickyFingersZipperPart = mod.GetTexture("Projectiles/Zipper_Part");
+
             Vector2 ownerCenter = Main.player[projectile.owner].Center;
             Vector2 center = projectile.Center;
             Vector2 distToProj = ownerCenter - projectile.Center;
-            Texture2D texture = mod.GetTexture("Projectiles/Zipper_Part");
             float projRotation = distToProj.ToRotation();
             float distance = distToProj.Length();
             while (distance > 30f && !float.IsNaN(distance))
@@ -86,7 +90,7 @@ namespace JoJoStands.Projectiles
                 distToProj = ownerCenter - center;    //update distance
                 distance = distToProj.Length();
 
-                spriteBatch.Draw(texture, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y), new Rectangle(0, 0, texture.Width, texture.Height), Color.White, projRotation, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(stickyFingersZipperPart, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y), new Rectangle(0, 0, stickyFingersZipperPart.Width, stickyFingersZipperPart.Height), Color.White, projRotation, new Vector2(stickyFingersZipperPart.Width / 2f, stickyFingersZipperPart.Height / 2f), 1f, SpriteEffects.None, 0f);
             }
             return true;
         }
