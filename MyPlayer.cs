@@ -698,7 +698,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
                         shootVelocity *= 30f;       //multiply the angle by the speed to get the effect
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts), 4f, Main.myPlayer);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct) * equippedTuskAct), 4f, player.whoAmI);
                     }
                 }
                 if (TuskActNumber == 2)
@@ -711,7 +711,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(49 * standDamageBoosts), 5f, Main.myPlayer);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 5f, player.whoAmI);
                     }
                 }
                 if (TuskActNumber == 3)
@@ -724,7 +724,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * standDamageBoosts), 6f, Main.myPlayer);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 6f, player.whoAmI);
                     }
                     if (Main.mouseRight && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
                     {
@@ -733,7 +733,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 5f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 210, 8f, Main.myPlayer);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 210, 8f, player.whoAmI);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(15));
                     }
                 }
@@ -747,7 +747,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 60f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(305 * standDamageBoosts), 7f, Main.myPlayer);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(305 * standDamageBoosts), 7f, player.whoAmI);
                     }
                     if (Main.mouseRight && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
                     {
@@ -756,7 +756,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 30f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, player.whoAmI);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(10));
                     }
                 }

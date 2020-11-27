@@ -9,7 +9,7 @@ namespace JoJoStands.Items
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("A gold and well designed staff.\nAll arrows shot become Viral Arrows chases down all enemies.");
+			Tooltip.SetDefault("A bow that injects Viral Meteroite into its ammo.\nAll arrows shot become Viral Arrows that chase down all enemies.");
 		}
 
 		public override void SetDefaults()

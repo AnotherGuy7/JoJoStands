@@ -76,11 +76,11 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             if (target.boss)
             {
-                target.StrikeNPC(damage * 3, projectile.knockBack, projectile.direction);
+                damage *= 3;
             }
         }
 

@@ -1,10 +1,7 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class Knife : ModProjectile
@@ -26,6 +23,15 @@ namespace JoJoStands.Projectiles
         {
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(45f);
             projectile.velocity.Y += 0.3f;
+        }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            {
+                crit = true;
+            }
         }
     }
 }

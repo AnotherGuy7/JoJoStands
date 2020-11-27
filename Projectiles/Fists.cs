@@ -4,6 +4,7 @@ using System.Drawing;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.NPCs;
  
 namespace JoJoStands.Projectiles
 {
@@ -90,6 +91,12 @@ namespace JoJoStands.Projectiles
                 {
                     PlayerStands.KillerQueen.KillerQueenStandFinal.savedTarget = target;
                 }
+            }
+            if (projectile.ai[0] == 6f)
+            {
+                JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
+                damage = (int)(damage * jojoNPC.kingCrimsonDonutMultiplier);
+                jojoNPC.kingCrimsonDonutMultiplier += 0.06f;
             }
             if (projectile.ai[0] == 7f)
             {

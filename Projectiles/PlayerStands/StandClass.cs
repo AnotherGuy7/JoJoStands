@@ -113,7 +113,6 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void Punch(float movementSpeed = 5f)
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             HandleDrawOffsets();
             normalFrames = false;
@@ -157,10 +156,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (shootCount <= 0)
             {
-                if ((newPunchTime) >= 2)      //a punch speed cap of 2
-                    shootCount += newPunchTime;
-                else
-                    shootCount += 2;
+                shootCount += newPunchTime;
                 Vector2 shootVel = Main.MouseWorld - projectile.Center;
                 if (shootVel == Vector2.Zero)
                 {
@@ -234,7 +230,6 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void BasicPunchAI()
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             HandleDrawOffsets();
             NPC target = null;
@@ -299,10 +294,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         {
                             PlayPunchSound();
                         }
-                        if (newPunchTime >= 2)
-                            shootCount += newPunchTime;
-                        else
-                            shootCount += 2;
+                        shootCount += newPunchTime;
                         Vector2 shootVel = targetPos - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -407,10 +399,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 PlayPunchSound();
                             }
-                            if ((newPunchTime) >= 2)
-                                shootCount += newPunchTime;
-                            else
-                                shootCount += 2;
+                            shootCount += newPunchTime;
                             Vector2 shootVel = targetPos - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
@@ -511,7 +500,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void PlayPunchSound()
         {
-			if (punchSoundName != "" && punchingSoundInstance == null)
+            if (punchSoundName != "" && punchingSoundInstance == null)
             {
                 InitializeSounds();
             }
@@ -575,6 +564,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 playedBeginning = false;
             }
+            if (projectile.netUpdate)       //We put it here cause we don't want to sync this all the time, but specifically whenever this method is called (Idles)
+            {
+                SyncSounds();
+            }
         }
 
         public void HandleDrawOffsets()     //this method kind of lost its usage when we found a better way to do offsets but whatever
@@ -597,6 +590,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (modPlayer.standType != standType)
             {
                 modPlayer.standType = standType;
+            }
+            if (newPunchTime <= 2)
+            {
+                newPunchTime = 2;
+            }
+            if (newShootTime <= 5)
+            {
+                newShootTime = 5;
             }
         }
 

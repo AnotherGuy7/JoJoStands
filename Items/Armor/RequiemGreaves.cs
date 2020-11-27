@@ -36,7 +36,7 @@ namespace JoJoStands.Items.Armor
             recipe.AddIngredient(ItemID.LunarBar, 15);
             recipe.AddIngredient(ItemID.FragmentStardust, 5);
             recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 5);
-            recipe.AddIngredient(TileID.MythrilAnvil);
+            recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

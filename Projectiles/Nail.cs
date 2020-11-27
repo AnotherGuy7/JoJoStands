@@ -1,8 +1,5 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -20,6 +17,7 @@ namespace JoJoStands.Projectiles
             projectile.height = 12;
             projectile.aiStyle = 0;
             projectile.timeLeft = 300;
+            projectile.penetrate = 1;
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
@@ -29,23 +27,13 @@ namespace JoJoStands.Projectiles
         {
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
         }
+
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.destroyAmuletEquipped)
+            MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
             {
-                if (Main.rand.NextFloat(0, 101) >= 93)
-                {
-                    target.AddBuff(BuffID.OnFire, 60 * 3);
-                }
-            }
-            if (mPlayer.greaterDestroyEquipped)
-            {
-                if (Main.rand.NextFloat(0, 101) >= 80)
-                {
-                    target.AddBuff(BuffID.CursedInferno, 60 * 10);
-                }
+                crit = true;
             }
         }
     }

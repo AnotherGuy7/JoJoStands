@@ -16,7 +16,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("King Crimson (Tier 2)");
-            Tooltip.SetDefault("Donut enemies with a powerful punch!\nSpecial: Skip 2 seconds of time!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Donut enemies with a powerful punch!\nConsecutive Donuts deal greater damage.\nSpecial: Skip 2 seconds of time!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

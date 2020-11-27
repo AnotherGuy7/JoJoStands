@@ -44,6 +44,15 @@ namespace JoJoStands.Projectiles
             Main.dust[num109].velocity *= 1.4f;
         }
 
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            {
+                crit = true;
+            }
+        }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             if (Main.rand.Next(0, 101) < 50f)

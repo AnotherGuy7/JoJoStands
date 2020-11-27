@@ -25,6 +25,7 @@ namespace JoJoStands.NPCs
         public int indexPosition = 0;
         public bool spawnedByDeathLoop = false;
         public int deathTimer = 0;
+        public float kingCrimsonDonutMultiplier = 1f;
         public Vector2 playerPositionOnSkip = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
         public Vector2[] foresightPosition = new Vector2[400];
@@ -47,7 +48,7 @@ namespace JoJoStands.NPCs
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("SunDroplet"), Main.rand.Next(1, 3));
             }
-            if ((npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC) && Main.rand.NextFloat(0, 101) < 14f)
+            if (Main.hardMode && (npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC) && Main.rand.NextFloat(0, 101) <= 4f)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("Hand"));
             }

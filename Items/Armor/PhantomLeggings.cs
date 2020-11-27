@@ -37,7 +37,7 @@ namespace JoJoStands.Items.Armor
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Ectoplasm, 14);
             recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 4);
-            recipe.AddIngredient(TileID.MythrilAnvil);
+            recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

@@ -45,7 +45,7 @@ namespace JoJoStands.Items
             recipe.AddRecipe();
             recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("SexPistolsT2"));
-            recipe.AddIngredient(ItemID.CobaltBar, 20);
+            recipe.AddIngredient(ItemID.CobaltOre, 20);
             recipe.AddIngredient(ItemID.Topaz, 2);
             recipe.AddIngredient(ItemID.FallenStar, 5);
             recipe.AddIngredient(mod.ItemType("WillToFight"), 2);

@@ -38,7 +38,7 @@ namespace JoJoStands.Items
 					NPC npc = Main.npc[n];
 					if (npc.active)
 					{
-						if (npc.Distance(player.position) <= 4 * 16 && npc.lifeMax > 5 && !npc.friendly)
+						if (npc.Distance(player.position) <= 8f * 16f && npc.lifeMax > 5 && !npc.friendly && !npc.immortal && !npc.hide)
 						{
 							npc.StrikeNPC(18, 12f, player.direction);
 						}
