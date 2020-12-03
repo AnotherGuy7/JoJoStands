@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -36,8 +34,8 @@ namespace JoJoStands.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("TuskAct2"));
             recipe.AddIngredient(ItemID.HallowedBar, 11);
-			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
-			recipe.AddIngredient(mod.ItemType("WillToProtect"));
+            recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
+            recipe.AddIngredient(mod.ItemType("WillToProtect"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();

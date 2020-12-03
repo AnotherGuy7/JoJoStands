@@ -36,27 +36,27 @@ namespace JoJoStands.Projectiles
                 Main.PlaySound(SoundID.Item1, projectile.Center);
                 projectile.soundDelay = 12;
             }
-            if (Main.myPlayer == projectile.owner)
+            /*if (Main.myPlayer == projectile.owner)
             {
                 if (player.channel && !player.noItems && !player.CCed)
                 {
-                    float scaleFactor6 = 1f;
+                    float distanceAwayFromPlayer = 1f;
                     if (player.inventory[player.selectedItem].shoot == projectile.type)
                     {
-                        scaleFactor6 = player.inventory[player.selectedItem].shootSpeed * projectile.scale;
+                        distanceAwayFromPlayer = player.inventory[player.selectedItem].shootSpeed * projectile.scale;
                     }
-                    Vector2 vector13 = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter, true);
-                    vector13.Normalize();
-                    if (vector13.HasNaNs())
+                    Vector2 velocity = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter, true);
+                    velocity.Normalize();
+                    if (velocity.HasNaNs())
                     {
-                        vector13 = Vector2.UnitX * (float)player.direction;
+                        velocity = Vector2.UnitX * (float)player.direction;
                     }
-                    vector13 *= scaleFactor6;
-                    if (vector13.X != projectile.velocity.X || vector13.Y != projectile.velocity.Y)
+                    velocity *= distanceAwayFromPlayer;
+                    if (velocity.X != projectile.velocity.X || velocity.Y != projectile.velocity.Y)
                     {
                         projectile.netUpdate = true;
                     }
-                    projectile.velocity = vector13;
+                    projectile.velocity = velocity;
                 }
                 else
                 {
@@ -65,13 +65,29 @@ namespace JoJoStands.Projectiles
             }
             Vector2 vector14 = projectile.Center + projectile.velocity * 3f;
             Lighting.AddLight(vector14, 0.8f, 0.8f, 0.8f);
-            projectile.position = player.RotatedRelativePoint(player.Center, true) + new Vector2(-31f, -36f);
+            projectile.position = player.RotatedRelativePoint(player.Center, true) + new Vector2(-31f, -36f);*/
+            if (projectile.owner == Main.myPlayer)
+            {
+                if (player.channel)
+                {
+                    Vector2 direction = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
+                    if (projectile.position != player.Center + (direction.ToRotation().ToRotationVector2() * 98f))
+                    {
+                        projectile.netUpdate = true;
+                    }
+                    projectile.position = player.Center + (direction.ToRotation().ToRotationVector2() * 98f);
+                }
+                else
+                {
+                    projectile.Kill();
+                }
+            }
             projectile.spriteDirection = projectile.direction;
             projectile.timeLeft = 2;
             player.ChangeDir(projectile.direction);
             player.heldProj = projectile.whoAmI;
             player.itemTime = 2;
-            player.itemAnimation = 2;   
+            player.itemAnimation = 2;
             projectile.rotation = player.itemRotation = (float)Math.Atan2((double)(projectile.velocity.Y * (float)projectile.direction), (double)(projectile.velocity.X * (float)projectile.direction));
 
             projectile.frameCounter++;

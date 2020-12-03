@@ -99,7 +99,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 }
                 if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("SheerHeartAttack")] == 0)
                 {
-                    Projectile.NewProjectile(projectile.position.X + 10f * projectile.direction, projectile.position.Y, 0f, 0f, mod.ProjectileType("SheerHeartAttack"), 1, 0f, projectile.owner, 1f);
+                    Projectile.NewProjectile(projectile.position + new Vector2(10f * projectile.direction, 0f), projectile.velocity, mod.ProjectileType("SheerHeartAttack"), 1, 0f, projectile.owner, 1f);
                 }
             }
             if (modPlayer.StandAutoMode)

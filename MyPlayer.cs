@@ -698,7 +698,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
                         shootVelocity *= 30f;       //multiply the angle by the speed to get the effect
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct) * equippedTuskAct), 4f, player.whoAmI);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 4f, player.whoAmI);
                     }
                 }
                 if (TuskActNumber == 2)
@@ -711,7 +711,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 5f, player.whoAmI);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 5f, player.whoAmI);
                     }
                 }
                 if (TuskActNumber == 3)
@@ -724,7 +724,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 6f, player.whoAmI);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * standDamageBoosts) + ((22 + equippedTuskAct - 3) * equippedTuskAct - 3), 6f, player.whoAmI);
                     }
                     if (Main.mouseRight && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
                     {
@@ -733,7 +733,7 @@ namespace JoJoStands
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 5f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 210, 8f, player.whoAmI);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 124, 8f, player.whoAmI);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(15));
                     }
                 }
@@ -1587,7 +1587,7 @@ namespace JoJoStands
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomHoodLongEquipped)
+            if (drawPlayer.active && modPlayer.phantomHoodLongEquipped && drawPlayer.head == mod.GetEquipSlot("PhantomHoodLong", EquipType.Head))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomHoodLong_Head_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1611,7 +1611,7 @@ namespace JoJoStands
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomHoodNeutralEquipped)
+            if (drawPlayer.active && modPlayer.phantomHoodNeutralEquipped && drawPlayer.head == mod.GetEquipSlot("PhantomHoodNeutral", EquipType.Head))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomHoodNeutral_Head_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1636,7 +1636,7 @@ namespace JoJoStands
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomHoodShortEquipped)
+            if (drawPlayer.active && modPlayer.phantomHoodShortEquipped && drawPlayer.head == mod.GetEquipSlot("PhantomHoodShort", EquipType.Head))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomHoodShort_Head_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1660,7 +1660,7 @@ namespace JoJoStands
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomChestplateEquipped)
+            if (drawPlayer.active && modPlayer.phantomChestplateEquipped && drawPlayer.body == mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomChestplate_Body_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1679,7 +1679,7 @@ namespace JoJoStands
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomChestplateEquipped)
+            if (drawPlayer.active && modPlayer.phantomChestplateEquipped && drawPlayer.body == mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomChestplate_Arms_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1698,7 +1698,7 @@ namespace JoJoStands
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomLeggingsEquipped)
+            if (drawPlayer.active && modPlayer.phantomLeggingsEquipped && drawPlayer.legs == mod.GetEquipSlot("PhantomLeggings", EquipType.Legs))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomLeggings_Legs_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;

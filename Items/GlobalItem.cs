@@ -117,11 +117,13 @@ namespace JoJoStands.Items
             revolverRecipe.AddIngredient(mod.ItemType("RustyRevolver"));
             revolverRecipe.AddIngredient(ItemID.IronBar, 16);
             revolverRecipe.SetResult(ItemID.Revolver);
+            revolverRecipe.AddTile(TileID.Anvils);
             revolverRecipe.AddRecipe();
             revolverRecipe = new ModRecipe(mod);
             revolverRecipe.AddIngredient(mod.ItemType("RustyRevolver"));
             revolverRecipe.AddIngredient(ItemID.LeadBar, 16);
             revolverRecipe.SetResult(ItemID.Revolver);
+            revolverRecipe.AddTile(TileID.Anvils);
             revolverRecipe.AddRecipe();
         }
     }

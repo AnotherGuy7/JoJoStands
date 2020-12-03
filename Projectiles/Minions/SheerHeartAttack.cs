@@ -24,7 +24,6 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void SetDefaults()
         {
-            projectile.netImportant = true;
             projectile.width = 30;
             projectile.height = 24;
             projectile.friendly = true;
@@ -43,15 +42,15 @@ namespace JoJoStands.Projectiles.Minions
                 projectile.position = player.position;
                 projectile.netUpdate = true;
             }
-            projectile.velocity.Y += 1.5f;
-            if (projectile.velocity.Y >= 6f)
+            if (projectile.velocity.Y < 6f)
             {
-                projectile.velocity.Y = 6f;
+                projectile.velocity.Y += 0.3f;
             }
 
             if (npcTarget == null)
             {
                 saidKocchiwomiro = false;
+                projectile.rotation = 0f;
                 projectile.velocity.X = 0f;
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
@@ -60,6 +59,7 @@ namespace JoJoStands.Projectiles.Minions
                     {
                         npcTarget = npc;
                         targettedEnemy[npc.whoAmI] = true;
+                        break;
                     }
                 }
             }
@@ -79,18 +79,30 @@ namespace JoJoStands.Projectiles.Minions
                 if (npcTarget.position.X > projectile.position.X)
                 {
                     projectile.direction = 1;
-                    projectile.spriteDirection = 1;
                 }
                 if (npcTarget.position.X <= projectile.position.X)
                 {
                     projectile.direction = -1;
-                    projectile.spriteDirection = -1;
                 }
-                projectile.velocity.X = 2.5f * projectile.direction;
-                if (WorldGen.SolidTile((int)(projectile.Center.X / 16f) + projectile.direction, (int)(projectile.Center.Y / 16f)))
+
+                if (!npcTarget.noGravity)
                 {
-                    projectile.velocity.Y = -6f;
-                    projectile.netUpdate = true;
+                    projectile.rotation = 0f;
+                    projectile.spriteDirection = projectile.direction;
+                    projectile.velocity.X = 3f * projectile.direction;
+                    if (WorldGen.SolidTile((int)(projectile.Center.X / 16f) + projectile.direction, (int)(projectile.Center.Y / 16f)))
+                    {
+                        projectile.velocity.Y = -6f;
+                        projectile.netUpdate = true;
+                    }
+                }
+                else
+                {
+                    projectile.spriteDirection = 1;
+                    Vector2 velocity = npcTarget.position - projectile.position;
+                    velocity.Normalize();
+                    projectile.rotation = velocity.ToRotation();
+                    projectile.velocity = velocity * 3f;
                 }
             }
         }
@@ -109,20 +121,23 @@ namespace JoJoStands.Projectiles.Minions
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            target.immune[projectile.owner] = 0;
             if (projectile.ai[0] == 0f)
             {
-                int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, 350, 7f, Main.myPlayer);
+                int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, (int)(350 * mPlayer.standDamageBoosts), 7f, projectile.owner);
+                Main.projectile[proj].friendly = true;
                 Main.projectile[proj].timeLeft = 2;
                 Main.projectile[proj].netUpdate = true;
                 player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
             }
             if (projectile.ai[0] == 1f)
             {
-                int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, 724, 7f, Main.myPlayer);
+                int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, (int)(724 * mPlayer.standDamageBoosts), 7f, projectile.owner);
+                Main.projectile[proj].friendly = true;
                 Main.projectile[proj].timeLeft = 2;
                 Main.projectile[proj].netUpdate = true;
                 player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(4));

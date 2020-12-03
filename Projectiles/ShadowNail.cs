@@ -28,6 +28,10 @@ namespace JoJoStands.Projectiles
             player.immune = true;
             player.noFallDmg = true;
             player.controlUseItem = false;
+            if (player.HasBuff(BuffID.Suffocation))
+            {
+                player.ClearBuff(BuffID.Suffocation);
+            }
             if (player.mount.Type != 0)
             {
                 player.mount.Dismount(player);

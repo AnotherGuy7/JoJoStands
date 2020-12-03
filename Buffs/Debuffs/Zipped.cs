@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,6 +9,7 @@ namespace JoJoStands.Buffs.Debuffs
     public class Zipped : ModBuff
     {
         private Vector2 savedVelocity = Vector2.Zero;
+
         public override void SetDefaults()
         {
             DisplayName.SetDefault("Zipped!");
@@ -42,23 +44,15 @@ namespace JoJoStands.Buffs.Debuffs
             npc.lifeRegenExpectedLossPerSecond = 20;
             npc.lifeRegen -= 60;
 
-            if (npc.velocity.X > savedVelocity.X)
+            if (Math.Abs(npc.velocity.X) > savedVelocity.X)
             {
-                npc.velocity.X = savedVelocity.X;
-            }
-            if (npc.velocity.X < -savedVelocity.X)
-            {
-                npc.velocity.X = -savedVelocity.X;
+                npc.velocity.X *= 0.9f;
             }
             if (npc.noGravity)
             {
-                if (npc.velocity.Y > savedVelocity.X)
+                if (Math.Abs(npc.velocity.Y) > savedVelocity.Y)
                 {
-                    npc.velocity.Y = savedVelocity.Y;
-                }
-                if (npc.velocity.Y < -savedVelocity.X)
-                {
-                    npc.velocity.Y = -savedVelocity.Y;
+                    npc.velocity.Y *= 0.9f;
                 }
             }
         }
