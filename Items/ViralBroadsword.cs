@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -31,10 +32,25 @@ namespace JoJoStands.Items
 			item.noMelee = true;
 			item.autoReuse = false;
 			item.melee = true;
-			item.shootSpeed = 15f;
 		}
 
-		public override void AddRecipes()
+        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        {
+			position = player.Center;
+			if (Main.MouseWorld.X > player.Center.X)
+			{
+				player.direction = 1;
+			}
+			else
+			{
+				player.direction = -1;
+			}
+			speedX = 1f * player.direction;
+			speedY = 0f;
+			return true;
+        }
+
+        public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 4);

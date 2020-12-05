@@ -23,13 +23,13 @@ namespace JoJoStands.Projectiles
             projectile.penetrate = -1;
             projectile.ownerHitCheck = true;
             projectile.friendly = true;
-            drawOriginOffsetY = 20;
+            //drawOriginOffsetY = 20;
         }
 
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            drawOffsetX = 25 * player.direction;
+            //drawOffsetX = 25 * player.direction;
             projectile.soundDelay--;
             if (projectile.soundDelay <= 0)
             {
@@ -66,16 +66,27 @@ namespace JoJoStands.Projectiles
             Vector2 vector14 = projectile.Center + projectile.velocity * 3f;
             Lighting.AddLight(vector14, 0.8f, 0.8f, 0.8f);
             projectile.position = player.RotatedRelativePoint(player.Center, true) + new Vector2(-31f, -36f);*/
+            Vector2 direction = Vector2.Zero;
             if (projectile.owner == Main.myPlayer)
             {
                 if (player.channel)
                 {
-                    Vector2 direction = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
-                    if (projectile.position != player.Center + (direction.ToRotation().ToRotationVector2() * 98f))
+                    direction = Main.MouseWorld - player.Center;        //Cause it has to be found client side
+                    Vector2 pos = player.Center + (direction.ToRotation().ToRotationVector2() * 40f) + new Vector2(-40f, -40f);
+                    if (projectile.position != pos)
                     {
+                        if (projectile.Center.X > player.Center.X)
+                        {
+                            projectile.direction = 1;
+                        }
+                        else
+                        {
+                            projectile.direction = -1;
+                        }
                         projectile.netUpdate = true;
                     }
-                    projectile.position = player.Center + (direction.ToRotation().ToRotationVector2() * 98f);
+                    projectile.position = pos;
+                    //projectile.rotation = direction.ToRotation();
                 }
                 else
                 {
@@ -88,7 +99,8 @@ namespace JoJoStands.Projectiles
             player.heldProj = projectile.whoAmI;
             player.itemTime = 2;
             player.itemAnimation = 2;
-            projectile.rotation = player.itemRotation = (float)Math.Atan2((double)(projectile.velocity.Y * (float)projectile.direction), (double)(projectile.velocity.X * (float)projectile.direction));
+            //player.itemRotation = direction.ToRotation();
+            projectile.rotation = player.itemRotation = (float)Math.Atan2(direction.Y * projectile.direction, direction.X * projectile.direction);
 
             projectile.frameCounter++;
             if (projectile.frameCounter >= 2)

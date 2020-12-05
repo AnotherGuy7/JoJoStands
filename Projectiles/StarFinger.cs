@@ -121,6 +121,9 @@ namespace JoJoStands.Projectiles
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
+            if (ownerProj == null)
+                return false;
+
             if (ownerProj.direction == 1)
             {
                 offset = new Vector2(20f, -2f);

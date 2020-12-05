@@ -16,17 +16,12 @@ namespace JoJoStands.Projectiles.Minions
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 8;
-            Main.projPet[projectile.type] = true;
-            ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
-            ProjectileID.Sets.Homing[projectile.type] = true;
-            ProjectileID.Sets.LightPet[projectile.type] = true;
-            Main.projPet[projectile.type] = true;
         }
 
         public override void SetDefaults()
         {
             projectile.netImportant = true;
-            projectile.width = 92;
+            projectile.width = 64;
             projectile.height = 74;
             projectile.friendly = true;
             projectile.minion = true;
@@ -39,21 +34,24 @@ namespace JoJoStands.Projectiles.Minions
         }
 
         public override int standType => 2;
-        private readonly float shootCool = 6f;
+        public override int punchDamage => 82;
+        public override int punchTime => 12;
+
         private int goldenRectangleEffectTimer = 256;
         private bool playedSound = false;
 
         public override void AI()
         {
+            SelectFrame();
             UpdateStandInfo();
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            Vector2 targetPos = projectile.position;
-            Vector2 direction2 = targetPos - player.position;
-            bool target = false;
-            float targetDist = 98f;
             projectile.frameCounter++;
-			modPlayer.poseSoundName = poseSoundName;
+
+            if (shootCount > 0)
+            {
+                shootCount--;
+            }
             if (player.whoAmI == Main.myPlayer && modPlayer.TuskActNumber == 4)         //Making an owner check cause tuskActNumber isn't in sync with other players, causing TA4 to die for everyone else
             {
                 projectile.timeLeft = 10;
@@ -79,64 +77,49 @@ namespace JoJoStands.Projectiles.Minions
                 goldenRectangleEffectTimer -= 2;
             }
 
-            for (int k = 0; k < 200; k++)
+            NPC target = null;
+            for (int n = 0; n < Main.maxNPCs; n++)
             {
-                NPC npc = Main.npc[k];
-                if (npc.CanBeChasedBy(this, false))
+                NPC npc = Main.npc[n];
+                if (npc.active)
                 {
-                    float distance = Vector2.Distance(npc.Center, projectile.Center);
-                    if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
+                    float distance = Vector2.Distance(npc.Center, player.Center);
+                    if (npc.CanBeChasedBy(this) && distance < 9f * 16f && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
                     {
-                        targetDist = distance;
-                        targetPos = npc.Center;
-                        target = true;
+                        target = npc;
                     }
                 }
             }
-            if (projectile.ai[1] > 0f)
-            {
-                projectile.ai[1] += 1f;
-                if (Main.rand.NextBool(3))
-                {
-                    projectile.ai[1] += 1f;
-                }
-            }
-            if (projectile.ai[1] > shootCool)
-            {
-                projectile.ai[1] = 0f;
-                projectile.netUpdate = true;
-            }
-            SelectFrame();
-            normalFrames = true;
-            attackFrames = false;
-            if (target && direction2.Length() < 98f)
+            if (target != null)
             {
                 attackFrames = true;
                 normalFrames = false;
                 PlayPunchSound();
-                if (projectile.ai[1] == 0f)
+
+                Vector2 velocity = (target.position + new Vector2(0f, -4f)) - projectile.position;
+                velocity.Normalize();
+                projectile.velocity = velocity * 4f;
+                if ((target.position - projectile.Center).X > 0f)     //the turn around stuff
                 {
-                    projectile.ai[1] = 1f;
-                    if ((targetPos - projectile.Center).X > 0f)     //the turn around stuff
+                    projectile.spriteDirection = projectile.direction = 1;
+                }
+                else if ((target.position - projectile.Center).X < 0f)
+                {
+                    projectile.spriteDirection = projectile.direction = -1;
+                }
+                if (Main.myPlayer == projectile.owner)
+                {
+                    if (shootCount <= 0)
                     {
-                        projectile.spriteDirection = projectile.direction = 1;
-                        projectile.velocity.X = 2f;
-                    }
-                    else if ((targetPos - projectile.Center).X < 0f)
-                    {
-                        projectile.spriteDirection = projectile.direction = -1;
-                        projectile.velocity.X = -2f;
-                    }
-                    if (Main.myPlayer == projectile.owner)
-                    {
-                        Vector2 shootVel = targetPos - projectile.Center;
+                        shootCount += newPunchTime;
+                        Vector2 shootVel = target.position - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), 61, 2f, Main.myPlayer, 0f, 0f);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                         Main.projectile[proj].timeLeft = 3;
                         projectile.netUpdate = true;
@@ -148,7 +131,7 @@ namespace JoJoStands.Projectiles.Minions
                 attackFrames = false;
                 normalFrames = true;
             }
-            if (!target || (!attackFrames && normalFrames))
+            if (target == null || (!attackFrames && normalFrames))
             {
                 Vector2 vector131 = player.Center;
                 vector131.X -= (float)((12 + player.width / 2) * player.direction);
@@ -194,7 +177,7 @@ namespace JoJoStands.Projectiles.Minions
             projectile.frameCounter++;
             if (attackFrames)
             {
-                if (projectile.frameCounter >= 6)
+                if (projectile.frameCounter >= newPunchTime)
                 {
                     projectile.frame += 1;
                     projectile.frameCounter = 0;

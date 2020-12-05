@@ -152,31 +152,27 @@ namespace JoJoStands
 
         public override void PlayerDisconnect(Player player)        //runs for everyone that hasn't left
         {
-            for (int i = 0; i < 255; i++)
+            for (int p = 0; p < Main.maxPlayers; p++)
             {
-                Player otherPlayer = Main.player[i];
+                Player otherPlayer = Main.player[p];
                 MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>();
                 if (otherPlayer.active)
                 {
-                    if (otherPlayer.active && otherModPlayer.TheWorldEffect && !otherPlayer.HasBuff(mod.BuffType("TheWorldBuff")))       //if everyone has the effect and no one has the owner buff, turn it off
+                    if (otherModPlayer.TheWorldEffect && !otherPlayer.HasBuff(mod.BuffType("TheWorldBuff")))       //if everyone has the effect and no one has the owner buff, turn it off
                     {
                         Main.NewText("The user has left, and time has begun to move once more...");
                         otherModPlayer.TheWorldEffect = false;
                     }
-                    if (otherPlayer.active && otherModPlayer.TimeSkipEffect && !otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
+                    if (otherModPlayer.TimeSkipEffect && !otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
                     {
                         Main.NewText("The user has left, and time has begun to move once more...");
                         otherModPlayer.TimeSkipEffect = false;
                     }
-                    if (otherPlayer.active && otherModPlayer.BackToZero && !otherPlayer.HasBuff(mod.BuffType("BackToZero")))
+                    if (otherModPlayer.BackToZero && !otherPlayer.HasBuff(mod.BuffType("BackToZero")))
                     {
                         otherModPlayer.BackToZero = false;
                     }
-                    if (otherPlayer.active && otherModPlayer.DeathLoop && !otherPlayer.HasBuff(mod.BuffType("DeathLoop")))
-                    {
-                        otherModPlayer.DeathLoop = false;
-                    }
-                    if (otherPlayer.active && otherModPlayer.DeathLoop && !otherPlayer.HasBuff(mod.BuffType("DeathLoop")))
+                    if (otherModPlayer.DeathLoop && !otherPlayer.HasBuff(mod.BuffType("DeathLoop")))
                     {
                         otherModPlayer.DeathLoop = false;
                     }
