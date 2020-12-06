@@ -42,7 +42,7 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void AI()
         {
-            SelectFrame();
+            PlayAnimations();
             UpdateStandInfo();
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
@@ -172,7 +172,7 @@ namespace JoJoStands.Projectiles.Minions
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
         }
 
-        public virtual void SelectFrame()   //too lazy to change, not like it has many states anyway
+        public virtual void PlayAnimations()   //too lazy to change, not like it has many states anyway
         {
             projectile.frameCounter++;
             if (attackFrames)

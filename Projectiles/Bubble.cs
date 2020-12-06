@@ -68,10 +68,10 @@ namespace JoJoStands.Projectiles
             for (int i = 0; i < 60; i++)
             {
                 float circlePos = i;
-                Vector2 spawnPos = projectile.Center + (circlePos.ToRotationVector2() * 90f);
-                Vector2 velocity = projectile.Center + (circlePos.ToRotationVector2() * 90f);
+                Vector2 spawnPos = projectile.Center + (circlePos.ToRotationVector2() * 50f);
+                Vector2 velocity = spawnPos - projectile.Center;
                 velocity.Normalize();
-                Dust dustIndex = Dust.NewDustPerfect(spawnPos, 17, velocity * 3f, Scale: Main.rand.NextFloat(0.8f, 1.2f));
+                Dust dustIndex = Dust.NewDustPerfect(spawnPos, 21, velocity * 4f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
                 dustIndex.noGravity = true;
             }
         }

@@ -42,7 +42,7 @@ namespace JoJoStands.Buffs.Debuffs
             npc.buffTime[buffIndex] = 2;
             if (Math.Abs(npc.velocity.X) > 1f)
             {
-                npc.velocity.X /= 2f;
+                npc.velocity.X *= 0.5f;
             }
         }
     }

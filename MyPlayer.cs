@@ -693,7 +693,7 @@ namespace JoJoStands
                         Main.PlaySound(SoundID.Item67);
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
-                        shootVelocity *= 30f;       //multiply the angle by the speed to get the effect
+                        shootVelocity *= 12f;       //multiply the angle by the speed to get the effect
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 4f, player.whoAmI);
                     }
                 }
@@ -712,7 +712,7 @@ namespace JoJoStands
                 }
                 if (TuskActNumber == 3)
                 {
-                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
+                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0)
                     {
                         player.channel = true;
                         tuskShootCooldown += 35 - standSpeedBoosts;
@@ -730,7 +730,6 @@ namespace JoJoStands
                         shootVelocity.Normalize();
                         shootVelocity *= 5f;
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 124, 8f, player.whoAmI);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(15));
                     }
                 }
                 if (TuskActNumber == 4)
@@ -742,7 +741,7 @@ namespace JoJoStands
                         Main.PlaySound(SoundID.Item67);
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
-                        shootVelocity *= 60f;
+                        shootVelocity *= 4f;
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(305 * standDamageBoosts), 7f, player.whoAmI);
                     }
                     if (Main.mouseRight && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
@@ -751,7 +750,7 @@ namespace JoJoStands
                         Main.PlaySound(SoundID.Item78);
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
-                        shootVelocity *= 30f;
+                        shootVelocity *= 16f;
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, player.whoAmI);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(10));
                     }

@@ -35,21 +35,22 @@ namespace JoJoStands.Items
             item.rare = ItemRarityID.LightPurple;
         }
 
-        public override bool AltFunctionUse(Player player)
-        {
-            return player.GetModPlayer<MyPlayer>().canRevertFromKQBTD;
-        }
-
-        public override bool CanUseItem(Player player)
+        public override void HoldItem(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (player.altFunctionUse == 2 && mPlayer.revertTimer <= 0)
+            if (player.whoAmI == Main.myPlayer)
             {
-                item.TurnToAir();
-                Item.NewItem(player.Center, mod.ItemType("KillerQueenBTD"));
-                mPlayer.revertTimer += 30;
+                if (mPlayer.canRevertFromKQBTD)
+                {
+                    if (Main.mouseRight && mPlayer.revertTimer <= 0)
+                    {
+                        item.type = mod.ItemType("KillerQueenBTD");
+                        item.SetDefaults(mod.ItemType("KillerQueenBTD"));
+                        Main.PlaySound(SoundID.Grab);
+                        mPlayer.revertTimer += 30;
+                    }
+                }
             }
-            return true;
         }
 
         public override void AddRecipes()

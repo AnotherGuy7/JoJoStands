@@ -41,7 +41,7 @@ namespace JoJoStands.Projectiles
             {
                 Vector2 direction = Main.MouseWorld - projectile.Center;
                 direction.Normalize();
-                projectile.velocity = direction * 12f;
+                projectile.velocity = direction * 16f;
                 kickedBullet = true;
             }
 

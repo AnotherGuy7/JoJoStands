@@ -39,6 +39,10 @@ namespace JoJoStands.Projectiles
             Lighting.AddLight(projectile.Center, 2f, 2f, 2f);
             if (projectile.owner == Main.myPlayer)
             {
+                if (player.GetModPlayer<MyPlayer>().TuskActNumber != 3)
+                {
+                    projectile.Kill();
+                }
                 if (Main.mouseLeft && !WorldGen.TileEmpty((int)(projectile.position.X / 16f), (int)(projectile.position.Y / 16f)))
                 {
                     projectile.velocity = Main.MouseWorld - projectile.position;
@@ -85,6 +89,7 @@ namespace JoJoStands.Projectiles
             }
             player.position = projectile.position + new Vector2(0f, -35f);
             player.velocity.Y -= 6f;
+            player.AddBuff(mod.BuffType("AbilityCooldown"), player.GetModPlayer<MyPlayer>().AbilityCooldownTime(20));
         }
     }
 }

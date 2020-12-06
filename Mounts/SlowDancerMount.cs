@@ -37,7 +37,7 @@ namespace JoJoStands.Mounts
             mountData.xOffset = 5;
             mountData.bodyFrame = 3;
             mountData.yOffset = 1;
-            mountData.playerHeadOffset = 22;
+            mountData.playerHeadOffset = 38;
             mountData.idleFrameCount = 0;       //Idle
             mountData.idleFrameDelay = 0;
             mountData.idleFrameStart = 0;
@@ -114,7 +114,7 @@ namespace JoJoStands.Mounts
                     }
                 }
             }
-            if (!WorldGen.SolidTile((int)(mountedPlayer.position.X / 16f), (int)(mountedPlayer.position.Y / 16f) + 8))
+            if (!WorldGen.SolidTile((int)(mountedPlayer.position.X / 16f), (int)(mountedPlayer.position.Y / 16f) + 5))
             {
                 mount._frame = 15;
             }

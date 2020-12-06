@@ -33,26 +33,22 @@ namespace JoJoStands.Items
             item.rare = ItemRarityID.LightPurple;
         }
 
-        public override void OnCraft(Recipe recipe)
-        {
-            Main.LocalPlayer.GetModPlayer<MyPlayer>().canRevertFromKQBTD = true;
-        }
-
-        public override bool AltFunctionUse(Player player)
-        {
-            return player.GetModPlayer<MyPlayer>().canRevertFromKQBTD;
-        }
-
-        public override bool CanUseItem(Player player)
+        public override void HoldItem(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (player.altFunctionUse == 2 && mPlayer.revertTimer <= 0)
+            if (player.whoAmI == Main.myPlayer)
             {
-                item.TurnToAir();
-                Item.NewItem(player.Center, mod.ItemType("KillerQueenFinal"));
-                mPlayer.revertTimer += 30;
+                if (mPlayer.canRevertFromKQBTD)
+                {
+                    if (Main.mouseRight && mPlayer.revertTimer <= 0)
+                    {
+                        item.type = mod.ItemType("KillerQueenFinal");
+                        item.SetDefaults(mod.ItemType("KillerQueenFinal"));
+                        Main.PlaySound(SoundID.Grab);
+                        mPlayer.revertTimer += 30;
+                    }
+                }
             }
-            return true;
         }
 
         public override void AddRecipes()
@@ -65,6 +61,11 @@ namespace JoJoStands.Items
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
+        }
+
+        public override void OnCraft(Recipe recipe)
+        {
+            Main.player[item.owner].GetModPlayer<MyPlayer>().canRevertFromKQBTD = true;
         }
     }
 }

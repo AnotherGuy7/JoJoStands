@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -29,7 +30,7 @@ namespace JoJoStands.Projectiles
             }
             else
             {
-                Dust.NewDust(projectile.Center, projectile.width, projectile.height, 105);
+                Dust.NewDust(projectile.position, projectile.width, projectile.height, 105);
                 projectile.position.X += (float)Math.Sin(counter * 180);
                 projectile.velocity = Vector2.Zero;
                 if (counter >= 240)
@@ -42,20 +43,28 @@ namespace JoJoStands.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            if (!player.ZoneDungeon)
+            if (projectile.owner == Main.myPlayer)
             {
-                if (Main.rand.Next(0, 101) <= 90)
+                int item = 0;
+                if (!player.ZoneDungeon)
                 {
-                    Item.NewItem(projectile.getRect(), mod.ItemType("ViralPearl"));
+                    if (Main.rand.Next(0, 101) <= 90)
+                    {
+                        item = Item.NewItem(projectile.getRect(), mod.ItemType("ViralPearl"));
+                    }
+                    else
+                    {
+                        item = Item.NewItem(projectile.getRect(), mod.ItemType("CrackedPearl"));
+                    }
                 }
                 else
                 {
-                    Item.NewItem(projectile.getRect(), mod.ItemType("CrackedPearl"));
+                    item = Item.NewItem(projectile.getRect(), mod.ItemType("EctoPearl"));
                 }
-            }
-            else
-            {
-                Item.NewItem(projectile.getRect(), mod.ItemType("EctoPearl"));
+                if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0)
+                {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f);
+                }
             }
         }
     }
