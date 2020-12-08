@@ -52,6 +52,20 @@ namespace JoJoStands.Projectiles
             {
                 target.AddBuff(BuffID.OnFire, (int)projectile.ai[1]);
             }
+            if (mPlayer.awakenedAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(mod.BuffType("Infected"), 60 * 9);
+                }
+            }
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                {
+                    target.AddBuff(mod.BuffType("Infected"), 10 * 60);
+                }
+            }
         }
     }
 }

@@ -35,6 +35,20 @@ namespace JoJoStands.Projectiles
             {
                 crit = true;
             }
+            if (mPlayer.awakenedAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 80)
+                {
+                    target.AddBuff(mod.BuffType("Infected"), 60 * 9);
+                }
+            }
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                {
+                    target.AddBuff(mod.BuffType("Infected"), 10 * 60);
+                }
+            }
         }
     }
 }

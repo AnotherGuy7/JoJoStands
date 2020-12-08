@@ -15,7 +15,7 @@ namespace JoJoStands.Projectiles
             get { return mod.Name + "/Projectiles/Fists"; }
         }
 
-        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 7 = TH; 8 = GD; 9 = WS;
+        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 7 = TH; 8 = GD; 9 = WS; 10 = SC;
         {
             projectile.width = 30;
             projectile.height = 30;
@@ -153,6 +153,29 @@ namespace JoJoStands.Projectiles
                 if (projectile.ai[1] == 4f)
                 {
                     target.AddBuff(BuffID.Confused, 60 * 6);
+                }
+            }
+            if (projectile.ai[0] == 10f)
+            {
+                if (projectile.ai[1] == 1f && Main.rand.NextFloat(0, 101) >= 75)
+                {
+                    target.AddBuff(BuffID.Bleeding, 60 * 5);
+                    player.armorPenetration += 5;
+                }
+                if (projectile.ai[1] == 2f)
+                {
+                    target.AddBuff(BuffID.Bleeding, 60 * 10);
+                    player.armorPenetration += 10;
+                }
+                if (projectile.ai[1] == 3f)
+                {
+                    target.AddBuff(BuffID.Bleeding, 60 * 15);
+                    player.armorPenetration += 15;
+                }
+                if (projectile.ai[1] == 4f)
+                {
+                    target.AddBuff(BuffID.Bleeding, 60 * 20);
+                    player.armorPenetration += 20;
                 }
             }
 

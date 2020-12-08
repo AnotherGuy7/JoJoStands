@@ -996,6 +996,22 @@ namespace JoJoStands
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("WhitesnakeStandFinal"), 0, 0f, Main.myPlayer);
             }
+            else if (inputItem.type == mod.ItemType("SilverChariotT1"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SilverChariotStandT1"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("SilverChariotT2"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SilverChariotStandT2"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("SilverChariotT3"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SilverChariotStandT3"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("SilverChariotFinal"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SilverChariotStandFinal"), 0, 0f, Main.myPlayer);
+            }
             else if (inputItem.type == mod.ItemType("SexPistolsT1"))
             {
                 standType = 2;
