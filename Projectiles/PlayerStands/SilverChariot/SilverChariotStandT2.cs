@@ -11,7 +11,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             Main.projPet[projectile.type] = true;
             Main.projFrames[projectile.type] = 10;
         }
-        public bool parryFrames = false;
         public override float maxDistance => 98f;
         public override int punchDamage => 46;
         public override int punchTime => 7;
@@ -21,6 +20,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override int standOffset => +30;
 
         public int updateTimer = 0;
+        private bool parryFrames = false;
 
         public override void AI()
         {
@@ -43,6 +43,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
+
             if (!modPlayer.StandAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
@@ -54,13 +55,15 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !parryFrames && projectile.owner == Main.myPlayer)
                 {
+                    normalFrames = false;
+                    attackFrames = false;
                     secondaryAbilityFrames = true;
                     Main.mouseLeft = false;
                     projectile.netUpdate = true;
                     GoInFront();
-                    Rectangle parryRectangle = new Rectangle((int)projectile.Center.X + (4 * projectile.direction), (int)projectile.Center.Y, 16, 54);
+                    Rectangle parryRectangle = new Rectangle((int)projectile.Center.X + (4 * projectile.direction), (int)projectile.Center.Y + halfStandHeight, 16, 54);
                     for (int p = 0; p < Main.maxProjectiles; p++)
                     {
                         Projectile otherProj = Main.projectile[p];
@@ -70,10 +73,11 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                             {
                                 parryFrames = true;
                                 otherProj.owner = projectile.owner;
+                                otherProj.damage *= 2;
                                 otherProj.velocity *= -1;
                                 otherProj.hostile = false;
                                 otherProj.friendly = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), 60 * 10);
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
                             }
                         }
                     }
@@ -87,7 +91,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 npc.StrikeNPC(npc.damage * 2, 6f, player.direction);
                                 secondaryAbilityFrames = false;
                                 parryFrames = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), 60 * 5);
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
                             }
                         }
                     }
@@ -129,6 +133,12 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             {
                 normalFrames = false;
                 attackFrames = false;
+                secondaryAbilityFrames = false;
+                if (currentAnimationDone)
+                {
+                    parryFrames = false;
+                    normalFrames = true;
+                }
                 PlayAnimation("Parry");
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)

@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 
-namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
+namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 {
     public class SilverChariotStandT1 : StandClass
     {
