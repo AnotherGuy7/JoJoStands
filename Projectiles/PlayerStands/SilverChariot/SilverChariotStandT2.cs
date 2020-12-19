@@ -63,7 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     Main.mouseLeft = false;
                     projectile.netUpdate = true;
                     GoInFront();
-                    Rectangle parryRectangle = new Rectangle((int)projectile.Center.X + (4 * projectile.direction), (int)projectile.Center.Y + halfStandHeight, 16, 54);
+                    Rectangle parryRectangle = new Rectangle((int)projectile.Center.X + (4 * projectile.direction), (int)projectile.Center.Y - 29, 16, 54);
                     for (int p = 0; p < Main.maxProjectiles; p++)
                     {
                         Projectile otherProj = Main.projectile[p];

@@ -61,6 +61,7 @@ namespace JoJoStands
         public float standCooldownReduction = 0f;
         public int standType = 0;           //0 = no type; 1 = Melee; 2 = Ranged;
         public int piercedTimer = 36000;
+        public int hermitPurpleTier = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -298,17 +299,12 @@ namespace JoJoStands
                 StandOut = false;
                 standType = 0;
                 poseSoundName = "";
+                sexPistolsTier = 0;
+                hermitPurpleTier = 0;
+                gratefulDeadTier = 0;
                 if (standAccessory)
                 {
                     standAccessory = false;
-                }
-                if (sexPistolsTier != 0)
-                {
-                    sexPistolsTier = 0;
-                }
-                if (gratefulDeadTier != 0)
-                {
-                    gratefulDeadTier = 0;
                 }
                 if (equippedTuskAct != 0)
                 {
@@ -760,6 +756,16 @@ namespace JoJoStands
                     tuskShootCooldown = 30;
                 }
             }
+            if (hermitPurpleTier != 0 && player.whoAmI == Main.myPlayer)
+            {
+                if (hermitPurpleTier == 1)
+                {
+                    if (Main.mouseLeft)
+                    {
+
+                    }
+                }
+            }
 
             if (revived && !player.HasBuff(mod.BuffType("ArtificialSoul")))
             {
@@ -907,6 +913,26 @@ namespace JoJoStands
             else if (inputItem.type == mod.ItemType("KingCrimsonFinal"))
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KingCrimsonStandFinal"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("HermitPurpleT1"))
+            {
+                standType = 1;
+                hermitPurpleTier = 1;
+            }
+            else if (inputItem.type == mod.ItemType("HermitPurpleT2"))
+            {
+                standType = 1;
+                hermitPurpleTier = 2;
+            }
+            else if (inputItem.type == mod.ItemType("HermitPurpleT3"))
+            {
+                standType = 1;
+                hermitPurpleTier = 3;
+            }
+            else if (inputItem.type == mod.ItemType("HermitPurpleFinal"))
+            {
+                standType = 1;
+                hermitPurpleTier = 4;
             }
             else if (inputItem.type == mod.ItemType("HierophantGreenT1"))
             {
@@ -1543,6 +1569,31 @@ namespace JoJoStands
             }
         });
 
+        public static readonly PlayerLayer HermitPurpleLayer = new PlayerLayer("JoJoStands", "HermitPurpleLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = ModLoader.GetMod("JoJoStands");
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            SpriteEffects effects = SpriteEffects.None;
+            if (drawPlayer.active && modPlayer.hermitPurpleTier != 0)
+            {
+                Texture2D texture = mod.GetTexture("Extras/HermitPurple_Body");
+                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
+                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
+                if (drawPlayer.direction == -1)
+                {
+                    drawX = drawX + 2;
+                    effects = SpriteEffects.FlipHorizontally;
+                }
+                if (drawPlayer.direction == 1)
+                {
+                    effects = SpriteEffects.None;
+                }
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), drawPlayer.bodyFrame, Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                Main.playerDrawData.Add(data);
+            }
+        });
+
         public static readonly PlayerLayer CenturyBoyActivated = new PlayerLayer("JoJoStands", "CenturyBoyActivated", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
         {
             Player drawPlayer = drawInfo.drawPlayer;
@@ -1794,6 +1845,7 @@ namespace JoJoStands
             layers.Add(MenacingPose);
             layers.Add(CenturyBoyActivated);
             layers.Add(SexPistolsLayer);
+            layers.Add(HermitPurpleLayer);
         }
     }
 }
