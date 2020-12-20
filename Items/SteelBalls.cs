@@ -34,7 +34,7 @@ namespace JoJoStands.Items
         public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
         {
             Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
-            if (hamonPlayer.HamonCounter >= 5)
+            if (hamonPlayer.amountOfHamon >= 5)
             {
                 flat += 33f;
             }
@@ -43,7 +43,7 @@ namespace JoJoStands.Items
         public override void GetWeaponKnockback(Player player, ref float knockback)
         {
             Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
-            if (hamonPlayer.HamonCounter >= 5)
+            if (hamonPlayer.amountOfHamon >= 5)
             {
                 knockback += 1f;
             }
@@ -52,11 +52,11 @@ namespace JoJoStands.Items
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
-            if (hamonPlayer.HamonCounter >= 5)
+            if (hamonPlayer.amountOfHamon >= 5)
             {
                 speedX *= 2f;
                 speedY *= 2f;
-                hamonPlayer.HamonCounter -= 5;
+                hamonPlayer.amountOfHamon -= 5;
             }
             return true;
         }

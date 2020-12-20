@@ -58,7 +58,7 @@ namespace JoJoStands.UI
                 hamonDisplay.Left.Set(90f, 0f);
                 hamonDisplay.Top.Set(150f, 0f);
             }
-            hamonDisplay.SetText(hamonPlayer.HamonCounter + "/" + hamonPlayer.maxHamon);
+            hamonDisplay.SetText(hamonPlayer.amountOfHamon + "/" + hamonPlayer.maxHamon);
             if (changedInConfig)
             {
                 HamonBar.Left.Set(MyPlayer.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
@@ -103,99 +103,99 @@ namespace JoJoStands.UI
             Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
             int frame = 0;
             int frameHeight = hamonBarTexture.Height / 24;      //24 frames in that sheet
-            if (hamonPlayer.HamonCounter >= 3 && hamonPlayer.HamonCounter <= 12)
+            if (hamonPlayer.amountOfHamon >= 3 && hamonPlayer.amountOfHamon <= 12)
             {
                 frame = 0;
             }
-            if (hamonPlayer.HamonCounter >= 13 && hamonPlayer.HamonCounter <= 24)
+            if (hamonPlayer.amountOfHamon >= 13 && hamonPlayer.amountOfHamon <= 24)
             {
                 frame = 1;
             }
-            if (hamonPlayer.HamonCounter >= 25 && hamonPlayer.HamonCounter <= 36)
+            if (hamonPlayer.amountOfHamon >= 25 && hamonPlayer.amountOfHamon <= 36)
             {
                 frame = 2;
             }
-            if (hamonPlayer.HamonCounter >= 37 && hamonPlayer.HamonCounter <= 48)
+            if (hamonPlayer.amountOfHamon >= 37 && hamonPlayer.amountOfHamon <= 48)
             {
                 frame = 3;
             }
-            if (hamonPlayer.HamonCounter >= 49 && hamonPlayer.HamonCounter <= 60)
+            if (hamonPlayer.amountOfHamon >= 49 && hamonPlayer.amountOfHamon <= 60)
             {
                 frame = 4;
             }
-            if (hamonPlayer.HamonCounter >= 61 && hamonPlayer.HamonCounter <= 75)
+            if (hamonPlayer.amountOfHamon >= 61 && hamonPlayer.amountOfHamon <= 75)
             {
                 frame = 5;
             }
-            if (hamonPlayer.HamonCounter >= 76 && hamonPlayer.HamonCounter <= 90)
+            if (hamonPlayer.amountOfHamon >= 76 && hamonPlayer.amountOfHamon <= 90)
             {
                 frame = 6;
             }
-            if (hamonPlayer.HamonCounter >= 91 && hamonPlayer.HamonCounter <= 105)
+            if (hamonPlayer.amountOfHamon >= 91 && hamonPlayer.amountOfHamon <= 105)
             {
                 frame = 7;
             }
-            if (hamonPlayer.HamonCounter >= 106 && hamonPlayer.HamonCounter <= 120)
+            if (hamonPlayer.amountOfHamon >= 106 && hamonPlayer.amountOfHamon <= 120)
             {
                 frame = 8;
             }
-            if (hamonPlayer.HamonCounter >= 121 && hamonPlayer.HamonCounter <= 140)
+            if (hamonPlayer.amountOfHamon >= 121 && hamonPlayer.amountOfHamon <= 140)
             {
                 frame = 9;
             }
-            if (hamonPlayer.HamonCounter >= 141 && hamonPlayer.HamonCounter <= 160)
+            if (hamonPlayer.amountOfHamon >= 141 && hamonPlayer.amountOfHamon <= 160)
             {
                 frame = 10;
             }
-            if (hamonPlayer.HamonCounter >= 161 && hamonPlayer.HamonCounter <= 180)
+            if (hamonPlayer.amountOfHamon >= 161 && hamonPlayer.amountOfHamon <= 180)
             {
                 frame = 11;
             }
-            if (hamonPlayer.HamonCounter >= 181 && hamonPlayer.HamonCounter <= 192)   //Aja stone frames
+            if (hamonPlayer.amountOfHamon >= 181 && hamonPlayer.amountOfHamon <= 192)   //Aja stone frames
             {
                 frame = 12;
             }
-            if (hamonPlayer.HamonCounter >= 193 && hamonPlayer.HamonCounter <= 204)
+            if (hamonPlayer.amountOfHamon >= 193 && hamonPlayer.amountOfHamon <= 204)
             {
                 frame = 13;
             }
-            if (hamonPlayer.HamonCounter >= 205 && hamonPlayer.HamonCounter <= 216)
+            if (hamonPlayer.amountOfHamon >= 205 && hamonPlayer.amountOfHamon <= 216)
             {
                 frame = 14;
             }
-            if (hamonPlayer.HamonCounter >= 217 && hamonPlayer.HamonCounter <= 228)
+            if (hamonPlayer.amountOfHamon >= 217 && hamonPlayer.amountOfHamon <= 228)
             {
                 frame = 15;
             }
-            if (hamonPlayer.HamonCounter >= 229 && hamonPlayer.HamonCounter <= 240)       //last of the first row
+            if (hamonPlayer.amountOfHamon >= 229 && hamonPlayer.amountOfHamon <= 240)       //last of the first row
             {
                 frame = 16;
             }
-            if (hamonPlayer.HamonCounter >= 241 && hamonPlayer.HamonCounter <= 255)       //2nd row starts here
+            if (hamonPlayer.amountOfHamon >= 241 && hamonPlayer.amountOfHamon <= 255)       //2nd row starts here
             {
                 frame = 17;
             }
-            if (hamonPlayer.HamonCounter >= 256 && hamonPlayer.HamonCounter <= 270)
+            if (hamonPlayer.amountOfHamon >= 256 && hamonPlayer.amountOfHamon <= 270)
             {
                 frame = 18;
             }
-            if (hamonPlayer.HamonCounter >= 271 && hamonPlayer.HamonCounter <= 285)
+            if (hamonPlayer.amountOfHamon >= 271 && hamonPlayer.amountOfHamon <= 285)
             {
                 frame = 19;
             }
-            if (hamonPlayer.HamonCounter >= 286 && hamonPlayer.HamonCounter <= 300)       //3rd row starts here
+            if (hamonPlayer.amountOfHamon >= 286 && hamonPlayer.amountOfHamon <= 300)       //3rd row starts here
             {
                 frame = 20;
             }
-            if (hamonPlayer.HamonCounter >= 301 && hamonPlayer.HamonCounter <= 320)
+            if (hamonPlayer.amountOfHamon >= 301 && hamonPlayer.amountOfHamon <= 320)
             {
                 frame = 21;
             }
-            if (hamonPlayer.HamonCounter >= 321 && hamonPlayer.HamonCounter <= 340)
+            if (hamonPlayer.amountOfHamon >= 321 && hamonPlayer.amountOfHamon <= 340)
             {
                 frame = 22;
             }
-            if (hamonPlayer.HamonCounter >= 341 && hamonPlayer.HamonCounter <= 360)
+            if (hamonPlayer.amountOfHamon >= 341 && hamonPlayer.amountOfHamon <= 360)
             {
                 frame = 23;
             }

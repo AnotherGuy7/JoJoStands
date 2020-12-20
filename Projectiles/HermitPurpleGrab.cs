@@ -7,7 +7,7 @@ using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles
 {
-    public class HermitPurpleWhip : ModProjectile
+    public class HermitPurpleGrab : ModProjectile
     {
         public override string Texture
         {
@@ -27,6 +27,7 @@ namespace JoJoStands.Projectiles
         }
 
         private bool living = true;
+        private NPC heldNPC = null;
 
         public override void AI()       //all this so that the other chain doesn't draw... yare yare. It was mostly just picking out types
         {
@@ -50,53 +51,78 @@ namespace JoJoStands.Projectiles
                 player.ChangeDir(1);
             }
             //projectile.spriteDirection = projectile.direction;
-            Vector2 rota = player.Center - projectile.Center;
-            projectile.rotation = (-rota).ToRotation();
-            if (projectile.alpha == 0)
+
+            if (!Main.mouseRight)
             {
-                if (projectile.position.X + (float)(projectile.width / 2) > player.position.X + (float)(player.width / 2))
+                heldNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().grabbedByHermitPurple = false;
+                heldNPC = null;
+                living = false;
+            }
+
+            Vector2 rotation = player.Center - projectile.Center;
+            projectile.rotation = (-rotation).ToRotation();
+            if (living)
+            {
+                if (heldNPC == null)
                 {
-                    player.ChangeDir(1);
+                    projectile.rotation = (-rotation).ToRotation();
+                    if (projectile.owner == Main.myPlayer)
+                    {
+                        float distance = projectile.Distance(Main.MouseWorld);
+                        if (distance >= 20f)
+                        {
+                            projectile.velocity = Main.MouseWorld - projectile.Center;
+                            projectile.velocity.Normalize();
+                            projectile.velocity *= 10f;
+                        }
+                        else
+                        {
+                            projectile.velocity = Vector2.Zero;
+                        }
+                        projectile.netUpdate = true;
+                    }
                 }
                 else
                 {
-                    player.ChangeDir(-1);
+                    if (heldNPC == null)
+                    {
+                        living = false;
+                        return;
+                    }
+
+                    projectile.timeLeft = 2;
+                    heldNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().grabbedByHermitPurple = true;
+                    heldNPC.velocity = Vector2.Zero;
+                    projectile.position = heldNPC.Center;
+                    rotation.Normalize();
+                    rotation *= 0.3f;
+                    heldNPC.velocity.X = rotation.X;
+                    if (heldNPC.velocity.Y < 6f)
+                    {
+                        heldNPC.velocity.Y += 0.3f;
+                    }
                 }
             }
-            Vector2 projectileCenter = new Vector2(projectile.position.X + (float)projectile.width * 0.5f, projectile.position.Y + (float)projectile.height * 0.5f);
-            float playerDifferenceX = player.position.X + (float)(player.width / 2) - projectileCenter.X;
-            float playerDifferenceY = player.position.Y + (float)(player.height / 2) - projectileCenter.Y;
-            float distance = (float)Math.Sqrt((double)(playerDifferenceX * playerDifferenceX + playerDifferenceY * playerDifferenceY));
-            if (living)
+            else
             {
-                if (distance > 120f)
+                float distance = projectile.Distance(player.Center);
+                if (distance >= 20f)
                 {
-                    living = false;
+                    projectile.velocity = player.Center - projectile.Center;
+                    projectile.velocity.Normalize();
+                    projectile.velocity *= 10f;
                 }
-                projectile.ai[1] += 1f;
-                if (projectile.ai[1] > 5f)
-                {
-                    projectile.alpha = 0;
-                }
-                if (projectile.ai[1] >= 10f)
-                {
-                    projectile.ai[1] = 15f;
-                }
-            }
-            else if (!living)
-            {
-                projectile.tileCollide = false;
-                float num169 = 20f;
-                if (distance < 50f)
+                else
                 {
                     projectile.Kill();
                 }
-                distance = num169 / distance;
-                playerDifferenceX *= distance;
-                playerDifferenceY *= distance;
-                projectile.velocity.X = playerDifferenceX;
-                projectile.velocity.Y = playerDifferenceY;
             }
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            heldNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().grabbedByHermitPurple = false;
+            heldNPC = null;
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -105,6 +131,10 @@ namespace JoJoStands.Projectiles
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
             {
                 crit = true;
+            }
+            if (!target.boss && living)
+            {
+                heldNPC = target;
             }
         }
 

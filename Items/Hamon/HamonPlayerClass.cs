@@ -11,7 +11,7 @@ namespace JoJoStands.Items.Hamon
         public int hamonIncreaseBonus = 0;
 
         public int hamonLevel = 0;
-        public int HamonCounter = 0;
+        public int amountOfHamon = 0;
         public int maxHamon = 60;
         public int hamonIncreaseCounter = 0;
         public int maxHamonCounter = 0;
@@ -116,7 +116,7 @@ namespace JoJoStands.Items.Hamon
             }
             if (Mplayer.Vampire)
             {
-                HamonCounter = 0;
+                amountOfHamon = 0;
                 hamonIncreaseCounter = 0;
             }
 
@@ -125,20 +125,20 @@ namespace JoJoStands.Items.Hamon
                 if (AjaStone)       //or any other decrease-preventing accessories
                 {
                     hamonIncreaseCounter = 0;
-                    HamonCounter += 1;
+                    amountOfHamon += 1;
                 }
-                if (HamonCounter < 60)
+                if (amountOfHamon < 60)
                 {
                     hamonIncreaseCounter = 0;
-                    HamonCounter += 1;
+                    amountOfHamon += 1;
                 }
             }
-            if (hamonIncreaseCounter >= maxHamonCounter && HamonCounter > 60 && !AjaStone)      //the one that decreases Hamon
+            if (hamonIncreaseCounter >= maxHamonCounter && amountOfHamon > 60 && !AjaStone)      //the one that decreases Hamon
             {
                 hamonIncreaseCounter = 0;
-                HamonCounter -= 1;
+                amountOfHamon -= 1;
             }
-            if (!Mplayer.Vampire && player.breath == player.breathMax && HamonCounter <= 60)       //in general, to increase Hamon while it can still be increased, no speeding up decreasing
+            if (!Mplayer.Vampire && player.breath == player.breathMax && amountOfHamon <= 60)       //in general, to increase Hamon while it can still be increased, no speeding up decreasing
             {
                 if (player.velocity != Vector2.Zero)
                 {
@@ -158,22 +158,22 @@ namespace JoJoStands.Items.Hamon
             {
                 maxHamonCounter = 240;
             }
-            if (HamonCounter > 60 && HamonCounter < 120 && !AjaStone)      //every 6 seconds, while Hamon is at the UI's second row, it decreases. Only if you don't have the Aja Stone
+            if (amountOfHamon > 60 && amountOfHamon < 120 && !AjaStone)      //every 6 seconds, while Hamon is at the UI's second row, it decreases. Only if you don't have the Aja Stone
             {
                 maxHamonCounter = 360;
             }
-            if (HamonCounter >= 120 && !AjaStone)      //same as top but every 3 seconds
+            if (amountOfHamon >= 120 && !AjaStone)      //same as top but every 3 seconds
             {
                 maxHamonCounter = 180;
             }
 
-            if (HamonCounter >= maxHamon)       //hamon limit stuff
+            if (amountOfHamon >= maxHamon)       //hamon limit stuff
             {
-                HamonCounter = maxHamon;
+                amountOfHamon = maxHamon;
             }
-            if (HamonCounter <= 0)
+            if (amountOfHamon <= 0)
             {
-                HamonCounter = 0;
+                amountOfHamon = 0;
             }
         }
 

@@ -39,7 +39,7 @@ namespace JoJoStands.Items.Hamon
         public override bool CanUseItem(Player player)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            if (player.altFunctionUse == 2 && hamonPlayer.HamonCounter >= 3)
+            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 3)
             {
                 item.damage = 17;
                 item.width = 30;
@@ -51,9 +51,9 @@ namespace JoJoStands.Items.Hamon
                 item.autoReuse = false;
                 item.shoot = mod.ProjectileType("CutterHamonBubble");
                 item.shootSpeed = 7f;
-                hamonPlayer.HamonCounter -= 3;
+                hamonPlayer.amountOfHamon -= 3;
             }
-            if (player.altFunctionUse == 2 && hamonPlayer.HamonCounter <= 3)
+            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon <= 3)
             {
                 return false;
             }
@@ -81,13 +81,13 @@ namespace JoJoStands.Items.Hamon
                 item.shoot = mod.ProjectileType("HamonBloodBubble");
                 item.shootSpeed = 5f;
                 item.damage += 24;
-                hamonPlayer.HamonCounter -= 1;
+                hamonPlayer.amountOfHamon -= 1;
             }
             else
             {
                 item.shoot = mod.ProjectileType("HamonBubble");
                 item.shootSpeed = 30f;
-                hamonPlayer.HamonCounter -= 1;
+                hamonPlayer.amountOfHamon -= 1;
             }
             return true;
         }

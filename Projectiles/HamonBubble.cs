@@ -29,7 +29,7 @@ namespace JoJoStands.Projectiles
             {
                 projectile.velocity *= 0;
             }
-            if (hamonPlayer.HamonCounter >= 1)
+            if (hamonPlayer.amountOfHamon >= 1)
             {
                 Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 169, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
             }

@@ -62,7 +62,7 @@ namespace JoJoStands.Items.Hamon
                 player.AddBuff(BuffID.Ironskin, 1800);
                 item.UseSound = SoundID.Item3;
                 item.potion = true;
-                player.GetModPlayer<HamonPlayer>().HamonCounter += 40;
+                player.GetModPlayer<HamonPlayer>().amountOfHamon += 40;
             }
 			return true;
 		}

@@ -61,7 +61,7 @@ namespace JoJoStands.Items.Hamon
                 player.AddBuff(BuffID.ManaRegeneration, 1650);
                 item.UseSound = SoundID.Item3;
                 item.potion = true;
-                player.GetModPlayer<HamonPlayer>().HamonCounter += 25;
+                player.GetModPlayer<HamonPlayer>().amountOfHamon += 25;
             }
 			return true;
 		}

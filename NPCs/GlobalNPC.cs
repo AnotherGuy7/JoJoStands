@@ -14,6 +14,7 @@ namespace JoJoStands.NPCs
         public bool applyingForesightPositions = false;
         public bool foresightResetIndex = false;
         public bool taggedWithPhantomMarker = false;
+        public bool grabbedByHermitPurple = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -403,6 +404,8 @@ namespace JoJoStands.NPCs
             }
             if (npc.HasBuff(mod.BuffType("Stolen")))
                 return false;
+            if (grabbedByHermitPurple)
+                return false;
             return true;
         }
 
@@ -410,7 +413,8 @@ namespace JoJoStands.NPCs
         {
             for (int i = 0; i < 255; i++)
             {
-                if (Main.player[i].active && npc.boss && Main.player[i].GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
+                Player player = Main.player[i];
+                if (player.active && npc.boss && player.GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
                 {
                     Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
                     Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
@@ -418,7 +422,7 @@ namespace JoJoStands.NPCs
                     Buffs.ItemBuff.DeathLoop.Looping3x = true;
                     Buffs.ItemBuff.DeathLoop.Looping10x = false;
                 }
-                if (Main.player[i].active && !npc.boss && Main.player[i].GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
+                if (player.active && !npc.boss && player.GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
                 {
                     Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
                     Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;

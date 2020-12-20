@@ -29,7 +29,7 @@ namespace JoJoStands.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             Items.Hamon.HamonPlayer hamonPlayer = Main.player[projectile.owner].GetModPlayer<Items.Hamon.HamonPlayer>();
-            if (hamonPlayer.HamonCounter >= 5 && Main.rand.Next(0, 101) <= 25)
+            if (hamonPlayer.amountOfHamon >= 5 && Main.rand.Next(0, 101) <= 25)
             {
                 target.AddBuff(mod.BuffType("Spin"), 40);
             }

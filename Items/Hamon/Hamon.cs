@@ -45,7 +45,7 @@ namespace JoJoStands.Items.Hamon
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             if (!mPlayer.StandOut || (mPlayer.StandOut && mPlayer.StandAutoMode))
             {
-                if (player.altFunctionUse == 2 && hamonPlayer.HamonCounter >= 5)
+                if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 5)
                 {
                     item.noUseGraphic = true;
                     item.useTime = 180;
@@ -54,9 +54,9 @@ namespace JoJoStands.Items.Hamon
                     int healamount = Main.rand.Next(10, 20);
                     player.HealEffect(healamount);
                     player.statLife += healamount;
-                    hamonPlayer.HamonCounter -= 5;
+                    hamonPlayer.amountOfHamon -= 5;
                 }
-                if (player.altFunctionUse == 2 && hamonPlayer.HamonCounter <= 5)
+                if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon <= 5)
                 {
                     return false;
                 }

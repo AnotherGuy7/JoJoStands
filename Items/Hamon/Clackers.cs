@@ -41,10 +41,10 @@ namespace JoJoStands.Items.Hamon
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            if (player.altFunctionUse == 2 && hamonPlayer.HamonCounter >= 5)
+            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 5)
             {
                 type = mod.ProjectileType("ChargedClackerProjectile");
-                hamonPlayer.HamonCounter -= 5;
+                hamonPlayer.amountOfHamon -= 5;
             }
             return true;
         }
@@ -65,7 +65,7 @@ namespace JoJoStands.Items.Hamon
         public override bool CanUseItem(Player player)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            if (player.altFunctionUse == 2 && hamonPlayer.HamonCounter >= 5)
+            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 5)
             {
                 item.damage *= (int)1.5;
                 item.useTime = 60;
@@ -76,7 +76,7 @@ namespace JoJoStands.Items.Hamon
                 item.useTurn = true;
                 item.noWet = true;
             }
-            if (player.altFunctionUse != 2 || (player.altFunctionUse == 2 && hamonPlayer.HamonCounter <= 4))
+            if (player.altFunctionUse != 2 || (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon <= 4))
             {
                 item.damage = 16;
                 item.useTime = 60;

@@ -45,7 +45,7 @@ namespace JoJoStands.Items.Hamon
             }
             if (increaseCounter >= 30)
             {
-                hamonPlayer.HamonCounter += 1;
+                hamonPlayer.amountOfHamon += 1;
                 increaseCounter = 0;
             }
         }
@@ -117,7 +117,7 @@ namespace JoJoStands.Items.Hamon
             {
                 add += 1.29f;
             }
-            if (hamonPlayer.HamonCounter >= hamonPlayer.maxHamon / 2)     //more than half of maxHamon
+            if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 2)     //more than half of maxHamon
             {
                 mult *= 1.5f;
             }

@@ -23,5 +23,15 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.lifeRegen -= 60;     //losing 30 health
             player.moveSpeed *= 0.5f;
         }
+
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            if (npc.lifeRegen > 0)
+            {
+                npc.lifeRegen = 0;
+            }
+            npc.lifeRegenExpectedLossPerSecond = 30;
+            npc.lifeRegen -= 60;     //losing 30 health
+        }
     }
 }

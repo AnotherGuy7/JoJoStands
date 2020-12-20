@@ -1,3 +1,4 @@
+using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -62,6 +63,9 @@ namespace JoJoStands
         public int standType = 0;           //0 = no type; 1 = Melee; 2 = Ranged;
         public int piercedTimer = 36000;
         public int hermitPurpleTier = 0;
+        public int hermitPurpleShootCooldown = 0;
+        public int hermitPurpleSpecialFrameCounter = 0;
+        public int hermitPurpleHamonBurstLeft = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -758,11 +762,96 @@ namespace JoJoStands
             }
             if (hermitPurpleTier != 0 && player.whoAmI == Main.myPlayer)
             {
+                bool specialPressed = false;
+                if (!Main.dedServ)
+                    specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+
+                HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+                if (specialPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && hermitPurpleTier > 2 && hPlayer.amountOfHamon > 40)
+                {
+                    if (hermitPurpleTier == 3)
+                    {
+                        hermitPurpleHamonBurstLeft = 3;
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(30));
+                    }
+                    if (hermitPurpleTier == 4)
+                    {
+                        hermitPurpleHamonBurstLeft = 5;
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(20));
+                    }
+                    hPlayer.amountOfHamon -= 40;
+                }
+                if (hermitPurpleShootCooldown > 0)
+                {
+                    hermitPurpleShootCooldown--;
+                }
+
                 if (hermitPurpleTier == 1)
                 {
-                    if (Main.mouseLeft)
+                    if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
                     {
-
+                        hermitPurpleShootCooldown += 40 - standSpeedBoosts;
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 14f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(17 * standDamageBoosts), 4f, player.whoAmI);
+                    }
+                }
+                if (hermitPurpleTier == 2)
+                {
+                    if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                    {
+                        hermitPurpleShootCooldown += 35 - standSpeedBoosts;
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 14f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(42 * standDamageBoosts), 6f, player.whoAmI);
+                    }
+                    if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
+                    {
+                        hermitPurpleShootCooldown += 60 - standSpeedBoosts;
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 8f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(33 * standDamageBoosts), 0f, player.whoAmI);
+                    }
+                }
+                if (hermitPurpleTier == 3)
+                {
+                    if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                    {
+                        hermitPurpleShootCooldown += 30 - standSpeedBoosts;
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 14f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(59 * standDamageBoosts), 7f, player.whoAmI);
+                    }
+                    if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
+                    {
+                        hermitPurpleShootCooldown += 60 - standSpeedBoosts;
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 8f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(47 * standDamageBoosts), 0f, player.whoAmI);
+                    }
+                }
+                if (hermitPurpleTier == 4)
+                {
+                    if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                    {
+                        hermitPurpleShootCooldown += 25 - standSpeedBoosts;
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 14f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(81 * standDamageBoosts), 8f, player.whoAmI);
+                    }
+                    if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
+                    {
+                        hermitPurpleShootCooldown += 60 - standSpeedBoosts;
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 8f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(72 * standDamageBoosts), 0f, player.whoAmI);
                     }
                 }
             }
@@ -1257,6 +1346,7 @@ namespace JoJoStands
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
         {
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (crystalArmorSetEquipped)
             {
                 Vector2 shootVel = player.Center + new Vector2(0f, -8f);
@@ -1270,6 +1360,33 @@ namespace JoJoStands
                     int proj = Projectile.NewProjectile(player.Center, perturbedSpeed, mod.ProjectileType("CrystalShard"), 15, 2f, player.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                 }
+            }
+            if (hermitPurpleTier >= 2)
+            {
+                int reflectedDamage = (int)(npc.damage * (0.05f * hermitPurpleTier));
+                npc.StrikeNPC(reflectedDamage, 3f * hermitPurpleTier, npc.direction);
+                if (hPlayer.amountOfHamon >= 30)
+                {
+                    npc.AddBuff(mod.BuffType("Sunburn"), ((hPlayer.amountOfHamon / 30) * hermitPurpleTier) * 60);
+                    hPlayer.amountOfHamon -= 2;
+                }
+            }
+            if (hermitPurpleHamonBurstLeft > 0)
+            {
+                int reflectedDamage = (int)(npc.damage * 0.5f);
+                npc.StrikeNPC(reflectedDamage, 14f, npc.direction);
+                npc.AddBuff(mod.BuffType("Sunburn"), (10 * (hermitPurpleTier - 2)) * 60);
+
+                for (int i = 0; i < 60; i++)
+                {
+                    float circlePos = i;
+                    Vector2 spawnPos = npc.Center + (circlePos.ToRotationVector2() * 50f);
+                    Vector2 velocity = spawnPos - npc.Center;
+                    velocity.Normalize();
+                    Dust dust = Dust.NewDustPerfect(spawnPos, 169, velocity * 4f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
+                    dust.noGravity = true;
+                }
+                hermitPurpleHamonBurstLeft -= 1;
             }
         }
 
@@ -1484,16 +1601,16 @@ namespace JoJoStands
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             Items.Hamon.HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<Items.Hamon.HamonPlayer>();
             SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && hamonPlayer.HamonCounter >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
+            if (drawPlayer.active && hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
             {
                 Texture2D texture = mod.GetTexture("Extras/HamonChargeI");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
-                if (hamonPlayer.HamonCounter >= hamonPlayer.maxHamon / 2)
+                if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 2)
                 {
                     texture = mod.GetTexture("Extras/HamonChargeII");
                 }
-                if (hamonPlayer.HamonCounter >= hamonPlayer.maxHamon / 1.5)
+                if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 1.5)
                 {
                     texture = mod.GetTexture("Extras/HamonChargeIII");
                 }
@@ -1569,13 +1686,50 @@ namespace JoJoStands
             }
         });
 
-        public static readonly PlayerLayer HermitPurpleLayer = new PlayerLayer("JoJoStands", "HermitPurpleLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
+        public static readonly PlayerLayer HermitPurpleArmsLayer = new PlayerLayer("JoJoStands", "HermitPurpleArmsLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             SpriteEffects effects = SpriteEffects.None;
             if (drawPlayer.active && modPlayer.hermitPurpleTier != 0)
+            {
+                Texture2D texture = mod.GetTexture("Extras/HermitPurple_Arms");
+                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
+                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
+                if (drawPlayer.direction == -1)
+                {
+                    drawX = drawX + 2;
+                    effects = SpriteEffects.FlipHorizontally;
+                }
+                if (drawPlayer.direction == 1)
+                {
+                    effects = SpriteEffects.None;
+                }
+                Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
+                if (modPlayer.hermitPurpleHamonBurstLeft > 0)        //No increment here because it's already incrememnted in the Body layer
+                {
+                    if (modPlayer.hermitPurpleSpecialFrameCounter >= 5)
+                    {
+                        color = Color.Yellow;
+                        if (modPlayer.hermitPurpleSpecialFrameCounter >= 10)
+                        {
+                            modPlayer.hermitPurpleSpecialFrameCounter = 0;
+                        }
+                    }
+                }
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), drawPlayer.bodyFrame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                Main.playerDrawData.Add(data);
+            }
+        });
+
+        public static readonly PlayerLayer HermitPurpleBodyLayer = new PlayerLayer("JoJoStands", "HermitPurpleBodyLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = ModLoader.GetMod("JoJoStands");
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            SpriteEffects effects = SpriteEffects.None;
+            if (drawPlayer.active && modPlayer.hermitPurpleTier > 1)
             {
                 Texture2D texture = mod.GetTexture("Extras/HermitPurple_Body");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
@@ -1589,7 +1743,20 @@ namespace JoJoStands
                 {
                     effects = SpriteEffects.None;
                 }
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), drawPlayer.bodyFrame, Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
+                if (modPlayer.hermitPurpleHamonBurstLeft > 0)
+                {
+                    modPlayer.hermitPurpleSpecialFrameCounter++;
+                    if (modPlayer.hermitPurpleSpecialFrameCounter >= 5)
+                    {
+                        color = Color.Yellow;
+                        if (modPlayer.hermitPurpleSpecialFrameCounter >= 10)
+                        {
+                            modPlayer.hermitPurpleSpecialFrameCounter = 0;
+                        }
+                    }
+                }
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), drawPlayer.bodyFrame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 Main.playerDrawData.Add(data);
             }
         });
@@ -1845,7 +2012,8 @@ namespace JoJoStands
             layers.Add(MenacingPose);
             layers.Add(CenturyBoyActivated);
             layers.Add(SexPistolsLayer);
-            layers.Add(HermitPurpleLayer);
+            layers.Add(HermitPurpleBodyLayer);
+            layers.Add(HermitPurpleArmsLayer);
         }
     }
 }
