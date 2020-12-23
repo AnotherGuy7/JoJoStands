@@ -11,6 +11,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override float fistWhoAmI => 1f;
         public override string punchSoundName => "Muda";
         public override string poseSoundName => "ComeAsCloseAsYouLike";
+        public override string spawnSoundName => "The World";
         public override int standType => 1;
 
         private int updateTimer = 0;

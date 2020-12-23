@@ -13,6 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override int standType => 2;
         public override int standOffset => -10;
         public override string poseSoundName => "IWouldntLose";
+        public override string spawnSoundName => "Killer Queen";
 
         private int bubbleDamage = 180;      //not using projectileDamage cause this one changes
         private int btdStartDelay = 0;

@@ -20,6 +20,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override float fistWhoAmI => 6f;
         public override int standOffset => 0;
         public override string poseSoundName => "AllThatRemainsAreTheResults";
+        public override string spawnSoundName => "King Crimson";
         public override int standType => 1;
 
         private int updateTimer = 0;

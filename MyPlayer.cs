@@ -85,6 +85,7 @@ namespace JoJoStands
         public bool phantomLeggingsEquipped = false;
         public bool usedEctoPearl = false;
         public bool receivedArrowShard = false;
+        public bool dyingVampire = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -1308,10 +1309,6 @@ namespace JoJoStands
                     player.HealEffect(healingAmount, true);
                 }
             }
-            if (chlorositeShortEqquipped)
-            {
-                damage = (int)(damage * 0.9f);
-            }
             if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
             {
                 player.AddBuff(BuffID.ShadowDodge, 30 * 60);
@@ -1373,7 +1370,7 @@ namespace JoJoStands
             }
             if (hermitPurpleHamonBurstLeft > 0)
             {
-                int reflectedDamage = (int)(npc.damage * 0.5f);
+                int reflectedDamage = npc.damage * 4;       //This is becaues npc damage is pretty weak against the NPC itself
                 npc.StrikeNPC(reflectedDamage, 14f, npc.direction);
                 npc.AddBuff(mod.BuffType("Sunburn"), (10 * (hermitPurpleTier - 2)) * 60);
 
@@ -1501,17 +1498,18 @@ namespace JoJoStands
                 return false;
             }
 
-            /*if (Vampire && !dyingVampire)
+            if (Vampire && !dyingVampire)
             {
-                player.AddBuff(mod.BuffType("DyingVampire"), 60);
-                player.statLife = player.statLifeMax2;
                 dyingVampire = true;
+                player.AddBuff(mod.BuffType("DyingVampire"), 60);
+                player.statLife = 50;
                 return false;
             }
             if (dyingVampire)
             {
+                player.ClearBuff(mod.BuffType("DyingVampire"));
                 dyingVampire = false;
-            }*/
+            }
 
             if (player.ZoneSkyHeight && Vampire)
             {
@@ -1696,7 +1694,7 @@ namespace JoJoStands
             {
                 Texture2D texture = mod.GetTexture("Extras/HermitPurple_Arms");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
+                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y) - 4;
                 if (drawPlayer.direction == -1)
                 {
                     drawX = drawX + 2;
@@ -1733,7 +1731,7 @@ namespace JoJoStands
             {
                 Texture2D texture = mod.GetTexture("Extras/HermitPurple_Body");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
+                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y) - 4;
                 if (drawPlayer.direction == -1)
                 {
                     drawX = drawX + 2;
@@ -1980,6 +1978,18 @@ namespace JoJoStands
                     {
                         layers[i].visible = false;
                     }
+                }
+                if (dyingVampire)
+                {
+                    PlayerLayer.Legs.visible = false;
+                    PlayerLayer.Body.visible = false;
+                    PlayerLayer.Skin.visible = false;
+                    PlayerLayer.Arms.visible = false;
+                    PlayerLayer.HeldItem.visible = false;
+                    PlayerLayer.ShieldAcc.visible = false;
+                    PlayerLayer.ShoeAcc.visible = false;
+                    PlayerLayer.BalloonAcc.visible = false;
+                    PlayerLayer.Wings.visible = false;
                 }
             }
 

@@ -4,19 +4,19 @@ using Terraria.ModLoader;
 namespace JoJoStands.Items.Vanities
 {
     [AutoloadEquip(EquipType.Head)]
-    public class AvdolHair : ModItem
+    public class OldJosephHat : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Fortuneteller Wig");
-            Tooltip.SetDefault("A wig, styled after a fortuneteller, and Stand user.");
+            DisplayName.SetDefault("Old Man's Hat");
+            Tooltip.SetDefault("A western hat. Comes with a beard!");
         }
 
         public override void SetDefaults()
         {
             item.width = 18;
             item.height = 18;
-            item.rare = 6;
+            item.rare = ItemRarityID.LightPurple;
             item.vanity = true;
         }
 

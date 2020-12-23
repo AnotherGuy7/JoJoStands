@@ -12,6 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override int standOffset => 0;
         public override int standType => 2;
         public override string poseSoundName => "ItsTheVictorWhoHasJustice";
+        public override string spawnSoundName => "Hierophant Green";
 
         public override void AI()
         {

@@ -54,8 +54,11 @@ namespace JoJoStands.Projectiles
 
             if (!Main.mouseRight)
             {
-                heldNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().grabbedByHermitPurple = false;
-                heldNPC = null;
+                if (heldNPC != null)
+                {
+                    heldNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().grabbedByHermitPurple = false;
+                    heldNPC = null;
+                }
                 living = false;
             }
 
@@ -84,7 +87,7 @@ namespace JoJoStands.Projectiles
                 }
                 else
                 {
-                    if (heldNPC == null)
+                    if (heldNPC == null || !heldNPC.active)
                     {
                         living = false;
                         return;
@@ -121,8 +124,11 @@ namespace JoJoStands.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            heldNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().grabbedByHermitPurple = false;
-            heldNPC = null;
+            if (heldNPC != null)
+            {
+                heldNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().grabbedByHermitPurple = false;
+                heldNPC = null;
+            }
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)

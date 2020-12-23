@@ -19,6 +19,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override float fistWhoAmI => 0f;
         public override string punchSoundName => "Ora";
         public override string poseSoundName => "YareYareDaze";
+        public override string spawnSoundName => "Star Platinum";
         public override int standType => 1;
 
         public int updateTimer = 0;

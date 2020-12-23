@@ -18,6 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 7f;
         public override string poseSoundName => "NobodyCanFoolMeTwice";
+        public override string spawnSoundName => "The Hand";
 
         private int updateTimer = 0;
         private bool scrapeFrames = false;

@@ -15,6 +15,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override int standType => 1;
         public override string punchSoundName => "Ari";
         public override string poseSoundName => "Arrivederci";
+        public override string spawnSoundName => "Sticky Fingers";
 
         private int updateTimer = 0;
 

@@ -15,6 +15,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override float fistWhoAmI => 5f;
         public override float maxAltDistance => 165f;     //about 10 tiles
         public override string poseSoundName => "IWouldntLose";
+        public override string spawnSoundName => "Killer Queen";
         public override int standType => 1;
 
 
