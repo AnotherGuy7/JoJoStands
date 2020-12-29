@@ -27,7 +27,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override void AI()
         {
-
             SelectAnimation();
             UpdateStandInfo();
             updateTimer = 0;
