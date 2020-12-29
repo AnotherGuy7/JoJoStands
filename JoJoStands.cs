@@ -31,6 +31,7 @@ namespace JoJoStands
         private UserInterface _bulletcounter;
         private UserInterface _aerosmithRadar;
         private UserInterface _sexPistolsUI;
+        private UserInterface _voidbarUI;
 
         internal ToBeContinued TBCarrow;
         internal HamonBarState HamonBarInterface;
@@ -39,6 +40,7 @@ namespace JoJoStands
         internal AerosmithRadar aerosmithRadar;
         internal BetUI betUI;
         internal SexPistolsUI sexPistolsUI;
+        internal VoidBar VoidBarUI;
 
         public override void Load()
         {
@@ -51,6 +53,7 @@ namespace JoJoStands
             GoldenSpinMeter.goldenRectangleTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeter");
             GoldenSpinMeter.goldenRectangleSpinLineTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeterLine");
             SexPistolsUI.sexPistolsUITexture = ModContent.GetTexture("JoJoStands/UI/SexPistolsUI");
+            VoidBar.VoidBarTexture = ModContent.GetTexture("JoJoStands/UI/VoidBar");
             MyPlayer.standTier1List.Add(ItemType("AerosmithT1"));
             MyPlayer.standTier1List.Add(ItemType("GoldExperienceT1"));
             MyPlayer.standTier1List.Add(ItemType("HierophantGreenT1"));
@@ -68,6 +71,7 @@ namespace JoJoStands
             MyPlayer.standTier1List.Add(ItemType("WhitesnakeT1"));
             MyPlayer.standTier1List.Add(ItemType("DollyDaggerT1"));
             MyPlayer.standTier1List.Add(ItemType("CenturyBoyT1"));
+            MyPlayer.standTier1List.Add(ItemType("CreamT1"));
 
             MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
             MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT3"));
@@ -118,6 +122,10 @@ namespace JoJoStands
                 _sexPistolsUI = new UserInterface();
                 _sexPistolsUI.SetState(sexPistolsUI);
                 _goldenSpinInterface.SetState(GoldenSpinInterface);
+                VoidBarUI = new VoidBar();
+                VoidBarUI.Activate();
+                _voidbarUI = new UserInterface();
+                _voidbarUI.SetState(VoidBarUI);
 
                 //Shader Stuff
                 Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect"));      // The path to the compiled shader file.
@@ -147,6 +155,7 @@ namespace JoJoStands
             GoldenSpinMeter.goldenRectangleTexture = null;
             GoldenSpinMeter.goldenRectangleSpinLineTexture = null;
             SexPistolsUI.sexPistolsUITexture = null;
+            VoidBar.VoidBarTexture = null;
             SpecialHotKey = null;
             PoseHotKey = null;
             StandAutoMode = null;
@@ -223,6 +232,10 @@ namespace JoJoStands
             {
                 _sexPistolsUI.Update(gameTime);
             }
+            if (VoidBar.Visible)
+            {
+                _voidbarUI.Update(gameTime);
+            }
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)     //from ExampleMod's ExampleUI
@@ -259,6 +272,10 @@ namespace JoJoStands
             if (SexPistolsUI.Visible)
             {
                 _sexPistolsUI.Draw(Main.spriteBatch, new GameTime());
+            }
+            if (VoidBar.Visible)
+            {
+                _voidbarUI.Draw(Main.spriteBatch, new GameTime());
             }
             return true;
         }

@@ -31,6 +31,15 @@ namespace JoJoStands.Buffs.AccessoryBuff
             {
                 player.AddBuff(mod.BuffType("Sunburn"), 2, true);
             }
+
+        }
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            Vector3 lightLevel = Lighting.GetColor((int)npc.Center.X / 16, (int)npc.Center.Y / 16).ToVector3();
+            if (lightLevel.Length() > 1.3f && Main.dayTime && Main.tile[(int)npc.Center.X / 16, (int)npc.Center.Y / 16].wall == 0)
+            {
+                npc.AddBuff(mod.BuffType("Sunburn"), 2);
+            }
         }
     }
 }

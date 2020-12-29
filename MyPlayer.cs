@@ -66,6 +66,11 @@ namespace JoJoStands
         public int hermitPurpleShootCooldown = 0;
         public int hermitPurpleSpecialFrameCounter = 0;
         public int hermitPurpleHamonBurstLeft = 0;
+        public int CreamPower = 0;
+        public int VoidCounter = 0;
+        public int VoidMax = 0;
+        public int VoidTimer = 0;
+        public int VoidCooldown = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -86,6 +91,8 @@ namespace JoJoStands
         public bool usedEctoPearl = false;
         public bool receivedArrowShard = false;
         public bool dyingVampire = false;
+        public bool ExposingMode = false;
+        public bool VoidMode = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -113,6 +120,7 @@ namespace JoJoStands
         public static List<int> standTier1List = new List<int>();
 
         public Vector2 aerosmithCamPosition;
+        public Vector2 VoidCamPosition;
 
         public string poseSoundName = "";       //This is for JoJoStandsSoudns
 
@@ -191,6 +199,14 @@ namespace JoJoStands
             if (controllingAerosmith)
             {
                 Main.screenPosition = aerosmithCamPosition;
+            }
+            if (VoidMode)
+            {
+                Main.screenPosition = VoidCamPosition;
+            }
+            if (ExposingMode)
+            {
+                Main.screenPosition = VoidCamPosition;
             }
         }
 
@@ -856,6 +872,72 @@ namespace JoJoStands
                     }
                 }
             }
+            if (CreamPower != 0)        //cream stuff
+            {
+                UI.VoidBar.Visible = true;
+                if (VoidCounter < VoidMax)
+                {
+                    if (!VoidMode && !ExposingMode)
+                    {
+                        VoidTimer += 1;
+                        if (VoidTimer >= 120)
+                        {
+                            VoidCounter++;
+                            VoidTimer = 0;
+                        }
+                    }
+                    if (!VoidMode && ExposingMode)
+                    {
+                        {
+                            if (CreamPower == 3)
+                            {
+                                VoidTimer += 1;
+                                if (VoidTimer >= 90)
+                                {
+                                    VoidCounter++;
+                                    VoidTimer = 0;
+                                }
+                            }
+                            if (CreamPower == 4)
+                            {
+                                VoidTimer += 1;
+                                if (VoidTimer >= 60)
+                                {
+                                    VoidCounter++;
+                                    VoidTimer = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (VoidCounter > 0)
+                {
+                    if (VoidMode)
+                    {
+                        VoidTimer += 1;
+                        if (VoidTimer >= 60)
+                        {
+                            VoidCounter--;
+                            VoidTimer = 0;
+                        }
+                    }
+                }
+            }
+            if (CreamPower == 0)
+            {
+                UI.VoidBar.Visible = false;
+            }
+            if (player.ownedProjectileCounts[mod.ProjectileType("Void")] > 0)
+            {
+                VoidCooldown = 30;
+            }
+            if (VoidCooldown > 0)
+                VoidCooldown--;
+            if (!StandOut)
+            {
+                CreamPower = 0;
+                VoidCounter = 0;
+            }
 
             if (revived && !player.HasBuff(mod.BuffType("ArtificialSoul")))
             {
@@ -1127,6 +1209,29 @@ namespace JoJoStands
             else if (inputItem.type == mod.ItemType("SilverChariotFinal"))
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SilverChariotStandFinal"), 0, 0f, Main.myPlayer);
+            }
+            else if (inputItem.type == mod.ItemType("CreamT1"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandT1"), 0, 0f, Main.myPlayer);
+                CreamPower = 1;
+            }
+            else if (inputItem.type == mod.ItemType("CreamT2"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandT2"), 0, 0f, Main.myPlayer);
+                CreamPower = 2;
+                VoidMax = 4;
+            }
+            else if (inputItem.type == mod.ItemType("CreamT3"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandT3"), 0, 0f, Main.myPlayer);
+                CreamPower = 3;
+                VoidMax = 8;
+            }
+            else if (inputItem.type == mod.ItemType("CreamFinal"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandFinal"), 0, 0f, Main.myPlayer);
+                CreamPower = 4;
+                VoidMax = 12;
             }
             else if (inputItem.type == mod.ItemType("SexPistolsT1"))
             {
@@ -1976,6 +2081,26 @@ namespace JoJoStands
                 {
                     for (int i = 0; i < layers.Count; i++)
                     {
+                        layers[i].visible = false;
+                    }
+                }
+                if (player.ownedProjectileCounts[mod.ProjectileType("Void")] != 0)
+                {
+                    for (int i = 0; i < layers.Count; i++)
+                    {
+                        layers[i].visible = false;
+                    }
+                }
+                int voidlayer = layers.FindIndex(l => l == PlayerLayer.Head);
+                int voidlayer2 = layers.FindIndex(l => l == PlayerLayer.Face);
+                int voidlayer3 = layers.FindIndex(l => l == PlayerLayer.FaceAcc);
+                if (player.ownedProjectileCounts[mod.ProjectileType("ExposingCream")] != 0)
+                {
+                    for (int i = 0; i < layers.Count; i++)
+                    {
+                        layers[voidlayer].visible = true;
+                        layers[voidlayer2].visible = true;
+                        layers[voidlayer3].visible = true;
                         layers[i].visible = false;
                     }
                 }
