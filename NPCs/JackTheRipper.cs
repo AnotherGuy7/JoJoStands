@@ -47,7 +47,7 @@ namespace JoJoStands.NPCs
         {
             if (random == 0)
             {
-                random = Main.rand.Next(1, 10000);
+                random = Main.rand.Next(1, 999999);
             }
             if (localjack == 0)
             {
@@ -109,15 +109,10 @@ namespace JoJoStands.NPCs
                 npc.immortal = false;
                 npc.hide = false;
                 npc.AddBuff(mod.BuffType("Vampire"), 2);
-                if (!npc.HasBuff(mod.BuffType("Hamon")) && !npc.HasBuff(mod.BuffType("Sunburn")))
+                if (!npc.HasBuff(mod.BuffType("Sunburn")))
                 {
                     npc.defense = 24;
                     npc.damage = 80;
-                }
-                if (npc.HasBuff(mod.BuffType("Hamon")) && !hide)
-                {
-                    npc.defense = 0;
-                    npc.damage = 40;
                 }
                 if (npc.HasBuff(mod.BuffType("Sunburn")) && !hide)
                 {
