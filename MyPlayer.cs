@@ -43,7 +43,7 @@ namespace JoJoStands
         public int tbcCounter = 0;
         public int ActivationTimer = 0;
         public int GEAbilityNumber = 0;
-        public int TuskActNumber = 0;
+        public int tuskActNumber = 0;
         public int equippedTuskAct = 0;
         public int tuskShootCooldown = 0;
         public int TimestopEffectDurationTimer = 0;
@@ -66,11 +66,10 @@ namespace JoJoStands
         public int hermitPurpleShootCooldown = 0;
         public int hermitPurpleSpecialFrameCounter = 0;
         public int hermitPurpleHamonBurstLeft = 0;
-        public int CreamPower = 0;
-        public int VoidCounter = 0;
-        public int VoidMax = 0;
-        public int VoidTimer = 0;
-        public int VoidCooldown = 0;
+        public int creamTier = 0;
+        public int voidCounter = 0;
+        public int voidCounterMax = 0;
+        public int voidTimer = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -91,8 +90,8 @@ namespace JoJoStands
         public bool usedEctoPearl = false;
         public bool receivedArrowShard = false;
         public bool dyingVampire = false;
-        public bool ExposingMode = false;
-        public bool VoidMode = false;
+        public bool creamExposedMode = false;
+        public bool creamVoidMode = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -152,15 +151,15 @@ namespace JoJoStands
             int type = StandSlot.Item.type;
             if (type == mod.ItemType("TuskAct3") || type == mod.ItemType("TuskAct4"))
             {
-                TuskActNumber = 3;
+                tuskActNumber = 3;
             }
             else if (type == mod.ItemType("TuskAct2"))
             {
-                TuskActNumber = 2;
+                tuskActNumber = 2;
             }
             else if (type == mod.ItemType("TuskAct1"))
             {
-                TuskActNumber = 1;
+                tuskActNumber = 1;
             }
         }
 
@@ -200,11 +199,11 @@ namespace JoJoStands
             {
                 Main.screenPosition = aerosmithCamPosition;
             }
-            if (VoidMode)
+            if (creamVoidMode)
             {
                 Main.screenPosition = VoidCamPosition;
             }
-            if (ExposingMode)
+            if (creamExposedMode)
             {
                 Main.screenPosition = VoidCamPosition;
             }
@@ -320,6 +319,7 @@ namespace JoJoStands
                 StandOut = false;
                 standType = 0;
                 poseSoundName = "";
+                creamTier = 0;
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
                 gratefulDeadTier = 0;
@@ -330,7 +330,7 @@ namespace JoJoStands
                 if (equippedTuskAct != 0)
                 {
                     equippedTuskAct = 0;
-                    TuskActNumber = 0;
+                    tuskActNumber = 0;
                 }
                 if (showingCBLayer)
                 {
@@ -627,7 +627,7 @@ namespace JoJoStands
                         }
                         if (achievedInfiniteSpin && !forceChangedTusk)
                         {
-                            TuskActNumber = 4;
+                            tuskActNumber = 4;
                             forceChangedTusk = true;
                         }
                         if (goldenSpinCounter <= 1)     //would reset anyway if the player isn't holding Tusk, cause it resets whenever you hold the item again
@@ -668,33 +668,33 @@ namespace JoJoStands
                     specialPressed = JoJoStands.SpecialHotKey.JustPressed;
                 if (specialPressed)
                 {
-                    TuskActNumber += 1;
+                    tuskActNumber += 1;
                 }
                 if (equippedTuskAct <= 3)
                 {
-                    if (TuskActNumber > equippedTuskAct)
-                        TuskActNumber = 1;
+                    if (tuskActNumber > equippedTuskAct)
+                        tuskActNumber = 1;
                 }
                 if (equippedTuskAct == 4)
                 {
                     if (achievedInfiniteSpin)
                     {
-                        if (TuskActNumber > equippedTuskAct)
-                            TuskActNumber = 1;
+                        if (tuskActNumber > equippedTuskAct)
+                            tuskActNumber = 1;
                     }
                     else
                     {
-                        if (TuskActNumber > 3)
-                            TuskActNumber = 1;
+                        if (tuskActNumber > 3)
+                            tuskActNumber = 1;
                     }
                 }
                 if (tuskShootCooldown > 0)
                     tuskShootCooldown--;
-                if (TuskActNumber <= 3)
+                if (tuskActNumber <= 3)
                 {
-                    if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct" + TuskActNumber + "Pet")] <= 0)
+                    if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct" + tuskActNumber + "Pet")] <= 0)
                     {
-                        Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct" + TuskActNumber + "Pet"), 0, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct" + tuskActNumber + "Pet"), 0, 0f, Main.myPlayer);
                     }
                 }
                 else
@@ -702,7 +702,7 @@ namespace JoJoStands
                     if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct4Minion")] <= 0)
                         Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct4Minion"), 0, 0f, Main.myPlayer);
                 }
-                if (TuskActNumber == 1)
+                if (tuskActNumber == 1)
                 {
                     if (Main.mouseLeft && tuskShootCooldown <= 0)
                     {
@@ -714,7 +714,7 @@ namespace JoJoStands
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 4f, player.whoAmI);
                     }
                 }
-                if (TuskActNumber == 2)
+                if (tuskActNumber == 2)
                 {
                     if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
                     {
@@ -727,7 +727,7 @@ namespace JoJoStands
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 5f, player.whoAmI);
                     }
                 }
-                if (TuskActNumber == 3)
+                if (tuskActNumber == 3)
                 {
                     if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0)
                     {
@@ -749,7 +749,7 @@ namespace JoJoStands
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 124, 8f, player.whoAmI);
                     }
                 }
-                if (TuskActNumber == 4)
+                if (tuskActNumber == 4)
                 {
                     if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
                     {
@@ -872,71 +872,52 @@ namespace JoJoStands
                     }
                 }
             }
-            if (CreamPower != 0)        //cream stuff
+            if (creamTier != 0)        //Cream stuff
             {
                 UI.VoidBar.Visible = true;
-                if (VoidCounter < VoidMax)
+                voidCounterMax = (creamTier - 1) * 4;
+                if (voidCounter < voidCounterMax)
                 {
-                    if (!VoidMode && !ExposingMode)
+                    if (!creamVoidMode && !creamExposedMode)
                     {
-                        VoidTimer += 1;
-                        if (VoidTimer >= 120)
+                        voidTimer += 1;
+                        if (voidTimer >= 120)
                         {
-                            VoidCounter++;
-                            VoidTimer = 0;
+                            voidCounter++;
+                            voidTimer = 0;
                         }
                     }
-                    if (!VoidMode && ExposingMode)
+                    if (!creamVoidMode && creamExposedMode)
                     {
+                        voidTimer += 1;
+                        if (voidTimer >= 150 - ((creamTier - 1) * 30))
                         {
-                            if (CreamPower == 3)
-                            {
-                                VoidTimer += 1;
-                                if (VoidTimer >= 90)
-                                {
-                                    VoidCounter++;
-                                    VoidTimer = 0;
-                                }
-                            }
-                            if (CreamPower == 4)
-                            {
-                                VoidTimer += 1;
-                                if (VoidTimer >= 60)
-                                {
-                                    VoidCounter++;
-                                    VoidTimer = 0;
-                                }
-                            }
+                            voidCounter++;
+                            voidTimer = 0;
                         }
                     }
                 }
-                if (VoidCounter > 0)
+                if (voidCounter > 0)
                 {
-                    if (VoidMode)
+                    if (creamVoidMode)
                     {
-                        VoidTimer += 1;
-                        if (VoidTimer >= 60)
+                        voidTimer += 1;
+                        if (voidTimer >= 60)
                         {
-                            VoidCounter--;
-                            VoidTimer = 0;
+                            voidCounter--;
+                            voidTimer = 0;
                         }
                     }
                 }
             }
-            if (CreamPower == 0)
+            else
             {
                 UI.VoidBar.Visible = false;
             }
-            if (player.ownedProjectileCounts[mod.ProjectileType("Void")] > 0)
-            {
-                VoidCooldown = 30;
-            }
-            if (VoidCooldown > 0)
-                VoidCooldown--;
             if (!StandOut)
             {
-                CreamPower = 0;
-                VoidCounter = 0;
+                creamTier = 0;
+                voidCounter = 0;
             }
 
             if (revived && !player.HasBuff(mod.BuffType("ArtificialSoul")))
@@ -1212,30 +1193,30 @@ namespace JoJoStands
             }
             else if (inputItem.type == mod.ItemType("CreamT1"))
             {
+                standType = 1;
+                creamTier = 1;
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandT1"), 0, 0f, Main.myPlayer);
-                CreamPower = 1;
             }
             else if (inputItem.type == mod.ItemType("CreamT2"))
             {
+                standType = 1;
+                creamTier = 2;
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandT2"), 0, 0f, Main.myPlayer);
-                CreamPower = 2;
-                VoidMax = 4;
             }
             else if (inputItem.type == mod.ItemType("CreamT3"))
             {
+                standType = 1;
+                creamTier = 3;
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandT3"), 0, 0f, Main.myPlayer);
-                CreamPower = 3;
-                VoidMax = 8;
             }
             else if (inputItem.type == mod.ItemType("CreamFinal"))
             {
+                standType = 1;
+                creamTier = 4;
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandFinal"), 0, 0f, Main.myPlayer);
-                CreamPower = 4;
-                VoidMax = 12;
             }
             else if (inputItem.type == mod.ItemType("SexPistolsT1"))
             {
-                standType = 2;
                 sexPistolsTier = 1;
                 poseSoundName = "SexPistolsIsDesignedToKill";
             }
@@ -1261,25 +1242,25 @@ namespace JoJoStands
             {
                 standType = 2;
                 equippedTuskAct = 1;
-                TuskActNumber = 1;
+                tuskActNumber = 1;
             }
             else if (inputItem.type == mod.ItemType("TuskAct2"))
             {
                 standType = 2;
                 equippedTuskAct = 2;
-                TuskActNumber = 2;
+                tuskActNumber = 2;
             }
             else if (inputItem.type == mod.ItemType("TuskAct3"))
             {
                 standType = 2;
                 equippedTuskAct = 3;
-                TuskActNumber = 3;
+                tuskActNumber = 3;
             }
             else if (inputItem.type == mod.ItemType("TuskAct4"))
             {
                 standType = 2;
                 equippedTuskAct = 4;
-                TuskActNumber = 3;
+                tuskActNumber = 3;
             }
             else if (inputItem.type == mod.ItemType("MagiciansRedT1"))
             {
@@ -1702,7 +1683,7 @@ namespace JoJoStands
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            Items.Hamon.HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<Items.Hamon.HamonPlayer>();
+            HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
             SpriteEffects effects = SpriteEffects.None;
             if (drawPlayer.active && hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
             {

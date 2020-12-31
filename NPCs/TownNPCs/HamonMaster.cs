@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace JoJoStands.NPCs
+namespace JoJoStands.NPCs.TownNPCs
 {
     [AutoloadHead]
     public class HamonMaster : ModNPC

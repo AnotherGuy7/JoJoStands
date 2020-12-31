@@ -39,7 +39,7 @@ namespace JoJoStands.Projectiles
             Lighting.AddLight(projectile.Center, 2f, 2f, 2f);
             if (projectile.owner == Main.myPlayer)
             {
-                if (player.GetModPlayer<MyPlayer>().TuskActNumber != 3)
+                if (player.GetModPlayer<MyPlayer>().tuskActNumber != 3)
                 {
                     projectile.Kill();
                 }

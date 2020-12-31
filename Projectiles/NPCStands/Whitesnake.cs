@@ -1,12 +1,11 @@
-using System;
+using JoJoStands.NPCs.TownNPCs;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles.NPCStands
-{  
+{
     public class Whitesnake : ModProjectile
     {
         public static bool whitesnakeActive = false;
@@ -48,7 +47,7 @@ namespace JoJoStands.Projectiles.NPCStands
         public override void AI()
         {
             NPC pucci = null;
-            if (NPCs.Priest.userIsAlive)
+            if (Priest.userIsAlive)
             {
                 for (int k = 0; k < 200; k++)
                 {
@@ -67,7 +66,7 @@ namespace JoJoStands.Projectiles.NPCStands
             {
                 whitesnakeActive = true;
             }
-            if (!NPCs.Priest.userIsAlive)
+            if (!Priest.userIsAlive)
             {
                 projectile.Kill();
             }

@@ -7,10 +7,8 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class Dead : ModBuff
     {
-
         public override void Update(NPC npc, ref int buffIndex)
         {
-
             if (npc.lifeRegen > 0)
             {
                 npc.lifeRegen = 0;

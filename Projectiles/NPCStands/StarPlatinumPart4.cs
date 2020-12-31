@@ -1,12 +1,11 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+using JoJoStands.NPCs.TownNPCs;
+
 namespace JoJoStands.Projectiles.NPCStands
-{  
+{
     public class StarPlatinumPart4 : ModProjectile
     {
         public static bool SPActive = false;
@@ -34,10 +33,10 @@ namespace JoJoStands.Projectiles.NPCStands
             projectile.npcProj = true;
         }
 
-        protected float shootCool = 6f;       //how fast the minion can shoot
-        protected float shootSpeed = 9f;     //how fast the projectile the minion shoots goes
-        public bool normalFrames = false;
-        public bool attackFrames = false;
+        private float shootCool = 6f;       //how fast the minion can shoot
+        private float shootSpeed = 9f;     //how fast the projectile the minion shoots goes
+        private bool normalFrames = false;
+        private bool attackFrames = false;
 
         public override void Kill(int timeLeft)
         {
@@ -47,7 +46,7 @@ namespace JoJoStands.Projectiles.NPCStands
         public override void AI()
         {
             NPC jotaro = null;
-            if (NPCs.MarineBiologist.userIsAlive)
+            if (MarineBiologist.userIsAlive)
             {
                 for (int k = 0; k < 200; k++)
                 {
@@ -62,7 +61,7 @@ namespace JoJoStands.Projectiles.NPCStands
             {
                 SPActive = true;
             }
-            if (!NPCs.MarineBiologist.userIsAlive)
+            if (!MarineBiologist.userIsAlive)
             {
                 projectile.Kill();
             }
@@ -147,7 +146,7 @@ namespace JoJoStands.Projectiles.NPCStands
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("NPCStandFists"), NPCs.MarineBiologist.attackPower, 1f, Main.myPlayer, 0, 0);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("NPCStandFists"), MarineBiologist.attackPower, 1f, Main.myPlayer, 0, 0);
                         Main.projectile[proj].npcProj = true;
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;

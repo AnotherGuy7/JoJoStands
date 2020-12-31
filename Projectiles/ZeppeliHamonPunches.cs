@@ -1,9 +1,9 @@
-using System;
+using JoJoStands.NPCs.TownNPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class ZeppeliHamonPunches : ModProjectile
@@ -79,7 +79,7 @@ namespace JoJoStands.Projectiles
             }
 
             projectile.frameCounter++;
-            NPCs.HamonMaster.punchesActive = true;
+            HamonMaster.punchesActive = true;
             if (projectile.direction == 1)
             {
                 drawOffsetX = 25;
@@ -125,7 +125,7 @@ namespace JoJoStands.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            NPCs.HamonMaster.punchesActive = false;
+            HamonMaster.punchesActive = false;
         }
     }
 }

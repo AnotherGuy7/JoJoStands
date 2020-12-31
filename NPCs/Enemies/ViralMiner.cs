@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace JoJoStands.NPCs
+namespace JoJoStands.NPCs.Enemies
 {
     public class ViralMiner : ModNPC
     {

@@ -52,7 +52,7 @@ namespace JoJoStands.Projectiles.Minions
             {
                 shootCount--;
             }
-            if (player.whoAmI == Main.myPlayer && modPlayer.TuskActNumber == 4)         //Making an owner check cause tuskActNumber isn't in sync with other players, causing TA4 to die for everyone else
+            if (player.whoAmI == Main.myPlayer && modPlayer.tuskActNumber == 4)         //Making an owner check cause tuskActNumber isn't in sync with other players, causing TA4 to die for everyone else
             {
                 projectile.timeLeft = 10;
             }

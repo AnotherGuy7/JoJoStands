@@ -9,18 +9,19 @@ namespace JoJoStands.Items
 		{
 			get { return mod.Name + "/Items/CreamT1"; }
 		}
+
 		public override int standSpeed => 22;
 		public override int standType => 1;
 
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Cream (Final Tier)");
-			Tooltip.SetDefault("Chop enemy neck with a powerful punch and right-click to become a Spherical Void!\nSpecial: Take a peek!\nUsed in Stand Slot");
+			Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to envelop yourself in Void!\nSpecial: Completely become a ball of Void and consume everything in your way!\nUsed in Stand Slot");
 		}
 
 		public override void SetDefaults()
 		{
-			item.damage = 216;
+			item.damage = 172;
 			item.width = 86;
 			item.height = 74;
 			item.maxStack = 1;
@@ -34,8 +35,7 @@ namespace JoJoStands.Items
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("CreamT3"));
 			recipe.AddIngredient(ItemID.SpectreBar, 21);
-			recipe.AddIngredient(ItemID.IceBlock);
-			recipe.AddIngredient(mod.ItemType("WillToDestroy"), 8);
+			recipe.AddIngredient(ItemID.IceBlock, 25);
 			recipe.AddIngredient(mod.ItemType("Tainted Lifeforce"));
 			recipe.AddTile(mod.TileType("RemixTableTile"));
 			recipe.SetResult(this);

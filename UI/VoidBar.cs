@@ -2,55 +2,84 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
+using Terraria.Graphics.Shaders;
 using Terraria.UI;
-using Terraria.UI.Chat;
 
 namespace JoJoStands.UI
 {
     internal class VoidBar : UIState
     {
-        public DragableUIPanel VoidBarUI;
+        public DragableUIPanel voidBarUI;
         public static bool Visible;
         public static Texture2D VoidBarTexture;
-        public UIText VoidText;
+        public static Texture2D VoidBarBarTexture;
+        public UIText voidText;
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            VoidText.SetText("Void: " + mPlayer.VoidCounter);
+            voidText.SetText("Void: " + mPlayer.voidCounter);
         }
 
         public override void OnInitialize()
         {
-            VoidBarUI = new DragableUIPanel();
-            VoidBarUI.HAlign = 0.9f;
-            VoidBarUI.VAlign = 0.9f;
-            VoidBarUI.Width.Set(140f, 0f);
-            VoidBarUI.Height.Set(96f, 0f);
-            VoidBarUI.BackgroundColor = new Color(0, 0, 0, 0);
-            VoidBarUI.BorderColor = new Color(0, 0, 0, 0);
+            voidBarUI = new DragableUIPanel();
+            voidBarUI.HAlign = 0.9f;
+            voidBarUI.VAlign = 0.9f;
+            voidBarUI.Width.Set(66f * 1.5f, 0f);
+            voidBarUI.Height.Set(60f * 1.5f, 0f);
+            voidBarUI.BackgroundColor = new Color(0, 0, 0, 0);
+            voidBarUI.BorderColor = new Color(0, 0, 0, 0);
 
-            VoidText = new UIText("");
-            VoidText.HAlign = 0.5f;
-            VoidText.VAlign = 1.4f;
-            VoidText.Width.Set(22f, 0f);
-            VoidText.Height.Set(22f, 0f);
-            VoidBarUI.Append(VoidText);
+            voidText = new UIText("");
+            voidText.HAlign = 0.5f;
+            voidText.VAlign = 1.4f;
+            voidText.Width.Set(22f, 0f);
+            voidText.Height.Set(22f, 0f);
+            voidBarUI.Append(voidText);
 
-            Append(VoidBarUI);
-            base.OnInitialize();
+            Append(voidBarUI);
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            int frame = 12 - mPlayer.VoidCounter;
-            int frameHeight = VoidBarTexture.Height / 12;
-            spriteBatch.Draw(VoidBarTexture, VoidBarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * frame, VoidBarTexture.Width, frameHeight), new Color(255f, 255f, 255f, 255f));
+
+            float normalizedVoidCounter = 1f - ((float)mPlayer.voidCounter / (float)mPlayer.voidCounterMax);
+            spriteBatch.Draw(VoidBarTexture, voidBarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 0, VoidBarTexture.Width, VoidBarTexture.Height), Color.White);
+
+            //---------- This shows how to apply shaders to UI elements. In this case it was supposed to be a gradient but it looked worse than a monotone bar either way ----------
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+
+            MiscShaderData voidGradientShader = GameShaders.Misc["JoJoStandsVoidGradient"];
+            voidGradientShader.UseOpacity(normalizedVoidCounter);
+
+            voidGradientShader.Apply(null);
+            spriteBatch.Draw(VoidBarBarTexture, voidBarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 0, VoidBarTexture.Width, VoidBarTexture.Height), Color.White);
+
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
         }
+
+        /*private void PreDrawVoidCounterGradient(MyPlayer modPlayer, SpriteBatch spriteBatch)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+
+            MiscShaderData voidGradientShader = GameShaders.Misc["JoJoStandsVoidGradient"];
+            voidGradientShader.UseOpacity(modPlayer.voidCounter / modPlayer.voidCounterMax);
+
+            voidGradientShader.Apply(null);
+            spriteBatch.Draw(VoidBarBarTexture, voidBarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 0, VoidBarTexture.Width, VoidBarTexture.Height), Color.White);
+        }
+
+        private void PostDrawVoidCounterGradient(SpriteBatch spriteBatch)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
+        }*/
     }
 }

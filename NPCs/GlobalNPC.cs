@@ -26,8 +26,6 @@ namespace JoJoStands.NPCs
         public int indexPosition = 0;
         public bool spawnedByDeathLoop = false;
         public int deathTimer = 0;
-        public int jackvictim = 0;
-        public bool jackcatch = false;
         public float kingCrimsonDonutMultiplier = 1f;
         public Vector2 playerPositionOnSkip = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];

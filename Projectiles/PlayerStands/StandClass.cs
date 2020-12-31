@@ -589,17 +589,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             newPunchDamage = (int)(punchDamage * modPlayer.standDamageBoosts);
             newProjectileDamage = (int)(projectileDamage * modPlayer.standDamageBoosts);
             modPlayer.poseSoundName = poseSoundName;
-            if (!playedSpawnSound)
-            {
-                Terraria.Audio.LegacySoundStyle spawnSound = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SummonCries/" + spawnSoundName);
-                spawnSound.WithVolume(MyPlayer.soundVolume);
-                Main.PlaySound(spawnSound, projectile.position);
-                playedSpawnSound = true;
-            }
-            if (modPlayer.standType != standType)
-            {
-                modPlayer.standType = standType;
-            }
             if (newPunchTime <= 2)
             {
                 newPunchTime = 2;
@@ -608,7 +597,20 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 newShootTime = 5;
             }
-
+            if (modPlayer.standType != standType)
+            {
+                modPlayer.standType = standType;
+            }
+            if (JoJoStands.SoundsLoaded)
+            {
+                if (spawnSoundName != "" && !playedSpawnSound)
+                {
+                    Terraria.Audio.LegacySoundStyle spawnSound = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SummonCries/" + spawnSoundName);
+                    spawnSound.WithVolume(MyPlayer.soundVolume);
+                    Main.PlaySound(spawnSound, projectile.position);
+                    playedSpawnSound = true;
+                }
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

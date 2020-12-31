@@ -12,9 +12,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             Main.projFrames[projectile.type] = 11;
         }
 
-        public override int punchDamage => 64;
-        public override float punchKnockback => 2f;
-        public override int punchTime => 25;     
+        public override int punchDamage => 35;
+        public override float punchKnockback => 8f;
+        public override int punchTime => 28;     
         public override int halfStandHeight => 32;
         public override float fistWhoAmI => 11f;
         public override int standOffset => 0;
@@ -26,25 +26,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override void AI()
         {
+            Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             SelectAnimation();
             UpdateStandInfo();
             updateTimer = 0;
             if (shootCount > 0)
                 shootCount--;
-            Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.VoidMode)
-            {
-                projectile.hide = true;
-            }
-            if (modPlayer.ExposingMode)
-            {
-                projectile.hide = true;
-            }
-            if (!modPlayer.VoidMode && !modPlayer.ExposingMode)
-            {
-                projectile.hide = false;
-            }
             projectile.frameCounter++;
             if (modPlayer.StandOut)
             {
@@ -55,9 +43,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
+
             if (!modPlayer.StandAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !modPlayer.VoidMode && !modPlayer.ExposingMode)
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;

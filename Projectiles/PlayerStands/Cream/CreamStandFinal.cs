@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             Main.projFrames[projectile.type] = 11;
         }
 
-        public override int punchDamage => 216;
+        public override int punchDamage => 176;
         public override float punchKnockback => 2f;
         public override int punchTime => 22;
         public override int halfStandHeight => 32;
@@ -23,7 +23,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         private int updateTimer = 0;
         private Vector2 velocityAddition;
         private float mouseDistance;
-        private bool rightclick = false;
 
         public override void AI()
         {
@@ -34,15 +33,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 shootCount--;
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.VoidMode)
+            if (modPlayer.creamVoidMode)
             {
                 projectile.hide = true;
             }
-            if (modPlayer.ExposingMode)
+            if (modPlayer.creamExposedMode)
             {
                 projectile.hide = true;
             }
-            if (!modPlayer.VoidMode && !modPlayer.ExposingMode)
+            if (!modPlayer.creamVoidMode && !modPlayer.creamExposedMode)
             {
                 projectile.hide = false;
             }
@@ -58,7 +57,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             if (!modPlayer.StandAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !modPlayer.VoidMode && !modPlayer.ExposingMode)
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !modPlayer.creamVoidMode && !modPlayer.creamExposedMode)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
@@ -114,15 +113,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     StayBehind();
                 }
-                if (Main.mouseRight && Main.mouseLeft && player.ownedProjectileCounts[mod.ProjectileType("Void")] <= 0 && !modPlayer.VoidMode && modPlayer.VoidCounter != 0 && modPlayer.VoidCooldown <= 0)
-                {
-                    rightclick = true;
-                }
-                if (Main.mouseRight && !Main.mouseLeft && player.ownedProjectileCounts[mod.ProjectileType("Void")] <= 0 && !modPlayer.VoidMode && modPlayer.VoidCounter != 0 && modPlayer.VoidCooldown <= 0)
-                {
-                    rightclick = true;
-                }
-                if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("ExposingCream")] <= 0 && !modPlayer.ExposingMode && modPlayer.VoidCounter != modPlayer.VoidMax)
+
+                if (Main.mouseRight && projectile.owner == Main.myPlayer && !modPlayer.creamExposedMode && player.ownedProjectileCounts[mod.ProjectileType("ExposingCream")] <= 0)
                 {
                     Main.PlaySound(SoundID.Item78);
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
@@ -130,18 +122,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     shootVelocity *= 5f;
                     Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("ExposingCream"), 0, 6f, player.whoAmI);
                 }
-                if (rightclick)
+                if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("Void")] <= 0 && !modPlayer.creamVoidMode)
                 {
-                    modPlayer.VoidCooldown += 60;
                     Main.PlaySound(SoundID.Item78);
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
                     shootVelocity.Normalize();
                     shootVelocity *= 5f;
-                    Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("Void"), (int)((64 * modPlayer.CreamPower) * modPlayer.standDamageBoosts), 6f, player.whoAmI);
-                    rightclick = false;
+                    Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("Void"), (int)((64 * modPlayer.creamTier) * modPlayer.standDamageBoosts), 6f, player.whoAmI);
                 }
             }
-            if (modPlayer.StandAutoMode && !modPlayer.VoidMode && !modPlayer.ExposingMode)
+            if (modPlayer.StandAutoMode && !modPlayer.creamVoidMode && !modPlayer.creamExposedMode)
             {
                 BasicPunchAI();
             }

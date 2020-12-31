@@ -54,6 +54,7 @@ namespace JoJoStands
             GoldenSpinMeter.goldenRectangleSpinLineTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeterLine");
             SexPistolsUI.sexPistolsUITexture = ModContent.GetTexture("JoJoStands/UI/SexPistolsUI");
             VoidBar.VoidBarTexture = ModContent.GetTexture("JoJoStands/UI/VoidBar");
+            VoidBar.VoidBarBarTexture = ModContent.GetTexture("JoJoStands/UI/VoidBarBar");
             MyPlayer.standTier1List.Add(ItemType("AerosmithT1"));
             MyPlayer.standTier1List.Add(ItemType("GoldExperienceT1"));
             MyPlayer.standTier1List.Add(ItemType("HierophantGreenT1"));
@@ -71,6 +72,9 @@ namespace JoJoStands
             MyPlayer.standTier1List.Add(ItemType("WhitesnakeT1"));
             MyPlayer.standTier1List.Add(ItemType("DollyDaggerT1"));
             MyPlayer.standTier1List.Add(ItemType("CenturyBoyT1"));
+            MyPlayer.standTier1List.Add(ItemType("SilverChariotT1"));
+            MyPlayer.standTier1List.Add(ItemType("HermitPurpleT1"));
+            MyPlayer.standTier1List.Add(ItemType("BadCompanyT1"));
             MyPlayer.standTier1List.Add(ItemType("CreamT1"));
 
             MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
@@ -140,6 +144,8 @@ namespace JoJoStands
                 Ref<Effect> redShader = new Ref<Effect>(GetEffect("Effects/RedEffect"));
                 Filters.Scene["RedEffect"] = new Filter(new ScreenShaderData(redShader, "RedEffect"), EffectPriority.VeryHigh);
                 Filters.Scene["RedEffect"].Load();
+                Ref<Effect> voidGradientShader = new Ref<Effect>(GetEffect("Effects/VoidBarGradient"));
+                GameShaders.Misc["JoJoStandsVoidGradient"] = new MiscShaderData(voidGradientShader, "VoidBarGradient");
 
                 //Misc
                 AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic"), ItemType("ViralMusicBox"), TileType("ViralMusicBoxTile"));
@@ -156,6 +162,7 @@ namespace JoJoStands
             GoldenSpinMeter.goldenRectangleSpinLineTexture = null;
             SexPistolsUI.sexPistolsUITexture = null;
             VoidBar.VoidBarTexture = null;
+            VoidBar.VoidBarBarTexture = null;
             SpecialHotKey = null;
             PoseHotKey = null;
             StandAutoMode = null;

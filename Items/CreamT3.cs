@@ -9,18 +9,19 @@ namespace JoJoStands.Items
 		{
 			get { return mod.Name + "/Items/CreamT1"; }
 		}
-		public override int standSpeed => 23;
+
+		public override int standSpeed => 24;
 		public override int standType => 1;
 
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Cream (Tier 3)");
-			Tooltip.SetDefault("Chop enemy neck with a powerful punch and right-click to become a Spherical Void!\nSpecial: Take a peek!\nUsed in Stand Slot");
+			Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to envelop yourself in Void!\nSpecial: Completely become a ball of Void and consume everything in your way!\nUsed in Stand Slot");
 		}
 
 		public override void SetDefaults()
 		{
-			item.damage = 144;
+			item.damage = 116;
 			item.width = 86;
 			item.height = 74;
 			item.maxStack = 1;

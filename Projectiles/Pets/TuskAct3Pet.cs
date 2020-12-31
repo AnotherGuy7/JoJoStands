@@ -28,7 +28,7 @@ namespace JoJoStands.Projectiles.Pets
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
             projectile.frameCounter++;
 			modPlayer.poseSoundName = poseSoundName;
-            if (modPlayer.TuskActNumber == 3)
+            if (modPlayer.tuskActNumber == 3)
             {
                 projectile.timeLeft = 2;
             }
