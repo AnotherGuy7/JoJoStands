@@ -70,6 +70,7 @@ namespace JoJoStands
         public int voidCounter = 0;
         public int voidCounterMax = 0;
         public int voidTimer = 0;
+        public int creamFrame = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -92,6 +93,10 @@ namespace JoJoStands
         public bool dyingVampire = false;
         public bool creamExposedMode = false;
         public bool creamVoidMode = false;
+        public bool creamNormalToExposed = false;
+        public bool creamExposedToVoid = false;
+        public bool creamAnimationReverse = false;
+        public bool creamNormalToVoid = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -918,6 +923,10 @@ namespace JoJoStands
             {
                 creamTier = 0;
                 voidCounter = 0;
+                creamNormalToExposed = false;
+                creamNormalToVoid = false;
+                creamExposedToVoid = false;
+                creamFrame = 0;
             }
 
             if (revived && !player.HasBuff(mod.BuffType("ArtificialSoul")))
@@ -2065,23 +2074,10 @@ namespace JoJoStands
                         layers[i].visible = false;
                     }
                 }
-                if (player.ownedProjectileCounts[mod.ProjectileType("Void")] != 0)
+                if (player.ownedProjectileCounts[mod.ProjectileType("Void")] != 0 || player.ownedProjectileCounts[mod.ProjectileType("ExposingCream")] != 0)
                 {
                     for (int i = 0; i < layers.Count; i++)
                     {
-                        layers[i].visible = false;
-                    }
-                }
-                int voidlayer = layers.FindIndex(l => l == PlayerLayer.Head);
-                int voidlayer2 = layers.FindIndex(l => l == PlayerLayer.Face);
-                int voidlayer3 = layers.FindIndex(l => l == PlayerLayer.FaceAcc);
-                if (player.ownedProjectileCounts[mod.ProjectileType("ExposingCream")] != 0)
-                {
-                    for (int i = 0; i < layers.Count; i++)
-                    {
-                        layers[voidlayer].visible = true;
-                        layers[voidlayer2].visible = true;
-                        layers[voidlayer3].visible = true;
                         layers[i].visible = false;
                     }
                 }

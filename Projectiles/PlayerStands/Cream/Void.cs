@@ -9,20 +9,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 4;
+            Main.projFrames[projectile.type] = 3;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 25;
-            projectile.height = 25;
+            projectile.width = 20;
+            projectile.height = 20;
             projectile.aiStyle = 0;
             projectile.penetrate = -1;
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
-            drawOffsetX = -32;
-            drawOriginOffsetY = -32;
+            drawOffsetX = -20;
+            drawOriginOffsetY = -20;
         }
 
         private int voidDashTimer = 0;
@@ -37,16 +37,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             //player.position.X = projectile.position.X + 5;
             //player.position.Y = projectile.position.Y - 15;
             modPlayer.creamVoidMode = true;
-            player.position = projectile.position + new Vector2(5f, -15f);
+            player.position = projectile.position + new Vector2(-10f, -15f);
             player.AddBuff(mod.BuffType("SphericalVoid"), 2);
             if (player.mount.Type != 0)
             {
                 player.mount.Dismount(player);
-            }
-
-            if (projectile.ai[0] <= 60f)        //A timer for disabling void mode
-            {
-                projectile.ai[0]++;
             }
             if (voidDashCooldownTimer > 0)
             {
@@ -57,25 +52,31 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 bool specialPressed = false;
                 if (!Main.dedServ)
-                    specialPressed = JoJoStands.SpecialHotKey.JustPressed;
-
+                specialPressed = JoJoStands.SpecialHotKey.JustPressed;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 modPlayer.VoidCamPosition = projectile.position - new Vector2(halfScreenWidth, halfScreenHeight);
 
-                if (player.dead || !modPlayer.StandOut || (projectile.ai[0] >= 60f && specialPressed) || modPlayer.voidCounter <= 0 || player.ownedProjectileCounts[mod.ProjectileType("Void")] >= 2)
+                if (player.dead || !modPlayer.StandOut || player.ownedProjectileCounts[mod.ProjectileType("Void")] >= 2)
                 {
-                    if (modPlayer.voidCounter <= 0)
-                    {
-                        Main.PlaySound(SoundID.Item78);
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 5f;
-                        Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("ExposingCream"), 0, 6f, player.whoAmI);
-                    }
                     projectile.Kill();
                 }
-
+                if (modPlayer.voidCounter <= 0 || Main.mouseRight && modPlayer.creamTier > 2 || specialPressed && !Main.mouseLeft)
+                {
+                    if (specialPressed && !Main.mouseLeft || modPlayer.creamTier == 2 && modPlayer.voidCounter <= 0)
+                    {
+                        modPlayer.creamNormalToVoid = true;
+                    }
+                    projectile.Kill();
+                    modPlayer.creamFrame = 7;
+                    modPlayer.creamExposedToVoid = true;
+                    modPlayer.creamAnimationReverse = true;
+                    Main.PlaySound(SoundID.Item78);
+                    Vector2 shootVelocity = Main.MouseWorld - player.position;
+                    shootVelocity.Normalize();
+                    shootVelocity *= 5f;
+                    Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("ExposingCream"), 0, 6f, player.whoAmI);
+                }
                 if (savedDashVelocity != Vector2.Zero)
                 {
                     voidDashTimer++;
@@ -87,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                         savedDashVelocity = Vector2.Zero;
                     }
                 }
-                else if (Main.mouseRight && savedDashVelocity == Vector2.Zero && voidDashTimer <= 0)       //Dash option
+                else if (specialPressed && Main.mouseLeft && savedDashVelocity == Vector2.Zero && voidDashTimer <= 0)       //Dash option
                 {
                     modPlayer.voidCounter -= 1;
                     savedDashVelocity = Main.MouseWorld - projectile.position;
@@ -103,7 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     projectile.velocity = Main.MouseWorld - projectile.position;
                     projectile.velocity.Normalize();
-                    projectile.velocity *= 5f + modPlayer.creamTier;      //8f and 9f
+                    projectile.velocity *= 5f + modPlayer.creamTier;      // 7f, 8f, 9f
 
                     if (Main.MouseWorld.X > projectile.position.X)
                         player.ChangeDir(1);
@@ -144,9 +145,19 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 for (int detectedTileY = creamUpY; detectedTileY < creamDownY; detectedTileY++)
                 {
                     Tile tileToDestroy = Main.tile[detectedTileX, detectedTileY];
-                    if (tileToDestroy.active() && tileToDestroy.type != TileID.LihzahrdBrick && tileToDestroy.type != TileID.LihzahrdAltar)
+                    if (modPlayer.creamTier <= 2)
                     {
-                        WorldGen.KillTile(detectedTileX, detectedTileY, false, false, true);
+                        if (tileToDestroy.active() && tileToDestroy.type != TileID.LihzahrdBrick && tileToDestroy.type != TileID.BlueDungeonBrick && tileToDestroy.type != TileID.GreenDungeonBrick && tileToDestroy.type != TileID.PinkDungeonBrick && tileToDestroy.type != TileID.LihzahrdAltar && tileToDestroy.type != TileID.DemonAltar)
+                        {
+                            WorldGen.KillTile(detectedTileX, detectedTileY, false, false, true);
+                        }
+                    }
+                    if (modPlayer.creamTier >= 3)
+                    {
+                        if (tileToDestroy.active() && tileToDestroy.type != TileID.LihzahrdBrick && tileToDestroy.type != TileID.LihzahrdAltar)
+                        {
+                            WorldGen.KillTile(detectedTileX, detectedTileY, false, false, true);
+                        }
                     }
                     if (Main.tile[detectedTileX, detectedTileY].liquid > 0)
                     {
@@ -161,7 +172,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 projectile.frame++;
                 projectile.frameCounter = 0;
-                if (projectile.frame >= 4)
+                if (projectile.frame >= 3)
                 {
                     projectile.frame = 0;
                 }
@@ -180,12 +191,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(mod.BuffType("MissingOrgans"), 300);
+            Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            target.AddBuff(mod.BuffType("MissingOrgans"), 120 * modPlayer.creamTier);
         }
 
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            target.AddBuff(mod.BuffType("MissingOrgans"), 300);
+            Player player = Main.player[projectile.owner];
+            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            target.AddBuff(mod.BuffType("MissingOrgans"), 60 * modPlayer.creamTier);
         }
 
         public override bool? CanHitNPC(NPC target)

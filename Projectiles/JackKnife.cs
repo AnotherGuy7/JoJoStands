@@ -22,5 +22,9 @@ namespace JoJoStands.Projectiles
         {
             projectile.rotation = projectile.velocity.ToRotation();
         }
+        public override bool? CanHitNPC(NPC target)
+        {
+            return true;
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace JoJoStands.Projectiles
             get { return mod.Name + "/Projectiles/Fists"; }
         }
 
-        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 7 = TH; 8 = GD; 9 = WS; 10 = SC;
+        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 7 = TH; 8 = GD; 9 = WS; 10 = SC; 11 = Cream
         {
             projectile.width = 30;
             projectile.height = 30;
@@ -178,6 +178,10 @@ namespace JoJoStands.Projectiles
                     player.armorPenetration += 20;
                 }
             }
+            if (projectile.ai[0] == 11f)
+            {
+                target.AddBuff(mod.BuffType("MissingOrgans"), 120 * mPlayer.creamTier);
+            }
 
             if (mPlayer.destroyAmuletEquipped)
             {
@@ -312,7 +316,10 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(BuffID.Confused, 60 * 6);
                 }
             }
-
+            if (projectile.ai[0] == 11f)
+            {
+                target.AddBuff(mod.BuffType("MissingOrgans"), 60 * mPlayer.creamTier);
+            }
             if (mPlayer.destroyAmuletEquipped)
             {
                 if (Main.rand.NextFloat(0, 101) >= 93)

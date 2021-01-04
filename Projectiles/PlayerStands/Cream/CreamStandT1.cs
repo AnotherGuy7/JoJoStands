@@ -15,7 +15,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override int punchDamage => 35;
         public override float punchKnockback => 8f;
         public override int punchTime => 28;     
-        public override int halfStandHeight => 32;
+        public override int halfStandHeight => 36;
         public override float fistWhoAmI => 11f;
         public override int standOffset => 0;
         public override int standType => 1;
@@ -141,7 +141,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 6, newPunchTime, true);
+                AnimationStates(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Pose")
             {

@@ -15,14 +15,14 @@ namespace JoJoStands.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Cream (Tier 2)");
-			Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to envelop yourself in Void!\nUsed in Stand Slot");
+			Tooltip.SetDefault("Chop an enemy with a powerful chop!\nSpecial: Completely become a ball of Void and consume everything in your way!\nUsed in Stand Slot");
 		}
 
 		public override void SetDefaults()
 		{
 			item.damage = 68;
-			item.width = 86;
-			item.height = 74;
+			item.width = 58;
+			item.height = 50;
 			item.maxStack = 1;
 			item.value = 0;
 			item.noUseGraphic = true;
