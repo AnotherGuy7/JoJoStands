@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.UI;
 
 namespace JoJoStands.NPCs.TownNPCs
 {
@@ -49,24 +50,44 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             if (firstButton)
             {
-
+                //HamonSkillTree.Visible = true;
+                HamonSkillTree.OpenHamonSkillTree();
             }
         }
 
         public override string GetChat()       //Allows you to give this town NPC a chat message when a player talks to it.
         {
-            switch (Main.rand.Next(4))    //this are the messages when you talk to the npc, if you want to add more cases, you first need to change the Main.rand to the number of cases (default is included!)
+            Player player = Main.LocalPlayer;
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (!mPlayer.Vampire)
             {
-                case 0:
-                    return "I am Zeppeli.";
-                case 1:
-                    return "What can I teach you today?";
-                case 2:
-                    return "3";
-                case 3:
-                    return "4";
-                default:
-                    return "0";
+                switch (Main.rand.Next(0, 5))
+                {
+                    case 0:
+                        return "Excuse me, " + player.name + ", would you happen to have some wine, preferably in a bottle? I had some, but it spilled.";
+                    case 1:
+                        return "I hope you are looking out for vampires, " + player.name + ". I have devoted my entire life to hunting them down.";
+                    case 2:
+                        return "Welcome back, friend. Are you here to train in the ways of Hamon?";
+                    case 3:
+                        return "Master Tonpetty told me I would meet my end if I completed my training... will it be here, in this strange land?";
+                    case 4:
+                        return "When you have free time, could you come back? I made a salad, with copious amounts of pepper, of course, and nobody else wants it.";
+                    default:        //When would this one even appear?
+                        return "When you have free time, could you come back? I made a salad, with copious amounts of pepper, of course, and nobody else wants it.";
+                }
+            }
+            else
+            {
+                switch (Main.rand.Next(0, 2))
+                {
+                    case 0:
+                        return "Something has changed about you... you have used the power of the Stone Mask for yourself, have you not? Get out of my sight.";
+                    case 1:
+                        return "You are a vampire now, are you not? How many people have you killed?! What did you say? 'How many breads have I eaten?' You monster.";
+                    default:
+                        return "Something has changed about you... you have used the power of the Stone Mask for yourself, have you not? Get out of my sight.";
+                }
             }
         }
 

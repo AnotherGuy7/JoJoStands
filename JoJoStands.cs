@@ -32,6 +32,7 @@ namespace JoJoStands
         private UserInterface _aerosmithRadar;
         private UserInterface _sexPistolsUI;
         private UserInterface _voidbarUI;
+        private UserInterface _hamonSkillTreeUI;
 
         internal ToBeContinued TBCarrow;
         internal HamonBarState HamonBarInterface;
@@ -41,6 +42,7 @@ namespace JoJoStands
         internal BetUI betUI;
         internal SexPistolsUI sexPistolsUI;
         internal VoidBar VoidBarUI;
+        internal HamonSkillTree HamonSkillTreeUI;
 
         public override void Load()
         {
@@ -130,6 +132,10 @@ namespace JoJoStands
                 VoidBarUI.Activate();
                 _voidbarUI = new UserInterface();
                 _voidbarUI.SetState(VoidBarUI);
+                HamonSkillTreeUI = new HamonSkillTree();
+                HamonSkillTreeUI.Activate();
+                _hamonSkillTreeUI = new UserInterface();
+                _hamonSkillTreeUI.SetState(HamonSkillTreeUI);
 
                 //Shader Stuff
                 Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect"));      // The path to the compiled shader file.
@@ -243,6 +249,10 @@ namespace JoJoStands
             {
                 _voidbarUI.Update(gameTime);
             }
+            if (HamonSkillTree.Visible)
+            {
+                _hamonSkillTreeUI.Update(gameTime);
+            }
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)     //from ExampleMod's ExampleUI
@@ -283,6 +293,10 @@ namespace JoJoStands
             if (VoidBar.Visible)
             {
                 _voidbarUI.Draw(Main.spriteBatch, new GameTime());
+            }
+            if (HamonSkillTree.Visible)
+            {
+                _hamonSkillTreeUI.Draw(Main.spriteBatch, new GameTime());
             }
             return true;
         }

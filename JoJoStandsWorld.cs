@@ -13,13 +13,10 @@ namespace JoJoStands
         private bool meteorDropped = false;
         public static int viralMeteoriteTiles = 0;
 
-        public override void PreUpdate()
+        public override void Initialize()
         {
-            if (NPC.downedBoss3 && !meteorDropped && Main.dayTime)
-            {
-                DropViralMeteorite();
-                meteorDropped = true;
-            }
+            meteorDropped = false;
+            viralMeteoriteTiles = 0;
         }
 
         public override TagCompound Save()
@@ -33,6 +30,15 @@ namespace JoJoStands
         public override void Load(TagCompound tag)
         {
             meteorDropped = tag.GetBool("meteorDropped");
+        }
+
+        public override void PreUpdate()
+        {
+            if (NPC.downedBoss3 && !meteorDropped && Main.dayTime)
+            {
+                DropViralMeteorite();
+                meteorDropped = true;
+            }
         }
 
         public override void PostWorldGen()     ///once again, from ExampleMod

@@ -1,6 +1,10 @@
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using System.Linq;
 
 namespace JoJoStands.Items.Hamon
 {
@@ -15,12 +19,39 @@ namespace JoJoStands.Items.Hamon
         public int maxHamon = 60;
         public int hamonIncreaseCounter = 0;
         public int maxHamonCounter = 0;
+        public int skillPointsAvailable = 2;
 
-        public bool AjaStone = false;
+        public bool chargingHamon = false;
+        public bool ajaStoneEquipped = false;
+
+        //Adjustable skills
+        public const int HamonSkillsLimit = 18;
+
+        public const int BreathingRegenSkill = 0;
+        public const int WaterWalkingSKill = 1;
+        public const int WeaponsHamonImbueSkill = 2;
+
+        //public bool[] learnedHamonSkills = new bool[HamonSkillsLimit];
+        public Dictionary<int, bool> learnedHamonSkills = new Dictionary<int, bool>();
+        public Dictionary<int, int> hamonAmountRequirements = new Dictionary<int, int>();
+
 
         public override void ResetEffects()
         {
             ResetVariables();
+        }
+
+        public override void OnEnterWorld(Player player)
+        {
+            if (learnedHamonSkills.Count == 0)
+            {
+                learnedHamonSkills.Add(BreathingRegenSkill, false);
+                learnedHamonSkills.Add(WaterWalkingSKill, false);
+                learnedHamonSkills.Add(WeaponsHamonImbueSkill, false);
+
+                hamonAmountRequirements.Add(WaterWalkingSKill, 0);
+                hamonAmountRequirements.Add(WeaponsHamonImbueSkill, 0);
+            }
         }
 
         public override void PreUpdate()
@@ -71,7 +102,6 @@ namespace JoJoStands.Items.Hamon
             {
                 case 1:
                     maxHamon = 72;
-
                     break;
                 case 2:
                     maxHamon = 84;
@@ -109,7 +139,7 @@ namespace JoJoStands.Items.Hamon
                     break;
             }
 
-            if (AjaStone)           //Hamon charging stuff
+            if (ajaStoneEquipped)           //Hamon charging stuff
             {
                 maxHamon *= 2;
                 maxHamonCounter = 120;
@@ -120,9 +150,22 @@ namespace JoJoStands.Items.Hamon
                 hamonIncreaseCounter = 0;
             }
 
+            if (!Mplayer.Vampire && player.breath == player.breathMax && amountOfHamon <= 60)       //in general, to increase Hamon while it can still be increased, no speeding up or decreasing
+            {
+                if (player.velocity.X == 0f)
+                {
+                    hamonIncreaseCounter++;
+                }
+                else
+                {
+                    hamonIncreaseCounter += 2;
+                }
+
+                hamonIncreaseCounter += hamonIncreaseBonus;
+            }
             if (hamonIncreaseCounter >= maxHamonCounter)      //the one that increases Hamon
             {
-                if (AjaStone)       //or any other decrease-preventing accessories
+                if (ajaStoneEquipped)       //or any other decrease-preventing accessories
                 {
                     hamonIncreaseCounter = 0;
                     amountOfHamon += 1;
@@ -133,36 +176,20 @@ namespace JoJoStands.Items.Hamon
                     amountOfHamon += 1;
                 }
             }
-            if (hamonIncreaseCounter >= maxHamonCounter && amountOfHamon > 60 && !AjaStone)      //the one that decreases Hamon
+            if (hamonIncreaseCounter >= maxHamonCounter && amountOfHamon > 60 && !ajaStoneEquipped)      //the one that decreases Hamon
             {
                 hamonIncreaseCounter = 0;
                 amountOfHamon -= 1;
             }
-            if (!Mplayer.Vampire && player.breath == player.breathMax && amountOfHamon <= 60)       //in general, to increase Hamon while it can still be increased, no speeding up decreasing
-            {
-                if (player.velocity != Vector2.Zero)
-                {
-                    hamonIncreaseCounter++;
-                }
-                else
-                {
-                    hamonIncreaseCounter += 2;
-                }
-                hamonIncreaseCounter += hamonIncreaseBonus;
-                if (player.lavaWet && !player.lavaImmune)
-                {
-                    hamonIncreaseCounter--;
-                }
-            }
-            if (!AjaStone)          //list maxHamonCounter decreasing things in here
+            if (!ajaStoneEquipped)          //list maxHamonCounter decreasing things in here
             {
                 maxHamonCounter = 240;
             }
-            if (amountOfHamon > 60 && amountOfHamon < 120 && !AjaStone)      //every 6 seconds, while Hamon is at the UI's second row, it decreases. Only if you don't have the Aja Stone
+            if (amountOfHamon > 60 && amountOfHamon < 120 && !ajaStoneEquipped)      //every 6 seconds, while Hamon is at the UI's second row, it decreases. Only if you don't have the Aja Stone
             {
                 maxHamonCounter = 360;
             }
-            if (amountOfHamon >= 120 && !AjaStone)      //same as top but every 3 seconds
+            if (amountOfHamon >= 120 && !ajaStoneEquipped)      //same as top but every 3 seconds
             {
                 maxHamonCounter = 180;
             }
@@ -175,6 +202,83 @@ namespace JoJoStands.Items.Hamon
             {
                 amountOfHamon = 0;
             }
+
+            /*if (learnedHamonSkills.Count == 0)
+            {
+                Main.NewText("Broke");
+            }*/
+        }
+
+        public override void MeleeEffects(Item item, Rectangle hitbox)
+        {
+            if (player.HasBuff(mod.BuffType("HamonWeaponImbueBuff")))
+            {
+                Vector2 hitboxPosition = new Vector2(hitbox.X, hitbox.Y);
+                Dust.NewDust(hitboxPosition, hitbox.Width, hitbox.Height, 169);
+            }
+        }
+
+        public override void NaturalLifeRegen(ref float regen)
+        {
+            if (chargingHamon)
+            {
+                if (learnedHamonSkills.ContainsKey(BreathingRegenSkill) && learnedHamonSkills[BreathingRegenSkill])
+                {
+                    regen *= 1.4f;
+                }
+            }
+        }
+
+        public override void PreUpdateMovement()
+        {
+            if (learnedHamonSkills.ContainsKey(WaterWalkingSKill) && learnedHamonSkills[WaterWalkingSKill])
+            {
+                if (amountOfHamon > hamonAmountRequirements[WaterWalkingSKill])
+                {
+                    player.waterWalk2 = true;
+                }
+            }
+        }
+
+        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        {
+            if (player.HasBuff(mod.BuffType("HamonWeaponImbueBuff")))
+            {
+                target.AddBuff(mod.BuffType("Sunburn"), 120);
+            }
+        }
+
+        public override TagCompound Save()
+        {
+            return new TagCompound
+            {
+                { "hamonSkillKeys", learnedHamonSkills.Keys.ToList() },
+                { "hamonSkillValues", learnedHamonSkills.Values.ToList() },
+                { "hamonRequirementKeys", hamonAmountRequirements.Keys.ToList() },
+                { "hamonRequirementValues", hamonAmountRequirements.Values.ToList() },
+                { "hamonSkillPoints", skillPointsAvailable }
+            };
+        }
+
+        public override void Load(TagCompound tag)
+        {
+            IList<int> skillKeys = tag.GetList<int>("hamonSkillKeys");
+            IList<bool> skillValues = tag.GetList<bool>("hamonSkillValues");
+            IList<int> requirementKeys = tag.GetList<int>("hamonRequirementKeys");
+            IList<int> requirementValues = tag.GetList<int>("hamonRequirementValues");
+            skillPointsAvailable = tag.GetInt("hamonSkillPoints");
+            /*for (int i = 0; i < keys.Count; i++)
+            {
+                if (learnedHamonSkills.ContainsKey(keys[i]))
+                {
+                    learnedHamonSkills[keys[i]] = values[i];
+                }
+            }*/
+            if (learnedHamonSkills.Count != 0)
+                learnedHamonSkills = skillKeys.Zip(skillValues, (key, value) => new {Key = key, Value = value}).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);
+
+            if (hamonAmountRequirements.Count != 0)
+                hamonAmountRequirements = requirementKeys.Zip(requirementValues, (key, value) => new { Key = key, Value = value }).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);
         }
 
         public override void UpdateDead()
@@ -187,6 +291,8 @@ namespace JoJoStands.Items.Hamon
             hamonDamageBoosts = 1f;
             hamonKnockbackBoosts = 1f;
             hamonIncreaseBonus = 0;
+
+            chargingHamon = false;
         }
     }
 }

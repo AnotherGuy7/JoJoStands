@@ -116,6 +116,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     projectile.velocity = Vector2.Zero;
                 }
             }
+            projectile.spriteDirection = player.direction;
 
             int creamLeftX = (int)(projectile.position.X / 16f) - 1;
             int creamRightX = (int)((projectile.position.X + (float)projectile.width) / 16f) + 2;

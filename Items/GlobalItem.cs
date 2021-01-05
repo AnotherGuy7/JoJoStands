@@ -1,6 +1,6 @@
-using Terraria.ID;
+using JoJoStands.Items.Hamon;
 using Terraria;
-using Microsoft.Xna.Framework;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -10,6 +10,7 @@ namespace JoJoStands.Items
        public override bool InstancePerEntity => true;
         public override bool CloneNewInstances => true;
 
+        public float doublePressTimer = 0;
         public float normalGravity = 0f;
         public float normalFallSpeed = 0f;
         public bool gravitySaved = false;
@@ -63,7 +64,7 @@ namespace JoJoStands.Items
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.StandOut && !mPlayer.StandAutoMode && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory)
             {
-                if (item.potion || (item.mountType != -1))      //default value for mountType is -1
+                if (item.potion || item.mountType != -1)      //default value for mountType is -1
                 {
                     return true;
                 }
@@ -108,6 +109,38 @@ namespace JoJoStands.Items
             {
                 normalFallSpeed = 0f;
                 normalGravity = 0f;
+            }
+        }
+
+        public override void HoldItem(Item item, Player player)
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+            if (item.melee && !mPlayer.StandOut)
+            {
+                if (doublePressTimer > 0)
+                    doublePressTimer--;
+
+                bool specialJustPressed = false;
+                if (!Main.dedServ)
+                    specialJustPressed = JoJoStands.SpecialHotKey.JustPressed;
+
+                if (specialJustPressed)
+                {
+                    if (doublePressTimer <= 0)
+                    {
+                        doublePressTimer = 30;
+                    }
+                    else
+                    {
+                        if (hPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.WeaponsHamonImbueSkill) && hPlayer.learnedHamonSkills[HamonPlayer.WeaponsHamonImbueSkill] && hPlayer.amountOfHamon >= hPlayer.hamonAmountRequirements[HamonPlayer.WeaponsHamonImbueSkill])
+                        {
+                            player.AddBuff(mod.BuffType("HamonWeaponImbueBuff"), 240 * 60);
+                            hPlayer.amountOfHamon -= hPlayer.hamonAmountRequirements[HamonPlayer.WeaponsHamonImbueSkill];
+                        }
+                        doublePressTimer = 0;
+                    }
+                }
             }
         }
 

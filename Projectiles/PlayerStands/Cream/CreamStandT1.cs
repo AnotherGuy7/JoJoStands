@@ -77,7 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     {
                         projectile.velocity = Vector2.Zero;
                     }
-                    if (shootCount <= 0 && (projectile.frame == 0 || projectile.frame == 4))
+                    if (shootCount <= 0 && projectile.frame == 2)
                     {
                         shootCount += newPunchTime;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
