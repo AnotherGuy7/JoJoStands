@@ -16,12 +16,13 @@ namespace JoJoStands.UI
 
         public UIElement owner;
         public bool focusedOn = false;      //These are meant to be chanegable
-        public float focusScaleAmount = 1.3f;
+        public float focusScaleAmount = 1.15f;
         public Vector2 buttonSize;
         public Color drawColor = Color.White;
         public float drawAlpha = 0f;
         public bool respondToFocus = false;
         public bool lockedInFocus = false;
+        public bool invisible = false;
         public SpriteEffects effect;
         public float rotation;
 
@@ -50,7 +51,10 @@ namespace JoJoStands.UI
         private void ResetVariables()
         {
             imageScale = 1f;
-            drawAlpha = 0.4f;
+            if (!invisible)
+            {
+                drawAlpha = 0.4f;
+            }
             focusedOn = false;
             SetVisibility(0f, 0f);      //This is to cover the draws of the normal UI
         }

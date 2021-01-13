@@ -62,7 +62,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     secondaryAbilityFrames = true;
                     Main.mouseLeft = false;
                     projectile.netUpdate = true;
-                    GoInFront();
                     Rectangle parryRectangle = new Rectangle((int)projectile.Center.X + (4 * projectile.direction), (int)projectile.Center.Y - 29, 16, 54);
                     for (int p = 0; p < Main.maxProjectiles; p++)
                     {
@@ -100,9 +99,12 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 {
                     secondaryAbilityFrames = false;
                 }
-                if (!attackFrames && !Main.mouseRight && !parryFrames)
+                if (!attackFrames && !parryFrames)
                 {
-                    StayBehind();
+                    if (!Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")))
+                        StayBehind();
+                    else
+                        GoInFront();
                 }
             }
             if (modPlayer.StandAutoMode)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -5,11 +6,14 @@ namespace JoJoStands.Items.Hamon
 {
     public class Hamon : HamonDamageClass
     {
+        private int healTimer = 0;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hamon");
-            Tooltip.SetDefault("Punch enemies with the power that circulates in you. \nExperience goes up after each conquer... \nRight-click requires more than 5 hamon\nSpecial: Hamon Breathing");
+            Tooltip.SetDefault("Punch enemies with the power that circulates in you. \nExperience goes up after each conquer...\nSpecial: Hamon Breathing");
         }
+
         public override void SafeSetDefaults()
         {
             item.damage = 14;
@@ -31,49 +35,44 @@ namespace JoJoStands.Items.Hamon
             item.shootSpeed = 15f;
         }
 
-        public override bool AltFunctionUse(Player player)
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            return true;
+            Player player = Main.player[item.owner];
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+
+            if (hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing])
+            {
+                TooltipLine tooltipAddition = new TooltipLine(mod, "Damage", "Hold Right-Click for more than 3 seconds to heal life! (Require more than 5 Hamon)");
+                tooltips.Add(tooltipAddition);
+            }
         }
 
-        public override bool CanUseItem(Player player)
+
+        public override void HoldItem(Player player)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            if (!mPlayer.StandOut || (mPlayer.StandOut && mPlayer.StandAutoMode))
+
+            ChargeHamon();
+            if (player.whoAmI == item.owner)
             {
-                if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 5)
+                if (Main.mouseRight && hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing] && hamonPlayer.amountOfHamon >= 5)
+                {
+                    healTimer++;
+                }
+                if (healTimer >= 180)
                 {
                     item.noUseGraphic = true;
-                    item.useTime = 180;
-                    item.useAnimation = 180;
-                    item.shoot = 0;
                     int healamount = Main.rand.Next(10, 20);
                     player.HealEffect(healamount);
                     player.statLife += healamount;
                     hamonPlayer.amountOfHamon -= 5;
+                    healTimer = 0;
                 }
-                if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon <= 5)
+                if (Main.mouseRightRelease)
                 {
-                    return false;
+                    healTimer = 0;
                 }
             }
-            if (player.altFunctionUse != 2)
-            {
-                item.knockBack = 1f;
-                item.shoot = mod.ProjectileType("HamonPunches");
-                item.useAnimation = 25;
-                item.useTime = 15;
-                item.channel = true;
-                item.autoReuse = false;
-                item.shootSpeed = 15f;
-            }
-            return true;
-        }
-
-        public override void HoldItem(Player player)
-        {
-            ChargeHamon();
             if (player.statLife <= 25)
             {
                 player.AddBuff(mod.BuffType("RUUUN"), 360);

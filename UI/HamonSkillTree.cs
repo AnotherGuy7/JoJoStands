@@ -14,6 +14,7 @@ namespace JoJoStands.UI
         public UIPanel HamonSkillTreePanel;
         public static bool Visible;
         public UIText hamonSkillTooltip;
+        public UIText hamonSkillPointsText;
         public UIImageButton hamonSkillTreeUpArrow;
         public UIImageButton hamonSkillTreeDownArrow;
         public UIImageButton hamonSkillTreeXButton;
@@ -28,6 +29,7 @@ namespace JoJoStands.UI
         public string[] hamonSkillIconTooltips = new string[10];
         public int[] affectedSkillSlotIndexes = new int[HamonPlayer.HamonSkillsLimit];      //This is an array of indexes for the slot that goes true
         public int[] affectedSkillSlotHamonRequired = new int[HamonPlayer.HamonSkillsLimit];
+        private Texture2D unknownSkillTexture;
 
         public static void OpenHamonSkillTree()
         {
@@ -37,6 +39,9 @@ namespace JoJoStands.UI
 
         public override void Update(GameTime gameTime)
         {
+            Player player = Main.player[Main.myPlayer];
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+
             for (int i = 0; i < hamonSkillIcons.Length; i++)
             {
                 AdjustableButton icon = hamonSkillIcons[i];
@@ -46,6 +51,7 @@ namespace JoJoStands.UI
                     icon.drawColor = Color.Yellow;
                 }
             }
+            hamonSkillPointsText.SetText("SP: " + hamonPlayer.skillPointsAvailable);
 
             /*KeyboardState keyboardState = Keyboard.GetState();     //Code for finding button positions (Just control it to where you want it and remember the coordiantes)
 
@@ -85,7 +91,12 @@ namespace JoJoStands.UI
             SetElementPosition(hamonSkillTooltip, new Vector2(186f, 178f));
             HamonSkillTreePanel.Append(hamonSkillTooltip);
 
-            hamonSkillTreeUpArrow = new UIImageButton(ModContent.GetTexture("JoJoStands/Extras/HamonTreeUpArrow"));
+            hamonSkillPointsText = new UIText("Skill Points Available: ");
+            SetElementSize(hamonSkillPointsText, new Vector2(102f, 38f));
+            SetElementPosition(hamonSkillPointsText, new Vector2(2f, 148f));
+            HamonSkillTreePanel.Append(hamonSkillPointsText);
+
+            /*hamonSkillTreeUpArrow = new UIImageButton(ModContent.GetTexture("JoJoStands/Extras/HamonTreeUpArrow"));
             SetElementSize(hamonSkillTreeUpArrow, new Vector2(32f, 32f));
             SetElementPosition(hamonSkillTreeUpArrow, new Vector2(10f, 10f));
             hamonSkillTreeUpArrow.OnClick += OnClickHamonSkillTreeUpArrow;
@@ -95,7 +106,7 @@ namespace JoJoStands.UI
             SetElementSize(hamonSkillTreeDownArrow, new Vector2(32f, 32f));
             SetElementPosition(hamonSkillTreeDownArrow, new Vector2(10f, 46f));
             hamonSkillTreeDownArrow.OnClick += OnClickHamonSkillTreeDownArrow;
-            HamonSkillTreePanel.Append(hamonSkillTreeDownArrow);
+            HamonSkillTreePanel.Append(hamonSkillTreeDownArrow);*/
 
             hamonSkillTreeXButton = new UIImageButton(ModContent.GetTexture("JoJoStands/Extras/HamonTreeXButton"));
             SetElementSize(hamonSkillTreeXButton, new Vector2(32f, 32f));
@@ -114,6 +125,7 @@ namespace JoJoStands.UI
                 hamonSkillIcons[b].owner = HamonSkillTreePanel;
                 HamonSkillTreePanel.Append(hamonSkillIcons[b]);
             }
+            unknownSkillTexture = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_Unknown");
             InitializeButtons(1);
 
             Append(HamonSkillTreePanel);
@@ -204,19 +216,25 @@ namespace JoJoStands.UI
                 return;
             }
 
-            if (!hamonPlayer.learnedHamonSkills[affectedSkillSlotIndexes[buttonIndex]])
+            if (hamonPlayer.skillPointsAvailable > 0 && !hamonPlayer.learnedHamonSkills[affectedSkillSlotIndexes[buttonIndex]])
             {
                 buttonClickedOn.focusedOn = true;
                 buttonClickedOn.lockedInFocus = true;
                 hamonPlayer.learnedHamonSkills[affectedSkillSlotIndexes[buttonIndex]] = true;
+                hamonPlayer.skillPointsAvailable -= 1;
                 if (affectedSkillSlotHamonRequired[buttonIndex] != 0)
                 {
                     hamonPlayer.hamonAmountRequirements[affectedSkillSlotIndexes[buttonIndex]] = affectedSkillSlotHamonRequired[buttonIndex];
                 }
                 hamonSkillTooltip.SetText(hamonSkillIconTooltips[buttonIndex]);
+                InitializeButtons(currentShownPage);
                 Main.NewText("Skill Obtained!", Color.Yellow);
             }
-            else
+            else if (hamonPlayer.skillPointsAvailable <= 0)
+            {
+                Main.NewText("You don't have a skill point! (Get more by using Sun Droplets)", Color.Yellow);
+            }
+            else if (hamonPlayer.learnedHamonSkills[affectedSkillSlotIndexes[buttonIndex]])
             {
                 Main.NewText("You've already obtained this skill before!", Color.Yellow);
             }
@@ -262,9 +280,17 @@ namespace JoJoStands.UI
                     affectedSkillSlotHamonRequired[3] = 60;
                     CheckForIconAbilityUnlocked(3);
 
+                    SetElementPosition(hamonSkillIcons[4], new Vector2(64f, 26f));
+                    hamonSkillIconImages[4] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_1");
+                    hamonSkillIcons[4].SetImage(hamonSkillIconImages[4]);
+                    hamonSkillIconTooltips[4] = "You discovered you can use your Hamon to heal yourself.\nHolding Right-click while holding the Hamon item for 3 seconds will heal you.";
+                    affectedSkillSlotIndexes[4] = HamonPlayer.HamonItemHealing;
+                    CheckForIconAbilityUnlocked(4);
+                    CheckForIconLock(4, 3);
+
                     //Slot 4 Position: 64, 26
                     //Slot 5 Position: 174, 26
-                    SetUnusedIconsInvisible(4);
+                    SetUnusedIconsInvisible(5);
                     break;
                 case 2:
                     break;
@@ -287,25 +313,45 @@ namespace JoJoStands.UI
             element.Height.Pixels = size.Y * UIScale;
         }
 
-        private void CheckForIconAbilityUnlocked(int iconIndex)
+        private bool CheckForIconAbilityUnlocked(int iconIndex)
         {
             if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
-                return;
+                return false;
 
             Player player = Main.player[Main.myPlayer];
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
 
-            if (hamonPlayer.learnedHamonSkills[affectedSkillSlotIndexes[iconIndex]])
+            bool learnedAbility = hamonPlayer.learnedHamonSkills[affectedSkillSlotIndexes[iconIndex]];
+            if (learnedAbility)
             {
                 hamonSkillIcons[iconIndex].lockedInFocus = true;
             }
+            return learnedAbility;
+        }
+
+        private bool CheckForIconLock(int iconIndex, int depenedentIconIndex)
+        {
+            if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
+                return false;
+
+            Player player = Main.player[Main.myPlayer];
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+
+            bool learnedAbility = hamonPlayer.learnedHamonSkills[affectedSkillSlotIndexes[depenedentIconIndex]];
+            if (!learnedAbility)
+            {
+                hamonSkillIcons[iconIndex].SetImage(unknownSkillTexture);
+                hamonSkillIconTooltips[iconIndex] = "Unlock the skill before this skill to be able to see this skill.";
+                affectedSkillSlotIndexes[iconIndex] = -1;
+            }
+            return learnedAbility;
         }
 
         private void SetUnusedIconsInvisible(int numberUsed)
         {
-            for (int i = numberUsed - 1; i < hamonSkillIcons.Length; i++)
+            for (int i = numberUsed; i < hamonSkillIcons.Length; i++)
             {
-                hamonSkillIcons[i].drawAlpha = 0f;
+                hamonSkillIcons[i].invisible = true;
             }
         }
     }

@@ -19,7 +19,7 @@ namespace JoJoStands.Items.Hamon
         public int maxHamon = 60;
         public int hamonIncreaseCounter = 0;
         public int maxHamonCounter = 0;
-        public int skillPointsAvailable = 2;
+        public int skillPointsAvailable = 1;
 
         public bool chargingHamon = false;
         public bool ajaStoneEquipped = false;
@@ -30,6 +30,7 @@ namespace JoJoStands.Items.Hamon
         public const int BreathingRegenSkill = 0;
         public const int WaterWalkingSKill = 1;
         public const int WeaponsHamonImbueSkill = 2;
+        public const int HamonItemHealing = 3;
 
         //public bool[] learnedHamonSkills = new bool[HamonSkillsLimit];
         public Dictionary<int, bool> learnedHamonSkills = new Dictionary<int, bool>();
@@ -48,7 +49,9 @@ namespace JoJoStands.Items.Hamon
                 learnedHamonSkills.Add(BreathingRegenSkill, false);
                 learnedHamonSkills.Add(WaterWalkingSKill, false);
                 learnedHamonSkills.Add(WeaponsHamonImbueSkill, false);
+                learnedHamonSkills.Add(HamonItemHealing, false);
 
+                //Only skills that need hamon to be used should add to the requirements dictionary
                 hamonAmountRequirements.Add(WaterWalkingSKill, 0);
                 hamonAmountRequirements.Add(WeaponsHamonImbueSkill, 0);
             }

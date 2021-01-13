@@ -71,6 +71,13 @@ namespace JoJoStands
         public int voidCounterMax = 0;
         public int voidTimer = 0;
         public int creamFrame = 0;
+        public int badCompanyTier = 0;
+        public int badCompanySoldiers = 0;
+        public int badCompanyTanks = 0;
+        public int badCompanyChoppers = 0;
+        public int maxBadCompanyUnits = 0;
+        public int badCompanyUnitsLeft = 0;
+        public int badCompanyUIClickTimer = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -336,6 +343,15 @@ namespace JoJoStands
                 {
                     equippedTuskAct = 0;
                     tuskActNumber = 0;
+                }
+                if (creamTier != 0)
+                {
+                    creamTier = 0;
+                    voidCounter = 0;
+                    creamNormalToExposed = false;
+                    creamNormalToVoid = false;
+                    creamExposedToVoid = false;
+                    creamFrame = 0;
                 }
                 if (showingCBLayer)
                 {
@@ -808,72 +824,75 @@ namespace JoJoStands
                     hermitPurpleShootCooldown--;
                 }
 
-                if (hermitPurpleTier == 1)
+                if (!StandAutoMode)
                 {
-                    if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                    if (hermitPurpleTier == 1)
                     {
-                        hermitPurpleShootCooldown += 40 - standSpeedBoosts;
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 14f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(17 * standDamageBoosts), 4f, player.whoAmI);
+                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                        {
+                            hermitPurpleShootCooldown += 40 - standSpeedBoosts;
+                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            shootVelocity.Normalize();
+                            shootVelocity *= 14f;
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(17 * standDamageBoosts), 4f, player.whoAmI);
+                        }
                     }
-                }
-                if (hermitPurpleTier == 2)
-                {
-                    if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                    if (hermitPurpleTier == 2)
                     {
-                        hermitPurpleShootCooldown += 35 - standSpeedBoosts;
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 14f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(42 * standDamageBoosts), 6f, player.whoAmI);
+                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                        {
+                            hermitPurpleShootCooldown += 35 - standSpeedBoosts;
+                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            shootVelocity.Normalize();
+                            shootVelocity *= 14f;
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(42 * standDamageBoosts), 6f, player.whoAmI);
+                        }
+                        if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
+                        {
+                            hermitPurpleShootCooldown += 60 - standSpeedBoosts;
+                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            shootVelocity.Normalize();
+                            shootVelocity *= 8f;
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(33 * standDamageBoosts), 0f, player.whoAmI);
+                        }
                     }
-                    if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
+                    if (hermitPurpleTier == 3)
                     {
-                        hermitPurpleShootCooldown += 60 - standSpeedBoosts;
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 8f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(33 * standDamageBoosts), 0f, player.whoAmI);
+                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                        {
+                            hermitPurpleShootCooldown += 30 - standSpeedBoosts;
+                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            shootVelocity.Normalize();
+                            shootVelocity *= 14f;
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(59 * standDamageBoosts), 7f, player.whoAmI);
+                        }
+                        if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
+                        {
+                            hermitPurpleShootCooldown += 60 - standSpeedBoosts;
+                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            shootVelocity.Normalize();
+                            shootVelocity *= 8f;
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(47 * standDamageBoosts), 0f, player.whoAmI);
+                        }
                     }
-                }
-                if (hermitPurpleTier == 3)
-                {
-                    if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                    if (hermitPurpleTier == 4)
                     {
-                        hermitPurpleShootCooldown += 30 - standSpeedBoosts;
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 14f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(59 * standDamageBoosts), 7f, player.whoAmI);
-                    }
-                    if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
-                    {
-                        hermitPurpleShootCooldown += 60 - standSpeedBoosts;
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 8f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(47 * standDamageBoosts), 0f, player.whoAmI);
-                    }
-                }
-                if (hermitPurpleTier == 4)
-                {
-                    if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
-                    {
-                        hermitPurpleShootCooldown += 25 - standSpeedBoosts;
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 14f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(81 * standDamageBoosts), 8f, player.whoAmI);
-                    }
-                    if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
-                    {
-                        hermitPurpleShootCooldown += 60 - standSpeedBoosts;
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 8f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(72 * standDamageBoosts), 0f, player.whoAmI);
+                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleWhip")] == 0)
+                        {
+                            hermitPurpleShootCooldown += 25 - standSpeedBoosts;
+                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            shootVelocity.Normalize();
+                            shootVelocity *= 14f;
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(81 * standDamageBoosts), 8f, player.whoAmI);
+                        }
+                        if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
+                        {
+                            hermitPurpleShootCooldown += 60 - standSpeedBoosts;
+                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            shootVelocity.Normalize();
+                            shootVelocity *= 8f;
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(72 * standDamageBoosts), 0f, player.whoAmI);
+                        }
                     }
                 }
             }
@@ -919,14 +938,100 @@ namespace JoJoStands
             {
                 UI.VoidBar.Visible = false;
             }
-            if (!StandOut)
+            if (badCompanyTier != 0)
             {
-                creamTier = 0;
-                voidCounter = 0;
-                creamNormalToExposed = false;
-                creamNormalToVoid = false;
-                creamExposedToVoid = false;
-                creamFrame = 0;
+                if (badCompanyUIClickTimer > 0)
+                {
+                    badCompanyUIClickTimer--;
+                }
+
+                bool specialPressed = false;
+                if (!Main.dedServ)
+                    specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+
+                if (specialPressed)
+                {
+                    if (badCompanyTier == 3)
+                    {
+                        player.AddBuff(mod.BuffType("Reinforcements"), 120 * 60);
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(6 * 60));       //6 minutes
+                    }
+                    if (badCompanyTier == 4)
+                    {
+                        player.AddBuff(mod.BuffType("Reinforcements"), 180 * 60);
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(5 * 60));       //5 minutes
+                    }
+                }
+
+                bool recalculateArmy = false;
+                int unitsLeftCalculation = maxBadCompanyUnits - (badCompanySoldiers + (badCompanyTanks * 4) + (badCompanyChoppers * 6));
+                if (unitsLeftCalculation != badCompanyUnitsLeft)
+                    recalculateArmy = true;
+                badCompanyUnitsLeft = unitsLeftCalculation;
+                int troopMult = 1;
+                if (player.HasBuff(mod.BuffType("Reinforcements")))
+                {
+                    troopMult = 2;
+                    recalculateArmy = true;
+                }
+                if (recalculateArmy)
+                {
+                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanySoldier")] < badCompanySoldiers * troopMult)     //Adding troops
+                    {
+                        Projectile.NewProjectile(player.Center, player.velocity, mod.ProjectileType("BadCompanySoldier"), 0, 0f, player.whoAmI, badCompanyTier);
+                    }
+                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanyTank")] < badCompanyTanks * troopMult)
+                    {
+                        Projectile.NewProjectile(player.Center, player.velocity, mod.ProjectileType("BadCompanyTank"), 0, 0f, player.whoAmI, badCompanyTier);
+                    }
+                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanyChopper")] < badCompanyChoppers * troopMult)
+                    {
+                        Projectile.NewProjectile(player.Center, player.velocity, mod.ProjectileType("BadCompanyChopper"), 0, 0f, player.whoAmI, badCompanyTier);
+                    }
+
+                    //Removing troops
+                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanySoldier")] > badCompanySoldiers * troopMult)
+                    {
+                        for (int p = 0; p < Main.maxProjectiles; p++)
+                        {
+                            Projectile projectile = Main.projectile[p];
+                            if (projectile.active && projectile.type == mod.ProjectileType("BadCompanySoldier") && projectile.owner == Main.myPlayer)
+                            {
+                                projectile.Kill();
+                                break;
+                            }
+                        }
+                    }
+                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanyTank")] > badCompanyTanks * troopMult)
+                    {
+                        for (int p = 0; p < Main.maxProjectiles; p++)
+                        {
+                            Projectile projectile = Main.projectile[p];
+                            if (projectile.active && projectile.type == mod.ProjectileType("BadCompanyTank") && projectile.owner == Main.myPlayer)
+                            {
+                                projectile.Kill();
+                                break;
+                            }
+                        }
+                    }
+                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanyChopper")] > badCompanyChoppers * troopMult)
+                    {
+                        for (int p = 0; p < Main.maxProjectiles; p++)
+                        {
+                            Projectile projectile = Main.projectile[p];
+                            if (projectile.active && projectile.type == mod.ProjectileType("BadCompanyChopper") && projectile.owner == Main.myPlayer)
+                            {
+                                projectile.Kill();
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (Main.mouseRight && badCompanyUIClickTimer <= 0 && player.whoAmI == Main.myPlayer)
+                {
+                    badCompanyUIClickTimer = 30;
+                    UI.BadCompanyUnitsUI.Visible = !UI.BadCompanyUnitsUI.Visible;
+                }
             }
 
             if (revived && !player.HasBuff(mod.BuffType("ArtificialSoul")))
@@ -1270,6 +1375,26 @@ namespace JoJoStands
                 standType = 2;
                 equippedTuskAct = 4;
                 tuskActNumber = 3;
+            }
+            else if (inputItem.type == mod.ItemType("BadCompanyT1"))
+            {
+                badCompanyTier = 1;
+                maxBadCompanyUnits = 6;
+            }
+            else if (inputItem.type == mod.ItemType("BadCompanyT2"))
+            {
+                badCompanyTier = 2;
+                maxBadCompanyUnits = 12;
+            }
+            else if (inputItem.type == mod.ItemType("BadCompanyT3"))
+            {
+                badCompanyTier = 3;
+                maxBadCompanyUnits = 18;
+            }
+            else if (inputItem.type == mod.ItemType("BadCompanyFinal"))
+            {
+                badCompanyTier = 4;
+                maxBadCompanyUnits = 24;
             }
             else if (inputItem.type == mod.ItemType("MagiciansRedT1"))
             {
@@ -1626,6 +1751,7 @@ namespace JoJoStands
                     damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though she wished for death, she was unable to die... then " + player.name + " eventually stopped thinking");
                 }
             }
+            StandOut = false;
             return true;
         }
 
