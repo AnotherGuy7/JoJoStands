@@ -104,6 +104,7 @@ namespace JoJoStands
         public bool creamExposedToVoid = false;
         public bool creamAnimationReverse = false;
         public bool creamNormalToVoid = false;
+        public bool doobiesskullEquipped = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -150,6 +151,7 @@ namespace JoJoStands
             phantomHoodShortEquipped = false;
             phantomChestplateEquipped = false;
             phantomLeggingsEquipped = false;
+            doobiesskullEquipped = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -211,11 +213,7 @@ namespace JoJoStands
             {
                 Main.screenPosition = aerosmithCamPosition;
             }
-            if (creamVoidMode)
-            {
-                Main.screenPosition = VoidCamPosition;
-            }
-            if (creamExposedMode)
+            if (creamVoidMode || creamExposedMode)
             {
                 Main.screenPosition = VoidCamPosition;
             }
@@ -335,6 +333,14 @@ namespace JoJoStands
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
                 gratefulDeadTier = 0;
+
+                creamTier = 0;
+                voidCounter = 0;
+                creamNormalToExposed = false;
+                creamNormalToVoid = false;
+                creamExposedToVoid = false;
+                creamFrame = 0;
+
                 if (standAccessory)
                 {
                     standAccessory = false;
@@ -343,15 +349,6 @@ namespace JoJoStands
                 {
                     equippedTuskAct = 0;
                     tuskActNumber = 0;
-                }
-                if (creamTier != 0)
-                {
-                    creamTier = 0;
-                    voidCounter = 0;
-                    creamNormalToExposed = false;
-                    creamNormalToVoid = false;
-                    creamExposedToVoid = false;
-                    creamFrame = 0;
                 }
                 if (showingCBLayer)
                 {
@@ -446,13 +443,15 @@ namespace JoJoStands
 
         public override void SetControls()
         {
-            if (controllingAerosmith || player.HasBuff(mod.BuffType("CenturyBoyBuff")))
+            if (controllingAerosmith || player.HasBuff(mod.BuffType("CenturyBoyBuff")) || creamVoidMode || creamExposedMode)
             {
                 player.controlUp = false;
                 player.controlDown = false;
                 player.controlLeft = false;
                 player.controlRight = false;
                 player.controlJump = false;
+                player.controlHook = false;
+                player.controlSmart = false;
             }
         }
 
@@ -1605,6 +1604,21 @@ namespace JoJoStands
                 }
                 hermitPurpleHamonBurstLeft -= 1;
             }
+            if (doobiesskullEquipped && player.ownedProjectileCounts[mod.ProjectileType("ChimeraSnake")] < 3)
+            {
+                Vector2 shootVelocity = player.position;
+                shootVelocity.Normalize();
+                Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("ChimeraSnake"), 30, 2f, player.whoAmI);
+            }
+        }
+        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
+        {
+            if (doobiesskullEquipped && player.ownedProjectileCounts[mod.ProjectileType("ChimeraSnake")] < 3)
+            {
+                Vector2 shootVelocity = player.position;
+                shootVelocity.Normalize();
+                Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("ChimeraSnake"), 30, 2f, player.whoAmI);
+            }
         }
 
         public override void UpdateBiomes()     //from ExampleMod ZoneExample
@@ -1758,6 +1772,13 @@ namespace JoJoStands
         public override void UpdateDead()
         {
             StandOut = false;
+
+            creamTier = 0;
+            voidCounter = 0;
+            creamNormalToExposed = false;
+            creamNormalToVoid = false;
+            creamExposedToVoid = false;
+            creamFrame = 0;
         }
 
         public static readonly PlayerLayer MenacingPose = new PlayerLayer("JoJoStands", "Menacing Pose", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
