@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             Main.projFrames[projectile.type] = 10;
         }
         public override float maxDistance => 98f;
-        public override int punchDamage => 46;
+        public override int punchDamage => 37;
         public override int punchTime => 7;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 10f;
@@ -55,7 +55,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !parryFrames && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !attackFrames && !parryFrames && projectile.owner == Main.myPlayer)
                 {
                     normalFrames = false;
                     attackFrames = false;

@@ -33,7 +33,7 @@ namespace JoJoStands.Items
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("StandArrow"));
+			recipe.AddIngredient(mod.ItemType("BadCompanyT2"));
 			recipe.AddIngredient(ItemID.HallowedBar, 12);
 			recipe.AddIngredient(ItemID.CursedBullet, 150);
 			recipe.AddIngredient(mod.ItemType("WillToDestroy"), 3);
@@ -41,7 +41,7 @@ namespace JoJoStands.Items
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 			recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("StandArrow"));
+			recipe.AddIngredient(mod.ItemType("BadCompanyT2"));
 			recipe.AddIngredient(ItemID.HallowedBar, 12);
 			recipe.AddIngredient(ItemID.IchorBullet, 150);
 			recipe.AddIngredient(mod.ItemType("WillToDestroy"), 3);

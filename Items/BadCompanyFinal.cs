@@ -33,7 +33,7 @@ namespace JoJoStands.Items
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("StandArrow"));
+			recipe.AddIngredient(mod.ItemType("BadCompanyT3"));
 			recipe.AddIngredient(ItemID.Ectoplasm, 4);
 			recipe.AddIngredient(ItemID.ChlorophyteBullet, 200);
 			recipe.AddIngredient(mod.ItemType("TaintedLifeforce"));

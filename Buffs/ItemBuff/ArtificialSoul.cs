@@ -12,5 +12,15 @@ namespace JoJoStands.Buffs.ItemBuff
             canBeCleared = false;
             Main.debuff[Type] = true;
         }
+
+        public override void Update(Player player, ref int buffIndex)
+        {
+            if (player.buffTime[buffIndex] <= 2)
+            {
+                player.KillMe(PlayerDeathReason.ByCustomReason(player.name + "'s artificial soul has left him."), player.statLife + 1, player.direction);
+                player.GetModPlayer<MyPlayer>().revived = false;
+                player.ClearBuff(Type);
+            }
+        }
     }
 }

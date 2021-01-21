@@ -33,7 +33,7 @@ namespace JoJoStands.Items
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("StandArrow"));
+			recipe.AddIngredient(mod.ItemType("BadCompanyT1"));
 			recipe.AddIngredient(ItemID.HellstoneBar, 8);
 			recipe.AddIngredient(ItemID.EmptyBullet, 50);
 			recipe.AddIngredient(mod.ItemType("WillToDestroy"), 2);

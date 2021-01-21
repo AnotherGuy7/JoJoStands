@@ -57,7 +57,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
-            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("TheWorldBuff")))
+            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("TheWorldBuff")) && timestopStartDelay <= 0)
             {
                 if (JoJoStands.JoJoStandsSounds == null)
                     timestopStartDelay = 120;

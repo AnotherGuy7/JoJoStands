@@ -50,7 +50,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             if (attackFrames)
                 GoInFront();
 
-            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("BitesTheDust")))
+            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("BitesTheDust")) && btdStartDelay <= 0)
             {
                 if (JoJoStands.JoJoStandsSounds == null)
                 {

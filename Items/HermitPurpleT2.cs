@@ -33,6 +33,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("HermitPurpleT1"));
             recipe.AddIngredient(ItemID.HellstoneBar, 7);
             recipe.AddIngredient(ItemID.Amethyst, 3);
             recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);

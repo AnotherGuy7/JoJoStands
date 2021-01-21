@@ -138,7 +138,7 @@ namespace JoJoStands.Projectiles
             {
                 crit = true;
             }
-            if (!target.boss && living)
+            if (!target.boss && !target.immortal && living)
             {
                 heldNPC = target;
             }

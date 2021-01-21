@@ -48,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
-            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("SkippingTime")) && !player.HasBuff(mod.BuffType("ForesightBuff")))
+            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("SkippingTime")) && !player.HasBuff(mod.BuffType("ForesightBuff")) && timeskipStartDelay <= 0)
             {
                 if (JoJoStands.JoJoStandsSounds == null)
                     timeskipStartDelay = 80;

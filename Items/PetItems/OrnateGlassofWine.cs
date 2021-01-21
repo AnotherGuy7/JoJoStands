@@ -9,7 +9,7 @@ namespace JoJoStands.Items.PetItems
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A glass of wine that never spills.\nSummons a Mini Will A. Zepppeli");
+            Tooltip.SetDefault("A glass of wine that never spills.\nSummons a Mini Will A. Zeppeli");
         }
 
         public override void SetDefaults()

@@ -16,12 +16,12 @@ namespace JoJoStands.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Silver Chariot (Tier 2)");
-			Tooltip.SetDefault("stab n shoot.\nUsed in Stand Slot");
+			Tooltip.SetDefault("Left-click to stab enemies and right-click to parry enemies and projectiles away!\nUsed in Stand Slot");
 		}
 
 		public override void SetDefaults()
 		{
-			item.damage = 46;
+			item.damage = 37;
 			item.width = 32;
 			item.height = 32;
 			item.noUseGraphic = true;

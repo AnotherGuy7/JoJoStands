@@ -21,6 +21,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         private bool setStats = false;
         private new int projectileDamage = 0;
         private new int shootTime = 0;
+        private int chopperInaccuracy = 0;
 
         public override void AI()
         {
@@ -49,11 +50,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 {
                     projectileDamage = 49;
                     shootTime = 12;
+                    chopperInaccuracy = 10;
                 }
                 else if (projectile.ai[0] == 4f)
                 {
                     projectileDamage = 62;
                     shootTime = 7;
+                    chopperInaccuracy = 8;
                 }
                 setStats = true;
             }
@@ -67,7 +70,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     {
                         shootCount += shootTime - modPlayer.standSpeedBoosts;
                         Main.PlaySound(SoundID.Item11, projectile.position);
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
+                        Vector2 shootVel = (Main.MouseWorld + chopperInaccuracyVector) - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
@@ -109,7 +113,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     {
                         shootCount += newShootTime;
                         Main.PlaySound(SoundID.Item11, projectile.position);
-                        Vector2 shootVel = target.Center - projectile.Center;
+                        Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
+                        Vector2 shootVel = (target.Center + chopperInaccuracyVector) - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);

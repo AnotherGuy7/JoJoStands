@@ -181,9 +181,12 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyTanks > 0)
+            if (mPlayer.badCompanyTier >= 2)
             {
-                mPlayer.badCompanyTanks--;
+                if (mPlayer.badCompanyTanks > 0)
+                {
+                    mPlayer.badCompanyTanks--;
+                }
             }
         }
 
@@ -192,9 +195,12 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyUnitsLeft > 0)
+            if (mPlayer.badCompanyTier >= 2)
             {
-                mPlayer.badCompanyTanks++;
+                if (mPlayer.badCompanyUnitsLeft > 0)
+                {
+                    mPlayer.badCompanyTanks++;
+                }
             }
         }
 
@@ -203,9 +209,12 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyChoppers > 0)
+            if (mPlayer.badCompanyTier >= 3)
             {
-                mPlayer.badCompanyChoppers--;
+                if (mPlayer.badCompanyChoppers > 0)
+                {
+                    mPlayer.badCompanyChoppers--;
+                }
             }
         }
 
@@ -214,9 +223,12 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyUnitsLeft > 0)
+            if (mPlayer.badCompanyTier >= 3)
             {
-                mPlayer.badCompanyChoppers++;
+                if (mPlayer.badCompanyUnitsLeft > 0)
+                {
+                    mPlayer.badCompanyChoppers++;
+                }
             }
         }
     }
