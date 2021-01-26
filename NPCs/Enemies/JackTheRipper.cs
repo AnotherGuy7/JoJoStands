@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -18,8 +19,8 @@ namespace JoJoStands.NPCs.Enemies
             npc.width = 40;
             npc.height = 48;
             npc.defense = 24;
-            npc.lifeMax = 400;
-            npc.damage = 80;
+            npc.lifeMax = 300;
+            npc.damage = 40;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath1;
             npc.knockBackResist = 1f;
@@ -37,6 +38,7 @@ namespace JoJoStands.NPCs.Enemies
         private int knifeThrowTimer = 0;
         private int knivesCooldown = 200;
         private int npcVictimWhoAmI = -1;
+        private int expertboost = 1;
 
         private bool dashing = false;
         private bool throwingKnives = false;
@@ -69,18 +71,33 @@ namespace JoJoStands.NPCs.Enemies
                 npc.hide = false;
                 npc.immortal = false;
                 npc.AddBuff(mod.BuffType("Vampire"), 2);
-                if (npc.HasBuff(mod.BuffType("Sunburn")))
+                if (!grabbingPlayer)
                 {
-                    npc.defense = 0;
-                    npc.damage = 40;
+                    if (npc.HasBuff(mod.BuffType("Sunburn")))
+                    {
+                        npc.defense = 0;
+                        npc.damage = 25 * expertboost;
+                    }
+                    else
+                    {
+                        npc.defense = 24;
+                        npc.damage = 40 * expertboost;
+                    }
                 }
-                else
+                if (grabbingPlayer)
                 {
-                    npc.defense = 24;
-                    npc.damage = 80;
+                    if (npc.HasBuff(mod.BuffType("Sunburn")))
+                    {
+                        npc.defense = 0;
+                        npc.damage = 0;
+                    }
+                    else
+                    {
+                        npc.defense = 24;
+                        npc.damage = 0;
+                    }
                 }
-
-                if (npc.life <= npc.lifeMax / 2 && !npc.HasBuff(mod.BuffType("Sunburn")))
+                if (npc.life <= npc.lifeMax / 2)
                 {
                     runCounter--;
                     if (!throwingKnives && !dashing)
@@ -152,7 +169,7 @@ namespace JoJoStands.NPCs.Enemies
                             target.mount.Dismount(target);
                         }
                         target.position = npc.position;     //I assume it's a sort of stunlock so I'll leave it as is
-                        //target.AddBuff(mod.BuffType("MissingOrgans2"), 2);        Missing Organs 2 doesn't exist?
+                        target.AddBuff(BuffID.Suffocation, 2);   
                         target.npcTypeNoAggro[mod.NPCType("JackTheRipper")] = true;
                         if (target.dead)
                         {
@@ -226,7 +243,7 @@ namespace JoJoStands.NPCs.Enemies
                 {
                     aiType = 73;
                     npc.aiStyle = 3;
-                    npc.knockBackResist = 1f;
+                    npc.knockBackResist = 0.5f;
                 }
             }
             else       //Searches for Town NPCs to hide in
@@ -303,9 +320,10 @@ namespace JoJoStands.NPCs.Enemies
                 int lifeStealAmount = damage / 2;
                 npc.life += lifeStealAmount;
             }
-            if (dashing && !target.immune)
+            if (dashing)
             {
                 grabbingPlayer = true;
+                npc.damage = 0;
             }
         }
 
@@ -328,31 +346,51 @@ namespace JoJoStands.NPCs.Enemies
         {
             if (style == 1)
             {
-                normalizedShootVelocity *= 40f;
+                normalizedShootVelocity *= 55f;
                 knifeThrowTimer += 1;
                 float numberKnives = 3;
                 float rotationk = MathHelper.ToRadians(3);
                 for (int i = 0; i < numberKnives; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(normalizedShootVelocity.X, normalizedShootVelocity.Y).RotatedBy(MathHelper.Lerp(-rotationk, rotationk, i / (numberKnives - 1))) * .2f;
-                    int proj = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("JackKnife"), (int)(npc.damage / 4), 2f);
+                    int proj = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("JackKnife"), 6 * expertboost, 2f);
                     Main.projectile[proj].netUpdate = true;
                     npc.netUpdate = true;
                 }
             }
             if (style == 2)
             {
-                normalizedShootVelocity *= 40f;
+                normalizedShootVelocity *= 55f;
                 float numberKnives = 2;
                 float rotationk = MathHelper.ToRadians(3);
                 for (int i = 0; i < numberKnives; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(normalizedShootVelocity.X, normalizedShootVelocity.Y).RotatedBy(MathHelper.Lerp(-rotationk, rotationk, i / (numberKnives - 1))) * .2f;
-                    int proj = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("JackKnife"), (int)(npc.damage / 4), 2f);
+                    int proj = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("JackKnife"), 6 * expertboost, 2f);
                     Main.projectile[proj].netUpdate = true;
                     npc.netUpdate = true;
                 }
             }
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            if (dashing && !grabbingPlayer)
+            {
+                SpriteEffects effects = (npc.spriteDirection == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                Texture2D texture2d = mod.GetTexture("NPCs/Enemies/JackTheRipper");
+                Vector2 vector2 = new Vector2((Main.npcTexture[npc.type].Width / 2), (Main.npcTexture[npc.type].Height / Main.npcFrameCount[npc.type] / 2));
+                Main.spriteBatch.Draw(texture2d, new Vector2(npc.position.X - Main.screenPosition.X + (npc.width / 2) - Main.npcTexture[npc.type].Width * npc.scale / 2f + vector2.X * npc.scale, npc.position.Y - Main.screenPosition.Y + npc.height - Main.npcTexture[npc.type].Height * npc.scale / Main.npcFrameCount[npc.type] + 4f + vector2.Y * npc.scale), new Rectangle?(npc.frame), Color.White, npc.rotation, vector2, npc.scale, effects, 0f);
+                for (int i = 1; i < npc.oldPos.Length; i++)
+                {
+                    Color color = Lighting.GetColor((int)(npc.position.X + npc.width * 0.5) / 16, (int)((npc.position.Y + npc.height * 0.5) / 16.0));
+                    Color color2 = color;
+                    color2 = Color.Lerp(color2, Color.Transparent, 0.5f);
+                    color2 = npc.GetAlpha(color2);
+                    color2 *= (npc.oldPos.Length - i) / 15f;
+                    Main.spriteBatch.Draw(texture2d, new Vector2(npc.position.X - Main.screenPosition.X + (npc.width / 2) - Main.npcTexture[npc.type].Width * npc.scale / 2f + vector2.X * npc.scale, npc.position.Y - Main.screenPosition.Y + npc.height - Main.npcTexture[npc.type].Height * npc.scale / Main.npcFrameCount[npc.type] + 4f + vector2.Y * npc.scale) - npc.velocity * i * 0.5f, new Rectangle?(npc.frame), color2, npc.rotation, vector2, npc.scale, effects, 0f);
+                }
+            }
+            return true;
         }
 
         public override void FindFrame(int frameHeight)

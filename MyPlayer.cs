@@ -104,6 +104,7 @@ namespace JoJoStands
         public bool creamExposedToVoid = false;
         public bool creamAnimationReverse = false;
         public bool creamNormalToVoid = false;
+        public bool doobiesskullEquipped = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -133,7 +134,7 @@ namespace JoJoStands
         public Vector2 aerosmithCamPosition;
         public Vector2 VoidCamPosition;
 
-        public string poseSoundName = "";       //This is for JoJoStandsSounds
+        public string poseSoundName = "";       //This is for JoJoStandsSoudns
 
         public override void ResetEffects()
         {
@@ -150,6 +151,7 @@ namespace JoJoStands
             phantomHoodShortEquipped = false;
             phantomChestplateEquipped = false;
             phantomLeggingsEquipped = false;
+            doobiesskullEquipped = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -331,7 +333,14 @@ namespace JoJoStands
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
                 gratefulDeadTier = 0;
-                badCompanyTier = 0;
+
+                creamTier = 0;
+                voidCounter = 0;
+                creamNormalToExposed = false;
+                creamNormalToVoid = false;
+                creamExposedToVoid = false;
+                creamFrame = 0;
+
                 if (standAccessory)
                 {
                     standAccessory = false;
@@ -340,15 +349,6 @@ namespace JoJoStands
                 {
                     equippedTuskAct = 0;
                     tuskActNumber = 0;
-                }
-                if (creamTier != 0)
-                {
-                    creamTier = 0;
-                    voidCounter = 0;
-                    creamNormalToExposed = false;
-                    creamNormalToVoid = false;
-                    creamExposedToVoid = false;
-                    creamFrame = 0;
                 }
                 if (showingCBLayer)
                 {
@@ -443,13 +443,15 @@ namespace JoJoStands
 
         public override void SetControls()
         {
-            if (controllingAerosmith || player.HasBuff(mod.BuffType("CenturyBoyBuff")))
+            if (controllingAerosmith || player.HasBuff(mod.BuffType("CenturyBoyBuff")) || creamVoidMode || creamExposedMode)
             {
                 player.controlUp = false;
                 player.controlDown = false;
                 player.controlLeft = false;
                 player.controlRight = false;
                 player.controlJump = false;
+                player.controlHook = false;
+                player.controlSmart = false;
             }
         }
 
@@ -720,77 +722,74 @@ namespace JoJoStands
                     if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct4Minion")] <= 0)
                         Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct4Minion"), 0, 0f, Main.myPlayer);
                 }
-                if (!StandAutoMode)
+                if (tuskActNumber == 1)
                 {
-                    if (tuskActNumber == 1)
+                    if (Main.mouseLeft && tuskShootCooldown <= 0)
                     {
-                        if (Main.mouseLeft && tuskShootCooldown <= 0)
-                        {
-                            tuskShootCooldown += 35 - standSpeedBoosts;
-                            Main.PlaySound(SoundID.Item67);
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
-                            shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
-                            shootVelocity *= 12f;       //multiply the angle by the speed to get the effect
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 4f, player.whoAmI);
-                        }
+                        tuskShootCooldown += 35 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item67);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
+                        shootVelocity *= 12f;       //multiply the angle by the speed to get the effect
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 4f, player.whoAmI);
                     }
-                    if (tuskActNumber == 2)
+                }
+                if (tuskActNumber == 2)
+                {
+                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
                     {
-                        if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
-                        {
-                            player.channel = true;
-                            tuskShootCooldown += 35 - standSpeedBoosts;
-                            Main.PlaySound(SoundID.Item67);
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
-                            shootVelocity.Normalize();
-                            shootVelocity *= 4f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 5f, player.whoAmI);
-                        }
+                        player.channel = true;
+                        tuskShootCooldown += 35 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item67);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 4f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 5f, player.whoAmI);
                     }
-                    if (tuskActNumber == 3)
+                }
+                if (tuskActNumber == 3)
+                {
+                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0)
                     {
-                        if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0)
-                        {
-                            player.channel = true;
-                            tuskShootCooldown += 35 - standSpeedBoosts;
-                            Main.PlaySound(SoundID.Item67);
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
-                            shootVelocity.Normalize();
-                            shootVelocity *= 4f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * standDamageBoosts) + ((22 + equippedTuskAct - 3) * equippedTuskAct - 3), 6f, player.whoAmI);
-                        }
-                        if (Main.mouseRight && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
-                        {
-                            tuskShootCooldown += 120 - standSpeedBoosts;
-                            Main.PlaySound(SoundID.Item78);
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
-                            shootVelocity.Normalize();
-                            shootVelocity *= 5f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 124, 8f, player.whoAmI);
-                        }
+                        player.channel = true;
+                        tuskShootCooldown += 35 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item67);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 4f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * standDamageBoosts) + ((22 + equippedTuskAct - 3) * equippedTuskAct - 3), 6f, player.whoAmI);
                     }
-                    if (tuskActNumber == 4)
+                    if (Main.mouseRight && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
                     {
-                        if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
-                        {
-                            player.channel = true;
-                            tuskShootCooldown += 15 - standSpeedBoosts;
-                            Main.PlaySound(SoundID.Item67);
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
-                            shootVelocity.Normalize();
-                            shootVelocity *= 4f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(305 * standDamageBoosts), 7f, player.whoAmI);
-                        }
-                        if (Main.mouseRight && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
-                        {
-                            tuskShootCooldown += 120 - standSpeedBoosts;
-                            Main.PlaySound(SoundID.Item78);
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
-                            shootVelocity.Normalize();
-                            shootVelocity *= 16f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, player.whoAmI);
-                            player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(10));
-                        }
+                        tuskShootCooldown += 120 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item78);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 5f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 124, 8f, player.whoAmI);
+                    }
+                }
+                if (tuskActNumber == 4)
+                {
+                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
+                    {
+                        player.channel = true;
+                        tuskShootCooldown += 15 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item67);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 4f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(305 * standDamageBoosts), 7f, player.whoAmI);
+                    }
+                    if (Main.mouseRight && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
+                    {
+                        tuskShootCooldown += 120 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item78);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 16f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, player.whoAmI);
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(10));
                     }
                 }
                 if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] > 0)
@@ -963,15 +962,6 @@ namespace JoJoStands
                     }
                 }
 
-                if (badCompanyTier < 3)
-                {
-                    if (badCompanyTier < 2)
-                    {
-                        badCompanyTanks = 0;
-                    }
-                    badCompanyChoppers = 0;
-                }
-
                 bool recalculateArmy = false;
                 int unitsLeftCalculation = maxBadCompanyUnits - (badCompanySoldiers + (badCompanyTanks * 4) + (badCompanyChoppers * 6));
                 if (unitsLeftCalculation != badCompanyUnitsLeft)
@@ -1041,6 +1031,12 @@ namespace JoJoStands
                     badCompanyUIClickTimer = 30;
                     UI.BadCompanyUnitsUI.Visible = !UI.BadCompanyUnitsUI.Visible;
                 }
+            }
+
+            if (revived && !player.HasBuff(mod.BuffType("ArtificialSoul")))
+            {
+                player.KillMe(PlayerDeathReason.ByCustomReason(player.name + "'s artificial soul has left him."), player.statLife + 1, player.direction);
+                revived = false;
             }
         }
 
@@ -1583,35 +1579,45 @@ namespace JoJoStands
             }
             if (hermitPurpleTier >= 2)
             {
-                float additionalPercentage = 1f;
-                if (StandAutoMode)      //Grants up to 20 additional percent when the stand is in Auto Mode
-                {
-                    additionalPercentage = 1.20f * (hermitPurpleTier / 4);
-                }
-                int reflectedDamage = (int)(npc.damage * (0.05f * hermitPurpleTier) * additionalPercentage);
+                int reflectedDamage = (int)(npc.damage * (0.05f * hermitPurpleTier));
                 npc.StrikeNPC(reflectedDamage, 3f * hermitPurpleTier, npc.direction);
                 if (hPlayer.amountOfHamon >= 30)
                 {
                     npc.AddBuff(mod.BuffType("Sunburn"), ((hPlayer.amountOfHamon / 30) * hermitPurpleTier) * 60);
                     hPlayer.amountOfHamon -= 2;
                 }
-                if (hermitPurpleHamonBurstLeft > 0)
-                {
-                    int specialReflectedDamage = npc.damage * 4;       //This is becaues npc damage is pretty weak against the NPC itself
-                    npc.StrikeNPC(specialReflectedDamage, 14f, npc.direction);
-                    npc.AddBuff(mod.BuffType("Sunburn"), (10 * (hermitPurpleTier - 2)) * 60);
+            }
+            if (hermitPurpleHamonBurstLeft > 0)
+            {
+                int reflectedDamage = npc.damage * 4;       //This is becaues npc damage is pretty weak against the NPC itself
+                npc.StrikeNPC(reflectedDamage, 14f, npc.direction);
+                npc.AddBuff(mod.BuffType("Sunburn"), (10 * (hermitPurpleTier - 2)) * 60);
 
-                    for (int i = 0; i < 60; i++)
-                    {
-                        float circlePos = i;
-                        Vector2 spawnPos = npc.Center + (circlePos.ToRotationVector2() * 50f);
-                        Vector2 velocity = spawnPos - npc.Center;
-                        velocity.Normalize();
-                        Dust dust = Dust.NewDustPerfect(spawnPos, 169, velocity * 4f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
-                        dust.noGravity = true;
-                    }
-                    hermitPurpleHamonBurstLeft -= 1;
+                for (int i = 0; i < 60; i++)
+                {
+                    float circlePos = i;
+                    Vector2 spawnPos = npc.Center + (circlePos.ToRotationVector2() * 50f);
+                    Vector2 velocity = spawnPos - npc.Center;
+                    velocity.Normalize();
+                    Dust dust = Dust.NewDustPerfect(spawnPos, 169, velocity * 4f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
+                    dust.noGravity = true;
                 }
+                hermitPurpleHamonBurstLeft -= 1;
+            }
+            if (doobiesskullEquipped && player.ownedProjectileCounts[mod.ProjectileType("ChimeraSnake")] < 3)
+            {
+                Vector2 shootVelocity = player.position;
+                shootVelocity.Normalize();
+                Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("ChimeraSnake"), 30, 2f, player.whoAmI);
+            }
+        }
+        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
+        {
+            if (doobiesskullEquipped && player.ownedProjectileCounts[mod.ProjectileType("ChimeraSnake")] < 3)
+            {
+                Vector2 shootVelocity = player.position;
+                shootVelocity.Normalize();
+                Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("ChimeraSnake"), 30, 2f, player.whoAmI);
             }
         }
 
@@ -1738,47 +1744,6 @@ namespace JoJoStands
                 player.ClearBuff(mod.BuffType("DyingVampire"));
                 dyingVampire = false;
             }
-            if (StandOut)
-            {
-                StandOut = false;
-                standType = 0;
-                poseSoundName = "";
-                creamTier = 0;
-                sexPistolsTier = 0;
-                hermitPurpleTier = 0;
-                gratefulDeadTier = 0;
-                badCompanyTier = 0;
-                if (standAccessory)
-                {
-                    standAccessory = false;
-                }
-                if (equippedTuskAct != 0)
-                {
-                    equippedTuskAct = 0;
-                    tuskActNumber = 0;
-                }
-                if (creamTier != 0)
-                {
-                    creamTier = 0;
-                    voidCounter = 0;
-                    creamNormalToExposed = false;
-                    creamNormalToVoid = false;
-                    creamExposedToVoid = false;
-                    creamFrame = 0;
-                }
-                if (showingCBLayer)
-                {
-                    showingCBLayer = false;
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, false, player.whoAmI);
-                    }
-                }
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
-                }
-            }
 
             if (player.ZoneSkyHeight && Vampire)
             {
@@ -1800,12 +1765,20 @@ namespace JoJoStands
                     damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though she wished for death, she was unable to die... then " + player.name + " eventually stopped thinking");
                 }
             }
+            StandOut = false;
             return true;
         }
 
         public override void UpdateDead()
         {
             StandOut = false;
+
+            creamTier = 0;
+            voidCounter = 0;
+            creamNormalToExposed = false;
+            creamNormalToVoid = false;
+            creamExposedToVoid = false;
+            creamFrame = 0;
         }
 
         public static readonly PlayerLayer MenacingPose = new PlayerLayer("JoJoStands", "Menacing Pose", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back

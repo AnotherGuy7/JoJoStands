@@ -21,8 +21,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.ignoreWater = true;
-            drawOffsetX = -20;
-            drawOriginOffsetY = -20;
+            drawOffsetX = -10;
+            drawOriginOffsetY = -10;
         }
 
         private int voidDashTimer = 0;
@@ -34,10 +34,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
-            //player.position.X = projectile.position.X + 5;
-            //player.position.Y = projectile.position.Y - 15;
             modPlayer.creamVoidMode = true;
-            player.position = projectile.position + new Vector2(-10f, -15f);
+            player.position = projectile.position + new Vector2(0f, 0f);
             player.AddBuff(mod.BuffType("SphericalVoid"), 2);
             if (player.mount.Type != 0)
             {
@@ -212,6 +210,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             return false;
+        }
+
+        public override bool TileCollideStyle(ref int widht, ref int height, ref bool fallThrough)
+        {
+            widht = projectile.width - 4;
+            height = projectile.height - 4;
+            fallThrough = true;
+            return true;
         }
 
         public override void Kill(int timeLeft)

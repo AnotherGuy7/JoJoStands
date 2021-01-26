@@ -26,8 +26,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             projectile.friendly = true;
             projectile.tileCollide = true;
             projectile.hide = true;
-            drawOffsetX = -20;
-            drawOriginOffsetY = -20;
+            drawOffsetX = -10;
+            drawOriginOffsetY = -10;
         }
 
         public override void AI()
@@ -35,10 +35,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             Player player = Main.player[projectile.owner];
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
-            //player.position.X = projectile.position.X + 5;
-            //player.position.Y = projectile.position.Y - 15;
             projectile.frame = 1;
-            player.position = projectile.position + new Vector2(-10f, -15f);
+            player.position = projectile.position + new Vector2(0f, 0f);
             player.AddBuff(mod.BuffType("Exposing"), 2);
             bool specialPressed = false;
             specialPressed = JoJoStands.SpecialHotKey.JustPressed;
@@ -94,8 +92,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override bool TileCollideStyle(ref int widht, ref int height, ref bool fallThrough)
         {
-            widht = projectile.width + 15;
-            height = projectile.height + 15;
+            widht = projectile.width + 14;
+            height = projectile.height + 14;
             fallThrough = true;
             return true;
         }
