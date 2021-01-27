@@ -28,6 +28,7 @@ namespace JoJoStands.NPCs
         public int deathTimer = 0;
         public float kingCrimsonDonutMultiplier = 1f;
         public Vector2 playerPositionOnSkip = Vector2.Zero;
+        public Vector2 preTimestopVelocity = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
         public Vector2[] foresightPosition = new Vector2[400];
         public Rectangle[] foresightFrames = new Rectangle[400];
@@ -164,8 +165,11 @@ namespace JoJoStands.NPCs
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
             if (player.TheWorldEffect || frozenInTime)
             {
-                npc.velocity.X *= 0f;
-                npc.velocity.Y *= 0f;               //negative X is to the left, negative Y is UP
+                if (npc.velocity != Vector2.Zero)
+                {
+                    preTimestopVelocity = npc.velocity;
+                }
+                npc.velocity = Vector2.Zero;
                 npc.frameCounter = 1;
                 if (!npc.noGravity)
                 {
@@ -411,10 +415,11 @@ namespace JoJoStands.NPCs
 
         public override bool CheckDead(NPC npc)
         {
-            for (int i = 0; i < 255; i++)
+            for (int i = 0; i < Main.maxPlayers; i++)
             {
                 Player player = Main.player[i];
-                if (player.active && npc.boss && player.GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
+                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+                if (player.active && npc.boss && mPlayer.DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
                 {
                     Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
                     Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
@@ -422,7 +427,7 @@ namespace JoJoStands.NPCs
                     Buffs.ItemBuff.DeathLoop.Looping3x = true;
                     Buffs.ItemBuff.DeathLoop.Looping10x = false;
                 }
-                if (player.active && !npc.boss && player.GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
+                if (player.active && !npc.boss && mPlayer.DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
                 {
                     Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
                     Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
