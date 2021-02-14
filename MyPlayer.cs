@@ -21,7 +21,6 @@ namespace JoJoStands
         public static int deathsoundint;        //make them static to have them be true for all of you, instead of having to manually set it true for each of your characters
         public static int RangeIndicatorAlpha;
         public static bool Sounds = true;
-        public static bool HamonEffects = true;
         public static bool TimestopEffects = false;
         public static bool RangeIndicators = false;
         public static bool AutomaticActivations = false;
@@ -47,7 +46,6 @@ namespace JoJoStands
         public int equippedTuskAct = 0;
         public int tuskShootCooldown = 0;
         public int TimestopEffectDurationTimer = 0;
-        public int hamonChargeCounter = 0;
         public int sexPistolsLeft = 6;
         public int sexPistolsTier = 0;
         public int gratefulDeadTier = 0;
@@ -116,7 +114,7 @@ namespace JoJoStands
         public bool BitesTheDust = false;
         public bool poseMode = false;
         public bool controllingAerosmith = false;
-        public bool Vampire;
+        public bool vampire;
         public bool canRevertFromKQBTD = false;
         public bool showingCBLayer = false;     //this is a bool that's needed to sync so that the Century Boy layer shows up for other clients in Multiplayer
         //public bool dyingVampire = false;
@@ -271,17 +269,20 @@ namespace JoJoStands
                 }
                 if (StandSlot.Item.type == mod.ItemType("LockT3"))
                 {
-                    for (int i = 0; i < Main.maxNPCs; i++)
+                    for (int n = 0; n < Main.maxNPCs; n++)
                     {
-                        NPC npc = Main.npc[i];
+                        NPC npc = Main.npc[n];
                         float distance = Vector2.Distance(player.Center, npc.Center);
-                        if (distance < (98f * 4f) && npc.boss && !npc.townNPC && !npc.immortal && !npc.hide)
+                        if (distance < (98f * 4f) && !npc.townNPC && !npc.immortal && !npc.hide)
                         {
-                            npc.AddBuff(mod.BuffType("Locked"), 60 * 10);
-                        }
-                        if (distance < (98f * 4f) && !npc.boss && !npc.townNPC && !npc.immortal && !npc.hide && npc.lifeMax > 5)
-                        {
-                            npc.AddBuff(mod.BuffType("Locked"), 60 * 30);
+                            if (npc.boss)
+                            {
+                                npc.AddBuff(mod.BuffType("Locked"), 60 * 10);
+                            }
+                            if (!npc.boss && npc.lifeMax > 5)
+                            {
+                                npc.AddBuff(mod.BuffType("Locked"), 60 * 30);
+                            }
                         }
                     }
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " was over-guilted."), 50, player.direction);
@@ -298,17 +299,20 @@ namespace JoJoStands
                 }
                 if (StandSlot.Item.type == mod.ItemType("LockT4"))
                 {
-                    for (int i = 0; i < Main.maxNPCs; i++)
+                    for (int n = 0; n < Main.maxNPCs; n++)
                     {
-                        NPC npc = Main.npc[i];
+                        NPC npc = Main.npc[n];
                         float distance = Vector2.Distance(player.Center, npc.Center);
-                        if (distance < (98f * 4f) && npc.boss && !npc.townNPC && !npc.immortal && !npc.hide)
+                        if (distance < (98f * 4f) && !npc.townNPC && !npc.immortal && !npc.hide)
                         {
-                            npc.AddBuff(mod.BuffType("Locked"), 60 * 15);
-                        }
-                        if (distance < (98f * 4f) && !npc.boss && !npc.townNPC && !npc.immortal && !npc.hide && npc.lifeMax > 5)
-                        {
-                            npc.AddBuff(mod.BuffType("Locked"), 60 * 45);
+                            if (npc.boss)
+                            {
+                                npc.AddBuff(mod.BuffType("Locked"), 60 * 15);
+                            }
+                            if (!npc.boss && npc.lifeMax > 5)
+                            {
+                                npc.AddBuff(mod.BuffType("Locked"), 60 * 45);
+                            }
                         }
                     }
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " was over-guilted."), 25, player.direction);
@@ -457,7 +461,6 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
-            hamonChargeCounter++;
             if (ActivationTimer > 0)
             {
                 ActivationTimer--;
@@ -592,10 +595,6 @@ namespace JoJoStands
             {
                 menacingFrames += 1;
                 poseDurationMinus -= 8;
-            }
-            if (hamonChargeCounter >= 56)
-            {
-                hamonChargeCounter = 0;
             }
 
             if (TheWorldEffect)
@@ -1512,7 +1511,7 @@ namespace JoJoStands
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)        //already only runs for melee weapons
         {
-            if (Vampire && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
+            if (vampire && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
                 int newDamage = damage / 4;
                 if (newDamage < player.statLifeMax - player.statLife)
@@ -1537,7 +1536,7 @@ namespace JoJoStands
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
-            if (Vampire && proj.type == mod.ProjectileType("Fists") && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
+            if (vampire && proj.type == mod.ProjectileType("Fists") && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
                 int newDamage = damage / 4;
                 if (newDamage < player.statLifeMax - player.statLife)
@@ -1653,7 +1652,7 @@ namespace JoJoStands
 
         public override void UpdateBadLifeRegen()
         {
-            if (Vampire)
+            if (vampire)
             {
                 if (player.lifeRegen > 0)
                 {
@@ -1723,16 +1722,12 @@ namespace JoJoStands
                 Main.NewText("The chip has given you new life!");
                 return false;
             }
-            if (revived)        //so if the player dies without the buff ending
-            {
-                revived = false;
-            }
             if (BackToZero)
             {
                 return false;
             }
 
-            if (Vampire && !dyingVampire)
+            if (vampire && !dyingVampire)
             {
                 dyingVampire = true;
                 player.AddBuff(mod.BuffType("DyingVampire"), 60);
@@ -1745,27 +1740,29 @@ namespace JoJoStands
                 dyingVampire = false;
             }
 
-            if (player.ZoneSkyHeight && Vampire)
+            if (player.ZoneSkyHeight && vampire)
             {
                 int karsText = Main.rand.Next(0, 3);
                 if (karsText == 0)
                 {
                     damageSource = PlayerDeathReason.ByCustomReason(player.name + " couldn't to become a bird in time and has frozen in space... then eventually stopped thinking...");
                 }
-                if (karsText == 1)
+                else if (karsText == 1)
                 {
                     damageSource = PlayerDeathReason.ByCustomReason(player.name + " was unable to change directions in time... then eventually stopped thinking...");
                 }
-                if (karsText == 2 && player.Male)
+                else if (karsText == 2 && player.Male)
                 {
                     damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though he wished for death, he was unable to die... then " + player.name + " eventually stopped thinking");
                 }
-                if (karsText == 2 && !player.Male)
+                else if (karsText == 2 && !player.Male)
                 {
                     damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though she wished for death, she was unable to die... then " + player.name + " eventually stopped thinking");
                 }
             }
             StandOut = false;
+            vampire = false;
+            revived = false;
             return true;
         }
 
@@ -1834,72 +1831,7 @@ namespace JoJoStands
             }
         });
 
-        public static readonly PlayerLayer HamonChargesFront = new PlayerLayer("JoJoStands", "HamonChargesFront", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
-            SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
-            {
-                Texture2D texture = mod.GetTexture("Extras/HamonChargeI");
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
-                if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 2)
-                {
-                    texture = mod.GetTexture("Extras/HamonChargeII");
-                }
-                if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 1.5)
-                {
-                    texture = mod.GetTexture("Extras/HamonChargeIII");
-                }
-                if (drawPlayer.direction == -1)
-                {
-                    drawX = drawX + 2;
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                if (drawPlayer.direction == 1)
-                {
-                    effects = SpriteEffects.None;
-                }
-                if (modPlayer.hamonChargeCounter > 0)
-                {
-                    int frame = 0;
-                    int frameHeight = texture.Height / 7;
-                    if (modPlayer.hamonChargeCounter >= 8 && modPlayer.hamonChargeCounter <= 15)
-                    {
-                        frame = 1;
-                    }
-                    if (modPlayer.hamonChargeCounter >= 16 && modPlayer.hamonChargeCounter <= 23)
-                    {
-                        frame = 2;
-                    }
-                    if (modPlayer.hamonChargeCounter >= 24 && modPlayer.hamonChargeCounter <= 31)
-                    {
-                        frame = 3;
-                    }
-                    if (modPlayer.hamonChargeCounter >= 32 && modPlayer.hamonChargeCounter <= 39)
-                    {
-                        frame = 4;
-                    }
-                    if (modPlayer.hamonChargeCounter >= 40 && modPlayer.hamonChargeCounter <= 47)
-                    {
-                        frame = 5;
-                    }
-                    if (modPlayer.hamonChargeCounter >= 48 && modPlayer.hamonChargeCounter <= 55)
-                    {
-                        frame = 6;
-                    }
-                    if (modPlayer.hamonChargeCounter == 56)
-                    {
-                        frame = 7;
-                    }
-                    DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameHeight * frame, texture.Width, frameHeight), Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
-                    Main.playerDrawData.Add(data);
-                }
-            }
-        });
+        
 
         public static readonly PlayerLayer KCArm = new PlayerLayer("JoJoStands", "KCArm", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
         {
@@ -2188,7 +2120,6 @@ namespace JoJoStands
             {
                 KCArm.visible = false;
                 MenacingPose.visible = false;
-                HamonChargesFront.visible = false;
                 AerosmithRadarCam.visible = false;
                 CenturyBoyActivated.visible = false;
                 SexPistolsLayer.visible = false;
@@ -2206,7 +2137,6 @@ namespace JoJoStands
                 MenacingPose.visible = true;
                 AerosmithRadarCam.visible = true;
                 CenturyBoyActivated.visible = true;
-                HamonChargesFront.visible = HamonEffects;
                 PhantomHoodLongGlowmask.visible = phantomHoodLongEquipped;
                 PhantomHoodNeutralGlowmask.visible = phantomHoodNeutralEquipped;
                 PhantomHoodShortGlowmask.visible = phantomHoodShortEquipped;
@@ -2267,7 +2197,6 @@ namespace JoJoStands
 
             layers.Add(AerosmithRadarCam);
             layers.Add(KCArm);
-            layers.Add(HamonChargesFront);
             layers.Add(MenacingPose);
             layers.Add(CenturyBoyActivated);
             layers.Add(SexPistolsLayer);

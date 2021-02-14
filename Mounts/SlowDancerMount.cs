@@ -114,7 +114,7 @@ namespace JoJoStands.Mounts
                     }
                 }
             }
-            if (!WorldGen.SolidTile((int)(mountedPlayer.position.X / 16f), (int)(mountedPlayer.position.Y / 16f) + 5))
+            if (!WorldGen.SolidTile((int)(mountedPlayer.position.X / 16f), (int)(mountedPlayer.position.Y / 16f) + 5) || mountedPlayer.velocity.Y != 0f)
             {
                 mount._frame = 15;
             }

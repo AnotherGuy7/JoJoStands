@@ -1,10 +1,8 @@
-using System;
+using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class HamonBubble : ModProjectile
@@ -24,10 +22,10 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
-            if (projectile.timeLeft == 592)
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            if (projectile.timeLeft <= 592)
             {
-                projectile.velocity *= 0;
+                projectile.velocity = Vector2.Zero;
             }
             if (hamonPlayer.amountOfHamon >= 1)
             {
@@ -35,7 +33,7 @@ namespace JoJoStands.Projectiles
             }
             else
             {
-                projectile.timeLeft = projectile.timeLeft / 2;
+                projectile.timeLeft /= 2;
             }
         }
     }

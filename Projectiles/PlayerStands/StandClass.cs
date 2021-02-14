@@ -233,7 +233,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             HandleDrawOffsets();
             NPC target = null;
             Vector2 targetPos = projectile.position;
-            float targetDist = newMaxDistance * 1.2f;
+            float detectionDist = newMaxDistance * 1.2f;
             if (!attackFrames)
             {
                 Vector2 vector131 = player.Center;
@@ -244,28 +244,24 @@ namespace JoJoStands.Projectiles.PlayerStands
                 projectile.velocity *= 0.8f;
                 projectile.rotation = 0;
             }
-            if (target == null)
+            for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
             {
-                for (int k = 0; k < 200; k++)       //the targeting system
+                NPC npc = Main.npc[n];
+                if (npc.active && npc.CanBeChasedBy(this, false))
                 {
-                    NPC npc = Main.npc[k];
-                    if (npc.CanBeChasedBy(this, false))
+                    float distance = Vector2.Distance(npc.Center, player.Center);
+                    if (distance < detectionDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                     {
-                        float distance = Vector2.Distance(npc.Center, player.Center);
-                        if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                        if (npc.boss)       //is gonna try to detect bosses over anything
                         {
-                            if (npc.boss)       //is gonna try to detect bosses over anything
-                            {
-                                targetDist = distance;
-                                targetPos = npc.Center;
-                                target = npc;
-                            }
-                            else        //if it fails to detect a boss, it'll detect the next best thing
-                            {
-                                targetDist = distance;
-                                targetPos = npc.Center;
-                                target = npc;
-                            }
+                            targetPos = npc.Center;
+                            target = npc;
+                            break;
+                        }
+                        else        //if it fails to detect a boss, it'll detect the next best thing
+                        {
+                            targetPos = npc.Center;
+                            target = npc;
                         }
                     }
                 }
@@ -301,7 +297,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         {
                             shootVel *= shootSpeed;
                         }
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }
@@ -323,34 +319,35 @@ namespace JoJoStands.Projectiles.PlayerStands
             HandleDrawOffsets();
             NPC target = null;
             Vector2 targetPos = projectile.position;
-            float targetDist = newMaxDistance * 3f;
-            if (target == null)
+            float rangedDetectionDist = newMaxDistance * 3f;        //Distance for ranged attacks to work
+            float punchDetectionDist = newMaxDistance * 1.5f;       //Distance for melee attacks to work
+            float maxDetectionDist = newMaxDistance * 3.1f;
+            float targetDist = maxDetectionDist;
+            for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
             {
-                for (int k = 0; k < 200; k++)       //the targeting system
+                NPC npc = Main.npc[n];
+                if (npc.active && npc.CanBeChasedBy(this, false))
                 {
-                    NPC npc = Main.npc[k];
-                    if (npc.CanBeChasedBy(this, false))
+                    float distance = Vector2.Distance(npc.Center, player.Center);
+                    if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                     {
-                        float distance = Vector2.Distance(npc.Center, player.Center);
-                        if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                        if (npc.boss)       //is gonna try to detect bosses over anything
                         {
-                            if (npc.boss)       //is gonna try to detect bosses over anything
-                            {
-                                targetDist = distance;
-                                targetPos = npc.Center;
-                                target = npc;
-                            }
-                            else        //if it fails to detect a boss, it'll detect the next best thing
-                            {
-                                targetDist = distance;
-                                targetPos = npc.Center;
-                                target = npc;
-                            }
+                            targetDist = distance;
+                            targetPos = npc.Center;
+                            target = npc;
+                            break;
+                        }
+                        else        //if it fails to detect a boss, it'll detect the next best thing
+                        {
+                            targetDist = distance;
+                            targetPos = npc.Center;
+                            target = npc;
                         }
                     }
                 }
             }
-            if (targetDist > (newMaxDistance * 1.5f) || secondaryAbility || target == null)
+            if (targetDist > punchDetectionDist || secondaryAbility || target == null)
             {
                 Vector2 vector131 = player.Center;
                 normalFrames = true;
@@ -371,7 +368,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (target != null)
             {
-                if (targetDist < (newMaxDistance * 1.5f) && !secondaryAbility)
+                if (targetDist < punchDetectionDist && !secondaryAbility)
                 {
                     attackFrames = true;
                     normalFrames = false;
@@ -409,7 +406,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                 }
-                else if (Main.rand.Next(0, 101) <= 1 && targetDist > (newMaxDistance * 1.5f))
+                else if (Main.rand.Next(0, 101) <= 1 && targetDist > punchDetectionDist)
                 {
                     if (itemToConsumeType != -1 && MyPlayer.AutomaticActivations && player.HasItem(itemToConsumeType))
                     {
@@ -462,7 +459,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                 }
-                if ((!gravityAccounting && player.ownedProjectileCounts[projToShoot] == 0) || targetDist > (newMaxDistance * 3f))     //!gravityAccounting and 0 of that projectile cause it's usually no gravity projectiles that are just 1 shot (star finger, zipper punch), while things like knives have gravity (meant to be thrown in succession)
+                if ((!gravityAccounting && player.ownedProjectileCounts[projToShoot] == 0) || targetDist > rangedDetectionDist)     //!gravityAccounting and 0 of that projectile cause it's usually no gravity projectiles that are just 1 shot (star finger, zipper punch), while things like knives have gravity (meant to be thrown in succession)
                 {
                     secondaryAbility = false;
                     secondaryAbilityFrames = false;

@@ -43,7 +43,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.moveSpeed = 0f;
 
             mPlayer.dyingVampire = true;
-            mPlayer.Vampire = true;
+            mPlayer.vampire = true;
             player.buffTime[buffIndex] = 2;
 
             if (player.whoAmI == Main.myPlayer)

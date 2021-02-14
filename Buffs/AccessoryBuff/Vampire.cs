@@ -16,7 +16,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
  
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<MyPlayer>().Vampire = true;
+            player.GetModPlayer<MyPlayer>().vampire = true;
             player.AddBuff(mod.BuffType("Vampire"), 2, true);
             player.allDamage *= 1.5f;
             player.moveSpeed *= 1.5f;

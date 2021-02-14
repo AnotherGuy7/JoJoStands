@@ -59,7 +59,7 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             Player player = Main.LocalPlayer;
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (!mPlayer.Vampire)
+            if (!mPlayer.vampire)
             {
                 switch (Main.rand.Next(0, 5))
                 {

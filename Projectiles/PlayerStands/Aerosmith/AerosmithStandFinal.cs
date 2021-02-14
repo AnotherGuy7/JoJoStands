@@ -60,6 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 projectile.timeLeft = 2;
             }
             modPlayer.aerosmithWhoAmI = projectile.whoAmI;
+            newProjectileDamage = (int)(newProjectileDamage * MathHelper.Clamp(1f - (projectile.Distance(player.Center) / (350f * 16f)), 0.5f, 1f));
 
             Vector2 rota = projectile.Center - Main.MouseWorld;
             projectile.rotation = (-rota * projectile.direction).ToRotation();
@@ -68,7 +69,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
             if (!modPlayer.StandAutoMode)
             {
-
                 modPlayer.controllingAerosmith = true;
                 float ScreenX = (float)Main.screenWidth / 2f;
                 float ScreenY = (float)Main.screenHeight / 2f;

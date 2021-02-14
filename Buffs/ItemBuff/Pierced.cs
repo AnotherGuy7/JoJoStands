@@ -17,11 +17,14 @@ namespace JoJoStands.Buffs.ItemBuff
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.piercedTimer--;
-            if (mPlayer.piercedTimer <= 0 || player.buffTime[buffIndex] <= 2)
+            if (player.whoAmI == Main.myPlayer)
             {
-                player.QuickSpawnItem(Main.rand.Next(MyPlayer.standTier1List.ToArray()));
-                mPlayer.piercedTimer = 36000;
-                player.ClearBuff(mod.BuffType(Name));
+                if (mPlayer.piercedTimer <= 0 || player.buffTime[buffIndex] <= 2)
+                {
+                    player.QuickSpawnItem(Main.rand.Next(MyPlayer.standTier1List.ToArray()));
+                    mPlayer.piercedTimer = 36000;
+                    player.ClearBuff(mod.BuffType(Name));
+                }
             }
         }
     }

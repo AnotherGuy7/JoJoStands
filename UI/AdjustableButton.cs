@@ -63,24 +63,26 @@ namespace JoJoStands.UI
         public override void Update(GameTime gameTime)
         {
             ResetVariables();
-            if (lockedInFocus)
+            if (!invisible)
             {
-                focusedOn = true;
-            }
-            if (respondToFocus)
-            {
-                if (focusedOn || IsMouseHovering)
+                if (lockedInFocus)
                 {
-                    drawAlpha = 1f;
-                    imageScale = focusScaleAmount;
-                    SetButtonSize(defaultSize * imageScale);
+                    focusedOn = true;
                 }
-                else
+                if (respondToFocus)
                 {
-                    SetButtonSize(defaultSize);
+                    if (focusedOn || IsMouseHovering)
+                    {
+                        drawAlpha = 1f;
+                        imageScale = focusScaleAmount;
+                        SetButtonSize(defaultSize * imageScale);
+                    }
+                    else
+                    {
+                        SetButtonSize(defaultSize);
+                    }
                 }
             }
-
             base.Update(gameTime);
         }
 

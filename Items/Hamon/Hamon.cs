@@ -42,7 +42,7 @@ namespace JoJoStands.Items.Hamon
 
             if (hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing])
             {
-                TooltipLine tooltipAddition = new TooltipLine(mod, "Damage", "Hold Right-Click for more than 3 seconds to heal life! (Require more than 5 Hamon)");
+                TooltipLine tooltipAddition = new TooltipLine(mod, "Damage", "Hold Right-Click for more than " + (4 / hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing]) + " seconds to heal life! (Requires more than " + hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing] + " Hamon)");
                 tooltips.Add(tooltipAddition);
             }
         }
@@ -53,19 +53,18 @@ namespace JoJoStands.Items.Hamon
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
 
             ChargeHamon();
-            if (player.whoAmI == item.owner)
+            if (player.whoAmI == item.owner && hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing])
             {
-                if (Main.mouseRight && hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing] && hamonPlayer.amountOfHamon >= 5)
+                if (Main.mouseRight && hamonPlayer.amountOfHamon >= hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing])
                 {
                     healTimer++;
                 }
-                if (healTimer >= 180)
+                if (healTimer >= (4 * 60) / hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing])
                 {
-                    item.noUseGraphic = true;
-                    int healamount = Main.rand.Next(10, 20);
+                    int healamount = Main.rand.Next(10 + (5 * hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing]), 20 * hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing]);
                     player.HealEffect(healamount);
                     player.statLife += healamount;
-                    hamonPlayer.amountOfHamon -= 5;
+                    hamonPlayer.amountOfHamon -= hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing];
                     healTimer = 0;
                 }
                 if (Main.mouseRightRelease)

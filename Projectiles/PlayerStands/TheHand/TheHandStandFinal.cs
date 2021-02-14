@@ -90,7 +90,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 {
                     specialTimer++;
                     secondaryAbilityFrames = true;
-
                 }
                 if (!SpecialKeyCurrent() && specialTimer != 0)
                 {

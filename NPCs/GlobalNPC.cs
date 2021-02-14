@@ -486,7 +486,7 @@ namespace JoJoStands.NPCs
             {
                 npc.StrikeNPC((int)(npc.damage * 0.7f), 6f, -npc.direction);
             }
-            if (target.GetModPlayer<MyPlayer>().Vampire)
+            if (target.GetModPlayer<MyPlayer>().vampire)
             {
                 npc.AddBuff(BuffID.Frostburn, 240);
             }

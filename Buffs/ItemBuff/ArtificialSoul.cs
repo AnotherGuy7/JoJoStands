@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
  
 namespace JoJoStands.Buffs.ItemBuff

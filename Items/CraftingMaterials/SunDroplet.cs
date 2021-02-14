@@ -1,5 +1,6 @@
 using JoJoStands.Items.Hamon;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.CraftingMaterials
@@ -36,6 +37,7 @@ namespace JoJoStands.Items.CraftingMaterials
                     hPlayer.skillPointsAvailable += 1;
                     item.stack -= 20;
                     clickTimer = 60;
+                    Main.PlaySound(2, Style: 25, pitchOffset: -0.8f);
                 }
             }
         }

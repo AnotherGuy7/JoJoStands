@@ -60,6 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 projectile.timeLeft = 2;
             }
             modPlayer.aerosmithWhoAmI = projectile.whoAmI;
+            newProjectileDamage = (int)(newProjectileDamage * MathHelper.Clamp(1f - (projectile.Distance(player.Center) / (350f * 16f)), 0.5f, 1f));
 
             if (projectile.position.Y < (Main.worldSurface * 0.35) * 16f)
             {

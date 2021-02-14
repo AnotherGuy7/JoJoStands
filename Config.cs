@@ -1,3 +1,4 @@
+using JoJoStands.Items.Hamon;
 using System.ComponentModel;
 using Terraria;
 using Terraria.ModLoader.Config;
@@ -74,9 +75,7 @@ namespace JoJoStands
         {
             MyPlayer.RangeIndicatorAlpha = RangeIndicatorVisibility;
             MyPlayer.deathsoundint = deathsound;
-            UI.HamonBarState.sizeMode = HamonBarSize;
             MyPlayer.Sounds = Sounds;
-            MyPlayer.HamonEffects = HamonEffects;
             MyPlayer.TimestopEffects = TimestopEffects;
             MyPlayer.RangeIndicators = RangeIndicators;
             MyPlayer.AutomaticActivations = AutomaticActivations;
@@ -86,7 +85,9 @@ namespace JoJoStands
             MyPlayer.HamonBarPositionY = HamonBarPositionY;
             MyPlayer.SecretReferences = SecretReferences;
             MyPlayer.soundVolume = soundVolume;
+            HamonPlayer.HamonEffects = HamonEffects;
             UI.HamonBarState.changedInConfig = true;
+            UI.HamonBarState.sizeMode = HamonBarSize;
             if (JoJoStands.JoJoStandsSounds == null)
             {
                 if (deathsound >= 6)

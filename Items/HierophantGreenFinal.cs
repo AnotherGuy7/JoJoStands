@@ -16,7 +16,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hierophant Green (Final)");
-            Tooltip.SetDefault("Shoot emeralds at the enemies and right click to shoot more accurate emralds!\nSpecial: 20 Meter Emerald Splash!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Shoot emeralds at the enemies and right-click to set two points for an Emerald Tripwire!\nSpecial: 20 Meter Emerald Splash!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
