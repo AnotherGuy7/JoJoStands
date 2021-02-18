@@ -50,13 +50,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 {
                     projectileDamage = 49;
                     shootTime = 12;
-                    chopperInaccuracy = 10;
+                    chopperInaccuracy = 25;
                 }
                 else if (projectile.ai[0] == 4f)
                 {
                     projectileDamage = 62;
                     shootTime = 7;
-                    chopperInaccuracy = 8;
+                    chopperInaccuracy = 15;
                 }
                 setStats = true;
             }
@@ -68,7 +68,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 {
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime - modPlayer.standSpeedBoosts;
+                        shootCount += shootTime - modPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
                         Main.PlaySound(SoundID.Item11, projectile.position);
                         Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
                         Vector2 shootVel = (Main.MouseWorld + chopperInaccuracyVector) - projectile.Center;
@@ -78,7 +78,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -92,9 +92,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     NPC npc = Main.npc[n];
                     if (npc.active)
                     {
-                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && projectile.Distance(npc.Center) <= 14f * 16f)
+                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && projectile.Distance(npc.Center) <= 26f * 16f)
                         {
-                            target = null;
+                            target = npc;
                             break;
                         }
                     }
@@ -111,7 +111,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     }
                     if (shootCount <= 0)
                     {
-                        shootCount += newShootTime;
+                        shootCount += shootTime - modPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
                         Main.PlaySound(SoundID.Item11, projectile.position);
                         Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
                         Vector2 shootVel = (target.Center + chopperInaccuracyVector) - projectile.Center;
@@ -121,7 +121,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, newProjectileDamage, 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }

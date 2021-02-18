@@ -345,6 +345,8 @@ namespace JoJoStands
                 creamExposedToVoid = false;
                 creamFrame = 0;
 
+                badCompanyTier = 0;
+
                 if (standAccessory)
                 {
                     standAccessory = false;

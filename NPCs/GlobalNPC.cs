@@ -415,11 +415,10 @@ namespace JoJoStands.NPCs
 
         public override bool CheckDead(NPC npc)
         {
-            for (int i = 0; i < Main.maxPlayers; i++)
+            for (int p = 0; p < Main.maxPlayers; p++)
             {
-                Player player = Main.player[i];
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                if (player.active && npc.boss && mPlayer.DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
+                Player player = Main.player[p];
+                if (player.active && npc.boss && player.GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
                 {
                     Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
                     Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
@@ -427,7 +426,7 @@ namespace JoJoStands.NPCs
                     Buffs.ItemBuff.DeathLoop.Looping3x = true;
                     Buffs.ItemBuff.DeathLoop.Looping10x = false;
                 }
-                if (player.active && !npc.boss && mPlayer.DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
+                if (player.active && !npc.boss && player.GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
                 {
                     Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
                     Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
@@ -436,7 +435,7 @@ namespace JoJoStands.NPCs
                     Buffs.ItemBuff.DeathLoop.Looping10x = true;
                 }
             }
-            return base.CheckDead(npc);
+            return true;
         }
 
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
@@ -457,7 +456,7 @@ namespace JoJoStands.NPCs
                     }
                 }
             }
-            return base.PreDraw(npc, spriteBatch, drawColor);
+            return true;
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)

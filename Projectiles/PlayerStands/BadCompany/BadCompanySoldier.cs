@@ -120,9 +120,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     NPC npc = Main.npc[n];
                     if (npc.active)
                     {
-                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && projectile.Distance(npc.Center) <= 8f * 16f)
+                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && projectile.Distance(npc.Center) <= 17f * 16f)
                         {
-                            target = null;
+                            target = npc;
                             break;
                         }
                     }
@@ -150,7 +150,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     }
                     if (shootCount <= 0)
                     {
-                        shootCount += newShootTime;
+                        shootCount += shootTime - modPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
                         Main.PlaySound(SoundID.Item11, projectile.position);
                         Vector2 shootVel = target.Center - projectile.Center;
                         if (shootVel == Vector2.Zero)
@@ -159,7 +159,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, newProjectileDamage, 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }

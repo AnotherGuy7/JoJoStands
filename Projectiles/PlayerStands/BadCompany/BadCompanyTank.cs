@@ -89,7 +89,46 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             }
             if (modPlayer.StandAutoMode)
             {
-                BasicPunchAI();
+                MovementAI();
+                NPC target = null;
+                for (int n = 0; n < Main.maxNPCs; n++)
+                {
+                    NPC npc = Main.npc[n];
+                    if (npc.active)
+                    {
+                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && projectile.Distance(npc.Center) <= 14f * 16f)
+                        {
+                            target = npc;
+                            break;
+                        }
+                    }
+                }
+                if (target != null)
+                {
+                    if (target.position.X >= projectile.position.X)
+                    {
+                        projectile.spriteDirection = projectile.direction = 1;
+                    }
+                    else
+                    {
+                        projectile.spriteDirection = projectile.direction = -1;
+                    }
+                    if (shootCount <= 0)
+                    {
+                        shootCount += shootTime - modPlayer.standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item11, projectile.position);
+                        Vector2 shootVel = target.Center - projectile.Center;
+                        if (shootVel == Vector2.Zero)
+                        {
+                            shootVel = new Vector2(0f, 1f);
+                        }
+                        shootVel.Y -= projectile.Distance(target.position) / 110f;
+                        shootVel.Normalize();
+                        shootVel *= shootSpeed;
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("BadCompanyTankRocket"), 1, 1f, projectile.owner, projectileDamage);
+                        Main.projectile[proj].netUpdate = true;
+                    }
+                }
             }
         }
 

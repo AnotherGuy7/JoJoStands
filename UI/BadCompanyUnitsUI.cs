@@ -170,7 +170,7 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyUnitsLeft > 0)
+            if (mPlayer.badCompanyUnitsLeft >= 1)
             {
                 mPlayer.badCompanySoldiers++;
             }
@@ -197,7 +197,7 @@ namespace JoJoStands.UI
 
             if (mPlayer.badCompanyTier >= 2)
             {
-                if (mPlayer.badCompanyUnitsLeft > 0)
+                if (mPlayer.badCompanyUnitsLeft >= 4)
                 {
                     mPlayer.badCompanyTanks++;
                 }
@@ -225,7 +225,7 @@ namespace JoJoStands.UI
 
             if (mPlayer.badCompanyTier >= 3)
             {
-                if (mPlayer.badCompanyUnitsLeft > 0)
+                if (mPlayer.badCompanyUnitsLeft >= 6)
                 {
                     mPlayer.badCompanyChoppers++;
                 }
