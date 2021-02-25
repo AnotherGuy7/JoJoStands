@@ -101,6 +101,7 @@ namespace JoJoStands.Items.Hamon
                 hamonAmountRequirements.Add(WaterWalkingSKill, 0);
                 hamonAmountRequirements.Add(WeaponsHamonImbueSkill, 0);
                 hamonAmountRequirements.Add(HamonItemHealing, 0);
+                hamonAmountRequirements.Add(DefensiveHamonAura, 0);
                 hamonAmountRequirements.Add(HamonShockwave, 0);
                 hamonAmountRequirements.Add(HamonHerbalGrowth, 0);
             }
@@ -302,7 +303,7 @@ namespace JoJoStands.Items.Hamon
 
         private void ManageAbilities()
         {
-            if (!learnedHamonSkills.ContainsKey(DefensiveHamonAura) || !hamonAmountRequirements.ContainsKey(DefensiveHamonAura))        //Just checking if something exists in the dictionary, if not, just skipping
+            if (!learnedHamonSkills.ContainsKey(HamonHerbalGrowth) || !hamonAmountRequirements.ContainsKey(HamonHerbalGrowth))        //Just checking if something exists in the dictionary, if not, just skipping
                 return;
 
             if (defensiveAuraDownDoublePressTimer > 0)
