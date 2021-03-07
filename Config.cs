@@ -45,6 +45,11 @@ namespace JoJoStands
         [Tooltip("Allows you to choose how transparent the Range Indicator is.")]
         public int RangeIndicatorVisibility;
 
+        [DefaultValue(MyPlayer.StandSearchType.Bosses)]
+        [Label("Stand Auto Mode Targetting Preference")]
+        [Tooltip("Select the type of enemy your Stand should prioritize first when in Auto Mode!")]
+        public MyPlayer.StandSearchType StandSearchType;
+
         [DefaultValue(39)]
         [Label("Stand Slot X Position")]
         public int StandSlotPositionX;
@@ -63,7 +68,7 @@ namespace JoJoStands
 
         [DefaultValue(false)]
         [Label("Hidden References")]
-        [Tooltip("Whether or not you want to see hidden references. (Some of these references can cause you to die)")]
+        [Tooltip("Whether or not you want to see hidden references. (Some of these references can cause you to die!)")]
         public bool SecretReferences;
 
         [DefaultValue(0.4f)]
@@ -88,6 +93,7 @@ namespace JoJoStands
             HamonPlayer.HamonEffects = HamonEffects;
             UI.HamonBarState.changedInConfig = true;
             UI.HamonBarState.sizeMode = HamonBarSize;
+            MyPlayer.standSearchType = StandSearchType;
             if (JoJoStands.JoJoStandsSounds == null)
             {
                 if (deathsound >= 6)

@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles
                 preSkipVel = Vector2.Zero;
             }
 
-            if (Mplayer.Foresight && !projectile.minion)
+            if (Mplayer.epitaphForesight && !projectile.minion)
             {
                 applyingForesightPositions = true;
                 if (foresightSaveTimer > 0)
@@ -105,7 +105,7 @@ namespace JoJoStands.Projectiles
                     foresightSaveTimer = 15;
                 }
             }
-            if (!Mplayer.Foresight && applyingForesightPositions)
+            if (!Mplayer.epitaphForesight && applyingForesightPositions)
             {
                 if (!foresightResetIndex)
                 {
@@ -155,7 +155,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            if (Mplayer.Foresight || applyingForesightPositions)
+            if (Mplayer.epitaphForesight || applyingForesightPositions)
             {
                 for (int i = 0; i < 50; i++)
                 {

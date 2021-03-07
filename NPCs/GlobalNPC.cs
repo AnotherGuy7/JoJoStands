@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -18,12 +19,14 @@ namespace JoJoStands.NPCs
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
-        public int BtZSaveTimer = 0;
+        public int btZSaveTimer = 0;
+        public int btzTotalRewindTime = 0;
+        public int btzTotalRewindTimer = 0;
         public int aiStyleSave = 0;
         public int lifeRegenIncrement = 0;
         public int lockRegenCounter = 0;
         public bool forceDeath = false;
-        public int indexPosition = 0;
+        public int btzPositionIndex = 0;
         public bool spawnedByDeathLoop = false;
         public int deathTimer = 0;
         public float kingCrimsonDonutMultiplier = 1f;
@@ -178,35 +181,40 @@ namespace JoJoStands.NPCs
                 npc.netUpdate = true;
                 return false;
             }
-            if (player.BackToZero)
+            if (player.backToZero)
             {
                 if (!affectedbyBtz)
                 {
-                    BtZSaveTimer--;
-                    if (BtZSaveTimer <= 0)
+                    btZSaveTimer--;
+                    if (btZSaveTimer <= 0)
                     {
-                        if (indexPosition < 999)
+                        if (btzPositionIndex < BtZPositions.Length)
                         {
-                            indexPosition += 1;
-                            BtZPositions[indexPosition] = npc.position;
-                            BtZSaveTimer = 30;
+                            btzPositionIndex += 1;
+                            BtZPositions[btzPositionIndex] = npc.position;
+                            btZSaveTimer = 30;
                         }
                     }
                 }
                 if (affectedbyBtz)
                 {
-                    BtZSaveTimer--;
-                    if (BtZSaveTimer <= 0)
+                    if (btzTotalRewindTimer > 0)
                     {
-                        if (indexPosition > 1)
+                        btzTotalRewindTimer--;
+                    }
+
+                    btZSaveTimer--;
+                    if (btZSaveTimer <= 0)
+                    {
+                        if (btzPositionIndex > 1)
                         {
-                            indexPosition -= 1;
-                            npc.position = BtZPositions[indexPosition];
-                            if (npc.position == BtZPositions[indexPosition])
+                            btzPositionIndex -= 1;
+                            npc.position = BtZPositions[btzPositionIndex];
+                            if (npc.position == BtZPositions[btzPositionIndex])
                             {
-                                System.Array.Clear(BtZPositions, indexPosition, 1);
+                                Array.Clear(BtZPositions, btzPositionIndex, 1);
                             }
-                            BtZSaveTimer = 5;
+                            btZSaveTimer = 5;
                         }
                         npc.netUpdate = true;
                     }
@@ -215,22 +223,25 @@ namespace JoJoStands.NPCs
                     return false;
                 }
             }
-            if (!player.BackToZero)
+            else
             {
                 if (npc.HasBuff(mod.BuffType("AffectedByBtZ")))
                 {
                     int buffIndex = npc.FindBuffIndex(mod.BuffType("AffectedByBtZ"));
                     npc.DelBuff(buffIndex);
                 }
-                BtZSaveTimer = 0;
-                indexPosition = 0;
+                btZSaveTimer = 0;
+                btzPositionIndex = 0;
+                btzTotalRewindTime = 0;
+                btzTotalRewindTimer = 0;
                 affectedbyBtz = false;
             }
             if (player.TimeSkipPreEffect)
             {
                 for (int i = 0; i < Main.maxPlayers; i++)
                 {
-                    if (Main.player[i].active && playerPositionOnSkip == Vector2.Zero && Main.player[i].GetModPlayer<MyPlayer>().TimeSkipPreEffect)
+                    Player otherPlayer = Main.player[i];
+                    if (otherPlayer.active && playerPositionOnSkip == Vector2.Zero && otherPlayer.GetModPlayer<MyPlayer>().TimeSkipPreEffect)
                     {
                         playerPositionOnSkip = Main.player[i].position;
                     }
@@ -301,7 +312,7 @@ namespace JoJoStands.NPCs
                 npc.aiStyle = aiStyleSave;
                 aiStyleSave = 0;
             }
-            if (player.Foresight && !npc.immortal)
+            if (player.epitaphForesight && !npc.immortal)
             {
                 applyingForesightPositions = true;
                 if (foresightSaveTimer > 0)
@@ -319,7 +330,7 @@ namespace JoJoStands.NPCs
                     foresightSaveTimer = 5;
                 }
             }
-            if (!player.Foresight && applyingForesightPositions)
+            if (!player.epitaphForesight && applyingForesightPositions)
             {
                 if (!foresightResetIndex)
                 {
@@ -418,21 +429,25 @@ namespace JoJoStands.NPCs
             for (int p = 0; p < Main.maxPlayers; p++)
             {
                 Player player = Main.player[p];
-                if (player.active && npc.boss && player.GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
+                if (player.active)
                 {
-                    Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
-                    Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
-                    Buffs.ItemBuff.DeathLoop.deathPositionY = npc.position.Y;
-                    Buffs.ItemBuff.DeathLoop.Looping3x = true;
-                    Buffs.ItemBuff.DeathLoop.Looping10x = false;
-                }
-                if (player.active && !npc.boss && player.GetModPlayer<MyPlayer>().DeathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
-                {
-                    Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
-                    Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
-                    Buffs.ItemBuff.DeathLoop.deathPositionY = npc.position.Y;
-                    Buffs.ItemBuff.DeathLoop.Looping3x = false;
-                    Buffs.ItemBuff.DeathLoop.Looping10x = true;
+                    MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+                    if (npc.boss && mPlayer.deathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
+                    {
+                        Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
+                        Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
+                        Buffs.ItemBuff.DeathLoop.deathPositionY = npc.position.Y;
+                        Buffs.ItemBuff.DeathLoop.Looping3x = true;
+                        Buffs.ItemBuff.DeathLoop.Looping10x = false;
+                    }
+                    if (!npc.boss && mPlayer.deathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
+                    {
+                        Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
+                        Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
+                        Buffs.ItemBuff.DeathLoop.deathPositionY = npc.position.Y;
+                        Buffs.ItemBuff.DeathLoop.Looping3x = false;
+                        Buffs.ItemBuff.DeathLoop.Looping10x = true;
+                    }
                 }
             }
             return true;
@@ -441,7 +456,7 @@ namespace JoJoStands.NPCs
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.Foresight || applyingForesightPositions)
+            if (player.epitaphForesight || applyingForesightPositions)
             {
                 for (int i = 0; i < foresightPositionIndexMax; i++)
                 {
@@ -452,8 +467,22 @@ namespace JoJoStands.NPCs
                     }
                     if (foresightPosition[i] != Vector2.Zero)
                     {
-                        spriteBatch.Draw(Main.npcTexture[npc.type], (foresightPosition[i] - Main.screenPosition) + new Vector2(-5f, 30f), foresightFrames[i], Color.DarkRed, foresightRotations[i].X, foresightFrames[i].Size() / 2f, npc.scale, effects, 0f);
+                        spriteBatch.Draw(Main.npcTexture[npc.type], foresightPosition[i] - Main.screenPosition, foresightFrames[i], Color.DarkRed, foresightRotations[i].X, Vector2.Zero, npc.scale, effects, 0f);
                     }
+                }
+            }
+            if (player.backToZero && btzTotalRewindTimer != 0)
+            {
+                for (int a = 0; a < BtZPositions.Length - 1; a++)
+                {
+                    float alpha = 1f / (Math.Abs((float)(btzTotalRewindTimer - (5 * a))) + 1f);
+                    SpriteEffects spriteEffect = SpriteEffects.None;
+                    if (npc.direction == 1)
+                    {
+                        spriteEffect = SpriteEffects.FlipHorizontally;
+                    }
+                    Vector2 position = BtZPositions[a] - Main.screenPosition;
+                    spriteBatch.Draw(Main.npcTexture[npc.type], position, npc.frame, Color.White * alpha, npc.rotation, Vector2.Zero, npc.scale, spriteEffect, 0f);
                 }
             }
             return true;
@@ -464,7 +493,7 @@ namespace JoJoStands.NPCs
             if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
             {
                 Texture2D texture = mod.GetTexture("Extras/BoundByRedBind");
-                spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, npc.Size / 2f, npc.scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, Vector2.Zero, npc.scale, SpriteEffects.None, 0f);
             }
         }
 
@@ -476,6 +505,8 @@ namespace JoJoStands.NPCs
             {
                 npc.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
                 npc.StrikeNPC(damage, npc.knockBackResist, -npc.direction);
+                btzTotalRewindTime = 5 * btzPositionIndex;
+                btzTotalRewindTimer = 5 * btzPositionIndex;
             }
             if (mPlayer.StandSlot.Item.type == mod.ItemType("DollyDaggerT1"))
             {

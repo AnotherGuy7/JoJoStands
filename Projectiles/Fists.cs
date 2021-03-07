@@ -49,7 +49,7 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(mod.BuffType("LifePunch"), 8 * 60);
                 }
             }
-            if (projectile.ai[0] == 3f && mPlayer.BackToZero)
+            if (projectile.ai[0] == 3f && mPlayer.backToZero)
             {
                 target.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
                 target.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
@@ -236,7 +236,7 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(mod.BuffType("LifePunch"), 8 * 60);
                 }
             }
-            if (projectile.ai[0] == 3f && mPlayer.BackToZero)
+            if (projectile.ai[0] == 3f && mPlayer.backToZero)
             {
                 target.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
             }

@@ -11,13 +11,13 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 4;
+            Main.npcFrameCount[npc.type] = 19;
         }
 
         public override void SetDefaults()
         {
-            npc.width = 40;
-            npc.height = 48;
+            npc.width = 48;
+            npc.height = 54;
             npc.defense = 24;
             npc.lifeMax = 300;
             npc.damage = 40;
@@ -30,6 +30,14 @@ namespace JoJoStands.NPCs.Enemies
             npc.aiStyle = 3;
             aiType = 73;
         }
+
+        public const int IdleFrame = 0;
+        public const int JumpingFrame = 1;
+        public const int WalkingFramesMinimum = 2;
+        public const int WalkingFramesMaximum = 14;
+        public const int KnivesFramesMinimum = 15;
+        public const int KnivesFramesMaximum = 17;
+        public const int GrabFrame = 18;
 
         private int frame = 0;
         private int runCounter = 200;
@@ -395,19 +403,76 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void FindFrame(int frameHeight)
         {
-            frameHeight = 48;
-            if (npc.velocity != Vector2.Zero)
+            frameHeight = npc.height;
+            if (npc.velocity.X == 0f)
+            {
+                frame = IdleFrame;
+                if (grabbingPlayer)
+                {
+                    frame = GrabFrame;
+                }
+                npc.frameCounter = 0;
+            }
+            else
             {
                 npc.frameCounter += Math.Abs(npc.velocity.X);
-                if (npc.frameCounter >= 10)
+                if (npc.frameCounter >= 6)
                 {
-                    frame += 1;
+                    frame++;
                     npc.frameCounter = 0;
+                    if (frame > WalkingFramesMaximum)
+                    {
+                        frame = WalkingFramesMinimum;
+                    }
+                    if (frame < WalkingFramesMinimum)
+                    {
+                        frame = WalkingFramesMinimum;
+                    }
                 }
-                if (frame >= 3)
+            }
+            if (knifeThrowTimer != 0)
+            {
+                npc.frameCounter++;
+                if (knifeThrowTimer <= 30)
                 {
-                    frame = 0;
+                    if (npc.frameCounter % 10 == 0)
+                    {
+                        frame++;
+                        npc.frameCounter = 0;
+                    }
                 }
+                if (knifeThrowTimer > 30 && knifeThrowTimer <= 60)
+                {
+                    if (frame != KnivesFramesMaximum)
+                    {
+                        if (npc.frameCounter >= 3)
+                        {
+                            frame++;
+                            npc.frameCounter = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (npc.frameCounter >= 4)
+                        {
+                            frame++;
+                            npc.frameCounter = 0;
+                        }
+                    }
+                }
+
+                if (frame < KnivesFramesMinimum)
+                {
+                    frame = KnivesFramesMinimum;
+                }
+                if (frame > KnivesFramesMaximum)
+                {
+                    frame = KnivesFramesMinimum;
+                }
+            }
+            if (npc.velocity.Y != 0f)
+            {
+                frame = JumpingFrame;
             }
             npc.frame.Y = frame * frameHeight;
         }

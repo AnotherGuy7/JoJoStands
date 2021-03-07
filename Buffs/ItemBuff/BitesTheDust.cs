@@ -44,7 +44,7 @@ namespace JoJoStands.Buffs.ItemBuff
             mPlayer.TheWorldEffect = false;     //second, get rid of the effects from everyone
             mPlayer.TimeSkipEffect = false;
             mPlayer.TimeSkipPreEffect = false;
-            mPlayer.Foresight = false;
+            mPlayer.epitaphForesight = false;
             if (Main.time != 1600)
             {
                 player.AddBuff(mod.BuffType(Name), 2);       //to constantly refresh the buff

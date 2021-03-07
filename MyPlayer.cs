@@ -31,6 +31,7 @@ namespace JoJoStands
         public static float HamonBarPositionY;
         public static float soundVolume;
         public static bool spawningOtherStands = false;     //this is used for the extra stands like FanStands so that those can spawn
+        public static StandSearchType standSearchType = StandSearchType.Bosses;
 
         public int goldenSpinCounter = 0;
         public int spinSubtractionTimer = 0;
@@ -107,9 +108,9 @@ namespace JoJoStands
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
         public bool TimeSkipEffect;
-        public bool BackToZero;
-        public bool DeathLoop;
-        public bool Foresight;
+        public bool backToZero;
+        public bool deathLoop;
+        public bool epitaphForesight;
         public bool standAccessory = false;
         public bool BitesTheDust = false;
         public bool poseMode = false;
@@ -133,6 +134,15 @@ namespace JoJoStands
         public Vector2 VoidCamPosition;
 
         public string poseSoundName = "";       //This is for JoJoStandsSoudns
+
+        public enum StandSearchType
+        {
+            Bosses,
+            Closest,
+            Farthest,
+            LeastHealth,
+            MostHealth
+        }
 
         public override void ResetEffects()
         {
@@ -193,13 +203,13 @@ namespace JoJoStands
                         Main.NewText("The user has left, and time has begun to move once more...");
                         otherModPlayer.TimeSkipEffect = false;
                     }
-                    if (otherModPlayer.BackToZero && !otherPlayer.HasBuff(mod.BuffType("BackToZero")))
+                    if (otherModPlayer.backToZero && !otherPlayer.HasBuff(mod.BuffType("BackToZero")))
                     {
-                        otherModPlayer.BackToZero = false;
+                        otherModPlayer.backToZero = false;
                     }
-                    if (otherModPlayer.DeathLoop && !otherPlayer.HasBuff(mod.BuffType("DeathLoop")))
+                    if (otherModPlayer.deathLoop && !otherPlayer.HasBuff(mod.BuffType("DeathLoop")))
                     {
-                        otherModPlayer.DeathLoop = false;
+                        otherModPlayer.deathLoop = false;
                     }
                 }
             }
@@ -504,7 +514,7 @@ namespace JoJoStands
                         Filters.Scene["TimestopEffectShader"].Deactivate();
                     }
                 }
-                if (BackToZero)
+                if (backToZero)
                 {
                     if (!Filters.Scene["GreenEffect"].IsActive())
                     {
@@ -537,20 +547,20 @@ namespace JoJoStands
                     TheWorldEffect = false;     //second, get rid of the effects from everyone
                     TimeSkipEffect = false;
                     TimeSkipPreEffect = false;
-                    Foresight = false;
+                    epitaphForesight = false;
                 }
-                if (!BackToZero && Filters.Scene["GreenEffect"].IsActive())
+                if (!backToZero && Filters.Scene["GreenEffect"].IsActive())
                 {
                     Filters.Scene["GreenEffect"].Deactivate();
                 }
-                if (Foresight)
+                if (epitaphForesight)
                 {
                     if (!Filters.Scene["RedEffect"].IsActive())
                     {
                         Filters.Scene.Activate("RedEffect");
                     }
                 }
-                if (!Foresight && Filters.Scene["RedEffect"].IsActive())
+                if (!epitaphForesight && Filters.Scene["RedEffect"].IsActive())
                 {
                     Filters.Scene["RedEffect"].Deactivate();
                 }
@@ -1487,11 +1497,11 @@ namespace JoJoStands
             {
                 player.AddBuff(mod.BuffType("FrozeninTime"), 2);
             }
-            if (DeathLoop)       //if someone has deathloop turned on and you don't turn it on for you
+            if (deathLoop)       //if someone has deathloop turned on and you don't turn it on for you
             {
                 player.AddBuff(mod.BuffType("DeathLoop"), 2);
             }
-            if (Foresight && !player.HasBuff(mod.BuffType("ForesightBuff")) && !player.HasBuff(mod.BuffType("ForeseenDebuff")))
+            if (epitaphForesight && !player.HasBuff(mod.BuffType("ForesightBuff")) && !player.HasBuff(mod.BuffType("ForeseenDebuff")))
             {
                 player.AddBuff(mod.BuffType("ForeseenDebuff"), 2);
             }
@@ -1724,7 +1734,7 @@ namespace JoJoStands
                 Main.NewText("The chip has given you new life!");
                 return false;
             }
-            if (BackToZero)
+            if (backToZero)
             {
                 return false;
             }

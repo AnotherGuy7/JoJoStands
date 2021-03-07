@@ -132,7 +132,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (Main.mouseRight && projectile.owner == Main.myPlayer && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("ForesightBuff")) && !player.HasBuff(mod.BuffType("SkippingTime")))
                 {
                     player.AddBuff(mod.BuffType("ForesightBuff"), 540);
-                    modPlayer.Foresight = true;
+                    modPlayer.epitaphForesight = true;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
                         ModNetHandler.effectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);

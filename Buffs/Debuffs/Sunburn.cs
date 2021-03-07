@@ -22,6 +22,7 @@ namespace JoJoStands.Buffs.Debuffs
             player.lifeRegenTime = 0;
             player.lifeRegen -= 60;     //losing 30 health
             player.moveSpeed *= 0.5f;
+
             if (Main.rand.Next(0, 2) == 0)
                 Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
         }

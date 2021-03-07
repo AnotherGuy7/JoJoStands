@@ -34,7 +34,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(35));
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    mPlayer.BackToZero = false;
+                    mPlayer.backToZero = false;
                 }
                 else
                 {
@@ -60,7 +60,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)
                 {
-                    mPlayer.BackToZero = false;
+                    mPlayer.backToZero = false;
                     ModNetHandler.effectSync.SendBTZ(256, player.whoAmI, false, player.whoAmI);
                 }
                 if (Main.netMode != NetmodeID.Server)

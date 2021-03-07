@@ -101,7 +101,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     if (Main.mouseRight && modPlayer.GEAbilityNumber == 4 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("BacktoZero")))
                     {
                         player.AddBuff(mod.BuffType("BacktoZero"), 1200);
-                        modPlayer.BackToZero = true;
+                        modPlayer.backToZero = true;
                         if (Main.netMode == NetmodeID.MultiplayerClient)
                         {
                             ModNetHandler.effectSync.SendBTZ(256, player.whoAmI, true, player.whoAmI);

@@ -28,7 +28,7 @@ namespace JoJoStands.Buffs.Debuffs
             {
                 player.position = zeroPosition;
             }
-            if (player.GetModPlayer<MyPlayer>().BackToZero)
+            if (player.GetModPlayer<MyPlayer>().backToZero)
             {
                 player.AddBuff(mod.BuffType(Name), 2);
             }

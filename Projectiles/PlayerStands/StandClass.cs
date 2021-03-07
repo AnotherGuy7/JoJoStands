@@ -231,7 +231,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             Player player = Main.player[projectile.owner];
 
             HandleDrawOffsets();
-            NPC target = null;
             Vector2 targetPos = projectile.position;
             float detectionDist = newMaxDistance * 1.2f;
             if (!attackFrames)
@@ -244,27 +243,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 projectile.velocity *= 0.8f;
                 projectile.rotation = 0;
             }
-            for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+            NPC target = FindNearestTarget(detectionDist);
+            if (target != null)
             {
-                NPC npc = Main.npc[n];
-                if (npc.active && npc.CanBeChasedBy(this, false))
-                {
-                    float distance = Vector2.Distance(npc.Center, player.Center);
-                    if (distance < detectionDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                    {
-                        if (npc.boss)       //is gonna try to detect bosses over anything
-                        {
-                            targetPos = npc.Center;
-                            target = npc;
-                            break;
-                        }
-                        else        //if it fails to detect a boss, it'll detect the next best thing
-                        {
-                            targetPos = npc.Center;
-                            target = npc;
-                        }
-                    }
-                }
+                targetPos = target.position;
             }
             if (target != null)
             {
@@ -317,35 +299,16 @@ namespace JoJoStands.Projectiles.PlayerStands
             MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
 
             HandleDrawOffsets();
-            NPC target = null;
             Vector2 targetPos = projectile.position;
             float rangedDetectionDist = newMaxDistance * 3f;        //Distance for ranged attacks to work
             float punchDetectionDist = newMaxDistance * 1.5f;       //Distance for melee attacks to work
             float maxDetectionDist = newMaxDistance * 3.1f;
             float targetDist = maxDetectionDist;
-            for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+            NPC target = FindNearestTarget(targetDist);
+            if (target != null)
             {
-                NPC npc = Main.npc[n];
-                if (npc.active && npc.CanBeChasedBy(this, false))
-                {
-                    float distance = Vector2.Distance(npc.Center, player.Center);
-                    if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                    {
-                        if (npc.boss)       //is gonna try to detect bosses over anything
-                        {
-                            targetDist = distance;
-                            targetPos = npc.Center;
-                            target = npc;
-                            break;
-                        }
-                        else        //if it fails to detect a boss, it'll detect the next best thing
-                        {
-                            targetDist = distance;
-                            targetPos = npc.Center;
-                            target = npc;
-                        }
-                    }
-                }
+                targetDist = Vector2.Distance(target.Center, player.Center);
+                targetPos = target.position;
             }
             if (targetDist > punchDetectionDist || secondaryAbility || target == null)
             {
@@ -764,6 +727,102 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 projectile.Center = player.Center;
             }
+        }
+
+        public NPC FindNearestTarget(float maxDetectionRange)
+        {
+            NPC target = null;
+            Player player = Main.player[projectile.owner];
+            switch (MyPlayer.standSearchType)
+            {
+                case MyPlayer.StandSearchType.Bosses:
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < maxDetectionRange && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                if (npc.boss)       //is gonna try to detect bosses over anything
+                                {
+                                    target = npc;
+                                    break;
+                                }
+                                else        //if it fails to detect a boss, it'll detect the next best thing
+                                {
+                                    target = npc;
+                                }
+                            }
+                        }
+                    }
+                break;
+                case MyPlayer.StandSearchType.Closest:
+                    float closestDistance = maxDetectionRange;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < closestDistance && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                closestDistance = distance;
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchType.Farthest:
+                    float farthestDistance = 0f;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance > farthestDistance && distance < maxDetectionRange && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                farthestDistance = distance;
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchType.LeastHealth:
+                    int leasthealth = int.MaxValue;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < maxDetectionRange && npc.life < leasthealth && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                leasthealth = npc.life;
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchType.MostHealth:
+                    int mosthealth = 0;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                mosthealth = npc.life;
+                            }
+                        }
+                    }
+                    break;
+            }
+            return target;
         }
 
         public virtual void SelectAnimation()       //what you override to use normalFrames, attackFrames, etc. and make the animations play

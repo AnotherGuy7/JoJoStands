@@ -193,8 +193,8 @@ namespace JoJoStands.Networking
 			int BTZOwner = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().BackToZero = BTZValue;
-				Main.player[BTZOwner].GetModPlayer<MyPlayer>().BackToZero = BTZValue;
+				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().backToZero = BTZValue;
+				Main.player[BTZOwner].GetModPlayer<MyPlayer>().backToZero = BTZValue;
 				SendBTZBackToOwner(BTZOwner, Main.myPlayer, BTZValue, Main.myPlayer);
 			}
 			else
@@ -209,7 +209,7 @@ namespace JoJoStands.Networking
 			int affectedPlayer = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().BackToZero = BTZValue;
+				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().backToZero = BTZValue;
 			}
 			else
 			{
@@ -241,8 +241,8 @@ namespace JoJoStands.Networking
 			int foresightOwner = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[foresightOwner].GetModPlayer<MyPlayer>().Foresight = foresightValue;
-				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().Foresight = foresightValue;
+				Main.player[foresightOwner].GetModPlayer<MyPlayer>().epitaphForesight = foresightValue;
+				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().epitaphForesight = foresightValue;
 				SendForesightBackToOwner(foresightOwner, Main.myPlayer, foresightValue, Main.myPlayer);
 			}
 			else
@@ -257,7 +257,7 @@ namespace JoJoStands.Networking
 			int affectedPlayer = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().Foresight = foresightValue;
+				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().epitaphForesight = foresightValue;
 			}
 			else
 			{
