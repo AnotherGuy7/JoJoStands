@@ -1,3 +1,4 @@
+using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -23,6 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         private float npcDistance = 0f;
         private float mouseToPlayerDistance = 0f;
         private Vector2 savedPosition = Vector2.Zero;
+        private bool touchedNPC = false;
         private bool touchedTile = false;
         private int timeAfterTouch = 0;
 
@@ -71,27 +73,79 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 {
                     StayBehind();
                 }
-                if (Main.mouseRight && shootCount <= 0 && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && shootCount <= 0 && timeAfterTouch <= 0 && projectile.owner == Main.myPlayer)
                 {
+                    shootCount += 5;
                     Main.mouseLeft = false;
                     attackFrames = false;
                     normalFrames = false;
-                    if (Collision.SolidCollision(Main.MouseWorld, 1, 1) && mouseToPlayerDistance < maxAltDistance && timeAfterTouch <= 0 && !touchedTile)
+
+                    if (!touchedNPC && !touchedTile)
                     {
-                        timeAfterTouch = 60;
-                        savedPosition = Main.MouseWorld;
-                        touchedTile = true;
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
+                        if (mouseToPlayerDistance < maxAltDistance)
+                        {
+                            bool foundNPCTarget = false;        //This first so you can get targets in tiles, like worms
+                            for (int n = 0; n < Main.maxNPCs; n++)
+                            {
+                                NPC npc = Main.npc[n];
+                                if (npc.active)
+                                {
+                                    if (npc.Distance(Main.MouseWorld) <= (npc.width / 2f) + 20f)
+                                    {
+                                        touchedNPC = true;
+                                        timeAfterTouch = 60;
+                                        foundNPCTarget = true;
+                                        npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByKillerQueen = true;
+                                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!foundNPCTarget)
+                            {
+                                if (Collision.SolidCollision(Main.MouseWorld, 1, 1) && !touchedTile)
+                                {
+                                    touchedTile = true;
+                                    timeAfterTouch = 60;
+                                    savedPosition = Main.MouseWorld;
+                                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
+                                }
+                            }
+                        }
                     }
-                    if (timeAfterTouch <= 0 && touchedTile)
+                    else
                     {
-                        secondaryAbilityFrames = true;
-                        int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, player.whoAmI);
-                        Main.projectile[projectile].friendly = true;
-                        Main.projectile[projectile].timeLeft = 2;
-                        Main.projectile[projectile].netUpdate = true;
-                        touchedTile = false;
-                        savedPosition = Vector2.Zero;
+                        if (touchedNPC)
+                        {
+                            for (int n = 0; n < Main.maxNPCs; n++)
+                            {
+                                NPC npc = Main.npc[n];
+                                if (npc.active)
+                                {
+                                    JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>();
+                                    if (jojoNPC.taggedByKillerQueen)
+                                    {
+                                        touchedNPC = false;
+                                        int projectile = Projectile.NewProjectile(npc.position, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, player.whoAmI);
+                                        Main.projectile[projectile].friendly = true;
+                                        Main.projectile[projectile].timeLeft = 2;
+                                        Main.projectile[projectile].netUpdate = true;
+                                        jojoNPC.taggedByKillerQueen = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (touchedTile)
+                        {
+                            touchedTile = false;
+                            secondaryAbilityFrames = true;
+                            int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, player.whoAmI);
+                            Main.projectile[projectile].friendly = true;
+                            Main.projectile[projectile].timeLeft = 2;
+                            Main.projectile[projectile].netUpdate = true;
+                            savedPosition = Vector2.Zero;
+                        }
                     }
                 }
                 else
@@ -112,28 +166,25 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     StayBehind();
                 }
                 float targetDist = maxDistance * 1.5f;
-                if (target == null)
+                for (int k = 0; k < 200; k++)       //the targeting system
                 {
-                    for (int k = 0; k < 200; k++)       //the targeting system
+                    NPC npc = Main.npc[k];
+                    if (npc.CanBeChasedBy(this, false))
                     {
-                        NPC npc = Main.npc[k];
-                        if (npc.CanBeChasedBy(this, false))
+                        float distance = Vector2.Distance(npc.Center, player.Center);
+                        if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
                         {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
+                            if (npc.boss)       //is gonna try to detect bosses over anything
                             {
-                                if (npc.boss)       //is gonna try to detect bosses over anything
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
-                                else        //if it fails to detect a boss, it'll detect the next best thing
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
+                                targetDist = distance;
+                                targetPos = npc.Center;
+                                target = npc;
+                            }
+                            else        //if it fails to detect a boss, it'll detect the next best thing
+                            {
+                                targetDist = distance;
+                                targetPos = npc.Center;
+                                target = npc;
                             }
                         }
                     }

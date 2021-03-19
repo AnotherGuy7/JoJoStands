@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using JoJoStands.UI;
+using JoJoStands.Items.Vampire;
 
 namespace JoJoStands.NPCs.TownNPCs
 {
@@ -58,8 +59,8 @@ namespace JoJoStands.NPCs.TownNPCs
         public override string GetChat()       //Allows you to give this town NPC a chat message when a player talks to it.
         {
             Player player = Main.LocalPlayer;
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (!mPlayer.vampire)
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            if (!vPlayer.vampire)
             {
                 switch (Main.rand.Next(0, 5))
                 {

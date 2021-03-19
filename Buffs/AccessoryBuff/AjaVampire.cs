@@ -1,3 +1,4 @@
+using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.ModLoader;
  
@@ -16,7 +17,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
  
         public override void Update(Player player, ref int buffIndex)
         {
-            player.AddBuff(mod.BuffType("AjaVampire"), 2);
+            player.buffTime[buffIndex] = 2;
             player.allDamage *= 2f;
             player.moveSpeed *= 2f;
             player.jumpBoost = true;
@@ -26,6 +27,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.lifeRegenCount += 5;
             player.arrowDamage *= 2f;
             player.statLifeMax2 = player.statLifeMax + 100;
+            player.GetModPlayer<VampirePlayer>().perfectBeing = true;
 
             if (player.ZoneSkyHeight && MyPlayer.SecretReferences)
             {

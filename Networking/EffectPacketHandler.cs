@@ -79,11 +79,11 @@ namespace JoJoStands.Networking
 				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().TheWorldEffect = timestopValue;
 				if (timestopValue)
 				{
-					Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().TimestopEffectDurationTimer = 60;
+					Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timestopEffectDurationTimer = 60;
 				}
 				else
 				{
-					Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().TimestopEffectDurationTimer = 60;
+					Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timestopEffectDurationTimer = 60;
 					if (Filters.Scene["GreyscaleEffect"].IsActive())
 					{
 						Filters.Scene["GreyscaleEffect"].Deactivate();

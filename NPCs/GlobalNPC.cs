@@ -1,6 +1,8 @@
+using JoJoStands.Items.Vampire;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,6 +18,7 @@ namespace JoJoStands.NPCs
         public bool foresightResetIndex = false;
         public bool taggedWithPhantomMarker = false;
         public bool grabbedByHermitPurple = false;
+        public bool taggedByKillerQueen = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -144,6 +147,11 @@ namespace JoJoStands.NPCs
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
+            if (type == NPCID.Merchant)
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType("Sunscreen"));
+                nextSlot++;
+            }
             if (type == NPCID.Painter)
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType("IWouldntLose"));
@@ -160,6 +168,7 @@ namespace JoJoStands.NPCs
             if (type == NPCID.TravellingMerchant && ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss))
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType("ViralPearlRing"));
+                nextSlot++;
             }
         }
 
@@ -485,6 +494,12 @@ namespace JoJoStands.NPCs
                     spriteBatch.Draw(Main.npcTexture[npc.type], position, npc.frame, Color.White * alpha, npc.rotation, Vector2.Zero, npc.scale, spriteEffect, 0f);
                 }
             }
+            if (taggedByKillerQueen)
+            {
+                Texture2D bombTexture = mod.GetTexture("Extras/Bomb");
+                Vector2 position = npc.Center - new Vector2(bombTexture.Width / 2f, (npc.height / 2f) + 18f);
+                spriteBatch.Draw(bombTexture, position - Main.screenPosition, Color.White);
+            }
             return true;
         }
 
@@ -516,7 +531,7 @@ namespace JoJoStands.NPCs
             {
                 npc.StrikeNPC((int)(npc.damage * 0.7f), 6f, -npc.direction);
             }
-            if (target.GetModPlayer<MyPlayer>().vampire)
+            if (target.GetModPlayer<VampirePlayer>().vampire)
             {
                 npc.AddBuff(BuffID.Frostburn, 240);
             }
@@ -565,6 +580,19 @@ namespace JoJoStands.NPCs
             if (forceDeath)
             {
                 npc.lifeRegen = -4;
+            }
+        }
+
+        public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
+        {
+            if (JoJoStandsWorld.VampiricNight)
+            {
+                pool.Clear();
+                pool.Add(NPCID.Zombie, SpawnCondition.OverworldNightMonster.Chance);
+                pool.Add(NPCID.BloodZombie, SpawnCondition.OverworldNightMonster.Chance);
+                pool.Add(mod.NPCType("Doobie"), 0.05f);
+                pool.Add(mod.NPCType("WangChan"), 0.05f);
+                pool.Add(mod.NPCType("JackTheRipper"), 0.05f);
             }
         }
     }

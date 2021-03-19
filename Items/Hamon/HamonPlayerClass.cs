@@ -9,6 +9,7 @@ using Terraria.GameInput;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.ID;
+using JoJoStands.Items.Vampire;
 
 namespace JoJoStands.Items.Hamon
 {
@@ -109,7 +110,7 @@ namespace JoJoStands.Items.Hamon
 
         public override void PreUpdate()
         {
-            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (NPC.downedBoss1)      //It's written this way so that by the time it gets to the bottom it would have the actual Hamon Level
             {
                 hamonLevel = 1;
@@ -198,7 +199,7 @@ namespace JoJoStands.Items.Hamon
                 maxHamon *= 2;
                 maxHamonCounter = 120;
             }
-            if (Mplayer.vampire)
+            if (vPlayer.vampire)
             {
                 amountOfHamon = 0;
                 hamonIncreaseCounter = 0;
@@ -210,7 +211,7 @@ namespace JoJoStands.Items.Hamon
                     hamonIncreaseBonus += hamonSkillLevels[PassiveHamonRegenBoost];
                 }
 
-                if (!Mplayer.vampire && player.breath == player.breathMax && amountOfHamon <= 60)       //in general, to increase Hamon while it can still be increased, no speeding up or decreasing
+                if (!vPlayer.vampire && player.breath == player.breathMax && amountOfHamon <= 60)       //in general, to increase Hamon while it can still be increased, no speeding up or decreasing
                 {
                     if (player.velocity.X == 0f)
                     {

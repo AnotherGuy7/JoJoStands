@@ -16,7 +16,7 @@ namespace JoJoStands.Items.Armor
         public override void SetDefaults()
         {
             item.width = 30;
-            item.height = 44; ;
+            item.height = 44;
             item.value = Item.buyPrice(silver: 5);
             item.rare = ItemRarityID.Green;
             item.defense = 1;

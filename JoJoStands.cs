@@ -156,6 +156,9 @@ namespace JoJoStands
                 Ref<Effect> redShader = new Ref<Effect>(GetEffect("Effects/RedEffect"));
                 Filters.Scene["RedEffect"] = new Filter(new ScreenShaderData(redShader, "RedEffect"), EffectPriority.VeryHigh);
                 Filters.Scene["RedEffect"].Load();
+                Ref<Effect> colorChangeShader = new Ref<Effect>(GetEffect("Effects/ColorChangeEffect"));
+                Filters.Scene["ColorChangeEffect"] = new Filter(new ScreenShaderData(colorChangeShader, "ColorChangeEffect"), EffectPriority.VeryHigh);
+                Filters.Scene["ColorChangeEffect"].Load();
                 Ref<Effect> voidGradientShader = new Ref<Effect>(GetEffect("Effects/VoidBarGradient"));
                 GameShaders.Misc["JoJoStandsVoidGradient"] = new MiscShaderData(voidGradientShader, "VoidBarGradient");
 

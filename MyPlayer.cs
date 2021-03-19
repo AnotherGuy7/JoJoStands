@@ -31,6 +31,8 @@ namespace JoJoStands
         public static float HamonBarPositionY;
         public static float soundVolume;
         public static bool spawningOtherStands = false;     //this is used for the extra stands like FanStands so that those can spawn
+        public static bool ColorChangeEffects = false;
+        public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
         public static StandSearchType standSearchType = StandSearchType.Bosses;
 
         public int goldenSpinCounter = 0;
@@ -46,7 +48,7 @@ namespace JoJoStands
         public int tuskActNumber = 0;
         public int equippedTuskAct = 0;
         public int tuskShootCooldown = 0;
-        public int TimestopEffectDurationTimer = 0;
+        public int timestopEffectDurationTimer = 0;
         public int sexPistolsLeft = 6;
         public int sexPistolsTier = 0;
         public int gratefulDeadTier = 0;
@@ -96,7 +98,6 @@ namespace JoJoStands
         public bool phantomLeggingsEquipped = false;
         public bool usedEctoPearl = false;
         public bool receivedArrowShard = false;
-        public bool dyingVampire = false;
         public bool creamExposedMode = false;
         public bool creamVoidMode = false;
         public bool creamNormalToExposed = false;
@@ -115,7 +116,6 @@ namespace JoJoStands
         public bool BitesTheDust = false;
         public bool poseMode = false;
         public bool controllingAerosmith = false;
-        public bool vampire;
         public bool canRevertFromKQBTD = false;
         public bool showingCBLayer = false;     //this is a bool that's needed to sync so that the Century Boy layer shows up for other clients in Multiplayer
         //public bool dyingVampire = false;
@@ -142,6 +142,16 @@ namespace JoJoStands
             Farthest,
             LeastHealth,
             MostHealth
+        }
+
+        public enum ColorChangeStyle
+        {
+            None,
+            NormalToLightGreen,
+            NormalToBlue,
+            NormalToPurple,
+            NormalToRed,
+            NormalToDarkBlue
         }
 
         public override void ResetEffects()
@@ -487,13 +497,13 @@ namespace JoJoStands
             }
             if (!Main.dedServ)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside
             {
-                if (TimestopEffectDurationTimer > 0)
+                if (timestopEffectDurationTimer > 0)
                 {
-                    if (TimestopEffectDurationTimer >= 15 && !Filters.Scene["TimestopEffectShader"].IsActive() && TimestopEffects)
+                    if (timestopEffectDurationTimer >= 15 && !Filters.Scene["TimestopEffectShader"].IsActive() && TimestopEffects)
                     {
                         Filters.Scene.Activate("TimestopEffectShader");
                     }
-                    if (TimestopEffectDurationTimer == 14)
+                    if (timestopEffectDurationTimer == 14)
                     {
                         Filters.Scene["TimestopEffectShader"].Deactivate();
                         if (!Filters.Scene["GreyscaleEffect"].IsActive())
@@ -501,7 +511,7 @@ namespace JoJoStands
                             Filters.Scene.Activate("GreyscaleEffect");
                         }
                     }
-                    TimestopEffectDurationTimer--;
+                    timestopEffectDurationTimer--;
                 }
                 if (!TheWorldEffect)
                 {
@@ -564,6 +574,12 @@ namespace JoJoStands
                 {
                     Filters.Scene["RedEffect"].Deactivate();
                 }
+                if (JoJoStandsWorld.VampiricNight && !Filters.Scene["ColorChangeEffect"].IsActive())
+                {
+                    Filters.Scene.Activate("ColorChangeEffect");
+                    var shader = Filters.Scene["ColorChangeEffect"].GetShader();
+                    shader.UseProgress((int)ColorChangeStyle.NormalToLightGreen);
+                }
             }
             if (controllingAerosmith)
             {
@@ -591,6 +607,7 @@ namespace JoJoStands
             if (poseMode)
             {
                 poseDuration--;
+                JoJoStandsWorld.VampiricNight = true;
             }
             if (poseMode && (poseDuration <= 0 || player.velocity != Vector2.Zero) && !Main.mouseLeft && !Main.mouseRight)
             {
@@ -1523,22 +1540,6 @@ namespace JoJoStands
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)        //already only runs for melee weapons
         {
-            if (vampire && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
-            {
-                int newDamage = damage / 4;
-                if (newDamage < player.statLifeMax - player.statLife)
-                {
-                    player.statLife += newDamage;
-                    player.HealEffect(newDamage, true);
-                }
-                if (newDamage >= player.statLifeMax - player.statLife)
-                {
-                    int healthReduction = player.statLifeMax - player.statLife;
-                    int healingAmount = newDamage - healthReduction;
-                    player.statLife += healingAmount;
-                    player.HealEffect(healingAmount, true);
-                }
-            }
             if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
             {
                 player.AddBuff(BuffID.ShadowDodge, 30 * 60);
@@ -1548,22 +1549,6 @@ namespace JoJoStands
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
-            if (vampire && proj.type == mod.ProjectileType("Fists") && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
-            {
-                int newDamage = damage / 4;
-                if (newDamage < player.statLifeMax - player.statLife)
-                {
-                    player.statLife += newDamage;
-                    player.HealEffect(newDamage, true);
-                }
-                if (newDamage >= player.statLifeMax - player.statLife)
-                {
-                    int healthReduction = player.statLifeMax - player.statLife;
-                    int healingAmount = newDamage - healthReduction;
-                    player.statLife += healingAmount;
-                    player.HealEffect(healingAmount, true);
-                }
-            }
             if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
             {
                 player.AddBuff(BuffID.ShadowDodge, 30 * 60);
@@ -1662,25 +1647,6 @@ namespace JoJoStands
             ZoneViralMeteorite = flags[0];
         }
 
-        public override void UpdateBadLifeRegen()
-        {
-            if (vampire)
-            {
-                if (player.lifeRegen > 0)
-                {
-                    player.lifeRegen = 0;
-                }
-                if (player.lifeRegenTime > 0)
-                {
-                    player.lifeRegenTime = 0;
-                }
-                if (player.lifeRegenCount > 0)
-                {
-                    player.lifeRegenCount = 0;
-                }
-            }
-        }
-
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] > 0)
@@ -1739,41 +1705,8 @@ namespace JoJoStands
                 return false;
             }
 
-            if (vampire && !dyingVampire)
-            {
-                dyingVampire = true;
-                player.AddBuff(mod.BuffType("DyingVampire"), 60);
-                player.statLife = 50;
-                return false;
-            }
-            if (dyingVampire)
-            {
-                player.ClearBuff(mod.BuffType("DyingVampire"));
-                dyingVampire = false;
-            }
 
-            if (player.ZoneSkyHeight && vampire)
-            {
-                int karsText = Main.rand.Next(0, 3);
-                if (karsText == 0)
-                {
-                    damageSource = PlayerDeathReason.ByCustomReason(player.name + " couldn't to become a bird in time and has frozen in space... then eventually stopped thinking...");
-                }
-                else if (karsText == 1)
-                {
-                    damageSource = PlayerDeathReason.ByCustomReason(player.name + " was unable to change directions in time... then eventually stopped thinking...");
-                }
-                else if (karsText == 2 && player.Male)
-                {
-                    damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though he wished for death, he was unable to die... then " + player.name + " eventually stopped thinking");
-                }
-                else if (karsText == 2 && !player.Male)
-                {
-                    damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though she wished for death, she was unable to die... then " + player.name + " eventually stopped thinking");
-                }
-            }
             StandOut = false;
-            vampire = false;
             revived = false;
             return true;
         }
@@ -2169,18 +2102,6 @@ namespace JoJoStands
                     {
                         layers[i].visible = false;
                     }
-                }
-                if (dyingVampire)
-                {
-                    PlayerLayer.Legs.visible = false;
-                    PlayerLayer.Body.visible = false;
-                    PlayerLayer.Skin.visible = false;
-                    PlayerLayer.Arms.visible = false;
-                    PlayerLayer.HeldItem.visible = false;
-                    PlayerLayer.ShieldAcc.visible = false;
-                    PlayerLayer.ShoeAcc.visible = false;
-                    PlayerLayer.BalloonAcc.visible = false;
-                    PlayerLayer.Wings.visible = false;
                 }
             }
 

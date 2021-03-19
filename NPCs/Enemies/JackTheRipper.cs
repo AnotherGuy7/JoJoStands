@@ -476,5 +476,15 @@ namespace JoJoStands.NPCs.Enemies
             }
             npc.frame.Y = frame * frameHeight;
         }
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            float chance = 0f;
+            if (JoJoStandsWorld.VampiricNight)
+            {
+                chance = 0.01f;
+            }
+            return chance;
+        }
     }
 }

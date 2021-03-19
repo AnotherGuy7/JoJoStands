@@ -1,3 +1,4 @@
+using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -22,6 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public float npcDistance = 0f;
         public float mouseToPlayerDistance = 0f;
         public Vector2 savedPosition = Vector2.Zero;
+        private bool touchedNPC = false;
         public bool touchedTile = false;
         public int timeAfterTouch = 0;
         public int explosionTimer = 0;
@@ -71,27 +73,79 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 {
                     StayBehind();
                 }
-                if (Main.mouseRight && shootCount <= 0 && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && shootCount <= 0 && timeAfterTouch <= 0 && projectile.owner == Main.myPlayer)
                 {
+                    shootCount += 5;
                     Main.mouseLeft = false;
                     attackFrames = false;
                     normalFrames = false;
-                    if (Collision.SolidCollision(Main.MouseWorld, 1, 1) && mouseToPlayerDistance < maxAltDistance && timeAfterTouch <= 0 && !touchedTile)
+
+                    if (!touchedNPC && !touchedTile)
                     {
-                        timeAfterTouch = 60;
-                        savedPosition = Main.MouseWorld;
-                        touchedTile = true;
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
+                        if (mouseToPlayerDistance < maxAltDistance)
+                        {
+                            bool foundNPCTarget = false;
+                            for (int n = 0; n < Main.maxNPCs; n++)
+                            {
+                                NPC npc = Main.npc[n];
+                                if (npc.active)
+                                {
+                                    if (npc.Distance(Main.MouseWorld) <= (npc.width / 2f) + 20f)
+                                    {
+                                        touchedNPC = true;
+                                        timeAfterTouch = 60;
+                                        foundNPCTarget = true;
+                                        npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByKillerQueen = true;
+                                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!foundNPCTarget)
+                            {
+                                if (Collision.SolidCollision(Main.MouseWorld, 1, 1) && !touchedTile)
+                                {
+                                    touchedTile = true;
+                                    timeAfterTouch = 60;
+                                    savedPosition = Main.MouseWorld;
+                                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
+                                }
+                            }
+                        }
                     }
-                    if (timeAfterTouch <= 0 && touchedTile)
+                    else
                     {
-                        secondaryAbilityFrames = true;
-                        int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, player.whoAmI);
-                        Main.projectile[projectile].friendly = true;
-                        Main.projectile[projectile].timeLeft = 2;
-                        Main.projectile[projectile].netUpdate = true;
-                        touchedTile = false;
-                        savedPosition = Vector2.Zero;
+                        if (touchedNPC)
+                        {
+                            for (int n = 0; n < Main.maxNPCs; n++)
+                            {
+                                NPC npc = Main.npc[n];
+                                if (npc.active)
+                                {
+                                    JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>();
+                                    if (jojoNPC.taggedByKillerQueen)
+                                    {
+                                        touchedNPC = false;
+                                        int projectile = Projectile.NewProjectile(npc.position, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, player.whoAmI);
+                                        Main.projectile[projectile].friendly = true;
+                                        Main.projectile[projectile].timeLeft = 2;
+                                        Main.projectile[projectile].netUpdate = true;
+                                        jojoNPC.taggedByKillerQueen = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (touchedTile)
+                        {
+                            touchedTile = false;
+                            secondaryAbilityFrames = true;
+                            int projectile = Projectile.NewProjectile(savedPosition, Vector2.Zero, ProjectileID.GrenadeIII, (int)(altDamage * modPlayer.standDamageBoosts), 50f, player.whoAmI);
+                            Main.projectile[projectile].friendly = true;
+                            Main.projectile[projectile].timeLeft = 2;
+                            Main.projectile[projectile].netUpdate = true;
+                            savedPosition = Vector2.Zero;
+                        }
                     }
                 }
                 else

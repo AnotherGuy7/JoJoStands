@@ -1,3 +1,4 @@
+using JoJoStands.Items.Vampire;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -19,7 +20,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (!buried && WorldGen.SolidTile((int)player.position.X / 16, ((int)player.position.Y / 16) + 4))
             {
                 player.position.Y += 10f;
@@ -42,8 +43,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.maxRunSpeed = 0f;
             player.moveSpeed = 0f;
 
-            mPlayer.dyingVampire = true;
-            mPlayer.vampire = true;
+            vPlayer.dyingVampire = true;
+            vPlayer.vampire = true;
             player.buffTime[buffIndex] = 2;
 
             if (player.whoAmI == Main.myPlayer)

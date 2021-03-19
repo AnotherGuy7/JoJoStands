@@ -76,6 +76,11 @@ namespace JoJoStands
         [Tooltip("Volume of barrage sounds")]
         public float soundVolume;
 
+        [DefaultValue(true)]
+        [Label("Color Change Effects")]
+        [Tooltip("Determiens whether or not you want to see the world color changes.")]
+        public bool ColorChangeEffects;
+
         public override void OnChanged()        //couldn't use Player player = Main.LocalPlayer cause it wasn't set to an instance of an object
         {
             MyPlayer.RangeIndicatorAlpha = RangeIndicatorVisibility;
@@ -93,6 +98,7 @@ namespace JoJoStands
             HamonPlayer.HamonEffects = HamonEffects;
             UI.HamonBarState.changedInConfig = true;
             UI.HamonBarState.sizeMode = HamonBarSize;
+            MyPlayer.ColorChangeEffects = ColorChangeEffects;
             MyPlayer.standSearchType = StandSearchType;
             if (JoJoStands.JoJoStandsSounds == null)
             {

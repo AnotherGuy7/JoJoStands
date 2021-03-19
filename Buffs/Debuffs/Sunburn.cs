@@ -1,3 +1,4 @@
+using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.ModLoader;
  
@@ -15,13 +16,26 @@ namespace JoJoStands.Buffs.Debuffs
  
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.lifeRegen > 0)
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            if (!vPlayer.weakenedSunBurning)
             {
-                player.lifeRegen = 0;
+                if (player.lifeRegen > 0)
+                {
+                    player.lifeRegen = 0;
+                }
+                player.lifeRegenTime = 0;
+                player.lifeRegen -= 60;     //losing 30 health
+                player.moveSpeed *= 0.5f;
             }
-            player.lifeRegenTime = 0;
-            player.lifeRegen -= 60;     //losing 30 health
-            player.moveSpeed *= 0.5f;
+            else
+            {
+                if (player.lifeRegen > 0)
+                {
+                    player.lifeRegen = 0;
+                }
+                player.lifeRegenTime = 60;
+                player.lifeRegen -= 10;     //losing 30 health
+            }
 
             if (Main.rand.Next(0, 2) == 0)
                 Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
