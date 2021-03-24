@@ -105,6 +105,7 @@ namespace JoJoStands
         public bool creamAnimationReverse = false;
         public bool creamNormalToVoid = false;
         public bool doobiesskullEquipped = false;
+        public bool blackUmbrellaEquipped = false;
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -170,6 +171,7 @@ namespace JoJoStands
             phantomChestplateEquipped = false;
             phantomLeggingsEquipped = false;
             doobiesskullEquipped = false;
+            blackUmbrellaEquipped = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -396,7 +398,7 @@ namespace JoJoStands
         {
             StandSlot = new UIItemSlot(Vector2.Zero, hoverText: "Enter Stand Here", scaleToInventory: true);
             StandSlot.BackOpacity = .8f;
-            StandSlot.Item = new Item();
+            StandSlot.Item = new Terraria.Item();
             StandSlot.Item.SetDefaults(0);
 
             StandDyeSlot = new UIItemSlot(StandSlot.Position - new Vector2(60f, 0f), 52, context: ItemSlot.Context.EquipDye, "Enter Dye Here", scaleToInventory: true);
@@ -2059,6 +2061,30 @@ namespace JoJoStands
             }
         });
 
+        public static readonly PlayerLayer BlackUmbrellaLayer = new PlayerLayer("JoJoStands", "Black Umbrella Layer", PlayerLayer.Head, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            Mod mod = ModLoader.GetMod("JoJoStands");
+            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && modPlayer.blackUmbrellaEquipped)
+            {
+                Texture2D texture = mod.GetTexture("Extras/UmbrellaHat");
+                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
+                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
+                int drawY = (int)(drawInfo.position.Y - Main.screenPosition.Y) - 1;
+                SpriteEffects effects = SpriteEffects.None;
+                if (drawPlayer.direction == -1)
+                {
+                    effects = SpriteEffects.FlipHorizontally;
+                }
+                Vector2 offset = new Vector2(0f, 0f);
+                Vector2 pos = new Vector2(drawX, drawY) + offset;
+
+                DrawData data = new DrawData(texture, pos, null, Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, effects, 0);
+                Main.playerDrawData.Add(data);
+            }
+        });
+
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
             if (player.dead || (player.mount.Type != -1))
@@ -2074,6 +2100,7 @@ namespace JoJoStands
                 PhantomChestplateGlowmask.visible = false;
                 PhantomArmsGlowmask.visible = false;
                 PhantomLeggingsGlowmask.visible = false;
+                BlackUmbrellaLayer.visible = false;
             }
             else
             {
@@ -2088,6 +2115,7 @@ namespace JoJoStands
                 PhantomChestplateGlowmask.visible = phantomChestplateEquipped;
                 PhantomArmsGlowmask.visible = phantomChestplateEquipped;
                 PhantomLeggingsGlowmask.visible = phantomLeggingsEquipped;
+                blackUmbrellaEquipped = blackUmbrellaEquipped;
 
                 if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] != 0)
                 {
@@ -2111,6 +2139,7 @@ namespace JoJoStands
                 layers.Insert(headLayer + 1, PhantomHoodLongGlowmask);
                 layers.Insert(headLayer + 1, PhantomHoodNeutralGlowmask);
                 layers.Insert(headLayer + 1, PhantomHoodShortGlowmask);
+                layers.Insert(headLayer + 1, BlackUmbrellaLayer);
             }
             int bodyLayer = layers.FindIndex(l => l == PlayerLayer.Body);
             if (bodyLayer > -1)

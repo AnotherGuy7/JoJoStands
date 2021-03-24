@@ -55,6 +55,23 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             player.velocity.X *= 0.5f;
+
+            if (target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
+            {
+                int newDamage = damage / 4;
+                if (newDamage < player.statLifeMax - player.statLife)
+                {
+                    player.statLife += newDamage;
+                    player.HealEffect(newDamage, true);
+                }
+                if (newDamage >= player.statLifeMax - player.statLife)
+                {
+                    int healthReduction = player.statLifeMax - player.statLife;
+                    int healingAmount = newDamage - healthReduction;
+                    player.statLife += healingAmount;
+                    player.HealEffect(healingAmount, true);
+                }
+            }
         }
     }
 }

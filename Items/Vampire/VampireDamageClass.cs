@@ -29,5 +29,15 @@ namespace JoJoStands.Items.Vampire
                 tooltip.text = splitText.First() + " Vampiric " + splitText.Last();
             }
         }
+
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
+        {
+            mult *= player.GetModPlayer<VampirePlayer>().vampiricDamageMultiplier;
+        }
+
+        public override void GetWeaponKnockback(Player player, ref float knockback)
+        {
+            knockback *= player.GetModPlayer<VampirePlayer>().vampiricKnockbackMultiplier;
+        }
     }
 }

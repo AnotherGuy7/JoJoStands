@@ -54,7 +54,7 @@ namespace JoJoStands.Items.Vampire
 			}
 			if (!Main.mouseLeft && lungeChargeTimer > 0 && useCool <= 0)
             {
-				useCool += 40 + (20 * (lungeChargeTimer / 30));
+				useCool += item.useTime + (20 * (lungeChargeTimer / 30));
 				int multiplier = lungeChargeTimer / 60;
 				if (multiplier == 0)
                 {
@@ -145,7 +145,8 @@ namespace JoJoStands.Items.Vampire
 
         public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
+			VampirePlayer vPlayer = Main.player[item.owner].GetModPlayer<VampirePlayer>();
+			VampiricItemRecipe recipe = new VampiricItemRecipe(mod, vPlayer.zombie);
 			recipe.SetResult(this);
             recipe.AddRecipe();
         }

@@ -280,7 +280,70 @@ namespace JoJoStands.NPCs.TownNPCs
                 {
 					Main.npcChatText = "Due to your annoying persistence, Whitesnake has reached its maximum potential. Now, keep it away from me, I mean it.";
                 }
-
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("SilverChariotT1"))
+                {
+                    Main.npcChatText = "Ah, Silver Chariot. Another Stand that belonged to a friend of mine, a fellow Stardust Crusader. You think my hair is ridiculous, you should have seen his. Anyways, Silver Chariot wields a rapier with lightning speed and deadly precision.\nAt the moment, Silver Chariot can only stab with its rapier. However underwhelming that may sound, the stabs come out extremely quick, almost invisible to the eye.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("SilverChariotT2"))
+                {
+                    Main.npcChatText = "On top of your stabbing flurry, Silver Chariot can now deflect projectiles back at your enemy with {whatever right click is}, almost like a game of baseball, or tennis.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("SilverChariotT3"))
+                {
+                    Main.npcChatText = "At this stage, Silver Chariot can now shed its armor to become so fast it can create afterimages. What this does for you is allows Silver Chariot to move significantly faster, but you also take more damage. Use this carefully.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("SilverChariotFinal"))
+                {
+                    Main.npcChatText = "Silver Chariot has reached the highest peak it can. The power of this stand alone rivals legendary swordsmen of old, and your toughest enemies. I wonder what would happen if this Stand were to change form or something.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("CreamT1"))
+                {
+                    Main.npcChatText = "That Stand makes me… nervous, and I cannot tell you why. Anyways, uh, Cream can harness the void and erase things, almost like that blockhead friend of Josuke’s.\nJust like the rest, Cream cannot do very much at this stage. It can throw a mean chop though, and it can cause enemies to lose their organs. Literally.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("CreamT2"))
+                {
+                    Main.npcChatText = "Cream has gained the ability to, well, eat you. Specifically, you can enter the void by pressing {specialabilitykey} and riding in Cream like an interdimensional ball of sorts. To control Cream in this state, use {attack} to guide it. The downsides are that you have a limited time in there, indicated by the Void Gauge, and you are effectively blind while in the void, so know where your target is beforehand. Once that time runs out, Cream pukes you out. I am being serious.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("CreamT3"))
+                {
+                    Main.npcChatText = "As a way to quickly refill your Void Gauge, Cream can consume you and fly about. On top of that, your void offensive now lasts longer, and once it runs out, Cream automatically enters that defensive recharge state instead of being puked out.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("CreamFinal"))
+                {
+                    Main.npcChatText = "At this final point, Cream can stay in the void for even longer. Once it runs out, you will still enter the recharge state rather than being puked out. Actually, I wonder if you could use this to fire yourself like a cannon… questions for another day.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("HermitPurpleT1"))
+                {
+                    Main.npcChatText = "Never in my life did I think I would see another Stand user with Hermit Purple. That Stand is special because the last owner I knew, my gramps, was a Hamon user as well, which makes it unique in that he used both in tandem. I wonder, do you have that ability?\nAt the moment, Hermit Purple is nothing more than a mass of vines. You can certainly hit people with them. It will certainly be more effective than getting mauled.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("HermitPurpleT2"))
+                {
+                    Main.npcChatText = "Well, it seems my initial question has been answered. Hermit Purple coils around you, and anything that opts to attack you will be met with quite the burn. On top of that, now you can grab and pull enemies into their eventual doom by 'clicking and holding right-click'.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("HermitPurpleT3"))
+                {
+                    Main.npcChatText = "Your connection to Hermit Purple grows like rampant vines; now you can press " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + " to overcharge Hermit Purple with Hamon and power up your passive counter. The next three things that hit you will not only feel the burn, but they will take damage and get knocked away.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("HermitPurpleFinal"))
+                {
+                    Main.npcChatText = "Hermit Purple is as strong as it will ever be, thanks to you. I know that the old man would never have come close, as long as he lived. I still have no idea how he managed to survive as long as he did.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("BadCompanyT1"))
+                {
+                    Main.npcChatText = "I don't know yet.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("BadCompanyT2"))
+                {
+                    Main.npcChatText = "I don't know yet.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("BadCompanyT3"))
+                {
+                    Main.npcChatText = "I don't know yet.";
+                }
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("BadCompanyT4"))
+                {
+                    Main.npcChatText = "I don't know yet.";
+                }
 
                 if (mPlayer.StandSlot.Item.IsAir)
                 {

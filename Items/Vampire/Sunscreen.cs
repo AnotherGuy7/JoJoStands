@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace JoJoStands.Items.Hamon
+namespace JoJoStands.Items.Vampire
 {
     public class Sunscreen : ModItem
     {

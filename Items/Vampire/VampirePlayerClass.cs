@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Vampire
         public bool zombie = false;
         public bool vampire = false;
         public bool perfectBeing = false;
+        public bool anyMaskForm = false;
         public bool dyingVampire = false;
 
         public bool weakenedSunBurning = false;
@@ -18,6 +19,9 @@ namespace JoJoStands.Items.Vampire
         public bool enemyIgnoreItemInUse = false;
         public bool stopOnHitNPC = false;
         public int enemyToIgnoreDamageFromIndex = -1;
+
+        public float vampiricDamageMultiplier = 1f;
+        public float vampiricKnockbackMultiplier = 1f;
 
         public override void ResetEffects()
         {
@@ -29,6 +33,7 @@ namespace JoJoStands.Items.Vampire
             zombie = false;
             vampire = false;
             perfectBeing = false;
+            anyMaskForm = false;
 
             if (!enemyIgnoreItemInUse)
             {
@@ -38,15 +43,18 @@ namespace JoJoStands.Items.Vampire
             stopOnHitNPC = false;
             weakenedSunBurning = false;
             noSunBurning = false;
+            vampiricDamageMultiplier = 1f;
+            vampiricKnockbackMultiplier = 1f;
         }
 
         public override void PreUpdate()
         {
+            anyMaskForm = zombie || vampire || perfectBeing;
             if (zombie || vampire)
             {
                 if (!noSunBurning)
                 {
-                    Vector3 lightLevel = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16).ToVector3();     //from projectile aiStyle 67, line 21033 in Projectile.cs
+                    Vector3 lightLevel = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16).ToVector3();
                     if (lightLevel.Length() > 1.3f && Main.dayTime && player.ZoneOverworldHeight && Main.tile[(int)player.Center.X / 16, (int)player.Center.Y / 16].wall == 0)
                     {
                         player.AddBuff(mod.BuffType("Sunburn"), 2, true);
@@ -57,7 +65,7 @@ namespace JoJoStands.Items.Vampire
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
-            if (vampire && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
+            if (anyMaskForm && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
                 int newDamage = damage / 4;
                 if (newDamage < player.statLifeMax - player.statLife)
@@ -77,7 +85,7 @@ namespace JoJoStands.Items.Vampire
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
-            if (vampire && proj.type == mod.ProjectileType("Fists") && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
+            if (anyMaskForm && proj.type == mod.ProjectileType("Fists") && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
                 int newDamage = damage / 4;
                 if (newDamage < player.statLifeMax - player.statLife)

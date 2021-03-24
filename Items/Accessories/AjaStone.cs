@@ -16,11 +16,11 @@ namespace JoJoStands.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 100;
-            item.height = 8;
+            item.width = 40;
+            item.height = 40;
             item.maxStack = 1;
-            item.value = Item.buyPrice(0, 50, 0, 0);
-            item.rare = 6;
+            item.value = Item.buyPrice(gold: 25);
+            item.rare = ItemRarityID.LightPurple;
             item.accessory = true;
         }
 
@@ -54,6 +54,7 @@ namespace JoJoStands.Items.Accessories
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.LargeRuby, 1);
+            recipe.AddIngredient(mod.ItemType("SunDroplet"), 12);
             recipe.AddIngredient(ItemID.SunStone, 1);
             recipe.SetResult(this);
             recipe.AddRecipe();

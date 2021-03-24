@@ -3,7 +3,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 
-namespace JoJoStands.Items.Hamon
+namespace JoJoStands.Items.Vampire
 {
 	public class UltraSunscreen : ModItem
 	{
