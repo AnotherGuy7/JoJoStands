@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override float maxDistance => 98f;
         public override int punchDamage => 138;
         public override int punchTime => 9;
-        public override int halfStandHeight => 34;
+        public override int halfStandHeight => 37;
         public override float fistWhoAmI => 3f;
         public override float tierNumber => 5f;
         public override int standOffset => 28;
@@ -124,7 +124,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     {
                         if (!saidAbility)
                         {
-                            Main.NewText("Ability: Scorpion Rock");
+                            Main.NewText("Ability: Scorpion Beam");
                             saidAbility = true;
                         }
                     }
@@ -176,7 +176,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         }
                         shootVel.Normalize();
                         shootVel *= 12f;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("GoldExperienceRock"), newPunchDamage + 11, 6f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("GoldExperienceBeam"), newPunchDamage + 11, 6f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                         player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(3));
@@ -228,11 +228,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 8, newPunchTime, true);
+                AnimationStates(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Secondary")
             {
-                AnimationStates(animationName, 17, 11, true);
+                AnimationStates(animationName, 11, 11, true);
             }
             if (animationName == "Pose")
             {

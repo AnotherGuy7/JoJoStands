@@ -1536,6 +1536,8 @@ namespace JoJoStands
         public int AbilityCooldownTime(int seconds) //Sometimes we won't want to reduce the cooldown so that's why reduction defaults to 0
         {
             int timeToReturn;
+            if (standCooldownReduction >= 0.5f)
+                standCooldownReduction = 0.5f;
             timeToReturn = (int)((seconds * 60f) * (1f - standCooldownReduction));
             return timeToReturn;
         }

@@ -112,6 +112,11 @@ namespace JoJoStands.Items.Vampire
             return true;
         }
 
+        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        {
+            enemyToIgnoreDamageFromIndex = -1;
+        }
+
         public override void UpdateBadLifeRegen()
         {
             if (zombie || vampire)

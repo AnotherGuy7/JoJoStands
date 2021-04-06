@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -19,8 +20,8 @@ namespace JoJoStands.Items.Vampire
             item.damage = 51;
             item.width = 28;
             item.height = 30;
-            item.useTime = 30;
-            item.useAnimation = 30;
+            item.useTime = 20;
+            item.useAnimation = 20;
             item.consumable = false;
             item.noUseGraphic = true;
             item.maxStack = 1;
@@ -45,8 +46,9 @@ namespace JoJoStands.Items.Vampire
 
         public override void HoldItem(Player player)
         {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            if (player.whoAmI != item.owner || !vPlayer.vampire)
+            if (player.whoAmI != item.owner || !vPlayer.vampire || (mPlayer.StandOut && !mPlayer.StandAutoMode))
                 return;
 
             if (useCool > 0)
@@ -136,7 +138,7 @@ namespace JoJoStands.Items.Vampire
                     else
                     {
                         NPC heldNPC = Main.npc[heldEnemyIndex];
-                        if (!heldNPC.active)
+                        if (vPlayer.enemyToIgnoreDamageFromIndex == -1 || !heldNPC.active)
                         {
                             vPlayer.enemyToIgnoreDamageFromIndex = -1;
                             enemyBeingGrabbed = false;
@@ -162,7 +164,7 @@ namespace JoJoStands.Items.Vampire
                         heldEnemyTimer++;
                         if (heldEnemyTimer >= 60)
                         {
-                            int suckAmount = (int)(heldNPC.lifeMax * 0.05f);
+                            int suckAmount = (int)(heldNPC.lifeMax * 0.08f);
                             player.HealEffect(suckAmount);
                             player.statLife += suckAmount;
                             heldNPC.StrikeNPC(suckAmount, 0f, player.direction);
@@ -229,6 +231,13 @@ namespace JoJoStands.Items.Vampire
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            TooltipLine tooltip = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
+            if (tooltip != null)
+            {
+                string[] splitText = tooltip.text.Split(' ');
+                tooltip.text = splitText.First() + " Vampiric " + splitText.Last();
+            }
+
             string rightClickMessage = "";
             if (abilityNumber == GrabAndSuck)
             {

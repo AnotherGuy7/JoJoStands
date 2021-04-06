@@ -36,8 +36,9 @@ namespace JoJoStands.Items.Vampire
 
         public override void HoldItem(Player player)
         {
+			MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 			VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-			if (player.whoAmI != item.owner || !vPlayer.zombie)
+			if (player.whoAmI != item.owner || !vPlayer.zombie || (mPlayer.StandOut && !mPlayer.StandAutoMode))
 				return;
 
 			if (useCool > 0)
@@ -99,7 +100,7 @@ namespace JoJoStands.Items.Vampire
 				else
                 {
 					NPC heldNPC = Main.npc[heldEnemyIndex];
-					if (!heldNPC.active)
+					if (vPlayer.enemyToIgnoreDamageFromIndex == -1 || !heldNPC.active)
 					{
 						vPlayer.enemyToIgnoreDamageFromIndex = -1;
 						enemyBeingGrabbed = false;

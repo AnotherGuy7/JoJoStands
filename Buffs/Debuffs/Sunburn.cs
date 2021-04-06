@@ -33,8 +33,8 @@ namespace JoJoStands.Buffs.Debuffs
                 {
                     player.lifeRegen = 0;
                 }
-                player.lifeRegenTime = 60;
-                player.lifeRegen -= 10;     //losing 30 health
+                player.lifeRegenTime = 160;
+                player.lifeRegen -= 10;
             }
 
             if (Main.rand.Next(0, 2) == 0)

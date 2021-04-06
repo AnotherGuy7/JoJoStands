@@ -9,6 +9,7 @@ namespace JoJoStands.Items.Hamon
     // Any class that we wish to be using our custom damage class will derive from this class, instead of ModItem
     public abstract class HamonDamageClass : ModItem        //the main reason this class was made was so that things like the aja stone and hamon increasing items can affect all of them at once.
     {
+        public virtual bool affectedByHamonScaling { get; } = false;
         // Custom items should override this to set their defaults
         public virtual void SafeSetDefaults()
         {}
@@ -78,6 +79,11 @@ namespace JoJoStands.Items.Hamon
         public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)       //when making the base damage values, make sure they are around the 10-20's cause otherwise, at MoonLord they'd go over 250
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            mult *= hamonPlayer.hamonDamageBoosts;
+
+            if (!affectedByHamonScaling)
+                return;
+
             if (NPC.downedBoss1)    //eye of cthulu
             {
                 add += 1.15f;     //this is 14%
@@ -122,7 +128,6 @@ namespace JoJoStands.Items.Hamon
             {
                 mult *= 1.5f;
             }
-            mult *= hamonPlayer.hamonDamageBoosts;
         }
 
         public override void GetWeaponKnockback(Player player, ref float knockback)

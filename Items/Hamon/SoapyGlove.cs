@@ -15,15 +15,15 @@ namespace JoJoStands.Items.Hamon
 
 		public override void SafeSetDefaults()
 		{
-			item.damage = 15;
+			item.damage = 9;
 			item.width = 30;
-			item.height = 8;        //hitbox's width and height when the item is in the world
-			item.useTime = 8;
-			item.useAnimation = 8;
-			item.useStyle = 3;
+			item.height = 30;        //hitbox's width and height when the item is in the world
+			item.useTime = 24;
+			item.useAnimation = 24;
+			item.useStyle = ItemUseStyleID.Stabbing;
 			item.maxStack = 1;
-			item.knockBack = 1;
-			item.rare = 6;
+			item.knockBack = 1f;
+			item.rare = ItemRarityID.LightPurple;
             item.UseSound = SoundID.Item85;
             item.shoot = mod.ProjectileType("HamonBubble");
 			item.shootSpeed = 4f;
@@ -39,36 +39,24 @@ namespace JoJoStands.Items.Hamon
         public override bool CanUseItem(Player player)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 3)
-            {
-                item.damage = 17;
-                item.width = 30;
-                item.height = 18;
-                item.useTime = 12;
-                item.useAnimation = 12;
-                item.useStyle = 3;
-                item.knockBack = 3;
-                item.autoReuse = false;
-                item.shoot = mod.ProjectileType("CutterHamonBubble");
-                item.shootSpeed = 7f;
-                hamonPlayer.amountOfHamon -= 3;
-            }
-            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon <= 3)
-            {
+
+            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon < 3)
                 return false;
+
+            if (player.altFunctionUse != 2 && hamonPlayer.amountOfHamon < 1)
+                return false;
+
+            if (player.altFunctionUse == 2)
+            {
+                item.damage = 15;
+                item.knockBack = 8f;
+                item.shoot = mod.ProjectileType("CutterHamonBubble");
             }
             if (player.altFunctionUse != 2)
             {
-                item.damage = 15;
-                item.width = 30;
-                item.height = 30;
-                item.useTime = 8;
-                item.useAnimation = 8;
-                item.useStyle = 3;
-                item.knockBack = 1;
-                item.autoReuse = false;
+                item.damage = 9;
+                item.knockBack = 1f;
                 item.shoot = mod.ProjectileType("HamonBubble");
-                item.shootSpeed = 10f;
             }
             return true;
         }
@@ -76,18 +64,25 @@ namespace JoJoStands.Items.Hamon
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            if (player.statLife <= 50)
+            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 3)
             {
-                item.shoot = mod.ProjectileType("HamonBloodBubble");
-                item.shootSpeed = 5f;
-                item.damage += 24;
-                hamonPlayer.amountOfHamon -= 1;
+                damage += 6;
+                type = mod.ProjectileType("CutterHamonBubble");
+                knockBack = 8f;
             }
-            else
+            if (player.altFunctionUse != 2 && hamonPlayer.amountOfHamon > 1)
             {
-                item.shoot = mod.ProjectileType("HamonBubble");
-                item.shootSpeed = 30f;
-                hamonPlayer.amountOfHamon -= 1;
+                if (player.statLife <= (player.statLifeMax * 0.05f))
+                {
+                    damage += 24;
+                    type = mod.ProjectileType("HamonBloodBubble");
+                    hamonPlayer.amountOfHamon -= 1;
+                }
+                else
+                {
+                    type = mod.ProjectileType("HamonBubble");
+                    hamonPlayer.amountOfHamon -= 1;
+                }
             }
             return true;
         }
@@ -95,16 +90,6 @@ namespace JoJoStands.Items.Hamon
         public override void HoldItem(Player player)
         {
             ChargeHamon();
-            player.waterWalk = true;
-            player.waterWalk2 = true;
-        }
-
-        public override void ModifyHitPvp(Player player, Player target, ref int damage, ref bool crit)
-        {
-            if (target.HasBuff(mod.BuffType("Vampire")))
-            {
-                target.AddBuff(mod.BuffType("Sunburn"), 80);
-            }
         }
 
         public override void AddRecipes()

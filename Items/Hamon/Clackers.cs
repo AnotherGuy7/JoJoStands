@@ -43,18 +43,13 @@ namespace JoJoStands.Items.Hamon
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 5)
             {
+                damage = (int)(damage * 1.5f);
+                speedX *= 1.25f;
+                speedY *= 1.25f;
                 type = mod.ProjectileType("ChargedClackerProjectile");
                 hamonPlayer.amountOfHamon -= 5;
             }
             return true;
-        }
-
-        public override void ModifyHitPvp(Player player, Player target, ref int damage, ref bool crit)
-        {
-            if (target.HasBuff(mod.BuffType("Vampire")))
-            {
-                target.AddBuff(mod.BuffType("Sunburn"), 120);
-            }
         }
 
         public override bool AltFunctionUse(Player player)
@@ -65,32 +60,15 @@ namespace JoJoStands.Items.Hamon
         public override bool CanUseItem(Player player)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 5)
-            {
-                item.damage *= (int)1.5;
-                item.useTime = 60;
-                item.useAnimation = 60;
-                item.useStyle = 5;
-                item.knockBack = 2f;
-                item.shootSpeed = 12f;
-                item.useTurn = true;
-                item.noWet = true;
-            }
-            if (player.altFunctionUse != 2 || (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon <= 4))
-            {
-                item.damage = 16;
-                item.useTime = 60;
-                item.useAnimation = 60;
-                item.useStyle = 5;
-                item.knockBack = 2f;
-                item.shoot = mod.ProjectileType("ClackerProjectile");
-                item.shootSpeed = 8f;
-                item.useTurn = true;
-                item.noWet = true;
-            }
+
             if ((player.ownedProjectileCounts[mod.ProjectileType("ClackerProjectile")] >= 1) || (player.ownedProjectileCounts[mod.ProjectileType("ChargedClackerProjectile")] >= 1))
             {
                 return false;
+            }
+
+            if (player.altFunctionUse != 2 || (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon <= 4))
+            {
+                item.shoot = mod.ProjectileType("ClackerProjectile");
             }
             return true;
         }

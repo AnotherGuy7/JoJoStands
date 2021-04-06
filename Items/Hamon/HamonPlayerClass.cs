@@ -33,12 +33,14 @@ namespace JoJoStands.Items.Hamon
         public int defensiveHamonLayerFrameCounter = 0;
         public int defensiveAuraDownDoublePressTimer = 0;
         public int hamonOverChargeSpecialDoublePressTimer = 0;
+        public int enemyToIgnoreDamageFromIndex = -1;
 
         public bool passiveRegen = false;
         public bool chargingHamon = false;
         public bool ajaStoneEquipped = false;
         public bool defensiveHamonAuraActive = false;
         public bool defensiveAuraCanPressDownAgain = false;
+        public bool usingItemThatIgnoresEnemyDamage = false;
 
         //Adjustable skills
         public const int HamonSkillsLimit = 18;
@@ -69,9 +71,15 @@ namespace JoJoStands.Items.Hamon
             hamonDamageBoosts = 1f;
             hamonKnockbackBoosts = 1f;
             hamonIncreaseBonus = 0;
+            if (!usingItemThatIgnoresEnemyDamage)
+            {
+                enemyToIgnoreDamageFromIndex = -1;
+            }
 
+            usingItemThatIgnoresEnemyDamage = false;
             chargingHamon = false;
             passiveRegen = true;
+            ajaStoneEquipped = false;
         }
 
         public override void OnEnterWorld(Player player)
@@ -409,6 +417,11 @@ namespace JoJoStands.Items.Hamon
             }
         }
 
+        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        {
+            enemyToIgnoreDamageFromIndex = -1;
+        }
+
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
         {
             if (defensiveHamonAuraActive)
@@ -421,6 +434,15 @@ namespace JoJoStands.Items.Hamon
 					npc.AddBuff(mod.BuffType("Sunburn"), 80 * hamonSkillLevels[DefensiveHamonAura]);
 				}
             }
+        }
+
+        public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
+        {
+            if (npc.whoAmI == enemyToIgnoreDamageFromIndex)
+            {
+                return false;
+            }
+            return true;
         }
 
         public override TagCompound Save()
