@@ -45,9 +45,18 @@ namespace JoJoStands.Items.Hamon
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Silk, 8);
-            recipe.AddIngredient(ItemID.PinkGel, 3);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 4);
+            recipe.AddIngredient(ItemID.WhiteString);
+            recipe.AddIngredient(ItemID.IronBar, 5);
+			recipe.AddIngredient(ItemID.Silk, 2);
+            recipe.AddIngredient(mod.ItemType("SunDroplet"), 7);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+			recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.WhiteString);
+            recipe.AddIngredient(ItemID.LeadBar, 5);
+			recipe.AddIngredient(ItemID.Silk, 2);
+            recipe.AddIngredient(mod.ItemType("SunDroplet"), 7);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

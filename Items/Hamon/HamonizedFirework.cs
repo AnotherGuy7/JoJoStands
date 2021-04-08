@@ -10,7 +10,7 @@ namespace JoJoStands.Items.Hamon
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Punch enemies with these Hamon-Infused silk gloves!\nRequires 7 or more Hamon to be used.\nExperience goes up after each conquer...\nSpecial: Hamon Breathing");
+            Tooltip.SetDefault("Light these Hamon-Infused fireworks and burn your enemies!\nRequires 7 or more Hamon to be used.\nExperience goes up after each conquer...\nSpecial: Hamon Breathing");
         }
 
         public override void SetDefaults()
@@ -36,7 +36,7 @@ namespace JoJoStands.Items.Hamon
 
         public override bool CanUseItem(Player player)
         {
-            return player.GetModPlayer<HamonPlayer>().amountOfHamon > 7;
+            return player.GetModPlayer<HamonPlayer>().amountOfHamon >= 7;
         }
 
         public override bool UseItem(Player player)

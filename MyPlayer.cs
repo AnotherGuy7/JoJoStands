@@ -576,12 +576,19 @@ namespace JoJoStands
                 {
                     Filters.Scene["RedEffect"].Deactivate();
                 }
-                if (JoJoStandsWorld.VampiricNight && !Filters.Scene["ColorChangeEffect"].IsActive())
-                {
-                    Filters.Scene.Activate("ColorChangeEffect");
-                    var shader = Filters.Scene["ColorChangeEffect"].GetShader();
-                    shader.UseProgress((int)ColorChangeStyle.NormalToLightGreen);
-                }
+				if (ColorChangeEffects)
+				{
+					if (JoJoStandsWorld.VampiricNight && !Filters.Scene["ColorChangeEffect"].IsActive())
+					{
+						Filters.Scene.Activate("ColorChangeEffect");
+						var shader = Filters.Scene["ColorChangeEffect"].GetShader();
+						shader.UseProgress((int)ColorChangeStyle.NormalToLightGreen);
+					}
+				}
+				if (!JoJoStandsWorld.VampiricNight && Filters.Scene["ColorChangeEffect"].IsActive() || (Filters.Scene["ColorChangeEffect"].IsActive() && ColorChangeEffects))
+				{
+					Filters.Scene["ColorChangeEffect"].Deactivate();
+				}
             }
             if (controllingAerosmith)
             {
@@ -609,7 +616,6 @@ namespace JoJoStands
             if (poseMode)
             {
                 poseDuration--;
-                JoJoStandsWorld.VampiricNight = true;
             }
             if (poseMode && (poseDuration <= 0 || player.velocity != Vector2.Zero) && !Main.mouseLeft && !Main.mouseRight)
             {
