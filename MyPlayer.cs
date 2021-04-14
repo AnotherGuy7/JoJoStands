@@ -106,6 +106,7 @@ namespace JoJoStands
         public bool creamNormalToVoid = false;
         public bool doobiesskullEquipped = false;
         public bool blackUmbrellaEquipped = false;
+        public bool Shirtless = false;      //hot shirtless daddy silver chariot *moan*
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -172,6 +173,7 @@ namespace JoJoStands
             phantomLeggingsEquipped = false;
             doobiesskullEquipped = false;
             blackUmbrellaEquipped = false;
+            Shirtless = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -485,6 +487,13 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
+            if (Shirtless)
+            {
+                player.statDefense = (int)(player.statDefense * 0.6f);
+                standDamageBoosts += 0.8f;
+                standSpeedBoosts += 2;
+                standCritChangeBoosts += 25f;
+            }
             if (ActivationTimer > 0)
             {
                 ActivationTimer--;
