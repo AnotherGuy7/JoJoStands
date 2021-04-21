@@ -929,6 +929,13 @@ namespace JoJoStands
                             Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(72 * standDamageBoosts), 0f, player.whoAmI);
                         }
                     }
+                    if (player.controlHook)
+                    {
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 9f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleHook"), 0, 0f, player.whoAmI);
+                    }
                 }
             }
             if (creamTier != 0)        //Cream stuff
@@ -988,21 +995,39 @@ namespace JoJoStands
                 {
                     if (badCompanyTier == 3)
                     {
+                        for (int i = 0; i < 12; i++)
+                        {
+                            Vector2 position = player.Center + new Vector2(((Main.screenWidth / 2f) + Main.rand.Next(0, 100 + 1)) * -player.direction, -Main.screenHeight / 3f);
+                            Vector2 velocity = new Vector2(6f * player.direction, 0f);
+                            Projectile.NewProjectile(position, velocity, mod.ProjectileType("BadCompanyBomberPlane"), 0, 10f, player.whoAmI, badCompanyTier);
+                        }
                         player.AddBuff(mod.BuffType("Reinforcements"), 120 * 60);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(6 * 60));       //6 minutes
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(5 * 60));       //6 minutes
                     }
                     if (badCompanyTier == 4)
                     {
+                        for (int i = 0; i < 24; i++)
+                        {
+                            Vector2 position = player.Center + new Vector2(((Main.screenWidth / 2f) + Main.rand.Next(0, 100 + 1)) * -player.direction, -Main.screenHeight / 3f);
+                            Vector2 velocity = new Vector2(6f * player.direction, 0f);
+                            Projectile.NewProjectile(position, velocity, mod.ProjectileType("BadCompanyBomberPlane"), 0, 10f, player.whoAmI, badCompanyTier);
+                        }
                         player.AddBuff(mod.BuffType("Reinforcements"), 180 * 60);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(5 * 60));       //5 minutes
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(3 * 60));       //5 minutes
                     }
                 }
 
                 bool recalculateArmy = false;
-                int unitsLeftCalculation = maxBadCompanyUnits - (badCompanySoldiers + (badCompanyTanks * 4) + (badCompanyChoppers * 6));
-                if (unitsLeftCalculation != badCompanyUnitsLeft)
+                int amountOfSoldiers = player.ownedProjectileCounts[mod.ProjectileType("BadCompanySoldier")];
+                int amountOfTanks = player.ownedProjectileCounts[mod.ProjectileType("BadCompanyTank")];
+                int amountOfChoppers = player.ownedProjectileCounts[mod.ProjectileType("BadCompanyChopper")];
+
+                int unitsLeft = maxBadCompanyUnits - (amountOfSoldiers + (amountOfTanks * 4) + (amountOfChoppers * 6));
+                int expectedUnitsLeft = maxBadCompanyUnits - (badCompanySoldiers + (badCompanyTanks * 4) + (badCompanyChoppers * 6));
+                if (unitsLeft != expectedUnitsLeft)
                     recalculateArmy = true;
-                badCompanyUnitsLeft = unitsLeftCalculation;
+                badCompanyUnitsLeft = expectedUnitsLeft;
+
                 int troopMult = 1;
                 if (player.HasBuff(mod.BuffType("Reinforcements")))
                 {
@@ -1011,21 +1036,21 @@ namespace JoJoStands
                 }
                 if (recalculateArmy)
                 {
-                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanySoldier")] < badCompanySoldiers * troopMult)     //Adding troops
+                    if (amountOfSoldiers < badCompanySoldiers * troopMult)     //Adding troops
                     {
                         Projectile.NewProjectile(player.Center, player.velocity, mod.ProjectileType("BadCompanySoldier"), 0, 0f, player.whoAmI, badCompanyTier);
                     }
-                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanyTank")] < badCompanyTanks * troopMult)
+                    if (amountOfTanks < badCompanyTanks * troopMult)
                     {
                         Projectile.NewProjectile(player.Center, player.velocity, mod.ProjectileType("BadCompanyTank"), 0, 0f, player.whoAmI, badCompanyTier);
                     }
-                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanyChopper")] < badCompanyChoppers * troopMult)
+                    if (amountOfChoppers < badCompanyChoppers * troopMult)
                     {
                         Projectile.NewProjectile(player.Center, player.velocity, mod.ProjectileType("BadCompanyChopper"), 0, 0f, player.whoAmI, badCompanyTier);
                     }
 
                     //Removing troops
-                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanySoldier")] > badCompanySoldiers * troopMult)
+                    if (amountOfSoldiers > badCompanySoldiers * troopMult)
                     {
                         for (int p = 0; p < Main.maxProjectiles; p++)
                         {
@@ -1037,7 +1062,7 @@ namespace JoJoStands
                             }
                         }
                     }
-                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanyTank")] > badCompanyTanks * troopMult)
+                    if (amountOfTanks > badCompanyTanks * troopMult)
                     {
                         for (int p = 0; p < Main.maxProjectiles; p++)
                         {
@@ -1049,7 +1074,7 @@ namespace JoJoStands
                             }
                         }
                     }
-                    if (player.ownedProjectileCounts[mod.ProjectileType("BadCompanyChopper")] > badCompanyChoppers * troopMult)
+                    if (amountOfChoppers > badCompanyChoppers * troopMult)
                     {
                         for (int p = 0; p < Main.maxProjectiles; p++)
                         {

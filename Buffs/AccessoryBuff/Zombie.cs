@@ -9,7 +9,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
     {
         public override void SetDefaults()
         {
-			DisplayName.SetDefault("Vampire");
+			DisplayName.SetDefault("Zombie");
             Description.SetDefault("You are now a zombie!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;

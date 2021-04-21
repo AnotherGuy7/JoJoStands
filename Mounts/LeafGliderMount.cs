@@ -124,6 +124,7 @@ namespace JoJoStands.Mounts
 		public override void Dismount(Player player, ref bool skipDust)
         {
 			usageTimer = 0;
+			player.GetModPlayer<HamonPlayer>().leafGliderGenerationTimer = 0;
         }
 	}
 }

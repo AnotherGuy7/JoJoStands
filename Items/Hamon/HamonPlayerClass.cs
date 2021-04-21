@@ -33,6 +33,7 @@ namespace JoJoStands.Items.Hamon
         public int defensiveHamonLayerFrameCounter = 0;
         public int defensiveAuraDownDoublePressTimer = 0;
         public int hamonOverChargeSpecialDoublePressTimer = 0;
+        public int leafGliderGenerationTimer = 0;
         public int enemyToIgnoreDamageFromIndex = -1;
 
         public bool passiveRegen = false;
@@ -307,6 +308,14 @@ namespace JoJoStands.Items.Hamon
                 {
                     player.waterWalk2 = true;
                 }
+                if (!player.wet && Main.tile[(int)player.position.X / 16, ((int)player.position.Y / 16) + 3].liquid >= 50)
+                {
+                    if (Main.rand.Next(0, 2) == 0)
+                    {
+                        int dustIndex = Dust.NewDust(player.position + new Vector2(0f, player.height), player.width, 2, 169, Scale: Main.rand.NextFloat(1f, 2f + 1f));
+                        Main.dust[dustIndex].noGravity = true;
+                    }
+                }
             }
         }
 
@@ -357,8 +366,24 @@ namespace JoJoStands.Items.Hamon
                 {
                     if (player.controlUp && amountOfHamon > 5 && player.mount.Type == -1 && !WorldGen.SolidTile((int)(player.Center.X / 16f), (int)(player.Center.Y / 16f) + 2))
                     {
-                        player.mount.SetMount(mod.MountType("LeafGliderMount"), player);
+                        if (leafGliderGenerationTimer < 15)
+                        {
+                            leafGliderGenerationTimer++;
+                            for (int i = 0; i < 2; i++)
+                            {
+                                Vector2 position = player.Center - new Vector2(0f, player.height);
+                                Dust.NewDust(position, player.width, player.height / 2, 3);
+                            }
+                        }
+                        else
+                        {
+                            player.mount.SetMount(mod.MountType("LeafGliderMount"), player);
+                        }
                     }
+                }
+                else
+                {
+                    leafGliderGenerationTimer = 0;
                 }
                 /*int targetCoordX = (int)(player.position.X / 16f);
                 int targetCoordY = (int)(player.position.X / 16f);

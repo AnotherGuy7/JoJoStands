@@ -37,6 +37,10 @@ namespace JoJoStands.Buffs.AccessoryBuff
             {
                 player.ClearBuff(mod.BuffType("Vampire"));
             }
+            if (player.HasBuff(mod.BuffType("Zombie")))
+            {
+                player.ClearBuff(mod.BuffType("Zombie"));
+            }
         }
     }
 }

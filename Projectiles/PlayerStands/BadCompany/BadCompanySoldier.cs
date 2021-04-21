@@ -68,6 +68,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     projectileDamage = 40;
                     shootTime = 60;
                 }
+                shootTime += Main.rand.Next(0, 15 + 1);
                 speedRandom = Main.rand.NextFloat(-0.05f, 0.05f);
                 setStats = true;
             }
@@ -180,7 +181,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             directionToPlayer.Normalize();
             directionToPlayer *= player.moveSpeed;
             float xDist = Math.Abs(player.position.X - projectile.position.X);
-            if (!WorldGen.SolidTile((int)(player.position.X / 16f), (int)(player.position.Y / 16f) + 4))
+            if (!WorldGen.SolidTile((int)(projectile.position.X / 16f), (int)(projectile.position.Y / 16f) + 2))
             {
                 projectile.ai[0] = 1f;
             }

@@ -12,7 +12,6 @@ namespace JoJoStands.Projectiles
             projectile.width = 30;
             projectile.height = 30;
             projectile.aiStyle = 0;
-            projectile.ranged = true;
             projectile.timeLeft = 600;
             projectile.friendly = true;
             projectile.tileCollide = true;
@@ -29,7 +28,8 @@ namespace JoJoStands.Projectiles
             }
             if (hamonPlayer.amountOfHamon >= 1)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 169, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+                int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+                Main.dust[dustIndex].noGravity = true;;
             }
             else
             {

@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -11,7 +12,6 @@ namespace JoJoStands.Projectiles
             projectile.width = 24;
             projectile.height = 28;
             projectile.aiStyle = 0;
-            projectile.ranged = true;
             projectile.timeLeft = 1800;
             projectile.friendly = true;
             projectile.tileCollide = true;
@@ -32,6 +32,14 @@ namespace JoJoStands.Projectiles
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
             {
                 crit = true;
+            }
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            for (int i = 0; i < Main.rand.Next(2, 6); i++)
+            {
+                Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Lead, -projectile.velocity.X * 0.2f, -projectile.velocity.Y * 0.2f);
             }
         }
     }

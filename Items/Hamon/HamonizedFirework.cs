@@ -10,7 +10,7 @@ namespace JoJoStands.Items.Hamon
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Light these Hamon-Infused fireworks and burn your enemies!\nRequires 7 or more Hamon to be used.\nExperience goes up after each conquer...\nSpecial: Hamon Breathing");
+            Tooltip.SetDefault("Light these Hamon-Infused fireworks and burn your enemies!\nRequires 7 or more Hamon to be used.\nSpecial: Hamon Breathing");
         }
 
         public override void SetDefaults()

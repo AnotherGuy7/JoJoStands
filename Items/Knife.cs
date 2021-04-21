@@ -24,8 +24,8 @@ namespace JoJoStands.Items
             item.noUseGraphic = true;
 			item.maxStack = 999;
 			item.knockBack = 1f;
-			item.value = Item.buyPrice(0, 0, 0, 75);
-			item.rare = 1;
+			item.value = Item.buyPrice(copper: 75);
+			item.rare = ItemRarityID.Blue;
 			item.autoReuse = true;
             item.shoot = mod.ProjectileType("Knife");
 			item.shootSpeed = 25f;

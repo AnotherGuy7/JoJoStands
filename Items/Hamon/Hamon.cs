@@ -58,6 +58,11 @@ namespace JoJoStands.Items.Hamon
                 if (Main.mouseRight && hamonPlayer.amountOfHamon >= hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing])
                 {
                     healTimer++;
+                    if (Main.rand.Next(0, 2) == 0)
+                    {
+                        int dustIndex = Dust.NewDust(player.position, player.width, player.height, 169, SpeedY: Main.rand.NextFloat(-0.6f, 1f));
+                        Main.dust[dustIndex].noGravity = true;
+                    }
                 }
                 if (healTimer >= (4 * 60) / hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing])
                 {

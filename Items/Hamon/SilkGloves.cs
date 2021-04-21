@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Hamon
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Left-click to punch enemies with these Hamon-Infused silk gloves and right-click to grab enemies and inject Hamon into them!\nExperience goes up after each conquer...\nSpecial: Hamon Breathing");
+            Tooltip.SetDefault("Left-click to punch enemies with these Hamon-Infused silk gloves and right-click to grab enemies and inject Hamon into them!\nSpecial: Hamon Breathing");
         }
 
         public override void SafeSetDefaults()

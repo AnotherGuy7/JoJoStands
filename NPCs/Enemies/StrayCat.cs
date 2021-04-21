@@ -48,6 +48,7 @@ namespace JoJoStands.NPCs.Enemies
             {
                 npc.ai[0] = 209f;
                 npc.ai[1] = 1f;
+                npc.netUpdate = true;
             }
             if (npc.ai[1] == 1f)
             {

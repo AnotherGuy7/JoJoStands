@@ -1,5 +1,3 @@
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,7 +8,7 @@ namespace JoJoStands.Items.Hamon
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Swing around and throw this hamon-infused Kunai!\nExperience goes up after each conquer...\nSpecial: Hamon Breathing");
+            Tooltip.SetDefault("Swing around and throw this hamon-infused Kunai!\nSpecial: Hamon Breathing");
         }
 
         public override void SafeSetDefaults()
@@ -47,15 +45,15 @@ namespace JoJoStands.Items.Hamon
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.WhiteString);
             recipe.AddIngredient(ItemID.IronBar, 5);
-			recipe.AddIngredient(ItemID.Silk, 2);
+            recipe.AddIngredient(ItemID.Silk, 2);
             recipe.AddIngredient(mod.ItemType("SunDroplet"), 7);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
-			recipe = new ModRecipe(mod);
+            recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.WhiteString);
             recipe.AddIngredient(ItemID.LeadBar, 5);
-			recipe.AddIngredient(ItemID.Silk, 2);
+            recipe.AddIngredient(ItemID.Silk, 2);
             recipe.AddIngredient(mod.ItemType("SunDroplet"), 7);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
