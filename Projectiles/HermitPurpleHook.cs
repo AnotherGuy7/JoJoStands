@@ -22,7 +22,7 @@ namespace JoJoStands.Projectiles
             projectile.timeLeft = 300;
             projectile.penetrate = -1;
             projectile.friendly = true;
-            projectile.tileCollide = true;
+            projectile.tileCollide = false;
             projectile.ignoreWater = true;
         }
 
@@ -59,6 +59,12 @@ namespace JoJoStands.Projectiles
                 {
                     distanceLimitReached = true;
                 }
+
+                if (Collision.SolidCollision(projectile.Center, 1, 1))
+                {
+                    attachedToTile = true;
+                    projectile.velocity = Vector2.Zero;
+                }
             }
             if (distanceLimitReached)
             {
@@ -81,18 +87,17 @@ namespace JoJoStands.Projectiles
 
             if (attachedToTile)
             {
+                if (player.controlJump)
+                {
+                    projectile.Kill();
+                    return;
+                }
+
                 Vector2 velocity = projectile.position - player.position;
                 velocity.Normalize();
                 velocity *= 9f;
                 player.velocity = velocity;
             }
-        }
-
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            attachedToTile = true;
-            projectile.velocity = Vector2.Zero;
-            return false;
         }
 
         private Texture2D hermitPurpleVinePartTexture;

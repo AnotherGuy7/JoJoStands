@@ -23,6 +23,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override int standType => 1;
 
         public int updateTimer = 0;
+        private bool flickFrames = false;
+        private bool resetFrame = false;
 
         public override void AI()
         {
@@ -61,20 +63,53 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 {
                     StayBehindWithAbility();
                 }
-                if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0 && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && shootCount <= 0 && projectile.owner == Main.myPlayer)
                 {
-                    shootCount += 120;
-                    Main.mouseLeft = false;
-                    Vector2 shootVel = Main.MouseWorld - projectile.Center;
-                    if (shootVel == Vector2.Zero)
+                    int bulletIndex = GetPlayerAmmo(player);
+                    if (bulletIndex != -1)
                     {
-                        shootVel = new Vector2(0f, 1f);
+                        Item bulletItem = player.inventory[bulletIndex];
+                        if (bulletItem.shoot != -1)
+                        {
+                            flickFrames = true;
+                            if (projectile.frame == 1)
+                            {
+                                shootCount += 120;
+                                Main.mouseLeft = false;
+                                Main.PlaySound(2, (int)player.position.X, (int)player.position.Y,  41, 1f, 2.8f);
+                                Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                                if (shootVel == Vector2.Zero)
+                                {
+                                    shootVel = new Vector2(0f, 1f);
+                                }
+                                shootVel.Normalize();
+                                shootVel *= 12f;
+                                int proj = Projectile.NewProjectile(projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * modPlayer.standDamageBoosts), bulletItem.knockBack, projectile.owner, projectile.whoAmI);
+                                Main.projectile[proj].netUpdate = true;
+                                projectile.netUpdate = true;
+                                if (bulletItem.Name.Contains("Bullet"))
+                                    player.ConsumeItem(bulletItem.type);
+                            }
+                        }
                     }
-                    shootVel.Normalize();
-                    shootVel *= shootSpeed;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("StarFinger"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, projectile.owner, projectile.whoAmI);
-                    Main.projectile[proj].netUpdate = true;
-                    projectile.netUpdate = true;
+                    else
+                    {
+                        if (player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
+                        {
+                            shootCount += 120;
+                            Main.mouseLeft = false;
+                            Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                            {
+                                shootVel = new Vector2(0f, 1f);
+                            }
+                            shootVel.Normalize();
+                            shootVel *= shootSpeed;
+                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StarFinger"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, projectile.owner, projectile.whoAmI);
+                            Main.projectile[proj].netUpdate = true;
+                            projectile.netUpdate = true;
+                        }
+                    }
                 }
                 if (player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] != 0)
                 {
@@ -89,6 +124,34 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             }
         }
 
+        private int GetPlayerAmmo(Player player)
+        {
+            int ammoType = -1;
+            for (int i = 54; i < 58; i++)       //These are the 4 ammo slots
+            {
+                Item item = player.inventory[i];
+                
+                if (item.ammo == AmmoID.Bullet && item.stack > 0)
+                {
+                    ammoType = i;
+                    break;
+                }
+            }
+            if (ammoType == -1)
+            {
+                for (int i = 0; i < 54; i++)       //The rest of the inventory
+                {
+                    Item item = player.inventory[i];
+                    if (item.ammo == AmmoID.Bullet && item.stack > 0)
+                    {
+                        ammoType = i;
+                        break;
+                    }
+                }
+            }
+            return ammoType;
+        }
+
         public override void SelectAnimation()
         {
             if (attackFrames)
@@ -100,6 +163,24 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
+            }
+            if (flickFrames)
+            {
+                if (!resetFrame)
+                {
+                    projectile.frame = 0;
+                    projectile.frameCounter = 0;
+                    resetFrame = true;
+                }
+                normalFrames = false;
+                attackFrames = false;
+                PlayAnimation("Flick");
+                if (resetFrame && currentAnimationDone)
+                {
+                    normalFrames = true;
+                    flickFrames = false;
+                    resetFrame = false;
+                }
             }
             if (secondaryAbilityFrames)
             {
@@ -132,6 +213,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             if (animationName == "Attack")
             {
                 AnimationStates(animationName, 4, newPunchTime, true);
+            }
+            if (animationName == "Flick")
+            {
+                AnimationStates(animationName, 4, 10, false);
             }
             if (animationName == "Pose")
             {

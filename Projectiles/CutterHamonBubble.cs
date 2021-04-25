@@ -21,15 +21,17 @@ namespace JoJoStands.Projectiles
             projectile.maxPenetrate = 3;
         }
 
-        public override void AI()       //make them very slightly controllable
+        public override void AI()
         {
             Player player = Main.player[projectile.owner];
             Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
-            hamonLossCounter++;
-            if (projectile.timeLeft <= 550 && Main.mouseRight && hamonPlayer.amountOfHamon >= 1 && player.whoAmI == Main.myPlayer)
+            if (!Main.mouseRight)
             {
-                beingControlled = true;
+                projectile.Kill();
+                return;
             }
+
+            hamonLossCounter++;
             if (beingControlled)
             {
                 hamonLossCounter++;

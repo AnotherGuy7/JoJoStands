@@ -938,11 +938,11 @@ namespace JoJoStands
                             Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(72 * standDamageBoosts), 0f, player.whoAmI);
                         }
                     }
-                    if (player.controlHook)
+                    if (player.controlHook && player.miscEquips[4].IsAir && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleHook")] == 0)       //player.miscEquips[4] is the hook slot
                     {
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
-                        shootVelocity *= 9f;
+                        shootVelocity *= 12f;
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleHook"), 0, 0f, player.whoAmI);
                     }
                 }
@@ -1049,11 +1049,11 @@ namespace JoJoStands
                     {
                         Projectile.NewProjectile(player.Center, player.velocity, mod.ProjectileType("BadCompanySoldier"), 0, 0f, player.whoAmI, badCompanyTier);
                     }
-                    if (amountOfTanks < badCompanyTanks * troopMult)
+                    if (amountOfTanks < badCompanyTanks)
                     {
                         Projectile.NewProjectile(player.Center, player.velocity, mod.ProjectileType("BadCompanyTank"), 0, 0f, player.whoAmI, badCompanyTier);
                     }
-                    if (amountOfChoppers < badCompanyChoppers * troopMult)
+                    if (amountOfChoppers < badCompanyChoppers)
                     {
                         Projectile.NewProjectile(player.Center, player.velocity, mod.ProjectileType("BadCompanyChopper"), 0, 0f, player.whoAmI, badCompanyTier);
                     }
@@ -1071,7 +1071,7 @@ namespace JoJoStands
                             }
                         }
                     }
-                    if (amountOfTanks > badCompanyTanks * troopMult)
+                    if (amountOfTanks > badCompanyTanks)
                     {
                         for (int p = 0; p < Main.maxProjectiles; p++)
                         {
@@ -1083,7 +1083,7 @@ namespace JoJoStands
                             }
                         }
                     }
-                    if (amountOfChoppers > badCompanyChoppers * troopMult)
+                    if (amountOfChoppers > badCompanyChoppers)
                     {
                         for (int p = 0; p < Main.maxProjectiles; p++)
                         {

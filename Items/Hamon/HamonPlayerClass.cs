@@ -278,6 +278,15 @@ namespace JoJoStands.Items.Hamon
             {
                 Main.NewText("Broke; " + learnedHamonSkills.Count);
             }*/
+
+            if (amountOfHamon > 120)
+            {
+                player.AddBuff(mod.BuffType("HamonChargedII"), 2);
+            }
+            else if (amountOfHamon > 60)
+            {
+                player.AddBuff(mod.BuffType("HamonChargedI"), 2);
+            }
         }
 
         public override void MeleeEffects(Item item, Rectangle hitbox)

@@ -59,6 +59,11 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     chopperInaccuracy = 15;
                 }
                 setStats = true;
+
+                for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+                {
+                    Dust.NewDust(projectile.Center, projectile.width, projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+                }
             }
 
             if (!modPlayer.StandAutoMode)

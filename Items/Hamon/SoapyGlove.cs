@@ -40,7 +40,7 @@ namespace JoJoStands.Items.Hamon
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
 
-            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon < 3)
+            if (player.altFunctionUse == 2 && player.ownedProjectileCounts[mod.ProjectileType("CutterHamonBubble")] <= 0 && hamonPlayer.amountOfHamon < 3)
                 return false;
 
             if (player.altFunctionUse != 2 && hamonPlayer.amountOfHamon < 1)

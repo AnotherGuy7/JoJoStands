@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
@@ -13,6 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
         public override int punchDamage => 50;
         public override int punchTime => 8;
+        public override int altDamage => 37;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 0f;
         public override string punchSoundName => "Ora";
@@ -46,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
             if (!modPlayer.StandAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
                 {
                     Punch();
                 }
@@ -57,12 +59,33 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 }
                 if (!attackFrames)
                 {
-                    StayBehind();
+                    StayBehindWithAbility();
+                }
+                if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0 && projectile.owner == Main.myPlayer)
+                {
+                    shootCount += 120;
+                    Main.mouseLeft = false;
+                    Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                    if (shootVel == Vector2.Zero)
+                    {
+                        shootVel = new Vector2(0f, 1f);
+                    }
+                    shootVel.Normalize();
+                    shootVel *= shootSpeed;
+                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("StarFinger"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, projectile.owner, projectile.whoAmI);
+                    Main.projectile[proj].netUpdate = true;
+                    projectile.netUpdate = true;
+                }
+                if (player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] != 0)
+                {
+                    secondaryAbilityFrames = true;
+                    Main.mouseLeft = false;
+                    projectile.netUpdate = true;
                 }
             }
             if (modPlayer.StandAutoMode)
             {
-                BasicPunchAI();
+                PunchAndShootAI(mod.ProjectileType("StarFinger"), shootMax: 1);
             }
         }
 
