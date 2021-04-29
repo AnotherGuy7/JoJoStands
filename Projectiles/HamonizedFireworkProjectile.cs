@@ -32,7 +32,7 @@ namespace JoJoStands.Projectiles
 
             if (projectile.timeLeft % 4 == 0)
             {
-                int dustIndex = Dust.NewDust(projectile.Center, projectile.width, projectile.height, 169);
+                int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169);
                 Main.dust[dustIndex].noGravity = true;
             }
         }
@@ -62,7 +62,7 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            Main.PlaySound(SoundID.Item62);
+            Main.PlaySound(2, (int)projectile.Center.X, (int)projectile.Center.Y, 62, 1f, 1.9f);
         }
     }
 }

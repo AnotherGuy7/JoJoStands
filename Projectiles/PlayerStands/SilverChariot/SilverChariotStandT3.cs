@@ -113,15 +113,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 if (Shirtless)
                 {
-                    if(!player.HasBuff(mod.BuffType("AbilityCooldown")))
+                    if (!player.HasBuff(mod.BuffType("AbilityCooldown")))
                     {
-                        Main.mouseLeft = false;
-                        int proj = Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("SilverChariotAfterImage"), 1, 0f, projectile.owner, tierNumber, tierNumber - 1f);
+                        int proj = Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("SilverChariotAfterImage"), 0, 0f, projectile.owner, tierNumber, tierNumber - 1f);
                         Main.projectile[proj].netUpdate = true;
                         player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(6));
                     }
                 }
-                Main.NewText(Shirtless);
             }
             if (modPlayer.StandAutoMode)
             {
@@ -175,6 +173,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
             if (Main.netMode != NetmodeID.Server)
                 standTexture = mod.GetTexture("Projectiles/PlayerStands/SilverChariot/SilverChariot_" + pathAddition + animationName);
+
             if (!Shirtless)
             {
                 if (animationName == "Idle")

@@ -5,19 +5,19 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 {
     public class SilverChariotAfterImage : StandClass
     {
-        public override void SetDefaults()
-        {
-
-        }
         public override void SetStaticDefaults()
         {
             Main.projPet[projectile.type] = true;
             Main.projFrames[projectile.type] = 10;
+        }
+
+        public override void SetDefaults()
+        {
             projectile.alpha = 127;
         }
 
         public override float maxDistance => 98f;
-        public override int punchDamage => 62;
+        public override int punchDamage => 32;
         public override int punchTime => 7;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 10f;
@@ -47,7 +47,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
+
+            BasicPunchAI();
         }
+
         public override void SelectAnimation()
         {
             if (attackFrames)
@@ -66,6 +69,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 PlayAnimation("Pose");
             }
         }
+
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)

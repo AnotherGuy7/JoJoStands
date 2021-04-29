@@ -26,6 +26,7 @@ namespace JoJoStands.Items
 			item.knockBack = 1f;
 			item.value = Item.buyPrice(copper: 75);
 			item.rare = ItemRarityID.Blue;
+			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
             item.shoot = mod.ProjectileType("Knife");
 			item.shootSpeed = 25f;
