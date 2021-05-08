@@ -1,4 +1,5 @@
 using System;
+using JoJoStands.Items.Vampire;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -54,24 +55,10 @@ namespace JoJoStands.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Player player = Main.player[projectile.owner];
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.velocity.X *= 0.5f;
 
-            if (target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
-            {
-                int newDamage = damage / 4;
-                if (newDamage < player.statLifeMax - player.statLife)
-                {
-                    player.statLife += newDamage;
-                    player.HealEffect(newDamage, true);
-                }
-                if (newDamage >= player.statLifeMax - player.statLife)
-                {
-                    int healthReduction = player.statLifeMax - player.statLife;
-                    int healingAmount = newDamage - healthReduction;
-                    player.statLife += healingAmount;
-                    player.HealEffect(healingAmount, true);
-                }
-            }
+            vPlayer.StealHealthFrom(target, damage);
         }
     }
 }

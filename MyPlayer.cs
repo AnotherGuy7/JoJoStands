@@ -594,7 +594,7 @@ namespace JoJoStands
 						shader.UseProgress((int)ColorChangeStyle.NormalToLightGreen);
 					}
 				}
-				if (!JoJoStandsWorld.VampiricNight && Filters.Scene["ColorChangeEffect"].IsActive() || (Filters.Scene["ColorChangeEffect"].IsActive() && ColorChangeEffects))
+				if (!JoJoStandsWorld.VampiricNight && Filters.Scene["ColorChangeEffect"].IsActive() || (Filters.Scene["ColorChangeEffect"].IsActive() && !ColorChangeEffects))
 				{
 					Filters.Scene["ColorChangeEffect"].Deactivate();
 				}

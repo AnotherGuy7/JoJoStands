@@ -49,7 +49,6 @@ namespace JoJoStands.Items.Hamon
         {
             if (player.whoAmI == item.owner)
             {
-                player.GetModPlayer<HamonPlayer>().amountOfHamon -= 4;
                 player.ConsumeItem(item.type);
             }
             return true;
@@ -67,6 +66,7 @@ namespace JoJoStands.Items.Hamon
             {
                 Projectile.NewProjectile(position, velocity, type, damage, knockBack, player.whoAmI, 0f);
             }
+            player.GetModPlayer<HamonPlayer>().amountOfHamon -= 4;
             return false;
         }
 

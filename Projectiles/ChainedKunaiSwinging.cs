@@ -1,4 +1,5 @@
 using System;
+using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -23,9 +24,12 @@ namespace JoJoStands.Projectiles
             projectile.penetrate = -1;
         }
 
+        private int hamonConsumptionTimer = 0;
+
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (Main.player[projectile.owner].dead)
             {
                 projectile.Kill();
@@ -53,6 +57,13 @@ namespace JoJoStands.Projectiles
                 }
                 int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169);
                 Main.dust[dustIndex].noGravity = true;
+
+                hamonConsumptionTimer++;
+                if (hamonConsumptionTimer > 120)
+                {
+                    hPlayer.amountOfHamon -= 2;
+                    hamonConsumptionTimer = 0;
+                }
             }
             else
             {

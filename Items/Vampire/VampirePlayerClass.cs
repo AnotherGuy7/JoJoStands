@@ -22,6 +22,9 @@ namespace JoJoStands.Items.Vampire
 
         public float vampiricDamageMultiplier = 1f;
         public float vampiricKnockbackMultiplier = 1f;
+        public float lifeStealMultiplier = 1f;
+        public float lifeStealPercentLoss = 0f;
+        public float lifeStealPercentLossTimer = 0;
 
         public override void ResetEffects()
         {
@@ -45,6 +48,7 @@ namespace JoJoStands.Items.Vampire
             noSunBurning = false;
             vampiricDamageMultiplier = 1f;
             vampiricKnockbackMultiplier = 1f;
+            lifeStealMultiplier = 1f;
         }
 
         public override void PreUpdate()
@@ -61,25 +65,25 @@ namespace JoJoStands.Items.Vampire
                     }
                 }
             }
+
+            if (lifeStealPercentLossTimer > 0)
+            {
+                lifeStealPercentLossTimer--;
+            }
+            else
+            {
+                if (lifeStealPercentLoss > 0f)
+                {
+                    lifeStealPercentLoss -= 0.01f;
+                }
+            }
         }
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
             if (anyMaskForm && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
-                int newDamage = damage / 4;
-                if (newDamage < player.statLifeMax - player.statLife)
-                {
-                    player.statLife += newDamage;
-                    player.HealEffect(newDamage, true);
-                }
-                if (newDamage >= player.statLifeMax - player.statLife)
-                {
-                    int healthReduction = player.statLifeMax - player.statLife;
-                    int healingAmount = newDamage - healthReduction;
-                    player.statLife += healingAmount;
-                    player.HealEffect(healingAmount, true);
-                }
+                StealHealthFrom(target, damage);
             }
         }
 
@@ -87,19 +91,33 @@ namespace JoJoStands.Items.Vampire
         {
             if (anyMaskForm && proj.type == mod.ProjectileType("Fists") && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
+                StealHealthFrom(target, damage);
+            }
+        }
+
+        public void StealHealthFrom(NPC target, int damage)
+        {
+            if (target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
+            {
                 int newDamage = damage / 4;
-                if (newDamage < player.statLifeMax - player.statLife)
+                int calculatedLifeSteal = (int)((newDamage * lifeStealMultiplier) * (1f - lifeStealPercentLoss));
+                if (calculatedLifeSteal < player.statLifeMax - player.statLife)
                 {
-                    player.statLife += newDamage;
-                    player.HealEffect(newDamage, true);
+                    player.statLife += calculatedLifeSteal;
+                    player.HealEffect(calculatedLifeSteal, true);
                 }
-                if (newDamage >= player.statLifeMax - player.statLife)
+                if (calculatedLifeSteal >= player.statLifeMax - player.statLife)
                 {
-                    int healthReduction = player.statLifeMax - player.statLife;
-                    int healingAmount = newDamage - healthReduction;
-                    player.statLife += healingAmount;
-                    player.HealEffect(healingAmount, true);
+                    calculatedLifeSteal = player.statLifeMax - player.statLife;
+                    player.statLife += (int)(calculatedLifeSteal);
+                    player.HealEffect(calculatedLifeSteal, true);
                 }
+
+                if (lifeStealPercentLoss < 0.97f)
+                {
+                    lifeStealPercentLoss += 0.03f;
+                }
+                lifeStealPercentLossTimer = 300;
             }
         }
 

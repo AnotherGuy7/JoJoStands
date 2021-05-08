@@ -6,14 +6,11 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
     public class SilverChariotAfterImage : StandClass
     {
         public override void SetStaticDefaults()
-        {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
-        }
+        { }
 
         public override void SetDefaults()
         {
-            projectile.alpha = 127;
+            projectile.alpha = 186;
         }
 
         public override float maxDistance => 98f;

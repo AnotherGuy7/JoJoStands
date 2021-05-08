@@ -41,6 +41,7 @@ namespace JoJoStands
         [Tooltip("Determines whether or not you want abilities to automatically activate, such as Killer Queen's bomb and The World's (Auto Mode) Knives")]
         public bool AutomaticActivations;
 
+        [DefaultValue(100)]
         [Label("Range Indicator Visibility")]
         [Tooltip("Allows you to choose how transparent the Range Indicator is.")]
         public int RangeIndicatorVisibility;

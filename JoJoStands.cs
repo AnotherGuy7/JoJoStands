@@ -215,6 +215,11 @@ namespace JoJoStands
                     music = GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic");
                     priority = MusicPriority.BiomeMedium;
                 }
+                if (JoJoStandsWorld.VampiricNight)
+                {
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/VNight");
+                    priority = MusicPriority.Event;
+                }
             }
         }
 

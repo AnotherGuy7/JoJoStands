@@ -126,10 +126,11 @@ namespace JoJoStands.Items.Vampire
                             NPC npc = Main.npc[n];
                             if (npc.active)
                             {
-                                if (player.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
+                                if (player.Distance(npc.Center) <= 1.6f * 16f && !npc.boss && !npc.immortal && !npc.hide)
                                 {
                                     enemyBeingGrabbed = true;
                                     heldEnemyIndex = npc.whoAmI;
+                                    vPlayer.enemyToIgnoreDamageFromIndex = npc.whoAmI;
                                     break;
                                 }
                             }
@@ -251,14 +252,15 @@ namespace JoJoStands.Items.Vampire
             {
                 rightClickMessage = "hold right-click to spawn zombie minions!";
             }
+            tooltips.Add(tooltip);
+
             TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", "Left-click to lunge and " + rightClickMessage + "\nSpecial: Switch the abilities used for right-click!");
             tooltips.Add(tooltipAddition);
         }
 
         public override void AddRecipes()
         {
-            VampirePlayer vPlayer = Main.player[item.owner].GetModPlayer<VampirePlayer>();
-            VampiricItemRecipe recipe = new VampiricItemRecipe(mod, vPlayer.vampire);
+            VampiricItemRecipe recipe = new VampiricItemRecipe(mod, item.type);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

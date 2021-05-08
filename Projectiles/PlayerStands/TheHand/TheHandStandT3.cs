@@ -94,7 +94,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 if (!SpecialKeyCurrent() && specialTimer != 0)
                 {
                     scrapeFrames = true;
-                    float mouseDistance = Vector2.Distance(player.Center, Main.MouseWorld);
                     if (specialTimer <= 60)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
@@ -121,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         }
                         player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(20));
                     }
-                    if (specialTimer > 60 && mouseDistance <= newMaxDistance * 1.6f)
+                    if (specialTimer > 60)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
                         for (int i = 0; i < Main.maxNPCs; i++)
@@ -176,11 +175,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 distanceToTeleport.Normalize();
                 distanceToTeleport *= (98f + modPlayer.standRangeBoosts) * (chargeTimer / 45f);
                 spriteBatch.Draw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f));
-            }
-            if (MyPlayer.RangeIndicators)
-            {
-                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), newMaxDistance * 1.6f / 150f, SpriteEffects.None, 0);
             }
             if (scrapeFrames)
             {

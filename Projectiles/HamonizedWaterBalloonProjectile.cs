@@ -32,7 +32,7 @@ namespace JoJoStands.Projectiles
                 Main.dust[dustIndex].noGravity = true;
             }
 
-            if (projectile.velocity.Y < 3f)
+            if (projectile.velocity.Y < 6f)
             {
                 projectile.velocity.Y += 0.2f;
             }

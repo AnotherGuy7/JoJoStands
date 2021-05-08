@@ -88,10 +88,11 @@ namespace JoJoStands.Items.Vampire
 						NPC npc = Main.npc[n];
 						if (npc.active)
 						{
-							if (player.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
+							if (player.Distance(npc.Center) <= 1.6f * 16f && !npc.boss && !npc.immortal && !npc.hide)
 							{
 								enemyBeingGrabbed = true;
 								heldEnemyIndex = npc.whoAmI;
+								vPlayer.enemyToIgnoreDamageFromIndex = npc.whoAmI;
 								break;
 							}
 						}
@@ -146,8 +147,7 @@ namespace JoJoStands.Items.Vampire
 
         public override void AddRecipes()
 		{
-			VampirePlayer vPlayer = Main.player[item.owner].GetModPlayer<VampirePlayer>();
-			VampiricItemRecipe recipe = new VampiricItemRecipe(mod, vPlayer.zombie);
+			VampiricItemRecipe recipe = new VampiricItemRecipe(mod, item.type);
 			recipe.SetResult(this);
             recipe.AddRecipe();
         }

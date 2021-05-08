@@ -1,4 +1,5 @@
 using System;
+using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -29,6 +30,7 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (Main.player[projectile.owner].dead)
             {
                 projectile.Kill();
@@ -52,9 +54,10 @@ namespace JoJoStands.Projectiles
 
             if (grabbedNPC != null)
             {
-                if (!grabbedNPC.active || distance > 18f * 16f)
+                if (!grabbedNPC.active || distance > 18f * 16f || !Main.mouseLeft)
                 {
                     living = false;
+                    grabbedNPC = null;
                     return;
                 }
 
@@ -62,10 +65,11 @@ namespace JoJoStands.Projectiles
                 projectile.position = grabbedNPC.Center - new Vector2(projectile.width / 2f, projectile.height / 2f);
 
                 heldNPCTimer++;
-                if (heldNPCTimer >= 80)
+                if (hPlayer.amountOfHamon >= 5 && heldNPCTimer >= 80)
                 {
                     grabbedNPC.StrikeNPC(projectile.damage, 0f, projectile.direction);
                     grabbedNPC.AddBuff(mod.BuffType("Sunburn"), 5 * 60);
+                    hPlayer.amountOfHamon -= 5;
                     heldNPCTimer = 0;
                 }
             }
@@ -99,8 +103,11 @@ namespace JoJoStands.Projectiles
                     projectile.Kill();
                 }
             }
-            int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169);
-            Main.dust[dustIndex].noGravity = true;
+            if (hPlayer.amountOfHamon >= 5)
+            {
+                int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169);
+                Main.dust[dustIndex].noGravity = true;
+            }
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -109,6 +116,14 @@ namespace JoJoStands.Projectiles
             {
                 grabbedNPC = target;
                 alreadyGrabbedNPC = true;
+            }
+        }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (alreadyGrabbedNPC && grabbedNPC != null)
+            {
+                damage = 0;
             }
         }
 

@@ -139,7 +139,7 @@ namespace JoJoStands.NPCs.Enemies
         {
             if (spawnInfo.player.GetModPlayer<MyPlayer>().ZoneViralMeteorite)
             {
-                return 2f;
+                return SpawnCondition.OverworldNightMonster.Chance * 2f;
             }
             else
             {
