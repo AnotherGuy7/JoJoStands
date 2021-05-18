@@ -107,6 +107,7 @@ namespace JoJoStands
         public bool doobiesskullEquipped = false;
         public bool blackUmbrellaEquipped = false;
         public bool Shirtless = false;      //hot shirtless daddy silver chariot *moan*
+        //Ozi is to blame for the comment above.
 
         public bool TheWorldEffect;
         public bool TimeSkipPreEffect;
@@ -487,13 +488,6 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
-            if (Shirtless)
-            {
-                player.statDefense = (int)(player.statDefense * 0.6f);
-                standDamageBoosts += 0.8f;
-                standSpeedBoosts += 2;
-                standCritChangeBoosts += 25f;
-            }
             if (ActivationTimer > 0)
             {
                 ActivationTimer--;
@@ -1103,11 +1097,21 @@ namespace JoJoStands
                 }
             }
 
+            if (Shirtless)
+            {
+                player.statDefense = (int)(player.statDefense * 0.6f);
+                standDamageBoosts += 0.8f;
+                standSpeedBoosts += 2;
+                standCritChangeBoosts += 25f;
+            }
+
             if (revived && !player.HasBuff(mod.BuffType("ArtificialSoul")))
             {
                 player.KillMe(PlayerDeathReason.ByCustomReason(player.name + "'s artificial soul has left him."), player.statLife + 1, player.direction);
                 revived = false;
             }
+
+
         }
 
         public override void PostUpdateMiscEffects()

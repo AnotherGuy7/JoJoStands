@@ -46,6 +46,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual string spawnSoundName { get; } = "";
         public virtual int standType { get; } = 0;
         public virtual Texture2D standTexture { get; set; }
+        public virtual bool useProjectileAlpha { get; } = false;
 
 
         public bool normalFrames = false;       //Much easier to sync animations this way rather than syncing everything about it
@@ -607,6 +608,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (projectile.spriteDirection == 1)
             {
                 effects = SpriteEffects.None;
+            }
+            if (useProjectileAlpha)
+            {
+                drawColor *= projectile.alpha / 255f;
             }
             if (standTexture != null && Main.netMode != NetmodeID.Server)
             {

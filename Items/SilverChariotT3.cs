@@ -5,7 +5,7 @@ namespace JoJoStands.Items
 {
 	public class SilverChariotT3 : StandItemClass
 	{
-		public override int standSpeed => 7;
+		public override int standSpeed => 6;
 		public override int standType => 1;
 
 		public override string Texture
@@ -16,12 +16,12 @@ namespace JoJoStands.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Silver Chariot (Tier 3)");
-			Tooltip.SetDefault("Left-click to stab enemies and right-click to parry enemies and projectiles away!\nUsed in Stand Slot");
+			Tooltip.SetDefault("Left-click to stab enemies and right-click to parry enemies and projectiles away!\nSpecial: Take SC's armor off! (Reduces player defense by 40%)\nUsed in Stand Slot");
 		}
 
 		public override void SetDefaults()
 		{
-			item.damage = 37;
+			item.damage = 51;
 			item.width = 32;
 			item.height = 32;
 			item.noUseGraphic = true;
@@ -34,10 +34,9 @@ namespace JoJoStands.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("SilverChariotT2"));
-			recipe.AddIngredient(ItemID.PlatinumBar, 12);
-			recipe.AddIngredient(ItemID.Hellstone, 20);
-			recipe.AddIngredient(ItemID.Amethyst, 2);
-			recipe.AddIngredient(ItemID.FallenStar, 5);
+			recipe.AddIngredient(ItemID.HallowedBar, 14);
+			recipe.AddIngredient(ItemID.SilverBar, 12);
+			recipe.AddIngredient(ItemID.GoldBar, 2);
 			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
 			recipe.AddIngredient(mod.ItemType("WillToProtect"));
 			recipe.AddTile(mod.TileType("RemixTableTile"));
@@ -45,10 +44,29 @@ namespace JoJoStands.Items
 			recipe.AddRecipe();
 			recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("SilverChariotT2"));
-			recipe.AddIngredient(ItemID.GoldBar, 12);
-			recipe.AddIngredient(ItemID.Hellstone, 20);
-			recipe.AddIngredient(ItemID.Amethyst, 2);
-			recipe.AddIngredient(ItemID.FallenStar, 5);
+			recipe.AddIngredient(ItemID.HallowedBar, 14);
+			recipe.AddIngredient(ItemID.TungstenBar, 12);
+			recipe.AddIngredient(ItemID.GoldBar, 2);
+			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
+			recipe.AddIngredient(mod.ItemType("WillToProtect"));
+			recipe.AddTile(mod.TileType("RemixTableTile"));
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+			recipe = new ModRecipe(mod);
+			recipe.AddIngredient(mod.ItemType("SilverChariotT2"));
+			recipe.AddIngredient(ItemID.HallowedBar, 14);
+			recipe.AddIngredient(ItemID.SilverBar, 12);
+			recipe.AddIngredient(ItemID.PlatinumBar, 2);
+			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
+			recipe.AddIngredient(mod.ItemType("WillToProtect"));
+			recipe.AddTile(mod.TileType("RemixTableTile"));
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+			recipe = new ModRecipe(mod);
+			recipe.AddIngredient(mod.ItemType("SilverChariotT2"));
+			recipe.AddIngredient(ItemID.HallowedBar, 14);
+			recipe.AddIngredient(ItemID.TungstenBar, 12);
+			recipe.AddIngredient(ItemID.PlatinumBar, 2);
 			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
 			recipe.AddIngredient(mod.ItemType("WillToProtect"));
 			recipe.AddTile(mod.TileType("RemixTableTile"));

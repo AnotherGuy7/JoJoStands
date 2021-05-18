@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         }
 
         public override float maxDistance => 98f;
-        public override int punchDamage => 15;
+        public override int punchDamage => 12;
         public override int punchTime => 8;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 10f;
@@ -90,7 +90,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 12, true);
+                AnimationStates(animationName, 4, 30, true);
             }
             if (animationName == "Attack")
             {

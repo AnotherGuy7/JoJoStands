@@ -103,6 +103,9 @@ namespace JoJoStands.Projectiles
                     projectile.Kill();
                 }
             }
+
+            player.itemTime = 2;
+            player.itemAnimation = 2;
             if (hPlayer.amountOfHamon >= 5)
             {
                 int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169);

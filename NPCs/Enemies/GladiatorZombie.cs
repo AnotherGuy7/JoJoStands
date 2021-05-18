@@ -66,7 +66,7 @@ namespace JoJoStands.NPCs.Enemies
                 npc.velocity.Y += 0.05f;
             }
 
-            if (Main.rand.Next(0, 151) <= 2)
+            if (Main.rand.Next(0, 251) <= 2)
             {
                 Main.PlaySound(14, (int)npc.position.X, (int)npc.position.Y, 1, 1f, -1.6f);
             }

@@ -4,7 +4,7 @@ using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 {
-    public class SilverChariotStandT3 : StandClass
+    public class SilverChariotStandFinal : StandClass
     {
         public override void SetStaticDefaults()
         {
@@ -12,8 +12,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             Main.projFrames[projectile.type] = 10;
         }
         public override float maxDistance => 98f;
-        public override int punchDamage => 51;
-        public override int punchTime => 6;
+        public override int punchDamage => 76;
+        public override int punchTime => 5;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 10f;
         public override int standType => 1;
@@ -22,7 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         private bool parryFrames = false;
         private bool Shirtless = false;
         private float punchMovementSpeed = 5f;
-        private int afterImagesLimit = 3;
+        private int afterImagesLimit = 5;
 
         public override void AI()
         {
@@ -79,7 +79,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 otherProj.velocity *= -1;
                                 otherProj.hostile = false;
                                 otherProj.friendly = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(6));
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(3));
                             }
                         }
                     }
@@ -93,7 +93,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 npc.StrikeNPC(npc.damage * 2, 6f, player.direction);
                                 secondaryAbilityFrames = false;
                                 parryFrames = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(6));
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(3));
                             }
                         }
                     }

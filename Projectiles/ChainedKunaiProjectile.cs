@@ -1,4 +1,5 @@
 using System;
+using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -86,9 +87,13 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            Player player = Main.player[projectile.owner];
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+
             living = false;
-            if (Main.rand.Next(0, 2) == 0)
+            if (hPlayer.amountOfHamon >= 4 && Main.rand.Next(0, 1 + 1) == 0)
             {
+                hPlayer.amountOfHamon -= 4;
                 target.AddBuff(mod.BuffType("Sunburn"), 12 * 60);
             }
         }

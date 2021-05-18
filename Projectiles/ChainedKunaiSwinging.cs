@@ -30,7 +30,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
-            if (Main.player[projectile.owner].dead)
+            if (player.dead)
             {
                 projectile.Kill();
                 return;
@@ -39,6 +39,8 @@ namespace JoJoStands.Projectiles
 
             if (Main.mouseLeft)
             {
+                player.itemTime = 2;
+                player.itemAnimation = 2;
                 projectile.timeLeft = 2;
                 projectile.Center = player.Center;
 

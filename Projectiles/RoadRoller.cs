@@ -42,8 +42,7 @@ namespace JoJoStands.Projectiles
                 {
                     if (projectile.Hitbox.Intersects(otherProj.Hitbox) && modPlayer.TheWorldEffect)
                     {
-                        velocityAdd.X += otherProj.velocity.X / 75f;
-                        velocityAdd.Y += otherProj.velocity.Y / 75f;
+                        velocityAdd += otherProj.velocity / 75f;
                         if (damageMult <= 4f)
                         {
                             damageMult += otherProj.damage / 50;

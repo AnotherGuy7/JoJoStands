@@ -1,4 +1,5 @@
 using System;
+using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -7,8 +8,10 @@ using Terraria.ModLoader;
  
 namespace JoJoStands.Projectiles
 {
-    public class MetallicNunchucksProjectile : ModProjectile
+    public class MetallicNunchucksSwinging : ModProjectile
     {
+        public override string Texture => mod.Name + "/Projectiles/MetallicNunchucksProjectile";
+
         public override void SetDefaults()
         {
             projectile.width = 18;
@@ -22,14 +25,13 @@ namespace JoJoStands.Projectiles
         }
 
         private float rotation = 0f;
-        private float swingCone = 90f;      //This is the swing area
-        private int playerStartDirection = 1;
-        private bool setRotation = false;
+        private int hamonConsumptionTimer = 0;
 
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            if (Main.player[projectile.owner].dead)
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+            if (player.dead)
             {
                 projectile.Kill();
                 return;
@@ -38,43 +40,56 @@ namespace JoJoStands.Projectiles
             Vector2 rota = player.Center - projectile.Center;
             projectile.rotation = (-rota).ToRotation();
 
-            if (!setRotation)
+            if (Main.mouseLeft)
             {
-                playerStartDirection = player.direction;
-                if (playerStartDirection == 1)
-                {
-                    rotation = 360f - swingCone;
-                }
-                else
-                {
-                    rotation = 180f + swingCone;
-                }
-                setRotation = true;
-            }
+                projectile.timeLeft = 2;
 
-            player.direction = playerStartDirection;
-            rotation += 24f * player.direction;
-            if (playerStartDirection == 1 && rotation >= 360f + swingCone)
+                rotation += 24f * player.direction;
+                if (rotation >= 360f)
+                {
+                    rotation = rotation - 360f;
+                }
+                if (rotation <= 0)
+                {
+                    rotation = rotation + 360f;
+                }
+
+                hamonConsumptionTimer++;
+                if (hamonConsumptionTimer > 120)
+                {
+                    hPlayer.amountOfHamon -= 2;
+                    hamonConsumptionTimer = 0;
+                }
+
+                projectile.Center = player.Center + (MathHelper.ToRadians(rotation).ToRotationVector2() * 32f);
+                projectile.velocity = Vector2.Zero;
+                player.itemTime = 2;
+                player.itemAnimation = 2;
+            }
+            else
             {
+                Projectile.NewProjectile(player.Center, Vector2.Zero, mod.ProjectileType("MetallicNunchucksProjectile"), projectile.damage, projectile.knockBack, projectile.owner);
                 projectile.Kill();
             }
-            if (playerStartDirection == -1 && rotation <= 180f - swingCone)
-            {
-                projectile.Kill();
-            }
-
-            projectile.position = player.Center + (MathHelper.ToRadians(rotation).ToRotationVector2() * 32f);
-            projectile.velocity = Vector2.Zero;
 
             int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169);
             Main.dust[dustIndex].noGravity = true;
         }
 
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            damage = (int)(damage * 0.4f);
+            knockback *= 0.4f;
+        }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (Main.rand.Next(0, 2) == 0)
+            Player player = Main.player[projectile.owner];
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+            if (hPlayer.amountOfHamon >= 4 && Main.rand.Next(0, 4 + 1) == 0)
             {
-                target.AddBuff(mod.BuffType("Sunburn"), 12 * 60);
+                hPlayer.amountOfHamon -= 4;
+                target.AddBuff(mod.BuffType("Sunburn"), 4 * 60);
             }
         }
 

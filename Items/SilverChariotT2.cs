@@ -21,7 +21,7 @@ namespace JoJoStands.Items
 
 		public override void SetDefaults()
 		{
-			item.damage = 37;
+			item.damage = 34;
 			item.width = 32;
 			item.height = 32;
 			item.noUseGraphic = true;
@@ -34,8 +34,8 @@ namespace JoJoStands.Items
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("SilverChariotT1"));
-			recipe.AddIngredient(ItemID.PlatinumBar, 12);
-			recipe.AddIngredient(ItemID.Hellstone, 20);
+			recipe.AddIngredient(ItemID.PlatinumBar, 9);
+			recipe.AddIngredient(ItemID.Hellstone, 16);
 			recipe.AddIngredient(ItemID.Amethyst, 2);
 			recipe.AddIngredient(ItemID.FallenStar, 5);
 			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
@@ -45,8 +45,8 @@ namespace JoJoStands.Items
 			recipe.AddRecipe();
 			recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("SilverChariotT1"));
-			recipe.AddIngredient(ItemID.GoldBar, 12);
-			recipe.AddIngredient(ItemID.Hellstone, 20);
+			recipe.AddIngredient(ItemID.GoldBar, 9);
+			recipe.AddIngredient(ItemID.Hellstone, 16);
 			recipe.AddIngredient(ItemID.Amethyst, 2);
 			recipe.AddIngredient(ItemID.FallenStar, 5);
 			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);

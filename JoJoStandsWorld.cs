@@ -52,7 +52,7 @@ namespace JoJoStands
 
             if (!Main.dayTime)
             {
-                if (!checkedForVampiricEvent)
+                if (!checkedForVampiricEvent && NPC.downedBoss1 && !VampiricNight)
                 {
                     if (Main.rand.Next(0, 12 + 1) == 0)
                     {

@@ -12,12 +12,11 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             Main.projFrames[projectile.type] = 10;
         }
         public override float maxDistance => 98f;
-        public override int punchDamage => 37;
+        public override int punchDamage => 34;
         public override int punchTime => 7;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 10f;
         public override int standType => 1;
-        public override int standOffset => +30;
 
         public int updateTimer = 0;
         private bool parryFrames = false;

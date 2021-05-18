@@ -589,11 +589,13 @@ namespace JoJoStands.NPCs
             {
                 pool.Clear();
                 pool.Add(NPCID.Zombie, SpawnCondition.OverworldNightMonster.Chance);
+                pool.Add(mod.NPCType("GladiatorZombie"), 0.09f);
+                pool.Add(mod.NPCType("BaldZombie"), 0.09f);
+                pool.Add(mod.NPCType("ChimeraBird"), 0.09f);
+
                 pool.Add(mod.NPCType("Doobie"), 0.02f);
                 pool.Add(mod.NPCType("WangChan"), 0.02f);
                 pool.Add(mod.NPCType("JackTheRipper"), 0.02f);
-                pool.Add(mod.NPCType("GladiatorZombie"), 0.09f);
-                pool.Add(mod.NPCType("BaldZombie"), 0.09f);
             }
         }
     }
