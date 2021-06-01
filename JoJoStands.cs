@@ -16,7 +16,7 @@ namespace JoJoStands
     public class JoJoStands : Mod
     {
         public static ModHotKey SpecialHotKey;
-        public static ModHotKey SecondSpecialHotKey;
+        public static ModHotKey SpecialHotKey2;
         public static ModHotKey StandOut;
         public static ModHotKey StandAutoMode;
         public static ModHotKey PoseHotKey;
@@ -96,7 +96,7 @@ namespace JoJoStands
 
             // Registers a new hotkey
             SpecialHotKey = RegisterHotKey("Special Ability", "P");        // See https://docs.microsoft.com/en-us/previous-versions/windows/xna/bb197781(v%3dxnagamestudio.41) for special keys
-            SecondSpecialHotKey = RegisterHotKey("Second Special Ability", "H");
+            SpecialHotKey2 = RegisterHotKey("Secondary Special Ability", "H");
             StandOut = RegisterHotKey("Stand Out", "G");
             PoseHotKey = RegisterHotKey("Pose", "V");
             StandAutoMode = RegisterHotKey("Stand Auto Mode", "L");
