@@ -15,13 +15,14 @@ namespace JoJoStands.UI
     {
         public UIPanel HamonSkillTreePanel;
         public static bool Visible;
-        public UIText hamonSkillTooltip;
+        //public UIText hamonSkillTooltip;
+        public MouseTextPanel hamonSkillTooltips;
         public UIText hamonSkillPointsText;
         public UIImageButton hamonSkillTreeUpArrow;
         public UIImageButton hamonSkillTreeDownArrow;
         public UIImageButton hamonSkillTreeXButton;
         private Texture2D[] skillTreeTextures = new Texture2D[3];
-        public const int MaxUIPages = 2;
+        public const int MaxUIPages = 3;
         public bool[] pageLockBosses = new bool[5] { NPC.downedBoss1, NPC.downedBoss3, Main.hardMode, NPC.downedMechBossAny, NPC.downedPlantBoss};
         public string[] pageLockMessages = new string[5] { "The next page is unlocked Post-Eye of Cthulu.", "The next page is unlocked Post-Skeletron.", "The next page is unlocked Post-Wall of Flesh.", "The next page is unlocked Post-Any Mech boss.", "The next page is unlocked Post-Plantera." };
 
@@ -49,17 +50,26 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
 
+            hamonSkillTooltips.visible = false;
             for (int i = 0; i < hamonSkillIcons.Length; i++)
             {
                 AdjustableButton icon = hamonSkillIcons[i];
+
+                if (icon.invisible)
+                {
+                    icon.drawAlpha = 0f;
+                    continue;
+                }
+
                 if (icon.lockedInFocus)
                 {
                     icon.drawAlpha = 1f;
                     icon.drawColor = Color.Yellow;
                 }
-                if (icon.invisible)
+                if (icon.IsMouseHovering)
                 {
-                    icon.drawAlpha = 0f;
+                    hamonSkillTooltips.ShowText(hamonSkillIconTooltips[i]);
+                    hamonSkillTooltips.ownerPos = new Vector2(Main.screenWidth * HamonSkillTreePanel.HAlign, Main.screenHeight * HamonSkillTreePanel.VAlign) - new Vector2(HamonSkillTreePanel.Width.Pixels / 2f, HamonSkillTreePanel.Height.Pixels / 2f);      //On screen changes, it had to update
                 }
             }
             hamonSkillPointsText.SetText("SP: " + hamonPlayer.skillPointsAvailable);
@@ -93,18 +103,18 @@ namespace JoJoStands.UI
             HamonSkillTreePanel = new UIPanel();
             HamonSkillTreePanel.HAlign = 0.5f;
             HamonSkillTreePanel.VAlign = 0.5f;
-            SetElementSize(HamonSkillTreePanel, new Vector2(300f, 226f));
+            SetElementSize(HamonSkillTreePanel, new Vector2(428f, 352f));
             HamonSkillTreePanel.BackgroundColor = new Color(0, 0, 0, 0);       //make it invisible so that the image is there itself
             HamonSkillTreePanel.BorderColor = new Color(0, 0, 0, 0);
 
-            hamonSkillTooltip = new UIText("Click on any button to view its info.");
+            /*hamonSkillTooltip = new UIText("Click on any button to view its info.");
             SetElementSize(hamonSkillTooltip, new Vector2(102f, 38f));
             SetElementPosition(hamonSkillTooltip, new Vector2(186f, 178f));
-            HamonSkillTreePanel.Append(hamonSkillTooltip);
+            HamonSkillTreePanel.Append(hamonSkillTooltip);*/
 
             hamonSkillPointsText = new UIText("Skill Points Available: ");
             SetElementSize(hamonSkillPointsText, new Vector2(102f, 38f));
-            SetElementPosition(hamonSkillPointsText, new Vector2(0f, 148f));
+            SetElementPosition(hamonSkillPointsText, new Vector2(0f, 295f));
             HamonSkillTreePanel.Append(hamonSkillPointsText);
 
             hamonSkillTreeUpArrow = new UIImageButton(ModContent.GetTexture("JoJoStands/Extras/HamonTreeUpArrow"));
@@ -121,12 +131,13 @@ namespace JoJoStands.UI
 
             hamonSkillTreeXButton = new UIImageButton(ModContent.GetTexture("JoJoStands/Extras/HamonTreeXButton"));
             SetElementSize(hamonSkillTreeXButton, new Vector2(32f, 32f));
-            SetElementPosition(hamonSkillTreeXButton, new Vector2(240f, 4f));
+            SetElementPosition(hamonSkillTreeXButton, new Vector2(360f, 6f));
             hamonSkillTreeXButton.OnClick += OnClickHamonSkillTreeXButton;
             HamonSkillTreePanel.Append(hamonSkillTreeXButton);
 
             skillTreeTextures[0] = ModContent.GetTexture("JoJoStands/UI/HamonSkillTree_Page1");
             skillTreeTextures[1] = ModContent.GetTexture("JoJoStands/UI/HamonSkillTree_Page2");
+            skillTreeTextures[2] = ModContent.GetTexture("JoJoStands/UI/HamonSkillTree_Page3");
             unknownSkillTexture = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_Unknown");
 
             for (int b = 0; b < hamonSkillIcons.Length; b++)
@@ -140,6 +151,10 @@ namespace JoJoStands.UI
             }
             InitializeButtons(1);
 
+            hamonSkillTooltips = new MouseTextPanel(256, 1, "Test Desc");       //Has to be at the end so it doesn't interfere with other button collisions
+            hamonSkillTooltips.ownerPos = new Vector2(Main.screenWidth * HamonSkillTreePanel.HAlign, Main.screenHeight * HamonSkillTreePanel.VAlign) - new Vector2(HamonSkillTreePanel.Width.Pixels / 2f, HamonSkillTreePanel.Height.Pixels / 2f);
+            HamonSkillTreePanel.Append(hamonSkillTooltips);
+
             Append(HamonSkillTreePanel);
         }
 
@@ -147,13 +162,13 @@ namespace JoJoStands.UI
         {
             Main.PlaySound(SoundID.MenuTick);
             pageLockBosses = new bool[5] { NPC.downedBoss1, NPC.downedBoss3, Main.hardMode, NPC.downedMechBossAny, NPC.downedPlantBoss };
-            bool pageUnlocked = pageLockBosses[currentShownPage];       //This works since pages are from 1 to max and the array is in 0 to max, meaning currentShownPage gets the next page info
+            bool pageUnlocked = pageLockBosses[currentShownPage - 1];       //This works since pages are from 1 to max and the array is in 0 to max, meaning currentShownPage gets the next page info
             if (pageUnlocked)
             {
                 currentShownPage++;
                 if (currentShownPage > MaxUIPages)
                 {
-                    currentShownPage = MaxUIPages - 1;
+                    currentShownPage = MaxUIPages;
                 }
             }
             else
@@ -212,7 +227,7 @@ namespace JoJoStands.UI
 
             Main.PlaySound(SoundID.MenuTick);
             buttonClickedOn.focusedOn = true;
-            hamonSkillTooltip.SetText(hamonSkillIconTooltips[buttonIndex]);
+            //hamonSkillTooltip.SetText(hamonSkillIconTooltips[buttonIndex]);
         }
 
         private void OnDoubleClickAnyIcon(UIMouseEvent evt, UIElement listeningElement)
@@ -258,6 +273,7 @@ namespace JoJoStands.UI
                 {
                     buttonClickedOn.focusedOn = true;
                     buttonClickedOn.lockedInFocus = true;
+                    hamonPlayer.learnedAnyAbility = true;
                     hamonPlayer.learnedHamonSkills[affectedSkillSlotIndexes[buttonIndex]] = true;
                     hamonPlayer.hamonSkillLevels[affectedSkillSlotIndexes[buttonIndex]] = affectedSkillSlotHamonSkillLevel[buttonIndex];
                     if (affectedSkillSlotHamonRequired[buttonIndex] != 0)
@@ -265,7 +281,7 @@ namespace JoJoStands.UI
                         hamonPlayer.hamonAmountRequirements[affectedSkillSlotIndexes[buttonIndex]] = affectedSkillSlotHamonRequired[buttonIndex];
                     }
                     hamonPlayer.skillPointsAvailable -= 1;
-                    hamonSkillTooltip.SetText(hamonSkillIconTooltips[buttonIndex]);
+                    //hamonSkillTooltip.SetText(hamonSkillIconTooltips[buttonIndex]);
                     Main.NewText("Skill Obtained!", Color.Yellow);
                 }
             }
@@ -314,13 +330,13 @@ namespace JoJoStands.UI
             switch (page)
             {
                 case 1:
-                    SetElementPosition(hamonSkillIcons[0], new Vector2(126f, 158f));
+                    SetElementPosition(hamonSkillIcons[0], new Vector2(184f, 238f));
                     hamonSkillIconTooltips[0] = "Learn to control your Hamon.";
                     hamonSkillIconImages[0] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_0");
                     hamonSkillIcons[0].SetImage(hamonSkillIconImages[0]);
                     hamonSkillIcons[0].lockedInFocus = true;        //This is because Hamon is always already learned
 
-                    SetElementPosition(hamonSkillIcons[1], new Vector2(54f, 120f));
+                    SetElementPosition(hamonSkillIcons[1], new Vector2(153f, 202f));
                     hamonSkillIconImages[1] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_8");
                     hamonSkillIcons[1].SetImage(hamonSkillIconImages[1]);
                     hamonSkillIconTooltips[1] = "Your Hamon disperses itself into the living things around you.\nWhile Hamon is past 15, walking on grass grows flowers. Press & hold UP to use a leaf glider while falling.";
@@ -329,7 +345,7 @@ namespace JoJoStands.UI
                     affectedSkillSlotHamonSkillLevel[1] = 1;
                     CheckForIconAbilityUnlocked(1);
 
-                    SetElementPosition(hamonSkillIcons[2], new Vector2(191f, 120f));
+                    SetElementPosition(hamonSkillIcons[2], new Vector2(215f, 202f));
                     hamonSkillIconImages[2] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_4");
                     hamonSkillIcons[2].SetImage(hamonSkillIconImages[2]);
                     hamonSkillIconTooltips[2] = "Your Hamon automatically focuses itself enough to help you keep your balance.\nWhen your Hamon is past 40, you will be able to water walk.";
@@ -338,7 +354,7 @@ namespace JoJoStands.UI
                     affectedSkillSlotHamonSkillLevel[2] = 1;
                     CheckForIconAbilityUnlocked(2);
 
-                    SetElementPosition(hamonSkillIcons[3], new Vector2(123f, 63f));
+                    SetElementPosition(hamonSkillIcons[3], new Vector2(184f, 202f));
                     hamonSkillIconImages[3] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_1");
                     hamonSkillIcons[3].SetImage(hamonSkillIconImages[3]);
                     hamonSkillIconTooltips[3] = "The Hamon you breathe in focuses itself to heal your body.\nIncreased Life Regen when Hamon Breathing.";
@@ -346,7 +362,7 @@ namespace JoJoStands.UI
                     affectedSkillSlotHamonSkillLevel[3] = 1;
                     CheckForIconAbilityUnlocked(3);
 
-                    SetElementPosition(hamonSkillIcons[4], new Vector2(64f, 26f));
+                    SetElementPosition(hamonSkillIcons[4], new Vector2(160f, 99f));
                     hamonSkillIconImages[4] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_2");
                     hamonSkillIcons[4].SetImage(hamonSkillIconImages[4]);
                     hamonSkillIconTooltips[4] = "Your Hamon can now be injected into weapons.\nWhen your Hamon is past 60, double-tap Special while holding a melee weapon to imbue it with Hamon.";
@@ -356,7 +372,7 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(4);
                     CheckForIconLock(4, 3);
 
-                    SetElementPosition(hamonSkillIcons[5], new Vector2(174f, 26f));
+                    SetElementPosition(hamonSkillIcons[5], new Vector2(208f, 99f));
                     hamonSkillIconImages[5] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_1");
                     hamonSkillIcons[5].SetImage(hamonSkillIconImages[5]);
                     hamonSkillIconTooltips[5] = "You discovered you can use your Hamon to heal yourself.\nHolding Right-click while holding the Hamon item for 4 seconds will heal you.";
@@ -378,7 +394,7 @@ namespace JoJoStands.UI
                     //Slot 6: 175, 64 (One on top of bottom-right)
                     //Slot 7: 175, 106 (Bottom-right)
 
-                    SetElementPosition(hamonSkillIcons[0], new Vector2(64f, 142f));
+                    SetElementPosition(hamonSkillIcons[0], new Vector2(160f, 242f));
                     hamonSkillIconImages[0] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_5");
                     hamonSkillIcons[0].SetImage(hamonSkillIconImages[0]);
                     hamonSkillIconTooltips[0] = "Your Hamon discharges into shockwaves upon heavy impact with the ground.\nWhile Hamon is past 30, when you land on the ground while holding DOWN, a hamon shockwave blasts through the ground.";
@@ -389,7 +405,7 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(0);
                     CheckForSpecificAbiltyUnlocked(0, HamonPlayer.WeaponsHamonImbueSkill);
 
-                    SetElementPosition(hamonSkillIcons[1], new Vector2(64f, 98f));
+                    SetElementPosition(hamonSkillIcons[1], new Vector2(160f, 157f));
                     hamonSkillIconImages[1] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_2");
                     hamonSkillIcons[1].SetImage(hamonSkillIconImages[1]);
                     hamonSkillIconTooltips[1] = "Further mastery of injecting Hamon into your weapons leads to better abilities.\nWhen your Hamon is past 40, double-tap Special while holding a melee weapon to imbue it with Hamon.";
@@ -399,7 +415,7 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(1, 2);
                     CheckForIconLock(1, 0);
 
-                    SetElementPosition(hamonSkillIcons[2], new Vector2(64f, 64f));
+                    SetElementPosition(hamonSkillIcons[2], new Vector2(183f, 120f));
                     hamonSkillIconImages[2] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_7");
                     hamonSkillIcons[2].SetImage(hamonSkillIconImages[2]);
                     hamonSkillIconTooltips[2] = "A bit of your life for some Hamon may not be as bad as it seems.\nWhen your Hamon is under 30 and your health is above 25%, double-tap Special while holding nothing to consume 5% of health for 30 Hamon.";
@@ -409,7 +425,7 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(2);
                     CheckForIconLock(2, 1);
 
-                    SetElementPosition(hamonSkillIcons[3], new Vector2(154f, 33f));
+                    SetElementPosition(hamonSkillIcons[3], new Vector2(183f, 64f));
                     hamonSkillIconImages[3] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_0");
                     hamonSkillIcons[3].SetImage(hamonSkillIconImages[3]);
                     hamonSkillIconTooltips[3] = "Enough usage of your Hamon has led you to increased efficiency with it.\nPassive Hamon Regen speed slightly increased.";
@@ -417,7 +433,7 @@ namespace JoJoStands.UI
                     affectedSkillSlotHamonSkillLevel[3] = 1;
                     CheckForIconAbilityUnlocked(3);
 
-                    SetElementPosition(hamonSkillIcons[4], new Vector2(175f, 64f));
+                    SetElementPosition(hamonSkillIcons[4], new Vector2(209f, 157f));
                     hamonSkillIconImages[4] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_1");
                     hamonSkillIcons[4].SetImage(hamonSkillIconImages[4]);
                     hamonSkillIconTooltips[4] = "Further use of Hamon Healing has lead to greater efficiency with it.\nHolding Right-click while holding the Hamon item for 2 seconds will heal you.";
@@ -426,7 +442,7 @@ namespace JoJoStands.UI
                     affectedSkillSlotHamonSkillLevel[4] = 2;
                     CheckForIconAbilityUnlocked(4, 2);
 
-                    SetElementPosition(hamonSkillIcons[5], new Vector2(175f, 106f));
+                    SetElementPosition(hamonSkillIcons[5], new Vector2(209f, 242f));
                     hamonSkillIconImages[5] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_6");
                     hamonSkillIcons[5].SetImage(hamonSkillIconImages[5]);
                     hamonSkillIconTooltips[5] = "Your Hamon is capable of protecting you even from the most dangerous attacks.\nWhile Hamon is greater than 45, double-tap DOWN to enable your defensive aura. Incoming attack damage is reduced by 5% (Consumes 3 Hamon on hit)";
@@ -435,11 +451,40 @@ namespace JoJoStands.UI
                     affectedSkillSlotHamonSkillLevel[5] = 1;
                     CheckForIconAbilityUnlocked(5);
                     CheckForSpecificAbiltyUnlocked(5, HamonPlayer.HamonItemHealing);
-
                     CheckForIconLock(4, 5);     //This is because 4 isn't initialized yet if it's called where it normally is
                     CheckForIconLock(3, 4);
 
                     SetUnusedIconsInvisible(5);
+                    break;
+                case 3:
+                    SetElementPosition(hamonSkillIcons[0], new Vector2(186f, 257f));
+                    hamonSkillIconImages[0] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_11");
+                    hamonSkillIcons[0].SetImage(hamonSkillIconImages[0]);
+                    hamonSkillIconTooltips[0] = "Sending thin waves of Hamon into the ground allows you to detect differences in content.\nWhile your Hamon is past 8, hold DOWN for two seconds to see nearby ores within 16 tiles.";
+                    affectedSkillSlotIndexes[0] = HamonPlayer.OreDetection;
+                    affectedSkillSlotHamonRequired[0] = 15;
+                    affectedSkillSlotHamonSkillLevel[0] = 1;
+                    hamonSkillIcons[0].lockedInFocus = false;
+                    CheckForIconAbilityUnlocked(0);
+                    CheckForSpecificAbiltyUnlocked(0, HamonPlayer.PassiveHamonRegenBoost);
+
+                    SetElementPosition(hamonSkillIcons[1], new Vector2(186f, 216f));
+                    hamonSkillIconImages[1] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_2");
+                    hamonSkillIcons[1].SetImage(hamonSkillIconImages[1]);
+                    hamonSkillIconTooltips[1] = "Further mastery of injecting Hamon into your weapons leads to better abilities.\nWhen your Hamon is past 40, double-tap Special while holding a melee weapon to imbue it with Hamon.";
+                    affectedSkillSlotIndexes[1] = HamonPlayer.WeaponsHamonImbueSkill;
+                    affectedSkillSlotHamonRequired[1] = 40;
+                    affectedSkillSlotHamonSkillLevel[1] = 2;
+                    CheckForIconAbilityUnlocked(1, 2);
+                    CheckForIconLock(1, 0);
+
+                    //Loc 3 = 186, 279
+                    //Loc 4 = 162, 126
+                    //Loc 5 = 203, 126
+                    //Loc 6 = 142, 101
+                    //Loc 7 = 186, 69
+
+                    SetUnusedIconsInvisible(1);
                     break;
             }
 

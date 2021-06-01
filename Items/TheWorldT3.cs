@@ -18,7 +18,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The World (Tier 3)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw knives! \nSpecial: Stop time for 5 seconds!\nNote: The knives TW throws are made with 1 iron bar at a furnace and are called 'Hunter's Knives'\nUsed in Stand Slot");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw knives! \nSpecial: Stop time for 5 seconds!\nSecond Special: Stop time and surround an enemy with knives!\nNote: The knives TW throws are made with 1 iron bar at a furnace and are called 'Hunter's Knives'\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

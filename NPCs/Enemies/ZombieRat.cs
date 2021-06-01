@@ -10,13 +10,13 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 3;
+            Main.npcFrameCount[npc.type] = 9;
         }
 
         public override void SetDefaults()
         {
-            npc.width = 24;
-            npc.height = 12;
+            npc.width = 48;
+            npc.height = 28;
             npc.defense = 3;
             npc.lifeMax = 35;
             npc.damage = 12;
@@ -83,7 +83,7 @@ namespace JoJoStands.NPCs.Enemies
                 npc.velocity.X += AccelerationVelocity * npc.direction;
             }
 
-            if (WorldGen.SolidOrSlopedTile((int)(npc.position.X / 16) + (int)Math.Ceiling(npc.width / 16f) + 1, (int)(npc.position.Y / 16f) + (int)Math.Ceiling(npc.height / 16f) - 1) && npc.ai[1] <= 0f)
+            if (WorldGen.SolidOrSlopedTile((int)(npc.position.X / 16) + (int)Math.Ceiling(npc.width / 16f) + 1 * npc.direction, (int)(npc.position.Y / 16f) + (int)Math.Ceiling(npc.height / 16f) - 1) && npc.ai[1] <= 0f)
             {
                 npc.velocity.Y = -6f;
                 npc.frameCounter = -40;     //This is to delay animations
@@ -105,16 +105,16 @@ namespace JoJoStands.NPCs.Enemies
                 return;
             }
 
-            frameHeight = 12;
-            npc.spriteDirection = npc.direction;
-            if (npc.ai[0] == 0f)
+            frameHeight = 28;
+            npc.spriteDirection = -npc.direction;
+            if (npc.ai[2] == 0f)
             {
                 frame = 0;
             }
-            else if (npc.ai[0] == 1f)
+            else if (npc.ai[2] == 1f && npc.ai[1] <= 0f)
             {
                 npc.frameCounter += Math.Abs(npc.velocity.X);
-                if (npc.frameCounter >= 12)
+                if (npc.frameCounter >= 4)
                 {
                     frame++;
                     npc.frameCounter = 0;

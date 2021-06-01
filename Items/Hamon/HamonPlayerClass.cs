@@ -35,6 +35,8 @@ namespace JoJoStands.Items.Hamon
         public int hamonOverChargeSpecialDoublePressTimer = 0;
         public int leafGliderGenerationTimer = 0;
         public int enemyToIgnoreDamageFromIndex = -1;
+        public int oreDetectionDownHeldTimer = 0;
+        public float oreDetectionRingRadius = 0;
 
         public bool passiveRegen = false;
         public bool chargingHamon = false;
@@ -42,6 +44,7 @@ namespace JoJoStands.Items.Hamon
         public bool defensiveHamonAuraActive = false;
         public bool defensiveAuraCanPressDownAgain = false;
         public bool usingItemThatIgnoresEnemyDamage = false;
+        public bool learnedAnyAbility = false;
 
         //Adjustable skills
         public const int HamonSkillsLimit = 18;
@@ -55,6 +58,10 @@ namespace JoJoStands.Items.Hamon
         public const int HamonOvercharge = 6;
         public const int HamonHerbalGrowth = 7;
         public const int PassiveHamonRegenBoost = 8;
+        public const int PoisonCancellation = 9;
+        public const int OreDetection = 10;
+        public const int SunTag = 11;
+        public const int SunShackles = 12;
 
         //public bool[] learnedHamonSkills = new bool[HamonSkillsLimit];
         public Dictionary<int, bool> learnedHamonSkills = new Dictionary<int, bool>();
@@ -96,6 +103,10 @@ namespace JoJoStands.Items.Hamon
                 learnedHamonSkills.Add(HamonOvercharge, false);
                 learnedHamonSkills.Add(HamonHerbalGrowth, false);
                 learnedHamonSkills.Add(PassiveHamonRegenBoost, false);
+                learnedHamonSkills.Add(PoisonCancellation, false);
+                learnedHamonSkills.Add(OreDetection, false);
+                learnedHamonSkills.Add(SunTag, false);
+                learnedHamonSkills.Add(SunShackles, false);
 
                 hamonSkillLevels.Add(BreathingRegenSkill, 0);
                 hamonSkillLevels.Add(WaterWalkingSKill, 0);
@@ -106,6 +117,9 @@ namespace JoJoStands.Items.Hamon
                 hamonSkillLevels.Add(HamonOvercharge, 0);
                 hamonSkillLevels.Add(HamonHerbalGrowth, 0);
                 hamonSkillLevels.Add(PassiveHamonRegenBoost, 0);
+                hamonSkillLevels.Add(PoisonCancellation, 0);
+                hamonSkillLevels.Add(SunTag, 0);
+                hamonSkillLevels.Add(SunShackles, 0);
 
                 //Only skills that need hamon to be used should add to the requirements dictionary
                 hamonAmountRequirements.Add(WaterWalkingSKill, 0);
@@ -114,6 +128,9 @@ namespace JoJoStands.Items.Hamon
                 hamonAmountRequirements.Add(DefensiveHamonAura, 0);
                 hamonAmountRequirements.Add(HamonShockwave, 0);
                 hamonAmountRequirements.Add(HamonHerbalGrowth, 0);
+                hamonAmountRequirements.Add(OreDetection, 0);
+                hamonAmountRequirements.Add(SunTag, 0);
+                hamonAmountRequirements.Add(SunShackles, 0);
             }
         }
 
@@ -330,7 +347,7 @@ namespace JoJoStands.Items.Hamon
 
         private void ManageAbilities()
         {
-            if (!learnedHamonSkills.ContainsKey(HamonHerbalGrowth) || !hamonAmountRequirements.ContainsKey(HamonHerbalGrowth))        //Just checking if something exists in the dictionary, if not, just skipping
+            if (!learnedAnyAbility)
                 return;
 
             if (defensiveAuraDownDoublePressTimer > 0)
@@ -441,6 +458,52 @@ namespace JoJoStands.Items.Hamon
                     amountOfHamon -= hamonAmountRequirements[HamonShockwave];
                 }
             }
+
+            if (player.controlDown || oreDetectionDownHeldTimer >= 120)
+            {
+                oreDetectionDownHeldTimer++;
+            }
+            else
+            {
+                oreDetectionDownHeldTimer = 0;
+            }
+
+            if (oreDetectionDownHeldTimer >= 120 && learnedHamonSkills[OreDetection])
+            {
+                oreDetectionRingRadius += 2.6f;
+                for (int i = 0; i < 80; i++)
+                {
+                    float rotation = MathHelper.ToRadians(i * (360f / 80f));
+                    Vector2 pos = player.Center + (rotation.ToRotationVector2() * oreDetectionRingRadius);
+                    int dustIndex = Dust.NewDust(pos, 1, 1, 169, Scale: Main.rand.NextFloat(1f, 2f + 1f));
+                    Main.dust[dustIndex].noGravity = true;
+                }
+
+                int detectionRadius = 16 * hamonSkillLevels[OreDetection];
+                Vector2 startingPos = (player.position - new Vector2(detectionRadius / 2f, detectionRadius / 2f)) / 16f;
+                for (int x = 0; x < detectionRadius; x++)
+                {
+                    for (int y = 0; y < detectionRadius; y++)
+                    {
+                        Tile potentialOreTile = Main.tile[(int)startingPos.X + x, (int)startingPos.Y + y];
+                        if (TileID.Sets.Ore[potentialOreTile.type])
+                        {
+                            for (int i = 0; i < Main.rand.Next(4, 6 + 1); i++)
+                            {
+                                startingPos *= 16f;
+                                Vector2 pos = new Vector2(startingPos.X + (x * 16f), startingPos.Y + (y * 16f));
+                                int dustIndex = Dust.NewDust(pos, 16, 16, 169, Scale: Main.rand.NextFloat(1f, 2f + 1f));
+                                Main.dust[dustIndex].noGravity = true;
+                            }
+                        }
+                    }
+                }
+
+                if (oreDetectionDownHeldTimer >= 180)
+                {
+                    oreDetectionDownHeldTimer = 0;
+                }
+            }
         }
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
@@ -489,7 +552,8 @@ namespace JoJoStands.Items.Hamon
                 { "hamonRequirementValues", hamonAmountRequirements.Values.ToList() },
                 { "hamonLevelKeys", hamonSkillLevels.Keys.ToList() },
                 { "hamonLevelValues", hamonSkillLevels.Values.ToList() },
-                { "hamonSkillPoints", skillPointsAvailable }
+                { "hamonSkillPoints", skillPointsAvailable },
+                { "learnedAnyAbility", learnedAnyAbility }
             };
         }
 
@@ -502,6 +566,7 @@ namespace JoJoStands.Items.Hamon
             IList<int> levelKeys = tag.GetList<int>("hamonLevelKeys");
             IList<int> levelValues = tag.GetList<int>("hamonLevelValues");
             skillPointsAvailable = tag.GetInt("hamonSkillPoints");
+            learnedAnyAbility = tag.GetBool("learnedAnyAbility");
             /*for (int i = 0; i < keys.Count; i++)
             {
                 if (learnedHamonSkills.ContainsKey(keys[i]))
