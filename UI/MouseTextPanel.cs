@@ -16,7 +16,6 @@ namespace JoJoStands.UI
         public Vector2 ownerPos;
 
         public bool visible = false;
-        private string[] stringSplitters = new string[1] { " " };
 
         public MouseTextPanel(int width, int height, string defaultText = "")
         {
@@ -36,11 +35,7 @@ namespace JoJoStands.UI
         public override void Update(GameTime gameTime)
         {
             if (!visible)
-            {
-                //BackgroundColor = BorderColor = new Color(0, 0, 0, 0);
-                //uiText.
                 return;
-            }
 
             Left.Pixels = Main.MouseScreen.X + 10f - ownerPos.X;
             Top.Pixels = Main.MouseScreen.Y + 10f - ownerPos.Y;

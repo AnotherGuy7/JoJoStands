@@ -37,6 +37,7 @@ namespace JoJoStands.Items.Hamon
         public int enemyToIgnoreDamageFromIndex = -1;
         public int oreDetectionDownHeldTimer = 0;
         public float oreDetectionRingRadius = 0;
+        public int muscleOverdriveHeldTimer = 0;
 
         public bool passiveRegen = false;
         public bool chargingHamon = false;
@@ -62,8 +63,10 @@ namespace JoJoStands.Items.Hamon
         public const int OreDetection = 10;
         public const int SunTag = 11;
         public const int SunShackles = 12;
+        public const int MuscleOverdrive = 13;
 
         //public bool[] learnedHamonSkills = new bool[HamonSkillsLimit];
+        public const int ExpectedAmountOfHamonSkills = 14;
         public Dictionary<int, bool> learnedHamonSkills = new Dictionary<int, bool>();
         public Dictionary<int, int> hamonAmountRequirements = new Dictionary<int, int>();
         public Dictionary<int, int> hamonSkillLevels = new Dictionary<int, int>();
@@ -92,45 +95,9 @@ namespace JoJoStands.Items.Hamon
 
         public override void OnEnterWorld(Player player)
         {
-            if (learnedHamonSkills.Count == 0)
+            if (learnedHamonSkills.Count != ExpectedAmountOfHamonSkills)
             {
-                learnedHamonSkills.Add(BreathingRegenSkill, false);
-                learnedHamonSkills.Add(WaterWalkingSKill, false);
-                learnedHamonSkills.Add(WeaponsHamonImbueSkill, false);
-                learnedHamonSkills.Add(HamonItemHealing, false);
-                learnedHamonSkills.Add(DefensiveHamonAura, false);
-                learnedHamonSkills.Add(HamonShockwave, false);
-                learnedHamonSkills.Add(HamonOvercharge, false);
-                learnedHamonSkills.Add(HamonHerbalGrowth, false);
-                learnedHamonSkills.Add(PassiveHamonRegenBoost, false);
-                learnedHamonSkills.Add(PoisonCancellation, false);
-                learnedHamonSkills.Add(OreDetection, false);
-                learnedHamonSkills.Add(SunTag, false);
-                learnedHamonSkills.Add(SunShackles, false);
-
-                hamonSkillLevels.Add(BreathingRegenSkill, 0);
-                hamonSkillLevels.Add(WaterWalkingSKill, 0);
-                hamonSkillLevels.Add(WeaponsHamonImbueSkill, 0);
-                hamonSkillLevels.Add(HamonItemHealing, 0);
-                hamonSkillLevels.Add(DefensiveHamonAura, 0);
-                hamonSkillLevels.Add(HamonShockwave, 0);
-                hamonSkillLevels.Add(HamonOvercharge, 0);
-                hamonSkillLevels.Add(HamonHerbalGrowth, 0);
-                hamonSkillLevels.Add(PassiveHamonRegenBoost, 0);
-                hamonSkillLevels.Add(PoisonCancellation, 0);
-                hamonSkillLevels.Add(SunTag, 0);
-                hamonSkillLevels.Add(SunShackles, 0);
-
-                //Only skills that need hamon to be used should add to the requirements dictionary
-                hamonAmountRequirements.Add(WaterWalkingSKill, 0);
-                hamonAmountRequirements.Add(WeaponsHamonImbueSkill, 0);
-                hamonAmountRequirements.Add(HamonItemHealing, 0);
-                hamonAmountRequirements.Add(DefensiveHamonAura, 0);
-                hamonAmountRequirements.Add(HamonShockwave, 0);
-                hamonAmountRequirements.Add(HamonHerbalGrowth, 0);
-                hamonAmountRequirements.Add(OreDetection, 0);
-                hamonAmountRequirements.Add(SunTag, 0);
-                hamonAmountRequirements.Add(SunShackles, 0);
+                RebuildHamonAbilitiesDictionaries();
             }
         }
 
@@ -322,6 +289,7 @@ namespace JoJoStands.Items.Hamon
                 if (learnedHamonSkills.ContainsKey(BreathingRegenSkill) && learnedHamonSkills[BreathingRegenSkill])
                 {
                     regen *= 1.2f + (0.2f * hamonSkillLevels[BreathingRegenSkill]);
+                    Main.NewText("Works");
                 }
             }
         }
@@ -468,8 +436,11 @@ namespace JoJoStands.Items.Hamon
                 oreDetectionDownHeldTimer = 0;
             }
 
-            if (oreDetectionDownHeldTimer >= 120 && learnedHamonSkills[OreDetection])
+            if (oreDetectionDownHeldTimer >= 120 && learnedHamonSkills[OreDetection] && amountOfHamon >= hamonAmountRequirements[OreDetection])
             {
+                if (oreDetectionDownHeldTimer == 120)
+                    amountOfHamon -= hamonAmountRequirements[OreDetection];
+
                 oreDetectionRingRadius += 2.6f;
                 for (int i = 0; i < 80; i++)
                 {
@@ -504,6 +475,74 @@ namespace JoJoStands.Items.Hamon
                     oreDetectionDownHeldTimer = 0;
                 }
             }
+
+            if (learnedHamonSkills[MuscleOverdrive] && amountOfHamon >= hamonAmountRequirements[MuscleOverdrive] && player.controlLeft && player.controlRight)
+            {
+                muscleOverdriveHeldTimer++;
+                if (muscleOverdriveHeldTimer >= 120)
+                {
+                    muscleOverdriveHeldTimer = 0;
+                    amountOfHamon -= hamonAmountRequirements[MuscleOverdrive];
+                    player.AddBuff(mod.BuffType("HamonChargedII"), 60 * 60 * 5);
+                }
+            }
+            else
+            {
+                muscleOverdriveHeldTimer = 0;
+            }
+        }
+
+        public void RebuildHamonAbilitiesDictionaries()
+        {
+            learnedHamonSkills.Clear();
+            hamonSkillLevels.Clear();
+            hamonAmountRequirements.Clear();
+
+            learnedHamonSkills.Add(BreathingRegenSkill, false);
+            learnedHamonSkills.Add(WaterWalkingSKill, false);
+            learnedHamonSkills.Add(WeaponsHamonImbueSkill, false);
+            learnedHamonSkills.Add(HamonItemHealing, false);
+            learnedHamonSkills.Add(DefensiveHamonAura, false);
+            learnedHamonSkills.Add(HamonShockwave, false);
+            learnedHamonSkills.Add(HamonOvercharge, false);
+            learnedHamonSkills.Add(HamonHerbalGrowth, false);
+            learnedHamonSkills.Add(PassiveHamonRegenBoost, false);
+            learnedHamonSkills.Add(PoisonCancellation, false);
+            learnedHamonSkills.Add(OreDetection, false);
+            learnedHamonSkills.Add(SunTag, false);
+            learnedHamonSkills.Add(SunShackles, false);
+            learnedHamonSkills.Add(MuscleOverdrive, false);
+
+            hamonSkillLevels.Add(BreathingRegenSkill, 0);
+            hamonSkillLevels.Add(WaterWalkingSKill, 0);
+            hamonSkillLevels.Add(WeaponsHamonImbueSkill, 0);
+            hamonSkillLevels.Add(HamonItemHealing, 0);
+            hamonSkillLevels.Add(DefensiveHamonAura, 0);
+            hamonSkillLevels.Add(HamonShockwave, 0);
+            hamonSkillLevels.Add(HamonOvercharge, 0);
+            hamonSkillLevels.Add(HamonHerbalGrowth, 0);
+            hamonSkillLevels.Add(OreDetection, 0);
+            hamonSkillLevels.Add(PassiveHamonRegenBoost, 0);
+            hamonSkillLevels.Add(PoisonCancellation, 0);
+            hamonSkillLevels.Add(SunTag, 0);
+            hamonSkillLevels.Add(SunShackles, 0);
+            hamonSkillLevels.Add(MuscleOverdrive, 0);
+
+            //Only skills that need hamon to be used should add to the requirements dictionary
+            hamonAmountRequirements.Add(WaterWalkingSKill, 0);
+            hamonAmountRequirements.Add(WeaponsHamonImbueSkill, 0);
+            hamonAmountRequirements.Add(HamonItemHealing, 0);
+            hamonAmountRequirements.Add(DefensiveHamonAura, 0);
+            hamonAmountRequirements.Add(HamonShockwave, 0);
+            hamonAmountRequirements.Add(HamonHerbalGrowth, 0);
+            hamonAmountRequirements.Add(OreDetection, 0);
+            hamonAmountRequirements.Add(PoisonCancellation, 0);
+            hamonAmountRequirements.Add(SunTag, 0);
+            hamonAmountRequirements.Add(SunShackles, 0);
+            hamonAmountRequirements.Add(MuscleOverdrive, 0);
+
+            learnedAnyAbility = false;
+            Main.NewText("Rebuilt Hamon Skills Dictionaries.", Color.Yellow);
         }
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
