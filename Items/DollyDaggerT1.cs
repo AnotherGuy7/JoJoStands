@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class DollyDaggerT1 : ModItem
+	public class DollyDaggerT1 : StandItemClass
 	{
 		public override void SetStaticDefaults()
 		{
@@ -26,6 +26,9 @@ namespace JoJoStands.Items
 			item.rare = ItemRarityID.Yellow;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 		}
+
+		public override void RightClick(Player player)
+		{ }
 
 		public override void AddRecipes()
 		{

@@ -19,6 +19,7 @@ namespace JoJoStands.NPCs
         public bool taggedWithPhantomMarker = false;
         public bool grabbedByHermitPurple = false;
         public bool taggedByKillerQueen = false;
+        public bool sunTagged = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -499,6 +500,11 @@ namespace JoJoStands.NPCs
                 Texture2D bombTexture = mod.GetTexture("Extras/Bomb");
                 Vector2 position = npc.Center - new Vector2(bombTexture.Width / 2f, (npc.height / 2f) + 18f);
                 spriteBatch.Draw(bombTexture, position - Main.screenPosition, Color.White);
+            }
+            if (sunTagged)
+            {
+                spriteBatch.Draw(Main.npcTexture[npc.type], npc.position, npc.frame, Color.Yellow);
+                return false;
             }
             return true;
         }

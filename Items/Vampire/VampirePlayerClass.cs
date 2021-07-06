@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Vampire
@@ -26,6 +27,8 @@ namespace JoJoStands.Items.Vampire
         public float lifeStealPercentLoss = 0f;
         public float lifeStealPercentLossTimer = 0;
 
+        public bool wearingDiosScarf = false;
+
         public override void ResetEffects()
         {
             ResetVariables();
@@ -49,6 +52,8 @@ namespace JoJoStands.Items.Vampire
             vampiricDamageMultiplier = 1f;
             vampiricKnockbackMultiplier = 1f;
             lifeStealMultiplier = 1f;
+
+            wearingDiosScarf = false;
         }
 
         public override void PreUpdate()
@@ -133,6 +138,17 @@ namespace JoJoStands.Items.Vampire
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
         {
             enemyToIgnoreDamageFromIndex = -1;
+        }
+
+        public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
+        {
+            if (wearingDiosScarf)
+            {
+                if (npc.TypeName.Contains("Zombie") || npc.TypeName.Contains("Undead") || npc.TypeName.Contains("Skeleton") || npc.type == NPCID.Zombie)
+                {
+                    damage = (int)(damage * 0.85f);
+                }
+            }
         }
 
         public override void UpdateBadLifeRegen()

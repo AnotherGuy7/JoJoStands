@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.ID;
 using JoJoStands.Items.Vampire;
+using JoJoStands.NPCs;
 
 namespace JoJoStands.Items.Hamon
 {
@@ -38,6 +39,7 @@ namespace JoJoStands.Items.Hamon
         public int oreDetectionDownHeldTimer = 0;
         public float oreDetectionRingRadius = 0;
         public int muscleOverdriveHeldTimer = 0;
+        public int sunTagHeldTimer = 0;
 
         public bool passiveRegen = false;
         public bool chargingHamon = false;
@@ -427,7 +429,7 @@ namespace JoJoStands.Items.Hamon
                 }
             }
 
-            if (player.controlDown || oreDetectionDownHeldTimer >= 120)
+            if ((player.controlDown || oreDetectionDownHeldTimer >= 120) && amountOfHamon >= hamonAmountRequirements[OreDetection])
             {
                 oreDetectionDownHeldTimer++;
             }
@@ -436,7 +438,7 @@ namespace JoJoStands.Items.Hamon
                 oreDetectionDownHeldTimer = 0;
             }
 
-            if (oreDetectionDownHeldTimer >= 120 && learnedHamonSkills[OreDetection] && amountOfHamon >= hamonAmountRequirements[OreDetection])
+            if (oreDetectionDownHeldTimer >= 120 && learnedHamonSkills[OreDetection])
             {
                 if (oreDetectionDownHeldTimer == 120)
                     amountOfHamon -= hamonAmountRequirements[OreDetection];
@@ -461,8 +463,7 @@ namespace JoJoStands.Items.Hamon
                         {
                             for (int i = 0; i < Main.rand.Next(4, 6 + 1); i++)
                             {
-                                startingPos *= 16f;
-                                Vector2 pos = new Vector2(startingPos.X + (x * 16f), startingPos.Y + (y * 16f));
+                                Vector2 pos = new Vector2(startingPos.X + x, startingPos.Y + y) * 16f;
                                 int dustIndex = Dust.NewDust(pos, 16, 16, 169, Scale: Main.rand.NextFloat(1f, 2f + 1f));
                                 Main.dust[dustIndex].noGravity = true;
                             }
@@ -475,6 +476,42 @@ namespace JoJoStands.Items.Hamon
                     oreDetectionDownHeldTimer = 0;
                 }
             }
+
+            if (learnedHamonSkills[SunTag])
+            {
+                bool secondSpecialHeld = false;
+                if (!Main.dedServ)
+                    secondSpecialHeld = JoJoStands.SecondSpecialHotKey.JustPressed;
+
+                if (secondSpecialHeld)
+                    sunTagHeldTimer++;
+                else
+                    sunTagHeldTimer = 0;
+
+                if (amountOfHamon >= hamonAmountRequirements[SunTag] && sunTagHeldTimer >= 180)
+                {
+                    for (int i = 0; i < 80; i++)
+                    {
+                        float rotation = MathHelper.ToRadians(i * (360f / 80f));
+                        Vector2 pos = player.Center + (rotation.ToRotationVector2() * 18f);
+                        Vector2 velocity = pos - player.Center;
+                        velocity.Normalize();
+                        velocity *= 9f;
+                        int dustIndex = Dust.NewDust(pos, 1, 1, 169, velocity.X, velocity.Y, Scale: Main.rand.NextFloat(1f, 2f + 1f));
+                        Main.dust[dustIndex].noGravity = true;
+                    }
+
+                    for (int n = 0; n < Main.maxNPCs; n++)
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.lifeMax > 5 && !npc.townNPC && !npc.immortal && player.Distance(npc.Center) <= 30f * 16f)
+                        {
+                            npc.GetGlobalNPC<JoJoGlobalNPC>().sunTagged = true;
+                        }
+                    }
+                }
+            }
+
 
             if (learnedHamonSkills[MuscleOverdrive] && amountOfHamon >= hamonAmountRequirements[MuscleOverdrive] && player.controlLeft && player.controlRight)
             {

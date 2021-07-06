@@ -33,6 +33,7 @@ namespace JoJoStands.Projectiles.Pets.Part1
                 projectile.Kill();
             }
 
+            player.zephyrfish = false;
             Vector2 directionToPlayer = player.Center - projectile.Center;
             directionToPlayer.Normalize();
             directionToPlayer *= player.moveSpeed;

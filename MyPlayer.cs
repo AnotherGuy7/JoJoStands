@@ -454,8 +454,10 @@ namespace JoJoStands
 
                 if (!TheWorldEffect)        //so that it's not interactable during a timestop, cause switching stands during a timestop is... not good
                 {
-                    StandSlot.Update();
-                    StandDyeSlot.Update();
+                    if (Main.mouseItem.modItem is Items.StandItemClass)
+                        StandSlot.Update();
+                    if (Main.mouseItem.dye != 0)
+                        StandDyeSlot.Update();
                 }
             }
         }
@@ -1950,7 +1952,8 @@ namespace JoJoStands
                     ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(modPlayer.StandDyeSlot.Item.type);
                     shader.Apply(null);
                 }
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY - 9f), drawPlayer.bodyFrame, Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY - 9f), drawPlayer.bodyFrame, drawColor, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 Main.playerDrawData.Add(data);
             }
         });

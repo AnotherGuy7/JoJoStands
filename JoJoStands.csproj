@@ -3,7 +3,7 @@
   <Import Project="..\..\references\tModLoader.targets" />
   <PropertyGroup>
     <AssemblyName>JoJoStands</AssemblyName>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
@@ -17,5 +17,22 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Terraria">
+      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+    </Reference>
+    <Reference Include="Terraria">
+      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+    </Reference>
+    <Reference Include="Terraria">
+      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+    </Reference>
+    <Reference Include="Terraria">
+      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+    </Reference>
+    <Reference Include="Terraria">
+      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

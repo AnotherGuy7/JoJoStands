@@ -500,8 +500,8 @@ namespace JoJoStands.UI
                     SetElementPosition(hamonSkillIcons[4], new Vector2(203f, 126f));
                     hamonSkillIconImages[4] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_12");
                     hamonSkillIcons[4].SetImage(hamonSkillIconImages[4]);
-                    hamonSkillIconTooltips[4] = "Focusing on entities around you allows you to create connections with them which slows them down.\nPress Second Special while standing still to release a shackle in the direction of the cursor. Hit enemies with the shackle to tie the shackle to them. Shackled enemies do 15% less damage to you.\nConsumes 15 Hamon.";
-                    affectedSkillSlotIndexes[4] = HamonPlayer.SunTag;
+                    hamonSkillIconTooltips[4] = "Focusing on entities around you allows you to create connections with them which slow them down.\nPress Second Special while standing still to release a shackle in the direction of the cursor. Hit enemies with the shackle to tie the shackle to them. Shackled enemies do 15% less damage to you.\nConsumes 15 Hamon.";
+                    affectedSkillSlotIndexes[4] = HamonPlayer.SunShackles;
                     affectedSkillSlotHamonRequired[4] = 15;
                     affectedSkillSlotHamonSkillLevel[4] = 1;
                     CheckForIconAbilityUnlocked(4);

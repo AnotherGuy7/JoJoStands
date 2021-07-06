@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class DollyDaggerT2 : ModItem
+	public class DollyDaggerT2 : StandItemClass
 	{
 		public override string Texture
 		{
@@ -61,7 +61,10 @@ namespace JoJoStands.Items
 			return true;
 		}
 
-		public override void AddRecipes()
+        public override void RightClick(Player player)
+        { }
+
+        public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("DollyDaggerT1"));

@@ -1,3 +1,4 @@
+using JoJoStands.NPCs;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -127,6 +128,15 @@ namespace JoJoStands.Items.Hamon
             if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 2)     //more than half of maxHamon
             {
                 mult *= 1.5f;
+            }
+        }
+
+        public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
+        {
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+            if (hPlayer.learnedHamonSkills[HamonPlayer.SunTag] && target.GetGlobalNPC<JoJoGlobalNPC>().sunTagged)
+            {
+                damage = (int)(damage * 1.15f);
             }
         }
 

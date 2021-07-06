@@ -14,7 +14,6 @@ namespace JoJoStands.Items.PetItems
 
         public override void SetDefaults()
         {
-            item.CloneDefaults(ItemID.ZephyrFish);
             item.width = 32;
             item.height = 32;
             item.maxStack = 1;
