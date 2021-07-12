@@ -20,6 +20,7 @@ namespace JoJoStands.NPCs
         public bool grabbedByHermitPurple = false;
         public bool taggedByKillerQueen = false;
         public bool sunTagged = false;
+        public bool sunShackled = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -501,12 +502,15 @@ namespace JoJoStands.NPCs
                 Vector2 position = npc.Center - new Vector2(bombTexture.Width / 2f, (npc.height / 2f) + 18f);
                 spriteBatch.Draw(bombTexture, position - Main.screenPosition, Color.White);
             }
+            return true;
+        }
+
+        public override void DrawEffects(NPC npc, ref Color drawColor)
+        {
             if (sunTagged)
             {
-                spriteBatch.Draw(Main.npcTexture[npc.type], npc.position, npc.frame, Color.Yellow);
-                return false;
+                drawColor = Color.Yellow;
             }
-            return true;
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
@@ -514,7 +518,7 @@ namespace JoJoStands.NPCs
             if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
             {
                 Texture2D texture = mod.GetTexture("Extras/BoundByRedBind");
-                spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, Vector2.Zero, npc.scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), npc.scale, SpriteEffects.None, 0f);
             }
         }
 

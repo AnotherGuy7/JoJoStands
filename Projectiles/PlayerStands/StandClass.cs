@@ -281,7 +281,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     projectile.spriteDirection = projectile.direction = 1;
                 }
-                else if ((targetPos - projectile.Center).X < 0f)
+                else if ((targetPos - projectile.Center).X <= 0f)
                 {
                     projectile.spriteDirection = projectile.direction = -1;
                 }
@@ -295,10 +295,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                         PlayPunchSound();
                         shootCount += newPunchTime;
                         Vector2 shootVel = targetPos - projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                        {
-                            shootVel = new Vector2(0f, 1f);
-                        }
                         shootVel.Normalize();
                         if (projectile.direction == 1)
                         {

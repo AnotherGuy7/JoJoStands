@@ -28,8 +28,23 @@ namespace JoJoStands.Items.Accessories
         {
             if (player.GetModPlayer<MyPlayer>().StandOut)
             {
-                player.statDefense += 10;
+                player.statDefense += 12;
             }
+        }
+
+        public override bool CanEquipAccessory(Player player, int slot)
+        {
+            bool alternateAmuletEquipped = false;
+            for (int i = 0; i < player.armor.Length; i++)
+            {
+                Item item = player.armor[i];
+                if (item.type == mod.ItemType("GreaterGoldAmuletOfProtect"))
+                {
+                    alternateAmuletEquipped = true;
+                    break;
+                }
+            }
+            return !alternateAmuletEquipped;
         }
 
         public override void AddRecipes()

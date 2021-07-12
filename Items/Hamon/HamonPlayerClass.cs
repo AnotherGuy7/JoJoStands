@@ -40,6 +40,7 @@ namespace JoJoStands.Items.Hamon
         public float oreDetectionRingRadius = 0;
         public int muscleOverdriveHeldTimer = 0;
         public int sunTagHeldTimer = 0;
+        public int sunShacklesHeldTimer = 0;
 
         public bool passiveRegen = false;
         public bool chargingHamon = false;
@@ -48,6 +49,7 @@ namespace JoJoStands.Items.Hamon
         public bool defensiveAuraCanPressDownAgain = false;
         public bool usingItemThatIgnoresEnemyDamage = false;
         public bool learnedAnyAbility = false;
+        public bool sunShacklesActive = false;
 
         //Adjustable skills
         public const int HamonSkillsLimit = 18;
@@ -429,51 +431,55 @@ namespace JoJoStands.Items.Hamon
                 }
             }
 
-            if ((player.controlDown || oreDetectionDownHeldTimer >= 120) && amountOfHamon >= hamonAmountRequirements[OreDetection])
+            if (learnedHamonSkills[OreDetection])
             {
-                oreDetectionDownHeldTimer++;
-            }
-            else
-            {
-                oreDetectionDownHeldTimer = 0;
-            }
-
-            if (oreDetectionDownHeldTimer >= 120 && learnedHamonSkills[OreDetection])
-            {
-                if (oreDetectionDownHeldTimer == 120)
-                    amountOfHamon -= hamonAmountRequirements[OreDetection];
-
-                oreDetectionRingRadius += 2.6f;
-                for (int i = 0; i < 80; i++)
+                if ((player.controlDown || oreDetectionDownHeldTimer >= 120) && amountOfHamon >= hamonAmountRequirements[OreDetection])
                 {
-                    float rotation = MathHelper.ToRadians(i * (360f / 80f));
-                    Vector2 pos = player.Center + (rotation.ToRotationVector2() * oreDetectionRingRadius);
-                    int dustIndex = Dust.NewDust(pos, 1, 1, 169, Scale: Main.rand.NextFloat(1f, 2f + 1f));
-                    Main.dust[dustIndex].noGravity = true;
+                    oreDetectionDownHeldTimer++;
+                }
+                else
+                {
+                    oreDetectionDownHeldTimer = 0;
                 }
 
-                int detectionRadius = 16 * hamonSkillLevels[OreDetection];
-                Vector2 startingPos = (player.position - new Vector2(detectionRadius / 2f, detectionRadius / 2f)) / 16f;
-                for (int x = 0; x < detectionRadius; x++)
+                if (oreDetectionDownHeldTimer >= 120)
                 {
-                    for (int y = 0; y < detectionRadius; y++)
+                    if (oreDetectionDownHeldTimer == 120)
+                        amountOfHamon -= hamonAmountRequirements[OreDetection];
+
+                    oreDetectionRingRadius += 2.6f;
+                    for (int i = 0; i < 80; i++)
                     {
-                        Tile potentialOreTile = Main.tile[(int)startingPos.X + x, (int)startingPos.Y + y];
-                        if (TileID.Sets.Ore[potentialOreTile.type])
+                        float rotation = MathHelper.ToRadians(i * (360f / 80f));
+                        Vector2 pos = player.Center + (rotation.ToRotationVector2() * oreDetectionRingRadius);
+                        int dustIndex = Dust.NewDust(pos, 1, 1, 169, Scale: Main.rand.NextFloat(1f, 2f + 1f));
+                        Main.dust[dustIndex].noGravity = true;
+                    }
+
+                    int detectionRadius = 24 * hamonSkillLevels[OreDetection];
+                    Vector2 startingPos = (player.position - new Vector2(detectionRadius / 2f, detectionRadius / 2f)) / 16f;
+                    for (int x = 0; x < detectionRadius; x++)
+                    {
+                        for (int y = 0; y < detectionRadius; y++)
                         {
-                            for (int i = 0; i < Main.rand.Next(4, 6 + 1); i++)
+                            Tile potentialOreTile = Main.tile[(int)startingPos.X + x, (int)startingPos.Y + y];
+                            if (TileID.Sets.Ore[potentialOreTile.type])
                             {
-                                Vector2 pos = new Vector2(startingPos.X + x, startingPos.Y + y) * 16f;
-                                int dustIndex = Dust.NewDust(pos, 16, 16, 169, Scale: Main.rand.NextFloat(1f, 2f + 1f));
-                                Main.dust[dustIndex].noGravity = true;
+                                for (int i = 0; i < Main.rand.Next(1, 3 + 1); i++)
+                                {
+                                    Vector2 pos = new Vector2(startingPos.X + x, startingPos.Y + y) * 16f;
+                                    int dustIndex = Dust.NewDust(pos, 16, 16, 169, Scale: Main.rand.NextFloat(1f, 2f + 1f));
+                                    Main.dust[dustIndex].noGravity = true;
+                                }
                             }
                         }
                     }
-                }
 
-                if (oreDetectionDownHeldTimer >= 180)
-                {
-                    oreDetectionDownHeldTimer = 0;
+                    if (oreDetectionDownHeldTimer >= 180)
+                    {
+                        oreDetectionDownHeldTimer = 0;
+                        oreDetectionRingRadius = 0f;
+                    }
                 }
             }
 
@@ -481,7 +487,7 @@ namespace JoJoStands.Items.Hamon
             {
                 bool secondSpecialHeld = false;
                 if (!Main.dedServ)
-                    secondSpecialHeld = JoJoStands.SecondSpecialHotKey.JustPressed;
+                    secondSpecialHeld = JoJoStands.SecondSpecialHotKey.Current;
 
                 if (secondSpecialHeld)
                     sunTagHeldTimer++;
@@ -490,10 +496,11 @@ namespace JoJoStands.Items.Hamon
 
                 if (amountOfHamon >= hamonAmountRequirements[SunTag] && sunTagHeldTimer >= 180)
                 {
+                    float sunTagRadius = 30f * 16f;
                     for (int i = 0; i < 80; i++)
                     {
                         float rotation = MathHelper.ToRadians(i * (360f / 80f));
-                        Vector2 pos = player.Center + (rotation.ToRotationVector2() * 18f);
+                        Vector2 pos = player.Center + (rotation.ToRotationVector2() * sunTagRadius);
                         Vector2 velocity = pos - player.Center;
                         velocity.Normalize();
                         velocity *= 9f;
@@ -504,28 +511,64 @@ namespace JoJoStands.Items.Hamon
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
                         NPC npc = Main.npc[n];
-                        if (npc.active && npc.lifeMax > 5 && !npc.townNPC && !npc.immortal && player.Distance(npc.Center) <= 30f * 16f)
+                        if (npc.active && npc.lifeMax > 5 && !npc.townNPC && !npc.immortal && player.Distance(npc.Center) <= sunTagRadius)
                         {
                             npc.GetGlobalNPC<JoJoGlobalNPC>().sunTagged = true;
                         }
                     }
+                    amountOfHamon -= hamonAmountRequirements[SunTag];
+                    sunTagHeldTimer = 0;
                 }
             }
 
-
-            if (learnedHamonSkills[MuscleOverdrive] && amountOfHamon >= hamonAmountRequirements[MuscleOverdrive] && player.controlLeft && player.controlRight)
+            if (learnedHamonSkills[SunShackles])
             {
-                muscleOverdriveHeldTimer++;
-                if (muscleOverdriveHeldTimer >= 120)
+                bool secondSpecialHeld = false;
+                if (!Main.dedServ)
+                    secondSpecialHeld = JoJoStands.SecondSpecialHotKey.Current;
+
+                if (secondSpecialHeld)
+                    sunShacklesHeldTimer++;
+                else
+                    sunShacklesHeldTimer = 0;
+
+                sunShacklesActive = player.ownedProjectileCounts[mod.ProjectileType("SunShackle")] > 0;
+
+                if (amountOfHamon >= hamonAmountRequirements[SunShackles] && sunShacklesHeldTimer >= 180)
+                {
+                    float sunShacklesRadius = 20f * 16f;
+                    for (int n = 0; n < Main.maxNPCs; n++)
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.lifeMax > 5 && !npc.townNPC && !npc.immortal && player.Distance(npc.Center) <= sunShacklesRadius)
+                        {
+                            npc.GetGlobalNPC<JoJoGlobalNPC>().sunShackled = true;
+                            Projectile.NewProjectile(npc.position, Vector2.Zero, mod.ProjectileType("SunShackle"), 0, 0f, player.whoAmI, npc.whoAmI, 0.3f);
+                        }
+                    }
+                    amountOfHamon -= hamonAmountRequirements[SunShackles];
+                    sunShacklesHeldTimer = 0;
+                }
+                Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 8, 1f, 0.8f);
+            }
+
+
+            if (learnedHamonSkills[MuscleOverdrive])
+            {
+                if (amountOfHamon >= hamonAmountRequirements[MuscleOverdrive] && player.controlLeft && player.controlRight)
+                {
+                    muscleOverdriveHeldTimer++;
+                    if (muscleOverdriveHeldTimer >= 120)
+                    {
+                        muscleOverdriveHeldTimer = 0;
+                        amountOfHamon -= hamonAmountRequirements[MuscleOverdrive];
+                        player.AddBuff(mod.BuffType("HamonChargedII"), 60 * 60 * 5);
+                    }
+                }
+                else
                 {
                     muscleOverdriveHeldTimer = 0;
-                    amountOfHamon -= hamonAmountRequirements[MuscleOverdrive];
-                    player.AddBuff(mod.BuffType("HamonChargedII"), 60 * 60 * 5);
                 }
-            }
-            else
-            {
-                muscleOverdriveHeldTimer = 0;
             }
         }
 
@@ -606,6 +649,13 @@ namespace JoJoStands.Items.Hamon
 				{
 					npc.AddBuff(mod.BuffType("Sunburn"), 80 * hamonSkillLevels[DefensiveHamonAura]);
 				}
+            }
+            if (sunShacklesActive)
+            {
+                if (npc.GetGlobalNPC<JoJoGlobalNPC>().sunShackled)
+                {
+                    damage = (int)(damage * 0.85f);
+                }
             }
         }
 

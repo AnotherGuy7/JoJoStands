@@ -40,11 +40,6 @@ namespace JoJoStands.Items.PetItems
             return true;
         }
 
-        public override void RightClick(Player player)
-        {
-            player.
-        }
-
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);

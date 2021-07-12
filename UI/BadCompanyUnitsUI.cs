@@ -33,6 +33,9 @@ namespace JoJoStands.UI
         {
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
 
+            if (mPlayer.badCompanyTier != 0)
+                Visible = false;
+
             unitsLeftText.SetText("Units Left: " + mPlayer.badCompanyUnitsLeft);
             soldiersActiveText.SetText(mPlayer.badCompanySoldiers.ToString());
             tanksActiveText.SetText(mPlayer.badCompanyTanks.ToString());
@@ -159,6 +162,9 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
+            if (mPlayer.badCompanyTier == 0)
+                return;
+
             if (mPlayer.badCompanySoldiers > 0)
             {
                 mPlayer.badCompanySoldiers--;
@@ -170,6 +176,9 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
+            if (mPlayer.badCompanyTier == 0)
+                return;
+
             if (mPlayer.badCompanyUnitsLeft >= 1)
             {
                 mPlayer.badCompanySoldiers++;
@@ -180,6 +189,9 @@ namespace JoJoStands.UI
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (mPlayer.badCompanyTier == 0)
+                return;
 
             if (mPlayer.badCompanyTier >= 2)
             {
@@ -195,6 +207,9 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
+            if (mPlayer.badCompanyTier == 0)
+                return;
+
             if (mPlayer.badCompanyTier >= 2)
             {
                 if (mPlayer.badCompanyUnitsLeft >= 4)
@@ -209,6 +224,9 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
+            if (mPlayer.badCompanyTier == 0)
+                return;
+
             if (mPlayer.badCompanyTier >= 3)
             {
                 if (mPlayer.badCompanyChoppers > 0)
@@ -222,6 +240,9 @@ namespace JoJoStands.UI
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (mPlayer.badCompanyTier == 0)
+                return;
 
             if (mPlayer.badCompanyTier >= 3)
             {

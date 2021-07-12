@@ -2,6 +2,7 @@ using JoJoStands.NPCs;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Hamon
@@ -45,6 +46,16 @@ namespace JoJoStands.Items.Hamon
                 hamonPlayer.hamonIncreaseCounter = 0;
                 hamonPlayer.chargingHamon = true;
                 Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
+                if (hamonPlayer.learnedHamonSkills[HamonPlayer.PoisonCancellation])
+                {
+                    for (int b = 0; b < player.buffType.Length; b++)
+                    {
+                        if (player.buffType[b] == BuffID.Poisoned)
+                        {
+                            player.buffTime[b] -= 5;
+                        }
+                    }
+                }
             }
             if (increaseCounter >= 30)
             {

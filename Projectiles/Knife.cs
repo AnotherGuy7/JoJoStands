@@ -23,6 +23,11 @@ namespace JoJoStands.Projectiles
         {
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(45f);
             projectile.velocity.Y += 0.3f;
+            if (projectile.velocity.X <= 0)
+            {
+                projectile.spriteDirection = -1;
+                projectile.rotation += MathHelper.ToRadians(90f);
+            }
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -39,7 +44,7 @@ namespace JoJoStands.Projectiles
         {
             for (int i = 0; i < Main.rand.Next(2, 6); i++)
             {
-                Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Lead, -projectile.velocity.X * 0.2f, -projectile.velocity.Y * 0.2f);
+                Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Lead, -projectile.velocity.X * 0.1f, -projectile.velocity.Y * 0.1f);
             }
             Main.PlaySound(0, (int)projectile.Center.X, (int)projectile.Center.Y, 1);
         }

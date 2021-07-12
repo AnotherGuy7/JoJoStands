@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
-    [AutoloadEquip(EquipType.Head)]
+    [AutoloadEquip(EquipType.Neck)]
     public class AjaStone : ModItem
     {
         public override void SetStaticDefaults()
@@ -29,7 +29,7 @@ namespace JoJoStands.Items.Accessories
             Lighting.AddLight(player.Center, 1f, 0f, 0f);
         }
 
-        public override void UpdateEquip(Player player)
+        public override void UpdateAccessory(Player player, bool hideVisual)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             hamonPlayer.hamonDamageBoosts += 0.5f;

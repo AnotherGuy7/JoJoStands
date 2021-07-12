@@ -1,18 +1,17 @@
-﻿using JoJoStands.Items.Hamon;
-using JoJoStands.Items.Vampire;
+﻿using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
-    [AutoloadEquip(EquipType.Body)]
+    [AutoloadEquip(EquipType.Neck)]
     public class DiosScarf : ModItem
     {
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Dio's Scarf");
-            Tooltip.SetDefault("A scarf that's been through many fights, betrayals, and murders...");
+            Tooltip.SetDefault("A scarf that's been through many fights, betrayals, and murders...\nGrants 15% Damage Resistance to undead enemies.");
         }
 
         public override void SetDefaults()
@@ -25,7 +24,7 @@ namespace JoJoStands.Items.Accessories
             item.accessory = true;
         }
 
-        public override void UpdateEquip(Player player)
+        public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<VampirePlayer>().wearingDiosScarf = true;
         }

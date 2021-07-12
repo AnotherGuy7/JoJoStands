@@ -1,6 +1,5 @@
 using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
-using System.Drawing;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -210,6 +209,11 @@ namespace JoJoStands.Projectiles
                 {
                     target.AddBuff(mod.BuffType("Infected"), 10 * 60);
                 }
+            }
+
+            if (!target.boss)
+            {
+                target.velocity.X *= 0.2f;
             }
         }
 

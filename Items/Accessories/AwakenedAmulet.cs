@@ -33,7 +33,7 @@ namespace JoJoStands.Items.Accessories
             mPlayer.awakenedAmuletEquipped = true;
             if (mPlayer.StandOut)
             {
-                player.statDefense += 10;
+                player.statDefense += 12;
             }
         }
 

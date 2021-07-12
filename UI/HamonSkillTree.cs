@@ -16,27 +16,27 @@ namespace JoJoStands.UI
         public UIPanel HamonSkillTreePanel;
         public static bool Visible;
         //public UIText hamonSkillTooltip;
-        public MouseTextPanel hamonSkillTooltips;
-        public UIText hamonSkillPointsText;
-        public UIImageButton hamonSkillTreeUpArrow;
-        public UIImageButton hamonSkillTreeDownArrow;
-        public UIImageButton hamonSkillTreeXButton;
+        private MouseTextPanel hamonSkillTooltips;
+        private UIText hamonSkillPointsText;
+        private UIImageButton hamonSkillTreeUpArrow;
+        private UIImageButton hamonSkillTreeDownArrow;
+        private UIImageButton hamonSkillTreeXButton;
         private Texture2D[] skillTreeTextures = new Texture2D[3];
-        public const int MaxUIPages = 3;
-        public bool[] pageLockBosses = new bool[5] { NPC.downedBoss1, NPC.downedBoss3, Main.hardMode, NPC.downedMechBossAny, NPC.downedPlantBoss};
-        public string[] pageLockMessages = new string[5] { "The next page is unlocked Post-Eye of Cthulu.", "The next page is unlocked Post-Skeletron.", "The next page is unlocked Post-Wall of Flesh.", "The next page is unlocked Post-Any Mech boss.", "The next page is unlocked Post-Plantera." };
+        private const int MaxUIPages = 3;
+        private bool[] pageLockBosses = new bool[5] { NPC.downedBoss1, NPC.downedBoss3, Main.hardMode, NPC.downedMechBossAny, NPC.downedPlantBoss};
+        private string[] pageLockMessages = new string[5] { "The next page is unlocked Post-Eye of Cthulu.", "The next page is unlocked Post-Skeletron.", "The next page is unlocked Post-Wall of Flesh.", "The next page is unlocked Post-Any Mech boss.", "The next page is unlocked Post-Plantera." };
 
 
-        public int currentShownPage = 1;
-        public const float UIScale = 1f;
-        public AdjustableButton[] hamonSkillIcons = new AdjustableButton[10];
-        public Vector2[] hamonSkillIconPositions = new Vector2[10];
-        public Texture2D[] hamonSkillIconImages = new Texture2D[10];
-        public string[] hamonSkillIconTooltips = new string[10];
-        public int[] affectedSkillSlotIndexes = new int[HamonPlayer.HamonSkillsLimit];      //This is an array of indexes for the slot that goes true
-        public int[] affectedSkillSlotHamonRequired = new int[HamonPlayer.HamonSkillsLimit];        //An array of values that change the amount of Hamon the skill needs
-        public int[] affectedSkillSlotHamonSkillLevel = new int[HamonPlayer.HamonSkillsLimit];       //An array of values that changes the skill level (for upgrading skills and stuff)
-        public bool[] slotsToLock = new bool[10];
+        private int currentShownPage = 1;
+        private const float UIScale = 1f;
+        private AdjustableButton[] hamonSkillIcons = new AdjustableButton[10];
+        private Vector2[] hamonSkillIconPositions = new Vector2[10];
+        private Texture2D[] hamonSkillIconImages = new Texture2D[10];
+        private string[] hamonSkillIconTooltips = new string[10];
+        private int[] affectedSkillSlotIndexes = new int[HamonPlayer.HamonSkillsLimit];      //This is an array of indexes for the slot that goes true
+        private int[] affectedSkillSlotHamonRequired = new int[HamonPlayer.HamonSkillsLimit];        //An array of values that change the amount of Hamon the skill needs
+        private int[] affectedSkillSlotHamonSkillLevel = new int[HamonPlayer.HamonSkillsLimit];       //An array of values that changes the skill level (for upgrading skills and stuff)
+        private bool[] slotsToLock = new bool[10];
         private Texture2D unknownSkillTexture;
 
         public static void OpenHamonSkillTree()
@@ -481,7 +481,7 @@ namespace JoJoStands.UI
                     SetElementPosition(hamonSkillIcons[2], new Vector2(186f, 279f));
                     hamonSkillIconImages[2] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_1");
                     hamonSkillIcons[2].SetImage(hamonSkillIconImages[2]);
-                    hamonSkillIconTooltips[2] = "The Hamon you breathe in focuses itself to heal your body.\nGreatly increased Life Regen when Hamon Breathing.";
+                    hamonSkillIconTooltips[2] = "The Hamon you create while breathing in focuses itself to heal your body.\nGreatly increased Life Regen when Hamon Breathing.";
                     affectedSkillSlotIndexes[2] = HamonPlayer.BreathingRegenSkill;
                     affectedSkillSlotHamonSkillLevel[2] = 2;
                     CheckForIconAbilityUnlocked(2, 2);
@@ -490,7 +490,7 @@ namespace JoJoStands.UI
                     SetElementPosition(hamonSkillIcons[3], new Vector2(162f, 126f));
                     hamonSkillIconImages[3] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_13");
                     hamonSkillIcons[3].SetImage(hamonSkillIconImages[3]);
-                    hamonSkillIconTooltips[3] = "Dispersing small amounts of Hamon into the air reveals what's around you.\nPress Second Special while standing still to release a small wave of Hamon and tag enemies. Tagged enemies are highlighted in yellow and receive 15% more damage from Hamon Sources.\nConsumes 10 Hamon.";
+                    hamonSkillIconTooltips[3] = "Dispersing small amounts of Hamon into the air reveals what's around you.\nPress and hold Second Special while standing still to release a small wave of Hamon and tag enemies. Tagged enemies are highlighted in yellow and receive 15% more damage from Hamon Sources.\nConsumes 10 Hamon.";
                     affectedSkillSlotIndexes[3] = HamonPlayer.SunTag;
                     affectedSkillSlotHamonRequired[3] = 10;
                     affectedSkillSlotHamonSkillLevel[3] = 1;
@@ -500,7 +500,7 @@ namespace JoJoStands.UI
                     SetElementPosition(hamonSkillIcons[4], new Vector2(203f, 126f));
                     hamonSkillIconImages[4] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_12");
                     hamonSkillIcons[4].SetImage(hamonSkillIconImages[4]);
-                    hamonSkillIconTooltips[4] = "Focusing on entities around you allows you to create connections with them which slow them down.\nPress Second Special while standing still to release a shackle in the direction of the cursor. Hit enemies with the shackle to tie the shackle to them. Shackled enemies do 15% less damage to you.\nConsumes 15 Hamon.";
+                    hamonSkillIconTooltips[4] = "Focusing on entities around you allows you to create connections with them which slow them down.\nPress and hold Second Special while standing still to release a shackle in the direction of the cursor. Hit enemies with the shackle to tie the shackle to them. Shackled enemies do 15% less damage to you.\nConsumes 15 Hamon.";
                     affectedSkillSlotIndexes[4] = HamonPlayer.SunShackles;
                     affectedSkillSlotHamonRequired[4] = 15;
                     affectedSkillSlotHamonSkillLevel[4] = 1;

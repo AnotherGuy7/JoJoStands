@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -84,7 +85,7 @@ namespace JoJoStands
             }
         }
 
-        public override void PostWorldGen()     ///once again, from ExampleMod
+        public override void PostWorldGen()     //once again, from ExampleMod
         {
             int[] itemsToPlaceInIceChests = { mod.ItemType("RustyRevolver") };
             for (int chestIndex = 0; chestIndex < Main.maxChests; chestIndex++)

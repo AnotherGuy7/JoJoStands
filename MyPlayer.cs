@@ -43,7 +43,7 @@ namespace JoJoStands
         public int poseDurationMinus = 290;
         public int menacingFrames = 0;
         public int tbcCounter = 0;
-        public int ActivationTimer = 0;
+        public int standKeyPressTimer = 0;
         public int GEAbilityNumber = 0;
         public int tuskActNumber = 0;
         public int equippedTuskAct = 0;
@@ -244,9 +244,9 @@ namespace JoJoStands
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (JoJoStands.StandAutoMode.JustPressed && !StandAutoMode && ActivationTimer <= 0)
+            if (JoJoStands.StandAutoMode.JustPressed && !StandAutoMode && standKeyPressTimer <= 0)
             {
-                ActivationTimer += 30;
+                standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Auto");
                 StandAutoMode = true;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -254,9 +254,9 @@ namespace JoJoStands
                     Networking.ModNetHandler.playerSync.SendStandAutoMode(256, player.whoAmI, true, player.whoAmI);
                 }
             }
-            if (JoJoStands.StandAutoMode.JustPressed && StandAutoMode && ActivationTimer <= 0)
+            if (JoJoStands.StandAutoMode.JustPressed && StandAutoMode && standKeyPressTimer <= 0)
             {
-                ActivationTimer += 30;
+                standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Manual");
                 StandAutoMode = false;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -276,10 +276,10 @@ namespace JoJoStands
                 }
                 poseMode = true;
             }
-            if (JoJoStands.StandOut.JustPressed && !StandOut && ActivationTimer <= 0 && !player.HasBuff(mod.BuffType("Stolen")))
+            if (JoJoStands.StandOut.JustPressed && !StandOut && standKeyPressTimer <= 0 && !player.HasBuff(mod.BuffType("Stolen")))
             {
                 StandOut = true;
-                ActivationTimer += 30;
+                standKeyPressTimer += 30;
                 SpawnStand();
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
@@ -353,7 +353,7 @@ namespace JoJoStands
                     }
                 }
             }
-            if (JoJoStands.StandOut.JustPressed && StandOut && ActivationTimer <= 0)
+            if (JoJoStands.StandOut.JustPressed && StandOut && standKeyPressTimer <= 0)
             {
                 StandOut = false;
                 standType = 0;
@@ -393,7 +393,7 @@ namespace JoJoStands
                 {
                     Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
                 }
-                ActivationTimer += 30;
+                standKeyPressTimer += 30;
             }
         }
 
@@ -454,9 +454,9 @@ namespace JoJoStands
 
                 if (!TheWorldEffect)        //so that it's not interactable during a timestop, cause switching stands during a timestop is... not good
                 {
-                    if (Main.mouseItem.modItem is Items.StandItemClass)
+                    if (Main.mouseItem.IsAir || Main.mouseItem.modItem is Items.StandItemClass)
                         StandSlot.Update();
-                    if (Main.mouseItem.dye != 0)
+                    if (Main.mouseItem.IsAir || Main.mouseItem.dye != 0)
                         StandDyeSlot.Update();
                 }
             }
@@ -490,18 +490,13 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
-            if (ActivationTimer > 0)
-            {
-                ActivationTimer--;
-            }
+            if (standKeyPressTimer > 0)
+                standKeyPressTimer--;
             if (revertTimer > 0)
-            {
                 revertTimer--;
-            }
             if (shadowDodgeCooldownTimer > 0)
-            {
                 shadowDodgeCooldownTimer--;
-            }
+
             if (!Main.dedServ)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside
             {
                 if (timestopEffectDurationTimer > 0)
@@ -598,6 +593,9 @@ namespace JoJoStands
             if (controllingAerosmith)
             {
                 aerosmithRadarCounter++;
+                if (aerosmithRadarCounter >= 30)
+                    aerosmithRadarCounter = 0;
+
                 player.controlLeft = false;
                 player.controlJump = false;
                 player.controlRight = false;
@@ -613,10 +611,6 @@ namespace JoJoStands
             {
                 aerosmithRadarCounter = 0;
                 UI.AerosmithRadar.Visible = false;
-            }
-            if (aerosmithRadarCounter >= 30)
-            {
-                aerosmithRadarCounter = 0;
             }
             if (poseMode)
             {
@@ -642,14 +636,6 @@ namespace JoJoStands
             if (TheWorldEffect)
             {
                 Main.windSpeed = 0f;
-            }
-            if (player.dead && player.whoAmI == Main.myPlayer && deathsoundint == 1)
-            {
-                tbcCounter++;
-                if (tbcCounter >= 270)
-                {
-                    UI.ToBeContinued.Visible = true;
-                }
             }
             if (!player.dead && player.whoAmI == Main.myPlayer)
             {
@@ -985,6 +971,7 @@ namespace JoJoStands
             {
                 UI.VoidBar.Visible = false;
             }
+
             if (badCompanyTier != 0)
             {
                 if (badCompanyUIClickTimer > 0)
@@ -1121,6 +1108,10 @@ namespace JoJoStands
             if (usedEctoPearl)
             {
                 standRangeBoosts += 64f;
+            }
+            if (StandOut)
+            {
+                player.statDefense += 10;
             }
         }
 
@@ -1771,6 +1762,15 @@ namespace JoJoStands
             creamNormalToVoid = false;
             creamExposedToVoid = false;
             creamFrame = 0;
+
+            if (player.whoAmI == Main.myPlayer && deathsoundint == 1)
+            {
+                tbcCounter++;
+                if (tbcCounter >= 270)
+                {
+                    UI.ToBeContinued.Visible = true;
+                }
+            }
         }
 
         public static readonly PlayerLayer MenacingPose = new PlayerLayer("JoJoStands", "Menacing Pose", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
