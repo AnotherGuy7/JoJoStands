@@ -120,11 +120,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 2, 30, true);
+                AnimateStand(animationName, 2, 30, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, newPunchTime, true);
+                AnimateStand(animationName, 4, newPunchTime, true);
             }
         }
     }

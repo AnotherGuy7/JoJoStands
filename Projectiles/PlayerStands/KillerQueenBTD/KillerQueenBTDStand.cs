@@ -227,15 +227,15 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 2, 30, true);
+                AnimateStand(animationName, 2, 30, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 6, newShootTime, true);
+                AnimateStand(animationName, 6, newShootTime, true);
             }
             if (animationName == "Secondary")
             {
-                AnimationStates(animationName, 4, 18 - Main.player[projectile.whoAmI].GetModPlayer<MyPlayer>().standSpeedBoosts, false);
+                AnimateStand(animationName, 4, 18 - Main.player[projectile.whoAmI].GetModPlayer<MyPlayer>().standSpeedBoosts, false);
             }
         }
     }

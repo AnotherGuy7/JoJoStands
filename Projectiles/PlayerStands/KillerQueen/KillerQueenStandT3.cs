@@ -355,19 +355,19 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 20, true);
+                AnimateStand(animationName, 4, 20, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, newPunchTime, true);
+                AnimateStand(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Secondary")
             {
-                AnimationStates(animationName, 6, 18, true);
+                AnimateStand(animationName, 6, 18, true);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 2, true);
+                AnimateStand(animationName, 1, 2, true);
             }
         }
     }

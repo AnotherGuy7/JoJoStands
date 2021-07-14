@@ -129,19 +129,19 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 30, true);
+                AnimateStand(animationName, 4, 30, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, newPunchTime, true);
+                AnimateStand(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Secondary")
             {
-                AnimationStates(animationName, 1, 10, true);
+                AnimateStand(animationName, 1, 10, true);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 10, true);
+                AnimateStand(animationName, 1, 10, true);
             }
         }
     }

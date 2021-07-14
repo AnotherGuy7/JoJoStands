@@ -260,27 +260,27 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 30, true);
+                AnimateStand(animationName, 4, 30, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, newPunchTime, true);
+                AnimateStand(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 2, true);
+                AnimateStand(animationName, 1, 2, true);
             }
             if (animationName == "Transform2")
             {
-                AnimationStates(animationName, 8, 99999, true);
+                AnimateStand(animationName, 8, 99999, true);
             }
             if (animationName == "Transform")
             {
-                AnimationStates(animationName, 6, 9999, true);
+                AnimateStand(animationName, 6, 9999, true);
             }
             if (animationName == "Idle2")
             {
-                AnimationStates(animationName, 4, 30, true);
+                AnimateStand(animationName, 4, 30, true);
             }
         }
     }

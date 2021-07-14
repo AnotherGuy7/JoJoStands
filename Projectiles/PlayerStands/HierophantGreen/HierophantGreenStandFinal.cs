@@ -276,15 +276,15 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 3, 20, true);
+                AnimateStand(animationName, 3, 20, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 3, 15, true);
+                AnimateStand(animationName, 3, 15, true);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 2, 15, true);
+                AnimateStand(animationName, 2, 15, true);
             }
         }
     }

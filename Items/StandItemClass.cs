@@ -6,7 +6,13 @@ namespace JoJoStands.Items
 {
     public class StandItemClass : ModItem
     {
+        /// <summary>
+        /// The Stands speed. (in frames)
+        /// </summary>
         public virtual int standSpeed { get; }
+        /// <summary>
+        /// The Stands type. 
+        /// </summary>
         public virtual int standType { get; } = 0;
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)

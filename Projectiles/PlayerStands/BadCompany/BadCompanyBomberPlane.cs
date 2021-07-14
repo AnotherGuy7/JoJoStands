@@ -77,7 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             if (Main.netMode != NetmodeID.Server)
                 standTexture = mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanyBomberPlane");
 
-            AnimationStates(animationName, 3, 11, true);
+            AnimateStand(animationName, 3, 11, true);
         }
     }
 }

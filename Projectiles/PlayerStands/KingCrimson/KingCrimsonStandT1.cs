@@ -137,15 +137,15 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 30, true);
+                AnimateStand(animationName, 4, 30, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 6, newPunchTime, true);
+                AnimateStand(animationName, 6, newPunchTime, true);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 2, true);
+                AnimateStand(animationName, 1, 2, true);
             }
         }
     }

@@ -90,15 +90,15 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 30, true);
+                AnimateStand(animationName, 4, 30, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 5, newPunchTime, true);
+                AnimateStand(animationName, 5, newPunchTime, true);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 12, true);
+                AnimateStand(animationName, 1, 12, true);
             }
         }
     }

@@ -189,46 +189,46 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             {
                 if (animationName == "Idle")
                 {
-                    AnimationStates(animationName, 4, 30, true);
+                    AnimateStand(animationName, 4, 30, true);
                 }
                 if (animationName == "Attack")
                 {
-                    AnimationStates(animationName, 5, newPunchTime, true);
+                    AnimateStand(animationName, 5, newPunchTime, true);
                 }
                 if (animationName == "Secondary")
                 {
-                    AnimationStates(animationName, 1, 1, true);
+                    AnimateStand(animationName, 1, 1, true);
                 }
                 if (animationName == "Parry")
                 {
-                    AnimationStates(animationName, 6, 8, false);
+                    AnimateStand(animationName, 6, 8, false);
                 }
                 if (animationName == "Pose")
                 {
-                    AnimationStates(animationName, 1, 10, true);
+                    AnimateStand(animationName, 1, 10, true);
                 }
             }
             else
             {
                 if (animationName == "Idle")
                 {
-                    AnimationStates("Shirtless" + animationName, 4, 30, true);
+                    AnimateStand("Shirtless" + animationName, 4, 30, true);
                 }
                 if (animationName == "Attack")
                 {
-                    AnimationStates("Shirtless" + animationName, 5, newPunchTime, true);
+                    AnimateStand("Shirtless" + animationName, 5, newPunchTime, true);
                 }
                 if (animationName == "Secondary")
                 {
-                    AnimationStates("Shirtless" + animationName, 1, 1, true);
+                    AnimateStand("Shirtless" + animationName, 1, 1, true);
                 }
                 if (animationName == "Parry")
                 {
-                    AnimationStates("Shirtless" + animationName, 6, 8, false);
+                    AnimateStand("Shirtless" + animationName, 6, 8, false);
                 }
                 if (animationName == "Pose")
                 {
-                    AnimationStates(animationName, 1, 10, true);
+                    AnimateStand(animationName, 1, 10, true);
                 }
             }
 

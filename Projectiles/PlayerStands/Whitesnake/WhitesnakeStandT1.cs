@@ -87,15 +87,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 30, true);
+                AnimateStand(animationName, 4, 30, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 3, newPunchTime, true);
+                AnimateStand(animationName, 3, newPunchTime, true);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 10, true);
+                AnimateStand(animationName, 1, 10, true);
             }
         }
     }

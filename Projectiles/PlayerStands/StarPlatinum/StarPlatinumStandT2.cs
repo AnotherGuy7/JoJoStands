@@ -116,15 +116,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 12, true);
+                AnimateStand(animationName, 4, 12, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, newPunchTime, true);
+                AnimateStand(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 2, 12, true);
+                AnimateStand(animationName, 2, 12, true);
             }
         }
     }

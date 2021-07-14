@@ -243,23 +243,23 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 12, true);
+                AnimateStand(animationName, 4, 12, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, newPunchTime, true);
+                AnimateStand(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Charge")
             {
-                AnimationStates(animationName, 4, 15, true);
+                AnimateStand(animationName, 4, 15, true);
             }
             if (animationName == "Scrape")
             {
-                AnimationStates(animationName, 2, 10, false);
+                AnimateStand(animationName, 2, 10, false);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 12, true);
+                AnimateStand(animationName, 1, 12, true);
             }
         }
     }

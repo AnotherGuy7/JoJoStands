@@ -263,23 +263,23 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
             if (animationName == "Parachute")
             {
-                AnimationStates(animationName, 1, 120, true);
+                AnimateStand(animationName, 1, 120, true);
             }
             if (animationName == "Prone")
             {
-                AnimationStates(animationName, 1, 120, true);
+                AnimateStand(animationName, 1, 120, true);
             }
             if (animationName == "AimUp")
             {
-                AnimationStates(animationName, 1, 120, true);
+                AnimateStand(animationName, 1, 120, true);
             }
             if (animationName == "AimDown")
             {
-                AnimationStates(animationName, 1, 120, true);
+                AnimateStand(animationName, 1, 120, true);
             }
             if (animationName == "Walk")
             {
-                AnimationStates(animationName, 4, 20 - (int)projectile.velocity.X, true);
+                AnimateStand(animationName, 4, 20 - (int)projectile.velocity.X, true);
             }
         }
     }

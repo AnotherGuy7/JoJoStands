@@ -181,15 +181,15 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 2, 30, true);
+                AnimateStand(animationName, 2, 30, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 2, newShootTime, true);
+                AnimateStand(animationName, 2, newShootTime, true);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 2, true);
+                AnimateStand(animationName, 1, 2, true);
             }
         }
     }

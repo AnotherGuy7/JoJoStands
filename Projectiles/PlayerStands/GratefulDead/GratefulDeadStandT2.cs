@@ -174,23 +174,23 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
             if (animationName == "Idle")
             {
-                AnimationStates(animationName, 4, 12, true);
+                AnimateStand(animationName, 4, 12, true);
             }
             if (animationName == "Attack")
             {
-                AnimationStates(animationName, 4, newPunchTime, true);
+                AnimateStand(animationName, 4, newPunchTime, true);
             }
             if (animationName == "Secondary")
             {
-                AnimationStates(animationName, 1, 1, true);
+                AnimateStand(animationName, 1, 1, true);
             }
             if (animationName == "Grab")
             {
-                AnimationStates(animationName, 3, 12, true, true, 2, 2);
+                AnimateStand(animationName, 3, 12, true, 2, 2);
             }
             if (animationName == "Pose")
             {
-                AnimationStates(animationName, 1, 12, true);
+                AnimateStand(animationName, 1, 12, true);
             }
         }
 

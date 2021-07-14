@@ -70,7 +70,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         private SoundEffectInstance beginningSoundInstance = null;
         private SoundEffectInstance punchingSoundInstance = null;
 
-
+        /// <summary>
+        /// Starts a timestop that lasts x amount of seconds.
+        /// </summary>
         public void Timestop(int seconds)
         {
             Player player = Main.player[projectile.owner];
@@ -89,6 +91,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        /// <summary>
+        /// Checks if the Special bind has just been pressed and there is no cooldown.
+        /// </summary>
+        /// <returns>True if the bind has just been pressed and the player has no ability cooldown on them. Returns false otherwise.</returns>
         public bool SpecialKeyPressed()     //checks for if this isn't the server, if the key is pressed, and if the player has no cooldown (is the owner check even needed?)
         {
             bool specialPressed = false;
@@ -97,6 +103,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             return specialPressed && !Main.player[projectile.owner].HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer;
         }
 
+        /// <summary>
+        /// Checks if the Special bind has just been pressed.
+        /// </summary>
+        /// <returns>True if the bind has just been pressed. Returns false otherwise.</returns>
         public bool SpecialKeyPressedNoCooldown()
         {
             bool specialPressed = false;
@@ -105,6 +115,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             return specialPressed && projectile.owner == Main.myPlayer;
         }
 
+        /// <summary>
+        /// Checks if the Special bind is currently being held down.
+        /// </summary>
+        /// <returns>True if the Special bind is being held down.</returns>
         public bool SpecialKeyCurrent()
         {
             bool specialPressed = false;
@@ -113,6 +127,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             return specialPressed && projectile.owner == Main.myPlayer;
         }
 
+        /// <summary>
+        /// Checks if the Second Special bind has just been pressed and the player has no Ability Cooldown.
+        /// </summary>
+        /// <returns>True if the Second Special bind has just been pressed and the player has no Ability Cooldown. False if otherwise.</returns>
         public bool SecondSpecialKeyPressed()     //checks for if this isn't the server, if the key is pressed, and if the player has no cooldown (is the owner check even needed?)
         {
             bool specialPressed = false;
@@ -121,6 +139,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             return specialPressed && !Main.player[projectile.owner].HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer;
         }
 
+        /// <summary>
+        /// Checks if the Second Special bind has just been pressed.
+        /// </summary>
+        /// <returns>True if the Second Special bind has just been pressed. False if otherwise.</returns>
         public bool SecondSpecialKeyPressedNoCooldown()
         {
             bool specialPressed = false;
@@ -129,6 +151,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             return specialPressed && projectile.owner == Main.myPlayer;
         }
 
+        /// <summary>
+        /// Checks if the Second Special bind is currently being held down.
+        /// </summary>
+        /// <returns>True if the Second Special bind is currently being held down. False if otherwise.</returns>
         public bool SeondSpecialKeyCurrent()
         {
             bool specialPressed = false;
@@ -137,6 +163,12 @@ namespace JoJoStands.Projectiles.PlayerStands
             return specialPressed && projectile.owner == Main.myPlayer;
         }
 
+        /// <summary>
+        /// Has the Stand switch to its attack state and punch.
+        /// Damage, knockback, and punch speed depend on the punchDamage, punchKnockback, and punchTime fields respectively.
+        /// Stand ID and Stand Tier Number are passed into the fist projectile.
+        /// </summary>
+        /// <param name="movementSpeed">How fast the Stand moves while it's punching</param>
         public void Punch(float movementSpeed = 5f)
         {
             Player player = Main.player[projectile.owner];
@@ -195,6 +227,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             LimitDistance();
         }
 
+        /// <summary>
+        /// Has the Stand switch to its idle state and stay behind the player.
+        /// </summary>
         public void StayBehind()
         {
             Player player = Main.player[projectile.owner];
@@ -213,6 +248,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             StopSounds();
         }
 
+        /// <summary>
+        /// Has the Stand switch to its idle state and stay behind the player.
+        /// During a secondary ability, the stand is able to face any direction.
+        /// </summary>
         public void StayBehindWithAbility()
         {
             Player player = Main.player[projectile.owner];
@@ -234,6 +273,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             StopSounds();
         }
 
+        /// <summary>
+        /// Has the Stand switch to its idle state and go in front of the player.
+        /// </summary>
         public void GoInFront()
         {
             Player player = Main.player[projectile.owner];
@@ -251,6 +293,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             LimitDistance();
         }
 
+        /// <summary>
+        /// A basic punch AI for Stands.
+        /// Detects enemies as far as what the maxDistance field is set to then multiplied by 1.2f (in pixels).
+        /// For use in Auto Mode.
+        /// </summary>
         public void BasicPunchAI()
         {
             Player player = Main.player[projectile.owner];
@@ -314,6 +361,15 @@ namespace JoJoStands.Projectiles.PlayerStands
             LimitDistance();
         }
 
+        /// <summary>
+        /// A basic punch AI for Stands.
+        /// Contains additional functionality for secondary abilities, which allows the stand to use ranged abilities while in Auto Mode.
+        /// For use in Auto Mode.
+        /// </summary>
+        /// <param name="projToShoot">The type of projectile that the sSand will shoot.</param>
+        /// <param name="itemToConsumeType">The type of item that will be consumed whenever the Stand uses its secondary ability.</param>
+        /// <param name="gravityAccounting">Whether or not the Stand should account for gravity when using its secondary ability.</param>
+        /// <param name="shootMax">The limit on the amount of the same projectile that the Stand can use with its secondary ability.</param>
         public void PunchAndShootAI(int projToShoot, int itemToConsumeType = -1, bool gravityAccounting = false, int shootMax = 999)
         {
             Player player = Main.player[projectile.owner];
@@ -453,6 +509,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             LimitDistance();
         }
 
+        /// <summary>
+        /// Initializes the sounds the Stand would use. 
+        /// Sounds are checked for in the JoJoStands Sounds directory.
+        /// This method checks in Sounds/BattleCries/ for the sound.
+        /// </summary>
         public void InitializeSounds()
         {
             if (JoJoStands.SoundsLoaded)
@@ -475,6 +536,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        /// <summary>
+        /// Call this method to play the punch sounds.
+        /// </summary>
         public void PlayPunchSound()
         {
             if (JoJoStands.SoundsLoaded)
@@ -513,6 +577,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        /// <summary>
+        /// Syncs the sounds with other clients in the server.
+        /// </summary>
         public void SyncSounds()
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -528,6 +595,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        /// <summary>
+        /// Stops all the sounds this Stand is currently playing.
+        /// </summary>
         public void StopSounds()
         {
             if (JoJoStands.SoundsLoaded)
@@ -553,11 +623,18 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        /// <summary>
+        /// Adjusts the draw offsets of the Stand based on its projectile.spriteDirection field.
+        /// </summary>
         public void HandleDrawOffsets()     //this method kind of lost its usage when we found a better way to do offsets but whatever
         {
             drawOffsetX = standOffset * projectile.spriteDirection;
         }
 
+        /// <summary>
+        /// Updates all client-side stand info.
+        /// Updates newPunchTime, newShootTime, newMaxDistance, newAltMaxDistance, newPunchDamage, newProjectileDamage, and modPlayer.standType.
+        /// </summary>
         public void UpdateStandInfo()
         {
             Player player = Main.player[projectile.owner];
@@ -619,6 +696,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
         }
 
+        /// <summary>
+        /// Draws the Stand.
+        /// </summary>
         private void DrawStand(SpriteBatch spriteBatch, Color drawColor)
         {
             if (projectile.spriteDirection == -1)
@@ -640,6 +720,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        /// <summary>
+        /// Draws the Stands range indicators.
+        /// Only draws if the MyPlayer.RangeIndicators field is set to true.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         private void DrawRangeIndicators(SpriteBatch spriteBatch)
         {
             Player player = Main.player[projectile.owner];
@@ -658,6 +743,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        /// <summary>
+        /// Syncs and applies the current dye in the Dye Slot to the Stand.
+        /// </summary>
         public void SyncAndApplyDyeSlot()
         {
             Player player = Main.player[projectile.owner];
@@ -711,12 +799,25 @@ namespace JoJoStands.Projectiles.PlayerStands
             ReceiveExtraStates(reader);
         }
 
+        /// <summary>
+        /// Use this method to write any extra information that needs to be communicated to other clients about this Stand.
+        /// Called when projectile.netUpdate is True. Sends the extra info to other clients.
+        /// </summary>
+        /// <param name="writer"></param>
         public virtual void SendExtraStates(BinaryWriter writer)        //for those extra special 4th states (TH Charge, TW Pose, GER Rock Flick)
         { }
 
+        /// <summary>
+        /// Use this method to read any extra information that has been communicated from other clients about that Stand.
+        /// Called when a client receives extra Stand information from other clients.
+        /// </summary>
+        /// <param name="reader"></param>
         public virtual void ReceiveExtraStates(BinaryReader reader)
         { }
 
+        /// <summary>
+        /// Limits the distance the Stand can travel.
+        /// </summary>
         public void LimitDistance()
         {
             Player player = Main.player[projectile.owner];
@@ -726,7 +827,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             float distanceTo = direction.Length();
             if (distanceTo > newMaxDistance)
             {
-                if (projectile.position.X <= player.position.X - 15f)
+                /*if (projectile.position.X <= player.position.X - 15f)
                 {
                     projectile.velocity = player.velocity + new Vector2(0.8f, 0f);
                 }
@@ -741,7 +842,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (projectile.position.Y <= player.position.Y - 15f)
                 {
                     projectile.velocity = player.velocity + new Vector2(0f, 0.8f);
-                }
+                }*/
+                direction.Normalize();
+                direction *= 0.8f;
+                projectile.velocity = direction;
             }
             if (distanceTo >= newMaxDistance + 22f)
             {
@@ -754,6 +858,12 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        /// <summary>
+        /// Find the closest NPC to the player.
+        /// Criteria for the search is set by the MyPlayer.standSearchType field.
+        /// </summary>
+        /// <param name="maxDetectionRange"></param>
+        /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
         public NPC FindNearestTarget(float maxDetectionRange)
         {
             NPC target = null;
@@ -850,13 +960,57 @@ namespace JoJoStands.Projectiles.PlayerStands
             return target;
         }
 
+        /// <summary>
+        /// Determines the animation of the Stand based on its state.
+        /// </summary>
         public virtual void SelectAnimation()       //what you override to use normalFrames, attackFrames, etc. and make the animations play
         { }
 
+        /// <summary>
+        /// Plays an animation.
+        /// </summary>
+        /// <param name="animationName">The name of the animation that has to be played. Animation Name determines which Stand spritesheet to animate.</param>
         public virtual void PlayAnimation(string animationName)     //What you override to set each animations information
         { }
 
-        public void AnimationStates(string stateName, int frameAmount, int frameCounterLimit, bool loop, bool loopCertainFrames = false, int loopFrameStart = 0, int loopFrameEnd = 0)
+        /// <summary>
+        /// Plays a set animation.
+        /// </summary>
+        /// <param name="stateName">The Stands state name.</param>
+        /// <param name="frameAmount">The amount of frames the spritesheet contains.</param>
+        /// <param name="frameCounterLimit">The amoutn of updates that pass before the frame changes.</param>
+        /// <param name="loop">Whether or not the animation should loop. If false, currentAnimationDone becomes true at animation completion.</param>
+        public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loop)
+        {
+            Main.projFrames[projectile.whoAmI] = frameAmount;
+            projectile.frameCounter++;
+            currentAnimationDone = false;
+            if (projectile.frameCounter >= frameCounterLimit)
+            {
+                projectile.frame += 1;
+                projectile.frameCounter = 0;
+            }
+            if (projectile.frame >= frameAmount)
+            {
+                if (loop)
+                    projectile.frame = 0;
+                else
+                    currentAnimationDone = true;
+            }
+        }
+
+
+        /// <summary>
+        /// Plays a set animation with looping in certain frames.
+        /// </summary>
+        /// <param name="stateName">The Stands state name.</param>
+        /// <param name="frameAmount">The amount of frames the spritesheet contains.</param>
+        /// <param name="frameCounterLimit">The amoutn of updates that pass before the frame changes.</param>
+        /// <param name="loop">Whether or not the animation should loop. If false, currentAnimationDone becomes true at animation completion.</param>
+        /// <param name="loopCertainFrames">Determines whether or not the Stand will loop in certain frames.</param>
+        /// <param name="loopFrameStart">The frame where the loop will start at.</param>
+        /// <param name="loopFrameEnd">The frame which will cause the loop to restart.</param>
+        public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loopCertainFrames, int loopFrameStart, int loopFrameEnd)
         {
             Main.projFrames[projectile.whoAmI] = frameAmount;
             projectile.frameCounter++;
@@ -872,14 +1026,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     projectile.frame = loopFrameStart;
                 }
-            }
-            if (projectile.frame >= frameAmount && loop)
-            {
-                projectile.frame = 0;
-            }
-            if (projectile.frame >= frameAmount && !loop)
-            {
-                currentAnimationDone = true;
             }
         }
     }
