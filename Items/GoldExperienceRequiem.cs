@@ -1,10 +1,6 @@
-using System;
 using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
-using System.Collections.Generic;
 
 namespace JoJoStands.Items
 {
@@ -12,6 +8,8 @@ namespace JoJoStands.Items
 	{
         public override int standSpeed => 9;
         public override int standType => 1;
+        public override string standProjectileName => "GoldExperience";
+        public override int standTier => 5;
 
         public override void SetStaticDefaults()
 		{
@@ -28,6 +26,12 @@ namespace JoJoStands.Items
             item.value = 0;
             item.noUseGraphic = true;
             item.rare = ItemRarityID.LightPurple;
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GoldExperienceRequiemStand"), 0, 0f, Main.myPlayer);
+            return true;
         }
 
         public override void AddRecipes()

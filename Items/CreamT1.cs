@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -7,6 +8,8 @@ namespace JoJoStands.Items
 	{
 		public override int standSpeed => 28;
 		public override int standType => 1;
+		public override string standProjectileName => "Cream";
+		public override int standTier => 1;
 
 		public override void SetStaticDefaults()
 		{
@@ -25,7 +28,13 @@ namespace JoJoStands.Items
 			item.rare = ItemRarityID.LightPurple;
 		}
 
-		public override void AddRecipes()
+        public override bool ManualStandSpawning(Player player)
+        {
+			player.GetModPlayer<MyPlayer>().creamTier = standTier;
+			return false;
+        }
+
+        public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("StandArrow"));

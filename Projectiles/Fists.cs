@@ -50,7 +50,7 @@ namespace JoJoStands.Projectiles
             }
             if (projectile.ai[0] == 3f && mPlayer.backToZero)
             {
-                target.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
+                target.GetGlobalNPC<JoJoGlobalNPC>().affectedbyBtz = true;
                 target.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
             }
             if (projectile.ai[0] == 4f)
@@ -96,6 +96,14 @@ namespace JoJoStands.Projectiles
                 JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
                 damage = (int)(damage * jojoNPC.kingCrimsonDonutMultiplier);
                 jojoNPC.kingCrimsonDonutMultiplier += 0.06f;
+
+                if (player.HasBuff(mod.BuffType("PowerfulStrike")))
+                {
+                    damage *= 6;
+                    knockback *= 3f;
+                    jojoNPC.kingCrimsonDonutMultiplier += 0.24f;
+                    player.ClearBuff(mod.BuffType("PowerfulStrike"));
+                }
             }
             if (projectile.ai[0] == 7f)
             {

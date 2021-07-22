@@ -37,6 +37,7 @@ namespace JoJoStands.UI
         private int[] affectedSkillSlotHamonRequired = new int[HamonPlayer.HamonSkillsLimit];        //An array of values that change the amount of Hamon the skill needs
         private int[] affectedSkillSlotHamonSkillLevel = new int[HamonPlayer.HamonSkillsLimit];       //An array of values that changes the skill level (for upgrading skills and stuff)
         private bool[] slotsToLock = new bool[10];
+        private bool[] unobtainableSlots = new bool[10];
         private Texture2D unknownSkillTexture;
 
         public static void OpenHamonSkillTree()
@@ -66,6 +67,8 @@ namespace JoJoStands.UI
                     icon.drawAlpha = 1f;
                     icon.drawColor = Color.Yellow;
                 }
+                if (unobtainableSlots[i])
+                    icon.drawColor = Color.Red;
                 if (icon.IsMouseHovering)
                 {
                     hamonSkillTooltips.ShowText(hamonSkillIconTooltips[i]);
@@ -162,7 +165,7 @@ namespace JoJoStands.UI
         {
             Main.PlaySound(SoundID.MenuTick);
             pageLockBosses = new bool[5] { NPC.downedBoss1, NPC.downedBoss3, Main.hardMode, NPC.downedMechBossAny, NPC.downedPlantBoss };
-            bool pageUnlocked = pageLockBosses[currentShownPage - 1];       //This works since pages are from 1 to max and the array is in 0 to max, meaning currentShownPage gets the next page info
+            bool pageUnlocked = pageLockBosses[currentShownPage - 1];       //This works since pages are from 1 to max and the array is in 0 to max - 1, meaning currentShownPage gets the next page info
             if (pageUnlocked)
             {
                 currentShownPage++;
@@ -310,6 +313,7 @@ namespace JoJoStands.UI
                 hamonSkillIcons[b].invisible = false;
                 hamonSkillIcons[b].lockedInFocus = false;
                 slotsToLock[b] = false;
+                unobtainableSlots[b] = false;
                 SetElementPosition(hamonSkillIcons[b], Vector2.Zero);
             }
             for (int i = 0; i < hamonSkillIcons.Length; i++)
@@ -382,6 +386,9 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(5);
                     CheckForIconLock(5, 3);
 
+                    CheckForAlternateAbilityUnlokced(4, 5);
+                    CheckForAlternateAbilityUnlokced(5, 4);
+
                     SetUnusedIconsInvisible(5);
                     break;
                 case 2:
@@ -423,7 +430,6 @@ namespace JoJoStands.UI
                     affectedSkillSlotHamonRequired[2] = 30;
                     affectedSkillSlotHamonSkillLevel[2] = 1;
                     CheckForIconAbilityUnlocked(2);
-                    CheckForIconLock(2, 1);
 
                     SetElementPosition(hamonSkillIcons[3], new Vector2(183f, 64f));
                     hamonSkillIconImages[3] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_0");
@@ -451,13 +457,18 @@ namespace JoJoStands.UI
                     affectedSkillSlotHamonSkillLevel[5] = 1;
                     CheckForIconAbilityUnlocked(5);
                     CheckForSpecificAbiltyUnlocked(5, HamonPlayer.HamonItemHealing);
+
                     CheckForIconLock(4, 5);     //This is because 4 isn't initialized yet if it's called where it normally is
-                    CheckForIconLock(3, 4);
+                    CheckForIconLock(3, 2);
+                    if (!CheckForIconLock(2, 1, true))
+                    {
+                        CheckForIconLock(2, 4);
+                    }
 
                     SetUnusedIconsInvisible(5);
                     break;
                 case 3:
-                    SetElementPosition(hamonSkillIcons[0], new Vector2(186f, 257f));
+                    SetElementPosition(hamonSkillIcons[0], new Vector2(186f, 279f));
                     hamonSkillIconImages[0] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_11");
                     hamonSkillIcons[0].SetImage(hamonSkillIconImages[0]);
                     hamonSkillIconTooltips[0] = "Sending thin waves of Hamon into the ground allows you to detect differences in content.\nWhile your Hamon is past 8, hold DOWN for two seconds to see nearby ores within 16 tiles.";
@@ -468,7 +479,7 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(0);
                     CheckForSpecificAbiltyUnlocked(0, HamonPlayer.PassiveHamonRegenBoost);
 
-                    SetElementPosition(hamonSkillIcons[1], new Vector2(186f, 216f));
+                    SetElementPosition(hamonSkillIcons[1], new Vector2(186f, 225f));
                     hamonSkillIconImages[1] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_9");
                     hamonSkillIcons[1].SetImage(hamonSkillIconImages[1]);
                     hamonSkillIconTooltips[1] = "You learned that Hamon Breathing and focusing on your body can nullify and remove poisons.\nHamon Breathing decreases the duration time of Poison and other debuffs.";
@@ -478,7 +489,7 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(1);
                     CheckForIconLock(1, 0);
 
-                    SetElementPosition(hamonSkillIcons[2], new Vector2(186f, 279f));
+                    SetElementPosition(hamonSkillIcons[2], new Vector2(186f, 178f));
                     hamonSkillIconImages[2] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_1");
                     hamonSkillIcons[2].SetImage(hamonSkillIconImages[2]);
                     hamonSkillIconTooltips[2] = "The Hamon you create while breathing in focuses itself to heal your body.\nGreatly increased Life Regen when Hamon Breathing.";
@@ -490,9 +501,9 @@ namespace JoJoStands.UI
                     SetElementPosition(hamonSkillIcons[3], new Vector2(162f, 126f));
                     hamonSkillIconImages[3] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_13");
                     hamonSkillIcons[3].SetImage(hamonSkillIconImages[3]);
-                    hamonSkillIconTooltips[3] = "Dispersing small amounts of Hamon into the air reveals what's around you.\nPress and hold Second Special while standing still to release a small wave of Hamon and tag enemies. Tagged enemies are highlighted in yellow and receive 15% more damage from Hamon Sources.\nConsumes 10 Hamon.";
+                    hamonSkillIconTooltips[3] = "Dispersing small amounts of Hamon into the air reveals what's around you.\nPress and hold Second Special while standing still to release a small wave of Hamon and tag enemies. Tagged enemies are highlighted in yellow and receive 15% more damage from Hamon Sources.\nConsumes 30 Hamon.";
                     affectedSkillSlotIndexes[3] = HamonPlayer.SunTag;
-                    affectedSkillSlotHamonRequired[3] = 10;
+                    affectedSkillSlotHamonRequired[3] = 30;
                     affectedSkillSlotHamonSkillLevel[3] = 1;
                     CheckForIconAbilityUnlocked(3);
                     CheckForIconLock(3, 2);
@@ -500,9 +511,9 @@ namespace JoJoStands.UI
                     SetElementPosition(hamonSkillIcons[4], new Vector2(203f, 126f));
                     hamonSkillIconImages[4] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_12");
                     hamonSkillIcons[4].SetImage(hamonSkillIconImages[4]);
-                    hamonSkillIconTooltips[4] = "Focusing on entities around you allows you to create connections with them which slow them down.\nPress and hold Second Special while standing still to release a shackle in the direction of the cursor. Hit enemies with the shackle to tie the shackle to them. Shackled enemies do 15% less damage to you.\nConsumes 15 Hamon.";
+                    hamonSkillIconTooltips[4] = "Focusing on entities around you allows you to create connections with them which slow them down.\nPress and hold Second Special while standing still to release a shackle in the direction of the cursor. Hit enemies with the shackle to tie the shackle to them. Shackled enemies do 15% less damage to you.\nConsumes 45 Hamon.";
                     affectedSkillSlotIndexes[4] = HamonPlayer.SunShackles;
-                    affectedSkillSlotHamonRequired[4] = 15;
+                    affectedSkillSlotHamonRequired[4] = 45;
                     affectedSkillSlotHamonSkillLevel[4] = 1;
                     CheckForIconAbilityUnlocked(4);
                     CheckForIconLock(4, 2);
@@ -510,9 +521,9 @@ namespace JoJoStands.UI
                     SetElementPosition(hamonSkillIcons[5], new Vector2(186f, 69f));
                     hamonSkillIconImages[5] = ModContent.GetTexture("JoJoStands/Extras/HamonIcon_14");
                     hamonSkillIcons[5].SetImage(hamonSkillIconImages[5]);
-                    hamonSkillIconTooltips[5] = "Channelling your Hamon into yourself allows you to increase muscle efficiency.\nWhile you have more than 10 Hamon, hold LEFT and RIGHT for two seconds to get Hamon Charged II.\nConsumes 10 Hamon.";
+                    hamonSkillIconTooltips[5] = "Channelling your Hamon into yourself allows you to increase muscle efficiency.\nWhile you have more than 30 Hamon, hold LEFT and RIGHT for two seconds to get Hamon Charged II.\nConsumes 30 Hamon.";
                     affectedSkillSlotIndexes[5] = HamonPlayer.MuscleOverdrive;
-                    affectedSkillSlotHamonRequired[1] = 10;
+                    affectedSkillSlotHamonRequired[5] = 30;
                     affectedSkillSlotHamonSkillLevel[5] = 1;
                     CheckForIconAbilityUnlocked(5);
                     if (!CheckForIconLock(5, 3, true))
@@ -526,6 +537,8 @@ namespace JoJoStands.UI
                     //Loc 6 = 142, 101
                     //Loc 7 = 186, 69
 
+                    CheckForAlternateAbilityUnlokced(3, 4);
+                    CheckForAlternateAbilityUnlokced(4, 3);
                     SetUnusedIconsInvisible(5);
                     break;
             }
@@ -534,6 +547,13 @@ namespace JoJoStands.UI
             {
                 if (slotsToLock[b])
                 {
+                    if (unobtainableSlots[b])
+                    {
+                        hamonSkillIconTooltips[b] = "This skill cannot be unlocked because the alternate skill has already been unlocked.";
+                        affectedSkillSlotIndexes[b] = -1;
+                        continue;
+                    }
+
                     hamonSkillIcons[b].SetImage(unknownSkillTexture);
                     hamonSkillIconTooltips[b] = "Unlock the skill before this skill to be able to see this skill.";
                     affectedSkillSlotIndexes[b] = -1;
@@ -655,6 +675,35 @@ namespace JoJoStands.UI
             }
 
             return learnedAbility && minimumLevelMet;
+        }
+
+        /// <summary>
+        /// Checks if an alternate version of that ability is unlocked. Locks this one if the other is unlocked. Useful for alternate abilities like the Sun Tag vs the Sun Shackles.
+        /// </summary>
+        /// <returns>Whether or not the icon was locked.</returns>
+        private bool CheckForAlternateAbilityUnlokced(int iconIndex, int dependentIconIndex)
+        {
+            if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
+                return false;
+
+            Player player = Main.player[Main.myPlayer];
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+
+            bool learnedAbility = false;
+            bool minimumLevelMet = false;
+
+            if (hamonPlayer.learnedHamonSkills.ContainsKey(affectedSkillSlotIndexes[dependentIconIndex]))
+            {
+                learnedAbility = hamonPlayer.learnedHamonSkills[affectedSkillSlotIndexes[dependentIconIndex]];
+                minimumLevelMet = hamonPlayer.hamonSkillLevels[affectedSkillSlotIndexes[dependentIconIndex]] >= affectedSkillSlotHamonSkillLevel[dependentIconIndex];
+                if (learnedAbility || minimumLevelMet)
+                {
+                    slotsToLock[iconIndex] = true;
+                    unobtainableSlots[iconIndex] = true;
+                }
+            }
+
+            return learnedAbility || minimumLevelMet;
         }
 
         private void SetUnusedIconsInvisible(int highestUsedIndex)

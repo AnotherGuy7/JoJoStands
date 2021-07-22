@@ -6,7 +6,7 @@ using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
-    public class GratefulDeadStandT4 : StandClass
+    public class GratefulDeadStandFinal : StandClass
     {
         public override float shootSpeed => 16f;
         public bool grabFrames = false;

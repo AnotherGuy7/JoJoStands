@@ -14,6 +14,14 @@ namespace JoJoStands.Items
         /// The Stands type. 
         /// </summary>
         public virtual int standType { get; } = 0;
+        /// <summary>
+        /// The stand's name.
+        /// </summary>
+        public virtual string standProjectileName { get; }
+        /// <summary>
+        /// The stand's tier.
+        /// </summary>
+        public virtual int standTier { get; } = 0;
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
@@ -68,6 +76,15 @@ namespace JoJoStands.Items
                 mPlayer.StandSlot.Item.type = item.type;
                 mPlayer.StandSlot.Item.SetDefaults(item.type);
             }
+        }
+
+        /// <summary>
+        /// Determines whether or not the Stand will spawn using normal spawn code.
+        /// </summary>
+        /// <returns>Whether or not this item will override standard stand spawning code.</returns>
+        public virtual bool ManualStandSpawning(Player player)
+        {
+            return false;
         }
     }
 }

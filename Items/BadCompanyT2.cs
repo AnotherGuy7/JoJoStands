@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -7,6 +8,8 @@ namespace JoJoStands.Items
 	{
 		public override int standSpeed => 80;
 		public override int standType => 2;
+		public override string standProjectileName => "BadCompany";
+		public override int standTier => 2;
 
 		public override string Texture
 		{
@@ -28,6 +31,15 @@ namespace JoJoStands.Items
 			item.value = 0;
 			item.noUseGraphic = true;
 			item.rare = ItemRarityID.LightPurple;
+		}
+
+		public override bool ManualStandSpawning(Player player)
+		{
+			MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+			mPlayer.badCompanyTier = standTier;
+			mPlayer.maxBadCompanyUnits = 6 * standTier;
+			return false;
 		}
 
 		public override void AddRecipes()

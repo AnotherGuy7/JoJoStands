@@ -27,6 +27,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         private Vector2 velocityAddition;
         private float mouseDistance;
         private int timeskipStartDelay = 0;
+        private int blockSearchTimer = 0;
 
         public override void AI()
         {
@@ -72,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (!modPlayer.StandAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !player.HasBuff(mod.BuffType("SkippingTime")))
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
@@ -121,10 +122,92 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 }
                 else
                 {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (!Main.mouseRight && player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (!attackFrames)
+                if (Main.mouseRight && projectile.owner == Main.myPlayer && !playerHasAbilityCooldown && !player.HasBuff(mod.BuffType("SkippingTime")))
+                {
+                    GoInFront();
+                    normalFrames = false;
+                    attackFrames = false;
+                    secondaryAbilityFrames = true;
+
+                    if (blockSearchTimer > 0)
+                    {
+                        blockSearchTimer--;
+                        return;
+                    }
+
+                    int rectWidth = 56;
+                    int rectHeight = 64;
+                    Rectangle blockRect = new Rectangle((int)projectile.Center.X - (rectWidth / 2), (int)projectile.Center.Y - (rectHeight / 2), rectWidth, rectHeight);
+                    for (int p = 0; p < Main.maxProjectiles; p++)
+                    {
+                        Projectile otherProj = Main.projectile[p];
+                        if (otherProj.active)
+                        {
+                            if (blockRect.Intersects(otherProj.Hitbox) && otherProj.type != projectile.type && !otherProj.friendly)
+                            {
+                                for (int i = 0; i < 20; i++)
+                                {
+                                    Dust.NewDust(player.position, player.width, player.height, 114);
+                                }
+
+                                otherProj.penetrate -= 1;
+                                if (otherProj.penetrate <= 0)
+                                {
+                                    projectile.Kill();
+                                }
+                                secondaryAbilityFrames = false;
+
+                                Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);
+                                while (WorldGen.SolidTile((int)(player.position.X + repositionOffset.X) / 16, (int)(player.position.Y + repositionOffset.Y) / 16))
+                                {
+                                    repositionOffset.Y -= 16f;
+                                }
+                                player.position += repositionOffset;
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
+                                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip"));
+                                for (int i = 0; i < 20; i++)
+                                {
+                                    Dust.NewDust(player.position, player.width, player.height, 114);
+                                }
+                            }
+                        }
+                    }
+                    for (int n = 0; n < Main.maxNPCs; n++)
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.lifeMax > 5 && !npc.immortal && !npc.townNPC && !npc.friendly && !npc.hide && npc.Hitbox.Intersects(blockRect))
+                        {
+                            for (int i = 0; i < 20; i++)
+                            {
+                                Dust.NewDust(player.position, player.width, player.height, 114);
+                            }
+
+                            Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);
+                            while (WorldGen.SolidTile((int)(player.position.X + repositionOffset.X) / 16, (int)(player.position.Y + repositionOffset.Y) / 16))
+                            {
+                                repositionOffset.Y -= 16f;
+                            }
+                            player.position += repositionOffset;
+                            player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
+                            npc.StrikeNPC(newPunchDamage * 2, punchKnockback * 1.5f, projectile.direction);
+                            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip"));
+
+                            for (int i = 0; i < 20; i++)
+                            {
+                                Dust.NewDust(player.position, player.width, player.height, 114);
+                            }
+                        }
+                    }
+                    blockSearchTimer += 5;
+                }
+                else
+                {
+                    secondaryAbilityFrames = false;
+                }
+                if (!attackFrames && !secondaryAbilityFrames)
                 {
                     StayBehind();
                 }
@@ -147,10 +230,17 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
+            if (secondaryAbilityFrames)
+            {
+                normalFrames = false;
+                attackFrames = false;
+                PlayAnimation("Block");
+            }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
+                secondaryAbilityFrames = false;
                 PlayAnimation("Pose");
             }
         }
@@ -167,6 +257,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             if (animationName == "Attack")
             {
                 AnimateStand(animationName, 6, newPunchTime, true);
+            }
+            if (animationName == "Block")
+            {
+                AnimateStand(animationName, 4, 15, true);
             }
             if (animationName == "Pose")
             {

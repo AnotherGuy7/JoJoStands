@@ -249,14 +249,9 @@ namespace JoJoStands.NPCs
             }
             if (player.TimeSkipPreEffect)
             {
-                for (int i = 0; i < Main.maxPlayers; i++)
-                {
-                    Player otherPlayer = Main.player[i];
-                    if (otherPlayer.active && playerPositionOnSkip == Vector2.Zero && otherPlayer.GetModPlayer<MyPlayer>().TimeSkipPreEffect)
-                    {
-                        playerPositionOnSkip = Main.player[i].position;
-                    }
-                }
+                aiStyleSave = 0;
+                playerPositionOnSkip = Vector2.Zero;
+                Main.NewText("Reset #1");
             }
             if (player.TimeSkipEffect && !npc.townNPC && !npc.friendly && !npc.boss)
             {
@@ -271,6 +266,7 @@ namespace JoJoStands.NPCs
                 }
                 if (npc.aiStyle == 0)
                 {
+                    Main.NewText("Control");
                     npc.velocity /= 2;
                     if (npc.direction == -1)
                     {
@@ -312,6 +308,7 @@ namespace JoJoStands.NPCs
                         }
                     }
                 }
+                return false;
             }
             if (player.TimeSkipEffect && npc.boss)
             {

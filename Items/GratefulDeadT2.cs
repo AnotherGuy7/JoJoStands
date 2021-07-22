@@ -1,4 +1,5 @@
-﻿using Terraria.ID;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -7,6 +8,8 @@ namespace JoJoStands.Items
     {
         public override int standSpeed => 12;
         public override int standType => 1;
+        public override string standProjectileName => "GratefulDead";
+        public override int standTier => 2;
 
         public override string Texture
         {
@@ -28,6 +31,12 @@ namespace JoJoStands.Items
             item.value = 0;
             item.noUseGraphic = true;
             item.rare = ItemRarityID.LightPurple;
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            player.GetModPlayer<MyPlayer>().gratefulDeadTier = standTier;
+            return false;
         }
 
         public override void AddRecipes()

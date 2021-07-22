@@ -14,9 +14,6 @@ namespace JoJoStands.Projectiles.Minions
             Main.projFrames[projectile.type] = 13;
         }
 
-        public bool timeLeftDeclared = false;
-        public bool shrinkAndDie = false;
-
         public override void SetDefaults()
         {
             projectile.width = 22;
@@ -30,6 +27,9 @@ namespace JoJoStands.Projectiles.Minions
             drawOriginOffsetX = -10;
             drawOriginOffsetY = 41;
         }
+
+        private bool timeLeftDeclared = false;
+        private bool shrinkAndDie = false;
 
         public override void AI()
         {
@@ -117,7 +117,7 @@ namespace JoJoStands.Projectiles.Minions
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             damage = target.damage;
-            knockback = -target.velocity.X;      //they're just gonna have to go back as fast as they were going
+            knockback = Math.Abs(target.velocity.X);      //they're just gonna have to go back as fast as they were going
         }
     }
 }

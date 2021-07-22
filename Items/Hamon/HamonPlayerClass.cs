@@ -11,6 +11,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs;
+using Microsoft.Xna.Framework.Input;
 
 namespace JoJoStands.Items.Hamon
 {
@@ -319,7 +320,7 @@ namespace JoJoStands.Items.Hamon
 
         private void ManageAbilities()
         {
-            if (!learnedAnyAbility)
+            if (!learnedAnyAbility || learnedHamonSkills.Count == 0)
                 return;
 
             if (defensiveAuraDownDoublePressTimer > 0)
@@ -548,14 +549,21 @@ namespace JoJoStands.Items.Hamon
                     }
                     amountOfHamon -= hamonAmountRequirements[SunShackles];
                     sunShacklesHeldTimer = 0;
+                    Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 8, 1f, 0.8f);
                 }
-                Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 8, 1f, 0.8f);
             }
 
 
             if (learnedHamonSkills[MuscleOverdrive])
             {
-                if (amountOfHamon >= hamonAmountRequirements[MuscleOverdrive] && player.controlLeft && player.controlRight)
+                bool leftPressed = false;
+                bool rightPressed = false;
+                if (player.whoAmI == Main.myPlayer)
+                {
+                    leftPressed = PlayerInput.Triggers.Current.Left;        //Terraria is set to make both player.controlLeft and player.controlRight to false when both are pressed at the same time.
+                    rightPressed = PlayerInput.Triggers.Current.Right;
+                }
+                if (amountOfHamon >= hamonAmountRequirements[MuscleOverdrive] && leftPressed && rightPressed)
                 {
                     muscleOverdriveHeldTimer++;
                     if (muscleOverdriveHeldTimer >= 120)
@@ -563,6 +571,10 @@ namespace JoJoStands.Items.Hamon
                         muscleOverdriveHeldTimer = 0;
                         amountOfHamon -= hamonAmountRequirements[MuscleOverdrive];
                         player.AddBuff(mod.BuffType("HamonChargedII"), 60 * 60 * 5);
+                        for (int i = 0; i < Main.rand.Next(15, 32); i++)
+                        {
+                            Dust.NewDust(player.position, player.width, player.height, 169, SpeedY: Main.rand.NextFloat(-1.4f + -0.3f + 1f));
+                        }
                     }
                 }
                 else

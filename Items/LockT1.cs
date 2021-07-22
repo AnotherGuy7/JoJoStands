@@ -1,4 +1,5 @@
-﻿using Terraria.ID;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -11,11 +12,23 @@ namespace JoJoStands.Items
             Tooltip.SetDefault("Make people that harm you overwhelmed with Guilt!");
         }
 
+        public override int standTier => 1;
+
         public override void SetDefaults()
         {
             item.width = 30;
             item.height = 30;
             item.rare = ItemRarityID.LightPurple;
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.standAccessory = true;
+            mPlayer.standType = 1;
+            mPlayer.poseSoundName = "TheGuiltierYouFeel";
+            player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
+            return true;
         }
 
         public override void AddRecipes()

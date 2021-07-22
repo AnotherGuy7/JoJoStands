@@ -7,8 +7,11 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class TestStand : ModItem
+	public class TestStand : StandItemClass
 	{
+        public override int standSpeed => 12;
+        public override int standType => 1;
+
         public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Test Stand");
@@ -53,5 +56,23 @@ namespace JoJoStands.Items
             }
             return false;
         }*/
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            if (player.name.Contains("Test Shadow"))
+            {
+                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TestStand"), 0, 0f, Main.myPlayer);
+            }
+            else
+            {
+                Main.NewText("You are not worthy.", Color.Red);
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
+                }
+                player.GetModPlayer<MyPlayer>().StandOut = false;
+            }
+            return true;
+        }
     }
 }

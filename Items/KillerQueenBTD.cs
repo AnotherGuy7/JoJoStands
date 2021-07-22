@@ -10,6 +10,7 @@ namespace JoJoStands.Items
 
         public override int standSpeed => 60;
         public override int standType => 2;
+        public override int standTier => 5;
 
         public override string Texture
         {
@@ -49,6 +50,12 @@ namespace JoJoStands.Items
                     }
                 }
             }
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KillerQueenBTDStand"), 0, 0f, Main.myPlayer);
+            return true;
         }
 
         public override void AddRecipes()

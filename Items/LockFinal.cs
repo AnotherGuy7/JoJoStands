@@ -1,14 +1,17 @@
-﻿using Terraria.ID;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class LockT4 : StandItemClass
+    public class LockFinal : StandItemClass
     {
         public override string Texture
         {
             get { return mod.Name + "/Items/LockT1"; }
         }
+
+        public override int standTier => 4;
 
         public override void SetStaticDefaults()
         {
@@ -21,6 +24,16 @@ namespace JoJoStands.Items
             item.width = 30;
             item.height = 30;
             item.rare = ItemRarityID.LightPurple;
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.standAccessory = true;
+            mPlayer.standType = 1;
+            mPlayer.poseSoundName = "TheGuiltierYouFeel";
+            player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
+            return true;
         }
 
         public override void AddRecipes()

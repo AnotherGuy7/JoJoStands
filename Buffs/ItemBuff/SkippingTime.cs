@@ -18,41 +18,44 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
 
-        public bool setToTrue = false;
-        public bool sendFalse = false;
+        private bool setToTrue = false;
+        private bool sendFalse = false;
  
         public override void Update(Player player, ref int buffIndex)
         {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
             if (player.HasBuff(mod.BuffType("SkippingTime")))
             {
                 player.immune = true;
                 player.controlUseItem = false;
                 player.AddBuff(BuffID.NightOwl, 2);
-                for (int i = 0; i < 255; i++)
+                mPlayer.TimeSkipEffect = true;
+                for (int i = 0; i < Main.maxPlayers; i++)
                 {
-                    if (Main.player[i].active && !Main.player[i].HasBuff(mod.BuffType("PreTimeSkip")) && !Main.player[i].HasBuff(mod.BuffType("SkippingTime")))
+                    Player otherPlayer = Main.player[i];
+                    if (otherPlayer.active && !otherPlayer.HasBuff(mod.BuffType("PreTimeSkip")) && !otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
                     {
-                        Main.player[i].velocity = PreTimeSkip.playerVelocity[i];
-                        Main.player[i].AddBuff(BuffID.Obstructed, 2);
-                        Main.player[i].controlUseItem = false;
-                        Main.player[i].controlLeft = false;
-                        Main.player[i].controlJump = false;
-                        Main.player[i].controlRight = false;
-                        Main.player[i].controlDown = false;
-                        Main.player[i].controlQuickHeal = false;
-                        Main.player[i].controlQuickMana = false;
-                        Main.player[i].controlRight = false;
-                        Main.player[i].controlUseTile = false;
-                        Main.player[i].controlUp = false;
-                        Main.player[i].controlMount = false;
-                        Main.player[i].gravControl = false;
-                        Main.player[i].gravControl2 = false;
-                        Main.player[i].controlTorch = false;
+                        otherPlayer.velocity = PreTimeSkip.playerVelocity[i];
+                        otherPlayer.AddBuff(BuffID.Obstructed, 2);
+                        otherPlayer.controlUseItem = false;
+                        otherPlayer.controlLeft = false;
+                        otherPlayer.controlJump = false;
+                        otherPlayer.controlRight = false;
+                        otherPlayer.controlDown = false;
+                        otherPlayer.controlQuickHeal = false;
+                        otherPlayer.controlQuickMana = false;
+                        otherPlayer.controlRight = false;
+                        otherPlayer.controlUseTile = false;
+                        otherPlayer.controlUp = false;
+                        otherPlayer.controlMount = false;
+                        otherPlayer.gravControl = false;
+                        otherPlayer.gravControl2 = false;
+                        otherPlayer.controlTorch = false;
                     }
                 }
                 if (!setToTrue)
                 {
-                    player.GetModPlayer<MyPlayer>().TimeSkipEffect = true;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
                         ModNetHandler.effectSync.SendTimeskip(256, player.whoAmI, true, player.whoAmI);
@@ -62,13 +65,13 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             else
             {
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                for (int i = 0; i < Main.maxNPCs; i++)
+                for (int n = 0; n < Main.maxNPCs; n++)
                 {
-                    Main.npc[i].AddBuff(mod.BuffType("TimeSkipConfusion"), 120);
+                    Main.npc[n].AddBuff(mod.BuffType("TimeSkipConfusion"), 120);
                 }
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timeskip_end"));
                 player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
+                player.AddBuff(mod.BuffType("PowerfulStrike"), 2);
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     mPlayer.TimeSkipEffect = false;
@@ -77,26 +80,26 @@ namespace JoJoStands.Buffs.ItemBuff
                 {
                     for (int i = 0; i < Main.maxPlayers; i++)
                     {
-                        Player otherPlayers = Main.player[i];
-                        if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
+                        Player otherPlayer = Main.player[i];
+                        if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI)
                         {
-                            if (otherPlayers.HasBuff(mod.BuffType(Name)))
+                            if (otherPlayer.HasBuff(mod.BuffType(Name)))
                             {
-                                sendFalse = false;      //don't send the packet and let the buff end if you weren't the only timestop owner
+                                sendFalse = false;      //don't send the packet and let the buff end if you weren't the only timeskip owner
                             }
                             else
                             {
-                                sendFalse = true;       //send the packet if no one is owning timestop
+                                sendFalse = true;       //send the packet if no one is owning timeskip
                             }
                         }
-                        if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
+                        if (player.active && !otherPlayer.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
                         {
                             sendFalse = true;
                         }
                         Array.Clear(PreTimeSkip.playerVelocity, i, 1);
-                        if (Main.player[i].active && i != player.whoAmI)
+                        if (otherPlayer.active && i != player.whoAmI)
                         {
-                            Main.player[i].AddBuff(mod.BuffType("TimeSkipConfusion"), 240);
+                            otherPlayer.AddBuff(mod.BuffType("TimeSkipConfusion"), 5 * 60);
                         }
                     }
                 }

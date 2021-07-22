@@ -64,7 +64,16 @@ namespace JoJoStands.Items
         public override void RightClick(Player player)
         { }
 
-        public override void AddRecipes()
+		public override bool ManualStandSpawning(Player player)
+		{
+			MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+			mPlayer.standType = 1;
+			mPlayer.standAccessory = true;
+			player.AddBuff(mod.BuffType("DollyDaggerActiveBuff"), 10);
+			return true;
+		}
+
+		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("DollyDaggerT1"));

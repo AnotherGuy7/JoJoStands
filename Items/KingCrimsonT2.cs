@@ -7,6 +7,8 @@ namespace JoJoStands.Items
     {
         public override int standSpeed => 24;
         public override int standType => 1;
+        public override string standProjectileName => "KingCrimson";
+        public override int standTier => 2;
 
         public override string Texture
         {
@@ -16,7 +18,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("King Crimson (Tier 2)");
-            Tooltip.SetDefault("Donut enemies with a powerful punch!\nConsecutive Donuts deal greater damage.\nSpecial: Skip 2 seconds of time!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!\nConsecutive Donuts deal greater damage.\nSpecial: Skip 2 seconds of time!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

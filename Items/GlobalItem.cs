@@ -1,4 +1,6 @@
 using JoJoStands.Items.Hamon;
+using JoJoStands.Projectiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,46 +9,34 @@ namespace JoJoStands.Items
 {
     public class JoJoGlobalItem : GlobalItem
     {
-       public override bool InstancePerEntity => true;
+        public override bool InstancePerEntity => true;
         public override bool CloneNewInstances => true;
 
-        public float doublePressTimer = 0;
-        public float normalGravity = 0f;
-        public float normalFallSpeed = 0f;
-        public bool gravitySaved = false;
+        private float doublePressTimer = 0;
+        private float normalGravity = 0f;
+        private float normalFallSpeed = 0f;
+        private bool gravitySaved = false;
 
         public override void ModifyWeaponDamage(Item item, Player player, ref float add, ref float mult, ref float flat)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.sexPistolsTier != 0 && (item.shoot == 10 || item.useAmmo == AmmoID.Bullet))
             {
-                if (mPlayer.sexPistolsTier == 1)
-                {
-                    mult *= 1.05f;
-                }
-                if (mPlayer.sexPistolsTier == 2)
-                {
-                    mult *= 1.1f;
-                }
-                if (mPlayer.sexPistolsTier == 3)
-                {
-                    mult *= 1.15f;
-                }
-                if (mPlayer.sexPistolsTier == 4)
-                {
-                    mult *= 1.2f;
-                }
+                mult *= 1f + (0.05f * mPlayer.sexPistolsTier);
             }
         }
 
-        public override void PickAmmo(Item weapon, Item ammo, Player player, ref int type, ref float speed, ref int damage, ref float knockback)
+        public override bool Shoot(Item item, Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.sexPistolsTier != 0 && (weapon.shoot == 10 || weapon.useAmmo == AmmoID.Bullet) && mPlayer.sexPistolsLeft > 0)
+            if (mPlayer.sexPistolsTier != 0 && (item.shoot == 10 || item.useAmmo == AmmoID.Bullet) && mPlayer.sexPistolsLeft > 0 && mPlayer.StandAutoMode)
             {
                 mPlayer.sexPistolsLeft -= 1;
-                type = mod.ProjectileType("SPBullet");
+                int projectileIndex = Projectile.NewProjectile(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
+                Main.projectile[projectileIndex].GetGlobalProjectile<JoJoGlobalProjectile>().autoModeSexPistols = true;
+                return false;
             }
+            return true;
         }
 
         public override bool AltFunctionUse(Item item, Player player)
@@ -56,7 +46,7 @@ namespace JoJoStands.Items
             {
                 return false;
             }
-            return base.AltFunctionUse(item, player);
+            return false;
         }
 
         public override bool CanUseItem(Item item, Player player)
@@ -81,6 +71,10 @@ namespace JoJoStands.Items
                     return false;
                 }
             }
+
+            if (player.HasBuff(mod.BuffType("SkippingTime")))
+                return false;
+
             return true;
         }
 

@@ -28,19 +28,20 @@ namespace JoJoStands.Buffs.ItemBuff
             {
                 for (int i = 0; i < 255; i++)
                 {
-                    if (Main.player[i].active && !Main.player[i].HasBuff(mod.BuffType("PreTimeSkip")) && !Main.player[i].HasBuff(mod.BuffType("SkippingTime")))
+                    Player otherPlayer = Main.player[i];
+                    if (otherPlayer.active && !otherPlayer.HasBuff(mod.BuffType("PreTimeSkip")) && !otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
                     {
-                        playerVelocity[i] = Main.player[i].velocity;
-                        Main.player[i].controlUseItem = false;
-                        Main.player[i].controlLeft = false;
-                        Main.player[i].controlJump = false;
-                        Main.player[i].controlRight = false;
-                        Main.player[i].controlDown = false;
-                        Main.player[i].controlQuickHeal = false;
-                        Main.player[i].controlQuickMana = false;
-                        Main.player[i].controlRight = false;
-                        Main.player[i].controlUseTile = false;
-                        Main.player[i].controlUp = false;
+                        playerVelocity[i] = otherPlayer.velocity;
+                        otherPlayer.controlUseItem = false;
+                        otherPlayer.controlLeft = false;
+                        otherPlayer.controlJump = false;
+                        otherPlayer.controlRight = false;
+                        otherPlayer.controlDown = false;
+                        otherPlayer.controlQuickHeal = false;
+                        otherPlayer.controlQuickMana = false;
+                        otherPlayer.controlRight = false;
+                        otherPlayer.controlUseTile = false;
+                        otherPlayer.controlUp = false;
                     }
                 }
                 player.GetModPlayer<MyPlayer>().TimeSkipPreEffect = true;
@@ -61,7 +62,6 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 player.GetModPlayer<MyPlayer>().TimeSkipPreEffect = false;
             }
-
         }
     }
 }

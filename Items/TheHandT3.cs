@@ -1,8 +1,5 @@
 ﻿using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
-using System.Collections.Generic;
 
 namespace JoJoStands.Items
 {
@@ -10,6 +7,8 @@ namespace JoJoStands.Items
     {
         public override int standSpeed => 11;
         public override int standType => 1;
+        public override string standProjectileName => "TheHand";
+        public override int standTier => 3;
 
         public override string Texture
         {

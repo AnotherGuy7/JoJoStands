@@ -1,9 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class JoJoGlobalProjectile : GlobalProjectile
@@ -24,6 +25,8 @@ namespace JoJoStands.Projectiles
         public bool stoppedInTime = false;
         //public bool checkedForImmunity = false;
         public bool timestopImmune = false;
+        public bool autoModeSexPistols = false;
+        public bool kickedBySexPistols = false;
 
         public override bool InstancePerEntity
         {
@@ -148,6 +151,29 @@ namespace JoJoStands.Projectiles
                 }
                 return false;
             }
+            if (autoModeSexPistols)
+            {
+                for (int n = 0; n < Main.maxNPCs; n++)
+                {
+                    NPC possibleTarget = Main.npc[n];
+                    if (possibleTarget.active && possibleTarget.lifeMax > 5 && !possibleTarget.immortal && !possibleTarget.townNPC && !possibleTarget.hide && projectile.Distance(possibleTarget.Center) <= 48f)
+                    {
+                        kickedBySexPistols = true;
+                        autoModeSexPistols = false;
+
+                        Vector2 redirectionVelocity = possibleTarget.Center - projectile.Center;
+                        redirectionVelocity.Normalize();
+                        redirectionVelocity *= 16f;
+                        projectile.velocity = redirectionVelocity;
+                        Main.PlaySound(SoundID.Tink, projectile.Center);
+                        break;
+                    }
+                }
+            }
+            if (kickedBySexPistols)
+            {
+                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 204, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+            }
             return true;
         }
 
@@ -174,12 +200,23 @@ namespace JoJoStands.Projectiles
             return base.PreAI(projectile);
         }
 
-        public override void OnHitPlayer(Projectile projectile, Player target, int damage, bool crit)
+        public override void ModifyHitPlayer(Projectile projectile, Player target, ref int damage, ref bool crit)
         {
-            if (target.HeldItem.type == mod.ItemType("DollyDagger"))
+            MyPlayer mPlayer = target.GetModPlayer<MyPlayer>();
+            if (mPlayer.StandSlot.Item.type == mod.ItemType("DollyDaggerT1"))
             {
-                damage = (int)(damage * 0.3);
+                damage = (int)(damage * 0.35f);
             }
+            if (mPlayer.StandSlot.Item.type == mod.ItemType("DollyDaggerT2"))
+            {
+                damage = (int)(damage * 0.7f);
+            }
+        }
+
+        public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (kickedBySexPistols)
+                damage = (int)(damage * 1.05f);
         }
 
         public override bool ShouldUpdatePosition(Projectile projectile)        //thanks, HellGoesOn for telling me this hook even existed
@@ -187,14 +224,7 @@ namespace JoJoStands.Projectiles
             MyPlayer Mplayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
             if (Mplayer.TheWorldEffect && projectile.timeLeft <= timeLeft)        //the ones who can move in Za Warudo's projectiles, like minions, fists, every other projectile should freeze
             {
-                if (timestopImmune)
-                {
-                    return true;
-                }
-                else      //if it's owner isn't a timestop owner, always stop the projectile
-                {
-                    return false;
-                }
+                    return timestopImmune;      //if it's owner isn't a timestop owner, always stop the projectile
             }
             return base.ShouldUpdatePosition(projectile);
         }

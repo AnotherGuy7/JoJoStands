@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -7,6 +8,7 @@ namespace JoJoStands.Items
     {
         public override int standSpeed => 35;
         public override int standType => 2;
+        public override int standTier => 3;
 
         public override void SetStaticDefaults()
         {
@@ -27,6 +29,16 @@ namespace JoJoStands.Items
             item.value = 0;
             item.noUseGraphic = true;
             item.rare = ItemRarityID.LightPurple;
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            mPlayer.standType = 2;
+            mPlayer.equippedTuskAct = standTier;
+            mPlayer.tuskActNumber = standTier;
+            return true;
         }
 
         public override void AddRecipes()

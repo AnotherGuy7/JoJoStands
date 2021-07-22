@@ -59,6 +59,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public int newPunchDamage = 0;
         public int newProjectileDamage = 0;
         public bool currentAnimationDone = false;
+        public bool playerHasAbilityCooldown = false;
 
         public int shootCount = 0;
         private Vector2 velocityAddition;
@@ -646,6 +647,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             newAltMaxDistance = maxAltDistance + modPlayer.standRangeBoosts;
             newPunchDamage = (int)(punchDamage * modPlayer.standDamageBoosts);
             newProjectileDamage = (int)(projectileDamage * modPlayer.standDamageBoosts);
+            playerHasAbilityCooldown = player.HasBuff(mod.BuffType("AbilityCooldown"));
             modPlayer.poseSoundName = poseSoundName;
             if (newPunchTime <= 2)
             {
@@ -845,7 +847,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }*/
                 direction.Normalize();
                 direction *= 0.8f;
-                projectile.velocity = direction;
+                projectile.velocity = player.velocity + direction;
             }
             if (distanceTo >= newMaxDistance + 22f)
             {

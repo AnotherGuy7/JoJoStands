@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,6 +7,8 @@ namespace JoJoStands.Items
     {
         public override int standSpeed => 11;
         public override int standType => 1;
+        public override string standProjectileName => "TheWorld";
+        public override int standTier => 1;
 
         public override void SetStaticDefaults()
         {

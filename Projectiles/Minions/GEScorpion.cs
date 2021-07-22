@@ -11,8 +11,6 @@ namespace JoJoStands.Projectiles.Minions
     {
         public override string Texture { get { return "Terraria/NPC_" + NPCID.ScorpionBlack; } }
 
-        public bool walking = false;
-
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 4;
@@ -31,10 +29,12 @@ namespace JoJoStands.Projectiles.Minions
             drawOriginOffsetY = -5;
         }
 
+        private const float DetectionDistance = 20f * 16f;
+        private bool walking = false;
+
         public override void AI()
         {
             SelectFrame();
-            NPC npcTarget = null;
             projectile.ai[0]--;
             if (projectile.ai[0] <= 0f)
             {
@@ -53,25 +53,21 @@ namespace JoJoStands.Projectiles.Minions
             {
                 walking = true;
             }
-            Vector2 move = Vector2.Zero;
-            float distance = 400f;
-            bool target = false;
-            for (int k = 0; k < 200; k++)
+            NPC npcTarget = null;
+            for (int n = 0; n < 200; n++)
             {
-                if (Main.npc[k].active && !Main.npc[k].dontTakeDamage && !Main.npc[k].friendly && Main.npc[k].lifeMax > 5 && Main.npc[k].type != NPCID.TargetDummy && Main.npc[k].type != NPCID.CultistTablet)
+                NPC npc = Main.npc[n];
+                if (npc.active && !npc.dontTakeDamage && !npc.friendly && npc.lifeMax > 5 && npc.type != NPCID.TargetDummy && npc.type != NPCID.CultistTablet)
                 {
-                    Vector2 newMove = Main.npc[k].Center - projectile.Center;
-                    npcTarget = Main.npc[k];
-                    float distanceTo = (float)Math.Sqrt(newMove.X * newMove.X + newMove.Y * newMove.Y);
-                    if (distanceTo < distance)
+                    npcTarget = npc;
+                    float distance = projectile.Distance(npc.Center);
+                    if (distance < DetectionDistance)
                     {
-                        move = newMove;
-                        distance = distanceTo;
-                        target = true;
+                        npcTarget = npc;
                     }
                 }
             }
-            if (target)
+            if (npcTarget != null)
             {
                 if (npcTarget.position.X > projectile.position.X)
                 {
@@ -136,6 +132,7 @@ namespace JoJoStands.Projectiles.Minions
             }
             if (damage > 75)
             {
+                damage = 75;
                 projectile.Kill();
             }
         }
@@ -150,7 +147,7 @@ namespace JoJoStands.Projectiles.Minions
             return false;
         }
  
-        public void SelectFrame()
+        private void SelectFrame()
         {
             projectile.frameCounter++;
             if (walking)

@@ -9,9 +9,6 @@ namespace JoJoStands.Projectiles.Minions
 {
     public class GEFrog : ModProjectile
     {
-        public int maxReflection = 15;
-        public int jumpTimer = 0;
-        public bool walking = false;
 
         public override string Texture { get { return "Terraria/NPC_" + NPCID.Frog; } }
 
@@ -31,10 +28,15 @@ namespace JoJoStands.Projectiles.Minions
             projectile.ignoreWater = true;
         }
 
+        private const float searchDistance = 18f * 16f;
+
+        private int maxReflection = 15;
+        private int jumpTimer = 0;
+        private bool walking = false;
+
         public override void AI()
         {
             SelectFrame();
-            NPC npcTarget = null;
             jumpTimer--;
             if (jumpTimer <= 0)
             {
@@ -45,22 +47,8 @@ namespace JoJoStands.Projectiles.Minions
             {
                 projectile.velocity.Y = 6f;
             }
-            if (projectile.ai[0] == 1f)
-            {
-                maxReflection = 15;
-            }
-            if (projectile.ai[0] == 2f)
-            {
-                maxReflection = 30;
-            }
-            if (projectile.ai[0] == 3f)
-            {
-                maxReflection = 45;
-            }
-            if (projectile.ai[0] == 4f)
-            {
-                maxReflection = 60;
-            }
+
+            maxReflection = (int)projectile.ai[0] * 15;
             if (projectile.ai[1] == 0f)
             {
                 projectile.penetrate = 1;
@@ -89,25 +77,23 @@ namespace JoJoStands.Projectiles.Minions
             {
                 walking = true;
             }
-            Vector2 move = Vector2.Zero;
-            float distance = 400f;
-            bool target = false;
-            for (int k = 0; k < 200; k++)
+
+            NPC npcTarget = null;
+            for (int n = 0; n < Main.maxNPCs; n++)
             {
-                if (Main.npc[k].active && !Main.npc[k].dontTakeDamage && !Main.npc[k].friendly && Main.npc[k].lifeMax > 5 && Main.npc[k].type != NPCID.TargetDummy && Main.npc[k].type != NPCID.CultistTablet)
+                NPC possibleTarget = Main.npc[n];
+                if (possibleTarget.active && !possibleTarget.dontTakeDamage && !possibleTarget.friendly && possibleTarget.lifeMax > 5 && !possibleTarget.townNPC && possibleTarget.type != NPCID.TargetDummy && possibleTarget.type != NPCID.CultistTablet)
                 {
-                    Vector2 newMove = Main.npc[k].Center - projectile.Center;
-                    npcTarget = Main.npc[k];
-                    float distanceTo = (float)Math.Sqrt(newMove.X * newMove.X + newMove.Y * newMove.Y);
-                    if (distanceTo < distance)
+                    npcTarget = possibleTarget;
+                    float distance = projectile.Distance(possibleTarget.Center);
+                    if (distance < searchDistance)
                     {
-                        move = newMove;
-                        distance = distanceTo;
-                        target = true;
+                        npcTarget = possibleTarget;
                     }
+                    break;
                 }
             }
-            if (target)
+            if (npcTarget != null)
             {
                 if (npcTarget.position.X > projectile.position.X)
                 {
@@ -176,6 +162,7 @@ namespace JoJoStands.Projectiles.Minions
             }
             if (damage > maxReflection)
             {
+                damage = maxReflection;
                 projectile.Kill();
             }
         }
@@ -185,7 +172,7 @@ namespace JoJoStands.Projectiles.Minions
             Main.PlaySound(SoundID.NPCDeath1, projectile.position);
         }
 
-        public void SelectFrame()
+        private void SelectFrame()
         {
             projectile.frameCounter++;
             if (walking)
@@ -200,7 +187,7 @@ namespace JoJoStands.Projectiles.Minions
                     projectile.frame = 6;
                 }
             }
-            if (!walking)
+            else
             {
                 if (projectile.frameCounter >= 12)
                 {

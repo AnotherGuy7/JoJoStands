@@ -1,5 +1,7 @@
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
 
 namespace JoJoStands.Items
 {
@@ -10,10 +12,12 @@ namespace JoJoStands.Items
             get { return mod.Name + "/Items/SexPistolsT1"; }
         }
 
+        public override int standTier => 2;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sex Pistols (Tier 2)");
-            Tooltip.SetDefault("Use a gun and have its bullets home! Increases bullet damages by 10%\nRight-Click to have controlled bullets go in the direction of the mouse.\nUsed in Stand Slot");
+            Tooltip.SetDefault("Use a gun and have Sex Pistols kick the bullet!\nIncreases bullet damages by 10% and adds one penetration point.\nSpecial: Configure all Sex Pistols's placement!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -28,6 +32,19 @@ namespace JoJoStands.Items
             item.value = 0;
             item.noUseGraphic = true;
             item.rare = ItemRarityID.LightPurple;
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            mPlayer.sexPistolsTier = standTier;
+            mPlayer.poseSoundName = "SexPistolsIsDesignedToKill";
+            for (int i = 0; i < 6; i++)
+            {
+                Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("SexPistolsStand"), 0, 0f, Main.myPlayer, i + 1);
+            }
+            return true;
         }
 
         public override void AddRecipes()

@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -7,8 +8,10 @@ namespace JoJoStands.Items
     {
         public override string Texture
         {
-            get { return mod.Name + "/Items/CenturyBoy"; }
+            get { return mod.Name + "/Items/CenturyBoyT1"; }
         }
+
+        public override int standTier => 2;
 
         public override void SetStaticDefaults()
         {
@@ -21,6 +24,19 @@ namespace JoJoStands.Items
             item.width = 30;
             item.height = 30;
             item.rare = ItemRarityID.LightPurple;
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.standType = 1;
+            mPlayer.showingCBLayer = true;
+            mPlayer.standAccessory = true;
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, true, player.whoAmI);
+            }
+            return true;
         }
 
         public override void AddRecipes()

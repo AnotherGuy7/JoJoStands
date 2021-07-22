@@ -1,10 +1,6 @@
-using System;
 using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
-using System.Collections.Generic;
 
 namespace JoJoStands.Items
 {
@@ -12,6 +8,8 @@ namespace JoJoStands.Items
 	{
         public override int standSpeed => 9;
         public override int standType => 1;
+        public override string standProjectileName => "KillerQueen";
+        public override int standTier => 4;
 
         public override string Texture
         {

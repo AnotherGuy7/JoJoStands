@@ -1,3 +1,4 @@
+using JoJoStands.Items;
 using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -79,6 +80,7 @@ namespace JoJoStands
         public int maxBadCompanyUnits = 0;
         public int badCompanyUnitsLeft = 0;
         public int badCompanyUIClickTimer = 0;
+        public int standDefenseToAdd = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -132,11 +134,16 @@ namespace JoJoStands
 
         public static List<int> stopImmune = new List<int>();
         public static List<int> standTier1List = new List<int>();
+        public Vector2[] sexPistolsOffsets = new Vector2[6];
 
         public Vector2 aerosmithCamPosition;
         public Vector2 VoidCamPosition;
 
-        public string poseSoundName = "";       //This is for JoJoStandsSoudns
+        public string poseSoundName = "";       //This is for JoJoStandsSounds
+
+        private int amountOfSexPistolsPlaced = 0;
+        private int sexPistolsClickTimer = 0;
+        private bool changingSexPistolsPositions = false;
 
         public enum StandSearchType
         {
@@ -197,6 +204,10 @@ namespace JoJoStands
             else if (type == mod.ItemType("TuskAct1"))
             {
                 tuskActNumber = 1;
+            }
+            for (int i = 0; i < sexPistolsOffsets.Length; i++)
+            {
+                sexPistolsOffsets[i] = new Vector2(Main.rand.NextFloat(-40f, 40f + 1f), Main.rand.NextFloat(-40f, 40f + 1f));
             }
         }
 
@@ -358,6 +369,7 @@ namespace JoJoStands
                 StandOut = false;
                 standType = 0;
                 poseSoundName = "";
+                standDefenseToAdd = 0;
                 creamTier = 0;
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
@@ -576,19 +588,19 @@ namespace JoJoStands
                 {
                     Filters.Scene["RedEffect"].Deactivate();
                 }
-				if (ColorChangeEffects)
-				{
-					if (JoJoStandsWorld.VampiricNight && !Filters.Scene["ColorChangeEffect"].IsActive())
-					{
-						Filters.Scene.Activate("ColorChangeEffect");
-						var shader = Filters.Scene["ColorChangeEffect"].GetShader();
-						shader.UseProgress((int)ColorChangeStyle.NormalToLightGreen);
-					}
-				}
-				if (!JoJoStandsWorld.VampiricNight && Filters.Scene["ColorChangeEffect"].IsActive() || (Filters.Scene["ColorChangeEffect"].IsActive() && !ColorChangeEffects))
-				{
-					Filters.Scene["ColorChangeEffect"].Deactivate();
-				}
+                if (ColorChangeEffects)
+                {
+                    if (JoJoStandsWorld.VampiricNight && !Filters.Scene["ColorChangeEffect"].IsActive())
+                    {
+                        Filters.Scene.Activate("ColorChangeEffect");
+                        var shader = Filters.Scene["ColorChangeEffect"].GetShader();
+                        shader.UseProgress((int)ColorChangeStyle.NormalToLightGreen);
+                    }
+                }
+                if (!JoJoStandsWorld.VampiricNight && Filters.Scene["ColorChangeEffect"].IsActive() || (Filters.Scene["ColorChangeEffect"].IsActive() && !ColorChangeEffects))
+                {
+                    Filters.Scene["ColorChangeEffect"].Deactivate();
+                }
             }
             if (controllingAerosmith)
             {
@@ -690,18 +702,61 @@ namespace JoJoStands
                 achievedInfiniteSpin = true;
             }
 
-            if (sexPistolsTier != 0)        //sex pistols reload stuff
+            if (sexPistolsTier != 0)        //Sex Pistols stuff
             {
-                UI.SexPistolsUI.Visible = true;
-                if (sexPistolsLeft < 6)
+                if (!StandAutoMode)
                 {
-                    sexPistolsRecoveryTimer += sexPistolsTier;
-                    if (sexPistolsRecoveryTimer >= 120)
+                    bool specialPressed = false;
+                    if (!Main.dedServ)
+                        specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+
+                    bool secondSpecialPressed = false;
+                    if (!Main.dedServ)
+                        secondSpecialPressed = JoJoStands.SecondSpecialHotKey.JustPressed;
+
+                    if (specialPressed)
                     {
-                        sexPistolsLeft++;
-                        sexPistolsRecoveryTimer = 0;
+                        amountOfSexPistolsPlaced = 0;
+                        changingSexPistolsPositions = true;
+                        sexPistolsClickTimer = 0;
+                        Main.NewText("Click on any position to have a Sex Pistol stay around it. (Relative to the player)");
+                    }
+
+                    if (changingSexPistolsPositions)
+                    {
+                        if (sexPistolsClickTimer > 0)
+                            sexPistolsClickTimer--;
+
+                        if (Main.mouseLeft && sexPistolsClickTimer <= 0)
+                        {
+                            sexPistolsClickTimer += 30;
+                            sexPistolsOffsets[amountOfSexPistolsPlaced] = Main.MouseWorld - player.Center;
+                            amountOfSexPistolsPlaced++;
+                            if (amountOfSexPistolsPlaced >= 6)
+                            {
+                                changingSexPistolsPositions = false;
+                            }
+                        }
+                    }
+
+                    if (secondSpecialPressed && sexPistolsTier >= 3)
+                    {
+                        player.AddBuff(mod.BuffType("BulletKickFrenzy"), 60 * 60 * (sexPistolsTier - 2));
                     }
                 }
+                else
+                {
+                    if (sexPistolsLeft < 6)
+                    {
+                        sexPistolsRecoveryTimer += sexPistolsTier;
+                        if (sexPistolsRecoveryTimer >= 120)
+                        {
+                            sexPistolsLeft++;
+                            sexPistolsRecoveryTimer = 0;
+                        }
+                    }
+                }
+                UI.SexPistolsUI.Visible = StandAutoMode;
             }
             else
             {
@@ -737,6 +792,7 @@ namespace JoJoStands
                 }
                 if (tuskShootCooldown > 0)
                     tuskShootCooldown--;
+
                 if (tuskActNumber <= 3)
                 {
                     if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct" + tuskActNumber + "Pet")] <= 0)
@@ -1099,451 +1155,50 @@ namespace JoJoStands
                 player.KillMe(PlayerDeathReason.ByCustomReason(player.name + "'s artificial soul has left him."), player.statLife + 1, player.direction);
                 revived = false;
             }
-
-
         }
 
         public override void PostUpdateMiscEffects()
         {
             if (usedEctoPearl)
-            {
                 standRangeBoosts += 64f;
-            }
+
             if (StandOut)
-            {
-                player.statDefense += 10;
-            }
+                player.statDefense += standDefenseToAdd;
         }
 
         public void SpawnStand()
         {
             Item inputItem = StandSlot.Item;
 
-            if (inputItem.type == mod.ItemType("CenturyBoy"))       //the accessory stands
+            if (!spawningOtherStands)
             {
-                standAccessory = true;
-                standType = 1;
-                showingCBLayer = true;
+                StandOut = false;
+                if (inputItem.IsAir)
+                {
+                    Main.NewText("There is no stand in the Stand Slot!", Color.Red);
+                }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, true, player.whoAmI);
+                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
                 }
             }
-            else if (inputItem.type == mod.ItemType("CenturyBoyT2"))
-            {
-                standAccessory = true;
-                standType = 1;
-                showingCBLayer = true;
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, true, player.whoAmI);
-                }
-            }
-            else if (inputItem.type == mod.ItemType("DollyDaggerT1"))
-            {
-                standAccessory = true;
-                standType = 1;
-                player.AddBuff(mod.BuffType("DollyDaggerActiveBuff"), 10);
-            }
-            else if (inputItem.type == mod.ItemType("DollyDaggerT2"))
-            {
-                standAccessory = true;
-                standType = 1;
-                player.AddBuff(mod.BuffType("DollyDaggerActiveBuff"), 10);
-            }
-            else if (inputItem.type == mod.ItemType("LockT1"))
-            {
-                standAccessory = true;
-                standType = 1;
-                poseSoundName = "TheGuiltierYouFeel";
-                player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
-            }
-            else if (inputItem.type == mod.ItemType("LockT2"))
-            {
-                standAccessory = true;
-                standType = 1;
-                poseSoundName = "TheGuiltierYouFeel";
-                player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
-            }
-            else if (inputItem.type == mod.ItemType("LockT3"))
-            {
-                standAccessory = true;
-                standType = 1;
-                poseSoundName = "TheGuiltierYouFeel";
-                player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
-            }
-            else if (inputItem.type == mod.ItemType("LockT4"))
-            {
-                standAccessory = true;
-                standType = 1;
-                poseSoundName = "TheGuiltierYouFeel";
-                player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
-            }
-            else if (inputItem.type == mod.ItemType("StarPlatinumT1"))       //the normal stands
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StarPlatinumStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("StarPlatinumT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StarPlatinumStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("StarPlatinumT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StarPlatinumStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("StarPlatinumFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StarPlatinumStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("TheWorldT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheWorldStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("TheWorldT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheWorldStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("TheWorldT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheWorldStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("TheWorldFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheWorldStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("GoldExperienceT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GoldExperienceStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("GoldExperienceT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GoldExperienceStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("GoldExperienceT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GoldExperienceStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("GoldExperienceFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GoldExperienceStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("GoldExperienceRequiem"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GoldExperienceRequiemStand"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("KingCrimsonT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KingCrimsonStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("KingCrimsonT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KingCrimsonStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("KingCrimsonT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KingCrimsonStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("KingCrimsonFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KingCrimsonStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("HermitPurpleT1"))
-            {
-                standType = 1;
-                hermitPurpleTier = 1;
-            }
-            else if (inputItem.type == mod.ItemType("HermitPurpleT2"))
-            {
-                standType = 1;
-                hermitPurpleTier = 2;
-            }
-            else if (inputItem.type == mod.ItemType("HermitPurpleT3"))
-            {
-                standType = 1;
-                hermitPurpleTier = 3;
-            }
-            else if (inputItem.type == mod.ItemType("HermitPurpleFinal"))
-            {
-                standType = 1;
-                hermitPurpleTier = 4;
-            }
-            else if (inputItem.type == mod.ItemType("HierophantGreenT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("HierophantGreenStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("HierophantGreenT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("HierophantGreenStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("HierophantGreenT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("HierophantGreenStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("HierophantGreenFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("HierophantGreenStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("KillerQueenT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KillerQueenStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("KillerQueenT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KillerQueenStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("KillerQueenT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KillerQueenStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("KillerQueenFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KillerQueenStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("KillerQueenBTD"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KillerQueenBTDStand"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("StickyFingersT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StickyFingersStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("StickyFingersT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StickyFingersStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("StickyFingersT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StickyFingersStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("StickyFingersFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("StickyFingersStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("GratefulDeadT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT1"), 0, 0f, Main.myPlayer);
-                gratefulDeadTier = 1;
-            }
-            else if (inputItem.type == mod.ItemType("GratefulDeadT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT2"), 0, 0f, Main.myPlayer);
-                gratefulDeadTier = 2;
-            }
-            else if (inputItem.type == mod.ItemType("GratefulDeadT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT3"), 0, 0f, Main.myPlayer);
-                gratefulDeadTier = 3;
-            }
-            else if (inputItem.type == mod.ItemType("GratefulDeadT4"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GratefulDeadStandT4"), 0, 0f, Main.myPlayer);
-                gratefulDeadTier = 4;
-            }
-            else if (inputItem.type == mod.ItemType("WhitesnakeT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("WhitesnakeStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("WhitesnakeT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("WhitesnakeStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("WhitesnakeT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("WhitesnakeStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("WhitesnakeFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("WhitesnakeStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("SilverChariotT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SilverChariotStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("SilverChariotT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SilverChariotStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("SilverChariotT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SilverChariotStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("SilverChariotFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("SilverChariotStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("CreamT1"))
-            {
-                standType = 1;
-                creamTier = 1;
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("CreamT2"))
-            {
-                standType = 1;
-                creamTier = 2;
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("CreamT3"))
-            {
-                standType = 1;
-                creamTier = 3;
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("CreamFinal"))
-            {
-                standType = 1;
-                creamTier = 4;
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("CreamStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("SexPistolsT1"))
-            {
-                sexPistolsTier = 1;
-                poseSoundName = "SexPistolsIsDesignedToKill";
-            }
-            else if (inputItem.type == mod.ItemType("SexPistolsT2"))
-            {
-                standType = 2;
-                sexPistolsTier = 2;
-                poseSoundName = "SexPistolsIsDesignedToKill";
-            }
-            else if (inputItem.type == mod.ItemType("SexPistolsT3"))
-            {
-                standType = 2;
-                sexPistolsTier = 3;
-                poseSoundName = "SexPistolsIsDesignedToKill";
-            }
-            else if (inputItem.type == mod.ItemType("SexPistolsFinal"))
-            {
-                standType = 2;
-                sexPistolsTier = 4;
-                poseSoundName = "SexPistolsIsDesignedToKill";
-            }
-            else if (inputItem.type == mod.ItemType("TuskAct1"))
-            {
-                standType = 2;
-                equippedTuskAct = 1;
-                tuskActNumber = 1;
-            }
-            else if (inputItem.type == mod.ItemType("TuskAct2"))
-            {
-                standType = 2;
-                equippedTuskAct = 2;
-                tuskActNumber = 2;
-            }
-            else if (inputItem.type == mod.ItemType("TuskAct3"))
-            {
-                standType = 2;
-                equippedTuskAct = 3;
-                tuskActNumber = 3;
-            }
-            else if (inputItem.type == mod.ItemType("TuskAct4"))
-            {
-                standType = 2;
-                equippedTuskAct = 4;
-                tuskActNumber = 3;
-            }
-            else if (inputItem.type == mod.ItemType("BadCompanyT1"))
-            {
-                badCompanyTier = 1;
-                maxBadCompanyUnits = 6;
-            }
-            else if (inputItem.type == mod.ItemType("BadCompanyT2"))
-            {
-                badCompanyTier = 2;
-                maxBadCompanyUnits = 12;
-            }
-            else if (inputItem.type == mod.ItemType("BadCompanyT3"))
-            {
-                badCompanyTier = 3;
-                maxBadCompanyUnits = 18;
-            }
-            else if (inputItem.type == mod.ItemType("BadCompanyFinal"))
-            {
-                badCompanyTier = 4;
-                maxBadCompanyUnits = 24;
-            }
-            else if (inputItem.type == mod.ItemType("MagiciansRedT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("MagiciansRedStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("MagiciansRedT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("MagiciansRedStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("MagiciansRedT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("MagiciansRedStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("MagiciansRedFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("MagiciansRedStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("AerosmithT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("AerosmithStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("AerosmithT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("AerosmithStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("AerosmithT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("AerosmithStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("AerosmithFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("AerosmithStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("TheHandT1"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheHandStandT1"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("TheHandT2"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheHandStandT2"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("TheHandT3"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheHandStandT3"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("TheHandFinal"))
-            {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TheHandStandFinal"), 0, 0f, Main.myPlayer);
-            }
-            else if (inputItem.type == mod.ItemType("TestStand"))
-            {
-                if (player.name.Contains("Test Shadow"))
-                {
-                    Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TestStand"), 0, 0f, Main.myPlayer);
-                }
-                else
-                {
-                    StandOut = false;
-                    Main.NewText("You are not worthy.", Color.Red);
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
-                    }
-                }
-            }
-            else
-            {
-                if (!spawningOtherStands)
-                {
-                    StandOut = false;
-                    if (!inputItem.IsAir)
-                    {
-                        Main.NewText(inputItem.Name + " is not a stand!", Color.Red);
-                    }
-                    if (inputItem.IsAir)
-                    {
-                        Main.NewText("There is no stand in the Stand Slot!", Color.Red);
-                    }
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
-                    }
-                }
+
+            StandItemClass standItem = inputItem.modItem as StandItemClass;
+
+            StandOut = true;
+            standDefenseToAdd = 4 + (2 * standItem.standTier);
+            if (standItem.standType == 2)
+                standDefenseToAdd /= 2;
+
+            if (!standItem.ManualStandSpawning(player))
+            {
+                string standClassName = standItem.standProjectileName + "StandT" + standItem.standTier;
+                if (standClassName.Contains("T4"))
+                    standClassName = standItem.standProjectileName + "StandFinal";
+
+                int standProjectileType = mod.ProjectileType(standClassName);
+
+                Projectile.NewProjectile(player.position, player.velocity, standProjectileType, 0, 0f, Main.myPlayer);
             }
         }
 
