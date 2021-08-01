@@ -22,6 +22,7 @@ namespace JoJoStands
         public static ModHotKey PoseHotKey;
         public static Mod JoJoStandsSounds;
         public static bool SoundsLoaded = false;
+        public static bool FanStandsLoaded = false;
         internal static JoJoStands Instance => ModContent.GetInstance<JoJoStands>();
         internal static CustomizableOptions customizableConfig;
 
@@ -51,6 +52,7 @@ namespace JoJoStands
         {
             JoJoStandsSounds = ModLoader.GetMod("JoJoStandsSounds");        //would just return null if nothing is there
             SoundsLoaded = JoJoStandsSounds != null;
+            FanStandsLoaded = ModLoader.GetMod("JoJoFanStands") != null;
             HamonBarState.hamonBarTexture = ModContent.GetTexture("JoJoStands/UI/HamonBar");
             ToBeContinued.TBCArrowTexture = ModContent.GetTexture("JoJoStands/UI/TBCArrow");
             BulletCounter.bulletCounterTexture = ModContent.GetTexture("JoJoStands/UI/BulletCounter");

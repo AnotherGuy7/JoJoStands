@@ -24,7 +24,11 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
-            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 61, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+            if (Main.rand.Next(0, 1 + 1) == 0)
+            {
+                int dustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 61, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+                Main.dust[dustIndex].noGravity = true;
+            }
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)

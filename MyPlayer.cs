@@ -31,7 +31,6 @@ namespace JoJoStands
         public static float HamonBarPositionX;
         public static float HamonBarPositionY;
         public static float soundVolume;
-        public static bool spawningOtherStands = false;     //this is used for the extra stands like FanStands so that those can spawn
         public static bool ColorChangeEffects = false;
         public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
         public static StandSearchType standSearchType = StandSearchType.Bosses;
@@ -1170,17 +1169,24 @@ namespace JoJoStands
         {
             Item inputItem = StandSlot.Item;
 
-            if (!spawningOtherStands)
+            if (inputItem.IsAir)
             {
-                StandOut = false;
-                if (inputItem.IsAir)
+                if (!JoJoStands.FanStandsLoaded)
                 {
                     Main.NewText("There is no stand in the Stand Slot!", Color.Red);
+                    StandOut = false;
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
+                    }
+                    return;
                 }
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
-                }
+            }
+
+            if (!(inputItem.modItem is StandItemClass))
+            {
+                Main.NewText("Something went wrong while summoning the Stand.", Color.Red);
+                return;
             }
 
             StandItemClass standItem = inputItem.modItem as StandItemClass;
