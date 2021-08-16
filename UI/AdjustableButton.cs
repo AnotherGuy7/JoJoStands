@@ -11,6 +11,7 @@ namespace JoJoStands.UI
         private Texture2D buttonImage;
         private Vector2 drawPosition;
         private Vector2 defaultSize;        //Meant to be a 
+        private Vector2 textureSize;
         private Rectangle rectangle;
         private float imageScale;
 
@@ -32,6 +33,7 @@ namespace JoJoStands.UI
             buttonImage = texture;
             SetButtonPosiiton(position);
             defaultSize = size;
+            textureSize = texture.Size();
             drawColor = color;
             imageScale = 1f;
             rotation = 0f;
@@ -88,9 +90,10 @@ namespace JoJoStands.UI
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            base.DrawSelf(spriteBatch);
+            if (invisible)
+                return;
 
-            Vector2 origin = new Vector2(buttonImage.Width / 2f, buttonImage.Height / 2f);
+            Vector2 origin = textureSize / 2f;
             Vector2 ownerPosition = Vector2.Zero;
             if (owner.Top.Pixels != 0f || owner.Left.Pixels != 0f)
             {

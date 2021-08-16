@@ -1,5 +1,6 @@
 using System;
 using JoJoStands.Items.Vampire;
+using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -59,6 +60,7 @@ namespace JoJoStands.Projectiles
             player.velocity.X *= 0.5f;
 
             vPlayer.StealHealthFrom(target, damage);
+            target.GetGlobalNPC<JoJoGlobalNPC>().vampireUserLastHitIndex = player.whoAmI;
         }
     }
 }

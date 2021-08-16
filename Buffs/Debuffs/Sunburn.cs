@@ -17,25 +17,13 @@ namespace JoJoStands.Buffs.Debuffs
         public override void Update(Player player, ref int buffIndex)
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            if (!vPlayer.weakenedSunBurning)
+            if (player.lifeRegen > 0)
             {
-                if (player.lifeRegen > 0)
-                {
-                    player.lifeRegen = 0;
-                }
-                player.lifeRegenTime = 0;
-                player.lifeRegen -= 60;     //losing 30 health
-                player.moveSpeed *= 0.5f;
+                player.lifeRegen = 0;
             }
-            else
-            {
-                if (player.lifeRegen > 0)
-                {
-                    player.lifeRegen = 0;
-                }
-                player.lifeRegenTime = 160;
-                player.lifeRegen -= 10;
-            }
+            player.lifeRegenTime = (int)(60 * vPlayer.sunburnRegenTimeMultiplier);
+            player.lifeRegen -= (int)(60 * vPlayer.sunburnDamageMultiplier);
+            player.moveSpeed *= vPlayer.sunburnMoveSpeedMultiplier;
 
             if (Main.rand.Next(0, 2) == 0)
                 Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);

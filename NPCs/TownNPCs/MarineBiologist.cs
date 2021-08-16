@@ -184,7 +184,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 {
                     Main.npcChatText = "Congrats, it seems you've unlocked the power of Epitaph. Epitaph is able to look into the future, so you can anticipate your enemies moves and prepare for them in advance.";
                 }
-                if (mPlayer.StandSlot.Item.type == mod.ItemType("CenturyBoy"))
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("CenturyBoyT1"))
                 {
                     Main.npcChatText = "This Stand has no weaknesses, defensively. Century Boy is the ultimate physical defense- when you activate it, the stand mounts itself on your body and you are impervious to all harm. This does have one minor weakness... you lose the ability to move. Do with that what you will.";
                 }

@@ -1,7 +1,9 @@
 using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
+using JoJoStands.NPCs;
 using Terraria.ModLoader;
+using System.Collections.Generic;
 
 namespace JoJoStands.Items.Vampire
 {
@@ -10,7 +12,7 @@ namespace JoJoStands.Items.Vampire
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Zombie Abilities");
-			Tooltip.SetDefault("Left-click to lunge and hold right-click to grab an enemy and suck their blood!");
+			Tooltip.SetDefault("Left-click to lunge at enemies! Hold left-click to charge up the lunge and make it stronger!");
 		}
 
 		public override void SafeSetDefaults()
@@ -79,7 +81,7 @@ namespace JoJoStands.Items.Vampire
 				Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 1, 1f, 0.2f);
 				lungeChargeTimer = 0;
 			}
-			if (Main.mouseRight && useCool <= 0)
+			if (Main.mouseRight && useCool <= 0 && vPlayer.learnedZombieSkills[VampirePlayer.BloodSuck])
             {
 				if (!enemyBeingGrabbed)
 				{
@@ -108,6 +110,8 @@ namespace JoJoStands.Items.Vampire
 						heldEnemyIndex = -1;
 						heldEnemyTimer = 0;
 						useCool += 120;
+						player.immune = true;
+						player.immuneTime = 60;
 						return;
 					}
 
@@ -116,18 +120,19 @@ namespace JoJoStands.Items.Vampire
 					player.controlLeft = false;
 					player.controlRight = false;
 					player.controlJump = false;
-					player.velocity = Vector2.Zero;
+					player.velocity.X = 0f;
 					player.itemRotation = MathHelper.ToRadians(30f);
 
 					heldNPC.direction = -player.direction;
 					heldNPC.position = player.position + new Vector2(5f * player.direction, -2f - heldNPC.height / 3f);
-					heldNPC.velocity = Vector2.Zero;
+					heldNPC.velocity = new Vector2(0f, player.velocity.Y);
 					vPlayer.enemyToIgnoreDamageFromIndex = heldNPC.whoAmI;
+					heldNPC.GetGlobalNPC<JoJoGlobalNPC>().vampireUserLastHitIndex = player.whoAmI;
 
 					heldEnemyTimer++;
 					if (heldEnemyTimer >= 60)
                     {
-						int suckAmount = (int)(heldNPC.lifeMax * 0.05f);
+						int suckAmount = (int)(heldNPC.lifeMax * 0.08f);
 						player.HealEffect(suckAmount);
 						player.statLife += suckAmount;
 						heldNPC.StrikeNPC(suckAmount, 0f, player.direction);
@@ -145,7 +150,17 @@ namespace JoJoStands.Items.Vampire
 			}
         }
 
-        public override void AddRecipes()
+		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		{
+			VampirePlayer vPlayer = Main.player[item.owner].GetModPlayer<VampirePlayer>();
+			if (vPlayer.learnedZombieSkills[VampirePlayer.BloodSuck])
+			{
+				TooltipLine secondaryUseTooltip = new TooltipLine(JoJoStands.Instance, "Secondary Use", "Hold right-click to grab an enemy and suck their blood!");
+				tooltips.Add(secondaryUseTooltip);
+			}
+		}
+
+		public override void AddRecipes()
 		{
 			VampiricItemRecipe recipe = new VampiricItemRecipe(mod, item.type);
 			recipe.SetResult(this);

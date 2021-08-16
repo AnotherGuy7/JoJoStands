@@ -29,6 +29,10 @@ namespace JoJoStands.Items.Vampire
             {
                 result = true;
             }
+            else if (recipeItemType == mod.ItemType("KnifeWielder") && vPlayer.zombie && vPlayer.learnedZombieSkills[VampirePlayer.KnifeWielder])
+            {
+                result = true;
+            }
             return result;
         }
     }

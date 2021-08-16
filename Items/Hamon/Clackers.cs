@@ -10,7 +10,7 @@ namespace JoJoStands.Items.Hamon
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Clacker Balls");
-			Tooltip.SetDefault("These clackers are now deadly weapons while infused with Hamon \nExperience goes up after each conquer... \nRight-click requires more than 5 hamon\nSpecial: Hamon Breathing");
+			Tooltip.SetDefault("These clackers are now deadly weapons while infused with Hamon.\nRight-click requires more than 5 hamon\nSpecial: Hamon Breathing");
 		}
 
 		public override void SafeSetDefaults()
@@ -30,8 +30,6 @@ namespace JoJoStands.Items.Hamon
             item.useTurn = true;
             item.noWet = true;
 		}
-
-        private int increaseCounter = 0;
 
         public override void HoldItem(Player player)
         {

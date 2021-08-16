@@ -7,7 +7,9 @@ namespace JoJoStands.Items.Hamon
 {
 	public class SoapyGlove : HamonDamageClass
 	{
-		public override void SetStaticDefaults()
+        public override bool affectedByHamonScaling => true;
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Soapy Glove");
 			Tooltip.SetDefault("Shoot controllable bubbles! \nExperience goes up after each conquer... \nRight-click requires more than 3 hamon\nSpecial: Hamon Breathing");

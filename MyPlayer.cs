@@ -1825,7 +1825,7 @@ namespace JoJoStands
                 PhantomChestplateGlowmask.visible = phantomChestplateEquipped;
                 PhantomArmsGlowmask.visible = phantomChestplateEquipped;
                 PhantomLeggingsGlowmask.visible = phantomLeggingsEquipped;
-                blackUmbrellaEquipped = blackUmbrellaEquipped;
+                BlackUmbrellaLayer.visible = blackUmbrellaEquipped;
 
                 if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] != 0)
                 {

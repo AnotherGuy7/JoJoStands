@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
-    public class BlackUmbrella : StandItemClass
+    public class BlackUmbrella : ModItem
     {
         public override void SetStaticDefaults()
         {

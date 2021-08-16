@@ -1,6 +1,8 @@
 using JoJoStands.Items.Hamon;
+using JoJoStands.Items.Vampire;
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,10 +14,20 @@ namespace JoJoStands.Items
         public override bool InstancePerEntity => true;
         public override bool CloneNewInstances => true;
 
-        private float doublePressTimer = 0;
+        private int generalPurposeTimer = 0;        //Use for anything
         private float normalGravity = 0f;
         private float normalFallSpeed = 0f;
         private bool gravitySaved = false;
+
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            VampirePlayer vPlayer = Main.player[item.owner].GetModPlayer<VampirePlayer>();
+            if ((item.type == ItemID.DirtBlock || item.type == ItemID.MudBlock) && vPlayer.learnedZombieSkills[VampirePlayer.ProtectiveFilm])
+            {
+                TooltipLine secondaryUseTooltip = new TooltipLine(JoJoStands.Instance, "Secondary Use", "Right-click to consume 5 of this item and apply a protective film around yourself.");
+                tooltips.Add(secondaryUseTooltip);
+            }
+        }
 
         public override void ModifyWeaponDamage(Item item, Player player, ref float add, ref float mult, ref float flat)
         {
@@ -110,20 +122,22 @@ namespace JoJoStands.Items
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+
+            if (generalPurposeTimer > 0)
+                generalPurposeTimer--;
+
             if (item.melee && !mPlayer.StandOut)
             {
-                if (doublePressTimer > 0)
-                    doublePressTimer--;
-
                 bool specialJustPressed = false;
                 if (!Main.dedServ)
                     specialJustPressed = JoJoStands.SpecialHotKey.JustPressed;
 
                 if (specialJustPressed)
                 {
-                    if (doublePressTimer <= 0)
+                    if (generalPurposeTimer <= 0)
                     {
-                        doublePressTimer = 30;
+                        generalPurposeTimer = 30;
                     }
                     else
                     {
@@ -132,7 +146,34 @@ namespace JoJoStands.Items
                             player.AddBuff(mod.BuffType("HamonWeaponImbueBuff"), 240 * 60);
                             hPlayer.amountOfHamon -= hPlayer.hamonAmountRequirements[HamonPlayer.WeaponsHamonImbueSkill];
                         }
-                        doublePressTimer = 0;
+                        generalPurposeTimer = 0;
+                    }
+                }
+            }
+            
+            if (item.type == ItemID.DirtBlock || item.type == ItemID.MudBlock)
+            {
+                if (!MyPlayer.AutomaticActivations)
+                {
+                    if (item.stack >= 5 && Main.mouseRight && generalPurposeTimer <= 0 && item.owner == Main.myPlayer && vPlayer.learnedZombieSkills[VampirePlayer.ProtectiveFilm])
+                    {
+                        generalPurposeTimer += 30;
+                        player.AddBuff(mod.BuffType("ProtectiveFilmBuff"), 60 * 60);
+                        for (int i = 0; i < 5; i++)
+                        {
+                            player.ConsumeItem(item.type);
+                        }
+                    }
+                }
+                else
+                {
+                    if (item.stack >= 5 && item.owner == Main.myPlayer && vPlayer.learnedZombieSkills[VampirePlayer.ProtectiveFilm] && !player.HasBuff(mod.BuffType("ProtectiveFilmBuff")))
+                    {
+                        player.AddBuff(mod.BuffType("ProtectiveFilmBuff"), 60 * 60);
+                        for (int i = 0; i < 5; i++)
+                        {
+                            player.ConsumeItem(item.type);
+                        }
                     }
                 }
             }

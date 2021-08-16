@@ -53,7 +53,7 @@ namespace JoJoStands.Items.Hamon
         public bool sunShacklesActive = false;
 
         //Adjustable skills
-        public const int HamonSkillsLimit = 18;
+        public const int HamonSkillsLimit = 15;
 
         public const int BreathingRegenSkill = 0;
         public const int WaterWalkingSKill = 1;
@@ -69,9 +69,10 @@ namespace JoJoStands.Items.Hamon
         public const int SunTag = 11;
         public const int SunShackles = 12;
         public const int MuscleOverdrive = 13;
+        public const int StandHamonImbue = 14;
 
         //public bool[] learnedHamonSkills = new bool[HamonSkillsLimit];
-        public const int ExpectedAmountOfHamonSkills = 14;
+        public const int ExpectedAmountOfHamonSkills = 15;
         public Dictionary<int, bool> learnedHamonSkills = new Dictionary<int, bool>();
         public Dictionary<int, int> hamonAmountRequirements = new Dictionary<int, int>();
         public Dictionary<int, int> hamonSkillLevels = new Dictionary<int, int>();
@@ -604,6 +605,7 @@ namespace JoJoStands.Items.Hamon
             learnedHamonSkills.Add(SunTag, false);
             learnedHamonSkills.Add(SunShackles, false);
             learnedHamonSkills.Add(MuscleOverdrive, false);
+            learnedHamonSkills.Add(StandHamonImbue, false);
 
             hamonSkillLevels.Add(BreathingRegenSkill, 0);
             hamonSkillLevels.Add(WaterWalkingSKill, 0);
@@ -619,6 +621,7 @@ namespace JoJoStands.Items.Hamon
             hamonSkillLevels.Add(SunTag, 0);
             hamonSkillLevels.Add(SunShackles, 0);
             hamonSkillLevels.Add(MuscleOverdrive, 0);
+            hamonSkillLevels.Add(StandHamonImbue, 0);
 
             //Only skills that need hamon to be used should add to the requirements dictionary
             hamonAmountRequirements.Add(WaterWalkingSKill, 0);
@@ -632,6 +635,7 @@ namespace JoJoStands.Items.Hamon
             hamonAmountRequirements.Add(SunTag, 0);
             hamonAmountRequirements.Add(SunShackles, 0);
             hamonAmountRequirements.Add(MuscleOverdrive, 0);
+            hamonAmountRequirements.Add(StandHamonImbue, 0);
 
             learnedAnyAbility = false;
             Main.NewText("Rebuilt Hamon Skills Dictionaries.", Color.Yellow);

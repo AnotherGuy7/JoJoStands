@@ -2,7 +2,6 @@ using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 using Terraria.ID;
-using Microsoft.Xna.Framework;
 using JoJoStands.Networking;
 
 namespace JoJoStands.Buffs.ItemBuff
@@ -12,7 +11,7 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void SetDefaults()
         {
 			DisplayName.SetDefault("The World");
-            Description.SetDefault("Time... has been stopped");
+            Description.SetDefault("Time... has been stopped!");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
             canBeCleared = false;

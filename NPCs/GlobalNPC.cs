@@ -34,7 +34,9 @@ namespace JoJoStands.NPCs
         public int btzPositionIndex = 0;
         public bool spawnedByDeathLoop = false;
         public int deathTimer = 0;
+        public int zombieHightlightTimer = 0;
         public float kingCrimsonDonutMultiplier = 1f;
+        public int vampireUserLastHitIndex = -1;        //An index of the vampiric player who last hit the enemy
         public Vector2 playerPositionOnSkip = Vector2.Zero;
         public Vector2 preTimestopVelocity = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
@@ -177,6 +179,9 @@ namespace JoJoStands.NPCs
         public override bool PreAI(NPC npc)
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            if (zombieHightlightTimer > 0)
+                zombieHightlightTimer--;
+
             if (player.TheWorldEffect || frozenInTime)
             {
                 if (npc.velocity != Vector2.Zero)
@@ -432,7 +437,7 @@ namespace JoJoStands.NPCs
 
         public override bool CheckDead(NPC npc)
         {
-            for (int p = 0; p < Main.maxPlayers; p++)
+            for (int p = 0; p < Main.maxPlayers; p++)       //Searches if any player has death loop on
             {
                 Player player = Main.player[p];
                 if (player.active)
@@ -454,6 +459,17 @@ namespace JoJoStands.NPCs
                         Buffs.ItemBuff.DeathLoop.Looping3x = false;
                         Buffs.ItemBuff.DeathLoop.Looping10x = true;
                     }
+                }
+            }
+            if (vampireUserLastHitIndex != -1)
+            {
+                Player player = Main.player[vampireUserLastHitIndex];
+                VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+                vPlayer.enemiesKilled[npc.type] += 1;
+                if ((!npc.boss && vPlayer.enemiesKilled[npc.type] == 10) || (npc.boss && vPlayer.enemiesKilled[npc.type] == 0))
+                {
+                    vPlayer.vampireSkillPointsAvailable += 1;
+                    Main.NewText("You have obtained another Vampiric Skill Point!");
                 }
             }
             return true;
@@ -503,9 +519,10 @@ namespace JoJoStands.NPCs
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
             if (sunTagged)
-            {
                 drawColor = Color.Yellow;
-            }
+
+            if (zombieHightlightTimer > 0)
+                drawColor = Color.Orange;
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
@@ -578,6 +595,7 @@ namespace JoJoStands.NPCs
                     npc.AddBuff(mod.BuffType("Locked"), 20 * 60);
                 }
             }
+            zombieHightlightTimer = 0;
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)

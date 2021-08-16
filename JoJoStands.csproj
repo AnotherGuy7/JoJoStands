@@ -20,19 +20,19 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Terraria">
-      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+      <HintPath>C:\Users\AnotherGuy\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
     </Reference>
     <Reference Include="Terraria">
-      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+      <HintPath>C:\Users\AnotherGuy\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
     </Reference>
     <Reference Include="Terraria">
-      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+      <HintPath>C:\Users\AnotherGuy\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
     </Reference>
     <Reference Include="Terraria">
-      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+      <HintPath>C:\Users\AnotherGuy\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
     </Reference>
     <Reference Include="Terraria">
-      <HintPath>C:\Users\Jayson\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
+      <HintPath>C:\Users\AnotherGuy\Downloads\Contents\Steam Stuff\steamapps\common\tModLoader\tModLoader.exe</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

@@ -21,17 +21,6 @@ namespace JoJoStands.Items
             item.rare = ItemRarityID.LightPurple;
         }
 
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StandArrow"));
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 3);
-            recipe.AddIngredient(mod.ItemType("WillToEscape"), 3);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-        }
-
         public override bool ManualStandSpawning(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -43,6 +32,17 @@ namespace JoJoStands.Items
                 Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, true, player.whoAmI);
             }
             return true;
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(mod.ItemType("StandArrow"));
+            recipe.AddIngredient(mod.ItemType("WillToProtect"), 3);
+            recipe.AddIngredient(mod.ItemType("WillToEscape"), 3);
+            recipe.AddTile(mod.TileType("RemixTableTile"));
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }

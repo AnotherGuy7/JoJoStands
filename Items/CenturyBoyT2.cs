@@ -42,15 +42,17 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("CenturyBoy"));
+            recipe.AddIngredient(mod.ItemType("CenturyBoyT1"));
             recipe.AddIngredient(ItemID.CobaltBar, 6);
+            recipe.AddIngredient(ItemID.HallowedBar, 4);
             recipe.AddIngredient(ItemID.Dynamite, 5);
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();
             recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("CenturyBoy"));
+            recipe.AddIngredient(mod.ItemType("CenturyBoyT1"));
             recipe.AddIngredient(ItemID.PalladiumBar, 6);
+            recipe.AddIngredient(ItemID.HallowedBar, 4);
             recipe.AddIngredient(ItemID.Dynamite, 5);
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);

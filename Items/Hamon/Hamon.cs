@@ -6,7 +6,7 @@ namespace JoJoStands.Items.Hamon
 {
     public class Hamon : HamonDamageClass
     {
-        private int healTimer = 0;
+        public override bool affectedByHamonScaling => true;
 
         public override void SetStaticDefaults()
         {
@@ -47,6 +47,7 @@ namespace JoJoStands.Items.Hamon
             }
         }
 
+        private int healTimer = 0;
 
         public override void HoldItem(Player player)
         {

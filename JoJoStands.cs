@@ -36,6 +36,7 @@ namespace JoJoStands
         private UserInterface _voidbarUI;
         private UserInterface _hamonSkillTreeUI;
         private UserInterface _unitsUI;
+        private UserInterface _zombieSkillTreeUI;
 
         internal ToBeContinued TBCarrow;
         internal HamonBarState HamonBarInterface;
@@ -47,6 +48,7 @@ namespace JoJoStands
         internal VoidBar VoidBarUI;
         internal HamonSkillTree HamonSkillTreeUI;
         internal BadCompanyUnitsUI UnitsUI;
+        internal ZombieSkillTree ZombieSkillTreeUI;
 
         public override void Load()
         {
@@ -146,6 +148,10 @@ namespace JoJoStands
                 UnitsUI.Activate();
                 _unitsUI = new UserInterface();
                 _unitsUI.SetState(UnitsUI);
+                ZombieSkillTreeUI = new ZombieSkillTree();
+                ZombieSkillTreeUI.Activate();
+                _zombieSkillTreeUI = new UserInterface();
+                _zombieSkillTreeUI.SetState(ZombieSkillTreeUI);
 
                 //Shader Stuff
                 Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect"));      // The path to the compiled shader file.
@@ -275,6 +281,10 @@ namespace JoJoStands
             {
                 _unitsUI.Update(gameTime);
             }
+            if (ZombieSkillTree.Visible)
+            {
+                _zombieSkillTreeUI.Update(gameTime);
+            }
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)     //from ExampleMod's ExampleUI
@@ -323,6 +333,10 @@ namespace JoJoStands
             if (BadCompanyUnitsUI.Visible)
             {
                 _unitsUI.Draw(Main.spriteBatch, new GameTime());
+            }
+            if (ZombieSkillTree.Visible)
+            {
+                _zombieSkillTreeUI.Draw(Main.spriteBatch, new GameTime());
             }
             return true;
         }

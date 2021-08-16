@@ -1,3 +1,4 @@
+using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,12 +36,18 @@ namespace JoJoStands.Items.Hamon
         {
             Player player = Main.player[item.owner];
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             bool specialPressed = false;
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SpecialHotKey.Current;
 
             if (specialPressed)
             {
+                if (vPlayer.zombie || vPlayer.vampire)
+                {
+                    player.AddBuff(mod.BuffType("Sunburn"), 5 * 60);
+                    return;
+                }
                 increaseCounter++;
                 player.velocity.X /= 3f;
                 hamonPlayer.hamonIncreaseCounter = 0;

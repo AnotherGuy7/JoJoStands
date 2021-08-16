@@ -146,6 +146,8 @@ namespace JoJoStands.Items.Vampire
                             heldEnemyIndex = -1;
                             heldEnemyTimer = 0;
                             useCool += 120;
+                            player.immune = true;
+                            player.immuneTime = 60;
                             return;
                         }
 
@@ -154,18 +156,18 @@ namespace JoJoStands.Items.Vampire
                         player.controlLeft = false;
                         player.controlRight = false;
                         player.controlJump = false;
-                        player.velocity = Vector2.Zero;
+                        player.velocity.X = 0f;
                         player.itemRotation = MathHelper.ToRadians(30f);
 
                         heldNPC.direction = -player.direction;
                         heldNPC.position = player.position + new Vector2(5f * player.direction, -2f - heldNPC.height / 3f);
-                        heldNPC.velocity = Vector2.Zero;
+                        heldNPC.velocity = new Vector2(0f, player.velocity.Y);
                         vPlayer.enemyToIgnoreDamageFromIndex = heldNPC.whoAmI;
 
                         heldEnemyTimer++;
                         if (heldEnemyTimer >= 60)
                         {
-                            int suckAmount = (int)(heldNPC.lifeMax * 0.08f);
+                            int suckAmount = (int)(heldNPC.lifeMax * 0.12f);
                             player.HealEffect(suckAmount);
                             player.statLife += suckAmount;
                             heldNPC.StrikeNPC(suckAmount, 0f, player.direction);

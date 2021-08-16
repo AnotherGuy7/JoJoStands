@@ -22,6 +22,8 @@ namespace JoJoStands.Items.Vampire
 			item.useStyle = ItemUseStyleID.HoldingUp;
             item.value = Item.buyPrice(0, 0, 10, 0);
 			item.rare = ItemRarityID.Green;
+			item.consumable = true;
+			item.maxStack = 99;
 			item.buffTime = 3 * 60 * 60;
 			item.buffType = mod.BuffType("UltraSunscreenBuff");
         }
@@ -31,14 +33,14 @@ namespace JoJoStands.Items.Vampire
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("Sunscreen"), 3);
 			recipe.AddIngredient(ItemID.Sunflower);
-			recipe.AddIngredient(ItemID.PlatinumBar);
+			recipe.AddIngredient(ItemID.CrimtaneBar);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this, 3);
 			recipe.AddRecipe();
 			recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("Sunscreen"), 3);
 			recipe.AddIngredient(ItemID.Sunflower);
-			recipe.AddIngredient(ItemID.GoldBar);
+			recipe.AddIngredient(ItemID.DemoniteBar);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this, 3);
 			recipe.AddRecipe();

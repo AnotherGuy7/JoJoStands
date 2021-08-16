@@ -67,7 +67,7 @@ namespace JoJoStands.NPCs.Enemies
 
             if (Main.rand.Next(0, 251) <= 2)
             {
-                Main.PlaySound(14, (int)npc.position.X, (int)npc.position.Y, 1, 1f, -0.8f);
+                Main.PlaySound(14, (int)npc.position.X, (int)npc.position.Y, 1, Main.soundVolume, -0.8f);
             }
 
             float targetDistance = 0f;
