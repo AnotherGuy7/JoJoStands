@@ -59,7 +59,7 @@ namespace JoJoStands.Items
 
         public override bool ManualStandSpawning(Player player)
         {
-            if (player.name.Contains("Test Shadow"))
+            if (MyPlayer.testStandUnlocked)
             {
                 Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TestStand"), 0, 0f, Main.myPlayer);
             }
@@ -70,7 +70,7 @@ namespace JoJoStands.Items
                 {
                     Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
                 }
-                player.GetModPlayer<MyPlayer>().StandOut = false;
+                player.GetModPlayer<MyPlayer>().standOut = false;
             }
             return true;
         }

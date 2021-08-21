@@ -25,22 +25,20 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 secondaryAbilityFrames = player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] != 0;
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] == 0)
@@ -69,12 +67,12 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("StickyFingersFistExtended"), (int)(altDamage * modPlayer.standDamageBoosts), 6f, projectile.owner, projectile.whoAmI);
+                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StickyFingersFistExtended"), (int)(altDamage * mPlayer.standDamageBoosts), 6f, projectile.owner, projectile.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 PunchAndShootAI(mod.ProjectileType("StickyFingersFistExtended"), shootMax: 1);
             }

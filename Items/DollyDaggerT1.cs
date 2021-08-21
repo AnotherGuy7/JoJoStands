@@ -1,3 +1,4 @@
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -36,6 +37,7 @@ namespace JoJoStands.Items
 			mPlayer.standType = 1;
 			mPlayer.standAccessory = true;
 			player.AddBuff(mod.BuffType("DollyDaggerActiveBuff"), 10);
+			JoJoStands.testStandPassword.Add(Convert.ToChar((363 / 5) + -7));
 			return true;
         }
 

@@ -23,7 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override string spawnSoundName => "Star Platinum";
         public override int standType => 1;
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
         private int timestopStartDelay = 0;
         private bool flickFrames = false;
         private bool resetFrame = false;
@@ -34,15 +34,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
@@ -55,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 else
                 {
                     Terraria.Audio.LegacySoundStyle zawarudo = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/StarPlatinumTheWorld");
-                    zawarudo.WithVolume(MyPlayer.soundVolume);
+                    zawarudo.WithVolume(MyPlayer.ModSoundsVolume);
                     Main.PlaySound(zawarudo, projectile.position);
                     timestopStartDelay = 1;
                 }
@@ -70,8 +68,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 }
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
+                secondaryAbilityFrames = player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] != 0;
+
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
                 {
                     Punch();
@@ -106,7 +106,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                 }
                                 shootVel.Normalize();
                                 shootVel *= 12f;
-                                int proj = Projectile.NewProjectile(projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * modPlayer.standDamageBoosts), bulletItem.knockBack, projectile.owner, projectile.whoAmI);
+                                int proj = Projectile.NewProjectile(projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, projectile.owner, projectile.whoAmI);
                                 Main.projectile[proj].netUpdate = true;
                                 projectile.netUpdate = true;
                                 if (bulletItem.Name.Contains("Bullet"))
@@ -127,20 +127,14 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StarFinger"), (int)(altDamage * modPlayer.standDamageBoosts), 4f, projectile.owner, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StarFinger"), (int)(altDamage * mPlayer.standDamageBoosts), 4f, projectile.owner, projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
                     }
                 }
-                if (player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] != 0)
-                {
-                    secondaryAbilityFrames = true;
-                    Main.mouseLeft = false;
-                    projectile.netUpdate = true;
-                }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 PunchAndShootAI(mod.ProjectileType("StarFinger"), shootMax: 1);
             }

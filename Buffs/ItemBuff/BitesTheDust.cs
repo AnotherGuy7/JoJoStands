@@ -41,10 +41,10 @@ namespace JoJoStands.Buffs.ItemBuff
                     }
                 }
             }
-            mPlayer.TheWorldEffect = false;     //second, get rid of the effects from everyone
-            mPlayer.TimeSkipEffect = false;
-            mPlayer.TimeSkipPreEffect = false;
-            mPlayer.epitaphForesight = false;
+            mPlayer.timestopActive = false;     //second, get rid of the effects from everyone
+            mPlayer.timeskipActive = false;
+            mPlayer.timeskipPreEffect = false;
+            mPlayer.epitaphForesightActive = false;
             if (Main.time != 1600)
             {
                 player.AddBuff(mod.BuffType(Name), 2);       //to constantly refresh the buff

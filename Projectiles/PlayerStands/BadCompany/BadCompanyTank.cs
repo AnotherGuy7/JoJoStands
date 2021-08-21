@@ -5,7 +5,7 @@ using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
-    public class BadCompanyTank: StandClass
+    public class BadCompanyTank : StandClass
     {
 
         public override void SetDefaults()
@@ -33,9 +33,9 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 shootCount--;
             }
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             projectile.frameCounter++;
-            if (modPlayer.StandOut && modPlayer.badCompanyTier != 0)
+            if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
             {
                 projectile.timeLeft = 2;
             }
@@ -71,14 +71,14 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 }
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 MovementAI();
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
                 {
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime - modPlayer.standSpeedBoosts;
+                        shootCount += shootTime - mPlayer.standSpeedBoosts;
                         Main.PlaySound(SoundID.Item11, projectile.position);
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
@@ -92,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     }
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 MovementAI();
                 NPC target = null;
@@ -120,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     }
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime - modPlayer.standSpeedBoosts;
+                        shootCount += shootTime - mPlayer.standSpeedBoosts;
                         Main.PlaySound(SoundID.Item11, projectile.position);
                         Vector2 shootVel = target.Center - projectile.Center;
                         if (shootVel == Vector2.Zero)

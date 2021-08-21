@@ -26,32 +26,32 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (projectile.timeLeft < 256)
             {
                 projectile.alpha = -projectile.timeLeft + 255;
             }
             projectile.spriteDirection = projectile.direction;
-            projectile.rotation = (projectile.velocity * new Vector2(projectile.spriteDirection, projectile.spriteDirection)).ToRotation();
-            //Main.NewText(projectile.rotation + "; " + projectile.direction + "; " + projectile.spriteDirection);
+            projectile.rotation = (projectile.velocity * new Vector2(projectile.spriteDirection)).ToRotation();
 
             for (int p = 0; p < Main.maxProjectiles; p++)
             {
                 Projectile otherProj = Main.projectile[p];
+                if (p == projectile.whoAmI)
+                    continue;
+
                 if (otherProj.active && otherProj.type == mod.ProjectileType("Fists"))
                 {
-                    if (projectile.Hitbox.Intersects(otherProj.Hitbox) && modPlayer.TheWorldEffect)
+                    if (projectile.Hitbox.Intersects(otherProj.Hitbox) && mPlayer.timestopActive)
                     {
                         velocityAdd += otherProj.velocity / 75f;
                         if (damageMult <= 4f)
                         {
                             damageMult += otherProj.damage / 50;
                         }
-                        //Main.NewText("Mult: " + damageMult + "; Current Vel: " + projectile.velocity + "; X: " + velocityAdd.X + "; Y: " + velocityAdd.Y);
                         Dust.NewDust(otherProj.position, projectile.width, projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
                         otherProj.Kill();
-                        //Main.NewText(projectile.velocity + velocityAdd);
                     }
                 }
             }
@@ -60,15 +60,13 @@ namespace JoJoStands.Projectiles
             {
                 projectile.damage = 0;
             }
-            if (!modPlayer.TheWorldEffect)
+            if (!mPlayer.timestopActive)
             {
                 projectile.velocity.Y += 0.1f;
                 if (velocityAdd != Vector2.Zero)
                 {
-                    //Main.NewText("Vel: " + projectile.velocity + "; D: " + projectile.damage);
                     projectile.velocity += velocityAdd;
                     projectile.damage *= (int)damageMult;
-                    //Main.NewText("New Vel: " + projectile.velocity + "; New D: " + projectile.damage);
                     damageMult = 1f;
                     velocityAdd = Vector2.Zero;
                 }
@@ -78,9 +76,7 @@ namespace JoJoStands.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             if (target.boss)
-            {
                 damage *= 3;
-            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -91,9 +87,8 @@ namespace JoJoStands.Projectiles
 
         public override bool ShouldUpdatePosition()
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            return !modPlayer.TheWorldEffect;
+            MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+            return !mPlayer.timestopActive;
         }
     }
 }

@@ -123,10 +123,10 @@ namespace JoJoStands.Mounts
 
         public override void UpdateEffects(Player player)
         {
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Math.Abs(player.velocity.X) >= 13f)
             {
-                modPlayer.goldenSpinCounter += 1;
+                mPlayer.goldenSpinCounter += 1;
             }
         }
     }

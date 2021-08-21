@@ -33,50 +33,41 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             if (shootCount > 0)
                 shootCount--;
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.creamVoidMode)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.creamVoidMode)
                 projectile.hide = true;
-            }
-            if (modPlayer.creamExposedMode)
-            {
+            if (mPlayer.creamExposedMode)
                 projectile.hide = false;
-            }
-            if (!modPlayer.creamVoidMode)
-            {
+            if (!mPlayer.creamVoidMode)
                 projectile.hide = false;
-            }
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
-            if (!modPlayer.StandAutoMode)
+
+            if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !modPlayer.creamVoidMode && !modPlayer.creamExposedMode && !modPlayer.creamExposedToVoid && !modPlayer.creamNormalToExposed)
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
                     normalFrames = false;
-                    Main.mouseRight = false;
                     projectile.netUpdate = true;
                     float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
                     projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
-                    if (Main.MouseWorld.X > projectile.position.X)
-                    {
-                        projectile.spriteDirection = 1;
-                        projectile.direction = 1;
-                    }
+
+                    projectile.direction = 1;
                     if (Main.MouseWorld.X < projectile.position.X)
                     {
                         projectile.spriteDirection = -1;
                         projectile.direction = -1;
                     }
+                    projectile.spriteDirection = projectile.direction;
+
                     velocityAddition = Main.MouseWorld - projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f;
@@ -99,7 +90,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }
@@ -114,40 +105,40 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     StayBehind();
                 }
-                if (Main.mouseRight && !modPlayer.creamExposedMode && player.ownedProjectileCounts[mod.ProjectileType("ExposingCream")] <= 0 && player.ownedProjectileCounts[mod.ProjectileType("Void")] <= 0 && !modPlayer.creamNormalToExposed && !modPlayer.creamExposedToVoid)
+                if (Main.mouseRight && !mPlayer.creamExposedMode && player.ownedProjectileCounts[mod.ProjectileType("ExposingCream")] <= 0 && player.ownedProjectileCounts[mod.ProjectileType("Void")] <= 0 && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid)
                 {
-                    modPlayer.creamFrame = 0;
-                    if (!modPlayer.creamVoidMode)
+                    mPlayer.creamFrame = 0;
+                    if (!mPlayer.creamVoidMode)
                     {
-                        modPlayer.creamNormalToExposed = true;
+                        mPlayer.creamNormalToExposed = true;
                     }
                 }
-                if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("Void")] <= 0 && !modPlayer.creamVoidMode && !modPlayer.creamNormalToExposed && !modPlayer.creamExposedToVoid)
+                if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("Void")] <= 0 && !mPlayer.creamVoidMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid)
                 {
-                    modPlayer.creamFrame = 0;
-                    if (modPlayer.creamExposedMode)
+                    mPlayer.creamFrame = 0;
+                    if (mPlayer.creamExposedMode)
                     {
-                        modPlayer.creamExposedToVoid = true;
+                        mPlayer.creamExposedToVoid = true;
                     }
-                    if (!modPlayer.creamExposedMode)
+                    if (!mPlayer.creamExposedMode)
                     {
-                        modPlayer.creamNormalToExposed = true;
-                        modPlayer.creamNormalToVoid = true;
+                        mPlayer.creamNormalToExposed = true;
+                        mPlayer.creamNormalToVoid = true;
                     }
                 }
             }
-            if (modPlayer.creamNormalToExposed)
+            if (mPlayer.creamNormalToExposed)
             {
                 PlayAnimation("Transform");
-                if (modPlayer.creamFrame >= 5 && !modPlayer.creamAnimationReverse)
+                if (mPlayer.creamFrame >= 5 && !mPlayer.creamAnimationReverse)
                 {
-                    if (modPlayer.creamNormalToVoid)
+                    if (mPlayer.creamNormalToVoid)
                     {
-                        modPlayer.creamExposedToVoid = true;
-                        modPlayer.creamNormalToVoid = false;
+                        mPlayer.creamExposedToVoid = true;
+                        mPlayer.creamNormalToVoid = false;
                     }
-                    modPlayer.creamNormalToExposed = false;
-                    modPlayer.creamFrame = 0;
+                    mPlayer.creamNormalToExposed = false;
+                    mPlayer.creamFrame = 0;
                     Main.PlaySound(SoundID.Item78);
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
                     shootVelocity.Normalize();
@@ -155,39 +146,39 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("ExposingCream"), 0, 6f, player.whoAmI);
                 }
             }
-            if (modPlayer.creamExposedToVoid)
+            if (mPlayer.creamExposedToVoid)
             {
                 PlayAnimation("Transform2");
-                if (modPlayer.creamFrame >= 7 && !modPlayer.creamAnimationReverse)
+                if (mPlayer.creamFrame >= 7 && !mPlayer.creamAnimationReverse)
                 {
-                    modPlayer.creamExposedToVoid = false;
+                    mPlayer.creamExposedToVoid = false;
                     Main.PlaySound(SoundID.Item78);
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
                     shootVelocity.Normalize();
                     shootVelocity *= 5f;
-                    Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("Void"), (int)((50 * modPlayer.creamTier) * modPlayer.standDamageBoosts), 6f, player.whoAmI);
+                    Projectile.NewProjectile(player.Top, shootVelocity, mod.ProjectileType("Void"), (int)((50 * mPlayer.creamTier) * mPlayer.standDamageBoosts), 6f, player.whoAmI);
                 }
-                if (modPlayer.creamFrame <= 0 && modPlayer.creamAnimationReverse && modPlayer.creamNormalToExposed)
+                if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse && mPlayer.creamNormalToExposed)
                 {
-                    modPlayer.creamNormalToExposed = false;
-                    modPlayer.creamAnimationReverse = false;
+                    mPlayer.creamNormalToExposed = false;
+                    mPlayer.creamAnimationReverse = false;
                 }
-                if (modPlayer.creamFrame <= 0 && modPlayer.creamAnimationReverse && modPlayer.creamExposedToVoid)
+                if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse && mPlayer.creamExposedToVoid)
                 {
-                    modPlayer.creamExposedToVoid = false;
-                    if (!modPlayer.creamNormalToVoid)
+                    mPlayer.creamExposedToVoid = false;
+                    if (!mPlayer.creamNormalToVoid)
                     {
-                        modPlayer.creamAnimationReverse = false;
+                        mPlayer.creamAnimationReverse = false;
                     }
-                    if (modPlayer.creamNormalToVoid)
+                    if (mPlayer.creamNormalToVoid)
                     {
-                        modPlayer.creamFrame = 5;
-                        modPlayer.creamNormalToExposed = true;
-                        modPlayer.creamNormalToVoid = false;
+                        mPlayer.creamFrame = 5;
+                        mPlayer.creamNormalToExposed = true;
+                        mPlayer.creamNormalToVoid = false;
                     }
                 }
             }
-            if (modPlayer.creamExposedToVoid || modPlayer.creamVoidMode || modPlayer.creamExposedMode)
+            if (mPlayer.creamExposedToVoid || mPlayer.creamVoidMode || mPlayer.creamExposedMode)
             {
                 HandleDrawOffsets();
                 Vector2 vector131 = player.Center;
@@ -199,29 +190,29 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 projectile.rotation = 0;
                 LimitDistance();
             }
-            if (modPlayer.creamExposedToVoid || modPlayer.creamNormalToExposed)
+            if (mPlayer.creamExposedToVoid || mPlayer.creamNormalToExposed)
             {
-                projectile.frame = modPlayer.creamFrame;
-                if (modPlayer.creamAnimationReverse)
+                projectile.frame = mPlayer.creamFrame;
+                if (mPlayer.creamAnimationReverse)
                 {
                     framechangecounter += 1;
                     if (framechangecounter == 15)
                     {
-                        modPlayer.creamFrame -= 1;
+                        mPlayer.creamFrame -= 1;
                         framechangecounter = 0;
                     }
                 }
-                if (!modPlayer.creamAnimationReverse)
+                if (!mPlayer.creamAnimationReverse)
                 {
                     framechangecounter += 1;
                     if (framechangecounter == 15)
                     {
-                        modPlayer.creamFrame += 1;
+                        mPlayer.creamFrame += 1;
                         framechangecounter = 0;
                     }
                 }
             }
-            if (modPlayer.StandAutoMode && !modPlayer.creamVoidMode && !modPlayer.creamExposedMode && !modPlayer.creamExposedToVoid && !modPlayer.creamNormalToExposed)
+            if (mPlayer.standAutoMode && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed)
             {
                 BasicPunchAI();
             }
@@ -230,24 +221,24 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void SelectAnimation()
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (attackFrames && !modPlayer.creamNormalToExposed && !modPlayer.creamExposedToVoid && !modPlayer.creamExposedMode)
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (attackFrames && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 normalFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames && !modPlayer.creamNormalToExposed && !modPlayer.creamExposedToVoid && !modPlayer.creamExposedMode)
+            if (normalFrames && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode && !modPlayer.creamNormalToExposed && !modPlayer.creamExposedToVoid && !modPlayer.creamExposedMode)
+            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 normalFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }
-            if (modPlayer.creamExposedMode && !modPlayer.creamNormalToExposed && !modPlayer.creamExposedToVoid)
+            if (mPlayer.creamExposedMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid)
             {
                 PlayAnimation("Idle2");
             }

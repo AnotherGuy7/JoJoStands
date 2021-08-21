@@ -1,7 +1,9 @@
 using JoJoStands.Items;
 using JoJoStands.Items.Hamon;
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
@@ -19,7 +21,7 @@ namespace JoJoStands
 {
     public class MyPlayer : ModPlayer
     {
-        public static int deathsoundint;        //make them static to have them be true for all of you, instead of having to manually set it true for each of your characters
+        public static int DeathSoundID;        //make them static to have them be true for all of you, instead of having to manually set it true for each of your characters
         public static int RangeIndicatorAlpha;
         public static bool Sounds = true;
         public static bool TimestopEffects = false;
@@ -30,17 +32,17 @@ namespace JoJoStands
         public static int StandSlotPositionY;
         public static float HamonBarPositionX;
         public static float HamonBarPositionY;
-        public static float soundVolume;
+        public static float ModSoundsVolume;
         public static bool ColorChangeEffects = false;
         public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
         public static StandSearchType standSearchType = StandSearchType.Bosses;
+        public static bool testStandUnlocked = false;
 
         public int goldenSpinCounter = 0;
         public int spinSubtractionTimer = 0;
         public int shadowDodgeCooldownTimer = 0;        //does Vanilla not have one of these?
-        public int aerosmithRadarCounter = 0;
+        public int aerosmithRadarFrameCounter = 0;
         public int poseDuration = 300;
-        public int poseDurationMinus = 290;
         public int menacingFrames = 0;
         public int tbcCounter = 0;
         public int standKeyPressTimer = 0;
@@ -84,8 +86,9 @@ namespace JoJoStands
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
         public bool achievedInfiniteSpin = false;
-        public bool StandOut = false;
-        public bool StandAutoMode = false;
+        public bool standOut = false;
+        public bool standAutoMode = false;
+        public bool standRemoteMode = false;
         public bool destroyAmuletEquipped = false;
         public bool greaterDestroyEquipped = false;
         public bool awakenedAmuletEquipped = false;
@@ -107,24 +110,23 @@ namespace JoJoStands
         public bool creamNormalToVoid = false;
         public bool doobiesskullEquipped = false;
         public bool blackUmbrellaEquipped = false;
-        public bool Shirtless = false;      //hot shirtless daddy silver chariot *moan*
+        public bool silverChariotShirtless = false;      //hot shirtless daddy silver chariot *moan*
         //Ozi is to blame for the comment above.
 
-        public bool TheWorldEffect;
-        public bool TimeSkipPreEffect;
-        public bool TimeSkipEffect;
-        public bool backToZero;
-        public bool deathLoop;
-        public bool epitaphForesight;
+        public bool timestopActive;
+        public bool timeskipPreEffect;
+        public bool timeskipActive;
+        public bool backToZeroActive;
+        public bool deathLoopActive;
+        public bool epitaphForesightActive;
         public bool standAccessory = false;
-        public bool BitesTheDust = false;
+        public bool bitesTheDustActive = false;
         public bool poseMode = false;
-        public bool controllingAerosmith = false;
         public bool canRevertFromKQBTD = false;
         public bool showingCBLayer = false;     //this is a bool that's needed to sync so that the Century Boy layer shows up for other clients in Multiplayer
-        //public bool dyingVampire = false;
+
         private bool forceChangedTusk = false;
-        public bool revived = false;
+        private bool revived = false;
 
         public bool ZoneViralMeteorite;
 
@@ -135,10 +137,11 @@ namespace JoJoStands
         public static List<int> standTier1List = new List<int>();
         public Vector2[] sexPistolsOffsets = new Vector2[6];
 
-        public Vector2 aerosmithCamPosition;
+        public Vector2 standRemoteModeCameraPosition;
         public Vector2 VoidCamPosition;
 
         public string poseSoundName = "";       //This is for JoJoStandsSounds
+        public string standName = "";
 
         private int amountOfSexPistolsPlaced = 0;
         private int sexPistolsClickTimer = 0;
@@ -165,8 +168,8 @@ namespace JoJoStands
 
         public override void ResetEffects()
         {
-            UI.BulletCounter.Visible = false;
-            controllingAerosmith = false;
+            BulletCounter.Visible = false;
+            standRemoteMode = false;
             wearingEpitaph = false;
             destroyAmuletEquipped = false;
             greaterDestroyEquipped = false;
@@ -180,7 +183,7 @@ namespace JoJoStands
             phantomLeggingsEquipped = false;
             doobiesskullEquipped = false;
             blackUmbrellaEquipped = false;
-            Shirtless = false;
+            silverChariotShirtless = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -218,23 +221,23 @@ namespace JoJoStands
                 MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>();
                 if (otherPlayer.active)
                 {
-                    if (otherModPlayer.TheWorldEffect && !otherPlayer.HasBuff(mod.BuffType("TheWorldBuff")))       //if everyone has the effect and no one has the owner buff, turn it off
+                    if (otherModPlayer.timestopActive && !otherPlayer.HasBuff(mod.BuffType("TheWorldBuff")))       //if everyone has the effect and no one has the owner buff, turn it off
                     {
                         Main.NewText("The user has left, and time has begun to move once more...");
-                        otherModPlayer.TheWorldEffect = false;
+                        otherModPlayer.timestopActive = false;
                     }
-                    if (otherModPlayer.TimeSkipEffect && !otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
+                    if (otherModPlayer.timeskipActive && !otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
                     {
                         Main.NewText("The user has left, and time has begun to move once more...");
-                        otherModPlayer.TimeSkipEffect = false;
+                        otherModPlayer.timeskipActive = false;
                     }
-                    if (otherModPlayer.backToZero && !otherPlayer.HasBuff(mod.BuffType("BackToZero")))
+                    if (otherModPlayer.backToZeroActive && !otherPlayer.HasBuff(mod.BuffType("BackToZero")))
                     {
-                        otherModPlayer.backToZero = false;
+                        otherModPlayer.backToZeroActive = false;
                     }
-                    if (otherModPlayer.deathLoop && !otherPlayer.HasBuff(mod.BuffType("DeathLoop")))
+                    if (otherModPlayer.deathLoopActive && !otherPlayer.HasBuff(mod.BuffType("DeathLoop")))
                     {
-                        otherModPlayer.deathLoop = false;
+                        otherModPlayer.deathLoopActive = false;
                     }
                 }
             }
@@ -242,33 +245,30 @@ namespace JoJoStands
 
         public override void ModifyScreenPosition()     //used HERO's Mods FlyCam as a reference for this
         {
-            if (controllingAerosmith)
-            {
-                Main.screenPosition = aerosmithCamPosition;
-            }
+            if (standRemoteMode)
+                Main.screenPosition = standRemoteModeCameraPosition;
+
             if (creamVoidMode || creamExposedMode)
-            {
                 Main.screenPosition = VoidCamPosition;
-            }
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (JoJoStands.StandAutoMode.JustPressed && !StandAutoMode && standKeyPressTimer <= 0)
+            if (JoJoStands.StandAutoMode.JustPressed && !standAutoMode && standKeyPressTimer <= 0)
             {
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Auto");
-                StandAutoMode = true;
+                standAutoMode = true;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
                     Networking.ModNetHandler.playerSync.SendStandAutoMode(256, player.whoAmI, true, player.whoAmI);
                 }
             }
-            if (JoJoStands.StandAutoMode.JustPressed && StandAutoMode && standKeyPressTimer <= 0)
+            if (JoJoStands.StandAutoMode.JustPressed && standAutoMode && standKeyPressTimer <= 0)
             {
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Manual");
-                StandAutoMode = false;
+                standAutoMode = false;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
                     Networking.ModNetHandler.playerSync.SendStandAutoMode(256, player.whoAmI, true, player.whoAmI);
@@ -286,9 +286,9 @@ namespace JoJoStands
                 }
                 poseMode = true;
             }
-            if (JoJoStands.StandOut.JustPressed && !StandOut && standKeyPressTimer <= 0 && !player.HasBuff(mod.BuffType("Stolen")))
+            if (JoJoStands.StandOut.JustPressed && !standOut && standKeyPressTimer <= 0 && !player.HasBuff(mod.BuffType("Stolen")))
             {
-                StandOut = true;
+                standOut = true;
                 standKeyPressTimer += 30;
                 SpawnStand();
                 if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -363,18 +363,19 @@ namespace JoJoStands
                     }
                 }
             }
-            if (JoJoStands.StandOut.JustPressed && StandOut && standKeyPressTimer <= 0)
+            if (JoJoStands.StandOut.JustPressed && standOut && standKeyPressTimer <= 0)
             {
-                StandOut = false;
+                standOut = false;
                 standType = 0;
                 poseSoundName = "";
+                standName = "";
+                standRemoteMode = false;
                 standDefenseToAdd = 0;
                 creamTier = 0;
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
                 gratefulDeadTier = 0;
 
-                creamTier = 0;
                 voidCounter = 0;
                 creamNormalToExposed = false;
                 creamNormalToVoid = false;
@@ -463,7 +464,7 @@ namespace JoJoStands
 
                 Main.inventoryScale = origScale;
 
-                if (!TheWorldEffect)        //so that it's not interactable during a timestop, cause switching stands during a timestop is... not good
+                if (!timestopActive)        //so that it's not interactable during a timestop, cause switching stands during a timestop is... not good
                 {
                     if (Main.mouseItem.IsAir || Main.mouseItem.modItem is Items.StandItemClass)
                         StandSlot.Update();
@@ -487,7 +488,7 @@ namespace JoJoStands
 
         public override void SetControls()
         {
-            if (controllingAerosmith || player.HasBuff(mod.BuffType("CenturyBoyBuff")) || creamVoidMode || creamExposedMode)
+            if (standRemoteMode || player.HasBuff(mod.BuffType("CenturyBoyBuff")) || creamVoidMode || creamExposedMode)
             {
                 player.controlUp = false;
                 player.controlDown = false;
@@ -526,7 +527,7 @@ namespace JoJoStands
                     }
                     timestopEffectDurationTimer--;
                 }
-                if (!TheWorldEffect)
+                if (!timestopActive)
                 {
                     if (Filters.Scene["GreyscaleEffect"].IsActive())
                     {
@@ -537,7 +538,7 @@ namespace JoJoStands
                         Filters.Scene["TimestopEffectShader"].Deactivate();
                     }
                 }
-                if (backToZero)
+                if (backToZeroActive)
                 {
                     if (!Filters.Scene["GreenEffect"].IsActive())
                     {
@@ -567,23 +568,20 @@ namespace JoJoStands
                     {
                         player.ClearBuff(mod.BuffType("ForesightBuff"));
                     }
-                    TheWorldEffect = false;     //second, get rid of the effects from everyone
-                    TimeSkipEffect = false;
-                    TimeSkipPreEffect = false;
-                    epitaphForesight = false;
+                    timestopActive = false;     //second, get rid of the effects from everyone
+                    timeskipActive = false;
+                    timeskipPreEffect = false;
+                    epitaphForesightActive = false;
                 }
-                if (!backToZero && Filters.Scene["GreenEffect"].IsActive())
+                if (!backToZeroActive && Filters.Scene["GreenEffect"].IsActive())
                 {
                     Filters.Scene["GreenEffect"].Deactivate();
                 }
-                if (epitaphForesight)
+                if (epitaphForesightActive && !Filters.Scene["RedEffect"].IsActive())
                 {
-                    if (!Filters.Scene["RedEffect"].IsActive())
-                    {
-                        Filters.Scene.Activate("RedEffect");
-                    }
+                    Filters.Scene.Activate("RedEffect");
                 }
-                if (!epitaphForesight && Filters.Scene["RedEffect"].IsActive())
+                if (!epitaphForesightActive && Filters.Scene["RedEffect"].IsActive())
                 {
                     Filters.Scene["RedEffect"].Deactivate();
                 }
@@ -601,56 +599,42 @@ namespace JoJoStands
                     Filters.Scene["ColorChangeEffect"].Deactivate();
                 }
             }
-            if (controllingAerosmith)
+            if (standRemoteMode && standName == "Aerosmith")
             {
-                aerosmithRadarCounter++;
-                if (aerosmithRadarCounter >= 30)
-                    aerosmithRadarCounter = 0;
-
-                player.controlLeft = false;
-                player.controlJump = false;
-                player.controlRight = false;
-                player.controlDown = false;
-                player.controlUp = false;
                 player.velocity = Vector2.Zero;
-                if (StandSlot.Item.type == mod.ItemType("AerosmithT3") || StandSlot.Item.type == mod.ItemType("AerosmithFinal"))
-                {
-                    UI.AerosmithRadar.Visible = true;
-                }
+                AerosmithRadar.Visible = StandSlot.Item.type == mod.ItemType("AerosmithT3") || StandSlot.Item.type == mod.ItemType("AerosmithFinal");
             }
             else
             {
-                aerosmithRadarCounter = 0;
-                UI.AerosmithRadar.Visible = false;
+                AerosmithRadar.Visible = false;
             }
             if (poseMode)
             {
                 poseDuration--;
-            }
-            if (poseMode && (poseDuration <= 0 || player.velocity != Vector2.Zero) && !Main.mouseLeft && !Main.mouseRight)
-            {
-                poseDurationMinus = 290;
-                menacingFrames = 0;
-                if (poseDuration <= 0)
+                if ((poseDuration <= 0 || player.velocity != Vector2.Zero) && !Main.mouseLeft && !Main.mouseRight)
                 {
-                    player.AddBuff(mod.BuffType("StrongWill"), 30 * 60);
+                    menacingFrames = 0;
+                    if (poseDuration <= 0)
+                    {
+                        player.AddBuff(mod.BuffType("StrongWill"), 30 * 60);
+                    }
+                    poseDuration = 300;
+                    poseMode = false;
+                    JoJoStands.testStandPassword.Add(Convert.ToChar((int)MathHelper.ToDegrees(1.36136f)));
+                    JoJoStands.testStandPassword.Add(Convert.ToChar(Math.Sqrt(4999) + 1));
+                    JoJoStands.testStandPassword.Add(Convert.ToChar(byte.MaxValue - 186));
+                    JoJoStands.testStandPassword.Add(Convert.ToChar((78 / 4) * Math.Pow(2f, 2f)));
+                    JoJoStands.testStandPassword.Add(Convert.ToChar(84));
                 }
-                poseDuration = 300;
-                poseMode = false;
-            }
-            if (poseDuration < poseDurationMinus)
-            {
-                menacingFrames += 1;
-                poseDurationMinus -= 8;
             }
 
-            if (TheWorldEffect)
+            if (timestopActive)
             {
                 Main.windSpeed = 0f;
             }
             if (!player.dead && player.whoAmI == Main.myPlayer)
             {
-                UI.ToBeContinued.Visible = false;
+                ToBeContinued.Visible = false;
                 tbcCounter = 0;
             }
 
@@ -670,18 +654,18 @@ namespace JoJoStands
                 if (goldenSpinCounter <= 1)
                 {
                     achievedInfiniteSpin = false;
-                    if (UI.GoldenSpinMeter.Visible)
+                    if (GoldenSpinMeter.Visible)
                     {
-                        UI.GoldenSpinMeter.Visible = false;
+                        GoldenSpinMeter.Visible = false;
                     }
                 }
                 if (equippedTuskAct != 0)
                 {
                     if (goldenSpinCounter > 0)
                     {
-                        if (!UI.GoldenSpinMeter.Visible)
+                        if (!GoldenSpinMeter.Visible)
                         {
-                            UI.GoldenSpinMeter.Visible = true;
+                            GoldenSpinMeter.Visible = true;
                         }
                         if (achievedInfiniteSpin && !forceChangedTusk)
                         {
@@ -694,16 +678,17 @@ namespace JoJoStands
                         }
                     }
                 }
-            }
-            if (goldenSpinCounter >= 300)
-            {
-                goldenSpinCounter = 300;
-                achievedInfiniteSpin = true;
+
+                if (goldenSpinCounter >= 300)
+                {
+                    goldenSpinCounter = 300;
+                    achievedInfiniteSpin = true;
+                }
             }
 
             if (sexPistolsTier != 0)        //Sex Pistols stuff
             {
-                if (!StandAutoMode)
+                if (!standAutoMode)
                 {
                     bool specialPressed = false;
                     if (!Main.dedServ)
@@ -755,19 +740,19 @@ namespace JoJoStands
                         }
                     }
                 }
-                UI.SexPistolsUI.Visible = StandAutoMode;
+                SexPistolsUI.Visible = standAutoMode;
             }
             else
             {
-                UI.SexPistolsUI.Visible = false;
+                SexPistolsUI.Visible = false;
             }
 
             if (equippedTuskAct != 0 && player.whoAmI == Main.myPlayer)     //Tusk stuff
             {
-                bool specialPressed = false;
+                bool specialJustPressed = false;
                 if (!Main.dedServ)
-                    specialPressed = JoJoStands.SpecialHotKey.JustPressed;
-                if (specialPressed)
+                    specialJustPressed = JoJoStands.SpecialHotKey.JustPressed;
+                if (specialJustPressed)
                 {
                     tuskActNumber += 1;
                 }
@@ -881,12 +866,12 @@ namespace JoJoStands
             }
             if (hermitPurpleTier != 0 && player.whoAmI == Main.myPlayer)
             {
-                bool specialPressed = false;
+                bool specialJustPressed = false;
                 if (!Main.dedServ)
-                    specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+                    specialJustPressed = JoJoStands.SpecialHotKey.JustPressed;
 
                 HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
-                if (specialPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && hermitPurpleTier > 2 && hPlayer.amountOfHamon > 40)
+                if (specialJustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && hermitPurpleTier > 2 && hPlayer.amountOfHamon > 40)
                 {
                     if (hermitPurpleTier == 3)
                     {
@@ -905,7 +890,7 @@ namespace JoJoStands
                     hermitPurpleShootCooldown--;
                 }
 
-                if (!StandAutoMode)
+                if (!standAutoMode)
                 {
                     if (hermitPurpleTier == 1)
                     {
@@ -986,7 +971,7 @@ namespace JoJoStands
             }
             if (creamTier != 0)        //Cream stuff
             {
-                UI.VoidBar.Visible = true;
+                VoidBar.Visible = true;
                 voidCounterMax = (creamTier - 1) * 4;
                 if (voidCounter < voidCounterMax)
                 {
@@ -1024,7 +1009,7 @@ namespace JoJoStands
             }
             else
             {
-                UI.VoidBar.Visible = false;
+                VoidBar.Visible = false;
             }
 
             if (badCompanyTier != 0)
@@ -1137,11 +1122,11 @@ namespace JoJoStands
                 if (Main.mouseRight && badCompanyUIClickTimer <= 0 && player.whoAmI == Main.myPlayer)
                 {
                     badCompanyUIClickTimer = 30;
-                    UI.BadCompanyUnitsUI.Visible = !UI.BadCompanyUnitsUI.Visible;
+                    BadCompanyUnitsUI.Visible = !BadCompanyUnitsUI.Visible;
                 }
             }
 
-            if (Shirtless)
+            if (silverChariotShirtless)
             {
                 player.statDefense = (int)(player.statDefense * 0.6f);
                 standDamageBoosts += 0.8f;
@@ -1156,12 +1141,18 @@ namespace JoJoStands
             }
         }
 
+        public override void PreUpdateMovement()
+        {
+            if (timestopActive && !player.HasBuff(mod.BuffType("TheWorldBuff")))
+                player.velocity = Vector2.Zero;
+        }
+
         public override void PostUpdateMiscEffects()
         {
             if (usedEctoPearl)
                 standRangeBoosts += 64f;
 
-            if (StandOut)
+            if (standOut)
                 player.statDefense += standDefenseToAdd;
         }
 
@@ -1174,7 +1165,7 @@ namespace JoJoStands
                 if (!JoJoStands.FanStandsLoaded)
                 {
                     Main.NewText("There is no stand in the Stand Slot!", Color.Red);
-                    StandOut = false;
+                    standOut = false;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
                         Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
@@ -1191,8 +1182,9 @@ namespace JoJoStands
 
             StandItemClass standItem = inputItem.modItem as StandItemClass;
 
-            StandOut = true;
+            standOut = true;
             standDefenseToAdd = 4 + (2 * standItem.standTier);
+            standName = standItem.standProjectileName;
             if (standItem.standType == 2)
                 standDefenseToAdd /= 2;
 
@@ -1210,15 +1202,15 @@ namespace JoJoStands
 
         public override void PreUpdateBuffs()
         {
-            if (TheWorldEffect && !player.HasBuff(mod.BuffType("TheWorldBuff")))
+            if (timestopActive && !player.HasBuff(mod.BuffType("TheWorldBuff")))
             {
                 player.AddBuff(mod.BuffType("FrozeninTime"), 2);
             }
-            if (deathLoop)       //if someone has deathloop turned on and you don't turn it on for you
+            if (deathLoopActive)       //if someone has deathloop turned on and you don't turn it on for you
             {
                 player.AddBuff(mod.BuffType("DeathLoop"), 2);
             }
-            if (epitaphForesight && !player.HasBuff(mod.BuffType("ForesightBuff")) && !player.HasBuff(mod.BuffType("ForeseenDebuff")))
+            if (epitaphForesightActive && !player.HasBuff(mod.BuffType("ForesightBuff")) && !player.HasBuff(mod.BuffType("ForeseenDebuff")))
             {
                 player.AddBuff(mod.BuffType("ForeseenDebuff"), 2);
             }
@@ -1228,7 +1220,7 @@ namespace JoJoStands
         {
             standCooldownReduction = 0f;        //it's here because it resets before the buffs can use it when its in ResetEffects()
             if (player.HasBuff(mod.BuffType("Stolen")))
-                StandOut = false;
+                standOut = false;
         }
 
         public int AbilityCooldownTime(int seconds) //Sometimes we won't want to reduce the cooldown so that's why reduction defaults to 0
@@ -1362,29 +1354,29 @@ namespace JoJoStands
         {
             if (player.whoAmI == Main.myPlayer)
             {
-                if (deathsoundint == 1)
+                if (DeathSoundID == 1)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/ToBeContinued4"));
                 }
-                if (deathsoundint == 2)
+                if (DeathSoundID == 2)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/CAESAAAAAAAR"));
                 }
-                if (deathsoundint == 3)
+                if (DeathSoundID == 3)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/GangTortureDance"));
                 }
-                if (deathsoundint == 4)
+                if (DeathSoundID == 4)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/LastTrainHome"));
                 }
-                if (deathsoundint == 5)
+                if (DeathSoundID == 5)
                 {
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Deathsounds/KORE GA... WAGA KING CRIMSON NO NORIO KU"));
                 }
-                if (deathsoundint != 1)
+                if (DeathSoundID != 1)
                 {
-                    UI.ToBeContinued.Visible = true;
+                    ToBeContinued.Visible = true;
                 }
             }
 
@@ -1402,20 +1394,20 @@ namespace JoJoStands
                 Main.NewText("The chip has given you new life!");
                 return false;
             }
-            if (backToZero)
+            if (backToZeroActive)
             {
                 return false;
             }
 
 
-            StandOut = false;
+            standOut = false;
             revived = false;
             return true;
         }
 
         public override void UpdateDead()
         {
-            StandOut = false;
+            standOut = false;
 
             creamTier = 0;
             voidCounter = 0;
@@ -1424,12 +1416,12 @@ namespace JoJoStands
             creamExposedToVoid = false;
             creamFrame = 0;
 
-            if (player.whoAmI == Main.myPlayer && deathsoundint == 1)
+            if (player.whoAmI == Main.myPlayer && DeathSoundID == 1)
             {
                 tbcCounter++;
                 if (tbcCounter >= 270)
                 {
-                    UI.ToBeContinued.Visible = true;
+                    ToBeContinued.Visible = true;
                 }
             }
         }
@@ -1438,22 +1430,30 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && drawPlayer.velocity == Vector2.Zero && modPlayer.poseMode)
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && drawPlayer.velocity == Vector2.Zero && mPlayer.poseMode)
             {
                 Texture2D texture = mod.GetTexture("Extras/Menacing");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
                 if (drawPlayer.direction == -1)
                 {
-                    drawX = drawX + 2;
+                    drawX += 2;
                 }
-                int frameHeight = texture.Height / 6;
-                if (modPlayer.menacingFrames >= 6)
+
+                if (mPlayer.poseDuration % 8 == 0)
+                    mPlayer.menacingFrames += 1;
+                if (mPlayer.menacingFrames >= 6)
                 {
-                    modPlayer.menacingFrames = 0;
+                    mPlayer.menacingFrames = 0;
                 }
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameHeight * modPlayer.menacingFrames, texture.Width, frameHeight), Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, frameHeight / 2f), 1f, SpriteEffects.None, 0);
+
+                int frameHeight = texture.Height / 6;
+                Vector2 drawPos = new Vector2(drawX, drawY);
+                Rectangle poseAnimRect = new Rectangle(0, frameHeight * mPlayer.menacingFrames, texture.Width, frameHeight);
+                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
+                Vector2 poseOrigin = new Vector2(texture.Width / 2f, frameHeight / 2f);
+                DrawData data = new DrawData(texture, drawPos, poseAnimRect, drawColor, drawPlayer.fullRotation, poseOrigin, 1f, SpriteEffects.None, 0);
                 Main.playerDrawData.Add(data);
             }
         });
@@ -1462,54 +1462,55 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            int frame = 0;
-            if (drawPlayer.active && modPlayer.controllingAerosmith)
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.standRemoteMode && (mPlayer.StandSlot.Item.type == mod.ItemType("AerosmithT3") || mPlayer.StandSlot.Item.type == mod.ItemType("AerosmithFinal")))
             {
                 Texture2D texture = mod.GetTexture("Extras/AerosmithRadar");
                 int drawX = (int)(drawInfo.position.X + 4f + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.position.Y + 7f - Main.screenPosition.Y);
                 if (drawPlayer.direction == -1)
                 {
-                    drawX = drawX - 2;
+                    drawX -= 2;
                 }
+                mPlayer.aerosmithRadarFrameCounter++;
+                if (mPlayer.aerosmithRadarFrameCounter >= 30)
+                    mPlayer.aerosmithRadarFrameCounter = 0;
+                int frame = mPlayer.aerosmithRadarFrameCounter / 16;
                 int frameHeight = texture.Height / 2;
-                if (modPlayer.aerosmithRadarCounter > 12)
-                {
-                    frame = 0;
-                }
-                if (modPlayer.aerosmithRadarCounter <= 12)
-                {
-                    frame = 1;
-                }
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameHeight * frame, texture.Width, frameHeight), Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, frameHeight / 2f), 1f, SpriteEffects.None, 0);
+
+                Vector2 drawPos = new Vector2(drawX, drawY);
+                Rectangle animRect = new Rectangle(0, frameHeight * frame, texture.Width, frameHeight);
+                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
+                Vector2 origin = new Vector2(texture.Width / 2f, frameHeight / 2f);
+                DrawData data = new DrawData(texture, drawPos, animRect, drawColor, 0f, origin, 1f, SpriteEffects.None, 0);
                 Main.playerDrawData.Add(data);
             }
         });
 
-        
 
-        public static readonly PlayerLayer KCArm = new PlayerLayer("JoJoStands", "KCArm", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
+
+        public static readonly PlayerLayer KCArmLayer = new PlayerLayer("JoJoStands", "KCArm", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && modPlayer.wearingEpitaph)
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.wearingEpitaph)
             {
                 Texture2D texture = mod.GetTexture("Extras/KCArm");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
+                SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
                 {
-                    drawX = drawX + 2;
+                    drawX += 2;
                     effects = SpriteEffects.FlipHorizontally;
                 }
-                if (drawPlayer.direction == 1)
-                {
-                    effects = SpriteEffects.None;
-                }
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, 0, texture.Width, texture.Height), Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, effects, 0);
+
+                Vector2 drawPos = new Vector2(drawX, drawY);
+                Rectangle animRect = new Rectangle(0, 0, texture.Width, texture.Height);
+                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
+                Vector2 origin = new Vector2(texture.Width / 2f, texture.Height / 2f);
+                DrawData data = new DrawData(texture, drawPos, animRect, drawColor, 0f, origin, 1f, effects, 0);
                 Main.playerDrawData.Add(data);
             }
         });
@@ -1518,16 +1519,16 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && modPlayer.hermitPurpleTier != 0)
+            if (drawPlayer.active && mPlayer.hermitPurpleTier != 0)
             {
                 Texture2D texture = mod.GetTexture("Extras/HermitPurple_Arms");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y) - 4;
                 if (drawPlayer.direction == -1)
                 {
-                    drawX = drawX + 2;
+                    drawX += 2;
                     effects = SpriteEffects.FlipHorizontally;
                 }
                 if (drawPlayer.direction == 1)
@@ -1535,14 +1536,14 @@ namespace JoJoStands
                     effects = SpriteEffects.None;
                 }
                 Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                if (modPlayer.hermitPurpleHamonBurstLeft > 0)        //No increment here because it's already incrememnted in the Body layer
+                if (mPlayer.hermitPurpleHamonBurstLeft > 0)        //No increment here because it's already incrememnted in the Body layer
                 {
-                    if (modPlayer.hermitPurpleSpecialFrameCounter >= 5)
+                    if (mPlayer.hermitPurpleSpecialFrameCounter >= 5)
                     {
                         color = Color.Yellow;
-                        if (modPlayer.hermitPurpleSpecialFrameCounter >= 10)
+                        if (mPlayer.hermitPurpleSpecialFrameCounter >= 10)
                         {
-                            modPlayer.hermitPurpleSpecialFrameCounter = 0;
+                            mPlayer.hermitPurpleSpecialFrameCounter = 0;
                         }
                     }
                 }
@@ -1555,16 +1556,16 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && modPlayer.hermitPurpleTier > 1)
+            if (drawPlayer.active && mPlayer.hermitPurpleTier > 1)
             {
                 Texture2D texture = mod.GetTexture("Extras/HermitPurple_Body");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y) - 4;
                 if (drawPlayer.direction == -1)
                 {
-                    drawX = drawX + 2;
+                    drawX += 2;
                     effects = SpriteEffects.FlipHorizontally;
                 }
                 if (drawPlayer.direction == 1)
@@ -1572,19 +1573,20 @@ namespace JoJoStands
                     effects = SpriteEffects.None;
                 }
                 Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                if (modPlayer.hermitPurpleHamonBurstLeft > 0)
+                if (mPlayer.hermitPurpleHamonBurstLeft > 0)
                 {
-                    modPlayer.hermitPurpleSpecialFrameCounter++;
-                    if (modPlayer.hermitPurpleSpecialFrameCounter >= 5)
+                    mPlayer.hermitPurpleSpecialFrameCounter++;
+                    if (mPlayer.hermitPurpleSpecialFrameCounter >= 5)
                     {
                         color = Color.Yellow;
-                        if (modPlayer.hermitPurpleSpecialFrameCounter >= 10)
+                        if (mPlayer.hermitPurpleSpecialFrameCounter >= 10)
                         {
-                            modPlayer.hermitPurpleSpecialFrameCounter = 0;
+                            mPlayer.hermitPurpleSpecialFrameCounter = 0;
                         }
                     }
                 }
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), drawPlayer.bodyFrame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                Vector2 drawPos = new Vector2(drawX, drawY);
+                DrawData data = new DrawData(texture, drawPos, drawPlayer.bodyFrame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 Main.playerDrawData.Add(data);
             }
         });
@@ -1593,9 +1595,9 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && modPlayer.showingCBLayer)
+            if (drawPlayer.active && mPlayer.showingCBLayer)
             {
                 Texture2D texture = mod.GetTexture("Extras/CB");
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
@@ -1608,9 +1610,9 @@ namespace JoJoStands
                 {
                     effects = SpriteEffects.None;
                 }
-                if (modPlayer.StandDyeSlot.Item.dye != 0)
+                if (mPlayer.StandDyeSlot.Item.dye != 0)
                 {
-                    ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(modPlayer.StandDyeSlot.Item.type);
+                    ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(mPlayer.StandDyeSlot.Item.type);
                     shader.Apply(null);
                 }
                 Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
@@ -1623,10 +1625,10 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.sexPistolsLeft != 0 && modPlayer.StandOut && modPlayer.sexPistolsTier != 0)
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.sexPistolsLeft != 0 && mPlayer.standOut && mPlayer.sexPistolsTier != 0)
             {
-                int frame = 6 - modPlayer.sexPistolsLeft;       //frames 0-5
+                int frame = 6 - mPlayer.sexPistolsLeft;       //frames 0-5
                 Texture2D texture = mod.GetTexture("Extras/SexPistolsLayer");
                 int drawX = (int)(drawInfo.position.X + 4f + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
@@ -1635,7 +1637,11 @@ namespace JoJoStands
                     drawX = drawX - 2;
                 }
                 int frameHeight = texture.Height / 6;
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameHeight * frame, texture.Width, frameHeight), Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, frameHeight / 2f), 1f, SpriteEffects.None, 0);
+
+                Vector2 drawPos = new Vector2(drawX, drawY);
+                Rectangle sexPistolsAnimRect = new Rectangle(0, frameHeight * frame, texture.Width, frameHeight);
+                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
+                DrawData data = new DrawData(texture, drawPos, sexPistolsAnimRect, drawColor, drawPlayer.fullRotation, new Vector2(texture.Width / 2f, frameHeight / 2f), 1f, SpriteEffects.None, 0);
                 Main.playerDrawData.Add(data);
             }
         });
@@ -1644,8 +1650,8 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomHoodLongEquipped && drawPlayer.head == mod.GetEquipSlot("PhantomHoodLong", EquipType.Head))
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.phantomHoodLongEquipped && drawPlayer.head == mod.GetEquipSlot("PhantomHoodLong", EquipType.Head))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomHoodLong_Head_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1668,8 +1674,8 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomHoodNeutralEquipped && drawPlayer.head == mod.GetEquipSlot("PhantomHoodNeutral", EquipType.Head))
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.phantomHoodNeutralEquipped && drawPlayer.head == mod.GetEquipSlot("PhantomHoodNeutral", EquipType.Head))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomHoodNeutral_Head_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1693,8 +1699,8 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomHoodShortEquipped && drawPlayer.head == mod.GetEquipSlot("PhantomHoodShort", EquipType.Head))
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.phantomHoodShortEquipped && drawPlayer.head == mod.GetEquipSlot("PhantomHoodShort", EquipType.Head))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomHoodShort_Head_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1717,8 +1723,8 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomChestplateEquipped && drawPlayer.body == mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomChestplate_Body_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1736,8 +1742,8 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomChestplateEquipped && drawPlayer.body == mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomChestplate_Arms_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1755,8 +1761,8 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.phantomLeggingsEquipped && drawPlayer.legs == mod.GetEquipSlot("PhantomLeggings", EquipType.Legs))
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.phantomLeggingsEquipped && drawPlayer.legs == mod.GetEquipSlot("PhantomLeggings", EquipType.Legs))
             {
                 Texture2D texture = mod.GetTexture("Extras/PhantomLeggings_Legs_Glowmask");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1775,8 +1781,8 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod mod = ModLoader.GetMod("JoJoStands");
-            MyPlayer modPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && modPlayer.blackUmbrellaEquipped)
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.blackUmbrellaEquipped)
             {
                 Texture2D texture = mod.GetTexture("Extras/UmbrellaHat");
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -1799,7 +1805,7 @@ namespace JoJoStands
         {
             if (player.dead || (player.mount.Type != -1))
             {
-                KCArm.visible = false;
+                KCArmLayer.visible = false;
                 MenacingPose.visible = false;
                 AerosmithRadarCam.visible = false;
                 CenturyBoyActivated.visible = false;
@@ -1815,7 +1821,7 @@ namespace JoJoStands
             else
             {
                 SexPistolsLayer.visible = true;
-                KCArm.visible = true;
+                KCArmLayer.visible = true;
                 MenacingPose.visible = true;
                 AerosmithRadarCam.visible = true;
                 CenturyBoyActivated.visible = true;
@@ -1868,7 +1874,7 @@ namespace JoJoStands
             }
 
             layers.Add(AerosmithRadarCam);
-            layers.Add(KCArm);
+            layers.Add(KCArmLayer);
             layers.Add(MenacingPose);
             layers.Add(CenturyBoyActivated);
             layers.Add(SexPistolsLayer);

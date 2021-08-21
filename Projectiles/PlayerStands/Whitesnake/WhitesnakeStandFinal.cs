@@ -27,23 +27,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && !stealFrames)
                 {
@@ -72,10 +69,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         }
                         shootVel.Normalize();
                         shootVel *= 8f;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * mPlayer.standDamageBoosts), 2f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
                         secondaryAbilityFrames = false;
+                        projectile.netUpdate = true;
                     }
                 }
                 if (!attackFrames && !stealFrames && !waitingForEnemyFrames)
@@ -90,6 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     projectile.velocity = Main.MouseWorld - projectile.position;
                     projectile.velocity.Normalize();
                     projectile.velocity *= 5f;
+
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
                     if (mouseDistance > 40f)
                     {
@@ -100,9 +98,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         projectile.velocity = Vector2.Zero;
                     }
                     waitingForEnemyFrames = true;
-                    for (int i = 0; i < Main.maxNPCs; i++)
+                    for (int n = 0; n < Main.maxNPCs; n++)
                     {
-                        NPC npc = Main.npc[i];
+                        NPC npc = Main.npc[n];
                         if (npc.active)
                         {
                             if (projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
@@ -188,7 +186,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     shootCount += 30;
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

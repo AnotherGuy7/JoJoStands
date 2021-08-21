@@ -41,7 +41,7 @@ namespace JoJoStands.Items
         public override bool Shoot(Item item, Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.sexPistolsTier != 0 && (item.shoot == 10 || item.useAmmo == AmmoID.Bullet) && mPlayer.sexPistolsLeft > 0 && mPlayer.StandAutoMode)
+            if (mPlayer.sexPistolsTier != 0 && (item.shoot == 10 || item.useAmmo == AmmoID.Bullet) && mPlayer.sexPistolsLeft > 0 && mPlayer.standAutoMode)
             {
                 mPlayer.sexPistolsLeft -= 1;
                 int projectileIndex = Projectile.NewProjectile(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
@@ -54,7 +54,7 @@ namespace JoJoStands.Items
         public override bool AltFunctionUse(Item item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.StandOut && !mPlayer.StandAutoMode && !mPlayer.standAccessory)
+            if (mPlayer.standOut && !mPlayer.standAutoMode && !mPlayer.standAccessory)
             {
                 return false;
             }
@@ -64,7 +64,7 @@ namespace JoJoStands.Items
         public override bool CanUseItem(Item item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.StandOut && !mPlayer.StandAutoMode && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory)
+            if (mPlayer.standOut && !mPlayer.standAutoMode && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory)
             {
                 if (item.potion || item.mountType != -1)      //default value for mountType is -1
                 {
@@ -94,7 +94,7 @@ namespace JoJoStands.Items
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.TheWorldEffect && gravity != 3f)
+            if (mPlayer.timestopActive && gravity != 3f)
             {
                 normalGravity = gravity;
                 normalFallSpeed = maxFallSpeed;
@@ -105,13 +105,13 @@ namespace JoJoStands.Items
                 gravity = 3f;
                 maxFallSpeed = 0;
             }
-            if (gravitySaved && !mPlayer.TheWorldEffect)
+            if (gravitySaved && !mPlayer.timestopActive)
             {
                 gravity = normalGravity;
                 maxFallSpeed = normalFallSpeed;
                 gravitySaved = false;
             }
-            if (!mPlayer.TheWorldEffect && normalGravity != 0f && !gravitySaved)
+            if (!mPlayer.timestopActive && normalGravity != 0f && !gravitySaved)
             {
                 normalFallSpeed = 0f;
                 normalGravity = 0f;
@@ -127,7 +127,7 @@ namespace JoJoStands.Items
             if (generalPurposeTimer > 0)
                 generalPurposeTimer--;
 
-            if (item.melee && !mPlayer.StandOut)
+            if (item.melee && !mPlayer.standOut)
             {
                 bool specialJustPressed = false;
                 if (!Main.dedServ)

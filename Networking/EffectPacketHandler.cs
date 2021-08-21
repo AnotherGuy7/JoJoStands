@@ -75,8 +75,8 @@ namespace JoJoStands.Networking
 			int timestopOwner = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[timestopOwner].GetModPlayer<MyPlayer>().TheWorldEffect = timestopValue;
-				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().TheWorldEffect = timestopValue;
+				Main.player[timestopOwner].GetModPlayer<MyPlayer>().timestopActive = timestopValue;
+				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timestopActive = timestopValue;
 				if (timestopValue)
 				{
 					Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timestopEffectDurationTimer = 60;
@@ -111,7 +111,7 @@ namespace JoJoStands.Networking
 			int affectedPlayer = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().TheWorldEffect = timestopValue;
+				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().timestopActive = timestopValue;
 			}
 			else
 			{
@@ -144,8 +144,8 @@ namespace JoJoStands.Networking
 			int timeskipOwner = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[timeskipOwner].GetModPlayer<MyPlayer>().TimeSkipEffect = timeskipValue;
-				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().TimeSkipEffect = timeskipValue;
+				Main.player[timeskipOwner].GetModPlayer<MyPlayer>().timeskipActive = timeskipValue;
+				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timeskipActive = timeskipValue;
 				SendTimeskipBackToOwner(timeskipOwner, Main.myPlayer, timeskipValue, Main.myPlayer);
 			}
 			else
@@ -160,7 +160,7 @@ namespace JoJoStands.Networking
 			int affectedPlayer = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().TimeSkipEffect = timeskipValue;
+				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().timeskipActive = timeskipValue;
 			}
 			else
 			{
@@ -193,8 +193,8 @@ namespace JoJoStands.Networking
 			int BTZOwner = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().backToZero = BTZValue;
-				Main.player[BTZOwner].GetModPlayer<MyPlayer>().backToZero = BTZValue;
+				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().backToZeroActive = BTZValue;
+				Main.player[BTZOwner].GetModPlayer<MyPlayer>().backToZeroActive = BTZValue;
 				SendBTZBackToOwner(BTZOwner, Main.myPlayer, BTZValue, Main.myPlayer);
 			}
 			else
@@ -209,7 +209,7 @@ namespace JoJoStands.Networking
 			int affectedPlayer = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().backToZero = BTZValue;
+				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().backToZeroActive = BTZValue;
 			}
 			else
 			{
@@ -241,8 +241,8 @@ namespace JoJoStands.Networking
 			int foresightOwner = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[foresightOwner].GetModPlayer<MyPlayer>().epitaphForesight = foresightValue;
-				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().epitaphForesight = foresightValue;
+				Main.player[foresightOwner].GetModPlayer<MyPlayer>().epitaphForesightActive = foresightValue;
+				Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().epitaphForesightActive = foresightValue;
 				SendForesightBackToOwner(foresightOwner, Main.myPlayer, foresightValue, Main.myPlayer);
 			}
 			else
@@ -257,7 +257,7 @@ namespace JoJoStands.Networking
 			int affectedPlayer = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().epitaphForesight = foresightValue;
+				Main.player[affectedPlayer].GetModPlayer<MyPlayer>().epitaphForesightActive = foresightValue;
 			}
 			else
 			{

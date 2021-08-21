@@ -22,53 +22,49 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         private int updateTimer = 0;
         private Vector2 velocityAddition;
-        private float mouseDistance;
 
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             SelectAnimation();
             UpdateStandInfo();
             updateTimer = 0;
             if (shootCount > 0)
                 shootCount--;
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
                     normalFrames = false;
-                    Main.mouseRight = false;
                     projectile.netUpdate = true;
+
                     float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
                     projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
-                    if (Main.MouseWorld.X > projectile.position.X)
-                    {
-                        projectile.spriteDirection = 1;
-                        projectile.direction = 1;
-                    }
+
+                    projectile.direction = 1;
                     if (Main.MouseWorld.X < projectile.position.X)
                     {
-                        projectile.spriteDirection = -1;
                         projectile.direction = -1;
                     }
+                    projectile.spriteDirection = projectile.direction;
+
                     velocityAddition = Main.MouseWorld - projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f;
-                    mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
+
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
                     if (mouseDistance > 40f)
                     {
                         projectile.velocity = player.velocity + velocityAddition;
@@ -87,7 +83,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }
@@ -103,7 +99,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     StayBehind();
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

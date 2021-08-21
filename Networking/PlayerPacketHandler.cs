@@ -85,7 +85,7 @@ namespace JoJoStands.Networking
 			int whoAmI = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[whoAmI].GetModPlayer<MyPlayer>().StandOut = standOutVal;
+				Main.player[whoAmI].GetModPlayer<MyPlayer>().standOut = standOutVal;
 
 			}
 			else
@@ -109,7 +109,7 @@ namespace JoJoStands.Networking
 			int whoAmI = reader.ReadInt32();
 			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.player[whoAmI].GetModPlayer<MyPlayer>().StandAutoMode = autoModeVal;
+				Main.player[whoAmI].GetModPlayer<MyPlayer>().standAutoMode = autoModeVal;
 
 			}
 			else

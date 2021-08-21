@@ -17,29 +17,27 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override string poseSoundName => "Arrivederci";
         public override string spawnSoundName => "Sticky Fingers";
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
 
         public override void AI()
         {
             SelectAnimation();
             UpdateStandInfo();
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 secondaryAbilityFrames = player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] != 0;
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] == 0)
@@ -71,7 +69,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("StickyFingersFistExtended"), (int)(altDamage * modPlayer.standDamageBoosts), 6f, projectile.owner, projectile.whoAmI);
+                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StickyFingersFistExtended"), (int)(altDamage * mPlayer.standDamageBoosts), 6f, projectile.owner, projectile.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
                 }
@@ -85,12 +83,12 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed * 3;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("StickyFingersZipperPoint"), 0, 0f, projectile.owner, 1f);
+                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StickyFingersZipperPoint"), 0, 0f, projectile.owner, 1f);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 PunchAndShootAI(mod.ProjectileType("StickyFingersFistExtended"), shootMax: 1);
             }

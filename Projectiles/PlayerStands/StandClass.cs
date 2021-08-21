@@ -71,16 +71,18 @@ namespace JoJoStands.Projectiles.PlayerStands
         private SoundEffectInstance beginningSoundInstance = null;
         private SoundEffectInstance punchingSoundInstance = null;
 
+        private const int RangeIndicatorSize = 320;
+
         /// <summary>
         /// Starts a timestop that lasts x amount of seconds.
         /// </summary>
         public void Timestop(int seconds)
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            modPlayer.timestopEffectDurationTimer = 60;
-            modPlayer.TheWorldEffect = true;
+            mPlayer.timestopEffectDurationTimer = 60;
+            mPlayer.timestopActive = true;
             if (JoJoStands.JoJoStandsSounds == null)
             {
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_start"));
@@ -180,27 +182,18 @@ namespace JoJoStands.Projectiles.PlayerStands
             projectile.netUpdate = true;
             float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
             projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
-            if (Main.MouseWorld.X > projectile.position.X)
-            {
-                projectile.spriteDirection = 1;
-                projectile.direction = 1;
-            }
+            velocityAddition = Main.MouseWorld - projectile.position;
+            velocityAddition.Normalize();
+            velocityAddition *= movementSpeed;
+
+            projectile.spriteDirection = 1;
+            projectile.direction = 1;
             if (Main.MouseWorld.X < projectile.position.X)
             {
                 projectile.spriteDirection = -1;
                 projectile.direction = -1;
             }
-            velocityAddition = Main.MouseWorld - projectile.position;
-            velocityAddition.Normalize();
-            velocityAddition *= movementSpeed;
-            /*if (projectile.position.X > Main.MouseWorld.X - 5f && projectile.position.X < Main.MouseWorld.X + 5f)
-            {
-                velocityAddition.X = 0f;
-            }
-            if (projectile.position.Y < Main.MouseWorld.Y + 5f && projectile.position.Y > Main.MouseWorld.Y - 5f)
-            {
-                velocityAddition.Y = 0f;
-            }*/
+
             mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
             if (mouseDistance > 40f)
             {
@@ -221,7 +214,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 shootVel.Normalize();
                 shootVel *= shootSpeed;
-                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
+                int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
                 Main.projectile[proj].netUpdate = true;
                 projectile.netUpdate = true;
             }
@@ -236,10 +229,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             Player player = Main.player[projectile.owner];
 
             HandleDrawOffsets();
-            Vector2 vector131 = player.Center;
-            vector131.X -= (float)((12 + player.width / 2) * player.direction);
-            vector131.Y -= -35f + halfStandHeight;
-            projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
+            Vector2 areaBehindPlayer = player.Center;
+            areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
+            areaBehindPlayer.Y -= -35f + halfStandHeight;
+            projectile.Center = Vector2.Lerp(projectile.Center, areaBehindPlayer, 0.2f);
             projectile.velocity *= 0.8f;
             projectile.direction = projectile.spriteDirection = player.direction;
             projectile.rotation = 0;
@@ -258,10 +251,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             Player player = Main.player[projectile.owner];
 
             HandleDrawOffsets();
-            Vector2 vector131 = player.Center;
-            vector131.X -= (float)((12 + player.width / 2) * player.direction);
-            vector131.Y -= -35f + halfStandHeight;
-            projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
+            Vector2 areaBehindPlayer = player.Center;
+            areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
+            areaBehindPlayer.Y -= -35f + halfStandHeight;
+            projectile.Center = Vector2.Lerp(projectile.Center, areaBehindPlayer, 0.2f);
             projectile.velocity *= 0.8f;
             if (!secondaryAbilityFrames)
             {
@@ -374,7 +367,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void PunchAndShootAI(int projToShoot, int itemToConsumeType = -1, bool gravityAccounting = false, int shootMax = 999)
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             HandleDrawOffsets();
             Vector2 targetPos = projectile.position;
@@ -441,7 +434,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 shootVel *= shootSpeed;
                             }
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
+                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), (int)(newPunchDamage * 0.9f), punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -490,7 +483,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 shootVel.Y -= projectile.Distance(targetPos) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
                             }
-                            int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * modPlayer.standDamageBoosts) * 0.9f), 2f, projectile.owner, projectile.whoAmI, tierNumber);
+                            int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, projectile.owner, projectile.whoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -525,14 +518,14 @@ namespace JoJoStands.Projectiles.PlayerStands
                     if (sound != null)
                     {
                         beginningSoundInstance = sound.CreateInstance();
-                        beginningSoundInstance.Volume = MyPlayer.soundVolume;
+                        beginningSoundInstance.Volume = MyPlayer.ModSoundsVolume;
                     }
                 }
                 if (punchingSoundInstance == null)
                 {
                     SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName);
                     punchingSoundInstance = sound.CreateInstance();
-                    punchingSoundInstance.Volume = MyPlayer.soundVolume;
+                    punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
                 }
             }
         }
@@ -555,14 +548,14 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (!playedBeginning)
                         {
                             //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                            beginningSoundInstance.Volume = MyPlayer.soundVolume;
+                            beginningSoundInstance.Volume = MyPlayer.ModSoundsVolume;
                             Main.PlaySoundInstance(beginningSoundInstance);                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
                             playedBeginning = true;
                         }
                         if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
                         {
                             //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                            punchingSoundInstance.Volume = MyPlayer.soundVolume;
+                            punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
                             Main.PlaySoundInstance(punchingSoundInstance);
                             SyncSounds();
                         }
@@ -634,21 +627,21 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         /// <summary>
         /// Updates all client-side stand info.
-        /// Updates newPunchTime, newShootTime, newMaxDistance, newAltMaxDistance, newPunchDamage, newProjectileDamage, and modPlayer.standType.
+        /// Updates newPunchTime, newShootTime, newMaxDistance, newAltMaxDistance, newPunchDamage, newProjectileDamage, and mPlayer.standType.
         /// </summary>
         public void UpdateStandInfo()
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            newPunchTime = punchTime - modPlayer.standSpeedBoosts;
-            newShootTime = shootTime - modPlayer.standSpeedBoosts;
-            newMaxDistance = maxDistance + modPlayer.standRangeBoosts;
-            newAltMaxDistance = maxAltDistance + modPlayer.standRangeBoosts;
-            newPunchDamage = (int)(punchDamage * modPlayer.standDamageBoosts);
-            newProjectileDamage = (int)(projectileDamage * modPlayer.standDamageBoosts);
+            newPunchTime = punchTime - mPlayer.standSpeedBoosts;
+            newShootTime = shootTime - mPlayer.standSpeedBoosts;
+            newMaxDistance = maxDistance + mPlayer.standRangeBoosts;
+            newAltMaxDistance = maxAltDistance + mPlayer.standRangeBoosts;
+            newPunchDamage = (int)(punchDamage * mPlayer.standDamageBoosts);
+            newProjectileDamage = (int)(projectileDamage * mPlayer.standDamageBoosts);
             playerHasAbilityCooldown = player.HasBuff(mod.BuffType("AbilityCooldown"));
-            modPlayer.poseSoundName = poseSoundName;
+            mPlayer.poseSoundName = poseSoundName;
             if (newPunchTime <= 2)
             {
                 newPunchTime = 2;
@@ -657,16 +650,16 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 newShootTime = 5;
             }
-            if (modPlayer.standType != standType)
+            if (mPlayer.standType != standType)
             {
-                modPlayer.standType = standType;
+                mPlayer.standType = standType;
             }
             if (JoJoStands.SoundsLoaded)
             {
                 if (spawnSoundName != "" && !playedSpawnSound)
                 {
                     Terraria.Audio.LegacySoundStyle spawnSound = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SummonCries/" + spawnSoundName);
-                    spawnSound.WithVolume(MyPlayer.soundVolume);
+                    spawnSound.WithVolume(MyPlayer.ModSoundsVolume);
                     Main.PlaySound(spawnSound, projectile.position);
                     playedSpawnSound = true;
                 }
@@ -690,35 +683,33 @@ namespace JoJoStands.Projectiles.PlayerStands
             return true;
         }
 
-        public SpriteEffects effects = SpriteEffects.None;
-
         public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)     //manually drawing stands cause sometimes stands had too many frames, it's easier to manage this way, and dye effects didn't work for stands that were overriding PostDraw
         {
             spriteBatch.End();     //ending the spriteBatch that started in PreDraw
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
         }
 
+        public SpriteEffects effects = SpriteEffects.None;
+
         /// <summary>
         /// Draws the Stand.
         /// </summary>
         private void DrawStand(SpriteBatch spriteBatch, Color drawColor)
         {
-            if (projectile.spriteDirection == -1)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
-            if (projectile.spriteDirection == 1)
-            {
-                effects = SpriteEffects.None;
-            }
             if (useProjectileAlpha)
-            {
                 drawColor *= projectile.alpha / 255f;
-            }
+
+            effects = SpriteEffects.None;
+            if (projectile.spriteDirection == -1)
+                effects = SpriteEffects.FlipHorizontally;
+
             if (standTexture != null && Main.netMode != NetmodeID.Server)
             {
                 int frameHeight = standTexture.Height / Main.projFrames[projectile.whoAmI];
-                spriteBatch.Draw(standTexture, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
+                Vector2 drawPosition = projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f);
+                Rectangle animRect = new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight);
+                Vector2 standOrigin = new Vector2(standTexture.Width / 2f, frameHeight / 2f);
+                spriteBatch.Draw(standTexture, drawPosition, animRect, drawColor, projectile.rotation, standOrigin, 1f, effects, 0);
             }
         }
 
@@ -734,14 +725,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (MyPlayer.RangeIndicators && Main.netMode != NetmodeID.Server)
             {
                 Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
-                if (maxDistance != 0f)
-                {
-                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), newMaxDistance / 122.5f, SpriteEffects.None, 0);
-                }
-                if (maxAltDistance != 0f)
-                {
-                    spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Orange * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), newAltMaxDistance / 160f, SpriteEffects.None, 0);
-                }
+                Vector2 rangeIndicatorDrawPosition = player.Center - Main.screenPosition;
+                float rangeIndicatorAlpha = (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f);
+                Vector2 rangeIndicatorOrigin = new Vector2(RangeIndicatorSize / 2f);
+                if (maxDistance > 0f)
+                    spriteBatch.Draw(texture, rangeIndicatorDrawPosition, null, Color.White * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, newMaxDistance / (RangeIndicatorSize / 2f), SpriteEffects.None, 0);
+
+                if (maxAltDistance > 0f)
+                    spriteBatch.Draw(texture, rangeIndicatorDrawPosition, null, Color.Orange * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, newAltMaxDistance / (RangeIndicatorSize / 2f), SpriteEffects.None, 0);
             }
         }
 
@@ -781,8 +772,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void Kill(int timeLeft)
         {
-            Main.player[projectile.owner].GetModPlayer<MyPlayer>().standType = 0;
-            Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseSoundName = "";
+            MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+            mPlayer.standType = 0;
+            mPlayer.poseSoundName = "";
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -823,35 +815,19 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void LimitDistance()
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             Vector2 direction = player.Center - projectile.Center;
-            float distanceTo = direction.Length();
-            if (distanceTo > newMaxDistance)
+            float distanceFromPlayer = direction.Length();
+            if (distanceFromPlayer > newMaxDistance)
             {
-                /*if (projectile.position.X <= player.position.X - 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(0.8f, 0f);
-                }
-                if (projectile.position.X >= player.position.X + 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(-0.8f, 0f);
-                }
-                if (projectile.position.Y >= player.position.Y + 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(0f, -0.8f);
-                }
-                if (projectile.position.Y <= player.position.Y - 15f)
-                {
-                    projectile.velocity = player.velocity + new Vector2(0f, 0.8f);
-                }*/
                 direction.Normalize();
                 direction *= 0.8f;
                 projectile.velocity = player.velocity + direction;
             }
-            if (distanceTo >= newMaxDistance + 22f)
+            if (distanceFromPlayer >= newMaxDistance + 22f)
             {
-                if (!modPlayer.StandAutoMode)
+                if (!mPlayer.standAutoMode)
                 {
                     Main.mouseLeft = false;
                     Main.mouseRight = false;
@@ -893,7 +869,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             }
                         }
                     }
-                break;
+                    break;
                 case MyPlayer.StandSearchType.Closest:
                     float closestDistance = maxDetectionRange;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
@@ -984,9 +960,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <param name="loop">Whether or not the animation should loop. If false, currentAnimationDone becomes true at animation completion.</param>
         public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loop)
         {
-            Main.projFrames[projectile.whoAmI] = frameAmount;
             projectile.frameCounter++;
             currentAnimationDone = false;
+            Main.projFrames[projectile.whoAmI] = frameAmount;
             if (projectile.frameCounter >= frameCounterLimit)
             {
                 projectile.frame += 1;
@@ -1014,9 +990,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <param name="loopFrameEnd">The frame which will cause the loop to restart.</param>
         public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loopCertainFrames, int loopFrameStart, int loopFrameEnd)
         {
-            Main.projFrames[projectile.whoAmI] = frameAmount;
             projectile.frameCounter++;
             currentAnimationDone = false;
+            Main.projFrames[projectile.whoAmI] = frameAmount;
             if (projectile.frameCounter >= frameCounterLimit)
             {
                 projectile.frame += 1;

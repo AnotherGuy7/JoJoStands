@@ -16,7 +16,7 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<MyPlayer>().StandOut = false;
+            player.GetModPlayer<MyPlayer>().standOut = false;
         }
 
         public override void Update(NPC npc, ref int buffIndex)

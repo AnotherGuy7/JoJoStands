@@ -20,47 +20,46 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (!player.HasBuff(mod.BuffType("CooledOut")))
+            if (player.HasBuff(mod.BuffType("CooledOut")))
+                return;
+
+            if (player.lifeRegen > 0)
             {
-                if (player.lifeRegen > 0)
-                {
-                    player.lifeRegen = 0;
-                }
-                player.lifeRegenTime = 120;
-                player.lifeRegen -= 4 * damageMultiplication;
-                player.moveSpeed *= 0.94f;
-                player.meleeDamage *= 0.75f;
-                player.rangedDamage *= 0.75f;
-                player.magicDamage *= 0.75f;
-                player.meleeSpeed *= 0.5f;
-                player.statDefense = (int)(player.statDefense * 0.8f);
-
-                if (player.ZoneSnow || player.ZoneSkyHeight)
-                {
-                    damageMultiplication = 0;
-                }
-                if (player.ZoneUndergroundDesert)
-                {
-                    damageMultiplication = 1;
-                }
-                if (player.ZoneDesert)
-                {
-                    damageMultiplication = 2;
-                }
-                if (player.ZoneUnderworldHeight)
-                {
-                    damageMultiplication = 3;
-                }
+                player.lifeRegen = 0;
             }
+            player.lifeRegenTime = 120;
+            player.lifeRegen -= 4 * damageMultiplication;
+            player.moveSpeed *= 0.94f;
+            player.meleeDamage *= 0.75f;
+            player.rangedDamage *= 0.75f;
+            player.magicDamage *= 0.75f;
+            player.meleeSpeed *= 0.5f;
+            player.statDefense = (int)(player.statDefense * 0.8f);
 
+            if (player.ZoneSnow || player.ZoneSkyHeight)
+            {
+                damageMultiplication = 0;
+            }
+            if (player.ZoneUndergroundDesert)
+            {
+                damageMultiplication = 1;
+            }
+            if (player.ZoneDesert)
+            {
+                damageMultiplication = 2;
+            }
+            if (player.ZoneUnderworldHeight)
+            {
+                damageMultiplication = 3;
+            }
         }
         public override void Update(NPC npc, ref int buffIndex)
         {
             Player player = Main.player[Main.myPlayer];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (savedVelocityX == -1)
             {
-                savedVelocityX = Math.Abs(npc.velocity.X) / modPlayer.gratefulDeadTier;
+                savedVelocityX = Math.Abs(npc.velocity.X) / mPlayer.gratefulDeadTier;
             }
 
             if (npc.boss)
@@ -107,7 +106,7 @@ namespace JoJoStands.Buffs.Debuffs
             {
                 npc.velocity.X *= 0.9f;
             }
-            if (modPlayer.gratefulDeadTier == 2)
+            if (mPlayer.gratefulDeadTier == 2)
             {
                 npc.lifeRegen = -4 * damageMultiplication;
                 if (!oneTimeEffectsApplied)
@@ -116,7 +115,7 @@ namespace JoJoStands.Buffs.Debuffs
                     oneTimeEffectsApplied = true;
                 }
             }
-            if (modPlayer.gratefulDeadTier == 3)
+            if (mPlayer.gratefulDeadTier == 3)
             {
                 npc.lifeRegen = -8 * damageMultiplication;
                 if (!oneTimeEffectsApplied)
@@ -125,7 +124,7 @@ namespace JoJoStands.Buffs.Debuffs
                     oneTimeEffectsApplied = true;
                 }
             }
-            if (modPlayer.gratefulDeadTier == 4)
+            if (mPlayer.gratefulDeadTier == 4)
             {
                 npc.lifeRegen = -16 * damageMultiplication;
                 if (!oneTimeEffectsApplied)

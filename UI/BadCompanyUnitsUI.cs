@@ -33,7 +33,7 @@ namespace JoJoStands.UI
         {
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyTier != 0)
+            if (mPlayer.badCompanyTier == 0)
                 Visible = false;
 
             unitsLeftText.SetText("Units Left: " + mPlayer.badCompanyUnitsLeft);

@@ -15,8 +15,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override string poseSoundName => "IWouldntLose";
         public override string spawnSoundName => "Killer Queen";
 
-        private int bubbleDamage = 180;      //not using projectileDamage cause this one changes
         private int btdStartDelay = 0;
+        private int bubbleDamage = 180;      //not using projectileDamage cause this one changes
 
 
         public override void AI()
@@ -24,16 +24,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             SelectAnimation();
             UpdateStandInfo();
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (mPlayer.StandOut)
-            {
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (Main.dayTime)
             {
                 bubbleDamage = 180;
@@ -59,7 +56,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 else
                 {
                     Terraria.Audio.LegacySoundStyle biteTheDust = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/BiteTheDust");
-                    biteTheDust.WithVolume(MyPlayer.soundVolume);
+                    biteTheDust.WithVolume(MyPlayer.ModSoundsVolume);
                     Main.PlaySound(biteTheDust, projectile.position);
                     btdStartDelay = 1;
                 }
@@ -76,14 +73,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             }
 
 
-            if (!mPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && projectile.ai[0] == 0f)
                 {
                     attackFrames = true;
-                    Main.mouseRight = false;
                     projectile.netUpdate = true;
-                    if (projectile.frame == 4 && !mPlayer.StandAutoMode)
+                    if (projectile.frame == 4 && !mPlayer.standAutoMode)
                     {
                         if (shootCount <= 0)
                         {
@@ -95,7 +91,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, projectile.owner, 1f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, projectile.owner, 1f, projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -130,62 +126,33 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     }
                 }
             }
-            if (mPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
-                NPC target = null;
-                Vector2 targetPos = projectile.position;
-                float targetDist = 350f;
-                if (target == null)
-                {
-                    for (int k = 0; k < 200; k++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[k];
-                        if (npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
-                            {
-                                if (npc.boss)       //is gonna try to detect bosses over anything
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
-                                else        //if it fails to detect a boss, it'll detect the next best thing
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
-                            }
-                        }
-                    }
-                }
+                NPC target = FindNearestTarget(350f);
                 if (target != null)
                 {
                     attackFrames = true;
                     normalFrames = false;
-                    if ((targetPos - projectile.Center).X > 0f)
+                    projectile.direction = 1;
+                    if (target.position.X - projectile.Center.X < 0)
                     {
-                        projectile.spriteDirection = projectile.direction = 1;
+                        projectile.direction = -1;
                     }
-                    else if ((targetPos - projectile.Center).X < 0f)
-                    {
-                        projectile.spriteDirection = projectile.direction = -1;
-                    }
-                    if (attackFrames && projectile.frame == 5 && shootCount <= 0)
+                    projectile.spriteDirection = projectile.direction;
+
+                    if (attackFrames && projectile.frame == 4 && shootCount <= 0)
                     {
                         if (Main.myPlayer == projectile.owner)
                         {
                             shootCount += newShootTime;
-                            Vector2 shootVel = targetPos - projectile.Center;
+                            Vector2 shootVel = target.position - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, projectile.owner, 0f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, projectile.owner, 0f, projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }
@@ -235,7 +202,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             }
             if (animationName == "Secondary")
             {
-                AnimateStand(animationName, 4, 18 - Main.player[projectile.whoAmI].GetModPlayer<MyPlayer>().standSpeedBoosts, false);
+                AnimateStand(animationName, 4, newShootTime / 4, false);
             }
         }
     }

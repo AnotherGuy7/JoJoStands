@@ -60,7 +60,7 @@ namespace JoJoStands.Items.Hamon
             }
             ChargeHamon();
 
-            if (mPlayer.StandOut && !mPlayer.StandAutoMode)
+            if (mPlayer.standOut && !mPlayer.standAutoMode)
                 return;
 
             hamonPlayer.usingItemThatIgnoresEnemyDamage = true;

@@ -32,22 +32,20 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
@@ -67,14 +65,14 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                 {
                     if (SpecialKeyPressedNoCooldown())
                     {
-                        modPlayer.GEAbilityNumber += 1;
+                        mPlayer.GEAbilityNumber += 1;
                         saidAbility = false;
                     }
-                    if (modPlayer.GEAbilityNumber >= 3)
+                    if (mPlayer.GEAbilityNumber >= 3)
                     {
-                        modPlayer.GEAbilityNumber = 0;
+                        mPlayer.GEAbilityNumber = 0;
                     }
-                    if (modPlayer.GEAbilityNumber == 0)
+                    if (mPlayer.GEAbilityNumber == 0)
                     {
                         if (!saidAbility)
                         {
@@ -82,7 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                             saidAbility = true;
                         }
                     }
-                    if (modPlayer.GEAbilityNumber == 1)
+                    if (mPlayer.GEAbilityNumber == 1)
                     {
                         if (!saidAbility)
                         {
@@ -90,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                             saidAbility = true;
                         }
                     }
-                    if (modPlayer.GEAbilityNumber == 2)
+                    if (mPlayer.GEAbilityNumber == 2)
                     {
                         if (!saidAbility)
                         {
@@ -99,26 +97,26 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                         }
                     }
 
-                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && modPlayer.GEAbilityNumber == 0)
+                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 0)
                     {
                         Main.mouseLeft = false;
                         int proj = Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("GEFrog"), 1, 0f, projectile.owner, tierNumber, tierNumber - 1f);
                         Main.projectile[proj].netUpdate = true;
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(6));
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(6));
                     }
-                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && modPlayer.GEAbilityNumber == 1)
+                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
                     {
                         Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 65f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(12));
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
                     }
-                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && modPlayer.GEAbilityNumber == 2)
+                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 2)
                     {
                         Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("GEButterfly"), 1, 0f, projectile.owner);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(12));
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
                     }
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

@@ -25,7 +25,7 @@ namespace JoJoStands.Buffs.ItemBuff
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             player.AddBuff(mod.BuffType(Name), 2);
-            if (player.HasBuff(mod.BuffType(Name)) && mPlayer.epitaphForesight)
+            if (player.HasBuff(mod.BuffType(Name)) && mPlayer.epitaphForesightActive)
             {
                 saveTimer++;
                 if (saveTimer >= 30)
@@ -36,7 +36,7 @@ namespace JoJoStands.Buffs.ItemBuff
                     saveTimer = 0;
                 }
             }
-            if (player.HasBuff(mod.BuffType(Name)) && !mPlayer.epitaphForesight)
+            if (player.HasBuff(mod.BuffType(Name)) && !mPlayer.epitaphForesightActive)
             {
                 if (!foresightWoreOff)
                 {

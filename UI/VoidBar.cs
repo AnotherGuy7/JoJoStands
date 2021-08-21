@@ -13,11 +13,12 @@ namespace JoJoStands.UI
         public static bool Visible;
         public static Texture2D VoidBarTexture;
         public static Texture2D VoidBarBarTexture;
-        public UIText voidText;
+        private UIText voidText;
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
             MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             voidText.SetText("Void: " + mPlayer.voidCounter);
         }
@@ -64,13 +65,13 @@ namespace JoJoStands.UI
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
         }
 
-        /*private void PreDrawVoidCounterGradient(MyPlayer modPlayer, SpriteBatch spriteBatch)
+        /*private void PreDrawVoidCounterGradient(MyPlayer mPlayer, SpriteBatch spriteBatch)
         {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 
             MiscShaderData voidGradientShader = GameShaders.Misc["JoJoStandsVoidGradient"];
-            voidGradientShader.UseOpacity(modPlayer.voidCounter / modPlayer.voidCounterMax);
+            voidGradientShader.UseOpacity(mPlayer.voidCounter / mPlayer.voidCounterMax);
 
             voidGradientShader.Apply(null);
             spriteBatch.Draw(VoidBarBarTexture, voidBarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 0, VoidBarTexture.Width, VoidBarTexture.Height), Color.White);

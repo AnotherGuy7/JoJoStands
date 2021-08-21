@@ -22,7 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override string spawnSoundName => "Star Platinum";
         public override int standType => 1;
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
 
         public override void AI()
         {
@@ -30,24 +30,23 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
+                secondaryAbilityFrames = player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] != 0;
+
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
                 {
                     Punch();
@@ -64,7 +63,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0 && projectile.owner == Main.myPlayer)
                 {
                     shootCount += 120;
-                    Main.mouseLeft = false;
                     Vector2 shootVel = Main.MouseWorld - projectile.Center;
                     if (shootVel == Vector2.Zero)
                     {
@@ -72,18 +70,12 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("StarFinger"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, projectile.owner, projectile.whoAmI);
+                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StarFinger"), (int)(altDamage * mPlayer.standDamageBoosts), 2f, projectile.owner, projectile.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
                 }
-                if (player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] != 0)
-                {
-                    secondaryAbilityFrames = true;
-                    Main.mouseLeft = false;
-                    projectile.netUpdate = true;
-                }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 PunchAndShootAI(mod.ProjectileType("StarFinger"), shootMax: 1);
             }

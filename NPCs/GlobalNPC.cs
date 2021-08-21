@@ -182,7 +182,7 @@ namespace JoJoStands.NPCs
             if (zombieHightlightTimer > 0)
                 zombieHightlightTimer--;
 
-            if (player.TheWorldEffect || frozenInTime)
+            if (player.timestopActive || frozenInTime)
             {
                 if (npc.velocity != Vector2.Zero)
                 {
@@ -197,7 +197,7 @@ namespace JoJoStands.NPCs
                 npc.netUpdate = true;
                 return false;
             }
-            if (player.backToZero)
+            if (player.backToZeroActive)
             {
                 if (!affectedbyBtz)
                 {
@@ -252,12 +252,12 @@ namespace JoJoStands.NPCs
                 btzTotalRewindTimer = 0;
                 affectedbyBtz = false;
             }
-            if (player.TimeSkipPreEffect)
+            if (player.timeskipPreEffect)
             {
                 aiStyleSave = 0;
                 playerPositionOnSkip = Vector2.Zero;
             }
-            if (player.TimeSkipEffect && !npc.townNPC && !npc.friendly && !npc.boss)
+            if (player.timeskipActive && !npc.townNPC && !npc.friendly && !npc.boss)
             {
                 if (playerPositionOnSkip == Vector2.Zero)
                 {
@@ -313,17 +313,17 @@ namespace JoJoStands.NPCs
                 }
                 return false;
             }
-            if (player.TimeSkipEffect && npc.boss)
+            if (player.timeskipActive && npc.boss)
             {
                 npc.defense /= 2;
             }
-            if (!player.TimeSkipEffect && npc.aiStyle == 0)
+            if (!player.timeskipActive && npc.aiStyle == 0)
             {
                 playerPositionOnSkip = Vector2.Zero;
                 npc.aiStyle = aiStyleSave;
                 aiStyleSave = 0;
             }
-            if (player.epitaphForesight && !npc.immortal)
+            if (player.epitaphForesightActive && !npc.immortal)
             {
                 applyingForesightPositions = true;
                 if (foresightSaveTimer > 0)
@@ -341,7 +341,7 @@ namespace JoJoStands.NPCs
                     foresightSaveTimer = 5;
                 }
             }
-            if (!player.epitaphForesight && applyingForesightPositions)
+            if (!player.epitaphForesightActive && applyingForesightPositions)
             {
                 if (!foresightResetIndex)
                 {
@@ -443,7 +443,7 @@ namespace JoJoStands.NPCs
                 if (player.active)
                 {
                     MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                    if (npc.boss && mPlayer.deathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
+                    if (npc.boss && mPlayer.deathLoopActive && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
                     {
                         Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
                         Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
@@ -451,7 +451,7 @@ namespace JoJoStands.NPCs
                         Buffs.ItemBuff.DeathLoop.Looping3x = true;
                         Buffs.ItemBuff.DeathLoop.Looping10x = false;
                     }
-                    if (!npc.boss && mPlayer.deathLoop && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
+                    if (!npc.boss && mPlayer.deathLoopActive && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
                     {
                         Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
                         Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
@@ -478,7 +478,7 @@ namespace JoJoStands.NPCs
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
             MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
-            if (player.epitaphForesight || applyingForesightPositions)
+            if (player.epitaphForesightActive || applyingForesightPositions)
             {
                 for (int i = 0; i < foresightPositionIndexMax; i++)
                 {
@@ -493,7 +493,7 @@ namespace JoJoStands.NPCs
                     }
                 }
             }
-            if (player.backToZero && btzTotalRewindTimer != 0)
+            if (player.backToZeroActive && btzTotalRewindTimer != 0)
             {
                 for (int a = 0; a < BtZPositions.Length - 1; a++)
                 {

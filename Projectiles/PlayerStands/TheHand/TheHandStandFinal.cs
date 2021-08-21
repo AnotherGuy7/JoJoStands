@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override int punchTime => 10;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 7f;
-		public override string poseSoundName => "NobodyCanFoolMeTwice";
+        public override string poseSoundName => "NobodyCanFoolMeTwice";
         public override string spawnSoundName => "The Hand";
 
         private int updateTimer = 0;
@@ -37,23 +37,20 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
@@ -67,7 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && projectile.owner == Main.myPlayer)
                 {
                     secondaryAbilityFrames = true;
-                    if (chargeTimer < 150f)
+                    if (chargeTimer < 150)
                     {
                         chargeTimer++;
                     }
@@ -83,7 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     distanceToTeleport.Normalize();
                     distanceToTeleport *= chargeTimer / 30f;
                     player.velocity += distanceToTeleport * 5f;
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(chargeTimer / 30));       //5s max cooldown
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(chargeTimer / 30));       //5s max cooldown
                     chargeTimer = 0;
                 }
                 if (SpecialKeyCurrent() && !player.HasBuff(mod.BuffType("AbilityCooldown")))
@@ -97,24 +94,24 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     if (specialTimer <= 60)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        for (int n = 0; n < Main.maxNPCs; n++)
                         {
-                            NPC npc = Main.npc[i];
-                            if (npc.active && Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), projectile.position, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)        //checking if the NPC collides with a line from The Hand to the mouse
+                            NPC npc = Main.npc[n];
+                            if (npc.active && Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), projectile.Center, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)        //checking if the NPC collides with a line from The Hand to the mouse
                             {
                                 Vector2 difference = player.position - npc.position;
                                 npc.position = player.Center + (-difference / 2f);
                             }
                         }
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(15));
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(15));
                     }
                     if (specialTimer > 60)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        for (int n = 0; n < Main.maxNPCs; n++)
                         {
-                            NPC npc = Main.npc[i];
-                            if (npc.active && Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), projectile.position, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
+                            NPC npc = Main.npc[n];
+                            if (npc.active && Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), projectile.Center, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
                             {
                                 npc.StrikeNPC(60 * (specialTimer / 30), 0f, player.direction);      //damage goes up at a rate of 120dmg/s
                                 npc.AddBuff(mod.BuffType("MissingOrgans"), 900);
@@ -125,14 +122,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             Player otherPlayer = Main.player[p];
                             if (otherPlayer.active)
                             {
-                                if (otherPlayer.team != player.team && otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), projectile.position, Main.MouseWorld))
+                                if (otherPlayer.team != player.team && otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), projectile.Center, Main.MouseWorld))
                                 {
                                     otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " was scraped out of existence by " + player.name + "."), 60 * (specialTimer / 30), 1);
                                     otherPlayer.AddBuff(mod.BuffType("MissingOrgans"), 600);
                                 }
                             }
                         }
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(25));
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(25));
                     }
                     specialTimer = 0;
                 }
@@ -144,7 +141,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         GoInFront();
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }
@@ -159,7 +156,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 Texture2D positionIndicator = mod.GetTexture("Extras/PositionIndicator");
                 Vector2 distanceToTeleport = Vector2.Zero;
                 if (projectile.owner == Main.myPlayer)
-                    distanceToTeleport = Main.MouseWorld - player.position; 
+                    distanceToTeleport = Main.MouseWorld - player.position;
                 distanceToTeleport.Normalize();
                 distanceToTeleport *= 98f * (chargeTimer / 30f);
                 spriteBatch.Draw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f));

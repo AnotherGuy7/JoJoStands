@@ -7,8 +7,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
     public class GratefulDeadStandT1 : StandClass
     {
         public override float shootSpeed => 16f;
-        public bool grabFrames = false;
-        public bool secondaryFrames = false;
         public override float maxDistance => 98f;
         public override int punchDamage => 16;
         public override int punchTime => 13;
@@ -19,8 +17,10 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int standType => 1;
         public override string poseSoundName => "OnceWeDecideToKillItsDone";
         public override string spawnSoundName => "The Grateful Dead";
-        public int updateTimer = 0;
 
+        private int updateTimer = 0;
+        private bool grabFrames = false;
+        private bool secondaryFrames = false;
 
         public override void AI()
         {
@@ -28,23 +28,20 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && !grabFrames)
                 {
@@ -61,7 +58,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 }
 
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

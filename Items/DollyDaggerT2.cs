@@ -41,7 +41,7 @@ namespace JoJoStands.Items
 
 		public override bool CanUseItem(Player player)
 		{
-			if (player.GetModPlayer<MyPlayer>().StandOut)
+			if (player.GetModPlayer<MyPlayer>().standOut)
 				return false;
 
 			if (player.altFunctionUse == 2)

@@ -1,17 +1,14 @@
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
 
 namespace JoJoStands.Items
 {
-	public class StrayCat : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Stray Cat");
-			Tooltip.SetDefault("An odd plant that is somehow a cat. It can fire bubbles invisible to the eye capable of causing meowsive damage.");
+    public class StrayCat : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Stray Cat");
+            Tooltip.SetDefault("An odd plant that is somehow a cat. It can fire bubbles invisible to the eye and is capable of causing meowsive damage.");
         }
 
         public override void SetDefaults()
@@ -38,13 +35,9 @@ namespace JoJoStands.Items
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
-            {
                 item.shoot = 0;
-            }
             else
-            {
                 item.shoot = mod.ProjectileType("MatureStrayCatMinion");
-            }
             return true;
         }
     }

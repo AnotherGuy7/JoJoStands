@@ -36,22 +36,19 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
                 {
@@ -68,22 +65,22 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 }
                 if (!attackFrames && projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && modPlayer.GEAbilityNumber == 0)
+                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 0)
                     {
                         normalFrames = false;
                         attackFrames = false;
                         secondaryAbilityFrames = true;
                     }
-                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && modPlayer.GEAbilityNumber == 1)
+                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
                     {
                         Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 65f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
                     }
-                    if (Main.mouseRight && modPlayer.GEAbilityNumber == 2 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("DeathLoop")))
+                    if (Main.mouseRight && mPlayer.GEAbilityNumber == 2 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("DeathLoop")))
                     {
                         player.AddBuff(mod.BuffType("DeathLoop"), 1500);
                     }
-                    if (Main.mouseRight && player.velocity == Vector2.Zero && modPlayer.GEAbilityNumber == 3)
+                    if (Main.mouseRight && player.velocity == Vector2.Zero && mPlayer.GEAbilityNumber == 3)
                     {
                         regencounter++;
                         if (Main.rand.Next(0, 3) == 0)
@@ -103,10 +100,10 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         player.HealEffect(healamount);
                         regencounter = 0;
                     }
-                    if (Main.mouseRight && modPlayer.GEAbilityNumber == 4 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("BacktoZero")))
+                    if (Main.mouseRight && mPlayer.GEAbilityNumber == 4 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("BacktoZero")))
                     {
                         player.AddBuff(mod.BuffType("BacktoZero"), 1200);
-                        modPlayer.backToZero = true;
+                        mPlayer.backToZeroActive = true;
                         if (Main.netMode == NetmodeID.MultiplayerClient)
                         {
                             ModNetHandler.effectSync.SendBTZ(256, player.whoAmI, true, player.whoAmI);
@@ -118,14 +115,14 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 {
                     if (SpecialKeyPressedNoCooldown())
                     {
-                        modPlayer.GEAbilityNumber += 1;
+                        mPlayer.GEAbilityNumber += 1;
                         saidAbility = false;
                     }
-                    if (modPlayer.GEAbilityNumber >= 6)
+                    if (mPlayer.GEAbilityNumber >= 6)
                     {
-                        modPlayer.GEAbilityNumber = 0;
+                        mPlayer.GEAbilityNumber = 0;
                     }
-                    if (modPlayer.GEAbilityNumber == 0)
+                    if (mPlayer.GEAbilityNumber == 0)
                     {
                         if (!saidAbility)
                         {
@@ -133,7 +130,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                             saidAbility = true;
                         }
                     }
-                    if (modPlayer.GEAbilityNumber == 1)
+                    if (mPlayer.GEAbilityNumber == 1)
                     {
                         if (!saidAbility)
                         {
@@ -141,7 +138,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                             saidAbility = true;
                         }
                     }
-                    if (modPlayer.GEAbilityNumber == 2)
+                    if (mPlayer.GEAbilityNumber == 2)
                     {
                         if (!saidAbility)
                         {
@@ -149,7 +146,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                             saidAbility = true;
                         }
                     }
-                    if (modPlayer.GEAbilityNumber == 3)
+                    if (mPlayer.GEAbilityNumber == 3)
                     {
                         if (!saidAbility)
                         {
@@ -157,7 +154,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                             saidAbility = true;
                         }
                     }
-                    if (modPlayer.GEAbilityNumber == 4)
+                    if (mPlayer.GEAbilityNumber == 4)
                     {
                         if (!saidAbility)
                         {
@@ -181,15 +178,15 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         }
                         shootVel.Normalize();
                         shootVel *= 12f;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("GoldExperienceBeam"), newPunchDamage + 11, 6f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("GoldExperienceBeam"), newPunchDamage + 11, 6f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(3));
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(3));
                         secondaryAbilityFrames = false;
                     }
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

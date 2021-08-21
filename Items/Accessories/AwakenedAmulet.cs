@@ -31,7 +31,7 @@ namespace JoJoStands.Items.Accessories
             mPlayer.standCooldownReduction += 0.2f;
             mPlayer.standCritChangeBoosts += 30f;
             mPlayer.awakenedAmuletEquipped = true;
-            if (mPlayer.StandOut)
+            if (mPlayer.standOut)
             {
                 player.statDefense += 12;
             }

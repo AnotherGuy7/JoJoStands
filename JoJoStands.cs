@@ -2,6 +2,7 @@ using JoJoStands.Networking;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
@@ -50,6 +51,8 @@ namespace JoJoStands
         internal BadCompanyUnitsUI UnitsUI;
         internal ZombieSkillTree ZombieSkillTreeUI;
 
+        public static List<char> testStandPassword = new List<char>();      //  :) Have *fuuuuuuun!*
+
         public override void Load()
         {
             JoJoStandsSounds = ModLoader.GetMod("JoJoStandsSounds");        //would just return null if nothing is there
@@ -96,6 +99,8 @@ namespace JoJoStands
             MyPlayer.stopImmune.Add(ProjectileType("Fists"));
             MyPlayer.stopImmune.Add(ProjectileType("GoldExperienceRequiemStand"));
             MyPlayer.stopImmune.Add(ProjectileType("TuskAct4Minion"));
+
+            testStandPassword.Add(Convert.ToChar(84));
 
 
             // Registers a new hotkey

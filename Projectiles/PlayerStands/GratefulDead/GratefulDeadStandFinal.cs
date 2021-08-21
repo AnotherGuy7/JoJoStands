@@ -9,9 +9,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
     public class GratefulDeadStandFinal : StandClass
     {
         public override float shootSpeed => 16f;
-        public bool grabFrames = false;
-        public bool secondaryFrames = false;
-        public bool activatedGas = false;
         public override float maxDistance => 98f;
         public override int punchDamage => 90;
         public override int punchTime => 10;
@@ -22,12 +19,12 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int standType => 1;
         public override string poseSoundName => "OnceWeDecideToKillItsDone";
         public override string spawnSoundName => "The Grateful Dead";
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            return false;
-        }
+
         public int updateTimer = 0;
 
+        private bool grabFrames = false;
+        private bool secondaryFrames = false;
+        private bool activatedGas = false;
 
         public override void AI()
         {
@@ -35,23 +32,20 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && !secondaryFrames && !grabFrames)
                 {
@@ -71,6 +65,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     projectile.velocity = Main.MouseWorld - projectile.position;
                     projectile.velocity.Normalize();
                     projectile.velocity *= 5f;
+
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
                     if (mouseDistance > 40f)
                     {
@@ -80,10 +75,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     {
                         projectile.velocity = Vector2.Zero;
                     }
+
                     secondaryFrames = true;
-                    for (int i = 0; i < Main.maxNPCs; i++)
+                    for (int n = 0; n < Main.maxNPCs; n++)
                     {
-                        NPC npc = Main.npc[i];
+                        NPC npc = Main.npc[n];
                         if (npc.active)
                         {
                             if (projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
@@ -160,7 +156,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 }
                 player.AddBuff(mod.BuffType("Old"), 2);
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }
@@ -175,7 +171,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 Texture2D texture = mod.GetTexture("Extras/RangeIndicator");
                 spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * ((MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), ((30f * 16f) + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
             }
-            return base.PreDrawExtras(spriteBatch);
+            return true;
         }
 
         public override void SendExtraStates(BinaryWriter writer)
@@ -186,6 +182,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             grabFrames = reader.ReadBoolean();
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            return false;
         }
 
 

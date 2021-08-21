@@ -25,27 +25,27 @@ namespace JoJoStands.Projectiles.Pets
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-			modPlayer.poseSoundName = poseSoundName;
-            if (modPlayer.tuskActNumber == 3)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+			mPlayer.poseSoundName = poseSoundName;
+            if (mPlayer.tuskActNumber == 3)
                 projectile.timeLeft = 2;
-            }
-            Vector2 vector131 = player.Center;
-            vector131.X -= (float)((12 + player.width / 2) * player.direction);
-            vector131.Y -= 25f;
-            projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
+
+            Vector2 behindPlayer = player.Center;
+            behindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
+            behindPlayer.Y -= 25f;
+            projectile.Center = Vector2.Lerp(projectile.Center, behindPlayer, 0.2f);
             projectile.velocity *= 0.8f;
-            projectile.direction = (projectile.spriteDirection = player.direction);
+            projectile.spriteDirection = projectile.direction = player.direction;
+
+            projectile.frameCounter++;
             if (projectile.frameCounter >= 10)
             {
                 projectile.frame += 1;
                 projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 4)
-            {
-                projectile.frame = 0;
+                if (projectile.frame >= 4)
+                {
+                    projectile.frame = 0;
+                }
             }
             projectile.netUpdate = true;
         }

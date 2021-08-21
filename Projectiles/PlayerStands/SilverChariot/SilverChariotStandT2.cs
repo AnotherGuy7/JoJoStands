@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override float fistWhoAmI => 10f;
         public override int standType => 1;
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
         private bool parryFrames = false;
 
         public override void AI()
@@ -27,23 +27,20 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
@@ -59,7 +56,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     normalFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
-                    Main.mouseLeft = false;
                     projectile.netUpdate = true;
                     Rectangle parryRectangle = new Rectangle((int)projectile.Center.X + (4 * projectile.direction), (int)projectile.Center.Y - 29, 16, 54);
                     for (int p = 0; p < Main.maxProjectiles; p++)
@@ -75,7 +71,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 otherProj.velocity *= -1;
                                 otherProj.hostile = false;
                                 otherProj.friendly = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
                             }
                         }
                     }
@@ -89,7 +85,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 npc.StrikeNPC(npc.damage * 2, 6f, player.direction);
                                 secondaryAbilityFrames = false;
                                 parryFrames = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(10));
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
                             }
                         }
                     }
@@ -106,7 +102,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         GoInFront();
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

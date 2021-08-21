@@ -33,8 +33,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 shootCount--;
             }
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.StandOut && modPlayer.badCompanyTier != 0)
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
             {
                 projectile.timeLeft = 2;
             }
@@ -58,7 +58,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (bombDropTimer >= bombDropTime && bombsDropped < 3)
             {
                 bombsDropped++;
-                Projectile.NewProjectile(projectile.Center, projectile.velocity, mod.ProjectileType("BadCompanyBomb"), 0, 3f, projectile.owner, bombDamage * (float)modPlayer.standDamageBoosts);
+                Projectile.NewProjectile(projectile.Center, projectile.velocity, mod.ProjectileType("BadCompanyBomb"), 0, 3f, projectile.owner, bombDamage * (float)mPlayer.standDamageBoosts);
                 bombDropTimer = 0;
             }
 

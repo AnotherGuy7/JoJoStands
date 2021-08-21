@@ -32,7 +32,7 @@ namespace JoJoStands.Projectiles.Pets.Part1
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            //MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            //MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!player.HasBuff(mod.BuffType("SpeedWagonPetBuff")) || player.dead)
             {
                 projectile.Kill();

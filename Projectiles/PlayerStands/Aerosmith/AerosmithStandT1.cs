@@ -53,23 +53,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 shootCount--;
             }
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (modPlayer.StandOut)
+            if (mPlayer.standOut)
             {
                 projectile.timeLeft = 2;
             }
-            modPlayer.aerosmithWhoAmI = projectile.whoAmI;
+            mPlayer.aerosmithWhoAmI = projectile.whoAmI;
             newProjectileDamage = (int)(newProjectileDamage * MathHelper.Clamp(1f - (projectile.Distance(player.Center) / (350f * 16f)), 0.5f, 1f));
 
-            if (projectile.position.Y < (Main.worldSurface * 0.35) * 16f)
-            {
-                fallingFromSpace = true;
-            }
-            else
-            {
-                fallingFromSpace = false;
-            }
+            fallingFromSpace = projectile.position.Y < (Main.worldSurface * 0.35) * 16f;
             if (fallingFromSpace)
             {
                 projectile.frameCounter = 0;
@@ -80,14 +73,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             projectile.rotation = (-rota * projectile.direction).ToRotation();
             projectile.tileCollide = true;
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 projectile.tileCollide = true;
-                modPlayer.controllingAerosmith = true;
-                float ScreenX = (float)Main.screenWidth / 2f;
-                float ScreenY = (float)Main.screenHeight / 2f;
-                modPlayer.aerosmithCamPosition = projectile.position + new Vector2(ScreenX, ScreenY);
-                modPlayer.aerosmithCamPosition = new Vector2(projectile.position.X - ScreenX, projectile.position.Y - ScreenY);
+                mPlayer.standRemoteMode = true;
+                float halfScreenWidth = (float)Main.screenWidth / 2f;
+                float halfScreenHeight = (float)Main.screenHeight / 2f;
+                mPlayer.standRemoteModeCameraPosition = projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
 
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && !fallingFromSpace)
                 {
@@ -97,10 +89,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         projectile.velocity = Main.MouseWorld - projectile.Center;
                         projectile.velocity.Normalize();
                         projectile.velocity *= 10f;
-                        if (Main.MouseWorld.X > projectile.position.X + 5)
-                        {
-                            projectile.direction = 1;
-                        }
+
+                        projectile.direction = 1;
                         if (Main.MouseWorld.X < projectile.position.X - 5)
                         {
                             projectile.direction = -1;
@@ -111,6 +101,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     {
                         projectile.velocity = Vector2.Zero;
                     }
+                    projectile.netUpdate = true;
                 }
                 else
                 {
@@ -122,8 +113,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 }
                 if (Main.mouseRight && projectile.owner == Main.myPlayer)
                 {
-                    Main.mouseRight = false;
-                    projectile.netUpdate = true;
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
@@ -140,33 +129,25 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     }
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 projectile.rotation = (projectile.velocity * projectile.direction).ToRotation();
-                NPC target = null;
-                Vector2 targetPos = projectile.position;
-                float targetDist = 350f;
+                NPC target = FindNearestTarget(350f);
                 if (target == null)
                 {
                     if (projectile.Distance(player.Center) < 80f)
                     {
-                        if (projectile.ai[0] == 0f)
+                        if (projectile.position.X >= player.position.X + 50f || WorldGen.SolidTile((int)(projectile.position.X / 16) - 3, (int)(projectile.position.Y / 16f) + 1))
                         {
                             projectile.velocity.X = -2f;
                             projectile.spriteDirection = projectile.direction = -1;
-                        }
-                        if (projectile.ai[0] == 1f)
-                        {
-                            projectile.velocity.X = 2f;
-                            projectile.spriteDirection = projectile.direction = 1;
-                        }
-                        if (projectile.position.X >= player.position.X + 50f || WorldGen.SolidTile((int)(projectile.position.X / 16) - 3, (int)(projectile.position.Y / 16f) + 1))
-                        {
-                            projectile.ai[0] = 0f;
+                            projectile.netUpdate = true;
                         }
                         if (projectile.position.X < player.position.X - 50f || WorldGen.SolidTile((int)(projectile.position.X / 16) + 3, (int)(projectile.position.Y / 16f) + 1))
                         {
-                            projectile.ai[0] = 1f;
+                            projectile.velocity.X = 2f;
+                            projectile.spriteDirection = projectile.direction = 1;
+                            projectile.netUpdate = true;
                         }
                         if (projectile.position.Y > player.position.Y + 2f)
                         {
@@ -179,6 +160,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         if (projectile.position.Y < player.position.Y + 2f && projectile.position.Y > player.position.Y - 2f)
                         {
                             projectile.velocity.Y = 0f;
+                            projectile.netUpdate = true;
                         }
                     }
                     else
@@ -188,45 +170,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         projectile.velocity.Normalize();
                         projectile.velocity *= 8f;
                     }
-                    for (int k = 0; k < 200; k++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[k];
-                        if (npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
-                            {
-                                if (npc.boss)       //is gonna try to detect bosses over anything
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
-                                else        //if it fails to detect a boss, it'll detect the next best thing
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
-                            }
-                        }
-                    }
                 }
                 if (target != null)
                 {
-                    if ((targetPos - projectile.Center).X > 0f)
-                    {
-                        projectile.spriteDirection = projectile.direction = 1;
-                    }
-                    else if ((targetPos - projectile.Center).X < 0f)
-                    {
-                        projectile.spriteDirection = projectile.direction = -1;
-                    }
                     if (projectile.Distance(target.Center) > 45f)
                     {
-                        projectile.velocity = targetPos - projectile.Center;
+                        projectile.velocity = target.position - projectile.Center;
                         projectile.velocity.Normalize();
                         projectile.velocity *= 8f;
+
+                        projectile.direction = 1;
+                        if (projectile.velocity.X < 0f)
+                            projectile.direction = -1;
+                        projectile.spriteDirection = projectile.direction;
+                        projectile.netUpdate = true;
                     }
                     if (shootCount <= 0)
                     {
@@ -234,20 +191,19 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         {
                             shootCount += newShootTime;
                             Main.PlaySound(SoundID.Item11, projectile.position);
-                            Vector2 shootVel = targetPos - projectile.Center;
+                            Vector2 shootVel = target.position - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, newProjectileDamage, 3f, projectile.owner);
+                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, ProjectileID.Bullet, newProjectileDamage, 3f, projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                         }
                     }
                 }
             }
-            projectile.netUpdate = true;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -262,10 +218,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             {
                 projectile.frame += 1;
                 projectile.frameCounter = 0;
-            }
-            if (projectile.frame >= 2)
-            {
-                projectile.frame = 0;
+                if (projectile.frame >= 3)
+                {
+                    projectile.frame = 0;
+                }
             }
         }
     }

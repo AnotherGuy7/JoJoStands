@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using System;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Commands
@@ -19,6 +21,21 @@ namespace JoJoStands.Commands
             if (page == 1)
             {
                 Main.NewTextMultiline("0. None \n1. Roundabout \n2. CAESAAARRR \n3. Kono me amareri maroreri merare maro \n4. Last Train Home \n5. KORE GA... WAGA KING CRIMSON NO NORIO KU");
+            }
+            
+            if (args[0].Length == 6 && JoJoStands.testStandPassword.Count == 6)
+            {
+                string password = "";
+                for (int i = 0; i < 6; i++)
+                {
+                    password += JoJoStands.testStandPassword[i];
+                }
+                if (input == password)
+                {
+                    MyPlayer.testStandUnlocked = true;
+                    Main.NewText("Worthiness has been achieved.");
+                    Main.PlaySound(SoundID.MoonLord);
+                }
             }
         }
     }

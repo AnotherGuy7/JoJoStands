@@ -85,7 +85,7 @@ namespace JoJoStands
         public override void OnChanged()        //couldn't use Player player = Main.LocalPlayer cause it wasn't set to an instance of an object
         {
             MyPlayer.RangeIndicatorAlpha = RangeIndicatorVisibility;
-            MyPlayer.deathsoundint = deathsound;
+            MyPlayer.DeathSoundID = deathsound;
             MyPlayer.Sounds = Sounds;
             MyPlayer.TimestopEffects = TimestopEffects;
             MyPlayer.RangeIndicators = RangeIndicators;
@@ -95,7 +95,7 @@ namespace JoJoStands
             MyPlayer.HamonBarPositionX = HamonBarPositionX;
             MyPlayer.HamonBarPositionY = HamonBarPositionY;
             MyPlayer.SecretReferences = SecretReferences;
-            MyPlayer.soundVolume = soundVolume;
+            MyPlayer.ModSoundsVolume = soundVolume;
             HamonPlayer.HamonEffects = HamonEffects;
             UI.HamonBarState.changedInConfig = true;
             UI.HamonBarState.sizeMode = HamonBarSize;

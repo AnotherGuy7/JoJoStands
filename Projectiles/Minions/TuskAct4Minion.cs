@@ -45,23 +45,19 @@ namespace JoJoStands.Projectiles.Minions
             PlayAnimations();
             UpdateStandInfo();
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
-            if (player.whoAmI == Main.myPlayer && modPlayer.tuskActNumber == 4)         //Making an owner check cause tuskActNumber isn't in sync with other players, causing TA4 to die for everyone else
-            {
-                projectile.timeLeft = 10;
-            }
+            if (player.whoAmI == Main.myPlayer && mPlayer.tuskActNumber == 4)         //Making an owner check cause tuskActNumber isn't in sync with other players, causing TA4 to die for everyone else
+                projectile.timeLeft = 2;
+
             if (goldenRectangleEffectTimer >= 215)
             {
                 if (JoJoStands.SoundsLoaded && !playedSound)
                 {
                     Terraria.Audio.LegacySoundStyle chumimiiin = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Chumimiiin");
-                    chumimiiin.WithVolume(MyPlayer.soundVolume);
+                    chumimiiin.WithVolume(MyPlayer.ModSoundsVolume);
                     Main.PlaySound(chumimiiin, projectile.position);
                     playedSound = true;
                 }
@@ -70,26 +66,11 @@ namespace JoJoStands.Projectiles.Minions
                 Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X + 5f, projectile.velocity.Y - 5f);
                 Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X + 5f, projectile.velocity.Y + 5f);
                 Dust.NewDust(projectile.position, projectile.width, projectile.height, 169, projectile.velocity.X - 5f, projectile.velocity.Y - 5f);
-                //Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 169, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
             }
             if (goldenRectangleEffectTimer > 0)
-            {
                 goldenRectangleEffectTimer -= 2;
-            }
 
-            NPC target = null;
-            for (int n = 0; n < Main.maxNPCs; n++)
-            {
-                NPC npc = Main.npc[n];
-                if (npc.active)
-                {
-                    float distance = Vector2.Distance(npc.Center, player.Center);
-                    if (npc.CanBeChasedBy(this) && distance < 9f * 16f && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
-                    {
-                        target = npc;
-                    }
-                }
-            }
+            NPC target = FindNearestTarget(9f * 16f);
             if (target != null)
             {
                 attackFrames = true;
@@ -99,14 +80,14 @@ namespace JoJoStands.Projectiles.Minions
                 Vector2 velocity = (target.position + new Vector2(0f, -4f)) - projectile.position;
                 velocity.Normalize();
                 projectile.velocity = velocity * 4f;
-                if ((target.position - projectile.Center).X > 0f)     //the turn around stuff
+
+                projectile.direction = 1;
+                if ((target.position - projectile.Center).X < 0f)
                 {
-                    projectile.spriteDirection = projectile.direction = 1;
+                    projectile.direction = -1;
                 }
-                else if ((target.position - projectile.Center).X < 0f)
-                {
-                    projectile.spriteDirection = projectile.direction = -1;
-                }
+                projectile.spriteDirection = projectile.direction;
+
                 if (Main.myPlayer == projectile.owner)
                 {
                     if (shootCount <= 0)

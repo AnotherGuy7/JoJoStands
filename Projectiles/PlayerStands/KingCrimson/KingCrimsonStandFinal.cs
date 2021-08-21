@@ -26,7 +26,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
         private int updateTimer = 0;
         private Vector2 velocityAddition;
-        private float mouseDistance;
         private int timeskipStartDelay = 0;
         private int blockSearchTimer = 0;
 
@@ -38,12 +37,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             if (shootCount > 0)
                 shootCount--;
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
@@ -56,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 else
                 {
                     Terraria.Audio.LegacySoundStyle kingCrimson = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/KingCrimson");
-                    kingCrimson.WithVolume(MyPlayer.soundVolume);
+                    kingCrimson.WithVolume(MyPlayer.ModSoundsVolume);
                     Main.PlaySound(kingCrimson, projectile.position);
                     timeskipStartDelay = 1;
                 }
@@ -67,36 +64,34 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (timeskipStartDelay >= 80)
                 {
                     player.AddBuff(mod.BuffType("PreTimeSkip"), 10);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip")); 
+                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip"));
                     timeskipStartDelay = 0;
                 }
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer && !player.HasBuff(mod.BuffType("SkippingTime")))
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
                     normalFrames = false;
-                    Main.mouseRight = false;
                     projectile.netUpdate = true;
+
                     float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
                     projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
-                    if (Main.MouseWorld.X > projectile.position.X)
-                    {
-                        projectile.spriteDirection = 1;
-                        projectile.direction = 1;
-                    }
+
+                    projectile.direction = 1;
                     if (Main.MouseWorld.X < projectile.position.X)
                     {
-                        projectile.spriteDirection = -1;
                         projectile.direction = -1;
                     }
+                    projectile.spriteDirection = projectile.direction;
+
                     velocityAddition = Main.MouseWorld - projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f;
-                    mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
                     if (mouseDistance > 40f)
                     {
                         projectile.velocity = player.velocity + velocityAddition;
@@ -105,6 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     {
                         projectile.velocity = Vector2.Zero;
                     }
+
                     if (shootCount <= 0 && (projectile.frame == 0 || projectile.frame == 4))
                     {
                         shootCount += newPunchTime;
@@ -115,7 +111,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                     }
@@ -167,7 +163,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                     repositionOffset.Y -= 16f;
                                 }
                                 player.position += repositionOffset;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(4));
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(4));
                                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip"));
                                 for (int i = 0; i < 20; i++)
                                 {
@@ -192,7 +188,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 repositionOffset.Y -= 16f;
                             }
                             player.position += repositionOffset;
-                            player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(4));
+                            player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(4));
                             npc.StrikeNPC(newPunchDamage * 2, punchKnockback * 1.5f, projectile.direction);
                             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/TimeSkip"));
 
@@ -215,14 +211,14 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (SecondSpecialKeyPressed() && projectile.owner == Main.myPlayer && !player.HasBuff(mod.BuffType("ForesightBuff")) && !player.HasBuff(mod.BuffType("SkippingTime")))
                 {
                     player.AddBuff(mod.BuffType("ForesightBuff"), 540);
-                    modPlayer.epitaphForesight = true;
+                    mPlayer.epitaphForesightActive = true;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
                         ModNetHandler.effectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
                     }
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

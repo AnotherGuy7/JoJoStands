@@ -42,12 +42,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 shootCount--;
             }
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.Shirtless)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.silverChariotShirtless)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
@@ -65,7 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
                 {
@@ -81,7 +79,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     normalFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
-                    Main.mouseLeft = false;
                     projectile.netUpdate = true;
                     Rectangle parryRectangle = new Rectangle((int)projectile.Center.X + (4 * projectile.direction), (int)projectile.Center.Y - 29, 16, 54);
                     for (int p = 0; p < Main.maxProjectiles; p++)
@@ -97,7 +94,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 otherProj.velocity *= -1;
                                 otherProj.hostile = false;
                                 otherProj.friendly = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(parryCooldownTime));
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(parryCooldownTime));
                             }
                         }
                     }
@@ -111,16 +108,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 npc.StrikeNPC(npc.damage * 2, 6f, player.direction);
                                 secondaryAbilityFrames = false;
                                 parryFrames = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(parryCooldownTime));
+                                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(parryCooldownTime));
                             }
                         }
                     }
 
-                    if (projectile.position.X > player.position.X)
-                    {
-                        projectile.direction = 1;
-                    }
-                    else
+                    projectile.direction = 1;
+                    if (projectile.position.X <= player.position.X)
                     {
                         projectile.direction = -1;
                     }
@@ -135,7 +129,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 {
                     float angle = 360f / projectile.ai[1];
                     angle *= projectile.ai[0];
-                    
+
                     projectile.position = player.Center + (MathHelper.ToRadians(angle).ToRotationVector2() * (4f * 16f));
                     if (!secondaryAbilityFrames && !parryFrames)
                     {
@@ -164,18 +158,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
         private void DrawStand(SpriteBatch spriteBatch, Color drawColor)
         {
+            effects = SpriteEffects.None
             if (projectile.spriteDirection == -1)
             {
                 effects = SpriteEffects.FlipHorizontally;
             }
-            if (projectile.spriteDirection == 1)
-            {
-                effects = SpriteEffects.None;
-            }
-            if (useProjectileAlpha)
-            {
-                drawColor *= projectile.alpha / 255f;
-            }
+
+            drawColor *= projectile.alpha / 255f;
             if (standTexture != null && Main.netMode != NetmodeID.Server)
             {
                 int frameHeight = standTexture.Height / Main.projFrames[projectile.whoAmI];

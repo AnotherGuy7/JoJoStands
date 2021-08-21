@@ -33,55 +33,55 @@ namespace JoJoStands.Projectiles.Pets
         public override void AI()       //I unfortunately had to copy the DD2Pet AI style cause framecounter was made to stay at 5 on it...
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-			modPlayer.poseSoundName = poseSoundName;
-            if (modPlayer.tuskActNumber == 1)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.poseSoundName = poseSoundName;
+            if (mPlayer.tuskActNumber == 1)
                 projectile.timeLeft = 2;
-            }
+
+            projectile.frameCounter++;
             if (projectile.frameCounter >= 10)
             {
                 projectile.frame += 1;
                 projectile.frameCounter = 0;
+                if (projectile.frame >= 4)
+                {
+                    projectile.frame = 0;
+                }
             }
-            if (projectile.frame >= 4)
-            {
-                projectile.frame = 0;
-            }
-            float num = 4f;
-            Vector2 value = new Vector2((float)(player.direction * 30), -20f);
-            projectile.direction = (projectile.spriteDirection = player.direction);
-            Vector2 vector = player.MountedCenter + value;
-            float num6 = Vector2.Distance(projectile.Center, vector);
-            if (num6 > 1000f)
-            {
-                projectile.Center = player.Center + value;
-            }
-            Vector2 vector2 = vector - projectile.Center;
-            if (num6 < num)
+            projectile.direction = projectile.spriteDirection = player.direction;
+
+
+            float maximumDistance = 4f;
+            Vector2 playerDirectionDistance = new Vector2(player.direction * 30f, -20f);
+            Vector2 frontOfPlayer = player.MountedCenter + playerDirectionDistance;
+            float playerBackDistance = Vector2.Distance(projectile.Center, frontOfPlayer);
+            if (playerBackDistance > 1000f)
+                projectile.Center = player.Center + playerDirectionDistance;
+
+            Vector2 projectileDirection = frontOfPlayer - projectile.Center;
+            if (playerBackDistance < maximumDistance)
             {
                 projectile.velocity *= 0.25f;
             }
-            if (vector2 != Vector2.Zero)
+            if (projectileDirection != Vector2.Zero)
             {
-                if (vector2.Length() < num * 0.5f)
+                if (projectileDirection.Length() < maximumDistance * 0.5f)
                 {
-                    projectile.velocity = vector2;
+                    projectile.velocity = projectileDirection;
                 }
                 else
                 {
-                    projectile.velocity = vector2 * 0.1f;
+                    projectile.velocity = projectileDirection * 0.1f;
                 }
             }
             if (projectile.velocity.Length() > 6f)
             {
-                float num7 = projectile.velocity.X * 0.08f + projectile.velocity.Y * (float)projectile.spriteDirection * 0.02f;
-                if (Math.Abs(projectile.rotation - num7) >= 3.14159274f)
+                float estimatedRotation = projectile.velocity.X * 0.08f + projectile.velocity.Y * (float)projectile.spriteDirection * 0.02f;
+                if (Math.Abs(projectile.rotation - estimatedRotation) >= 3.14159274f)       //Pi?
                 {
-                    if (num7 < projectile.rotation)
+                    if (estimatedRotation < projectile.rotation)
                     {
-                        projectile.rotation -= 6.28318548f;
+                        projectile.rotation -= 6.28318548f;     //Pi * 2?
                     }
                     else
                     {
@@ -89,7 +89,7 @@ namespace JoJoStands.Projectiles.Pets
                     }
                 }
                 float num8 = 12f;
-                projectile.rotation = (projectile.rotation * (num8 - 1f) + num7) / num8;
+                projectile.rotation = (projectile.rotation * (num8 - 1f) + estimatedRotation) / num8;
             }
             else
             {
@@ -105,11 +105,6 @@ namespace JoJoStands.Projectiles.Pets
                 {
                     projectile.rotation *= 0.96f;
                 }
-            }
-            projectile.localAI[0] += 1f;
-            if (projectile.localAI[0] > 120f)
-            {
-                projectile.localAI[0] = 0f;
             }
             projectile.netUpdate = true;
         }

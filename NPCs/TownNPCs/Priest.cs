@@ -109,7 +109,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)//Allows you to determine the projectile type of this town NPC's attack, and how long it takes for the projectile to actually appear
         {
-            if (!Projectiles.NPCStands.Whitesnake.whitesnakeActive)
+            if (!Projectiles.NPCStands.WhitesnakeNPCStand.whitesnakeActive)
             {
                 projType = mod.ProjectileType("Whitesnake");
                 attackDelay = 1;

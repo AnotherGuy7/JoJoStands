@@ -30,7 +30,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 player.immune = true;
                 player.controlUseItem = false;
                 player.AddBuff(BuffID.NightOwl, 2);
-                mPlayer.TimeSkipEffect = true;
+                mPlayer.timeskipActive = true;
                 for (int i = 0; i < Main.maxPlayers; i++)
                 {
                     Player otherPlayer = Main.player[i];
@@ -74,7 +74,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 player.AddBuff(mod.BuffType("PowerfulStrike"), 2);
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    mPlayer.TimeSkipEffect = false;
+                    mPlayer.timeskipActive = false;
                 }
                 else
                 {
@@ -105,7 +105,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)
                 {
-                    mPlayer.TimeSkipEffect = false;
+                    mPlayer.timeskipActive = false;
                     ModNetHandler.effectSync.SendTimeskip(256, player.whoAmI, false, player.whoAmI);
                 }
                 PreTimeSkip.userIndex = -1;

@@ -35,22 +35,20 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
@@ -83,7 +81,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     distanceToTeleport *= chargeTimer / 60f;
                     player.velocity += distanceToTeleport * 5f;
 
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(chargeTimer / 10));       //15s max cooldown
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(chargeTimer / 10));       //15s max cooldown
                     chargeTimer = 0;
                 }
                 /*if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")))
@@ -103,7 +101,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     distanceToTeleport.Normalize();
                     distanceToTeleport *= 98f;
                     player.position = player.Center + distanceToTeleport;
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(5));
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(5));
                     projectile.ai[0] = 0f;
                 }
                 if (projectile.ai[0] == 2f)     //pull the enemy
@@ -122,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         GoInFront();
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

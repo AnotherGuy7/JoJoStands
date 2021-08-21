@@ -24,23 +24,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
                 projectile.netUpdate = true;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
@@ -69,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         }
                         shootVel.Normalize();
                         shootVel *= 8f;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * modPlayer.standDamageBoosts), 2f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * mPlayer.standDamageBoosts), 2f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                         projectile.netUpdate = true;
                         secondaryAbilityFrames = false;
@@ -83,7 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         GoInFront();
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

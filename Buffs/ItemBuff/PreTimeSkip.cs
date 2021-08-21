@@ -44,7 +44,7 @@ namespace JoJoStands.Buffs.ItemBuff
                         otherPlayer.controlUp = false;
                     }
                 }
-                player.GetModPlayer<MyPlayer>().TimeSkipPreEffect = true;
+                player.GetModPlayer<MyPlayer>().timeskipPreEffect = true;
             }
             else
             {
@@ -60,7 +60,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 {
                     player.AddBuff(mod.BuffType("SkippingTime"), 600);
                 }
-                player.GetModPlayer<MyPlayer>().TimeSkipPreEffect = false;
+                player.GetModPlayer<MyPlayer>().timeskipPreEffect = false;
             }
         }
     }

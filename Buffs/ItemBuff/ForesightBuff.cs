@@ -28,7 +28,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    mPlayer.epitaphForesight = false;
+                    mPlayer.epitaphForesightActive = false;
                 }
                 else
                 {
@@ -54,7 +54,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)
                 {
-                    mPlayer.epitaphForesight = false;
+                    mPlayer.epitaphForesightActive = false;
                     ModNetHandler.effectSync.SendForesight(256, player.whoAmI, false, player.whoAmI);
                 }
             }

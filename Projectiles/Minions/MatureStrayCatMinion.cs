@@ -1,11 +1,10 @@
-using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles.Minions
-{  
+{
     public class MatureStrayCatMinion : ModProjectile
     {
         public override void SetStaticDefaults()
@@ -32,19 +31,19 @@ namespace JoJoStands.Projectiles.Minions
             projectile.damage = 0;
         }
 
-        public bool canShoot = false;
-        public int shootCount = 0;
+        private bool canShoot = false;
+        private int shootCount = 0;
 
         public override void AI()       ////I really just ported over the Stray Cat NPC AI
         {
             SelectFrame();
             Player player = Main.player[projectile.owner];
-            NPC target = null;
             projectile.damage = 0;
+            projectile.timeLeft = 2;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
+            NPC target = null;
             if (target == null)
             {
                 for (int k = 0; k < Main.maxNPCs; k++)
@@ -56,7 +55,6 @@ namespace JoJoStands.Projectiles.Minions
                     }
                 }
             }
-            projectile.timeLeft = 2;
             if (player.HeldItem.type == mod.ItemType("StrayCat") && player.altFunctionUse == 2)
             {
                 projectile.Kill();
@@ -89,7 +87,7 @@ namespace JoJoStands.Projectiles.Minions
                         }
                         shootVel.Normalize();
                         shootVel *= 2f;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("AirBubble"), 104, 1f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("AirBubble"), 104, 1f, projectile.owner);
                         Main.projectile[proj].hostile = false;
                         Main.projectile[proj].friendly = true;
                         Main.projectile[proj].netUpdate = true;
@@ -97,16 +95,14 @@ namespace JoJoStands.Projectiles.Minions
 
                     }
                 }
-                if (target.position.X > projectile.position.X)
-                {
-                    projectile.direction = 1;
-                }
+
+                projectile.direction = 1;
                 if (target.position.X < projectile.position.X)
                 {
                     projectile.direction = -1;
                 }
+                projectile.spriteDirection = projectile.direction;
             }
-            projectile.spriteDirection = projectile.direction;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -116,7 +112,6 @@ namespace JoJoStands.Projectiles.Minions
 
         public void SelectFrame()
         {
-            projectile.spriteDirection = projectile.direction;
             if (projectile.ai[1] == 1f)
             {
                 projectile.frameCounter++;

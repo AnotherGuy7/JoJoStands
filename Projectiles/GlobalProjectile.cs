@@ -37,7 +37,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            if (Mplayer.TheWorldEffect)
+            if (Mplayer.timestopActive)
             {
                 timeLeftSave++;
                 if (timeLeftSave >= 6 && timeLeft == 0)
@@ -77,11 +77,11 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (Mplayer.TimeSkipPreEffect)     //saves it, this is for projectiles like minions, controllable projectiles, etc.
+            if (Mplayer.timeskipPreEffect)     //saves it, this is for projectiles like minions, controllable projectiles, etc.
             {
                 preSkipVel = projectile.velocity;
             }
-            if (Mplayer.TimeSkipEffect)        //deploys it
+            if (Mplayer.timeskipActive)        //deploys it
             {
                 projectile.velocity = preSkipVel;
             }
@@ -90,7 +90,7 @@ namespace JoJoStands.Projectiles
                 preSkipVel = Vector2.Zero;
             }
 
-            if (Mplayer.epitaphForesight && !projectile.minion)
+            if (Mplayer.epitaphForesightActive && !projectile.minion)
             {
                 applyingForesightPositions = true;
                 if (foresightSaveTimer > 0)
@@ -108,7 +108,7 @@ namespace JoJoStands.Projectiles
                     foresightSaveTimer = 15;
                 }
             }
-            if (!Mplayer.epitaphForesight && applyingForesightPositions)
+            if (!Mplayer.epitaphForesightActive && applyingForesightPositions)
             {
                 if (!foresightResetIndex)
                 {
@@ -181,7 +181,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            if (Mplayer.epitaphForesight || applyingForesightPositions)
+            if (Mplayer.epitaphForesightActive || applyingForesightPositions)
             {
                 for (int i = 0; i < 50; i++)
                 {
@@ -222,7 +222,7 @@ namespace JoJoStands.Projectiles
         public override bool ShouldUpdatePosition(Projectile projectile)        //thanks, HellGoesOn for telling me this hook even existed
         {
             MyPlayer Mplayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
-            if (Mplayer.TheWorldEffect && projectile.timeLeft <= timeLeft)        //the ones who can move in Za Warudo's projectiles, like minions, fists, every other projectile should freeze
+            if (Mplayer.timestopActive && projectile.timeLeft <= timeLeft)        //the ones who can move in Za Warudo's projectiles, like minions, fists, every other projectile should freeze
             {
                     return timestopImmune;      //if it's owner isn't a timestop owner, always stop the projectile
             }

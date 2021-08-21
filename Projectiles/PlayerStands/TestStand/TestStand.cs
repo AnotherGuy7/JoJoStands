@@ -11,15 +11,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
 {
     public class TestStand : StandClass
     {
-
-        //public override float shootSpeed => 16f;
-        //public override float maxDistance { get; } = 98f;
         public override int punchDamage => 70;
         public override int halfStandHeight => 37;
         public override int punchTime => 7;
         public override int standType => 1;
 
-        public int timestopPoseTimer = 0;
+        private int timestopPoseTimer = 0;
 
         /*ripple effect info
         private int rippleCount = 3;
@@ -33,18 +30,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             UpdateStandInfo();
             //rippleEffectTimer--;
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            //Main.NewText("A: " + attackFrames + "; N: " + normalFrames, Color.DarkGreen);
-            if (modPlayer.StandOut)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
                 projectile.timeLeft = 2;
-            }
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
                 {
@@ -74,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed + 4f;
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("RoadRoller"), 120, 5f, projectile.owner);
+                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("RoadRoller"), 120, 5f, projectile.owner);
                     Main.projectile[proj].netUpdate = true;
                     projectile.netUpdate = true;
                 }
@@ -93,7 +85,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                     rippleEffectTimer = 0;
                 }*/
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }

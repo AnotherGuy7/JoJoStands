@@ -8,7 +8,7 @@ namespace JoJoStands.NPCs.TownNPCs
     public class MarineBiologist : ModNPC
     {
         public static bool userIsAlive = false;
-        public static int attackPower = 0;
+        public static int standDamage = 0;
 
         public override void SetDefaults()
         {
@@ -416,12 +416,12 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             if (!Main.hardMode)
             {
-                attackPower = 40;  //npc damage
+                standDamage = 40;  //npc damage
                 knockback = 2f;   //npc knockback
             }
             if (Main.hardMode)
             {
-                attackPower = 62;
+                standDamage = 62;
                 knockback = 3f;
             }
         }
@@ -434,7 +434,7 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)//Allows you to determine the projectile type of this town NPC's attack, and how long it takes for the projectile to actually appear
         {
-            if (!Projectiles.NPCStands.StarPlatinumPart4.SPActive)
+            if (!Projectiles.NPCStands.StarPlatinumNPCStand.SPActive)
             {
                 projType = mod.ProjectileType("StarPlatinumPart4");
                 attackDelay = 1;

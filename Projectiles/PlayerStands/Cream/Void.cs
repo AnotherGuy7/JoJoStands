@@ -32,19 +32,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void AI()
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            modPlayer.creamVoidMode = true;
+            mPlayer.creamVoidMode = true;
             player.position = projectile.position + new Vector2(0f, 0f);
             player.AddBuff(mod.BuffType("SphericalVoid"), 2);
             if (player.mount.Type != 0)
-            {
                 player.mount.Dismount(player);
-            }
             if (voidDashCooldownTimer > 0)
-            {
                 voidDashCooldownTimer--;
-            }
 
             if (projectile.owner == Main.myPlayer)
             {
@@ -53,22 +49,22 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 specialPressed = JoJoStands.SpecialHotKey.JustPressed;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
-                modPlayer.VoidCamPosition = projectile.position - new Vector2(halfScreenWidth, halfScreenHeight);
+                mPlayer.VoidCamPosition = projectile.position - new Vector2(halfScreenWidth, halfScreenHeight);
 
-                if (player.dead || !modPlayer.StandOut || player.ownedProjectileCounts[mod.ProjectileType("Void")] >= 2)
+                if (player.dead || !mPlayer.standOut || player.ownedProjectileCounts[mod.ProjectileType("Void")] >= 2)
                 {
                     projectile.Kill();
                 }
-                if (modPlayer.voidCounter <= 0 || Main.mouseRight && modPlayer.creamTier > 2 || specialPressed && !Main.mouseLeft)
+                if (mPlayer.voidCounter <= 0 || Main.mouseRight && mPlayer.creamTier > 2 || specialPressed && !Main.mouseLeft)
                 {
-                    if (specialPressed && !Main.mouseLeft || modPlayer.creamTier == 2 && modPlayer.voidCounter <= 0)
+                    if (specialPressed && !Main.mouseLeft || mPlayer.creamTier == 2 && mPlayer.voidCounter <= 0)
                     {
-                        modPlayer.creamNormalToVoid = true;
+                        mPlayer.creamNormalToVoid = true;
                     }
                     projectile.Kill();
-                    modPlayer.creamFrame = 7;
-                    modPlayer.creamExposedToVoid = true;
-                    modPlayer.creamAnimationReverse = true;
+                    mPlayer.creamFrame = 7;
+                    mPlayer.creamExposedToVoid = true;
+                    mPlayer.creamAnimationReverse = true;
                     Main.PlaySound(SoundID.Item78);
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
                     shootVelocity.Normalize();
@@ -88,7 +84,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 }
                 else if (specialPressed && Main.mouseLeft && savedDashVelocity == Vector2.Zero && voidDashTimer <= 0)       //Dash option
                 {
-                    modPlayer.voidCounter -= 1;
+                    mPlayer.voidCounter -= 1;
                     savedDashVelocity = Main.MouseWorld - projectile.position;
                     savedDashVelocity.Normalize();
                     savedDashVelocity *= 12f;
@@ -102,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     projectile.velocity = Main.MouseWorld - projectile.position;
                     projectile.velocity.Normalize();
-                    projectile.velocity *= 5f + modPlayer.creamTier;      // 7f, 8f, 9f
+                    projectile.velocity *= 5f + mPlayer.creamTier;      // 7f, 8f, 9f
 
                     if (Main.MouseWorld.X > projectile.position.X)
                         player.ChangeDir(1);
@@ -122,36 +118,28 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             int creamDownY = (int)((projectile.position.Y + (float)projectile.height) / 16f) + 2;
 
             if (creamLeftX < 0)
-            {
                 creamLeftX = 0;
-            }
             if (creamRightX > Main.maxTilesX)
-            {
                 creamRightX = Main.maxTilesX;
-            }
 
             if (creamUpY < 0)
-            {
                 creamUpY = 0;
-            }
             if (creamDownY > Main.maxTilesY)
-            {
                 creamDownY = Main.maxTilesY;
-            }
 
             for (int detectedTileX = creamLeftX; detectedTileX < creamRightX; detectedTileX++)
             {
                 for (int detectedTileY = creamUpY; detectedTileY < creamDownY; detectedTileY++)
                 {
                     Tile tileToDestroy = Main.tile[detectedTileX, detectedTileY];
-                    if (modPlayer.creamTier <= 2)
+                    if (mPlayer.creamTier <= 2)
                     {
                         if (tileToDestroy.active() && tileToDestroy.type != TileID.LihzahrdBrick && tileToDestroy.type != TileID.BlueDungeonBrick && tileToDestroy.type != TileID.GreenDungeonBrick && tileToDestroy.type != TileID.PinkDungeonBrick && tileToDestroy.type != TileID.LihzahrdAltar && tileToDestroy.type != TileID.DemonAltar)
                         {
                             WorldGen.KillTile(detectedTileX, detectedTileY, false, false, true);
                         }
                     }
-                    if (modPlayer.creamTier >= 3)
+                    if (mPlayer.creamTier >= 3)
                     {
                         if (tileToDestroy.active() && tileToDestroy.type != TileID.LihzahrdBrick && tileToDestroy.type != TileID.LihzahrdAltar)
                         {
@@ -180,26 +168,21 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            target.AddBuff(mod.BuffType("MissingOrgans"), 120 * modPlayer.creamTier);
+            MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+            target.AddBuff(mod.BuffType("MissingOrgans"), 120 * mPlayer.creamTier);
         }
 
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            target.AddBuff(mod.BuffType("MissingOrgans"), 60 * modPlayer.creamTier);
+            MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+            target.AddBuff(mod.BuffType("MissingOrgans"), 60 * mPlayer.creamTier);
         }
 
         public override bool? CanHitNPC(NPC target)
@@ -223,9 +206,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            modPlayer.creamVoidMode = false;
+            mPlayer.creamVoidMode = false;
             player.fallStart = (int)player.position.Y;
         }
     }

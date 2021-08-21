@@ -26,7 +26,7 @@ namespace JoJoStands.Buffs.ItemBuff
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    mPlayer.TheWorldEffect = false;
+                    mPlayer.timestopActive = false;
                 }
                 else
                 {
@@ -52,7 +52,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)
                 {
-                    mPlayer.TheWorldEffect = false;
+                    mPlayer.timestopActive = false;
                     ModNetHandler.effectSync.SendTimestop(256, player.whoAmI, false, player.whoAmI);
                 }
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timestop_stop"));

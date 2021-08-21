@@ -29,16 +29,13 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             SelectAnimation();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
-            if (modPlayer.StandOut && modPlayer.badCompanyTier != 0)
-            {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
@@ -77,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 }
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 MovementAI();
                 if (projectile.ai[0] == 0f)     //Here because it's different for Auto Mode
@@ -93,17 +90,16 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 }
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
                 {
-                    if (Main.MouseWorld.X > projectile.position.X)
-                    {
-                        projectile.spriteDirection = projectile.direction = 1;
-                    }
+                    projectile.direction = 1;
                     if (Main.MouseWorld.X <= projectile.position.X)
                     {
-                        projectile.spriteDirection = projectile.direction = -1;
+                        projectile.direction = -1;
                     }
+                    projectile.spriteDirection = projectile.direction;
+
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime - modPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
+                        shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
                         Main.PlaySound(SoundID.Item11, projectile.position);
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
@@ -112,26 +108,14 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
-                NPC target = null;
-                for (int n = 0; n < Main.maxNPCs; n++)
-                {
-                    NPC npc = Main.npc[n];
-                    if (npc.active)
-                    {
-                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && projectile.Distance(npc.Center) <= 17f * 16f)
-                        {
-                            target = npc;
-                            break;
-                        }
-                    }
-                }
+                NPC target = FindNearestTarget(17f * 16f);
                 if (target != null)
                 {
                     if (projectile.ai[0] == 0f)
@@ -145,17 +129,17 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                             PlayAnimation("AimUp");
                         }
                     }
-                    if (target.position.X > projectile.position.X)
-                    {
-                        projectile.spriteDirection = projectile.direction = 1;
-                    }
+
+                    projectile.direction = 1;
                     if (target.position.X <= projectile.position.X)
                     {
-                        projectile.spriteDirection = projectile.direction = -1;
+                        projectile.direction = -1;
                     }
+                    projectile.spriteDirection = projectile.direction;
+
                     if (shootCount <= 0)
                     {
-                        shootCount += shootTime - modPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
+                        shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
                         Main.PlaySound(SoundID.Item11, projectile.position);
                         Vector2 shootVel = target.Center - projectile.Center;
                         if (shootVel == Vector2.Zero)
@@ -164,7 +148,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }

@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override string spawnSoundName => "Hierophant Green";
 
         private bool spawningField = false;
-        private float numberSpawned = 0;
+        private int numberSpawned = 0;
         private bool linkShot = false;
         private bool linkShotForSpecial = false;
         private Vector2 formPosition = Vector2.Zero;
@@ -30,7 +30,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 shootCount--;
             }
             Player player = Main.player[projectile.owner];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Lighting.AddLight((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 35, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
             projectile.scale = ((50 - player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPoint2")]) * 2f) / 100f;
@@ -49,22 +49,20 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             projectile.velocity *= 0.8f;
             projectile.direction = (projectile.spriteDirection = player.direction);
 
-            if (modPlayer.StandOut)
+            if (mPlayer.standOut)
             {
                 projectile.timeLeft = 2;
             }
 
-            if (!modPlayer.StandAutoMode)
+            if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && projectile.scale >= 0.5f && projectile.owner == Main.myPlayer)
                 {
                     attackFrames = true;
                     normalFrames = false;
-                    Main.mouseRight = false;        //so that the player can't just stop time while punching
                     projectile.netUpdate = true;
                     if (shootCount <= 0)
                     {
-                        Main.PlaySound(SoundID.Item21, projectile.position);
                         shootCount += newShootTime;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
@@ -73,15 +71,17 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
+
                         float numberProjectiles = 5;
                         float rotation = MathHelper.ToRadians(25);
-                        float random = Main.rand.NextFloat(-6f, 6f);
+                        float randomSpeedOffset = Main.rand.NextFloat(-6f, 6f);
                         for (int i = 0; i < numberProjectiles; i++)
                         {
-                            Vector2 perturbedSpeed = new Vector2(shootVel.X + random, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                            int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Emerald"), newProjectileDamage, 3f, player.whoAmI);
+                            Vector2 perturbedSpeed = new Vector2(shootVel.X + randomSpeedOffset, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                            int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("Emerald"), newProjectileDamage, 3f, player.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                         }
+                        Main.PlaySound(SoundID.Item21, projectile.position);
                         projectile.netUpdate = true;
                     }
                 }
@@ -95,9 +95,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 }
                 if (Main.mouseRight && shootCount <= 0 && !linkShot && projectile.scale >= 0.5f && projectile.owner == Main.myPlayer)
                 {
-                    Main.mouseLeft = false;
                     linkShot = true;
-                    Main.PlaySound(SoundID.Item21, projectile.position);
                     shootCount += 15;
                     Vector2 shootVel = Main.MouseWorld - projectile.Center;
                     if (shootVel == Vector2.Zero)
@@ -107,14 +105,13 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
                     Vector2 perturbedSpeed = new Vector2(shootVel.X + Main.rand.NextFloat(-3f, 3f), shootVel.Y);
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("EmeraldStringPoint"), 0, 3f, player.whoAmI);
+                    int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("EmeraldStringPoint"), 0, 3f, player.whoAmI);
                     Main.projectile[proj].netUpdate = true;
+                    Main.PlaySound(SoundID.Item21, projectile.position);
                 }
                 if (Main.mouseRight && shootCount <= 0 && linkShot && projectile.scale >= 0.5f && projectile.owner == Main.myPlayer)
                 {
-                    Main.mouseLeft = false;
                     linkShot = false;
-                    Main.PlaySound(SoundID.Item21, projectile.position);
                     shootCount += 15;
                     Vector2 shootVel = Main.MouseWorld - projectile.Center;
                     if (shootVel == Vector2.Zero)
@@ -124,8 +121,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
                     Vector2 perturbedSpeed = new Vector2(shootVel.X + Main.rand.NextFloat(-3f, 3f), shootVel.Y);
-                    int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("EmeraldStringPoint2"), 0, 3f, player.whoAmI, 24f);
+                    int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("EmeraldStringPoint2"), 0, 3f, player.whoAmI, 24f);
                     Main.projectile[proj].netUpdate = true;
+                    Main.PlaySound(SoundID.Item21, projectile.position);
                 }
                 if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPoint2")] <= 0 && !spawningField)
                 {
@@ -139,103 +137,69 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (spawningField)
                 {
                     float randomRadius = Main.rand.NextFloat(-20f, 21f);
-                    Main.mouseLeft = false;
-                    Main.mouseRight = false;
-                    Vector2 offset = formPosition + (randomRadius.ToRotationVector2() * 288f);     //33 tiles
+                    Vector2 pointPosition = formPosition + (randomRadius.ToRotationVector2() * 288f);     //33 tiles
 
-                    if (numberSpawned < 70f && shootCount <= 0 && !linkShotForSpecial)        //35 tendrils, the number spawned limit /2 is the wanted amount
+                    if (numberSpawned < 70 && shootCount <= 0 && !linkShotForSpecial)        //35 tendrils, the number spawned limit /2 is the wanted amount
                     {
                         shootCount += 2;
-                        int proj = Projectile.NewProjectile(offset, Vector2.Zero, mod.ProjectileType("EmeraldStringPoint"), 0, 2f, player.whoAmI);
+                        numberSpawned += 1;
+                        int proj = Projectile.NewProjectile(pointPosition, Vector2.Zero, mod.ProjectileType("EmeraldStringPoint"), 0, 2f, player.whoAmI);
                         Main.projectile[proj].netUpdate = true;
                         Main.projectile[proj].tileCollide = false;
                         linkShotForSpecial = true;
-                        numberSpawned++;
                     }
-                    if (numberSpawned < 70f && shootCount <= 0 && linkShotForSpecial)
+                    if (numberSpawned < 70 && shootCount <= 0 && linkShotForSpecial)
                     {
                         shootCount += 2;
-                        int proj = Projectile.NewProjectile(offset, Vector2.Zero, mod.ProjectileType("EmeraldStringPoint2"), 0, 2f, player.whoAmI, 24f);
+                        numberSpawned += 1;
+                        int proj = Projectile.NewProjectile(pointPosition, Vector2.Zero, mod.ProjectileType("EmeraldStringPoint2"), 0, 2f, player.whoAmI, 24f);
                         Main.projectile[proj].netUpdate = true;
                         Main.projectile[proj].tileCollide = false;
                         linkShotForSpecial = false;
-                        numberSpawned++;
                     }
-                    if (numberSpawned >= 70f)
+                    if (numberSpawned >= 70)
                     {
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), modPlayer.AbilityCooldownTime(30));
+                        numberSpawned = 0;
                         spawningField = false;
                         formPosition = Vector2.Zero;
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
                     }
-                }
-                else
-                {
-                    numberSpawned = 0;
                 }
             }
-            if (modPlayer.StandAutoMode)
+            if (mPlayer.standAutoMode)
             {
-                NPC target = null;
-                Vector2 targetPos = projectile.position;
-                float targetDist = 350f;
-                if (target == null)
-                {
-                    for (int k = 0; k < 200; k++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[k];
-                        if (npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < targetDist && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
-                            {
-                                if (npc.boss)       //is gonna try to detect bosses over anything
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
-                                else        //if it fails to detect a boss, it'll detect the next best thing
-                                {
-                                    targetDist = distance;
-                                    targetPos = npc.Center;
-                                    target = npc;
-                                }
-                            }
-                        }
-                    }
-                }
+                NPC target = FindNearestTarget(350f);
                 if (target != null)
                 {
                     attackFrames = true;
                     normalFrames = false;
-                    if ((targetPos - projectile.Center).X > 0f)
+                    projectile.direction = 1;
+                    if (target.position.X - projectile.Center.X < 0)
                     {
-                        projectile.spriteDirection = projectile.direction = 1;
+                        projectile.direction = -1;
                     }
-                    else if ((targetPos - projectile.Center).X < 0f)
-                    {
-                        projectile.spriteDirection = projectile.direction = -1;
-                    }
+                    projectile.spriteDirection = projectile.direction;
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
                         Main.PlaySound(SoundID.Item21, projectile.position);
                         if (Main.myPlayer == projectile.owner)
                         {
-                            Vector2 shootVel = targetPos - projectile.Center;
+                            Vector2 shootVel = target.position - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
+
                             float numberProjectiles = 5;
                             float rotation = MathHelper.ToRadians(25);
-                            float random = Main.rand.NextFloat(-6f, 6f);
+                            float randomSpeedOffset = Main.rand.NextFloat(-6f, 6f);
                             for (int i = 0; i < numberProjectiles; i++)
                             {
-                                Vector2 perturbedSpeed = new Vector2(shootVel.X + random, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Emerald"), (int)((projectileDamage * modPlayer.standDamageBoosts) * 0.9f), 3f, player.whoAmI);
+                                Vector2 perturbedSpeed = new Vector2(shootVel.X + randomSpeedOffset, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                                int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("Emerald"), (int)((projectileDamage * mPlayer.standDamageBoosts) * 0.9f), 3f, player.whoAmI);
                                 Main.projectile[proj].netUpdate = true;
                             }
                             projectile.netUpdate = true;

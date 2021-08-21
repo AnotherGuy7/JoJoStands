@@ -35,7 +35,7 @@ namespace JoJoStands.Buffs.Debuffs
         public override void Update(NPC npc, ref int buffIndex)
         {
             Player player = Main.player[Main.myPlayer];
-            MyPlayer modPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (savedVelocityX == -1f)
             {
                 savedVelocityX = Math.Abs(npc.velocity.X) / 2f;
@@ -51,11 +51,11 @@ namespace JoJoStands.Buffs.Debuffs
             {
                 npc.velocity.X *= 0.8f;
             }
-            if (modPlayer.gratefulDeadTier == 3)
+            if (mPlayer.gratefulDeadTier == 3)
             {
                 npc.lifeRegen = -350;
             }
-            if (modPlayer.gratefulDeadTier == 4)
+            if (mPlayer.gratefulDeadTier == 4)
             {
                 npc.lifeRegen = -500;
             }
