@@ -30,7 +30,7 @@ namespace JoJoStands.Buffs.Debuffs
             }
             if (player.GetModPlayer<MyPlayer>().backToZeroActive)
             {
-                player.AddBuff(mod.BuffType(Name), 2);
+                player.buffTime[buffIndex] = 2;
             }
             player.controlUseItem = false;
             player.dash *= 0;

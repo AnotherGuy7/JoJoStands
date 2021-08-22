@@ -46,31 +46,24 @@ namespace JoJoStands.Projectiles.NPCStands
             NPC pucci = null;
             if (Priest.userIsAlive)
             {
-                for (int k = 0; k < 200; k++)
+                for (int n = 0; n < Main.maxNPCs; n++)
                 {
-                    NPC npc = Main.npc[k];
+                    NPC npc = Main.npc[n];
                     if (npc.type == mod.NPCType("Priest"))
                     {
                         pucci = npc;
+                        break;
                     }
                 }
             }
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
-            if (projectile.active)
-            {
-                whitesnakeActive = true;
-            }
+            whitesnakeActive = projectile.active;
             if (!Priest.userIsAlive)
-            {
                 projectile.Kill();
-            }
             if (projectile.timeLeft < 256)
-            {
                 projectile.alpha = -projectile.timeLeft + 255;
-            }
+
             if (pucci != null)
             {
                 Vector2 vector131 = pucci.Center;
@@ -82,7 +75,7 @@ namespace JoJoStands.Projectiles.NPCStands
             }
 
             NPC target = null;
-            for (int n = 0; n < 200; n++)
+            for (int n = 0; n < Main.maxNPCs; n++)
             {
                 normalFrames = true;
                 NPC npc = Main.npc[n];
@@ -142,10 +135,10 @@ namespace JoJoStands.Projectiles.NPCStands
                 {
                     projectile.frame += 1;
                     projectile.frameCounter = 0;
-                }
-                if (projectile.frame >= 8)
-                {
-                    projectile.frame = 0;
+                    if (projectile.frame >= 8)
+                    {
+                        projectile.frame = 0;
+                    }
                 }
             }
             if (normalFrames)

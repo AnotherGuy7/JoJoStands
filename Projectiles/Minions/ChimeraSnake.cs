@@ -53,12 +53,12 @@ namespace JoJoStands.Projectiles.Minions
             projectile.frameCounter++;
             if (projectile.frameCounter >= 10)
             {
-                changeframe = 0;
                 projectile.frame += 1;
-            }
-            if (projectile.frame > 3)
-            {
-                projectile.frame = 0;
+                projectile.frameCounter = 0;
+                if (projectile.frame > 3)
+                {
+                    projectile.frame = 0;
+                }
             }
         }
 

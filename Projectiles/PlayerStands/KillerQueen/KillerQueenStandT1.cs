@@ -63,6 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 }
                 if (Main.mouseRight && shootCount <= 0 && projectile.owner == Main.myPlayer)
                 {
+                    shootCount += 10;
                     attackFrames = false;
                     normalFrames = false;
                     float mouseToPlayerDistance = Vector2.Distance(Main.MouseWorld, player.Center);
@@ -79,8 +80,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                 {
                                     if (npc.Distance(Main.MouseWorld) <= (npc.width / 2f) + 20f)
                                     {
+                                        shootCount += 20;
                                         touchedNPC = true;
-                                        shootCount += 60;
                                         foundNPCTarget = true;
                                         npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByKillerQueen = true;
                                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
@@ -92,8 +93,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             {
                                 if (Collision.SolidCollision(Main.MouseWorld, 1, 1) && !touchedTile)
                                 {
+                                    shootCount += 20;
                                     touchedTile = true;
-                                    shootCount += 60;
                                     savedPosition = Main.MouseWorld;
                                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
                                 }
@@ -102,6 +103,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     }
                     else
                     {
+                        shootCount += 20;
                         if (touchedNPC)
                         {
                             for (int n = 0; n < Main.maxNPCs; n++)

@@ -63,7 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     mPlayer.creamExposedMode = true;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
-                mPlayer.VoidCamPosition = projectile.Center - (halfScreenWidth, halfScreenHeight);
+                mPlayer.VoidCamPosition = projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
                 if (Main.mouseLeft)
                 {
                     projectile.velocity = Main.MouseWorld - projectile.position;

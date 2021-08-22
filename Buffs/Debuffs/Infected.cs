@@ -20,11 +20,21 @@ namespace JoJoStands.Buffs.Debuffs
             }
             player.lifeRegenTime = 120;
             player.lifeRegen -= 4;
+            if (Main.rand.Next(0, 2 + 1) == 0)
+            {
+                int dustIndex = Dust.NewDust(player.position, player.width, player.height, 232);
+                Main.dust[dustIndex].noGravity = true;
+            }
         }
 
         public override void Update(NPC npc, ref int buffIndex)
         {
             npc.lifeRegen = -12;
+            if (Main.rand.Next(0, 2 + 1) == 0)
+            {
+                int dustIndex = Dust.NewDust(npc.position, npc.width, npc.height, 232);
+                Main.dust[dustIndex].noGravity = true;
+            }
         }
     }
 }

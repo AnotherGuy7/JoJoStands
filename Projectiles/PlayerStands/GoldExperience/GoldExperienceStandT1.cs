@@ -17,13 +17,14 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
         public override int halfStandHeight => 35;
         public override float fistWhoAmI => 2f;
         public override float tierNumber => 1f;
-        public override int standOffset => -30;
+        public override int standOffset => -10;
         public override string punchSoundName => "GER_Muda";
         public override string poseSoundName => "TheresADreamInMyHeart";
         public override string spawnSoundName => "Gold Experience";
         public override int standType => 1;
 
-        public int updateTimer = 0;
+        private int updateTimer = 0;
+
 
         public override void AI()
         {

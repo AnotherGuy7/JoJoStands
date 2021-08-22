@@ -17,9 +17,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
         public override string spawnSoundName => "Gold Experience";
         public override int standType => 1;
 
-        public bool saidAbility = true;
-        public int regencounter = 0;
-        public int updateTimer = 0;
+        private int updateTimer = 0;
+        private int regencounter = 0;
+        private string[] abilityNames = new string[4] { "Frog", "Tree", "Butterfly", "Limb Recreation" };
 
         public override void AI()
         {
@@ -27,15 +27,13 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
             UpdateStandInfo();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
-            {
                 projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
@@ -63,43 +61,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                     if (SpecialKeyPressedNoCooldown())
                     {
                         mPlayer.GEAbilityNumber += 1;
-                        saidAbility = false;
-                    }
-                    if (mPlayer.GEAbilityNumber >= 4)
-                    {
-                        mPlayer.GEAbilityNumber = 0;
-                    }
-                    if (mPlayer.GEAbilityNumber == 0)
-                    {
-                        if (!saidAbility)
+                        if (mPlayer.GEAbilityNumber >= 4)
                         {
-                            Main.NewText("Ability: Frog");
-                            saidAbility = true;
+                            mPlayer.GEAbilityNumber = 0;
                         }
-                    }
-                    if (mPlayer.GEAbilityNumber == 1)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Tree");
-                            saidAbility = true;
-                        }
-                    }
-                    if (mPlayer.GEAbilityNumber == 2)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Butterflies");
-                            saidAbility = true;
-                        }
-                    }
-                    if (mPlayer.GEAbilityNumber == 3)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Limb Recreation");
-                            saidAbility = true;
-                        }
+                        Main.NewText("Ability: " + abilityNames[mPlayer.GEAbilityNumber]);
                     }
 
                     if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 0)
@@ -108,9 +74,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                         Main.projectile[proj].netUpdate = true;
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(6));
                     }
-                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
+                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
                     {
-                        Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 65f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
+                        Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 16f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
                     }
                     if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 2)
@@ -121,6 +87,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                     if (Main.mouseRight && player.velocity == Vector2.Zero && mPlayer.GEAbilityNumber == 3)
                     {
                         regencounter++;
+                        if (Main.rand.Next(0, 3) == 0)
+                        {
+                            int dustIndex = Dust.NewDust(player.position, player.width, player.height, 169, SpeedY: Main.rand.NextFloat(-1.1f, -0.6f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
+                            Main.dust[dustIndex].noGravity = true;
+                        }
                     }
                     else
                     {

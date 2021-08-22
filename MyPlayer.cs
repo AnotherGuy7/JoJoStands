@@ -39,13 +39,9 @@ namespace JoJoStands
         public static bool testStandUnlocked = false;
 
         public int goldenSpinCounter = 0;
-        public int spinSubtractionTimer = 0;
         public int shadowDodgeCooldownTimer = 0;        //does Vanilla not have one of these?
         public int aerosmithRadarFrameCounter = 0;
         public int poseDuration = 300;
-        public int menacingFrames = 0;
-        public int tbcCounter = 0;
-        public int standKeyPressTimer = 0;
         public int GEAbilityNumber = 0;
         public int tuskActNumber = 0;
         public int equippedTuskAct = 0;
@@ -86,6 +82,7 @@ namespace JoJoStands
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
         public bool achievedInfiniteSpin = false;
+        public bool revived = false;
         public bool standOut = false;
         public bool standAutoMode = false;
         public bool standRemoteMode = false;
@@ -125,8 +122,13 @@ namespace JoJoStands
         public bool canRevertFromKQBTD = false;
         public bool showingCBLayer = false;     //this is a bool that's needed to sync so that the Century Boy layer shows up for other clients in Multiplayer
 
+        private int standKeyPressTimer = 0;
+        private int spinSubtractionTimer = 0;
+        private int menacingFrames = 0;
+        private int tbcCounter = 0;
+
         private bool forceChangedTusk = false;
-        private bool revived = false;
+
 
         public bool ZoneViralMeteorite;
 
@@ -621,9 +623,9 @@ namespace JoJoStands
                     poseDuration = 300;
                     poseMode = false;
                     JoJoStands.testStandPassword.Add(Convert.ToChar((int)MathHelper.ToDegrees(1.36136f)));
-                    JoJoStands.testStandPassword.Add(Convert.ToChar(Math.Sqrt(4999) + 1));
+                    JoJoStands.testStandPassword.Add(Convert.ToChar((int)Math.Sqrt(4999) + 1));
                     JoJoStands.testStandPassword.Add(Convert.ToChar(byte.MaxValue - 186));
-                    JoJoStands.testStandPassword.Add(Convert.ToChar((78 / 4) * Math.Pow(2f, 2f)));
+                    JoJoStands.testStandPassword.Add(Convert.ToChar((int)((78 / 4) * Math.Pow(2f, 2f)) + 2));
                     JoJoStands.testStandPassword.Add(Convert.ToChar(84));
                 }
             }

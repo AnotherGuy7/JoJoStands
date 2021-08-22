@@ -17,24 +17,30 @@ namespace JoJoStands.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            int page = int.Parse(args[0]);
-            if (page == 1)
+            if (args[0].Length <= 1)
             {
-                Main.NewTextMultiline("0. None \n1. Roundabout \n2. CAESAAARRR \n3. Kono me amareri maroreri merare maro \n4. Last Train Home \n5. KORE GA... WAGA KING CRIMSON NO NORIO KU");
-            }
-            
-            if (args[0].Length == 6 && JoJoStands.testStandPassword.Count == 6)
-            {
-                string password = "";
-                for (int i = 0; i < 6; i++)
+                int page = int.Parse(args[0]);
+                if (page == 1)
                 {
-                    password += JoJoStands.testStandPassword[i];
+                    Main.NewTextMultiline("0. None \n1. Roundabout \n2. CAESAAARRR \n3. Kono me amareri maroreri merare maro \n4. Last Train Home \n5. KORE GA... WAGA KING CRIMSON NO NORIO KU");
                 }
-                if (input == password)
+            }
+            else
+            {
+                if (args[0].Length == 7 && JoJoStands.testStandPassword.Count == 7)
                 {
-                    MyPlayer.testStandUnlocked = true;
-                    Main.NewText("Worthiness has been achieved.");
-                    Main.PlaySound(SoundID.MoonLord);
+                    string password = "";
+                    for (int i = 0; i < 7; i++)
+                    {
+                        password += JoJoStands.testStandPassword[i];
+                    }
+                    Main.NewText(password);
+                    if (args[0] == password)
+                    {
+                        MyPlayer.testStandUnlocked = true;
+                        Main.NewText("Worthiness has been achieved.");
+                        Main.PlaySound(SoundID.MoonLord);
+                    }
                 }
             }
         }

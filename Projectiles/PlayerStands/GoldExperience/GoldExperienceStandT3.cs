@@ -23,8 +23,8 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
         public override string spawnSoundName => "Gold Experience";
         public override int standType => 1;
 
-        public bool saidAbility = true;
-        public int updateTimer = 0;
+        private int updateTimer = 0;
+        private string[] abilityNames = new string[3] { "Frog", "Tree", "Butterfly" };
 
         public override void AI()
         {
@@ -66,47 +66,22 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                     if (SpecialKeyPressedNoCooldown())
                     {
                         mPlayer.GEAbilityNumber += 1;
-                        saidAbility = false;
-                    }
-                    if (mPlayer.GEAbilityNumber >= 3)
-                    {
-                        mPlayer.GEAbilityNumber = 0;
-                    }
-                    if (mPlayer.GEAbilityNumber == 0)
-                    {
-                        if (!saidAbility)
+                        if (mPlayer.GEAbilityNumber >= 3)
                         {
-                            Main.NewText("Ability: Frog");
-                            saidAbility = true;
+                            mPlayer.GEAbilityNumber = 0;
                         }
-                    }
-                    if (mPlayer.GEAbilityNumber == 1)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Tree");
-                            saidAbility = true;
-                        }
-                    }
-                    if (mPlayer.GEAbilityNumber == 2)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Butterflies");
-                            saidAbility = true;
-                        }
+                        Main.NewText("Ability: " + abilityNames[mPlayer.GEAbilityNumber]);
                     }
 
                     if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 0)
                     {
-                        Main.mouseLeft = false;
                         int proj = Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("GEFrog"), 1, 0f, projectile.owner, tierNumber, tierNumber - 1f);
                         Main.projectile[proj].netUpdate = true;
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(6));
                     }
-                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
+                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
                     {
-                        Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 65f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
+                        Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 16f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
                     }
                     if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 2)

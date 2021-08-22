@@ -403,13 +403,13 @@ namespace JoJoStands.NPCs.TownNPCs
         public override bool CheckActive()
         {
             userIsAlive = true;
-            return base.CheckActive();
+            return true;
         }
 
         public override bool CheckDead()
         {
             userIsAlive = false;
-            return base.CheckDead();
+            return true;
         }
 
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)//  Allows you to determine the damage and knockback of this town NPC attack
@@ -436,7 +436,7 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             if (!Projectiles.NPCStands.StarPlatinumNPCStand.SPActive)
             {
-                projType = mod.ProjectileType("StarPlatinumPart4");
+                projType = mod.ProjectileType("StarPlatinumNPCStand");
                 attackDelay = 1;
             }
         }

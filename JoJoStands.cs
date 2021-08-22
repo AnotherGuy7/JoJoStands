@@ -200,6 +200,7 @@ namespace JoJoStands
             customizableConfig = null;
             MyPlayer.standTier1List.Clear();
             MyPlayer.stopImmune.Clear();
+            testStandPassword.Clear();
         }
 
         public override void AddRecipeGroups()

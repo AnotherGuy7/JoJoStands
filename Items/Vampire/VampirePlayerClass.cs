@@ -314,7 +314,6 @@ namespace JoJoStands.Items.Vampire
                     damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though she wished for death, she was unable to die... then " + player.name + " eventually stopped thinking");
                 }
             }
-            vampire = false;
             return true;
         }
 

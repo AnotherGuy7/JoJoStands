@@ -25,9 +25,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override string spawnSoundName => "Gold Experience";
         public override int standType => 1;
 
-        private bool saidAbility = true;
-        private int regencounter = 0;
         private int updateTimer = 0;
+        private int regencounter = 0;
+        private string[] abilityNames = new string[5] { "Scorpion Beam", "Tree", "Death-Loop", "Limb Recreation", "Back to Zero" };
 
 
         public override void AI()
@@ -63,6 +63,18 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 {
                     StayBehind();
                 }
+                if (projectile.owner == Main.myPlayer)
+                {
+                    if (SpecialKeyPressedNoCooldown())
+                    {
+                        mPlayer.GEAbilityNumber += 1;
+                        if (mPlayer.GEAbilityNumber >= 6)
+                        {
+                            mPlayer.GEAbilityNumber = 0;
+                        }
+                        Main.NewText("Ability: " + abilityNames[mPlayer.GEAbilityNumber]);
+                    }
+                }
                 if (!attackFrames && projectile.owner == Main.myPlayer)
                 {
                     if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 0)
@@ -71,9 +83,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         attackFrames = false;
                         secondaryAbilityFrames = true;
                     }
-                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
+                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
                     {
-                        Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 65f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
+                        Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 16f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
                     }
                     if (Main.mouseRight && mPlayer.GEAbilityNumber == 2 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("DeathLoop")))
@@ -111,58 +123,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     }
                 }
 
-                if (projectile.owner == Main.myPlayer)
-                {
-                    if (SpecialKeyPressedNoCooldown())
-                    {
-                        mPlayer.GEAbilityNumber += 1;
-                        saidAbility = false;
-                    }
-                    if (mPlayer.GEAbilityNumber >= 6)
-                    {
-                        mPlayer.GEAbilityNumber = 0;
-                    }
-                    if (mPlayer.GEAbilityNumber == 0)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Scorpion Beam");
-                            saidAbility = true;
-                        }
-                    }
-                    if (mPlayer.GEAbilityNumber == 1)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Tree");
-                            saidAbility = true;
-                        }
-                    }
-                    if (mPlayer.GEAbilityNumber == 2)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Death Loop");
-                            saidAbility = true;
-                        }
-                    }
-                    if (mPlayer.GEAbilityNumber == 3)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Limb Recreation");
-                            saidAbility = true;
-                        }
-                    }
-                    if (mPlayer.GEAbilityNumber == 4)
-                    {
-                        if (!saidAbility)
-                        {
-                            Main.NewText("Ability: Back to Zero");
-                            saidAbility = true;
-                        }
-                    }
-                }
                 if (secondaryAbilityFrames)
                 {
                     normalFrames = false;
@@ -180,7 +140,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         shootVel *= 12f;
                         int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("GoldExperienceBeam"), newPunchDamage + 11, 6f, projectile.owner);
                         Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(3));
                         secondaryAbilityFrames = false;
                     }

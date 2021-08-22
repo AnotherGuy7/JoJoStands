@@ -10,7 +10,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
     public class KillerQueenStandFinal : StandClass
     {
         public override int punchDamage => 74;
-        public override int altDamage => 265;
+        public override int altDamage => 284;
         public override int punchTime => 9;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 5f;
@@ -64,6 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 }
                 if (Main.mouseRight && shootCount <= 0 && projectile.owner == Main.myPlayer)
                 {
+                    shootCount += 10;
                     attackFrames = false;
                     normalFrames = false;
                     float mouseToPlayerDistance = Vector2.Distance(Main.MouseWorld, player.Center);
@@ -80,7 +81,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                 {
                                     if (npc.Distance(Main.MouseWorld) <= (npc.width / 2f) + 20f)
                                     {
-                                        shootCount += 60;
+                                        shootCount += 20;
                                         touchedNPC = true;
                                         foundNPCTarget = true;
                                         npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByKillerQueen = true;
@@ -93,7 +94,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             {
                                 if (Collision.SolidCollision(Main.MouseWorld, 1, 1) && !touchedTile)
                                 {
-                                    shootCount += 60;
+                                    shootCount += 20;
                                     touchedTile = true;
                                     savedPosition = Main.MouseWorld;
                                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
@@ -103,6 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     }
                     else
                     {
+                        shootCount += 20;
                         if (touchedNPC)
                         {
                             for (int n = 0; n < Main.maxNPCs; n++)

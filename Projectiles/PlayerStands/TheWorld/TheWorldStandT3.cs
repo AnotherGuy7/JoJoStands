@@ -117,7 +117,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     {
                         shootCount += 28;
                         float numberOfKnives = 3;
-                        float knivesSpread = MathHelper.ToRadians(15f)
+                        float knivesSpread = MathHelper.ToRadians(15f);
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {

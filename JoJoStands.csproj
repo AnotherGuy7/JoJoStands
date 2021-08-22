@@ -12,8 +12,11 @@
   </Target>
   <ItemGroup>
     <Compile Remove="Buffs\MiscDebuffs\**" />
+    <Compile Remove="Items\AntiVampireSerum.png\**" />
     <EmbeddedResource Remove="Buffs\MiscDebuffs\**" />
+    <EmbeddedResource Remove="Items\AntiVampireSerum.png\**" />
     <None Remove="Buffs\MiscDebuffs\**" />
+    <None Remove="Items\AntiVampireSerum.png\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />

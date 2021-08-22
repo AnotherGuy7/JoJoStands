@@ -11,35 +11,35 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
 
         public override void SetDefaults()
         {
-            npc.townNPC = true; //This defines if the npc is a town Npc or not
-            npc.friendly = true;  //this defines if the npc can hur you or not()
-            npc.width = 18; //the npc sprite width
-            npc.height = 46;  //the npc sprite height
-            npc.aiStyle = 7; //this is the npc ai style, 7 is Pasive Ai
-            npc.defense = 27;  //the npc defense
-            npc.lifeMax = 300;// the npc life
-            npc.HitSound = SoundID.NPCHit1;  //the npc sound when is hit
-            npc.DeathSound = SoundID.NPCDeath1;  //the npc sound when he dies
-            npc.knockBackResist = 1f;  //the npc knockback resistance
-            Main.npcFrameCount[npc.type] = 26; //this defines how many frames the npc sprite sheet has
+            npc.townNPC = true;     //This defines if the npc is a town Npc or not
+            npc.friendly = true;        //this defines if the npc can hur you or not()
+            npc.width = 18;     //the npc sprite width
+            npc.height = 46;        //the npc sprite height
+            npc.aiStyle = 7;        //this is the npc ai style, 7 is Pasive Ai
+            npc.defense = 27;       //the npc defense
+            npc.lifeMax = 300;      // the npc life
+            npc.HitSound = SoundID.NPCHit1;     //the npc sound when is hit
+            npc.DeathSound = SoundID.NPCDeath1;     //the npc sound when he dies
+            npc.knockBackResist = 1f;       //the npc knockback resistance
+            Main.npcFrameCount[npc.type] = 26;      //this defines how many frames the npc sprite sheet has
             NPCID.Sets.ExtraFramesCount[npc.type] = 9;
             NPCID.Sets.AttackFrameCount[npc.type] = 4;
-            NPCID.Sets.DangerDetectRange[npc.type] = 250; //this defines the npc danger detect range
-            NPCID.Sets.AttackType[npc.type] = 1; //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
-            NPCID.Sets.HatOffsetY[npc.type] = 4; //this defines the party hat position
-            animationType = NPCID.Guide;  //this copy the guide animation
+            NPCID.Sets.DangerDetectRange[npc.type] = 250;       //this defines the npc danger detect range
+            NPCID.Sets.AttackType[npc.type] = 1;        //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
+            NPCID.Sets.HatOffsetY[npc.type] = 4;        //this defines the party hat position
+            animationType = NPCID.Guide;        //this copy the guide animation
         }
 
         public override bool CheckActive()
         {
             userIsAlive = true;
-            return base.CheckActive();
+            return true;
         }
 
         public override bool CheckDead()
         {
             userIsAlive = false;
-            return base.CheckDead();
+            return true;
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs, int money) //Whether or not the conditions have been met for this town NPC to be able to move into town.
@@ -111,7 +111,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
         {
             if (!Projectiles.NPCStands.WhitesnakeNPCStand.whitesnakeActive)
             {
-                projType = mod.ProjectileType("Whitesnake");
+                projType = mod.ProjectileType("WhitesnakeNPCStand");
                 attackDelay = 1;
             }
         }

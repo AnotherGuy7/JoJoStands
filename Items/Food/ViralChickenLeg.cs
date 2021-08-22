@@ -8,7 +8,7 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A dry, breaded (chicken?) leg that when eaten makes you feel much better.\nGrants Stand related buffs upon consumption.");
+            Tooltip.SetDefault("A dry, breaded (chicken?) leg that, when eaten, makes you feel much better.\nGrants Stand related buffs upon consumption.");
         }
 
         public override void SetDefaults()

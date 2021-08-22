@@ -13,11 +13,11 @@ namespace JoJoStands.Buffs.AccessoryBuff
             Description.SetDefault("You are now a zombie!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
+            Main.persistentBuff[Type] = true;
         }
  
         public override void Update(Player player, ref int buffIndex)
         {
-            player.AddBuff(Type, 2, true);
             player.allDamage *= 1.1f;
             player.moveSpeed *= 1.2f;
             player.meleeSpeed *= 1.1f;
@@ -25,6 +25,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.manaRegen += 2;
             player.statDefense = (int)(player.statDefense / 0.75);
             player.GetModPlayer<VampirePlayer>().zombie = true;
+            player.buffTime[buffIndex] = 2;
         }
 
         public override void Update(NPC npc, ref int buffIndex)

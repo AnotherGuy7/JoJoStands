@@ -158,7 +158,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
         private void DrawStand(SpriteBatch spriteBatch, Color drawColor)
         {
-            effects = SpriteEffects.None
+            effects = SpriteEffects.None;
             if (projectile.spriteDirection == -1)
             {
                 effects = SpriteEffects.FlipHorizontally;

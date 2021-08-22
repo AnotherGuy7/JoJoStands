@@ -153,6 +153,9 @@ namespace JoJoStands.Items
             
             if (item.type == ItemID.DirtBlock || item.type == ItemID.MudBlock)
             {
+                if (!vPlayer.zombie && !vPlayer.vampire)
+                    return;
+
                 if (!MyPlayer.AutomaticActivations)
                 {
                     if (item.stack >= 5 && Main.mouseRight && generalPurposeTimer <= 0 && item.owner == Main.myPlayer && vPlayer.learnedZombieSkills[VampirePlayer.ProtectiveFilm])

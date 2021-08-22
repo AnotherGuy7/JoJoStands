@@ -27,6 +27,10 @@ namespace JoJoStands.Buffs.Debuffs
             }
             player.lifeRegenTime = 0;
             player.lifeRegen -= 20;
+            if (Main.rand.Next(0, 2 + 1) == 0)
+            {
+                Dust.NewDust(player.position, player.width, player.height, DustID.Blood);
+            }
         }
 
         public override void Update(NPC npc, ref int buffIndex)
