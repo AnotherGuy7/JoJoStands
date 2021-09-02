@@ -13,7 +13,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hierophant Green (Tier 1)");
-            Tooltip.SetDefault("Shoot emeralds at the enemies!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Left-click to release a flurry of emeralds!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

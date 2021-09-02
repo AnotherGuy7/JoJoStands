@@ -225,15 +225,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Scrape");
-                if (resetFrame)
-                {
-                    if (currentAnimationDone)
-                    {
-                        normalFrames = true;
-                        scrapeFrames = false;
-                        resetFrame = false;
-                    }
-                }
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
@@ -242,6 +233,16 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 secondaryAbilityFrames = false;
                 scrapeFrames = false;
                 PlayAnimation("Pose");
+            }
+        }
+
+        public override void AnimationCompleted(string animationName)
+        {
+            if (resetFrame && animationName == "Scrape")
+            {
+                normalFrames = true;
+                scrapeFrames = false;
+                resetFrame = false;
             }
         }
 

@@ -21,6 +21,7 @@ namespace JoJoStands.NPCs
         public bool taggedByKillerQueen = false;
         public bool sunTagged = false;
         public bool sunShackled = false;
+        public bool stunnedByBindingEmerald = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -35,6 +36,7 @@ namespace JoJoStands.NPCs
         public bool spawnedByDeathLoop = false;
         public int deathTimer = 0;
         public int zombieHightlightTimer = 0;
+        public int bindingEmeraldDurationTimer = 0;
         public float kingCrimsonDonutMultiplier = 1f;
         public int vampireUserLastHitIndex = -1;        //An index of the vampiric player who last hit the enemy
         public Vector2 playerPositionOnSkip = Vector2.Zero;
@@ -428,6 +430,22 @@ namespace JoJoStands.NPCs
                     npc.velocity.Y += 0.3f;
                 return false;
             }
+            if (stunnedByBindingEmerald)
+            {
+                if (bindingEmeraldDurationTimer > 0)
+                    bindingEmeraldDurationTimer--;
+                else
+                    stunnedByBindingEmerald = false;
+
+                if (npc.boss)
+                {
+                    npc.velocity *= 0.8f;
+                    return true;
+                }
+
+                npc.velocity.X = 0f;
+                return false;
+            }
             if (npc.HasBuff(mod.BuffType("Stolen")))
                 return false;
             if (grabbedByHermitPurple)
@@ -531,6 +549,23 @@ namespace JoJoStands.NPCs
             {
                 Texture2D texture = mod.GetTexture("Extras/BoundByRedBind");
                 spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), npc.scale, SpriteEffects.None, 0f);
+            }
+            if (stunnedByBindingEmerald)
+            {
+                Texture2D emeraldStringWebTexture = mod.GetTexture("Extras/EmeraldStringWeb");
+                int textureWidth = 19;
+                int textureHeight = 19;
+
+                Vector2 position = npc.Center - Main.screenPosition;
+                Vector2 origin = new Vector2(textureWidth / 2f, textureHeight / 2f);
+                float scale = npc.width;
+                if (npc.height > npc.width)
+                    scale = npc.height;
+
+                scale -= 4f;
+                scale /= (float)textureWidth;
+                scale += (float)Math.Abs(Math.Sin(bindingEmeraldDurationTimer / 100f)) * 0.5f;
+                spriteBatch.Draw(emeraldStringWebTexture, position, null, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
             }
         }
 

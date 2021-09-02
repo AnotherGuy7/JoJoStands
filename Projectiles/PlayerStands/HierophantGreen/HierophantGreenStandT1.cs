@@ -8,7 +8,7 @@ namespace JoJoStands.Projectiles.PlayerStands
     {
         public override int shootTime => 40;
         public override int projectileDamage => 12;
-        public override int halfStandHeight => 25;
+        public override int halfStandHeight => 30;
         public override int standOffset => 0;
         public override int standType => 2;
         public override string poseSoundName => "ItsTheVictorWhoHasJustice";
@@ -23,27 +23,12 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut)
+                projectile.timeLeft = 2;
+
             Lighting.AddLight((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 35, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
 
-            Vector2 vector131 = player.Center;
-            if (!attackFrames)
-            {
-                vector131.X -= (float)((15 + player.width / 2) * player.direction);
-            }
-            if (attackFrames)
-            {
-                vector131.X -= (float)((15 + player.width / 2) * (player.direction * -1));
-            }
-            vector131.Y -= 5f;
-            projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
-            projectile.velocity *= 0.8f;
-            projectile.direction = (projectile.spriteDirection = player.direction);
-
-            if (mPlayer.standOut)
-            {
-                projectile.timeLeft = 2;
-            }
 
             if (!mPlayer.standAutoMode)
             {
@@ -64,11 +49,12 @@ namespace JoJoStands.Projectiles.PlayerStands
 
                         float numberProjectiles = 3;        //incraeses by 1 each tier
                         float rotation = MathHelper.ToRadians(15);      //increases by 5 every tier
-                        float randomSpeedOFfset = Main.rand.NextFloat(-6f, 6f);
+                        float randomSpeedOffset = (100f + Main.rand.NextFloat(-6f, 6f)) / 100f;
                         for (int i = 0; i < numberProjectiles; i++)
                         {
-                            Vector2 shootVelocity = new Vector2(shootVel.X + randomSpeedOFfset, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                            int proj = Projectile.NewProjectile(projectile.Center, shootVelocity, mod.ProjectileType("Emerald"), newProjectileDamage, 2f, player.whoAmI);
+                            Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                            perturbedSpeed *= randomSpeedOffset;
+                            int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("Emerald"), newProjectileDamage, 2f, player.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                         }
                         Main.PlaySound(SoundID.Item21, projectile.position);
@@ -83,6 +69,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                         attackFrames = false;
                     }
                 }
+                if (!attackFrames)
+                    StayBehind();
+                else
+                    GoInFront();
             }
             if (mPlayer.standAutoMode)
             {
@@ -113,10 +103,11 @@ namespace JoJoStands.Projectiles.PlayerStands
 
                             float numberProjectiles = 3;
                             float rotation = MathHelper.ToRadians(15);
-                            float randomSpeedOffset = Main.rand.NextFloat(-6f, 6f);
+                            float randomSpeedOffset = (100f + Main.rand.NextFloat(-6f, 6f)) / 100f;
                             for (int i = 0; i < numberProjectiles; i++)
                             {
-                                Vector2 perturbedSpeed = new Vector2(shootVel.X + randomSpeedOffset, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                                Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                                perturbedSpeed *= randomSpeedOffset;
                                 int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("Emerald"), (int)((projectileDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, player.whoAmI);
                                 Main.projectile[proj].netUpdate = true;
                             }

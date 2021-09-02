@@ -13,8 +13,10 @@ namespace JoJoStands.Buffs.AccessoryBuff
             Description.SetDefault("You are now a vampire... Stay away from the sun!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
+            Main.persistentBuff[Type] = true;
+            canBeCleared = false;
         }
- 
+
         public override void Update(Player player, ref int buffIndex)
         {
             player.allDamage *= 1.5f;

@@ -58,7 +58,6 @@ namespace JoJoStands.Projectiles.PlayerStands
         public float newAltMaxDistance = 0f;
         public int newPunchDamage = 0;
         public int newProjectileDamage = 0;
-        public bool currentAnimationDone = false;
         public bool playerHasAbilityCooldown = false;
 
         public int shootCount = 0;
@@ -158,7 +157,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// Checks if the Second Special bind is currently being held down.
         /// </summary>
         /// <returns>True if the Second Special bind is currently being held down. False if otherwise.</returns>
-        public bool SeondSpecialKeyCurrent()
+        public bool SecondSpecialKeyCurrent()
         {
             bool specialPressed = false;
             if (!Main.dedServ)
@@ -945,6 +944,13 @@ namespace JoJoStands.Projectiles.PlayerStands
         { }
 
         /// <summary>
+        /// Gets called when an animation that isn't set to loop is completed.
+        /// </summary>
+        /// <param name="animationName">The name of the animation that has finished playing.</param>
+        public virtual void AnimationCompleted(string animationName)
+        { }
+
+        /// <summary>
         /// Plays a set animation.
         /// </summary>
         /// <param name="stateName">The Stands state name.</param>
@@ -954,7 +960,6 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loop)
         {
             projectile.frameCounter++;
-            currentAnimationDone = false;
             Main.projFrames[projectile.whoAmI] = frameAmount;
             if (projectile.frameCounter >= frameCounterLimit)
             {
@@ -966,7 +971,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (loop)
                     projectile.frame = 0;
                 else
-                    currentAnimationDone = true;
+                {
+                    projectile.frame = frameAmount - 1;
+                    AnimationCompleted(stateName);
+                }
             }
         }
 
@@ -984,7 +992,6 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loopCertainFrames, int loopFrameStart, int loopFrameEnd)
         {
             projectile.frameCounter++;
-            currentAnimationDone = false;
             Main.projFrames[projectile.whoAmI] = frameAmount;
             if (projectile.frameCounter >= frameCounterLimit)
             {

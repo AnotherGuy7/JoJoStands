@@ -18,7 +18,8 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hierophant Green (Tier 2)");
-            Tooltip.SetDefault("Shoot emeralds at the enemies and right-click to set two points for an Emerald Tripwire!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Left-click to release a flurry of emeralds and right-click to throw a binding emerald string!\nSecond Special: Remote Control" +
+                "\nWhile in Remote Mode: Left-click to move and right-click to release a flurry of emeralds!\nRemote Mode Special: Set tripwires for your enemies!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

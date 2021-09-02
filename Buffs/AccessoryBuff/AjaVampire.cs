@@ -12,7 +12,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
             Description.SetDefault("You are now an immortal, ultimate being!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
-            //canBeCleared = false;
+            Main.persistentBuff[Type] = true;
+            canBeCleared = false;
         }
  
         public override void Update(Player player, ref int buffIndex)

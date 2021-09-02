@@ -9,7 +9,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
     {
         public override int shootTime => 15;
         public override int projectileDamage => 72;
-        public override int halfStandHeight => 25;
+        public override int halfStandHeight => 30;
         public override int standOffset => 0;
         public override int standType => 2;
         public override string poseSoundName => "ItsTheVictorWhoHasJustice";
@@ -17,7 +17,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
         private bool spawningField = false;
         private int numberSpawned = 0;
-        private bool linkShot = false;
+        private bool pointShot = false;
+        private bool remotelyControlled = false;
         private bool linkShotForSpecial = false;
         private Vector2 formPosition = Vector2.Zero;
 
@@ -26,41 +27,23 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             SelectAnimation();
             UpdateStandInfo();
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Lighting.AddLight((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 35, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
-            projectile.scale = ((50 - player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPoint2")]) * 2f) / 100f;
-
-            Vector2 vector131 = player.Center;
-            if (!attackFrames)
-            {
-                vector131.X -= (float)((15 + player.width / 2) * player.direction);
-            }
-            if (attackFrames)
-            {
-                vector131.X -= (float)((15 + player.width / 2) * (player.direction * -1));
-            }
-            vector131.Y -= 5f;
-            projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
-            projectile.velocity *= 0.8f;
-            projectile.direction = (projectile.spriteDirection = player.direction);
+            projectile.scale = ((50 - player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPointConnector")]) * 2f) / 100f;
 
             if (mPlayer.standOut)
-            {
                 projectile.timeLeft = 2;
-            }
 
-            if (!mPlayer.standAutoMode)
+            if (!mPlayer.standAutoMode && !remotelyControlled)
             {
                 if (Main.mouseLeft && projectile.scale >= 0.5f && projectile.owner == Main.myPlayer)
                 {
                     attackFrames = true;
                     normalFrames = false;
-                    projectile.netUpdate = true;
                     if (shootCount <= 0)
                     {
                         Main.PlaySound(SoundID.Item21, projectile.position);
@@ -74,58 +57,40 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         shootVel *= shootSpeed;
                         float numberProjectiles = 6;
                         float rotation = MathHelper.ToRadians(30);
-                        float randomSpeedOffset = Main.rand.NextFloat(-6f, 6f);
+                        float randomSpeedOffset = (100f + Main.rand.NextFloat(-6f, 6f)) / 100f;
                         for (int i = 0; i < numberProjectiles; i++)
                         {
-                            Vector2 perturbedSpeed = new Vector2(shootVel.X + randomSpeedOffset, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                            Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                            perturbedSpeed *= randomSpeedOffset;
                             int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("Emerald"), newProjectileDamage, 3f, player.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                         }
+                        projectile.netUpdate = true;
                     }
                 }
+                if (!Main.mouseLeft && player.whoAmI == Main.myPlayer)        //The reason it's not an else is because it would count the owner part too
+                {
+                    normalFrames = true;
+                    attackFrames = false;
+                }
+                if (!attackFrames)
+                    StayBehind();
                 else
+                    GoInFront();
+
+                if (Main.mouseRight && shootCount <= 0 && projectile.scale >= 0.5f && !playerHasAbilityCooldown && projectile.owner == Main.myPlayer)
                 {
-                    if (player.whoAmI == Main.myPlayer)
-                    {
-                        normalFrames = true;
-                        attackFrames = false;
-                    }
-                }
-                if (Main.mouseRight && shootCount <= 0 && !linkShot && projectile.scale >= 0.5f && projectile.owner == Main.myPlayer)
-                {
-                    shootCount += 15;
-                    linkShot = true;
+                    shootCount += 30;
                     Vector2 shootVel = Main.MouseWorld - projectile.Center;
-                    if (shootVel == Vector2.Zero)
-                    {
-                        shootVel = new Vector2(0f, 1f);
-                    }
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
-
-                    Vector2 perturbedSpeed = new Vector2(shootVel.X + Main.rand.NextFloat(-3f, 3f), shootVel.Y);
-                    int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("EmeraldStringPoint"), 0, 3f, player.whoAmI);
+                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("BindingEmeraldString"), newProjectileDamage / 2, 0f, projectile.owner, 30);
                     Main.projectile[proj].netUpdate = true;
                     Main.PlaySound(SoundID.Item21, projectile.position);
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(5));
                 }
-                if (Main.mouseRight && shootCount <= 0 && linkShot && projectile.scale >= 0.5f && projectile.owner == Main.myPlayer)
-                {
-                    shootCount += 15;
-                    linkShot = false;
-                    Vector2 shootVel = Main.MouseWorld - projectile.Center;
-                    if (shootVel == Vector2.Zero)
-                    {
-                        shootVel = new Vector2(0f, 1f);
-                    }
-                    shootVel.Normalize();
-                    shootVel *= shootSpeed;
 
-                    Vector2 perturbedSpeed = new Vector2(shootVel.X + Main.rand.NextFloat(-3f, 3f), shootVel.Y);
-                    int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("EmeraldStringPoint2"), 0, 3f, player.whoAmI, 40f);
-                    Main.projectile[proj].netUpdate = true;
-                    Main.PlaySound(SoundID.Item21, projectile.position);
-                }
-                if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPoint2")] <= 0 && !spawningField)
+                if (SpecialKeyPressed() && player.ownedProjectileCounts[mod.ProjectileType("EmeraldStringPointConnector")] <= 0 && !spawningField)
                 {
                     spawningField = true;
                     formPosition = projectile.position;
@@ -134,36 +99,114 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/EmeraldSplash"));
                     }
                 }
-                if (spawningField)
+                if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
                 {
-                    float randomRadius = Main.rand.NextFloat(-20f, 21f);
-                    Vector2 offset = formPosition + (randomRadius.ToRotationVector2() * 288f);     //33 tiles
+                    shootCount += 30;
+                    remotelyControlled = true;
+                }
+            }
+            if (!mPlayer.standAutoMode && remotelyControlled)
+            {
+                mPlayer.standRemoteMode = true;
+                float halfScreenWidth = (float)Main.screenWidth / 2f;
+                float halfScreenHeight = (float)Main.screenHeight / 2f;
+                mPlayer.standRemoteModeCameraPosition = projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                {
+                    projectile.velocity = Main.MouseWorld - projectile.Center;
+                    projectile.velocity.Normalize();
+                    projectile.velocity *= 5.5f;
 
-                    if (numberSpawned < 100 && shootCount <= 0 && !linkShotForSpecial)        //50 tendrils, the number spawned limit /2 is the wanted amount
+                    projectile.direction = 1;
+                    if (Main.MouseWorld.X < projectile.Center.X)
                     {
-                        shootCount += 2;
-                        numberSpawned += 1;
-                        int proj = Projectile.NewProjectile(offset, Vector2.Zero, mod.ProjectileType("EmeraldStringPoint"), 0, 2f, player.whoAmI);
-                        Main.projectile[proj].netUpdate = true;
-                        Main.projectile[proj].tileCollide = false;
-                        linkShotForSpecial = true;
+                        projectile.direction = -1;
                     }
-                    if (numberSpawned < 100 && shootCount <= 0 && linkShotForSpecial)
+                    projectile.spriteDirection = projectile.direction;
+
+                    if (Vector2.Distance(projectile.Center, player.Center) >= 50f * 16f)
                     {
-                        shootCount += 2;
-                        numberSpawned += 1;
-                        int proj = Projectile.NewProjectile(offset, Vector2.Zero, mod.ProjectileType("EmeraldStringPoint2"), 0, 2f, player.whoAmI, 40f);
-                        Main.projectile[proj].netUpdate = true;
-                        Main.projectile[proj].tileCollide = false;
-                        linkShotForSpecial = false;
+                        projectile.velocity = player.Center - projectile.Center;
+                        projectile.velocity.Normalize();
+                        projectile.velocity *= 0.8f;
                     }
-                    if (numberSpawned >= 100f)
+                    projectile.netUpdate = true;
+                }
+                if (!Main.mouseLeft && projectile.owner == Main.myPlayer)
+                {
+                    projectile.velocity *= 0.78f;
+                    projectile.netUpdate = true;
+                }
+                if (Main.mouseRight && projectile.owner == Main.myPlayer)
+                {
+                    attackFrames = true;
+                    normalFrames = false;
+                    if (shootCount <= 0)
                     {
-                        numberSpawned = 0;
-                        spawningField = false;
-                        formPosition = Vector2.Zero;
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
+                        shootCount += newShootTime;
+
+                        projectile.direction = 1;
+                        if (Main.MouseWorld.X < projectile.Center.X)
+                        {
+                            projectile.direction = -1;
+                        }
+                        projectile.spriteDirection = projectile.direction;
+
+                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        if (shootVel == Vector2.Zero)
+                        {
+                            shootVel = new Vector2(0f, 1f);
+                        }
+                        shootVel.Normalize();
+                        shootVel *= shootSpeed;
+
+                        float numberProjectiles = 6;
+                        float rotation = MathHelper.ToRadians(30);
+                        float randomSpeedOffset = (100f + Main.rand.NextFloat(-6f, 6f)) / 100f;
+                        for (int i = 0; i < numberProjectiles; i++)
+                        {
+                            Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                            perturbedSpeed *= randomSpeedOffset;
+                            int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("Emerald"), newProjectileDamage, 3f, player.whoAmI);
+                            Main.projectile[proj].netUpdate = true;
+                        }
+                        Main.PlaySound(SoundID.Item21, projectile.position);
+                        projectile.netUpdate = true;
                     }
+                }
+                else
+                {
+                    if (projectile.owner == Main.myPlayer)
+                    {
+                        attackFrames = false;
+                        normalFrames = true;
+                    }
+                }
+                if (SpecialKeyPressed() && shootCount <= 0 && projectile.scale >= 0.5f)
+                {
+                    pointShot = !pointShot;
+                    int connectorType = mod.ProjectileType("EmeraldStringPoint");
+                    if (!pointShot)
+                        connectorType = mod.ProjectileType("EmeraldStringPointConnector");
+
+                    shootCount += 15;
+                    Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                    if (shootVel == Vector2.Zero)
+                    {
+                        shootVel = new Vector2(0f, 1f);
+                    }
+                    shootVel.Normalize();
+                    shootVel *= shootSpeed;
+                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, connectorType, 0, 3f, player.whoAmI);
+                    Main.projectile[proj].netUpdate = true;
+                    Main.PlaySound(SoundID.Item21, projectile.position);
+                    projectile.netUpdate = true;
+                }
+
+                if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
+                {
+                    shootCount += 30;
+                    remotelyControlled = false;
                 }
             }
             if (mPlayer.standAutoMode)
@@ -194,10 +237,11 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                             shootVel *= shootSpeed;
                             float numberProjectiles = 6;
                             float rotation = MathHelper.ToRadians(30);
-                            float randomSpeedOffset = Main.rand.NextFloat(-6f, 6f);
+                            float randomSpeedOffset = (100f + Main.rand.NextFloat(-6f, 6f)) / 100f;
                             for (int i = 0; i < numberProjectiles; i++)
                             {
-                                Vector2 perturbedSpeed = new Vector2(shootVel.X + randomSpeedOffset, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                                Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                                perturbedSpeed *= randomSpeedOffset;
                                 int proj = Projectile.NewProjectile(projectile.Center, perturbedSpeed, mod.ProjectileType("Emerald"), (int)((projectileDamage * mPlayer.standDamageBoosts) * 0.9f), 3f, player.whoAmI);
                                 Main.projectile[proj].netUpdate = true;
                             }
@@ -209,6 +253,38 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     normalFrames = true;
                     attackFrames = false;
+                }
+            }
+
+            if (spawningField && projectile.owner == Main.myPlayer)
+            {
+                float randomRadius = Main.rand.NextFloat(-20f, 21f);
+                Vector2 offset = formPosition + (randomRadius.ToRotationVector2() * 288f);     //33 tiles
+
+                if (numberSpawned < 100 && shootCount <= 0 && !linkShotForSpecial)        //50 tendrils, the number spawned limit /2 is the wanted amount
+                {
+                    shootCount += 2;
+                    numberSpawned += 1;
+                    int proj = Projectile.NewProjectile(offset, Vector2.Zero, mod.ProjectileType("EmeraldStringPoint"), 0, 2f, player.whoAmI);
+                    Main.projectile[proj].netUpdate = true;
+                    Main.projectile[proj].tileCollide = false;
+                    linkShotForSpecial = true;
+                }
+                if (numberSpawned < 100 && shootCount <= 0 && linkShotForSpecial)
+                {
+                    shootCount += 2;
+                    numberSpawned += 1;
+                    int proj = Projectile.NewProjectile(offset, Vector2.Zero, mod.ProjectileType("EmeraldStringPointConnector"), 0, 2f, player.whoAmI, 40f);
+                    Main.projectile[proj].netUpdate = true;
+                    Main.projectile[proj].tileCollide = false;
+                    linkShotForSpecial = false;
+                }
+                if (numberSpawned >= 100f)
+                {
+                    numberSpawned = 0;
+                    spawningField = false;
+                    formPosition = Vector2.Zero;
+                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
                 }
             }
         }

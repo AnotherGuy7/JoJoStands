@@ -191,12 +191,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 normalFrames = false;
                 attackFrames = false;
                 PlayAnimation("Flick");
-                if (resetFrame && currentAnimationDone)
-                {
-                    normalFrames = true;
-                    flickFrames = false;
-                    resetFrame = false;
-                }
             }
             if (secondaryAbilityFrames)
             {
@@ -214,6 +208,16 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 normalFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
+            }
+        }
+
+        public override void AnimationCompleted(string animationName)
+        {
+            if (resetFrame && animationName == "Flick")
+            {
+                normalFrames = true;
+                flickFrames = false;
+                resetFrame = false;
             }
         }
 

@@ -131,11 +131,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                if (currentAnimationDone)
-                {
-                    parryFrames = false;
-                    normalFrames = true;
-                }
                 PlayAnimation("Parry");
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
@@ -143,6 +138,15 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 normalFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
+            }
+        }
+
+        public override void AnimationCompleted(string animationName)
+        {
+            if (animationName == "Parry")
+            {
+                normalFrames = true;
+                parryFrames = false;
             }
         }
 

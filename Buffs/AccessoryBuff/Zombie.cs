@@ -14,6 +14,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;
+            canBeCleared = false;
         }
  
         public override void Update(Player player, ref int buffIndex)

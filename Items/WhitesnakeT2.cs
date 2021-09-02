@@ -18,7 +18,8 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Whitesnake (Tier 2)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw some acid!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw some acid!\nSecond Special: Remote Control" +
+                "\nWhile in Remote Mode: Left-click to move and right-click shoot enemies with a pistol!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
