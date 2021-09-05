@@ -502,23 +502,23 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public void InitializeSounds()
         {
-            if (JoJoStands.SoundsLoaded)
+            if (!JoJoStands.SoundsLoaded)
+                return;
+
+            if (beginningSoundInstance == null)
             {
-                if (beginningSoundInstance == null)
+                SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName + "_Beginning");
+                if (sound != null)
                 {
-                    SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName + "_Beginning");
-                    if (sound != null)
-                    {
-                        beginningSoundInstance = sound.CreateInstance();
-                        beginningSoundInstance.Volume = MyPlayer.ModSoundsVolume;
-                    }
+                    beginningSoundInstance = sound.CreateInstance();
+                    beginningSoundInstance.Volume = MyPlayer.ModSoundsVolume;
                 }
-                if (punchingSoundInstance == null)
-                {
-                    SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName);
-                    punchingSoundInstance = sound.CreateInstance();
-                    punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
-                }
+            }
+            if (punchingSoundInstance == null)
+            {
+                SoundEffect sound = JoJoStands.JoJoStandsSounds.GetSound("Sounds/BattleCries/" + punchSoundName);
+                punchingSoundInstance = sound.CreateInstance();
+                punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
             }
         }
 
@@ -527,38 +527,38 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public void PlayPunchSound()
         {
-            if (JoJoStands.SoundsLoaded)
+            if (!JoJoStands.SoundsLoaded)
+                return;
+
+            if (punchSoundName != "" && punchingSoundInstance == null)
             {
-                if (punchSoundName != "" && punchingSoundInstance == null)
+                InitializeSounds();
+            }
+            if (punchSoundName != "")
+            {
+                if (beginningSoundInstance != null)
                 {
-                    InitializeSounds();
-                }
-                if (punchSoundName != "")
-                {
-                    if (beginningSoundInstance != null)
+                    if (!playedBeginning)
                     {
-                        if (!playedBeginning)
-                        {
-                            //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                            beginningSoundInstance.Volume = MyPlayer.ModSoundsVolume;
-                            Main.PlaySoundInstance(beginningSoundInstance);                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
-                            playedBeginning = true;
-                        }
-                        if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
-                        {
-                            //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                            punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
-                            Main.PlaySoundInstance(punchingSoundInstance);
-                            SyncSounds();
-                        }
-                    }
-                    else
-                    {
-                        //punchingSoundInstance.Play();
-                        Main.PlaySoundInstance(punchingSoundInstance);
-                        SyncSounds();
+                        //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        beginningSoundInstance.Volume = MyPlayer.ModSoundsVolume;
+                        Main.PlaySoundInstance(beginningSoundInstance);                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
                         playedBeginning = true;
                     }
+                    if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
+                    {
+                        //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
+                        punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
+                        Main.PlaySoundInstance(punchingSoundInstance);
+                        SyncSounds();
+                    }
+                }
+                else
+                {
+                    //punchingSoundInstance.Play();
+                    Main.PlaySoundInstance(punchingSoundInstance);
+                    SyncSounds();
+                    playedBeginning = true;
                 }
             }
         }
@@ -568,9 +568,12 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public void SyncSounds()
         {
+            if (!JoJoStands.SoundsLoaded)
+                return;
+
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                if (JoJoStands.SoundsLoaded && punchingSoundInstance != null)
+                if (punchingSoundInstance != null)
                 {
                     Player player = Main.player[projectile.owner];
                     string path = "Sounds/BattleCries/" + punchSoundName;
@@ -586,26 +589,26 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public void StopSounds()
         {
-            if (JoJoStands.SoundsLoaded)
+            if (!JoJoStands.SoundsLoaded)
+                return;
+
+            if (playedBeginning)
             {
-                if (playedBeginning)
+                if (beginningSoundInstance != null)
                 {
-                    if (beginningSoundInstance != null)
-                    {
-                        beginningSoundInstance.Stop();
-                        SyncSounds();
-                    }
-                    if (punchingSoundInstance != null)
-                    {
-                        punchingSoundInstance.Stop();
-                        SyncSounds();
-                    }
-                    playedBeginning = false;
-                }
-                if (projectile.netUpdate)       //We put it here cause we don't want to sync this all the time, but specifically whenever this method is called (Idles)
-                {
+                    beginningSoundInstance.Stop();
                     SyncSounds();
                 }
+                if (punchingSoundInstance != null)
+                {
+                    punchingSoundInstance.Stop();
+                    SyncSounds();
+                }
+                playedBeginning = false;
+            }
+            if (projectile.netUpdate)       //We put it here cause we don't want to sync this all the time, but specifically whenever this method is called (Idles)
+            {
+                SyncSounds();
             }
         }
 

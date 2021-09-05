@@ -32,9 +32,8 @@ namespace JoJoStands.Projectiles
         {
             MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
+
             if (mPlayer.awakenedAmuletEquipped)
             {
                 if (Main.rand.NextFloat(0, 101) >= 80)

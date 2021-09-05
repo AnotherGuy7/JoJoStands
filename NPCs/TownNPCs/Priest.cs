@@ -42,33 +42,31 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             return true;
         }
 
-        public override bool CanTownNPCSpawn(int numTownNPCs, int money) //Whether or not the conditions have been met for this town NPC to be able to move into town.
+        public override bool CanTownNPCSpawn(int numTownNPCs, int money)        //Whether or not the conditions have been met for this town NPC to be able to move into town.
         {
             return Main.hardMode;
         }
 
-        public override string TownNPCName()     //Allows you to give this town NPC any name when it spawns
+        public override string TownNPCName()        //Allows you to give this town NPC any name when it spawns
         {
             return "Pucci";
         }
 
-        public override void SetChatButtons(ref string button, ref string button2)  //Allows you to set the text for the buttons that appear on this town NPC's chat window. 
+        public override void SetChatButtons(ref string button, ref string button2)      //Allows you to set the text for the buttons that appear on this town NPC's chat window. 
         {
-            button = "Buy Stands";   //this defines the buy button name
+            button = "Buy Stands";      //this defines the buy button name
         }
-        public override void OnChatButtonClicked(bool firstButton, ref bool openShop) //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
+        public override void OnChatButtonClicked(bool firstButton, ref bool openShop)       //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
         {
             if (firstButton)
-            {
-                openShop = true;   //so when you click on buy button opens the shop
-            }
+                openShop = true;        //so when you click on buy button opens the shop
         }
 
-        public override void SetupShop(Chest shop, ref int nextSlot)       //Allows you to add items to this town NPC's shop. Add an item by setting the defaults of shop.item[nextSlot] then incrementing nextSlot.
+        public override void SetupShop(Chest shop, ref int nextSlot)        //Allows you to add items to this town NPC's shop. Add an item by setting the defaults of shop.item[nextSlot] then incrementing nextSlot.
         {
-            for (int i = 0; i < MyPlayer.standTier1List.Count; i++)     //auto builds the list of items, also sets their price to 1 platinum without affecting original items
+            for (int i = 0; i < JoJoStands.standTier1List.Count; i++)       //auto builds the list of items, also sets their price to 1 platinum without affecting original items
             {
-                shop.item[i].SetDefaults(MyPlayer.standTier1List[i]);
+                shop.item[i].SetDefaults(JoJoStands.standTier1List[i]);
                 shop.item[i].value = Item.buyPrice(0, 50, 0, 0);
             }
         }
@@ -95,19 +93,19 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             }
         }
 
-        public override void TownNPCAttackStrength(ref int damage, ref float knockback)//  Allows you to determine the damage and knockback of this town NPC attack
+        public override void TownNPCAttackStrength(ref int damage, ref float knockback)     //Allows you to determine the damage and knockback of this town NPC attack
         {
-            damage = 40;  //npc damage
-            knockback = 2f;   //npc knockback
+            damage = 40;        //npc damage
+            knockback = 2f;     //npc knockback
         }
 
-        public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)  //Allows you to determine the cooldown between each of this town NPC's attack. The cooldown will be a number greater than or equal to the first parameter, and less then the sum of the two parameters.
+        public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)     //Allows you to determine the cooldown between each of this town NPC's attack. The cooldown will be a number greater than or equal to the first parameter, and less then the sum of the two parameters.
         {
             cooldown = 5;
             randExtraCooldown = 10;
         }
 
-        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)//Allows you to determine the projectile type of this town NPC's attack, and how long it takes for the projectile to actually appear
+        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)       //Allows you to determine the projectile type of this town NPC's attack, and how long it takes for the projectile to actually appear
         {
             if (!Projectiles.NPCStands.WhitesnakeNPCStand.whitesnakeActive)
             {

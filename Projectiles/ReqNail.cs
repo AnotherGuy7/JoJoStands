@@ -1,9 +1,4 @@
-using System;
-using System.IO;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -17,8 +12,8 @@ namespace JoJoStands.Projectiles
 
         public override void SetDefaults()
         {
-            projectile.width = 5;
-            projectile.height = 12;
+            projectile.width = 14;
+            projectile.height = 6;
             projectile.aiStyle = 0;
             projectile.timeLeft = 300;
             projectile.friendly = true;
@@ -38,7 +33,13 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 205, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+            projectile.rotation = projectile.velocity.ToRotation();
+
+            int pinkDustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 205, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+            Main.dust[pinkDustIndex].noGravity = true;
+
+            int blueDustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 202, projectile.velocity.X * -0.3f, projectile.velocity.Y * -0.3f);
+            Main.dust[blueDustIndex].noGravity = true;
         }
     }
 }

@@ -54,7 +54,7 @@ namespace JoJoStands.NPCs.TownNPCs
             {
                 if (player.HeldItem.type == mod.ItemType("Hamon"))
                 {
-                    Main.npcChatText = "I haven't heard much about it but that old man tells me that it increases the power of your punches and allows you to heal while standing still.";
+                    Main.npcChatText = "I haven't heard much about it but that old man tells me that .";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("StarPlatinumT1") || mPlayer.StandSlot.Item.type == mod.ItemType("StarPlatinumT2"))
                 {
@@ -74,7 +74,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("HierophantGreenT2"))
                 {
-                    Main.npcChatText = "You now have the ability to place down tripwire. Any enemies who walk into these wires will soon be filled with emeralds.";
+                    Main.npcChatText = "You now have the ability to shoot wires that wrap and paralyze your enemies. Enemies that are wrapped in your wires will not be able to move for a short time, so use that time wisely. Hierphant Green is also able to be controlled at much farther distances now, so take advantage of that to set up tripwires and shoot from advantageous positions.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("HierophantGreenT3") || mPlayer.StandSlot.Item.type == mod.ItemType("HierophantGreenFinal"))
                 {
@@ -106,7 +106,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("KillerQueenBTD"))
                 {
-                    Main.npcChatText = "You've unlocked yet another power... Bites The Dust. It allows you to rewind time back to the beginning of the day, causing enemies to explode during the rewind. Not only that, you can now shoot bubbles that you've touched and have them pierce up to 7 enemies before exploding.";
+                    Main.npcChatText = "You've unlocked yet another power... Bites The Dust. Bites the Dust allows you to rewind time back to the beginning of the day, causing enemies to explode during the rewind. Not only that, you can now shoot bubbles that you've touched and have them pierce up to 7 enemies before exploding.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("AchtungBaby"))
                 {
@@ -158,15 +158,15 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("SexPistolsT1"))
                 {
-                    Main.npcChatText = "Ah, good grief... this, well, these, are Sex Pistols. They're six, sentient, bullet-shaped stands that allow you to fire off the gun they're attached to and make the bullets almost lock on to enemies. Sex Pistols never gained any new or extreme abilities, but each of your upgrades increases your guns power. More efficiency means more rounds out, and more bodies.";
+                    Main.npcChatText = "Ah, good grief... this, well, these, are Sex Pistols. They're six, sentient, bullet-shaped stands that will stay around the area you want them to. Whenever a bullet goes near them, they will redirect that bullet to the nearest enemy. Sex Pistols never gained any new or extreme abilities, but each of your upgrades increases your guns power. More efficiency means more rounds out, and more bodies.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("SexPistolsT2"))
                 {
-                    Main.npcChatText = "The faster the pistols come back to you after being fired, the more power you gain. Did I tell you that the Pistols need to eat?";
+                    Main.npcChatText = "The pistols should be able to kick bullets with even greater force now. Did I tell you that the Pistols need to eat?";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("SexPistolsT3"))
                 {
-                    Main.npcChatText = "Faster and faster the chamber goes, can you keep up long enough to keep firing?";
+                    Main.npcChatText = "Faster and faster the chamber goes, can you keep up long enough to keep firing? Pressing " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + " will allow your pistols to go into a frenzy, where they would kick bullets until the end. ";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("SexPistolsFinal"))
                 {
@@ -178,7 +178,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("KingCrimsonT2"))
                 {
-                    Main.npcChatText = "King Crimson has acquired its signature ability of skipping time. It's a strange ability in concept, so here's a summary- you can remove the cause from the effect. Jump past time itself, confuse your enemies, and take your place at the apex of creation.";
+                    Main.npcChatText = "King Crimson has acquired its signature ability of skipping time. It's a strange ability in concept, so here's a summary- you can remove the cause from the effect. Jump past time itself, confuse your enemies, and take your place at the apex of creation. And now that it can use its signurature ability, it can also perform 'Quick Timeskips' when needed, mainly while it's blocking enemies.";
                 }
                 if ((mPlayer.StandSlot.Item.type == mod.ItemType("KingCrimsonT3") || mPlayer.StandSlot.Item.type == mod.ItemType("KingCrimsonFinal")))
                 {
@@ -254,15 +254,15 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("GratefulDeadT4"))
                 {
-					Main.npcChatText = "Finally, Grateful Dead is at maximum power. Just… stay a few feet away from me. I already have a couple of gray hairs.";
+					Main.npcChatText = "Finally, Grateful Dead is at maximum power. Just... stay a few feet away from me. I already have a couple of gray hairs.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("LockT1") || mPlayer.StandSlot.Item.type == mod.ItemType("LockT2"))
                 {
-					Main.npcChatText = "Oh. The Lock. I feel bad that you have to use this one… wait a minute. The Lock has the ability to make others' hearts heavy with guilt, literally. Use it, and anything that harms you will start to feel that immense weight. Some things may be immune to that guilt, and it can be overcome.";
+					Main.npcChatText = "Oh. The Lock. I feel bad that you have to use this one... wait a minute. The Lock has the ability to make others' hearts heavy with guilt, literally. Use it, and anything that harms you will start to feel that immense weight. Some things may be immune to that guilt, and it can be overcome.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("LockT3") || mPlayer.StandSlot.Item.type == mod.ItemType("LockT4"))
                 {
-					Main.npcChatText = "The Lock can now force others to feel guilty without any action against you… by harming yourself. Use this ability with caution.";
+					Main.npcChatText = "The Lock can now force others to feel guilty without any action against you... by harming yourself. Use this ability with caution.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeT1"))
                 {
@@ -270,11 +270,11 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeT2"))
                 {
-					Main.npcChatText = "Now, Whitesnake can secrete a gooey substance that damages enemies and sticks to surfaces. It's not a pleasant experience.";
+					Main.npcChatText = "Now, Whitesnake can secrete a gooey substance that damages enemies and sticks to surfaces. It's not a pleasant experience for those affected. You'll also notice that you can send Whitesnake farther away from you now, and that it has a gun. As you get stronger, that ability will help you out more and more, keep that in mind.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeT3"))
                 {
-					Main.npcChatText = "Whitesnake has unlocked the ability to steal discs from opponents. If your enemy isn't a Stand user, then they'll be devoid of thought for a few moments. If they are, then you'll disable their Stand temporarily- do all of this by pressing " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0];
+					Main.npcChatText = "Whitesnake has unlocked the ability to steal discs from opponents. If your enemy isn't a Stand user, then they'll be devoid of thought for a few moments. If they are, then you'll disable their Stand temporarily- do all of this by pressing and holding " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0];
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("WhitesnakeFinal"))
                 {
@@ -286,7 +286,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("SilverChariotT2"))
                 {
-                    Main.npcChatText = "On top of your stabbing flurry, Silver Chariot can now deflect projectiles back at your enemy with {whatever right click is}, almost like a game of baseball, or tennis.";
+                    Main.npcChatText = "On top of your stabbing flurry, Silver Chariot can now deflect projectiles back at your enemy with it's rapier, almost as if it's playing a game of baseball, or tennis.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("SilverChariotT3"))
                 {
@@ -298,11 +298,11 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("CreamT1"))
                 {
-                    Main.npcChatText = "That Stand makes me… nervous, and I cannot tell you why. Anyways, uh, Cream can harness the void and erase things, almost like that blockhead friend of Josuke’s.\nJust like the rest, Cream cannot do very much at this stage. It can throw a mean chop though, and it can cause enemies to lose their organs. Literally.";
+                    Main.npcChatText = "That Stand makes me... nervous, and I cannot tell you why. Anyways, uh, Cream can harness the void and erase things, almost like that blockhead friend of Josuke’s.\nJust like the rest, Cream cannot do very much at this stage. It can throw a mean chop though, and it can cause enemies to lose their organs. Literally.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("CreamT2"))
                 {
-                    Main.npcChatText = "Cream has gained the ability to, well, eat you. Specifically, you can enter the void by pressing {specialabilitykey} and riding in Cream like an interdimensional ball of sorts. To control Cream in this state, use {attack} to guide it. The downsides are that you have a limited time in there, indicated by the Void Gauge, and you are effectively blind while in the void, so know where your target is beforehand. Once that time runs out, Cream pukes you out. I am being serious.";
+                    Main.npcChatText = "Cream has gained the ability to, well, eat you. Specifically, you can enter the void by pressing " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + " and riding in Cream like an interdimensional ball of sorts. To control Cream in this state, use your 'left-click' to guide it. The downsides are that you have a limited time in there, indicated by the Void Gauge, and you are effectively blind while in the void, so know where your target is beforehand. Once that time runs out, Cream pukes you out. I am being serious.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("CreamT3"))
                 {
@@ -310,7 +310,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("CreamFinal"))
                 {
-                    Main.npcChatText = "At this final point, Cream can stay in the void for even longer. Once it runs out, you will still enter the recharge state rather than being puked out. Actually, I wonder if you could use this to fire yourself like a cannon… questions for another day.";
+                    Main.npcChatText = "At this final point, Cream can stay in the void for even longer. Once it runs out, you will still enter the recharge state rather than being puked out. Actually, I wonder if you could use this to fire yourself like a cannon... questions for another day.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("HermitPurpleT1"))
                 {
@@ -322,7 +322,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("HermitPurpleT3"))
                 {
-                    Main.npcChatText = "Your connection to Hermit Purple grows like rampant vines; now you can press " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + " to overcharge Hermit Purple with Hamon and power up your passive counter. The next three things that hit you will not only feel the burn, but they will take damage and get knocked away.";
+                    Main.npcChatText = "Your connection to Hermit Purple grows like rampant vines; You can now press " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + " to overcharge Hermit Purple with Hamon and power up your passive counter. The next three things that hit you will not only feel the burn, but they will take damage and get knocked away.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("HermitPurpleFinal"))
                 {
@@ -330,24 +330,24 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("BadCompanyT1"))
                 {
-                    Main.npcChatText = "I don't know yet.";
+                    Main.npcChatText = "That Stand... I've never seen it before, though I do remember some descriptions of a Stand like this from Josuke a while back.\nAccording to Josuke, that Stand was able to summon armies of soldiers, tanks, and attack helicopters, though I'd imagine that at this stage, soldiers would be all you could handle. I'll have to ask Josuke for greater details on this Stand.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("BadCompanyT2"))
                 {
-                    Main.npcChatText = "I don't know yet.";
+                    Main.npcChatText = "Your Stand, Bad Company, should now be able to summon more troops, as well as summon tanks. Your troops should also be much stronger now that they've gained combat experience.";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("BadCompanyT3"))
                 {
-                    Main.npcChatText = "I don't know yet.";
+                    Main.npcChatText = "According to Josuke, by now, you should be able to summon attack helicopters. Those helicopters would be your greatest asset, but don't depend on them too much. This is just a guess but, if you can summon attack helicopters, what's stopping you from summoning war planes?";
                 }
                 if (mPlayer.StandSlot.Item.type == mod.ItemType("BadCompanyT4"))
                 {
-                    Main.npcChatText = "I don't know yet.";
+                    Main.npcChatText = "This Stand is surely something to be afraid of. You now have a small militia under your command, with soldiers, tanks, attack helicopters, and war planes under your command. It amazes how Josuke was able to survive that battle.";
                 }
 
                 if (mPlayer.StandSlot.Item.IsAir)
                 {
-                    int helpText = Main.rand.Next(0, 7);
+                    int helpText = Main.rand.Next(0, 6 + 1);
                     switch (helpText)
                     {
                         case 0:

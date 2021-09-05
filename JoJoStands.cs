@@ -16,28 +16,12 @@ namespace JoJoStands
 {
     public class JoJoStands : Mod
     {
-        public static ModHotKey SpecialHotKey;
-        public static ModHotKey SecondSpecialHotKey;
-        public static ModHotKey StandOut;
-        public static ModHotKey StandAutoMode;
-        public static ModHotKey PoseHotKey;
-        public static Mod JoJoStandsSounds;
         public static bool SoundsLoaded = false;
         public static bool FanStandsLoaded = false;
-        internal static JoJoStands Instance => ModContent.GetInstance<JoJoStands>();
-        internal static CustomizableOptions customizableConfig;
+        public static Mod JoJoStandsSounds;
 
-        private UserInterface _betUI;
-        private UserInterface _hamonbarInterface;
-        private UserInterface _goldenSpinInterface;
-        private UserInterface _tbcarrow;
-        private UserInterface _bulletcounter;
-        private UserInterface _aerosmithRadar;
-        private UserInterface _sexPistolsUI;
-        private UserInterface _voidbarUI;
-        private UserInterface _hamonSkillTreeUI;
-        private UserInterface _unitsUI;
-        private UserInterface _zombieSkillTreeUI;
+        internal static JoJoStands Instance => ModContent.GetInstance<JoJoStands>();        //internal so that it's only usable inside this specific project
+        internal static CustomizableOptions customizableConfig;
 
         internal ToBeContinued TBCarrow;
         internal HamonBarState HamonBarInterface;
@@ -51,6 +35,26 @@ namespace JoJoStands
         internal BadCompanyUnitsUI UnitsUI;
         internal ZombieSkillTree ZombieSkillTreeUI;
 
+        private UserInterface _betUI;
+        private UserInterface _hamonbarInterface;
+        private UserInterface _goldenSpinInterface;
+        private UserInterface _tbcarrow;
+        private UserInterface _bulletcounter;
+        private UserInterface _aerosmithRadar;
+        private UserInterface _sexPistolsUI;
+        private UserInterface _voidbarUI;
+        private UserInterface _hamonSkillTreeUI;
+        private UserInterface _unitsUI;
+        private UserInterface _zombieSkillTreeUI;
+
+        public static ModHotKey SpecialHotKey;
+        public static ModHotKey SecondSpecialHotKey;
+        public static ModHotKey StandOutHotKey;
+        public static ModHotKey StandAutoModeHotKey;
+        public static ModHotKey PoseHotKey;
+
+        public static List<int> timestopImmune = new List<int>();
+        public static List<int> standTier1List = new List<int>();
         public static List<char> testStandPassword = new List<char>();      //  :) Have *fuuuuuuun!*
 
         public override void Load()
@@ -58,6 +62,7 @@ namespace JoJoStands
             JoJoStandsSounds = ModLoader.GetMod("JoJoStandsSounds");        //would just return null if nothing is there
             SoundsLoaded = JoJoStandsSounds != null;
             FanStandsLoaded = ModLoader.GetMod("JoJoFanStands") != null;
+
             HamonBarState.hamonBarTexture = ModContent.GetTexture("JoJoStands/UI/HamonBar");
             ToBeContinued.TBCArrowTexture = ModContent.GetTexture("JoJoStands/UI/TBCArrow");
             BulletCounter.bulletCounterTexture = ModContent.GetTexture("JoJoStands/UI/BulletCounter");
@@ -67,48 +72,50 @@ namespace JoJoStands
             SexPistolsUI.sexPistolsUITexture = ModContent.GetTexture("JoJoStands/UI/SexPistolsUI");
             VoidBar.VoidBarTexture = ModContent.GetTexture("JoJoStands/UI/VoidBar");
             VoidBar.VoidBarBarTexture = ModContent.GetTexture("JoJoStands/UI/VoidBarBar");
-            MyPlayer.standTier1List.Add(ItemType("AerosmithT1"));
-            MyPlayer.standTier1List.Add(ItemType("GoldExperienceT1"));
-            MyPlayer.standTier1List.Add(ItemType("HierophantGreenT1"));
-            MyPlayer.standTier1List.Add(ItemType("KillerQueenT1"));
-            MyPlayer.standTier1List.Add(ItemType("KingCrimsonT1"));
-            MyPlayer.standTier1List.Add(ItemType("MagiciansRedT1"));
-            MyPlayer.standTier1List.Add(ItemType("SexPistolsT1"));
-            MyPlayer.standTier1List.Add(ItemType("StarPlatinumT1"));
-            MyPlayer.standTier1List.Add(ItemType("StickyFingersT1"));
-            MyPlayer.standTier1List.Add(ItemType("TheWorldT1"));
-            MyPlayer.standTier1List.Add(ItemType("TuskAct1"));
-            MyPlayer.standTier1List.Add(ItemType("LockT1"));
-            MyPlayer.standTier1List.Add(ItemType("GratefulDeadT1"));
-            MyPlayer.standTier1List.Add(ItemType("TheHandT1"));
-            MyPlayer.standTier1List.Add(ItemType("WhitesnakeT1"));
-            MyPlayer.standTier1List.Add(ItemType("DollyDaggerT1"));
-            MyPlayer.standTier1List.Add(ItemType("CenturyBoyT1"));
-            MyPlayer.standTier1List.Add(ItemType("SilverChariotT1"));
-            MyPlayer.standTier1List.Add(ItemType("HermitPurpleT1"));
-            MyPlayer.standTier1List.Add(ItemType("BadCompanyT1"));
-            MyPlayer.standTier1List.Add(ItemType("CreamT1"));
 
-            MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
-            MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandT3"));
-            MyPlayer.stopImmune.Add(ProjectileType("TheWorldStandFinal"));
-            MyPlayer.stopImmune.Add(ProjectileType("StarPlatinumStandFinal"));
+            standTier1List.Add(ItemType("AerosmithT1"));
+            standTier1List.Add(ItemType("GoldExperienceT1"));
+            standTier1List.Add(ItemType("HierophantGreenT1"));
+            standTier1List.Add(ItemType("KillerQueenT1"));
+            standTier1List.Add(ItemType("KingCrimsonT1"));
+            standTier1List.Add(ItemType("MagiciansRedT1"));
+            standTier1List.Add(ItemType("SexPistolsT1"));
+            standTier1List.Add(ItemType("StarPlatinumT1"));
+            standTier1List.Add(ItemType("StickyFingersT1"));
+            standTier1List.Add(ItemType("TheWorldT1"));
+            standTier1List.Add(ItemType("TuskAct1"));
+            standTier1List.Add(ItemType("LockT1"));
+            standTier1List.Add(ItemType("GratefulDeadT1"));
+            standTier1List.Add(ItemType("TheHandT1"));
+            standTier1List.Add(ItemType("WhitesnakeT1"));
+            standTier1List.Add(ItemType("DollyDaggerT1"));
+            standTier1List.Add(ItemType("CenturyBoyT1"));
+            standTier1List.Add(ItemType("SilverChariotT1"));
+            standTier1List.Add(ItemType("HermitPurpleT1"));
+            standTier1List.Add(ItemType("BadCompanyT1"));
+            standTier1List.Add(ItemType("CreamT1"));
+
+            timestopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
+            timestopImmune.Add(ProjectileType("TheWorldStandT3"));
+            timestopImmune.Add(ProjectileType("TheWorldStandFinal"));
+            timestopImmune.Add(ProjectileType("StarPlatinumStandFinal"));
             //MyPlayer.stopImmune.Add(ProjectileType("StickyFingersFistExtended"));
-            MyPlayer.stopImmune.Add(ProjectileType("RoadRoller"));
-            MyPlayer.stopImmune.Add(ProjectileType("HamonPunches"));
-            MyPlayer.stopImmune.Add(ProjectileType("Fists"));
-            MyPlayer.stopImmune.Add(ProjectileType("GoldExperienceRequiemStand"));
-            MyPlayer.stopImmune.Add(ProjectileType("TuskAct4Minion"));
+            timestopImmune.Add(ProjectileType("RoadRoller"));
+            timestopImmune.Add(ProjectileType("HamonPunches"));
+            timestopImmune.Add(ProjectileType("Fists"));
+            timestopImmune.Add(ProjectileType("GoldExperienceRequiemStand"));
+            timestopImmune.Add(ProjectileType("TuskAct4Stand"));
+            timestopImmune.Add(ProjectileType("TestStand"));
 
             testStandPassword.Add(Convert.ToChar(84));
 
 
-            // Registers a new hotkey
+            //Where we register the hotkeys
             SpecialHotKey = RegisterHotKey("Special Ability", "P");        // See https://docs.microsoft.com/en-us/previous-versions/windows/xna/bb197781(v%3dxnagamestudio.41) for special keys
             SecondSpecialHotKey = RegisterHotKey("Secondary Special Ability", "H");
-            StandOut = RegisterHotKey("Stand Out", "G");
+            StandOutHotKey = RegisterHotKey("Stand Out", "G");
             PoseHotKey = RegisterHotKey("Pose", "V");
-            StandAutoMode = RegisterHotKey("Stand Auto Mode", "L");
+            StandAutoModeHotKey = RegisterHotKey("Stand Auto Mode", "L");
 
             if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
             {
@@ -117,42 +124,52 @@ namespace JoJoStands
                 HamonBarInterface.Activate();
                 _hamonbarInterface = new UserInterface();
                 _hamonbarInterface.SetState(HamonBarInterface);
+
                 TBCarrow = new ToBeContinued();
                 TBCarrow.Activate();
                 _tbcarrow = new UserInterface();
                 _tbcarrow.SetState(TBCarrow);
+
                 bulletCounter = new BulletCounter();
                 bulletCounter.Activate();
                 _bulletcounter = new UserInterface();
                 _bulletcounter.SetState(bulletCounter);
+
                 aerosmithRadar = new AerosmithRadar();
                 aerosmithRadar.Activate();
                 _aerosmithRadar = new UserInterface();
                 _aerosmithRadar.SetState(aerosmithRadar);
+
                 betUI = new BetUI();
                 betUI.Activate();
                 _betUI = new UserInterface();
                 _betUI.SetState(betUI);
+
                 GoldenSpinInterface = new GoldenSpinMeter();
                 GoldenSpinInterface.Activate();
                 _goldenSpinInterface = new UserInterface();
+                _goldenSpinInterface.SetState(GoldenSpinInterface);
+
                 sexPistolsUI = new SexPistolsUI();
                 sexPistolsUI.Activate();
                 _sexPistolsUI = new UserInterface();
                 _sexPistolsUI.SetState(sexPistolsUI);
-                _goldenSpinInterface.SetState(GoldenSpinInterface);
+
                 VoidBarUI = new VoidBar();
                 VoidBarUI.Activate();
                 _voidbarUI = new UserInterface();
                 _voidbarUI.SetState(VoidBarUI);
+
                 HamonSkillTreeUI = new HamonSkillTree();
                 HamonSkillTreeUI.Activate();
                 _hamonSkillTreeUI = new UserInterface();
                 _hamonSkillTreeUI.SetState(HamonSkillTreeUI);
+
                 UnitsUI = new BadCompanyUnitsUI();
                 UnitsUI.Activate();
                 _unitsUI = new UserInterface();
                 _unitsUI.SetState(UnitsUI);
+
                 ZombieSkillTreeUI = new ZombieSkillTree();
                 ZombieSkillTreeUI.Activate();
                 _zombieSkillTreeUI = new UserInterface();
@@ -184,6 +201,17 @@ namespace JoJoStands
 
         public override void Unload()
         {
+            SpecialHotKey = null;
+            PoseHotKey = null;
+            StandAutoModeHotKey = null;
+            StandOutHotKey = null;
+            customizableConfig = null;
+            standTier1List.Clear();
+            timestopImmune.Clear();
+            testStandPassword.Clear();
+            SoundsLoaded = false;
+            FanStandsLoaded = false;
+            JoJoStandsSounds = null;
             ToBeContinued.TBCArrowTexture = null;
             HamonBarState.hamonBarTexture = null;
             BulletCounter.bulletCounterTexture = null;
@@ -193,14 +221,6 @@ namespace JoJoStands
             SexPistolsUI.sexPistolsUITexture = null;
             VoidBar.VoidBarTexture = null;
             VoidBar.VoidBarBarTexture = null;
-            SpecialHotKey = null;
-            PoseHotKey = null;
-            StandAutoMode = null;
-            StandOut = null;
-            customizableConfig = null;
-            MyPlayer.standTier1List.Clear();
-            MyPlayer.stopImmune.Clear();
-            testStandPassword.Clear();
         }
 
         public override void AddRecipeGroups()
@@ -248,49 +268,37 @@ namespace JoJoStands
         public override void UpdateUI(GameTime gameTime)
         {
             if (HamonBarState.Visible)
-            {
                 _hamonbarInterface.Update(gameTime);
-            }
+
             if (ToBeContinued.Visible)
-            {
                 _tbcarrow.Update(gameTime);
-            }
+
             if (BulletCounter.Visible)
-            {
                 _bulletcounter.Update(gameTime);
-            }
+
             if (AerosmithRadar.Visible)
-            {
                 _aerosmithRadar.Update(gameTime);
-            }
+
             if (BetUI.Visible)
-            {
                 _betUI.Update(gameTime);
-            }
+
             if (GoldenSpinMeter.Visible)
-            {
                 _goldenSpinInterface.Update(gameTime);
-            }
+
             if (SexPistolsUI.Visible)
-            {
                 _sexPistolsUI.Update(gameTime);
-            }
+
             if (VoidBar.Visible)
-            {
                 _voidbarUI.Update(gameTime);
-            }
+
             if (HamonSkillTree.Visible)
-            {
                 _hamonSkillTreeUI.Update(gameTime);
-            }
+
             if (BadCompanyUnitsUI.Visible)
-            {
                 _unitsUI.Update(gameTime);
-            }
+
             if (ZombieSkillTree.Visible)
-            {
                 _zombieSkillTreeUI.Update(gameTime);
-            }
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)     //from ExampleMod's ExampleUI
@@ -301,49 +309,38 @@ namespace JoJoStands
         private bool DrawUI()       //also from Terraria Interface for Dummies
         {
             if (HamonBarState.Visible)
-            {
                 _hamonbarInterface.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (ToBeContinued.Visible)
-            {
                 _tbcarrow.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (BulletCounter.Visible)
-            {
                 _bulletcounter.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (AerosmithRadar.Visible)
-            {
                 _aerosmithRadar.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (BetUI.Visible)
-            {
                 _betUI.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (GoldenSpinMeter.Visible)
-            {
                 _goldenSpinInterface.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (SexPistolsUI.Visible)
-            {
                 _sexPistolsUI.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (VoidBar.Visible)
-            {
                 _voidbarUI.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (HamonSkillTree.Visible)
-            {
                 _hamonSkillTreeUI.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (BadCompanyUnitsUI.Visible)
-            {
                 _unitsUI.Draw(Main.spriteBatch, new GameTime());
-            }
+
             if (ZombieSkillTree.Visible)
-            {
                 _zombieSkillTreeUI.Draw(Main.spriteBatch, new GameTime());
-            }
+
             return true;
         }
 

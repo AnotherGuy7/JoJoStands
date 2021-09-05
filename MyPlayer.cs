@@ -124,26 +124,23 @@ namespace JoJoStands
 
         private int standKeyPressTimer = 0;
         private int spinSubtractionTimer = 0;
+        private int poseFrameCounter = 0;
         private int menacingFrames = 0;
         private int tbcCounter = 0;
 
         private bool forceChangedTusk = false;
-
 
         public bool ZoneViralMeteorite;
 
         public UIItemSlot StandSlot;
         public UIItemSlot StandDyeSlot;
 
-        public static List<int> stopImmune = new List<int>();
-        public static List<int> standTier1List = new List<int>();
+        public Vector2 VoidCamPosition;
+        public Vector2 standRemoteModeCameraPosition;
         public Vector2[] sexPistolsOffsets = new Vector2[6];
 
-        public Vector2 standRemoteModeCameraPosition;
-        public Vector2 VoidCamPosition;
-
-        public string poseSoundName = "";       //This is for JoJoStandsSounds
         public string standName = "";
+        public string poseSoundName = "";       //This is for JoJoStandsSounds
 
         private int amountOfSexPistolsPlaced = 0;
         private int sexPistolsClickTimer = 0;
@@ -170,7 +167,6 @@ namespace JoJoStands
 
         public override void ResetEffects()
         {
-            BulletCounter.Visible = false;
             standRemoteMode = false;
             wearingEpitaph = false;
             destroyAmuletEquipped = false;
@@ -186,6 +182,7 @@ namespace JoJoStands
             doobiesskullEquipped = false;
             blackUmbrellaEquipped = false;
             silverChariotShirtless = false;
+            BulletCounter.Visible = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -256,7 +253,7 @@ namespace JoJoStands
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (JoJoStands.StandAutoMode.JustPressed && !standAutoMode && standKeyPressTimer <= 0)
+            if (JoJoStands.StandAutoModeHotKey.JustPressed && !standAutoMode && standKeyPressTimer <= 0)
             {
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Auto");
@@ -266,7 +263,7 @@ namespace JoJoStands
                     Networking.ModNetHandler.playerSync.SendStandAutoMode(256, player.whoAmI, true, player.whoAmI);
                 }
             }
-            if (JoJoStands.StandAutoMode.JustPressed && standAutoMode && standKeyPressTimer <= 0)
+            if (JoJoStands.StandAutoModeHotKey.JustPressed && standAutoMode && standKeyPressTimer <= 0)
             {
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Manual");
@@ -288,7 +285,7 @@ namespace JoJoStands
                 }
                 poseMode = true;
             }
-            if (JoJoStands.StandOut.JustPressed && !standOut && standKeyPressTimer <= 0 && !player.HasBuff(mod.BuffType("Stolen")))
+            if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !player.HasBuff(mod.BuffType("Stolen")))
             {
                 standOut = true;
                 standKeyPressTimer += 30;
@@ -365,7 +362,7 @@ namespace JoJoStands
                     }
                 }
             }
-            if (JoJoStands.StandOut.JustPressed && standOut && standKeyPressTimer <= 0)
+            if (JoJoStands.StandOutHotKey.JustPressed && standOut && standKeyPressTimer <= 0)
             {
                 standOut = false;
                 standType = 0;
@@ -480,9 +477,9 @@ namespace JoJoStands
         {
             if (Main.rand.Next(0, 101) <= 20)
             {
-                int inheritanceStandChance = Main.rand.Next(0, standTier1List.Count);
+                int inheritanceStandChance = Main.rand.Next(0, JoJoStands.standTier1List.Count);
                 Item standTier1 = new Item();
-                standTier1.SetDefaults(standTier1List[inheritanceStandChance]);
+                standTier1.SetDefaults(JoJoStands.standTier1List[inheritanceStandChance]);
                 standTier1.stack = 1;
                 items.Add(standTier1);
             }
@@ -754,10 +751,14 @@ namespace JoJoStands
                 bool specialJustPressed = false;
                 if (!Main.dedServ)
                     specialJustPressed = JoJoStands.SpecialHotKey.JustPressed;
-                if (specialJustPressed)
-                {
+
+                bool secondSpecialJustPressed = false;
+                if (!Main.dedServ)
+                    secondSpecialJustPressed = JoJoStands.SecondSpecialHotKey.JustPressed;
+
+                if (secondSpecialJustPressed)
                     tuskActNumber += 1;
-                }
+
                 if (equippedTuskAct <= 3)
                 {
                     if (tuskActNumber > equippedTuskAct)
@@ -788,8 +789,8 @@ namespace JoJoStands
                 }
                 else
                 {
-                    if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct4Minion")] <= 0)
-                        Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct4Minion"), 0, 0f, Main.myPlayer);
+                    if (player.ownedProjectileCounts[mod.ProjectileType("TuskAct4Stand")] <= 0)
+                        Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TuskAct4Stand"), 0, 0f, Main.myPlayer);
                 }
                 if (tuskActNumber == 1)
                 {
@@ -802,6 +803,13 @@ namespace JoJoStands
                         shootVelocity *= 12f;       //multiply the angle by the speed to get the effect
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("Nail"), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 4f, player.whoAmI);
                     }
+                    if (Main.mouseRight && !player.channel && tuskShootCooldown <= 0)
+                    {
+                        tuskShootCooldown = 5;
+                        Projectile.NewProjectile(player.Center, Vector2.Zero, mod.ProjectileType("NailSlasher"), (int)(28 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 5f, player.whoAmI);
+                    }
+                    if (player.ownedProjectileCounts[mod.ProjectileType("NailSlasher")] > 0)
+                        tuskShootCooldown = 2;
                 }
                 if (tuskActNumber == 2)
                 {
@@ -815,10 +823,17 @@ namespace JoJoStands
                         shootVelocity *= 4f;
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 5f, player.whoAmI);
                     }
+                    if (Main.mouseRight && !player.channel && tuskShootCooldown <= 0)
+                    {
+                        tuskShootCooldown = 5;
+                        Projectile.NewProjectile(player.Center, Vector2.Zero, mod.ProjectileType("NailSlasher"), (int)(53 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 7f, player.whoAmI);
+                    }
+                    if (player.ownedProjectileCounts[mod.ProjectileType("NailSlasher")] > 0)
+                        tuskShootCooldown = 2;
                 }
                 if (tuskActNumber == 3)
                 {
-                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0)
+                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("WormholeNail")] <= 0 && player.ownedProjectileCounts[mod.ProjectileType("ArmWormholeNail")] <= 0)
                     {
                         player.channel = true;
                         tuskShootCooldown += 35 - standSpeedBoosts;
@@ -828,40 +843,52 @@ namespace JoJoStands
                         shootVelocity *= 4f;
                         Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * standDamageBoosts) + ((22 + equippedTuskAct - 3) * equippedTuskAct - 3), 6f, player.whoAmI);
                     }
-                    if (Main.mouseRight && player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
+                    if (Main.mouseRight && player.ownedProjectileCounts[mod.ProjectileType("ArmWormholeNail")] <= 0 && player.ownedProjectileCounts[mod.ProjectileType("WormholeNail")] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
+                    {
+                        tuskShootCooldown += 60 - standSpeedBoosts;
+                        Main.PlaySound(SoundID.Item78);
+                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        shootVelocity.Normalize();
+                        shootVelocity *= 1.1f;
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ArmWormholeNail"), 80, 2f, player.whoAmI);
+                    }
+                    if (specialJustPressed && player.ownedProjectileCounts[mod.ProjectileType("WormholeNail")] <= 0 && player.ownedProjectileCounts[mod.ProjectileType("ArmWormholeNail")] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
                     {
                         tuskShootCooldown += 120 - standSpeedBoosts;
                         Main.PlaySound(SoundID.Item78);
                         Vector2 shootVelocity = Main.MouseWorld - player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 5f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ShadowNail"), 124, 8f, player.whoAmI);
+                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("WormholeNail"), 124, 8f, player.whoAmI);
                     }
                 }
                 if (tuskActNumber == 4)
                 {
-                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
+                    if (standAutoMode)
                     {
-                        player.channel = true;
-                        tuskShootCooldown += 15 - standSpeedBoosts;
-                        Main.PlaySound(SoundID.Item67);
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 4f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(305 * standDamageBoosts), 7f, player.whoAmI);
-                    }
-                    if (Main.mouseRight && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
-                    {
-                        tuskShootCooldown += 120 - standSpeedBoosts;
-                        Main.PlaySound(SoundID.Item78);
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
-                        shootVelocity.Normalize();
-                        shootVelocity *= 16f;
-                        Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, player.whoAmI);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(10));
+                        if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
+                        {
+                            player.channel = true;
+                            tuskShootCooldown += 15 - standSpeedBoosts;
+                            Main.PlaySound(SoundID.Item67);
+                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            shootVelocity.Normalize();
+                            shootVelocity *= 4f;
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(305 * standDamageBoosts), 7f, player.whoAmI);
+                        }
+                        if (Main.mouseRight && tuskShootCooldown <= 0 && !player.HasBuff(mod.BuffType("AbilityCooldown")))
+                        {
+                            tuskShootCooldown += 120 - standSpeedBoosts;
+                            Main.PlaySound(2, (int)player.Center.X, (int)player.Center.Y, 67, ModSoundsVolume, -1.2f);
+                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            shootVelocity.Normalize();
+                            shootVelocity *= 16f;
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("ReqNail"), 512, 0f, player.whoAmI);
+                            player.AddBuff(mod.BuffType("AbilityCooldown"), AbilityCooldownTime(10));
+                        }
                     }
                 }
-                if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] > 0)
+                if (player.ownedProjectileCounts[mod.ProjectileType("WormholeNail")] > 0)
                 {
                     tuskShootCooldown = 30;
                 }
@@ -902,7 +929,7 @@ namespace JoJoStands
                             Vector2 shootVelocity = Main.MouseWorld - player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(17 * standDamageBoosts), 4f, player.whoAmI);
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(38 * standDamageBoosts), 4f, player.whoAmI);
                         }
                     }
                     if (hermitPurpleTier == 2)
@@ -913,7 +940,7 @@ namespace JoJoStands
                             Vector2 shootVelocity = Main.MouseWorld - player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(42 * standDamageBoosts), 6f, player.whoAmI);
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(81 * standDamageBoosts), 6f, player.whoAmI);
                         }
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
                         {
@@ -921,7 +948,7 @@ namespace JoJoStands
                             Vector2 shootVelocity = Main.MouseWorld - player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(33 * standDamageBoosts), 0f, player.whoAmI);
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(78 * standDamageBoosts), 0f, player.whoAmI);
                         }
                     }
                     if (hermitPurpleTier == 3)
@@ -932,7 +959,7 @@ namespace JoJoStands
                             Vector2 shootVelocity = Main.MouseWorld - player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(59 * standDamageBoosts), 7f, player.whoAmI);
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(157 * standDamageBoosts), 7f, player.whoAmI);
                         }
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
                         {
@@ -940,7 +967,7 @@ namespace JoJoStands
                             Vector2 shootVelocity = Main.MouseWorld - player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(47 * standDamageBoosts), 0f, player.whoAmI);
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(149 * standDamageBoosts), 0f, player.whoAmI);
                         }
                     }
                     if (hermitPurpleTier == 4)
@@ -951,7 +978,7 @@ namespace JoJoStands
                             Vector2 shootVelocity = Main.MouseWorld - player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(81 * standDamageBoosts), 8f, player.whoAmI);
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleWhip"), (int)(202 * standDamageBoosts), 8f, player.whoAmI);
                         }
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleGrab")] == 0)
                         {
@@ -959,7 +986,7 @@ namespace JoJoStands
                             Vector2 shootVelocity = Main.MouseWorld - player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
-                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(72 * standDamageBoosts), 0f, player.whoAmI);
+                            Projectile.NewProjectile(player.Center, shootVelocity, mod.ProjectileType("HermitPurpleGrab"), (int)(191 * standDamageBoosts), 0f, player.whoAmI);
                         }
                     }
                     if (player.controlHook && player.miscEquips[4].IsAir && player.ownedProjectileCounts[mod.ProjectileType("HermitPurpleHook")] == 0)       //player.miscEquips[4] is the hook slot
@@ -1345,7 +1372,7 @@ namespace JoJoStands
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
-            if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] > 0)
+            if (player.ownedProjectileCounts[mod.ProjectileType("WormholeNail")] > 0)
             {
                 return false;
             }
@@ -1443,11 +1470,15 @@ namespace JoJoStands
                     drawX += 2;
                 }
 
-                if (mPlayer.poseDuration % 8 == 0)
-                    mPlayer.menacingFrames += 1;
-                if (mPlayer.menacingFrames >= 6)
+                mPlayer.poseFrameCounter++;
+                if (mPlayer.poseFrameCounter >= 7)
                 {
-                    mPlayer.menacingFrames = 0;
+                    mPlayer.menacingFrames += 1;
+                    mPlayer.poseFrameCounter = 0;
+                    if (mPlayer.menacingFrames >= 6)
+                    {
+                        mPlayer.menacingFrames = 0;
+                    }
                 }
 
                 int frameHeight = texture.Height / 6;
@@ -1835,7 +1866,7 @@ namespace JoJoStands
                 PhantomLeggingsGlowmask.visible = phantomLeggingsEquipped;
                 BlackUmbrellaLayer.visible = blackUmbrellaEquipped;
 
-                if (player.ownedProjectileCounts[mod.ProjectileType("ShadowNail")] != 0)
+                if (player.ownedProjectileCounts[mod.ProjectileType("WormholeNail")] != 0)
                 {
                     for (int i = 0; i < layers.Count; i++)
                     {

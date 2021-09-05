@@ -21,7 +21,7 @@ namespace JoJoStands.Buffs.ItemBuff
             {
                 if (mPlayer.piercedTimer <= 0 || player.buffTime[buffIndex] <= 2)
                 {
-                    player.QuickSpawnItem(Main.rand.Next(MyPlayer.standTier1List.ToArray()));
+                    player.QuickSpawnItem(Main.rand.Next(JoJoStands.standTier1List.ToArray()));
                     mPlayer.piercedTimer = 36000;
                     player.ClearBuff(mod.BuffType(Name));
                 }
