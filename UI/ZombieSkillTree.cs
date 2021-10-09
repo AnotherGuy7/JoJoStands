@@ -291,7 +291,7 @@ namespace JoJoStands.UI
             }
             else if (zombiePlayer.vampireSkillPointsAvailable <= 0)
             {
-                Main.NewText("You don't have any skill points! (Get more by [details])", Color.Red);
+                Main.NewText("You don't have any skill points! (Get more by killing new types of enemies multiple times!)", Color.Red);
             }
             else if (zombiePlayer.learnedZombieSkills[affectedSkillSlotIndexes[buttonIndex]])
             {

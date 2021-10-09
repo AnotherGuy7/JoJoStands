@@ -71,7 +71,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !player.HasBuff(mod.BuffType("SkippingTime")))
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !secondaryAbilityFrames && !player.HasBuff(mod.BuffType("SkippingTime")))
                 {
                     HandleDrawOffsets();
                     attackFrames = true;

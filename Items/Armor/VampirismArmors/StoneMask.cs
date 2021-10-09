@@ -17,7 +17,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors
         {
             item.width = 18;
             item.height = 18;
-            item.value = Item.buyPrice(1, 0, 0, 0);
+            item.value = Item.buyPrice(1);
             item.rare = 8;
             item.defense = 12;
         }

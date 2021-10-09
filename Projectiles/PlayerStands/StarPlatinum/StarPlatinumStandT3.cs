@@ -49,7 +49,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             {
                 secondaryAbilityFrames = player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] != 0;
 
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !flickFrames && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
                 {
                     Punch();
                 }

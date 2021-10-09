@@ -13,7 +13,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tusk (ACT 4)");
-            Tooltip.SetDefault("Use the infinite energy inside you... \nSpecial: Switch to previous acts!");
+            Tooltip.SetDefault("Use the infinite energy inside you... \nWhile in Manual Mode: Left-click to deliver a flurry of punches with TA4.\nWhile in Auto Mode: Hold left-click to shoot and control a spinning nail and right-click to shoot an infinite spin nail!\nSpecial: Switch to previous acts!");
         }
 
         public override void SetDefaults()

@@ -13,7 +13,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tusk (ACT 2)");
-            Tooltip.SetDefault("Shoot controllable spins at enemies!\nSpecial: Switch to previous acts!");
+            Tooltip.SetDefault("Hold left-click to shoot and control a spinning nail and right-click to spin your nails in front of you to use as a melee weapon!\nSecond Special: Switch to previous acts!");
         }
 
         public override void SetDefaults()

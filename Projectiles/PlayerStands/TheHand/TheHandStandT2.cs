@@ -50,7 +50,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !secondaryAbility && !scrapeFrames)
                 {
                     Punch();
                 }

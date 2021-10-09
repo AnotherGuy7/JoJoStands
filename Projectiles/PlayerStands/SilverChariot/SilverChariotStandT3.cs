@@ -45,7 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             mPlayer.silverChariotShirtless = Shirtless;
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && player.whoAmI == Main.myPlayer && !secondaryAbilityFrames)
                 {
                     Punch(punchMovementSpeed);
                 }

@@ -54,7 +54,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             remoteControlFrames = remoteControlled;
             if (!mPlayer.standAutoMode && !remoteControlled)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
                 {
                     Punch();
                 }

@@ -35,9 +35,12 @@ namespace JoJoStands.Items.Vampire
         public float sunburnMoveSpeedMultiplier = 0.5f;
 
         public bool wearingDiosScarf = false;
+        public bool wearingAstoRemainsSet = false;
 
-        public int[] enemiesKilled = new int[500];
+        public int[] enemyTypesKilled = new int[500];
         public int vampireSkillPointsAvailable = 1;
+        public int totalVampireSkillPointsEarned = 0;
+        public int vampiricLevel = 0;
 
         public const int ExpectedAmountOfZombieSkills = 6;
         public const int UndeadConstitution = 0;
@@ -58,13 +61,10 @@ namespace JoJoStands.Items.Vampire
         public override void OnEnterWorld(Player player)
         {
             if (learnedZombieSkills.Count != ExpectedAmountOfZombieSkills)
-            {
                 RebuildZombieAbilitiesDictionaries();
-            }
-            if (enemiesKilled.Length == 0)
-            {
-                enemiesKilled = new int[Main.maxNPCTypes];
-            }
+
+            if (enemyTypesKilled.Length == 0)
+                enemyTypesKilled = new int[Main.maxNPCTypes];
         }
 
         private void ResetVariables()
@@ -81,7 +81,7 @@ namespace JoJoStands.Items.Vampire
             enemyIgnoreItemInUse = false;
             stopOnHitNPC = false;
             noSunBurning = false;
-            vampiricDamageMultiplier = 1f;
+            vampiricDamageMultiplier = 1f + (1.4f * vampiricLevel);
             vampiricKnockbackMultiplier = 1f;
             lifeStealMultiplier = 1f;
             sunburnRegenTimeMultiplier = 0f;
@@ -89,6 +89,7 @@ namespace JoJoStands.Items.Vampire
             sunburnMoveSpeedMultiplier = 0.5f;
 
             wearingDiosScarf = false;
+            wearingAstoRemainsSet = false;
         }
 
         public override void PreUpdate()
@@ -244,10 +245,16 @@ namespace JoJoStands.Items.Vampire
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
         {
             enemyToIgnoreDamageFromIndex = -1;
+
+            if (player.HasBuff(mod.BuffType("KnifeAmalgamation")))
+            {
+                npc.StrikeNPC(29, 2f, -npc.direction);
+            }
         }
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
         {
+            bool itemIsVampireItem = player.HeldItem.modItem is VampireDamageClass;
             if (wearingDiosScarf)
             {
                 if (npc.TypeName.Contains("Zombie") || npc.TypeName.Contains("Undead") || npc.TypeName.Contains("Skeleton") || npc.type == NPCID.Zombie)
@@ -255,9 +262,14 @@ namespace JoJoStands.Items.Vampire
                     damage = (int)(damage * 0.85f);
                 }
             }
-            if (player.HasBuff(mod.BuffType("KnifeAmalgamation")))
+
+            if (wearingAstoRemainsSet && Main.rand.Next(0, 101) <= 20 && itemIsVampireItem)
             {
-                npc.StrikeNPC(29, 2f, -npc.direction);
+                damage = 0;
+                crit = false;
+                player.velocity.X = 6f * -player.direction;
+                player.immuneTime += 40;
+                player.immune = true;
             }
         }
 
@@ -322,24 +334,28 @@ namespace JoJoStands.Items.Vampire
             return new TagCompound
             {
                 { "vampireSkillPointsAvailable", vampireSkillPointsAvailable },
+                { "totalVampireSkillPointsEarned", totalVampireSkillPointsEarned },
+                { "vampiricLevel", vampiricLevel },
                 { "learnedAnyZombieAbility", learnedAnyZombieAbility },
                 { "zombieSkillKeys", learnedZombieSkills.Keys.ToList() },
                 { "zombieSkillValues", learnedZombieSkills.Values.ToList() },
                 { "zombieLevelKeys", zombieSkillLevels.Keys.ToList() },
                 { "zombieLevelValues", zombieSkillLevels.Values.ToList() },
-                { "enemiesKilled", enemiesKilled }
+                { "enemyTypesKilled", enemyTypesKilled }
             };
         }
 
         public override void Load(TagCompound tag)
         {
             vampireSkillPointsAvailable = tag.GetInt("vampireSkillPointsAvailable");
+            totalVampireSkillPointsEarned = tag.GetInt("totalVampireSkillPointsEarned");
+            vampiricLevel = tag.GetInt("vampiricLevel");
             learnedAnyZombieAbility = tag.GetBool("learnedAnyZombieAbility");
             IList<int> zombieSkillKeys = tag.GetList<int>("zombieSkillKeys");
             IList<bool> zombieSkillValues = tag.GetList<bool>("zombieSkillValues");
             IList<int> zombieLevelKeys = tag.GetList<int>("zombieLevelKeys");
             IList<int> zombieLevelValues = tag.GetList<int>("zombieLevelValues");
-            enemiesKilled = tag.GetIntArray("enemiesKilled");
+            enemyTypesKilled = tag.GetIntArray("enemyTypesKilled");
 
             learnedZombieSkills = zombieSkillKeys.Zip(zombieSkillValues, (key, value) => new { Key = key, Value = value }).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);
             zombieSkillLevels = zombieLevelKeys.Zip(zombieLevelValues, (key, value) => new { Key = key, Value = value }).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);

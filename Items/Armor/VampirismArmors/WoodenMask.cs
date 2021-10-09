@@ -31,9 +31,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors
         public override void HoldItem(Player player)
         {
             if (Main.mouseRight && player.whoAmI == Main.myPlayer && !ZombieSkillTree.Visible)
-            {
                 ZombieSkillTree.OpenZombieSkillTree();
-            }
         }
 
         public override void AddRecipes()

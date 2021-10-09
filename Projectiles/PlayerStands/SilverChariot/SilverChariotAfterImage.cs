@@ -65,7 +65,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
+                if (Main.mouseLeft && player.whoAmI == Main.myPlayer && !secondaryAbilityFrames)
                 {
                     Punch(7.5f);
                 }

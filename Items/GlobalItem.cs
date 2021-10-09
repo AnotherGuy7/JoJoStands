@@ -21,7 +21,11 @@ namespace JoJoStands.Items
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            VampirePlayer vPlayer = Main.player[item.owner].GetModPlayer<VampirePlayer>();
+            Player player = Main.player[item.owner];
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            if (player.whoAmI != Main.myPlayer || !vPlayer.learnedAnyZombieAbility)
+                return;
+
             if ((item.type == ItemID.DirtBlock || item.type == ItemID.MudBlock) && vPlayer.learnedZombieSkills[VampirePlayer.ProtectiveFilm])
             {
                 TooltipLine secondaryUseTooltip = new TooltipLine(JoJoStands.Instance, "Secondary Use", "Right-click to consume 5 of this item and apply a protective film around yourself.");

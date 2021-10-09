@@ -158,6 +158,11 @@ namespace JoJoStands.NPCs
                 shop.item[nextSlot].SetDefaults(mod.ItemType("Sunscreen"));
                 nextSlot++;
             }
+            if (type == NPCID.TravellingMerchant && ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss))
+            {
+                shop.item[nextSlot].SetDefaults(mod.ItemType("ViralPearlRing"));
+                nextSlot++;
+            }
             if (type == NPCID.Painter)
             {
                 shop.item[nextSlot].SetDefaults(mod.ItemType("IWouldntLose"));
@@ -169,11 +174,6 @@ namespace JoJoStands.NPCs
                 shop.item[nextSlot].SetDefaults(mod.ItemType("ShotintheDark"));
                 nextSlot++;
                 shop.item[nextSlot].SetDefaults(mod.ItemType("BloodForTheKing"));
-                nextSlot++;
-            }
-            if (type == NPCID.TravellingMerchant && ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss))
-            {
-                shop.item[nextSlot].SetDefaults(mod.ItemType("ViralPearlRing"));
                 nextSlot++;
             }
         }
@@ -304,9 +304,9 @@ namespace JoJoStands.NPCs
                     }
                     if (!npc.noGravity)
                     {
-                        int num17 = (int)((npc.position.X + (float)(npc.width / 2) + (float)(15 * npc.direction)) / 16f);
-                        int num18 = (int)((npc.position.Y + (float)npc.height - 16f) / 16f);
-                        if (WorldGen.SolidTile((int)(npc.Center.X / 16f) + npc.direction, (int)(npc.Center.Y / 16f)) && !Collision.SolidTilesVersatile(num17 - npc.direction * 2, num17 - npc.direction, num18 - 5, num18 - 1) && !Collision.SolidTiles(num17, num17, num18 - 5, num18 - 3) && npc.ai[1] == 0f)
+                        int tilesInFront = (int)((npc.Center.X + (float)(15 * npc.direction)) / 16f);
+                        int tilesUnder = (int)((npc.position.Y + (float)npc.height - 16f) / 16f);
+                        if (WorldGen.SolidTile((int)(npc.Center.X / 16f) + npc.direction, (int)(npc.Center.Y / 16f)) && !Collision.SolidTilesVersatile(tilesInFront - npc.direction * 2, tilesInFront - npc.direction, tilesUnder - 5, tilesUnder - 1) && !Collision.SolidTiles(tilesInFront, tilesInFront, tilesUnder - 5, tilesUnder - 3) && npc.ai[1] == 0f)
                         {
                             npc.velocity.Y = -6f;
                             npc.netUpdate = true;
@@ -400,11 +400,11 @@ namespace JoJoStands.NPCs
                 {
                     if (npc.immortal || npc.hide)
                     {
-                        npc.StrikeNPCNoInteraction(999999999, 0f, 1, false, true, false);
+                        npc.StrikeNPCNoInteraction(999999999, 0f, 1, noEffect: true);
                     }
                     if (!npc.immortal)
                     {
-                        npc.StrikeNPCNoInteraction(npc.lifeMax + 10, 0f, 1, false, true, false);
+                        npc.StrikeNPCNoInteraction(npc.lifeMax + 10, 0f, 1, noEffect: true);
                     }
                     deathTimer = 0;
                 }
@@ -483,11 +483,17 @@ namespace JoJoStands.NPCs
             {
                 Player player = Main.player[vampireUserLastHitIndex];
                 VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-                vPlayer.enemiesKilled[npc.type] += 1;
-                if ((!npc.boss && vPlayer.enemiesKilled[npc.type] == 10) || (npc.boss && vPlayer.enemiesKilled[npc.type] == 0))
+                vPlayer.enemyTypesKilled[npc.type] += 1;
+                if ((!npc.boss && vPlayer.enemyTypesKilled[npc.type] == 10) || (npc.boss && vPlayer.enemyTypesKilled[npc.type] == 0))
                 {
                     vPlayer.vampireSkillPointsAvailable += 1;
+                    vPlayer.totalVampireSkillPointsEarned += 1;
                     Main.NewText("You have obtained another Vampiric Skill Point!");
+                    if (vPlayer.totalVampireSkillPointsEarned % 5 == 0)
+                    {
+                        vPlayer.vampiricLevel += 1;
+                    }
+
                 }
             }
             return true;
