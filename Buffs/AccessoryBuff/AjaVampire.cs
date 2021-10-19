@@ -18,6 +18,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
  
         public override void Update(Player player, ref int buffIndex)
         {
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.allDamage *= 2f;
             player.moveSpeed *= 2f;
             player.jumpBoost = true;
@@ -28,7 +29,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.arrowDamage *= 2f;
             player.statLifeMax2 += 100;
             player.buffTime[buffIndex] = 2;
-            player.GetModPlayer<VampirePlayer>().perfectBeing = true;
+            vPlayer.perfectBeing = true;
+            vPlayer.anyMaskForm = true;
 
             if (player.ZoneSkyHeight && MyPlayer.SecretReferences)
             {

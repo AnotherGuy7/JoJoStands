@@ -19,13 +19,15 @@ namespace JoJoStands.Buffs.AccessoryBuff
  
         public override void Update(Player player, ref int buffIndex)
         {
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.allDamage *= 1.1f;
             player.moveSpeed *= 1.2f;
             player.meleeSpeed *= 1.1f;
             player.jumpBoost = true;
             player.manaRegen += 2;
             player.statDefense = (int)(player.statDefense / 0.75);
-            player.GetModPlayer<VampirePlayer>().zombie = true;
+            vPlayer.zombie = true;
+            vPlayer.anyMaskForm = true;
             player.buffTime[buffIndex] = 2;
         }
 

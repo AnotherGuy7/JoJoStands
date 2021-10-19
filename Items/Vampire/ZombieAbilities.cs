@@ -153,6 +153,9 @@ namespace JoJoStands.Items.Vampire
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
 			VampirePlayer vPlayer = Main.player[item.owner].GetModPlayer<VampirePlayer>();
+			if (!vPlayer.learnedAnyZombieAbility)
+				return;
+
 			if (vPlayer.learnedZombieSkills[VampirePlayer.BloodSuck])
 			{
 				TooltipLine secondaryUseTooltip = new TooltipLine(JoJoStands.Instance, "Secondary Use", "Hold right-click to grab an enemy and suck their blood!");

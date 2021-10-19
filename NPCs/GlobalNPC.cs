@@ -22,6 +22,7 @@ namespace JoJoStands.NPCs
         public bool sunTagged = false;
         public bool sunShackled = false;
         public bool stunnedByBindingEmerald = false;
+        public bool removeZombieHighlightOnHit = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -547,6 +548,9 @@ namespace JoJoStands.NPCs
 
             if (zombieHightlightTimer > 0)
                 drawColor = Color.Orange;
+
+            if (npc.HasBuff(mod.BuffType("Lacerated")) && Main.player[Main.myPlayer].GetModPlayer<VampirePlayer>().anyMaskForm)
+                drawColor = Color.OrangeRed;
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
@@ -636,7 +640,8 @@ namespace JoJoStands.NPCs
                     npc.AddBuff(mod.BuffType("Locked"), 20 * 60);
                 }
             }
-            zombieHightlightTimer = 0;
+            if (removeZombieHighlightOnHit)
+                zombieHightlightTimer = 0;
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)

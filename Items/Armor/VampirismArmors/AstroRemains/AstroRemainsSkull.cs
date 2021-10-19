@@ -11,7 +11,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A deer skull with a surprisingly sturdy exterior.\n");
+            Tooltip.SetDefault("A deer skull with a surprisingly sturdy exterior.");
         }
 
         public override void SetDefaults()
@@ -33,7 +33,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.setBonus = "80% Sunburn Damage Reduction\nWhile using Vampiric Abilities: 20% to dodge incoming attacks";
             vPlayer.sunburnDamageMultiplier *= 0.2f;
-            vPlayer.wearingAstoRemainsSet = true;
+            vPlayer.wearingAstroRemainsSet = true;
         }
 
         public override void AddRecipes()

@@ -35,7 +35,8 @@ namespace JoJoStands.Items.Vampire
         public float sunburnMoveSpeedMultiplier = 0.5f;
 
         public bool wearingDiosScarf = false;
-        public bool wearingAstoRemainsSet = false;
+        public bool wearingAstroRemainsSet = false;
+        public bool wearingVisceralChestplate = false;
 
         public int[] enemyTypesKilled = new int[500];
         public int vampireSkillPointsAvailable = 1;
@@ -89,7 +90,7 @@ namespace JoJoStands.Items.Vampire
             sunburnMoveSpeedMultiplier = 0.5f;
 
             wearingDiosScarf = false;
-            wearingAstoRemainsSet = false;
+            wearingAstroRemainsSet = false;
         }
 
         public override void PreUpdate()
@@ -176,6 +177,7 @@ namespace JoJoStands.Items.Vampire
                             if (npc.active && !npc.immortal && !npc.hide && npc.life == npc.lifeMax)
                             {
                                 npc.GetGlobalNPC<JoJoGlobalNPC>().zombieHightlightTimer += 5 * 60;
+                                npc.GetGlobalNPC<JoJoGlobalNPC>().removeZombieHighlightOnHit = true;
                             }
                         }
                         enemySearchTimer = 0;
@@ -184,11 +186,19 @@ namespace JoJoStands.Items.Vampire
             }
         }
 
+        /// <summary>
+        /// Steals health from a target.
+        /// </summary>
+        /// <param name="target">The target to steal health from. No operations are done to this entity.</param>
+        /// <param name="damage">The amount of damage that was originally done. The amount of health that will be taken will be the damage dealt / 4.</param>
         public void StealHealthFrom(NPC target, int damage)
         {
             if (target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
                 int newDamage = damage / 4;
+                if (target.HasBuff(mod.BuffType("Lacerated")))
+                    newDamage *= 2;
+
                 int calculatedLifeSteal = (int)((newDamage * lifeStealMultiplier) * (1f - lifeStealPercentLoss));
                 if (calculatedLifeSteal < player.statLifeMax - player.statLife)
                 {
@@ -201,6 +211,45 @@ namespace JoJoStands.Items.Vampire
                     player.statLife += (int)(calculatedLifeSteal);
                     player.HealEffect(calculatedLifeSteal, true);
                 }
+
+                if (lifeStealPercentLoss < 0.97f)
+                {
+                    lifeStealPercentLoss += 0.03f;
+                }
+                lifeStealPercentLossTimer = 300;
+            }
+        }
+
+        /// <summary>
+        /// Steals health from the passed in NPC. Has more customization than StealHealthFrom(NPC target, int damage).
+        /// </summary>
+        /// <param name="target">The target to steal health from.</param>
+        /// <param name="trueDamage">The damage that will be passed in before any operations.</param>
+        /// <param name="knockback">The knockback the npc will take if strikeNPC is true.</param>
+        /// <param name="dividend">The number the damage will be divided by to get the amount of health to steal.</param>
+        /// <param name="strikeNPC">Whether or not the target will be hit with the health steal damage value</param>
+        public void StealHealthFrom(NPC target, int trueDamage, float knockback, int dividend, bool strikeNPC = false)
+        {
+            if (target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
+            {
+                int newDamage = trueDamage / dividend;
+                if (target.HasBuff(mod.BuffType("Lacerated")))
+                    newDamage *= 2;
+
+                int calculatedLifeSteal = (int)((newDamage * lifeStealMultiplier) * (1f - lifeStealPercentLoss));
+                if (calculatedLifeSteal < player.statLifeMax - player.statLife)
+                {
+                    player.statLife += calculatedLifeSteal;
+                    player.HealEffect(calculatedLifeSteal, true);
+                }
+                if (calculatedLifeSteal >= player.statLifeMax - player.statLife)
+                {
+                    calculatedLifeSteal = player.statLifeMax - player.statLife;
+                    player.statLife += (int)(calculatedLifeSteal);
+                    player.HealEffect(calculatedLifeSteal, true);
+                }
+                if (strikeNPC)
+                    target.StrikeNPC(newDamage, knockback, player.direction);
 
                 if (lifeStealPercentLoss < 0.97f)
                 {
@@ -250,6 +299,10 @@ namespace JoJoStands.Items.Vampire
             {
                 npc.StrikeNPC(29, 2f, -npc.direction);
             }
+            if (wearingVisceralChestplate)
+            {
+                npc.AddBuff(mod.BuffType("Lacerated"), 15 * 60);
+            }
         }
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
@@ -263,7 +316,7 @@ namespace JoJoStands.Items.Vampire
                 }
             }
 
-            if (wearingAstoRemainsSet && Main.rand.Next(0, 101) <= 20 && itemIsVampireItem)
+            if (wearingAstroRemainsSet && Main.rand.Next(0, 101) <= 20 && itemIsVampireItem)
             {
                 damage = 0;
                 crit = false;
