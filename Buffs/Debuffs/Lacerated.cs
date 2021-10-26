@@ -38,16 +38,18 @@ namespace JoJoStands.Buffs.Debuffs
             if (Main.rand.Next(0, 2 + 1) == 0)
                 Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f, 0, Scale: 2f);
 
-            int lifeLossPerSecond = npc.lifeMax / 8;
+            int lifeLossPerSecond = npc.lifeMax / 56;
             if (Main.hardMode)
-                if (lifeLossPerSecond >= 180)
-                    lifeLossPerSecond = 180;
+                if (lifeLossPerSecond >= 51)
+                    lifeLossPerSecond = 51;
             else
-                if (lifeLossPerSecond >= 80)
-                    lifeLossPerSecond = 80;
+                if (lifeLossPerSecond >= 16)
+                    lifeLossPerSecond = 16;
+            if (npc.boss)
+                lifeLossPerSecond /= 2;
 
-            npc.lifeRegenExpectedLossPerSecond = lifeLossPerSecond;
-            npc.lifeRegen -= lifeLossPerSecond * 2;
+            npc.lifeRegenExpectedLossPerSecond = lifeLossPerSecond / 12;
+            npc.lifeRegen -= lifeLossPerSecond;
         }
     }
 }

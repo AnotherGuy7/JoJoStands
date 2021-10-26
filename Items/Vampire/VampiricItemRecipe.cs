@@ -16,7 +16,8 @@ namespace JoJoStands.Items.Vampire
         {
             bool result = false;
 
-            VampirePlayer vPlayer = Main.LocalPlayer.GetModPlayer<VampirePlayer>();
+            Player player = Main.LocalPlayer;
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (recipeItemType == mod.ItemType("ZombieAbilities") && vPlayer.zombie)
             {
                 result = true;
@@ -29,7 +30,11 @@ namespace JoJoStands.Items.Vampire
             {
                 result = true;
             }
-            else if (recipeItemType == mod.ItemType("KnifeWielder") && vPlayer.zombie && vPlayer.learnedZombieSkills[VampirePlayer.KnifeWielder])
+            else if (recipeItemType == mod.ItemType("KnifeWielder") && vPlayer.zombie && vPlayer.HasSkill(player, VampirePlayer.KnifeWielder))
+            {
+                result = true;
+            }
+            else if (recipeItemType == mod.ItemType("EntrailAbilities") && vPlayer.zombie && vPlayer.HasSkill(player, VampirePlayer.EntrailAbilities))
             {
                 result = true;
             }

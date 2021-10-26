@@ -61,6 +61,9 @@ namespace JoJoStands.Projectiles
 
             vPlayer.StealHealthFrom(target, damage);
             target.GetGlobalNPC<JoJoGlobalNPC>().vampireUserLastHitIndex = player.whoAmI;
+            if (vPlayer.HasSkill(player, VampirePlayer.SavageInstincts))
+                if (Main.rand.Next(0, 100) <= vPlayer.lacerationChance)
+                    target.AddBuff(mod.BuffType("Lacerated"), (vPlayer.GetSkillLevel(player, VampirePlayer.SavageInstincts) * 4) * 60);
         }
     }
 }

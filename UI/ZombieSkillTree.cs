@@ -24,13 +24,13 @@ namespace JoJoStands.UI
         private UIImageButton zombieSkillTreeXButton;
         private const int MaxUIPages = 2;
         private Texture2D[] skillTreeTextures = new Texture2D[MaxUIPages];
-        private bool[] pageLockBosses = new bool[MaxUIPages] { NPC.downedBoss1, NPC.downedBoss2 };
+        private bool[] pageLockBosses = new bool[MaxUIPages] { NPC.downedBoss1, NPC.downedBoss1 };
         private string[] pageLockMessages = new string[MaxUIPages] { "The next page is unlocked Post-Eye of Cthulu.", "The next page is unlocked Post-Evil Boss." };
 
 
         private int currentShownPage = 1;
         private const float UIScale = 1f;
-        private const int MaxButtonsPerPage = 7;
+        private const int MaxButtonsPerPage = 10;
         private AdjustableButton[] zombieSkillIcons = new AdjustableButton[MaxButtonsPerPage];
         private Texture2D[] zombieSkillIconImages = new Texture2D[MaxButtonsPerPage];
         private string[] zombieSkillIconTooltips = new string[MaxButtonsPerPage];
@@ -78,7 +78,7 @@ namespace JoJoStands.UI
             }
             zombieSkillPointsText.SetText("SP: " + zombiePlayer.vampireSkillPointsAvailable);
 
-            /*KeyboardState keyboardState = Keyboard.GetState();     //Code for finding button positions (Just control it to where you want it and remember the coordiantes)
+           /*KeyboardState keyboardState = Keyboard.GetState();     //Code for finding button positions (Just control it to where you want it and remember the coordiantes)
 
              if (keyboardState.IsKeyDown(Keys.Up))
              {
@@ -96,7 +96,6 @@ namespace JoJoStands.UI
              {
                  zombieSkillIcons[1].Left.Pixels += 1;
              }
-             Main.NewText("X: " + zombieSkillIcons[1].Left.Pixels + "; Y:" + zombieSkillIcons[1].Top.Pixels);
              Main.NewText("X: " + zombieSkillIcons[1].Left.Pixels + "; Y:" + zombieSkillIcons[1].Top.Pixels);*/
 
             base.Update(gameTime);
@@ -140,7 +139,7 @@ namespace JoJoStands.UI
             ZombieSkillTreePanel.Append(zombieSkillTreeXButton);
 
             skillTreeTextures[0] = ModContent.GetTexture("JoJoStands/UI/ZombieSkillTree_Page1");
-            //skillTreeTextures[1] = ModContent.GetTexture("JoJoStands/UI/ZombieSkillTree_Page2");
+            skillTreeTextures[1] = ModContent.GetTexture("JoJoStands/UI/ZombieSkillTree_Page2");
             //skillTreeTextures[2] = ModContent.GetTexture("JoJoStands/UI/ZombieSkillTree_Page3");
             unknownSkillTexture = ModContent.GetTexture("JoJoStands/Extras/VampireIcon_Unknown");
 
@@ -207,14 +206,11 @@ namespace JoJoStands.UI
 
             for (int b = 0; b < MaxButtonsPerPage; b++)
             {
+                zombieSkillIcons[b].focusedOn = false;
                 if (listeningElement == zombieSkillIcons[b])
                 {
                     buttonIndex = b;
                     buttonClickedOn = zombieSkillIcons[b];
-                }
-                if (zombieSkillIcons[b].focusedOn)
-                {
-                    zombieSkillIcons[b].focusedOn = false;
                 }
             }
 
@@ -380,15 +376,109 @@ namespace JoJoStands.UI
                     }
 
                     SetElementPosition(zombieSkillIcons[5], new Vector2(43f, 79f));
-                    zombieSkillIconImages[5] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_5");
+                    zombieSkillIconImages[5] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_6");
                     zombieSkillIcons[5].SetImage(zombieSkillIconImages[5]);
-                    zombieSkillIconTooltips[5] = "The use of knives as a weapon shines out to you.\nAllows you to use the knife wielder abilities. (Will become freely craftable once this skill is unlocked)";
-                    affectedSkillSlotIndexes[5] = VampirePlayer.KnifeWielder;
+                    zombieSkillIconTooltips[5] = "Your twisted, deteriorated form has many hidden advantages.\nAllows you to use the withering abilities. (Will become freely craftable once this skill is unlocked)";
+                    affectedSkillSlotIndexes[5] = VampirePlayer.WitheringAbilities;
                     affectedSkillSlotZombieSkillLevel[5] = 1;
                     CheckForIconAbilityUnlocked(5);
                     CheckForIconLock(5, 4);
 
                     SetUnusedIconsInvisible(5);
+                    break;
+
+                case 2:
+                    SetElementPosition(zombieSkillIcons[0], new Vector2(330f, 79f));
+                    zombieSkillIconImages[0] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_7");
+                    zombieSkillIcons[0].SetImage(zombieSkillIconImages[0]);
+                    zombieSkillIconTooltips[0] = "Your experience in savagery has sharpened your intellect, granting you knowledge on where to strike next.\nAll vampiric weapons have a 7% of inflicting Lacerated!";
+                    affectedSkillSlotIndexes[0] = VampirePlayer.SavageInstincts;
+                    affectedSkillSlotZombieSkillLevel[0] = 1;
+                    CheckForIconAbilityUnlocked(0);
+                    CheckForSpecificAbiltyUnlocked(0, VampirePlayer.WitheringAbilities);
+
+                    SetElementPosition(zombieSkillIcons[1], new Vector2(249f, 79f));
+                    zombieSkillIconImages[1] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_1");
+                    zombieSkillIcons[1].SetImage(zombieSkillIconImages[1]);
+                    zombieSkillIconTooltips[1] = "Your new structure gives you unparalleled strength and speed.\nWhen a zombie, your damage and movement speed is increased by 7%.";
+                    affectedSkillSlotIndexes[1] = VampirePlayer.UndeadConstitution;
+                    affectedSkillSlotZombieSkillLevel[1] = 2;
+                    CheckForIconAbilityUnlocked(1, 2);
+                    CheckForIconLock(1, 0);
+
+                    SetElementPosition(zombieSkillIcons[2], new Vector2(295f, 128f));
+                    zombieSkillIconImages[2] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_8");
+                    zombieSkillIcons[2].SetImage(zombieSkillIconImages[2]);
+                    zombieSkillIconTooltips[2] = "Being entombed has its perks.\nWhen a zombie, hold DOWN while standing still for 3 seconds to bury yourself underground. While underground, life regeneration is increased. Press JUMP to get out.";
+                    affectedSkillSlotIndexes[2] = VampirePlayer.UndergroundRecovery;
+                    affectedSkillSlotZombieSkillLevel[2] = 1;
+                    CheckForIconAbilityUnlocked(2);
+                    CheckForIconLock(2, 0);
+
+                    SetElementPosition(zombieSkillIcons[3], new Vector2(294f, 171f));
+                    zombieSkillIconImages[3] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_9");
+                    zombieSkillIcons[3].SetImage(zombieSkillIconImages[3]);
+                    zombieSkillIconTooltips[3] = "Your heightened senses make reacting to incoming danger basic instinct.\n8% Chance to dodge incoming damage.";
+                    affectedSkillSlotIndexes[3] = VampirePlayer.EvasiveInstincts;
+                    affectedSkillSlotZombieSkillLevel[3] = 1;
+                    CheckForIconAbilityUnlocked(3);
+                    CheckForIconLock(3, 0);
+
+                    SetElementPosition(zombieSkillIcons[4], new Vector2(216f, 171f));
+                    zombieSkillIconImages[4] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_5");
+                    zombieSkillIcons[4].SetImage(zombieSkillIconImages[4]);
+                    zombieSkillIconTooltips[4] = "The use of knives as a weapon shines out to you.\nAllows you to use the knife wielder abilities. (Will become freely craftable once this skill is unlocked)";
+                    affectedSkillSlotIndexes[4] = VampirePlayer.KnifeWielder;
+                    affectedSkillSlotZombieSkillLevel[4] = 1;
+                    CheckForIconAbilityUnlocked(4);
+                    CheckForIconLock(4, 3);
+
+                    SetElementPosition(zombieSkillIcons[5], new Vector2(215f, 243f));
+                    zombieSkillIconImages[5] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_3");
+                    zombieSkillIcons[5].SetImage(zombieSkillIconImages[5]);
+                    zombieSkillIconTooltips[5] = "Being a zombie has made you much more attentive.\nAt night, every 10s, enemies at full health are highlighted and damage dealt to them while they are highlighted is multiplied by 1.4x.";
+                    affectedSkillSlotIndexes[5] = VampirePlayer.UndeadPerception;
+                    affectedSkillSlotZombieSkillLevel[5] = 2;
+                    CheckForIconAbilityUnlocked(5, 2);
+                    CheckForIconLock(5, 4);
+
+                    SetElementPosition(zombieSkillIcons[6], new Vector2(135f, 171f));
+                    zombieSkillIconImages[6] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_10");
+                    zombieSkillIcons[6].SetImage(zombieSkillIconImages[6]);
+                    zombieSkillIconTooltips[6] = "Those who don't fear you will have to be shown who the top is.\nWhile a boss is summoned: +8% Movement Speed\n+10% Damage\n+15% Jump Speed";
+                    affectedSkillSlotIndexes[6] = VampirePlayer.TopOfTheChain;
+                    affectedSkillSlotZombieSkillLevel[6] = 1;
+                    CheckForIconAbilityUnlocked(6);
+                    CheckForIconLock(6, 4);
+
+                    SetElementPosition(zombieSkillIcons[7], new Vector2(101f, 105f));
+                    zombieSkillIconImages[7] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_4");
+                    zombieSkillIcons[7].SetImage(zombieSkillIconImages[7]);
+                    zombieSkillIconTooltips[7] = "The taste of blood strengthens you.\nBlood Suck abilities have been improved.";
+                    affectedSkillSlotIndexes[7] = VampirePlayer.BloodSuck;
+                    affectedSkillSlotZombieSkillLevel[7] = 2;
+                    CheckForIconAbilityUnlocked(7, 2);
+                    CheckForIconLock(7, 6);
+
+                    SetElementPosition(zombieSkillIcons[8], new Vector2(67f, 171f));
+                    zombieSkillIconImages[8] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_11");
+                    zombieSkillIcons[8].SetImage(zombieSkillIconImages[8]);
+                    zombieSkillIconTooltips[8] = "Your insides are more than enough of a danger to your surroundings.\nAllows you to use the Entrails Abilities.";
+                    affectedSkillSlotIndexes[8] = VampirePlayer.EntrailAbilities;
+                    affectedSkillSlotZombieSkillLevel[8] = 1;
+                    CheckForIconAbilityUnlocked(8);
+                    CheckForIconLock(8, 6);
+
+                    SetElementPosition(zombieSkillIcons[9], new Vector2(25f, 243f));
+                    zombieSkillIconImages[9] = ModContent.GetTexture("JoJoStands/Extras/ZombieIcon_7");
+                    zombieSkillIcons[9].SetImage(zombieSkillIconImages[9]);
+                    zombieSkillIconTooltips[9] = "Your experience in savagery has sharpened your intellect, granting you knowledge on where to strike next.\nAll vampiric weapons have a 12% of inflicting Lacerated!";
+                    affectedSkillSlotIndexes[9] = VampirePlayer.SavageInstincts;
+                    affectedSkillSlotZombieSkillLevel[9] = 2;
+                    CheckForIconAbilityUnlocked(9, 2);
+                    CheckForIconLock(9, 8);
+
+                    SetUnusedIconsInvisible(10);
                     break;
             }
 

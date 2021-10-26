@@ -81,7 +81,7 @@ namespace JoJoStands.Items.Vampire
 				Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 1, 1f, 0.2f);
 				lungeChargeTimer = 0;
 			}
-			if (Main.mouseRight && useCool <= 0 && vPlayer.learnedZombieSkills[VampirePlayer.BloodSuck])
+			if (Main.mouseRight && useCool <= 0 && vPlayer.HasSkill(player, VampirePlayer.BloodSuck))
             {
 				if (!enemyBeingGrabbed)
 				{
@@ -152,11 +152,12 @@ namespace JoJoStands.Items.Vampire
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			VampirePlayer vPlayer = Main.player[item.owner].GetModPlayer<VampirePlayer>();
+			Player player = Main.player[item.owner];
+			VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
 			if (!vPlayer.learnedAnyZombieAbility)
 				return;
 
-			if (vPlayer.learnedZombieSkills[VampirePlayer.BloodSuck])
+			if (vPlayer.HasSkill(player, VampirePlayer.BloodSuck))
 			{
 				TooltipLine secondaryUseTooltip = new TooltipLine(JoJoStands.Instance, "Secondary Use", "Hold right-click to grab an enemy and suck their blood!");
 				tooltips.Add(secondaryUseTooltip);

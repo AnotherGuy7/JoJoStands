@@ -22,8 +22,13 @@ namespace JoJoStands.Items.Vampire
         public bool noSunBurning = false;
         public bool enemyIgnoreItemInUse = false;
         public bool stopOnHitNPC = false;
+        public bool buriedUnderground = false;
         public int enemyToIgnoreDamageFromIndex = -1;
         public int enemySearchTimer = 0;
+        public int lacerationChance = 0;
+        public int buriedUndergroundButtonHeldTimer = 0;
+        public int buriedUndergroundHealthRegenTimer = 0;
+        public int topOfTheChainScanTimer = 0;
 
         public float vampiricDamageMultiplier = 1f;
         public float vampiricKnockbackMultiplier = 1f;
@@ -43,13 +48,19 @@ namespace JoJoStands.Items.Vampire
         public int totalVampireSkillPointsEarned = 0;
         public int vampiricLevel = 0;
 
-        public const int ExpectedAmountOfZombieSkills = 6;
+        public const int ExpectedAmountOfZombieSkills = 12;
         public const int UndeadConstitution = 0;
         public const int UndeadPerception = 1;
         public const int ProtectiveFilm = 2;
         public const int BloodSuck = 3;
         public const int BrutesStrength = 4;
         public const int KnifeWielder = 5;
+        public const int WitheringAbilities = 6;
+        public const int SavageInstincts = 7;
+        public const int UndergroundRecovery = 8;
+        public const int EvasiveInstincts = 9;
+        public const int TopOfTheChain = 10;
+        public const int EntrailAbilities = 11;
         public bool learnedAnyZombieAbility = false;
         public Dictionary<int, bool> learnedZombieSkills = new Dictionary<int, bool>();
         public Dictionary<int, int> zombieSkillLevels = new Dictionary<int, int>();
@@ -85,6 +96,7 @@ namespace JoJoStands.Items.Vampire
             vampiricDamageMultiplier = 1f + (1.4f * vampiricLevel);
             vampiricKnockbackMultiplier = 1f;
             lifeStealMultiplier = 1f;
+            lacerationChance = 7 + (5 * (GetSkillLevel(SavageInstincts) - 1));
             sunburnRegenTimeMultiplier = 0f;
             sunburnDamageMultiplier = 1f;
             sunburnMoveSpeedMultiplier = 0.5f;
@@ -134,10 +146,10 @@ namespace JoJoStands.Items.Vampire
         {
             JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
             bool itemIsVampireItem = item.modItem is VampireDamageClass;
-            if (target.life == target.lifeMax && (item.melee || itemIsVampireItem) && jojoNPC.zombieHightlightTimer > 0)
+            if (!Main.dayTime && target.life == target.lifeMax && (item.melee || itemIsVampireItem) && jojoNPC.zombieHightlightTimer > 0)
             {
                 damage = (int)(damage * 1.2f);
-                knockback *= 1.2f;
+                knockback *= 1.2f + (0.2f * GetSkillLevel(UndeadPerception));
             }
         }
 
@@ -159,17 +171,17 @@ namespace JoJoStands.Items.Vampire
                 if (!learnedAnyZombieAbility || learnedZombieSkills.Count == 0)
                     return;
 
-                if (learnedZombieSkills[UndeadConstitution])
+                if (HasSkill(UndeadConstitution))
                 {
-                    float percentageBoost = 0.035f * zombieSkillLevels[UndeadConstitution];
+                    float percentageBoost = 1.4f + (0.3f * GetSkillLevel(UndeadConstitution));
                     player.moveSpeed *= percentageBoost;
                     player.allDamageMult *= percentageBoost;
                 }
 
-                if (!Main.dayTime && learnedZombieSkills[UndeadPerception])
+                if (!Main.dayTime && HasSkill(UndeadPerception))
                 {
                     enemySearchTimer++;
-                    if (enemySearchTimer >= 20 * 60)
+                    if (enemySearchTimer >= (20 - (5 * (GetSkillLevel(UndeadPerception) - 1))) * 60)
                     {
                         for (int n = 0; n < Main.maxNPCs; n++)
                         {
@@ -181,6 +193,65 @@ namespace JoJoStands.Items.Vampire
                             }
                         }
                         enemySearchTimer = 0;
+                    }
+                }
+
+                if (HasSkill(UndergroundRecovery))
+                {
+                    if (!buriedUnderground && player.controlDown && player.velocity == Vector2.Zero)
+                    {
+                        buriedUndergroundButtonHeldTimer++;
+                        if (buriedUndergroundButtonHeldTimer >= 3 * 60)
+                        {
+                            buriedUnderground = true;
+                            buriedUndergroundButtonHeldTimer = 0;
+                            player.position += new Vector2(0f, player.height + 15f);
+                        }
+                    }
+                    if (buriedUnderground)
+                    {
+                        if (player.controlJump)
+                        {
+                            buriedUnderground = false;
+                            player.position -= new Vector2(0f, player.height + 15f);
+                        }
+
+                        buriedUndergroundHealthRegenTimer++;
+                        if (buriedUndergroundHealthRegenTimer >= (4 - GetSkillLevel(UndergroundRecovery)) * 60)
+                        {
+                            buriedUndergroundHealthRegenTimer = 0;
+
+                            int healthRegained = (int)(player.statLifeMax * (0.06f * GetSkillLevel(UndergroundRecovery)));
+                            if (player.statLife + healthRegained <= player.statLifeMax)
+                                player.statLife += healthRegained;
+                            else
+                                player.statLife = player.statLifeMax;
+                            player.HealEffect(healthRegained);
+                        }
+                        player.controlUseItem = false;
+                        player.controlLeft = false;
+                        player.controlRight = false;
+                        player.controlUp = false;
+                        player.controlDown = false;
+                        player.velocity = Vector2.Zero;
+                    }
+                }
+
+                if (HasSkill(TopOfTheChain))
+                {
+                    topOfTheChainScanTimer++;
+                    if (topOfTheChainScanTimer >= 5 * 60)
+                    {
+                        for (int n = 0; n < Main.maxNPCs; n++)
+                        {
+                            NPC npc = Main.npc[n];
+                            if (npc.active && npc.boss)
+                            {
+                                player.AddBuff(mod.BuffType("TopOfTheChain"), 6 * 60);
+                                break;
+                            }
+                        }
+                        topOfTheChainScanTimer = 0;
                     }
                 }
             }
@@ -259,6 +330,42 @@ namespace JoJoStands.Items.Vampire
             }
         }
 
+        public bool SafeSkillCheck(Player player)
+        {
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            return player.whoAmI == Main.myPlayer && vPlayer.learnedZombieSkills.Count == ExpectedAmountOfZombieSkills;
+        }
+
+        public bool HasSkill(Player player, int skillType)
+        {
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            return SafeSkillCheck(player) && vPlayer.learnedZombieSkills[skillType];
+        }
+
+        public int GetSkillLevel(Player player, int skillType)
+        {
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            if (!SafeSkillCheck(player))
+                return -1;
+
+            return vPlayer.zombieSkillLevels[skillType];
+        }
+
+        private bool HasSkill(int skillType)
+        {
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            return SafeSkillCheck(player) && vPlayer.learnedZombieSkills[skillType];
+        }
+
+        private int GetSkillLevel(int skillType)
+        {
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            if (!SafeSkillCheck(player))
+                return -1;
+
+            return vPlayer.zombieSkillLevels[skillType];
+        }
+
         public void RebuildZombieAbilitiesDictionaries()
         {
             learnedZombieSkills.Clear();
@@ -270,6 +377,13 @@ namespace JoJoStands.Items.Vampire
             learnedZombieSkills.Add(BloodSuck, false);
             learnedZombieSkills.Add(BrutesStrength, false);
             learnedZombieSkills.Add(KnifeWielder, false);
+            learnedZombieSkills.Add(WitheringAbilities, false);
+            learnedZombieSkills.Add(SavageInstincts, false);
+            learnedZombieSkills.Add(UndergroundRecovery, false);
+            learnedZombieSkills.Add(EvasiveInstincts, false);
+            learnedZombieSkills.Add(TopOfTheChain, false);
+            learnedZombieSkills.Add(EntrailAbilities, false);
+
 
             zombieSkillLevels.Add(UndeadConstitution, 0);
             zombieSkillLevels.Add(UndeadPerception, 0);
@@ -277,6 +391,12 @@ namespace JoJoStands.Items.Vampire
             zombieSkillLevels.Add(BloodSuck, 0);
             zombieSkillLevels.Add(BrutesStrength, 0);
             zombieSkillLevels.Add(KnifeWielder, 0);
+            zombieSkillLevels.Add(WitheringAbilities, 0);
+            zombieSkillLevels.Add(SavageInstincts, 0);
+            zombieSkillLevels.Add(UndergroundRecovery, 0);
+            zombieSkillLevels.Add(EvasiveInstincts, 0);
+            zombieSkillLevels.Add(TopOfTheChain, 0);
+            zombieSkillLevels.Add(EntrailAbilities, 0);
 
             learnedAnyZombieAbility = false;
             Main.NewText("Rebuilt Vampire Skills Dictionaries.", Color.Red);
@@ -323,6 +443,13 @@ namespace JoJoStands.Items.Vampire
                 player.velocity.X = 6f * -player.direction;
                 player.immuneTime += 40;
                 player.immune = true;
+            }
+
+            if (HasSkill(EvasiveInstincts) && Main.rand.Next(0, 101) <= 9 + (3 * GetSkillLevel(EvasiveInstincts)))
+            {
+                damage = 0;
+                player.immune = true;
+                player.immuneTime = 20;
             }
         }
 

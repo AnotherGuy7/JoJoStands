@@ -26,7 +26,7 @@ namespace JoJoStands.Items
             if (player.whoAmI != Main.myPlayer || !vPlayer.learnedAnyZombieAbility)
                 return;
 
-            if ((item.type == ItemID.DirtBlock || item.type == ItemID.MudBlock) && vPlayer.learnedZombieSkills[VampirePlayer.ProtectiveFilm])
+            if ((item.type == ItemID.DirtBlock || item.type == ItemID.MudBlock) && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm))
             {
                 TooltipLine secondaryUseTooltip = new TooltipLine(JoJoStands.Instance, "Secondary Use", "Right-click to consume 5 of this item and apply a protective film around yourself.");
                 tooltips.Add(secondaryUseTooltip);
@@ -162,7 +162,7 @@ namespace JoJoStands.Items
 
                 if (!MyPlayer.AutomaticActivations)
                 {
-                    if (item.stack >= 5 && Main.mouseRight && generalPurposeTimer <= 0 && item.owner == Main.myPlayer && vPlayer.learnedZombieSkills[VampirePlayer.ProtectiveFilm])
+                    if (item.stack >= 5 && Main.mouseRight && generalPurposeTimer <= 0 && item.owner == Main.myPlayer && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm))
                     {
                         generalPurposeTimer += 30;
                         player.AddBuff(mod.BuffType("ProtectiveFilmBuff"), 60 * 60);
@@ -174,7 +174,7 @@ namespace JoJoStands.Items
                 }
                 else
                 {
-                    if (item.stack >= 5 && item.owner == Main.myPlayer && vPlayer.learnedZombieSkills[VampirePlayer.ProtectiveFilm] && !player.HasBuff(mod.BuffType("ProtectiveFilmBuff")))
+                    if (item.stack >= 5 && item.owner == Main.myPlayer && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm) && !player.HasBuff(mod.BuffType("ProtectiveFilmBuff")))
                     {
                         player.AddBuff(mod.BuffType("ProtectiveFilmBuff"), 60 * 60);
                         for (int i = 0; i < 5; i++)
