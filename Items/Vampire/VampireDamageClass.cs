@@ -32,7 +32,9 @@ namespace JoJoStands.Items.Vampire
 
         public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
         {
-            mult *= player.GetModPlayer<VampirePlayer>().vampiricDamageMultiplier;
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            mult *= vPlayer.vampiricLevel * 0.12f;
+            mult *= vPlayer.vampiricDamageMultiplier;
         }
 
         public override void GetWeaponKnockback(Player player, ref float knockback)

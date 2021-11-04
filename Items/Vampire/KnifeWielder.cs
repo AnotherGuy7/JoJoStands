@@ -29,7 +29,6 @@ namespace JoJoStands.Items.Vampire
 		}
 
 		private int useCool = 0;
-		private int lungeChargeTimer = 0;
 
         public override void HoldItem(Player player)
         {
@@ -41,39 +40,13 @@ namespace JoJoStands.Items.Vampire
 			if (useCool > 0)
 				useCool--;
 
-            if (Main.mouseLeft && useCool <= 0)
+			if (player.ownedProjectileCounts[mod.ProjectileType("KnifeSlashes")] > 0)
+				return;
+
+			if (Main.mouseLeft && useCool <= 0)
             {
-				lungeChargeTimer++;
-				if (lungeChargeTimer > 180)
-                {
-					lungeChargeTimer = 180;
-                }
-			}
-			if (!Main.mouseLeft && lungeChargeTimer > 0 && useCool <= 0)
-            {
-				useCool += item.useTime + (20 * (lungeChargeTimer / 30));
-				int multiplier = lungeChargeTimer / 60;
-				if (multiplier == 0)
-                {
-					multiplier = 1;
-                }
-				if (Main.MouseWorld.X - player.position.X >= 0)
-				{
-					player.direction = 1;
-				}
-				else
-				{
-					player.direction = -1;
-				}
-				player.immune = true;
-				player.immuneTime = 20;
-				Vector2 launchVector = Main.MouseWorld - player.position;
-				launchVector.Normalize();
-				launchVector *= multiplier * 6;
-				player.velocity += launchVector;
-				Projectile.NewProjectile(player.Center, Vector2.Zero, mod.ProjectileType("VampiricSlash"), item.damage * multiplier, item.knockBack * multiplier, item.owner);
-				Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 1, 1f, 0.6f);
-				lungeChargeTimer = 0;
+				useCool += 4;
+				Projectile.NewProjectile(player.Center, Vector2.Zero, mod.ProjectileType("KnifeSlashes"), item.damage, item.knockBack, item.owner);
 			}
 
 			if (Main.mouseRight && useCool <= 0 && !player.HasBuff(mod.BuffType("KnifeAmalgamation")) && player.CountItem(mod.ItemType("Knife")) >= 16)

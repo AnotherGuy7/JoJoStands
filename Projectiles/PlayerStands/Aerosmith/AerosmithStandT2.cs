@@ -51,16 +51,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             SelectFrame();
             UpdateStandInfo();
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             if (mPlayer.standOut)
-            {
                 projectile.timeLeft = 2;
-            }
+
             mPlayer.aerosmithWhoAmI = projectile.whoAmI;
             newProjectileDamage = (int)(newProjectileDamage * MathHelper.Clamp(1f - (projectile.Distance(player.Center) / (350f * 16f)), 0.5f, 1f));
 
@@ -91,18 +89,17 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     {
                         projectile.velocity = Main.MouseWorld - projectile.Center;
                         projectile.velocity.Normalize();
-                        projectile.velocity *= 10f;
+                        projectile.velocity *= 8f;
 
                         projectile.direction = 1;
                         if (Main.MouseWorld.X < projectile.position.X - 5)
-                        {
                             projectile.direction = -1;
-                        }
+
                         projectile.spriteDirection = projectile.direction;
                     }
                     else
                     {
-                        projectile.velocity = Vector2.Zero;
+                        projectile.velocity *= 0.95f;
                     }
                     projectile.netUpdate = true;
                 }
@@ -110,7 +107,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 {
                     if (!fallingFromSpace)
                     {
-                        projectile.velocity = Vector2.Zero;
+                        projectile.velocity *= 0.95f;
                     }
                     projectile.rotation = 0f;
                 }
@@ -192,6 +189,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         projectile.direction = 1;
                         if (projectile.velocity.X < 0f)
                             projectile.direction = -1;
+
                         projectile.spriteDirection = projectile.direction;
                         projectile.netUpdate = true;
                     }
@@ -201,7 +199,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         {
                             shootCount += newShootTime;
                             Main.PlaySound(SoundID.Item11, projectile.position);
-                            Vector2 shootVel = target.position - projectile.Center;
+                            Vector2 shootVel = target.Center - projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
                                 shootVel = new Vector2(0f, 1f);

@@ -31,14 +31,9 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.IronBar, 18);
-            recipe.AddIngredient(ItemID.MudBlock, 20);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LeadBar, 18);
-            recipe.AddIngredient(ItemID.MudBlock, 20);
+            recipe.AddIngredient(ItemID.MeteoriteBar, 12);
+            recipe.AddIngredient(ItemID.Bone, 30);
+            recipe.AddIngredient(ItemID.HellstoneBar, 3);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -260,7 +260,7 @@ namespace JoJoStands.NPCs
                 aiStyleSave = 0;
                 playerPositionOnSkip = Vector2.Zero;
             }
-            if (player.timeskipActive && !npc.townNPC && !npc.friendly && !npc.boss)
+            if (player.timeskipActive && !npc.townNPC && !npc.friendly && !npc.boss && !npc.immortal)
             {
                 if (playerPositionOnSkip == Vector2.Zero)
                 {
@@ -491,9 +491,7 @@ namespace JoJoStands.NPCs
                     vPlayer.totalVampireSkillPointsEarned += 1;
                     Main.NewText("You have obtained another Vampiric Skill Point!");
                     if (vPlayer.totalVampireSkillPointsEarned % 5 == 0)
-                    {
                         vPlayer.vampiricLevel += 1;
-                    }
 
                 }
             }
@@ -616,7 +614,7 @@ namespace JoJoStands.NPCs
                 {
                     npc.AddBuff(mod.BuffType("Locked"), 9 * 60);
                 }
-                if (standSlotType == mod.ItemType("LockT4"))
+                if (standSlotType == mod.ItemType("LockFinal"))
                 {
                     npc.AddBuff(mod.BuffType("Locked"), 12 * 60);
                 }
@@ -635,7 +633,7 @@ namespace JoJoStands.NPCs
                 {
                     npc.AddBuff(mod.BuffType("Locked"), 15 * 60);
                 }
-                if (standSlotType == mod.ItemType("LockT4"))
+                if (standSlotType == mod.ItemType("LockFinal"))
                 {
                     npc.AddBuff(mod.BuffType("Locked"), 20 * 60);
                 }

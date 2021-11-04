@@ -33,7 +33,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            if (Main.player[projectile.owner].dead)
+            if (player.dead)
             {
                 projectile.Kill();
                 return;
@@ -104,9 +104,6 @@ namespace JoJoStands.Projectiles
                     projectile.Kill();
                 }
             }
-
-            player.itemTime = 2;
-            player.itemAnimation = 2;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

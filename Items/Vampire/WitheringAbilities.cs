@@ -1,9 +1,6 @@
 using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
-using JoJoStands.NPCs;
-using Terraria.ModLoader;
-using System.Collections.Generic;
 using Terraria.DataStructures;
 
 namespace JoJoStands.Items.Vampire
@@ -18,7 +15,7 @@ namespace JoJoStands.Items.Vampire
 
 		public override void SafeSetDefaults()
 		{
-			item.damage = 31;
+			item.damage = 42;
 			item.width = 26;
 			item.height = 26;
 			item.useTime = 60;

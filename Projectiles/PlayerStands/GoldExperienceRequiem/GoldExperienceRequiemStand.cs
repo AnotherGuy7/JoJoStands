@@ -68,7 +68,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     if (SpecialKeyPressedNoCooldown())
                     {
                         mPlayer.GEAbilityNumber += 1;
-                        if (mPlayer.GEAbilityNumber >= 6)
+                        if (mPlayer.GEAbilityNumber >= 5)
                         {
                             mPlayer.GEAbilityNumber = 0;
                         }
@@ -95,7 +95,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     if (Main.mouseRight && player.velocity == Vector2.Zero && mPlayer.GEAbilityNumber == 3)
                     {
                         regencounter++;
-                        if (Main.rand.Next(0, 3) == 0)
+                        if (Main.rand.Next(0, 2 + 1) == 0)
                         {
                             int dustIndex = Dust.NewDust(player.position, player.width, player.height, 169, SpeedY: Main.rand.NextFloat(-1.1f, -0.6f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
                             Main.dust[dustIndex].noGravity = true;

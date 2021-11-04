@@ -43,12 +43,12 @@ namespace JoJoStands.Items.Vampire
         public bool wearingAstroRemainsSet = false;
         public bool wearingVisceralChestplate = false;
 
-        public int[] enemyTypesKilled = new int[500];
+        public int[] enemyTypesKilled = new int[1200];
         public int vampireSkillPointsAvailable = 1;
         public int totalVampireSkillPointsEarned = 0;
         public int vampiricLevel = 0;
 
-        public const int ExpectedAmountOfZombieSkills = 12;
+        public const int ExpectedAmountOfZombieSkills = 14;
         public const int UndeadConstitution = 0;
         public const int UndeadPerception = 1;
         public const int ProtectiveFilm = 2;
@@ -61,6 +61,8 @@ namespace JoJoStands.Items.Vampire
         public const int EvasiveInstincts = 9;
         public const int TopOfTheChain = 10;
         public const int EntrailAbilities = 11;
+        public const int ExperiencedBeast = 12;
+        public const int FinalPush = 13;
         public bool learnedAnyZombieAbility = false;
         public Dictionary<int, bool> learnedZombieSkills = new Dictionary<int, bool>();
         public Dictionary<int, int> zombieSkillLevels = new Dictionary<int, int>();
@@ -76,7 +78,7 @@ namespace JoJoStands.Items.Vampire
                 RebuildZombieAbilitiesDictionaries();
 
             if (enemyTypesKilled.Length == 0)
-                enemyTypesKilled = new int[Main.maxNPCTypes];
+                enemyTypesKilled = new int[1200];
         }
 
         private void ResetVariables()
@@ -93,7 +95,7 @@ namespace JoJoStands.Items.Vampire
             enemyIgnoreItemInUse = false;
             stopOnHitNPC = false;
             noSunBurning = false;
-            vampiricDamageMultiplier = 1f + (1.4f * vampiricLevel);
+            vampiricDamageMultiplier = 1f;
             vampiricKnockbackMultiplier = 1f;
             lifeStealMultiplier = 1f;
             lacerationChance = 7 + (5 * (GetSkillLevel(SavageInstincts) - 1));
@@ -210,7 +212,7 @@ namespace JoJoStands.Items.Vampire
                     }
                     if (buriedUnderground)
                     {
-                        if (player.controlJump)
+                        if (player.controlJump || !Collision.SolidTiles((int)player.Center.X / 16, (int)player.Center.X / 16, (int)player.Center.Y / 16, (int)player.Center.Y / 16))
                         {
                             buriedUnderground = false;
                             player.position -= new Vector2(0f, player.height + 15f);
@@ -221,7 +223,7 @@ namespace JoJoStands.Items.Vampire
                         {
                             buriedUndergroundHealthRegenTimer = 0;
 
-                            int healthRegained = (int)(player.statLifeMax * (0.06f * GetSkillLevel(UndergroundRecovery)));
+                            int healthRegained = (int)(player.statLifeMax * (0.04f * GetSkillLevel(UndergroundRecovery)));
                             if (player.statLife + healthRegained <= player.statLifeMax)
                                 player.statLife += healthRegained;
                             else
@@ -234,6 +236,7 @@ namespace JoJoStands.Items.Vampire
                         player.controlUp = false;
                         player.controlDown = false;
                         player.velocity = Vector2.Zero;
+                        player.AddBuff(BuffID.Obstructed, 2);
                     }
                 }
 
@@ -383,6 +386,8 @@ namespace JoJoStands.Items.Vampire
             learnedZombieSkills.Add(EvasiveInstincts, false);
             learnedZombieSkills.Add(TopOfTheChain, false);
             learnedZombieSkills.Add(EntrailAbilities, false);
+            learnedZombieSkills.Add(ExperiencedBeast, false);
+            learnedZombieSkills.Add(FinalPush, false);
 
 
             zombieSkillLevels.Add(UndeadConstitution, 0);
@@ -397,9 +402,13 @@ namespace JoJoStands.Items.Vampire
             zombieSkillLevels.Add(EvasiveInstincts, 0);
             zombieSkillLevels.Add(TopOfTheChain, 0);
             zombieSkillLevels.Add(EntrailAbilities, 0);
+            zombieSkillLevels.Add(ExperiencedBeast, 0);
+            zombieSkillLevels.Add(FinalPush, 0);
+
+            enemyTypesKilled = new int[1200];
 
             learnedAnyZombieAbility = false;
-            Main.NewText("Rebuilt Vampire Skills Dictionaries.", Color.Red);
+            Main.NewText("Rebuilt Vampire Skill Dictionaries.", Color.Red);
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
@@ -419,7 +428,7 @@ namespace JoJoStands.Items.Vampire
             {
                 npc.StrikeNPC(29, 2f, -npc.direction);
             }
-            if (wearingVisceralChestplate)
+            if (wearingVisceralChestplate && Main.rand.Next(0, 100 + 1) <= 12)
             {
                 npc.AddBuff(mod.BuffType("Lacerated"), 15 * 60);
             }
@@ -450,6 +459,13 @@ namespace JoJoStands.Items.Vampire
                 damage = 0;
                 player.immune = true;
                 player.immuneTime = 20;
+            }
+
+            if (itemIsVampireItem)
+            {
+                float multiplier = 1f;
+                multiplier += MathHelper.Clamp(enemyTypesKilled[npc.type] / 1000f, 0f, 0.16f + (0.02f * (GetSkillLevel(ExperiencedBeast - 1))));
+                damage = (int)(damage * multiplier);
             }
         }
 
@@ -504,6 +520,15 @@ namespace JoJoStands.Items.Vampire
                 else if (karsText == 2 && !player.Male)
                 {
                     damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though she wished for death, she was unable to die... then " + player.name + " eventually stopped thinking");
+                }
+            }
+            if (player.whoAmI == Main.myPlayer && (zombie || vampire) && HasSkill(FinalPush) && !player.HasBuff(mod.BuffType("FinalPush")))
+            {
+                if (Main.rand.Next(0, 100 + 1) <= 30)
+                {
+                    player.AddBuff(mod.BuffType("FinalPush"), 2 * 60 * 60);
+                    player.statLife = (int)(player.statLifeMax * 0.3f);
+                    return false;
                 }
             }
             return true;

@@ -17,7 +17,7 @@ namespace JoJoStands.Items.Vampire
 
 		public override void SafeSetDefaults()
 		{
-			item.damage = 12;
+			item.damage = 21;
 			item.width = 28;
 			item.height = 30;
 			item.useTime = 40;

@@ -331,7 +331,7 @@ namespace JoJoStands
                         }
                     }
                 }
-                if (StandSlot.Item.type == mod.ItemType("LockT4"))
+                if (StandSlot.Item.type == mod.ItemType("LockFinal"))
                 {
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
@@ -489,6 +489,9 @@ namespace JoJoStands
         {
             if (standRemoteMode || player.HasBuff(mod.BuffType("CenturyBoyBuff")) || creamVoidMode || creamExposedMode)
             {
+                if (standName.Contains("Aerosmith"))
+                    return;
+
                 player.controlUp = false;
                 player.controlDown = false;
                 player.controlLeft = false;
@@ -599,14 +602,10 @@ namespace JoJoStands
                 }
             }
             if (standRemoteMode && standName == "Aerosmith")
-            {
-                player.velocity = Vector2.Zero;
                 AerosmithRadar.Visible = StandSlot.Item.type == mod.ItemType("AerosmithT3") || StandSlot.Item.type == mod.ItemType("AerosmithFinal");
-            }
             else
-            {
                 AerosmithRadar.Visible = false;
-            }
+
             if (poseMode)
             {
                 poseDuration--;

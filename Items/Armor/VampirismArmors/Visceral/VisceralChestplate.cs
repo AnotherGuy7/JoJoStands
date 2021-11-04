@@ -10,7 +10,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Visceral
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A chestplate decorated with sharp bones and seemingly living flesh.\n+12% Vampiric Knockback\nBeing hit inflicts Lacerated on enemies. Hitting enemies affected with Lacerated doubles blood suck gains.");
+            Tooltip.SetDefault("A chestplate decorated with sharp bones and seemingly living flesh.\n+12% Vampiric Knockback\nBeing hit causes a 12% to inflict Lacerated! on enemies. Hitting enemies affected with Lacerated doubles blood suck gains.");
         }
 
         public override void SetDefaults()

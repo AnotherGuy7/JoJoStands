@@ -34,19 +34,14 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
             player.setBonus = "80% Sunburn Damage Reduction\nWhile using Vampiric Abilities: 20% to dodge incoming attacks";
             vPlayer.sunburnDamageMultiplier *= 0.2f;
             vPlayer.wearingAstroRemainsSet = true;
+            Lighting.AddLight(player.Center, 1f, 0.5f, 0.4f);
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.IronBar, 9);
-            recipe.AddIngredient(ItemID.MudBlock, 10);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LeadBar, 9);
-            recipe.AddIngredient(ItemID.MudBlock, 10);
+            recipe.AddIngredient(ItemID.MeteoriteBar, 6);
+            recipe.AddIngredient(ItemID.Bone, 45);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -260,7 +260,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 {
 					Main.npcChatText = "Oh. The Lock. I feel bad that you have to use this one... wait a minute. The Lock has the ability to make others' hearts heavy with guilt, literally. Use it, and anything that harms you will start to feel that immense weight. Some things may be immune to that guilt, and it can be overcome.";
                 }
-                if (mPlayer.StandSlot.Item.type == mod.ItemType("LockT3") || mPlayer.StandSlot.Item.type == mod.ItemType("LockT4"))
+                if (mPlayer.StandSlot.Item.type == mod.ItemType("LockT3") || mPlayer.StandSlot.Item.type == mod.ItemType("LockFinal"))
                 {
 					Main.npcChatText = "The Lock can now force others to feel guilty without any action against you... by harming yourself. Use this ability with caution.";
                 }
