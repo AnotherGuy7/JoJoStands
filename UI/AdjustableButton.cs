@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace JoJoStands.UI
@@ -9,18 +10,26 @@ namespace JoJoStands.UI
     internal class AdjustableButton : UIImageButton
     {
         private Texture2D buttonImage;
+        private Texture2D overlayImage;
         private Vector2 drawPosition;
         private Vector2 defaultSize;        //Meant to be a 
         private Vector2 textureSize;
+        private Vector2 overlaySize;
         private Rectangle rectangle;
-        private float imageScale;
+        public float imageScale;
+        private float overlayScaleReduction;
+        private float defaultAlpha = 0.4f;
 
         public UIElement owner;
         public bool focusedOn = false;      //These are meant to be chanegable
         public float focusScaleAmount = 1.15f;
+        public Vector2 buttonPosition;
+        public Vector2 screenPosition;
+        public Vector2 buttonCenter;
         public Vector2 buttonSize;
         public Color drawColor = Color.White;
         public float drawAlpha = 0f;
+        public float activeAlpha = 0f;
         public bool respondToFocus = false;
         public bool lockedInFocus = false;
         public bool invisible = false;
@@ -28,7 +37,7 @@ namespace JoJoStands.UI
         public float rotation;
 
 
-        public AdjustableButton(Texture2D texture, Vector2 position, Vector2 size, Color color, bool respondToFocusInput = true, float focusScale = 1.15f) : base(texture)
+        public AdjustableButton(Texture2D texture, Vector2 position, Vector2 size, Color color, bool respondToFocusInput, float focusScale = 1.15f) : base(texture)
         {
             buttonImage = texture;
             SetButtonPosiiton(position);
@@ -44,6 +53,24 @@ namespace JoJoStands.UI
             rectangle = new Rectangle(0, 0, (int)size.X, (int)size.Y);
         }
 
+        public AdjustableButton(Texture2D texture, Vector2 position, Vector2 size, Color color, float defaultAlpha = 0.4f, float activeAlpha = 1f, bool respondToFocusInput = true, float focusScale = 1.15f) : base(texture)
+        {
+            buttonImage = texture;
+            SetButtonPosiiton(position);
+            defaultSize = size;
+            textureSize = texture.Size();
+            drawColor = color;
+            imageScale = 1f;
+            rotation = 0f;
+            effect = SpriteEffects.None;
+            focusedOn = false;
+            focusScaleAmount = focusScale;
+            respondToFocus = respondToFocusInput;
+            rectangle = new Rectangle(0, 0, (int)size.X, (int)size.Y);
+            this.defaultAlpha = defaultAlpha;
+            this.activeAlpha = activeAlpha;
+        }
+
         public override void OnInitialize()
         {
             SetButtonPosiiton(drawPosition);
@@ -55,7 +82,7 @@ namespace JoJoStands.UI
             imageScale = 1f;
             if (!invisible)
             {
-                drawAlpha = 0.4f;
+                drawAlpha = defaultAlpha;
             }
             focusedOn = false;
             SetVisibility(0f, 0f);      //This is to cover the draws of the normal UI
@@ -75,7 +102,7 @@ namespace JoJoStands.UI
                 {
                     if (focusedOn || IsMouseHovering)
                     {
-                        drawAlpha = 1f;
+                        drawAlpha = activeAlpha;
                         imageScale = focusScaleAmount;
                         SetButtonSize(defaultSize * imageScale);
                     }
@@ -85,6 +112,7 @@ namespace JoJoStands.UI
                     }
                 }
             }
+
             base.Update(gameTime);
         }
 
@@ -95,21 +123,40 @@ namespace JoJoStands.UI
 
             Vector2 origin = textureSize / 2f;
             Vector2 ownerPosition = Vector2.Zero;
-            if (owner.Top.Pixels != 0f || owner.Left.Pixels != 0f)
-            {
-                ownerPosition = new Vector2(owner.Left.Pixels, owner.Top.Pixels);
-            }
-            if (owner.HAlign != 0f || owner.VAlign != 0f)
-            {
-                float fractionWidth = (float)Main.screenWidth * owner.HAlign;
-                float fractionHeight = (float)Main.screenHeight * owner.VAlign;
-                ownerPosition = new Vector2(fractionWidth, fractionHeight);
-            }
 
-            //I got to this end result through trial and error (Apparently using the Align ones make the origin centered???)
-            drawPosition = ownerPosition + new Vector2(Left.Pixels, Top.Pixels) - new Vector2(owner.Width.Pixels / 2f, owner.Height.Pixels / 2f) + (origin * 2f);
+            if (owner != null)
+            {
+                if (owner.Top.Pixels != 0f || owner.Left.Pixels != 0f)
+                {
+                    ownerPosition = new Vector2(owner.Left.Pixels, owner.Top.Pixels);
+                }
+                if (owner.HAlign != 0f || owner.VAlign != 0f)
+                {
+                    float fractionWidth = (float)Main.screenWidth * owner.HAlign;
+                    float fractionHeight = (float)Main.screenHeight * owner.VAlign;
+                    ownerPosition = new Vector2(fractionWidth, fractionHeight);
+                }
+
+                //I got to this end result through trial and error (Apparently using the Align ones make the origin centered???)
+                drawPosition = ownerPosition + buttonPosition - new Vector2(owner.Width.Pixels / 2f, owner.Height.Pixels / 2f) + (origin * 2f);
+            }
+            else
+                drawPosition = buttonPosition;
+
+            screenPosition = drawPosition;
+
 
             spriteBatch.Draw(buttonImage, drawPosition, rectangle, drawColor * drawAlpha, rotation, origin, imageScale, effect, 0f);
+
+            if (overlayImage != null)
+            {
+                Vector2 overlayOrigin = overlaySize / 2f;
+                Vector2 overlayPosition = drawPosition;
+                if (owner != null)
+                    overlayPosition = drawPosition - (origin / 2f);
+
+                spriteBatch.Draw(overlayImage, overlayPosition, rectangle, drawColor * drawAlpha, rotation, overlayOrigin, imageScale - overlayScaleReduction, effect, 0f);
+            }
         }
 
         public new void SetImage(Texture2D texture)
@@ -117,10 +164,41 @@ namespace JoJoStands.UI
             buttonImage = texture;
         }
 
+        /// <summary>
+        /// Gives the button an overlay texture. *Note: The overlay will not have reduced alpha and will remain identical in draw parameters to the original button.
+        /// </summary>
+        /// <param name="texture">The texture the overlay will use.</param>
+        /// <param name="scaleReduction">The amount that the scale will be reduced by.</param>
+        public void SetOverlayImage(Texture2D texture, float scaleReduction)
+        {
+            overlayImage = texture;
+            overlayScaleReduction = scaleReduction;
+            overlaySize = overlayImage.Size() / 2f;
+        }
+
         public void SetButtonPosiiton(Vector2 pos)
         {
-            Top.Pixels = pos.X;
-            Left.Pixels = pos.Y;
+            Top.Pixels = pos.Y;
+            Left.Pixels = pos.X;
+            buttonPosition = new Vector2(Left.Pixels, Top.Pixels);
+            buttonCenter = buttonPosition + (buttonSize / 2f);
+            screenPosition = buttonPosition;
+
+            if (owner != null)
+            {
+                Vector2 ownerPosition = Vector2.Zero;
+                if (owner.Top.Pixels != 0f || owner.Left.Pixels != 0f)
+                {
+                    ownerPosition = new Vector2(owner.Left.Pixels, owner.Top.Pixels);
+                }
+                if (owner.HAlign != 0f || owner.VAlign != 0f)
+                {
+                    float fractionWidth = (float)Main.screenWidth * owner.HAlign;
+                    float fractionHeight = (float)Main.screenHeight * owner.VAlign;
+                    ownerPosition = new Vector2(fractionWidth, fractionHeight);
+                }
+                screenPosition = ownerPosition + buttonPosition;
+            }
         }
 
         public void SetButtonSize(Vector2 size)

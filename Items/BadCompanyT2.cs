@@ -47,7 +47,7 @@ namespace JoJoStands.Items
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.ItemType("BadCompanyT1"));
 			recipe.AddIngredient(ItemID.HellstoneBar, 8);
-			recipe.AddIngredient(ItemID.EmptyBullet, 50);
+			recipe.AddIngredient(ItemID.MusketBall);
 			recipe.AddIngredient(mod.ItemType("WillToDestroy"), 2);
 			recipe.AddTile(mod.TileType("RemixTableTile"));
 			recipe.SetResult(this);

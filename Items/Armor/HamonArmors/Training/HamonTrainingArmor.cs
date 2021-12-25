@@ -9,14 +9,14 @@ namespace JoJoStands.Items.Armor.HamonArmors.Training
 	{
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamon Training Armor");
+            DisplayName.SetDefault("Hamon Training Vest");
             Tooltip.SetDefault("You can feel your lungs becoming mightier...\nIncreases Hamon Damage by 10%");
         }
 
 		public override void SetDefaults()
 		{
-			item.width = 18;
-			item.height = 18;
+			item.width = 30;
+			item.height = 22;
 			item.value = Item.buyPrice(0, 0, 75, 0);
             item.rare = ItemRarityID.Green;
 			item.defense = 5;
@@ -30,8 +30,8 @@ namespace JoJoStands.Items.Armor.HamonArmors.Training
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 20);
-			recipe.AddIngredient(mod.ItemType("SunDroplet"), 25);
+			recipe.AddIngredient(ItemID.Silk, 15);
+			recipe.AddIngredient(mod.ItemType("SunDroplet"), 7);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

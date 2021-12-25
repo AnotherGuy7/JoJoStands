@@ -27,6 +27,7 @@ namespace JoJoStands.Items.Hamon
         public int amountOfHamon = 0;
         public int maxHamon = 60;
         public int hamonIncreaseCounter = 0;
+        public int hamonDecreaseCounter = 0;
         public int maxHamonCounter = 0;
         public int skillPointsAvailable = 1;
         public int hamonLayerFrame = 0;
@@ -42,6 +43,7 @@ namespace JoJoStands.Items.Hamon
         public int muscleOverdriveHeldTimer = 0;
         public int sunTagHeldTimer = 0;
         public int sunShacklesHeldTimer = 0;
+        public int hamonStage = 0;
 
         public bool passiveRegen = false;
         public bool chargingHamon = false;
@@ -88,6 +90,8 @@ namespace JoJoStands.Items.Hamon
             hamonDamageBoosts = 1f;
             hamonKnockbackBoosts = 1f;
             hamonIncreaseBonus = 0;
+            maxHamonCounter = 300;
+            hamonStage = 0;
             if (!usingItemThatIgnoresEnemyDamage)
             {
                 enemyToIgnoreDamageFromIndex = -1;
@@ -192,91 +196,51 @@ namespace JoJoStands.Items.Hamon
                     break;
             }
 
+            if (vPlayer.zombie || vPlayer.vampire)
+                return;
+
+            if (amountOfHamon <= 0)
+                hamonStage = 0;
+            else if (amountOfHamon <= 60)
+                hamonStage = 1;
+            else if (amountOfHamon > 60 && amountOfHamon <= 120)
+                hamonStage = 2;
+            else if (amountOfHamon > 120)
+                hamonStage = 3;
+
             ManageAbilities();
             if (ajaStoneEquipped)           //Hamon charging stuff
-            {
                 maxHamon *= 2;
-                maxHamonCounter = 120;
-            }
-            if (vPlayer.vampire)
-            {
-                amountOfHamon = 0;
-                hamonIncreaseCounter = 0;
-            }
+            if (player.velocity.X == 0f)
+                hamonIncreaseBonus += 1;
+
             if (passiveRegen)
             {
                 if (learnedHamonSkills.ContainsKey(PassiveHamonRegenBoost) && learnedHamonSkills[PassiveHamonRegenBoost])
-                {
                     hamonIncreaseBonus += hamonSkillLevels[PassiveHamonRegenBoost];
-                }
 
-                if (!vPlayer.vampire && player.breath == player.breathMax && amountOfHamon <= 60)       //in general, to increase Hamon while it can still be increased, no speeding up or decreasing
+                if (amountOfHamon < 60 && player.breath == player.breathMax)       //in general, to increase Hamon while it can still be increased, no speeding up or decreasing
                 {
-                    if (player.velocity.X == 0f)
-                    {
-                        hamonIncreaseCounter++;
-                    }
-                    else
-                    {
-                        hamonIncreaseCounter += 2;
-                    }
-
-                    hamonIncreaseCounter += hamonIncreaseBonus;
+                    hamonIncreaseCounter += 1 + hamonIncreaseBonus;
                 }
                 if (hamonIncreaseCounter >= maxHamonCounter)      //the one that increases Hamon
                 {
-                    if (ajaStoneEquipped)       //or any other decrease-preventing accessories
-                    {
-                        hamonIncreaseCounter = 0;
-                        amountOfHamon += 1;
-                    }
                     if (amountOfHamon < 60)
-                    {
-                        hamonIncreaseCounter = 0;
                         amountOfHamon += 1;
-                    }
-                }
-                if (hamonIncreaseCounter >= maxHamonCounter && amountOfHamon > 60 && !ajaStoneEquipped)      //the one that decreases Hamon
-                {
+
                     hamonIncreaseCounter = 0;
+                }
+            }
+            if (hamonStage > 1)
+            {
+                hamonDecreaseCounter++;
+                if (hamonDecreaseCounter > 240 / (hamonStage - 1))
+                {
                     amountOfHamon -= 1;
-                }
-                if (!ajaStoneEquipped)          //list maxHamonCounter decreasing things in here
-                {
-                    maxHamonCounter = 240;
-                }
-                if (amountOfHamon > 60 && amountOfHamon < 120 && !ajaStoneEquipped)      //every 6 seconds, while Hamon is at the UI's second row, it decreases. Only if you don't have the Aja Stone
-                {
-                    maxHamonCounter = 360;
-                }
-                if (amountOfHamon >= 120 && !ajaStoneEquipped)      //same as top but every 3 seconds
-                {
-                    maxHamonCounter = 180;
+                    hamonDecreaseCounter = 0;
                 }
             }
-
-            if (amountOfHamon >= maxHamon)       //hamon limit stuff
-            {
-                amountOfHamon = maxHamon;
-            }
-            if (amountOfHamon <= 0)
-            {
-                amountOfHamon = 0;
-            }
-
-            /*if (learnedHamonSkills.Count == 0)
-            {
-                Main.NewText("Broke; " + learnedHamonSkills.Count);
-            }*/
-
-            if (amountOfHamon > 120)
-            {
-                player.AddBuff(mod.BuffType("HamonChargedII"), 2);
-            }
-            else if (amountOfHamon > 60)
-            {
-                player.AddBuff(mod.BuffType("HamonChargedI"), 2);
-            }
+            amountOfHamon = (int)MathHelper.Clamp(amountOfHamon, 0, maxHamon);
         }
 
         public override void MeleeEffects(Item item, Rectangle hitbox)
@@ -317,6 +281,14 @@ namespace JoJoStands.Items.Hamon
                     }
                 }
             }
+        }
+
+        public override void PreUpdateBuffs()
+        {
+            if (hamonStage == 2)
+                player.AddBuff(mod.BuffType("HamonChargedII"), 2);
+            else if (hamonStage == 1)
+                player.AddBuff(mod.BuffType("HamonChargedI"), 2);
         }
 
         private void ManageAbilities()

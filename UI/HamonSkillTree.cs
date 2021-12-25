@@ -145,7 +145,7 @@ namespace JoJoStands.UI
 
             for (int b = 0; b < hamonSkillIcons.Length; b++)
             {
-                hamonSkillIcons[b] = new AdjustableButton(ModContent.GetTexture("JoJoStands/Extras/HamonIcon_Empty"), Vector2.Zero, new Vector2(30f, 30f), Color.White);
+                hamonSkillIcons[b] = new AdjustableButton(ModContent.GetTexture("JoJoStands/Extras/HamonIcon_Empty"), Vector2.Zero, new Vector2(30f, 30f), Color.White, true);
                 SetElementSize(hamonSkillIcons[b], new Vector2(30f, 30f));
                 hamonSkillIcons[b].OnClick += OnClickAnyIcon;        //This ties *all* of the buttons to the same method
                 hamonSkillIcons[b].OnDoubleClick += OnDoubleClickAnyIcon;

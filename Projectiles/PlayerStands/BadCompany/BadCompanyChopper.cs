@@ -131,6 +131,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     }
                 }
             }
+            projectile.tileCollide = !Collision.SolidCollision(projectile.position, projectile.width, projectile.height);
         }
 
         public override void Kill(int timeLeft)

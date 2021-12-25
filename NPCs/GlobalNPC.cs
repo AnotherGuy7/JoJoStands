@@ -125,9 +125,11 @@ namespace JoJoStands.NPCs
                 {
                     chat = "I knew a guy who loved to name things. He’s still around, and he’s probably still naming everything he can find. I wonder what kind of Placement he went through in the dimension shift...";
                 }
-                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Nekro contributor reference
+                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Nekro contributor reference             
                 {
-                    chat = "There was a man with splt personalities named Nekro and Sektor, they named about 10 of the stands you have access to, kinda reminds me of a friend from Egypt...";
+                    //Removed at Nekro's behest for reasons described as "cringe" and "bad"
+                    //chat = "There was a man with splt personalities named Nekro and Sektor, they named about 10 of the stands you have access to, kinda reminds me of a friend from Egypt...";
+                    chat = "Did you know animals can develop stands too? I even once saw an eagle who got struck with the arrow become humanoid once it developed a stand capable of turning people to glass. I even managed to teach it my old cigarette trick.";
                 }
                 if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 5)      //Techno contributor reference
                 {
@@ -148,6 +150,14 @@ namespace JoJoStands.NPCs
                 if (npc.type == NPCID.Mechanic && Main.rand.Next(0, 100) <= 5)      //Phil contributer reference
                 {
                     chat = "I've heard of someone named Phil selling something called 'Flex Tape' that can fix everything, mind if you get some for me?";
+                }
+                if (npc.type == NPCID.Mechanic && Main.rand.Next(0, 100) <= 5)      //Archerous contributer reference
+                {
+                    chat = "Have the lights been acting weird lately? If I didn't know better, I'd say Archerous has something to do with this. That 'Lucy in the Sky' of his has been causing me some real trouble!";
+                }
+                if (npc.type == NPCID.Cyborg && Main.rand.Next(0, 100) <= 5)      //AG contributer reference
+                {
+                    chat = "Hey, if you ever see me acting weird, just tie me up and lock me inside of my home. I hear there's someone called 'A. Guy' or something of the sort looking to mess with me.";
                 }
             }
         }

@@ -16,10 +16,14 @@ namespace JoJoStands.UI
         public Vector2 ownerPos;
 
         public bool visible = false;
+        public bool wrapText = false;
+        public int textCharacterLimit = 0;
 
-        public MouseTextPanel(int width, int height, string defaultText = "")
+        public MouseTextPanel(int width, int height, string defaultText = "", bool wrapAllText = false, int textWrapCharacterLimit = 0)
         {
             Width.Pixels = width;
+            wrapText = wrapAllText;
+            textCharacterLimit = textWrapCharacterLimit;
 
             uiText = new UIText(defaultText);
             Append(uiText);
@@ -28,6 +32,12 @@ namespace JoJoStands.UI
         public void ShowText(string newText)
         {
             visible = true;
+            if (wrapText)
+            {
+                string[] stringSplitters = new string[1] { " " };
+                newText = WrapText(newText, textCharacterLimit, stringSplitters);
+            }
+
             uiText.SetText(newText);
             Height.Pixels = Main.fontMouseText.MeasureString(uiText.Text).Y + 8f;
         }
@@ -50,6 +60,44 @@ namespace JoJoStands.UI
                 return;
 
             base.Draw(spriteBatch);
+        }
+
+        private string WrapText(string textToBreak, int sentenceCharacterLimit, string[] stringSplitParts)
+        {
+            List<string> createdSentences = new List<string>();
+            string[] wordsArray = textToBreak.Split(stringSplitParts, StringSplitOptions.None);
+
+            string sentenceResult = "";
+            for (int word = 0; word < wordsArray.Length; word++)
+            {
+                if (wordsArray[word].Contains("\n"))
+                {
+                    createdSentences.Add(sentenceResult);
+                    sentenceResult = wordsArray[word] + " ";
+                    continue;
+                }
+
+                if (sentenceResult.Length + wordsArray[word].Length > sentenceCharacterLimit)
+                {
+                    createdSentences.Add(sentenceResult);
+                    sentenceResult = "\n" + wordsArray[word] + " ";
+                }
+                else
+                {
+                    sentenceResult += wordsArray[word] + " ";
+                }
+            }
+            if (sentenceResult != "")       //Cause sometimes it doesn't fill the needed conditions to be considered something to add
+            {
+                createdSentences.Add(sentenceResult);
+            }
+
+            string finalResult = "";
+            foreach (string sentencePiece in createdSentences)
+            {
+                finalResult += sentencePiece;
+            }
+            return finalResult;
         }
     }
 }

@@ -124,7 +124,7 @@ namespace JoJoStands.UI
 
             for (int b = 0; b < MaxButtonsPerPage; b++)
             {
-                zombieSkillIcons[b] = new AdjustableButton(ModContent.GetTexture("JoJoStands/Extras/VampireIcon_Empty"), Vector2.Zero, new Vector2(30f, 30f), Color.White);
+                zombieSkillIcons[b] = new AdjustableButton(ModContent.GetTexture("JoJoStands/Extras/VampireIcon_Empty"), Vector2.Zero, new Vector2(30f, 30f), Color.White, true);
                 SetElementSize(zombieSkillIcons[b], new Vector2(30f, 30f));
                 zombieSkillIcons[b].OnClick += OnClickAnyIcon;        //This ties *all* of the buttons to the same method
                 zombieSkillIcons[b].OnDoubleClick += OnDoubleClickAnyIcon;

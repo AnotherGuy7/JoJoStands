@@ -34,6 +34,7 @@ namespace JoJoStands
         internal HamonSkillTree HamonSkillTreeUI;
         internal BadCompanyUnitsUI UnitsUI;
         internal ZombieSkillTree ZombieSkillTreeUI;
+        internal StoneFreeAbilityWheel StoneFreeAbilityWheelUI;
 
         private UserInterface _betUI;
         private UserInterface _hamonbarInterface;
@@ -46,6 +47,7 @@ namespace JoJoStands
         private UserInterface _hamonSkillTreeUI;
         private UserInterface _unitsUI;
         private UserInterface _zombieSkillTreeUI;
+        private UserInterface _stoneFreeAbilityWheelUI;
 
         public static ModHotKey SpecialHotKey;
         public static ModHotKey SecondSpecialHotKey;
@@ -175,6 +177,11 @@ namespace JoJoStands
                 _zombieSkillTreeUI = new UserInterface();
                 _zombieSkillTreeUI.SetState(ZombieSkillTreeUI);
 
+                StoneFreeAbilityWheelUI = new StoneFreeAbilityWheel();
+                StoneFreeAbilityWheelUI.Activate();
+                _stoneFreeAbilityWheelUI = new UserInterface();
+                _stoneFreeAbilityWheelUI.SetState(StoneFreeAbilityWheelUI);
+
                 //Shader Stuff
                 Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect"));      // The path to the compiled shader file.
                 Filters.Scene["TimestopEffectShader"] = new Filter(new ScreenShaderData(timestopShader, "TimestopEffectShader"), EffectPriority.VeryHigh);
@@ -299,6 +306,9 @@ namespace JoJoStands
 
             if (ZombieSkillTree.Visible)
                 _zombieSkillTreeUI.Update(gameTime);
+
+            if (StoneFreeAbilityWheel.visible)
+                _stoneFreeAbilityWheelUI.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)     //from ExampleMod's ExampleUI
@@ -340,6 +350,9 @@ namespace JoJoStands
 
             if (ZombieSkillTree.Visible)
                 _zombieSkillTreeUI.Draw(Main.spriteBatch, new GameTime());
+
+            if (StoneFreeAbilityWheel.visible)
+                _stoneFreeAbilityWheelUI.Draw(Main.spriteBatch, new GameTime());
 
             return true;
         }

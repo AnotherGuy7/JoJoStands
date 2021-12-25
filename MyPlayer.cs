@@ -78,6 +78,7 @@ namespace JoJoStands
         public int badCompanyUnitsLeft = 0;
         public int badCompanyUIClickTimer = 0;
         public int standDefenseToAdd = 0;
+        public int chosenAbility = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -384,9 +385,9 @@ namespace JoJoStands
                 badCompanyTier = 0;
 
                 if (standAccessory)
-                {
                     standAccessory = false;
-                }
+                if (StoneFreeAbilityWheel.visible)
+                    StoneFreeAbilityWheel.CloseAbilityWheel();
                 if (equippedTuskAct != 0)
                 {
                     equippedTuskAct = 0;

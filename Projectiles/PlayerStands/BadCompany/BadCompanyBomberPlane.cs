@@ -13,6 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             projectile.width = 40;
             projectile.height = 26;
             projectile.timeLeft = 180;
+            projectile.tileCollide = false;
         }
 
         public override int standType => 2;
@@ -63,13 +64,9 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             }
 
             if (projectile.velocity.X <= 0)
-            {
                 projectile.spriteDirection = projectile.direction = -1;
-            }
             else
-            {
                 projectile.spriteDirection = projectile.direction = 1;
-            }
         }
 
         public override void PlayAnimation(string animationName)
