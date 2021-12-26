@@ -16,9 +16,10 @@ namespace JoJoStands.UI
         private Vector2 textureSize;
         private Vector2 overlaySize;
         private Rectangle rectangle;
-        public float imageScale;
+        private float imageScale;
         private float overlayScaleReduction;
         private float defaultAlpha = 0.4f;
+        private float activeAlpha = 1f;
 
         public UIElement owner;
         public bool focusedOn = false;      //These are meant to be chanegable
@@ -29,7 +30,6 @@ namespace JoJoStands.UI
         public Vector2 buttonSize;
         public Color drawColor = Color.White;
         public float drawAlpha = 0f;
-        public float activeAlpha = 0f;
         public bool respondToFocus = false;
         public bool lockedInFocus = false;
         public bool invisible = false;
@@ -159,6 +159,10 @@ namespace JoJoStands.UI
             }
         }
 
+        /// <summary>
+        /// Sets the default texture for the button.
+        /// </summary>
+        /// <param name="texture">The texture the button will have.</param>
         public new void SetImage(Texture2D texture)
         {
             buttonImage = texture;
@@ -176,15 +180,18 @@ namespace JoJoStands.UI
             overlaySize = overlayImage.Size() / 2f;
         }
 
+        /// <summary>
+        /// Sets the button's position in Left and Top.
+        /// </summary>
+        /// <param name="pos"></param>
         public void SetButtonPosiiton(Vector2 pos)
         {
             Top.Pixels = pos.Y;
             Left.Pixels = pos.X;
             buttonPosition = new Vector2(Left.Pixels, Top.Pixels);
             buttonCenter = buttonPosition + (buttonSize / 2f);
-            screenPosition = buttonPosition;
 
-            if (owner != null)
+            /*if (owner != null)
             {
                 Vector2 ownerPosition = Vector2.Zero;
                 if (owner.Top.Pixels != 0f || owner.Left.Pixels != 0f)
@@ -198,7 +205,16 @@ namespace JoJoStands.UI
                     ownerPosition = new Vector2(fractionWidth, fractionHeight);
                 }
                 screenPosition = ownerPosition + buttonPosition;
-            }
+            }*/
+        }
+
+        /// <summary>
+        /// Updates the button's position. Used when object positions are changed without using SetButtonPosition()
+        /// </summary>
+        public void UpdateButtonPosition()
+        {
+            buttonPosition = new Vector2(Left.Pixels, Top.Pixels);
+            buttonCenter = buttonPosition + (buttonSize / 2f);
         }
 
         public void SetButtonSize(Vector2 size)

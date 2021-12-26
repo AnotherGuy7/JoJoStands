@@ -17,6 +17,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         private bool pointShot = false;
         private bool remotelyControlled = false;
 
+        private const float MaxRemoteModeDistance = 40f * 16f;
+
         public override void AI()
         {
             SelectAnimation();
@@ -114,6 +116,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
+
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
                     projectile.velocity = Main.MouseWorld - projectile.Center;
@@ -125,15 +128,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     {
                         projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
-
-                    if (Vector2.Distance(projectile.Center, player.Center) >= 40f * 16f)
-                    {
-                        projectile.velocity = player.Center - projectile.Center;
-                        projectile.velocity.Normalize();
-                        projectile.velocity *= 0.8f;
-                    }
                     projectile.netUpdate = true;
+                    projectile.spriteDirection = projectile.direction;
+                    LimitDistance(MaxRemoteModeDistance);
                 }
                 if (!Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
@@ -258,6 +255,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     normalFrames = true;
                     attackFrames = false;
                 }
+                LimitDistance(MaxRemoteModeDistance);
             }
         }
 

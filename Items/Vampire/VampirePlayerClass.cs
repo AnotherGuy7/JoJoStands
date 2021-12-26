@@ -132,6 +132,8 @@ namespace JoJoStands.Items.Vampire
                 if (lifeStealPercentLoss > 0f)
                 {
                     lifeStealPercentLoss -= 0.01f;
+                    if (lifeStealPercentLoss <= 0f)
+                        lifeStealPercentLoss = 0f;
                 }
             }
         }
@@ -274,6 +276,9 @@ namespace JoJoStands.Items.Vampire
                     newDamage *= 2;
 
                 int calculatedLifeSteal = (int)((newDamage * lifeStealMultiplier) * (1f - lifeStealPercentLoss));
+                if (calculatedLifeSteal < 0)
+                    return;
+
                 if (calculatedLifeSteal < player.statLifeMax - player.statLife)
                 {
                     player.statLife += calculatedLifeSteal;
@@ -289,6 +294,8 @@ namespace JoJoStands.Items.Vampire
                 if (lifeStealPercentLoss < 0.97f)
                 {
                     lifeStealPercentLoss += 0.03f;
+                    if (lifeStealPercentLoss >= 1f)
+                        lifeStealPercentLoss = 1f;
                 }
                 lifeStealPercentLossTimer = 300;
             }
@@ -311,6 +318,9 @@ namespace JoJoStands.Items.Vampire
                     newDamage *= 2;
 
                 int calculatedLifeSteal = (int)((newDamage * lifeStealMultiplier) * (1f - lifeStealPercentLoss));
+                if (calculatedLifeSteal < 0)
+                    return;
+
                 if (calculatedLifeSteal < player.statLifeMax - player.statLife)
                 {
                     player.statLife += calculatedLifeSteal;
@@ -328,6 +338,8 @@ namespace JoJoStands.Items.Vampire
                 if (lifeStealPercentLoss < 0.97f)
                 {
                     lifeStealPercentLoss += 0.03f;
+                    if (lifeStealPercentLoss >= 1f)
+                        lifeStealPercentLoss = 1f;
                 }
                 lifeStealPercentLossTimer = 300;
             }

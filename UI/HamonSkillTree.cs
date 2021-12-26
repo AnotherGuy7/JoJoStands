@@ -23,7 +23,7 @@ namespace JoJoStands.UI
         private UIImageButton hamonSkillTreeXButton;
         private Texture2D[] skillTreeTextures = new Texture2D[3];
         private const int MaxUIPages = 3;
-        private bool[] pageLockBosses = new bool[5] { NPC.downedBoss1, NPC.downedBoss3, Main.hardMode, NPC.downedMechBossAny, NPC.downedPlantBoss};
+        private bool[] pageLockBosses = new bool[5] { NPC.downedBoss1, NPC.downedBoss3, Main.hardMode, NPC.downedMechBossAny, NPC.downedPlantBoss };
         private string[] pageLockMessages = new string[5] { "The next page is unlocked Post-Eye of Cthulu.", "The next page is unlocked Post-Skeletron.", "The next page is unlocked Post-Wall of Flesh.", "The next page is unlocked Post-Any Mech boss.", "The next page is unlocked Post-Plantera." };
 
 
@@ -558,6 +558,7 @@ namespace JoJoStands.UI
                     hamonSkillIconTooltips[b] = "Unlock the skill before this skill to be able to see this skill.";
                     affectedSkillSlotIndexes[b] = -1;
                 }
+                hamonSkillIcons[b].UpdateButtonPosition();
             }
 
             //Text wrapping

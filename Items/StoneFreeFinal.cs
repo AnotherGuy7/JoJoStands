@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -30,6 +32,13 @@ namespace JoJoStands.Items
             item.value = 0;
             item.noUseGraphic = true;
             item.rare = ItemRarityID.LightPurple;
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            //StoneFreeAbilityWheel.OpenAbilityWheel(player.GetModPlayer<MyPlayer>());
+            Main.NewText("This Stand has been disabled until further notice.", Color.Red);
+            return true;
         }
 
         public override void AddRecipes()

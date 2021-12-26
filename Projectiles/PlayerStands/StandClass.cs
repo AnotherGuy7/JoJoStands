@@ -443,53 +443,53 @@ namespace JoJoStands.Projectiles.PlayerStands
                         secondaryAbility = true;
                     }
                 }
-            }
-            if (secondaryAbility)
-            {
-                attackFrames = false;
-                normalFrames = false;
-                secondaryAbilityFrames = true;
 
-                projectile.direction = 1;
-                if (target.position.X - projectile.Center.X < 0f)
+                if (secondaryAbility)
                 {
-                    projectile.spriteDirection = projectile.direction = -1;
-                }
-                projectile.spriteDirection = projectile.direction;
-
-                if (shootCount <= 0 && player.ownedProjectileCounts[projToShoot] < shootMax)
-                {
-                    if (Main.myPlayer == projectile.owner)
+                    attackFrames = false;
+                    normalFrames = false;
+                    secondaryAbilityFrames = true;
+                    projectile.direction = 1;
+                    if (target.position.X - projectile.Center.X < 0f)
                     {
-                        if (shootCount <= 0)
+                        projectile.spriteDirection = projectile.direction = -1;
+                    }
+                    projectile.spriteDirection = projectile.direction;
+
+                    if (shootCount <= 0 && player.ownedProjectileCounts[projToShoot] < shootMax)
+                    {
+                        if (Main.myPlayer == projectile.owner)
                         {
-                            shootCount += 28;
-                            Vector2 shootVel = target.position - projectile.Center - new Vector2(0f, 3f);
-                            if (shootVel == Vector2.Zero)
+                            if (shootCount <= 0)
                             {
-                                shootVel = new Vector2(0f, 1f);
+                                shootCount += 28;
+                                Vector2 shootVel = target.position - projectile.Center - new Vector2(0f, 3f);
+                                if (shootVel == Vector2.Zero)
+                                {
+                                    shootVel = new Vector2(0f, 1f);
+                                }
+                                shootVel.Normalize();
+                                shootVel *= shootSpeed;
+                                if (gravityAccounting)
+                                {
+                                    shootVel.Y -= projectile.Distance(target.position) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
+                                }
+                                int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, projectile.owner, projectile.whoAmI, tierNumber);
+                                Main.projectile[proj].netUpdate = true;
+                                projectile.netUpdate = true;
                             }
-                            shootVel.Normalize();
-                            shootVel *= shootSpeed;
-                            if (gravityAccounting)
+                            if (itemToConsumeType != -1)
                             {
-                                shootVel.Y -= projectile.Distance(target.position) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
+                                player.ConsumeItem(itemToConsumeType);
                             }
-                            int proj = Projectile.NewProjectile(projectile.position.X + 5f, projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((altDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, projectile.owner, projectile.whoAmI, tierNumber);
-                            Main.projectile[proj].netUpdate = true;
-                            projectile.netUpdate = true;
-                        }
-                        if (itemToConsumeType != -1)
-                        {
-                            player.ConsumeItem(itemToConsumeType);
                         }
                     }
-                }
-                if ((!gravityAccounting && player.ownedProjectileCounts[projToShoot] == 0) || targetDist > rangedDetectionDist)     //!gravityAccounting and 0 of that projectile cause it's usually no gravity projectiles that are just 1 shot (star finger, zipper punch), while things like knives have gravity (meant to be thrown in succession)
-                {
-                    secondaryAbility = false;
-                    secondaryAbilityFrames = false;
-                    normalFrames = true;
+                    if ((!gravityAccounting && player.ownedProjectileCounts[projToShoot] == 0) || targetDist > rangedDetectionDist)     //!gravityAccounting and 0 of that projectile cause it's usually no gravity projectiles that are just 1 shot (star finger, zipper punch), while things like knives have gravity (meant to be thrown in succession)
+                    {
+                        secondaryAbility = false;
+                        secondaryAbilityFrames = false;
+                        normalFrames = true;
+                    }
                 }
             }
             LimitDistance();
@@ -820,7 +820,38 @@ namespace JoJoStands.Projectiles.PlayerStands
                 direction *= 0.8f;
                 projectile.velocity = player.velocity + direction;
             }
+
             if (distanceFromPlayer >= newMaxDistance + 22f)
+            {
+                if (!mPlayer.standAutoMode)
+                {
+                    Main.mouseLeft = false;
+                    Main.mouseRight = false;
+                }
+                projectile.Center = player.Center;
+            }
+        }
+
+        /// <summary>
+        /// Limits the distance the Stand can travel.
+        /// </summary>
+        public void LimitDistance(float maxDistance, bool affectedByRangeModifiers = false)
+        {
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (affectedByRangeModifiers)
+                maxDistance += mPlayer.standRangeBoosts;
+
+            Vector2 direction = player.Center - projectile.Center;
+            float distanceFromPlayer = direction.Length();
+            if (distanceFromPlayer > maxDistance)
+            {
+                direction.Normalize();
+                direction *= 0.8f;
+                projectile.velocity = player.velocity + direction;
+            }
+
+            if (distanceFromPlayer >= maxDistance)
             {
                 if (!mPlayer.standAutoMode)
                 {

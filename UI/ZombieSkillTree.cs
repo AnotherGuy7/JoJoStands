@@ -23,7 +23,7 @@ namespace JoJoStands.UI
         private UIImageButton zombieSkillTreeXButton;
         private const int MaxUIPages = 3;
         private Texture2D[] skillTreeTextures = new Texture2D[MaxUIPages];
-        private bool[] pageLockBosses = new bool[MaxUIPages - 1] { NPC.downedBoss2, NPC.downedBoss3 };
+        private bool[] pageLockBosses = new bool[MaxUIPages] { NPC.downedBoss2, NPC.downedBoss3, false };
         private string[] pageLockMessages = new string[MaxUIPages - 1] { "The next page is unlocked Post-Evil Boss.", "The next page is unlocked Post-Skeletron." };
 
 
@@ -92,7 +92,7 @@ namespace JoJoStands.UI
             /*zombieSkillTooltip = new UIText("Click on any button to view its info.");
             SetElementSize(zombieSkillTooltip, new Vector2(102f, 38f));
             SetElementPosition(zombieSkillTooltip, new Vector2(186f, 178f));
-            HamonSkillTreePanel.Append(zombieSkillTooltip);*/
+            ZombieSkillTreePanel.Append(zombieSkillTooltip);*/
 
             zombieSkillPointsText = new UIText("Skill Points Available: ");
             SetElementSize(zombieSkillPointsText, new Vector2(102f, 38f));
@@ -102,19 +102,19 @@ namespace JoJoStands.UI
             zombieSkillTreeLeftArrow = new UIImageButton(ModContent.GetTexture("JoJoStands/Extras/VampireSkillTreeLeftArrow"));
             SetElementSize(zombieSkillTreeLeftArrow, new Vector2(32f, 32f));
             SetElementPosition(zombieSkillTreeLeftArrow, new Vector2(10f, 10f));
-            zombieSkillTreeLeftArrow.OnClick += OnClickHamonSkillTreeUpArrow;
+            zombieSkillTreeLeftArrow.OnClick += OnClickZombieSkillTreeUpArrow;
             ZombieSkillTreePanel.Append(zombieSkillTreeLeftArrow);
 
             zombieSkillTreeRightArrow = new UIImageButton(ModContent.GetTexture("JoJoStands/Extras/VampireSkillTreeRightArrow"));
             SetElementSize(zombieSkillTreeRightArrow, new Vector2(32f, 32f));
             SetElementPosition(zombieSkillTreeRightArrow, new Vector2(46f, 10f));
-            zombieSkillTreeRightArrow.OnClick += OnClickHamonSkillTreeDownArrow;
+            zombieSkillTreeRightArrow.OnClick += OnClickZombieSkillTreeDownArrow;
             ZombieSkillTreePanel.Append(zombieSkillTreeRightArrow);
 
             zombieSkillTreeXButton = new UIImageButton(ModContent.GetTexture("JoJoStands/Extras/VampireSkillTreeXButton"));
             SetElementSize(zombieSkillTreeXButton, new Vector2(32f, 32f));
             SetElementPosition(zombieSkillTreeXButton, new Vector2(364f, 7f));
-            zombieSkillTreeXButton.OnClick += OnClickHamonSkillTreeXButton;
+            zombieSkillTreeXButton.OnClick += OnClickZombieSkillTreeXButton;
             ZombieSkillTreePanel.Append(zombieSkillTreeXButton);
 
             skillTreeTextures[0] = ModContent.GetTexture("JoJoStands/UI/ZombieSkillTree_Page1");
@@ -140,27 +140,25 @@ namespace JoJoStands.UI
             Append(ZombieSkillTreePanel);
         }
 
-        private void OnClickHamonSkillTreeUpArrow(UIMouseEvent evt, UIElement listeningElement)
+        private void OnClickZombieSkillTreeUpArrow(UIMouseEvent evt, UIElement listeningElement)
         {
-            Main.PlaySound(SoundID.MenuTick);
-            pageLockBosses = new bool[2] { NPC.downedBoss1, NPC.downedBoss2 };
+            pageLockBosses = new bool[3] { NPC.downedBoss1, NPC.downedBoss2, false };
             bool pageUnlocked = pageLockBosses[currentShownPage - 1];       //This works since pages are from 1 to max and the array is in 0 to max - 1, meaning currentShownPage gets the next page info
             if (pageUnlocked)
             {
                 currentShownPage++;
                 if (currentShownPage > MaxUIPages)
-                {
                     currentShownPage = MaxUIPages;
-                }
             }
             else
             {
                 Main.NewText(pageLockMessages[currentShownPage - 1]);
             }
             InitializeButtons(currentShownPage);
+            Main.PlaySound(SoundID.MenuTick);
         }
 
-        private void OnClickHamonSkillTreeDownArrow(UIMouseEvent evt, UIElement listeningElement)
+        private void OnClickZombieSkillTreeDownArrow(UIMouseEvent evt, UIElement listeningElement)
         {
             currentShownPage--;
             Main.PlaySound(SoundID.MenuTick);
@@ -171,7 +169,7 @@ namespace JoJoStands.UI
             InitializeButtons(currentShownPage);
         }
 
-        private void OnClickHamonSkillTreeXButton(UIMouseEvent evt, UIElement listeningElement)
+        private void OnClickZombieSkillTreeXButton(UIMouseEvent evt, UIElement listeningElement)
         {
             Visible = false;
             currentShownPage = 1;
@@ -554,6 +552,7 @@ namespace JoJoStands.UI
                     zombieSkillIconTooltips[b] = "Unlock the skill before this skill to be able to see this skill.";
                     affectedSkillSlotIndexes[b] = -1;
                 }
+                zombieSkillIcons[b].UpdateButtonPosition();
             }
 
             //Text wrapping

@@ -298,7 +298,7 @@ namespace JoJoStands
             }
             if (JoJoStands.SpecialHotKey.Current && standAccessory)
             {
-                if (StandSlot.Item.type == mod.ItemType("CenturyBoy") || StandSlot.Item.type == mod.ItemType("CenturyBoyT2"))
+                if (StandSlot.Item.type == mod.ItemType("CenturyBoyT1") || StandSlot.Item.type == mod.ItemType("CenturyBoyT2"))
                 {
                     player.AddBuff(mod.BuffType("CenturyBoyBuff"), 2, true);
                 }

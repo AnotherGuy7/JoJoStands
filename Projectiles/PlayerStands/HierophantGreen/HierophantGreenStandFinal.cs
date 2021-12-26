@@ -22,6 +22,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         private bool linkShotForSpecial = false;
         private Vector2 formPosition = Vector2.Zero;
 
+        private const float MaxRemoteModeDistance = 50f * 16f;
+
         public override void AI()
         {
             SelectAnimation();
@@ -122,15 +124,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     {
                         projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
-
-                    if (Vector2.Distance(projectile.Center, player.Center) >= 50f * 16f)
-                    {
-                        projectile.velocity = player.Center - projectile.Center;
-                        projectile.velocity.Normalize();
-                        projectile.velocity *= 0.8f;
-                    }
                     projectile.netUpdate = true;
+                    projectile.spriteDirection = projectile.direction;
+                    LimitDistance(MaxRemoteModeDistance);
                 }
                 if (!Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
@@ -254,6 +250,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     normalFrames = true;
                     attackFrames = false;
                 }
+                LimitDistance(MaxRemoteModeDistance);
             }
 
             if (spawningField && projectile.owner == Main.myPlayer)

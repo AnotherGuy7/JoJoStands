@@ -1,4 +1,5 @@
 using JoJoStands.UI;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -36,8 +37,9 @@ namespace JoJoStands.Items
 
         public override bool ManualStandSpawning(Player player)
         {
-            StoneFreeAbilityWheel.OpenAbilityWheel(player.GetModPlayer<MyPlayer>());
-            return false;
+            //StoneFreeAbilityWheel.OpenAbilityWheel(player.GetModPlayer<MyPlayer>());
+            Main.NewText("This Stand has been disabled until further notice.", Color.Red);
+            return true;
         }
 
         public override void AddRecipes()

@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 30;
+            item.width = 36;
+            item.height = 48;
             item.rare = ItemRarityID.LightPurple;
         }
 
@@ -30,6 +30,7 @@ namespace JoJoStands.Items
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standType = 1;
+            mPlayer.standName = "CenturyBoy";
             mPlayer.showingCBLayer = true;
             mPlayer.standAccessory = true;
             if (Main.netMode == NetmodeID.MultiplayerClient)

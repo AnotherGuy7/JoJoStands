@@ -81,7 +81,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
                 var explosion = Projectile.NewProjectile(player.position, Vector2.Zero, ProjectileID.GrenadeIII, 49, 8f, Main.myPlayer);
                 Main.projectile[explosion].timeLeft = 2;
                 Main.projectile[explosion].netUpdate = true;
-                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(6));
                 player.ConsumeItem(ItemID.Dynamite);
             }
         }

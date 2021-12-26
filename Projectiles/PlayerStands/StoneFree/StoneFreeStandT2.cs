@@ -67,7 +67,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         {
                             stringConnectorPlaced = true;
                             firstStringPos = Main.MouseWorld;
-                            Main.NewText("Placed 1");
                         }
                     }
                     else
@@ -84,7 +83,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                             stringConnectorPlaced = false;
                             int stringPointIndex = Projectile.NewProjectile(firstStringPos, Vector2.Zero, mod.ProjectileType("StoneFreeStringPoint"), 0, 0f, player.whoAmI);
                             Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, mod.ProjectileType("StoneFreeStringConnector"), 0, 0f, player.whoAmI, stringPointIndex, punchDamage + 29 * (int)mPlayer.standDamageBoosts);
-                            Main.NewText("Placed 2");
                         }
                     }
                 }

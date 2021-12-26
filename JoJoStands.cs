@@ -57,6 +57,7 @@ namespace JoJoStands
 
         public static List<int> timestopImmune = new List<int>();
         public static List<int> standTier1List = new List<int>();
+        public static List<int> christmasStands = new List<int>();
         public static List<char> testStandPassword = new List<char>();      //  :) Have *fuuuuuuun!*
 
         public override void Load()
@@ -108,6 +109,9 @@ namespace JoJoStands
             timestopImmune.Add(ProjectileType("GoldExperienceRequiemStand"));
             timestopImmune.Add(ProjectileType("TuskAct4Stand"));
             timestopImmune.Add(ProjectileType("TestStand"));
+
+            christmasStands.Add(ItemType("StarOnTheTree"));
+            christmasStands.Add(ItemType("KingChristmas"));
 
             testStandPassword.Add(Convert.ToChar(84));
 
