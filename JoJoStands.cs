@@ -109,6 +109,7 @@ namespace JoJoStands
             timestopImmune.Add(ProjectileType("GoldExperienceRequiemStand"));
             timestopImmune.Add(ProjectileType("TuskAct4Stand"));
             timestopImmune.Add(ProjectileType("TestStand"));
+            timestopImmune.Add(ProjectileType("StarOnTheTreeStand"));
 
             christmasStands.Add(ItemType("StarOnTheTree"));
             christmasStands.Add(ItemType("KingChristmas"));

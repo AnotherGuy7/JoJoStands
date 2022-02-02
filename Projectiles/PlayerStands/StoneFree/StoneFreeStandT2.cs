@@ -25,6 +25,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         private int updateTimer = 0;
         private bool stringConnectorPlaced = false;
         private Vector2 firstStringPos;
+        private bool extendedBarrage = false;
 
         private const float MaxTrapDistance = 30f * 16f;
 
@@ -51,7 +52,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
-                    Punch();
+                    float lifeTimeMultiplier = 1f;
+                    if (extendedBarrage)
+                    {
+                        newPunchDamage = (int)(newPunchDamage * 0.92f);
+                        lifeTimeMultiplier = 1.8f;
+                    }
+                    Punch(punchLifeTimeMultiplier: lifeTimeMultiplier);
                 }
                 else
                 {
@@ -86,10 +93,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         }
                     }
                 }
+                if (SpecialKeyPressed())
+                    extendedBarrage = !extendedBarrage;
                 if (!attackFrames)
-                {
                     StayBehind();
-                }
             }
             if (mPlayer.standAutoMode)
             {
@@ -102,7 +109,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                if (!extendedBarrage)
+                    PlayAnimation("Attack");
+                else
+                    PlayAnimation("ExtendedAttack");
             }
             if (normalFrames)
             {
@@ -126,6 +136,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                 AnimateStand(animationName, 4, 12, true);
             }
             if (animationName == "Attack")
+            {
+                AnimateStand(animationName, 4, newPunchTime, true);
+            }
+            if (animationName == "ExtendedAttack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }

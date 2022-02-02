@@ -171,7 +171,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// Stand ID and Stand Tier Number are passed into the fist projectile.
         /// </summary>
         /// <param name="movementSpeed">How fast the Stand moves while it's punching</param>
-        public void Punch(float movementSpeed = 5f)
+        ///  /// <param name="punchLifeTimeMultiplier">A multiplier for the punch projectiles' lifetime.</param>
+        public void Punch(float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f)
         {
             Player player = Main.player[projectile.owner];
 
@@ -214,6 +215,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 shootVel.Normalize();
                 shootVel *= shootSpeed;
                 int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI, tierNumber);
+                Main.projectile[proj].timeLeft = (int)(Main.projectile[proj].timeLeft * punchLifeTimeMultiplier);
                 Main.projectile[proj].netUpdate = true;
                 projectile.netUpdate = true;
             }

@@ -26,7 +26,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         private int updateTimer = 0;
         private bool stringConnectorPlaced = false;
         private Vector2 firstStringPos;
+        private bool extendedBarrage = false;
 
+        private const int ExtendedBarrageAbility = 1;
+        private const int TiedTogetherAbility = 4;
         private const float MaxTrapDistance = 35f * 16f;
 
         public override void AI()
@@ -53,7 +56,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             {
                 if (Main.mouseLeft && projectile.owner == Main.myPlayer)
                 {
-                    Punch();
+                    float lifeTimeMultiplier = 1f;
+                    if (extendedBarrage)
+                    {
+                        newPunchDamage = (int)(newPunchDamage * 0.92f);
+                        lifeTimeMultiplier = 1.8f;
+                    }
+                    Punch(punchLifeTimeMultiplier: lifeTimeMultiplier);
                 }
                 else
                 {
@@ -88,8 +97,20 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         }
                     }
                 }
+                if (SpecialKeyPressed() && mPlayer.chosenAbility == ExtendedBarrageAbility)
+                    extendedBarrage = !extendedBarrage;
+                if (SpecialKeyPressed() && mPlayer.chosenAbility == TiedTogetherAbility)
+                {
+                    
+                }
+
                 if (SecondSpecialKeyPressedNoCooldown())
-                    StoneFreeAbilityWheel.OpenAbilityWheel(mPlayer);
+                {
+                    if (!StoneFreeAbilityWheel.visible)
+                        StoneFreeAbilityWheel.OpenAbilityWheel(mPlayer);
+                    else
+                        StoneFreeAbilityWheel.CloseAbilityWheel();
+                }
 
                 if (!attackFrames)
                 {
@@ -113,7 +134,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                if (!extendedBarrage)
+                    PlayAnimation("Attack");
+                else
+                    PlayAnimation("ExtendedAttack");
             }
             if (normalFrames)
             {
@@ -137,6 +161,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                 AnimateStand(animationName, 4, 12, true);
             }
             if (animationName == "Attack")
+            {
+                AnimateStand(animationName, 4, newPunchTime, true);
+            }
+            if (animationName == "ExtendedAttack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }

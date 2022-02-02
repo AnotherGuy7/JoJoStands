@@ -63,7 +63,7 @@ namespace JoJoStands.UI
             "Allows Stone Free to turn its arms into strings, letting its punched travel farther but hit slightly weaker.",
             "Allows Stone Free to tie strings onto two tiles to create a string trap. Enemies are hurt by the string and enemy projectiles are stopped by the string.",
             "Allows Stone Free to tie an enemy up. Certain enemies can move desprite being tied up.",
-            "Allows Stone Free to tie and drag enemies.",
+            "Allows Stone Free to tie and drag enemies. The closer the enemy is to Stone Free, the greater the strangle damage they receive. Pull efforts are increased with proximity.",
             "Allows Stone Free to create a condensed string shield."
         };
 

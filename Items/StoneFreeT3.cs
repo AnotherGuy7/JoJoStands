@@ -21,7 +21,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Stone Free (Tier 3)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to create a string trap!\nSpecial: This ability is set by the ability selected in the Abiliy Wheel.\nSecond Special: Expands the Ability Wheel.\nUsed in Stand Slot");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to create a string trap!\nSpecial: This ability is set by the ability selected in the Abiliy Wheel.\nSecond Special: Toggles the Ability Wheel.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -33,13 +33,6 @@ namespace JoJoStands.Items
             item.value = 0;
             item.noUseGraphic = true;
             item.rare = ItemRarityID.LightPurple;
-        }
-
-        public override bool ManualStandSpawning(Player player)
-        {
-            //StoneFreeAbilityWheel.OpenAbilityWheel(player.GetModPlayer<MyPlayer>());
-            Main.NewText("This Stand has been disabled until further notice.", Color.Red);
-            return true;
         }
 
         public override void AddRecipes()
