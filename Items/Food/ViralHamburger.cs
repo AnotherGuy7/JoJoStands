@@ -8,7 +8,7 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A regular ol' hamburger... but sprinkled with Viral Powder!\nGrants Stand related buffs upon consumption.");
+            Tooltip.SetDefault("A regular ol' hamburger... but sprinkled with Viral Powder!\nBoosts Stand Damage, Stand Crit Chance, Stand Speed, and player defense for 5m.");
         }
 
         public override void SetDefaults()
@@ -31,18 +31,17 @@ namespace JoJoStands.Items.Food
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(mod.BuffType("StrongWill"), (4 * 60) * 60);
-            player.AddBuff(mod.BuffType("SharpMind"), (4 * 60) * 60);
-            player.AddBuff(mod.BuffType("QuickThinking"), (4 * 60) * 60);
-            player.AddBuff(mod.BuffType("MentalFortitude"), (4 * 60) * 60);
+            player.AddBuff(mod.BuffType("StrongWill"), (5 * 60) * 60);
+            player.AddBuff(mod.BuffType("SharpMind"), (5 * 60) * 60);
+            player.AddBuff(mod.BuffType("QuickThinking"), (5 * 60) * 60);
+            player.AddBuff(mod.BuffType("MentalFortitude"), (5 * 60) * 60);
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ViralPowder"), 4);
-            recipe.AddIngredient(ItemID.Hay, 4);
-            recipe.AddIngredient(ItemID.Vine, 5);
+            recipe.AddIngredient(mod.ItemType("ViralPowder"), 5);
+            recipe.AddIngredient(ItemID.Hay, 5);
             recipe.AddIngredient(ItemID.Bunny);
             recipe.SetResult(this);
             recipe.AddRecipe();

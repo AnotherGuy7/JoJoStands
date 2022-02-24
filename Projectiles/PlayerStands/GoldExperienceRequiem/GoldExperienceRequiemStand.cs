@@ -67,32 +67,32 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 {
                     if (SpecialKeyPressedNoCooldown())
                     {
-                        mPlayer.GEAbilityNumber += 1;
-                        if (mPlayer.GEAbilityNumber >= 5)
+                        mPlayer.chosenAbility += 1;
+                        if (mPlayer.chosenAbility >= 5)
                         {
-                            mPlayer.GEAbilityNumber = 0;
+                            mPlayer.chosenAbility = 0;
                         }
-                        Main.NewText("Ability: " + abilityNames[mPlayer.GEAbilityNumber]);
+                        Main.NewText("Ability: " + abilityNames[mPlayer.chosenAbility]);
                     }
                 }
                 if (!attackFrames && projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 0)
+                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.chosenAbility == 0)
                     {
                         normalFrames = false;
                         attackFrames = false;
                         secondaryAbilityFrames = true;
                     }
-                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
+                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.chosenAbility == 1)
                     {
                         Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 16f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(10));
                     }
-                    if (Main.mouseRight && mPlayer.GEAbilityNumber == 2 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("DeathLoop")))
+                    if (Main.mouseRight && mPlayer.chosenAbility == 2 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("DeathLoop")))
                     {
                         player.AddBuff(mod.BuffType("DeathLoop"), 1500);
                     }
-                    if (Main.mouseRight && player.velocity == Vector2.Zero && mPlayer.GEAbilityNumber == 3)
+                    if (Main.mouseRight && player.velocity == Vector2.Zero && mPlayer.chosenAbility == 3)
                     {
                         regencounter++;
                         if (Main.rand.Next(0, 2 + 1) == 0)
@@ -112,7 +112,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         player.HealEffect(healamount);
                         regencounter = 0;
                     }
-                    if (Main.mouseRight && mPlayer.GEAbilityNumber == 4 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("BacktoZero")))
+                    if (Main.mouseRight && mPlayer.chosenAbility == 4 && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("BacktoZero")))
                     {
                         player.AddBuff(mod.BuffType("BacktoZero"), 1200);
                         mPlayer.backToZeroActive = true;

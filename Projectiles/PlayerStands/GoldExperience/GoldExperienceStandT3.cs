@@ -1,3 +1,4 @@
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -65,26 +66,25 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                 {
                     if (SpecialKeyPressedNoCooldown())
                     {
-                        mPlayer.GEAbilityNumber += 1;
-                        if (mPlayer.GEAbilityNumber >= 3)
-                        {
-                            mPlayer.GEAbilityNumber = 0;
-                        }
-                        Main.NewText("Ability: " + abilityNames[mPlayer.GEAbilityNumber]);
+                        if (!GoldExperienceAbilityWheel.visible)
+                            GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 3);
+                        else
+                            GoldExperienceAbilityWheel.CloseAbilityWheel();
                     }
 
-                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 0)
+                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.chosenAbility == 0)
                     {
                         int proj = Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("GEFrog"), 1, 0f, projectile.owner, tierNumber, tierNumber - 1f);
                         Main.projectile[proj].netUpdate = true;
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(6));
                     }
-                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
+                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.chosenAbility == 1)
                     {
-                        Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 16f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
+                        int yPos = (((int)Main.MouseWorld.Y / 16) - 3) * 16;
+                        Projectile.NewProjectile(Main.MouseWorld.X, yPos, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
                     }
-                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 2)
+                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.chosenAbility == 2)
                     {
                         Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("GEButterfly"), 1, 0f, projectile.owner);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));

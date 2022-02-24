@@ -37,7 +37,8 @@ namespace JoJoStands.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("TheHandT1"));
             recipe.AddIngredient(ItemID.HellstoneBar, 13);
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"), 2);
+            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
+            recipe.AddIngredient(mod.ItemType("WillToChange"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();

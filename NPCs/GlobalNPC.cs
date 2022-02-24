@@ -23,6 +23,7 @@ namespace JoJoStands.NPCs
         public bool sunShackled = false;
         public bool stunnedByBindingEmerald = false;
         public bool removeZombieHighlightOnHit = false;
+        public bool highlightedByTheHandMarker = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -559,6 +560,12 @@ namespace JoJoStands.NPCs
 
             if (npc.HasBuff(mod.BuffType("Lacerated")) && Main.player[Main.myPlayer].GetModPlayer<VampirePlayer>().anyMaskForm)
                 drawColor = Color.OrangeRed;
+
+            if (highlightedByTheHandMarker)
+            {
+                highlightedByTheHandMarker = false;
+                drawColor = Color.LightBlue;
+            }
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)

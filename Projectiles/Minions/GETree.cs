@@ -25,7 +25,7 @@ namespace JoJoStands.Projectiles.Minions
             projectile.ignoreWater = true;
             projectile.scale = 2f;
             drawOriginOffsetX = -10;
-            drawOriginOffsetY = 41;
+            drawOriginOffsetY = 21;
         }
 
         private bool timeLeftDeclared = false;

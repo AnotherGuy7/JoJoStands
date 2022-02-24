@@ -37,7 +37,7 @@ namespace JoJoStands.Items
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("TheHandT3"));
             recipe.AddIngredient(ItemID.ShroomiteBar, 15);
-            recipe.AddIngredient(mod.ItemType("DetermiendLifeforce"));
+            recipe.AddIngredient(mod.ItemType("DeterminedLifeforce"));
             recipe.AddTile(mod.TileType("RemixTableTile"));
             recipe.SetResult(this);
             recipe.AddRecipe();

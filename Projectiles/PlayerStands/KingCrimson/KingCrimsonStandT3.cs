@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     }
                     projectile.spriteDirection = projectile.direction;
 
-                    velocityAddition = Main.MouseWorld - projectile.position;
+                    Vector2 velocityAddition = Main.MouseWorld - projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f;
 

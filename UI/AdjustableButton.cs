@@ -151,11 +151,8 @@ namespace JoJoStands.UI
             if (overlayImage != null)
             {
                 Vector2 overlayOrigin = overlaySize / 2f;
-                Vector2 overlayPosition = drawPosition;
-                if (owner != null)
-                    overlayPosition = drawPosition - (origin / 2f);
 
-                spriteBatch.Draw(overlayImage, overlayPosition, rectangle, drawColor * drawAlpha, rotation, overlayOrigin, imageScale - overlayScaleReduction, effect, 0f);
+                spriteBatch.Draw(overlayImage, drawPosition, rectangle, drawColor * drawAlpha, rotation, overlayOrigin, imageScale - overlayScaleReduction, effect, 0f);
             }
         }
 
@@ -177,7 +174,7 @@ namespace JoJoStands.UI
         {
             overlayImage = texture;
             overlayScaleReduction = scaleReduction;
-            overlaySize = overlayImage.Size() / 2f;
+            overlaySize = overlayImage.Size();
         }
 
         /// <summary>

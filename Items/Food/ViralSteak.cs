@@ -8,7 +8,7 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An already warm, juicy, and mediun-rare steak.\nGrants Stand related buffs upon consumption.");
+            Tooltip.SetDefault("An already warm, juicy, and mediun-rare steak.\nBoosts Stand Range and Stand Damage for 3m.");
         }
 
         public override void SetDefaults()
@@ -31,16 +31,16 @@ namespace JoJoStands.Items.Food
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(mod.BuffType("CoordinatedEyes"), 90 * 60);
-            player.AddBuff(mod.BuffType("StrongWill"), 90 * 60);
+            player.AddBuff(mod.BuffType("CoordinatedEyes"), 180 * 60);
+            player.AddBuff(mod.BuffType("StrongWill"), 180 * 60);
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod.ItemType("ViralPowder"), 4);
-            recipe.AddIngredient(ItemID.Bunny, 2);
-            recipe.AddIngredient(ItemID.Squirrel, 2);
+            recipe.AddIngredient(ItemID.Bunny);
+            recipe.AddIngredient(ItemID.Squirrel);
             recipe.AddTile(TileID.Campfire);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -75,7 +75,6 @@ namespace JoJoStands.Items
 			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.ChlorophyteBar, 2);
             recipe.AddIngredient(ItemID.HallowedBar, 7);
-            recipe.AddIngredient(mod.ItemType("Hamon"), 1);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

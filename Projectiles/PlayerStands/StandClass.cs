@@ -2,6 +2,7 @@ using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.IO;
 using Terraria;
 using Terraria.Graphics.Shaders;
@@ -59,6 +60,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         public int newPunchDamage = 0;
         public int newProjectileDamage = 0;
         public bool playerHasAbilityCooldown = false;
+        public Texture2D standRangeIndicatorTexture;
+        public Texture2D secondaryStandRangeIndicatorTexture;
 
         public int shootCount = 0;
         private Vector2 velocityAddition;
@@ -69,8 +72,11 @@ namespace JoJoStands.Projectiles.PlayerStands
         private bool sentDyePacket = false;
         private SoundEffectInstance beginningSoundInstance = null;
         private SoundEffectInstance punchingSoundInstance = null;
+        private Vector2 rangeIndicatorSize;
+        private Vector2 secondaryRangeIndicatorSize;
+        //private int rangeIndicatorSize = 0;
+        //private int secondaryRangeIndicatorSize = 0;
 
-        private const int RangeIndicatorSize = 320;
 
         /// <summary>
         /// Starts a timestop that lasts x amount of seconds.
@@ -498,6 +504,44 @@ namespace JoJoStands.Projectiles.PlayerStands
         }
 
         /// <summary>
+        /// Generates a Stand Range Indicator Texture based on the needed distance.
+        /// </summary>
+        /// <param name="dist">The distance of the range indicator.</param>
+        /// <param name="sizeUpdateID">The size to update. 1 updates the rangeIndicatorSize variable and 2 updates the secondaryRangeIndicatorSize variable.</param>
+        /// <returns></returns>
+        public Texture2D GenerateRangeIndicatorTexture(float dist, int sizeUpdateID = 1)
+        {
+            dist /= 2f;     //For smaller texture sizes which we will scale up later. Also prevents mixels.
+            int size = (int)dist * 2;
+            Vector2 center = new Vector2(size) / 2f;
+            Texture2D texture = new Texture2D(Main.graphics.GraphicsDevice, size, size);
+            Color[] colorArray = new Color[size * size];
+            for (int x = 0; x < size; x++)
+            {
+                for (int y = 0; y < size; y++)
+                {
+                    Color pixelColor = Color.Transparent;
+                    Vector2 pixelPos = new Vector2(x, y);
+                    int pixelDist = (int)Vector2.Distance(pixelPos, center);
+
+                    if (pixelDist == dist - 1)
+                        pixelColor = Color.Black;
+                    else if (pixelDist == dist - 2)
+                        pixelColor = Color.White;
+
+                    colorArray[x + y * size] = pixelColor;
+                }
+            }
+            if (sizeUpdateID == 1)
+                rangeIndicatorSize = new Vector2(size);
+            else if (sizeUpdateID == 2)
+                secondaryRangeIndicatorSize = new Vector2(size);
+
+            texture.SetData(colorArray);
+            return texture;
+        }
+
+        /// <summary>
         /// Initializes the sounds the Stand would use. 
         /// Sounds are checked for in the JoJoStands Sounds directory.
         /// This method checks in Sounds/BattleCries/ for the sound.
@@ -648,9 +692,19 @@ namespace JoJoStands.Projectiles.PlayerStands
                 newShootTime = 5;
             }
             if (mPlayer.standType != standType)
-            {
                 mPlayer.standType = standType;
+
+            if (MyPlayer.RangeIndicators && newMaxDistance > 0)
+            {
+                if (Math.Abs((int)rangeIndicatorSize.X - (int)newMaxDistance) > 1)     //Comparing via subtraction to have a minimum error count of 1
+                    standRangeIndicatorTexture = GenerateRangeIndicatorTexture((int)newMaxDistance);
+                if (Math.Abs((int)secondaryRangeIndicatorSize.X - (int)newAltMaxDistance) > 1)
+                {
+                    Main.NewText("G");
+                    secondaryStandRangeIndicatorTexture = GenerateRangeIndicatorTexture((int)newAltMaxDistance, 2);
+                }
             }
+
             if (JoJoStands.SoundsLoaded)
             {
                 if (spawnSoundName != "" && !playedSpawnSound)
@@ -719,17 +773,21 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[projectile.owner];
 
-            if (MyPlayer.RangeIndicators && Main.netMode != NetmodeID.Server)
-            {
-                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
-                Vector2 rangeIndicatorDrawPosition = player.Center - Main.screenPosition;
-                float rangeIndicatorAlpha = (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f);
-                Vector2 rangeIndicatorOrigin = new Vector2(RangeIndicatorSize / 2f);
-                if (maxDistance > 0f)
-                    spriteBatch.Draw(texture, rangeIndicatorDrawPosition, null, Color.White * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, newMaxDistance / (RangeIndicatorSize / 2f), SpriteEffects.None, 0);
+            if (!MyPlayer.RangeIndicators || Main.netMode == NetmodeID.Server || rangeIndicatorSize == Vector2.Zero)
+                return;
 
-                if (maxAltDistance > 0f)
-                    spriteBatch.Draw(texture, rangeIndicatorDrawPosition, null, Color.Orange * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, newAltMaxDistance / (RangeIndicatorSize / 2f), SpriteEffects.None, 0);
+            //Texture2D texture = mod.GetTexture("Extras/RangeIndicator");        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
+            Vector2 rangeIndicatorDrawPosition = player.Center - Main.screenPosition;
+            Vector2 rangeIndicatorOrigin = rangeIndicatorSize / 2f;
+            float rangeIndicatorAlpha = (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f);
+
+            if (maxDistance > 0f)
+                spriteBatch.Draw(standRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.White * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);
+
+            if (maxAltDistance > 0f)
+            {
+                rangeIndicatorOrigin = secondaryRangeIndicatorSize / 2f;
+                spriteBatch.Draw(secondaryStandRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.Orange * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);
             }
         }
 
@@ -821,16 +879,16 @@ namespace JoJoStands.Projectiles.PlayerStands
                 direction.Normalize();
                 direction *= 0.8f;
                 projectile.velocity = player.velocity + direction;
-            }
 
-            if (distanceFromPlayer >= newMaxDistance + 22f)
-            {
-                if (!mPlayer.standAutoMode)
+                if (distanceFromPlayer >= newMaxDistance + 16)
                 {
-                    Main.mouseLeft = false;
-                    Main.mouseRight = false;
+                    if (!mPlayer.standAutoMode)
+                    {
+                        Main.mouseLeft = false;
+                        Main.mouseRight = false;
+                    }
+                    projectile.Center = player.Center;
                 }
-                projectile.Center = player.Center;
             }
         }
 
@@ -851,16 +909,16 @@ namespace JoJoStands.Projectiles.PlayerStands
                 direction.Normalize();
                 direction *= 0.8f;
                 projectile.velocity = player.velocity + direction;
-            }
 
-            if (distanceFromPlayer >= maxDistance)
-            {
-                if (!mPlayer.standAutoMode)
+                if (distanceFromPlayer >= maxDistance + 16)
                 {
-                    Main.mouseLeft = false;
-                    Main.mouseRight = false;
+                    if (!mPlayer.standAutoMode)
+                    {
+                        Main.mouseLeft = false;
+                        Main.mouseRight = false;
+                    }
+                    projectile.Center = player.Center;
                 }
-                projectile.Center = player.Center;
             }
         }
 

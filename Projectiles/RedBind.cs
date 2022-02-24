@@ -34,6 +34,7 @@ namespace JoJoStands.Projectiles
                 ownerProj.direction = 1;
             }
             projectile.spriteDirection = projectile.direction;
+            ownerProj.spriteDirection = ownerProj.direction;
             Vector2 rota = ownerProj.Center - projectile.Center;
             projectile.rotation = (-rota * projectile.direction).ToRotation();
 
@@ -53,21 +54,10 @@ namespace JoJoStands.Projectiles
                 projectile.netUpdate = true;
             }
 
-            if (!ownerProj.active)
+            if (!ownerProj.active || Main.mouseLeft)
             {
                 projectile.Kill();
                 return;
-            }
-            if (projectile.alpha == 0)
-            {
-                if (projectile.position.X + (float)(projectile.width / 2) > ownerProj.position.X + (float)(ownerProj.width / 2))
-                {
-                    ownerProj.direction = ownerProj.spriteDirection = 1;
-                }
-                else
-                {
-                    ownerProj.direction = ownerProj.spriteDirection = -1;
-                }
             }
             //projectile.rotation = (float)Math.Atan2((double)projectile.velocity.Y, (double)projectile.velocity.X) + 1.57f;
         }
@@ -80,9 +70,8 @@ namespace JoJoStands.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             if (!target.boss && !target.hide && !target.immortal)
-            {
                 target.AddBuff(mod.BuffType("RedBindDebuff"), (int)projectile.ai[1]);
-            }
+
             projectile.Kill();
         }
 
@@ -95,15 +84,10 @@ namespace JoJoStands.Projectiles
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
         {
             Projectile ownerProj = Main.projectile[(int)projectile.ai[0]];
-            Vector2 ownerCenterOffset = Vector2.Zero;
+            Vector2 ownerCenterOffset = new Vector2(4f, -4.5f);
             if (ownerProj.spriteDirection == -1)
-            {
                 ownerCenterOffset = new Vector2(-16f, -10f);
-            }
-            if (ownerProj.spriteDirection == 1)
-            {
-                ownerCenterOffset = new Vector2(4f, -4.5f);
-            }
+
             Vector2 ownerCenter = ownerProj.Center + ownerCenterOffset;
             Vector2 center = projectile.Center + new Vector2(0f, -1f);
             Texture2D texture = mod.GetTexture("Projectiles/RedBind_Part");

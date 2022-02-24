@@ -42,7 +42,6 @@ namespace JoJoStands
         public int shadowDodgeCooldownTimer = 0;        //does Vanilla not have one of these?
         public int aerosmithRadarFrameCounter = 0;
         public int poseDuration = 300;
-        public int GEAbilityNumber = 0;
         public int tuskActNumber = 0;
         public int equippedTuskAct = 0;
         public int tuskShootCooldown = 0;

@@ -35,6 +35,7 @@ namespace JoJoStands
         internal BadCompanyUnitsUI UnitsUI;
         internal ZombieSkillTree ZombieSkillTreeUI;
         internal StoneFreeAbilityWheel StoneFreeAbilityWheelUI;
+        internal GoldExperienceAbilityWheel GoldExperienceAbilityWheelUI;
 
         private UserInterface _betUI;
         private UserInterface _hamonbarInterface;
@@ -48,6 +49,7 @@ namespace JoJoStands
         private UserInterface _unitsUI;
         private UserInterface _zombieSkillTreeUI;
         private UserInterface _stoneFreeAbilityWheelUI;
+        private UserInterface _goldExperienceAbilityWheelUI;
 
         public static ModHotKey SpecialHotKey;
         public static ModHotKey SecondSpecialHotKey;
@@ -187,6 +189,11 @@ namespace JoJoStands
                 _stoneFreeAbilityWheelUI = new UserInterface();
                 _stoneFreeAbilityWheelUI.SetState(StoneFreeAbilityWheelUI);
 
+                GoldExperienceAbilityWheelUI = new GoldExperienceAbilityWheel();
+                GoldExperienceAbilityWheelUI.Activate();
+                _goldExperienceAbilityWheelUI = new UserInterface();
+                _goldExperienceAbilityWheelUI.SetState(GoldExperienceAbilityWheelUI);
+
                 //Shader Stuff
                 Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect"));      // The path to the compiled shader file.
                 Filters.Scene["TimestopEffectShader"] = new Filter(new ScreenShaderData(timestopShader, "TimestopEffectShader"), EffectPriority.VeryHigh);
@@ -314,6 +321,9 @@ namespace JoJoStands
 
             if (StoneFreeAbilityWheel.visible)
                 _stoneFreeAbilityWheelUI.Update(gameTime);
+
+            if (GoldExperienceAbilityWheel.visible)
+                _goldExperienceAbilityWheelUI.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)     //from ExampleMod's ExampleUI
@@ -358,6 +368,9 @@ namespace JoJoStands
 
             if (StoneFreeAbilityWheel.visible)
                 _stoneFreeAbilityWheelUI.Draw(Main.spriteBatch, new GameTime());
+
+            if (GoldExperienceAbilityWheel.visible)
+                _goldExperienceAbilityWheelUI.Draw(Main.spriteBatch, new GameTime());
 
             return true;
         }

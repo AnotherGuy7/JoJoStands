@@ -1,3 +1,4 @@
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -58,39 +59,49 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 
                 if (projectile.owner == Main.myPlayer)
                 {
+                    /*if (SpecialKeyPressedNoCooldown())
+                    {
+                        mPlayer.chosenAbility += 1;
+                        if (mPlayer.chosenAbility >= 4)
+                        {
+                            mPlayer.chosenAbility = 0;
+                        }
+                        Main.NewText("Ability: " + abilityNames[mPlayer.chosenAbility]);
+                    }*/
+
                     if (SpecialKeyPressedNoCooldown())
                     {
-                        mPlayer.GEAbilityNumber += 1;
-                        if (mPlayer.GEAbilityNumber >= 4)
-                        {
-                            mPlayer.GEAbilityNumber = 0;
-                        }
-                        Main.NewText("Ability: " + abilityNames[mPlayer.GEAbilityNumber]);
+                        if (!GoldExperienceAbilityWheel.visible)
+                            GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 4);
+                        else
+                            GoldExperienceAbilityWheel.CloseAbilityWheel();
                     }
 
-                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 0)
+                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.chosenAbility == 0)
                     {
                         int proj = Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("GEFrog"), 1, 0f, projectile.owner, tierNumber, tierNumber - 1f);
                         Main.projectile[proj].netUpdate = true;
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(6));
                     }
-                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 1)
+                    if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.chosenAbility == 1)
                     {
-                        Projectile.NewProjectile(Main.MouseWorld.X, Main.MouseWorld.Y - 16f, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
+                        int yPos = (((int)Main.MouseWorld.Y / 16) - 3) * 16;
+                        Projectile.NewProjectile(Main.MouseWorld.X, yPos, 0f, 0f, mod.ProjectileType("GETree"), 1, 0f, projectile.owner, tierNumber);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
                     }
-                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.GEAbilityNumber == 2)
+                    if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.chosenAbility == 2)
                     {
                         Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("GEButterfly"), 1, 0f, projectile.owner);
                         player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(12));
                     }
-                    if (Main.mouseRight && player.velocity == Vector2.Zero && mPlayer.GEAbilityNumber == 3)
+                    if (Main.mouseRight && player.velocity == Vector2.Zero && mPlayer.chosenAbility == 3)
                     {
                         regencounter++;
-                        if (Main.rand.Next(0, 3) == 0)
+                        if (Main.rand.Next(0, 5) == 0)
                         {
-                            int dustIndex = Dust.NewDust(player.position, player.width, player.height, 169, SpeedY: Main.rand.NextFloat(-1.1f, -0.6f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
+                            int dustIndex = Dust.NewDust(player.position, player.width, player.height, 169, SpeedY: Main.rand.NextFloat(-1.4f, -0.7f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
                             Main.dust[dustIndex].noGravity = true;
+                            Main.dust[dustIndex].rotation = 0f;
                         }
                     }
                     else

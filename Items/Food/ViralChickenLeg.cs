@@ -8,7 +8,7 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A dry, breaded (chicken?) leg that, when eaten, makes you feel much better.\nGrants Stand related buffs upon consumption.");
+            Tooltip.SetDefault("A dry, breaded (chicken?) leg that, when eaten, makes you feel much better.\nBoosts Stand Speed and player defense for 3m.");
         }
 
         public override void SetDefaults()
@@ -31,8 +31,8 @@ namespace JoJoStands.Items.Food
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(mod.BuffType("QuickThinking"), (3 * 30) * 60);
-            player.AddBuff(mod.BuffType("MentalFortitude"), (3 * 30) * 60);
+            player.AddBuff(mod.BuffType("QuickThinking"), (3 * 60) * 60);
+            player.AddBuff(mod.BuffType("MentalFortitude"), (3 * 60) * 60);
         }
 
         public override void AddRecipes()

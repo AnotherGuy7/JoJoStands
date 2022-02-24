@@ -31,7 +31,8 @@ namespace JoJoStands.Items.Tiles
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 5);
+            recipe.AddIngredient(ItemID.MusicBox);
+            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 4);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -103,7 +103,7 @@ namespace JoJoStands.NPCs.Enemies
         {
             Item.NewItem(npc.getRect(), ItemID.SilverCoin, Main.rand.Next(1, 8));
             Item.NewItem(npc.getRect(), ItemID.CopperCoin, Main.rand.Next(1, 101));
-            if (Main.rand.Next(0, 101) <= 20)
+            if (Main.rand.Next(0, 101) <= 45)
             {
                 Item.NewItem(npc.getRect(), mod.ItemType("ViralMeteorite"), Main.rand.Next(1, 6));
             }

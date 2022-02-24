@@ -97,17 +97,21 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         }
                     }
                 }
-                if (SpecialKeyPressed() && mPlayer.chosenAbility == ExtendedBarrageAbility)
-                    extendedBarrage = !extendedBarrage;
-                if (SpecialKeyPressed() && mPlayer.chosenAbility == TiedTogetherAbility)
+                if (SpecialKeyPressed())
                 {
-                    
+                    if (mPlayer.chosenAbility == ExtendedBarrageAbility)
+                        extendedBarrage = !extendedBarrage;
+
+                    if (mPlayer.chosenAbility == TiedTogetherAbility)
+                    {
+
+                    }
                 }
 
                 if (SecondSpecialKeyPressedNoCooldown())
                 {
                     if (!StoneFreeAbilityWheel.visible)
-                        StoneFreeAbilityWheel.OpenAbilityWheel(mPlayer);
+                        StoneFreeAbilityWheel.OpenAbilityWheel(mPlayer, 4);
                     else
                         StoneFreeAbilityWheel.CloseAbilityWheel();
                 }
@@ -167,6 +171,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             if (animationName == "ExtendedAttack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
+            }
+            if (animationName == "StringHold")
+            {
+                AnimateStand(animationName, 1, 40, true);
             }
             if (animationName == "Pose")
             {

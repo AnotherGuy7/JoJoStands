@@ -3,48 +3,42 @@ using Terraria;
 
 namespace JoJoStands.UI
 {
-    internal class StoneFreeAbilityWheel : AbilityWheel
+    internal class GoldExperienceAbilityWheel : AbilityWheel
     {
         public static bool visible;
-        private static StoneFreeAbilityWheel stoneFreeAbilityWheel;
+        private static GoldExperienceAbilityWheel goldExperienceAbilityWheel;
 
-        private const int AmountOfAbilities = 6;
+        private const int AmountOfAbilities = 4;
         public override int amountOfAbilities => AmountOfAbilities;
-        public override string buttonTexturePath => "JoJoStands/UI/AbilityWheel/StoneFree/";
+        public override string buttonTexturePath => "JoJoStands/UI/AbilityWheel/GoldExperience/";
         public override string[] abilityNames => new string[AmountOfAbilities]
         {
-            "          Summon",
-            "Extended Barrage",
-            "    String Traps",
-            "            Bind",
-            "   Tied Together",
-            "           Weave"
+            "           Frog",
+            "           Tree",
+            "      Butterfly",
+            "Limb Recreation"
         };
 
         public override string[] abilityTextureNames => new string[AmountOfAbilities]
 {
-            "Summon",
-            "ExtendedBarrage",
-            "StringTraps",
-            "Bind",
-            "TiedTogether",
-            "Weave"
+            "Frog",
+            "Tree",
+            "Butterfly",
+            "LimbRecreation"
         };
 
 
         public override string[] abilityDescriptions => new string[AmountOfAbilities]
         {
-            "Summons Stone Free. (This ability is the same as Stand Out)",
-            "Allows Stone Free to turn its arms into strings, letting its punched travel farther but hit slightly weaker.",
-            "Allows Stone Free to tie strings onto two tiles to create a string trap. Enemies are hurt by the string and enemy projectiles are stopped by the string.",
-            "Allows Stone Free to tie an enemy up. Certain enemies can move desprite being tied up.",
-            "Allows Stone Free to tie and drag enemies. The closer the enemy is to Stone Free, the greater the strangle damage they receive. Pull efforts are increased with proximity.",
-            "Allows Stone Free to create a condensed string shield."
+            "Allows Gold Experience to create a damage reflecting frog.",
+            "Allows Gold Experience to create a damage reflecting tree.",
+            "Allows Gold Experience to create a butterfly. This butterfly will double the drop chances of any enemy that kills it.",
+            "Allows Gold Experience to recreate lost limbs. Hold right-click to use."
         };
 
         public override void ExtraInitialize()
         {
-            stoneFreeAbilityWheel = this;
+            goldExperienceAbilityWheel = this;
         }
 
         public static void OpenAbilityWheel(MyPlayer modPlayer, int amountOfAbilities)
@@ -53,11 +47,11 @@ namespace JoJoStands.UI
             mPlayer = modPlayer;
             mPlayer.chosenAbility = 0;
 
-            StoneFreeAbilityWheel wheel = stoneFreeAbilityWheel;
+            GoldExperienceAbilityWheel wheel = goldExperienceAbilityWheel;
             wheel.abilitiesShown = amountOfAbilities;
-            for (int i = 0; i < AmountOfAbilities; i++)
+            for (int i = 0; i < amountOfAbilities; i++)
             {
-                wheel.abilityButtons[i].SetButtonPosiiton(wheel.wheelCenter.buttonPosition + (wheel.IndexToRadianPosition(i, AmountOfAbilities, wheel.wheelRotation) * wheel.wheelSpace));
+                wheel.abilityButtons[i].SetButtonPosiiton(wheel.wheelCenter.buttonPosition + (wheel.IndexToRadianPosition(i, wheel.abilitiesShown, wheel.wheelRotation) * wheel.wheelSpace));
                 if (i > wheel.abilitiesShown - 1)
                     wheel.abilityButtons[i].invisible = true;
             }

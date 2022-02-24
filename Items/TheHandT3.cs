@@ -17,7 +17,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The Hand (Tier 3)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to scrape away space!\nSpecial: Tap special to bring enemies to you and hold special to charge a scrape attack!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to scrape away space!\nSpecial: Switch to Scrape Mode\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

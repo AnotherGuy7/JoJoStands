@@ -8,7 +8,7 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A golden, sour, yet refreshing drink that boosts your mental capabilities somehow.\nGrants Stand related buffs upon consumption.");
+            Tooltip.SetDefault("A golden, sour, yet refreshing drink that boosts your mental capabilities somehow.\nBoosts Stand Damage and Stand Speed for 2m.");
         }
 
         public override void SetDefaults()
@@ -31,8 +31,8 @@ namespace JoJoStands.Items.Food
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(mod.BuffType("StrongWill"), 60 * 60);
-            player.AddBuff(mod.BuffType("QuickThinking"), 60 * 60);
+            player.AddBuff(mod.BuffType("StrongWill"), 120 * 60);
+            player.AddBuff(mod.BuffType("QuickThinking"), 120 * 60);
         }
 
         public override void AddRecipes()

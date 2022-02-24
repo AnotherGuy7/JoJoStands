@@ -31,7 +31,7 @@ namespace JoJoStands.Items.Tiles
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.StoneBlock, 50);
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"));
+            recipe.AddIngredient(mod.ItemType("ViralMeteorite"));
             recipe.AddTile(TileID.HeavyWorkBench);
             recipe.SetResult(this, 50);
             recipe.AddRecipe();
