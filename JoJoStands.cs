@@ -213,6 +213,17 @@ namespace JoJoStands
                 Ref<Effect> voidGradientShader = new Ref<Effect>(GetEffect("Effects/VoidBarGradient"));
                 GameShaders.Misc["JoJoStandsVoidGradient"] = new MiscShaderData(voidGradientShader, "VoidBarGradient");
 
+                Effect timeskipShaderEffect = GetEffect("Effects/TimeSkipEffectShader");
+                //timeskipShaderEffect.Parameters["backStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonBackStars"));
+                //timeskipShaderEffect.Parameters["frontStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonFrontStars"));
+                Ref<Effect> timeskipShader = new Ref<Effect>(timeskipShaderEffect);      // The path to the compiled shader file.
+                Filters.Scene["TimeSkipEffectShader"] = new Filter(new ScreenShaderData(timeskipShader, "TimeSkipEffectShader"), EffectPriority.VeryHigh);
+                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonBackStars"), 0);
+                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonFrontStars"), 1);
+                Filters.Scene["TimeSkipEffectShader"].Load();
+                //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["backStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonBackStars"));
+                //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["frontStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonFrontStars"));
+
                 //Misc
                 AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic"), ItemType("ViralMusicBox"), TileType("ViralMusicBoxTile"));
             }

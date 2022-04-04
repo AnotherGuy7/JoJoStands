@@ -78,6 +78,7 @@ namespace JoJoStands
         public int badCompanyUIClickTimer = 0;
         public int standDefenseToAdd = 0;
         public int chosenAbility = 0;
+        public int timeSkipEffectTransitionTimer = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -1134,6 +1135,24 @@ namespace JoJoStands
                     Filters.Scene.Activate("RedEffect");
                 if (!epitaphForesightActive && Filters.Scene["RedEffect"].IsActive())
                     Filters.Scene["RedEffect"].Deactivate();
+
+                if (timeskipActive && timeSkipEffectTransitionTimer < 40)
+                {
+                    if (!Filters.Scene["TimeSkipEffectShader"].IsActive())
+                        Filters.Scene.Activate("TimeSkipEffectShader");
+                    else
+                    {
+                        timeSkipEffectTransitionTimer++;
+                        Filters.Scene["TimeSkipEffectShader"].GetShader().UseProgress((float)timeSkipEffectTransitionTimer / 40f);
+                    }
+                }
+                if (!timeskipActive && timeSkipEffectTransitionTimer > 0)
+                {
+                    timeSkipEffectTransitionTimer--;
+                    Filters.Scene["TimeSkipEffectShader"].GetShader().UseProgress((float)timeSkipEffectTransitionTimer / 40f);
+                    if (timeSkipEffectTransitionTimer <= 0)
+                        Filters.Scene["TimeSkipEffectShader"].Deactivate();
+                }
 
                 if (ColorChangeEffects)
                 {

@@ -6,6 +6,8 @@ namespace JoJoStands.Projectiles
 {
     public class StoneFreeBindString : ModProjectile
     {
+        public override string Texture => mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
+
         public override void SetDefaults()
         {
             projectile.width = 26;
