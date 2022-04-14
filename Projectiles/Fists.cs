@@ -29,10 +29,10 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
+            if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
-            }
+            if (JoJoStands.SoundsLoaded)
+                mPlayer.standHitTime += 2;
 
             if (projectile.ai[0] == 2f)
             {

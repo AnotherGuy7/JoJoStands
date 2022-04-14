@@ -22,6 +22,7 @@ float2 uImageSize3;
 
 sampler backStarsImage;
 sampler frontStarsImage;
+sampler npcMask;
 
 float4 darkPurple = float4(0.258, 0.058, 0.349, 1.0);
 
@@ -43,7 +44,10 @@ float2 RandomFloat2(float number)
 
 float4 PixelShaderFunction(float2 UV : TEXCOORD0) : COLOR0
 {
-    float4 pixelColor = tex2D(uImage0 , UV);
+    float4 pixelColor = tex2D(uImage0, UV);
+    float4 maskColor = tex2D(npcMask, UV);
+    if (maskColor.r + maskColor.g + maskColor.b > 2.95)
+        return pixelColor;
     
     //float backSpaceLerpValue = abs(sin(UV.x + (uTime / 8.0)));      //Very back tint
     //float4 backSpaceCol = lerp(darkPurple / 2.0, mediumPink / 2.0, backSpaceLerpValue);
@@ -65,7 +69,7 @@ float4 PixelShaderFunction(float2 UV : TEXCOORD0) : COLOR0
     else if (uProgress > 0.9)
         distanceMultiplier = 3.7 * ((-uProgress + 1.0) / 0.1);*/
         
-        float spaceLayerTransparency = baseRadius - (distance(float2(0.5, 0.5), UV) * distanceMultiplier); //The transparency from the center
+    float spaceLayerTransparency = baseRadius - (distance(float2(0.5, 0.5), UV) * distanceMultiplier); //The transparency from the center
     float4 resultSpaceColor = backSpaceCol + backStarsCol + frontStarsCol;
     
     resultSpaceColor = lerp(pixelColor, resultSpaceColor, clamp(1.0 - spaceLayerTransparency, 0.0, 1.0));

@@ -5,7 +5,7 @@ using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 {
-    public class StoneFreeStandT3 : StandClass
+    public class StoneFreeStandFinal : StandClass
     {
         public override void SetStaticDefaults()
         {
@@ -33,6 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         private const int StringTraps = 1;
         private const int Bind = 2;
         private const int TiedTogetherAbility = 3;
+        private const int WeaveShield = 4;
         private const float MaxTrapDistance = 35f * 16f;
 
         public override void AI()
@@ -109,7 +110,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         shootVel.Normalize();
                         shootVel *= 12f;
                         Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StoneFreeTiedTogetherString"), 4, 0f, player.whoAmI, projectile.whoAmI);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(8));
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(4));
                     }
                 }
                 holdingStringNPC = player.ownedProjectileCounts[mod.ProjectileType("StoneFreeTiedTogetherString")] > 0;
@@ -125,15 +126,19 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         shootVel.Normalize();
                         shootVel *= 12f;
-                        Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StoneFreeBindString"), 4, 0f, player.whoAmI, projectile.whoAmI, 12);
-                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(8));
+                        Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StoneFreeBindString"), 4, 0f, player.whoAmI, projectile.whoAmI, 18);
+                        player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(5));
+                    }
+                    else if (mPlayer.chosenAbility == WeaveShield)
+                    {
+
                     }
                 }
 
                 if (SecondSpecialKeyPressedNoCooldown())
                 {
                     if (!StoneFreeAbilityWheel.visible)
-                        StoneFreeAbilityWheel.OpenAbilityWheel(mPlayer, 4);
+                        StoneFreeAbilityWheel.OpenAbilityWheel(mPlayer, 5);
                     else
                         StoneFreeAbilityWheel.CloseAbilityWheel();
                 }

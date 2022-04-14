@@ -88,12 +88,6 @@ namespace JoJoStands.Projectiles
             {
                 if (distance > 30f * 16f)
                     living = false;
-
-                projectile.ai[1] += 1f;
-                if (projectile.ai[1] > 5f)
-                    projectile.alpha = 0;
-                if (projectile.ai[1] >= 10f)
-                    projectile.ai[1] = 15f;
             }
             else if (!living)
             {
@@ -149,9 +143,8 @@ namespace JoJoStands.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             if (heldNPC == null)
-            {
                 heldNPC = target;
-            }
+
             projectile.damage = 0;
         }
 

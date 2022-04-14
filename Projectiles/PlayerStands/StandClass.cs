@@ -573,7 +573,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public void PlayPunchSound()
         {
-            if (!JoJoStands.SoundsLoaded)
+            if (!JoJoStands.SoundsLoaded || Main.player[projectile.owner].GetModPlayer<MyPlayer>().standHitTime <= 0)
                 return;
 
             if (punchSoundName != "" && punchingSoundInstance == null)
@@ -687,6 +687,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 newPunchTime = 2;
             if (newShootTime <= 5)
                 newShootTime = 5;
+            if (JoJoStands.SoundsLoaded && mPlayer.standHitTime > 0)
+                mPlayer.standHitTime--;
 
             if (mPlayer.standType != standType)
                 mPlayer.standType = standType;

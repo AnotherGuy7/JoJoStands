@@ -123,6 +123,12 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
             }
         }
 
+        public override bool PreKill(int timeLeft)
+        {
+            GoldExperienceAbilityWheel.CloseAbilityWheel();
+            return true;
+        }
+
         public override void SelectAnimation()
         {
             if (attackFrames)

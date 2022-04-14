@@ -1,6 +1,7 @@
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using JoJoStands.UI;
 
 namespace JoJoStands.Items
 {
@@ -31,6 +32,7 @@ namespace JoJoStands.Items
         public override bool ManualStandSpawning(Player player)
         {
             Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("GoldExperienceRequiemStand"), 0, 0f, Main.myPlayer);
+            GoldExperienceRequiemAbilityWheel.OpenAbilityWheel(player.GetModPlayer<MyPlayer>(), 5);
             return true;
         }
 

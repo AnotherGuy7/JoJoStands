@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using JoJoStands.UI;
 using JoJoStands.Items.Vampire;
+using JoJoStands.Items.Hamon;
 
 namespace JoJoStands.NPCs.TownNPCs
 {
@@ -49,10 +50,36 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override void OnChatButtonClicked(bool firstButton, ref bool openShop)
         {
+            Player player = Main.LocalPlayer;
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (firstButton)
             {
-                //HamonSkillTree.Visible = true;
-                HamonSkillTree.OpenHamonSkillTree();
+                if (hPlayer.learnedHamon)
+                {
+                    HamonSkillTree.OpenHamonSkillTree();
+                    return;
+                }
+
+                if (player.CountItem(mod.ItemType("SunDroplet")) >= 5)
+                {
+                    for (int i = 0; i < 5; i++)
+                        player.ConsumeItem(mod.ItemType("SunDroplet"));
+                    hPlayer.learnedHamon = true;
+                    hPlayer.skillPointsAvailable = 1;
+
+                    if (Main.rand.Next(1, 3 + 1) != 1)
+                        Main.npcChatText = "Do you feel that? That is the power of your Hamon. Ask me whenever you feel like you're ready to learn something new, I've got lots of skills I can pass on to you.";
+                    else
+                    {
+                        hPlayer.skillPointsAvailable = 3;
+                        Main.npcChatText = "Amazing! You truly have the capability to become a master Hamon User! Your untapped Hamon is far beyond what I had expected it to be. Tell me, were your predecessors Hamon Users too?";
+                    }
+                }
+                else
+                {
+                    Main.npcChatText = "Oh? You seem like you have untapped potential in you. Tell me, would you like to learn Hamon? Don't worry, I've trained some of the finest warriors there are in this world.\n" +
+                                        "Bring me 5 Sun Droplets and I can show you how to take advantage of your unknown Hamon abilities.";
+                }
             }
         }
 
@@ -62,7 +89,7 @@ namespace JoJoStands.NPCs.TownNPCs
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (!vPlayer.vampire)
             {
-                switch (Main.rand.Next(0, 5))
+                switch (Main.rand.Next(0, 4 + 1))
                 {
                     case 0:
                         return "Excuse me, " + player.name + ", would you happen to have some wine, preferably in a bottle? I had some, but it spilled.";
@@ -80,7 +107,7 @@ namespace JoJoStands.NPCs.TownNPCs
             }
             else
             {
-                switch (Main.rand.Next(0, 2))
+                switch (Main.rand.Next(0, 1 + 1))
                 {
                     case 0:
                         return "Something has changed about you... you have used the power of the Stone Mask for yourself, have you not? Get out of my sight.";

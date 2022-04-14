@@ -2,10 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 using Terraria.UI;
-using Terraria.UI.Chat;
 
 namespace JoJoStands.UI
 {
@@ -17,6 +14,16 @@ namespace JoJoStands.UI
         public UIText hamonDisplay;
         public static Texture2D hamonBarTexture;
         public static bool changedInConfig = false;
+
+        public static void ShowHamonBar()
+        {
+            Visible = true;
+        }
+
+        public static void HideHamonBar()
+        {
+            Visible = false;
+        }
 
         public override void Update(GameTime gameTime)
         {
@@ -65,7 +72,7 @@ namespace JoJoStands.UI
                 HamonBar.Top.Set(MyPlayer.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
                 changedInConfig = false;
             }
-			
+
 
             base.Update(gameTime);
         }
@@ -89,12 +96,6 @@ namespace JoJoStands.UI
 
             Append(HamonBar);
             base.OnInitialize();
-        }
-
-        public override void RightClick(UIMouseEvent evt)
-        {
-            Visible = false;
-            base.RightClick(evt);
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)       //from ExampleMod's ExampleUI
@@ -199,7 +200,7 @@ namespace JoJoStands.UI
             {
                 frame = 23;
             }
-            spriteBatch.Draw(hamonBarTexture, HamonBar.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * frame, hamonBarTexture.Width, frameHeight),  Color.Yellow);
+            spriteBatch.Draw(hamonBarTexture, HamonBar.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * frame, hamonBarTexture.Width, frameHeight), Color.Yellow);
         }
     }
 }

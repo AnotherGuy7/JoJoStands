@@ -31,6 +31,16 @@ namespace JoJoStands
         [Tooltip("Determines whether or not you want to see the timestop effects.")]
         public bool TimestopEffects;
 
+        [DefaultValue(true)]
+        [Label("Timeskip Effects")]
+        [Tooltip("Determines whether or not you want to see the timeskip effects.")]
+        public bool TimeskipEffects;
+
+        [DefaultValue(true)]
+        [Label("Bite the Dust Effects")]
+        [Tooltip("Determines whether or not you want to see the bite the dust effects.")]
+        public bool BitetheDustEffects;
+
         [DefaultValue(false)]
         [Label("Range Indicators")]
         [Tooltip("Determines whether or not you want to see the range indicators for stands that need them.")]
@@ -101,6 +111,8 @@ namespace JoJoStands
             UI.HamonBarState.sizeMode = HamonBarSize;
             MyPlayer.ColorChangeEffects = ColorChangeEffects;
             MyPlayer.standSearchType = StandSearchType;
+            MyPlayer.TimeskipEffects = TimeskipEffects;
+            MyPlayer.BiteTheDustEffects = BitetheDustEffects;
             if (JoJoStands.JoJoStandsSounds == null)
             {
                 if (deathsound >= 6)

@@ -22,6 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
         private int updateTimer = 0;
         private bool scrapeFrames = false;
+        private bool scrapeBarrageFrames = false;
         private int chargeTimer = 0;
         private int specialScrapeTimer = 0;
         private bool scrapeMode = false;
@@ -54,7 +55,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             if (!mPlayer.standAutoMode)
             {
                 if (SpecialKeyPressedNoCooldown())
+                {
                     scrapeMode = !scrapeMode;
+                    if (scrapeMode)
+                        Main.NewText("Scrape Mode: Active");
+                    else
+                        Main.NewText("Scrape Mode: Disabled");
+                }
 
                 if (!scrapeMode)
                 {
@@ -71,14 +78,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     {
                         secondaryAbilityFrames = true;
                         if (chargeTimer < 150f)
-                        {
                             chargeTimer++;
-                        }
                     }
                     if (!Main.mouseRight && chargeTimer != 0 && projectile.owner == Main.myPlayer)
-                    {
                         scrapeFrames = true;
-                    }
+
                     if (!Main.mouseRight && chargeTimer != 0 && scrapeFrames && projectile.frame == 1 && projectile.owner == Main.myPlayer)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
@@ -97,7 +101,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         HandleDrawOffsets();
                         attackFrames = false;
                         normalFrames = false;
-                        scrapeFrames = true;
+                        scrapeBarrageFrames = true;
                         projectile.netUpdate = true;
 
                         float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
@@ -105,9 +109,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
                         projectile.direction = 1;
                         if (Main.MouseWorld.X < projectile.position.X)
-                        {
                             projectile.direction = -1;
-                        }
+
                         projectile.spriteDirection = projectile.direction;
 
                         Vector2 velocityAddition = Main.MouseWorld - projectile.position;
@@ -119,24 +122,27 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         if (mouseDistance <= 40f)
                             projectile.velocity = Vector2.Zero;
 
-                        if (shootCount <= 0 && projectile.frame == 0)
+                        if (shootCount <= 0 && projectile.frame == 1 || projectile.frame == 4)
                         {
-                            shootCount += 80;
+                            shootCount += newPunchTime;
                             Vector2 shootVel = Main.MouseWorld - projectile.Center;
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
 
-                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
+                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage * 2, punchKnockback, projectile.owner, fistWhoAmI);
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
-                            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR").SoundId, Style: mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR").Style, pitchOffset: Main.rand.NextFloat(0, 0.8f + 1f));
+                            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR").SoundId, -1, -1, mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR").Style, MyPlayer.ModSoundsVolume, Main.rand.NextFloat(0, 0.8f + 1f));
                         }
                         LimitDistance();
                     }
                     else
                     {
                         if (player.whoAmI == Main.myPlayer)
+                        {
                             attackFrames = false;
+                            scrapeBarrageFrames = false;
+                        }
                     }
                     if (Main.mouseRight && !playerHasAbilityCooldown)
                     {
@@ -201,7 +207,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                                 if (Collision.CheckAABBvLineCollision(npcPos, npcSize, projectile.Center, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
                                 {
                                     npc.StrikeNPC(60 * (specialScrapeTimer / 60), 0f, player.direction);     //damage goes up at a rate of 60dmg/s
-                                    npc.AddBuff(mod.BuffType("MissingOrgans"), 600);
+                                    npc.AddBuff(mod.BuffType("MissingOrgans"), 10 * 60);
                                 }
                             }
                             for (int p = 0; p < Main.maxPlayers; p++)
@@ -212,18 +218,18 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                                     if (otherPlayer.team != player.team && otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), projectile.Center, Main.MouseWorld))
                                     {
                                         otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " was scraped out of existence by " + player.name + "."), 60 * (specialScrapeTimer / 60), 1);
-                                        otherPlayer.AddBuff(mod.BuffType("MissingOrgans"), 600);
+                                        otherPlayer.AddBuff(mod.BuffType("MissingOrgans"), 10 * 60);
                                     }
                                 }
                             }
-                            player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
+                            player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(20));
                         }
                         specialScrapeTimer = 0;
                     }
                 }
                 if (!attackFrames)
                 {
-                    if (!scrapeFrames && !secondaryAbilityFrames)
+                    if (!scrapeFrames && !secondaryAbilityFrames && !scrapeBarrageFrames)
                         StayBehind();
                     else
                         GoInFront();
@@ -256,6 +262,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 int frameHeight = standTexture.Height / 2;
                 spriteBatch.Draw(scrapeTrail, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), Color.White, 0f, new Vector2(scrapeTrail.Width / 2f, frameHeight / 2f), 1f, effects, 0);
             }
+            if (scrapeBarrageFrames)
+            {
+                Texture2D scrapeTrail = mod.GetTexture("Projectiles/PlayerStands/TheHand/ScrapeBarrage_Scrape");
+                //spriteBatch.Draw(scrapeTrail, projectile.Center - Main.screenPosition, new Rectangle(0, 2 - projectile.frame, scrapeTrail.Width, scrapeTrail.Height / (projectile.frame + 1)), Color.White);
+                int frameHeight = standTexture.Height / 7;
+                spriteBatch.Draw(scrapeTrail, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), Color.White, 0f, new Vector2(scrapeTrail.Width / 2f, frameHeight / 2f), 1f, effects, 0);
+            }
             return true;
         }
 
@@ -264,11 +277,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(scrapeFrames);
+            writer.Write(scrapeBarrageFrames);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             scrapeFrames = reader.ReadBoolean();
+            scrapeBarrageFrames = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()
@@ -301,6 +316,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Scrape");
+            }
+            if (scrapeBarrageFrames)
+            {
+                normalFrames = false;
+                PlayAnimation("ScrapeBarrage");
             }
             if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
@@ -342,6 +362,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             if (animationName == "Scrape")
             {
                 AnimateStand(animationName, 2, 10, false);
+            }
+            if (animationName == "ScrapeBarrage")
+            {
+                AnimateStand(animationName, 7, (int)(newPunchTime * 2.2), true);
             }
             if (animationName == "Pose")
             {

@@ -1,4 +1,5 @@
 using JoJoStands.Networking;
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -63,18 +64,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 {
                     StayBehind();
                 }
-                if (projectile.owner == Main.myPlayer)
-                {
-                    if (SpecialKeyPressedNoCooldown())
-                    {
-                        mPlayer.chosenAbility += 1;
-                        if (mPlayer.chosenAbility >= 5)
-                        {
-                            mPlayer.chosenAbility = 0;
-                        }
-                        Main.NewText("Ability: " + abilityNames[mPlayer.chosenAbility]);
-                    }
-                }
                 if (!attackFrames && projectile.owner == Main.myPlayer)
                 {
                     if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && mPlayer.chosenAbility == 0)
@@ -123,6 +112,14 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     }
                 }
 
+                if (SpecialKeyPressedNoCooldown())
+                {
+                    if (!GoldExperienceRequiemAbilityWheel.visible)
+                        GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 5);
+                    else
+                        GoldExperienceAbilityWheel.CloseAbilityWheel();
+                }
+
                 if (secondaryAbilityFrames)
                 {
                     normalFrames = false;
@@ -149,6 +146,12 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             {
                 BasicPunchAI();
             }
+        }
+
+        public override bool PreKill(int timeLeft)
+        {
+            GoldExperienceRequiemAbilityWheel.CloseAbilityWheel();
+            return true;
         }
 
         public override void SelectAnimation()

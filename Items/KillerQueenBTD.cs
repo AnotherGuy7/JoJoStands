@@ -8,7 +8,7 @@ namespace JoJoStands.Items
     {
         public static bool taggedAnything = false;
 
-        public override int standSpeed => 60;
+        public override int standSpeed => 30;
         public override int standType => 2;
         public override int standTier => 5;
 
@@ -20,12 +20,12 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Killer Queen (Stray Cat)");
-            Tooltip.SetDefault("Left-click to shoot bubbles and right-click to detonate them!\nSpecial: Bite The Dust!\nRight-Click while holding the item to revert back to Killer Queen Final (You can revert back to BTD)\nUsed in Stand Slot");
+            Tooltip.SetDefault("Left-click to shoot bubbles and right-click to detonate them!\nSpecial: Bite The Dust!\nRight-Click while holding the item to revert back to Killer Queen Final (You can revert back to BTD)\nNote: Manually detonating bubble bombs deal 2x damage!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
         {
-            item.damage = 180;
+            item.damage = 684;
             item.width = 32;
             item.height = 32;
             item.maxStack = 1;

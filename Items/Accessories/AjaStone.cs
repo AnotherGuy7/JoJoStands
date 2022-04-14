@@ -16,12 +16,13 @@ namespace JoJoStands.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 40;
-            item.height = 40;
+            item.width = 48;
+            item.height = 60;
             item.maxStack = 1;
-            item.value = Item.buyPrice(gold: 25);
+            item.value = Item.buyPrice(gold: 14, silver: 50);
             item.rare = ItemRarityID.LightPurple;
             item.accessory = true;
+            item.scale = 0.8f;
         }
 
         public override void HoldItem(Player player)
@@ -34,16 +35,15 @@ namespace JoJoStands.Items.Accessories
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             hamonPlayer.hamonDamageBoosts += 0.5f;
             hamonPlayer.hamonKnockbackBoosts += 0.5f;
-            if (Main.dayTime == true)
+            if (Main.dayTime)
             {
                 player.meleeDamage += 0.23f;
                 player.meleeSpeed += 0.18f;
                 player.magicDamage *= 2;
                 player.manaRegen *= 3;
                 player.lifeRegen += 2;
-                player.waterWalk = true;
-                player.waterWalk2 = true;
             }
+
             player.lifeRegen += 1;
             player.waterWalk = true;
             player.waterWalk2 = true;

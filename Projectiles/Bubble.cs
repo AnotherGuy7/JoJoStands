@@ -27,9 +27,11 @@ namespace JoJoStands.Projectiles
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 21, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
             if (Main.mouseRight && projectile.owner == Main.myPlayer && projectile.ai[0] == 1f && player.ownedProjectileCounts[mod.ProjectileType("KillerQueenBTDStand")] == 1 && ownerProj.ai[0] == 1f)
             {
+                projectile.damage *= 2;
                 projectile.Kill();
                 projectile.netUpdate = true;
             }
+
             if (MyPlayer.AutomaticActivations)
             {
                 for (int i = 0; i < Main.maxNPCs; i++)
@@ -41,6 +43,7 @@ namespace JoJoStands.Projectiles
                         if (npcDistance < 30f && !npc.immortal && !npc.hide && !npc.friendly && npc.lifeMax > 5)
                         {
                             projectile.Kill();
+                            break;
                         }
                     }
                 }
@@ -51,16 +54,13 @@ namespace JoJoStands.Projectiles
         {
             MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
+            damage = 0;
         }
 
         public override void Kill(int timeLeft)
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            int explosion = Projectile.NewProjectile(projectile.position, projectile.velocity, ProjectileID.GrenadeIII, (int)(180f * Mplayer.standDamageBoosts), 8f, projectile.owner);
+            int explosion = Projectile.NewProjectile(projectile.position, projectile.velocity, ProjectileID.GrenadeIII, projectile.damage, 8f, projectile.owner);
             Main.projectile[explosion].timeLeft = 2;
             Main.projectile[explosion].netUpdate = true;
             Main.PlaySound(SoundID.Item62);

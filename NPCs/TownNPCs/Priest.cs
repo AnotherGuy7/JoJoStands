@@ -26,7 +26,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             NPCID.Sets.AttackFrameCount[npc.type] = 4;
             NPCID.Sets.DangerDetectRange[npc.type] = 250;       //this defines the npc danger detect range
             NPCID.Sets.AttackType[npc.type] = 1;        //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
-            NPCID.Sets.HatOffsetY[npc.type] = 4;        //this defines the party hat position
+            NPCID.Sets.HatOffsetY[npc.type] = 1;        //this defines the party hat position
             animationType = NPCID.Guide;        //this copy the guide animation
         }
 

@@ -9,16 +9,16 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetDefaults()
         {
-            DisplayName.SetDefault("Bite The Dust");
-            Description.SetDefault("The day is now restarting and your enemies are disappearing.");
+            DisplayName.SetDefault("Bites The Dust");
+            Description.SetDefault("The ultimate weapon against failure.");
             Main.persistentBuff[Type] = true;
-            Main.buffNoTimeDisplay[Type] = true;
-            Main.debuff[Type] = true;
+            Main.buffNoTimeDisplay[Type] = false;
+            Main.debuff[Type] = false;
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int i = 0; i < Main.maxPlayers; i++)       //first, get rid of all effect owners
@@ -68,17 +68,14 @@ namespace JoJoStands.Buffs.ItemBuff
                 player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(420));
                 player.ClearBuff(mod.BuffType(Name));
 
-            }
-            for (int n = 0; n < Main.maxNPCs; n++)
+            }*/
+            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.bitesTheDustActive = true;
+            if (!player.HasBuff(mod.BuffType(Name)))
             {
-                NPC npc = Main.npc[n];
-                if (npc.active && !npc.dontTakeDamage && !npc.friendly && npc.lifeMax > 5 && Main.rand.Next(1, 16) == 1)
-                {
-                    int bomb = Projectile.NewProjectile(npc.Center + new Vector2(Main.rand.NextFloat(0f, 10f), Main.rand.NextFloat(0f, 10f)), Vector2.Zero, ProjectileID.GrenadeIII, 102, 3f, player.whoAmI);
-                    Main.projectile[bomb].timeLeft = 2;
-                    Main.projectile[bomb].netUpdate = true;
-                }
-            }
+                mPlayer.bitesTheDustActive = false;
+                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(120));
+            }*/
         }
     }
 }

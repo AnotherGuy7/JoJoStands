@@ -461,6 +461,12 @@ namespace JoJoStands.NPCs
             }
             if (boundByStrings)
             {
+                if (npc.boss)
+                {
+                    npc.velocity *= 0.6f;
+                    return true;
+                }
+
                 npc.velocity.X = 0f;
                 if (npc.velocity.Y > 8f)
                     npc.velocity.Y += 0.3f;
@@ -555,12 +561,6 @@ namespace JoJoStands.NPCs
                 Vector2 position = npc.Center - new Vector2(bombTexture.Width / 2f, (npc.height / 2f) + 18f);
                 spriteBatch.Draw(bombTexture, position - Main.screenPosition, Color.White);
             }
-            if (boundByStrings)
-            {
-                Texture2D bombTexture = mod.GetTexture("Extras/BoundByStrings");
-                Vector2 position = npc.Center - new Vector2(bombTexture.Width / 2f, (npc.height / 2f) + 18f);
-                spriteBatch.Draw(bombTexture, position - Main.screenPosition, Color.White);
-            }
             return true;
         }
 
@@ -605,6 +605,13 @@ namespace JoJoStands.NPCs
                 scale /= (float)textureWidth;
                 scale += (float)Math.Abs(Math.Sin(bindingEmeraldDurationTimer / 100f)) * 0.5f;
                 spriteBatch.Draw(emeraldStringWebTexture, position, null, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
+            }
+            if (boundByStrings)
+            {
+                Texture2D bombTexture = mod.GetTexture("Extras/BoundByStrings");
+                Vector2 scale = new Vector2(npc.width, npc.height) / new Vector2(22, 14);
+                Vector2 origin = new Vector2(11, 7);
+                spriteBatch.Draw(bombTexture, npc.Center - Main.screenPosition, null, npc.color, npc.rotation, origin, scale, SpriteEffects.None, 0f);
             }
         }
 

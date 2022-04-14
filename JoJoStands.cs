@@ -36,6 +36,7 @@ namespace JoJoStands
         internal ZombieSkillTree ZombieSkillTreeUI;
         internal StoneFreeAbilityWheel StoneFreeAbilityWheelUI;
         internal GoldExperienceAbilityWheel GoldExperienceAbilityWheelUI;
+        internal GoldExperienceRequiemAbilityWheel GoldExperienceRequiemAbilityWheelUI;
 
         private UserInterface _betUI;
         private UserInterface _hamonbarInterface;
@@ -50,6 +51,7 @@ namespace JoJoStands
         private UserInterface _zombieSkillTreeUI;
         private UserInterface _stoneFreeAbilityWheelUI;
         private UserInterface _goldExperienceAbilityWheelUI;
+        private UserInterface _goldExperienceRequiemAbilityWheelUI;
 
         public static ModHotKey SpecialHotKey;
         public static ModHotKey SecondSpecialHotKey;
@@ -194,6 +196,11 @@ namespace JoJoStands
                 _goldExperienceAbilityWheelUI = new UserInterface();
                 _goldExperienceAbilityWheelUI.SetState(GoldExperienceAbilityWheelUI);
 
+                GoldExperienceRequiemAbilityWheelUI = new GoldExperienceRequiemAbilityWheel();
+                GoldExperienceRequiemAbilityWheelUI.Activate();
+                _goldExperienceRequiemAbilityWheelUI = new UserInterface();
+                _goldExperienceRequiemAbilityWheelUI.SetState(GoldExperienceRequiemAbilityWheelUI);
+
                 //Shader Stuff
                 Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect"));      // The path to the compiled shader file.
                 Filters.Scene["TimestopEffectShader"] = new Filter(new ScreenShaderData(timestopShader, "TimestopEffectShader"), EffectPriority.VeryHigh);
@@ -223,6 +230,10 @@ namespace JoJoStands
                 Filters.Scene["TimeSkipEffectShader"].Load();
                 //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["backStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonBackStars"));
                 //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["frontStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonFrontStars"));
+                Ref<Effect> biteTheDustEffectShader = new Ref<Effect>(GetEffect("Effects/BiteTheDustEffectShader"));
+                Filters.Scene["BiteTheDustEffect"] = new Filter(new ScreenShaderData(biteTheDustEffectShader, "BiteTheDustEffectShader"), EffectPriority.VeryHigh);
+                Filters.Scene["BiteTheDustEffect"].GetShader().UseImage(ModContent.GetTexture("JoJoStands/Extras/KillerQueenBTDImage"), 0);
+                Filters.Scene["BiteTheDustEffect"].Load();
 
                 //Misc
                 AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic"), ItemType("ViralMusicBox"), TileType("ViralMusicBoxTile"));
@@ -335,6 +346,9 @@ namespace JoJoStands
 
             if (GoldExperienceAbilityWheel.visible)
                 _goldExperienceAbilityWheelUI.Update(gameTime);
+
+            if (GoldExperienceRequiemAbilityWheel.visible)
+                _goldExperienceRequiemAbilityWheelUI.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)     //from ExampleMod's ExampleUI
@@ -382,6 +396,9 @@ namespace JoJoStands
 
             if (GoldExperienceAbilityWheel.visible)
                 _goldExperienceAbilityWheelUI.Draw(Main.spriteBatch, new GameTime());
+
+            if (GoldExperienceRequiemAbilityWheel.visible)
+                _goldExperienceRequiemAbilityWheelUI.Draw(Main.spriteBatch, new GameTime());
 
             return true;
         }

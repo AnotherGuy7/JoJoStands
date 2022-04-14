@@ -196,32 +196,32 @@ namespace JoJoStands.UI
                 bool keyPressed = false;
                 KeyboardState keyboardState = Keyboard.GetState();
 
-                if (abilitiesShown <= 0 && (keyboardState.IsKeyDown(Keys.D1) || keyboardState.IsKeyDown(Keys.NumPad1)))
+                if (abilitiesShown >= 1 && (keyboardState.IsKeyDown(Keys.D1) || keyboardState.IsKeyDown(Keys.NumPad1)))
                 {
                     keyPressed = true;
                     mPlayer.chosenAbility = 0;
                 }
-                if (abilitiesShown <= 1 && (keyboardState.IsKeyDown(Keys.D2) || keyboardState.IsKeyDown(Keys.NumPad2)))
+                if (abilitiesShown >= 2 && (keyboardState.IsKeyDown(Keys.D2) || keyboardState.IsKeyDown(Keys.NumPad2)))
                 {
                     keyPressed = true;
                     mPlayer.chosenAbility = 1;
                 }
-                if (abilitiesShown <= 2 && (keyboardState.IsKeyDown(Keys.D3) || keyboardState.IsKeyDown(Keys.NumPad3)))
+                if (abilitiesShown >= 3 && (keyboardState.IsKeyDown(Keys.D3) || keyboardState.IsKeyDown(Keys.NumPad3)))
                 {
                     keyPressed = true;
                     mPlayer.chosenAbility = 2;
                 }
-                if (abilitiesShown <= 3 && (keyboardState.IsKeyDown(Keys.D4) || keyboardState.IsKeyDown(Keys.NumPad4)))
+                if (abilitiesShown >= 4 && (keyboardState.IsKeyDown(Keys.D4) || keyboardState.IsKeyDown(Keys.NumPad4)))
                 {
                     keyPressed = true;
                     mPlayer.chosenAbility = 3;
                 }
-                if (abilitiesShown <= 4 && (keyboardState.IsKeyDown(Keys.D5) || keyboardState.IsKeyDown(Keys.NumPad5)))
+                if (abilitiesShown >= 5 && (keyboardState.IsKeyDown(Keys.D5) || keyboardState.IsKeyDown(Keys.NumPad5)))
                 {
                     keyPressed = true;
                     mPlayer.chosenAbility = 4;
                 }
-                if (abilitiesShown <= 5 && (keyboardState.IsKeyDown(Keys.D6) || keyboardState.IsKeyDown(Keys.NumPad6)))
+                if (abilitiesShown >= 6 && (keyboardState.IsKeyDown(Keys.D6) || keyboardState.IsKeyDown(Keys.NumPad6)))
                 {
                     keyPressed = true;
                     mPlayer.chosenAbility = 5;

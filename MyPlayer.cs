@@ -34,6 +34,8 @@ namespace JoJoStands
         public static float HamonBarPositionY;
         public static float ModSoundsVolume;
         public static bool ColorChangeEffects = false;
+        public static bool TimeskipEffects = false;
+        public static bool BiteTheDustEffects = false;
         public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
         public static StandSearchType standSearchType = StandSearchType.Bosses;
         public static bool testStandUnlocked = false;
@@ -79,6 +81,7 @@ namespace JoJoStands
         public int standDefenseToAdd = 0;
         public int chosenAbility = 0;
         public int timeSkipEffectTransitionTimer = 0;
+        public float biteTheDustEffectProgress = 0f;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -109,6 +112,7 @@ namespace JoJoStands
         public bool doobiesskullEquipped = false;
         public bool blackUmbrellaEquipped = false;
         public bool silverChariotShirtless = false;      //hot shirtless daddy silver chariot *moan*
+        public bool standChangingLocked = false;
         //Ozi is to blame for the comment above.
 
         public bool timestopActive;
@@ -139,9 +143,11 @@ namespace JoJoStands
         public Vector2 VoidCamPosition;
         public Vector2 standRemoteModeCameraPosition;
         public Vector2[] sexPistolsOffsets = new Vector2[6];
+        public Texture2D timeskipNPCMask;
 
         public string standName = "";
         public string poseSoundName = "";       //This is for JoJoStandsSounds
+        public int standHitTime = 0;
 
         private int amountOfSexPistolsPlaced = 0;
         private int sexPistolsClickTimer = 0;
@@ -260,9 +266,7 @@ namespace JoJoStands
                 Main.NewText("Stand Control: Auto");
                 standAutoMode = true;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
                     Networking.ModNetHandler.playerSync.SendStandAutoMode(256, player.whoAmI, true, player.whoAmI);
-                }
             }
             if (JoJoStands.StandAutoModeHotKey.JustPressed && standAutoMode && standKeyPressTimer <= 0)
             {
@@ -270,9 +274,7 @@ namespace JoJoStands
                 Main.NewText("Stand Control: Manual");
                 standAutoMode = false;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
                     Networking.ModNetHandler.playerSync.SendStandAutoMode(256, player.whoAmI, true, player.whoAmI);
-                }
             }
             if (JoJoStands.PoseHotKey.JustPressed && !poseMode)
             {
@@ -286,6 +288,9 @@ namespace JoJoStands
                 }
                 poseMode = true;
             }
+            if (standChangingLocked)
+                return;
+
             if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !player.HasBuff(mod.BuffType("Stolen")))
             {
                 standOut = true;
@@ -413,7 +418,7 @@ namespace JoJoStands
         {
             StandSlot = new UIItemSlot(Vector2.Zero, hoverText: "Enter Stand Here", scaleToInventory: true);
             StandSlot.BackOpacity = .8f;
-            StandSlot.Item = new Terraria.Item();
+            StandSlot.Item = new Item();
             StandSlot.Item.SetDefaults(0);
 
             StandDyeSlot = new UIItemSlot(StandSlot.Position - new Vector2(60f, 0f), 52, context: ItemSlot.Context.EquipDye, "Enter Dye Here", scaleToInventory: true);
@@ -464,19 +469,45 @@ namespace JoJoStands
 
                 Main.inventoryScale = origScale;
 
-                if (!timestopActive)        //so that it's not interactable during a timestop, cause switching stands during a timestop is... not good
+                if (!timestopActive && !standChangingLocked)        //so that it's not interactable during a timestop, cause switching stands during a timestop is... not good
                 {
-                    if (Main.mouseItem.IsAir || Main.mouseItem.modItem is Items.StandItemClass)
+                    if (Main.mouseItem.IsAir || Main.mouseItem.modItem is StandItemClass)
                         StandSlot.Update();
                     if (Main.mouseItem.IsAir || Main.mouseItem.dye != 0)
                         StandDyeSlot.Update();
                 }
             }
+
+            /*if (timeskipActive)
+            {
+                RenderTarget2D renderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+                {
+                    spriteBatch.End();
+                    Main.graphics.GraphicsDevice.SetRenderTarget(null);
+
+                    Main.graphics.GraphicsDevice.SetRenderTarget(renderTarget);
+                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+                        NPC npc = Main.npc[i];
+                        if (npc.active)
+                            spriteBatch.Draw(Main.npcTexture[npc.type], npc.getRect(), npc.frame, Color.Red, npc.rotation, npc.visualOffset, SpriteEffects.None, 0f);
+                    }
+
+                    spriteBatch.End();     //ending the spriteBatch that started in PreDraw
+                    Main.graphics.GraphicsDevice.SetRenderTarget(null);
+                    timeskipNPCMask = renderTarget;
+                    Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage(timeskipNPCMask, 2);
+
+                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                }
+            }*/
         }
 
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
-            if (Main.rand.Next(0, 101) <= 20)
+            if (Main.rand.Next(1, 5 + 1) == 1)
             {
                 int inheritanceStandChance = Main.rand.Next(0, JoJoStands.standTier1List.Count);
                 Item standTier1 = new Item();
@@ -1136,22 +1167,35 @@ namespace JoJoStands
                 if (!epitaphForesightActive && Filters.Scene["RedEffect"].IsActive())
                     Filters.Scene["RedEffect"].Deactivate();
 
-                if (timeskipActive && timeSkipEffectTransitionTimer < 40)
+                if (BiteTheDustEffects)
                 {
-                    if (!Filters.Scene["TimeSkipEffectShader"].IsActive())
-                        Filters.Scene.Activate("TimeSkipEffectShader");
-                    else
-                    {
-                        timeSkipEffectTransitionTimer++;
-                        Filters.Scene["TimeSkipEffectShader"].GetShader().UseProgress((float)timeSkipEffectTransitionTimer / 40f);
-                    }
+                    if (bitesTheDustActive && !Filters.Scene["BiteTheDustEffect"].IsActive())
+                        Filters.Scene.Activate("BiteTheDustEffect");
+                    if (!bitesTheDustActive && Filters.Scene["BiteTheDustEffect"].IsActive())
+                        Filters.Scene["BiteTheDustEffect"].Deactivate();
+                    if (bitesTheDustActive && Filters.Scene["BiteTheDustEffect"].IsActive())
+                        Filters.Scene["BiteTheDustEffect"].GetShader().UseProgress(biteTheDustEffectProgress);
                 }
-                if (!timeskipActive && timeSkipEffectTransitionTimer > 0)
+
+                if (TimeskipEffects)
                 {
-                    timeSkipEffectTransitionTimer--;
-                    Filters.Scene["TimeSkipEffectShader"].GetShader().UseProgress((float)timeSkipEffectTransitionTimer / 40f);
-                    if (timeSkipEffectTransitionTimer <= 0)
-                        Filters.Scene["TimeSkipEffectShader"].Deactivate();
+                    if (timeskipActive && timeSkipEffectTransitionTimer < 40)
+                    {
+                        if (!Filters.Scene["TimeSkipEffectShader"].IsActive())
+                            Filters.Scene.Activate("TimeSkipEffectShader");
+                        else
+                        {
+                            timeSkipEffectTransitionTimer++;
+                            Filters.Scene["TimeSkipEffectShader"].GetShader().UseProgress((float)timeSkipEffectTransitionTimer / 40f);
+                        }
+                    }
+                    if (!timeskipActive && timeSkipEffectTransitionTimer > 0)
+                    {
+                        timeSkipEffectTransitionTimer--;
+                        Filters.Scene["TimeSkipEffectShader"].GetShader().UseProgress((float)timeSkipEffectTransitionTimer / 40f);
+                        if (timeSkipEffectTransitionTimer <= 0)
+                            Filters.Scene["TimeSkipEffectShader"].Deactivate();
+                    }
                 }
 
                 if (ColorChangeEffects)
@@ -1187,6 +1231,8 @@ namespace JoJoStands
         public void SpawnStand()
         {
             Item inputItem = StandSlot.Item;
+            if (standChangingLocked)
+                return;
 
             if (inputItem.IsAir)
             {
@@ -1430,6 +1476,7 @@ namespace JoJoStands
 
             standOut = false;
             revived = false;
+            standChangingLocked = false;
             return true;
         }
 

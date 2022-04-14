@@ -53,6 +53,7 @@ namespace JoJoStands.Items.Hamon
         public bool usingItemThatIgnoresEnemyDamage = false;
         public bool learnedAnyAbility = false;
         public bool sunShacklesActive = false;
+        public bool learnedHamon = false;
 
         //Adjustable skills
         public const int HamonSkillsLimit = 15;
@@ -667,7 +668,8 @@ namespace JoJoStands.Items.Hamon
                 { "hamonLevelKeys", hamonSkillLevels.Keys.ToList() },
                 { "hamonLevelValues", hamonSkillLevels.Values.ToList() },
                 { "hamonSkillPoints", skillPointsAvailable },
-                { "learnedAnyAbility", learnedAnyAbility }
+                { "learnedAnyAbility", learnedAnyAbility },
+                { "learnedHamon", learnedHamon }
             };
         }
 
@@ -681,6 +683,7 @@ namespace JoJoStands.Items.Hamon
             IList<int> levelValues = tag.GetList<int>("hamonLevelValues");
             skillPointsAvailable = tag.GetInt("hamonSkillPoints");
             learnedAnyAbility = tag.GetBool("learnedAnyAbility");
+            learnedHamon = tag.GetBool("learnedHamon");
             /*for (int i = 0; i < keys.Count; i++)
             {
                 if (learnedHamonSkills.ContainsKey(keys[i]))
