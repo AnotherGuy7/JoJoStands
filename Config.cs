@@ -51,6 +51,11 @@ namespace JoJoStands
         [Tooltip("Determines whether or not you want abilities to automatically activate, such as Killer Queen's bomb and The World's (Auto Mode) Knives")]
         public bool AutomaticActivations;
 
+        [DefaultValue(true)]
+        [Label("Respawn With Stand Out")]
+        [Tooltip("Determiens whether or not you want to always respawn with your Stand out.")]
+        public bool RespawnWithStandOut;
+
         [DefaultValue(100)]
         [Label("Range Indicator Visibility")]
         [Tooltip("Allows you to choose how transparent the Range Indicator is.")]
@@ -113,6 +118,7 @@ namespace JoJoStands
             MyPlayer.standSearchType = StandSearchType;
             MyPlayer.TimeskipEffects = TimeskipEffects;
             MyPlayer.BiteTheDustEffects = BitetheDustEffects;
+            MyPlayer.RespawnWithStandOut = RespawnWithStandOut;
             if (JoJoStands.JoJoStandsSounds == null)
             {
                 if (deathsound >= 6)

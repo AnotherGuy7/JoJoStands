@@ -77,7 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     }
                     if (shootCount <= 0 && (projectile.frame == 0 || projectile.frame == 4))
                     {
-                        shootCount += newPunchTime;
+                        shootCount += newPunchTime / 2;
                         Vector2 shootVel = Main.MouseWorld - projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -134,11 +134,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (animationName == "Idle")
             {
-                AnimateStand(animationName, 4, 30, true);
+                AnimateStand(animationName, 4, 15, true);
             }
             if (animationName == "Attack")
             {
-                AnimateStand(animationName, 6, newPunchTime, true);
+                AnimateStand(animationName, 6, newPunchTime / 2, true);
             }
             if (animationName == "Pose")
             {

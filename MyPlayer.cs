@@ -36,6 +36,7 @@ namespace JoJoStands
         public static bool ColorChangeEffects = false;
         public static bool TimeskipEffects = false;
         public static bool BiteTheDustEffects = false;
+	    public static bool RespawnWithStandOut = true;
         public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
         public static StandSearchType standSearchType = StandSearchType.Bosses;
         public static bool testStandUnlocked = false;
@@ -217,6 +218,12 @@ namespace JoJoStands
             {
                 sexPistolsOffsets[i] = new Vector2(Main.rand.NextFloat(-40f, 40f + 1f), Main.rand.NextFloat(-40f, 40f + 1f));
             }
+        }
+
+        public override void OnRespawn(Player player)
+        {
+            if (player.whoAmI == Main.myPlayer && RespawnWithStandOut)
+                SpawnStand();
         }
 
         public override void PlayerDisconnect(Player player)        //runs for everyone that hasn't left
