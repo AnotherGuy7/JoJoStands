@@ -4,6 +4,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -78,10 +79,10 @@ namespace JoJoStands.NPCs.Enemies
             {
                 npc.hide = false;
                 npc.immortal = false;
-                npc.AddBuff(mod.BuffType("Vampire"), 2);
+                npc.AddBuff(ModContent.BuffType<Vampire>(), 2);
                 if (!grabbingPlayer)
                 {
-                    if (npc.HasBuff(mod.BuffType("Sunburn")))
+                    if (npc.HasBuff(ModContent.BuffType<Sunburn>()))
                     {
                         npc.defense = 0;
                         npc.damage = 25 * expertboost;
@@ -94,7 +95,7 @@ namespace JoJoStands.NPCs.Enemies
                 }
                 if (grabbingPlayer)
                 {
-                    if (npc.HasBuff(mod.BuffType("Sunburn")))
+                    if (npc.HasBuff(ModContent.BuffType<Sunburn>()))
                     {
                         npc.defense = 0;
                         npc.damage = 0;
@@ -178,7 +179,7 @@ namespace JoJoStands.NPCs.Enemies
                         }
                         target.position = npc.position;     //I assume it's a sort of stunlock so I'll leave it as is
                         target.AddBuff(BuffID.Suffocation, 2);   
-                        target.npcTypeNoAggro[mod.NPCType("JackTheRipper")] = true;
+                        target.npcTypeNoAggro[Mod.NPCType("JackTheRipper>()] = true;
                         if (target.dead)
                         {
                             dashCounter = 0;
@@ -259,7 +260,7 @@ namespace JoJoStands.NPCs.Enemies
                 /*for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC otherNPCs = Main.npc[n];
-                    JoJoGlobalNPC jojoNPC = otherNPCs.GetGlobalNPC<JoJoGlobalNPC>();
+                    JoJoGlobalNPC jojoNPC = otherNPCs.GetGlobalNPC<JoJoGlobalNPC>());
                     if (otherNPCs.townNPC)
                     {
                         if (jojoNPC.jackHiding)
@@ -276,7 +277,7 @@ namespace JoJoStands.NPCs.Enemies
                                     npc.hide = true;
                                     if (otherNPCs.Distance(target.Center) <= 200f && npc.whoAmI == jojoNPC.hiddenJackWhoAmI)
                                     {
-                                        otherNPCs.AddBuff(mod.BuffType("Dead"), 2);
+                                        otherNPCs.AddBuff(ModContent.BuffType<Dead>(), 2);
                                     }
                                 }
                                 if (!otherNPCs.active)
@@ -309,7 +310,7 @@ namespace JoJoStands.NPCs.Enemies
                     npc.Center = victimNPC.Center;
                     if (victimNPC.Distance(target.Center) <= 200f)
                     {
-                        victimNPC.AddBuff(mod.BuffType("Dead"), 2);
+                        victimNPC.AddBuff(ModContent.BuffType<Dead>(), 2);
                     }
                 }
                 else
@@ -361,7 +362,7 @@ namespace JoJoStands.NPCs.Enemies
                 for (int i = 0; i < numberKnives; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(normalizedShootVelocity.X, normalizedShootVelocity.Y).RotatedBy(MathHelper.Lerp(-rotationk, rotationk, i / (numberKnives - 1))) * .2f;
-                    int proj = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("JackKnife"), 6 * expertboost, 2f);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.Center.X, npc.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, ModContent.ProjectileType<JackKnife>(), 6 * expertboost, 2f);
                     Main.projectile[proj].netUpdate = true;
                     npc.netUpdate = true;
                 }
@@ -374,7 +375,7 @@ namespace JoJoStands.NPCs.Enemies
                 for (int i = 0; i < numberKnives; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(normalizedShootVelocity.X, normalizedShootVelocity.Y).RotatedBy(MathHelper.Lerp(-rotationk, rotationk, i / (numberKnives - 1))) * .2f;
-                    int proj = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, mod.ProjectileType("JackKnife"), 6 * expertboost, 2f);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.Center.X, npc.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, ModContent.ProjectileType<JackKnife>(), 6 * expertboost, 2f);
                     Main.projectile[proj].netUpdate = true;
                     npc.netUpdate = true;
                 }
@@ -385,7 +386,7 @@ namespace JoJoStands.NPCs.Enemies
             if (dashing && !grabbingPlayer)
             {
                 SpriteEffects effects = (npc.spriteDirection == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                Texture2D texture2d = mod.GetTexture("NPCs/Enemies/JackTheRipper");
+                Texture2D texture2d = Mod.GetTexture("NPCs/Enemies/JackTheRipper>();
                 Vector2 vector2 = new Vector2((Main.npcTexture[npc.type].Width / 2), (Main.npcTexture[npc.type].Height / Main.npcFrameCount[npc.type] / 2));
                 Main.spriteBatch.Draw(texture2d, new Vector2(npc.position.X - Main.screenPosition.X + (npc.width / 2) - Main.npcTexture[npc.type].Width * npc.scale / 2f + vector2.X * npc.scale, npc.position.Y - Main.screenPosition.Y + npc.height - Main.npcTexture[npc.type].Height * npc.scale / Main.npcFrameCount[npc.type] + 4f + vector2.Y * npc.scale), new Rectangle?(npc.frame), Color.White, npc.rotation, vector2, npc.scale, effects, 0f);
                 for (int i = 1; i < npc.oldPos.Length; i++)

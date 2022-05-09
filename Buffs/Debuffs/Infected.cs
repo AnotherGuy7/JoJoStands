@@ -5,7 +5,7 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class Infected : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Infected");
             Description.SetDefault("Some sort of otherworldly virus is spreading inside your body.");
@@ -15,9 +15,8 @@ namespace JoJoStands.Buffs.Debuffs
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.lifeRegen > 0)
-            {
                 player.lifeRegen = 0;
-            }
+
             player.lifeRegenTime = 120;
             player.lifeRegen -= 4;
             if (Main.rand.Next(0, 2 + 1) == 0)

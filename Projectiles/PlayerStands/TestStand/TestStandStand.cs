@@ -6,10 +6,11 @@ using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.PlayerStands.TestStand
 {
-    public class TestStand : StandClass
+    public class TestStandStand : StandClass
     {
         public override int punchDamage => 70;
         public override int halfStandHeight => 37;
@@ -29,10 +30,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             SelectAnimation();
             UpdateStandInfo();
             //rippleEffectTimer--;
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
             if (shootCount > 0)
                 shootCount--;
 
@@ -51,31 +52,31 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                 {
                     StayBehind();
                 }
-                if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !player.HasBuff(mod.BuffType("TheWorldBuff")))
+                if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
                 {
                     Timestop(30);
                     timestopPoseTimer += 60;
                 }
-                if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(mod.BuffType("AbilityCooldown")) && player.HasBuff(mod.BuffType("TheWorldBuff")) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[mod.ProjectileType("RoadRoller")] == 0)
+                if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<RoadRoller>()] == 0)
                 {
                     shootCount += 12;
-                    Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
                     {
                         shootVel = new Vector2(0f, 1f);
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed + 4f;
-                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("RoadRoller"), 120, 5f, projectile.owner);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RoadRoller>(), 120, 5f, Projectile.owner);
                     Main.projectile[proj].netUpdate = true;
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                 }
                 if (timestopPoseTimer > 0)
                 {
                     timestopPoseTimer--;
                     normalFrames = false;
                     attackFrames = false;
-                    projectile.frame = 6;
+                    Projectile.frame = 6;
                     Main.mouseLeft = false;
                     Main.mouseRight = false;
                 }
@@ -96,25 +97,25 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/TestStand/TestStand_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/TestStand/TestStand_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 2, 30, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }

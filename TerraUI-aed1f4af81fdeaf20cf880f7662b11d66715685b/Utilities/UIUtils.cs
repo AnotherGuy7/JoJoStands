@@ -5,17 +5,18 @@ using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.UI;
 using TerraUI.Objects;
 
 namespace TerraUI.Utilities {
     public static class UIUtils {
         /// <summary>
-        /// The mod that uses TerraUI.
+        /// The Mod that uses TerraUI.
         /// </summary>
         public static Mod Mod { get; set; }
         /// <summary>
-        /// The subdirectory that TerraUI is stored in, if it is not in the mod's base folder. Used to determine where to load UI
+        /// The subdirectory that TerraUI is stored in, if it is not in the Mod's base folder. Used to determine where to load UI
         /// textures from.
         /// Example: Addons/TerraUI
         /// </summary>
@@ -135,22 +136,22 @@ namespace TerraUI.Utilities {
         /// <summary>
         /// Switch two items.
         /// </summary>
-        /// <param name="item1">first item</param>
-        /// <param name="item2">second item</param>
+        /// <param name="item1">first Item</param>
+        /// <param name="item2">second Item</param>
         public static void SwitchItems(ref Item item1, ref Item item2) {
-            if((item1.type == 0 || item1.stack < 1) && (item2.type != 0 || item2.stack > 0)) //if item2 is mouseitem, then if item slot is empty and item is picked up
+            if((item1.type == 0 || item1.stack < 1) && (item2.type != 0 || item2.stack > 0)) //if item2 is mouseitem, then if Item slot is empty and Item is picked up
             {
                 item1 = item2;
                 item2 = new Item();
                 item2.SetDefaults();
             }
-            else if((item1.type != 0 || item1.stack > 0) && (item2.type == 0 || item2.stack < 1)) //if item2 is mouseitem, then if item slot is empty and item is picked up
+            else if((item1.type != 0 || item1.stack > 0) && (item2.type == 0 || item2.stack < 1)) //if item2 is mouseitem, then if Item slot is empty and Item is picked up
             {
                 item2 = item1;
                 item1 = new Item();
                 item1.SetDefaults();
             }
-            else if((item1.type != 0 || item1.stack > 0) && (item2.type != 0 || item2.stack > 0)) //if item2 is mouseitem, then if item slot is empty and item is picked up
+            else if((item1.type != 0 || item1.stack > 0) && (item2.type != 0 || item2.stack > 0)) //if item2 is mouseitem, then if Item slot is empty and Item is picked up
             {
                 Item item3 = item2;
                 item2 = item1;

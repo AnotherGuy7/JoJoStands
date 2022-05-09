@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/HierophantGreenT1"; }
+            get { return Mod.Name + "/Items/HierophantGreenT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -24,35 +26,34 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 56;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 56;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("HierophantGreenT2"));
-            recipe.AddIngredient(ItemID.Emerald, 6);
-            recipe.AddIngredient(ItemID.OrichalcumBar, 6);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToChange"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("HierophantGreenT2"));
-            recipe.AddIngredient(ItemID.Emerald, 6);
-            recipe.AddIngredient(ItemID.MythrilBar, 6);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToChange"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<HierophantGreenT2>())
+                .AddIngredient(ItemID.Emerald, 6)
+                .AddIngredient(ItemID.OrichalcumBar, 6)
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<HierophantGreenT2>())
+                .AddIngredient(ItemID.Emerald, 6)
+                .AddIngredient(ItemID.MythrilBar, 6)
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

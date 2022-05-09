@@ -7,47 +7,47 @@ namespace JoJoStands.Projectiles.Pets
 {
     public class TuskAct3Pet : StandClass
     {
-        public override string Texture => mod.Name + "/Projectiles/Pets/TuskAct3Pet";
+        public override string Texture => Mod.Name + "/Projectiles/Pets/TuskAct3Pet";
 		public override string poseSoundName => "ItsBeenARoundaboutPath";
 
         public override void SetStaticDefaults()
         {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 4;
+            Main.projPet[Projectile.type] = true;
+            Main.projFrames[Projectile.type] = 4;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 24;
-            projectile.height = 26;
+            Projectile.width = 24;
+            Projectile.height = 26;
         }
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 			mPlayer.poseSoundName = poseSoundName;
             if (mPlayer.tuskActNumber == 3)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             Vector2 behindPlayer = player.Center;
             behindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
             behindPlayer.Y -= 25f;
-            projectile.Center = Vector2.Lerp(projectile.Center, behindPlayer, 0.2f);
-            projectile.velocity *= 0.8f;
-            projectile.spriteDirection = projectile.direction = player.direction;
+            Projectile.Center = Vector2.Lerp(Projectile.Center, behindPlayer, 0.2f);
+            Projectile.velocity *= 0.8f;
+            Projectile.spriteDirection = Projectile.direction = player.direction;
 
-            projectile.frameCounter++;
-            if (projectile.frameCounter >= 10)
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 10)
             {
-                projectile.frame += 1;
-                projectile.frameCounter = 0;
-                if (projectile.frame >= 4)
+                Projectile.frame += 1;
+                Projectile.frameCounter = 0;
+                if (Projectile.frame >= 4)
                 {
-                    projectile.frame = 0;
+                    Projectile.frame = 0;
                 }
             }
-            projectile.netUpdate = true;
+            Projectile.netUpdate = true;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)

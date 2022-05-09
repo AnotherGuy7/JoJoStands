@@ -1,11 +1,14 @@
-using Terraria.ID;
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class KillerQueenFinal : StandItemClass
-	{
+    public class KillerQueenFinal : StandItemClass
+    {
         public override int standSpeed => 9;
         public override int standType => 1;
         public override string standProjectileName => "KillerQueen";
@@ -13,24 +16,24 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/KillerQueenT1"; }
+            get { return Mod.Name + "/Items/KillerQueenT1"; }
         }
 
         public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Killer Queen (Final)");
-			Tooltip.SetDefault("Left-click to punch and right-click to trigger any block! \nRange: 16 blocks \nSpecial: Sheer Heart Attack!\nUsed in Stand Slot");
-		}
+        {
+            DisplayName.SetDefault("Killer Queen (Final)");
+            Tooltip.SetDefault("Left-click to punch and right-click to trigger any block! \nRange: 16 blocks \nSpecial: Sheer Heart Attack!\nUsed in Stand Slot");
+        }
 
         public override void SetDefaults()
         {
-            item.damage = 74;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 74;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void HoldItem(Player player)
@@ -42,9 +45,9 @@ namespace JoJoStands.Items
                 {
                     if (Main.mouseRight && mPlayer.revertTimer <= 0)
                     {
-                        item.type = mod.ItemType("KillerQueenBTD");
-                        item.SetDefaults(mod.ItemType("KillerQueenBTD"));
-                        Main.PlaySound(SoundID.Grab);
+                        Item.type = ModContent.ItemType<KillerQueenBTD>();
+                        Item.SetDefaults(ModContent.ItemType<KillerQueenBTD>());
+                        SoundEngine.PlaySound(SoundID.Grab);
                         mPlayer.revertTimer += 30;
                     }
                 }
@@ -52,18 +55,17 @@ namespace JoJoStands.Items
         }
 
         public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("KillerQueenT3"));
-            recipe.AddIngredient(ItemID.ChlorophyteBar, 7);
-            recipe.AddIngredient(ItemID.SoulofNight, 15);
-            recipe.AddIngredient(mod.ItemType("Hand"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"), 3);
-            recipe.AddIngredient(mod.ItemType("WillToEscape"), 3);
-            recipe.AddIngredient(mod.ItemType("TaintedLifeforce"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
-	}
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<KillerQueenT3>())
+                .AddIngredient(ItemID.ChlorophyteBar, 7)
+                .AddIngredient(ItemID.SoulofNight, 15)
+                .AddIngredient(ModContent.ItemType<Hand>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToDestroy>(), 3)
+                .AddIngredient(ModContent.ItemType<WillToEscape>(), 3)
+                .AddIngredient(ModContent.ItemType<TaintedLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+        }
+    }
 }

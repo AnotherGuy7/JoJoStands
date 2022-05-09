@@ -9,7 +9,7 @@ namespace TerraUI {
     public delegate void MouseButtonEventHandler(UIObject sender, MouseButtonEventArgs e);
     public delegate void MouseEventHandler(UIObject sender, MouseEventArgs e);
     public delegate void DrawHandler(UIObject sender, SpriteBatch spriteBatch);
-    public delegate bool ConditionHandler(Item item);
+    public delegate bool ConditionHandler(Item Item);
     public delegate void ValueChangedEventHandler<T>(UIObject sender, ValueChangedEventArgs<T> e);
 
     public class ValueChangedEventArgs<T> {

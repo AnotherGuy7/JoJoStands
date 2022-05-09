@@ -1,4 +1,7 @@
-﻿using Terraria;
+﻿using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -16,9 +19,9 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 30;
-            item.rare = ItemRarityID.LightPurple;
+            Item.width = 30;
+            Item.height = 30;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -27,18 +30,17 @@ namespace JoJoStands.Items
             mPlayer.standAccessory = true;
             mPlayer.standType = 1;
             mPlayer.poseSoundName = "TheGuiltierYouFeel";
-            player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
+            player.AddBuff(ModContent.BuffType<LockActiveBuff>(), 10);
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StandArrow"));
-            recipe.AddIngredient(mod.ItemType("WillToEscape"), 1);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<StandArrow>())
+                .AddIngredient(ModContent.ItemType<WillToEscape>(), 1)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

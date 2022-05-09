@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.Minions
 {
@@ -9,26 +10,26 @@ namespace JoJoStands.Projectiles.Minions
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 6;
+            Main.projFrames[Projectile.type] = 6;
         }
 
         public override void SetDefaults()
         {
-            projectile.netImportant = true;
-            projectile.width = 16;
-            projectile.height = 28;
-            projectile.friendly = true;
-            projectile.netImportant = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.hostile = false;
-            projectile.minion = true;
-            projectile.timeLeft = 2;
-            projectile.minionSlots = 0.5f;
-            drawOffsetX = 8;
-            drawOriginOffsetY = 6;
-            projectile.penetrate = -1;
-            projectile.damage = 0;
+            Projectile.netImportant = true;
+            Projectile.width = 16;
+            Projectile.height = 28;
+            Projectile.friendly = true;
+            Projectile.netImportant = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.hostile = false;
+            Projectile.minion = true;
+            Projectile.timeLeft = 2;
+            Projectile.minionSlots = 0.5f;
+            DrawOffsetX = 8;
+            DrawOriginOffsetY = 6;
+            Projectile.penetrate = -1;
+            Projectile.damage = 0;
         }
 
         private bool canShoot = false;
@@ -37,9 +38,9 @@ namespace JoJoStands.Projectiles.Minions
         public override void AI()       ////I really just ported over the Stray Cat NPC AI
         {
             SelectFrame();
-            Player player = Main.player[projectile.owner];
-            projectile.damage = 0;
-            projectile.timeLeft = 2;
+            Player player = Main.player[Projectile.owner];
+            Projectile.damage = 0;
+            Projectile.timeLeft = 2;
             if (shootCount > 0)
                 shootCount--;
 
@@ -49,45 +50,45 @@ namespace JoJoStands.Projectiles.Minions
                 for (int k = 0; k < Main.maxNPCs; k++)
                 {
                     NPC potentialTarget = Main.npc[k];
-                    if (potentialTarget.active && !potentialTarget.dontTakeDamage && !potentialTarget.friendly && potentialTarget.lifeMax > 5 && potentialTarget.type != NPCID.TargetDummy && potentialTarget.type != NPCID.CultistTablet && !potentialTarget.townNPC && projectile.Distance(potentialTarget.Center) <= 400f)
+                    if (potentialTarget.active && !potentialTarget.dontTakeDamage && !potentialTarget.friendly && potentialTarget.lifeMax > 5 && potentialTarget.type != NPCID.TargetDummy && potentialTarget.type != NPCID.CultistTablet && !potentialTarget.townNPC && Projectile.Distance(potentialTarget.Center) <= 400f)
                     {
                         target = potentialTarget;
                     }
                 }
             }
-            if (player.HeldItem.type == mod.ItemType("StrayCat") && player.altFunctionUse == 2)
+            if (player.HeldItem.type == ModContent.ItemType<StrayCat>()) && player.altFunctionUse == 2)
             {
-                projectile.Kill();
+                Projectile.Kill();
             }
-            projectile.velocity.Y = 2f;
+            Projectile.velocity.Y = 2f;
             if (target != null)
             {
-                if (projectile.ai[1] == 0f)
+                if (Projectile.ai[1] == 0f)
                 {
-                    projectile.ai[0]++;
+                    Projectile.ai[0]++;
                 }
-                if (projectile.ai[0] > 0f && projectile.ai[1] == 1f)
+                if (Projectile.ai[0] > 0f && Projectile.ai[1] == 1f)
                 {
-                    projectile.ai[0]--;
+                    Projectile.ai[0]--;
                 }
-                if (projectile.ai[0] >= 210f)
+                if (Projectile.ai[0] >= 210f)
                 {
-                    projectile.ai[0] = 209f;
-                    projectile.ai[1] = 1f;
+                    Projectile.ai[0] = 209f;
+                    Projectile.ai[1] = 1f;
                 }
-                if (projectile.ai[1] == 1f)
+                if (Projectile.ai[1] == 1f)
                 {
                     if (canShoot && shootCount <= 0)
                     {
                         shootCount += 40;
-                        Vector2 shootVel = target.Center - projectile.Center;
+                        Vector2 shootVel = target.Center - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= 2f;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("AirBubble"), 104, 1f, projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<AirBubble>()), 104, 1f, Projectile.owner);
                         Main.projectile[proj].hostile = false;
                         Main.projectile[proj].friendly = true;
                         Main.projectile[proj].netUpdate = true;
@@ -96,12 +97,12 @@ namespace JoJoStands.Projectiles.Minions
                     }
                 }
 
-                projectile.direction = 1;
-                if (target.position.X < projectile.position.X)
+                Projectile.direction = 1;
+                if (target.position.X < Projectile.position.X)
                 {
-                    projectile.direction = -1;
+                    Projectile.direction = -1;
                 }
-                projectile.spriteDirection = projectile.direction;
+                Projectile.spriteDirection = Projectile.direction;
             }
         }
 
@@ -112,22 +113,22 @@ namespace JoJoStands.Projectiles.Minions
 
         public void SelectFrame()
         {
-            if (projectile.ai[1] == 1f)
+            if (Projectile.ai[1] == 1f)
             {
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= 20)
+                Projectile.frameCounter++;
+                if (Projectile.frameCounter >= 20)
                 {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
+                    Projectile.frame += 1;
+                    Projectile.frameCounter = 0;
                 }
-                if (!canShoot && projectile.frame == 5)
+                if (!canShoot && Projectile.frame == 5)
                 {
                     canShoot = true;
                 }
-                if (projectile.frame >= 6)
+                if (Projectile.frame >= 6)
                 {
-                    projectile.frame = 0;
-                    projectile.ai[1] = 0f;
+                    Projectile.frame = 0;
+                    Projectile.ai[1] = 0f;
                     canShoot = false;
                 }
             }

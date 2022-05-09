@@ -1,7 +1,8 @@
-using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -9,30 +10,30 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 24;
-            projectile.height = 10;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 1800;
-            projectile.friendly = false;
-            projectile.tileCollide = true;
-            projectile.hostile = true;
-            projectile.ignoreWater = true;
-            projectile.penetrate = 2;
+            Projectile.width = 24;
+            Projectile.height = 10;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 1800;
+            Projectile.friendly = false;
+            Projectile.tileCollide = true;
+            Projectile.hostile = true;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = 2;
         }
 
         private int expertboost = 1;
 
         public override void AI()
         {
-            projectile.rotation = projectile.velocity.ToRotation();
-            projectile.velocity.Y += 0.05f;
+            Projectile.rotation = Projectile.velocity.ToRotation();
+            Projectile.velocity.Y += 0.05f;
 
             if (Main.expertMode)
             {
                 expertboost = 2;
             }
 
-            projectile.damage = 6 * expertboost;
+            Projectile.damage = 6 * expertboost;
         }
         public override bool? CanHitNPC(NPC target)
         {
@@ -40,8 +41,8 @@ namespace JoJoStands.Projectiles
         }
         public override void Kill(int timeLeft)
         {
-            Collision.HitTiles(projectile.position, projectile.velocity, projectile.width, projectile.height);
-            Main.PlaySound(SoundID.Item10, projectile.position);
+            Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
+            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
         }
     }
 }

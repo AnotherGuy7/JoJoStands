@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Tiles
 {
@@ -12,7 +13,7 @@ namespace JoJoStands.Tiles
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileLighted[Type] = true;
-            drop = mod.ItemType("ViralBrick");
+            drop = ModContent.ItemType<ViralBrick>();
 
             AddMapEntry(new Color(200, 200, 200));
         }

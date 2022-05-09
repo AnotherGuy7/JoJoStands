@@ -1,6 +1,7 @@
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -162,23 +163,23 @@ namespace JoJoStands.Networking
 			}
 		}
 
-		public void SendDyeItem(int toWho, int fromWho, int dyeItemType, int whoAmI)
+		public void SendDyeItem(int toWho, int fromWho, int dyeModContent.ItemType, int whoAmI)
 		{
 			ModPacket packet = GetPacket(DyeItem, fromWho);
-			packet.Write(dyeItemType);
+			packet.Write(dyeModContent.ItemType);
 			packet.Write(whoAmI);
 			packet.Send(toWho, fromWho);
 		}
 
 		public void ReceiveDyeItem(BinaryReader reader, int fromWho)
 		{
-			int dyeItemType = reader.ReadInt32();
+			int dyeModContent.ItemType = reader.ReadInt32();
 			int oneWhoEquipped = reader.ReadInt32();
-			Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.Item.type = dyeItemType;
-			Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.Item.SetDefaults(dyeItemType);
+			Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.Item.type = dyeModContent.ItemType;
+			Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.Item.SetDefaults(dyeModContent.ItemType);
 			if (Main.netMode == NetmodeID.Server)
 			{
-				SendDyeItem(-1, fromWho, dyeItemType, oneWhoEquipped);
+				SendDyeItem(-1, fromWho, dyeModContent.ItemType, oneWhoEquipped);
 			}
 		}
 

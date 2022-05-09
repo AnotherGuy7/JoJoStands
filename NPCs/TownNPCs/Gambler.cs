@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.TownNPCs
 {
@@ -60,11 +61,11 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override void SetupShop(Chest shop, ref int nextSlot)
         {
-            shop.item[nextSlot].SetDefaults(mod.ItemType("PackoCards"));
+            shop.Item[nextSlot].SetDefaults(ModContent.ItemType<PackoCards>()));
             nextSlot++;
-            shop.item[nextSlot].SetDefaults(mod.ItemType("PokerChip"));
+            shop.Item[nextSlot].SetDefaults(ModContent.ItemType<PokerChip>()));
             nextSlot++;
-            shop.item[nextSlot].SetDefaults(mod.ItemType("TarotTable"));
+            shop.Item[nextSlot].SetDefaults(ModContent.ItemType<TarotTable>()));
             nextSlot++;
         }
 
@@ -95,7 +96,7 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             cooldown = 1;
         }
-        public override void DrawTownAttackGun(ref float scale, ref int item, ref int closeness)
+        public override void DrawTownAttackGun(ref float scale, ref int Item, ref int closeness)
         {
             scale = 1f;
             closeness = 15;
@@ -103,7 +104,7 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
-            projType = mod.ProjectileType("Card");
+            projType = ModContent.ProjectileType<Card>());
             attackDelay = 1;
         }
 

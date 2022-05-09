@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using JoJoStands.UI;
 using Terraria;
 using Terraria.ID;
@@ -14,7 +16,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/GoldExperienceFinal"; }
+            get { return Mod.Name + "/Items/GoldExperienceFinal"; }
         }
 
         public override void SetStaticDefaults()
@@ -25,13 +27,13 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 65;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 65;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -42,16 +44,15 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("GoldExperienceT2"));
-            recipe.AddIngredient(ItemID.HallowedBar, 25);
-            recipe.AddIngredient(ItemID.Bone, 20);
-            recipe.AddIngredient(ItemID.LifeCrystal, 2);
-            recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<GoldExperienceT2>())
+                .AddIngredient(ItemID.HallowedBar, 25)
+                .AddIngredient(ItemID.Bone, 20)
+                .AddIngredient(ItemID.LifeCrystal, 2)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

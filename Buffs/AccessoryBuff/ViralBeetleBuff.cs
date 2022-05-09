@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JoJoStands.Projectiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -6,7 +7,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
 {
     public class ViralBeetleBuff : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Viral Beetle");
             Description.SetDefault("The otherworldy virus you have conquered now manifested itself and protects you.");
@@ -17,12 +18,12 @@ namespace JoJoStands.Buffs.AccessoryBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.ownedProjectileCounts[mod.ProjectileType("ViralBeetleProjectile")] < 3)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<ViralBeetleProjectile>()] < 3)
             {
                 beetleSpawnTimer++;
                 if (beetleSpawnTimer >= 180)
                 {
-                    Projectile.NewProjectile(player.Center, Vector2.Zero, mod.ProjectileType("ViralBeetleProjectile"), 124, 14f, player.whoAmI, player.ownedProjectileCounts[mod.ProjectileType("ViralBeetleProjectile")] + 1);
+                    Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<ViralBeetleProjectile>(), 124, 14f, player.whoAmI, player.ownedProjectileCounts[ModContent.ProjectileType<ViralBeetleProjectile>()] + 1);
                     beetleSpawnTimer = 0;
                 }
             }

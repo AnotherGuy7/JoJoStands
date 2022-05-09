@@ -1,47 +1,45 @@
-using Microsoft.Xna.Framework;
-using System;
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class ViralYoYo : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Viral Yoyo");
-			Tooltip.SetDefault("A deadly yoyo with small spikes to cut and infect your enemies.\nInflicts Infected upon enemy hit.");
-		}
+    public class ViralYoYo : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Viral Yoyo");
+            Tooltip.SetDefault("A deadly yoyo with small spikes to cut and infect your enemies.\nInflicts Infected upon enemy hit.");
+        }
 
-		public override void SetDefaults()
-		{
-			item.damage = 9;
-			item.width = 24;
-			item.height = 24;
-			item.useAnimation = 25;
-			item.useTime = 25;
-			item.knockBack = 4f;
-			item.melee = true;
-			item.channel = true;
-			item.noMelee = true;
-			item.noUseGraphic = true;
-			item.UseSound = SoundID.Item1;
-			item.rare = ItemRarityID.LightRed;
-			item.useStyle = ItemUseStyleID.HoldingOut;
-			item.value = Item.buyPrice(0, 1, 25, 0);
-			item.shoot = mod.ProjectileType("ViralYoYoProjectile");
-			item.shootSpeed = 16f;
-		}
+        public override void SetDefaults()
+        {
+            Item.damage = 9;
+            Item.width = 24;
+            Item.height = 24;
+            Item.useAnimation = 25;
+            Item.useTime = 25;
+            Item.knockBack = 4f;
+            Item.channel = true;
+            Item.noMelee = true;
+            Item.noUseGraphic = true;
+            Item.UseSound = SoundID.Item1;
+            Item.rare = ItemRarityID.LightRed;
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.value = Item.buyPrice(0, 1, 25, 0);
+            Item.shoot = ModContent.ProjectileType<ViralYoYoProjectile>();
+            Item.shootSpeed = 16f;
+        }
 
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 3);
-			recipe.AddIngredient(ItemID.WhiteString);
-			recipe.SetResult(this);
-			recipe.AddTile(TileID.Anvils);
-			recipe.AddRecipe();
-		}
-	}
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 3)
+                .AddIngredient(ItemID.WhiteString)
+                .AddTile(TileID.Anvils)
+                .Register();
+        }
+    }
 }

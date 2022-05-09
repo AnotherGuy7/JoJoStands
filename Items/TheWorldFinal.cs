@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/TheWorldT1"; }
+            get { return Mod.Name + "/Items/TheWorldT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,27 +25,26 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 87;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 87;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("TheWorldT3"));
-            recipe.AddIngredient(ItemID.Ectoplasm, 15);
-            recipe.AddIngredient(mod.ItemType("SoulofTime"), 7);
-            recipe.AddIngredient(mod.ItemType("WillToFight"), 3);
-            recipe.AddIngredient(mod.ItemType("WillToControl"), 3);
-            recipe.AddIngredient(mod.ItemType("TaintedLifeforce"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<TheWorldT3>())
+                .AddIngredient(ItemID.Ectoplasm, 15)
+                .AddIngredient(ModContent.ItemType<SoulofTime>(), 7)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 3)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 3)
+                .AddIngredient(ModContent.ItemType<TaintedLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

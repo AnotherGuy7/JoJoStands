@@ -6,12 +6,12 @@ namespace JoJoStands.Buffs.ItemBuff
 {
     public class Exposing : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Exposed Form");
             Description.SetDefault("You’re vulnerable more vulnurable to enemy attacks but you recover Void faster.");
             Main.buffNoTimeDisplay[Type] = true;
-            canBeCleared = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
         public override void Update(Player player, ref int buffIndex)
@@ -21,9 +21,7 @@ namespace JoJoStands.Buffs.ItemBuff
             player.controlUseTile = false;
             player.statDefense -= 6;
             if (player.HasBuff(BuffID.Suffocation))
-            {
                 player.ClearBuff(BuffID.Suffocation);
-            }
         }
 
     }

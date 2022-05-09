@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -13,7 +15,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/GratefulDeadT1"; }
+            get { return Mod.Name + "/Items/GratefulDeadT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -24,13 +26,13 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 67;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 67;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -41,24 +43,23 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("GratefulDeadT2"));
-            recipe.AddIngredient(ItemID.Ichor, 10);
-            recipe.AddIngredient(ItemID.Bone, 15);
-            recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToChange"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("GratefulDeadT2"));
-            recipe.AddIngredient(ItemID.CursedFlame, 10);
-            recipe.AddIngredient(ItemID.Bone, 15);
-            recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToChange"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<GratefulDeadT2>())
+                .AddIngredient(ItemID.Ichor, 10)
+                .AddIngredient(ItemID.Bone, 15)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<GratefulDeadT2>())
+                .AddIngredient(ItemID.CursedFlame, 10)
+                .AddIngredient(ItemID.Bone, 15)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

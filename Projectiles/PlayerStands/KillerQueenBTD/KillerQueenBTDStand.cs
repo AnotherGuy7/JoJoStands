@@ -1,6 +1,10 @@
+using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -68,10 +72,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (Main.dayTime)
             {
@@ -81,7 +85,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             {
                 bubbleDamage = 456;
             }
-            drawOriginOffsetY = -halfStandHeight;
+            DrawOriginOffsetY = -halfStandHeight;
             int newBubbleDamage = (int)(bubbleDamage * mPlayer.standDamageBoosts);
 
             if (!attackFrames)
@@ -89,11 +93,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             if (attackFrames)
                 GoInFront();
 
-            bitesTheDustActive = player.HasBuff(mod.BuffType("BitesTheDust"));
+            bitesTheDustActive = player.HasBuff(ModContent.BuffType<BitesTheDust>());
             if (SpecialKeyPressed() && !bitesTheDustActive)
             {
                 btdPositionIndex = 0;
-                amountOfSavedData =  0;
+                amountOfSavedData = 0;
                 btdPlayerPositions = new Vector2[500];
                 btdPlayerVelocities = new Vector2[500];
                 btdPlayerPositions[0] = player.position;
@@ -116,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     savedPlayerData.buffTimes[i] = player.buffTime[i];
                 }
 
-                player.AddBuff(mod.BuffType("BitesTheDust"), 5 * 60 * 60);      //So it doesn't save
+                player.AddBuff(ModContent.BuffType<BitesTheDust>(), 5 * 60 * 60);      //So it doesn't save
                 mPlayer.standChangingLocked = true;
 
                 savedWorldData = new WorldData();
@@ -145,8 +149,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
-                    player.AddBuff(mod.BuffType("BitesTheDust"), 10);
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BiteTheDustEffect"));
+                    player.AddBuff(ModContent.BuffType<BitesTheDust>(), 10);
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BiteTheDustEffect>"));
                 }
                 else
                     btdStartDelay = 205;
@@ -158,9 +162,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
-                    Terraria.Audio.LegacySoundStyle biteTheDust = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/BiteTheDust");
-                    biteTheDust.WithVolume(MyPlayer.ModSoundsVolume);
-                    Main.PlaySound(biteTheDust, projectile.position);
+                    LegacySoundStyle btdSound = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/BiteTheDust");
+                    SoundEffectInstance biteTheDust = SoundEngine.PlaySound((int)btdSound.Type, (int)Projectile.position.X, (int)Projectile.position.Y, btdSound.Style, MyPlayer.ModSoundsVolume);
                     btdStartDelay = 1;
                 }
             }
@@ -200,9 +203,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         player.position = savedPlayerData.playerBTDPos;
                         player.inventory = savedPlayerData.playerBTDInventory;
                         player.ChangeDir(savedPlayerData.playerDirection);
-                        //player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(120));
-                        player.ClearBuff(mod.BuffType("BitesTheDust"));
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
+                        //player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(120));
+                        player.ClearBuff(ModContent.BuffType<BitesTheDust>());
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick"));
 
                         for (int i = 0; i < savedPlayerData.buffTypes.Length; i++)
                         {
@@ -218,7 +221,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             NPCData savedData = savedWorldData.npcData[i];
                             if (!Main.npc[i].active)
                             {
-                                NPC remadeNPC = Main.npc[NPC.NewNPC((int)savedData.position.X, (int)savedData.position.Y, savedData.type)];
+                                NPC remadeNPC = Main.npc[NPC.NewNPC(Projectile.GetSource_FromThis(), (int)savedData.position.X, (int)savedData.position.Y, savedData.type)];
                                 remadeNPC.life = savedData.health;
                                 remadeNPC.ai = savedData.ai;
                                 remadeNPC.velocity = savedData.velocity;
@@ -239,28 +242,28 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && projectile.ai[0] == 0f)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f)
                 {
                     attackFrames = true;
-                    projectile.netUpdate = true;
-                    if (projectile.frame == 4 && !mPlayer.standAutoMode)
+                    Projectile.netUpdate = true;
+                    if (Projectile.frame == 4 && !mPlayer.standAutoMode)
                     {
                         if (shootCount <= 0)
                         {
                             shootCount += newShootTime;
-                            Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, projectile.owner, 1f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Bubble>(), newBubbleDamage, 6f, Projectile.owner, 1f, Projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
-                            projectile.netUpdate = true;
+                            Projectile.netUpdate = true;
                         }
                     }
-                    if (projectile.frame >= 5)
+                    if (Projectile.frame >= 5)
                     {
                         attackFrames = false;
                     }
@@ -273,17 +276,17 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         attackFrames = false;
                     }
                 }
-                if (Main.mouseRight && projectile.owner == Main.myPlayer && projectile.ai[0] == 0f)
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f)
                 {
                     secondaryAbilityFrames = true;
-                    projectile.ai[0] = 1f;      //to detonate all bombos
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/KQButtonClick"));
+                    Projectile.ai[0] = 1f;      //to detonate all bombos
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick"));
                 }
-                if (secondaryAbilityFrames && projectile.ai[0] == 1f)
+                if (secondaryAbilityFrames && Projectile.ai[0] == 1f)
                 {
-                    if (projectile.frame >= 2)
+                    if (Projectile.frame >= 2)
                     {
-                        projectile.ai[0] = 0f;
+                        Projectile.ai[0] = 0f;
                         normalFrames = true;
                         attackFrames = false;
                         secondaryAbilityFrames = false;
@@ -297,28 +300,28 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     attackFrames = true;
                     normalFrames = false;
-                    projectile.direction = 1;
-                    if (target.position.X - projectile.Center.X < 0)
+                    Projectile.direction = 1;
+                    if (target.position.X - Projectile.Center.X < 0)
                     {
-                        projectile.direction = -1;
+                        Projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
+                    Projectile.spriteDirection = Projectile.direction;
 
-                    if (attackFrames && projectile.frame == 4 && shootCount <= 0)
+                    if (attackFrames && Projectile.frame == 4 && shootCount <= 0)
                     {
-                        if (Main.myPlayer == projectile.owner)
+                        if (Main.myPlayer == Projectile.owner)
                         {
                             shootCount += newShootTime;
-                            Vector2 shootVel = target.position - projectile.Center;
+                            Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Bubble"), newBubbleDamage, 6f, projectile.owner, 0f, projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Bubble>(), newBubbleDamage, 6f, Projectile.owner, 0f, Projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
-                            projectile.netUpdate = true;
+                            Projectile.netUpdate = true;
                         }
                     }
                 }
@@ -365,7 +368,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/KillerQueenBTD/KQBTD_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/KillerQueenBTD/KQBTD_" + animationName);
 
             if (animationName == "Idle")
             {

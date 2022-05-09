@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
@@ -10,8 +11,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
         public override void SetDefaults()
         {
-            projectile.width = 40;
-            projectile.height = 26;
+            Projectile.width = 40;
+            Projectile.height = 26;
         }
 
         public override int standType => 2;
@@ -31,28 +32,28 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 shootCount--;
             }
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.frameCounter++;
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            Projectile.frameCounter++;
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
             {
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
             }
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!setStats)
             {
-                if (projectile.ai[0] == 3f)
+                if (Projectile.ai[0] == 3f)
                 {
                     projectileDamage = 49;
                     shootTime = 12;
                     chopperInaccuracy = 25;
                 }
-                else if (projectile.ai[0] == 4f)
+                else if (Projectile.ai[0] == 4f)
                 {
                     projectileDamage = 62;
                     shootTime = 7;
@@ -62,7 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
                 for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
                 {
-                    Dust.NewDust(projectile.position, projectile.width, projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
                 }
             }
 
@@ -74,16 +75,16 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     if (shootCount <= 0)
                     {
                         shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
-                        Main.PlaySound(SoundID.Item11, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                         Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
-                        Vector2 shootVel = (Main.MouseWorld + chopperInaccuracyVector) - projectile.Center;
+                        Vector2 shootVel = (Main.MouseWorld + chopperInaccuracyVector) - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -97,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     NPC npc = Main.npc[n];
                     if (npc.active)
                     {
-                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && projectile.Distance(npc.Center) <= 26f * 16f)
+                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && Projectile.Distance(npc.Center) <= 26f * 16f)
                         {
                             target = npc;
                             break;
@@ -106,39 +107,39 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 }
                 if (target != null)
                 {
-                    if (target.position.X >= projectile.position.X)
+                    if (target.position.X >= Projectile.position.X)
                     {
-                        projectile.spriteDirection = projectile.direction = 1;
+                        Projectile.spriteDirection = Projectile.direction = 1;
                     }
                     else
                     {
-                        projectile.spriteDirection = projectile.direction = -1;
+                        Projectile.spriteDirection = Projectile.direction = -1;
                     }
                     if (shootCount <= 0)
                     {
                         shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
-                        Main.PlaySound(SoundID.Item11, projectile.position);
+                        SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                         Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
-                        Vector2 shootVel = (target.Center + chopperInaccuracyVector) - projectile.Center;
+                        Vector2 shootVel = (target.Center + chopperInaccuracyVector) - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
             }
-            projectile.tileCollide = !Collision.SolidCollision(projectile.position, projectile.width, projectile.height);
+            Projectile.tileCollide = !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
         }
 
         public override void Kill(int timeLeft)
         {
             for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
             {
-                Dust.NewDust(projectile.position, projectile.width, projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
             }
         }
 
@@ -147,47 +148,47 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
         private void MovementAI()       //Pretty much the pet AI
         {
-            Player player = Main.player[projectile.owner];
-            PlayAnimation("Chopper");
-            Vector2 directionToPlayer = player.Center - projectile.Center;
+            Player player = Main.player[Projectile.owner];
+            PlayAnimation("Chopper>();
+            Vector2 directionToPlayer = player.Center - Projectile.Center;
             directionToPlayer.Normalize();
             directionToPlayer *= player.moveSpeed;
 
-            if (projectile.position.X > player.position.X)
+            if (Projectile.position.X > player.position.X)
             {
-                projectile.direction = -1;
+                Projectile.direction = -1;
             }
             else
             {
-                projectile.direction = 1;
+                Projectile.direction = 1;
             }
-            projectile.spriteDirection = projectile.direction;
-            float distance = Vector2.Distance(player.Center, projectile.Center);
+            Projectile.spriteDirection = Projectile.direction;
+            float distance = Vector2.Distance(player.Center, Projectile.Center);
             if (distance >= IdleRange)
             {
                 if (Math.Abs(player.velocity.X) > 1f || Math.Abs(player.velocity.Y) > 1f)
                 {
                     directionToPlayer *= distance / 16f;
-                    projectile.velocity = directionToPlayer;
+                    Projectile.velocity = directionToPlayer;
                 }
                 else
                 {
                     directionToPlayer *= 0.9f * (distance / 60f);
-                    projectile.velocity = directionToPlayer;
+                    Projectile.velocity = directionToPlayer;
                 }
             }
             if (distance >= MaxRange)        //Out of range
             {
-                projectile.tileCollide = false;
+                Projectile.tileCollide = false;
                 directionToPlayer *= distance / 90f;
-                projectile.velocity += directionToPlayer;
+                Projectile.velocity += directionToPlayer;
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanyChopper");
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanyChopper>();
 
             AnimateStand(animationName, 2, 15, true);
         }

@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
@@ -16,11 +17,11 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 18;
-            item.value = Item.buyPrice(0, 0, 45, 0);
-            item.rare = ItemRarityID.Blue;
-            item.defense = 4;
+            Item.width = 22;
+            Item.height = 18;
+            Item.value = Item.buyPrice(0, 0, 45, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.defense = 4;
         }
         public override void UpdateEquip(Player player)
         {

@@ -1,6 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.StandArmors.Alloys
@@ -10,17 +11,17 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Adamantite Alloy Helmet (Short-Ranged)");
-            Tooltip.SetDefault("A helmet fused with Viral Meteorite to empower the user.\n8% Stand Crit Chance\n12% Stand Damage");
+            DisplayName.SetDefault("Adamantite Alloy Helmet (Short-Ranged)>();
+            Tooltip.SetDefault("A helmet fused with Viral Meteorite to empower the user.\n8% Stand Crit Chance\n12% Stand Damage>();
         }
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 3, 0, 0);
-            item.rare = ItemRarityID.LightRed;
-            item.defense = 20;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 3, 0, 0);
+            Item.rare = ItemRarityID.LightRed;
+            Item.defense = 20;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -42,13 +43,13 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
 
             if (mPlayer.standType == 0)
             {
-                item.type = mod.ItemType("AdamantiteAlloyHelmetNeutral");
-                item.SetDefaults(mod.ItemType("AdamantiteAlloyHelmetNeutral"));
+                Item.type = ModContent.ItemType<AdamantiteAlloyHelmetNeutral>();
+                Item.SetDefaults(ModContent.ItemType<AdamantiteAlloyHelmetNeutral>());
             }
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("AdamantiteAlloyHelmetLong");
-                item.SetDefaults(mod.ItemType("AdamantiteAlloyHelmetLong"));
+                Item.type = ModContent.ItemType<AdamantiteAlloyHelmetLong>();
+                Item.SetDefaults(ModContent.ItemType<AdamantiteAlloyHelmetLong>());
             }
         }
     }

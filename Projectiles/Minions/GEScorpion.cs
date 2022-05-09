@@ -1,32 +1,32 @@
-using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles.Minions
-{  
+{
     public class GEScorpion : ModProjectile
     {
         public override string Texture { get { return "Terraria/NPC_" + NPCID.ScorpionBlack; } }
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 4;
-            ProjectileID.Sets.Homing[projectile.type] = true;
+            Main.projFrames[Projectile.type] = 4;
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 26;
-            projectile.height = 18;
-            projectile.friendly = true;
-            projectile.penetrate = 6;
-            projectile.timeLeft = 800;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            drawOriginOffsetY = -5;
+            Projectile.width = 26;
+            Projectile.height = 18;
+            Projectile.friendly = true;
+            Projectile.penetrate = 6;
+            Projectile.timeLeft = 800;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            DrawOriginOffsetY = -5;
         }
 
         private const float DetectionDistance = 20f * 16f;
@@ -35,17 +35,17 @@ namespace JoJoStands.Projectiles.Minions
         public override void AI()
         {
             SelectFrame();
-            projectile.ai[0]--;
-            if (projectile.ai[0] <= 0f)
+            Projectile.ai[0]--;
+            if (Projectile.ai[0] <= 0f)
             {
-                projectile.ai[0] = 0f;
+                Projectile.ai[0] = 0f;
             }
-            projectile.velocity.Y += 1.5f;
-            if (projectile.velocity.Y >= 6f)
+            Projectile.velocity.Y += 1.5f;
+            if (Projectile.velocity.Y >= 6f)
             {
-                projectile.velocity.Y = 6f;
+                Projectile.velocity.Y = 6f;
             }
-            if (projectile.velocity.X == 0f)
+            if (Projectile.velocity.X == 0f)
             {
                 walking = false;
             }
@@ -60,7 +60,7 @@ namespace JoJoStands.Projectiles.Minions
                 if (npc.active && !npc.dontTakeDamage && !npc.friendly && npc.lifeMax > 5 && npc.type != NPCID.TargetDummy && npc.type != NPCID.CultistTablet)
                 {
                     npcTarget = npc;
-                    float distance = projectile.Distance(npc.Center);
+                    float distance = Projectile.Distance(npc.Center);
                     if (distance < DetectionDistance)
                     {
                         npcTarget = npc;
@@ -69,54 +69,53 @@ namespace JoJoStands.Projectiles.Minions
             }
             if (npcTarget != null)
             {
-                if (npcTarget.position.X > projectile.position.X)
+                if (npcTarget.position.X > Projectile.position.X)
                 {
-                    projectile.velocity.X = 1f;
-                    projectile.direction = 1;
-                    projectile.spriteDirection = -1;
+                    Projectile.velocity.X = 1f;
+                    Projectile.direction = 1;
+                    Projectile.spriteDirection = -1;
                 }
-                if (npcTarget.position.X < projectile.position.X)
+                if (npcTarget.position.X < Projectile.position.X)
                 {
-                    projectile.velocity.X = -1f;
-                    projectile.direction = -1;
-                    projectile.spriteDirection = 1;
+                    Projectile.velocity.X = -1f;
+                    Projectile.direction = -1;
+                    Projectile.spriteDirection = 1;
                 }
-                if (WorldGen.SolidTile((int)(projectile.Center.X / 16f) + projectile.direction, (int)(projectile.Center.Y / 16f)) && projectile.ai[0] <= 0f)
+                if (WorldGen.SolidTile((int)(Projectile.Center.X / 16f) + Projectile.direction, (int)(Projectile.Center.Y / 16f)) && Projectile.ai[0] <= 0f)
                 {
-                    projectile.ai[0] = 50f;
-                    projectile.velocity.Y = -6f;
-                    projectile.netUpdate = true;
+                    Projectile.ai[0] = 50f;
+                    Projectile.velocity.Y = -6f;
+                    Projectile.netUpdate = true;
                 }
             }
             else
             {
-                projectile.velocity.X = 0f;
+                Projectile.velocity.X = 0f;
             }
 
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int p = 0; p < Main.maxProjectiles; p++)
                 {
                     Projectile otherProj = Main.projectile[p];
                     Player otherPlayer = Main.player[otherProj.owner];
-                    if (otherProj.active && projectile.Hitbox.Intersects(otherProj.Hitbox))
+                    if (otherProj.active && Projectile.Hitbox.Intersects(otherProj.Hitbox))
                     {
-                        if (projectile.owner != otherProj.owner && player.team != otherPlayer.team && projectile.damage < 75)
+                        if (Projectile.owner != otherProj.owner && player.team != otherPlayer.team && Projectile.damage < 75)
                         {
-                            Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, projectile.width, projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
+                            Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, Projectile.width, Projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
                             if (MyPlayer.Sounds)
-                            {
-                                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
-                            }
+                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
+
                             otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " couldn't resist hurting " + player.name + "'s damage-reflecting scorpion."), otherProj.damage, 1, true);
                             otherProj.Kill();
-                            projectile.Kill();
+                            Projectile.Kill();
                         }
-                        if (projectile.owner != otherProj.owner && player.team != otherPlayer.team && projectile.damage > 75)
+                        if (Projectile.owner != otherProj.owner && player.team != otherPlayer.team && Projectile.damage > 75)
                         {
                             otherProj.Kill();
-                            projectile.Kill();
+                            Projectile.Kill();
                         }
                     }
                 }
@@ -133,38 +132,38 @@ namespace JoJoStands.Projectiles.Minions
             if (damage > 75)
             {
                 damage = 75;
-                projectile.Kill();
+                Projectile.Kill();
             }
         }
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(SoundID.NPCDeath1, projectile.position);
+            SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.position);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             return false;
         }
- 
+
         private void SelectFrame()
         {
-            projectile.frameCounter++;
+            Projectile.frameCounter++;
             if (walking)
             {
-                if (projectile.frameCounter >= 8)
+                if (Projectile.frameCounter >= 8)
                 {
-                    projectile.frameCounter = 0;
-                    projectile.frame += 1;
+                    Projectile.frameCounter = 0;
+                    Projectile.frame += 1;
                 }
-                if (projectile.frame >= 4)
+                if (Projectile.frame >= 4)
                 {
-                    projectile.frame = 0;
+                    Projectile.frame = 0;
                 }
             }
             else
             {
-                projectile.frame = 0;
+                Projectile.frame = 0;
             }
         }
     }

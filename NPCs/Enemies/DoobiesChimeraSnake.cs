@@ -4,6 +4,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -17,7 +18,7 @@ namespace JoJoStands.NPCs.Enemies
 
         public override string Texture
         {
-            get { return mod.Name + "/Projectiles/Minions/ChimeraSnake"; }
+            get { return Mod.Name + "/Projectiles/Minions/ChimeraSnake"; }
         }
 
         public override void SetDefaults()

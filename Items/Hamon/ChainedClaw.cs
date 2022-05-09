@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,26 +15,26 @@ namespace JoJoStands.Items.Hamon
 
         public override void SafeSetDefaults()
         {
-            item.damage = 19;
-            item.width = 32;
-            item.height = 32;        //hitbox's width and height when the item is in the world
-            item.useTime = 80;
-            item.useAnimation = 80;
-            item.maxStack = 1;
-            item.noUseGraphic = true;
-            item.knockBack = 1f;
-            item.rare = ItemRarityID.Pink;
-            item.useTurn = true;
-            item.useStyle = ItemUseStyleID.Stabbing;
-            item.noMelee = true;
-            item.autoReuse = false;
-            item.shoot = mod.ProjectileType("ChainedClawProjectile");
-            item.shootSpeed = 9f;
+            Item.damage = 19;
+            Item.width = 32;
+            Item.height = 32;        //hitbox's width and height when the Item is in the world
+            Item.useTime = 80;
+            Item.useAnimation = 80;
+            Item.maxStack = 1;
+            Item.noUseGraphic = true;
+            Item.knockBack = 1f;
+            Item.rare = ItemRarityID.Pink;
+            Item.useTurn = true;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.noMelee = true;
+            Item.autoReuse = false;
+            Item.shoot = ModContent.ProjectileType<ChainedClawProjectile>();
+            Item.shootSpeed = 9f;
         }
 
         public override bool CanUseItem(Player player)
         {
-            return player.ownedProjectileCounts[mod.ProjectileType("ChainedClaw")] == 0;
+            return player.ownedProjectileCounts[ModContent.ProjectileType<ChainedClawProjectile>()] == 0;
         }
 
         public override void HoldItem(Player player)
@@ -42,22 +44,21 @@ namespace JoJoStands.Items.Hamon
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Chain, 6);
-            recipe.AddIngredient(ItemID.IronBar, 3);
-            recipe.AddIngredient(ItemID.Sapphire);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Chain, 6);
-            recipe.AddIngredient(ItemID.LeadBar, 3);
-            recipe.AddIngredient(ItemID.Sapphire);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Chain, 6)
+                .AddIngredient(ItemID.IronBar, 3)
+                .AddIngredient(ItemID.Sapphire)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.Chain, 6)
+                .AddIngredient(ItemID.LeadBar, 3)
+                .AddIngredient(ItemID.Sapphire)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

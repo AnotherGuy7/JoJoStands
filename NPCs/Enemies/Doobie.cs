@@ -4,6 +4,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -47,8 +48,8 @@ namespace JoJoStands.NPCs.Enemies
                 expertboost = 2;
             }
 
-            npc.AddBuff(mod.BuffType("Vampire"), 2);
-            if (npc.HasBuff(mod.BuffType("Sunburn")) && waiting)
+            npc.AddBuff(ModContent.BuffType<Vampire>(), 2);
+            if (npc.HasBuff(ModContent.BuffType<Sunburn>()) && waiting)
             {
                 waiting = false;
                 runCounter += 150;
@@ -125,7 +126,7 @@ namespace JoJoStands.NPCs.Enemies
                         snakeCooldown -= 1;
                     }
                     npc.knockBackResist = 0.5f;
-                    if (npc.HasBuff(mod.BuffType("Sunburn")))
+                    if (npc.HasBuff(ModContent.BuffType<Sunburn>()))
                     {
                         npc.defense = 0;
                         npc.damage = 30 * expertboost;
@@ -139,7 +140,7 @@ namespace JoJoStands.NPCs.Enemies
             }
         }
 
-        public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
+        public override void OnHitByItem(Player player, Item Item, int damage, float knockback, bool crit)
         {
             if (waiting)
             {
@@ -153,14 +154,14 @@ namespace JoJoStands.NPCs.Enemies
                 {
                     if (typeofsnake == 1)
                     {
-                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)mod.NPCType("DoobiesSnake"));
+                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)Mod.NPCType("DoobiesSnake>());
                         typeofsnake = 0;
                         snakeCooldown += 150;
                         snakeLimit += 1;
                     }
                     if (typeofsnake == 2)
                     {
-                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)mod.NPCType("DoobiesChimeraSnake"));
+                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)Mod.NPCType("DoobiesChimeraSnake>());
                         typeofsnake = 0;
                         snakeCooldown += 150;
                         snakeLimit += 1;
@@ -168,7 +169,7 @@ namespace JoJoStands.NPCs.Enemies
                 }
             }
         }
-        public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
+        public override void OnHitByProjectile(Projectile Projectile, int damage, float knockback, bool crit)
         {
             if (waiting)
             {
@@ -184,12 +185,12 @@ namespace JoJoStands.NPCs.Enemies
                     snakeLimit += 1;
                     if (typeofsnake == 1)
                     {
-                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)mod.NPCType("DoobiesSnake"));
+                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)Mod.NPCType("DoobiesSnake>());
                         typeofsnake = 0;
                     }
                     if (typeofsnake == 2)
                     {
-                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)mod.NPCType("DoobiesChimeraSnake"));
+                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)Mod.NPCType("DoobiesChimeraSnake>());
                         typeofsnake = 0;
                     }
                 }
@@ -254,7 +255,7 @@ namespace JoJoStands.NPCs.Enemies
             if (runCounter > 0)
             {
                 SpriteEffects effects = (npc.spriteDirection == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                Texture2D texture2d = mod.GetTexture("NPCs/Enemies/Doobie");
+                Texture2D texture2d = Mod.GetTexture("NPCs/Enemies/Doobie>();
                 Vector2 vector2 = new Vector2((Main.npcTexture[npc.type].Width / 2), (Main.npcTexture[npc.type].Height / Main.npcFrameCount[npc.type] / 2));
                 Main.spriteBatch.Draw(texture2d, new Vector2(npc.position.X - Main.screenPosition.X + (npc.width / 2) - Main.npcTexture[npc.type].Width * npc.scale / 2f + vector2.X * npc.scale, npc.position.Y - Main.screenPosition.Y + npc.height - Main.npcTexture[npc.type].Height * npc.scale / Main.npcFrameCount[npc.type] + 4f + vector2.Y * npc.scale), new Rectangle?(npc.frame), Color.White, npc.rotation, vector2, npc.scale, effects, 0f);
                 for (int i = 1; i < npc.oldPos.Length; i++)

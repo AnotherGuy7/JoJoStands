@@ -1,3 +1,4 @@
+using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -6,22 +7,22 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Mounts
 {
-    public class SlowDancerMount : ModMountData
+    public class SlowDancerMount : ModMount
     {
-        public override void SetDefaults()          //basically the unicorn mount
+        public override void SetStaticDefaults()          //basically the unicorn mount
         {
-            mountData.buff = mod.BuffType("SlowDancerBuff");
-            mountData.heightBoost = 34;
-            mountData.flightTimeMax = 0;
-            mountData.fallDamage = 0.2f;
-            mountData.dashSpeed = 14f;
-            mountData.runSpeed = 7f;
-            mountData.acceleration = 0.5f;
-            mountData.jumpHeight = 6;
-            mountData.jumpSpeed = 6f;
-            mountData.totalFrames = 16;
-            mountData.constantJump = true;
-            int[] array = new int[mountData.totalFrames];
+            MountData.buff = ModContent.BuffType<SlowDancerBuff>();
+            MountData.heightBoost = 34;
+            MountData.flightTimeMax = 0;
+            MountData.fallDamage = 0.2f;
+            MountData.dashSpeed = 14f;
+            MountData.runSpeed = 7f;
+            MountData.acceleration = 0.5f;
+            MountData.jumpHeight = 6;
+            MountData.jumpSpeed = 6f;
+            MountData.totalFrames = 16;
+            MountData.constantJump = true;
+            int[] array = new int[MountData.totalFrames];
             for (int num6 = 0; num6 < array.Length; num6++)
             {
                 array[num6] = 28;
@@ -33,47 +34,47 @@ namespace JoJoStands.Mounts
             array[12] += 2;
             array[13] += 2;
             array[15] += 4;
-            mountData.playerYOffsets = array;
-            mountData.xOffset = 5;
-            mountData.bodyFrame = 3;
-            mountData.yOffset = 1;
-            mountData.playerHeadOffset = 38;
-            mountData.idleFrameCount = 0;       //Idle
-            mountData.idleFrameDelay = 0;
-            mountData.idleFrameStart = 0;
-            mountData.standingFrameCount = 1;       //Standing
-            mountData.standingFrameDelay = 12;
-            mountData.standingFrameStart = 0;
-            mountData.runningFrameCount = 7;        //Running
-            mountData.runningFrameDelay = 15;
-            mountData.runningFrameStart = 1;
-            mountData.dashingFrameCount = 7;        //Dashing (When does this even happen?)
-            mountData.dashingFrameDelay = 20;
-            mountData.dashingFrameStart = 9;
-            mountData.flyingFrameCount = 6;     //Flying
-            mountData.flyingFrameDelay = 6;
-            mountData.flyingFrameStart = 1;
-            mountData.inAirFrameCount = 1;      //In Air
-            mountData.inAirFrameDelay = 12;
-            mountData.inAirFrameStart = 15;
-            mountData.idleFrameLoop = false;
-            mountData.swimFrameCount = mountData.inAirFrameCount;       //Swimming
-            mountData.swimFrameDelay = mountData.inAirFrameDelay;
-            mountData.swimFrameStart = mountData.inAirFrameStart;
+            MountData.playerYOffsets = array;
+            MountData.xOffset = 5;
+            MountData.bodyFrame = 3;
+            MountData.yOffset = 1;
+            MountData.playerHeadOffset = 38;
+            MountData.idleFrameCount = 0;       //Idle
+            MountData.idleFrameDelay = 0;
+            MountData.idleFrameStart = 0;
+            MountData.standingFrameCount = 1;       //Standing
+            MountData.standingFrameDelay = 12;
+            MountData.standingFrameStart = 0;
+            MountData.runningFrameCount = 7;        //Running
+            MountData.runningFrameDelay = 15;
+            MountData.runningFrameStart = 1;
+            MountData.dashingFrameCount = 7;        //Dashing (When does this even happen?)
+            MountData.dashingFrameDelay = 20;
+            MountData.dashingFrameStart = 9;
+            MountData.flyingFrameCount = 6;     //Flying
+            MountData.flyingFrameDelay = 6;
+            MountData.flyingFrameStart = 1;
+            MountData.inAirFrameCount = 1;      //In Air
+            MountData.inAirFrameDelay = 12;
+            MountData.inAirFrameStart = 15;
+            MountData.idleFrameLoop = false;
+            MountData.swimFrameCount = MountData.inAirFrameCount;       //Swimming
+            MountData.swimFrameDelay = MountData.inAirFrameDelay;
+            MountData.swimFrameStart = MountData.inAirFrameStart;
             if (Main.netMode == NetmodeID.Server)
             {
                 return;
             }
 
-            mountData.textureWidth = mountData.backTexture.Width + 20;
-            mountData.textureHeight = mountData.backTexture.Height;
+            MountData.textureWidth = MountData.backTexture.Width() + 20;
+            MountData.textureHeight = MountData.backTexture.Height();
         }
 
         public override bool UpdateFrame(Player mountedPlayer, int state, Vector2 velocity)
         {
             Mount mount = mountedPlayer.mount;
             float positiveVelX = Math.Abs(velocity.X);
-            bool dashing = positiveVelX > mountData.dashSpeed - mountData.runSpeed / 2f;
+            bool dashing = positiveVelX > MountData.dashSpeed - MountData.runSpeed / 2f;
             if (velocity == Vector2.Zero)
             {
                 mount._frame = 0;
@@ -83,41 +84,40 @@ namespace JoJoStands.Mounts
                 mount._frameCounter += 1 + positiveVelX / 2f;
                 if (dashing)
                 {
-                    if (mount._frameCounter >= mountData.dashingFrameDelay)
+                    if (mount._frameCounter >= MountData.dashingFrameDelay)
                     {
                         mount._frame += 1;
                         mount._frameCounter = 0;
                     }
-                    if (mount._frame < mountData.dashingFrameStart)
+                    if (mount._frame < MountData.dashingFrameStart)
                     {
-                        mount._frame = mountData.dashingFrameStart;
+                        mount._frame = MountData.dashingFrameStart;
                     }
-                    if (mount._frame >= mountData.dashingFrameStart + mountData.dashingFrameCount - 1)
+                    if (mount._frame >= MountData.dashingFrameStart + MountData.dashingFrameCount - 1)
                     {
-                        mount._frame = mountData.dashingFrameStart;
+                        mount._frame = MountData.dashingFrameStart;
                     }
                 }
                 else
                 {
-                    if (mount._frameCounter >= mountData.runningFrameDelay)
+                    if (mount._frameCounter >= MountData.runningFrameDelay)
                     {
                         mount._frame += 1;
                         mount._frameCounter = 0;
                     }
-                    if (mount._frame < mountData.runningFrameStart)
+                    if (mount._frame < MountData.runningFrameStart)
                     {
-                        mount._frame = mountData.runningFrameStart;
+                        mount._frame = MountData.runningFrameStart;
                     }
-                    if (mount._frame >= mountData.runningFrameStart + mountData.runningFrameCount)
+                    if (mount._frame >= MountData.runningFrameStart + MountData.runningFrameCount)
                     {
-                        mount._frame = mountData.runningFrameStart;
+                        mount._frame = MountData.runningFrameStart;
                     }
                 }
             }
             if (!WorldGen.SolidTile((int)(mountedPlayer.position.X / 16f), (int)(mountedPlayer.position.Y / 16f) + 5) || mountedPlayer.velocity.Y != 0f)
-            {
                 mount._frame = 15;
-            }
+
             return false;
         }
 
@@ -125,9 +125,7 @@ namespace JoJoStands.Mounts
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Math.Abs(player.velocity.X) >= 13f)
-            {
                 mPlayer.goldenSpinCounter += 1;
-            }
         }
     }
 }

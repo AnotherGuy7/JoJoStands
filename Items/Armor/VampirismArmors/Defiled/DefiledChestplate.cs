@@ -15,11 +15,11 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Defiled
 
         public override void SetDefaults()
         {
-            item.width = 42;
-            item.height = 36;
-            item.value = Item.buyPrice(gold: 1);
-            item.rare = ItemRarityID.Orange;
-            item.defense = 8;
+            Item.width = 42;
+            Item.height = 36;
+            Item.value = Item.buyPrice(gold: 1);
+            Item.rare = ItemRarityID.Orange;
+            Item.defense = 8;
         }
 
         public override void UpdateEquip(Player player)
@@ -31,14 +31,13 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Defiled
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.DemoniteBar, 18);
-            recipe.AddIngredient(ItemID.RottenChunk, 25);
-            recipe.AddIngredient(ItemID.ShadowScale, 10);
-            recipe.AddIngredient(ItemID.WormTooth, 8);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.DemoniteBar, 18)
+                .AddIngredient(ItemID.RottenChunk, 25)
+                .AddIngredient(ItemID.ShadowScale, 10)
+                .AddIngredient(ItemID.WormTooth, 8)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

@@ -16,16 +16,16 @@ namespace JoJoStands.Items.Armor.VampirismArmors
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 44;
-            item.value = Item.buyPrice(silver: 5);
-            item.rare = ItemRarityID.Green;
-            item.defense = 1;
+            Item.width = 30;
+            Item.height = 44;
+            Item.value = Item.buyPrice(silver: 5);
+            Item.rare = ItemRarityID.Green;
+            Item.defense = 1;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.AddBuff(mod.BuffType("Zombie"), 2);
+            player.AddBuff(ModContent.BuffType<Zombie>(), 2);
         }
 
         public override void HoldItem(Player player)
@@ -36,18 +36,17 @@ namespace JoJoStands.Items.Armor.VampirismArmors
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Wood, 40);
-            recipe.AddIngredient(ItemID.GoldBar, 2);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Wood, 40);
-            recipe.AddIngredient(ItemID.PlatinumBar, 2);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Wood, 40)
+                .AddIngredient(ItemID.GoldBar, 2)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.Wood, 40)
+                .AddIngredient(ItemID.PlatinumBar, 2)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

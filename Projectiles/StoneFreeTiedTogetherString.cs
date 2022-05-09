@@ -2,23 +2,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
     public class StoneFreeTiedTogetherString : ModProjectile
     {
-        public override string Texture => mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
+        public override string Texture => Mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
 
         public override void SetDefaults()
         {
-            projectile.width = 16;
-            projectile.height = 16;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 600;
-            projectile.friendly = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-            projectile.penetrate = -1;
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
         }
 
         private int linkWhoAmI = -1;
@@ -29,29 +30,29 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
-            Projectile ownerProj = Main.projectile[(int)projectile.ai[0]];
-            if (projectile.ai[0] < 0 || projectile.ai[0] >= Main.maxProjectiles || !ownerProj.active)
+            Player player = Main.player[Projectile.owner];
+            Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
+            if (Projectile.ai[0] < 0 || Projectile.ai[0] >= Main.maxProjectiles || !ownerProj.active)
             {
-                projectile.Kill();
+                Projectile.Kill();
                 return;
             }
 
 
-            float direction = player.Center.X - projectile.Center.X;
+            float direction = player.Center.X - Projectile.Center.X;
             if (direction > 0)
             {
-                projectile.direction = -1;
+                Projectile.direction = -1;
                 player.direction = -1;
             }
             if (direction < 0)
             {
-                projectile.direction = 1;
+                Projectile.direction = 1;
                 player.direction = 1;
             }
-            Vector2 rota = player.Center - projectile.Center;
-            projectile.rotation = (-rota).ToRotation();
-            float distance = Vector2.Distance(player.Center, projectile.Center);
+            Vector2 rota = player.Center - Projectile.Center;
+            Projectile.rotation = (-rota).ToRotation();
+            float distance = Vector2.Distance(player.Center, Projectile.Center);
 
             if (heldNPC != null)
             {
@@ -62,13 +63,13 @@ namespace JoJoStands.Projectiles
                     return;
                 }
 
-                projectile.timeLeft = 300;
-                projectile.position = heldNPC.Center - new Vector2(projectile.width / 2f, projectile.height / 2f);
+                Projectile.timeLeft = 300;
+                Projectile.position = heldNPC.Center - new Vector2(Projectile.width / 2f, Projectile.height / 2f);
 
                 float mouseDistance = heldNPC.Distance(Main.MouseWorld);
                 if (mouseDistance > previousDistance)
                 {
-                    Vector2 pullVelocity = projectile.Center - ownerProj.Center;
+                    Vector2 pullVelocity = Projectile.Center - ownerProj.Center;
                     pullVelocity.Normalize();
                     pullVelocity *= (previousDistance - mouseDistance) / 128f;
                     heldNPC.velocity += pullVelocity;
@@ -91,14 +92,14 @@ namespace JoJoStands.Projectiles
             }
             else if (!living)
             {
-                projectile.tileCollide = false;
-                Vector2 returnVel = player.Center - projectile.Center;
+                Projectile.tileCollide = false;
+                Vector2 returnVel = player.Center - Projectile.Center;
                 returnVel.Normalize();
                 returnVel *= 9f;
-                projectile.velocity = returnVel;
+                Projectile.velocity = returnVel;
 
                 if (distance < 50f)
-                    projectile.Kill();
+                    Projectile.Kill();
             }
         }
 
@@ -111,14 +112,14 @@ namespace JoJoStands.Projectiles
         {
             if (stringTexture == null)
             {
-                stringTexture = mod.GetTexture("Projectiles/StoneFreeString_Part");
+                stringTexture = Mod.GetTexture("Projectiles/StoneFreeString_Part>();
                 stringSourceRect = new Rectangle(0, 0, stringTexture.Width, stringTexture.Height);
                 stringOrigin = new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f);
             }
 
-            Projectile ownerProj = Main.projectile[(int)projectile.ai[0]];
+            Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
             Vector2 linkCenter = ownerProj.Center + new Vector2(12f * ownerProj.direction, 0f);
-            Vector2 projectileCenter = projectile.Center;
+            Vector2 projectileCenter = Projectile.Center;
             drawColor = lightColor;
 
             float stringRotation = (linkCenter - projectileCenter).ToRotation();
@@ -135,7 +136,7 @@ namespace JoJoStands.Projectiles
                     lightLevelIndex = 0f;
                 }
 
-                spriteBatch.Draw(stringTexture, pos, stringSourceRect, drawColor, stringRotation, stringOrigin, projectile.scale * stringScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(stringTexture, pos, stringSourceRect, drawColor, stringRotation, stringOrigin, Projectile.scale * stringScale, SpriteEffects.None, 0f);
             }
             return false;
         }
@@ -145,12 +146,12 @@ namespace JoJoStands.Projectiles
             if (heldNPC == null)
                 heldNPC = target;
 
-            projectile.damage = 0;
+            Projectile.damage = 0;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            projectile.velocity = Vector2.Zero;
+            Projectile.velocity = Vector2.Zero;
             return false;
         }
     }

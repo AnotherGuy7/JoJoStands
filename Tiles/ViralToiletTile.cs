@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ObjectData;
 
 namespace JoJoStands.Tiles
@@ -29,7 +30,7 @@ namespace JoJoStands.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 4, 4, mod.ItemType("ViralToilet"));
+            Item.NewItem(i * 16, j * 16, 4, 4, ModContent.ItemType<ViralToilet>());
         }
     }
 }

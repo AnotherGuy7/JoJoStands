@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/HierophantGreenT1"; }
+            get { return Mod.Name + "/Items/HierophantGreenT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -24,27 +26,26 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 72;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 72;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("HierophantGreenT3"));
-            recipe.AddIngredient(ItemID.LargeEmerald, 1);
-            recipe.AddIngredient(ItemID.ChlorophyteOre, 12);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 3);
-            recipe.AddIngredient(mod.ItemType("WillToChange"), 3);
-            recipe.AddIngredient(mod.ItemType("RighteousLifeforce"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<HierophantGreenT3>())
+                .AddIngredient(ItemID.LargeEmerald, 1)
+                .AddIngredient(ItemID.ChlorophyteOre, 12)
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 3)
+                .AddIngredient(ModContent.ItemType<WillToChange>(), 3)
+                .AddIngredient(ModContent.ItemType<RighteousLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

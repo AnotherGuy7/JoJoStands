@@ -3,6 +3,7 @@ using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -165,7 +166,7 @@ namespace JoJoStands.NPCs.Enemies
                     }
                     shootVel.Normalize();
                     shootVel *= 16f;
-                    yosarrowWhoAmI = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("Yosarrow"), 21, 1f);
+                    yosarrowWhoAmI = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.Center.X, npc.Center.Y, shootVel.X, shootVel.Y, ModContent.ProjectileType<Yosarrow>()), 21, 1f);
                     Main.projectile[yosarrowWhoAmI].netUpdate = true;
                     npc.netUpdate = true;
                 }
@@ -384,7 +385,7 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void NPCLoot()
         {
-            Item.NewItem(npc.getRect(), mod.ItemType("StandArrow"), 1);
+            Item.NewItem(npc.getRect(), ModContent.ItemType<StandArrow>()), 1);
         }
     }
 }

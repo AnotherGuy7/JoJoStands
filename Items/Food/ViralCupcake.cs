@@ -1,3 +1,5 @@
+using JoJoStands.Buffs.PlayerBuffs;
+using JoJoStands.Items.CraftingMaterials;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,36 +15,35 @@ namespace JoJoStands.Items.Food
 
         public override void SetDefaults()
         {
-            item.width = 10;
-            item.height = 10;
-            item.useTime = 20;
-            item.useAnimation = 20;
-            item.value = Item.buyPrice(0, 0, 12, 50);
-            item.UseSound = SoundID.Item2;
-            item.rare = ItemRarityID.Green;
-            item.useStyle = ItemUseStyleID.EatingUsing;
-            item.consumable = true;
+            Item.width = 10;
+            Item.height = 10;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.value = Item.buyPrice(0, 0, 12, 50);
+            Item.UseSound = SoundID.Item2;
+            Item.rare = ItemRarityID.Green;
+            Item.useStyle = ItemUseStyleID.EatFood;
+            Item.consumable = true;
         }
 
-        public override bool UseItem(Player player)
+        public override bool? UseItem(Player player)
         {
             return true;
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(mod.BuffType("StrongWill"), (2 * 60) * 60);
-            player.AddBuff(mod.BuffType("SharpMind"), (2 * 60) * 60);
+            player.AddBuff(ModContent.BuffType<StrongWill>(), (2 * 60) * 60);
+            player.AddBuff(ModContent.BuffType<SharpMind>(), (2 * 60) * 60);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ViralPowder"), 4);
-            recipe.AddIngredient(ItemID.HoneyBlock);
-            recipe.AddIngredient(ItemID.Hay);
-            recipe.SetResult(this, 5);
-            recipe.AddRecipe();
+            CreateRecipe(6)
+                .AddIngredient(ModContent.ItemType<ViralPowder>(), 4)
+                .AddIngredient(ItemID.HoneyBlock)
+                .AddIngredient(ItemID.Hay)
+                .Register();
         }
     }
 }

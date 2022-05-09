@@ -10,28 +10,23 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Old Man's Hat");
             Tooltip.SetDefault("A western hat. Comes with a beard!");
+            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
         }
 
         public override void SetDefaults()
         {
-            item.width = 18;
-            item.height = 18;
-            item.rare = ItemRarityID.LightPurple;
-            item.vanity = true;
-        }
-
-        public override bool DrawHead()
-        {
-            return true;
+            Item.width = 18;
+            Item.height = 18;
+            Item.rare = ItemRarityID.LightPurple;
+            Item.vanity = true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Silk, 2);
-            recipe.AddTile(TileID.Loom);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Silk, 2)
+                .AddTile(TileID.Loom)
+                .Register();
         }
     }
 }

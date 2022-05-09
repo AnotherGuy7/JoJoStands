@@ -1,5 +1,5 @@
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,26 +15,26 @@ namespace JoJoStands.Items.Hamon
 
         public override void SafeSetDefaults()
         {
-            item.damage = 65;
-            item.width = 24;
-            item.height = 28;        //hitbox's width and height when the item is in the world
-            item.useTime = 60;
-            item.useAnimation = 60;
-            item.maxStack = 1;
-            item.noUseGraphic = true;
-            item.knockBack = 12f;
-            item.rare = ItemRarityID.Orange;
-            item.useTurn = true;
-            item.useStyle = ItemUseStyleID.Stabbing;
-            item.noMelee = true;
-            item.autoReuse = false;
-            item.shoot = mod.ProjectileType("MetallicNunchucksSwinging");
-            item.shootSpeed = 10f;
+            Item.damage = 65;
+            Item.width = 24;
+            Item.height = 28;        //hitbox's width and height when the Item is in the world
+            Item.useTime = 60;
+            Item.useAnimation = 60;
+            Item.maxStack = 1;
+            Item.noUseGraphic = true;
+            Item.knockBack = 12f;
+            Item.rare = ItemRarityID.Orange;
+            Item.useTurn = true;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.noMelee = true;
+            Item.autoReuse = false;
+            Item.shoot = ModContent.ProjectileType<MetallicNunchucksSwinging>();
+            Item.shootSpeed = 10f;
         }
 
         public override bool CanUseItem(Player player)
         {
-            return player.ownedProjectileCounts[mod.ProjectileType("MetallicNunchucksSwinging")] == 0 && player.ownedProjectileCounts[mod.ProjectileType("MetallicNunchucksProjectile")] == 0;
+            return player.ownedProjectileCounts[ModContent.ProjectileType<MetallicNunchucksSwinging>()] == 0 && player.ownedProjectileCounts[ModContent.ProjectileType<MetallicNunchucksProjectile>()] == 0;
         }
 
         public override void HoldItem(Player player)
@@ -44,37 +44,37 @@ namespace JoJoStands.Items.Hamon
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Chain, 5);
-            recipe.AddIngredient(ItemID.IronBar, 8);
-            recipe.AddIngredient(ItemID.DemoniteBar, 6);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 3);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-			recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Chain, 5);
-            recipe.AddIngredient(ItemID.LeadBar, 8);
-            recipe.AddIngredient(ItemID.DemoniteBar, 6);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 3);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Chain, 5);
-            recipe.AddIngredient(ItemID.LeadBar, 8);
-            recipe.AddIngredient(ItemID.CrimtaneBar, 6);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 3);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe(); recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Chain, 5);
-            recipe.AddIngredient(ItemID.LeadBar, 8);
-            recipe.AddIngredient(ItemID.CrimtaneBar, 6);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 3);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Chain, 5)
+                .AddIngredient(ItemID.IronBar, 8)
+                .AddIngredient(ItemID.DemoniteBar, 6)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 3)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.Chain, 5)
+                .AddIngredient(ItemID.LeadBar, 8)
+                .AddIngredient(ItemID.DemoniteBar, 6)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 3)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.Chain, 5)
+                .AddIngredient(ItemID.LeadBar, 8)
+                .AddIngredient(ItemID.CrimtaneBar, 6)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 3)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.Chain, 5)
+                .AddIngredient(ItemID.LeadBar, 8)
+                .AddIngredient(ItemID.CrimtaneBar, 6)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 3)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

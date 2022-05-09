@@ -1,5 +1,5 @@
-﻿using Terraria.ID;
-using Terraria;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
@@ -16,11 +16,11 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 2, 0, 0);
-            item.rare = ItemRarityID.LightPurple;
-            item.defense = 7;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.rare = ItemRarityID.LightPurple;
+            Item.defense = 7;
         }
 
         public override void UpdateEquip(Player player)
@@ -31,12 +31,11 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.CrystalShard, 6);
-            recipe.AddIngredient(ItemID.Silk, 10);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.CrystalShard, 6)
+                .AddIngredient(ItemID.Silk, 10)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

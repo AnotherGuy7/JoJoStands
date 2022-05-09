@@ -1,61 +1,62 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class SilverChariotT2 : StandItemClass
-	{
-		public override int standSpeed => 7;
-		public override int standType => 1;
-		public override string standProjectileName => "SilverChariot";
-		public override int standTier => 2;
+    public class SilverChariotT2 : StandItemClass
+    {
+        public override int standSpeed => 7;
+        public override int standType => 1;
+        public override string standProjectileName => "SilverChariot";
+        public override int standTier => 2;
 
-		public override string Texture
-		{
-			get { return mod.Name + "/Items/SilverChariotT1"; }
-		}
+        public override string Texture
+        {
+            get { return Mod.Name + "/Items/SilverChariotT1"; }
+        }
 
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Silver Chariot (Tier 2)");
-			Tooltip.SetDefault("Left-click to stab enemies and right-click to parry enemies and projectiles away!\nUsed in Stand Slot");
-		}
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Silver Chariot (Tier 2)");
+            Tooltip.SetDefault("Left-click to stab enemies and right-click to parry enemies and projectiles away!\nUsed in Stand Slot");
+        }
 
-		public override void SetDefaults()
-		{
-			item.damage = 34;
-			item.width = 32;
-			item.height = 32;
-			item.noUseGraphic = true;
-			item.maxStack = 1;
-			item.value = 0;
-			item.rare = ItemRarityID.LightPurple;
-		}
+        public override void SetDefaults()
+        {
+            Item.damage = 34;
+            Item.width = 32;
+            Item.height = 32;
+            Item.noUseGraphic = true;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.rare = ItemRarityID.LightPurple;
+        }
 
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("SilverChariotT1"));
-			recipe.AddIngredient(ItemID.PlatinumBar, 9);
-			recipe.AddIngredient(ItemID.Hellstone, 16);
-			recipe.AddIngredient(ItemID.Amethyst, 2);
-			recipe.AddIngredient(ItemID.FallenStar, 5);
-			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
-			recipe.AddIngredient(mod.ItemType("WillToProtect"));
-			recipe.AddTile(mod.TileType("RemixTableTile"));
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-			recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("SilverChariotT1"));
-			recipe.AddIngredient(ItemID.GoldBar, 9);
-			recipe.AddIngredient(ItemID.Hellstone, 16);
-			recipe.AddIngredient(ItemID.Amethyst, 2);
-			recipe.AddIngredient(ItemID.FallenStar, 5);
-			recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
-			recipe.AddIngredient(mod.ItemType("WillToProtect"));
-			recipe.AddTile(mod.TileType("RemixTableTile"));
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
-	}
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<SilverChariotT1>())
+                .AddIngredient(ItemID.PlatinumBar, 9)
+                .AddIngredient(ItemID.Hellstone, 16)
+                .AddIngredient(ItemID.Amethyst, 2)
+                .AddIngredient(ItemID.FallenStar, 5)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToProtect>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<SilverChariotT1>())
+                .AddIngredient(ItemID.GoldBar, 9)
+                .AddIngredient(ItemID.Hellstone, 16)
+                .AddIngredient(ItemID.Amethyst, 2)
+                .AddIngredient(ItemID.FallenStar, 5)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToProtect>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+        }
+    }
 }

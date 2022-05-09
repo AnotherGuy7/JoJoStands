@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 {
@@ -26,36 +26,36 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (!attackFrames)
                 StayBehind();
             else
                 GoInFront();
 
-            bool redBindActive = secondaryAbilityFrames = player.ownedProjectileCounts[mod.ProjectileType("RedBind")] != 0;
+            bool redBindActive = secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<RedBind>()] != 0;
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !redBindActive)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !redBindActive)
                 {
                     attackFrames = true;
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("FireAnkh"), newProjectileDamage, 3f, projectile.owner, chanceToDebuff, debuffDuration);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
                         Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                     }
                 }
                 else
@@ -66,26 +66,26 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                         attackFrames = false;
                     }
                 }
-                if (Main.mouseRight && projectile.owner == Main.myPlayer && !redBindActive && !player.HasBuff(mod.BuffType("AbilityCooldown")))
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer && !redBindActive && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
                     secondaryAbilityFrames = true;
                     if (JoJoStands.SoundsLoaded)
                     {
-                        Terraria.Audio.LegacySoundStyle redBind = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/RedBind");
+                        Terraria.Audio.LegacySoundStyle redBind = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/RedBind>();
                         redBind.WithVolume(MyPlayer.ModSoundsVolume);
-                        Main.PlaySound(redBind, projectile.position);
+                        SoundEngine.PlaySound(redBind, Projectile.position);
                     }
-                    Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
                     {
                         shootVel = new Vector2(0f, 1f);
                     }
                     shootVel.Normalize();
                     shootVel *= 16f;
-                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("RedBind"), newProjectileDamage, 3f, projectile.owner, projectile.whoAmI, debuffDuration - 60);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RedBind>(), newProjectileDamage, 3f, Projectile.owner, Projectile.whoAmI, debuffDuration - 60);
                     Main.projectile[proj].netUpdate = true;
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(20));
-                    projectile.netUpdate = true;
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(20));
+                    Projectile.netUpdate = true;
                 }
             }
             if (mPlayer.standAutoMode)
@@ -96,31 +96,31 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     attackFrames = true;
                     normalFrames = false;
 
-                    projectile.direction = 1;
-                    if (target.position.X - projectile.position.X < 0f)
+                    Projectile.direction = 1;
+                    if (target.position.X - Projectile.position.X < 0f)
                     {
-                        projectile.direction = -1;
+                        Projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
+                    Projectile.spriteDirection = Projectile.direction;
 
-                    projectile.velocity = target.Center - projectile.Center;
-                    projectile.velocity.Normalize();
-                    projectile.velocity *= 4f;
+                    Projectile.velocity = target.Center - Projectile.Center;
+                    Projectile.velocity.Normalize();
+                    Projectile.velocity *= 4f;
                     if (shootCount <= 0)
                     {
-                        if (Main.myPlayer == projectile.owner)
+                        if (Main.myPlayer == Projectile.owner)
                         {
                             shootCount += newShootTime;
-                            Vector2 shootVel = target.position - projectile.Center;
+                            Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                             {
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("FireAnkh"), newProjectileDamage, 3f, projectile.owner, chanceToDebuff, debuffDuration);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
                             Main.projectile[proj].netUpdate = true;
-                            projectile.netUpdate = true;
+                            Projectile.netUpdate = true;
                         }
                     }
                 }
@@ -137,46 +137,46 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary");
+                PlayAnimation("Secondary>();
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 4, 15, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 4, newShootTime / 2, true);
             }
-            if (animationName == "Secondary")
+            if (animationName == "Secondary>()
             {
                 AnimateStand(animationName, 4, 15, true);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>()
             {
                 AnimateStand(animationName, 1, 2, true);
             }

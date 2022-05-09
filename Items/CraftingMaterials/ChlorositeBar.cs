@@ -13,20 +13,19 @@ namespace JoJoStands.Items.CraftingMaterials
         }
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.value = Item.buyPrice(0, 1, 90, 0);
-            item.rare = 1;
-            item.maxStack = 999;
+            Item.width = 32;
+            Item.height = 32;
+            Item.value = Item.buyPrice(0, 1, 90, 0);
+            Item.rare = 1;
+            Item.maxStack = 999;
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.ChlorophyteBar);
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"));
-            recipe.AddTile(TileID.AdamantiteForge);
-            recipe.SetResult(this, 2);
-            recipe.AddRecipe();
+            CreateRecipe(2)
+                .AddIngredient(ItemID.ChlorophyteBar)
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>())
+                .AddTile(TileID.AdamantiteForge)
+                .Register();
         }
     }
 }

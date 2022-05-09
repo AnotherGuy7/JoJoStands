@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/KillerQueenT1"; }
+            get { return Mod.Name + "/Items/KillerQueenT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,26 +25,25 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 35;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 35;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("KillerQueenT1"));
-            recipe.AddIngredient(ItemID.Dynamite, 12);
-            recipe.AddIngredient(ItemID.HellstoneBar, 5);
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
-            recipe.AddIngredient(mod.ItemType("WillToEscape"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<KillerQueenT1>())
+                .AddIngredient(ItemID.Dynamite, 12)
+                .AddIngredient(ItemID.HellstoneBar, 5)
+                .AddIngredient(ModContent.ItemType<WillToDestroy>())
+                .AddIngredient(ModContent.ItemType<WillToEscape>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

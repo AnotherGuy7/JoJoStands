@@ -1,6 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -8,15 +9,15 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 14;
-            projectile.height = 20;
-            projectile.aiStyle = 0;
-            projectile.ranged = true;
-            projectile.timeLeft = 1800;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.maxPenetrate = 1;
+            Projectile.width = 14;
+            Projectile.height = 20;
+            Projectile.aiStyle = 0;
+            Projectile.ranged = true;
+            Projectile.timeLeft = 1800;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.maxPenetrate = 1;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

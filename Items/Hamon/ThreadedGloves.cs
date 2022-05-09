@@ -1,9 +1,11 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System;
 
 namespace JoJoStands.Items.Hamon
 {
@@ -18,21 +20,21 @@ namespace JoJoStands.Items.Hamon
 
         public override void SafeSetDefaults()
         {
-            item.damage = 62;
-            item.width = 22;
-            item.height = 24;        //hitbox's width and height when the item is in the world
-            item.maxStack = 1;
-            item.noUseGraphic = true;
-            item.knockBack = 8f;
-            item.rare = ItemRarityID.Pink;
-            item.useTurn = true;
-            item.noWet = true;
-            item.useAnimation = 2;
-            item.useTime = 2;
-            item.useStyle = ItemUseStyleID.Stabbing;
-            item.noMelee = true;
-            item.autoReuse = false;
-            item.shootSpeed = 15f;
+            Item.damage = 62;
+            Item.width = 22;
+            Item.height = 24;        //hitbox's width and height when the Item is in the world
+            Item.maxStack = 1;
+            Item.noUseGraphic = true;
+            Item.knockBack = 8f;
+            Item.rare = ItemRarityID.Pink;
+            Item.useTurn = true;
+            Item.noWet = true;
+            Item.useAnimation = 2;
+            Item.useTime = 2;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.noMelee = true;
+            Item.autoReuse = false;
+            Item.shootSpeed = 15f;
         }
 
         private int punchCounter = 0;
@@ -53,29 +55,22 @@ namespace JoJoStands.Items.Hamon
 
             if (useCool > 0)
                 useCool--;
-
             if (punchCounter <= 0)
-            {
                 numberOfPunches = 0;
-            }
-            ChargeHamon();
 
+            ChargeHamon();
             if (mPlayer.standOut && !mPlayer.standAutoMode)
                 return;
 
             hamonPlayer.usingItemThatIgnoresEnemyDamage = true;
-            if (Main.mouseLeft && canPunchAgain && useCool <= 0 && player.ownedProjectileCounts[mod.ProjectileType("ThreadedGlovePunches")] <= 0)
+            if (Main.mouseLeft && canPunchAgain && useCool <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<ThreadedGlovePunches>()] <= 0)
             {
-                useCool += item.useTime;
+                useCool += Item.useTime;
                 canPunchAgain = false;
                 if (Main.MouseWorld.X - player.position.X >= 0)
-                {
                     player.direction = 1;
-                }
                 else
-                {
                     player.direction = -1;
-                }
                 if (Math.Abs(player.velocity.X) <= 4f)
                     player.velocity.X += 1f * player.direction;
 
@@ -83,15 +78,15 @@ namespace JoJoStands.Items.Hamon
                 {
                     punchCounter = 0;
                     hamonPlayer.amountOfHamon -= 2;
-                    Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("ThreadedGlovePunches"), item.damage, item.knockBack, item.owner, numberOfPunches);
+                    Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<ThreadedGlovePunches>(), Item.damage, Item.knockBack, player.whoAmI, numberOfPunches);
                     numberOfPunches = 0;
                 }
                 else
                 {
                     punchCounter += 15;
                     hamonPlayer.amountOfHamon -= 1;
-                    Main.PlaySound(SoundID.Item1, player.Center);
-                    Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("ThreadedGlovePunches"), item.damage, item.knockBack, item.owner, numberOfPunches);
+                    SoundEngine.PlaySound(SoundID.Item1, player.Center);
+                    Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<ThreadedGlovePunches>(), Item.damage, Item.knockBack, player.whoAmI, numberOfPunches);
                     numberOfPunches += 1;
                 }
             }
@@ -127,11 +122,11 @@ namespace JoJoStands.Items.Hamon
                         enemyBeingGrabbed = false;
                         heldEnemyIndex = -1;
                         heldEnemyTimer = 0;
-                        item.reuseDelay += 120;
+                        Item.reuseDelay += 120;
                         return;
                     }
 
-                    item.reuseDelay = 3;
+                    Item.reuseDelay = 3;
                     player.controlUp = false;
                     player.controlDown = false;
                     player.controlLeft = false;
@@ -149,9 +144,9 @@ namespace JoJoStands.Items.Hamon
                     if (heldEnemyTimer >= 60)
                     {
                         hamonPlayer.amountOfHamon -= 5;
-                        heldNPC.StrikeNPC(item.damage, 0f, player.direction);
-                        heldNPC.AddBuff(mod.BuffType("Sunburn"), 5 * 60);
-                        Main.PlaySound(SoundID.Item, (int)player.position.X, (int)player.position.Y, 3, 1f, -0.8f);
+                        heldNPC.StrikeNPC(Item.damage, 0f, player.direction);
+                        heldNPC.AddBuff(ModContent.BuffType<Sunburn>(), 5 * 60);
+                        SoundEngine.PlaySound(SoundID.Item, (int)player.position.X, (int)player.position.Y, 3, 1f, -0.8f);
                         heldEnemyTimer = 0;
                     }
                 }
@@ -162,45 +157,44 @@ namespace JoJoStands.Items.Hamon
                 enemyBeingGrabbed = false;
                 heldEnemyIndex = -1;
                 heldEnemyTimer = 0;
-                item.reuseDelay += 120;
+                Item.reuseDelay += 120;
                 return;
             }
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.CobaltBar, 4);
-            recipe.AddIngredient(ItemID.LeadBar, 12);
-            recipe.AddIngredient(ItemID.WhiteString, 3);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.CobaltBar, 4);
-            recipe.AddIngredient(ItemID.IronBar, 12);
-            recipe.AddIngredient(ItemID.WhiteString, 3);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.PalladiumBar, 4);
-            recipe.AddIngredient(ItemID.LeadBar, 12);
-            recipe.AddIngredient(ItemID.WhiteString, 3);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.PalladiumBar, 4);
-            recipe.AddIngredient(ItemID.LeadBar, 12);
-            recipe.AddIngredient(ItemID.WhiteString, 3);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.CobaltBar, 4)
+                .AddIngredient(ItemID.LeadBar, 12)
+                .AddIngredient(ItemID.WhiteString, 3)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.CobaltBar, 4)
+                .AddIngredient(ItemID.IronBar, 12)
+                .AddIngredient(ItemID.WhiteString, 3)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.PalladiumBar, 4)
+                .AddIngredient(ItemID.LeadBar, 12)
+                .AddIngredient(ItemID.WhiteString, 3)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.PalladiumBar, 4)
+                .AddIngredient(ItemID.LeadBar, 12)
+                .AddIngredient(ItemID.WhiteString, 3
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

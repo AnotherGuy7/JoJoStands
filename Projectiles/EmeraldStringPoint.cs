@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -8,34 +9,34 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 18;
-            projectile.height = 18;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 600;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 18;
+            Projectile.height = 18;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         public const float MaxUnconnectedDistance = 32f * 16f;
 
         public override void AI()
         {
-            if (projectile.ai[0] == 1f)
-                projectile.timeLeft = 2;
+            if (Projectile.ai[0] == 1f)
+                Projectile.timeLeft = 2;
 
-            if (projectile.ai[0] == 0f)
+            if (Projectile.ai[0] == 0f)
             {
-                if (projectile.Distance(Main.player[projectile.owner].Center) >= MaxUnconnectedDistance)
+                if (Projectile.Distance(Main.player[Projectile.owner].Center) >= MaxUnconnectedDistance)
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                 }
             }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            projectile.velocity = Vector2.Zero;
+            Projectile.velocity = Vector2.Zero;
             return false;
         }
     }

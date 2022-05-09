@@ -1,28 +1,28 @@
-using Terraria;
-using Microsoft.Xna.Framework;
-using Terraria.ModLoader;
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items.Vampire;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.AccessoryBuff
 {
     public class Vampire : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Vampire");
+            DisplayName.SetDefault("Vampire");
             Description.SetDefault("You are now a vampire... Stay away from the sun!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;
-            canBeCleared = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            player.allDamage *= 1.5f;
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
             player.moveSpeed *= 1.5f;
-            player.meleeSpeed *= 1.5f;
             player.noFallDmg = true;
             player.jumpBoost = true;
             player.manaRegen += 4;
@@ -30,19 +30,17 @@ namespace JoJoStands.Buffs.AccessoryBuff
             vPlayer.vampire = true;
             vPlayer.anyMaskForm = true;
             player.buffTime[buffIndex] = 2;
-            if (player.HasBuff(mod.BuffType("Zombie")))
-            {
-                player.ClearBuff(mod.BuffType("Zombie"));
-            }
+            player.GetDamage(DamageClass.Generic) *= 1.5f;
+            player.GetAttackSpeed(DamageClass.Generic) *= 1.5f;
+            if (player.HasBuff(ModContent.BuffType<Zombie>()))
+                player.ClearBuff(ModContent.BuffType<Zombie>());
         }
 
         public override void Update(NPC npc, ref int buffIndex)
         {
             Vector3 lightLevel = Lighting.GetColor((int)npc.Center.X / 16, (int)npc.Center.Y / 16).ToVector3();
-            if (lightLevel.Length() > 1.3f && Main.dayTime && Main.tile[(int)npc.Center.X / 16, (int)npc.Center.Y / 16].wall == 0)
-            {
-                npc.AddBuff(mod.BuffType("Sunburn"), 2);
-            }
+            if (lightLevel.Length() > 1.3f && Main.dayTime && Main.tile[(int)npc.Center.X / 16, (int)npc.Center.Y / 16].WallType == 0)
+                npc.AddBuff(ModContent.BuffType<Sunburn>(), 2);
         }
     }
 }

@@ -1,3 +1,4 @@
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,7 +9,7 @@ namespace JoJoStands.Items
     {
         public override string Texture
         {
-            get { return mod.Name + "/Items/CenturyBoyT1"; }
+            get { return Mod.Name + "/Items/CenturyBoyT1"; }
         }
 
         public override int standTier => 2;
@@ -21,9 +22,9 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.width = 36;
-            item.height = 48;
-            item.rare = ItemRarityID.LightPurple;
+            Item.width = 36;
+            Item.height = 48;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -34,30 +35,27 @@ namespace JoJoStands.Items
             mPlayer.showingCBLayer = true;
             mPlayer.standAccessory = true;
             if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
                 Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, true, player.whoAmI);
-            }
+
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("CenturyBoyT1"));
-            recipe.AddIngredient(ItemID.CobaltBar, 6);
-            recipe.AddIngredient(ItemID.HallowedBar, 4);
-            recipe.AddIngredient(ItemID.Dynamite, 5);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("CenturyBoyT1"));
-            recipe.AddIngredient(ItemID.PalladiumBar, 6);
-            recipe.AddIngredient(ItemID.HallowedBar, 4);
-            recipe.AddIngredient(ItemID.Dynamite, 5);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<CenturyBoyT1>())
+                .AddIngredient(ItemID.CobaltBar, 6)
+                .AddIngredient(ItemID.HallowedBar, 4)
+                .AddIngredient(ItemID.Dynamite, 5)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<CenturyBoyT1>())
+                .AddIngredient(ItemID.PalladiumBar, 6)
+                .AddIngredient(ItemID.HallowedBar, 4)
+                .AddIngredient(ItemID.Dynamite, 5)
+                .AddTile(ModContent.TileType<RemixTableTile>());
         }
     }
 }

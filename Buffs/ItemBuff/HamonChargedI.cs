@@ -6,7 +6,7 @@ namespace JoJoStands.Buffs.ItemBuff
 {
     public class HamonChargedI : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hamon Charged I");
             Description.SetDefault("The large amount of Hamon in you is increasing your physical abilities.");
@@ -19,8 +19,8 @@ namespace JoJoStands.Buffs.ItemBuff
             hPlayer.hamonDamageBoosts += 0.03f;
             player.moveSpeed += 0.03f;
             player.jumpSpeedBoost += 0.03f;
-            player.allDamage += 0.03f;
-            player.meleeSpeed += 0.03f;
+            player.GetDamage(DamageClass.Generic) += 0.03f;
+            player.GetAttackSpeed(DamageClass.Generic) += 0.03f;
             player.pickSpeed += 0.03f;
 
             if (Main.rand.Next(0, 8 + 1) == 0)

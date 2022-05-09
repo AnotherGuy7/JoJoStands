@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Vampire
 {
@@ -13,16 +14,16 @@ namespace JoJoStands.Items.Vampire
         public sealed override void SetDefaults()
         {
             SafeSetDefaults();
-            item.melee = false;
-            item.ranged = false;
-            item.magic = false;
-            item.thrown = false;
-            item.summon = false;
+            Item.melee = false;
+            Item.ranged = false;
+            Item.magic = false;
+            Item.thrown = false;
+            Item.summon = false;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            TooltipLine tooltip = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
+            TooltipLine tooltip = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.Mod == "Terraria");
             if (tooltip != null)
             {
                 string[] splitText = tooltip.text.Split(' ');

@@ -6,7 +6,7 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class Lacerated : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Lacerated");
             Description.SetDefault("You have been wounded deeply.");
@@ -18,9 +18,8 @@ namespace JoJoStands.Buffs.Debuffs
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.lifeRegen > 0)
-            {
                 player.lifeRegen = 0;
-            }
+
             player.lifeRegenTime = 30;
             player.lifeRegen -= 26;
 
@@ -31,9 +30,7 @@ namespace JoJoStands.Buffs.Debuffs
         public override void Update(NPC npc, ref int buffIndex)
         {
             if (npc.lifeRegen > 0)
-            {
                 npc.lifeRegen = 0;
-            }
 
             if (Main.rand.Next(0, 2 + 1) == 0)
                 Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f, 0, Scale: 2f);
@@ -42,7 +39,7 @@ namespace JoJoStands.Buffs.Debuffs
             if (Main.hardMode)
                 if (lifeLossPerSecond >= 51)
                     lifeLossPerSecond = 51;
-            else
+                else
                 if (lifeLossPerSecond >= 16)
                     lifeLossPerSecond = 16;
             if (npc.boss)

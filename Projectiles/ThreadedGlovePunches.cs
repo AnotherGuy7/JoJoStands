@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
@@ -11,16 +12,16 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 24;
-            projectile.height = 48;
-            projectile.friendly = true;
-            projectile.aiStyle = 0;
-            projectile.tileCollide = false;
-            projectile.penetrate = -1;
-            projectile.ownerHitCheck = true;
-            projectile.friendly = true;
-            drawOriginOffsetY = 20;
-            projectile.timeLeft = 40;
+            Projectile.width = 24;
+            Projectile.height = 48;
+            Projectile.friendly = true;
+            Projectile.aiStyle = 0;
+            Projectile.tileCollide = false;
+            Projectile.penetrate = -1;
+            Projectile.ownerHitCheck = true;
+            Projectile.friendly = true;
+            DrawOriginOffsetY = 20;
+            Projectile.timeLeft = 40;
         }
 
         private Texture2D punchSpritesheet;
@@ -29,24 +30,24 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
 
             if (!checkedPunchType)
             {
-                if (projectile.ai[0] < 2f)
+                if (Projectile.ai[0] < 2f)
                 {
-                    punchSpritesheet = mod.GetTexture("Projectiles/ThreadedGloves_Punch");
+                    punchSpritesheet = Mod.GetTexture("Projectiles/ThreadedGloves_Punch>();
                     amountOfFrames = 4;
                 }
                 else
                 {
                     if (Main.rand.Next(0, 2) == 0)
                     {
-                        punchSpritesheet = mod.GetTexture("Projectiles/ThreadedGloves_Uppercut");
+                        punchSpritesheet = Mod.GetTexture("Projectiles/ThreadedGloves_Uppercut>();
                     }
                     else
                     {
-                        punchSpritesheet = mod.GetTexture("Projectiles/ThreadedGloves_Undercut");
+                        punchSpritesheet = Mod.GetTexture("Projectiles/ThreadedGloves_Undercut>();
                     }
                     amountOfFrames = 5;
                 }
@@ -58,18 +59,18 @@ namespace JoJoStands.Projectiles
             {
                 centerOffset.X -= 24f;
             }
-            projectile.position = player.Center + centerOffset;
-            projectile.direction = player.direction;
+            Projectile.position = player.Center + centerOffset;
+            Projectile.direction = player.direction;
 
-            projectile.frameCounter++;
-            if (projectile.frameCounter >= 4)
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 4)
             {
-                projectile.frame += 1;
-                projectile.frameCounter = 0;
-                if (projectile.frame >= amountOfFrames)
+                Projectile.frame += 1;
+                Projectile.frameCounter = 0;
+                if (Projectile.frame >= amountOfFrames)
                 {
-                    projectile.frame = 0;
-                    projectile.Kill();
+                    Projectile.frame = 0;
+                    Projectile.Kill();
                 }
             }
         }
@@ -77,13 +78,13 @@ namespace JoJoStands.Projectiles
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             int frameHeight = punchSpritesheet.Height / amountOfFrames;
-            Rectangle sourceRect = new Rectangle(0, projectile.frame * frameHeight, punchSpritesheet.Width, frameHeight);
+            Rectangle sourceRect = new Rectangle(0, Projectile.frame * frameHeight, punchSpritesheet.Width, frameHeight);
             SpriteEffects effect = SpriteEffects.None;
-            if (projectile.direction == -1)
+            if (Projectile.direction == -1)
             {
                 effect = SpriteEffects.FlipHorizontally;
             }
-            spriteBatch.Draw(punchSpritesheet, projectile.Center - Main.screenPosition, sourceRect, lightColor, projectile.rotation, new Vector2(sourceRect.Width / 2f, sourceRect.Height / 2f), projectile.scale, effect, 0f);
+            spriteBatch.Draw(punchSpritesheet, Projectile.Center - Main.screenPosition, sourceRect, lightColor, Projectile.rotation, new Vector2(sourceRect.Width / 2f, sourceRect.Height / 2f), Projectile.scale, effect, 0f);
             return false;
         }
 
@@ -91,7 +92,7 @@ namespace JoJoStands.Projectiles
         {
             if (Main.rand.Next(0, 2) == 0)
             {
-                target.AddBuff(mod.BuffType("Sunburn"), 20 * 60);
+                target.AddBuff(ModContent.BuffType<Sunburn>(), 20 * 60);
             }
         }
     }

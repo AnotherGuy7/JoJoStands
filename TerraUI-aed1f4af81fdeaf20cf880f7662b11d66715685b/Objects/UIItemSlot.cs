@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
@@ -8,9 +9,11 @@ using Terraria.UI;
 using Terraria.UI.Chat;
 using TerraUI.Utilities;
 
-namespace TerraUI.Objects {
-    public class UIItemSlot : UIObject {
-        protected Item item;
+namespace TerraUI.Objects
+{
+    public class UIItemSlot : UIObject
+    {
+        protected Item Item;
         protected string hoverText = "";
         protected float backOpacity = 1f;
         protected float itemOpacity = 1f;
@@ -18,27 +21,27 @@ namespace TerraUI.Objects {
         protected Rectangle tickRect;
 
         /// <summary>
-        /// Method that checks whether an item can go in the slot.
+        /// Method that checks whether an Item can go in the slot.
         /// </summary>
         public ConditionHandler Conditions { get; set; }
         /// <summary>
-        /// Method that draws the background of the item slot.
+        /// Method that draws the background of the Item slot.
         /// </summary>
         public DrawHandler DrawBackground { get; set; }
         /// <summary>
-        /// Method that draws the item in the slot.
+        /// Method that draws the Item in the slot.
         /// </summary>
         public DrawHandler DrawItem { get; set; }
         /// <summary>
-        /// Method called after the item in the slot is drawn.
+        /// Method called after the Item in the slot is drawn.
         /// </summary>
         public DrawHandler PostDrawItem { get; set; }
         /// <summary>
-        /// Whether the item in the slot is visible on the player character.
+        /// Whether the Item in the slot is visible on the player character.
         /// </summary>
         public bool ItemVisible { get; set; }
         /// <summary>
-        /// Whether to draw the slot as a normal item slot.
+        /// Whether to draw the slot as a normal Item slot.
         /// </summary>
         public bool DrawAsNormalSlot { get; set; }
         /// <summary>
@@ -48,13 +51,17 @@ namespace TerraUI.Objects {
         /// <summary>
         /// The text to show when the mouse hovers over the slot. If blank, text is determined by slot context.
         /// </summary>
-        public string HoverText {
+        public string HoverText
+        {
             get { return hoverText; }
-            set {
-                if(string.IsNullOrEmpty(value)) {
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
                     hoverText = UIUtils.GetHoverText(Context);
                 }
-                else {
+                else
+                {
                     hoverText = value;
                 }
             }
@@ -64,27 +71,30 @@ namespace TerraUI.Objects {
         /// </summary>
         public bool ScaleToInventory { get; set; }
         /// <summary>
-        /// The item shown in the slot.
+        /// The Item shown in the slot.
         /// </summary>
-        public Item Item {
-            get { return item; }
-            set { item = value; }
+        public Item Item
+        {
+            get { return Item; }
+            set { Item = value; }
         }
         /// <summary>
         /// The slot to swap items with if this slot is right-clicked.
         /// </summary>
         public UIItemSlot Partner { get; set; }
         /// <summary>
-        /// The opacity of the item slot background (between 0 and 1).
+        /// The opacity of the Item slot background (between 0 and 1).
         /// </summary>
-        public float BackOpacity {
+        public float BackOpacity
+        {
             get { return backOpacity; }
             set { backOpacity = MathHelper.Clamp(value, 0f, 1f); }
         }
         /// <summary>
-        /// The opacity of the item texture in the slot (between 0 and 1).
+        /// The opacity of the Item texture in the slot (between 0 and 1).
         /// </summary>
-        public float ItemOpacity {
+        public float ItemOpacity
+        {
             get { return itemOpacity; }
             set { itemOpacity = MathHelper.Clamp(value, 0f, 1f); }
         }
@@ -97,17 +107,18 @@ namespace TerraUI.Objects {
         /// <param name="context">context for slot</param>
         /// <param name="hoverText">hover text to show instead of context</param>
         /// <param name="parent">parent UIObject</param>
-        /// <param name="conditions">checked before item is placed in slot; if null, all items are permitted</param>
+        /// <param name="conditions">checked before Item is placed in slot; if null, all items are permitted</param>
         /// <param name="drawBackground">run when slot background is drawn; if null, slot is drawn with background texture</param>
-        /// <param name="drawItem">run when item in slot is drawn; if null, item is drawn in center of slot</param>
-        /// <param name="postDrawItem">run after item in slot is drawn; use to draw elements over the item</param>
+        /// <param name="drawItem">run when Item in slot is drawn; if null, Item is drawn in center of slot</param>
+        /// <param name="postDrawItem">run after Item in slot is drawn; use to draw elements over the Item</param>
         /// <param name="drawAsNormalSlot">draw as a normal inventory ItemSlot</param>
         /// <param name="scaleToInventory">whether to scale with the inventory</param>
         public UIItemSlot(Vector2 position, int size = 52, int context = ItemSlot.Context.InventoryItem,
             string hoverText = "", UIObject parent = null, ConditionHandler conditions = null,
             DrawHandler drawBackground = null, DrawHandler drawItem = null, DrawHandler postDrawItem = null,
             bool drawAsNormalSlot = false, bool scaleToInventory = false)
-            : base(position, new Vector2(size), parent, false) {
+            : base(position, new Vector2(size), parent, false)
+        {
             Item = new Item();
             Context = context;
             HoverText = hoverText;
@@ -122,13 +133,16 @@ namespace TerraUI.Objects {
         /// <summary>
         /// The default left click event.
         /// </summary>
-        public override void OnLeftClick() {
-            if(Main.mouseItem.stack < 1 && item.type < 1) {
+        public override void OnLeftClick()
+        {
+            if (Main.mouseItem.stack < 1 && Item.type < 1)
+            {
                 return;
             }
 
-            if(Main.mouseItem.stack < 1 || Conditions == null || Conditions(Main.mouseItem)) {
-                Swap(ref item, ref Main.mouseItem);
+            if (Main.mouseItem.stack < 1 || Conditions == null || Conditions(Main.mouseItem))
+            {
+                Swap(ref Item, ref Main.mouseItem);
             }
         }
 
@@ -137,67 +151,79 @@ namespace TerraUI.Objects {
         /// </summary>
         /*public override void OnRightClick() {         just for now, it won't be needed and it seems to cause crashes upon being called
             if(Conditions(Main.mouseItem)) {
-                Swap(ref item, ref Main.mouseItem);
+                Swap(ref Item, ref Main.mouseItem);
             }
             else if(Partner != null && (Item.stack > 0 || Partner.Item.stack > 0)) {
-                Swap(ref item, ref Partner.item);
+                Swap(ref Item, ref Partner.Item);
             }
         }*/
 
         /// <summary>
         /// Swap two items between slots or the slot and the mouse cursor.
         /// </summary>
-        /// <param name="item1">first item</param>
-        /// <param name="item2">second item</param>
-        public void Swap(ref Item item1, ref Item item2) {
+        /// <param name="item1">first Item</param>
+        /// <param name="item2">second Item</param>
+        public void Swap(ref Item item1, ref Item item2)
+        {
             UIUtils.SwitchItems(ref item1, ref item2);
-            Main.PlaySound(SoundID.Grab);
+            SoundEngine.PlaySound(SoundID.Grab);
             Recipe.FindRecipes();
         }
 
         /// <summary>
-        /// Toggle the visibility of the item in the slot.
+        /// Toggle the visibility of the Item in the slot.
         /// </summary>
-        public void ToggleVisibility() {
+        public void ToggleVisibility()
+        {
             ItemVisible = !ItemVisible;
-            Main.PlaySound(SoundID.MenuTick);
+            SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         /// <summary>
-        /// Update the item slot.
+        /// Update the Item slot.
         /// </summary>
-        public override void Update() {
-            if(!PlayerInput.IgnoreMouseInterface) {
+        public override void Update()
+        {
+            if (!PlayerInput.IgnoreMouseInterface)
+            {
                 bool intersectsTick = MouseUtils.Rectangle.Intersects(tickRect) && HasTick();
                 bool intersectsRect = MouseUtils.Rectangle.Intersects(Rectangle);
 
-                if(intersectsRect || intersectsTick) {
+                if (intersectsRect || intersectsTick)
+                {
                     Main.player[Main.myPlayer].mouseInterface = true;
                 }
 
-                if(intersectsTick) {
+                if (intersectsTick)
+                {
                     Main.hoverItemName =
                         (ItemVisible ? Language.GetTextValue("LegacyInterface.59") : Language.GetTextValue("GameUI.Hidden"));
 
-                    if(MouseUtils.JustPressed(MouseButtons.Left)) {
+                    if (MouseUtils.JustPressed(MouseButtons.Left))
+                    {
                         ToggleVisibility();
                     }
                 }
-                else if(intersectsRect) {
+                else if (intersectsRect)
+                {
                     Main.HoverItem = Item;
 
-                    if(Item.stack < 1) {
+                    if (Item.stack < 1)
+                    {
                         Main.hoverItemName = HoverText;
                     }
-                    else if(Item.stack > 0) {
+                    else if (Item.stack > 0)
+                    {
                         Main.hoverItemName = Item.Name;
                     }
-                    else if(Item.stack > 1) {
+                    else if (Item.stack > 1)
+                    {
                         Main.hoverItemName = Item.Name + " (" + Item.stack + ")";
                     }
                 }
 
-                if(!intersectsTick) {
+                if (!intersectsTick)
+                {
                     base.Update();
                 }
             }
@@ -207,35 +233,46 @@ namespace TerraUI.Objects {
         /// Draw the object. Call during any Draw() function.
         /// </summary>
         /// <param name="spriteBatch">drawing SpriteBatch</param>
-        public override void Draw(SpriteBatch spriteBatch) {
+        public override void Draw(SpriteBatch spriteBatch)
+        {
             Rectangle = new Rectangle((int)RelativePosition.X, (int)RelativePosition.Y, (int)Size.X, (int)Size.Y);
 
-            if(DrawAsNormalSlot) {
-                ItemSlot.Draw(spriteBatch, ref item, (int)Context, RelativePosition);
+            if (DrawAsNormalSlot)
+            {
+                ItemSlot.Draw(spriteBatch, ref Item, (int)Context, RelativePosition);
             }
-            else {
-                if(DrawBackground != null) {
+            else
+            {
+                if (DrawBackground != null)
+                {
                     DrawBackground(this, spriteBatch);
                 }
-                else {
+                else
+                {
                     OnDrawBackground(spriteBatch);
                 }
 
-                if(Item.type > 0) {
-                    if(DrawItem != null) {
+                if (Item.type > 0)
+                {
+                    if (DrawItem != null)
+                    {
                         DrawItem(this, spriteBatch);
                     }
-                    else {
+                    else
+                    {
                         OnDrawItem(spriteBatch);
                     }
                 }
             }
 
-            if(PostDrawItem != null) {
+            if (PostDrawItem != null)
+            {
                 PostDrawItem(this, spriteBatch);
             }
-            else {
-                if(HasTick() && !DrawAsNormalSlot) {
+            else
+            {
+                if (HasTick() && !DrawAsNormalSlot)
+                {
                     DrawTick(spriteBatch);
                 }
             }
@@ -247,7 +284,8 @@ namespace TerraUI.Objects {
         /// The default DrawBackground function.
         /// </summary>
         /// <param name="spriteBatch">drawing SpriteBatch</param>
-        public void OnDrawBackground(SpriteBatch spriteBatch) {
+        public void OnDrawBackground(SpriteBatch spriteBatch)
+        {
             Texture2D backTex = UIUtils.GetContextTexture(Context);
             spriteBatch.Draw(
                 backTex,
@@ -265,14 +303,17 @@ namespace TerraUI.Objects {
         /// The default DrawItem function.
         /// </summary>
         /// <param name="spriteBatch">drawing SpriteBatch</param>
-        public void OnDrawItem(SpriteBatch spriteBatch) {
+        public void OnDrawItem(SpriteBatch spriteBatch)
+        {
             Texture2D texture2D = Main.itemTexture[Item.type];
             Rectangle rectangle;
 
-            if(Main.itemAnimations[Item.type] != null) {
+            if (Main.itemAnimations[Item.type] != null)
+            {
                 rectangle = Main.itemAnimations[Item.type].GetFrame(texture2D);
             }
-            else {
+            else
+            {
                 rectangle = texture2D.Frame(1, 1, 0, 0);
             }
 
@@ -291,7 +332,8 @@ namespace TerraUI.Objects {
                 SpriteEffects.None,
                 0f);
 
-            if(Item.stack > 1) {
+            if (Item.stack > 1)
+            {
                 ChatManager.DrawColorCodedStringWithShadow(
                     spriteBatch,
                     Main.fontItemStack,
@@ -310,10 +352,12 @@ namespace TerraUI.Objects {
         /// Draws the visibility tick in the slot.
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public void DrawTick(SpriteBatch spriteBatch) {
+        public void DrawTick(SpriteBatch spriteBatch)
+        {
             Texture2D tickTexture = Main.inventoryTickOnTexture;
 
-            if(!ItemVisible) {
+            if (!ItemVisible)
+            {
                 tickTexture = Main.inventoryTickOffTexture;
             }
 
@@ -325,10 +369,12 @@ namespace TerraUI.Objects {
         /// Checks if the slot has a context that needs a tick.
         /// </summary>
         /// <returns>whether the slot has a tick</returns>
-        public bool HasTick() {
-            if(Context == ItemSlot.Context.EquipAccessory ||
+        public bool HasTick()
+        {
+            if (Context == ItemSlot.Context.EquipAccessory ||
                Context == ItemSlot.Context.EquipLight ||
-               Context == ItemSlot.Context.EquipPet) {
+               Context == ItemSlot.Context.EquipPet)
+            {
                 return true;
             }
 
@@ -340,10 +386,12 @@ namespace TerraUI.Objects {
         /// </summary>
         /// <param name="scaleForSlot">whether to also scale for the slot size</param>
         /// <returns>scale</returns>
-        public float Scale(bool scaleForSlot) {
+        public float Scale(bool scaleForSlot)
+        {
             float scale = (ScaleToInventory ? Main.inventoryScale : 1f);
 
-            if(scaleForSlot) {
+            if (scaleForSlot)
+            {
                 scale *= (Size.X / defaultSize);
             }
 

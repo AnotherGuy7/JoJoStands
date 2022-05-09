@@ -1,7 +1,7 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-
 
 namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
 {
@@ -16,11 +16,11 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 4, 0, 0);
-            item.rare = ItemRarityID.LightPurple;
-            item.defense = 17;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 4, 0, 0);
+            Item.rare = ItemRarityID.LightPurple;
+            Item.defense = 17;
         }
 
         public override void UpdateEquip(Player player)
@@ -32,11 +32,10 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ChlorositeBar"), 20);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<ChlorositeBar>(), 20)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }

@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/HermitPurpleT1"; }
+            get { return Mod.Name + "/Items/HermitPurpleT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,13 +25,13 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 157;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 157;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -42,16 +44,15 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("HermitPurpleT2"));
-            recipe.AddIngredient(ItemID.HallowedBar, 7);
-            recipe.AddIngredient(ItemID.Amethyst, 6);
-            recipe.AddIngredient(ItemID.ThornsPotion);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 5);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 3);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<HermitPurpleT2>())
+                .AddIngredient(ItemID.HallowedBar, 7)
+                .AddIngredient(ItemID.Amethyst, 6)
+                .AddIngredient(ItemID.ThornsPotion)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 3)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -9,22 +10,22 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 30;
-            projectile.height = 34;
-            projectile.aiStyle = 0;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 3600;
-            projectile.friendly = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
+            Projectile.width = 30;
+            Projectile.height = 34;
+            Projectile.aiStyle = 0;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 3600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
         }
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
-            projectile.rotation += MathHelper.ToRadians(13f * projectile.direction);
+            Player player = Main.player[Projectile.owner];
+            Projectile.rotation += MathHelper.ToRadians(13f * Projectile.direction);
             player.AddBuff(BuffID.Obstructed, 2);
-            player.position = projectile.Center;
+            player.position = Projectile.Center;
             player.immune = true;
             player.noFallDmg = true;
             player.controlUseItem = false;
@@ -36,44 +37,44 @@ namespace JoJoStands.Projectiles
             {
                 player.mount.Dismount(player);
             }
-            Lighting.AddLight(projectile.Center, 2f, 2f, 2f);
-            if (projectile.owner == Main.myPlayer)
+            Lighting.AddLight(Projectile.Center, 2f, 2f, 2f);
+            if (Projectile.owner == Main.myPlayer)
             {
-                if (player.GetModPlayer<MyPlayer>().tuskActNumber != 3)
+                if (player.GetModPlayer<MyPlayer>()).tuskActNumber != 3)
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                 }
-                if (Main.mouseLeft && !WorldGen.TileEmpty((int)(projectile.position.X / 16f), (int)(projectile.position.Y / 16f)))
+                if (Main.mouseLeft && !WorldGen.TileEmpty((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f)))
                 {
-                    projectile.velocity = Main.MouseWorld - projectile.position;
-                    projectile.velocity.Normalize();
-                    projectile.velocity *= 5f;
+                    Projectile.velocity = Main.MouseWorld - Projectile.position;
+                    Projectile.velocity.Normalize();
+                    Projectile.velocity *= 5f;
 
-                    if (Main.MouseWorld.X > projectile.position.X)
+                    if (Main.MouseWorld.X > Projectile.position.X)
                         player.ChangeDir(1);
                     else
                         player.ChangeDir(-1);
                 }
                 else
                 {
-                    if (WorldGen.TileEmpty((int)(projectile.position.X / 16f), (int)(projectile.position.Y / 16f)))
+                    if (WorldGen.TileEmpty((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f)))
                     {
-                        projectile.velocity.Y += 0.1f;
-                        projectile.velocity.X *= 0.04f;
+                        Projectile.velocity.Y += 0.1f;
+                        Projectile.velocity.X *= 0.04f;
                     }
                     else
                     {
-                        projectile.velocity = Vector2.Zero;
+                        Projectile.velocity = Vector2.Zero;
                     }
                 }
-                if ((projectile.timeLeft <= 3540 && Main.mouseRight) || player.dead)
+                if ((Projectile.timeLeft <= 3540 && Main.mouseRight) || player.dead)
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                 }
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
-            int dustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 240);
+            int dustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 240);
             Main.dust[dustIndex].noGravity = true;
         }
 
@@ -84,15 +85,15 @@ namespace JoJoStands.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
 
-            while (!WorldGen.TileEmpty((int)(projectile.position.X / 16f), (int)(projectile.position.Y / 16f)))
+            while (!WorldGen.TileEmpty((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f)))
             {
-                projectile.position.Y -= 10f;
+                Projectile.position.Y -= 10f;
             }
-            player.position = projectile.position + new Vector2(0f, -35f);
+            player.position = Projectile.position + new Vector2(0f, -35f);
             player.velocity.Y -= 6f;
-            player.AddBuff(mod.BuffType("AbilityCooldown"), player.GetModPlayer<MyPlayer>().AbilityCooldownTime(20));
+            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), player.GetModPlayer<MyPlayer>()).AbilityCooldownTime(20));
         }
     }
 }

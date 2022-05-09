@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.NPCStands
 {
@@ -12,31 +13,31 @@ namespace JoJoStands.Projectiles.NPCStands
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 8;
-            Main.projPet[projectile.type] = true;
-            ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
-            ProjectileID.Sets.Homing[projectile.type] = true;
-            ProjectileID.Sets.LightPet[projectile.type] = true;
-            Main.projPet[projectile.type] = true;
+            Main.projFrames[Projectile.type] = 8;
+            Main.projPet[Projectile.type] = true;
+            ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+            ProjectileID.Sets.LightPet[Projectile.type] = true;
+            Main.projPet[Projectile.type] = true;
         }
 
         public override void SetDefaults()
         {
-            projectile.netImportant = true;
-            projectile.width = 40;
-            projectile.height = 64;
-            projectile.friendly = true;
-            projectile.minion = true;
-            projectile.timeLeft = 600;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-            projectile.npcProj = true;
+            Projectile.netImportant = true;
+            Projectile.width = 40;
+            Projectile.height = 64;
+            Projectile.friendly = true;
+            Projectile.minion = true;
+            Projectile.timeLeft = 600;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.npcProj = true;
         }
 
         private const float MaximumDetectionDistance = 10f * 16f;
 
         private int shootTime = 30;
-        private float shootSpeed = 9f;     //how fast the projectile the minion shoots goes
+        private float shootSpeed = 9f;     //how fast the Projectile the minion shoots goes
         private bool normalFrames = false;
         private bool attackFrames = false;
         private float shootCount = 0f;
@@ -49,7 +50,7 @@ namespace JoJoStands.Projectiles.NPCStands
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC npc = Main.npc[n];
-                    if (npc.type == mod.NPCType("Priest"))
+                    if (npc.type == Mod.NPCType("Priest>())
                     {
                         pucci = npc;
                         break;
@@ -58,20 +59,20 @@ namespace JoJoStands.Projectiles.NPCStands
             }
             if (shootCount > 0)
                 shootCount--;
-            whitesnakeActive = projectile.active;
+            whitesnakeActive = Projectile.active;
             if (!Priest.userIsAlive)
-                projectile.Kill();
-            if (projectile.timeLeft < 256)
-                projectile.alpha = -projectile.timeLeft + 255;
+                Projectile.Kill();
+            if (Projectile.timeLeft < 256)
+                Projectile.alpha = -Projectile.timeLeft + 255;
 
             if (pucci != null)
             {
                 Vector2 vector131 = pucci.Center;
                 vector131.X -= (float)((5 + pucci.width / 2) * pucci.direction);
                 vector131.Y -= 15f;
-                projectile.Center = Vector2.Lerp(projectile.Center, vector131, 0.2f);
-                projectile.velocity *= 0.8f;
-                projectile.direction = (projectile.spriteDirection = pucci.direction);
+                Projectile.Center = Vector2.Lerp(Projectile.Center, vector131, 0.2f);
+                Projectile.velocity *= 0.8f;
+                Projectile.direction = (Projectile.spriteDirection = pucci.direction);
             }
 
             NPC target = null;
@@ -81,12 +82,12 @@ namespace JoJoStands.Projectiles.NPCStands
                 NPC npc = Main.npc[n];
                 if (npc.CanBeChasedBy(this, false))
                 {
-                    float distance = Vector2.Distance(npc.Center, projectile.Center);
-                    if (distance < MaximumDetectionDistance && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
+                    float distance = Vector2.Distance(npc.Center, Projectile.Center);
+                    if (distance < MaximumDetectionDistance && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height))
                     {
                         target = npc;
-                        projectile.alpha = 0;
-                        projectile.timeLeft = 600;
+                        Projectile.alpha = 0;
+                        Projectile.timeLeft = 600;
                     }
                 }
             }
@@ -96,27 +97,27 @@ namespace JoJoStands.Projectiles.NPCStands
             if (target == null)
                 return;
 
-            if (shootCount <= 0 && projectile.frame == 4)
+            if (shootCount <= 0 && Projectile.frame == 4)
             {
                 shootCount += shootTime;
 
-                projectile.direction = 1;
-                if (target.position.X - projectile.position.X < 0f)
+                Projectile.direction = 1;
+                if (target.position.X - Projectile.position.X < 0f)
                 {
-                    projectile.spriteDirection = projectile.direction = -1;
+                    Projectile.spriteDirection = Projectile.direction = -1;
                 }
-                projectile.spriteDirection = projectile.direction;
-                Vector2 shootVel = target.position - projectile.Center;
+                Projectile.spriteDirection = Projectile.direction;
+                Vector2 shootVel = target.position - Projectile.Center;
                 if (shootVel == Vector2.Zero)
                 {
                     shootVel = new Vector2(0f, 1f);
                 }
                 shootVel.Normalize();
                 shootVel *= shootSpeed;
-                int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Disc"), 40, 4f);
+                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Disc>(), 40, 4f);
                 Main.projectile[proj].npcProj = true;
                 Main.projectile[proj].netUpdate = true;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
         }
 
@@ -127,24 +128,24 @@ namespace JoJoStands.Projectiles.NPCStands
 
         public virtual void SelectFrame()
         {
-            projectile.frameCounter++;
+            Projectile.frameCounter++;
             if (attackFrames)
             {
                 normalFrames = false;
-                if (projectile.frameCounter >= 10)
+                if (Projectile.frameCounter >= 10)
                 {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
-                    if (projectile.frame >= 8)
+                    Projectile.frame += 1;
+                    Projectile.frameCounter = 0;
+                    if (Projectile.frame >= 8)
                     {
-                        projectile.frame = 0;
+                        Projectile.frame = 0;
                     }
                 }
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                projectile.frame = 1;
+                Projectile.frame = 1;
             }
         }
     }

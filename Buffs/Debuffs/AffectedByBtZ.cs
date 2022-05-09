@@ -1,14 +1,14 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
- 
+
 namespace JoJoStands.Buffs.Debuffs
 {
     public class AffectedByBtZ : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Zero");
+            DisplayName.SetDefault("Zero");
             Description.SetDefault("You are stuck at zero.");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
@@ -29,11 +29,10 @@ namespace JoJoStands.Buffs.Debuffs
                 player.position = zeroPosition;
             }
             if (player.GetModPlayer<MyPlayer>().backToZeroActive)
-            {
                 player.buffTime[buffIndex] = 2;
-            }
+
             player.controlUseItem = false;
-            player.dash *= 0;
+            player.dashType *= 0;
             player.bodyVelocity = Vector2.Zero;
             player.controlLeft = false;
             player.controlJump = false;
@@ -59,7 +58,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.dust[newDust].noGravity = true;
             Main.dust[newDust].velocity = Vector2.Zero;
             npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().affectedbyBtz = true;
-            npc.AddBuff(mod.BuffType(Name), 1);
+            npc.AddBuff(Type, 1);
         }
     }
 }

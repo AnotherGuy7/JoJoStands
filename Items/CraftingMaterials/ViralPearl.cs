@@ -1,6 +1,7 @@
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.CraftingMaterials
 {
@@ -14,11 +15,11 @@ namespace JoJoStands.Items.CraftingMaterials
 
 		public override void SetDefaults()
         {
-			item.width = 20;
-			item.height = 20;
-			item.maxStack = 99;
-            item.value = Item.buyPrice(0, 0, 24, 0);
-            item.rare = ItemRarityID.Red;
+			Item.width = 20;
+			Item.height = 20;
+			Item.maxStack = 99;
+            Item.value = Item.buyPrice(0, 0, 24, 0);
+            Item.rare = ItemRarityID.Red;
 		}
 	}
 }

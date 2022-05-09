@@ -1,3 +1,4 @@
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,28 +14,27 @@ namespace JoJoStands.Items.Tiles
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.useTurn = true;
-            item.autoReuse = true;
-            item.useAnimation = 10;
-            item.useTime = 10;
-            item.useStyle = 1;
-            item.consumable = true;
-            item.value = Item.buyPrice(0, 0, 50, 0);
-            item.rare = ItemRarityID.Blue;
-            item.maxStack = 999;
-            item.createTile = mod.TileType("ViralBrickTile");
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTurn = true;
+            Item.autoReuse = true;
+            Item.useAnimation = 10;
+            Item.useTime = 10;
+            Item.useStyle = 1;
+            Item.consumable = true;
+            Item.value = Item.buyPrice(0, 0, 50, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.maxStack = 999;
+            Item.createTile = ModContent.TileType<ViralBrickTile>();
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.StoneBlock, 50);
-            recipe.AddIngredient(mod.ItemType("ViralMeteorite"));
-            recipe.AddTile(TileID.HeavyWorkBench);
-            recipe.SetResult(this, 50);
-            recipe.AddRecipe();
+            CreateRecipe(50)
+                .AddIngredient(ItemID.StoneBlock, 50)
+                .AddIngredient(ModContent.ItemType<ViralMeteorite>())
+                .AddTile(TileID.HeavyWorkBench)
+                .Register();
         }
     }
 }

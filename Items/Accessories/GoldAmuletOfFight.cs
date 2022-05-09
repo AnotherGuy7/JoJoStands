@@ -1,7 +1,9 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
@@ -9,18 +11,18 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 4));
+            Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Amulet of Fight");
             Tooltip.SetDefault("10% increased Stand attack damage");
         }
         public override void SetDefaults()
         {
-            item.width = 16;
-            item.height = 16;
-            item.maxStack = 1;
-            item.value = Item.buyPrice(0, 0, 25, 0);
-            item.rare = ItemRarityID.Blue;
-            item.accessory = true;
+            Item.width = 16;
+            Item.height = 16;
+            Item.maxStack = 1;
+            Item.value = Item.buyPrice(0, 0, 25, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.accessory = true;
         }
 
         public override void UpdateEquip(Player player)
@@ -28,13 +30,13 @@ namespace JoJoStands.Items.Accessories
             player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.1f;
         }
 
-        public override bool CanEquipAccessory(Player player, int slot)
+        public override bool CanEquipAccessory(Player player, int slot, bool modded)
         {
             bool alternateAmuletEquipped = false;
             for (int i = 0; i < player.armor.Length; i++)
             {
-                Item item = player.armor[i];
-                if (item.type == mod.ItemType("PlatinumAmuletOfFight"))
+                Item Item = player.armor[i];
+                if (Item.type == ModContent.ItemType<PlatinumAmuletOfFight>())
                 {
                     alternateAmuletEquipped = true;
                     break;
@@ -45,13 +47,12 @@ namespace JoJoStands.Items.Accessories
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Chain, 1);
-            recipe.AddIngredient(ItemID.GoldBar, 3);
-            recipe.AddIngredient(mod.ItemType("WillToFight"), 3);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Chain, 1)
+                .AddIngredient(ItemID.GoldBar, 3)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 3)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

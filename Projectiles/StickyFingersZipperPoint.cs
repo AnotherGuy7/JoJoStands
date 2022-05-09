@@ -1,25 +1,26 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+using static Terraria.ModLoader.ModContent;
+
 namespace JoJoStands.Projectiles
 {
     public class StickyFingersZipperPoint : ModProjectile
     {
         public override void SetDefaults()
         {
-            projectile.width = 10;
-            projectile.height = 10;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 1200;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.penetrate = -1;
-            projectile.damage = 0;
+            Projectile.width = 10;
+            Projectile.height = 10;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 1200;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
+            Projectile.damage = 0;
         }
 
         private bool stopped = false;
@@ -29,36 +30,36 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             //Main.NewText(zipperLine + "; L:" + zipperLine.Length());
-            zipperLine = projectile.Center - player.Center;
+            zipperLine = Projectile.Center - player.Center;
             zipperLine.Normalize();
-            float dist = Vector2.Distance(player.Center, projectile.Center);
+            float dist = Vector2.Distance(player.Center, Projectile.Center);
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Zip"));
+                SoundEngine.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Zip>());
                 playedSound = true;
             }
             if (dist >= 495f)       //about 30 tiles
             {
                 stopped = true;
-                projectile.velocity = Vector2.Zero;
+                Projectile.velocity = Vector2.Zero;
             }
             if (stopped)
             {
                 player.velocity = zipperLine * 12f;
-                if (recoveredTime == 0f && projectile.ai[0] == 0f)      //max here can be 9 seconds 
+                if (recoveredTime == 0f && Projectile.ai[0] == 0f)      //max here can be 9 seconds 
                 {
                     recoveredTime = dist * 1.0909f;     //1.0909 is gotten by doing (number of seconds * 60) / maxDistance  =  540 / 495
                 }
-                if (recoveredTime == 0f && projectile.ai[0] == 1f)      //max here can be 4 seconds
+                if (recoveredTime == 0f && Projectile.ai[0] == 1f)      //max here can be 4 seconds
                 {
                     recoveredTime = dist * 0.4848f;     ////0.4848 is gotten by doing (number of seconds * 60) / maxDistance  =  240 / 495
                 }
                 if (dist <= 45f)
                 {
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), (int)recoveredTime);
-                    projectile.Kill();
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), (int)recoveredTime);
+                    Projectile.Kill();
                 }
             }
         }
@@ -66,7 +67,7 @@ namespace JoJoStands.Projectiles
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             stopped = true;
-            projectile.velocity = Vector2.Zero;
+            Projectile.velocity = Vector2.Zero;
             return false;
         }
 
@@ -75,11 +76,11 @@ namespace JoJoStands.Projectiles
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             if (Main.netMode != NetmodeID.Server)
-                stickyFingersZipperPart = mod.GetTexture("Projectiles/Zipper_Part");
+                stickyFingersZipperPart = Mod.GetTexture("Projectiles/Zipper_Part>();
 
-            Vector2 ownerCenter = Main.player[projectile.owner].Center;
-            Vector2 center = projectile.Center;
-            Vector2 distToProj = ownerCenter - projectile.Center;
+            Vector2 ownerCenter = Main.player[Projectile.owner].Center;
+            Vector2 center = Projectile.Center;
+            Vector2 distToProj = ownerCenter - Projectile.Center;
             float projRotation = distToProj.ToRotation();
             float distance = distToProj.Length();
             while (distance > 30f && !float.IsNaN(distance))

@@ -1,36 +1,38 @@
-using Terraria.ID;
-using Terraria;
 using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.CraftingMaterials
 {
-	public class CaringLifeforce : ModItem
-	{
-		public override void SetStaticDefaults()
+    public class CaringLifeforce : ModItem
+    {
+        public override void SetStaticDefaults()
         {
-            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(8, 4));
-			DisplayName.SetDefault("Caring Lifeforce");
-			Tooltip.SetDefault("The spirit of someone whose only wish is to help");
-		}
+            Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(8, 4));
+            DisplayName.SetDefault("Caring Lifeforce");
+            Tooltip.SetDefault("The spirit of someone whose only wish is to help");
+        }
 
-		public override void SetDefaults()
+        public override void SetDefaults()
         {
-			item.width = 20;
-			item.height = 20;
-			item.maxStack = 99;
-			item.rare = ItemRarityID.Yellow;
-			item.value = Item.buyPrice(0, 0, 75, 0);
-		}
+            Item.width = 20;
+            Item.height = 20;
+            Item.maxStack = 99;
+            Item.rare = ItemRarityID.Yellow;
+            Item.value = Item.buyPrice(0, 0, 75, 0);
+        }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            Texture2D texture = mod.GetTexture("Items/CraftingMaterials/" + Name);
-            DrawAnimation drawAnim = Main.itemAnimations[item.type];
+
+            Texture2D texture = (Texture2D)Request<Texture2D>("Items/CraftingMaterials/" + Name);
+            DrawAnimation drawAnim = Main.itemAnimations[Item.type];
             Rectangle sourceRect = drawAnim.GetFrame(texture);
-            spriteBatch.Draw(texture, item.Center - Main.screenPosition + new Vector2(0f, 1f), sourceRect, Color.White, 0f, new Vector2(texture.Width / 2f, item.height / 2f), 1f, SpriteEffects.None, 0);     //animates faster than the normal animation???
+            spriteBatch.Draw(texture, Item.Center - Main.screenPosition + new Vector2(0f, 1f), sourceRect, Color.White, 0f, new Vector2(texture.Width / 2f, Item.height / 2f), 1f, SpriteEffects.None, 0);     //animates faster than the normal animation???
             return false;
         }
 
@@ -42,13 +44,12 @@ namespace JoJoStands.Items.CraftingMaterials
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 3);
-            recipe.AddIngredient(mod.ItemType("WillToChange"), 3);
-            recipe.AddIngredient(ItemID.SoulofLight, 3);
-            recipe.AddIngredient(ItemID.Ectoplasm, 4);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 3)
+                .AddIngredient(ModContent.ItemType<WillToChange>(), 3)
+                .AddIngredient(ItemID.SoulofLight, 3)
+                .AddIngredient(ItemID.Ectoplasm, 4)
+                .Register();
         }
     }
 }

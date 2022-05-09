@@ -7,7 +7,14 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader.IO;
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Items.Vampire;
+using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Projectiles;
+using JoJoStands.Buffs.PlayerBuffs;
+using JoJoStands.Buffs.AccessoryBuff;
 
 namespace JoJoStands.Items.Vampire
 {
@@ -72,7 +79,7 @@ namespace JoJoStands.Items.Vampire
             ResetVariables();
         }
 
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld(Player Player)
         {
             if (learnedZombieSkills.Count != ExpectedAmountOfZombieSkills)
                 RebuildZombieAbilitiesDictionaries();
@@ -114,10 +121,10 @@ namespace JoJoStands.Items.Vampire
             {
                 if (!noSunBurning)
                 {
-                    Vector3 lightLevel = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16).ToVector3();
-                    if (lightLevel.Length() > 1.3f && Main.dayTime && player.ZoneOverworldHeight && Main.tile[(int)player.Center.X / 16, (int)player.Center.Y / 16].wall == 0)
+                    Vector3 lightLevel = Lighting.GetColor((int)Player.Center.X / 16, (int)Player.Center.Y / 16).ToVector3();
+                    if (lightLevel.Length() > 1.3f && Main.dayTime && Player.ZoneOverworldHeight && Main.tile[(int)Player.Center.X / 16, (int)Player.Center.Y / 16].WallType == 0)
                     {
-                        player.AddBuff(mod.BuffType("Sunburn"), 2, true);
+                        Player.AddBuff(ModContent.BuffType<Sunburn>(), 2, true);
                     }
                 }
             }
@@ -138,7 +145,7 @@ namespace JoJoStands.Items.Vampire
             }
         }
 
-        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(Item Item, NPC target, int damage, float knockback, bool crit)
         {
             if (anyMaskForm && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
@@ -146,11 +153,11 @@ namespace JoJoStands.Items.Vampire
             }
         }
 
-        public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+        public override void ModifyHitNPC(Item Item, NPC target, ref int damage, ref float knockback, ref bool crit)
         {
             JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
-            bool itemIsVampireItem = item.modItem is VampireDamageClass;
-            if (!Main.dayTime && target.life == target.lifeMax && (item.melee || itemIsVampireItem) && jojoNPC.zombieHightlightTimer > 0)
+            bool itemIsVampireItem = Item.ModItem is VampireDamageClass;
+            if (!Main.dayTime && target.life == target.lifeMax && (Item.DamageType == DamageClass.Melee || itemIsVampireItem) && jojoNPC.zombieHightlightTimer > 0)
             {
                 damage = (int)(damage * 1.2f);
                 knockback *= 1.2f + (0.2f * GetSkillLevel(UndeadPerception));
@@ -159,7 +166,7 @@ namespace JoJoStands.Items.Vampire
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
-            if (anyMaskForm && proj.type == mod.ProjectileType("Fists") && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
+            if (anyMaskForm && proj.type == ModContent.ProjectileType<Fists>() && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
                 StealHealthFrom(target, damage);
             }
@@ -178,8 +185,8 @@ namespace JoJoStands.Items.Vampire
                 if (HasSkill(UndeadConstitution))
                 {
                     float percentageBoost = 1.4f + (0.3f * GetSkillLevel(UndeadConstitution));
-                    player.moveSpeed *= percentageBoost;
-                    player.allDamageMult *= percentageBoost;
+                    Player.moveSpeed *= percentageBoost;
+                    Player.GetDamage(DamageClass.Melee) *= percentageBoost;
                 }
 
                 if (!Main.dayTime && HasSkill(UndeadPerception))
@@ -202,22 +209,22 @@ namespace JoJoStands.Items.Vampire
 
                 if (HasSkill(UndergroundRecovery))
                 {
-                    if (!buriedUnderground && player.controlDown && player.velocity == Vector2.Zero)
+                    if (!buriedUnderground && Player.controlDown && Player.velocity == Vector2.Zero)
                     {
                         buriedUndergroundButtonHeldTimer++;
                         if (buriedUndergroundButtonHeldTimer >= 3 * 60)
                         {
                             buriedUnderground = true;
                             buriedUndergroundButtonHeldTimer = 0;
-                            player.position += new Vector2(0f, player.height + 15f);
+                            Player.position += new Vector2(0f, Player.height + 15f);
                         }
                     }
                     if (buriedUnderground)
                     {
-                        if (player.controlJump || !Collision.SolidTiles((int)player.Center.X / 16, (int)player.Center.X / 16, (int)player.Center.Y / 16, (int)player.Center.Y / 16))
+                        if (Player.controlJump || !Collision.SolidTiles((int)Player.Center.X / 16, (int)Player.Center.X / 16, (int)Player.Center.Y / 16, (int)Player.Center.Y / 16))
                         {
                             buriedUnderground = false;
-                            player.position -= new Vector2(0f, player.height + 15f);
+                            Player.position -= new Vector2(0f, Player.height + 15f);
                         }
 
                         buriedUndergroundHealthRegenTimer++;
@@ -225,20 +232,20 @@ namespace JoJoStands.Items.Vampire
                         {
                             buriedUndergroundHealthRegenTimer = 0;
 
-                            int healthRegained = (int)(player.statLifeMax * (0.04f * GetSkillLevel(UndergroundRecovery)));
-                            if (player.statLife + healthRegained <= player.statLifeMax)
-                                player.statLife += healthRegained;
+                            int healthRegained = (int)(Player.statLifeMax * (0.04f * GetSkillLevel(UndergroundRecovery)));
+                            if (Player.statLife + healthRegained <= Player.statLifeMax)
+                                Player.statLife += healthRegained;
                             else
-                                player.statLife = player.statLifeMax;
-                            player.HealEffect(healthRegained);
+                                Player.statLife = Player.statLifeMax;
+                            Player.HealEffect(healthRegained);
                         }
-                        player.controlUseItem = false;
-                        player.controlLeft = false;
-                        player.controlRight = false;
-                        player.controlUp = false;
-                        player.controlDown = false;
-                        player.velocity = Vector2.Zero;
-                        player.AddBuff(BuffID.Obstructed, 2);
+                        Player.controlUseItem = false;
+                        Player.controlLeft = false;
+                        Player.controlRight = false;
+                        Player.controlUp = false;
+                        Player.controlDown = false;
+                        Player.velocity = Vector2.Zero;
+                        Player.AddBuff(BuffID.Obstructed, 2);
                     }
                 }
 
@@ -252,7 +259,7 @@ namespace JoJoStands.Items.Vampire
                             NPC npc = Main.npc[n];
                             if (npc.active && npc.boss)
                             {
-                                player.AddBuff(mod.BuffType("TopOfTheChain"), 6 * 60);
+                                Player.AddBuff(ModContent.BuffType<TopOfTheChain>(), 6 * 60);
                                 break;
                             }
                         }
@@ -272,23 +279,23 @@ namespace JoJoStands.Items.Vampire
             if (target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
                 int newDamage = damage / 4;
-                if (target.HasBuff(mod.BuffType("Lacerated")))
+                if (target.HasBuff(ModContent.BuffType<Lacerated>()))
                     newDamage *= 2;
 
                 int calculatedLifeSteal = (int)((newDamage * lifeStealMultiplier) * (1f - lifeStealPercentLoss));
                 if (calculatedLifeSteal < 0)
                     return;
 
-                if (calculatedLifeSteal < player.statLifeMax - player.statLife)
+                if (calculatedLifeSteal < Player.statLifeMax - Player.statLife)
                 {
-                    player.statLife += calculatedLifeSteal;
-                    player.HealEffect(calculatedLifeSteal, true);
+                    Player.statLife += calculatedLifeSteal;
+                    Player.HealEffect(calculatedLifeSteal, true);
                 }
-                if (calculatedLifeSteal >= player.statLifeMax - player.statLife)
+                if (calculatedLifeSteal >= Player.statLifeMax - Player.statLife)
                 {
-                    calculatedLifeSteal = player.statLifeMax - player.statLife;
-                    player.statLife += (int)(calculatedLifeSteal);
-                    player.HealEffect(calculatedLifeSteal, true);
+                    calculatedLifeSteal = Player.statLifeMax - Player.statLife;
+                    Player.statLife += (int)(calculatedLifeSteal);
+                    Player.HealEffect(calculatedLifeSteal, true);
                 }
 
                 if (lifeStealPercentLoss < 0.97f)
@@ -314,26 +321,26 @@ namespace JoJoStands.Items.Vampire
             if (target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
                 int newDamage = trueDamage / dividend;
-                if (target.HasBuff(mod.BuffType("Lacerated")))
+                if (target.HasBuff(ModContent.BuffType<Lacerated>()))
                     newDamage *= 2;
 
                 int calculatedLifeSteal = (int)((newDamage * lifeStealMultiplier) * (1f - lifeStealPercentLoss));
                 if (calculatedLifeSteal < 0)
                     return;
 
-                if (calculatedLifeSteal < player.statLifeMax - player.statLife)
+                if (calculatedLifeSteal < Player.statLifeMax - Player.statLife)
                 {
-                    player.statLife += calculatedLifeSteal;
-                    player.HealEffect(calculatedLifeSteal, true);
+                    Player.statLife += calculatedLifeSteal;
+                    Player.HealEffect(calculatedLifeSteal, true);
                 }
-                if (calculatedLifeSteal >= player.statLifeMax - player.statLife)
+                if (calculatedLifeSteal >= Player.statLifeMax - Player.statLife)
                 {
-                    calculatedLifeSteal = player.statLifeMax - player.statLife;
-                    player.statLife += (int)(calculatedLifeSteal);
-                    player.HealEffect(calculatedLifeSteal, true);
+                    calculatedLifeSteal = Player.statLifeMax - Player.statLife;
+                    Player.statLife += (int)(calculatedLifeSteal);
+                    Player.HealEffect(calculatedLifeSteal, true);
                 }
                 if (strikeNPC)
-                    target.StrikeNPC(newDamage, knockback, player.direction);
+                    target.StrikeNPC(newDamage, knockback, Player.direction);
 
                 if (lifeStealPercentLoss < 0.97f)
                 {
@@ -345,22 +352,22 @@ namespace JoJoStands.Items.Vampire
             }
         }
 
-        public bool SafeSkillCheck(Player player)
+        public bool SafeSkillCheck(Player Player)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            return player.whoAmI == Main.myPlayer && vPlayer.learnedZombieSkills.Count == ExpectedAmountOfZombieSkills;
+            VampirePlayer vPlayer = Player.GetModPlayer<VampirePlayer>();
+            return Player.whoAmI == Main.myPlayer && vPlayer.learnedZombieSkills.Count == ExpectedAmountOfZombieSkills;
         }
 
-        public bool HasSkill(Player player, int skillType)
+        public bool HasSkill(Player Player, int skillType)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            return SafeSkillCheck(player) && vPlayer.learnedZombieSkills[skillType];
+            VampirePlayer vPlayer = Player.GetModPlayer<VampirePlayer>();
+            return SafeSkillCheck(Player) && vPlayer.learnedZombieSkills[skillType];
         }
 
-        public int GetSkillLevel(Player player, int skillType)
+        public int GetSkillLevel(Player Player, int skillType)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            if (!SafeSkillCheck(player))
+            VampirePlayer vPlayer = Player.GetModPlayer<VampirePlayer>();
+            if (!SafeSkillCheck(Player))
                 return -1;
 
             return vPlayer.zombieSkillLevels[skillType];
@@ -368,14 +375,14 @@ namespace JoJoStands.Items.Vampire
 
         private bool HasSkill(int skillType)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            return SafeSkillCheck(player) && vPlayer.learnedZombieSkills[skillType];
+            VampirePlayer vPlayer = Player.GetModPlayer<VampirePlayer>();
+            return SafeSkillCheck(Player) && vPlayer.learnedZombieSkills[skillType];
         }
 
         private int GetSkillLevel(int skillType)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            if (!SafeSkillCheck(player))
+            VampirePlayer vPlayer = Player.GetModPlayer<VampirePlayer>();
+            if (!SafeSkillCheck(Player))
                 return -1;
 
             return vPlayer.zombieSkillLevels[skillType];
@@ -436,19 +443,19 @@ namespace JoJoStands.Items.Vampire
         {
             enemyToIgnoreDamageFromIndex = -1;
 
-            if (player.HasBuff(mod.BuffType("KnifeAmalgamation")))
+            if (Player.HasBuff(ModContent.BuffType<KnifeAmalgamation>()))
             {
                 npc.StrikeNPC(29, 2f, -npc.direction);
             }
             if (wearingVisceralChestplate && Main.rand.Next(0, 100 + 1) <= 12)
             {
-                npc.AddBuff(mod.BuffType("Lacerated"), 15 * 60);
+                npc.AddBuff(ModContent.BuffType<Lacerated>(), 15 * 60);
             }
         }
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
         {
-            bool itemIsVampireItem = player.HeldItem.modItem is VampireDamageClass;
+            bool itemIsVampireItem = Player.HeldItem.ModItem is VampireDamageClass;
             if (wearingDiosScarf)
             {
                 if (npc.TypeName.Contains("Zombie") || npc.TypeName.Contains("Undead") || npc.TypeName.Contains("Skeleton") || npc.type == NPCID.Zombie)
@@ -461,16 +468,16 @@ namespace JoJoStands.Items.Vampire
             {
                 damage = 0;
                 crit = false;
-                player.velocity.X = 6f * -player.direction;
-                player.immuneTime += 40;
-                player.immune = true;
+                Player.velocity.X = 6f * -Player.direction;
+                Player.immuneTime += 40;
+                Player.immune = true;
             }
 
             if (HasSkill(EvasiveInstincts) && Main.rand.Next(0, 101) <= 9 + (3 * GetSkillLevel(EvasiveInstincts)))
             {
                 damage = 0;
-                player.immune = true;
-                player.immuneTime = 20;
+                Player.immune = true;
+                Player.immuneTime = 20;
             }
 
             if (itemIsVampireItem)
@@ -485,17 +492,17 @@ namespace JoJoStands.Items.Vampire
         {
             if (zombie || vampire)
             {
-                if (player.lifeRegen > 0)
+                if (Player.lifeRegen > 0)
                 {
-                    player.lifeRegen = 0;
+                    Player.lifeRegen = 0;
                 }
-                if (player.lifeRegenTime > 0)
+                if (Player.lifeRegenTime > 0)
                 {
-                    player.lifeRegenTime = 0;
+                    Player.lifeRegenTime = 0;
                 }
-                if (player.lifeRegenCount > 0)
+                if (Player.lifeRegenCount > 0)
                 {
-                    player.lifeRegenCount = 0;
+                    Player.lifeRegenCount = 0;
                 }
             }
         }
@@ -505,41 +512,41 @@ namespace JoJoStands.Items.Vampire
             if (vampire && !dyingVampire)
             {
                 dyingVampire = true;
-                player.AddBuff(mod.BuffType("DyingVampire"), 60);
-                player.statLife = 50;
+                Player.AddBuff(ModContent.BuffType<DyingVampire>(), 60);
+                Player.statLife = 50;
                 return false;
             }
             if (dyingVampire)
             {
-                player.ClearBuff(mod.BuffType("DyingVampire"));
+                Player.ClearBuff(ModContent.BuffType<DyingVampire>());
                 dyingVampire = false;
             }
-            if (MyPlayer.SecretReferences && player.ZoneSkyHeight && perfectBeing)
+            if (MyPlayer.SecretReferences && Player.ZoneSkyHeight && perfectBeing)
             {
                 int karsText = Main.rand.Next(0, 3);
                 if (karsText == 0)
                 {
-                    damageSource = PlayerDeathReason.ByCustomReason(player.name + " couldn't to become a bird in time and has frozen in space... then eventually stopped thinking...");
+                    damageSource = PlayerDeathReason.ByCustomReason(Player.name + " couldn't to become a bird in time and has frozen in space... then eventually stopped thinking...");
                 }
                 else if (karsText == 1)
                 {
-                    damageSource = PlayerDeathReason.ByCustomReason(player.name + " was unable to change directions in time... then eventually stopped thinking...");
+                    damageSource = PlayerDeathReason.ByCustomReason(Player.name + " was unable to change directions in time... then eventually stopped thinking...");
                 }
-                else if (karsText == 2 && player.Male)
+                else if (karsText == 2 && Player.Male)
                 {
-                    damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though he wished for death, he was unable to die... then " + player.name + " eventually stopped thinking");
+                    damageSource = PlayerDeathReason.ByCustomReason(Player.name + " became half-mineral, half-animal and floated forever through space, and though he wished for death, he was unable to die... then " + Player.name + " eventually stopped thinking");
                 }
-                else if (karsText == 2 && !player.Male)
+                else if (karsText == 2 && !Player.Male)
                 {
-                    damageSource = PlayerDeathReason.ByCustomReason(player.name + " became half-mineral, half-animal and floated forever through space, and though she wished for death, she was unable to die... then " + player.name + " eventually stopped thinking");
+                    damageSource = PlayerDeathReason.ByCustomReason(Player.name + " became half-mineral, half-animal and floated forever through space, and though she wished for death, she was unable to die... then " + Player.name + " eventually stopped thinking");
                 }
             }
-            if (player.whoAmI == Main.myPlayer && (zombie || vampire) && HasSkill(FinalPush) && !player.HasBuff(mod.BuffType("FinalPush")))
+            if (Player.whoAmI == Main.myPlayer && (zombie || vampire) && HasSkill(FinalPush) && !Player.HasBuff(ModContent.BuffType<FinalPush>()))
             {
                 if (Main.rand.Next(0, 100 + 1) <= 30)
                 {
-                    player.AddBuff(mod.BuffType("FinalPush"), 2 * 60 * 60);
-                    player.statLife = (int)(player.statLifeMax * 0.3f);
+                    Player.AddBuff(ModContent.BuffType<FinalPush>(), 2 * 60 * 60);
+                    Player.statLife = (int)(Player.statLifeMax * 0.3f);
                     return false;
                 }
             }
@@ -562,7 +569,7 @@ namespace JoJoStands.Items.Vampire
             };
         }
 
-        public override void Load(TagCompound tag)
+        public override void LoadData(TagCompound tag)
         {
             vampireSkillPointsAvailable = tag.GetInt("vampireSkillPointsAvailable");
             totalVampireSkillPointsEarned = tag.GetInt("totalVampireSkillPointsEarned");
@@ -583,14 +590,14 @@ namespace JoJoStands.Items.Vampire
             ResetVariables();
         }
 
-        public static readonly PlayerLayer ProtectiveFilmLayer = new PlayerLayer("JoJoStands", "ProtectiveFilmLayer", PlayerLayer.FrontAcc, delegate (PlayerDrawInfo drawInfo)
+        /*public static readonly PlayerDrawLayer ProtectiveFilmLayer = new PlayerDrawLayer("JoJoStands", "ProtectiveFilmLayer", PlayerDrawLayer.FrontAcc, delegate (PlayerDrawInfo drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = ModLoader.GetMod("JoJoStands");
-            VampirePlayer vampirePlayer = drawPlayer.GetModPlayer<VampirePlayer>();
-            if (drawPlayer.active && drawPlayer.HasBuff(mod.BuffType("ProtectiveFilmBuff")))
+            Mod Mod = ModLoader.GetMod("JoJoStands>();
+            VampirePlayer vampirePlayer = drawPlayer.GetModPlayer<VampirePlayer>());
+            if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<ProtectiveFilmBuff>()))
             {
-                Texture2D texture = mod.GetTexture("Extras/ProtectiveFilmLayer");
+                Texture2D texture = Mod.GetTexture("Extras/ProtectiveFilmLayer>();
                 int drawX = (int)drawInfo.position.X;
                 int drawY = (int)(drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
                 Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
@@ -602,18 +609,18 @@ namespace JoJoStands.Items.Vampire
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
                 Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
                 DrawData data = new DrawData(texture, position, drawPlayer.bodyFrame, color * alpha, drawPlayer.fullRotation, drawPlayer.Size / 2f, 1f, effects, 0);
-                Main.playerDrawData.Add(data);
+                Main.PlayerDrawData.Add(data);
             }
         });
 
         public static readonly PlayerLayer KnivesLayer = new PlayerLayer("JoJoStands", "KnivesLayer", PlayerLayer.FrontAcc, delegate (PlayerDrawInfo drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = ModLoader.GetMod("JoJoStands");
-            VampirePlayer vampirePlayer = drawPlayer.GetModPlayer<VampirePlayer>();
-            if (drawPlayer.active && drawPlayer.HasBuff(mod.BuffType("KnifeAmalgamation")))
+            Mod Mod = ModLoader.GetMod("JoJoStands>();
+            VampirePlayer vampirePlayer = drawPlayer.GetModPlayer<VampirePlayer>());
+            if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<KnifeAmalgamation>()))
             {
-                Texture2D texture = mod.GetTexture("Extras/KnivesLayer");
+                Texture2D texture = Mod.GetTexture("Extras/KnivesLayer>();
                 int drawX = (int)drawInfo.position.X;
                 int drawY = (int)(drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
                 Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
@@ -625,7 +632,7 @@ namespace JoJoStands.Items.Vampire
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
                 Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
                 DrawData data = new DrawData(texture, position, drawPlayer.bodyFrame, color * alpha, drawPlayer.fullRotation, drawPlayer.Size / 2f, 1f, effects, 0);
-                Main.playerDrawData.Add(data);
+                Main.PlayerDrawData.Add(data);
             }
         });
 
@@ -645,6 +652,6 @@ namespace JoJoStands.Items.Vampire
             }
             layers.Add(ProtectiveFilmLayer);
             layers.Add(KnivesLayer);
-        }
+        }*/
     }
 }

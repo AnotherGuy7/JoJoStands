@@ -1,16 +1,17 @@
 using JoJoStands.Items.Vampire;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class SunscreenBuff : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sunscreen");
             Description.SetDefault("98% of those harmful UV rays are being blocked away!");
-            canBeCleared = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
             Main.debuff[Type] = false;
         }
 

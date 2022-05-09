@@ -1,67 +1,63 @@
-using System;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class HamonPunches : ModProjectile
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 11;
+            Main.projFrames[Projectile.type] = 11;
         }
 
         public override void SetDefaults()      //look into ProjectileID.595. Done.
         {
-            projectile.width = 68;
-            projectile.height = 64;
-            projectile.friendly = true;
-            projectile.aiStyle = 0;
-            projectile.tileCollide = false;
-            projectile.penetrate = -1;
-            projectile.ownerHitCheck = true;
-            projectile.friendly = true;
-            drawOriginOffsetY = 20;
-            projectile.scale = (int)1.5;
+            Projectile.width = 68;
+            Projectile.height = 64;
+            Projectile.friendly = true;
+            Projectile.aiStyle = 0;
+            Projectile.tileCollide = false;
+            Projectile.penetrate = -1;
+            Projectile.ownerHitCheck = true;
+            Projectile.friendly = true;
+            DrawOriginOffsetY = 20;
+            Projectile.scale = (int)1.5;
         }
 
         public override void AI()
         {
-            projectile.frameCounter++;
-            if (projectile.frameCounter >= 2)
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 2)
             {
-                projectile.frame += 1;
-                projectile.frameCounter = 0;
+                Projectile.frame += 1;
+                Projectile.frameCounter = 0;
             }
-            Player player = Main.player[projectile.owner];
-            if (projectile.direction == 1)
+            Player player = Main.player[Projectile.owner];
+            if (Projectile.direction == 1)
+                DrawOffsetX = 25;
+            if (Projectile.direction == -1)
+                DrawOffsetX = -2;
+            if (Projectile.frame >= Main.projFrames[Projectile.type])
+                Projectile.frame = 0;
+
+            Projectile.soundDelay--;
+            if (Projectile.soundDelay <= 0)
             {
-                drawOffsetX = 25;
+                SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+                Projectile.soundDelay = 12;
             }
-            if (projectile.direction == -1)
-            {
-                drawOffsetX = -2;
-            }
-            if (projectile.frame >= Main.projFrames[projectile.type])
-            {
-                projectile.frame = 0;
-            }
-            projectile.soundDelay--;
-            if (projectile.soundDelay <= 0)
-            {
-                Main.PlaySound(SoundID.Item1, projectile.Center);
-                projectile.soundDelay = 12;
-            }
-            if (Main.myPlayer == projectile.owner)
+            if (Main.myPlayer == Projectile.owner)
             {
                 if (player.channel && !player.noItems && !player.CCed)
                 {
                     float scaleFactor6 = 1f;
-                    if (player.inventory[player.selectedItem].shoot == projectile.type)
+                    if (player.inventory[player.selectedItem].shoot == Projectile.type)
                     {
-                        scaleFactor6 = player.inventory[player.selectedItem].shootSpeed * projectile.scale;
+                        scaleFactor6 = player.inventory[player.selectedItem].shootSpeed * Projectile.scale;
                     }
                     Vector2 vector13 = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter, true);
                     vector13.Normalize();
@@ -70,27 +66,27 @@ namespace JoJoStands.Projectiles
                         vector13 = Vector2.UnitX * (float)player.direction;
                     }
                     vector13 *= scaleFactor6;
-                    if (vector13.X != projectile.velocity.X || vector13.Y != projectile.velocity.Y)
+                    if (vector13.X != Projectile.velocity.X || vector13.Y != Projectile.velocity.Y)
                     {
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                     }
-                    projectile.velocity = vector13;
+                    Projectile.velocity = vector13;
                 }
                 else
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                 }
             }
-            Vector2 vector14 = projectile.Center + projectile.velocity * 3f;
+            Vector2 vector14 = Projectile.Center + Projectile.velocity * 3f;
             Lighting.AddLight(vector14, 0.8f, 0.8f, 0.8f);
-            projectile.position = player.RotatedRelativePoint(player.Center, true) + new Vector2(-31f, -31f);       //I'm adjusting the hitbox cause it's about a block to the right of the player and completely under the player
-            projectile.spriteDirection = projectile.direction;
-            projectile.timeLeft = 2;
-            player.ChangeDir(projectile.direction);
-            player.heldProj = projectile.whoAmI;
+            Projectile.position = player.RotatedRelativePoint(player.Center, true) + new Vector2(-31f, -31f);       //I'm adjusting the hitbox cause it's about a block to the right of the player and completely under the player
+            Projectile.spriteDirection = Projectile.direction;
+            Projectile.timeLeft = 2;
+            player.ChangeDir(Projectile.direction);
+            player.heldProj = Projectile.whoAmI;
             player.itemTime = 2;
-            player.itemAnimation = 2;   
-            player.itemRotation = (float)Math.Atan2((double)(projectile.velocity.Y * (float)projectile.direction), (double)(projectile.velocity.X * (float)projectile.direction));
+            player.itemAnimation = 2;
+            player.itemRotation = (float)Math.Atan2((double)(Projectile.velocity.Y * (float)Projectile.direction), (double)(Projectile.velocity.X * (float)Projectile.direction));
         }
     }
 }

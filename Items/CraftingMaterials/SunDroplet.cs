@@ -1,7 +1,8 @@
 using JoJoStands.Items.Hamon;
 using Terraria;
-using Terraria.ID;
+using Terraria.Audio;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.CraftingMaterials
 {
@@ -14,11 +15,11 @@ namespace JoJoStands.Items.CraftingMaterials
 
         public override void SetDefaults()
         {
-            item.width = 20;
-            item.height = 20;
-            item.maxStack = 99;
-            item.rare = 2;
-            item.value = Item.buyPrice(0, 0, 0, 20);
+            Item.width = 20;
+            Item.height = 20;
+            Item.maxStack = 99;
+            Item.rare = 2;
+            Item.value = Item.buyPrice(0, 0, 0, 20);
         }
 
         private int clickTimer = 0;
@@ -30,14 +31,14 @@ namespace JoJoStands.Items.CraftingMaterials
             {
                 clickTimer--;
             }
-            if (player.whoAmI == item.owner)
+            if (player.whoAmI == Item.owner)
             {
-                if (Main.mouseRight && item.stack > 20 && clickTimer <= 0)
+                if (Main.mouseRight && Item.stack > 20 && clickTimer <= 0)
                 {
                     hPlayer.skillPointsAvailable += 1;
-                    item.stack -= 20;
+                    Item.stack -= 20;
                     clickTimer = 60;
-                    Main.PlaySound(2, Style: 25, pitchOffset: -0.8f);
+                    SoundEngine.PlaySound(2, Style: 25, pitchOffset: -0.8f);
                 }
             }
         }

@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -8,14 +9,14 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 22;
-            projectile.height = 22;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
-            projectile.friendly = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-            projectile.alpha = 70;
+            Projectile.width = 22;
+            Projectile.height = 22;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 300;
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.alpha = 70;
         }
 
         private int nearestNPCWhoAmI = -1;
@@ -23,7 +24,7 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            projectile.rotation += MathHelper.ToRadians(13f);
+            Projectile.rotation += MathHelper.ToRadians(13f);
 
             if (nearestNPCWhoAmI == -1)
             {
@@ -34,7 +35,7 @@ namespace JoJoStands.Projectiles
                     {
                         if (npc.lifeMax > 5 && !npc.friendly && !npc.immortal && !npc.hide)
                         {
-                            float distance = projectile.Distance(npc.position);
+                            float distance = Projectile.Distance(npc.position);
                             if (distance < nearestDistance)
                             {
                                 nearestDistance = distance;
@@ -47,12 +48,12 @@ namespace JoJoStands.Projectiles
             if (nearestNPCWhoAmI >= 0)
             {
                 NPC target = Main.npc[nearestNPCWhoAmI];
-                Vector2 vel = target.position - projectile.position;
+                Vector2 vel = target.position - Projectile.position;
                 vel.Normalize();
                 vel *= 9f;
-                projectile.velocity = vel;
+                Projectile.velocity = vel;
             }
-            Lighting.AddLight(projectile.Center, 0.5f, 0.5f, 0.5f);
+            Lighting.AddLight(Projectile.Center, 0.5f, 0.5f, 0.5f);
         }
     }
 }

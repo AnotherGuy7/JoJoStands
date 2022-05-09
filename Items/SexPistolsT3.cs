@@ -1,7 +1,10 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles.PlayerStands.SexPistols;
+using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
 namespace JoJoStands.Items
 {
@@ -9,7 +12,7 @@ namespace JoJoStands.Items
     {
         public override string Texture
         {
-            get { return mod.Name + "/Items/SexPistolsT1"; }
+            get { return Mod.Name + "/Items/SexPistolsT1"; }
         }
 
         public override int standTier => 3;
@@ -22,16 +25,16 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.useTime = 12;
-            item.useAnimation = 12;
-            item.useStyle = 5;
-            item.maxStack = 1;
-            item.knockBack = 2f;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTime = 12;
+            Item.useAnimation = 12;
+            Item.useStyle = 5;
+            Item.maxStack = 1;
+            Item.knockBack = 2f;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -42,35 +45,34 @@ namespace JoJoStands.Items
             mPlayer.poseSoundName = "SexPistolsIsDesignedToKill";
             for (int i = 0; i < 6; i++)
             {
-                Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("SexPistolsStand"), 0, 0f, Main.myPlayer, i + 1);
+                Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<SexPistolsStand>(), 0, 0f, Main.myPlayer, i + 1);
             }
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("SexPistolsT2"));
-            recipe.AddIngredient(ItemID.PalladiumOre, 20);
-            recipe.AddIngredient(ItemID.Topaz, 2);
-            recipe.AddIngredient(ItemID.FallenStar, 5);
-            recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);
-            recipe.AddIngredient(ItemID.MeteorShot, 160);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("SexPistolsT2"));
-            recipe.AddIngredient(ItemID.CobaltOre, 20);
-            recipe.AddIngredient(ItemID.Topaz, 2);
-            recipe.AddIngredient(ItemID.FallenStar, 5);
-            recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);
-            recipe.AddIngredient(ItemID.MeteorShot, 160);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<SexPistolsT2>())
+                .AddIngredient(ItemID.PalladiumOre, 20)
+                .AddIngredient(ItemID.Topaz, 2)
+                .AddIngredient(ItemID.FallenStar, 5)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
+                .AddIngredient(ItemID.MeteorShot, 160)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<SexPistolsT2>())
+                .AddIngredient(ItemID.CobaltOre, 20)
+                .AddIngredient(ItemID.Topaz, 2)
+                .AddIngredient(ItemID.FallenStar, 5)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
+                .AddIngredient(ItemID.MeteorShot, 160)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

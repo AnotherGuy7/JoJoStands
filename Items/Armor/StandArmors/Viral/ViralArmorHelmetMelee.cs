@@ -1,6 +1,7 @@
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.StandArmors.Viral
@@ -10,22 +11,22 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
 	{
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Helmet (Short-Range)");
-            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Speed Increase: -1");
+            DisplayName.SetDefault("Viral Helmet (Short-Range)>();
+            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Speed Increase: -1>();
         }
 
         public override void SetDefaults()
         {
-            item.width = 26;
-            item.height = 28;
-            item.value = Item.buyPrice(0, 3, 50, 0);
-            item.rare = ItemRarityID.Green;
-            item.defense = 7;
+            Item.width = 26;
+            Item.height = 28;
+            Item.value = Item.buyPrice(0, 3, 50, 0);
+            Item.rare = ItemRarityID.Green;
+            Item.defense = 7;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("ViralArmorKaruta") && legs.type == mod.ItemType("ViralArmorTabi");
+            return body.type == ModContent.ItemType<ViralArmorKaruta>() && legs.type == ModContent.ItemType<ViralArmorTabi>();
         }
 
         public override void UpdateArmorSet(Player player)
@@ -41,13 +42,13 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
 
             if (mPlayer.standType == 0)
             {
-                item.type = mod.ItemType("ViralArmorHelmetNeutral");
-                item.SetDefaults(mod.ItemType("ViralArmorHelmetNeutral"));
+                Item.type = ModContent.ItemType<ViralArmorHelmetNeutral>();
+                Item.SetDefaults(ModContent.ItemType<ViralArmorHelmetNeutral>());
             }
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("ViralArmorHelmetRanged");
-                item.SetDefaults(mod.ItemType("ViralArmorHelmetRanged"));
+                Item.type = ModContent.ItemType<ViralArmorHelmetRanged>();
+                Item.SetDefaults(ModContent.ItemType<ViralArmorHelmetRanged>());
             }
         }
     }

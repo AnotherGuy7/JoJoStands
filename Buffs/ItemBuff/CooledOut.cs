@@ -5,7 +5,7 @@ namespace JoJoStands.Buffs.ItemBuff
 {
     public class CooledOut : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cooled Out");
             Description.SetDefault("You lowered your body temperature.");

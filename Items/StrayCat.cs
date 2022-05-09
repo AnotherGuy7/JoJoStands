@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items
 {
@@ -7,24 +8,24 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stray Cat");
-            Tooltip.SetDefault("An odd plant that is somehow a cat. It can fire bubbles invisible to the eye and is capable of causing meowsive damage.");
+            DisplayName.SetDefault("Stray Cat>();
+            Tooltip.SetDefault("An odd plant that is somehow a cat. It can fire bubbles invisible to the eye and is capable of causing meowsive damage.>();
         }
 
         public override void SetDefaults()
         {
-            item.damage = 104;
-            item.width = 32;
-            item.height = 32;
-            item.useTime = 12;
-            item.useAnimation = 12;
-            item.useStyle = 5;
-            item.maxStack = 1;
-            item.knockBack = 2f;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = 6;
-            item.shoot = mod.ProjectileType("MatureStrayCatMinion");
+            Item.damage = 104;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTime = 12;
+            Item.useAnimation = 12;
+            Item.useStyle = 5;
+            Item.maxStack = 1;
+            Item.knockBack = 2f;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = 6;
+            Item.shoot = ModContent.ProjectileType<MatureStrayCatMinion>();
         }
 
         public override bool AltFunctionUse(Player player)
@@ -35,9 +36,9 @@ namespace JoJoStands.Items
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
-                item.shoot = 0;
+                Item.shoot = 0;
             else
-                item.shoot = mod.ProjectileType("MatureStrayCatMinion");
+                Item.shoot = ModContent.ProjectileType<MatureStrayCatMinion>();
             return true;
         }
     }

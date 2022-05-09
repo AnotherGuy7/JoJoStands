@@ -8,8 +8,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
     {
         public override void SetStaticDefaults()
         {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
+            Main.projPet[Projectile.type] = true;
+            Main.projFrames[Projectile.type] = 10;
         }
 
         public override float maxDistance => 98f;
@@ -37,20 +37,20 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
                     float lifeTimeMultiplier = 1f;
                     if (extendedBarrage)
@@ -65,7 +65,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && projectile.owner == Main.myPlayer && shootCount <= 0)
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer && shootCount <= 0)
                 {
                     shootCount += 30;
                     if (!stringConnectorPlaced)
@@ -83,13 +83,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                             if (Vector2.Distance(firstStringPos, Main.MouseWorld) >= MaxTrapDistance)
                             {
                                 stringConnectorPlaced = false;
-                                Main.NewText("Your strings do not extend that far.");
+                                Main.NewText("Your strings do not extend that far.>();
                                 return;
                             }
 
                             stringConnectorPlaced = false;
-                            int stringPointIndex = Projectile.NewProjectile(firstStringPos, Vector2.Zero, mod.ProjectileType("StoneFreeStringPoint"), 0, 0f, player.whoAmI);
-                            Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, mod.ProjectileType("StoneFreeStringConnector"), 0, 0f, player.whoAmI, stringPointIndex, punchDamage + 29 * (int)mPlayer.standDamageBoosts);
+                            int stringPointIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firstStringPos, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringPoint>(), 0, 0f, player.whoAmI);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringConnector>(), 0, 0f, player.whoAmI, stringPointIndex, punchDamage + 29 * (int)mPlayer.standDamageBoosts);
                         }
                     }
                 }
@@ -110,40 +110,40 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             {
                 normalFrames = false;
                 if (!extendedBarrage)
-                    PlayAnimation("Attack");
+                    PlayAnimation("Attack>();
                 else
-                    PlayAnimation("ExtendedAttack");
+                    PlayAnimation("ExtendedAttack>();
             }
             if (normalFrames)
             {
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 4, 12, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "ExtendedAttack")
+            if (animationName == "ExtendedAttack>()
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>()
             {
                 AnimateStand(animationName, 2, 12, true);
             }

@@ -1,41 +1,43 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
- 
+using static Terraria.ModLoader.ModContent;
+
 namespace JoJoStands.Projectiles
 {
     public class PhantomMarker : ModProjectile
     {
         public override void SetDefaults()
         {
-            projectile.width = 14;
-            projectile.height = 14;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 6;
-            projectile.friendly = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-            projectile.ai[0] = -1f;
+            Projectile.width = 14;
+            Projectile.height = 14;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 6;
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.ai[0] = -1f;
         }
 
         public override void AI()
         {
-            if (projectile.ai[0] != -1f)
+            if (Projectile.ai[0] != -1f)
             {
-                NPC target = Main.npc[(int)projectile.ai[0]];
+                NPC target = Main.npc[(int)Projectile.ai[0]];
                 if (target.active)
                 {
-                    projectile.position = target.Center + new Vector2(0f, -target.height - 25f);
-                    projectile.timeLeft = 2;
+                    Projectile.position = target.Center + new Vector2(0f, -target.height - 25f);
+                    Projectile.timeLeft = 2;
                 }
                 if (target.life < 0)
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                 }
-                Lighting.AddLight(projectile.Center, 1.73f / 1.5f, 2.24f / 1.5f, 2.30f / 1.5f);
+                Lighting.AddLight(Projectile.Center, 1.73f / 1.5f, 2.24f / 1.5f, 2.30f / 1.5f);
                 if (Main.rand.Next(1, 5) == 1)
-                    Main.dust[Dust.NewDust(projectile.Center, projectile.width, projectile.height, 59)].noGravity = true;
+                    Main.dust[Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, 59)].noGravity = true;
             }
         }
 
@@ -46,17 +48,17 @@ namespace JoJoStands.Projectiles
                 NPC npc = Main.npc[n];
                 if (npc.active)
                 {
-                    if (npc.Distance(projectile.position) <= 10 * 16 && npc.lifeMax > 5 && !npc.friendly && !npc.immortal && !npc.hide)
+                    if (npc.Distance(Projectile.position) <= 10 * 16 && npc.lifeMax > 5 && !npc.friendly && !npc.immortal && !npc.hide)
                     {
-                        npc.StrikeNPC(78, 5f, projectile.direction);
+                        npc.StrikeNPC(78, 5f, Projectile.direction);
                     }
                 }
             }
             for (int d = 0; d < 15; d++)
             {
-                Dust.NewDust(projectile.Center, projectile.width, projectile.height, 226, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f));
+                Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, 226, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f));
             }
-            Main.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62);
         }
     }
 }

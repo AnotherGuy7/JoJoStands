@@ -3,6 +3,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -40,8 +41,8 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void AI()
         {
-            npc.AddBuff(mod.BuffType("Vampire"), 2);
-            if (npc.HasBuff(mod.BuffType("Sunburn")))
+            npc.AddBuff(ModContent.BuffType<Vampire>(), 2);
+            if (npc.HasBuff(ModContent.BuffType<Sunburn>()))
             {
                 npc.defense = 0;
                 npc.damage = 0;
@@ -69,7 +70,7 @@ namespace JoJoStands.NPCs.Enemies
             {
                 if (heldMouse == null)
                 {
-                    heldMouse = Main.npc[NPC.NewNPC((int)npc.position.X, (int)npc.position.Y, mod.NPCType("ZombieRat"))];
+                    heldMouse = Main.npc[NPC.NewNPC((int)npc.position.X, (int)npc.position.Y, Mod.NPCType("ZombieRat>())];
                 }
                 else
                 {

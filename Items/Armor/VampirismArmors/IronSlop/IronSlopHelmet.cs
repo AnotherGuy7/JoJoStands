@@ -16,16 +16,16 @@ namespace JoJoStands.Items.Armor.VampirismArmors.IronSlop
 
         public override void SetDefaults()
         {
-            item.width = 28;
-            item.height = 32;
-            item.value = Item.buyPrice(silver: 5);
-            item.rare = ItemRarityID.Blue;
-            item.defense = 2;
+            Item.width = 28;
+            Item.height = 32;
+            Item.value = Item.buyPrice(silver: 5);
+            Item.rare = ItemRarityID.Blue;
+            Item.defense = 2;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("IronSlopChestplate") && legs.type == mod.ItemType("IronSlopShorts");
+            return body.type == ModContent.ItemType<IronSlopChestplate>() && legs.type == ModContent.ItemType<IronSlopShorts>();
         }
 
         public override void UpdateArmorSet(Player player)
@@ -39,18 +39,17 @@ namespace JoJoStands.Items.Armor.VampirismArmors.IronSlop
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.IronBar, 9);
-            recipe.AddIngredient(ItemID.MudBlock, 10);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LeadBar, 9);
-            recipe.AddIngredient(ItemID.MudBlock, 10);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.IronBar, 9)
+                .AddIngredient(ItemID.MudBlock, 10)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.LeadBar, 9)
+                .AddIngredient(ItemID.MudBlock, 10)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

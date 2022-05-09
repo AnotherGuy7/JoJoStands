@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/TheWorldT1"; }
+            get { return Mod.Name + "/Items/TheWorldT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,37 +25,36 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 70;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 70;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("TheWorldT2"));
-            recipe.AddIngredient(ItemID.HallowedBar, 19);
-            recipe.AddIngredient(ItemID.GoldBar, 15);
-            recipe.AddIngredient(mod.ItemType("SoulofTime"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("TheWorldT2"));
-            recipe.AddIngredient(ItemID.HallowedBar, 19);
-            recipe.AddIngredient(ItemID.PlatinumBar, 15);
-            recipe.AddIngredient(mod.ItemType("SoulofTime"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToFight"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<TheWorldT2>())
+                .AddIngredient(ItemID.HallowedBar, 19)
+                .AddIngredient(ItemID.GoldBar, 15)
+                .AddIngredient(ModContent.ItemType<SoulofTime>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<TheWorldT2>())
+                .AddIngredient(ItemID.HallowedBar, 19)
+                .AddIngredient(ItemID.PlatinumBar, 15)
+                .AddIngredient(ModContent.ItemType<SoulofTime>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

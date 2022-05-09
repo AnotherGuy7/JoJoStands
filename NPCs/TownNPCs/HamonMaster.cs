@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using JoJoStands.UI;
 using JoJoStands.Items.Vampire;
 using JoJoStands.Items.Hamon;
@@ -51,7 +52,7 @@ namespace JoJoStands.NPCs.TownNPCs
         public override void OnChatButtonClicked(bool firstButton, ref bool openShop)
         {
             Player player = Main.LocalPlayer;
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>());
             if (firstButton)
             {
                 if (hPlayer.learnedHamon)
@@ -60,10 +61,10 @@ namespace JoJoStands.NPCs.TownNPCs
                     return;
                 }
 
-                if (player.CountItem(mod.ItemType("SunDroplet")) >= 5)
+                if (player.CountItem(ModContent.ItemType<SunDroplet>())) >= 5)
                 {
                     for (int i = 0; i < 5; i++)
-                        player.ConsumeItem(mod.ItemType("SunDroplet"));
+                        player.ConsumeItem(ModContent.ItemType<SunDroplet>()));
                     hPlayer.learnedHamon = true;
                     hPlayer.skillPointsAvailable = 1;
 
@@ -86,7 +87,7 @@ namespace JoJoStands.NPCs.TownNPCs
         public override string GetChat()       //Allows you to give this town NPC a chat message when a player talks to it.
         {
             Player player = Main.LocalPlayer;
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
             if (!vPlayer.vampire)
             {
                 switch (Main.rand.Next(0, 4 + 1))
@@ -143,7 +144,7 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             if (!punchesActive)
             {
-                projType = mod.ProjectileType("ZeppeliHamonPunches");
+                projType = ModContent.ProjectileType<ZeppeliHamonPunches>());
                 attackDelay = 1;
             }
         }

@@ -1,9 +1,10 @@
-using System;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
-using Terraria.DataStructures;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.Minions
 {
@@ -11,18 +12,18 @@ namespace JoJoStands.Projectiles.Minions
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 6;
+            Main.projFrames[Projectile.type] = 6;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 30;
-            projectile.height = 34;
-            projectile.friendly = true;
-            projectile.timeLeft = 90 * 60;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.penetrate = 10;
+            Projectile.width = 30;
+            Projectile.height = 34;
+            Projectile.friendly = true;
+            Projectile.timeLeft = 90 * 60;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = 10;
         }
 
         private const int IdleFrame = 0;
@@ -43,25 +44,25 @@ namespace JoJoStands.Projectiles.Minions
                 spawnTimer++;
                 if (!checkedForGround)
                 {
-                    while (!WorldGen.SolidTile((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f) - 2) || WorldGen.SolidTile((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f) - 3))
+                    while (!WorldGen.SolidTile((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f) - 2) || WorldGen.SolidTile((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f) - 3))
                     {
-                        projectile.position.Y += 1f;
-                        if (projectile.position.Y / 16f > Main.maxTilesY)
+                        Projectile.position.Y += 1f;
+                        if (Projectile.position.Y / 16f > Main.maxTilesY)
                         {
                             break;
                         }
                     }
                     checkedForGround = true;
                 }
-                projectile.position.Y -= 0.5f;
-                projectile.alpha = (int)(255f * (spawnTimer / 120f));
+                Projectile.position.Y -= 0.5f;
+                Projectile.alpha = (int)(255f * (spawnTimer / 120f));
                 if (dirtSpawnPosition == Vector2.Zero)
                 {
-                    dirtSpawnPosition = projectile.Center - new Vector2(0f, projectile.height);
+                    dirtSpawnPosition = Projectile.Center - new Vector2(0f, Projectile.height);
                 }
                 for (int d = 0; d < 11; d++)
                 {
-                    int dustIndex = Dust.NewDust(dirtSpawnPosition, projectile.width, 6, DustID.Dirt);
+                    int dustIndex = Dust.NewDust(dirtSpawnPosition, Projectile.width, 6, DustID.Dirt);
                     Main.dust[dustIndex].noGravity = true;
                 }
                 return;
@@ -69,13 +70,13 @@ namespace JoJoStands.Projectiles.Minions
 
             if (jumpRestTimer > 0)
                 jumpRestTimer--;
-            if (projectile.velocity.Y < 5f)
-                projectile.velocity.Y += 0.2f;
+            if (Projectile.velocity.Y < 5f)
+                Projectile.velocity.Y += 0.2f;
 
-            Vector3 lightLevel = Lighting.GetColor((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16).ToVector3();
-            if (lightLevel.Length() > 1.3f && Main.dayTime && Main.tile[(int)projectile.Center.X / 16, (int)projectile.Center.Y / 16].wall == 0)
+            Vector3 lightLevel = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16).ToVector3();
+            if (lightLevel.Length() > 1.3f && Main.dayTime && Main.tile[(int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16].wall == 0)
             {
-                projectile.Kill();
+                Projectile.Kill();
             }
 
             NPC target = null;
@@ -84,7 +85,7 @@ namespace JoJoStands.Projectiles.Minions
                 NPC npc = Main.npc[n];
                 if (npc.active)
                 {
-                    if (npc.lifeMax > 5 && !npc.friendly && !npc.townNPC && !npc.hide && projectile.Distance(npc.Center) <= DetectionDistance)
+                    if (npc.lifeMax > 5 && !npc.friendly && !npc.townNPC && !npc.hide && Projectile.Distance(npc.Center) <= DetectionDistance)
                     {
                         target = npc;
                         break;
@@ -94,52 +95,52 @@ namespace JoJoStands.Projectiles.Minions
 
             if (target != null)
             {
-                if (projectile.position.X > target.position.X)
+                if (Projectile.position.X > target.position.X)
                 {
-                    projectile.direction = -1;
+                    Projectile.direction = -1;
                 }
                 else
                 {
-                    projectile.direction = 1;
+                    Projectile.direction = 1;
                 }
-                if (Math.Abs(projectile.velocity.X) < 3.5f)
+                if (Math.Abs(Projectile.velocity.X) < 3.5f)
                 {
-                    projectile.velocity.X += 0.2f * projectile.direction;
+                    Projectile.velocity.X += 0.2f * Projectile.direction;
                 }
-                if (WorldGen.SolidTile((int)(projectile.Center.X / 16f) + projectile.direction, (int)(projectile.Center.Y / 16f)) && jumpRestTimer <= 0)
+                if (WorldGen.SolidTile((int)(Projectile.Center.X / 16f) + Projectile.direction, (int)(Projectile.Center.Y / 16f)) && jumpRestTimer <= 0)
                 {
                     jumpRestTimer += 40;
-                    projectile.velocity.Y = -8f;
-                    projectile.netUpdate = true;
+                    Projectile.velocity.Y = -8f;
+                    Projectile.netUpdate = true;
                 }
             }
             else
             {
-                if (Math.Abs(projectile.velocity.X) > 0f)
+                if (Math.Abs(Projectile.velocity.X) > 0f)
                 {
-                    projectile.velocity.X *= 0.6718057f;
+                    Projectile.velocity.X *= 0.6718057f;
                 }
             }
 
-            projectile.spriteDirection = projectile.direction;
-            if (Math.Abs(projectile.velocity.X) >= 0.2f)
+            Projectile.spriteDirection = Projectile.direction;
+            if (Math.Abs(Projectile.velocity.X) >= 0.2f)
             {
-                projectile.frameCounter += (int)Math.Ceiling(projectile.velocity.X);
-                if (projectile.frameCounter >= 22f)
+                Projectile.frameCounter += (int)Math.Ceiling(Projectile.velocity.X);
+                if (Projectile.frameCounter >= 22f)
                 {
-                    if (projectile.frame < WalkingFramesMinimum || projectile.frame > WalkingFramesMaximum)
+                    if (Projectile.frame < WalkingFramesMinimum || Projectile.frame > WalkingFramesMaximum)
                     {
-                        projectile.frame = WalkingFramesMinimum;
+                        Projectile.frame = WalkingFramesMinimum;
                     }
                 }
             }
             else
             {
-                projectile.frame = IdleFrame;
+                Projectile.frame = IdleFrame;
             }
-            if (!WorldGen.SolidTile((int)(projectile.Center.X / 16f), (int)(projectile.Center.Y / 16f) + 2))
+            if (!WorldGen.SolidTile((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f) + 2))
             {
-                projectile.frame = JumpingFrame;
+                Projectile.frame = JumpingFrame;
             }
         }
 
@@ -156,9 +157,9 @@ namespace JoJoStands.Projectiles.Minions
             for (int d = 0; d < Main.rand.Next(3, 9); d++)
             {
                 float angle = d;
-                Dust.NewDust(dirtSpawnPosition + angle.ToRotationVector2(), projectile.width, projectile.height, DustID.Smoke);
+                Dust.NewDust(dirtSpawnPosition + angle.ToRotationVector2(), Projectile.width, Projectile.height, DustID.Smoke);
             }
-            Main.PlaySound(SoundID.NPCDeath1, projectile.position);
+            SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.position);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

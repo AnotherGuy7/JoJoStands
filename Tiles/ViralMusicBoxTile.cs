@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ObjectData;
 
 namespace JoJoStands.Tiles
@@ -23,13 +24,13 @@ namespace JoJoStands.Tiles
 			dustType = DustID.Lead;
 
 			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Viral Music Box");
+			name.SetDefault("Viral Music Box>();
 			AddMapEntry(Color.Silver, name);
 		}
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 4, 4, mod.ItemType("ViralMusicBox"));
+			Item.NewItem(i * 16, j * 16, 4, 4, ModContent.ItemType<ViralMusicBox>());
 		}
 	}
 }

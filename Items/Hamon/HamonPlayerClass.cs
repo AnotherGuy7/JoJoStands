@@ -1,17 +1,17 @@
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using System.Linq;
-using Terraria.GameInput;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Terraria.ID;
 using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Linq;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameInput;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
+using Terraria.ModLoader.IO;
 
 namespace JoJoStands.Items.Hamon
 {
@@ -76,9 +76,9 @@ namespace JoJoStands.Items.Hamon
 
         //public bool[] learnedHamonSkills = new bool[HamonSkillsLimit];
         public const int ExpectedAmountOfHamonSkills = 15;
-        public Dictionary<int, bool> learnedHamonSkills = new Dictionary<int, bool>();
-        public Dictionary<int, int> hamonAmountRequirements = new Dictionary<int, int>();
-        public Dictionary<int, int> hamonSkillLevels = new Dictionary<int, int>();
+        public Dictionary<int, bool> learnedHamonSkills = new Dictionary<int, bool>());
+        public Dictionary<int, int> hamonAmountRequirements = new Dictionary<int, int>());
+        public Dictionary<int, int> hamonSkillLevels = new Dictionary<int, int>());
 
 
         public override void ResetEffects()
@@ -114,7 +114,7 @@ namespace JoJoStands.Items.Hamon
 
         public override void PreUpdate()
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
             if (NPC.downedBoss1)      //It's written this way so that by the time it gets to the bottom it would have the actual Hamon Level
             {
                 hamonLevel = 1;
@@ -244,9 +244,9 @@ namespace JoJoStands.Items.Hamon
             amountOfHamon = (int)MathHelper.Clamp(amountOfHamon, 0, maxHamon);
         }
 
-        public override void MeleeEffects(Item item, Rectangle hitbox)
+        public override void MeleeEffects(Item Item, Rectangle hitbox)
         {
-            if (player.HasBuff(mod.BuffType("HamonWeaponImbueBuff")))
+            if (player.HasBuff(ModContent.BuffType<HamonWeaponImbueBuff>()))
             {
                 Vector2 hitboxPosition = new Vector2(hitbox.X, hitbox.Y);
                 Dust.NewDust(hitboxPosition, hitbox.Width, hitbox.Height, 169);
@@ -260,7 +260,7 @@ namespace JoJoStands.Items.Hamon
                 if (learnedHamonSkills.ContainsKey(BreathingRegenSkill) && learnedHamonSkills[BreathingRegenSkill])
                 {
                     regen *= 1.2f + (0.2f * hamonSkillLevels[BreathingRegenSkill]);
-                    Main.NewText("Works");
+                    Main.NewText("Works>();
                 }
             }
         }
@@ -287,9 +287,9 @@ namespace JoJoStands.Items.Hamon
         public override void PreUpdateBuffs()
         {
             if (hamonStage == 2)
-                player.AddBuff(mod.BuffType("HamonChargedII"), 2);
+                player.AddBuff(ModContent.BuffType<HamonChargedII>(), 2);
             else if (hamonStage == 1)
-                player.AddBuff(mod.BuffType("HamonChargedI"), 2);
+                player.AddBuff(ModContent.BuffType<HamonChargedI>(), 2);
         }
 
         private void ManageAbilities()
@@ -350,7 +350,7 @@ namespace JoJoStands.Items.Hamon
                         }
                         else
                         {
-                            player.mount.SetMount(mod.MountType("LeafGliderMount"), player);
+                            player.mount.SetMount(Mod.MountType("LeafGliderMount>(), player);
                         }
                     }
                 }
@@ -390,7 +390,7 @@ namespace JoJoStands.Items.Hamon
                         if (amountOfHamon <= hamonAmountRequirements[HamonOvercharge] && player.statLife > (int)(player.statLifeMax * 0.25f))
                         {
                             amountOfHamon += 30 * hamonSkillLevels[HamonOvercharge];
-                            player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " overcharged themselves with Hamon."), (int)(player.statLifeMax * 0.05), player.direction);
+                            player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " overcharged themselves with Hamon.>(), (int)(player.statLifeMax * 0.05), player.direction);
                         }
                         hamonOverChargeSpecialDoublePressTimer = 0;
                     }
@@ -401,7 +401,7 @@ namespace JoJoStands.Items.Hamon
             {
                 if (amountOfHamon > hamonAmountRequirements[HamonShockwave] && player.controlDown && player.velocity.Y > 0f && WorldGen.SolidTile((int)(player.Center.X / 16f), (int)(player.Center.Y / 16f) + 2))
                 {
-                    Projectile.NewProjectile(player.Center + new Vector2(0f, 5f), new Vector2(0.01f * player.direction, 0f), mod.ProjectileType("HamonShockwaveSpike"), 32 * hamonSkillLevels[HamonShockwave], 4f * hamonSkillLevels[HamonShockwave], player.whoAmI, player.direction, hamonSkillLevels[HamonShockwave]);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center + new Vector2(0f, 5f), new Vector2(0.01f * player.direction, 0f), ModContent.ProjectileType<HamonShockwaveSpike>(), 32 * hamonSkillLevels[HamonShockwave], 4f * hamonSkillLevels[HamonShockwave], player.whoAmI, player.direction, hamonSkillLevels[HamonShockwave]);
                     amountOfHamon -= hamonAmountRequirements[HamonShockwave];
                 }
             }
@@ -488,7 +488,7 @@ namespace JoJoStands.Items.Hamon
                         NPC npc = Main.npc[n];
                         if (npc.active && npc.lifeMax > 5 && !npc.townNPC && !npc.immortal && player.Distance(npc.Center) <= sunTagRadius)
                         {
-                            npc.GetGlobalNPC<JoJoGlobalNPC>().sunTagged = true;
+                            npc.GetGlobalNPC<JoJoGlobalNPC>()).sunTagged = true;
                         }
                     }
                     amountOfHamon -= hamonAmountRequirements[SunTag];
@@ -507,7 +507,7 @@ namespace JoJoStands.Items.Hamon
                 else
                     sunShacklesHeldTimer = 0;
 
-                sunShacklesActive = player.ownedProjectileCounts[mod.ProjectileType("SunShackle")] > 0;
+                sunShacklesActive = player.ownedProjectileCounts[ModContent.ProjectileType<SunShackle>()] > 0;
 
                 if (amountOfHamon >= hamonAmountRequirements[SunShackles] && sunShacklesHeldTimer >= 180)
                 {
@@ -517,13 +517,13 @@ namespace JoJoStands.Items.Hamon
                         NPC npc = Main.npc[n];
                         if (npc.active && npc.lifeMax > 5 && !npc.townNPC && !npc.immortal && player.Distance(npc.Center) <= sunShacklesRadius)
                         {
-                            npc.GetGlobalNPC<JoJoGlobalNPC>().sunShackled = true;
-                            Projectile.NewProjectile(npc.position, Vector2.Zero, mod.ProjectileType("SunShackle"), 0, 0f, player.whoAmI, npc.whoAmI, 0.3f);
+                            npc.GetGlobalNPC<JoJoGlobalNPC>()).sunShackled = true;
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, Vector2.Zero, ModContent.ProjectileType<SunShackle>(), 0, 0f, player.whoAmI, npc.whoAmI, 0.3f);
                         }
                     }
                     amountOfHamon -= hamonAmountRequirements[SunShackles];
                     sunShacklesHeldTimer = 0;
-                    Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 8, 1f, 0.8f);
+                    SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 8, 1f, 0.8f);
                 }
             }
 
@@ -544,7 +544,7 @@ namespace JoJoStands.Items.Hamon
                     {
                         muscleOverdriveHeldTimer = 0;
                         amountOfHamon -= hamonAmountRequirements[MuscleOverdrive];
-                        player.AddBuff(mod.BuffType("HamonChargedII"), 60 * 60 * 5);
+                        player.AddBuff(ModContent.BuffType<HamonChargedII>(), 60 * 60 * 5);
                         for (int i = 0; i < Main.rand.Next(15, 32); i++)
                         {
                             Dust.NewDust(player.position, player.width, player.height, 169, SpeedY: Main.rand.NextFloat(-1.4f + -0.3f + 1f));
@@ -614,11 +614,11 @@ namespace JoJoStands.Items.Hamon
             Main.NewText("Rebuilt Hamon Skills Dictionaries.", Color.Yellow);
         }
 
-        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(Item Item, NPC target, int damage, float knockback, bool crit)
         {
-            if (player.HasBuff(mod.BuffType("HamonWeaponImbueBuff")))
+            if (player.HasBuff(ModContent.BuffType<HamonWeaponImbueBuff>()))
             {
-                target.AddBuff(mod.BuffType("Sunburn"), 120 * (player.GetModPlayer<HamonPlayer>().hamonSkillLevels[WeaponsHamonImbueSkill] - 1));
+                target.AddBuff(ModContent.BuffType<Sunburn>(), 120 * (player.GetModPlayer<HamonPlayer>()).hamonSkillLevels[WeaponsHamonImbueSkill] - 1));
             }
         }
 
@@ -633,15 +633,15 @@ namespace JoJoStands.Items.Hamon
             {
                 damage = (int)(damage * 0.95f);
                 amountOfHamon -= 3;
-				
-				if (Main.rand.Next(0, 7) == 0)
-				{
-					npc.AddBuff(mod.BuffType("Sunburn"), 80 * hamonSkillLevels[DefensiveHamonAura]);
-				}
+
+                if (Main.rand.Next(0, 7) == 0)
+                {
+                    npc.AddBuff(ModContent.BuffType<Sunburn>(), 80 * hamonSkillLevels[DefensiveHamonAura]);
+                }
             }
             if (sunShacklesActive)
             {
-                if (npc.GetGlobalNPC<JoJoGlobalNPC>().sunShackled)
+                if (npc.GetGlobalNPC<JoJoGlobalNPC>()).sunShackled)
                 {
                     damage = (int)(damage * 0.85f);
                 }
@@ -675,15 +675,15 @@ namespace JoJoStands.Items.Hamon
 
         public override void Load(TagCompound tag)
         {
-            IList<int> skillKeys = tag.GetList<int>("hamonSkillKeys");
-            IList<bool> skillValues = tag.GetList<bool>("hamonSkillValues");
-            IList<int> requirementKeys = tag.GetList<int>("hamonRequirementKeys");
-            IList<int> requirementValues = tag.GetList<int>("hamonRequirementValues");
-            IList<int> levelKeys = tag.GetList<int>("hamonLevelKeys");
-            IList<int> levelValues = tag.GetList<int>("hamonLevelValues");
-            skillPointsAvailable = tag.GetInt("hamonSkillPoints");
-            learnedAnyAbility = tag.GetBool("learnedAnyAbility");
-            learnedHamon = tag.GetBool("learnedHamon");
+            IList<int> skillKeys = tag.GetList<int>()"hamonSkillKeys>();
+            IList<bool> skillValues = tag.GetList<bool>()"hamonSkillValues>();
+            IList<int> requirementKeys = tag.GetList<int>()"hamonRequirementKeys>();
+            IList<int> requirementValues = tag.GetList<int>()"hamonRequirementValues>();
+            IList<int> levelKeys = tag.GetList<int>()"hamonLevelKeys>();
+            IList<int> levelValues = tag.GetList<int>()"hamonLevelValues>();
+            skillPointsAvailable = tag.GetInt("hamonSkillPoints>();
+            learnedAnyAbility = tag.GetBool("learnedAnyAbility>();
+            learnedHamon = tag.GetBool("learnedHamon>();
             /*for (int i = 0; i < keys.Count; i++)
             {
                 if (learnedHamonSkills.ContainsKey(keys[i]))
@@ -693,13 +693,13 @@ namespace JoJoStands.Items.Hamon
             }*/
 
             //if (learnedHamonSkills.Count != 0)
-                learnedHamonSkills = skillKeys.Zip(skillValues, (key, value) => new {Key = key, Value = value}).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);
+            learnedHamonSkills = skillKeys.Zip(skillValues, (key, value) => new { Key = key, Value = value }).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);
 
             //if (hamonAmountRequirements.Count != 0)
-                hamonAmountRequirements = requirementKeys.Zip(requirementValues, (key, value) => new { Key = key, Value = value }).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);
+            hamonAmountRequirements = requirementKeys.Zip(requirementValues, (key, value) => new { Key = key, Value = value }).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);
 
             //if (hamonSkillLevels.Count != 0)
-                hamonSkillLevels = levelKeys.Zip(levelValues, (key, value) => new { Key = key, Value = value }).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);
+            hamonSkillLevels = levelKeys.Zip(levelValues, (key, value) => new { Key = key, Value = value }).ToDictionary(newKey => newKey.Key, newValue => newValue.Value);
         }
 
         public override void UpdateDead()
@@ -710,21 +710,21 @@ namespace JoJoStands.Items.Hamon
         public static readonly PlayerLayer HamonChargesFront = new PlayerLayer("JoJoStands", "HamonChargesFront", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = ModLoader.GetMod("JoJoStands");
-            HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
+            Mod Mod = ModLoader.GetMod("JoJoStands>();
+            HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>());
             SpriteEffects effects = SpriteEffects.None;
             if (drawPlayer.active && hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
             {
-                Texture2D texture = mod.GetTexture("Extras/HamonChargeI");
+                Texture2D texture = Mod.GetTexture("Extras/HamonChargeI>();
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
                 if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 2)
                 {
-                    texture = mod.GetTexture("Extras/HamonChargeII");
+                    texture = Mod.GetTexture("Extras/HamonChargeII>();
                 }
                 if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 1.5)
                 {
-                    texture = mod.GetTexture("Extras/HamonChargeIII");
+                    texture = Mod.GetTexture("Extras/HamonChargeIII>();
                 }
 
                 if (drawPlayer.direction == -1)
@@ -753,11 +753,11 @@ namespace JoJoStands.Items.Hamon
         public static readonly PlayerLayer DefensiveHamonAuraLayer = new PlayerLayer("JoJoStands", "DefensiveHamonAuraLayer", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = ModLoader.GetMod("JoJoStands");
-            HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
+            Mod Mod = ModLoader.GetMod("JoJoStands>();
+            HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>());
             if (drawPlayer.active && hamonPlayer.defensiveHamonAuraActive)
             {
-                Texture2D auraTexture = mod.GetTexture("Extras/DefensiveHamonAura");
+                Texture2D auraTexture = Mod.GetTexture("Extras/DefensiveHamonAura>();
                 int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
 
@@ -799,8 +799,8 @@ namespace JoJoStands.Items.Hamon
                 HamonChargesFront.visible = HamonEffects;
                 DefensiveHamonAuraLayer.visible = true;
             }
-			
-			int miscEffectsLayer = layers.FindIndex(l => l == PlayerLayer.MiscEffectsBack);
+
+            int miscEffectsLayer = layers.FindIndex(l => l == PlayerLayer.MiscEffectsBack);
             if (miscEffectsLayer > -1)
             {
                 layers.Insert(miscEffectsLayer + 1, DefensiveHamonAuraLayer);

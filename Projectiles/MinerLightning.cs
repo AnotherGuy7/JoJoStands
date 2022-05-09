@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -7,20 +8,20 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 18;
-            projectile.height = 8;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
+            Projectile.width = 18;
+            Projectile.height = 8;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 300;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
         }
 
         public override void AI()
         {
-            projectile.rotation = projectile.velocity.ToRotation();
-            int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 61);
+            Projectile.rotation = Projectile.velocity.ToRotation();
+            int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 61);
             Main.dust[dustIndex].noGravity = true;
         }
     }

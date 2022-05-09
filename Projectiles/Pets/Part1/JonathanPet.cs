@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.Pets.Part1
 {
@@ -9,131 +10,131 @@ namespace JoJoStands.Projectiles.Pets.Part1
     {
         public override void SetStaticDefaults()
         {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 6;
+            Main.projPet[Projectile.type] = true;
+            Main.projFrames[Projectile.type] = 6;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 30;
-            projectile.height = 30;
-            projectile.penetrate = -1;
-            projectile.friendly = true;
-            projectile.ignoreWater = true;
-            projectile.tileCollide = true;
-            drawOriginOffsetY = -26;
+            Projectile.width = 30;
+            Projectile.height = 30;
+            Projectile.penetrate = -1;
+            Projectile.friendly = true;
+            Projectile.ignoreWater = true;
+            Projectile.tileCollide = true;
+            DrawOriginOffsetY = -26;
         }
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
-            //MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (!player.HasBuff(mod.BuffType("JonathanPetBuff")) || player.dead)
+            Player player = Main.player[Projectile.owner];
+            //MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            if (!player.HasBuff(ModContent.BuffType<JonathanPetBuff>()) || player.dead)
             {
-                projectile.Kill();
+                Projectile.Kill();
             }
 
-            Vector2 directionToPlayer = player.Center - projectile.Center;
+            Vector2 directionToPlayer = player.Center - Projectile.Center;
             directionToPlayer.Normalize();
             directionToPlayer *= player.moveSpeed;
-            float xDist = Math.Abs(player.position.X - projectile.position.X);
+            float xDist = Math.Abs(player.position.X - Projectile.position.X);
             if (!WorldGen.SolidTile((int)(player.position.X / 16f), (int)(player.position.Y / 16f) + 4))
             {
-                projectile.ai[0] = 1f;
+                Projectile.ai[0] = 1f;
             }
             else
             {
-                projectile.ai[0] = 0f;
+                Projectile.ai[0] = 0f;
             }
 
-            if (projectile.position.X > player.position.X)
+            if (Projectile.position.X > player.position.X)
             {
-                projectile.direction = -1;
+                Projectile.direction = -1;
             }
             else
             {
-                projectile.direction = 1;
+                Projectile.direction = 1;
             }
-            projectile.spriteDirection = projectile.direction;
+            Projectile.spriteDirection = Projectile.direction;
 
-            if (projectile.ai[0] == 0f)
+            if (Projectile.ai[0] == 0f)
             {
-                projectile.tileCollide = true;
-                if (projectile.velocity.Y < 6f)
+                Projectile.tileCollide = true;
+                if (Projectile.velocity.Y < 6f)
                 {
-                    projectile.velocity.Y += 0.3f;
+                    Projectile.velocity.Y += 0.3f;
                 }
 
                 if (xDist >= 72f)
                 {
-                    projectile.velocity.X = directionToPlayer.X * xDist / 14;
+                    Projectile.velocity.X = directionToPlayer.X * xDist / 14;
                 }
                 else
                 {
-                    projectile.velocity.X *= 0.96f;
+                    Projectile.velocity.X *= 0.96f;
                 }
             }
-            float distance = Vector2.Distance(player.Center, projectile.Center);
-            if (projectile.ai[0] == 1f)        //Flying
+            float distance = Vector2.Distance(player.Center, Projectile.Center);
+            if (Projectile.ai[0] == 1f)        //Flying
             {
                 if (distance >= 48f)
                 {
                     if (Math.Abs(player.velocity.X) > 1f || Math.Abs(player.velocity.Y) > 1f)
                     {
                         directionToPlayer *= distance / 16f;
-                        projectile.velocity = directionToPlayer;
+                        Projectile.velocity = directionToPlayer;
                     }
                     else
                     {
                         directionToPlayer *= 0.9f * (distance / 60f);
-                        projectile.velocity = directionToPlayer;
+                        Projectile.velocity = directionToPlayer;
                     }
                 }
             }
             if (distance >= 300f)        //Out of range
             {
-                projectile.tileCollide = false;
+                Projectile.tileCollide = false;
                 directionToPlayer *= distance / 90f;
-                projectile.velocity += directionToPlayer;
+                Projectile.velocity += directionToPlayer;
             }
             AnimatePet();
         }
 
         private void AnimatePet()
         {
-            if (projectile.ai[0] == 0f)
+            if (Projectile.ai[0] == 0f)
             {
-                projectile.frameCounter += (int)Math.Abs(projectile.velocity.X);
-                if (projectile.frameCounter >= 11)
+                Projectile.frameCounter += (int)Math.Abs(Projectile.velocity.X);
+                if (Projectile.frameCounter >= 11)
                 {
-                    projectile.frame++;
-                    projectile.frameCounter = 0;
-                    if (projectile.frame >= 4)
+                    Projectile.frame++;
+                    Projectile.frameCounter = 0;
+                    if (Projectile.frame >= 4)
                     {
-                        projectile.frame = 0;
+                        Projectile.frame = 0;
                     }
                 }
             }
             else
             {
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= 8)
+                Projectile.frameCounter++;
+                if (Projectile.frameCounter >= 8)
                 {
-                    projectile.frame++;
-                    projectile.frameCounter = 0;
-                    if (projectile.frame >= 6)
+                    Projectile.frame++;
+                    Projectile.frameCounter = 0;
+                    if (Projectile.frame >= 6)
                     {
-                        projectile.frame = 4;
+                        Projectile.frame = 4;
                     }
                 }
-                if (projectile.frame <= 3)
+                if (Projectile.frame <= 3)
                 {
-                    projectile.frame = 4;
+                    Projectile.frame = 4;
                 }
             }
-            /*if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            /*if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
-                projectile.frame = 6;
+                Projectile.frame = 6;
             }*/
         }
     }

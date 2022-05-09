@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -9,100 +10,100 @@ namespace JoJoStands.Projectiles
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 3;
+            Main.projFrames[Projectile.type] = 3;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 24;
-            projectile.height = 24;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 360;
-            projectile.friendly = true;
-            projectile.tileCollide = false;
-            projectile.penetrate = 3;
+            Projectile.width = 24;
+            Projectile.height = 24;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 360;
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+            Projectile.penetrate = 3;
         }
 
         private bool changedPos = false;
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
 
-            //player.ownedProjectileCounts[mod.ProjectileType("ViralBeetleProjectile")]
-            if (player.HasBuff(mod.BuffType("ViralBeetleBuff")))
+            //player.ownedProjectileCounts[ModContent.ProjectileType<ViralBeetleProjectile>()]
+            if (player.HasBuff(ModContent.BuffType<ViralBeetleBuff>()))
             {
-                projectile.timeLeft = 10;
+                Projectile.timeLeft = 10;
             }
-            float radius = projectile.ai[0] * 24f;     //Radius, in which ai[0] is it's spawn number
-            if (projectile.ai[0] != 2f)
+            float radius = Projectile.ai[0] * 24f;     //Radius, in which ai[0] is it's spawn number
+            if (Projectile.ai[0] != 2f)
             {
-                projectile.ai[1] += 0.07f;     //Rotation
+                Projectile.ai[1] += 0.07f;     //Rotation
             }
             else
             {
-                projectile.ai[1] -= 0.07f;
+                Projectile.ai[1] -= 0.07f;
             }
-            if (projectile.ai[0] == 3f && !changedPos)
+            if (Projectile.ai[0] == 3f && !changedPos)
             {
-                projectile.ai[1] += 36f;
+                Projectile.ai[1] += 36f;
                 changedPos = true;
             }
-            Vector2 offset = player.Center + (projectile.ai[1].ToRotationVector2() * radius) + new Vector2(-6f, 0f);
-            projectile.position = offset;
-            Lighting.AddLight(projectile.Center, 2.55f / 3f, 2.14f / 3f, 0.88f / 3f);
+            Vector2 offset = player.Center + (Projectile.ai[1].ToRotationVector2() * radius) + new Vector2(-6f, 0f);
+            Projectile.position = offset;
+            Lighting.AddLight(Projectile.Center, 2.55f / 3f, 2.14f / 3f, 0.88f / 3f);
 
-            if (projectile.position.X > player.position.X)
+            if (Projectile.position.X > player.position.X)
             {
-                projectile.direction = 1;
+                Projectile.direction = 1;
             }
             else
             {
-                projectile.direction = -1;
+                Projectile.direction = -1;
             }
-            projectile.spriteDirection = projectile.direction;
+            Projectile.spriteDirection = Projectile.direction;
 
             for (int p = 0; p < Main.maxProjectiles; p++)
             {
                 Projectile otherProj = Main.projectile[p];
                 if (otherProj.active)
                 {
-                    if (projectile.Hitbox.Intersects(otherProj.Hitbox) && otherProj.type != projectile.type && (otherProj.hostile || !otherProj.friendly))
+                    if (Projectile.Hitbox.Intersects(otherProj.Hitbox) && otherProj.type != Projectile.type && (otherProj.hostile || !otherProj.friendly))
                     {
                         otherProj.velocity *= -1f;
                         otherProj.penetrate -= 1;
-                        projectile.penetrate -= 1;
+                        Projectile.penetrate -= 1;
                     }
                 }
             }
 
-            if (projectile.penetrate <= 0)
+            if (Projectile.penetrate <= 0)
             {
-                projectile.Kill();
+                Projectile.Kill();
             }
 
-            projectile.frameCounter++;
-            if (projectile.frameCounter >= 15)
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 15)
             {
-                projectile.frame++;
-                if (projectile.frame >= Main.projFrames[projectile.type])
+                Projectile.frame++;
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
                 {
-                    projectile.frame = 0;
+                    Projectile.frame = 0;
                 }
-                projectile.frameCounter = 0;
+                Projectile.frameCounter = 0;
             }
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            Texture2D texture = mod.GetTexture("Projectiles/ViralBeetleProjectile");
-            int frameHeight = texture.Height / Main.projFrames[projectile.type];
+            Texture2D texture = Mod.GetTexture("Projectiles/ViralBeetleProjectile>();
+            int frameHeight = texture.Height / Main.projFrames[Projectile.type];
             SpriteEffects effects = SpriteEffects.None;
-            if (projectile.direction == -1)
+            if (Projectile.direction == -1)
             {
                 effects = SpriteEffects.FlipVertically;
             }
-            spriteBatch.Draw(texture, projectile.position - Main.screenPosition, new Rectangle(0, projectile.frame, projectile.width, frameHeight), Color.White, projectile.rotation, new Vector2(texture.Width / 2f, frameHeight / 2f), projectile.scale, effects, 0f);
+            spriteBatch.Draw(texture, Projectile.position - Main.screenPosition, new Rectangle(0, Projectile.frame, Projectile.width, frameHeight), Color.White, Projectile.rotation, new Vector2(texture.Width / 2f, frameHeight / 2f), Projectile.scale, effects, 0f);
             return false;
         }
 
@@ -110,13 +111,13 @@ namespace JoJoStands.Projectiles
         {
             for (int d = 0; d < 10; d++)
             {
-                Main.dust[Dust.NewDust(projectile.Center + new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f)), projectile.width, projectile.height, 232)].noGravity = true;
+                Main.dust[Dust.NewDust(Projectile.Center + new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f)), Projectile.width, Projectile.height, 232)].noGravity = true;
             }
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(mod.BuffType("Infected"), 10 * 60);
+            target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
         }
     }
 }

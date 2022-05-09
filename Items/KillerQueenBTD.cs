@@ -1,4 +1,8 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles.PlayerStands.KillerQueenBTD;
+using JoJoStands.Tiles;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,24 +18,24 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/KillerQueenT1"; }
+            get { return Mod.Name + "/Items/KillerQueenT1"; }
         }
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Killer Queen (Stray Cat)");
-            Tooltip.SetDefault("Left-click to shoot bubbles and right-click to detonate them!\nSpecial: Bite The Dust!\nRight-Click while holding the item to revert back to Killer Queen Final (You can revert back to BTD)\nNote: Manually detonating bubble bombs deal 2x damage!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Left-click to shoot bubbles and right-click to detonate them!\nSpecial: Bite The Dust!\nRight-Click while holding the Item to revert back to Killer Queen Final (You can revert back to BTD)\nNote: Manually detonating bubble bombs deal 2x damage!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
         {
-            item.damage = 684;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 684;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void HoldItem(Player player)
@@ -43,9 +47,9 @@ namespace JoJoStands.Items
                 {
                     if (Main.mouseRight && mPlayer.revertTimer <= 0)
                     {
-                        item.type = mod.ItemType("KillerQueenFinal");
-                        item.SetDefaults(mod.ItemType("KillerQueenFinal"));
-                        Main.PlaySound(SoundID.Grab);
+                        Item.type = ModContent.ItemType<KillerQueenFinal>();
+                        Item.SetDefaults(ModContent.ItemType<KillerQueenFinal>());
+                        SoundEngine.PlaySound(SoundID.Grab);
                         mPlayer.revertTimer += 30;
                     }
                 }
@@ -54,25 +58,24 @@ namespace JoJoStands.Items
 
         public override bool ManualStandSpawning(Player player)
         {
-            Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("KillerQueenBTDStand"), 0, 0f, Main.myPlayer);
+            Projectile.NewProjectile(player.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<KillerQueenBTDStand>(), 0, 0f, Main.myPlayer);
             return true;
-        }
-
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("KillerQueenFinal"));
-            recipe.AddIngredient(mod.ItemType("RequiemArrow"));
-            recipe.AddIngredient(mod.ItemType("TaintedLifeforce"));
-            recipe.AddIngredient(mod.ItemType("StrayCat"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
         }
 
         public override void OnCraft(Recipe recipe)
         {
-            Main.player[item.owner].GetModPlayer<MyPlayer>().canRevertFromKQBTD = true;
+            Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().canRevertFromKQBTD = true;
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<KillerQueenFinal>())
+                .AddIngredient(ModContent.ItemType<RequiemArrow>())
+                .AddIngredient(ModContent.ItemType<TaintedLifeforce>())
+                .AddIngredient(ModContent.ItemType<StrayCat>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

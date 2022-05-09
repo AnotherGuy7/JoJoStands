@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using JoJoStands.Items.CraftingMaterials;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,28 +16,26 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.melee = true;
-            item.damage = 14;
-            item.width = 64;
-            item.height = 30;
-            item.knockBack = 5f;
-            item.useTime = 20;
-            item.useAnimation = 20;
-            item.useStyle = ItemUseStyleID.SwingThrow;
-            item.value = Item.buyPrice(0, 0, 25, 0);
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 14;
+            Item.width = 64;
+            Item.height = 30;
+            Item.knockBack = 5f;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.value = Item.buyPrice(0, 0, 25, 0);
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.IronBar, 6);
-            recipe.AddIngredient(ItemID.GoldBar, 4);
-            recipe.AddIngredient(ItemID.Ruby);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.IronBar, 6)
+                .AddIngredient(ItemID.GoldBar, 4)
+                .AddIngredient(ItemID.Ruby)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
+                .AddTile(TileID.Anvils);
+                .Register();
         }
     }
 }

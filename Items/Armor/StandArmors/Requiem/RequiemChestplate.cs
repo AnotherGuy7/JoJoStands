@@ -1,7 +1,7 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-
 
 namespace JoJoStands.Items.Armor.StandArmors.Requiem
 {
@@ -16,11 +16,11 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 20, 0, 0);
-            item.rare = ItemRarityID.Red;
-            item.defense = 24;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 20, 0, 0);
+            Item.rare = ItemRarityID.Red;
+            Item.defense = 24;
         }
 
         public override void UpdateEquip(Player player)
@@ -33,13 +33,12 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LunarBar, 20);
-            recipe.AddIngredient(ItemID.FragmentStardust, 7);
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 8);
-            recipe.AddTile(TileID.LunarCraftingStation);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.LunarBar, 20)
+                .AddIngredient(ItemID.FragmentStardust, 7)
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 8)
+                .AddTile(TileID.LunarCraftingStation)
+                .Register();
         }
     }
 }

@@ -4,6 +4,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
+using Terraria.Audio;
 
 namespace JoJoStands.Projectiles.Minions
 {
@@ -14,18 +16,18 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 10;
-            ProjectileID.Sets.Homing[projectile.type] = true;
+            Main.projFrames[Projectile.type] = 10;
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 18;
-            projectile.height = 20;
-            projectile.friendly = true;
-            projectile.timeLeft = 600;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 18;
+            Projectile.height = 20;
+            Projectile.friendly = true;
+            Projectile.timeLeft = 600;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         private const float searchDistance = 18f * 16f;
@@ -42,34 +44,34 @@ namespace JoJoStands.Projectiles.Minions
             {
                 jumpTimer = 0;
             }
-            projectile.velocity.Y += 1.5f;
-            if (projectile.velocity.Y >= 6f)
+            Projectile.velocity.Y += 1.5f;
+            if (Projectile.velocity.Y >= 6f)
             {
-                projectile.velocity.Y = 6f;
+                Projectile.velocity.Y = 6f;
             }
 
-            maxReflection = (int)projectile.ai[0] * 15;
-            if (projectile.ai[1] == 0f)
+            maxReflection = (int)Projectile.ai[0] * 15;
+            if (Projectile.ai[1] == 0f)
             {
-                projectile.penetrate = 1;
-                projectile.ai[1] = 4f;
+                Projectile.penetrate = 1;
+                Projectile.ai[1] = 4f;
             }
-            if (projectile.ai[1] == 1f)
+            if (Projectile.ai[1] == 1f)
             {
-                projectile.penetrate = 2;
-                projectile.ai[1] = 4f;
+                Projectile.penetrate = 2;
+                Projectile.ai[1] = 4f;
             }
-            if (projectile.ai[1] == 2f)
+            if (Projectile.ai[1] == 2f)
             {
-                projectile.penetrate = 3;
-                projectile.ai[1] = 4f;
+                Projectile.penetrate = 3;
+                Projectile.ai[1] = 4f;
             }
-            if (projectile.ai[1] == 3f)
+            if (Projectile.ai[1] == 3f)
             {
-                projectile.penetrate = 4;
-                projectile.ai[1] = 4f;
+                Projectile.penetrate = 4;
+                Projectile.ai[1] = 4f;
             }
-            if (projectile.velocity.X == 0f)
+            if (Projectile.velocity.X == 0f)
             {
                 walking = false;
             }
@@ -85,7 +87,7 @@ namespace JoJoStands.Projectiles.Minions
                 if (possibleTarget.active && !possibleTarget.dontTakeDamage && !possibleTarget.friendly && possibleTarget.lifeMax > 5 && !possibleTarget.townNPC && possibleTarget.type != NPCID.TargetDummy && possibleTarget.type != NPCID.CultistTablet)
                 {
                     npcTarget = possibleTarget;
-                    float distance = projectile.Distance(possibleTarget.Center);
+                    float distance = Projectile.Distance(possibleTarget.Center);
                     if (distance < searchDistance)
                     {
                         npcTarget = possibleTarget;
@@ -95,54 +97,54 @@ namespace JoJoStands.Projectiles.Minions
             }
             if (npcTarget != null)
             {
-                if (npcTarget.position.X > projectile.position.X)
+                if (npcTarget.position.X > Projectile.position.X)
                 {
-                    projectile.velocity.X = 1f;
-                    projectile.direction = 1;
-                    projectile.spriteDirection = -1;
+                    Projectile.velocity.X = 1f;
+                    Projectile.direction = 1;
+                    Projectile.spriteDirection = -1;
                 }
-                if (npcTarget.position.X < projectile.position.X)
+                if (npcTarget.position.X < Projectile.position.X)
                 {
-                    projectile.velocity.X = -1f;
-                    projectile.direction = -1;
-                    projectile.spriteDirection = 1;
+                    Projectile.velocity.X = -1f;
+                    Projectile.direction = -1;
+                    Projectile.spriteDirection = 1;
                 }
-                if (WorldGen.SolidTile((int)(projectile.Center.X / 16f) + projectile.direction, (int)(projectile.Center.Y / 16f)) && jumpTimer <= 0)
+                if (WorldGen.SolidTile((int)(Projectile.Center.X / 16f) + Projectile.direction, (int)(Projectile.Center.Y / 16f)) && jumpTimer <= 0)
                 {
                     jumpTimer = 40;
-                    projectile.velocity.Y = -10f;
-                    projectile.netUpdate = true;
+                    Projectile.velocity.Y = -10f;
+                    Projectile.netUpdate = true;
                 }
             }
             else
             {
-                projectile.velocity.X = 0f;
+                Projectile.velocity.X = 0f;
             }
 
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int p = 0; p < Main.maxProjectiles; p++)
                 {
                     Projectile otherProj = Main.projectile[p];
                     Player otherPlayer = Main.player[otherProj.owner];
-                    if (otherProj.active && projectile.Hitbox.Intersects(otherProj.Hitbox))
+                    if (otherProj.active && Projectile.Hitbox.Intersects(otherProj.Hitbox))
                     {
-                        if (projectile.owner != otherProj.owner && player.team != otherPlayer.team && projectile.damage < maxReflection)
+                        if (Projectile.owner != otherProj.owner && player.team != otherPlayer.team && Projectile.damage < maxReflection)
                         {
-                            Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, projectile.width, projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
+                            Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, Projectile.width, Projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
                             if (MyPlayer.Sounds)
                             {
-                                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
+                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
                             }
                             otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " missed his target and hit " + player.name + "'s damage-reflecting frog."), otherProj.damage, 1, true);
                             otherProj.Kill();
-                            projectile.Kill();
+                            Projectile.Kill();
                         }
-                        if (projectile.owner != otherProj.owner && player.team != otherPlayer.team && projectile.damage > maxReflection)
+                        if (Projectile.owner != otherProj.owner && player.team != otherPlayer.team && Projectile.damage > maxReflection)
                         {
                             otherProj.Kill();
-                            projectile.Kill();
+                            Projectile.Kill();
                         }
                     }
                 }
@@ -163,40 +165,40 @@ namespace JoJoStands.Projectiles.Minions
             if (damage > maxReflection)
             {
                 damage = maxReflection;
-                projectile.Kill();
+                Projectile.Kill();
             }
         }
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(SoundID.NPCDeath1, projectile.position);
+            SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.position);
         }
 
         private void SelectFrame()
         {
-            projectile.frameCounter++;
+            Projectile.frameCounter++;
             if (walking)
             {
-                if (projectile.frameCounter >= 8)
+                if (Projectile.frameCounter >= 8)
                 {
-                    projectile.frameCounter = 0;
-                    projectile.frame += 1;
+                    Projectile.frameCounter = 0;
+                    Projectile.frame += 1;
                 }
-                if (projectile.frame >= 10)
+                if (Projectile.frame >= 10)
                 {
-                    projectile.frame = 6;
+                    Projectile.frame = 6;
                 }
             }
             else
             {
-                if (projectile.frameCounter >= 12)
+                if (Projectile.frameCounter >= 12)
                 {
-                    projectile.frameCounter = 0;
-                    projectile.frame += 1;
+                    Projectile.frameCounter = 0;
+                    Projectile.frame += 1;
                 }
-                if (projectile.frame >= 6)
+                if (Projectile.frame >= 6)
                 {
-                    projectile.frame = 0;
+                    Projectile.frame = 0;
                 }
             }
         }

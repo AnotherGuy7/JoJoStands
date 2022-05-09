@@ -6,7 +6,7 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class LifePunch : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Life Punched");
             Description.SetDefault("Your senses are accellarated and your body can't keep up with you!");
@@ -31,9 +31,8 @@ namespace JoJoStands.Buffs.Debuffs
         public override void Update(NPC npc, ref int buffIndex)
         {
             if (Math.Abs(npc.velocity.X) > 0.5f)
-            {
                 npc.velocity.X *= 0.7f;
-            }
+
             if (!appliedChange)
             {
                 npc.defense -= 5;

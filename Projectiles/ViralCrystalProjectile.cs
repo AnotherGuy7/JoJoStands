@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
@@ -7,25 +8,25 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 30;
-            projectile.height = 14;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
-            projectile.friendly = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
+            Projectile.width = 30;
+            Projectile.height = 14;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 300;
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(mod.BuffType("Infected"), 360);
+            target.AddBuff(ModContent.BuffType<Infected>(), 360);
         }
 
         public override void AI()
         {
-            projectile.rotation = projectile.velocity.ToRotation();
+            Projectile.rotation = Projectile.velocity.ToRotation();
             if (Main.rand.Next(1, 101) >= 45)
-                Dust.NewDust(projectile.Center, projectile.width, projectile.height, 204);
+                Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, 204);
         }
     }
 }

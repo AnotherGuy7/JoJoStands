@@ -1,35 +1,33 @@
-using System;
-using Terraria.ID;
-using Terraria;
+using JoJoStands.Projectiles.PlayerStands.KingCrimson;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class PreTimeSkip : ModBuff
     {
         public static int userIndex = -1;
-        public static Vector2[] playerVelocity = new Vector2[255];
+        public static Vector2[] playerVelocity = new Vector2[Main.maxPlayers];
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Skipping Time");
+            DisplayName.SetDefault("Skipping Time");
             Description.SetDefault("Time is skipping");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
- 
+
         public override void Update(Player player, ref int buffIndex)
         {
             userIndex = player.whoAmI;
-            if (player.HasBuff(mod.BuffType("PreTimeSkip")))
+            if (player.HasBuff(ModContent.BuffType<PreTimeSkip>()))
             {
                 for (int i = 0; i < 255; i++)
                 {
                     Player otherPlayer = Main.player[i];
-                    if (otherPlayer.active && !otherPlayer.HasBuff(mod.BuffType("PreTimeSkip")) && !otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
+                    if (otherPlayer.active && !otherPlayer.HasBuff(ModContent.BuffType<PreTimeSkip>()) && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))
                     {
                         playerVelocity[i] = otherPlayer.velocity;
                         otherPlayer.controlUseItem = false;
@@ -48,18 +46,12 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             else
             {
-                if (player.ownedProjectileCounts[mod.ProjectileType("KingCrimsonStandT2")] == 1)
-                {
-                    player.AddBuff(mod.BuffType("SkippingTime"), 180);
-                }
-                else if (player.ownedProjectileCounts[mod.ProjectileType("KingCrimsonStandT3")] == 1)
-                {
-                    player.AddBuff(mod.BuffType("SkippingTime"), 300);
-                }
-                else if (player.ownedProjectileCounts[mod.ProjectileType("KingCrimsonStandFinal")] == 1)
-                {
-                    player.AddBuff(mod.BuffType("SkippingTime"), 600);
-                }
+                if (player.ownedProjectileCounts[ModContent.ProjectileType<KingCrimsonStandT2>()] == 1)
+                    player.AddBuff(ModContent.BuffType<SkippingTime>(), 180);
+                else if (player.ownedProjectileCounts[ModContent.ProjectileType<KingCrimsonStandT3>()] == 1)
+                    player.AddBuff(ModContent.BuffType<SkippingTime>(), 300);
+                else if (player.ownedProjectileCounts[ModContent.ProjectileType<KingCrimsonStandFinal>()] == 1)
+                    player.AddBuff(ModContent.BuffType<SkippingTime>(), 600);
                 player.GetModPlayer<MyPlayer>().timeskipPreEffect = false;
             }
         }

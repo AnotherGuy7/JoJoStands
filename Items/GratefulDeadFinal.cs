@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -13,7 +15,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/GratefulDeadT1"; }
+            get { return Mod.Name + "/Items/GratefulDeadT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -24,13 +26,13 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 90;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 90;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -41,22 +43,21 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("GratefulDeadT3"));
-            recipe.AddIngredient(ItemID.ShroomiteBar, 14);
-            recipe.AddIngredient(ItemID.Ichor, 20);
-            recipe.AddIngredient(mod.ItemType("DeterminedLifeForce"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("GratefulDeadT3"));
-            recipe.AddIngredient(ItemID.ShroomiteBar, 14);
-            recipe.AddIngredient(ItemID.CursedFlame, 20);
-            recipe.AddIngredient(mod.ItemType("DeterminedLifeForce"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<GratefulDeadT3>())
+                .AddIngredient(ItemID.ShroomiteBar, 14)
+                .AddIngredient(ItemID.Ichor, 20)
+                .AddIngredient(ModContent.ItemType<DeterminedLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<GratefulDeadT3>())
+                .AddIngredient(ItemID.ShroomiteBar, 14)
+                .AddIngredient(ItemID.CursedFlame, 20)
+                .AddIngredient(ModContent.ItemType<DeterminedLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

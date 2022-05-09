@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ObjectData;
 
 namespace JoJoStands.Tiles
@@ -30,7 +31,7 @@ namespace JoJoStands.Tiles
 			TileObjectData.addTile(Type);
 
 			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Tarot Table");
+			name.SetDefault("Tarot Table>());
 			AddMapEntry(Color.Brown, name);
 		}
 
@@ -52,13 +53,13 @@ namespace JoJoStands.Tiles
 		public override bool NewRightClick(int i, int j)
 		{
 			Player player = Main.player[Main.myPlayer];
-			player.AddBuff(mod.BuffType("StrongWill"), 300 * 60);
+			player.AddBuff(ModContent.BuffType<StrongWill>()), 300 * 60);
 			return true;
 		}
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 4, 4, mod.ItemType("TarotTable"));
+			Item.NewItem(i * 16, j * 16, 4, 4, ModContent.ItemType<TarotTable>()));
 		}
 	}
 }

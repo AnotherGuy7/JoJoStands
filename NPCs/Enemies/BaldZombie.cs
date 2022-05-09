@@ -2,7 +2,9 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.Audio;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -36,8 +38,8 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void AI()
         {
-            npc.AddBuff(mod.BuffType("Vampire"), 2);
-            if (npc.HasBuff(mod.BuffType("Sunburn")))
+            npc.AddBuff(ModContent.BuffType<Vampire>(), 2);
+            if (npc.HasBuff(ModContent.BuffType<Sunburn>()))
             {
                 npc.defense = 0;
                 npc.damage = 0;
@@ -67,7 +69,7 @@ namespace JoJoStands.NPCs.Enemies
 
             if (Main.rand.Next(0, 251) <= 2)
             {
-                Main.PlaySound(14, (int)npc.position.X, (int)npc.position.Y, 1, Main.soundVolume, -0.8f);
+                SoundEngine.PlaySound(14, (int)npc.position.X, (int)npc.position.Y, 1, Main.soundVolume, -0.8f);
             }
 
             float targetDistance = 0f;

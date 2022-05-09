@@ -1,4 +1,6 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/WhitesnakeT1"; }
+            get { return Mod.Name + "/Items/WhitesnakeT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -24,39 +26,38 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 69;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 69;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("WhitesnakeT2"));
-            recipe.AddIngredient(ItemID.SoulofNight, 14);
-            recipe.AddIngredient(ItemID.SoulofLight, 3);
-            recipe.AddIngredient(ItemID.Diamond, 2);
-            recipe.AddIngredient(ItemID.CursedFlame, 3);
-            recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("WhitesnakeT2"));
-            recipe.AddIngredient(ItemID.SoulofNight, 14);
-            recipe.AddIngredient(ItemID.SoulofLight, 3);
-            recipe.AddIngredient(ItemID.Diamond, 2);
-            recipe.AddIngredient(ItemID.Ichor, 3);
-            recipe.AddIngredient(mod.ItemType("WillToControl"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<WhitesnakeT2>())
+                .AddIngredient(ItemID.SoulofNight, 14)
+                .AddIngredient(ItemID.SoulofLight, 3)
+                .AddIngredient(ItemID.Diamond, 2)
+                .AddIngredient(ItemID.CursedFlame, 3)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToDestroy>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<WhitesnakeT2>())
+                .AddIngredient(ItemID.SoulofNight, 14)
+                .AddIngredient(ItemID.SoulofLight, 3)
+                .AddIngredient(ItemID.Diamond, 2)
+                .AddIngredient(ItemID.Ichor, 3)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToDestroy>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.UI;
 
 namespace JoJoStands.UI
@@ -61,10 +62,10 @@ namespace JoJoStands.UI
             abilityWheel.BorderColor = Color.Transparent;
             abilityWheel.OnScrollWheel += MouseScroll;
 
-            wheelCenter = new AdjustableButton(ModContent.GetTexture("JoJoStands/UI/AbilityWheel/WheelCenter"), Vector2.Zero, new Vector2(54f), Color.White, 1f, 1f);
+            wheelCenter = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelCenter"), Vector2.Zero, new Vector2(54f), Color.White, 1f, 1f);
             wheelCenter.SetButtonPosiiton(new Vector2(60f));
             wheelCenter.SetButtonSize(new Vector2(54f));
-            wheelCenter.SetOverlayImage(ModContent.GetTexture(centerTexturePath), 0.15f);
+            wheelCenter.SetOverlayImage(ModContent.Request<Texture2D>(centerTexturePath), 0.15f);
             wheelCenter.owner = abilityWheel;
             wheelCenter.respondToFocus = false;
             abilityWheel.Append(wheelCenter);
@@ -72,8 +73,8 @@ namespace JoJoStands.UI
             abilityButtons = new AdjustableButton[amountOfAbilities];
             for (int i = 0; i < amountOfAbilities; i++)
             {
-                abilityButtons[i] = new AdjustableButton(ModContent.GetTexture("JoJoStands/UI/AbilityWheel/WheelPiece"), wheelCenter.buttonCenter + (IndexToRadianPosition(i, 6) * wheelSpace), new Vector2(38f), Color.White, 1f, 1f);
-                abilityButtons[i].SetOverlayImage(ModContent.GetTexture(buttonTexturePath + abilityTextureNames[i]), 0.15f);
+                abilityButtons[i] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelPiece"), wheelCenter.buttonCenter + (IndexToRadianPosition(i, 6) * wheelSpace), new Vector2(38f), Color.White, 1f, 1f);
+                abilityButtons[i].SetOverlayImage(ModContent.Request<Texture2D>(buttonTexturePath + abilityTextureNames[i]), 0.15f);
                 abilityButtons[i].OnClick += ClickedAbility;
                 abilityButtons[i].OnScrollWheel += MouseScroll;
                 //abilityButtons[i].owner = abilityWheel;

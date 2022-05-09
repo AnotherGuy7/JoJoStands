@@ -1,6 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using JoJoStands.NPCs;
 
 namespace JoJoStands.Items.Armor.StandArmors.Phantom
@@ -12,22 +13,22 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Phantom Hood (Short-Ranged)");
-            Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.\n+18% Stand Damage\n+1 Stand Speed");
+            DisplayName.SetDefault("Phantom Hood (Short-Ranged)>());
+            Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.\n+18% Stand Damage\n+1 Stand Speed>());
         }
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 3, 0, 0);
-            item.rare = ItemRarityID.Yellow;
-            item.defense = 24;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 3, 0, 0);
+            Item.rare = ItemRarityID.Yellow;
+            Item.defense = 24;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("PhantomChestplate") && legs.type == mod.ItemType("PhantomLeggings");
+            return body.type == ModContent.ItemType<PhantomChestplate>()) && legs.type == ModContent.ItemType<PhantomLeggings>());
         }
 
         public override void UpdateArmorSet(Player player)
@@ -43,10 +44,10 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
                     NPC npc = Main.npc[n];
                     if (npc.active)
                     {
-                        JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>();
+                        JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>());
                         if (npc.lifeMax > 5 && !npc.friendly && !jojoNPC.taggedWithPhantomMarker)
                         {
-                            Projectile.NewProjectile(npc.position, npc.velocity, mod.ProjectileType("PhantomMarker"), 0, 0f, Main.myPlayer, npc.whoAmI);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, npc.velocity, ModContent.ProjectileType<PhantomMarker>()), 0, 0f, Main.myPlayer, npc.whoAmI);
                             jojoNPC.taggedWithPhantomMarker = true;
                         }
                     }
@@ -58,20 +59,20 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
         public override void UpdateEquip(Player player)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             mPlayer.phantomHoodShortEquipped = false;
             mPlayer.standCritChangeBoosts += 10f;
             mPlayer.standSpeedBoosts += 1;
 
             if (mPlayer.standType == 0)
             {
-                item.type = mod.ItemType("PhantomHoodNeutral");
-                item.SetDefaults(mod.ItemType("PhantomHoodNeutral"));
+                Item.type = ModContent.ItemType<PhantomHoodNeutral>());
+                Item.SetDefaults(ModContent.ItemType<PhantomHoodNeutral>()));
             }
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("PhantomHoodLong");
-                item.SetDefaults(mod.ItemType("PhantomHoodLong"));
+                Item.type = ModContent.ItemType<PhantomHoodLong>());
+                Item.SetDefaults(ModContent.ItemType<PhantomHoodLong>()));
             }
         }
     }

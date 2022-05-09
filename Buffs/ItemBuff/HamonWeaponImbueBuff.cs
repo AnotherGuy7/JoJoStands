@@ -5,7 +5,7 @@ namespace JoJoStands.Buffs.ItemBuff
 {
     public class HamonWeaponImbueBuff : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hamon Weapon Imbue");
             Description.SetDefault("You're injecting Hamon into your weapons.");

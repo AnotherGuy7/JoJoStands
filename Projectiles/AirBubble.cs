@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
@@ -11,39 +12,39 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 14;
-            projectile.height = 14;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 14;
+            Projectile.height = 14;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 300;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         public override void AI()
         {
-            if (projectile.ai[0] == 0f)
+            if (Projectile.ai[0] == 0f)
             {
-                projectile.alpha += 6;
+                Projectile.alpha += 6;
             }
-            if (projectile.ai[0] == 1f)
+            if (Projectile.ai[0] == 1f)
             {
-                projectile.alpha -= 6;
+                Projectile.alpha -= 6;
             }
-            if (projectile.alpha >= 255)
+            if (Projectile.alpha >= 255)
             {
-                projectile.ai[0] = 1f;
+                Projectile.ai[0] = 1f;
             }
-            if (projectile.alpha <= 0)
+            if (Projectile.alpha <= 0)
             {
-                projectile.ai[0] = 0f;
+                Projectile.ai[0] = 0f;
             }
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            projectile.Kill();
+            Projectile.Kill();
         }
     }
 }

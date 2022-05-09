@@ -1,7 +1,9 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
@@ -9,18 +11,18 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(10, 8));
+            Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 8));
             Tooltip.SetDefault("An amulet that perfectly represents and enchances the form of the soul.\n30% increased Stand attack damage\n2 increased Stand Speed\n20% Stand Ability cooldown reduction\n30% increased Stand crit chance\nMakes melee stands inflict Infected on enemies.\nIncreased defense while the Stand is out");
         }
 
         public override void SetDefaults()
         {
-            item.width = 16;
-            item.height = 16;
-            item.maxStack = 1;
-            item.value = Item.buyPrice(1, 0, 0, 0);
-            item.rare = ItemRarityID.Red;
-            item.accessory = true;
+            Item.width = 16;
+            Item.height = 16;
+            Item.maxStack = 1;
+            Item.value = Item.buyPrice(1, 0, 0, 0);
+            Item.rare = ItemRarityID.Red;
+            Item.accessory = true;
         }
 
         public override void UpdateEquip(Player player)
@@ -32,31 +34,27 @@ namespace JoJoStands.Items.Accessories
             mPlayer.standCritChangeBoosts += 30f;
             mPlayer.awakenedAmuletEquipped = true;
             if (mPlayer.standOut)
-            {
                 player.statDefense += 12;
-            }
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("GoldAmuletOfManipulation"));
-            recipe.AddIngredient(mod.ItemType("GoldAmuletOfServing"));
-            recipe.AddIngredient(mod.ItemType("GoldAmuletOfAdapting"));
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 5);
-            recipe.AddRecipeGroup(RecipeGroupID.Fragment, 5);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("PlatinumAmuletOfManipulation"));
-            recipe.AddIngredient(mod.ItemType("PlatinumAmuletOfServing"));
-            recipe.AddIngredient(mod.ItemType("PlatinumAmuletOfAdapting"));
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 5);
-            recipe.AddRecipeGroup(RecipeGroupID.Fragment, 5);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<GoldAmuletOfManipulation>())
+                .AddIngredient(ModContent.ItemType<GoldAmuletOfServing>())
+                .AddIngredient(ModContent.ItemType<GoldAmuletOfAdapting>())
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 5)
+                .AddRecipeGroup(RecipeGroupID.Fragment, 5)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<PlatinumAmuletOfManipulation>())
+                .AddIngredient(ModContent.ItemType<PlatinumAmuletOfServing>())
+                .AddIngredient(ModContent.ItemType<PlatinumAmuletOfAdapting>())
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 5)
+                .AddRecipeGroup(RecipeGroupID.Fragment, 5)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

@@ -8,8 +8,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
     {
         public override void SetStaticDefaults()
         {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 11;
+            Main.projPet[Projectile.type] = true;
+            Main.projFrames[Projectile.type] = 11;
         }
 
         public override int punchDamage => 35;
@@ -25,67 +25,67 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             SelectAnimation();
             UpdateStandInfo();
             updateTimer = 0;
             if (shootCount > 0)
                 shootCount--;
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
                     normalFrames = false;
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
 
-                    float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
-                    projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
+                    float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
+                    Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
 
-                    projectile.direction = 1;
-                    if (Main.MouseWorld.X < projectile.position.X)
+                    Projectile.direction = 1;
+                    if (Main.MouseWorld.X < Projectile.position.X)
                     {
-                        projectile.direction = -1;
+                        Projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
+                    Projectile.spriteDirection = Projectile.direction;
 
-                    velocityAddition = Main.MouseWorld - projectile.position;
+                    velocityAddition = Main.MouseWorld - Projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f;
 
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
                     {
-                        projectile.velocity = player.velocity + velocityAddition;
+                        Projectile.velocity = player.velocity + velocityAddition;
                     }
                     if (mouseDistance <= 40f)
                     {
-                        projectile.velocity = Vector2.Zero;
+                        Projectile.velocity = Vector2.Zero;
                     }
-                    if (shootCount <= 0 && projectile.frame == 2)
+                    if (shootCount <= 0 && Projectile.frame == 2)
                     {
                         shootCount += newPunchTime;
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner, fistWhoAmI);
                         Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                     }
                     LimitDistance();
                 }
@@ -110,18 +110,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
 
             }
         }
@@ -129,17 +129,17 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/Cream/Cream_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/Cream/Cream_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 4, 30, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>()
             {
                 AnimateStand(animationName, 1, 2, true);
             }

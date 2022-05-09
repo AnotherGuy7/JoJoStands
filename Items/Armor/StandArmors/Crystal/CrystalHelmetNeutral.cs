@@ -1,5 +1,5 @@
-﻿using Terraria.ID;
-using Terraria;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
@@ -16,11 +16,11 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 2, 0, 0);
-            item.rare = ItemRarityID.LightPurple;
-            item.defense = 6;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.rare = ItemRarityID.LightPurple;
+            Item.defense = 6;
         }
 
         public override void UpdateEquip(Player player)
@@ -29,24 +29,23 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
 
             if (mPlayer.standType == 1)
             {
-                item.type = mod.ItemType("CrystalHelmetShort");
-                item.SetDefaults(mod.ItemType("CrystalHelmetShort"));
+                Item.type = ModContent.ItemType<CrystalHelmetShort>();
+                Item.SetDefaults(ModContent.ItemType<CrystalHelmetShort>());
             }
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("CrystalHelmetLong");
-                item.SetDefaults(mod.ItemType("CrystalHelmetLong"));
+                Item.type = ModContent.ItemType<CrystalHelmetLong>();
+                Item.SetDefaults(ModContent.ItemType<CrystalHelmetLong>());
             }
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.CrystalShard, 10);
-            recipe.AddIngredient(ItemID.Silk, 5);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.CrystalShard, 10)
+                .AddIngredient(ItemID.Silk, 5)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

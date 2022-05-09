@@ -1,5 +1,4 @@
-﻿using JoJoStands.Items.Vampire;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -16,11 +15,11 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Visceral
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 18;
-            item.value = Item.buyPrice(silver: 80);
-            item.rare = ItemRarityID.Orange;
-            item.defense = 7;
+            Item.width = 22;
+            Item.height = 18;
+            Item.value = Item.buyPrice(silver: 80);
+            Item.rare = ItemRarityID.Orange;
+            Item.defense = 7;
         }
 
         public override void UpdateEquip(Player player)
@@ -30,13 +29,12 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Visceral
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.CrimtaneBar, 14);
-            recipe.AddIngredient(ItemID.Vertebrae, 24);
-            recipe.AddIngredient(ItemID.TissueSample, 10);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.CrimtaneBar, 14)
+                .AddIngredient(ItemID.Vertebrae, 24)
+                .AddIngredient(ItemID.TissueSample, 10)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

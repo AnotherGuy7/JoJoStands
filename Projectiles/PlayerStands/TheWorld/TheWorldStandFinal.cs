@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 {
@@ -31,25 +31,25 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
-            if (SpecialKeyPressed() && !player.HasBuff(mod.BuffType("TheWorldBuff")) && timestopStartDelay <= 0)
+            if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>())) && timestopStartDelay <= 0)
             {
                 if (JoJoStands.JoJoStandsSounds == null)
                     timestopStartDelay = 120;
                 else
                 {
-                    Terraria.Audio.LegacySoundStyle zawarudo = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/TheWorld");
+                    Terraria.Audio.LegacySoundStyle zawarudo = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/TheWorld>());
                     zawarudo.WithVolume(MyPlayer.ModSoundsVolume);
-                    Main.PlaySound(zawarudo, projectile.position);
+                    SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
                 }
             }
@@ -80,7 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
                 {
                     Punch();
                 }
@@ -94,31 +94,31 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     if (!secondaryAbilityFrames)
                     {
                         StayBehind();
-                        projectile.direction = projectile.spriteDirection = player.direction;
+                        Projectile.direction = Projectile.spriteDirection = player.direction;
                     }
                     else
                     {
                         GoInFront();
-                        projectile.direction = 1;
-                        if (Main.MouseWorld.X < projectile.position.X)
+                        Projectile.direction = 1;
+                        if (Main.MouseWorld.X < Projectile.position.X)
                         {
-                            projectile.direction = -1;
+                            Projectile.direction = -1;
                         }
-                        projectile.spriteDirection = projectile.direction;
+                        Projectile.spriteDirection = Projectile.direction;
                     }
                     secondaryAbilityFrames = false;
                 }
-                if (Main.mouseRight && player.HasItem(mod.ItemType("Knife")) && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && player.HasItem(ModContent.ItemType<Knife>())) && Projectile.owner == Main.myPlayer)
                 {
                     normalFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
-                    if (shootCount <= 0 && projectile.frame == 1)
+                    if (shootCount <= 0 && Projectile.frame == 1)
                     {
                         shootCount += 13;       // has to be half if the framecounter + 1 (2 if shootCount goes to -1)
                         float numberOfKnives = 4;
                         float knivesAngleSpread = MathHelper.ToRadians(15f);
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
@@ -127,34 +127,34 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         shootVel *= 100f;
                         for (int i = 0; i < numberOfKnives; i++)
                         {
-                            Vector2 shootPosition = projectile.position + new Vector2(5f, -3f);
+                            Vector2 shootPosition = Projectile.position + new Vector2(5f, -3f);
                             Vector2 perturbedSpeed = new Vector2(shootVel.X, shootVel.Y).RotatedBy(MathHelper.Lerp(-knivesAngleSpread, knivesAngleSpread, i / (numberOfKnives - 1))) * .2f;
-                            int proj = Projectile.NewProjectile(shootPosition, perturbedSpeed, mod.ProjectileType("Knife"), (int)(altDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<Knife>()), (int)(altDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
                             Main.projectile[proj].netUpdate = true;
-                            player.ConsumeItem(mod.ItemType("Knife"));
-                            projectile.netUpdate = true;
+                            player.ConsumeItem(ModContent.ItemType<Knife>()));
+                            Projectile.netUpdate = true;
                         }
                     }
                 }
-                if (SpecialKeyPressed() && player.HasBuff(mod.BuffType("TheWorldBuff")) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[mod.ProjectileType("RoadRoller")] == 0)
+                if (SpecialKeyPressed() && player.HasBuff(ModContent.BuffType<TheWorldBuff>())) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<RoadRoller>())] == 0)
                 {
                     if (JoJoStands.SoundsLoaded)
                     {
-                        Main.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/RoadRollerDa"));
+                        SoundEngine.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/RoadRollerDa>()));
                     }
                     shootCount += 12;
-                    Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
                     {
                         shootVel = new Vector2(0f, 1f);
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed + 4f;
-                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("RoadRoller"), 512, 12f, player.whoAmI);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RoadRoller>()), 512, 12f, player.whoAmI);
                     Main.projectile[proj].netUpdate = true;
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                 }
-                if (SecondSpecialKeyPressed() && player.HasItem(mod.ItemType("Knife")) && player.CountItem(mod.ItemType("Knife")) >= 75 && projectile.owner == Main.myPlayer)
+                if (SecondSpecialKeyPressed() && player.HasItem(ModContent.ItemType<Knife>())) && player.CountItem(ModContent.ItemType<Knife>())) >= 75 && Projectile.owner == Main.myPlayer)
                 {
                     NPC target = null;
 
@@ -180,7 +180,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         Vector2 velocity = target.position - position;
                         velocity.Normalize();
                         velocity *= 8f;
-                        Projectile.NewProjectile(position, velocity, mod.ProjectileType("Knife"), (int)(altDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<Knife>()), (int)(altDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
                     }
 
                     int secondRingKnives = 50;
@@ -192,21 +192,21 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         Vector2 velocity = target.position - position;
                         velocity.Normalize();
                         velocity *= 8f;
-                        Projectile.NewProjectile(position, velocity, mod.ProjectileType("Knife"), (int)(altDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<Knife>()), (int)(altDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
                     }
 
                     for (int i = 0; i < firstRingKnives + secondRingKnives; i++)
                     {
-                        player.ConsumeItem(mod.ItemType("Knife"));
+                        player.ConsumeItem(ModContent.ItemType<Knife>()));
                     }
 
                     mPlayer.poseMode = true;
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(15));
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>()), mPlayer.AbilityCooldownTime(15));
                 }
             }
             if (mPlayer.standAutoMode)
             {
-                PunchAndShootAI(mod.ProjectileType("Knife"), mod.ItemType("Knife"), true);
+                PunchAndShootAI(ModContent.ProjectileType("Knife>()), ModContent.ItemType<Knife>()), true);
             }
         }
 
@@ -225,57 +225,57 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>());
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>());
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary");
+                PlayAnimation("Secondary>());
             }
             if (abilityPose)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                PlayAnimation("AbilityPose");
+                PlayAnimation("AbilityPose>());
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>());
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>())
             {
                 AnimateStand(animationName, 2, 30, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>())
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Secondary")
+            if (animationName == "Secondary>())
             {
                 AnimateStand(animationName, 2, 24, true);
             }
-            if (animationName == "AbilityPose")
+            if (animationName == "AbilityPose>())
             {
                 AnimateStand(animationName, 1, 10, true);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>())
             {
                 AnimateStand(animationName, 1, 10, true);
             }

@@ -1,26 +1,25 @@
 using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Buffs.Debuffs
 {
     public class Sunburn : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Sunburn");
+            DisplayName.SetDefault("Sunburn");
             Description.SetDefault("You're burning in the sunlight!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }
- 
+
         public override void Update(Player player, ref int buffIndex)
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (player.lifeRegen > 0)
-            {
                 player.lifeRegen = 0;
-            }
+
             player.lifeRegenTime = (int)(60 * vPlayer.sunburnRegenTimeMultiplier);
             player.lifeRegen -= (int)(60 * vPlayer.sunburnDamageMultiplier);
             player.moveSpeed *= vPlayer.sunburnMoveSpeedMultiplier;
@@ -32,9 +31,8 @@ namespace JoJoStands.Buffs.Debuffs
         public override void Update(NPC npc, ref int buffIndex)
         {
             if (npc.lifeRegen > 0)
-            {
                 npc.lifeRegen = 0;
-            }
+
             npc.lifeRegenExpectedLossPerSecond = 30;
             npc.lifeRegen -= 60;     //losing 30 health
             if (Main.rand.Next(0, 2) == 0)

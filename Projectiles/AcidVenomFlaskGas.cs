@@ -1,3 +1,4 @@
+using JoJoStands.Buffs.AccessoryBuff;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -9,13 +10,13 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.damage = 7;
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-            projectile.friendly = false;
-            projectile.hostile = true;
+            Projectile.damage = 7;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
         }
 
         private int randomrotation = 0;
@@ -26,29 +27,23 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             if (Main.expertMode)
-            {
                 expertboost = 2;
-            }
+
+            if (randomrotation == 0)
+                randomrotation = Main.rand.Next(-5, 5);
+
             if (nodamage > 0)
             {
                 nodamage--;
-                projectile.damage = 0;
+                Projectile.damage = 0;
             }
             else
-            {
-                projectile.damage = 7 * expertboost;
-            }
+                Projectile.damage = 7 * expertboost;
 
-            if (randomrotation == 0)
-            {
-                randomrotation = Main.rand.Next(-5, 5);
-            }
-            projectile.rotation += MathHelper.ToRadians(randomrotation * 1f);
-            projectile.alpha += 1;
-            if (projectile.alpha >= 255)
-            {
-                projectile.Kill();
-            }
+            Projectile.rotation += MathHelper.ToRadians(randomrotation * 1f);
+            Projectile.alpha += 1;
+            if (Projectile.alpha >= 255)
+                Projectile.Kill();
         }
 
         public override bool? CanHitNPC(NPC target)
@@ -58,7 +53,7 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (target.HasBuff(mod.BuffType("Vampire")))
+            if (target.HasBuff(ModContent.BuffType<Vampire>()))
             {
                 if (target.life < target.lifeMax)
                 {
@@ -72,6 +67,7 @@ namespace JoJoStands.Projectiles
             }
             target.AddBuff(BuffID.Venom, 180);
         }
+
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             target.AddBuff(BuffID.Venom, 180);

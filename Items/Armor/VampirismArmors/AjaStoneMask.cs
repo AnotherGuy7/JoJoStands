@@ -1,6 +1,9 @@
+using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Items.Accessories;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.VampirismArmors
@@ -15,27 +18,25 @@ namespace JoJoStands.Items.Armor.VampirismArmors
 
         public override void SetDefaults()
         {
-            item.width = 18;
-            item.height = 18;
-            item.value = Item.buyPrice(2, 50, 0, 0);
-            item.rare = 10;
-            item.defense = 20;
+            Item.width = 18;
+            Item.height = 18;
+            Item.value = Item.buyPrice(2, 50, 0, 0);
+            Item.rare = 10;
+            Item.defense = 20;
         }
 
         public override void UpdateEquip(Player player)
         {
             Lighting.AddLight(player.Center, 1f, 0f, 0f);
-            player.AddBuff(mod.BuffType("AjaVampire"), 2);
+            player.AddBuff(BuffType<AjaVampire>(), 2);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StoneMask"));
-            recipe.AddIngredient(mod.ItemType("AjaStone"));
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<StoneMask>())
+                .AddIngredient(ModContent.ItemType<AjaStone>())
+                .AddTile(TileID.MythrilAnvil);
         }
     }
 }

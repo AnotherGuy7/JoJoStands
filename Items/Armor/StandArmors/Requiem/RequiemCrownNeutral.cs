@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Items.CraftingMaterials;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,22 +17,22 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 15, 0, 0);
-            item.rare = ItemRarityID.Red;
-            item.defense = 10;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 15, 0, 0);
+            Item.rare = ItemRarityID.Red;
+            Item.defense = 10;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("RequiemChestplate") && legs.type == mod.ItemType("RequiemGreaves");
+            return body.type == ModContent.ItemType<RequiemChestplate>() && legs.type == ModContent.ItemType<RequiemGreaves>();
         }
 
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Viral Beetles float around you, defending you from anything that comes your way.";
-            player.AddBuff(mod.BuffType("ViralBeetleBuff"), 2);
+            player.AddBuff(ModContent.BuffType<ViralBeetleBuff>(), 2);
         }
 
         public override void UpdateEquip(Player player)
@@ -39,24 +41,23 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
 
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("RequiemCrownLong");
-                item.SetDefaults(mod.ItemType("RequiemCrownLong"));
+                Item.type = ModContent.ItemType<RequiemCrownLong>();
+                Item.SetDefaults(ModContent.ItemType<RequiemCrownLong>());
             }
             if (mPlayer.standType == 1)
             {
-                item.type = mod.ItemType("RequiemCrownShort");
-                item.SetDefaults(mod.ItemType("RequiemCrownShort"));
+                Item.type = ModContent.ItemType<RequiemCrownShort>();
+                Item.SetDefaults(ModContent.ItemType<RequiemCrownShort>());
             }
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LunarBar, 17);
-            recipe.AddIngredient(ItemID.FragmentStardust, 6);
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 6);
-            recipe.AddTile(TileID.LunarCraftingStation);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.LunarBar, 17)
+                .AddIngredient(ItemID.FragmentStardust, 6)
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 6)
+                .AddTile(TileID.LunarCraftingStation)
+                .Register();
         }
     }
 }

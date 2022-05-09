@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Accessories
 {
@@ -16,12 +17,12 @@ namespace JoJoStands.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 30;
-            item.maxStack = 1;
-            item.value = Item.buyPrice(gold: 2, silver: 25);
-            item.rare = ItemRarityID.LightPurple;
-            item.accessory = true;
+            Item.width = 32;
+            Item.height = 30;
+            Item.maxStack = 1;
+            Item.value = Item.buyPrice(gold: 2, silver: 25);
+            Item.rare = ItemRarityID.LightPurple;
+            Item.accessory = true;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

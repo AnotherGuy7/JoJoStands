@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
@@ -9,63 +10,63 @@ namespace JoJoStands.Projectiles
     {
         public override string Texture
         {
-            get { return mod.Name + "/Projectiles/ControllableNail"; }
+            get { return Mod.Name + "/Projectiles/ControllableNail"; }
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
-            projectile.friendly = true;
-            projectile.aiStyle = 0;
-            projectile.tileCollide = false;
-            projectile.penetrate = -1;
-            projectile.ownerHitCheck = true;
-            projectile.friendly = true;
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.friendly = true;
+            Projectile.aiStyle = 0;
+            Projectile.tileCollide = false;
+            Projectile.penetrate = -1;
+            Projectile.ownerHitCheck = true;
+            Projectile.friendly = true;
         }
 
         private const float DistanceFromPlayer = 2f * 16f;
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
 
             Vector2 direction = Vector2.Zero;
-            if (projectile.owner == Main.myPlayer)
+            if (Projectile.owner == Main.myPlayer)
             {
                 if (Main.mouseRight)
                 {
                     direction = Main.MouseWorld - player.Center;        //Cause it has to be found client side
                     direction.Normalize();
                     Vector2 pos = player.Center + (direction * DistanceFromPlayer);
-                    if (projectile.Center != pos)
+                    if (Projectile.Center != pos)
                     {
-                        projectile.direction = 1;
-                        if (projectile.Center.X < player.Center.X)
+                        Projectile.direction = 1;
+                        if (Projectile.Center.X < player.Center.X)
                         {
-                            projectile.direction = -1;
+                            Projectile.direction = -1;
                         }
-                        player.ChangeDir(projectile.direction);
-                        projectile.netUpdate = true;
+                        player.ChangeDir(Projectile.direction);
+                        Projectile.netUpdate = true;
                     }
-                    projectile.Center = pos;
+                    Projectile.Center = pos;
                 }
                 else
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                 }
             }
 
-            projectile.timeLeft = 2;
-            projectile.spriteDirection = projectile.direction;
+            Projectile.timeLeft = 2;
+            Projectile.spriteDirection = Projectile.direction;
 
-            //player.heldProj = projectile.whoAmI;
+            //player.heldProj = Projectile.whoAmI;
             //player.itemTime = 2;
             //player.itemAnimation = 2;
-            //player.itemRotation = (float)Math.Atan2(direction.Y * projectile.direction, direction.X * projectile.direction);      //Gives an index OOB error when there's no item
-            projectile.rotation += player.direction * 0.8f;
+            //player.itemRotation = (float)Math.Atan2(direction.Y * Projectile.direction, direction.X * Projectile.direction);      //Gives an index OOB error when there's no Item
+            Projectile.rotation += player.direction * 0.8f;
 
-            int dustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 202, projectile.velocity.X * -0.3f, projectile.velocity.Y * -0.3f);
+            int dustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 202, Projectile.velocity.X * -0.3f, Projectile.velocity.Y * -0.3f);
             Main.dust[dustIndex].noGravity = true;
         }
     }

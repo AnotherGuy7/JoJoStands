@@ -4,6 +4,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items
 {
@@ -14,43 +15,43 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Test Stand");
-			Tooltip.SetDefault("A faceless stand with unknown abilities...");
+			DisplayName.SetDefault("Test Stand>();
+			Tooltip.SetDefault("A faceless stand with unknown abilities...>();
 		}
 
         public override void SetDefaults()
         {
-            item.damage = 70;
-            item.width = 32;
-            item.height = 32;
-            item.useTime = 12;
-            item.useAnimation = 12;
-            item.useStyle = 5;
-            item.maxStack = 1;
-            item.knockBack = 2f;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = 6;
+            Item.damage = 70;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTime = 12;
+            Item.useAnimation = 12;
+            Item.useStyle = 5;
+            Item.maxStack = 1;
+            Item.knockBack = 2f;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = 6;
         }
 
         /*public override void HoldItem(Player player)
         {
-            if (player.name == "Mod Test Shadow")
+            if (player.name == "Mod Test Shadow>()
             {
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
                 if (player.whoAmI == Main.myPlayer)
                 {
-                    if (player.ownedProjectileCounts[mod.ProjectileType("TestStand")] <= 0 && !mPlayer.StandOut)
+                    if (player.ownedProjectileCounts[ModContent.ProjectileType<TestStand>()] <= 0 && !mPlayer.StandOut)
                     {
-                        Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TestStand"), 0, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<TestStand>(), 0, 0f, Main.myPlayer);
                     }
                 }
             }
         }*/
 
-        /*public override bool UseItem(Player player)
+        /*public override bool? UseItem(Player player)
         {
-            if (player.name != "Mod Test Shadow")
+            if (player.name != "Mod Test Shadow>()
             {
                 Main.NewText("You are not worthy.", Color.Red);
             }
@@ -61,7 +62,7 @@ namespace JoJoStands.Items
         {
             if (MyPlayer.testStandUnlocked)
             {
-                Projectile.NewProjectile(player.position, player.velocity, mod.ProjectileType("TestStand"), 0, 0f, Main.myPlayer);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<TestStand>(), 0, 0f, Main.myPlayer);
             }
             else
             {
@@ -70,7 +71,7 @@ namespace JoJoStands.Items
                 {
                     Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
                 }
-                player.GetModPlayer<MyPlayer>().standOut = false;
+                player.GetModPlayer<MyPlayer>()).standOut = false;
             }
             return true;
         }

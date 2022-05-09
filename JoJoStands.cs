@@ -1,3 +1,4 @@
+using JoJoStands.Items;
 using JoJoStands.Networking;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
@@ -10,7 +11,19 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.UI;
+using JoJoStands.Items.Seasonal;
+using Microsoft.Xna.Framework.Input;
+using JoJoStands.Projectiles.PlayerStands.TheWorld;
+using JoJoStands.Projectiles.PlayerStands.StarPlatinum;
+using JoJoStands.Projectiles;
+using JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem;
+using JoJoStands.Projectiles.PlayerStands.Tusk;
+using JoJoStands.Projectiles.PlayerStands.TestStand;
+using JoJoStands.Items.Tiles;
+using JoJoStands.Tiles;
+using JoJoStands.Items.CraftingMaterials;
 
 namespace JoJoStands
 {
@@ -20,7 +33,7 @@ namespace JoJoStands
         public static bool FanStandsLoaded = false;
         public static Mod JoJoStandsSounds;
 
-        internal static JoJoStands Instance => ModContent.GetInstance<JoJoStands>();        //internal so that it's only usable inside this specific project
+        internal static JoJoStands Instance => GetInstance<JoJoStands>();        //internal so that it's only usable inside this specific project
         internal static CustomizableOptions customizableConfig;
 
         internal ToBeContinued TBCarrow;
@@ -53,11 +66,11 @@ namespace JoJoStands
         private UserInterface _goldExperienceAbilityWheelUI;
         private UserInterface _goldExperienceRequiemAbilityWheelUI;
 
-        public static ModHotKey SpecialHotKey;
-        public static ModHotKey SecondSpecialHotKey;
-        public static ModHotKey StandOutHotKey;
-        public static ModHotKey StandAutoModeHotKey;
-        public static ModHotKey PoseHotKey;
+        public static ModKeybind SpecialHotKey;
+        public static ModKeybind SecondSpecialHotKey;
+        public static ModKeybind StandOutHotKey;
+        public static ModKeybind StandAutoModeHotKey;
+        public static ModKeybind PoseHotKey;
 
         public static List<int> timestopImmune = new List<int>();
         public static List<int> standTier1List = new List<int>();
@@ -70,63 +83,64 @@ namespace JoJoStands
             SoundsLoaded = JoJoStandsSounds != null;
             FanStandsLoaded = ModLoader.GetMod("JoJoFanStands") != null;
 
-            HamonBarState.hamonBarTexture = ModContent.GetTexture("JoJoStands/UI/HamonBar");
-            ToBeContinued.TBCArrowTexture = ModContent.GetTexture("JoJoStands/UI/TBCArrow");
-            BulletCounter.bulletCounterTexture = ModContent.GetTexture("JoJoStands/UI/BulletCounter");
-            AerosmithRadar.aerosmithRadarTexture = ModContent.GetTexture("JoJoStands/UI/AerosmithRadar");
-            GoldenSpinMeter.goldenRectangleTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeter");
-            GoldenSpinMeter.goldenRectangleSpinLineTexture = ModContent.GetTexture("JoJoStands/UI/GoldenSpinMeterLine");
-            SexPistolsUI.sexPistolsUITexture = ModContent.GetTexture("JoJoStands/UI/SexPistolsUI");
-            VoidBar.VoidBarTexture = ModContent.GetTexture("JoJoStands/UI/VoidBar");
-            VoidBar.VoidBarBarTexture = ModContent.GetTexture("JoJoStands/UI/VoidBarBar");
+            HamonBarState.hamonBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/HamonBar");
+            ToBeContinued.TBCArrowTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/TBCArrow");
+            BulletCounter.bulletCounterTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/BulletCounter");
+            AerosmithRadar.aerosmithRadarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/AerosmithRadar");
+            GoldenSpinMeter.goldenRectangleTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/GoldenSpinMeter");
+            GoldenSpinMeter.goldenRectangleSpinLineTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/GoldenSpinMeterLine");
+            SexPistolsUI.sexPistolsUITexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/SexPistolsUI");
+            VoidBar.VoidBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar");
+            VoidBar.VoidBarBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBarBar");
 
-            standTier1List.Add(ItemType("AerosmithT1"));
-            standTier1List.Add(ItemType("GoldExperienceT1"));
-            standTier1List.Add(ItemType("HierophantGreenT1"));
-            standTier1List.Add(ItemType("KillerQueenT1"));
-            standTier1List.Add(ItemType("KingCrimsonT1"));
-            standTier1List.Add(ItemType("MagiciansRedT1"));
-            standTier1List.Add(ItemType("SexPistolsT1"));
-            standTier1List.Add(ItemType("StarPlatinumT1"));
-            standTier1List.Add(ItemType("StickyFingersT1"));
-            standTier1List.Add(ItemType("TheWorldT1"));
-            standTier1List.Add(ItemType("TuskAct1"));
-            standTier1List.Add(ItemType("LockT1"));
-            standTier1List.Add(ItemType("GratefulDeadT1"));
-            standTier1List.Add(ItemType("TheHandT1"));
-            standTier1List.Add(ItemType("WhitesnakeT1"));
-            standTier1List.Add(ItemType("DollyDaggerT1"));
-            standTier1List.Add(ItemType("CenturyBoyT1"));
-            standTier1List.Add(ItemType("SilverChariotT1"));
-            standTier1List.Add(ItemType("HermitPurpleT1"));
-            standTier1List.Add(ItemType("BadCompanyT1"));
-            standTier1List.Add(ItemType("CreamT1"));
+            standTier1List.Add(ItemType<AerosmithT1>());
+            standTier1List.Add(ItemType<GoldExperienceT1>());
+            standTier1List.Add(ItemType<HierophantGreenT1>());
+            standTier1List.Add(ItemType<KillerQueenT1>());
+            standTier1List.Add(ItemType<KingCrimsonT1>());
+            standTier1List.Add(ItemType<MagiciansRedT1>());
+            standTier1List.Add(ItemType<SexPistolsT1>());
+            standTier1List.Add(ItemType<StarPlatinumT1>());
+            standTier1List.Add(ItemType<StickyFingersT1>());
+            standTier1List.Add(ItemType<TheWorldT1>());
+            standTier1List.Add(ItemType<TuskAct1>());
+            standTier1List.Add(ItemType<LockT1>());
+            standTier1List.Add(ItemType<GratefulDeadT1>());
+            standTier1List.Add(ItemType<TheHandT1>());
+            standTier1List.Add(ItemType<WhitesnakeT1>());
+            standTier1List.Add(ItemType<DollyDaggerT1>());
+            standTier1List.Add(ItemType<CenturyBoyT1>());
+            standTier1List.Add(ItemType<SilverChariotT1>());
+            standTier1List.Add(ItemType<HermitPurpleT1>());
+            standTier1List.Add(ItemType<BadCompanyT1>());
+            standTier1List.Add(ItemType<CreamT1>());
 
-            timestopImmune.Add(ProjectileType("TheWorldStandT2"));     //only the timestop capable stands as people shouldn't switch anyway
-            timestopImmune.Add(ProjectileType("TheWorldStandT3"));
-            timestopImmune.Add(ProjectileType("TheWorldStandFinal"));
-            timestopImmune.Add(ProjectileType("StarPlatinumStandFinal"));
-            //MyPlayer.stopImmune.Add(ProjectileType("StickyFingersFistExtended"));
-            timestopImmune.Add(ProjectileType("RoadRoller"));
-            timestopImmune.Add(ProjectileType("HamonPunches"));
-            timestopImmune.Add(ProjectileType("Fists"));
-            timestopImmune.Add(ProjectileType("GoldExperienceRequiemStand"));
-            timestopImmune.Add(ProjectileType("TuskAct4Stand"));
-            timestopImmune.Add(ProjectileType("TestStand"));
-            timestopImmune.Add(ProjectileType("StarOnTheTreeStand"));
+            timestopImmune.Add(ProjectileType<TheWorldStandT2>());     //only the timestop capable stands as people shouldn't switch anyway
+            timestopImmune.Add(ProjectileType<TheWorldStandT3>());
+            timestopImmune.Add(ProjectileType<TheWorldStandFinal>());
+            timestopImmune.Add(ProjectileType<StarPlatinumStandFinal>());
+            //MyPlayer.stopImmune.Add(ProjectileType("StickyFingersFistExtended>());
+            timestopImmune.Add(ProjectileType<RoadRoller>());
+            timestopImmune.Add(ProjectileType<HamonPunches>());
+            timestopImmune.Add(ProjectileType<Fists>());
+            timestopImmune.Add(ProjectileType<GoldExperienceRequiemStand>());
+            timestopImmune.Add(ProjectileType<TuskAct4Stand>());
+            timestopImmune.Add(ProjectileType<TestStandStand>());
+            timestopImmune.Add(ProjectileType<StarOnTheTreeStand>());
 
-            christmasStands.Add(ItemType("StarOnTheTree"));
-            christmasStands.Add(ItemType("KingChristmas"));
+            christmasStands.Add(ItemType<StarOnTheTree>());
+            christmasStands.Add(ItemType<KingClaus>());
 
             testStandPassword.Add(Convert.ToChar(84));
 
 
             //Where we register the hotkeys
-            SpecialHotKey = RegisterHotKey("Special Ability", "R");        // See https://docs.microsoft.com/en-us/previous-versions/windows/xna/bb197781(v%3dxnagamestudio.41) for special keys
-            SecondSpecialHotKey = RegisterHotKey("Secondary Special Ability", "T");
-            StandOutHotKey = RegisterHotKey("Stand Out", "G");
-            PoseHotKey = RegisterHotKey("Pose", "V");
-            StandAutoModeHotKey = RegisterHotKey("Stand Auto Mode", "C");
+            SpecialHotKey = KeybindLoader.RegisterKeybind(Instance, "Special Ability", Keys.R);
+            SecondSpecialHotKey = KeybindLoader.RegisterKeybind(Instance, "Second Special Ability", Keys.G);
+            StandOutHotKey = KeybindLoader.RegisterKeybind(Instance, "Stand Out", Keys.V);
+            PoseHotKey = KeybindLoader.RegisterKeybind(Instance, "Pose", Keys.R);
+            StandAutoModeHotKey = KeybindLoader.RegisterKeybind(Instance, "Stand Auto Mode", Keys.R);
+            
 
             if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
             {
@@ -202,41 +216,42 @@ namespace JoJoStands
                 _goldExperienceRequiemAbilityWheelUI.SetState(GoldExperienceRequiemAbilityWheelUI);
 
                 //Shader Stuff
-                Ref<Effect> timestopShader = new Ref<Effect>(GetEffect("Effects/TimestopEffect"));      // The path to the compiled shader file.
+                Request<Effect>("");
+                Ref<Effect> timestopShader = new Ref<Effect>((Effect)Request<Effect>("Effects/TimestopEffect"));      // The path to the compiled shader file.
                 Filters.Scene["TimestopEffectShader"] = new Filter(new ScreenShaderData(timestopShader, "TimestopEffectShader"), EffectPriority.VeryHigh);
                 Filters.Scene["TimestopEffectShader"].Load();
-                Ref<Effect> greyscaleShader = new Ref<Effect>(GetEffect("Effects/Greyscale"));
+                Ref<Effect> greyscaleShader = new Ref<Effect>((Effect)Request<Effect>("Effects/Greyscale"));
                 Filters.Scene["GreyscaleEffect"] = new Filter(new ScreenShaderData(greyscaleShader, "GreyscaleEffect"), EffectPriority.VeryHigh);
                 Filters.Scene["GreyscaleEffect"].Load();
-                Ref<Effect> greenShader = new Ref<Effect>(GetEffect("Effects/GreenEffect"));
+                Ref<Effect> greenShader = new Ref<Effect>((Effect)Request<Effect>("Effects/GreenEffect"));
                 Filters.Scene["GreenEffect"] = new Filter(new ScreenShaderData(greenShader, "GreenEffect"), EffectPriority.VeryHigh);
                 Filters.Scene["GreenEffect"].Load();
-                Ref<Effect> redShader = new Ref<Effect>(GetEffect("Effects/RedEffect"));
+                Ref<Effect> redShader = new Ref<Effect>((Effect)Request<Effect>("Effects/RedEffect"));
                 Filters.Scene["RedEffect"] = new Filter(new ScreenShaderData(redShader, "RedEffect"), EffectPriority.VeryHigh);
                 Filters.Scene["RedEffect"].Load();
-                Ref<Effect> colorChangeShader = new Ref<Effect>(GetEffect("Effects/ColorChangeEffect"));
+                Ref<Effect> colorChangeShader = new Ref<Effect>((Effect)Request<Effect>("Effects/ColorChangeEffect"));
                 Filters.Scene["ColorChangeEffect"] = new Filter(new ScreenShaderData(colorChangeShader, "ColorChangeEffect"), EffectPriority.VeryHigh);
                 Filters.Scene["ColorChangeEffect"].Load();
-                Ref<Effect> voidGradientShader = new Ref<Effect>(GetEffect("Effects/VoidBarGradient"));
-                GameShaders.Misc["JoJoStandsVoidGradient"] = new MiscShaderData(voidGradientShader, "VoidBarGradient");
+                Ref<Effect> voidGradientShader = new Ref<Effect>((Effect)Request<Effect>("Effects/VoidBarGradient"));
+                GameShaders.Misc["JoJoStandsVoidGradient"] = new MiscShaderData(voidGradientShader, "VoidBarGradient"));
 
-                Effect timeskipShaderEffect = GetEffect("Effects/TimeSkipEffectShader");
-                //timeskipShaderEffect.Parameters["backStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonBackStars"));
-                //timeskipShaderEffect.Parameters["frontStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonFrontStars"));
+                Effect timeskipShaderEffect = (Effect)Request<Effect>("Effects/TimeSkipEffectShader"));
+                //timeskipShaderEffect.Parameters["backStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonBackStars>());
+                //timeskipShaderEffect.Parameters["frontStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars>());
                 Ref<Effect> timeskipShader = new Ref<Effect>(timeskipShaderEffect);      // The path to the compiled shader file.
                 Filters.Scene["TimeSkipEffectShader"] = new Filter(new ScreenShaderData(timeskipShader, "TimeSkipEffectShader"), EffectPriority.VeryHigh);
-                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonBackStars"), 0);
-                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonFrontStars"), 1);
+                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KingCrimsonBackStars"), 0);
+                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars"), 1);
                 Filters.Scene["TimeSkipEffectShader"].Load();
-                //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["backStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonBackStars"));
-                //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["frontStarsImage"].SetValue(ModContent.GetTexture("JoJoStands/Extras/KingCrimsonFrontStars"));
-                Ref<Effect> biteTheDustEffectShader = new Ref<Effect>(GetEffect("Effects/BiteTheDustEffectShader"));
+                //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["backStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonBackStars>());
+                //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["frontStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars>());
+                Ref<Effect> biteTheDustEffectShader = new Ref<Effect>((Effect)Request<Effect>("Effects/BiteTheDustEffectShader"));
                 Filters.Scene["BiteTheDustEffect"] = new Filter(new ScreenShaderData(biteTheDustEffectShader, "BiteTheDustEffectShader"), EffectPriority.VeryHigh);
-                Filters.Scene["BiteTheDustEffect"].GetShader().UseImage(ModContent.GetTexture("JoJoStands/Extras/KillerQueenBTDImage"), 0);
+                Filters.Scene["BiteTheDustEffect"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KillerQueenBTDImage"), 0);
                 Filters.Scene["BiteTheDustEffect"].Load();
 
                 //Misc
-                AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic"), ItemType("ViralMusicBox"), TileType("ViralMusicBoxTile"));
+                AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic"), ItemType<ViralMusicBox>(), TileType<ViralMusicBoxTile>());
             }
         }
 
@@ -268,12 +283,12 @@ namespace JoJoStands
         {
             RecipeGroup willsGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "Wills", new int[]
             {
-                ItemType("WillToFight"),
-                ItemType("WillToChange"),
-                ItemType("WillToControl"),
-                ItemType("WillToDestroy"),
-                ItemType("WillToEscape"),
-                ItemType("WillToProtect")
+                ItemType<WillToFight>(),
+                ItemType<WillToChange>(),
+                ItemType<WillToControl>(),
+                ItemType<WillToDestroy>(),
+                ItemType<WillToEscape>(),
+                ItemType<WillToProtect>()
             });
             RecipeGroup.RegisterGroup("JoJoStandsWills", willsGroup);
         }

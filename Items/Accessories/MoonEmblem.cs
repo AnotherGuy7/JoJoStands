@@ -2,6 +2,7 @@ using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Accessories
 {
@@ -15,11 +16,11 @@ namespace JoJoStands.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 30;
-            item.accessory = true;
-            item.rare = ItemRarityID.LightRed;
-            item.value = Item.buyPrice(gold: 2);
+            Item.width = 30;
+            Item.height = 30;
+            Item.accessory = true;
+            Item.rare = ItemRarityID.LightRed;
+            Item.value = Item.buyPrice(gold: 2);
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

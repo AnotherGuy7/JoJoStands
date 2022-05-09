@@ -1,9 +1,11 @@
+using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Items.Hamon;
 using JoJoStands.Items.Vampire;
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,89 +14,82 @@ namespace JoJoStands.Items
     public class JoJoGlobalItem : GlobalItem
     {
         public override bool InstancePerEntity => true;
-        public override bool CloneNewInstances => true;
 
         private int generalPurposeTimer = 0;        //Use for anything
         private float normalGravity = 0f;
         private float normalFallSpeed = 0f;
         private bool gravitySaved = false;
 
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        public override void ModifyTooltips(Item Item, List<TooltipLine> tooltips)
         {
-            Player player = Main.player[item.owner];
+            Player player = Main.player[Main.myPlayer];
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (player.whoAmI != Main.myPlayer || !vPlayer.learnedAnyZombieAbility)
                 return;
 
-            if ((item.type == ItemID.DirtBlock || item.type == ItemID.MudBlock) && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm))
+            if ((Item.type == ItemID.DirtBlock || Item.type == ItemID.MudBlock) && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm))
             {
-                TooltipLine secondaryUseTooltip = new TooltipLine(JoJoStands.Instance, "Secondary Use", "Right-click to consume 5 of this item and apply a protective film around yourself.");
+                TooltipLine secondaryUseTooltip = new TooltipLine(JoJoStands.Instance, "Secondary Use", "Right-click to consume 5 of this Item and apply a protective film around yourself.");
                 tooltips.Add(secondaryUseTooltip);
             }
         }
 
-        public override void ModifyWeaponDamage(Item item, Player player, ref float add, ref float mult, ref float flat)
+        public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.sexPistolsTier != 0 && (item.shoot == 10 || item.useAmmo == AmmoID.Bullet))
             {
-                mult *= 1f + (0.05f * mPlayer.sexPistolsTier);
+                damage *= 1f + (0.05f * mPlayer.sexPistolsTier);
             }
         }
 
-        public override bool Shoot(Item item, Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.sexPistolsTier != 0 && (item.shoot == 10 || item.useAmmo == AmmoID.Bullet) && mPlayer.sexPistolsLeft > 0 && mPlayer.standAutoMode)
             {
                 mPlayer.sexPistolsLeft -= 1;
-                int projectileIndex = Projectile.NewProjectile(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
+                int projectileIndex = Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
                 Main.projectile[projectileIndex].GetGlobalProjectile<JoJoGlobalProjectile>().autoModeSexPistols = true;
                 return false;
             }
             return true;
         }
 
-        public override bool AltFunctionUse(Item item, Player player)
+        public override bool AltFunctionUse(Item Item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut && !mPlayer.standAutoMode && !mPlayer.standAccessory)
-            {
                 return false;
-            }
+
             return false;
         }
 
-        public override bool CanUseItem(Item item, Player player)
+        public override bool CanUseItem(Item Item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut && !mPlayer.standAutoMode && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory)
             {
-                if (item.potion || item.mountType != -1)      //default value for mountType is -1
-                {
+                if (Item.potion || Item.mountType != -1)      //default value for mountType is -1
                     return true;
-                }
-                if (!player.controlMount && item.mountType != -1)        //if the player isn't pressing controlMount AND the item's mount is actually something, 
-                {
+
+                if (!player.controlMount && Item.mountType != -1)        //if the player isn't pressing controlMount AND the Item's mount is actually something, 
                     return false;
-                }
-                else if ((!player.controlQuickMana || !player.controlQuickHeal) && item.potion)
-                {
+
+                else if ((!player.controlQuickMana || !player.controlQuickHeal) && Item.potion)
                     return false;
-                }
+
                 else
-                {
                     return false;
-                }
             }
 
-            if (player.HasBuff(mod.BuffType("SkippingTime")))
+            if (player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 return false;
 
             return true;
         }
 
-        public override void Update(Item item, ref float gravity, ref float maxFallSpeed)
+        public override void Update(Item Item, ref float gravity, ref float maxFallSpeed)
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -122,7 +117,7 @@ namespace JoJoStands.Items
             }
         }
 
-        public override void HoldItem(Item item, Player player)
+        public override void HoldItem(Item Item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
@@ -131,7 +126,7 @@ namespace JoJoStands.Items
             if (generalPurposeTimer > 0)
                 generalPurposeTimer--;
 
-            if (item.melee && !mPlayer.standOut)
+            if (!Item.noMelee && !mPlayer.standOut)
             {
                 bool specialJustPressed = false;
                 if (!Main.dedServ)
@@ -147,39 +142,39 @@ namespace JoJoStands.Items
                     {
                         if (hPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.WeaponsHamonImbueSkill) && hPlayer.learnedHamonSkills[HamonPlayer.WeaponsHamonImbueSkill] && hPlayer.amountOfHamon >= hPlayer.hamonAmountRequirements[HamonPlayer.WeaponsHamonImbueSkill])
                         {
-                            player.AddBuff(mod.BuffType("HamonWeaponImbueBuff"), 240 * 60);
+                            player.AddBuff(ModContent.BuffType<HamonWeaponImbueBuff>(), 240 * 60);
                             hPlayer.amountOfHamon -= hPlayer.hamonAmountRequirements[HamonPlayer.WeaponsHamonImbueSkill];
                         }
                         generalPurposeTimer = 0;
                     }
                 }
             }
-            
-            if (item.type == ItemID.DirtBlock || item.type == ItemID.MudBlock)
+
+            if (Item.type == ItemID.DirtBlock || Item.type == ItemID.MudBlock)
             {
                 if (!vPlayer.zombie && !vPlayer.vampire)
                     return;
 
                 if (!MyPlayer.AutomaticActivations)
                 {
-                    if (item.stack >= 5 && Main.mouseRight && generalPurposeTimer <= 0 && item.owner == Main.myPlayer && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm))
+                    if (Item.stack >= 5 && Main.mouseRight && generalPurposeTimer <= 0 && player.whoAmI == Main.myPlayer && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm))
                     {
                         generalPurposeTimer += 30;
-                        player.AddBuff(mod.BuffType("ProtectiveFilmBuff"), 60 * 60);
+                        player.AddBuff(ModContent.BuffType<ProtectiveFilmBuff>(), 60 * 60);
                         for (int i = 0; i < 5; i++)
                         {
-                            player.ConsumeItem(item.type);
+                            player.ConsumeItem(Item.type);
                         }
                     }
                 }
                 else
                 {
-                    if (item.stack >= 5 && item.owner == Main.myPlayer && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm) && !player.HasBuff(mod.BuffType("ProtectiveFilmBuff")))
+                    if (Item.stack >= 5 && player.whoAmI == Main.myPlayer && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm) && !player.HasBuff(ModContent.BuffType<ProtectiveFilmBuff>()))
                     {
-                        player.AddBuff(mod.BuffType("ProtectiveFilmBuff"), 60 * 60);
+                        player.AddBuff(ModContent.BuffType<ProtectiveFilmBuff>(), 60 * 60);
                         for (int i = 0; i < 5; i++)
                         {
-                            player.ConsumeItem(item.type);
+                            player.ConsumeItem(Item.type);
                         }
                     }
                 }
@@ -188,18 +183,17 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            ModRecipe revolverRecipe = new ModRecipe(mod);
-            revolverRecipe.AddIngredient(mod.ItemType("RustyRevolver"));
+            Recipe revolverRecipe = Mod.CreateRecipe(ItemID.Revolver, 999);
+            revolverRecipe.AddIngredient(ModContent.ItemType<RustyRevolver>());
             revolverRecipe.AddIngredient(ItemID.IronBar, 16);
-            revolverRecipe.SetResult(ItemID.Revolver);
             revolverRecipe.AddTile(TileID.Anvils);
-            revolverRecipe.AddRecipe();
-            revolverRecipe = new ModRecipe(mod);
-            revolverRecipe.AddIngredient(mod.ItemType("RustyRevolver"));
+            revolverRecipe.Register();
+
+            revolverRecipe = Mod.CreateRecipe(ItemID.Revolver, 999);
+            revolverRecipe.AddIngredient(ModContent.ItemType<RustyRevolver>());
             revolverRecipe.AddIngredient(ItemID.LeadBar, 16);
-            revolverRecipe.SetResult(ItemID.Revolver);
             revolverRecipe.AddTile(TileID.Anvils);
-            revolverRecipe.AddRecipe();
+            revolverRecipe.Register();
         }
     }
 }

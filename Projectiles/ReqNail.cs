@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -7,38 +8,38 @@ namespace JoJoStands.Projectiles
     {
         public override string Texture
         {
-            get { return mod.Name + "/Projectiles/ControllableNail"; }
+            get { return Mod.Name + "/Projectiles/ControllableNail"; }
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 14;
-            projectile.height = 6;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 14;
+            Projectile.height = 6;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 300;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            target.AddBuff(mod.BuffType("Spin"), 60);
+            target.AddBuff(ModContent.BuffType<Spin>(), 60);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(mod.BuffType("Spin"), 60);
+            target.AddBuff(ModContent.BuffType<Spin>(), 60);
         }
 
         public override void AI()
         {
-            projectile.rotation = projectile.velocity.ToRotation();
+            Projectile.rotation = Projectile.velocity.ToRotation();
 
-            int pinkDustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 205, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+            int pinkDustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 205, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
             Main.dust[pinkDustIndex].noGravity = true;
 
-            int blueDustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 202, projectile.velocity.X * -0.3f, projectile.velocity.Y * -0.3f);
+            int blueDustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 202, Projectile.velocity.X * -0.3f, Projectile.velocity.Y * -0.3f);
             Main.dust[blueDustIndex].noGravity = true;
         }
     }

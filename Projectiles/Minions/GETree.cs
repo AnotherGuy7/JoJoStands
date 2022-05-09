@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,21 +12,21 @@ namespace JoJoStands.Projectiles.Minions
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 13;
+            Main.projFrames[Projectile.type] = 13;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 22;
-            projectile.height = 41;
-            projectile.friendly = true;
-            projectile.penetrate = 9999;
-            projectile.timeLeft = 5;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.scale = 2f;
-            drawOriginOffsetX = -10;
-            drawOriginOffsetY = 21;
+            Projectile.width = 22;
+            Projectile.height = 41;
+            Projectile.friendly = true;
+            Projectile.penetrate = 9999;
+            Projectile.timeLeft = 5;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.scale = 2f;
+            DrawOriginOffsetX = -10;
+            DrawOriginOffsetY = 21;
         }
 
         private bool timeLeftDeclared = false;
@@ -33,22 +34,22 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int p = 0; p < Main.maxProjectiles; p++)
                 {
                     Projectile otherProj = Main.projectile[p];
-                    if (otherProj.active && projectile.Hitbox.Intersects(otherProj.Hitbox))
+                    if (otherProj.active && Projectile.Hitbox.Intersects(otherProj.Hitbox))
                     {
                         Player otherPlayer = Main.player[otherProj.owner];
-                        if (projectile.owner != otherProj.owner && player.team != otherPlayer.team)
+                        if (Projectile.owner != otherProj.owner && player.team != otherPlayer.team)
                         {
                             if (MyPlayer.Sounds)
                             {
-                                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Punch_land").WithVolume(.3f));
+                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
                             }
-                            Dust.NewDust(otherProj.position + otherProj.velocity, projectile.width, projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
+                            Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
                             otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " loved the damage reflection given by " + player.name + "'s damage-reflecting tree too much."), otherProj.damage, 1, true);
                             otherProj.Kill();
                         }
@@ -56,56 +57,56 @@ namespace JoJoStands.Projectiles.Minions
                 }
             }
 
-            projectile.velocity.X = 0f;
-            projectile.velocity.Y = 3f;
-            projectile.direction = -1;
-            if (projectile.ai[0] == 2f && !timeLeftDeclared)
+            Projectile.velocity.X = 0f;
+            Projectile.velocity.Y = 3f;
+            Projectile.direction = -1;
+            if (Projectile.ai[0] == 2f && !timeLeftDeclared)
             {
-                projectile.timeLeft = 900;
+                Projectile.timeLeft = 900;
                 timeLeftDeclared = true;
             }
-            if (projectile.ai[0] == 3f && !timeLeftDeclared)
+            if (Projectile.ai[0] == 3f && !timeLeftDeclared)
             {
-                projectile.timeLeft = 1200;
+                Projectile.timeLeft = 1200;
                 timeLeftDeclared = true;
             }
-            if (projectile.ai[0] == 4f && !timeLeftDeclared)
+            if (Projectile.ai[0] == 4f && !timeLeftDeclared)
             {
-                projectile.timeLeft = 1500;
+                Projectile.timeLeft = 1500;
                 timeLeftDeclared = true;
             }
-            if (projectile.ai[0] == 5f && !timeLeftDeclared)
+            if (Projectile.ai[0] == 5f && !timeLeftDeclared)
             {
-                projectile.timeLeft = 1800;
+                Projectile.timeLeft = 1800;
                 timeLeftDeclared = true;
             }
 
-            if (projectile.timeLeft <= 181)
+            if (Projectile.timeLeft <= 181)
             {
                 shrinkAndDie = true;
             }
             if (!shrinkAndDie)
             {
-                if (projectile.frame <= 11)
-                    projectile.frameCounter++;
+                if (Projectile.frame <= 11)
+                    Projectile.frameCounter++;
 
-                if (projectile.frameCounter >= 14)
+                if (Projectile.frameCounter >= 14)
                 {
-                    projectile.frame += 1;
-                    projectile.frameCounter = 0;
+                    Projectile.frame += 1;
+                    Projectile.frameCounter = 0;
                 }
             }
             if (shrinkAndDie)
             {
-                projectile.frameCounter++;
-                if (projectile.frameCounter >= 14)
+                Projectile.frameCounter++;
+                if (Projectile.frameCounter >= 14)
                 {
-                    projectile.frame -= 1;
-                    projectile.frameCounter = 0;
+                    Projectile.frame -= 1;
+                    Projectile.frameCounter = 0;
                 }
-                if (projectile.frame <= 0)
+                if (Projectile.frame <= 0)
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                 }
             }
         }

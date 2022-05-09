@@ -4,6 +4,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items
@@ -16,11 +17,11 @@ namespace JoJoStands.Items
 
 		public override void SetDefaults()
         {
-			item.width = 18;
-			item.height = 18;
-			item.value = Item.buyPrice(0, 35, 72, 0);
-			item.rare = 8;
-            item.maxStack = 1;
+			Item.width = 18;
+			Item.height = 18;
+			Item.value = Item.buyPrice(0, 35, 72, 0);
+			Item.rare = 8;
+            Item.maxStack = 1;
 		}
 
         public override void OnConsumeItem(Player player)

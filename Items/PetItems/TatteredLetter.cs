@@ -1,7 +1,10 @@
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
+using JoJoStands.Buffs.PetBuffs;
+using JoJoStands.Projectiles.Pets.Part1;
 using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items.PetItems
 {
@@ -14,40 +17,39 @@ namespace JoJoStands.Items.PetItems
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.useTime = 20;
-            item.useAnimation = 20;
-            item.value = Item.buyPrice(silver: 50);
-            item.useStyle = ItemUseStyleID.SwingThrow;
-            item.rare = ItemRarityID.Blue;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.value = Item.buyPrice(silver: 50);
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.rare = ItemRarityID.Blue;
         }
 
-        public override bool UseItem(Player player)
+        public override bool? UseItem(Player player)
         {
-            if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("DioPet")] == 0)
+            if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<DioPet>()] == 0)
             {
-                player.AddBuff(mod.BuffType("DioPetBuff"), 60);
-                Projectile.NewProjectile(player.Center + new Vector2(0f, -6f), player.velocity, mod.ProjectileType("DioPet"), 0, 0f, item.owner);
+                player.AddBuff(ModContent.BuffType<DioPetBuff>(), 60);
+                Projectile.NewProjectile(player.GetSource_FromThis(), player.Center + new Vector2(0f, -6f), player.velocity, ModContent.ProjectileType<DioPet>(), 0, 0f, player.whoAmI);
             }
             return true;
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            player.AddBuff(mod.BuffType("DioPetBuff"), 60);
+            player.AddBuff(ModContent.BuffType<DioPetBuff>(), 60);
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.TatteredCloth, 3);
-            recipe.AddIngredient(ItemID.Ruby);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.TatteredCloth, 3)
+                .AddIngredient(ItemID.Ruby)
+                .AddTile(TileID.WorkBenches)
+                .Register();
         }
     }
 }

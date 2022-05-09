@@ -1,3 +1,6 @@
+using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
@@ -16,33 +19,33 @@ namespace JoJoStands.Items.Hamon
 
         public override void SafeSetDefaults()
         {
-            item.damage = 14;
-            item.width = 32;
-            item.height = 32;        //hitbox's width and height when the item is in the world
-            item.maxStack = 1;
-            item.noUseGraphic = true;
-            item.knockBack = 1f;
-            item.rare = 5;
-            item.shoot = mod.ProjectileType("HamonPunches");
-            item.useTurn = true;
-            item.noWet = true;
-            item.useAnimation = 25;
-            item.useTime = 15;
-            item.useStyle = 5;
-            item.channel = true;
-            item.noMelee = true;
-            item.autoReuse = false;
-            item.shootSpeed = 15f;
+            Item.damage = 14;
+            Item.width = 32;
+            Item.height = 32;        //hitbox's width and height when the Item is in the world
+            Item.maxStack = 1;
+            Item.noUseGraphic = true;
+            Item.knockBack = 1f;
+            Item.rare = 5;
+            Item.shoot = ModContent.ProjectileType<HamonPunches>();
+            Item.useTurn = true;
+            Item.noWet = true;
+            Item.useAnimation = 25;
+            Item.useTime = 15;
+            Item.useStyle = 5;
+            Item.channel = true;
+            Item.noMelee = true;
+            Item.autoReuse = false;
+            Item.shootSpeed = 15f;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            Player player = Main.player[item.owner];
+            Player player = Main.player[Main.myPlayer];
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
 
             if (hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing])
             {
-                TooltipLine tooltipAddition = new TooltipLine(mod, "Damage", "Hold Right-Click for more than " + (4 / hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing]) + " seconds to heal life! (Requires more than " + hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing] + " Hamon)");
+                TooltipLine tooltipAddition = new TooltipLine(Mod, "Damage", "Hold Right-Click for more than " + (4 / hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing]) + " seconds to heal life! (Requires more than " + hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing] + " Hamon)");
                 tooltips.Add(tooltipAddition);
             }
         }
@@ -54,7 +57,7 @@ namespace JoJoStands.Items.Hamon
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
 
             ChargeHamon();
-            if (player.whoAmI == item.owner && hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing])
+            if (player.whoAmI == Main.myPlayer && hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing])
             {
                 if (Main.mouseRight && hamonPlayer.amountOfHamon >= hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing])
                 {
@@ -74,22 +77,17 @@ namespace JoJoStands.Items.Hamon
                     healTimer = 0;
                 }
                 if (Main.mouseRightRelease)
-                {
                     healTimer = 0;
-                }
             }
             if (player.statLife <= 25)
-            {
-                player.AddBuff(mod.BuffType("RUUUN"), 360);
-            }
+                player.AddBuff(ModContent.BuffType<RUUUN>(), 360);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 25);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 25)
+                .Register();
         }
     }
 }

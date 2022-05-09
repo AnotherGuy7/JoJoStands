@@ -1,4 +1,7 @@
-﻿using Terraria;
+﻿using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,7 +11,7 @@ namespace JoJoStands.Items
     {
         public override string Texture
         {
-            get { return mod.Name + "/Items/LockT1"; }
+            get { return Mod.Name + "/Items/LockT1"; }
         }
 
         public override int standTier => 3;
@@ -21,9 +24,9 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 30;
-            item.rare = ItemRarityID.LightPurple;
+            Item.width = 30;
+            Item.height = 30;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -32,20 +35,19 @@ namespace JoJoStands.Items
             mPlayer.standAccessory = true;
             mPlayer.standType = 1;
             mPlayer.poseSoundName = "TheGuiltierYouFeel";
-            player.AddBuff(mod.BuffType("LockActiveBuff"), 10);
+            player.AddBuff(ModContent.BuffType<LockActiveBuff>(), 10);
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("LockT2"));
-            recipe.AddIngredient(ItemID.HallowedBar, 8);
-            recipe.AddIngredient(mod.ItemType("WillToEscape"), 2);
-			recipe.AddIngredient(mod.ItemType("WillToControl"), 1);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<LockT2>())
+                .AddIngredient(ItemID.HallowedBar, 8)
+                .AddIngredient(ModContent.ItemType<WillToEscape>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 1)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

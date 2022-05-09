@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
@@ -40,21 +40,21 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             remoteControlFrames = remoteControlled;
             if (!mPlayer.standAutoMode && !remoteControlled)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
                 {
                     Punch();
                 }
@@ -63,26 +63,26 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && shootCount <= 0 && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
-                    projectile.frame = 0;
+                    Projectile.frame = 0;
                     secondaryAbilityFrames = true;
                 }
                 if (secondaryAbilityFrames)
                 {
-                    if (projectile.frame >= 4)
+                    if (Projectile.frame >= 4)
                     {
                         shootCount += 120;
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= 8f;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("MeltYourHeart"), (int)(altDamage * mPlayer.standDamageBoosts), 2f, projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<MeltYourHeart>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                         secondaryAbilityFrames = false;
                     }
                 }
@@ -99,8 +99,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     attackFrames = false;
                     normalFrames = false;
                     secondaryAbilityFrames = false;
-                    projectile.frame = 0;
-                    projectile.frameCounter = 0;
+                    Projectile.frame = 0;
+                    Projectile.frameCounter = 0;
                     gunRevealFrames = true;
                 }
             }
@@ -109,12 +109,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 mPlayer.standRemoteMode = true;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
-                mPlayer.standRemoteModeCameraPosition = projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
+                mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
 
                 floatTimer += 0.06f;
-                armRotation = (Main.MouseWorld - projectile.Center).ToRotation();
-                armPosition = projectile.Center + new Vector2(-18f * projectile.spriteDirection, -4f);
-                if (projectile.spriteDirection == -1)
+                armRotation = (Main.MouseWorld - Projectile.Center).ToRotation();
+                armPosition = Projectile.Center + new Vector2(-18f * Projectile.spriteDirection, -4f);
+                if (Projectile.spriteDirection == -1)
                 {
                     armPosition -= new Vector2(14f, 8f);
                 }
@@ -123,74 +123,74 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 else
                     armFrame = 0;
 
-                bool aboveTile = Collision.SolidTiles((int)projectile.Center.X / 16, (int)projectile.Center.X / 16, (int)projectile.Center.Y / 16, (int)(projectile.Center.Y / 16) + 4);
+                bool aboveTile = Collision.SolidTiles((int)Projectile.Center.X / 16, (int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16, (int)(Projectile.Center.Y / 16) + 4);
                 if (aboveTile)
                 {
-                    projectile.velocity.Y = (float)Math.Sin(floatTimer) / 5f;
+                    Projectile.velocity.Y = (float)Math.Sin(floatTimer) / 5f;
                 }
                 else
                 {
-                    if (projectile.velocity.Y < 6f)
+                    if (Projectile.velocity.Y < 6f)
                     {
-                        projectile.velocity.Y += 0.2f;
+                        Projectile.velocity.Y += 0.2f;
                     }
-                    if (Vector2.Distance(projectile.Center, player.Center) >= RemoteControlMaxDistance)
+                    if (Vector2.Distance(Projectile.Center, player.Center) >= RemoteControlMaxDistance)
                     {
-                        projectile.velocity = player.Center - projectile.Center;
-                        projectile.velocity.Normalize();
-                        projectile.velocity *= 0.8f;
+                        Projectile.velocity = player.Center - Projectile.Center;
+                        Projectile.velocity.Normalize();
+                        Projectile.velocity *= 0.8f;
                     }
                 }
 
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
-                    Vector2 moveVelocity = Main.MouseWorld - projectile.Center;
+                    Vector2 moveVelocity = Main.MouseWorld - Projectile.Center;
                     moveVelocity.Normalize();
-                    projectile.velocity.X = moveVelocity.X * 4f;
+                    Projectile.velocity.X = moveVelocity.X * 4f;
                     if (aboveTile)
-                        projectile.velocity.Y += moveVelocity.Y * 2f;
+                        Projectile.velocity.Y += moveVelocity.Y * 2f;
 
-                    projectile.direction = 1;
-                    if (Main.MouseWorld.X < projectile.Center.X)
+                    Projectile.direction = 1;
+                    if (Main.MouseWorld.X < Projectile.Center.X)
                     {
-                        projectile.direction = -1;
+                        Projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
+                    Projectile.spriteDirection = Projectile.direction;
 
-                    if (Vector2.Distance(projectile.Center, player.Center) >= RemoteControlMaxDistance)
+                    if (Vector2.Distance(Projectile.Center, player.Center) >= RemoteControlMaxDistance)
                     {
-                        projectile.velocity = player.Center - projectile.Center;
-                        projectile.velocity.Normalize();
-                        projectile.velocity *= 0.8f;
+                        Projectile.velocity = player.Center - Projectile.Center;
+                        Projectile.velocity.Normalize();
+                        Projectile.velocity *= 0.8f;
                     }
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                 }
-                if (!Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (!Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
-                    projectile.velocity.X *= 0.78f;
-                    projectile.netUpdate = true;
+                    Projectile.velocity.X *= 0.78f;
+                    Projectile.netUpdate = true;
                 }
-                if (Main.mouseRight && canShootAgain && shootCount <= 0 && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && canShootAgain && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
                     shootCount += 5;
                     canShootAgain = false;
-                    projectile.direction = 1;
-                    if (Main.MouseWorld.X < projectile.Center.X)
+                    Projectile.direction = 1;
+                    if (Main.MouseWorld.X < Projectile.Center.X)
                     {
-                        projectile.direction = -1;
+                        Projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
+                    Projectile.spriteDirection = Projectile.direction;
 
                     Vector2 shootVel = Main.MouseWorld - armPosition;
                     shootVel.Normalize();
                     shootVel *= 12f;
-                    int proj = Projectile.NewProjectile(armPosition, shootVel, ProjectileID.Bullet, (int)(altDamage * mPlayer.standDamageBoosts), 2f, projectile.owner);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), armPosition, shootVel, ProjectileID.Bullet, (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
                     Main.projectile[proj].netUpdate = true;
-                    projectile.netUpdate = true;
-                    projectile.velocity -= shootVel * 0.02f;
-                    Main.PlaySound(SoundID.Item41, projectile.Center);
+                    Projectile.netUpdate = true;
+                    Projectile.velocity -= shootVel * 0.02f;
+                    SoundEngine.PlaySound(SoundID.Item41, Projectile.Center);
                 }
-                if (!Main.mouseRight && projectile.owner == Main.myPlayer)
+                if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
                     canShootAgain = true;
                 }
@@ -211,13 +211,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         {
             if (remoteControlled)
             {
-                Texture2D armTexture = mod.GetTexture("Projectiles/PlayerStands/Whitesnake/Whitesnake_Arm");
+                Texture2D armTexture = Mod.GetTexture("Projectiles/PlayerStands/Whitesnake/Whitesnake_Arm>();
                 Vector2 armOrigin = new Vector2(4f, 12f);
                 int armFrameHeight = 16;
                 Rectangle armSourceRect = new Rectangle(0, armFrame * armFrameHeight, 56, armFrameHeight);
-                Color armColor = Lighting.GetColor((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16);
+                Color armColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
                 SpriteEffects armEffect = SpriteEffects.None;
-                if (projectile.spriteDirection == -1)
+                if (Projectile.spriteDirection == -1)
                 {
                     armEffect = SpriteEffects.FlipVertically;
                 }
@@ -232,18 +232,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary");
+                PlayAnimation("Secondary>();
             }
             if (gunRevealFrames)
             {
@@ -251,25 +251,25 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 remoteControlFrames = false;
-                PlayAnimation("GunReveal");
+                PlayAnimation("GunReveal>();
             }
             if (remoteControlFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("RemoteControl");
+                PlayAnimation("RemoteControl>();
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
             }
         }
 
         public override void AnimationCompleted(string animationName)
         {
-            if (animationName == "GunReveal")
+            if (animationName == "GunReveal>()
             {
                 remoteControlled = true;
                 gunRevealFrames = false;
@@ -279,29 +279,29 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 4, 30, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 3, newPunchTime, true);
             }
-            if (animationName == "Secondary")
+            if (animationName == "Secondary>()
             {
                 AnimateStand(animationName, 5, 10, true);
             }
-            if (animationName == "GunReveal")
+            if (animationName == "GunReveal>()
             {
                 AnimateStand(animationName, 5, 3, false);
             }
-            if (animationName == "RemoteControl")
+            if (animationName == "RemoteControl>()
             {
                 AnimateStand(animationName, 1, 15, true);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>()
             {
                 AnimateStand(animationName, 1, 10, true);
             }

@@ -1,6 +1,8 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,24 +17,23 @@ namespace JoJoStands.Items.Hamon
 
         public override void SetDefaults()
         {
-            item.ranged = true;
-            item.damage = 18;
-            item.width = 30;
-            item.height = 28;
-            item.useTime = 75;
-            item.useAnimation = 75;
-            item.maxStack = 999;
-            item.knockBack = 5f;
-            item.rare = ItemRarityID.Pink;
-            item.noWet = true;
-            item.useTurn = true;
-            item.autoReuse = false;
-            item.noUseGraphic = true;
-            item.consumable = true;
-            item.useStyle = ItemUseStyleID.SwingThrow;
-            item.UseSound = SoundID.Item1;
-            item.shoot = mod.ProjectileType("HamonizedWaterBalloonProjectile");
-            item.shootSpeed = 9f;
+            Item.damage = 18;
+            Item.width = 30;
+            Item.height = 28;
+            Item.useTime = 75;
+            Item.useAnimation = 75;
+            Item.maxStack = 999;
+            Item.knockBack = 5f;
+            Item.rare = ItemRarityID.Pink;
+            Item.noWet = true;
+            Item.useTurn = true;
+            Item.autoReuse = false;
+            Item.noUseGraphic = true;
+            Item.consumable = true;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.UseSound = SoundID.Item1;
+            Item.shoot = ModContent.ProjectileType<HamonizedWaterBalloonProjectile>();
+            Item.shootSpeed = 9f;
         }
 
         public override bool AltFunctionUse(Player player)
@@ -45,26 +46,25 @@ namespace JoJoStands.Items.Hamon
             return player.GetModPlayer<HamonPlayer>().amountOfHamon >= 4;
         }
 
-        public override bool UseItem(Player player)
+        public override bool? UseItem(Player player)
         {
-            if (player.whoAmI == item.owner)
+            if (player.whoAmI == Main.myPlayer)
             {
-                player.ConsumeItem(item.type);
+                player.ConsumeItem(Item.type);
             }
             return true;
         }
 
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Vector2 velocity = new Vector2(speedX, speedY);
             if (player.altFunctionUse == 2)
             {
                 velocity *= 0.5f;
-                Projectile.NewProjectile(position, velocity, type, damage, knockBack, player.whoAmI, 1f);
+                Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI, 1f);
             }
             else
             {
-                Projectile.NewProjectile(position, velocity, type, damage, knockBack, player.whoAmI, 0f);
+                Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI, 0f);
             }
             player.GetModPlayer<HamonPlayer>().amountOfHamon -= 4;
             return false;
@@ -72,11 +72,10 @@ namespace JoJoStands.Items.Hamon
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"));
-            recipe.AddIngredient(ItemID.BottledWater);
-            recipe.SetResult(this, 15);
-            recipe.AddRecipe();
+            CreateRecipe(15)
+                .AddIngredient(ModContent.ItemType<SunDroplet>())
+                .AddIngredient(ItemID.BottledWater)
+                .Register();
         }
     }
 }

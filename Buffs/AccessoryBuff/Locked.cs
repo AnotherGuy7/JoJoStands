@@ -5,7 +5,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
 {
     public class Locked : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Locked");
             Description.SetDefault("Your guilt is increasing and it hurts.");

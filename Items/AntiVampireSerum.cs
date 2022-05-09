@@ -1,5 +1,8 @@
+using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Items.Vampire;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,18 +19,18 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.width = 24;
-            item.height = 24;
-            item.maxStack = 99;
-            item.useTime = 20;
-            item.useAnimation = 20;
-            item.value = Item.buyPrice(0, 0, 2, 50);
-            item.rare = ItemRarityID.LightPurple;
-            item.useStyle = ItemUseStyleID.EatingUsing;
-            item.consumable = true;
+            Item.width = 24;
+            Item.height = 24;
+            Item.maxStack = 99;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.value = Item.buyPrice(0, 0, 2, 50);
+            Item.rare = ItemRarityID.LightPurple;
+            Item.useStyle = ItemUseStyleID.EatFood;
+            Item.consumable = true;
         }
 
-        public override bool UseItem(Player player)
+        public override bool? UseItem(Player player)
         {
             return true;
         }
@@ -36,34 +39,33 @@ namespace JoJoStands.Items
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (vPlayer.zombie || vPlayer.vampire)
-            {
                 player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " will to return to humanity was rejectd by his vampiric antics."), player.statLife / 2, player.direction);      //Tried to make a spin on that "Reject humanity" meme
-            }
+
             vPlayer.zombie = false;
             vPlayer.vampire = false;
             vPlayer.perfectBeing = false;
             vPlayer.anyMaskForm = false;
-            Main.PlaySound(2, player.Center, 3);
+            SoundEngine.PlaySound(2, player.Center, 3);
 
-            if (player.HasBuff(mod.BuffType("Vampire")))
-                player.ClearBuff(mod.BuffType("Vampire"));
-            if (player.HasBuff(mod.BuffType("Zombie")))
-                player.ClearBuff(mod.BuffType("Zombie"));
-            if (player.HasBuff(mod.BuffType("AjaVampire")))
-                player.ClearBuff(mod.BuffType("AjaVampire"));
+
+            if (player.HasBuff(ModContent.BuffType<Buffs.AccessoryBuff.Vampire>()))
+                player.ClearBuff(ModContent.BuffType<Buffs.AccessoryBuff.Vampire>());
+            if (player.HasBuff(ModContent.BuffType<Zombie>()))
+                player.ClearBuff(ModContent.BuffType<Zombie>());
+            if (player.HasBuff(ModContent.BuffType<AjaVampire>()))
+                player.ClearBuff(ModContent.BuffType<AjaVampire>());
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.HealingPotion);
-            recipe.AddIngredient(ItemID.Sunflower, 3);
-            recipe.AddIngredient(ItemID.Daybloom, 2);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 2);
-            recipe.AddTile(TileID.Bottles);
-            recipe.AddTile(TileID.AlchemyTable);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.HealingPotion)
+                .AddIngredient(ItemID.Sunflower, 3)
+                .AddIngredient(ItemID.Daybloom, 2)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 2)
+                .AddTile(TileID.Bottles)
+                .AddTile(TileID.AlchemyTable)
+                .Register();
         }
     }
 }

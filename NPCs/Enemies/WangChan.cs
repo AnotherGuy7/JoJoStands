@@ -3,6 +3,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -63,8 +64,8 @@ namespace JoJoStands.NPCs.Enemies
                 expertDamageMultiplier = 2;
             }
 
-            npc.AddBuff(mod.BuffType("Vampire"), 2);
-            if (npc.HasBuff(mod.BuffType("Sunburn")))
+            npc.AddBuff(ModContent.BuffType<Vampire>(), 2);
+            if (npc.HasBuff(ModContent.BuffType<Sunburn>()))
             {
                 npc.defense = 0;
                 npc.damage = 20 * expertDamageMultiplier;
@@ -181,7 +182,7 @@ namespace JoJoStands.NPCs.Enemies
                     }
                     float rotation = MathHelper.ToRadians(rotationInRadians);
                     Vector2 newSpeed = new Vector2(shootVel.X, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, 1) * 1f);
-                    int proj = Projectile.NewProjectile(npc.Center, newSpeed, mod.ProjectileType("AcidVenomFlask"), 21 * expertDamageMultiplier, 1f);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.Center, newSpeed, ModContent.ProjectileType<AcidVenomFlask>(), 21 * expertDamageMultiplier, 1f);
                     Main.projectile[proj].netUpdate = true;
                     npc.netUpdate = true;
                 }

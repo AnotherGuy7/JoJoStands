@@ -1,4 +1,5 @@
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
@@ -6,20 +7,20 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 36;
-            projectile.height = 36;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.hostile = false;
-            projectile.scale = 0.5f;
+            Projectile.width = 36;
+            Projectile.height = 36;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 300;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.hostile = false;
+            Projectile.scale = 0.5f;
         }
 
         public override void AI()
         {
-            projectile.rotation = projectile.direction * 180f;
+            Projectile.rotation = Projectile.direction * 180f;
         }
     }
 }

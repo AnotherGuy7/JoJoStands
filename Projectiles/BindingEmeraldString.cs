@@ -2,6 +2,7 @@ using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -9,37 +10,37 @@ namespace JoJoStands.Projectiles
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 4;
+            Main.projFrames[Projectile.type] = 4;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 22;
-            projectile.height = 14;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 600;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 22;
+            Projectile.height = 14;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         public override void AI()
         {
-            projectile.frameCounter += 1;
-            if (projectile.frameCounter >= 5)
+            Projectile.frameCounter += 1;
+            if (Projectile.frameCounter >= 5)
             {
-                projectile.frame += 1;
-                projectile.frameCounter = 0;
-                if (projectile.frame >= Main.projFrames[projectile.type])
+                Projectile.frame += 1;
+                Projectile.frameCounter = 0;
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
                 {
-                    projectile.frame = 0;
+                    Projectile.frame = 0;
                 }
             }
 
-            projectile.rotation = projectile.velocity.ToRotation();
+            Projectile.rotation = Projectile.velocity.ToRotation();
             if (Main.rand.Next(0, 1 + 1) == 0)
             {
-                int dustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 61, projectile.velocity.X * -0.5f, projectile.velocity.Y * -0.5f);
+                int dustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 61, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
                 Main.dust[dustIndex].noGravity = true;
             }
         }
@@ -51,7 +52,7 @@ namespace JoJoStands.Projectiles
             else
                 target.velocity = Vector2.Zero;
             target.GetGlobalNPC<JoJoGlobalNPC>().stunnedByBindingEmerald = true;
-            target.GetGlobalNPC<JoJoGlobalNPC>().bindingEmeraldDurationTimer = (int)projectile.ai[0] * 60;
+            target.GetGlobalNPC<JoJoGlobalNPC>().bindingEmeraldDurationTimer = (int)Projectile.ai[0] * 60;
         }
     }
 }

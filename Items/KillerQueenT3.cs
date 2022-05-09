@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/KillerQueenT1"; }
+            get { return Mod.Name + "/Items/KillerQueenT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,27 +25,26 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 59;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 59;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("KillerQueenT2"));
-            recipe.AddIngredient(ItemID.HallowedBar, 6);
-            recipe.AddIngredient(mod.ItemType("Hand"), 1);
-            recipe.AddIngredient(ItemID.SoulofMight, 8);
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"), 2);
-            recipe.AddIngredient(mod.ItemType("WillToEscape"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<KillerQueenT2>())
+                .AddIngredient(ItemID.HallowedBar, 6)
+                .AddIngredient(ModContent.ItemType<Hand>(), 1)
+                .AddIngredient(ItemID.SoulofMight, 8)
+                .AddIngredient(ModContent.ItemType<WillToDestroy>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToEscape>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

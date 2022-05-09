@@ -1,6 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.StandArmors.Crystal
@@ -10,22 +11,22 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crystal Helmet (Short-Ranged)");
-            Tooltip.SetDefault("A helmet made to empower the force of the wills\n+2 Stand Speed");
+            DisplayName.SetDefault("Crystal Helmet (Short-Ranged)>();
+            Tooltip.SetDefault("A helmet made to empower the force of the wills\n+2 Stand Speed>();
         }
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 2, 0, 0);
-            item.rare = ItemRarityID.LightPurple;
-            item.defense = 12;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.rare = ItemRarityID.LightPurple;
+            Item.defense = 12;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("CrystalChestplate") && legs.type == mod.ItemType("CrystalLeggings");
+            return body.type == ModContent.ItemType<CrystalChestplate>() && legs.type == ModContent.ItemType<CrystalLeggings>();
         }
 
         public override void UpdateArmorSet(Player player)
@@ -42,13 +43,13 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
 
             if (mPlayer.standType == 0)
             {
-                item.type = mod.ItemType("CrystalHelmetNeutral");
-                item.SetDefaults(mod.ItemType("CrystalHelmetNeutral"));
+                Item.type = ModContent.ItemType<CrystalHelmetNeutral>();
+                Item.SetDefaults(ModContent.ItemType<CrystalHelmetNeutral>());
             }
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("CrystalHelmetLong");
-                item.SetDefaults(mod.ItemType("CrystalHelmetLong"));
+                Item.type = ModContent.ItemType<CrystalHelmetLong>();
+                Item.SetDefaults(ModContent.ItemType<CrystalHelmetLong>());
             }
         }
     }

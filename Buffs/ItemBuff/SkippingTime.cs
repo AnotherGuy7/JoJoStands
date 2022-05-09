@@ -1,18 +1,18 @@
-using System;
-using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader;
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Networking;
- 
+using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
+
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class SkippingTime : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Skipping Time");
+            DisplayName.SetDefault("Skipping Time");
             Description.SetDefault("Time is skipping");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
@@ -20,12 +20,12 @@ namespace JoJoStands.Buffs.ItemBuff
 
         private bool setToTrue = false;
         private bool sendFalse = false;
- 
+
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (player.HasBuff(mod.BuffType("SkippingTime")))
+            if (player.HasBuff(ModContent.BuffType<SkippingTime>()))
             {
                 player.immune = true;
                 player.controlUseItem = false;
@@ -34,7 +34,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 for (int i = 0; i < Main.maxPlayers; i++)
                 {
                     Player otherPlayer = Main.player[i];
-                    if (otherPlayer.active && !otherPlayer.HasBuff(mod.BuffType("PreTimeSkip")) && !otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
+                    if (otherPlayer.active && !otherPlayer.HasBuff(ModContent.BuffType<PreTimeSkip>()) && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))
                     {
                         otherPlayer.velocity = PreTimeSkip.playerVelocity[i];
                         otherPlayer.AddBuff(BuffID.Obstructed, 2);
@@ -67,11 +67,11 @@ namespace JoJoStands.Buffs.ItemBuff
             {
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
-                    Main.npc[n].AddBuff(mod.BuffType("TimeSkipConfusion"), 120);
+                    Main.npc[n].AddBuff(ModContent.BuffType<TimeSkipConfusion>(), 120);
                 }
-                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/timeskip_end"));
-                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
-                player.AddBuff(mod.BuffType("PowerfulStrike"), 2);
+                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/timeskip_end>());
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
+                player.AddBuff(ModContent.BuffType<PowerfulStrike>(), 2);
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     mPlayer.timeskipActive = false;
@@ -83,14 +83,7 @@ namespace JoJoStands.Buffs.ItemBuff
                         Player otherPlayer = Main.player[i];
                         if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI)
                         {
-                            if (otherPlayer.HasBuff(mod.BuffType(Name)))
-                            {
-                                sendFalse = false;      //don't send the packet and let the buff end if you weren't the only timeskip owner
-                            }
-                            else
-                            {
-                                sendFalse = true;       //send the packet if no one is owning timeskip
-                            }
+                            sendFalse = !otherPlayer.HasBuff(Type);
                         }
                         if (player.active && !otherPlayer.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
                         {
@@ -98,9 +91,7 @@ namespace JoJoStands.Buffs.ItemBuff
                         }
                         Array.Clear(PreTimeSkip.playerVelocity, i, 1);
                         if (otherPlayer.active && i != player.whoAmI)
-                        {
-                            otherPlayer.AddBuff(mod.BuffType("TimeSkipConfusion"), 5 * 60);
-                        }
+                            otherPlayer.AddBuff(ModContent.BuffType<TimeSkipConfusion>(), 5 * 60);
                     }
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)

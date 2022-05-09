@@ -14,11 +14,11 @@ namespace JoJoStands.Items.Accessories
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 32;
-            item.rare = ItemRarityID.Green;
-            item.value = Item.buyPrice(silver: 5);
-            item.accessory = true;
+            Item.width = 30;
+            Item.height = 32;
+            Item.rare = ItemRarityID.Green;
+            Item.value = Item.buyPrice(silver: 5);
+            Item.accessory = true;
         }
 
         public override void HoldItem(Player player)
@@ -36,18 +36,17 @@ namespace JoJoStands.Items.Accessories
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.IronBar, 3);
-            recipe.AddIngredient(ItemID.Silk, 2);
-            recipe.AddIngredient(mod.ItemType("Sunscreen"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LeadBar, 3);
-            recipe.AddIngredient(ItemID.Silk, 2);
-            recipe.AddIngredient(mod.ItemType("Sunscreen"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.IronBar, 3)
+                .AddIngredient(ItemID.Silk, 2)
+                .AddIngredient(ModContent.ItemType<Sunscreen>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.LeadBar, 3)
+                .AddIngredient(ItemID.Silk, 2)
+                .AddIngredient(ModContent.ItemType<Sunscreen>())
+                .Register();
         }
     }
 }

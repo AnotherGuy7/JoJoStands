@@ -1,31 +1,29 @@
-using System;
-using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader;
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Networking;
- 
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class ForesightBuff : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Foresight");
+            DisplayName.SetDefault("Foresight");
             Description.SetDefault("You are staring into the future...");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
 
         public bool sendFalse = false;
- 
+
         public override void Update(Player player, ref int buffIndex)
         {
-            if (!player.HasBuff(mod.BuffType(Name)))
+            if (!player.HasBuff(Type))
             {
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(30));
+                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     mPlayer.epitaphForesightActive = false;
@@ -37,14 +35,7 @@ namespace JoJoStands.Buffs.ItemBuff
                         Player otherPlayers = Main.player[i];
                         if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
                         {
-                            if (otherPlayers.HasBuff(mod.BuffType(Name)))
-                            {
-                                sendFalse = false;      //don't send the packet and let the buff end if you weren't the only timestop owner
-                            }
-                            else
-                            {
-                                sendFalse = true;       //send the packet if no one is owning timestop
-                            }
+                            sendFalse = !otherPlayers.HasBuff(Type);
                         }
                         if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
                         {

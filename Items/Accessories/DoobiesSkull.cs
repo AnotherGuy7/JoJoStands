@@ -2,6 +2,7 @@
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.Localization;
 
 namespace JoJoStands.Items.Accessories
@@ -15,12 +16,12 @@ namespace JoJoStands.Items.Accessories
         }
         public override void SetDefaults()
         {
-            item.width = 44;
-            item.height = 50;
-            item.maxStack = 1;
-            item.value = Item.buyPrice(0, 5, 0, 0);
-            item.rare = 2;
-            item.accessory = true;
+            Item.width = 44;
+            Item.height = 50;
+            Item.maxStack = 1;
+            Item.value = Item.buyPrice(0, 5, 0, 0);
+            Item.rare = 2;
+            Item.accessory = true;
         }
         public override void UpdateEquip(Player player)
         {      

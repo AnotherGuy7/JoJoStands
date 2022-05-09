@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/MagiciansRedT1"; }
+            get { return Mod.Name + "/Items/MagiciansRedT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,26 +25,25 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 48;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 48;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("MagiciansRedT1"));
-            recipe.AddIngredient(ItemID.HellstoneBar, 8);
-            recipe.AddIngredient(ItemID.Fireblossom, 3);
-            recipe.AddIngredient(mod.ItemType("WillToFight"));
-            recipe.AddIngredient(mod.ItemType("WillToProtect"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<MagiciansRedT1>())
+                .AddIngredient(ItemID.HellstoneBar, 8)
+                .AddIngredient(ItemID.Fireblossom, 3)
+                .AddIngredient(ModContent.ItemType<WillToFight>())
+                .AddIngredient(ModContent.ItemType<WillToProtect>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
@@ -16,11 +17,11 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 3, 0, 0);
-            item.rare = ItemRarityID.LightRed;
-            item.defense = 14;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 3, 0, 0);
+            Item.rare = ItemRarityID.LightRed;
+            Item.defense = 14;
         }
 
         public override void UpdateEquip(Player player)
@@ -29,24 +30,23 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
 
             if (mPlayer.standType == 1)
             {
-                item.type = mod.ItemType("AdamantiteAlloyHelmetShort");
-                item.SetDefaults(mod.ItemType("AdamantiteAlloyHelmetShort"));
+                Item.type = ModContent.ItemType<AdamantiteAlloyHelmetShort>();
+                Item.SetDefaults(ModContent.ItemType<AdamantiteAlloyHelmetShort>());
             }
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("AdamantiteAlloyHelmetLong");
-                item.SetDefaults(mod.ItemType("AdamantiteAlloyHelmetLong"));
+                Item.type = ModContent.ItemType<AdamantiteAlloyHelmetLong>();
+                Item.SetDefaults(ModContent.ItemType<AdamantiteAlloyHelmetLong>());
             }
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.AdamantiteBar, 10);
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 15);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.AdamantiteBar, 10)
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 15)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -10,97 +11,97 @@ namespace JoJoStands.Projectiles
     {
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.Homing[projectile.type] = true;
+            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 14;
-            projectile.height = 6;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
-            projectile.penetrate = 3;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 14;
+            Projectile.height = 6;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 300;
+            Projectile.penetrate = 3;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         private const float MouseDistanceLimit = 12f;
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
 
-            if (projectile.owner == Main.myPlayer && projectile.ai[0] == 0f)
+            if (Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f)
             {
-                float xDist = (float)Main.mouseX + Main.screenPosition.X - projectile.Center.X;
-                float yDist = (float)Main.mouseY + Main.screenPosition.Y - projectile.Center.Y;
+                float xDist = (float)Main.mouseX + Main.screenPosition.X - Projectile.Center.X;
+                float yDist = (float)Main.mouseY + Main.screenPosition.Y - Projectile.Center.Y;
                 float mouseDistance = (float)Math.Sqrt(xDist * xDist + yDist * yDist);
-                projectile.rotation += (float)projectile.direction * 0.8f;
+                Projectile.rotation += (float)Projectile.direction * 0.8f;
                 if (player.gravDir == -1f)
-                    yDist = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY - projectile.Center.Y;
+                    yDist = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY - Projectile.Center.Y;
 
                 if (player.channel)
                 {
-                    projectile.rotation += (float)projectile.direction * 0.8f;
+                    Projectile.rotation += (float)Projectile.direction * 0.8f;
 
                     if (mouseDistance > MouseDistanceLimit)
                     {
-                        projectile.rotation += (float)projectile.direction * 0.8f;
+                        Projectile.rotation += (float)Projectile.direction * 0.8f;
                         mouseDistance = MouseDistanceLimit / mouseDistance;
                         xDist *= mouseDistance;
                         yDist *= mouseDistance;
                         Point expectedVelocity = new Point((int)(xDist * 1000f), (int)(yDist * 1000f));
-                        Point actualVelocity = new Point((int)(projectile.velocity.X * 1000f), (int)(projectile.velocity.Y * 1000f));
+                        Point actualVelocity = new Point((int)(Projectile.velocity.X * 1000f), (int)(Projectile.velocity.Y * 1000f));
                         if (expectedVelocity.X != actualVelocity.X || expectedVelocity.Y != actualVelocity.Y)
                         {
-                            projectile.netUpdate = true;
+                            Projectile.netUpdate = true;
                         }
-                        projectile.velocity = new Vector2(xDist, yDist);
+                        Projectile.velocity = new Vector2(xDist, yDist);
                     }
                     else
                     {
-                        projectile.rotation += (float)projectile.direction * 0.8f;
+                        Projectile.rotation += (float)Projectile.direction * 0.8f;
                         Point expectedVelocity = new Point((int)(xDist * 1000f), (int)(yDist * 1000f));
-                        Point actualVelocity = new Point((int)(projectile.velocity.X * 1000f), (int)(projectile.velocity.Y * 1000f));
+                        Point actualVelocity = new Point((int)(Projectile.velocity.X * 1000f), (int)(Projectile.velocity.Y * 1000f));
                         if (expectedVelocity.X != actualVelocity.X || expectedVelocity.Y != actualVelocity.Y)
                         {
-                            projectile.netUpdate = true;
+                            Projectile.netUpdate = true;
                         }
-                        projectile.velocity = new Vector2(xDist, yDist);
+                        Projectile.velocity = new Vector2(xDist, yDist);
                     }
                 }
                 else
                 {
-                    projectile.rotation += (float)projectile.direction * 0.8f;
-                    if (projectile.ai[0] == 0f)
+                    Projectile.rotation += (float)Projectile.direction * 0.8f;
+                    if (Projectile.ai[0] == 0f)
                     {
-                        projectile.ai[0] = 1f;
-                        projectile.rotation += (float)projectile.direction * 0.8f;
-                        projectile.netUpdate = true;
+                        Projectile.ai[0] = 1f;
+                        Projectile.rotation += (float)Projectile.direction * 0.8f;
+                        Projectile.netUpdate = true;
 
                         if (mouseDistance == 0f)
                         {
-                            projectile.Center = new Vector2(player.position.X + (float)(player.width / 2), player.position.Y + (float)(player.height / 2));
-                            projectile.rotation += (float)projectile.direction * 0.8f;
-                            xDist = projectile.position.X + (float)projectile.width * 0.5f - projectile.Center.X;
-                            yDist = projectile.position.Y + (float)projectile.height * 0.5f - projectile.Center.Y;
+                            Projectile.Center = new Vector2(player.position.X + (float)(player.width / 2), player.position.Y + (float)(player.height / 2));
+                            Projectile.rotation += (float)Projectile.direction * 0.8f;
+                            xDist = Projectile.position.X + (float)Projectile.width * 0.5f - Projectile.Center.X;
+                            yDist = Projectile.position.Y + (float)Projectile.height * 0.5f - Projectile.Center.Y;
                             mouseDistance = (float)Math.Sqrt((double)(xDist * xDist + yDist * yDist));
                         }
                         mouseDistance = MouseDistanceLimit / mouseDistance;
-                        projectile.velocity = new Vector2(xDist, yDist) * mouseDistance;
-                        if (projectile.velocity == Vector2.Zero)
-                            projectile.Kill();
+                        Projectile.velocity = new Vector2(xDist, yDist) * mouseDistance;
+                        if (Projectile.velocity == Vector2.Zero)
+                            Projectile.Kill();
                     }
                 }
             }
-            int dustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 202, projectile.velocity.X * -0.3f, projectile.velocity.Y * -0.3f);
+            int dustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 202, Projectile.velocity.X * -0.3f, Projectile.velocity.Y * -0.3f);
             Main.dust[dustIndex].noGravity = true;
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            MyPlayer mPlayer = Main.player[projectile.owner].GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
                 crit = true;
         }

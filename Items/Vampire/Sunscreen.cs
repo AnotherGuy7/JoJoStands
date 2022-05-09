@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Vampire
 {
@@ -8,23 +9,23 @@ namespace JoJoStands.Items.Vampire
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sunscreen");
-            Tooltip.SetDefault("For all the hot days you spend wandering.");
+            DisplayName.SetDefault("Sunscreen>();
+            Tooltip.SetDefault("For all the hot days you spend wandering.>();
         }
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 30;
-            item.useTime = 20;
-            item.useAnimation = 20;
-            item.useStyle = ItemUseStyleID.HoldingUp;
-            item.value = Item.buyPrice(0, 0, 10, 0);
-            item.rare = ItemRarityID.Green;
-            item.consumable = true;
-            item.maxStack = 99;
-            item.buffTime = 3 * 60 * 60;
-            item.buffType = mod.BuffType("SunscreenBuff");
+            Item.width = 30;
+            Item.height = 30;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.useStyle = ItemUseStyleID.HoldUp;
+            Item.value = Item.buyPrice(0, 0, 10, 0);
+            Item.rare = ItemRarityID.Green;
+            Item.consumable = true;
+            Item.maxStack = 99;
+            Item.buffTime = 3 * 60 * 60;
+            Item.buffType = ModContent.BuffType<SunscreenBuff>();
         }
     }
 }

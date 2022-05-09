@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ObjectData;
 
 namespace JoJoStands.Tiles
@@ -24,13 +25,13 @@ namespace JoJoStands.Tiles
             TileObjectData.addTile(Type);
             disableSmartCursor = true;
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Blood for the King");
+            name.SetDefault("Blood for the King>();
             AddMapEntry(new Color(120, 85, 60), name);
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 4, 4, mod.ItemType("BloodForTheKing"));
+            Item.NewItem(i * 16, j * 16, 4, 4, ModContent.ItemType<BloodForTheKing>());
         }
     }
 }

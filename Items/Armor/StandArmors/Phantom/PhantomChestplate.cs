@@ -1,5 +1,6 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
@@ -16,11 +17,11 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 4, 0, 0);
-            item.rare = ItemRarityID.Yellow;
-            item.defense = 20;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 4, 0, 0);
+            Item.rare = ItemRarityID.Yellow;
+            Item.defense = 20;
         }
 
         public override void UpdateEquip(Player player)
@@ -34,13 +35,12 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Ectoplasm, 20);
-            recipe.AddIngredient(mod.ItemType("ViralPearl"));
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 4);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Ectoplasm, 20)
+                .AddIngredient(ModContent.ItemType<ViralPearl>())
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 4)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }

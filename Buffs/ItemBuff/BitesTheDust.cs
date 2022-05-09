@@ -1,13 +1,11 @@
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class BitesTheDust : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bites The Dust");
             Description.SetDefault("The ultimate weapon against failure.");
@@ -18,7 +16,7 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int i = 0; i < Main.maxPlayers; i++)       //first, get rid of all effect owners
@@ -26,17 +24,17 @@ namespace JoJoStands.Buffs.ItemBuff
                     Player otherPlayer = Main.player[i];
                     if (otherPlayer.active && otherPlayer.team != player.team)
                     {
-                        if (otherPlayer.HasBuff(mod.BuffType("TheWorldBuff")))
+                        if (otherPlayer.HasBuff(ModContent.BuffType<TheWorldBuff>()))
                         {
-                            otherPlayer.ClearBuff(mod.BuffType("TheWorldBuff"));
+                            otherPlayer.ClearBuff(ModContent.BuffType<TheWorldBuff>());
                         }
-                        if (otherPlayer.HasBuff(mod.BuffType("SkippingTime")))
+                        if (otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))
                         {
-                            otherPlayer.ClearBuff(mod.BuffType("SkippingTime"));
+                            otherPlayer.ClearBuff(ModContent.BuffType<SkippingTime>());
                         }
-                        if (otherPlayer.HasBuff(mod.BuffType("ForesightBuff")))
+                        if (otherPlayer.HasBuff(ModContent.BuffType<ForesightBuff>()))
                         {
-                            otherPlayer.ClearBuff(mod.BuffType("ForesightBuff"));
+                            otherPlayer.ClearBuff(ModContent.BuffType<ForesightBuff>());
                         }
                     }
                 }
@@ -47,7 +45,7 @@ namespace JoJoStands.Buffs.ItemBuff
             mPlayer.epitaphForesightActive = false;
             if (Main.time != 1600)
             {
-                player.AddBuff(mod.BuffType(Name), 2);       //to constantly refresh the buff
+                player.AddBuff(Type, 2);       //to constantly refresh the buff
             }
             if (Main.time < 1600)
             {
@@ -65,16 +63,16 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 player.statLife = player.statLifeMax;
                 player.Spawn();
-                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(420));
-                player.ClearBuff(mod.BuffType(Name));
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(420));
+                player.ClearBuff(Type);
 
             }*/
-            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             mPlayer.bitesTheDustActive = true;
-            if (!player.HasBuff(mod.BuffType(Name)))
+            if (!player.HasBuff(Type))
             {
                 mPlayer.bitesTheDustActive = false;
-                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(120));
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(120));
             }*/
         }
     }

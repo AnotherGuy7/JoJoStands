@@ -10,10 +10,10 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
         public override void SetDefaults()
         {
-            projectile.width = 40;
-            projectile.height = 26;
-            projectile.timeLeft = 180;
-            projectile.tileCollide = false;
+            Projectile.width = 40;
+            Projectile.height = 26;
+            Projectile.timeLeft = 180;
+            Projectile.tileCollide = false;
         }
 
         public override int standType => 2;
@@ -33,25 +33,25 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 shootCount--;
             }
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
             {
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
             }
-            PlayAnimation("BomberPlane");
+            PlayAnimation("BomberPlane>();
 
             if (!setStats)
             {
-                if (projectile.ai[0] == 3f)
+                if (Projectile.ai[0] == 3f)
                 {
                     bombDamage = 62;
                 }
-                else if (projectile.ai[0] == 4f)
+                else if (Projectile.ai[0] == 4f)
                 {
                     bombDamage = 87;
                 }
-                bombDropTime = (int)((Main.screenWidth / 4f) / Math.Abs(projectile.velocity.X)) + Main.rand.Next(-30, 30 + 1);
+                bombDropTime = (int)((Main.screenWidth / 4f) / Math.Abs(Projectile.velocity.X)) + Main.rand.Next(-30, 30 + 1);
                 setStats = true;
             }
 
@@ -59,20 +59,20 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (bombDropTimer >= bombDropTime && bombsDropped < 3)
             {
                 bombsDropped++;
-                Projectile.NewProjectile(projectile.Center, projectile.velocity, mod.ProjectileType("BadCompanyBomb"), 0, 3f, projectile.owner, bombDamage * (float)mPlayer.standDamageBoosts);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<BadCompanyBomb>(), 0, 3f, Projectile.owner, bombDamage * (float)mPlayer.standDamageBoosts);
                 bombDropTimer = 0;
             }
 
-            if (projectile.velocity.X <= 0)
-                projectile.spriteDirection = projectile.direction = -1;
+            if (Projectile.velocity.X <= 0)
+                Projectile.spriteDirection = Projectile.direction = -1;
             else
-                projectile.spriteDirection = projectile.direction = 1;
+                Projectile.spriteDirection = Projectile.direction = 1;
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanyBomberPlane");
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanyBomberPlane>();
 
             AnimateStand(animationName, 3, 11, true);
         }

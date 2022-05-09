@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -10,21 +11,21 @@ namespace JoJoStands.Projectiles
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 2;
+            Main.projFrames[Projectile.type] = 2;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 20;
-            projectile.height = 18;
-            projectile.aiStyle = 0;         //Honestly, this is just to give D'Arby an item to sell, and to play around with frames a little
-            projectile.ranged = true;
-            projectile.timeLeft = 270;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.penetrate = 2;
-            projectile.scale = 0.5f;
+            Projectile.width = 20;
+            Projectile.height = 18;
+            Projectile.aiStyle = 0;         //Honestly, this is just to give D'Arby an Item to sell, and to play around with frames a little
+            Projectile.ranged = true;
+            Projectile.timeLeft = 270;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = 2;
+            Projectile.scale = 0.5f;
         }
 
 
@@ -32,10 +33,10 @@ namespace JoJoStands.Projectiles
         {
             if (!setFrame)
             {
-                projectile.frame = Main.rand.Next(2);
+                Projectile.frame = Main.rand.Next(2);
                 setFrame = true;
             }
-            projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
         }
     }
 }

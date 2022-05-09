@@ -1,4 +1,5 @@
 using JoJoStands.Items.Vampire;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -7,7 +8,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
 {
     public class DyingVampire : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Dying Vampire");
             Description.SetDefault("Only your head remains.");
@@ -20,7 +21,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
             if (!buried && WorldGen.SolidTile((int)player.position.X / 16, ((int)player.position.Y / 16) + 4))
             {
                 player.position.Y += 10f;
@@ -28,7 +29,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             }
 
             player.lifeRegenCount -= 10;
-            player.dash = 0;
+            player.dashType = 0;
             player.controlUseItem = false;
             player.bodyVelocity = Vector2.Zero;
             player.controlLeft = false;
@@ -63,7 +64,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
                     }
                     shootVel.Normalize();
                     shootVel *= 12f;
-                    int proj = Projectile.NewProjectile(player.Center.X, player.Center.Y - 20f, shootVel.X, shootVel.Y, mod.ProjectileType("SpaceRipperStingyEyes"), 82, 4f, Main.myPlayer, 1f);
+                    int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center.X, player.Center.Y - 20f, shootVel.X, shootVel.Y, ModContent.ProjectileType<SpaceRipperStingyEyes>(), 82, 4f, Main.myPlayer, 1f);
                     Main.projectile[proj].netUpdate = true;
                     SRSETimer = 0;
                 }

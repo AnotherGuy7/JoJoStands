@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -8,25 +9,25 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 50;
-            projectile.height = 8;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 600;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 50;
+            Projectile.height = 8;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(projectile.position, Vector2.Zero, mod.ProjectileType("GEScorpion"), 1, 0f, Main.myPlayer);
-            int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<GEScorpion>(), 1, 0f, Main.myPlayer);
+            int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
             Main.dust[dustIndex].noGravity = true;
         }
 
         public override void AI()
         {
-            projectile.rotation = projectile.velocity.ToRotation();
+            Projectile.rotation = Projectile.velocity.ToRotation();
         }
     }
 }

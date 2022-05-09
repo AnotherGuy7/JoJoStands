@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/TheWorldT1"; }
+            get { return Mod.Name + "/Items/TheWorldT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,35 +25,34 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 42;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 42;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("TheWorldT1"));
-            recipe.AddIngredient(ItemID.HellstoneBar, 25);
-            recipe.AddIngredient(ItemID.GoldWatch);
-            recipe.AddIngredient(mod.ItemType("WillToFight"));
-            recipe.AddIngredient(mod.ItemType("WillToControl"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("TheWorldT1"));
-            recipe.AddIngredient(ItemID.HellstoneBar, 25);
-            recipe.AddIngredient(ItemID.PlatinumWatch);
-            recipe.AddIngredient(mod.ItemType("WillToFight"));
-            recipe.AddIngredient(mod.ItemType("WillToControl"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<TheWorldT1>())
+                .AddIngredient(ItemID.HellstoneBar, 25)
+                .AddIngredient(ItemID.GoldWatch)
+                .AddIngredient(ModContent.ItemType<WillToFight>())
+                .AddIngredient(ModContent.ItemType<WillToControl>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<TheWorldT1>())
+                .AddIngredient(ItemID.HellstoneBar, 25)
+                .AddIngredient(ItemID.PlatinumWatch)
+                .AddIngredient(ModContent.ItemType<WillToFight>())
+                .AddIngredient(ModContent.ItemType<WillToControl>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

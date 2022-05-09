@@ -1,9 +1,10 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -20,7 +21,7 @@ namespace JoJoStands.NPCs.Enemies
             npc.height = 48;
             npc.defense = 14;
             npc.lifeMax = 240;
-            npc.damage = 34; 
+            npc.damage = 34;
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath1;
             npc.knockBackResist = 0.5f;
@@ -37,8 +38,8 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void AI()
         {
-            npc.AddBuff(mod.BuffType("Vampire"), 2);
-            if (npc.HasBuff(mod.BuffType("Sunburn")))
+            npc.AddBuff(ModContent.BuffType<Vampire>()), 2);
+            if (npc.HasBuff(ModContent.BuffType<Sunburn>())))
             {
                 npc.defense = 0;
                 npc.damage = 0;
@@ -68,13 +69,13 @@ namespace JoJoStands.NPCs.Enemies
 
             if (Main.rand.Next(0, 251) <= 2)
             {
-                Main.PlaySound(14, (int)npc.position.X, (int)npc.position.Y, 1, Main.soundVolume, -1.6f);
+                SoundEngine.PlaySound(14, (int)npc.position.X, (int)npc.position.Y, 1, Main.soundVolume, -1.6f);
             }
 
             float targetDistance = 0f;
             if (npc.target != -1)
             {
-                 targetDistance = Vector2.Distance(npc.Center, Main.player[npc.target].Center);
+                targetDistance = Vector2.Distance(npc.Center, Main.player[npc.target].Center);
             }
 
             if (targetDistance > 28f)
@@ -142,15 +143,15 @@ namespace JoJoStands.NPCs.Enemies
             int dropChance = 6;
             if (chance <= dropChance)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("RustedGladiatorHelmet"));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<RustedGladiatorHelmet>()));
             }
             else if (chance <= dropChance * 2)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("RustedGladiatorChestplate"));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<RustedGladiatorChestplate>()));
             }
             else if (chance <= dropChance * 3)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("RustedGladiatorBoots"));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<RustedGladiatorBoots>()));
             }
 
             Item.NewItem(npc.getRect(), ItemID.SilverCoin, Main.rand.Next(0, 3 + 1));
@@ -202,7 +203,7 @@ namespace JoJoStands.NPCs.Enemies
             float chance = 0f;
             if (JoJoStandsWorld.VampiricNight)
             {
-                chance =SpawnCondition.OverworldNightMonster.Chance * 0.92f;
+                chance = SpawnCondition.OverworldNightMonster.Chance * 0.92f;
             }
             return chance;
         }

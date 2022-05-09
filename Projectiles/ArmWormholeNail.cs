@@ -1,7 +1,9 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -9,27 +11,27 @@ namespace JoJoStands.Projectiles
     {
         public override string Texture
         {
-            get { return mod.Name + "/Projectiles/WormholeNail"; }
+            get { return Mod.Name + "/Projectiles/WormholeNail"; }
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 25;
-            projectile.height = 25;
-            projectile.aiStyle = 0;
-            projectile.penetrate = -1;
-            projectile.timeLeft = 3600;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 25;
+            Projectile.height = 25;
+            Projectile.aiStyle = 0;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 3600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            projectile.rotation += MathHelper.ToRadians(13f * projectile.direction);
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            Projectile.rotation += MathHelper.ToRadians(13f * Projectile.direction);
 
             if (player.whoAmI == Main.myPlayer && mPlayer.tuskShootCooldown <= 0)
             {
@@ -37,26 +39,26 @@ namespace JoJoStands.Projectiles
                 {
                     player.channel = true;
                     mPlayer.tuskShootCooldown += 35 - mPlayer.standSpeedBoosts;
-                    Main.PlaySound(SoundID.Item67);
-                    Vector2 shootVelocity = Main.MouseWorld - projectile.Center;
+                    SoundEngine.PlaySound(SoundID.Item67);
+                    Vector2 shootVelocity = Main.MouseWorld - Projectile.Center;
                     shootVelocity.Normalize();
                     shootVelocity *= 4f;
-                    Projectile.NewProjectile(projectile.Center + shootVelocity, shootVelocity, mod.ProjectileType("ControllableNail"), (int)(122 * mPlayer.standDamageBoosts) + ((22 + mPlayer.equippedTuskAct - 3) * mPlayer.equippedTuskAct - 3), 6f, player.whoAmI);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + shootVelocity, shootVelocity, ModContent.ProjectileType<ControllableNail>(), (int)(122 * mPlayer.standDamageBoosts) + ((22 + mPlayer.equippedTuskAct - 3) * mPlayer.equippedTuskAct - 3), 6f, player.whoAmI);
                 }
                 if (Main.mouseRight || mPlayer.tuskActNumber != 3)
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                     mPlayer.tuskShootCooldown += 30;
                 }
             }
 
-            int dustIndex = Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 240);
+            int dustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 240);
             Main.dust[dustIndex].noGravity = true;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            projectile.velocity = Vector2.Zero;
+            Projectile.velocity = Vector2.Zero;
             return false;
         }
     }

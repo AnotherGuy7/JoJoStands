@@ -1,6 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.StandArmors.Alloys
@@ -10,17 +11,17 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Titanium Alloy Mask (Long-Ranged)");
-            Tooltip.SetDefault("A mask fused with Viral Meteorite to empower the user.\n10% Stand Crit Chance\n15% Stand Damage");
+            DisplayName.SetDefault("Titanium Alloy Mask (Long-Ranged)>();
+            Tooltip.SetDefault("A mask fused with Viral Meteorite to empower the user.\n10% Stand Crit Chance\n15% Stand Damage>();
         }
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 3, 0, 0);
-            item.rare = ItemRarityID.LightRed;
-            item.defense = 10;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 3, 0, 0);
+            Item.rare = ItemRarityID.LightRed;
+            Item.defense = 10;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -42,13 +43,13 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
 
             if (mPlayer.standType == 0)
             {
-                item.type = mod.ItemType("TitaniumAlloyMaskNeutral");
-                item.SetDefaults(mod.ItemType("TitaniumAlloyMaskNeutral"));
+                Item.type = ModContent.ItemType<TitaniumAlloyMaskNeutral>();
+                Item.SetDefaults(ModContent.ItemType<TitaniumAlloyMaskNeutral>());
             }
             if (mPlayer.standType == 1)
             {
-                item.type = mod.ItemType("TitaniumAlloyMaskShort");
-                item.SetDefaults(mod.ItemType("TitaniumAlloyMaskShort"));
+                Item.type = ModContent.ItemType<TitaniumAlloyMaskShort>();
+                Item.SetDefaults(ModContent.ItemType<TitaniumAlloyMaskShort>());
             }
         }
     }

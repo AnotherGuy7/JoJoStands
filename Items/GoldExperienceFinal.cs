@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using JoJoStands.UI;
 using Terraria;
 using Terraria.ID;
@@ -20,13 +22,13 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 98;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 98;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -37,16 +39,15 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("GoldExperienceT3"));
-            recipe.AddIngredient(ItemID.ChlorophyteBar, 6);
-            recipe.AddIngredient(ItemID.Ectoplasm, 3);
-            recipe.AddIngredient(ItemID.LifeFruit, 2);
-            recipe.AddIngredient(ItemID.RedHusk, 2);
-            recipe.AddIngredient(mod.ItemType("DeterminedLifeforce"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<GoldExperienceT3>())
+                .AddIngredient(ItemID.ChlorophyteBar, 6)
+                .AddIngredient(ItemID.Ectoplasm, 3)
+                .AddIngredient(ItemID.LifeFruit, 2)
+                .AddIngredient(ItemID.RedHusk, 2)
+                .AddIngredient(ModContent.ItemType<DeterminedLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

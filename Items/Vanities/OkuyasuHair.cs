@@ -1,41 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Vanities
 {
-	[AutoloadEquip(EquipType.Head)]
-	public class OkuyasuHair : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Okuyasu Wig");
-			Tooltip.SetDefault("A wig in the hairstyle of Okuyasu Nijimura, minus the facial scars.");
-		}
+    [AutoloadEquip(EquipType.Head)]
+    public class OkuyasuHair : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Okuyasu Wig");
+            Tooltip.SetDefault("A wig in the hairstyle of Okuyasu Nijimura, minus the facial scars.");
+            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+        }
 
-		public override void SetDefaults()
-		{
-			item.width = 18;
-			item.height = 18;
-			item.rare = 6;
-			item.vanity = true;
-		}
+        public override void SetDefaults()
+        {
+            Item.width = 18;
+            Item.height = 18;
+            Item.rare = 6;
+            Item.vanity = true;
+        }
 
-		public override bool DrawHead()
-		{
-			return true;
-		}
-
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 2);
-			recipe.AddTile(TileID.Loom);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
-	}
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Silk, 2)
+                .AddTile(TileID.Loom)
+                .Register();
+        }
+    }
 }

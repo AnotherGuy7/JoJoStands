@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indicate the folder where it is to be read from, so you the texture will load correctly
 {
@@ -62,12 +63,12 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
                 openShop = true;        //so when you click on buy button opens the shop
         }
 
-        public override void SetupShop(Chest shop, ref int nextSlot)        //Allows you to add items to this town NPC's shop. Add an item by setting the defaults of shop.item[nextSlot] then incrementing nextSlot.
+        public override void SetupShop(Chest shop, ref int nextSlot)        //Allows you to add items to this town NPC's shop. Add an Item by setting the defaults of shop.Item[nextSlot] then incrementing nextSlot.
         {
             for (int i = 0; i < JoJoStands.standTier1List.Count; i++)       //auto builds the list of items, also sets their price to 1 platinum without affecting original items
             {
-                shop.item[i].SetDefaults(JoJoStands.standTier1List[i]);
-                shop.item[i].value = Item.buyPrice(0, 50, 0, 0);
+                shop.Item[i].SetDefaults(JoJoStands.standTier1List[i]);
+                shop.Item[i].value = Item.buyPrice(0, 50, 0, 0);
             }
         }
 
@@ -105,11 +106,11 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             randExtraCooldown = 10;
         }
 
-        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)       //Allows you to determine the projectile type of this town NPC's attack, and how long it takes for the projectile to actually appear
+        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)       //Allows you to determine the Projectile type of this town NPC's attack, and how long it takes for the Projectile to actually appear
         {
             if (!Projectiles.NPCStands.WhitesnakeNPCStand.whitesnakeActive)
             {
-                projType = mod.ProjectileType("WhitesnakeNPCStand");
+                projType = ModContent.ProjectileType<WhitesnakeNPCStand>();
                 attackDelay = 1;
             }
         }

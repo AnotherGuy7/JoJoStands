@@ -2,8 +2,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.TheHand
 {
@@ -37,20 +37,20 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !secondaryAbility && !scrapeFrames)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility && !scrapeFrames)
                 {
                     Punch();
                 }
@@ -59,7 +59,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && player.whoAmI == Main.myPlayer)
+                if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.whoAmI == Main.myPlayer)
                 {
                     secondaryAbilityFrames = true;
                     if (chargeTimer < 150f)
@@ -67,13 +67,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         chargeTimer++;
                     }
                 }
-                if (!Main.mouseRight && chargeTimer != 0 && projectile.owner == Main.myPlayer)
+                if (!Main.mouseRight && chargeTimer != 0 && Projectile.owner == Main.myPlayer)
                 {
                     scrapeFrames = true;
                 }
-                if (!Main.mouseRight && chargeTimer != 0 && projectile.owner == Main.myPlayer && scrapeFrames && projectile.frame == 1)
+                if (!Main.mouseRight && chargeTimer != 0 && Projectile.owner == Main.myPlayer && scrapeFrames && Projectile.frame == 1)
                 {
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/BRRR"));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR>());
                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                     distanceToTeleport.Normalize();
                     /*distanceToTeleport *= 98f * (chargeTimer / 60f);
@@ -81,10 +81,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     distanceToTeleport *= chargeTimer / 60f;
                     player.velocity += distanceToTeleport * 5f;
 
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(chargeTimer / 10));       //15s max cooldown
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(chargeTimer / 10));       //15s max cooldown
                     chargeTimer = 0;
                 }
-                /*if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")))
+                /*if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
                     chargingScrape = true;
                     secondaryAbilityFrames = true;
@@ -93,24 +93,24 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 {
                     chargingScrape = false;
                     scrapeFrames = true;
-                    Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, mod.ProjectileType("TheHandMouse"), 0, 0f, Main.myPlayer, projectile.whoAmI);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<TheHandMouse>(), 0, 0f, Main.myPlayer, Projectile.whoAmI);
                 }
-                if (projectile.ai[0] == 1f)     //teleport in that direction
+                if (Projectile.ai[0] == 1f)     //teleport in that direction
                 {
                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                     distanceToTeleport.Normalize();
                     distanceToTeleport *= 98f;
                     player.position = player.Center + distanceToTeleport;
-                    player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(5));
-                    projectile.ai[0] = 0f;
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
+                    Projectile.ai[0] = 0f;
                 }
-                if (projectile.ai[0] == 2f)     //pull the enemy
+                if (Projectile.ai[0] == 2f)     //pull the enemy
                 {
-                    projectile.ai[0] = 0f;
+                    Projectile.ai[0] = 0f;
                 }
-                if (projectile.ai[0] == 3f)     //break tiles
+                if (Projectile.ai[0] == 3f)     //break tiles
                 {
-                    projectile.ai[0] = 0f;
+                    Projectile.ai[0] = 0f;
                 }*/
                 if (!attackFrames)
                 {
@@ -128,12 +128,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
         public override bool PreDrawExtras(SpriteBatch spriteBatch)
         {
-            Player player = Main.player[projectile.owner];
-            if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && MyPlayer.RangeIndicators && chargeTimer != 0)
+            Player player = Main.player[Projectile.owner];
+            if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && MyPlayer.RangeIndicators && chargeTimer != 0)
             {
-                Texture2D positionIndicator = mod.GetTexture("Extras/PositionIndicator");
+                Texture2D positionIndicator = Mod.GetTexture("Extras/PositionIndicator>();
                 Vector2 distanceToTeleport = Vector2.Zero;
-                if (projectile.owner == Main.myPlayer)      //so that other players cursors don't mix in
+                if (Projectile.owner == Main.myPlayer)      //so that other players cursors don't mix in
                     distanceToTeleport = Main.MouseWorld - player.position;
                 distanceToTeleport.Normalize();
                 distanceToTeleport *= 98f * (chargeTimer / 60f);
@@ -141,10 +141,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (scrapeFrames)
             {
-                Texture2D scrapeTrail = mod.GetTexture("Extras/ScrapeTrail");
-                //spriteBatch.Draw(scrapeTrail, projectile.Center - Main.screenPosition, new Rectangle(0, 2 - projectile.frame, scrapeTrail.Width, scrapeTrail.Height / (projectile.frame + 1)), Color.White);
+                Texture2D scrapeTrail = Mod.GetTexture("Extras/ScrapeTrail>();
+                //spriteBatch.Draw(scrapeTrail, Projectile.Center - Main.screenPosition, new Rectangle(0, 2 - Projectile.frame, scrapeTrail.Width, scrapeTrail.Height / (Projectile.frame + 1)), Color.White);
                 int frameHeight = standTexture.Height / 2;
-                spriteBatch.Draw(scrapeTrail, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), Color.White, 0f, new Vector2(scrapeTrail.Width / 2f, frameHeight / 2f), 1f, effects, 0);
+                spriteBatch.Draw(scrapeTrail, Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight), Color.White, 0f, new Vector2(scrapeTrail.Width / 2f, frameHeight / 2f), 1f, effects, 0);
             }
             return true;
         }
@@ -166,45 +166,45 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Charge");
+                PlayAnimation("Charge>();
             }
             if (scrapeFrames)
             {
                 if (!resetFrame)
                 {
-                    projectile.frame = 0;
-                    projectile.frameCounter = 0;
+                    Projectile.frame = 0;
+                    Projectile.frameCounter = 0;
                     resetFrame = true;
                 }
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                PlayAnimation("Scrape");
+                PlayAnimation("Scrape>();
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 scrapeFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
             }
         }
 
         public override void AnimationCompleted(string animationName)
         {
-            if (resetFrame && animationName == "Scrape")
+            if (resetFrame && animationName == "Scrape>()
             {
                 normalFrames = true;
                 scrapeFrames = false;
@@ -215,25 +215,25 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 4, 12, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Charge")
+            if (animationName == "Charge>()
             {
                 AnimateStand(animationName, 4, 15, true);
             }
-            if (animationName == "Scrape")
+            if (animationName == "Scrape>()
             {
                 AnimateStand(animationName, 2, 10, false);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>()
             {
                 AnimateStand(animationName, 1, 12, true);
             }

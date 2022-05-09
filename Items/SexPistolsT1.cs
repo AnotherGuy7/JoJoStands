@@ -1,7 +1,10 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles.PlayerStands.SexPistols;
+using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
 namespace JoJoStands.Items
 {
@@ -19,16 +22,16 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.useTime = 12;
-            item.useAnimation = 12;
-            item.useStyle = 5;
-            item.maxStack = 1;
-            item.knockBack = 2f;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTime = 12;
+            Item.useAnimation = 12;
+            Item.useStyle = 5;
+            Item.maxStack = 1;
+            Item.knockBack = 2f;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -39,19 +42,18 @@ namespace JoJoStands.Items
             mPlayer.poseSoundName = "SexPistolsIsDesignedToKill";
             for (int i = 0; i < 6; i++)
             {
-                Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("SexPistolsStand"), 0, 0f, Main.myPlayer, i + 1);
+                Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<SexPistolsStand>(), 0, 0f, Main.myPlayer, i + 1);
             }
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StandArrow"));
-            recipe.AddIngredient(mod.ItemType("WillToFight"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<StandArrow>())
+                .AddIngredient(ModContent.ItemType<WillToFight>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

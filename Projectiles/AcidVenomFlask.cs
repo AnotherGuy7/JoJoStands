@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,13 +10,13 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.damage = 21;
-            projectile.width = 18;
-            projectile.height = 18;
-            projectile.friendly = false;
-            projectile.hostile = true;
-            projectile.ignoreWater = false;
-            projectile.tileCollide = true;
+            Projectile.damage = 21;
+            Projectile.width = 18;
+            Projectile.height = 18;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.ignoreWater = false;
+            Projectile.tileCollide = true;
         }
 
         private int expertboost = 1;
@@ -23,14 +24,12 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             if (Main.expertMode)
-            {
                 expertboost = 2;
-            }
 
-            projectile.rotation += MathHelper.ToRadians(20f);
-            projectile.velocity.Y += 0.33f;
+            Projectile.rotation += MathHelper.ToRadians(20f);
+            Projectile.velocity.Y += 0.33f;
 
-            projectile.damage = 21 * expertboost;
+            Projectile.damage = 21 * expertboost;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -44,8 +43,8 @@ namespace JoJoStands.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(2, (int)projectile.position.X, (int)projectile.position.Y, 107);
-            Gore.NewGore(projectile.position, projectile.oldVelocity * 0.2f, 704);
+            SoundEngine.PlaySound(2, (int)Projectile.position.X, (int)Projectile.position.Y, 107);
+            Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.oldVelocity * 0.2f, 704);
 
             int gasclouds = Main.rand.Next(21, 30);
             for (int index = 0; index < gasclouds; ++index)
@@ -53,7 +52,7 @@ namespace JoJoStands.Projectiles
                 Vector2 gasVelocity = new Vector2(Main.rand.Next(-100, 100), Main.rand.Next(-100, 100));
                 gasVelocity.Normalize();
                 gasVelocity *= (float)Main.rand.Next(10, 70) * 0.007f;
-                int acidVenomGas = Projectile.NewProjectile(projectile.Center, gasVelocity, mod.ProjectileType("AcidVenomFlaskGas"), 7 * expertboost, 1f, projectile.owner);
+                int acidVenomGas = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, gasVelocity, ModContent.ProjectileType<AcidVenomFlaskGas>(), 7 * expertboost, 1f, Projectile.owner);
                 Main.projectile[acidVenomGas].netUpdate = true;
             }
         }

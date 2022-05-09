@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/StickyFingersT1"; }
+            get { return Mod.Name + "/Items/StickyFingersT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,25 +25,24 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 37;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 37;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StickyFingersT1"));
-            recipe.AddIngredient(ItemID.Sapphire, 3);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"));
-            recipe.AddIngredient(mod.ItemType("WillToChange"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<StickyFingersT1>())
+                .AddIngredient(ItemID.Sapphire, 3)
+                .AddIngredient(ModContent.ItemType<WillToProtect>())
+                .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

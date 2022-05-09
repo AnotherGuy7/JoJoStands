@@ -1,16 +1,17 @@
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Networking;
+using Terraria;
 using Terraria.Graphics.Effects;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class BacktoZero : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Back to Zero");
+            DisplayName.SetDefault("Back to Zero");
             Description.SetDefault("Enemies that hurt you never touched you at all...");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
@@ -21,8 +22,8 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)       //it should only affect the user with this buff on
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (player.HasBuff(mod.BuffType(Name)))
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            if (player.HasBuff(Type))
             {
                 player.statDefense += 99999;
                 player.endurance = 1f;
@@ -31,7 +32,7 @@ namespace JoJoStands.Buffs.ItemBuff
             }
             else
             {
-                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(35));
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(35));
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     mPlayer.backToZeroActive = false;
@@ -43,14 +44,7 @@ namespace JoJoStands.Buffs.ItemBuff
                         Player otherPlayers = Main.player[i];
                         if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
                         {
-                            if (otherPlayers.HasBuff(mod.BuffType(Name)))
-                            {
-                                sendFalse = false;      //don't send the packet and let the buff end if you weren't the only timestop owner
-                            }
-                            else
-                            {
-                                sendFalse = true;       //send the packet if no one is owning timestop
-                            }
+                            sendFalse = !otherPlayers.HasBuff(Type);
                         }
                         if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
                         {
@@ -66,9 +60,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 if (Main.netMode != NetmodeID.Server)
                 {
                     if (Filters.Scene["GreenEffect"].IsActive())
-                    {
                         Filters.Scene["GreenEffect"].Deactivate();
-                    }
                 }
             }
         }

@@ -1,7 +1,8 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Items.CraftingMaterials;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-
 
 namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
 {
@@ -16,45 +17,45 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 3, 0, 0);
-            item.rare = ItemRarityID.LightRed;
-            item.defense = 6;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 3, 0, 0);
+            Item.rare = ItemRarityID.LightRed;
+            Item.defense = 6;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("ChlorositeChestplate") && legs.type == mod.ItemType("ChlorositeLeggings");
+            return body.type == ModContent.ItemType<ChlorositeChestplate>() && legs.type == ModContent.ItemType<ChlorositeLeggings>();
         }
 
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Summons a Viral Crystal";
-            player.AddBuff(mod.BuffType("ViralCrystalBuff"), 2);
+            player.AddBuff(ModContent.BuffType<ViralCrystalBuff>(), 2);
         }
+
         public override void UpdateEquip(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("ChlorositeHelmetLong");
-                item.SetDefaults(mod.ItemType("ChlorositeHelmetLong"));
+                Item.type = ModContent.ItemType<ChlorositeHelmetLong>();
+                Item.SetDefaults(ModContent.ItemType<ChlorositeHelmetLong>());
             }
             if (mPlayer.standType == 1)
             {
-                item.type = mod.ItemType("ChlorositeHelmetShort");
-                item.SetDefaults(mod.ItemType("ChlorositeHelmetShort"));
+                Item.type = ModContent.ItemType<ChlorositeHelmetShort>();
+                Item.SetDefaults(ModContent.ItemType<ChlorositeHelmetShort>());
             }
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ChlorositeBar"), 10);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<ChlorositeBar>(), 10)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }

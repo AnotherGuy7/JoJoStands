@@ -2,23 +2,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
     public class StoneFreeBindString : ModProjectile
     {
-        public override string Texture => mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
+        public override string Texture => Mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
 
         public override void SetDefaults()
         {
-            projectile.width = 16;
-            projectile.height = 16;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 360;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.penetrate = -1;
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 360;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
         }
 
         private NPC boundNPC;
@@ -26,54 +27,54 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            Projectile ownerProj = Main.projectile[(int)projectile.ai[0]];
+            Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
             if (boundToNPC)
             {
                 if (!ownerProj.active || (boundNPC == null || boundNPC.life <= 0))
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                     return;
                 }
 
-                projectile.Center = boundNPC.Center;
+                Projectile.Center = boundNPC.Center;
                 return;
             }
 
-            float direction = ownerProj.Center.X - projectile.Center.X;
+            float direction = ownerProj.Center.X - Projectile.Center.X;
             if (direction > 0)
             {
-                projectile.direction = -1;
+                Projectile.direction = -1;
                 ownerProj.direction = -1;
             }
             if (direction < 0)
             {
-                projectile.direction = 1;
+                Projectile.direction = 1;
                 ownerProj.direction = 1;
             }
-            projectile.spriteDirection = projectile.direction;
+            Projectile.spriteDirection = Projectile.direction;
             ownerProj.spriteDirection = ownerProj.direction;
-            Vector2 rota = ownerProj.Center - projectile.Center;
-            projectile.rotation = (-rota * projectile.direction).ToRotation();
+            Vector2 rota = ownerProj.Center - Projectile.Center;
+            Projectile.rotation = (-rota * Projectile.direction).ToRotation();
 
-            if (projectile.owner == Main.myPlayer)
+            if (Projectile.owner == Main.myPlayer)
             {
-                float distance = projectile.Distance(Main.MouseWorld);
+                float distance = Projectile.Distance(Main.MouseWorld);
                 if (distance >= 16f)
                 {
-                    projectile.velocity = Main.MouseWorld - projectile.Center;
-                    projectile.velocity.Normalize();
-                    projectile.velocity *= 24f;
+                    Projectile.velocity = Main.MouseWorld - Projectile.Center;
+                    Projectile.velocity.Normalize();
+                    Projectile.velocity *= 24f;
                 }
                 else
                 {
-                    projectile.velocity = Vector2.Zero;
+                    Projectile.velocity = Vector2.Zero;
                 }
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!ownerProj.active)
             {
-                projectile.Kill();
+                Projectile.Kill();
                 return;
             }
         }
@@ -89,16 +90,16 @@ namespace JoJoStands.Projectiles
             {
                 boundNPC = target;
                 boundToNPC = true;
-                boundNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().boundByStrings = true;
-                projectile.damage = 0;
-                projectile.timeLeft = (int)projectile.ai[1] * 60;
+                boundNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>()).boundByStrings = true;
+                Projectile.damage = 0;
+                Projectile.timeLeft = (int)Projectile.ai[1] * 60;
             }
         }
 
         public override void Kill(int timeLeft)
         {
             if (boundToNPC && boundNPC != null && boundNPC.life > 0)
-                boundNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().boundByStrings = false;
+                boundNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>()).boundByStrings = false;
         }
 
         private Texture2D stringTexture;
@@ -110,14 +111,14 @@ namespace JoJoStands.Projectiles
         {
             if (stringTexture == null)
             {
-                stringTexture = mod.GetTexture("Projectiles/StoneFreeString_Part");
+                stringTexture = Mod.GetTexture("Projectiles/StoneFreeString_Part>();
                 stringSourceRect = new Rectangle(0, 0, stringTexture.Width, stringTexture.Height);
                 stringOrigin = new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f);
             }
 
-            Projectile ownerProj = Main.projectile[(int)projectile.ai[0]];
+            Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
             Vector2 linkCenter = ownerProj.Center + new Vector2(12f * ownerProj.direction, 0f);
-            Vector2 projectileCenter = projectile.Center;
+            Vector2 projectileCenter = Projectile.Center;
             drawColor = lightColor;
 
             float stringRotation = (linkCenter - projectileCenter).ToRotation();
@@ -134,7 +135,7 @@ namespace JoJoStands.Projectiles
                     lightLevelIndex = 0f;
                 }
 
-                spriteBatch.Draw(stringTexture, pos, stringSourceRect, drawColor, stringRotation, stringOrigin, projectile.scale * stringScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(stringTexture, pos, stringSourceRect, drawColor, stringRotation, stringOrigin, Projectile.scale * stringScale, SpriteEffects.None, 0f);
             }
             return false;
         }

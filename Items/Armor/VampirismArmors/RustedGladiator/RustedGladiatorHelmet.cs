@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
@@ -11,16 +12,16 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A helmet worn by only the best of warriors.\n+5% Vampiric Damaage");
+            Tooltip.SetDefault("A helmet worn by only the best of warriors.\n+5% Vampiric Damaage>();
         }
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.value = Item.buyPrice(0, 0, 47, 0);
-            item.rare = ItemRarityID.Blue;
-            item.defense = 4;
+            Item.width = 32;
+            Item.height = 32;
+            Item.value = Item.buyPrice(0, 0, 47, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.defense = 4;
         }
 
         public override void UpdateEquip(Player player)
@@ -30,7 +31,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("RustedGladiatorChestplate") && legs.type == mod.ItemType("RustedGladiatorBoots");
+            return body.type == ModContent.ItemType<RustedGladiatorChestplate>() && legs.type == ModContent.ItemType<RustedGladiatorBoots>();
         }
 
         public override void UpdateArmorSet(Player player)

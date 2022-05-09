@@ -13,19 +13,18 @@ namespace JoJoStands.Items.Vanities
 
         public override void SetDefaults()
         {
-            item.width = 36;
-            item.height = 32;
-            item.rare = ItemRarityID.LightPurple;
-            item.vanity = true;
+            Item.width = 36;
+            Item.height = 32;
+            Item.rare = ItemRarityID.LightPurple;
+            Item.vanity = true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Silk, 10);
-            recipe.AddTile(TileID.Loom);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Silk, 10)
+                .AddTile(TileID.Loom)
+                .Register();
         }
     }
 }

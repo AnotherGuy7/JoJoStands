@@ -1,16 +1,17 @@
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class ArtificialSoul : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Artificial Soul");
+            DisplayName.SetDefault("Artificial Soul");
             Description.SetDefault("An artificial soul has been given to you!");
-            canBeCleared = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
             Main.debuff[Type] = true;
         }
 

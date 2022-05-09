@@ -1,8 +1,10 @@
 using JoJoStands.NPCs.TownNPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -10,26 +12,26 @@ namespace JoJoStands.Projectiles
     {
         public override string Texture
         {
-            get { return mod.Name + "/Projectiles/HamonPunches"; }
+            get { return Mod.Name + "/Projectiles/HamonPunches"; }
         }
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 11;
+            Main.projFrames[Projectile.type] = 11;
         }
 
         public override void SetDefaults()      //look into ProjectileID.595. Done.
         {
-            projectile.width = 68;
-            projectile.height = 64;
-            projectile.friendly = true;
-            projectile.aiStyle = 0;
-            projectile.tileCollide = false;
-            projectile.penetrate = -1;
-            projectile.ownerHitCheck = true;
-            projectile.friendly = true;
-            drawOriginOffsetY = 20;
-            projectile.scale = (int)1.5;
+            Projectile.width = 68;
+            Projectile.height = 64;
+            Projectile.friendly = true;
+            Projectile.aiStyle = 0;
+            Projectile.tileCollide = false;
+            Projectile.penetrate = -1;
+            Projectile.ownerHitCheck = true;
+            Projectile.friendly = true;
+            DrawOriginOffsetY = 20;
+            Projectile.scale = (int)1.5;
         }
 
         private NPC zeppeli = null;
@@ -41,7 +43,7 @@ namespace JoJoStands.Projectiles
                 for (int k = 0; k < Main.maxNPCs; k++)
                 {
                     NPC npc = Main.npc[k];
-                    if (npc.type == mod.NPCType("HamonMaster"))
+                    if (npc.type == Mod.NPCType("HamonMaster"))
                     {
                         zeppeli = npc;
                     }
@@ -50,13 +52,13 @@ namespace JoJoStands.Projectiles
 
             if (zeppeli == null || !zeppeli.active)
             {
-                projectile.Kill();
+                Projectile.Kill();
                 return;
             }
 
             bool enemiesNearby = false;
-            projectile.ai[0]++;
-            if (projectile.ai[0] >= 10f)
+            Projectile.ai[0]++;
+            if (Projectile.ai[0] >= 10f)
             {
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
@@ -72,54 +74,54 @@ namespace JoJoStands.Projectiles
                 }
                 if (!enemiesNearby)
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                     return;
                 }
-                projectile.ai[0] = 0f;
+                Projectile.ai[0] = 0f;
             }
 
-            projectile.frameCounter++;
+            Projectile.frameCounter++;
             HamonMaster.punchesActive = true;
-            if (projectile.direction == 1)
+            if (Projectile.direction == 1)
             {
-                drawOffsetX = 25;
+                DrawOffsetX = 25;
             }
-            if (projectile.direction == -1)
+            if (Projectile.direction == -1)
             {
-                drawOffsetX = -2;
+                DrawOffsetX = -2;
             }
-            if (projectile.frameCounter >= 2)
+            if (Projectile.frameCounter >= 2)
             {
-                projectile.frame += 1;
-                if (projectile.frame >= Main.projFrames[projectile.type])
+                Projectile.frame += 1;
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
                 {
-                    projectile.frame = 0;
+                    Projectile.frame = 0;
                 }
-                projectile.frameCounter = 0;
+                Projectile.frameCounter = 0;
             }
 
-            projectile.soundDelay--;
-            if (projectile.soundDelay <= 0)
+            Projectile.soundDelay--;
+            if (Projectile.soundDelay <= 0)
             {
-                Main.PlaySound(SoundID.Item1, projectile.Center);
-                projectile.soundDelay = 12;
+                SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+                Projectile.soundDelay = 12;
             }
             Vector2 pos = zeppeli.Center + new Vector2(-40f, -40f) + new Vector2(20f * zeppeli.direction, 0f);
-            if (projectile.position != pos)
+            if (Projectile.position != pos)
             {
-                if (projectile.Center.X > zeppeli.Center.X)
+                if (Projectile.Center.X > zeppeli.Center.X)
                 {
-                    projectile.direction = 1;
+                    Projectile.direction = 1;
                 }
                 else
                 {
-                    projectile.direction = -1;
+                    Projectile.direction = -1;
                 }
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
-            projectile.position = pos;
-            projectile.spriteDirection = projectile.direction;
-            projectile.timeLeft = 2;
+            Projectile.position = pos;
+            Projectile.spriteDirection = Projectile.direction;
+            Projectile.timeLeft = 2;
             zeppeli.FaceTarget();
         }
 

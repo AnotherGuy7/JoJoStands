@@ -1,12 +1,13 @@
-using Terraria.ID;
+using JoJoStands.Items.CraftingMaterials;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Armor.StandArmors.Viral
 {
-	[AutoloadEquip(EquipType.Head)]
-	public class ViralArmorHelmetNeutral : ModItem
-	{
+    [AutoloadEquip(EquipType.Head)]
+    public class ViralArmorHelmetNeutral : ModItem
+    {
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Viral Helmet (Neutral)");
@@ -15,11 +16,11 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 26;
-            item.value = Item.buyPrice(0, 3, 50, 0);
-            item.rare = ItemRarityID.Green;
-            item.defense = 6;
+            Item.width = 22;
+            Item.height = 26;
+            Item.value = Item.buyPrice(0, 3, 50, 0);
+            Item.rare = ItemRarityID.Green;
+            Item.defense = 6;
         }
 
         public override void UpdateEquip(Player player)
@@ -28,23 +29,22 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
 
             if (mPlayer.standType == 1)
             {
-                item.type = mod.ItemType("ViralArmorHelmetMelee");
-                item.SetDefaults(mod.ItemType("ViralArmorHelmetMelee"));
+                Item.type = ModContent.ItemType<ViralArmorHelmetMelee>();
+                Item.SetDefaults(ModContent.ItemType<ViralArmorHelmetMelee>());
             }
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("ViralArmorHelmetRanged");
-                item.SetDefaults(mod.ItemType("ViralArmorHelmetRanged"));
+                Item.type = ModContent.ItemType<ViralArmorHelmetRanged>();
+                Item.SetDefaults(ModContent.ItemType<ViralArmorHelmetRanged>());
             }
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 20);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 20)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

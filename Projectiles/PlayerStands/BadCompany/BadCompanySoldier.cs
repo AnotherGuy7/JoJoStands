@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
@@ -9,8 +10,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
     {
         public override void SetDefaults()
         {
-            projectile.width = 16;
-            projectile.height = 26;
+            Projectile.width = 16;
+            Projectile.height = 26;
         }
 
         public override int standType => 2;
@@ -22,7 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         private new int projectileDamage = 0;
         private new int shootTime = 0;
         private float speedRandom = 0f;     //So the AI isn't always the same
-        private int centerDistance = 30;      //Height of the center of the projectile (used for 
+        private int centerDistance = 30;      //Height of the center of the Projectile (used for 
 
         public override void AI()
         {
@@ -31,35 +32,35 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!setStats)
             {
-                if (projectile.ai[0] == 1f)
+                if (Projectile.ai[0] == 1f)
                 {
                     projectileDamage = 9;
                     shootTime = 90;
                 }
-                else if (projectile.ai[0] == 2f)
+                else if (Projectile.ai[0] == 2f)
                 {
                     projectileDamage = 18;
                     shootTime = 80;
                 }
-                else if (projectile.ai[0] == 3f)
+                else if (Projectile.ai[0] == 3f)
                 {
                     projectileDamage = 31;
                     shootTime = 70;
                 }
-                else if (projectile.ai[0] == 4f)
+                else if (Projectile.ai[0] == 4f)
                 {
                     projectileDamage = 40;
                     shootTime = 60;
@@ -70,45 +71,45 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
                 for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
                 {
-                    Dust.NewDust(projectile.position, projectile.width, projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
                 }
             }
 
             if (!mPlayer.standAutoMode)
             {
                 MovementAI();
-                if (projectile.ai[0] == 0f)     //Here because it's different for Auto Mode
+                if (Projectile.ai[0] == 0f)     //Here because it's different for Auto Mode
                 {
-                    if (Main.MouseWorld.Y > projectile.position.Y + centerDistance)
+                    if (Main.MouseWorld.Y > Projectile.position.Y + centerDistance)
                     {
-                        PlayAnimation("AimDown");
+                        PlayAnimation("AimDown>();
                     }
-                    else if (Main.MouseWorld.Y < projectile.position.Y - centerDistance)
+                    else if (Main.MouseWorld.Y < Projectile.position.Y - centerDistance)
                     {
-                        PlayAnimation("AimUp");
+                        PlayAnimation("AimUp>();
                     }
                 }
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
                 {
-                    projectile.direction = 1;
-                    if (Main.MouseWorld.X <= projectile.position.X)
+                    Projectile.direction = 1;
+                    if (Main.MouseWorld.X <= Projectile.position.X)
                     {
-                        projectile.direction = -1;
+                        Projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
+                    Projectile.spriteDirection = Projectile.direction;
 
                     if (shootCount <= 0)
                     {
                         shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
-                        Main.PlaySound(SoundID.Item11, projectile.position);
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -118,37 +119,37 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 NPC target = FindNearestTarget(17f * 16f);
                 if (target != null)
                 {
-                    if (projectile.ai[0] == 0f)
+                    if (Projectile.ai[0] == 0f)
                     {
-                        if (target.position.Y > projectile.position.Y + centerDistance)
+                        if (target.position.Y > Projectile.position.Y + centerDistance)
                         {
-                            PlayAnimation("AimDown");
+                            PlayAnimation("AimDown>();
                         }
-                        if (target.position.Y < projectile.position.Y - centerDistance)
+                        if (target.position.Y < Projectile.position.Y - centerDistance)
                         {
-                            PlayAnimation("AimUp");
+                            PlayAnimation("AimUp>();
                         }
                     }
 
-                    projectile.direction = 1;
-                    if (target.position.X <= projectile.position.X)
+                    Projectile.direction = 1;
+                    if (target.position.X <= Projectile.position.X)
                     {
-                        projectile.direction = -1;
+                        Projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
+                    Projectile.spriteDirection = Projectile.direction;
 
                     if (shootCount <= 0)
                     {
                         shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
-                        Main.PlaySound(SoundID.Item11, projectile.position);
-                        Vector2 shootVel = target.Center - projectile.Center;
+                        SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
+                        Vector2 shootVel = target.Center - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -158,14 +159,14 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 }
             }
 
-            projectile.tileCollide = !Collision.SolidCollision(projectile.position, projectile.width, projectile.height);
+            Projectile.tileCollide = !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
         }
 
         public override void Kill(int timeLeft)
         {
             for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
             {
-                Dust.NewDust(projectile.position, projectile.width, projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
             }
         }
 
@@ -174,98 +175,98 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
         private void MovementAI()       //Pretty much the pet AI
         {
-            Player player = Main.player[projectile.owner];
-            Vector2 directionToPlayer = player.Center - projectile.Center;
+            Player player = Main.player[Projectile.owner];
+            Vector2 directionToPlayer = player.Center - Projectile.Center;
             directionToPlayer.Normalize();
             directionToPlayer *= player.moveSpeed;
-            float xDist = Math.Abs(player.position.X - projectile.position.X);
-            if (!WorldGen.SolidTile((int)(projectile.position.X / 16f), (int)(projectile.position.Y / 16f) + 2))
+            float xDist = Math.Abs(player.position.X - Projectile.position.X);
+            if (!WorldGen.SolidTile((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f) + 2))
             {
-                projectile.ai[0] = 1f;
+                Projectile.ai[0] = 1f;
             }
             else
             {
-                projectile.ai[0] = 0f;
+                Projectile.ai[0] = 0f;
             }
 
-            if (projectile.position.X > player.position.X)
+            if (Projectile.position.X > player.position.X)
             {
-                projectile.direction = -1;
+                Projectile.direction = -1;
             }
             else
             {
-                projectile.direction = 1;
+                Projectile.direction = 1;
             }
-            projectile.spriteDirection = projectile.direction;
+            Projectile.spriteDirection = Projectile.direction;
 
-            if (projectile.ai[0] == 0f)
+            if (Projectile.ai[0] == 0f)
             {
-                PlayAnimation("Walk");
-                projectile.tileCollide = true;
-                if (projectile.velocity.Y < 6f)
+                PlayAnimation("Walk>();
+                Projectile.tileCollide = true;
+                if (Projectile.velocity.Y < 6f)
                 {
-                    projectile.velocity.Y += 0.3f;
+                    Projectile.velocity.Y += 0.3f;
                 }
 
                 if (xDist >= IdleRange)
                 {
-                    projectile.velocity.X = directionToPlayer.X * xDist / 14;
+                    Projectile.velocity.X = directionToPlayer.X * xDist / 14;
                 }
                 else
                 {
-                    projectile.velocity.X *= 0.96f + speedRandom;
+                    Projectile.velocity.X *= 0.96f + speedRandom;
                 }
             }
-            float distance = Vector2.Distance(player.Center, projectile.Center);
-            if (projectile.ai[0] == 1f)        //Flying
+            float distance = Vector2.Distance(player.Center, Projectile.Center);
+            if (Projectile.ai[0] == 1f)        //Flying
             {
-                PlayAnimation("Parachute");
+                PlayAnimation("Parachute>();
                 if (distance >= MaxFlyingIdleDistance)
                 {
                     if (Math.Abs(player.velocity.X) > 1f || Math.Abs(player.velocity.Y) > 1f)
                     {
                         directionToPlayer *= distance / 16f;
-                        projectile.velocity = directionToPlayer;
+                        Projectile.velocity = directionToPlayer;
                     }
                     else
                     {
                         directionToPlayer *= (0.9f + speedRandom) * (distance / 60f);
-                        projectile.velocity = directionToPlayer;
+                        Projectile.velocity = directionToPlayer;
                     }
                 }
             }
             if (distance >= 300f)        //Out of range
             {
-                projectile.tileCollide = false;
+                Projectile.tileCollide = false;
                 directionToPlayer *= distance / 90f;
-                projectile.velocity += directionToPlayer;
+                Projectile.velocity += directionToPlayer;
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanySoldier_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanySoldier_" + animationName);
 
-            if (animationName == "Parachute")
+            if (animationName == "Parachute>()
             {
                 AnimateStand(animationName, 1, 120, true);
             }
-            if (animationName == "Prone")
+            if (animationName == "Prone>()
             {
                 AnimateStand(animationName, 1, 120, true);
             }
-            if (animationName == "AimUp")
+            if (animationName == "AimUp>()
             {
                 AnimateStand(animationName, 1, 120, true);
             }
-            if (animationName == "AimDown")
+            if (animationName == "AimDown>()
             {
                 AnimateStand(animationName, 1, 120, true);
             }
-            if (animationName == "Walk")
+            if (animationName == "Walk>()
             {
-                AnimateStand(animationName, 4, 20 - (int)projectile.velocity.X, true);
+                AnimateStand(animationName, 4, 20 - (int)Projectile.velocity.X, true);
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/WhitesnakeT1"; }
+            get { return Mod.Name + "/Items/WhitesnakeT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -24,37 +26,36 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 38;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 38;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("WhitesnakeT1"));
-            recipe.AddIngredient(ItemID.DemoniteBar, 9);
-            recipe.AddIngredient(ItemID.Diamond);
-            recipe.AddIngredient(ItemID.RottenChunk, 5);
-            recipe.AddIngredient(mod.ItemType("WillToControl"));
-            recipe.AddIngredient(mod.ItemType("WillToChange"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("WhitesnakeT1"));
-            recipe.AddIngredient(ItemID.CrimtaneBar, 9);
-            recipe.AddIngredient(ItemID.Diamond);
-            recipe.AddIngredient(ItemID.Vertebrae, 5);
-            recipe.AddIngredient(mod.ItemType("WillToControl"));
-            recipe.AddIngredient(mod.ItemType("WillToChange"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<WhitesnakeT1>())
+                .AddIngredient(ItemID.DemoniteBar, 9)
+                .AddIngredient(ItemID.Diamond)
+                .AddIngredient(ItemID.RottenChunk, 5)
+                .AddIngredient(ModContent.ItemType<WillToControl>())
+                .AddIngredient(ModContent.ItemType<WillToChange>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<WhitesnakeT1>())
+                .AddIngredient(ItemID.CrimtaneBar, 9)
+                .AddIngredient(ItemID.Diamond)
+                .AddIngredient(ItemID.Vertebrae, 5)
+                .AddIngredient(ModContent.ItemType<WillToControl>())
+                .AddIngredient(ModContent.ItemType<WillToChange>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

@@ -1,5 +1,5 @@
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,23 +15,23 @@ namespace JoJoStands.Items.Hamon
 
         public override void SetDefaults()
         {
-            item.ranged = true;
-            item.damage = 23;
-            item.width = 26;
-            item.height = 30;
-            item.useTime = 40;
-            item.useAnimation = 40;
-            item.maxStack = 999;
-            item.knockBack = 2f;
-            item.rare = ItemRarityID.Pink;
-            item.noWet = true;
-            item.useTurn = true;
-            item.autoReuse = false;
-            item.noUseGraphic = true;
-            item.consumable = true;
-            item.useStyle = ItemUseStyleID.Stabbing;
-            item.shoot = mod.ProjectileType("HamonizedFireworkProjectile");
-            item.shootSpeed = 15f;
+            Item.ranged = true;
+            Item.damage = 23;
+            Item.width = 26;
+            Item.height = 30;
+            Item.useTime = 40;
+            Item.useAnimation = 40;
+            Item.maxStack = 999;
+            Item.knockBack = 2f;
+            Item.rare = ItemRarityID.Pink;
+            Item.noWet = true;
+            Item.useTurn = true;
+            Item.autoReuse = false;
+            Item.noUseGraphic = true;
+            Item.consumable = true;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.shoot = ModContent.ProjectileType<HamonizedFireworkProjectile>();
+            Item.shootSpeed = 15f;
         }
 
         public override bool CanUseItem(Player player)
@@ -39,24 +39,23 @@ namespace JoJoStands.Items.Hamon
             return player.GetModPlayer<HamonPlayer>().amountOfHamon >= 7;
         }
 
-        public override bool UseItem(Player player)
+        public override bool? UseItem(Player player)
         {
-            if (player.whoAmI == item.owner)
+            if (player.whoAmI == Main.myPlayer)
             {
                 player.GetModPlayer<HamonPlayer>().amountOfHamon -= 7;
-                player.ConsumeItem(item.type);
+                player.ConsumeItem(Item.type);
             }
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Bomb, 2);
-            recipe.AddIngredient(ItemID.Gel, 8);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 4);
-            recipe.SetResult(this, 15);
-            recipe.AddRecipe();
+            CreateRecipe(15)
+                .AddIngredient(ItemID.Bomb, 2)
+                .AddIngredient(ItemID.Gel, 8)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 4)
+                .Register();
         }
     }
 }

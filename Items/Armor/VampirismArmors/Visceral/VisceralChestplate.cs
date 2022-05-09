@@ -15,11 +15,11 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Visceral
 
         public override void SetDefaults()
         {
-            item.width = 34;
-            item.height = 24;
-            item.value = Item.buyPrice(gold: 1);
-            item.rare = ItemRarityID.Orange;
-            item.defense = 8;
+            Item.width = 34;
+            Item.height = 24;
+            Item.value = Item.buyPrice(gold: 1);
+            Item.rare = ItemRarityID.Orange;
+            Item.defense = 8;
         }
 
         public override void UpdateEquip(Player player)
@@ -31,13 +31,12 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Visceral
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.CrimtaneBar, 18);
-            recipe.AddIngredient(ItemID.Vertebrae, 28);
-            recipe.AddIngredient(ItemID.TissueSample, 12);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.CrimtaneBar, 18)
+                .AddIngredient(ItemID.Vertebrae, 28)
+                .AddIngredient(ItemID.TissueSample, 12)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

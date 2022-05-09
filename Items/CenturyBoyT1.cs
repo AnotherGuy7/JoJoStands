@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,9 +18,9 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.width = 36;
-            item.height = 48;
-            item.rare = ItemRarityID.LightPurple;
+            Item.width = 36;
+            Item.height = 48;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -29,21 +31,19 @@ namespace JoJoStands.Items
             mPlayer.showingCBLayer = true;
             mPlayer.standAccessory = true;
             if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
                 Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, true, player.whoAmI);
-            }
+
             return true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StandArrow"));
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 3);
-            recipe.AddIngredient(mod.ItemType("WillToEscape"), 3);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<StandArrow>())
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 3)
+                .AddIngredient(ModContent.ItemType<WillToEscape>(), 3)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

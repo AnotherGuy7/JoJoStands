@@ -5,6 +5,7 @@ using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Hamon
 {
@@ -23,20 +24,20 @@ namespace JoJoStands.Items.Hamon
         {
             SafeSetDefaults();
             // all vanilla damage types must be false for custom damage types to work
-            item.melee = false;
-            item.ranged = false;
-            item.magic = false;
-            item.thrown = false;
-            item.summon = false;
+            Item.melee = false;
+            Item.ranged = false;
+            Item.magic = false;
+            Item.thrown = false;
+            Item.summon = false;
         }
 
         private int increaseCounter = 0;
 
         public void ChargeHamon()
         {
-            Player player = Main.player[item.owner];
-            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            Player player = Main.player[Item.owner];
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>());
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
             bool specialPressed = false;
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SpecialHotKey.Current;
@@ -45,7 +46,7 @@ namespace JoJoStands.Items.Hamon
             {
                 if (vPlayer.zombie || vPlayer.vampire)
                 {
-                    player.AddBuff(mod.BuffType("Sunburn"), 5 * 60);
+                    player.AddBuff(ModContent.BuffType<Sunburn>(), 5 * 60);
                     return;
                 }
                 increaseCounter++;
@@ -74,7 +75,7 @@ namespace JoJoStands.Items.Hamon
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             // Get the vanilla damage tooltip
-            TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
+            TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.Mod == "Terraria>();
             if (tt != null)
             {
                 // We want to grab the last word of the tooltip, which is the translated word for 'damage' (depending on what langauge the player is using)
@@ -87,17 +88,17 @@ namespace JoJoStands.Items.Hamon
 
         public override void ModifyHitPvp(Player player, Player target, ref int damage, ref bool crit)
         {
-            if (target.HasBuff(mod.BuffType("Vampire")))
+            if (target.HasBuff(ModContent.BuffType<Vampire>()))
             {
                 damage = (int)(damage * 1.3f);
-                target.AddBuff(mod.BuffType("Sunburn"), 90);
+                target.AddBuff(ModContent.BuffType<Sunburn>(), 90);
             }
         }
 
         // As a modder, you could also opt to make the Get overrides also sealed. Up to the modder
         public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)       //when making the base damage values, make sure they are around the 10-20's cause otherwise, at MoonLord they'd go over 250
         {
-            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>());
             mult *= hamonPlayer.hamonDamageBoosts;
 
             if (!affectedByHamonScaling)
@@ -151,8 +152,8 @@ namespace JoJoStands.Items.Hamon
 
         public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
         {
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
-            if (hPlayer.learnedHamonSkills[HamonPlayer.SunTag] && target.GetGlobalNPC<JoJoGlobalNPC>().sunTagged)
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>());
+            if (hPlayer.learnedHamonSkills[HamonPlayer.SunTag] && target.GetGlobalNPC<JoJoGlobalNPC>()).sunTagged)
             {
                 damage = (int)(damage * 1.15f);
             }
@@ -160,7 +161,7 @@ namespace JoJoStands.Items.Hamon
 
         public override void GetWeaponKnockback(Player player, ref float knockback)
         {
-            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>());
             knockback *= hamonPlayer.hamonKnockbackBoosts;
         }
     }

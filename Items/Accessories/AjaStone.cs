@@ -1,6 +1,7 @@
-﻿using Terraria.ID;
-using Terraria;
+﻿using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Items.Hamon;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
@@ -10,19 +11,19 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Red Stone of Aja");
-            Tooltip.SetDefault("Wear this stone to walk on water, increase your regenerative capabilities, and increase your max hamon!");
+            DisplayName.SetDefault("Red Stone of Aja>();
+            Tooltip.SetDefault("Wear this stone to walk on water, increase your regenerative capabilities, and increase your max hamon!>();
         }
 
         public override void SetDefaults()
         {
-            item.width = 48;
-            item.height = 60;
-            item.maxStack = 1;
-            item.value = Item.buyPrice(gold: 14, silver: 50);
-            item.rare = ItemRarityID.LightPurple;
-            item.accessory = true;
-            item.scale = 0.8f;
+            Item.width = 48;
+            Item.height = 60;
+            Item.maxStack = 1;
+            Item.value = Item.buyPrice(gold: 14, silver: 50);
+            Item.rare = ItemRarityID.LightPurple;
+            Item.accessory = true;
+            Item.scale = 0.8f;
         }
 
         public override void HoldItem(Player player)
@@ -37,9 +38,9 @@ namespace JoJoStands.Items.Accessories
             hamonPlayer.hamonKnockbackBoosts += 0.5f;
             if (Main.dayTime)
             {
-                player.meleeDamage += 0.23f;
-                player.meleeSpeed += 0.18f;
-                player.magicDamage *= 2;
+                player.GetDamage(DamageClass.Melee) += 0.23f;
+                player.GetAttackSpeed(DamageClass.Melee) += 0.18f;
+                player.GetDamage(DamageClass.Magic) += 0.23f;
                 player.manaRegen *= 3;
                 player.lifeRegen += 2;
             }
@@ -52,12 +53,11 @@ namespace JoJoStands.Items.Accessories
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LargeRuby, 1);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 12);
-            recipe.AddIngredient(ItemID.SunStone, 1);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.LargeRuby, 1)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 12)
+                .AddIngredient(ItemID.SunStone, 1)
+                .Register();
         }
     }
 }

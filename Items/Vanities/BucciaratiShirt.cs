@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Vanities
 {
@@ -18,19 +19,18 @@ namespace JoJoStands.Items.Vanities
 
 		public override void SetDefaults()
 		{
-			item.width = 18;
-			item.height = 18;
-			item.rare = 6;
-			item.vanity = true;
+			Item.width = 18;
+			Item.height = 18;
+			Item.rare = 6;
+			Item.vanity = true;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 10);
-			recipe.AddTile(TileID.Loom);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe()
+			    .AddIngredient(ItemID.Silk, 10)
+			    .AddTile(TileID.Loom)
+			    .Register();
 		}
 	}
 }

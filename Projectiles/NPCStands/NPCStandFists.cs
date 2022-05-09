@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles.Minions
 {
@@ -7,18 +8,18 @@ namespace JoJoStands.Projectiles.Minions
     {
         public override string Texture
         {
-            get { return mod.Name + "/Projectiles/Minions/Fists"; }
+            get { return Mod.Name + "/Projectiles/Minions/Fists"; }
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 30;
-            projectile.height = 30;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.timeLeft = 6;
-            projectile.alpha = 255;     //completely transparent
+            Projectile.width = 30;
+            Projectile.height = 30;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.timeLeft = 6;
+            Projectile.alpha = 255;     //completely transparent
         }
     }
 }

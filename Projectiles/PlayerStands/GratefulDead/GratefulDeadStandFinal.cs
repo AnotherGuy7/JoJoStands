@@ -34,20 +34,20 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && !secondaryFrames && !grabFrames)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryFrames && !grabFrames)
                 {
                     Punch();
                 }
@@ -60,20 +60,20 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 {
                     StayBehind();
                 }
-                if (Main.mouseRight && projectile.owner == Main.myPlayer && shootCount <= 0 && !grabFrames)
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer && shootCount <= 0 && !grabFrames)
                 {
-                    projectile.velocity = Main.MouseWorld - projectile.position;
-                    projectile.velocity.Normalize();
-                    projectile.velocity *= 5f;
+                    Projectile.velocity = Main.MouseWorld - Projectile.position;
+                    Projectile.velocity.Normalize();
+                    Projectile.velocity *= 5f;
 
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
                     {
-                        projectile.velocity = player.velocity + projectile.velocity;
+                        Projectile.velocity = player.velocity + Projectile.velocity;
                     }
                     if (mouseDistance <= 40f)
                     {
-                        projectile.velocity = Vector2.Zero;
+                        Projectile.velocity = Vector2.Zero;
                     }
 
                     secondaryFrames = true;
@@ -82,27 +82,27 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         NPC npc = Main.npc[n];
                         if (npc.active)
                         {
-                            if (projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
+                            if (Projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
                             {
-                                projectile.ai[0] = npc.whoAmI;
+                                Projectile.ai[0] = npc.whoAmI;
                                 grabFrames = true;
                             }
                         }
                     }
                     LimitDistance();
                 }
-                if (grabFrames && projectile.ai[0] != -1f)
+                if (grabFrames && Projectile.ai[0] != -1f)
                 {
-                    projectile.velocity = Vector2.Zero;
-                    NPC npc = Main.npc[(int)projectile.ai[0]];
-                    npc.direction = -projectile.direction;
-                    npc.position = projectile.position + new Vector2(5f * projectile.direction, -2f - npc.height / 3f);
+                    Projectile.velocity = Vector2.Zero;
+                    NPC npc = Main.npc[(int)Projectile.ai[0]];
+                    npc.direction = -Projectile.direction;
+                    npc.position = Projectile.position + new Vector2(5f * Projectile.direction, -2f - npc.height / 3f);
                     npc.velocity = Vector2.Zero;
-                    npc.AddBuff(mod.BuffType("Old2"), 2);
+                    npc.AddBuff(ModContent.BuffType<Old2>(), 2);
                     if (!npc.active)
                     {
                         grabFrames = false;
-                        projectile.ai[0] = -1f;
+                        Projectile.ai[0] = -1f;
                         shootCount += 30;
                     }
                     LimitDistance();
@@ -110,7 +110,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 if (!Main.mouseRight && (grabFrames || secondaryFrames))
                 {
                     grabFrames = false;
-                    projectile.ai[0] = -1f;
+                    Projectile.ai[0] = -1f;
                     shootCount += 30;
                     secondaryFrames = false;
                 }
@@ -121,11 +121,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 activatedGas = !activatedGas;
                 if (activatedGas)
                 {
-                    Main.NewText("Gas Spread: On");
+                    Main.NewText("Gas Spread: On>();
                 }
                 else
                 {
-                    Main.NewText("Gas Spread: Off");
+                    Main.NewText("Gas Spread: Off>();
                 }
             }
             if (activatedGas)
@@ -138,7 +138,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         float distance = Vector2.Distance(player.Center, npc.Center);
                         if (distance < (30f * 16f) && !npc.immortal && !npc.hide)
                         {
-                            npc.AddBuff(mod.BuffType("Old"), 2);
+                            npc.AddBuff(ModContent.BuffType<Old>(), 2);
                         }
                     }
                 }
@@ -150,11 +150,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         float distance = Vector2.Distance(player.Center, otherPlayer.Center);
                         if (distance < (30f * 16f) && otherPlayer.whoAmI != player.whoAmI)
                         {
-                            otherPlayer.AddBuff(mod.BuffType("Old"), 2);
+                            otherPlayer.AddBuff(ModContent.BuffType<Old>(), 2);
                         }
                     }
                 }
-                player.AddBuff(mod.BuffType("Old"), 2);
+                player.AddBuff(ModContent.BuffType<Old>(), 2);
             }
             if (mPlayer.standAutoMode)
             {
@@ -164,11 +164,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
         public override bool PreDrawExtras(SpriteBatch spriteBatch)
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (MyPlayer.RangeIndicators)
             {
-                Texture2D texture = mod.GetTexture("Extras/RangeIndicator");
+                Texture2D texture = Mod.GetTexture("Extras/RangeIndicator>();
                 spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * ((MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), ((30f * 16f) + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
             }
             return true;
@@ -195,56 +195,56 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
             if (secondaryFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary");
+                PlayAnimation("Secondary>();
             }
             if (grabFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryFrames = false;
-                PlayAnimation("Grab");
+                PlayAnimation("Grab>();
 
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 4, 12, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Secondary")
+            if (animationName == "Secondary>()
             {
                 AnimateStand(animationName, 1, 1, true);
             }
-            if (animationName == "Grab")
+            if (animationName == "Grab>()
             {
                 AnimateStand(animationName, 3, 12, true, 2, 2);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>()
             {
                 AnimateStand(animationName, 1, 12, true);
             }

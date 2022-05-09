@@ -1,7 +1,9 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
+﻿using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.NPCs;
+using JoJoStands.Projectiles;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Armor.StandArmors.Phantom
 {
@@ -18,16 +20,16 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 3, 0, 0);
-            item.rare = ItemRarityID.Yellow;
-            item.defense = 8;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 3, 0, 0);
+            Item.rare = ItemRarityID.Yellow;
+            Item.defense = 8;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("PhantomChestplate") && legs.type == mod.ItemType("PhantomLeggings");
+            return body.type == ModContent.ItemType<PhantomChestplate>() && legs.type == ModContent.ItemType<PhantomLeggings>();
         }
 
         public override void UpdateArmorSet(Player player)
@@ -46,7 +48,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
                         JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>();
                         if (npc.lifeMax > 5 && !npc.friendly && !jojoNPC.taggedWithPhantomMarker)
                         {
-                            Projectile.NewProjectile(npc.position, npc.velocity, mod.ProjectileType("PhantomMarker"), 0, 0f, Main.myPlayer, npc.whoAmI);
+                            Projectile.NewProjectile(player.GetSource_FromThis(), npc.position, npc.velocity, ModContent.ProjectileType<PhantomMarker>(), 0, 0f, Main.myPlayer, npc.whoAmI);
                             jojoNPC.taggedWithPhantomMarker = true;
                         }
                     }
@@ -63,24 +65,23 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
             if (mPlayer.standType == 2)
             {
-                item.type = mod.ItemType("PhantomHoodLong");
-                item.SetDefaults(mod.ItemType("PhantomHoodLong"));
+                Item.type = ModContent.ItemType<PhantomHoodLong>();
+                Item.SetDefaults(ModContent.ItemType<PhantomHoodLong>());
             }
             if (mPlayer.standType == 1)
             {
-                item.type = mod.ItemType("PhantomHoodShort");
-                item.SetDefaults(mod.ItemType("PhantomHoodShort"));
+                Item.type = ModContent.ItemType<PhantomHoodShort>();
+                Item.SetDefaults(ModContent.ItemType<PhantomHoodShort>());
             }
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Ectoplasm, 10);
-            recipe.AddIngredient(mod.ItemType("ViralPearl"));
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 2);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Ectoplasm, 10)
+                .AddIngredient(ModContent.ItemType<CraftingMaterials.ViralPearl>())
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 2)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }

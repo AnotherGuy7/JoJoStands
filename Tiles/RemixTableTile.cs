@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ObjectData;
 
 namespace JoJoStands.Tiles
@@ -20,7 +21,7 @@ namespace JoJoStands.Tiles
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 			TileObjectData.addTile(Type);
 			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Remix Table");
+			name.SetDefault("Remix Table>();
 			AddMapEntry(Color.Black, name);
 		}
 
@@ -40,7 +41,7 @@ namespace JoJoStands.Tiles
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 4, 4, mod.ItemType("RemixTable"));
+			Item.NewItem(i * 16, j * 16, 4, 4, ModContent.ItemType<RemixTable>());
 		}
 	}
 }

@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,27 +15,26 @@ namespace JoJoStands.Items.Tiles
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.useTurn = true;
-            item.autoReuse = true;
-            item.useAnimation = 10;
-            item.useTime = 10;
-            item.useStyle = 1;
-            item.consumable = true;
-            item.value = Item.buyPrice(0, 0, 50, 0);
-            item.rare = ItemRarityID.Yellow;
-            item.maxStack = 999;
-            item.createTile = mod.TileType("ViralToiletTile");
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTurn = true;
+            Item.autoReuse = true;
+            Item.useAnimation = 10;
+            Item.useTime = 10;
+            Item.useStyle = 1;
+            Item.consumable = true;
+            Item.value = Item.buyPrice(0, 0, 50, 0);
+            Item.rare = ItemRarityID.Yellow;
+            Item.maxStack = 999;
+            Item.createTile = ModContent.TileType<ViralToiletTile>();
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 6);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 6)
+                .AddTile(TileID.WorkBenches)
+                .Register();
         }
     }
 }

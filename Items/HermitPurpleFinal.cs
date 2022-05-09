@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/HermitPurpleT1"; }
+            get { return Mod.Name + "/Items/HermitPurpleT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,13 +25,13 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 202;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 202;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -42,15 +44,14 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("HermitPurpleT3"));
-            recipe.AddIngredient(ItemID.Ectoplasm, 8);
-            recipe.AddIngredient(ItemID.TurtleShell, 3);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 8);
-            recipe.AddIngredient(mod.ItemType("DeterminedLifeforce"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<HermitPurpleT3>())
+                .AddIngredient(ItemID.Ectoplasm, 8)
+                .AddIngredient(ItemID.TurtleShell, 3)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 8)
+                .AddIngredient(ModContent.ItemType<DeterminedLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

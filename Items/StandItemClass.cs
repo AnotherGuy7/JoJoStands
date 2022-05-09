@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items
 {
@@ -42,7 +43,7 @@ namespace JoJoStands.Items
             }
             if (standType != 0)
             {
-                TooltipLine tooltipAddition = new TooltipLine(mod, "Speed", speedType + speed);
+                TooltipLine tooltipAddition = new TooltipLine(Mod, "Speed", speedType + speed);
                 tooltips.Add(tooltipAddition);
             }
         }
@@ -68,20 +69,20 @@ namespace JoJoStands.Items
             if (mPlayer.StandSlot.Item.type != 0)
             {
                 player.QuickSpawnItem(mPlayer.StandSlot.Item.type);
-                mPlayer.StandSlot.Item.type = item.type;
-                mPlayer.StandSlot.Item.SetDefaults(item.type);
+                mPlayer.StandSlot.Item.type = Item.type;
+                mPlayer.StandSlot.Item.SetDefaults(Item.type);
             }
             if (mPlayer.StandSlot.Item.type == 0)
             {
-                mPlayer.StandSlot.Item.type = item.type;
-                mPlayer.StandSlot.Item.SetDefaults(item.type);
+                mPlayer.StandSlot.Item.type = Item.type;
+                mPlayer.StandSlot.Item.SetDefaults(Item.type);
             }
         }
 
         /// <summary>
         /// Determines whether or not the Stand will spawn using normal spawn code.
         /// </summary>
-        /// <returns>Whether or not this item will override standard stand spawning code.</returns>
+        /// <returns>Whether or not this Item will override standard stand spawning code.</returns>
         public virtual bool ManualStandSpawning(Player player)
         {
             return false;

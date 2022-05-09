@@ -1,5 +1,6 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using JoJoStands.UI;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,7 +16,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/StoneFreeT1"; }
+            get { return Mod.Name + "/Items/StoneFreeT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -26,13 +27,13 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 91;
-            item.width = 50;
-            item.height = 50;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 91;
+            Item.width = 50;
+            Item.height = 50;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -43,14 +44,13 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("StandArrow"));
-            recipe.AddIngredient(ItemID.Ectoplasm, 16);
-            recipe.AddIngredient(ItemID.Silk, 20);
-            recipe.AddIngredient(mod.ItemType("DeterminedLifeforce"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<StandArrow>())
+                .AddIngredient(ItemID.Ectoplasm, 16)
+                .AddIngredient(ItemID.Silk, 20)
+                .AddIngredient(ModContent.ItemType<DeterminedLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

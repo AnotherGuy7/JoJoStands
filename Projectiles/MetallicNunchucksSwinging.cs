@@ -5,23 +5,24 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
     public class MetallicNunchucksSwinging : ModProjectile
     {
-        public override string Texture => mod.Name + "/Projectiles/MetallicNunchucksProjectile";
+        public override string Texture => Mod.Name + "/Projectiles/MetallicNunchucksProjectile";
 
         public override void SetDefaults()
         {
-            projectile.width = 18;
-            projectile.height = 6;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 600;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.penetrate = -1;
+            Projectile.width = 18;
+            Projectile.height = 6;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
         }
 
         private float rotation = 0f;
@@ -29,20 +30,20 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+            Player player = Main.player[Projectile.owner];
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>());
             if (player.dead)
             {
-                projectile.Kill();
+                Projectile.Kill();
                 return;
             }
 
-            Vector2 rota = player.Center - projectile.Center;
-            projectile.rotation = (-rota).ToRotation();
+            Vector2 rota = player.Center - Projectile.Center;
+            Projectile.rotation = (-rota).ToRotation();
 
             if (Main.mouseLeft)
             {
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
                 rotation += 24f * player.direction;
                 if (rotation >= 360f)
@@ -61,18 +62,18 @@ namespace JoJoStands.Projectiles
                     hamonConsumptionTimer = 0;
                 }
 
-                projectile.Center = player.Center + (MathHelper.ToRadians(rotation).ToRotationVector2() * 32f);
-                projectile.velocity = Vector2.Zero;
+                Projectile.Center = player.Center + (MathHelper.ToRadians(rotation).ToRotationVector2() * 32f);
+                Projectile.velocity = Vector2.Zero;
                 player.itemTime = 2;
                 player.itemAnimation = 2;
             }
             else
             {
-                Projectile.NewProjectile(player.Center, Vector2.Zero, mod.ProjectileType("MetallicNunchucksProjectile"), projectile.damage, projectile.knockBack, projectile.owner);
-                projectile.Kill();
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<MetallicNunchucksProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                Projectile.Kill();
             }
 
-            int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 169);
+            int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
             Main.dust[dustIndex].noGravity = true;
         }
 
@@ -84,12 +85,12 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            Player player = Main.player[projectile.owner];
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
+            Player player = Main.player[Projectile.owner];
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>());
             if (hPlayer.amountOfHamon >= 4 && Main.rand.Next(0, 4 + 1) == 0)
             {
                 hPlayer.amountOfHamon -= 4;
-                target.AddBuff(mod.BuffType("Sunburn"), 4 * 60);
+                target.AddBuff(ModContent.BuffType<Sunburn>(), 4 * 60);
             }
         }
 
@@ -102,19 +103,19 @@ namespace JoJoStands.Projectiles
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
 
             if (Main.netMode != NetmodeID.Server && chainTexture == null)
-                chainTexture = mod.GetTexture("Projectiles/ChainedClaw_Chain");
+                chainTexture = Mod.GetTexture("Projectiles/ChainedClaw_Chain>();
 
             Vector2 linkCenter = player.Center;
-            Vector2 center = projectile.Center;
+            Vector2 center = Projectile.Center;
             float rotation = (linkCenter - center).ToRotation();
 
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / chainTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(chainTexture, pos, new Rectangle(0, 0, chainTexture.Width, chainTexture.Height), lightColor, rotation, new Vector2(chainTexture.Width * 0.5f, chainTexture.Height * 0.5f), projectile.scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(chainTexture, pos, new Rectangle(0, 0, chainTexture.Width, chainTexture.Height), lightColor, rotation, new Vector2(chainTexture.Width * 0.5f, chainTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

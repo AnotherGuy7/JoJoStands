@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Tiles
 {
@@ -13,17 +14,17 @@ namespace JoJoStands.Items.Tiles
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 30;
-            item.useTurn = true;
-            item.autoReuse = true;
-            item.useAnimation = 30;
-            item.useTime = 30;
-            item.useStyle = 1;
-            item.consumable = true;
-            item.value = Item.buyPrice(0, 2, 0, 0);
-            item.rare = 1;
-            item.createTile = mod.TileType("OfficersRegretTile");
+            Item.width = 30;
+            Item.height = 30;
+            Item.useTurn = true;
+            Item.autoReuse = true;
+            Item.useAnimation = 30;
+            Item.useTime = 30;
+            Item.useStyle = 1;
+            Item.consumable = true;
+            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.rare = 1;
+            Item.createTile = ModContent.TileType<OfficersRegretTile");
         }
     }
 }

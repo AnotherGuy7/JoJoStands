@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
@@ -13,14 +14,14 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 14;
-            projectile.height = 10;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 600;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.penetrate = -1;
+            Projectile.width = 14;
+            Projectile.height = 10;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
         }
 
         private bool living = true;
@@ -31,28 +32,28 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (player.dead)
             {
-                projectile.Kill();
+                Projectile.Kill();
                 return;
             }
 
-            float direction = player.Center.X - projectile.Center.X;
+            float direction = player.Center.X - Projectile.Center.X;
             if (direction > 0)
             {
-                projectile.direction = -1;
+                Projectile.direction = -1;
                 player.direction = -1;
             }
             if (direction < 0)
             {
-                projectile.direction = 1;
+                Projectile.direction = 1;
                 player.direction = 1;
             }
-            Vector2 rota = player.Center - projectile.Center;
-            projectile.rotation = (-rota).ToRotation();
-            float distance = Vector2.Distance(player.Center, projectile.Center);
+            Vector2 rota = player.Center - Projectile.Center;
+            Projectile.rotation = (-rota).ToRotation();
+            float distance = Vector2.Distance(player.Center, Projectile.Center);
 
             if (grabbedNPC != null)
             {
@@ -63,13 +64,13 @@ namespace JoJoStands.Projectiles
                     return;
                 }
 
-                projectile.timeLeft = 300;
-                projectile.position = grabbedNPC.Center - new Vector2(projectile.width / 2f, projectile.height / 2f);
+                Projectile.timeLeft = 300;
+                Projectile.position = grabbedNPC.Center - new Vector2(Projectile.width / 2f, Projectile.height / 2f);
 
                 heldNPCTimer++;
                 if (heldNPCTimer >= 30)
                 {
-                    vPlayer.StealHealthFrom(grabbedNPC, projectile.damage, 0f, 45, true);
+                    vPlayer.StealHealthFrom(grabbedNPC, Projectile.damage, 0f, 45, true);
                     heldNPCTimer = 0;
                 }
             }
@@ -81,27 +82,27 @@ namespace JoJoStands.Projectiles
                     living = false;
                 }
 
-                projectile.ai[1] += 1f;
-                if (projectile.ai[1] > 5f)
+                Projectile.ai[1] += 1f;
+                if (Projectile.ai[1] > 5f)
                 {
-                    projectile.alpha = 0;
+                    Projectile.alpha = 0;
                 }
-                if (projectile.ai[1] >= 10f)
+                if (Projectile.ai[1] >= 10f)
                 {
-                    projectile.ai[1] = 15f;
+                    Projectile.ai[1] = 15f;
                 }
             }
             else
             {
-                projectile.tileCollide = false;
-                Vector2 returnVel = player.Center - projectile.Center;
+                Projectile.tileCollide = false;
+                Vector2 returnVel = player.Center - Projectile.Center;
                 returnVel.Normalize();
                 returnVel *= 9f;
-                projectile.velocity = returnVel;
+                Projectile.velocity = returnVel;
 
                 if (distance < 50f)
                 {
-                    projectile.Kill();
+                    Projectile.Kill();
                 }
             }
         }
@@ -133,19 +134,19 @@ namespace JoJoStands.Projectiles
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
 
             if (Main.netMode != NetmodeID.Server && veinPartTexture == null)
-                veinPartTexture = mod.GetTexture("Projectiles/VampiricVein_Part");
+                veinPartTexture = Mod.GetTexture("Projectiles/VampiricVein_Part");
 
             Vector2 linkCenter = player.Center;
-            Vector2 center = projectile.Center;
+            Vector2 center = Projectile.Center;
             float rotation = (linkCenter - center).ToRotation();
 
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / veinPartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(veinPartTexture, pos, new Rectangle(0, 0, veinPartTexture.Width, veinPartTexture.Height), lightColor, rotation, new Vector2(veinPartTexture.Width * 0.5f, veinPartTexture.Height * 0.5f), projectile.scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(veinPartTexture, pos, new Rectangle(0, 0, veinPartTexture.Width, veinPartTexture.Height), lightColor, rotation, new Vector2(veinPartTexture.Width * 0.5f, veinPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

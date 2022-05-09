@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,23 +14,23 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Tusk (ACT 2)");
+            DisplayName.SetDefault("Tusk (ACT 2)")
             Tooltip.SetDefault("Hold left-click to shoot and control a spinning nail and right-click to spin your nails in front of you to use as a melee weapon!\nSecond Special: Switch to previous acts!");
         }
 
         public override void SetDefaults()
         {
-            item.damage = 49;
-            item.width = 32;
-            item.height = 32;
-            item.useTime = 12;
-            item.useAnimation = 12;
-            item.useStyle = 5;
-            item.maxStack = 1;
-            item.knockBack = 2f;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 49;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTime = 12;
+            Item.useAnimation = 12;
+            Item.useStyle = 5;
+            Item.maxStack = 1;
+            Item.knockBack = 2f;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override bool ManualStandSpawning(Player player)
@@ -43,14 +45,13 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("TuskAct1"));
-            recipe.AddIngredient(ItemID.Hellstone, 12);
-			recipe.AddIngredient(mod.ItemType("WillToFight"));
-			recipe.AddIngredient(mod.ItemType("WillToProtect"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<TuskAct1>())
+                .AddIngredient(ItemID.Hellstone, 12)
+                .AddIngredient(ModContent.ItemType<WillToFight>())
+                .AddIngredient(ModContent.ItemType<WillToProtect>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

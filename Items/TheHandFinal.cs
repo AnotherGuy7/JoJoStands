@@ -1,4 +1,6 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/TheHandT1"; }
+            get { return Mod.Name + "/Items/TheHandT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,24 +25,23 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 78;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 78;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("TheHandT3"));
-            recipe.AddIngredient(ItemID.ShroomiteBar, 15);
-            recipe.AddIngredient(mod.ItemType("DeterminedLifeforce"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<TheHandT3>())
+                .AddIngredient(ItemID.ShroomiteBar, 15)
+                .AddIngredient(ModContent.ItemType<DeterminedLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

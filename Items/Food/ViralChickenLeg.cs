@@ -1,3 +1,5 @@
+using JoJoStands.Buffs.PlayerBuffs;
+using JoJoStands.Items.CraftingMaterials;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,37 +15,36 @@ namespace JoJoStands.Items.Food
 
         public override void SetDefaults()
         {
-            item.width = 10;
-            item.height = 10;
-            item.useTime = 20;
-            item.useAnimation = 20;
-            item.value = Item.buyPrice(0, 0, 20, 0);
-            item.UseSound = SoundID.Item2;
-            item.rare = ItemRarityID.Green;
-            item.useStyle = ItemUseStyleID.EatingUsing;
-            item.consumable = true;
+            Item.width = 10;
+            Item.height = 10;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.value = Item.buyPrice(0, 0, 20, 0);
+            Item.UseSound = SoundID.Item2;
+            Item.rare = ItemRarityID.Green;
+            Item.useStyle = ItemUseStyleID.EatFood;
+            Item.consumable = true;
         }
 
-        public override bool UseItem(Player player)
+        public override bool? UseItem(Player player)
         {
             return true;
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(mod.BuffType("QuickThinking"), (3 * 60) * 60);
-            player.AddBuff(mod.BuffType("MentalFortitude"), (3 * 60) * 60);
+            player.AddBuff(ModContent.BuffType<QuickThinking>(), (3 * 60) * 60);
+            player.AddBuff(ModContent.BuffType<MentalFortitude>(), (3 * 60) * 60);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ViralPowder"), 3);
-            recipe.AddIngredient(ItemID.Bunny);
-            recipe.AddIngredient(ItemID.Bone, 2);
-            recipe.AddTile(TileID.Campfire);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<ViralPowder>(), 3)
+                .AddIngredient(ItemID.Bunny)
+                .AddIngredient(ItemID.Bone, 2)
+                .AddTile(TileID.Campfire)
+                .Register();
         }
     }
 }

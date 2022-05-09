@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/AerosmithT1"; }
+            get { return Mod.Name + "/Items/AerosmithT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,27 +25,26 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 63;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 63;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("AerosmithT2"));
-            recipe.AddIngredient(ItemID.Radar);
-            recipe.AddIngredient(ItemID.HallowedBar, 10);
-            recipe.AddIngredient(ItemID.SoulofFlight, 8);
-            recipe.AddIngredient(mod.ItemType("WillToFight"));
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 2);
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<AerosmithT2>())
+                .AddIngredient(ItemID.Radar)
+                .AddIngredient(ItemID.HallowedBar, 10)
+                .AddIngredient(ItemID.SoulofFlight, 8)
+                .AddIngredient(ModContent.ItemType<WillToFight>())
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

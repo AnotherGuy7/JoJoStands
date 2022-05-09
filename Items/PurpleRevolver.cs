@@ -1,43 +1,41 @@
-using System;
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class PurpleRevolver : ModItem
-	{
+    public class PurpleRevolver : ModItem
+    {
         public int reloadCounter = 0;
         public int reloadStart = 0;
         public int soundCounter = 0;
         public bool canAltUse = true;
 
         public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Purple Revolver");
-			Tooltip.SetDefault("A restored six-shooter, in full working order. Press the special key to reload.");
-		}
+        {
+            DisplayName.SetDefault("Purple Revolver");
+            Tooltip.SetDefault("A restored six-shooter, in full working order. Press the special key to reload.");
+        }
 
-		public override void SetDefaults()
-		{
-            item.damage = 45;
-            item.width = 30;
-            item.height = 30;
-            item.useTime = 18;
-            item.useAnimation = 18;
-            item.useStyle = 5;
-            item.knockBack = 3f;
-            item.value = Item.buyPrice(0, 1, 50, 0);
-            item.rare = ItemRarityID.LightRed;
-            item.UseSound = SoundID.Item41;
-            item.autoReuse = false;
-            item.ranged = true;
-            item.shoot = 10;
-            item.useAmmo = AmmoID.Bullet;
-            item.maxStack = 1;
-            item.shootSpeed = 16f;
+        public override void SetDefaults()
+        {
+            Item.damage = 45;
+            Item.width = 30;
+            Item.height = 30;
+            Item.useTime = 18;
+            Item.useAnimation = 18;
+            Item.useStyle = 5;
+            Item.knockBack = 3f;
+            Item.value = Item.buyPrice(0, 1, 50, 0);
+            Item.rare = ItemRarityID.LightRed;
+            Item.UseSound = SoundID.Item41;
+            Item.autoReuse = false;
+            Item.ranged = true;
+            Item.shoot = 10;
+            Item.useAmmo = AmmoID.Bullet;
+            Item.maxStack = 1;
+            Item.shootSpeed = 16f;
         }
 
         public override void HoldItem(Player player)
@@ -62,7 +60,7 @@ namespace JoJoStands.Items
             {
                 if (MyPlayer.Sounds)
                 {
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Reload180"));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload180"));
                 }
                 reloadCounter = 180;
             }
@@ -70,7 +68,7 @@ namespace JoJoStands.Items
             {
                 if (MyPlayer.Sounds)
                 {
-                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/Reload120"));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload120"));
                 }
                 reloadCounter = 120;
             }
@@ -84,7 +82,7 @@ namespace JoJoStands.Items
                 soundCounter++;
                 if (soundCounter > 5)
                 {
-                    Main.PlaySound(SoundID.Item41, player.Center);
+                    SoundEngine.PlaySound(SoundID.Item41, player.Center);
                     mPlayer.revolverBulletsShot += 1;
                     soundCounter = 0;
                 }
@@ -110,34 +108,33 @@ namespace JoJoStands.Items
             }
             if (player.altFunctionUse == 2 && reloadCounter == 0)
             {
-                item.useTime = 5;
-                item.useAnimation = 30;
+                Item.useTime = 5;
+                Item.useAnimation = 30;
             }
             if (player.altFunctionUse == 0)
             {
-                item.useTime = 18;
-                item.useAnimation = 18;
+                Item.useTime = 18;
+                Item.useAnimation = 18;
                 canAltUse = false;
             }
             return true;
         }
 
         public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Revolver);
-            recipe.AddIngredient(ItemID.MythrilBar, 6);
-            recipe.AddIngredient(ItemID.Obsidian, 15);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-			recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Revolver);
-            recipe.AddIngredient(ItemID.OrichalcumBar, 6);
-            recipe.AddIngredient(ItemID.Obsidian, 15);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Revolver)
+                .AddIngredient(ItemID.MythrilBar, 6)
+                .AddIngredient(ItemID.Obsidian, 15)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.Revolver)
+                .AddIngredient(ItemID.OrichalcumBar, 6)
+                .AddIngredient(ItemID.Obsidian, 15)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
-	}
+    }
 }

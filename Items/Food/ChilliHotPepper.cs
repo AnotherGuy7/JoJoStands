@@ -14,18 +14,18 @@ namespace JoJoStands.Items.Food
 
         public override void SetDefaults()
         {
-            item.width = 36;
-            item.height = 28;
-            item.useTime = 20;
-            item.useAnimation = 20;
-            item.value = Item.buyPrice(copper: 2);
-            item.UseSound = SoundID.Item2;
-            item.rare = ItemRarityID.Green;
-            item.useStyle = ItemUseStyleID.EatingUsing;
-            item.consumable = true;
+            Item.width = 36;
+            Item.height = 28;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.value = Item.buyPrice(copper: 2);
+            Item.UseSound = SoundID.Item2;
+            Item.rare = ItemRarityID.Green;
+            Item.useStyle = ItemUseStyleID.EatFood;
+            Item.consumable = true;
         }
 
-        public override bool UseItem(Player player)
+        public override bool? UseItem(Player player)
         {
             return true;
         }

@@ -1,7 +1,8 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Commands
 {
@@ -39,7 +40,7 @@ namespace JoJoStands.Commands
                     {
                         MyPlayer.testStandUnlocked = true;
                         Main.NewText("Worthiness has been achieved.");
-                        Main.PlaySound(SoundID.MoonLord);
+                        SoundEngine.PlaySound(SoundID.MoonLord);
                     }
                 }
             }

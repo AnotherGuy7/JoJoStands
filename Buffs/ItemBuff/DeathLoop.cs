@@ -1,7 +1,9 @@
-using Terraria.ID;
+using JoJoStands.Buffs.Debuffs;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class DeathLoop : ModBuff
@@ -15,9 +17,9 @@ namespace JoJoStands.Buffs.ItemBuff
         public int deathTimeAdd = 0;
         public int deathLoopTimer = 0;
 
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Death Loop");
+            DisplayName.SetDefault("Death Loop");
             Description.SetDefault("The next enemy you kill will go through endless deaths...");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
@@ -29,21 +31,17 @@ namespace JoJoStands.Buffs.ItemBuff
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.deathLoopActive = true;
             if (Main.netMode == NetmodeID.Server)
-            {
                 deathTimeAdd = 1;
-            }
+
             if (Main.netMode == NetmodeID.SinglePlayer)
-            {
                 deathTimeAdd = 0;
-            }
+
             if ((deathTimes < (3 + deathTimeAdd) && Looping3x) || (deathTimes < (10 + deathTimeAdd) && Looping10x))
-            {
-                player.AddBuff(mod.BuffType("DeathLoop"), 2);
-            }
+                player.AddBuff(ModContent.BuffType<DeathLoop>(), 2);
+
             if (deathLoopTimer >= 60)       //sometimes it w
-            {
                 deathLoopTimer = 0;
-            }
+
             if (!player.GetModPlayer<MyPlayer>().timestopActive)        //so the effect stops during a timestop
             {
                 if (Looping3x)
@@ -51,10 +49,10 @@ namespace JoJoStands.Buffs.ItemBuff
                     deathLoopTimer++;
                     if (deathLoopTimer >= 60 && deathTimes <= (1 + deathTimeAdd))
                     {
-                        int spawnedNPC = NPC.NewNPC((int)deathPositionX, (int)deathPositionY, LoopNPC);
+                        int spawnedNPC = NPC.NewNPC(player.GetSource_FromThis(), (int)deathPositionX, (int)deathPositionY, LoopNPC);
                         Main.npc[spawnedNPC].GetGlobalNPC<NPCs.JoJoGlobalNPC>().spawnedByDeathLoop = true;
                         deathTimes += 1;
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/GEDeathLoop"));
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/GEDeathLoop"));
                         deathLoopTimer = 0;
                     }
                     if (deathLoopTimer >= 60 && deathTimes == (2 + deathTimeAdd))
@@ -68,10 +66,10 @@ namespace JoJoStands.Buffs.ItemBuff
                     deathLoopTimer++;
                     if (deathLoopTimer >= 30 && deathTimes <= (8 + deathTimeAdd))
                     {
-                        int spawnedNPC = NPC.NewNPC((int)deathPositionX, (int)deathPositionY, LoopNPC);
+                        int spawnedNPC = NPC.NewNPC(player.GetSource_FromThis(), (int)deathPositionX, (int)deathPositionY, LoopNPC);
                         Main.npc[spawnedNPC].GetGlobalNPC<NPCs.JoJoGlobalNPC>().spawnedByDeathLoop = true;
                         deathTimes += 1;
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/sound/GEDeathLoop"));
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/GEDeathLoop"));
                         deathLoopTimer = 0;
                     }
                     if (deathLoopTimer >= 30 && deathTimes == (9 + deathTimeAdd))
@@ -88,8 +86,8 @@ namespace JoJoStands.Buffs.ItemBuff
                 Looping3x = false;
                 deathLoopTimer = 0;
                 Looping10x = false;
-                player.ClearBuff(mod.BuffType("DeathLoop"));
-                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(60));
+                player.ClearBuff(ModContent.BuffType<DeathLoop>());
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(60));
                 deathPositionX = 0f;
                 deathPositionY = 0f;
                 LoopNPC = 0;

@@ -16,11 +16,11 @@ namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
 
         public override void SetDefaults()
         {
-            item.width = 26;
-            item.height = 28;
-            item.value = Item.buyPrice(0, 0, 10, 0);
-            item.rare = ItemRarityID.Blue;
-            item.defense = 3;
+            Item.width = 26;
+            Item.height = 28;
+            Item.value = Item.buyPrice(0, 0, 10, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.defense = 3;
         }
         public override void UpdateEquip(Player player)
         {
@@ -29,18 +29,17 @@ namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Silk, 15);
-            recipe.AddIngredient(ItemID.IronBar, 5);
-            recipe.AddTile(TileID.Loom);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Silk, 15);
-            recipe.AddIngredient(ItemID.LeadBar, 5);
-            recipe.AddTile(TileID.Loom);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Silk, 15)
+                .AddIngredient(ItemID.IronBar, 5)
+                .AddTile(TileID.Loom)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.Silk, 15)
+                .AddIngredient(ItemID.LeadBar, 5)
+                .AddTile(TileID.Loom)
+                .Register();
         }
     }
 }

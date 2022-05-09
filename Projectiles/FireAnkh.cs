@@ -1,7 +1,8 @@
-using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -9,19 +10,19 @@ namespace JoJoStands.Projectiles
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 4;
+            Main.projFrames[Projectile.type] = 4;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 52;
-            projectile.height = 50;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 360;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.penetrate = 2;
-            projectile.scale = 0.7f;
+            Projectile.width = 52;
+            Projectile.height = 50;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 360;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.penetrate = 2;
+            Projectile.scale = 0.7f;
         }
 
         private bool playedSound = false;
@@ -30,58 +31,58 @@ namespace JoJoStands.Projectiles
         {
             if (!playedSound)
             {
-                Main.PlaySound(SoundID.Item20);
+                SoundEngine.PlaySound(SoundID.Item20);
                 playedSound = true;
             }
-            if (projectile.wet || projectile.honeyWet)
-                projectile.scale -= 0.05f;
-            if (projectile.scale <= 0f)
-                projectile.Kill();
+            if (Projectile.wet || Projectile.honeyWet)
+                Projectile.scale -= 0.05f;
+            if (Projectile.scale <= 0f)
+                Projectile.Kill();
 
-            projectile.frameCounter++;
-            if (projectile.frameCounter >= 4)
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 4)
             {
-                projectile.frame++;
-                projectile.frameCounter = 0;
-                if (projectile.frame >= Main.projFrames[projectile.type])
-                    projectile.frame = 0;
+                Projectile.frame++;
+                Projectile.frameCounter = 0;
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
+                    Projectile.frame = 0;
             }
 
-            if (projectile.velocity.X > 0)
-                projectile.direction = 1;
+            if (Projectile.velocity.X > 0)
+                Projectile.direction = 1;
             else
-                projectile.direction = -1;
-            projectile.spriteDirection = projectile.direction;
+                Projectile.direction = -1;
+            Projectile.spriteDirection = Projectile.direction;
 
-            int dustIndex = Dust.NewDust(projectile.position, projectile.width, projectile.height, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, Scale: 3.5f);
+            int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, Scale: 3.5f);
             Main.dust[dustIndex].noGravity = true;
             Main.dust[dustIndex].velocity *= 1.4f;
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
             {
                 crit = true;
             }
-            if (Main.rand.Next(0, 101) < projectile.ai[0])
+            if (Main.rand.Next(0, 101) < Projectile.ai[0])
             {
-                target.AddBuff(BuffID.OnFire, (int)projectile.ai[1]);
+                target.AddBuff(BuffID.OnFire, (int)Projectile.ai[1]);
             }
             if (mPlayer.awakenedAmuletEquipped)
             {
                 if (Main.rand.NextFloat(0, 101) >= 80)
                 {
-                    target.AddBuff(mod.BuffType("Infected"), 60 * 9);
+                    target.AddBuff(ModContent.BuffType<Infected>(), 60 * 9);
                 }
             }
             if (mPlayer.crackedPearlEquipped)
             {
                 if (Main.rand.NextFloat(0, 101) >= 60)
                 {
-                    target.AddBuff(mod.BuffType("Infected"), 10 * 60);
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
                 }
             }
         }

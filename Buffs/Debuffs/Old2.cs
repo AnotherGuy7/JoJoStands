@@ -6,7 +6,7 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class Old2 : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Old");
             Description.SetDefault("You can feel your entire life energy leaving.");
@@ -26,10 +26,8 @@ namespace JoJoStands.Buffs.Debuffs
             player.lifeRegenTime = 120;
             player.lifeRegen -= 16;
             player.moveSpeed *= 0.8f;
-            player.meleeDamage *= 0.75f;
-            player.rangedDamage *= 0.75f;
-            player.magicDamage *= 0.75f;
-            player.meleeSpeed *= 0.5f;
+            player.GetDamage(DamageClass.Generic) *= 0.75f;
+            player.GetAttackSpeed(DamageClass.Generic) *= 0.5f;
             player.statDefense = (int)(player.statDefense * 0.8f);
         }
         public override void Update(NPC npc, ref int buffIndex)
@@ -37,9 +35,8 @@ namespace JoJoStands.Buffs.Debuffs
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (savedVelocityX == -1f)
-            {
                 savedVelocityX = Math.Abs(npc.velocity.X) / 2f;
-            }
+
             if (!oneTimeEffectsApplied)
             {
                 npc.defense = (int)(npc.defense * 0.2f);
@@ -48,17 +45,11 @@ namespace JoJoStands.Buffs.Debuffs
 
             npc.lifeRegen = -250;
             if (Math.Abs(npc.velocity.X) > savedVelocityX)
-            {
                 npc.velocity.X *= 0.8f;
-            }
             if (mPlayer.gratefulDeadTier == 3)
-            {
                 npc.lifeRegen = -350;
-            }
             if (mPlayer.gratefulDeadTier == 4)
-            {
                 npc.lifeRegen = -500;
-            }
         }
     }
 }

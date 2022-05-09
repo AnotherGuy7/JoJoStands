@@ -4,46 +4,47 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using System;
 
 namespace JoJoStands.Projectiles
 {
     public class StoneFreeStringConnector : ModProjectile
     {
-        public override string Texture => mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
+        public override string Texture => Mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
 
         public override void SetDefaults()
         {
-            projectile.width = 16;
-            projectile.height = 16;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 600;
-            projectile.friendly = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
         }
 
         private int linkWhoAmI = -1;
 
         public override void AI()
         {
-            Player player = Main.player[projectile.owner];
-            if (projectile.ai[0] < 0 || projectile.ai[0] >= Main.maxProjectiles || !Main.projectile[(int)projectile.ai[0]].active)
+            Player player = Main.player[Projectile.owner];
+            if (Projectile.ai[0] < 0 || Projectile.ai[0] >= Main.maxProjectiles || !Main.projectile[(int)Projectile.ai[0]].active)
             {
-                projectile.Kill();
+                Projectile.Kill();
                 return;
             }
 
-            linkWhoAmI = (int)projectile.ai[0];
+            linkWhoAmI = (int)Projectile.ai[0];
             Projectile linkedProjectile = Main.projectile[linkWhoAmI];
             if (linkedProjectile == null || !linkedProjectile.active)
             {
-                projectile.Kill();
+                Projectile.Kill();
                 return;
             }
             else
             {
-                projectile.timeLeft = 4;
+                Projectile.timeLeft = 4;
                 linkedProjectile.timeLeft = 4;
             }
 
@@ -53,12 +54,12 @@ namespace JoJoStands.Projectiles
                 NPC npc = Main.npc[n];
                 if (npc.active)
                 {
-                    if (Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), projectile.Center, linkedProjectile.Center))
+                    if (Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), Projectile.Center, linkedProjectile.Center))
                     {
-                        npc.StrikeNPC((int)projectile.ai[1], 0f, -npc.direction);
+                        npc.StrikeNPC((int)Projectile.ai[1], 0f, -npc.direction);
                         objectHit = true;
                         linkedProjectile.Kill();
-                        projectile.Kill();
+                        Projectile.Kill();
                         break;
                     }
                 }
@@ -71,12 +72,12 @@ namespace JoJoStands.Projectiles
                 Projectile otherProj = Main.projectile[p];
                 if (otherProj.active)
                 {
-                    if (!projectile.friendly && Collision.CheckAABBvLineCollision(otherProj.position, new Vector2(otherProj.width, otherProj.height), projectile.Center, linkedProjectile.Center))
+                    if (!Projectile.friendly && Collision.CheckAABBvLineCollision(otherProj.position, new Vector2(otherProj.width, otherProj.height), Projectile.Center, linkedProjectile.Center))
                     {
                         otherProj.Kill();
                         objectHit = true;
                         linkedProjectile.Kill();
-                        projectile.Kill();
+                        Projectile.Kill();
                         break;
                     }
                 }
@@ -92,11 +93,11 @@ namespace JoJoStands.Projectiles
                     Player otherPlayer = Main.player[p];
                     if (otherPlayer.active)
                     {
-                        if (otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), projectile.Center, linkedProjectile.Center))
+                        if (otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), Projectile.Center, linkedProjectile.Center))
                         {
-                            otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " fell right into " + player.name + "'s string trap!"), (int)projectile.ai[1], -otherPlayer.direction);
+                            otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " fell right into " + player.name + "'s string trap!>(), (int)Projectile.ai[1], -otherPlayer.direction);
                             linkedProjectile.Kill();
-                            projectile.Kill();
+                            Projectile.Kill();
                             break;
                         }
                     }
@@ -115,12 +116,12 @@ namespace JoJoStands.Projectiles
                 sinTimer = 0;
 
             if (stringTexture == null)
-                stringTexture = mod.GetTexture("Projectiles/StoneFreeString_Part");
+                stringTexture = Mod.GetTexture("Projectiles/StoneFreeString_Part>();
 
             if (linkWhoAmI != -1)
             {
                 Vector2 linkCenter = Main.projectile[linkWhoAmI].Center;
-                Vector2 projectileCenter = projectile.Center;
+                Vector2 projectileCenter = Projectile.Center;
                 drawColor = lightColor;
 
                 float stringRotation = (linkCenter - projectileCenter).ToRotation();
@@ -141,7 +142,7 @@ namespace JoJoStands.Projectiles
                         lightLevelIndex = 0f;
                     }
 
-                    spriteBatch.Draw(stringTexture, pos, new Rectangle(0, 0, stringTexture.Width, stringTexture.Height), drawColor, stringRotation, new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f), projectile.scale * stringScale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(stringTexture, pos, new Rectangle(0, 0, stringTexture.Width, stringTexture.Height), drawColor, stringRotation, new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f), Projectile.scale * stringScale, SpriteEffects.None, 0f);
                 }
             }
             return false;
@@ -149,7 +150,7 @@ namespace JoJoStands.Projectiles
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            projectile.velocity = Vector2.Zero;
+            Projectile.velocity = Vector2.Zero;
             return false;
         }
     }

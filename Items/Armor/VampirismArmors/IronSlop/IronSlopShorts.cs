@@ -15,27 +15,26 @@ namespace JoJoStands.Items.Armor.VampirismArmors.IronSlop
 
         public override void SetDefaults()
         {
-            item.width = 18;
-            item.height = 14;
-            item.value = Item.buyPrice(silver: 6);
-            item.rare = ItemRarityID.Blue;
-            item.defense = 2;
+            Item.width = 18;
+            Item.height = 14;
+            Item.value = Item.buyPrice(silver: 6);
+            Item.rare = ItemRarityID.Blue;
+            Item.defense = 2;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.IronBar, 12);
-            recipe.AddIngredient(ItemID.MudBlock, 15);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LeadBar, 12);
-            recipe.AddIngredient(ItemID.MudBlock, 15);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.IronBar, 12)
+                .AddIngredient(ItemID.MudBlock, 15)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.LeadBar, 12)
+                .AddIngredient(ItemID.MudBlock, 15)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

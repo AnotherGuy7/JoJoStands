@@ -1,6 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.StandArmors.Alloys
@@ -16,11 +17,11 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 24;
-            item.value = Item.buyPrice(0, 3, 0, 0);
-            item.rare = ItemRarityID.LightRed;
-            item.defense = 9;
+            Item.width = 22;
+            Item.height = 24;
+            Item.value = Item.buyPrice(0, 3, 0, 0);
+            Item.rare = ItemRarityID.LightRed;
+            Item.defense = 9;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -42,13 +43,13 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
 
             if (mPlayer.standType == 0)
             {
-                item.type = mod.ItemType("AdamantiteAlloyHelmetNeutral");
-                item.SetDefaults(mod.ItemType("AdamantiteAlloyHelmetNeutral"));
+                Item.type = ModContent.ItemType<AdamantiteAlloyHelmetNeutral>();
+                Item.SetDefaults(ModContent.ItemType<AdamantiteAlloyHelmetNeutral>());
             }
             if (mPlayer.standType == 1)
             {
-                item.type = mod.ItemType("AdamantiteAlloyHelmetShort");
-                item.SetDefaults(mod.ItemType("AdamantiteAlloyHelmetShort"));
+                Item.type = ModContent.ItemType<AdamantiteAlloyHelmetShort>();
+                Item.SetDefaults(ModContent.ItemType<AdamantiteAlloyHelmetShort>());
             }
         }
     }

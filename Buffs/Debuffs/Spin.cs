@@ -8,7 +8,7 @@ namespace JoJoStands.Buffs.Debuffs
     public class Spin : ModBuff
     {
         public static int directionCounter = 0;
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spin");
             Description.SetDefault("You're being infinitely spun... There's no hope in surviving.");
@@ -33,17 +33,14 @@ namespace JoJoStands.Buffs.Debuffs
                 npc.direction *= -1;
                 directionCounter = 0;
             }
-            if (!npc.HasBuff(mod.BuffType("Spin")))
-            {
+            if (!npc.HasBuff(ModContent.BuffType<Spin>()))
                 directionCounter = 0;
-            }
+
             npc.AddBuff(BuffID.Confused, 95);
             npc.lifeRegen = (npc.lifeMax / 8) * -1;
             npc.buffTime[buffIndex] = 2;
             if (Math.Abs(npc.velocity.X) > 1f)
-            {
                 npc.velocity.X *= 0.5f;
-            }
         }
     }
 }

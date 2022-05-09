@@ -1,21 +1,22 @@
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
     public class StoneFreeStringPoint : ModProjectile
     {
-        public override string Texture => mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
+        public override string Texture => Mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
 
         public override void SetDefaults()
         {
-            projectile.width = 16;
-            projectile.height = 16;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 600;
-            projectile.friendly = true;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 600;
+            Projectile.friendly = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

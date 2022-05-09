@@ -1,4 +1,6 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -12,7 +14,7 @@ namespace JoJoStands.Items
 
         public override string Texture
         {
-            get { return mod.Name + "/Items/TheHandT1"; }
+            get { return Mod.Name + "/Items/TheHandT1"; }
         }
 
         public override void SetStaticDefaults()
@@ -23,25 +25,24 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            item.damage = 34;
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 1;
-            item.value = 0;
-            item.noUseGraphic = true;
-            item.rare = ItemRarityID.LightPurple;
+            Item.damage = 34;
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 1;
+            Item.value = 0;
+            Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("TheHandT1"));
-            recipe.AddIngredient(ItemID.HellstoneBar, 13);
-            recipe.AddIngredient(mod.ItemType("WillToDestroy"));
-            recipe.AddIngredient(mod.ItemType("WillToChange"));
-            recipe.AddTile(mod.TileType("RemixTableTile"));
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<TheHandT1>())
+                .AddIngredient(ItemID.HellstoneBar, 13)
+                .AddIngredient(ModContent.ItemType<WillToDestroy>())
+                .AddIngredient(ModContent.ItemType<WillToChange>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

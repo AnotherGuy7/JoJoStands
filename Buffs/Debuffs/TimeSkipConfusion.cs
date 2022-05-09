@@ -1,15 +1,15 @@
-using Terraria;
-using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ID;
- 
+using Terraria.ModLoader;
+
 namespace JoJoStands.Buffs.Debuffs
 {
     public class TimeSkipConfusion : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Time has skipped?");
+            DisplayName.SetDefault("Time has skipped?");
             Description.SetDefault("What you just saw was your future self.");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;

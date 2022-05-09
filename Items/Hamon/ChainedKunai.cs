@@ -1,3 +1,5 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,26 +15,26 @@ namespace JoJoStands.Items.Hamon
 
         public override void SafeSetDefaults()
         {
-            item.damage = 7;
-            item.width = 24;
-            item.height = 28;        //hitbox's width and height when the item is in the world
-            item.useTime = 60;
-            item.useAnimation = 60;
-            item.maxStack = 1;
-            item.noUseGraphic = true;
-            item.knockBack = 3f;
-            item.rare = ItemRarityID.Pink;
-            item.useTurn = true;
-            item.useStyle = ItemUseStyleID.Stabbing;
-            item.noMelee = true;
-            item.autoReuse = false;
-            item.shoot = mod.ProjectileType("ChainedKunaiSwinging");
-            item.shootSpeed = 2f;
+            Item.damage = 7;
+            Item.width = 24;
+            Item.height = 28;        //hitbox's width and height when the Item is in the world
+            Item.useTime = 60;
+            Item.useAnimation = 60;
+            Item.maxStack = 1;
+            Item.noUseGraphic = true;
+            Item.knockBack = 3f;
+            Item.rare = ItemRarityID.Pink;
+            Item.useTurn = true;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.noMelee = true;
+            Item.autoReuse = false;
+            Item.shoot = ModContent.ProjectileType<ChainedKunaiSwinging>();
+            Item.shootSpeed = 2f;
         }
 
         public override bool CanUseItem(Player player)
         {
-            return player.ownedProjectileCounts[mod.ProjectileType("ChainedKunaiSwinging")] == 0 && player.ownedProjectileCounts[mod.ProjectileType("ChainedKunaiProjectile")] == 0;
+            return player.ownedProjectileCounts[ModContent.ProjectileType<ChainedKunaiSwinging>()] == 0 && player.ownedProjectileCounts[ModContent.ProjectileType<ChainedKunaiProjectile>()] == 0;
         }
 
         public override void HoldItem(Player player)
@@ -42,22 +44,21 @@ namespace JoJoStands.Items.Hamon
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.WhiteString);
-            recipe.AddIngredient(ItemID.IronBar, 5);
-            recipe.AddIngredient(ItemID.Silk, 2);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 7);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.WhiteString);
-            recipe.AddIngredient(ItemID.LeadBar, 5);
-            recipe.AddIngredient(ItemID.Silk, 2);
-            recipe.AddIngredient(mod.ItemType("SunDroplet"), 7);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.WhiteString)
+                .AddIngredient(ItemID.IronBar, 5)
+                .AddIngredient(ItemID.Silk, 2)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 7)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.WhiteString)
+                .AddIngredient(ItemID.LeadBar, 5)
+                .AddIngredient(ItemID.Silk, 2)
+                .AddIngredient(ModContent.ItemType<SunDroplet>(), 7)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

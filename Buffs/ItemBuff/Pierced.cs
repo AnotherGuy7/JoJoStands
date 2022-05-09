@@ -1,16 +1,17 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class Pierced : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Pierced!");
+            DisplayName.SetDefault("Pierced!");
             Description.SetDefault("You have been pierced by an arrow shard!");
             Main.debuff[Type] = true;
-            canBeCleared = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
         public override void Update(Player player, ref int buffIndex)
@@ -21,9 +22,9 @@ namespace JoJoStands.Buffs.ItemBuff
             {
                 if (mPlayer.piercedTimer <= 0 || player.buffTime[buffIndex] <= 2)
                 {
-                    player.QuickSpawnItem(Main.rand.Next(JoJoStands.standTier1List.ToArray()));
+                    player.QuickSpawnItem(player.GetSource_FromThis(), Main.rand.Next(JoJoStands.standTier1List.ToArray()));
                     mPlayer.piercedTimer = 36000;
-                    player.ClearBuff(mod.BuffType(Name));
+                    player.ClearBuff(Type);
                 }
             }
         }

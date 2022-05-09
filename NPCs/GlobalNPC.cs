@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs
 {
@@ -59,52 +60,52 @@ namespace JoJoStands.NPCs
             Player player = Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)];
             if (Main.hardMode && (player.position.Y < (Main.worldSurface * 0.35) * 16f) && Main.rand.NextFloat(0, 101) < 7f)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("SoulofTime"), Main.rand.Next(1, 3));      //mininum amount = 1, maximum amount = 3
+                Item.NewItem(npc.getRect(), ModContent.ItemType<SoulofTime>()), Main.rand.Next(1, 3));      //mininum amount = 1, maximum amount = 3
             }
             if (Main.dayTime && Main.rand.NextFloat(0, 101) < 10f)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("SunDroplet"), Main.rand.Next(1, 3));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<SunDroplet>()), Main.rand.Next(1, 3));
             }
             if (Main.hardMode && (npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC) && Main.rand.NextFloat(0, 101) <= 4f)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("Hand"));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<Hand>()));
             }
             if (player.ZoneOverworldHeight && !player.ZoneCorrupt && !player.ZoneCrimson && !player.ZoneDungeon && !player.ZoneJungle && !player.ZoneSnow && !player.ZoneDesert && !player.ZoneBeach && !player.ZoneHoly)
             {
                 if (Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
                 {
-                    Item.NewItem(npc.getRect(), mod.ItemType("WillToFight"));
+                    Item.NewItem(npc.getRect(), ModContent.ItemType<WillToFight>()));
                 }
                 if (!Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
                 {
-                    Item.NewItem(npc.getRect(), mod.ItemType("WillToProtect"));
+                    Item.NewItem(npc.getRect(), ModContent.ItemType<WillToProtect>()));
                 }
             }
             if (player.ZoneUnderworldHeight && Main.rand.NextFloat(0, 101) <= 4f)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("WillToDestroy"));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<WillToDestroy>()));
             }
             if ((player.ZoneCorrupt || player.ZoneCrimson) && Main.rand.NextFloat(0, 101) <= 4f)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("WillToControl"));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<WillToControl>()));
             }
             if (player.ZoneDungeon && Main.rand.NextFloat(0, 101) <= 4f)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("WillToEscape"));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<WillToEscape>()));
             }
             if (player.ZoneJungle && Main.rand.NextFloat(0, 101) <= 4f)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("WillToChange"));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<WillToChange>()));
             }
             if (npc.type == NPCID.WallofFlesh)
             {
                 if (Main.rand.NextFloat(0, 101) < 50f)
                 {
-                    Item.NewItem(npc.getRect(), mod.ItemType("StandEmblem"));
+                    Item.NewItem(npc.getRect(), ModContent.ItemType<StandEmblem>()));
                 }
                 else
                 {
-                    Item.NewItem(npc.getRect(), mod.ItemType("HamonEmblem"));
+                    Item.NewItem(npc.getRect(), ModContent.ItemType<HamonEmblem>()));
                 }
             }
         }
@@ -123,17 +124,17 @@ namespace JoJoStands.NPCs
         {
             if (MyPlayer.SecretReferences)
             {
-                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Placement contributor reference
+                if (npc.type == Mod.NPCType("MarineBiologist>()) && Main.rand.Next(0, 101) <= 3)      //Placement contributor reference
                 {
                     chat = "I knew a guy who loved to name things. He’s still around, and he’s probably still naming everything he can find. I wonder what kind of Placement he went through in the dimension shift...";
                 }
-                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 3)      //Nekro contributor reference             
+                if (npc.type == Mod.NPCType("MarineBiologist>()) && Main.rand.Next(0, 101) <= 3)      //Nekro contributor reference             
                 {
                     //Removed at Nekro's behest for reasons described as "cringe" and "bad"
                     //chat = "There was a man with splt personalities named Nekro and Sektor, they named about 10 of the stands you have access to, kinda reminds me of a friend from Egypt...";
                     chat = "Did you know animals can develop stands too? I even once saw an eagle who got struck with the arrow become humanoid once it developed a stand capable of turning people to glass. I even managed to teach it my old cigarette trick.";
                 }
-                if (npc.type == mod.NPCType("MarineBiologist") && Main.rand.Next(0, 101) <= 5)      //Techno contributor reference
+                if (npc.type == Mod.NPCType("MarineBiologist>()) && Main.rand.Next(0, 101) <= 5)      //Techno contributor reference
                 {
                     chat = "Some weirdo with an afro once zoomed past me at the speed of a train, with his Stand carrying him in a box. Gramps seemed to approve. Who knows where that lunatic is now.";
                 }
@@ -168,32 +169,32 @@ namespace JoJoStands.NPCs
         {
             if (type == NPCID.Merchant)
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType("Sunscreen"));
+                shop.Item[nextSlot].SetDefaults(ModContent.ItemType<Sunscreen>()));
                 nextSlot++;
             }
             if (type == NPCID.TravellingMerchant && ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss))
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType("ViralPearlRing"));
+                shop.Item[nextSlot].SetDefaults(ModContent.ItemType<ViralPearlRing>()));
                 nextSlot++;
             }
             if (type == NPCID.Painter)
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType("IWouldntLose"));
+                shop.Item[nextSlot].SetDefaults(ModContent.ItemType<IWouldntLose>()));
                 nextSlot++;
-                shop.item[nextSlot].SetDefaults(mod.ItemType("OfficersRegret"));
+                shop.Item[nextSlot].SetDefaults(ModContent.ItemType<OfficersRegret>()));
                 nextSlot++;
-                shop.item[nextSlot].SetDefaults(mod.ItemType("QuietLife"));
+                shop.Item[nextSlot].SetDefaults(ModContent.ItemType<QuietLife>()));
                 nextSlot++;
-                shop.item[nextSlot].SetDefaults(mod.ItemType("ShotintheDark"));
+                shop.Item[nextSlot].SetDefaults(ModContent.ItemType<ShotintheDark>()));
                 nextSlot++;
-                shop.item[nextSlot].SetDefaults(mod.ItemType("BloodForTheKing"));
+                shop.Item[nextSlot].SetDefaults(ModContent.ItemType<BloodForTheKing>()));
                 nextSlot++;
             }
         }
 
         public override bool PreAI(NPC npc)
         {
-            MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>());
             if (zombieHightlightTimer > 0)
                 zombieHightlightTimer--;
 
@@ -256,9 +257,9 @@ namespace JoJoStands.NPCs
             }
             else
             {
-                if (npc.HasBuff(mod.BuffType("AffectedByBtZ")))
+                if (npc.HasBuff(ModContent.BuffType<AffectedByBtZ>())))
                 {
-                    int buffIndex = npc.FindBuffIndex(mod.BuffType("AffectedByBtZ"));
+                    int buffIndex = npc.FindBuffIndex(ModContent.BuffType<AffectedByBtZ>()));
                     npc.DelBuff(buffIndex);
                 }
                 btZSaveTimer = 0;
@@ -422,7 +423,7 @@ namespace JoJoStands.NPCs
                     deathTimer = 0;
                 }
             }
-            if (npc.HasBuff(mod.BuffType("Locked")))
+            if (npc.HasBuff(ModContent.BuffType<Locked>())))
             {
                 npc.lifeRegen = -4;
                 npc.velocity *= 0.95f;
@@ -436,7 +437,7 @@ namespace JoJoStands.NPCs
                 }
             }
 
-            if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
+            if (npc.HasBuff(ModContent.BuffType<RedBindDebuff>())))
             {
                 npc.velocity.X = 0f;
                 if (npc.velocity.Y > 8f)
@@ -472,7 +473,7 @@ namespace JoJoStands.NPCs
                     npc.velocity.Y += 0.3f;
                 return false;
             }
-            if (npc.HasBuff(mod.BuffType("Stolen")))
+            if (npc.HasBuff(ModContent.BuffType<Stolen>())))
                 return false;
             if (grabbedByHermitPurple)
                 return false;
@@ -486,7 +487,7 @@ namespace JoJoStands.NPCs
                 Player player = Main.player[p];
                 if (player.active)
                 {
-                    MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+                    MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
                     if (npc.boss && mPlayer.deathLoopActive && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
                     {
                         Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
@@ -508,13 +509,13 @@ namespace JoJoStands.NPCs
             if (vampireUserLastHitIndex != -1)
             {
                 Player player = Main.player[vampireUserLastHitIndex];
-                VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+                VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
                 vPlayer.enemyTypesKilled[npc.type] += 1;
                 if ((!npc.boss && vPlayer.enemyTypesKilled[npc.type] == 10) || (npc.boss && vPlayer.enemyTypesKilled[npc.type] == 0))
                 {
                     vPlayer.vampireSkillPointsAvailable += 1;
                     vPlayer.totalVampireSkillPointsEarned += 1;
-                    Main.NewText("You have obtained another Vampiric Skill Point!");
+                    Main.NewText("You have obtained another Vampiric Skill Point!>());
                     if (vPlayer.totalVampireSkillPointsEarned % 5 == 0)
                         vPlayer.vampiricLevel += 1;
 
@@ -525,7 +526,7 @@ namespace JoJoStands.NPCs
 
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
-            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            MyPlayer player = Main.LocalPlayer.GetModPlayer<MyPlayer>());
             if (player.epitaphForesightActive || applyingForesightPositions)
             {
                 for (int i = 0; i < foresightPositionIndexMax; i++)
@@ -557,7 +558,7 @@ namespace JoJoStands.NPCs
             }
             if (taggedByKillerQueen)
             {
-                Texture2D bombTexture = mod.GetTexture("Extras/Bomb");
+                Texture2D bombTexture = Mod.GetTexture("Extras/Bomb>());
                 Vector2 position = npc.Center - new Vector2(bombTexture.Width / 2f, (npc.height / 2f) + 18f);
                 spriteBatch.Draw(bombTexture, position - Main.screenPosition, Color.White);
             }
@@ -572,7 +573,7 @@ namespace JoJoStands.NPCs
             if (zombieHightlightTimer > 0)
                 drawColor = Color.Orange;
 
-            if (npc.HasBuff(mod.BuffType("Lacerated")) && Main.player[Main.myPlayer].GetModPlayer<VampirePlayer>().anyMaskForm)
+            if (npc.HasBuff(ModContent.BuffType<Lacerated>())) && Main.player[Main.myPlayer].GetModPlayer<VampirePlayer>()).anyMaskForm)
                 drawColor = Color.OrangeRed;
 
             if (highlightedByTheHandMarker)
@@ -584,14 +585,14 @@ namespace JoJoStands.NPCs
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
-            if (npc.HasBuff(mod.BuffType("RedBindDebuff")))
+            if (npc.HasBuff(ModContent.BuffType<RedBindDebuff>())))
             {
-                Texture2D texture = mod.GetTexture("Extras/BoundByRedBind");
+                Texture2D texture = Mod.GetTexture("Extras/BoundByRedBind>());
                 spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), npc.scale, SpriteEffects.None, 0f);
             }
             if (stunnedByBindingEmerald)
             {
-                Texture2D emeraldStringWebTexture = mod.GetTexture("Extras/EmeraldStringWeb");
+                Texture2D emeraldStringWebTexture = Mod.GetTexture("Extras/EmeraldStringWeb>());
                 int textureWidth = 19;
                 int textureHeight = 19;
 
@@ -608,7 +609,7 @@ namespace JoJoStands.NPCs
             }
             if (boundByStrings)
             {
-                Texture2D bombTexture = mod.GetTexture("Extras/BoundByStrings");
+                Texture2D bombTexture = Mod.GetTexture("Extras/BoundByStrings>());
                 Vector2 scale = new Vector2(npc.width, npc.height) / new Vector2(22, 14);
                 Vector2 origin = new Vector2(11, 7);
                 spriteBatch.Draw(bombTexture, npc.Center - Main.screenPosition, null, npc.color, npc.rotation, origin, scale, SpriteEffects.None, 0f);
@@ -617,63 +618,63 @@ namespace JoJoStands.NPCs
 
         public override void OnHitPlayer(NPC npc, Player target, int damage, bool crit)
         {
-            MyPlayer mPlayer = target.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = target.GetModPlayer<MyPlayer>());
             int standSlotType = mPlayer.StandSlot.Item.type;
-            if (target.HasBuff(mod.BuffType("BacktoZero")))     //only affects the ones with the buff, everyone's bool should turn on and save positions normally
+            if (target.HasBuff(ModContent.BuffType<BacktoZero>())))     //only affects the ones with the buff, everyone's bool should turn on and save positions normally
             {
-                npc.AddBuff(mod.BuffType("AffectedByBtZ"), 2);
+                npc.AddBuff(ModContent.BuffType<AffectedByBtZ>()), 2);
                 npc.StrikeNPC(damage, npc.knockBackResist, -npc.direction);
                 btzTotalRewindTime = 5 * btzPositionIndex;
                 btzTotalRewindTimer = 5 * btzPositionIndex;
             }
-            if (mPlayer.StandSlot.Item.type == mod.ItemType("DollyDaggerT1"))
+            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT1>()))
             {
                 npc.StrikeNPC((int)(npc.damage * 0.35f), 4f, -npc.direction);       //Dolly dagger is reflecting 35% of damage here, 70% in tier 2
             }
-            if (mPlayer.StandSlot.Item.type == mod.ItemType("DollyDaggerT2"))
+            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT2>()))
             {
                 npc.StrikeNPC((int)(npc.damage * 0.7f), 6f, -npc.direction);
             }
-            if (target.GetModPlayer<VampirePlayer>().vampire)
+            if (target.GetModPlayer<VampirePlayer>()).vampire)
             {
                 npc.AddBuff(BuffID.Frostburn, 240);
             }
             if (npc.boss)
             {
-                if (standSlotType == mod.ItemType("LockT1"))
+                if (standSlotType == ModContent.ItemType<LockT1>()))
                 {
-                    npc.AddBuff(mod.BuffType("Locked"), 3 * 60);
+                    npc.AddBuff(ModContent.BuffType<Locked>()), 3 * 60);
                 }
-                if (standSlotType == mod.ItemType("LockT2"))
+                if (standSlotType == ModContent.ItemType<LockT2>()))
                 {
-                    npc.AddBuff(mod.BuffType("Locked"), 6 * 60);
+                    npc.AddBuff(ModContent.BuffType<Locked>()), 6 * 60);
                 }
-                if (standSlotType == mod.ItemType("LockT3"))
+                if (standSlotType == ModContent.ItemType<LockT3>()))
                 {
-                    npc.AddBuff(mod.BuffType("Locked"), 9 * 60);
+                    npc.AddBuff(ModContent.BuffType<Locked>()), 9 * 60);
                 }
-                if (standSlotType == mod.ItemType("LockFinal"))
+                if (standSlotType == ModContent.ItemType<LockFinal>()))
                 {
-                    npc.AddBuff(mod.BuffType("Locked"), 12 * 60);
+                    npc.AddBuff(ModContent.BuffType<Locked>()), 12 * 60);
                 }
             }
             else
             {
-                if (standSlotType == mod.ItemType("LockT1"))
+                if (standSlotType == ModContent.ItemType<LockT1>()))
                 {
-                    npc.AddBuff(mod.BuffType("Locked"), 5 * 60);
+                    npc.AddBuff(ModContent.BuffType<Locked>()), 5 * 60);
                 }
-                if (standSlotType == mod.ItemType("LockT2"))
+                if (standSlotType == ModContent.ItemType<LockT2>()))
                 {
-                    npc.AddBuff(mod.BuffType("Locked"), 10 * 60);
+                    npc.AddBuff(ModContent.BuffType<Locked>()), 10 * 60);
                 }
-                if (standSlotType == mod.ItemType("LockT3"))
+                if (standSlotType == ModContent.ItemType<LockT3>()))
                 {
-                    npc.AddBuff(mod.BuffType("Locked"), 15 * 60);
+                    npc.AddBuff(ModContent.BuffType<Locked>()), 15 * 60);
                 }
-                if (standSlotType == mod.ItemType("LockFinal"))
+                if (standSlotType == ModContent.ItemType<LockFinal>()))
                 {
-                    npc.AddBuff(mod.BuffType("Locked"), 20 * 60);
+                    npc.AddBuff(ModContent.BuffType<Locked>()), 20 * 60);
                 }
             }
             if (removeZombieHighlightOnHit)
@@ -694,13 +695,13 @@ namespace JoJoStands.NPCs
             {
                 pool.Clear();
                 pool.Add(NPCID.Zombie, SpawnCondition.OverworldNightMonster.Chance);
-                pool.Add(mod.NPCType("GladiatorZombie"), 0.09f);
-                pool.Add(mod.NPCType("BaldZombie"), 0.09f);
-                pool.Add(mod.NPCType("ChimeraBird"), 0.09f);
+                pool.Add(Mod.NPCType("GladiatorZombie>()), 0.09f);
+                pool.Add(Mod.NPCType("BaldZombie>()), 0.09f);
+                pool.Add(Mod.NPCType("ChimeraBird>()), 0.09f);
 
-                pool.Add(mod.NPCType("Doobie"), 0.02f);
-                pool.Add(mod.NPCType("WangChan"), 0.02f);
-                pool.Add(mod.NPCType("JackTheRipper"), 0.02f);
+                pool.Add(Mod.NPCType("Doobie>()), 0.02f);
+                pool.Add(Mod.NPCType("WangChan>()), 0.02f);
+                pool.Add(Mod.NPCType("JackTheRipper>()), 0.02f);
             }
         }
     }

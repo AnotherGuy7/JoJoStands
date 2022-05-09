@@ -1,16 +1,17 @@
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
- 
+
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class FinalPush : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Final Push");
+            DisplayName.SetDefault("Final Push");
             Description.SetDefault("Those attempting to knock you of your place will be met with a tireless fight.");
-            canBeCleared = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
             Main.debuff[Type] = true;
         }
 

@@ -6,7 +6,7 @@ namespace JoJoStands.Buffs.ItemBuff
 {
     public class ForeseenDebuff : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Foreseen");
             Description.SetDefault("Your actions have already been seen...");
@@ -24,8 +24,8 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            player.AddBuff(mod.BuffType(Name), 2);
-            if (player.HasBuff(mod.BuffType(Name)) && mPlayer.epitaphForesightActive)
+            player.AddBuff(Type, 2);
+            if (player.HasBuff(Type) && mPlayer.epitaphForesightActive)
             {
                 saveTimer++;
                 if (saveTimer >= 30)
@@ -36,7 +36,7 @@ namespace JoJoStands.Buffs.ItemBuff
                     saveTimer = 0;
                 }
             }
-            if (player.HasBuff(mod.BuffType(Name)) && !mPlayer.epitaphForesightActive)
+            if (player.HasBuff(Type) && !mPlayer.epitaphForesightActive)
             {
                 if (!foresightWoreOff)
                 {
@@ -58,9 +58,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 }
                 player.position = savePositions[savePositionsIndex];
                 if (savePositionsIndex == savePositionsMaxIndex)
-                {
-                    player.ClearBuff(mod.BuffType(Name));
-                }
+                    player.ClearBuff(Type);
             }
             if (savePositionsIndex >= 49)
             {

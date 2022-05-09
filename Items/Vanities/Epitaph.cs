@@ -1,47 +1,40 @@
-using System;
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
 namespace JoJoStands.Items.Vanities
 {
-	[AutoloadEquip(EquipType.Head)]
-	public class Epitaph : ModItem
-	{
-		public override void SetStaticDefaults()
+    [AutoloadEquip(EquipType.Head)]
+    public class Epitaph : ModItem
+    {
+        public override void SetStaticDefaults()
         {
-			Tooltip.SetDefault("Wearing this makes you want to use a frog as a phone");
-		}
+            Tooltip.SetDefault("Wearing this makes you want to use a frog as a phone");
 
-		public override void SetDefaults()
+            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+        }
+
+        public override void SetDefaults()
         {
-			item.width = 18;
-			item.height = 18;
-			item.rare = 8;
-            item.vanity = true;
-		}
+            Item.width = 18;
+            Item.height = 18;
+            Item.rare = 8;
+            Item.vanity = true;
+        }
 
-		public override void UpdateVanity(Player player, EquipType type)
-		{
-			MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-			mPlayer.wearingEpitaph = true;
-		}
-
-		public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
+        public override void UpdateVanity(Player player)
         {
-            drawHair = true;
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.wearingEpitaph = true;
         }
 
         public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 2);
-            recipe.AddTile(TileID.Loom);
-            recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
-	}
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Silk, 2)
+                .AddTile(TileID.Loom)
+                .Register();
+        }
+    }
 }

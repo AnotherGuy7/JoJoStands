@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
@@ -11,26 +12,26 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            projectile.width = 9;
-            projectile.height = 29;
-            projectile.aiStyle = 1;
-            projectile.timeLeft = 900;
-            projectile.friendly = false;
-            projectile.arrow = true;
-            projectile.hostile = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 9;
+            Projectile.height = 29;
+            Projectile.aiStyle = 1;
+            Projectile.timeLeft = 900;
+            Projectile.friendly = false;
+            Projectile.arrow = true;
+            Projectile.hostile = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         public override void AI()
         {
-            projectile.velocity.Y += 0.3f;
-            projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
+            Projectile.velocity.Y += 0.3f;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            projectile.velocity = Vector2.Zero;
+            Projectile.velocity = Vector2.Zero;
             return false;
         }
     }

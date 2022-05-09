@@ -1,7 +1,11 @@
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Vampire
 {
@@ -15,17 +19,17 @@ namespace JoJoStands.Items.Vampire
 
         public override void SafeSetDefaults()
         {
-            item.damage = 58;
-            item.width = 26;
-            item.height = 26;
-            item.useTime = 30;
-            item.useAnimation = 30;
-            item.consumable = false;
-            item.noUseGraphic = true;
-            item.maxStack = 1;
-            item.knockBack = 12f;
-            item.value = 0;
-            item.rare = ItemRarityID.Orange;
+            Item.damage = 58;
+            Item.width = 26;
+            Item.height = 26;
+            Item.useTime = 30;
+            Item.useAnimation = 30;
+            Item.consumable = false;
+            Item.noUseGraphic = true;
+            Item.maxStack = 1;
+            Item.knockBack = 12f;
+            Item.value = 0;
+            Item.rare = ItemRarityID.Orange;
         }
 
         private int useCool = 0;
@@ -34,13 +38,13 @@ namespace JoJoStands.Items.Vampire
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            if (player.whoAmI != item.owner || !vPlayer.zombie || (mPlayer.standOut && !mPlayer.standAutoMode))
+            if (player.whoAmI != Main.myPlayer || !vPlayer.zombie || (mPlayer.standOut && !mPlayer.standAutoMode))
                 return;
 
             if (useCool > 0)
                 useCool--;
 
-            if (player.ownedProjectileCounts[mod.ProjectileType("VampiricVeinGrab")] > 0)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<VampiricVeinGrab>()] > 0)
                 useCool = 2;
 
             vPlayer.enemyIgnoreItemInUse = true;
@@ -48,16 +52,14 @@ namespace JoJoStands.Items.Vampire
             {
                 player.direction = 1;
                 if (Main.MouseWorld.X - player.position.X < 0)
-                {
                     player.direction = -1;
-                }
 
-                useCool += item.useTime;
+                useCool += Item.useTime;
                 Vector2 shootVel = Main.MouseWorld - player.position;
                 shootVel.Normalize();
                 shootVel *= 12f;
-                Projectile.NewProjectile(player.Center, shootVel, mod.ProjectileType("VampiricVeinSpike"), item.damage, item.knockBack, item.owner);
-                Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 17, 1f, -0.6f);
+                Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<VampiricVeinSpike>(), Item.damage, Item.knockBack, player.whoAmI);
+                SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 17, 1f, -0.6f);
             }
 
             if (Main.mouseRight && useCool <= 0)
@@ -66,9 +68,9 @@ namespace JoJoStands.Items.Vampire
                 Vector2 shootVel = Main.MouseWorld - player.Center;
                 shootVel.Normalize();
                 shootVel *= 12f;
-                int proj = Projectile.NewProjectile(player.Center, shootVel, mod.ProjectileType("VampiricVeinGrab"), (int)(item.damage * 1.2f), 0f, player.whoAmI);
+                int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<VampiricVeinGrab>(), (int)(Item.damage * 1.2f), 0f, player.whoAmI);
                 Main.projectile[proj].netUpdate = true;
-                Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 17, 1f, -0.6f);
+                SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 17, 1f, -0.6f);
             }
 
             bool specialPressed = false;
@@ -79,9 +81,8 @@ namespace JoJoStands.Items.Vampire
             {
                 Vector2 shootVel = Main.MouseWorld - player.Center;
                 if (shootVel == Vector2.Zero)
-                {
                     shootVel = new Vector2(0f, 1f);
-                }
+
                 shootVel.Normalize();
                 shootVel *= 16f;
                 useCool += 3 * 60;
@@ -91,7 +92,7 @@ namespace JoJoStands.Items.Vampire
                 for (int i = 0; i < numberProjectiles; i++)
                 {
                     Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1)));
-                    int proj = Projectile.NewProjectile(player.Center, perturbedSpeed, mod.ProjectileType("PressurizedBlood"), item.damage * 5, 9f, player.whoAmI);
+                    int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, perturbedSpeed, ModContent.ProjectileType<PressurizedBlood>(), Item.damage * 5, 9f, player.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                 }
                 player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " overstepped their boundaries as a Zombie."), 32, player.direction);
@@ -100,9 +101,12 @@ namespace JoJoStands.Items.Vampire
 
         public override void AddRecipes()
         {
-            VampiricItemRecipe recipe = new VampiricItemRecipe(mod, item.type);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            Player player = Main.player[Main.myPlayer];
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+
+            CreateRecipe()
+                .AddCondition(NetworkText.FromLiteral("ZombieRequirement"), r => vPlayer.zombie && vPlayer.HasSkill(player, VampirePlayer.EntrailAbilities))
+                .Register();
         }
     }
 }

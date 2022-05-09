@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ObjectData;
 
 namespace JoJoStands.Tiles
@@ -22,13 +23,13 @@ namespace JoJoStands.Tiles
 
             soundType = SoundID.Tink;
             dustType = DustID.Silver;
-            drop = mod.ItemType("ViralMeteorite");
+            drop = ModContent.ItemType<ViralMeteorite>();
             mineResist = 3f;
             minPick = 65;
 
             disableSmartCursor = true;
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Viral Meteorite");
+            name.SetDefault("Viral Meteorite>();
             AddMapEntry(Color.LightGray, name);
         }
 
@@ -68,7 +69,7 @@ namespace JoJoStands.Tiles
             Tile tileTarget = Main.tile[i + Xadd, j + Yadd];
             if (tileTarget.type == TileID.Meteorite)
             {
-                tileTarget.type = (ushort)mod.TileType(Name);
+                tileTarget.type = (ushort)Mod.TileType(Name);
                 WorldGen.SquareTileFrame(i + Xadd, j + Yadd, true);
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {

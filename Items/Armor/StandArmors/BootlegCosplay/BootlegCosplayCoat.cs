@@ -1,7 +1,7 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.CraftingMaterials;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-
 
 namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
 {
@@ -16,11 +16,11 @@ namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
 
         public override void SetDefaults()
         {
-            item.width = 26;
-            item.height = 28;
-            item.value = Item.buyPrice(0, 0, 10, 0);
-            item.rare = ItemRarityID.Blue;
-            item.defense = 4;
+            Item.width = 26;
+            Item.height = 28;
+            Item.value = Item.buyPrice(0, 0, 10, 0);
+            Item.rare = ItemRarityID.Blue;
+            Item.defense = 4;
         }
 
         public override void UpdateEquip(Player player)
@@ -30,13 +30,12 @@ namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Silk, 20);
-            recipe.AddIngredient(ItemID.Chain, 3);
-            recipe.AddIngredient(mod.ItemType("WillToProtect"), 1);
-            recipe.AddTile(TileID.Loom);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Silk, 20)
+                .AddIngredient(ItemID.Chain, 3)
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 1)
+                .AddTile(TileID.Loom)
+                .Register();
         }
     }
 }

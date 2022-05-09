@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
@@ -8,35 +9,35 @@ namespace JoJoStands.Projectiles
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 3;
+            Main.projFrames[Projectile.type] = 3;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 42;
-            projectile.height = 10;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
-            projectile.penetrate = -1;
-            projectile.maxPenetrate = -1;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 42;
+            Projectile.height = 10;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 300;
+            Projectile.penetrate = -1;
+            Projectile.maxPenetrate = -1;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         public override void AI()
         {
-            projectile.frameCounter++;
-            if (projectile.frameCounter > 12)
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter > 12)
             {
-                projectile.frameCounter = 0;
-                projectile.frame++;
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
             }
-            if (projectile.frame >= 3)
+            if (Projectile.frame >= 3)
             {
-                projectile.frame = 0;
+                Projectile.frame = 0;
             }
-            projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(0f);
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(0f);
         }
     }
 }

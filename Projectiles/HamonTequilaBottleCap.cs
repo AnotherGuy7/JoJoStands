@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
 {
@@ -11,19 +12,19 @@ namespace JoJoStands.Projectiles
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 3;
+            Main.projFrames[Projectile.type] = 3;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 3;
-            projectile.height = 6;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 300;
-            projectile.penetrate = 3;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.width = 3;
+            Projectile.height = 6;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 300;
+            Projectile.penetrate = 3;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -33,17 +34,17 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            projectile.frameCounter++;
-            if (projectile.frameCounter >= 12)
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 12)
             {
-                projectile.frame += 1;
-                projectile.frameCounter = 0;
+                Projectile.frame += 1;
+                Projectile.frameCounter = 0;
             }
-            if (projectile.frame >= 3)
+            if (Projectile.frame >= 3)
             {
-                projectile.frame = 0;
+                Projectile.frame = 0;
             }
-            projectile.rotation = projectile.velocity.ToRotation();
+            Projectile.rotation = Projectile.velocity.ToRotation();
         }
     }
 }

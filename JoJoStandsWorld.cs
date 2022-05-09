@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader.IO;
 
 namespace JoJoStands
@@ -39,8 +40,8 @@ namespace JoJoStands
 
         public override void Load(TagCompound tag)
         {
-            meteorDropped = tag.GetBool("meteorDropped");
-            VampiricNight = tag.GetBool("vampiricNight");
+            meteorDropped = tag.GetBool("meteorDropped>();
+            VampiricNight = tag.GetBool("vampiricNight>();
         }
 
         public override void PreUpdate()
@@ -87,7 +88,7 @@ namespace JoJoStands
 
         public override void PostWorldGen()     //once again, from ExampleMod
         {
-            int[] itemsToPlaceInIceChests = { mod.ItemType("RustyRevolver") };
+            int[] itemsToPlaceInIceChests = { ModContent.ItemType<RustyRevolver>() };
             for (int chestIndex = 0; chestIndex < Main.maxChests; chestIndex++)
             {
                 Chest chest = Main.chest[chestIndex];
@@ -95,11 +96,11 @@ namespace JoJoStands
                 {
                     for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)     //40 is the max amount of items a chest can hold
                     {
-                        if (chest.item[inventoryIndex].type == 0)
+                        if (chest.Item[inventoryIndex].type == 0)
                         {
                             if (Main.rand.NextFloat(0f, 101f) < 40f)
                             {
-                                chest.item[inventoryIndex].SetDefaults(itemsToPlaceInIceChests[0]);
+                                chest.Item[inventoryIndex].SetDefaults(itemsToPlaceInIceChests[0]);
                             }
                             break;
                         }
@@ -110,7 +111,7 @@ namespace JoJoStands
 
         public override void TileCountsAvailable(int[] tileCounts)
         {
-            viralMeteoriteTiles = tileCounts[mod.TileType("ViralMeteoriteTile")];
+            viralMeteoriteTiles = tileCounts[ModContent.TileType<ViralMeteoriteTile>()];
         }
 
         public static void DropViralMeteorite()        //directly from Terraria/WorldGen.cs, about 22~~
@@ -137,7 +138,7 @@ namespace JoJoStands
                 int YCoord = 5;
                 while ((double)YCoord < Main.worldSurface)
                 {
-                    if (Main.tile[XCoord, YCoord].active() && Main.tile[XCoord, YCoord].type == JoJoStands.Instance.TileType("ViralMeteoriteTile"))
+                    if (Main.tile[XCoord, YCoord].active() && Main.tile[XCoord, YCoord].type == JoJoStands.Instance.TileType("ViralMeteoriteTile>())
                     {
                         num++;
                         if (num > num3)
@@ -269,7 +270,7 @@ namespace JoJoStands
                             {
                                 Main.tile[xCoord, yCoord].active(false);
                             }
-                            Main.tile[xCoord, yCoord].type = (ushort)JoJoStands.Instance.TileType("ViralMeteoriteTile");
+                            Main.tile[xCoord, yCoord].type = (ushort)JoJoStands.Instance.TileType("ViralMeteoriteTile>();
                         }
                     }
                 }
@@ -307,7 +308,7 @@ namespace JoJoStands
                         }
                         Main.tile[xCoord, yCoord].liquid = 0;
                     }
-                    if (Main.tile[xCoord, yCoord].type == JoJoStands.Instance.TileType("ViralMeteoriteTile"))
+                    if (Main.tile[xCoord, yCoord].type == JoJoStands.Instance.TileType("ViralMeteoriteTile>())
                     {
                         if (!WorldGen.SolidTile(xCoord - 1, yCoord) && !WorldGen.SolidTile(xCoord + 1, yCoord) && !WorldGen.SolidTile(xCoord, yCoord - 1) && !WorldGen.SolidTile(xCoord, yCoord + 1))
                         {
@@ -338,7 +339,7 @@ namespace JoJoStands
                             {
                                 WorldGen.KillTile(xCoord, yCoord, false, false, false);
                             }
-                            Main.tile[xCoord, yCoord].type = (ushort)JoJoStands.Instance.TileType("ViralMeteoriteTile");
+                            Main.tile[xCoord, yCoord].type = (ushort)JoJoStands.Instance.TileType("ViralMeteoriteTile>();
                             WorldGen.SquareTileFrame(xCoord, yCoord, true);
                         }
                     }
@@ -360,7 +361,7 @@ namespace JoJoStands
                             {
                                 WorldGen.KillTile(xCoord, yCoord, false, false, false);
                             }
-                            Main.tile[xCoord, yCoord].type = (ushort)JoJoStands.Instance.TileType("ViralMeteoriteTile");
+                            Main.tile[xCoord, yCoord].type = (ushort)JoJoStands.Instance.TileType("ViralMeteoriteTile>();
                             WorldGen.SquareTileFrame(xCoord, yCoord, true);
                         }
                     }

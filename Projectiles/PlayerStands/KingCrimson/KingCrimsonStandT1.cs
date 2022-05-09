@@ -8,8 +8,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
     {
         public override void SetStaticDefaults()
         {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 11;
+            Main.projPet[Projectile.type] = true;
+            Main.projFrames[Projectile.type] = 11;
         }
 
         public override int punchDamage => 42;
@@ -30,64 +30,64 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             SelectAnimation();
             UpdateStandInfo();
             updateTimer++;
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (shootCount > 0)
                 shootCount--;
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
                     normalFrames = false;
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
 
-                    float rotaY = Main.MouseWorld.Y - projectile.Center.Y;
-                    projectile.rotation = MathHelper.ToRadians((rotaY * projectile.spriteDirection) / 6f);
-                    projectile.direction = 1;
-                    if (Main.MouseWorld.X < projectile.position.X)
+                    float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
+                    Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
+                    Projectile.direction = 1;
+                    if (Main.MouseWorld.X < Projectile.position.X)
                     {
-                        projectile.spriteDirection = -1;
-                        projectile.direction = -1;
+                        Projectile.spriteDirection = -1;
+                        Projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
+                    Projectile.spriteDirection = Projectile.direction;
 
-                    Vector2 velocityAddition = Main.MouseWorld - projectile.position;
+                    Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f;
 
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, projectile.Center);
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
                     {
-                        projectile.velocity = player.velocity + velocityAddition;
+                        Projectile.velocity = player.velocity + velocityAddition;
                     }
                     if (mouseDistance <= 40f)
                     {
-                        projectile.velocity = Vector2.Zero;
+                        Projectile.velocity = Vector2.Zero;
                     }
-                    if (shootCount <= 0 && (projectile.frame == 0 || projectile.frame == 4))
+                    if (shootCount <= 0 && (Projectile.frame == 0 || Projectile.frame == 4))
                     {
                         shootCount += newPunchTime / 2;
-                        Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("Fists"), newPunchDamage, punchKnockback, projectile.owner, fistWhoAmI);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner, fistWhoAmI);
                         Main.projectile[proj].netUpdate = true;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                     }
                     LimitDistance();
                 }
@@ -112,35 +112,35 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/KingCrimson/KingCrimson_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/KingCrimson/KingCrimson_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 4, 15, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 6, newPunchTime / 2, true);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>()
             {
                 AnimateStand(animationName, 1, 2, true);
             }

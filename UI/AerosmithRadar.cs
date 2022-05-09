@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
-using Terraria.ID;
-using System;
 
 namespace JoJoStands.UI
 {
@@ -31,7 +31,7 @@ namespace JoJoStands.UI
             aerosmithRadarUI.BackgroundColor = new Color(0, 0, 0, 0);
             aerosmithRadarUI.BorderColor = new Color(0, 0, 0, 0);
 
-            centerDot = new UIImage(ModContent.GetTexture("JoJoStands/UI/GreenDot"));
+            centerDot = new UIImage(ModContent.Request<Texture2D>("JoJoStands/UI/GreenDot"));
             centerDot.Left.Set(58f, 0f);
             centerDot.Top.Set(62f, 0f);
             centerDot.Width.Set(10f, 0f);
@@ -44,17 +44,22 @@ namespace JoJoStands.UI
 
         private Texture2D redDotTexture;
         private Texture2D orangeDotTexture;
-        private int[] dotTimers = new int[Main.maxNPCs];
-        private float[] dotAlphas = new float[Main.maxNPCs];
+        private AerosmithRadarPoint[] dataPoints;
+
+        private struct AerosmithRadarPoint
+        {
+            public int timer;
+            public float alpha;
+        }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (redDotTexture == null)
-                redDotTexture = ModContent.GetTexture("JoJoStands/UI/RedDot");
+                redDotTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/RedDot");
             if (orangeDotTexture == null)
-                orangeDotTexture = ModContent.GetTexture("JoJoStands/UI/OrangeDot");
+                orangeDotTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/OrangeDot");
 
             spriteBatch.Draw(aerosmithRadarTexture, aerosmithRadarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 1, aerosmithRadarTexture.Width, aerosmithRadarTexture.Height), new Color(255f, 255f, 255f, 255f));
 
@@ -71,16 +76,18 @@ namespace JoJoStands.UI
 
                     if (xDistance < xMaxDetectionDistance && yDistance < yMaxDetectionDistance && xDistance > -xMaxDetectionDistance && yDistance > -yMaxDetectionDistance)
                     {
-                        dotTimers[n]++;
-                        if (dotTimers[n] >= 360)
-                            dotTimers[n] = 0;
+                        AerosmithRadarPoint aerosmithRadarPoint = dataPoints[n];
+                        dataPoints[n].timer++;
+                        if (dataPoints[n].timer >= 360)
+                            dataPoints[n].timer = 0;
 
-                        dotAlphas[n] = 0.5f + (Math.Abs((float)Math.Sin(dotTimers[n] / 6f)) * 0.5f);
+                        dataPoints[n].alpha = 0.5f + (Math.Abs((float)Math.Sin(dataPoints[n].timer / 6f)) * 0.5f);
+                        dataPoints[n] = aerosmithRadarPoint;
 
                         if (xDistance < 675f && xDistance > -675f && yDistance < 675f && yDistance > -675f)
                         {
                             Rectangle destinationRect = new Rectangle((int)(centerDot.Left.Pixels + 13f + (-xDistance / 18f)) + (int)aerosmithRadarUI.Left.Pixels, (int)(centerDot.Top.Pixels + 13f + (-yDistance / 18f)) + (int)aerosmithRadarUI.Top.Pixels, 10, 10);
-                            spriteBatch.Draw(redDotTexture, destinationRect, null, Color.White * dotAlphas[n]);
+                            spriteBatch.Draw(redDotTexture, destinationRect, null, Color.White * dataPoints[n].alpha);
                         }
                     }
                 }
@@ -89,6 +96,9 @@ namespace JoJoStands.UI
             {
                 for (int p = 0; p < Main.maxPlayers; p++)
                 {
+                    if (p >= Main.maxNPCs)      //The limit is Main.maxNPCs
+                        break;
+
                     Player detectedPlayer = Main.player[p];
                     if (detectedPlayer.active && detectedPlayer.team != player.team)
                     {
@@ -99,23 +109,18 @@ namespace JoJoStands.UI
 
                         if (detectedPlayer.active && xDistance < xMaxDetectionDistance && yDistance < yMaxDetectionDistance && xDistance > -xMaxDetectionDistance && yDistance > -yMaxDetectionDistance)
                         {
-                            if (p < Main.maxNPCs)
-                            {
-                                dotTimers[p]++;     //They use the same ones as NPCs. This'll lead to faster behaviour but just think of it as "increased variation"
-                                if (dotTimers[p] >= 360)
-                                    dotTimers[p] = 0;
+                            AerosmithRadarPoint aerosmithRadarPoint = dataPoints[p];
+                            dataPoints[p].timer++;
+                            if (dataPoints[p].timer >= 360)
+                                dataPoints[p].timer = 0;
 
-                                dotAlphas[p] = 0.5f + (Math.Abs((float)Math.Sin(dotTimers[p] / 6f)) * 0.5f);
-                            }
-                            else
-                            {
-                                p = 0;      //Heh
-                            }
+                            dataPoints[p].alpha = 0.5f + (Math.Abs((float)Math.Sin(dataPoints[p].timer / 6f)) * 0.5f);
+                            dataPoints[p] = aerosmithRadarPoint;
 
                             if (xDistance < 675f && xDistance > -675f && yDistance < 675f && yDistance > -675f)
                             {
                                 Rectangle destinationRect = new Rectangle((int)(centerDot.Left.Pixels + 13f + (-xDistance / 18f)) + (int)aerosmithRadarUI.Left.Pixels, (int)(centerDot.Top.Pixels + 13f + (-yDistance / 18f)) + (int)aerosmithRadarUI.Top.Pixels, 10, 10);
-                                spriteBatch.Draw(orangeDotTexture, destinationRect, null, Color.White * dotAlphas[p]);
+                                spriteBatch.Draw(orangeDotTexture, destinationRect, null, Color.White * dataPoints[p].alpha);
                             }
                         }
                     }

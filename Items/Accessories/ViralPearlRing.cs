@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
 using Terraria.ID;
 
@@ -10,20 +11,20 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Pearl Ring");
-            Tooltip.SetDefault("Right Click to remove the Pearl. Be careful not to break it!");
+            DisplayName.SetDefault("Viral Pearl Ring>();
+            Tooltip.SetDefault("Right Click to remove the Pearl. Be careful not to break it!>();
         }
 
         public override void SetDefaults()
         {
-            item.width = 30;
-            item.height = 30;
-            item.accessory = true;
-            item.rare = ItemRarityID.LightRed;
-            item.value = Item.buyPrice(0, 2, 0, 0);
-            item.useStyle = ItemUseStyleID.EatingUsing;
-            item.maxStack = 1;
-            item.consumable = true;
+            Item.width = 30;
+            Item.height = 30;
+            Item.accessory = true;
+            Item.rare = ItemRarityID.LightRed;
+            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.useStyle = ItemUseStyleID.EatFood;
+            Item.maxStack = 1;
+            Item.consumable = true;
         }
 
         public override bool AltFunctionUse(Player player)
@@ -35,9 +36,9 @@ namespace JoJoStands.Items.Accessories
         {
             if (player.altFunctionUse == 2)
             {
-                int proj = Projectile.NewProjectile(player.position, Vector2.Zero, mod.ProjectileType("ViralPearl"), 0, 0f, player.whoAmI);
+                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<ViralPearl>(), 0, 0f, player.whoAmI);
                 Main.projectile[proj].netUpdate = true;
-                item.TurnToAir();
+                Item.TurnToAir();
             }
             else
             {

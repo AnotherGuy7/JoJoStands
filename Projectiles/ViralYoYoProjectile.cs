@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -8,25 +9,25 @@ namespace JoJoStands.Projectiles
     {
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.YoyosLifeTimeMultiplier[projectile.type] = 5f;
-            ProjectileID.Sets.YoyosMaximumRange[projectile.type] = 300f;
-            ProjectileID.Sets.YoyosTopSpeed[projectile.type] = 14f;
+            ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 5f;
+            ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 300f;
+            ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 14f;
         }
 
         public override void SetDefaults()
         {
-            projectile.extraUpdates = 0;
-            projectile.width = 16;
-            projectile.height = 16;
-            projectile.aiStyle = 99;
-            projectile.friendly = true;
-            projectile.penetrate = -1;
-            projectile.melee = true;
+            Projectile.extraUpdates = 0;
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.aiStyle = 99;
+            Projectile.friendly = true;
+            Projectile.penetrate = -1;
+            Projectile.melee = true;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(mod.BuffType("Infected"), Main.rand.Next(2, 5) * 60);
+            target.AddBuff(ModContent.BuffType<Infected>(), Main.rand.Next(2, 5) * 60);
         }
     }
 }

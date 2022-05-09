@@ -19,6 +19,7 @@ float2 uZoom;
 float2 uImageSize1;
 float2 uImageSize2;
 float2 uImageSize3;
+float4 uShaderSpecificData
 
 float NormalizedColor(float value)
 {

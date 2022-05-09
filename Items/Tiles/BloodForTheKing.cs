@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Tiles
 {
@@ -13,17 +14,17 @@ namespace JoJoStands.Items.Tiles
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 36;
-            item.useTurn = true;
-            item.autoReuse = true;
-            item.useAnimation = 30;
-            item.useTime = 30;
-            item.useStyle = 1;
-            item.consumable = true;
-            item.value = Item.buyPrice(0, 2, 0, 0);
-            item.rare = 1;
-            item.createTile = mod.TileType("BloodForTheKingTile");
+            Item.width = 32;
+            Item.height = 36;
+            Item.useTurn = true;
+            Item.autoReuse = true;
+            Item.useAnimation = 30;
+            Item.useTime = 30;
+            Item.useStyle = 1;
+            Item.consumable = true;
+            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.rare = 1;
+            Item.createTile = ModContent.TileType<BloodForTheKingTile");
         }
     }
 }

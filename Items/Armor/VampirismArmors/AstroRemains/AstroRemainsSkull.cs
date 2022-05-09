@@ -16,16 +16,16 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
 
         public override void SetDefaults()
         {
-            item.width = 38;
-            item.height = 44;
-            item.value = Item.buyPrice(silver: 70);
-            item.rare = ItemRarityID.Orange;
-            item.defense = 8;
+            Item.width = 38;
+            Item.height = 44;
+            Item.value = Item.buyPrice(silver: 70);
+            Item.rare = ItemRarityID.Orange;
+            Item.defense = 8;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("AstroRemainsChestplate") && legs.type == mod.ItemType("AstroRemainsGreaves");
+            return body.type == ModContent.ItemType<AstroRemainsChestplate>() && legs.type == ModContent.ItemType<AstroRemainsGreaves>();
         }
 
         public override void UpdateArmorSet(Player player)
@@ -39,12 +39,11 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.MeteoriteBar, 6);
-            recipe.AddIngredient(ItemID.Bone, 45);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.MeteoriteBar, 6)
+                .AddIngredient(ItemID.Bone, 45)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

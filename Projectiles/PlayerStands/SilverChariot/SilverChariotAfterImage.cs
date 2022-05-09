@@ -12,12 +12,12 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
         public override void SetDefaults()
         {
-            projectile.alpha = 186;
-            projectile.width = 38;
-            projectile.height = 1;
-            projectile.netImportant = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
+            Projectile.alpha = 186;
+            Projectile.width = 38;
+            Projectile.height = 1;
+            Projectile.netImportant = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
         }
 
         public override float maxDistance => 98f;
@@ -41,19 +41,19 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             {
                 shootCount--;
             }
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.silverChariotShirtless)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
             if (parryCooldownTime == 0)
             {
-                if (projectile.ai[1] == 3f)
+                if (Projectile.ai[1] == 3f)
                 {
                     parryCooldownTime = 6;
                 }
@@ -74,27 +74,27 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && !player.HasBuff(mod.BuffType("AbilityCooldown")) && !attackFrames && !parryFrames && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && !parryFrames && Projectile.owner == Main.myPlayer)
                 {
                     normalFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
-                    projectile.netUpdate = true;
-                    Rectangle parryRectangle = new Rectangle((int)projectile.Center.X + (4 * projectile.direction), (int)projectile.Center.Y - 29, 16, 54);
+                    Projectile.netUpdate = true;
+                    Rectangle parryRectangle = new Rectangle((int)Projectile.Center.X + (4 * Projectile.direction), (int)Projectile.Center.Y - 29, 16, 54);
                     for (int p = 0; p < Main.maxProjectiles; p++)
                     {
                         Projectile otherProj = Main.projectile[p];
                         if (otherProj.active)
                         {
-                            if (parryRectangle.Intersects(otherProj.Hitbox) && otherProj.type != projectile.type && !otherProj.friendly)
+                            if (parryRectangle.Intersects(otherProj.Hitbox) && otherProj.type != Projectile.type && !otherProj.friendly)
                             {
                                 parryFrames = true;
-                                otherProj.owner = projectile.owner;
+                                otherProj.owner = Projectile.owner;
                                 otherProj.damage *= 2;
                                 otherProj.velocity *= -1;
                                 otherProj.hostile = false;
                                 otherProj.friendly = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(parryCooldownTime));
+                                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(parryCooldownTime));
                             }
                         }
                     }
@@ -108,17 +108,17 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 npc.StrikeNPC(npc.damage * 2, 6f, player.direction);
                                 secondaryAbilityFrames = false;
                                 parryFrames = true;
-                                player.AddBuff(mod.BuffType("AbilityCooldown"), mPlayer.AbilityCooldownTime(parryCooldownTime));
+                                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(parryCooldownTime));
                             }
                         }
                     }
 
-                    projectile.direction = 1;
-                    if (projectile.position.X <= player.position.X)
+                    Projectile.direction = 1;
+                    if (Projectile.position.X <= player.position.X)
                     {
-                        projectile.direction = -1;
+                        Projectile.direction = -1;
                     }
-                    projectile.spriteDirection = projectile.direction;
+                    Projectile.spriteDirection = Projectile.direction;
                 }
                 if (!Main.mouseRight)
                 {
@@ -127,14 +127,14 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
                 if (!attackFrames)
                 {
-                    float angle = 360f / projectile.ai[1];
-                    angle *= projectile.ai[0];
+                    float angle = 360f / Projectile.ai[1];
+                    angle *= Projectile.ai[0];
 
-                    projectile.position = player.Center + (MathHelper.ToRadians(angle).ToRotationVector2() * (4f * 16f));
+                    Projectile.position = player.Center + (MathHelper.ToRadians(angle).ToRotationVector2() * (4f * 16f));
                     if (!secondaryAbilityFrames && !parryFrames)
                     {
                         normalFrames = true;
-                        projectile.spriteDirection = projectile.direction = player.direction;
+                        Projectile.spriteDirection = Projectile.direction = player.direction;
                     }
                     HandleDrawOffsets();
                 }
@@ -159,16 +159,16 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         private void DrawStand(SpriteBatch spriteBatch, Color drawColor)
         {
             effects = SpriteEffects.None;
-            if (projectile.spriteDirection == -1)
+            if (Projectile.spriteDirection == -1)
             {
                 effects = SpriteEffects.FlipHorizontally;
             }
 
-            drawColor *= projectile.alpha / 255f;
+            drawColor *= Projectile.alpha / 255f;
             if (standTexture != null && Main.netMode != NetmodeID.Server)
             {
-                int frameHeight = standTexture.Height / Main.projFrames[projectile.whoAmI];
-                spriteBatch.Draw(standTexture, projectile.Center - Main.screenPosition + new Vector2(drawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
+                int frameHeight = standTexture.Height / Main.projFrames[Projectile.whoAmI];
+                spriteBatch.Draw(standTexture, Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
             }
         }
 
@@ -177,60 +177,60 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary");
+                PlayAnimation("Secondary>();
             }
             if (parryFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                if (projectile.frame >= 5)
+                if (Projectile.frame >= 5)
                 {
                     parryFrames = false;
                     normalFrames = true;
                 }
-                PlayAnimation("Parry");
+                PlayAnimation("Parry>();
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/SilverChariot/SilverChariot_Shirtless_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/SilverChariot/SilverChariot_Shirtless_" + animationName);
             {
-                if (animationName == "Idle")
+                if (animationName == "Idle>()
                 {
                     AnimateStand(animationName, 4, 30, true);
                 }
-                if (animationName == "Attack")
+                if (animationName == "Attack>()
                 {
                     AnimateStand(animationName, 5, newPunchTime, true);
                 }
-                if (animationName == "Secondary")
+                if (animationName == "Secondary>()
                 {
                     AnimateStand(animationName, 1, 1, true);
                 }
-                if (animationName == "Parry")
+                if (animationName == "Parry>()
                 {
                     AnimateStand(animationName, 6, 8, false);
                 }
-                if (animationName == "Pose")
+                if (animationName == "Pose>()
                 {
                     AnimateStand(animationName, 1, 10, true);
                 }

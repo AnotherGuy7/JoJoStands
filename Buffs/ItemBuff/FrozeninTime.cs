@@ -1,28 +1,28 @@
-using Terraria;
 using Microsoft.Xna.Framework;
-using Terraria.ModLoader;
+using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
     public class FrozeninTime : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Frozen in Time");
+            DisplayName.SetDefault("Frozen in Time");
             Description.SetDefault("You have been stopped along with time");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
- 
+
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.HasBuff(mod.BuffType(Name)))
+            if (player.HasBuff(Type))
             {
                 player.controlUseItem = false;
-                player.dash = 0;
+                player.dashType = 0;
                 player.bodyVelocity = Vector2.Zero;
                 player.controlLeft = false;
                 player.controlJump = false;

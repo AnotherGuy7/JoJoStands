@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -53,7 +54,7 @@ namespace JoJoStands.NPCs.Enemies
             }
             if (npc.ai[0] == 1f && npc.ai[2] == 0f)
             {
-                NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType("HighwayStar"), 0, 0f, 0f, npc.whoAmI, 0f, npc.target);
+                NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, Mod.NPCType("HighwayStar"), 0, 0f, 0f, npc.whoAmI, 0f, npc.target);
             }
             if (npc.ai[2] == 0f)
             {

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -61,7 +62,7 @@ namespace JoJoStands.NPCs.Enemies
                     }
                     shootVel.Normalize();
                     shootVel *= 2f;
-                    int proj = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, shootVel.X, shootVel.Y, mod.ProjectileType("AirBubble"), npc.damage, 1f);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.Center.X, npc.Center.Y, shootVel.X, shootVel.Y, ModContent.ProjectileType<AirBubble>(), npc.damage, 1f);
                     Main.projectile[proj].netUpdate = true;
                     npc.netUpdate = true;
                     npc.ai[2] = 2f;

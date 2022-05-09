@@ -27,21 +27,21 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!mPlayer.standAutoMode)
             {
-                secondaryAbilityFrames = player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] != 0;
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] == 0)
+                secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] != 0;
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0)
                 {
                     Punch();
                 }
@@ -57,24 +57,24 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     else
                         GoInFront();
                 }
-                if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StickyFingersFistExtended")] == 0 && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0 && Projectile.owner == Main.myPlayer)
                 {
                     shootCount += 120;
-                    Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
                     {
                         shootVel = new Vector2(0f, 1f);
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
-                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StickyFingersFistExtended"), (int)(altDamage * mPlayer.standDamageBoosts), 6f, projectile.owner, projectile.whoAmI);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersFistExtended>(), (int)(altDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
                     Main.projectile[proj].netUpdate = true;
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                 }
             }
             if (mPlayer.standAutoMode)
             {
-                PunchAndShootAI(mod.ProjectileType("StickyFingersFistExtended"), shootMax: 1);
+                PunchAndShootAI(ModContent.ProjectileType<StickyFingersFistExtended>(), shootMax: 1);
             }
         }
 
@@ -83,45 +83,45 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary");
+                PlayAnimation("Secondary>();
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 4, 30, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Secondary")
+            if (animationName == "Secondary>()
             {
                 AnimateStand(animationName, 1, 10, true);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>()
             {
                 AnimateStand(animationName, 1, 10, true);
             }

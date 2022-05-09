@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.UI;
 
 namespace JoJoStands.UI
@@ -59,7 +60,7 @@ namespace JoJoStands.UI
             unitsLeftText.Height.Set(20f, 0f);
             UnitsUIPanel.Append(unitsLeftText);
 
-            Texture2D soldierTextureImage = ModContent.GetTexture("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanySoldier_Prone");
+            Texture2D soldierTextureImage = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanySoldier_Prone");
             soldierTexture = new UIImage(soldierTextureImage);
             soldierTexture.HAlign = 0.1f;
             soldierTexture.VAlign = 0.5f;
@@ -74,7 +75,7 @@ namespace JoJoStands.UI
             soldiersActiveText.Height.Set(20f, 0f);
             UnitsUIPanel.Append(soldiersActiveText);
 
-            Texture2D leftButtonTexture = ModContent.GetTexture("JoJoStands/Extras/LeftArrow");
+            Texture2D leftButtonTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/LeftArrow");
             subtractSoldierButton = new UIImageButton(leftButtonTexture);
             subtractSoldierButton.HAlign = soldiersActiveText.HAlign - buttonPadding;
             subtractSoldierButton.VAlign = soldiersActiveText.VAlign;
@@ -83,7 +84,7 @@ namespace JoJoStands.UI
             subtractSoldierButton.OnClick += OnClickSubtractSoldierButton;
             UnitsUIPanel.Append(subtractSoldierButton);
 
-            Texture2D rightButtonTexture = ModContent.GetTexture("JoJoStands/Extras/RightArrow");
+            Texture2D rightButtonTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/RightArrow");
             addSoldierButton = new UIImageButton(rightButtonTexture);
             addSoldierButton.HAlign = soldiersActiveText.HAlign + buttonPadding;
             addSoldierButton.VAlign = soldiersActiveText.VAlign;
@@ -92,7 +93,7 @@ namespace JoJoStands.UI
             addSoldierButton.OnClick += OnClickAddSoldierButton;
             UnitsUIPanel.Append(addSoldierButton);
 
-            Texture2D tankTextureImage = ModContent.GetTexture("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanyTank");
+            Texture2D tankTextureImage = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanyTank");
             tankTexture = new UIImage(tankTextureImage);
             tankTexture.HAlign = 0.5f;
             tankTexture.VAlign = 0.5f;
@@ -123,7 +124,7 @@ namespace JoJoStands.UI
             addTankButton.OnClick += OnClickAddTankButton;
             UnitsUIPanel.Append(addTankButton);
 
-            Texture2D chopperTextureImage = ModContent.GetTexture("JoJoStands/Extras/UnitsUIChopper");
+            Texture2D chopperTextureImage = ModContent.Request<Texture2D>("JoJoStands/Extras/UnitsUIChopper");
             chopperTexture = new UIImage(chopperTextureImage);
             chopperTexture.HAlign = 0.9f;
             chopperTexture.VAlign = 0.5f;

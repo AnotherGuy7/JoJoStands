@@ -6,7 +6,7 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class RedBindDebuff : ModBuff
     {
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Red Bind");
             Description.SetDefault("You are bound by fire...");

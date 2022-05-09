@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items
 {
@@ -15,43 +16,43 @@ namespace JoJoStands.Items
 
 		public override void SetDefaults()
 		{
-			item.width = 24;
-			item.height = 24;
-			item.useTime = 30;
-			item.useAnimation = 30;
-			item.useStyle = 1;
-			item.rare = ItemRarityID.Pink;
-			item.noMelee = true;
-			item.noUseGraphic = true;
-			item.mountType = mod.MountType("RoadRollerMount");
+			Item.width = 24;
+			Item.height = 24;
+			Item.useTime = 30;
+			Item.useAnimation = 30;
+			Item.useStyle = 1;
+			Item.rare = ItemRarityID.Pink;
+			Item.noMelee = true;
+			Item.noUseGraphic = true;
+			Item.mountType = Mod.MountType("RoadRollerMount");
         }
 
         public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.IronBar, 20);
-			recipe.AddIngredient(ItemID.PalladiumBar, 13);
-			recipe.AddIngredient(ItemID.SoulofNight);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-			recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.LeadBar, 20);
-			recipe.AddIngredient(ItemID.PalladiumBar, 13);
-			recipe.AddIngredient(ItemID.SoulofNight);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-			recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.IronBar, 20);
-			recipe.AddIngredient(ItemID.CobaltBar, 13);
-			recipe.AddIngredient(ItemID.SoulofNight);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-			recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.LeadBar, 20);
-			recipe.AddIngredient(ItemID.CobaltBar, 13);
-			recipe.AddIngredient(ItemID.SoulofNight);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe()
+			    .AddIngredient(ItemID.IronBar, 20);
+			    .AddIngredient(ItemID.PalladiumBar, 13);
+			    .AddIngredient(ItemID.SoulofNight);
+
+			    .Register();
+			CreateRecipe()
+			    .AddIngredient(ItemID.LeadBar, 20);
+			    .AddIngredient(ItemID.PalladiumBar, 13);
+			    .AddIngredient(ItemID.SoulofNight);
+
+			    .Register();
+			CreateRecipe()
+			    .AddIngredient(ItemID.IronBar, 20);
+			    .AddIngredient(ItemID.CobaltBar, 13);
+			    .AddIngredient(ItemID.SoulofNight);
+
+			    .Register();
+			CreateRecipe()
+			    .AddIngredient(ItemID.LeadBar, 20);
+			    .AddIngredient(ItemID.CobaltBar, 13);
+			    .AddIngredient(ItemID.SoulofNight);
+
+			    .Register();
 		}
 	}
 }

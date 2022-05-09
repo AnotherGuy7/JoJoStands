@@ -15,11 +15,11 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
 
         public override void SetDefaults()
         {
-            item.width = 40;
-            item.height = 24;
-            item.value = Item.buyPrice(silver: 80);
-            item.rare = ItemRarityID.Orange;
-            item.defense = 8;
+            Item.width = 40;
+            Item.height = 24;
+            Item.value = Item.buyPrice(silver: 80);
+            Item.rare = ItemRarityID.Orange;
+            Item.defense = 8;
         }
 
         public override void UpdateEquip(Player player)
@@ -30,13 +30,12 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.MeteoriteBar, 12);
-            recipe.AddIngredient(ItemID.Bone, 30);
-            recipe.AddIngredient(ItemID.HellstoneBar, 3);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.MeteoriteBar, 12)
+                .AddIngredient(ItemID.Bone, 30)
+                .AddIngredient(ItemID.HellstoneBar, 3)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

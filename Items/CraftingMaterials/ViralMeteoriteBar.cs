@@ -1,3 +1,4 @@
+using JoJoStands.Items.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,20 +16,19 @@ namespace JoJoStands.Items.CraftingMaterials
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.maxStack = 999;
-            item.rare = ItemRarityID.Green;
-            item.value = Item.buyPrice(0, 0, 50, 0);
+            Item.width = 32;
+            Item.height = 32;
+            Item.maxStack = 999;
+            Item.rare = ItemRarityID.Green;
+            Item.value = Item.buyPrice(0, 0, 50, 0);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ViralMeteorite"), 3);
-            recipe.AddTile(TileID.Furnaces);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<ViralMeteorite>(), 3)
+                .AddTile(TileID.Furnaces)
+                .Register();
         }
     }
 }

@@ -1,3 +1,4 @@
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,53 +15,49 @@ namespace JoJoStands.Items.Tiles
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
-            item.useTurn = true;
-            item.autoReuse = true;
-            item.useAnimation = 30;
-            item.useTime = 30;
-            item.useStyle = 1;
-            item.consumable = true;
-            item.value = Item.buyPrice(0, 0, 45, 0);
-            item.rare = 1;
-            item.maxStack = 999;
-            item.createTile = mod.TileType("RemixTableTile");
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTurn = true;
+            Item.autoReuse = true;
+            Item.useAnimation = 30;
+            Item.useTime = 30;
+            Item.useStyle = 1;
+            Item.consumable = true;
+            Item.value = Item.buyPrice(0, 0, 45, 0);
+            Item.rare = 1;
+            Item.maxStack = 999;
+            Item.createTile = ModContent.TileType<RemixTableTile>();
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);      //anvil + copper + any will
-            recipe.AddIngredient(ItemID.IronBar, 5);
-            recipe.AddIngredient(ItemID.ShadowScale, 3);
-            recipe.AddRecipeGroup("JoJoStandsWills");
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()      //anvil + copper + any will
+                .AddIngredient(ItemID.IronBar, 5)
+                .AddIngredient(ItemID.ShadowScale)
+                .AddRecipeGroup("JoJoStandsWills")
+                .AddTile(TileID.Anvils)
+                .Register();
 
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LeadBar, 5);
-            recipe.AddIngredient(ItemID.ShadowScale, 3);
-            recipe.AddRecipeGroup("JoJoStandsWills");
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.LeadBar, 5)
+                .AddIngredient(ItemID.ShadowScale, 3)
+                .AddRecipeGroup("JoJoStandsWills")
+                .AddTile(TileID.Anvils);
+                .Register();
 
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.IronBar, 5);
-            recipe.AddIngredient(ItemID.TissueSample, 3);
-            recipe.AddRecipeGroup("JoJoStandsWills");
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.IronBar, 5)
+                .AddIngredient(ItemID.TissueSample, 3)
+                .AddRecipeGroup("JoJoStandsWills")
+                .AddTile(TileID.Anvils)
+                .Register();
 
-            recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.LeadBar, 5);
-            recipe.AddIngredient(ItemID.TissueSample, 3);
-            recipe.AddRecipeGroup("JoJoStandsWills");
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.LeadBar, 5)
+                .AddIngredient(ItemID.TissueSample, 3)
+                .AddRecipeGroup("JoJoStandsWills")
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

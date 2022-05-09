@@ -9,28 +9,24 @@ namespace JoJoStands.Items.Vanities
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A top hat worn most during the 1800's.");
+
+            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
         }
 
         public override void SetDefaults()
         {
-            item.width = 28;
-            item.height = 24;
-            item.rare = ItemRarityID.LightPurple;
-            item.vanity = true;
-        }
-
-        public override bool DrawHead()
-        {
-            return true;
+            Item.width = 28;
+            Item.height = 24;
+            Item.rare = ItemRarityID.LightPurple;
+            Item.vanity = true;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Silk, 2);
-            recipe.AddTile(TileID.Loom);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.Silk, 2)
+                .AddTile(TileID.Loom)
+                .Register();
         }
     }
 }

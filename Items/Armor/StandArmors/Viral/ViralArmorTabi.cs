@@ -1,26 +1,27 @@
-using Terraria.ID;
+using JoJoStands.Items.CraftingMaterials;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Armor.StandArmors.Viral
 {
-	[AutoloadEquip(EquipType.Legs)]
-	public class ViralArmorTabi : ModItem
-	{
-		public override void SetStaticDefaults()
+    [AutoloadEquip(EquipType.Legs)]
+    public class ViralArmorTabi : ModItem
+    {
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Viral Tabi");
-			Tooltip.SetDefault("A pair of light boots from a surprisingly nimble meteor, powered by a strange virus.\nProvides a 4% Stand Crit Chance boost");
-		}
+            Tooltip.SetDefault("A pair of light boots from a surprisingly nimble meteor, powered by a strange virus.\nProvides a 4% Stand Crit Chance boost");
+        }
 
-		public override void SetDefaults()
+        public override void SetDefaults()
         {
-			item.width = 22;
-			item.height = 16;
-			item.value = Item.buyPrice(0, 3, 50, 0);
-			item.rare = ItemRarityID.Green;
-			item.defense = 5;
-		}
+            Item.width = 22;
+            Item.height = 16;
+            Item.value = Item.buyPrice(0, 3, 50, 0);
+            Item.rare = ItemRarityID.Green;
+            Item.defense = 5;
+        }
 
         public override void UpdateEquip(Player player)
         {
@@ -29,11 +30,10 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 25);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 25)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

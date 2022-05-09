@@ -1,62 +1,61 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-	public class ViralBroadsword : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			Tooltip.SetDefault("A shiny sword that gives you the might to swing effortlessly...");
-		}
-
-		public override void SetDefaults()
-		{
-			item.damage = 27;
-			item.width = 32;
-			item.height = 32;
-			item.useTime = 15;
-			item.useAnimation = 25;
-			item.useStyle = ItemUseStyleID.HoldingOut;
-			item.maxStack = 1;
-			item.noUseGraphic = true;
-			item.knockBack = 5f;
-			item.rare = ItemRarityID.LightRed;
-			item.shoot = mod.ProjectileType("ViralBroadswordProjectile");
-			item.value = Item.buyPrice(0, 1, 25, 0);
-			item.useTurn = true;
-			item.noWet = true;
-			item.channel = true;
-			item.noMelee = true;
-			item.autoReuse = false;
-			item.melee = true;
-		}
-
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+    public class ViralBroadsword : ModItem
+    {
+        public override void SetStaticDefaults()
         {
-			position = player.Center;
-			if (Main.MouseWorld.X > player.Center.X)
-			{
-				player.direction = 1;
-			}
-			else
-			{
-				player.direction = -1;
-			}
-			speedX = 1f * player.direction;
-			speedY = 0f;
-			return true;
+            Tooltip.SetDefault("A shiny sword that gives you the might to swing effortlessly...");
+        }
+
+        public override void SetDefaults()
+        {
+            Item.damage = 27;
+            Item.width = 32;
+            Item.height = 32;
+            Item.useTime = 15;
+            Item.useAnimation = 25;
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.maxStack = 1;
+            Item.noUseGraphic = true;
+            Item.knockBack = 5f;
+            Item.rare = ItemRarityID.LightRed;
+            Item.shoot = ModContent.ProjectileType<ViralBroadswordProjectile>();
+            Item.value = Item.buyPrice(0, 1, 25, 0);
+            Item.useTurn = true;
+            Item.noWet = true;
+            Item.channel = true;
+            Item.noMelee = true;
+            Item.autoReuse = false;
+            Item.melee = true;
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            position = player.Center;
+            if (Main.MouseWorld.X > player.Center.X)
+                player.direction = 1;
+            else
+                player.direction = -1;
+
+            velocity.X = 1f * player.direction;
+            velocity.Y = 0f;
+            return true;
         }
 
         public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(mod.ItemType("ViralMeteoriteBar"), 4);
-			recipe.SetResult(this);
-			recipe.AddTile(TileID.Anvils);
-			recipe.AddRecipe();
-		}
-	}
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 4)
+                .AddTile(TileID.Anvils)
+                .Register();
+        }
+    }
 }

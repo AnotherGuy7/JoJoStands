@@ -1,6 +1,7 @@
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
 using Terraria.Graphics.Effects;
 

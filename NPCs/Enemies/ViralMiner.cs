@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -83,7 +84,7 @@ namespace JoJoStands.NPCs.Enemies
                 }
                 shootVel.Normalize();
                 shootVel *= 10f;
-                int proj = Projectile.NewProjectile(npc.Center.X + (4f * npc.direction), npc.Center.Y - 5f, shootVel.X, shootVel.Y, mod.ProjectileType("MinerLightning"), npc.damage, 2f);
+                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.Center.X + (4f * npc.direction), npc.Center.Y - 5f, shootVel.X, shootVel.Y, ModContent.ProjectileType<MinerLightning>()), npc.damage, 2f);
                 Main.projectile[proj].netUpdate = true;
                 npc.netUpdate = true;
             }
@@ -105,7 +106,7 @@ namespace JoJoStands.NPCs.Enemies
             Item.NewItem(npc.getRect(), ItemID.CopperCoin, Main.rand.Next(1, 101));
             if (Main.rand.Next(0, 101) <= 45)
             {
-                Item.NewItem(npc.getRect(), mod.ItemType("ViralMeteorite"), Main.rand.Next(1, 6));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<ViralMeteorite>()), Main.rand.Next(1, 6));
             }
         }
 
@@ -137,7 +138,7 @@ namespace JoJoStands.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.player.GetModPlayer<MyPlayer>().ZoneViralMeteorite)
+            if (spawnInfo.player.GetModPlayer<MyPlayer>()).ZoneViralMeteorite)
             {
                 return SpawnCondition.OverworldNightMonster.Chance * 2f;
             }

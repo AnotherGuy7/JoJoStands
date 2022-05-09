@@ -25,20 +25,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
+            Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
                     Punch();
                 }
@@ -70,7 +70,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
@@ -81,7 +81,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
 
             if (animationName == "Idle")
             {

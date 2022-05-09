@@ -16,16 +16,16 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Defiled
 
         public override void SetDefaults()
         {
-            item.width = 22;
-            item.height = 18;
-            item.value = Item.buyPrice(silver: 80);
-            item.rare = ItemRarityID.Orange;
-            item.defense = 6;
+            Item.width = 22;
+            Item.height = 18;
+            Item.value = Item.buyPrice(silver: 80);
+            Item.rare = ItemRarityID.Orange;
+            Item.defense = 6;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == mod.ItemType("DefiledChestplate") && legs.type == mod.ItemType("DefiledGreaves");
+            return body.type == ModContent.ItemType<DefiledChestplate>() && legs.type == ModContent.ItemType<DefiledGreaves>();
         }
 
         public override void UpdateArmorSet(Player player)
@@ -50,14 +50,13 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Defiled
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.DemoniteBar, 11);
-            recipe.AddIngredient(ItemID.RottenChunk, 15);
-            recipe.AddIngredient(ItemID.ShadowScale, 6);
-            recipe.AddIngredient(ItemID.WormTooth, 2);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            CreateRecipe()
+                .AddIngredient(ItemID.DemoniteBar, 11)
+                .AddIngredient(ItemID.RottenChunk, 15)
+                .AddIngredient(ItemID.ShadowScale, 6)
+                .AddIngredient(ItemID.WormTooth, 2)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -14,81 +15,81 @@ namespace JoJoStands.Projectiles
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[projectile.type] = 5;
+            Main.projFrames[Projectile.type] = 5;
         }
 
         public override void SetDefaults()
         {
-            projectile.width = 16;
-            projectile.height = 16;
-            projectile.aiStyle = 0;
-            projectile.timeLeft = 1800;
-            projectile.friendly = true;
-            projectile.tileCollide = true;
-            projectile.ignoreWater = true;
-            projectile.penetrate = -1;
-            projectile.maxPenetrate = -1;
+            Projectile.width = 16;
+            Projectile.height = 16;
+            Projectile.aiStyle = 0;
+            Projectile.timeLeft = 1800;
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+            Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
+            Projectile.maxPenetrate = -1;
         }
 
         public override void AI()
         {
-            if (projectile.ai[0] != 0f)
+            if (Projectile.ai[0] != 0f)
             {
                 dripTimer++;
-                drawOriginOffsetY = -4;
-                if (projectile.ai[0] == 4f)     //stuck to the top
+                DrawOriginOffsetY = -4;
+                if (Projectile.ai[0] == 4f)     //stuck to the top
                 {
-                    projectile.rotation = 0f;
-                    projectile.frameCounter++;
-                    if (projectile.frameCounter >= 22.5f)
+                    Projectile.rotation = 0f;
+                    Projectile.frameCounter++;
+                    if (Projectile.frameCounter >= 22.5f)
                     {
-                        projectile.frame++;
-                        projectile.frameCounter = 0;
-                        if (projectile.frame >= 5)
+                        Projectile.frame++;
+                        Projectile.frameCounter = 0;
+                        if (Projectile.frame >= 5)
                         {
-                            int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 3f, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, projectile.owner, projectile.whoAmI);
+                            int drip = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y - 3f, 0f, 6f, ModContent.ProjectileType<MeltYourHeartDrip>(), Projectile.damage, 2f, Projectile.owner, Projectile.whoAmI);
                             Main.projectile[drip].netUpdate = true;
-                            projectile.netUpdate = true;
-                            projectile.frame = 1;
+                            Projectile.netUpdate = true;
+                            Projectile.frame = 1;
                         }
                     }
                 }
-                if (projectile.ai[0] == 3f)     //stuck to the right
+                if (Projectile.ai[0] == 3f)     //stuck to the right
                 {
-                    drawOffsetX = -8;
-                    projectile.frame = 1;
-                    projectile.rotation = MathHelper.ToRadians(270f);
+                    DrawOffsetX = -8;
+                    Projectile.frame = 1;
+                    Projectile.rotation = MathHelper.ToRadians(270f);
                     if (dripTimer >= 90)
                     {
-                        int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, projectile.owner, projectile.whoAmI);
+                        int drip = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, 0f, 6f, ModContent.ProjectileType<MeltYourHeartDrip>(), Projectile.damage, 2f, Projectile.owner, Projectile.whoAmI);
                         Main.projectile[drip].netUpdate = true;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                         dripTimer = 0;
                     }
                 }
-                if (projectile.ai[0] == 2f)     //stuck to the bottom
+                if (Projectile.ai[0] == 2f)     //stuck to the bottom
                 {
-                    projectile.frame = 1;
-                    projectile.rotation = MathHelper.ToRadians(180f);
+                    Projectile.frame = 1;
+                    Projectile.rotation = MathHelper.ToRadians(180f);
                 }
-                if (projectile.ai[0] == 1f)     //stuck to the left
+                if (Projectile.ai[0] == 1f)     //stuck to the left
                 {
-                    projectile.frame = 1;
-                    projectile.rotation = MathHelper.ToRadians(90f);
+                    Projectile.frame = 1;
+                    Projectile.rotation = MathHelper.ToRadians(90f);
                     if (dripTimer >= 90)
                     {
-                        int drip = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 6f, mod.ProjectileType("MeltYourHeartDrip"), projectile.damage, 2f, projectile.owner, projectile.whoAmI);
+                        int drip = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, 0f, 6f, ModContent.ProjectileType<MeltYourHeartDrip>(), Projectile.damage, 2f, Projectile.owner, Projectile.whoAmI);
                         Main.projectile[drip].netUpdate = true;
-                        projectile.netUpdate = true;
+                        Projectile.netUpdate = true;
                         dripTimer = 0;
                     }
                 }
-                projectile.velocity = Vector2.Zero;
+                Projectile.velocity = Vector2.Zero;
             }
             else
             {
-                projectile.frame = 0;
-                projectile.rotation = projectile.velocity.ToRotation();
+                Projectile.frame = 0;
+                Projectile.rotation = Projectile.velocity.ToRotation();
             }
         }
 
@@ -125,14 +126,14 @@ namespace JoJoStands.Projectiles
                     Xadd = 0;
                     Yadd = -1;
                 }
-                Tile tileTarget = Main.tile[(int)(projectile.Center.X /16f) + Xadd, (int)(projectile.Center.Y / 16f) + Yadd];
+                Tile tileTarget = Main.tile[(int)(Projectile.Center.X /16f) + Xadd, (int)(Projectile.Center.Y / 16f) + Yadd];
                 if (tileTarget.active())
                 {
-                    projectile.ai[0] = checkNumber + 1;
-                    projectile.frame = 0;
+                    Projectile.ai[0] = checkNumber + 1;
+                    Projectile.frame = 0;
                 }
             }
-            projectile.velocity = Vector2.Zero;
+            Projectile.velocity = Vector2.Zero;
             return false;
         }
     }

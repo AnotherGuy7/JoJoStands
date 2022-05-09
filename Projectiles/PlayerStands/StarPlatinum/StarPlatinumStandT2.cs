@@ -8,8 +8,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
     {
         public override void SetStaticDefaults()
         {
-            Main.projPet[projectile.type] = true;
-            Main.projFrames[projectile.type] = 10;
+            Main.projPet[Projectile.type] = true;
+            Main.projFrames[Projectile.type] = 10;
         }
 
         public override int punchDamage => 50;
@@ -32,22 +32,22 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             if (shootCount > 0)
                 shootCount--;
 
-            Player player = Main.player[projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
             if (mPlayer.standOut)
-                projectile.timeLeft = 2;
+                Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
-                projectile.netUpdate = true;
+                Projectile.netUpdate = true;
             }
 
             if (!mPlayer.standAutoMode)
             {
-                secondaryAbilityFrames = player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] != 0;
+                secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] != 0;
 
-                if (Main.mouseLeft && projectile.owner == Main.myPlayer && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                 {
                     Punch();
                 }
@@ -60,24 +60,24 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 {
                     StayBehindWithAbility();
                 }
-                if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[mod.ProjectileType("StarFinger")] == 0 && projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0 && Projectile.owner == Main.myPlayer)
                 {
                     shootCount += 120;
-                    Vector2 shootVel = Main.MouseWorld - projectile.Center;
+                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
                     {
                         shootVel = new Vector2(0f, 1f);
                     }
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
-                    int proj = Projectile.NewProjectile(projectile.Center, shootVel, mod.ProjectileType("StarFinger"), (int)(altDamage * mPlayer.standDamageBoosts), 2f, projectile.owner, projectile.whoAmI);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);
                     Main.projectile[proj].netUpdate = true;
-                    projectile.netUpdate = true;
+                    Projectile.netUpdate = true;
                 }
             }
             if (mPlayer.standAutoMode)
             {
-                PunchAndShootAI(mod.ProjectileType("StarFinger"), shootMax: 1);
+                PunchAndShootAI(ModContent.ProjectileType<StarFinger>(), shootMax: 1);
             }
         }
 
@@ -86,35 +86,35 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack");
+                PlayAnimation("Attack>();
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle");
+                PlayAnimation("Idle>();
             }
-            if (Main.player[projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose");
+                PlayAnimation("Pose>();
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = mod.GetTexture("Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
+                standTexture = Mod.GetTexture("Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
 
-            if (animationName == "Idle")
+            if (animationName == "Idle>()
             {
                 AnimateStand(animationName, 4, 12, true);
             }
-            if (animationName == "Attack")
+            if (animationName == "Attack>()
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Pose")
+            if (animationName == "Pose>()
             {
                 AnimateStand(animationName, 2, 12, true);
             }
