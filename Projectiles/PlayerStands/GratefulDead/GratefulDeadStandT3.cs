@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JoJoStands.Buffs.Debuffs;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
@@ -33,7 +35,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             if (shootCount > 0)
                 shootCount--;
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -119,11 +121,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 activatedGas = !activatedGas;
                 if (activatedGas)
                 {
-                    Main.NewText("Gas Spread: On>();
+                    Main.NewText("Gas Spread: On");
                 }
                 else
                 {
-                    Main.NewText("Gas Spread: Off>();
+                    Main.NewText("Gas Spread: Off");
                 }
             }
             if (activatedGas)
@@ -159,14 +161,14 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 BasicPunchAI();
             }
         }
-        public override bool PreDrawExtras(SpriteBatch spriteBatch)
+        public override bool PreDrawExtras()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (MyPlayer.RangeIndicators)
             {
-                Texture2D texture = Mod.GetTexture("Extras/RangeIndicator>();
-                spriteBatch.Draw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), ((20f * 16f) + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
+                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("Extras/RangeIndicator");
+                Main.EntitySpriteDraw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), ((20f * 16f) + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
             }
             return true;
         }
@@ -191,56 +193,56 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (secondaryFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary>();
+                PlayAnimation("Secondary");
             }
             if (grabFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryFrames = false;
-                PlayAnimation("Grab>();
+                PlayAnimation("Grab");
 
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 12, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Secondary>()
+            if (animationName == "Secondary")
             {
                 AnimateStand(animationName, 1, 1, true);
             }
-            if (animationName == "Grab>()
+            if (animationName == "Grab")
             {
                 AnimateStand(animationName, 3, 12, true, 2, 2);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 12, true);
             }

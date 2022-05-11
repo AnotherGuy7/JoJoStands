@@ -1,5 +1,7 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 {
@@ -83,7 +85,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/SilverChariot/SilverChariot_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/SilverChariot/SilverChariot_" + animationName);
 
             if (animationName == "Idle")
             {

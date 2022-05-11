@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.NPCStands
 {
@@ -50,7 +49,7 @@ namespace JoJoStands.Projectiles.NPCStands
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC npc = Main.npc[n];
-                    if (npc.type == Mod.NPCType("Priest>())
+                    if (npc.type == ModContent.NPCType<Priest>())
                     {
                         pucci = npc;
                         break;

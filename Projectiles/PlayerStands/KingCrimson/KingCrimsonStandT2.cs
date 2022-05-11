@@ -1,7 +1,11 @@
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 {
@@ -36,7 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             if (shootCount > 0)
                 shootCount--;
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -51,7 +55,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     timeskipStartDelay = 80;
                 else
                 {
-                    Terraria.Audio.LegacySoundStyle kingCrimson = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/KingCrimson>();
+                    LegacySoundStyle kingCrimson = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/KingCrimson");
                     kingCrimson.WithVolume(MyPlayer.ModSoundsVolume);
                     SoundEngine.PlaySound(kingCrimson, Projectile.position);
                     timeskipStartDelay = 1;
@@ -63,7 +67,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (timeskipStartDelay >= 80)
                 {
                     player.AddBuff(ModContent.BuffType<PreTimeSkip>(), 10);
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip>());
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip"));
                     timeskipStartDelay = 0;
                 }
             }
@@ -162,7 +166,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 }
                                 player.position += repositionOffset;
                                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip>());
+                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip"));
                                 for (int i = 0; i < 20; i++)
                                 {
                                     Dust.NewDust(player.position, player.width, player.height, 114);
@@ -188,7 +192,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             player.position += repositionOffset;
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
                             npc.StrikeNPC(newPunchDamage * 2, punchKnockback * 1.5f, Projectile.direction);
-                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip>());
+                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip"));
 
                             for (int i = 0; i < 20; i++)
                             {
@@ -218,46 +222,46 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Block>();
+                PlayAnimation("Block");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/KingCrimson/KingCrimson_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/KingCrimson/KingCrimson_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 15, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 6, newPunchTime / 2, true);
             }
-            if (animationName == "Block>()
+            if (animationName == "Block")
             {
                 AnimateStand(animationName, 4, 15, true);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 2, true);
             }

@@ -1,7 +1,10 @@
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 {
@@ -28,7 +31,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -72,7 +75,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     secondaryAbilityFrames = true;
                     if (JoJoStands.SoundsLoaded)
                     {
-                        Terraria.Audio.LegacySoundStyle redBind = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/RedBind>();
+                        Terraria.Audio.LegacySoundStyle redBind = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/RedBind");
                         redBind.WithVolume(MyPlayer.ModSoundsVolume);
                         SoundEngine.PlaySound(redBind, Projectile.position);
                     }
@@ -101,7 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     }
                     if (JoJoStands.SoundsLoaded)
                     {
-                        Terraria.Audio.LegacySoundStyle crossFireHurricane = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/CrossfireHurricaneSpecial>();
+                        Terraria.Audio.LegacySoundStyle crossFireHurricane = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/CrossfireHurricaneSpecial");
                         crossFireHurricane.WithVolume(MyPlayer.ModSoundsVolume);
                         SoundEngine.PlaySound(crossFireHurricane, Projectile.position);
                     }
@@ -174,46 +177,46 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary>();
+                PlayAnimation("Secondary");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 15, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newShootTime / 2, true);
             }
-            if (animationName == "Secondary>()
+            if (animationName == "Secondary")
             {
                 AnimateStand(animationName, 4, 15, true);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 2, true);
             }

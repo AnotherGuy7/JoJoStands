@@ -21,7 +21,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (!buried && WorldGen.SolidTile((int)player.position.X / 16, ((int)player.position.Y / 16) + 4))
             {
                 player.position.Y += 10f;

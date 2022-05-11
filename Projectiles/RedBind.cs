@@ -91,11 +91,11 @@ namespace JoJoStands.Projectiles
 
             Vector2 ownerCenter = ownerProj.Center + ownerCenterOffset;
             Vector2 center = Projectile.Center + new Vector2(0f, -1f);
-            Texture2D texture = Mod.GetTexture("Projectiles/RedBind_Part>();
+            Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/RedBind_Part>().Value;
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, ownerCenter) / texture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, ownerCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(texture, pos, new Rectangle(0, 0, texture.Width, texture.Height), lightColor, Projectile.rotation, new Vector2(texture.Width * 0.5f, texture.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture, pos, new Rectangle(0, 0, texture.Width, texture.Height), lightColor, Projectile.rotation, new Vector2(texture.Width * 0.5f, texture.Height * 0.5f), 1f, SpriteEffects.None, 0f);
             }
             return true;
         }

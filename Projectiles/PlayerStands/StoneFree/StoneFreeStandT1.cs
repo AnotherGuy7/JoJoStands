@@ -1,5 +1,7 @@
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 {
@@ -86,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
 
             if (animationName == "Idle")
             {

@@ -82,7 +82,7 @@ namespace JoJoStands.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Player player = Main.player[Projectile.owner];
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
 
             living = false;
             if (vPlayer.HasSkill(player, VampirePlayer.SavageInstincts))
@@ -105,7 +105,7 @@ namespace JoJoStands.Projectiles
 
             if (Main.netMode != NetmodeID.Server && veinPartTexture == null)
             {
-                veinPartTexture = Mod.GetTexture("Projectiles/VampiricVein_Part>();
+                veinPartTexture = Mod.Assets.Request<Texture2D>("Projectiles/VampiricVein_Part>().Value;
                 veinPartOrigin = new Vector2(veinPartTexture.Width * 0.5f, veinPartTexture.Height * 0.5f);
             }
 
@@ -115,7 +115,7 @@ namespace JoJoStands.Projectiles
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(Projectile.Center, playerCenter) / veinPartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(Projectile.Center, playerCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(veinPartTexture, pos, new Rectangle(0, 0, veinPartTexture.Width, veinPartTexture.Height), lightColor, rotation, veinPartOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(veinPartTexture, pos, new Rectangle(0, 0, veinPartTexture.Width, veinPartTexture.Height), lightColor, rotation, veinPartOrigin, Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

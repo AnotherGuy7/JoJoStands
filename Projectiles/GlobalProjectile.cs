@@ -1,10 +1,12 @@
+using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -38,7 +40,7 @@ namespace JoJoStands.Projectiles
         public override bool PreAI(Projectile Projectile)
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
             if (Mplayer.timestopActive)
             {
                 timeLeftSave++;
@@ -48,7 +50,7 @@ namespace JoJoStands.Projectiles
                 if (!stoppedInTime)
                 {
                     Projectile.damage = (int)(Projectile.damage * 0.8f);        //projectiles in timestop lose 20% damage, so it's not as OP
-                    if (player.HasBuff(ModContent.BuffType<TheWorldBuff>())) && JoJoStands.timestopImmune.Contains(Projectile.type))
+                    if (player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && JoJoStands.timestopImmune.Contains(Projectile.type))
                         timestopImmune = true;
                     stoppedInTime = true;
                 }
@@ -152,10 +154,10 @@ namespace JoJoStands.Projectiles
             return true;
         }
 
-        public override bool PreDraw(Projectile Projectile, SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(Projectile projectile, ref Color lightColor)
         {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>());
+            Player player = Main.player[projectile.owner];
+            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
             if (Mplayer.epitaphForesightActive || applyingForesightPositions)
             {
                 for (int i = 0; i < 50; i++)
@@ -164,14 +166,14 @@ namespace JoJoStands.Projectiles
                         continue;
 
                     SpriteEffects effects = SpriteEffects.None;
-                    int frameHeight = Main.projectileTexture[Projectile.type].Height / Main.projFrames[Projectile.type];
+                    int frameHeight = TextureAssets.Projectile[projectile.type].Value.Height / Main.projFrames[projectile.type];
                     if (foresightDirections[i] == 1)
                         effects = SpriteEffects.FlipHorizontally;
 
                     Vector2 drawPosition = foresightPosition[i] - Main.screenPosition;
-                    Rectangle animRect = new Rectangle(0, Projectile.frame * frameHeight, Projectile.width, frameHeight);
-                    Vector2 drawOrigin = Projectile.Size / 2f;
-                    spriteBatch.Draw(Main.projectileTexture[Projectile.type], drawPosition, animRect, Color.DarkRed, foresightRotations[i], drawOrigin, Projectile.scale, effects, 0f);
+                    Rectangle animRect = new Rectangle(0, projectile.frame * frameHeight, projectile.width, frameHeight);
+                    Vector2 drawOrigin = projectile.Size / 2f;
+                    Main.EntitySpriteDraw(TextureAssets.Projectile[projectile.type].Value, drawPosition, animRect, Color.DarkRed, foresightRotations[i], drawOrigin, projectile.scale, effects, 0);
                 }
             }
             return true;
@@ -180,9 +182,9 @@ namespace JoJoStands.Projectiles
         public override void ModifyHitPlayer(Projectile Projectile, Player target, ref int damage, ref bool crit)
         {
             MyPlayer mPlayer = target.GetModPlayer<MyPlayer>());
-            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT1>()))
+            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT1>())
                 damage = (int)(damage * 0.35f);
-            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT2>()))
+            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT2>())
                 damage = (int)(damage * 0.7f);
         }
 
@@ -194,7 +196,7 @@ namespace JoJoStands.Projectiles
 
         public override bool ShouldUpdatePosition(Projectile Projectile)        //thanks, HellGoesOn for telling me this hook even existed
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (mPlayer.timestopActive && Projectile.timeLeft <= savedTimeLeft)        //the ones who can move in Za Warudo's projectiles, like minions, fists, every other Projectile should freeze
                 return timestopImmune;      //if it's owner isn't a timestop owner, always stop the Projectile
 

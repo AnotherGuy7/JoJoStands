@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JoJoStands.Buffs.Debuffs;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 {
@@ -42,7 +44,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 shootCount--;
             }
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.silverChariotShirtless)
                 Projectile.timeLeft = 2;
 
@@ -54,13 +56,9 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             if (parryCooldownTime == 0)
             {
                 if (Projectile.ai[1] == 3f)
-                {
                     parryCooldownTime = 6;
-                }
                 else
-                {
                     parryCooldownTime = 3;
-                }
             }
 
             if (!mPlayer.standAutoMode)
@@ -168,7 +166,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             if (standTexture != null && Main.netMode != NetmodeID.Server)
             {
                 int frameHeight = standTexture.Height / Main.projFrames[Projectile.whoAmI];
-                spriteBatch.Draw(standTexture, Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
+                Main.EntitySpriteDraw(standTexture, Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
             }
         }
 
@@ -177,17 +175,17 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary>();
+                PlayAnimation("Secondary");
             }
             if (parryFrames)
             {
@@ -199,38 +197,38 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     parryFrames = false;
                     normalFrames = true;
                 }
-                PlayAnimation("Parry>();
+                PlayAnimation("Parry");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/SilverChariot/SilverChariot_Shirtless_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/SilverChariot/SilverChariot_Shirtless_" + animationName);
             {
-                if (animationName == "Idle>()
+                if (animationName == "Idle")
                 {
                     AnimateStand(animationName, 4, 30, true);
                 }
-                if (animationName == "Attack>()
+                if (animationName == "Attack")
                 {
                     AnimateStand(animationName, 5, newPunchTime, true);
                 }
-                if (animationName == "Secondary>()
+                if (animationName == "Secondary")
                 {
                     AnimateStand(animationName, 1, 1, true);
                 }
-                if (animationName == "Parry>()
+                if (animationName == "Parry")
                 {
                     AnimateStand(animationName, 6, 8, false);
                 }
-                if (animationName == "Pose>()
+                if (animationName == "Pose")
                 {
                     AnimateStand(animationName, 1, 10, true);
                 }

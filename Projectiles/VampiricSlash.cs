@@ -55,7 +55,7 @@ namespace JoJoStands.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Player player = Main.player[Projectile.owner];
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.velocity.X *= 0.5f;
 
             vPlayer.StealHealthFrom(target, damage);

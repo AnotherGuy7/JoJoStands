@@ -1,9 +1,8 @@
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -43,10 +42,10 @@ namespace JoJoStands.Projectiles
             }
             for (int i = 0; i < 20; i++)
             {
-                int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Fire, Alpha: 100, Scale: 3.5f);
+                int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Alpha: 100, Scale: 3.5f);
                 Main.dust[dustIndex].noGravity = true;
                 Main.dust[dustIndex].velocity *= 7f;
-                dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Fire, Alpha: 100, Scale: 1.5f);
+                dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Alpha: 100, Scale: 1.5f);
                 Main.dust[dustIndex].velocity *= 3f;
             }
 

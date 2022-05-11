@@ -76,7 +76,7 @@ namespace JoJoStands.Projectiles
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             if (Main.netMode != NetmodeID.Server)
-                stickyFingersZipperPart = Mod.GetTexture("Projectiles/Zipper_Part>();
+                stickyFingersZipperPart = Mod.Assets.Request<Texture2D>("Projectiles/Zipper_Part>().Value;
 
             Vector2 ownerCenter = Main.player[Projectile.owner].Center;
             Vector2 center = Projectile.Center;
@@ -91,7 +91,7 @@ namespace JoJoStands.Projectiles
                 distToProj = ownerCenter - center;    //update distance
                 distance = distToProj.Length();
 
-                spriteBatch.Draw(stickyFingersZipperPart, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y), new Rectangle(0, 0, stickyFingersZipperPart.Width, stickyFingersZipperPart.Height), Color.White, projRotation, new Vector2(stickyFingersZipperPart.Width / 2f, stickyFingersZipperPart.Height / 2f), 1f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(stickyFingersZipperPart, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y), new Rectangle(0, 0, stickyFingersZipperPart.Width, stickyFingersZipperPart.Height), Color.White, projRotation, new Vector2(stickyFingersZipperPart.Width / 2f, stickyFingersZipperPart.Height / 2f), 1f, SpriteEffects.None, 0f);
             }
             return true;
         }

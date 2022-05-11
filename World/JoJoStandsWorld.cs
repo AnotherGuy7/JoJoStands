@@ -1,16 +1,16 @@
+using JoJoStands.Items;
+using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using System;
-using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader.IO;
 
 namespace JoJoStands
 {
-    public class JoJoStandsWorld : ModWorld
+    public class JoJoStandsWorld : ModSystem
     {
         private bool meteorDropped = false;
         private bool vampiricNightQueued = false;
@@ -20,7 +20,7 @@ namespace JoJoStands
         public static bool VampiricNight = false;
         public static int viralMeteoriteTiles = 0;
 
-        public override void Initialize()
+        public override void OnWorldLoad()
         {
             meteorDropped = false;
             vampiricNightQueued = false;
@@ -29,22 +29,19 @@ namespace JoJoStands
             VampiricNight = false;
         }
 
-        public override TagCompound Save()
+        public override void SaveWorldData(TagCompound tag)
         {
-            return new TagCompound
-            {
-                { "meteorDropped", meteorDropped },
-                { "vampiricNight", VampiricNight }
-            };
+            tag.Add("meteorDropped", meteorDropped);
+            tag.Add("vampiricNight", VampiricNight);
         }
 
-        public override void Load(TagCompound tag)
+        public override void LoadWorldData(TagCompound tag)
         {
-            meteorDropped = tag.GetBool("meteorDropped>();
-            VampiricNight = tag.GetBool("vampiricNight>();
+            meteorDropped = tag.GetBool("meteorDropped");
+            VampiricNight = tag.GetBool("vampiricNight");
         }
 
-        public override void PreUpdate()
+        public override void PreUpdateWorld()
         {
             if (NPC.downedBoss3 && !meteorDropped && Main.dayTime)
             {
@@ -92,16 +89,14 @@ namespace JoJoStands
             for (int chestIndex = 0; chestIndex < Main.maxChests; chestIndex++)
             {
                 Chest chest = Main.chest[chestIndex];
-                if (chest != null && Main.tile[chest.x, chest.y].type == TileID.Containers && Main.tile[chest.x, chest.y].frameX == 1 * 36)
+                if (chest != null && Main.tile[chest.x, chest.y].TileType == TileID.Containers && Main.tile[chest.x, chest.y].TileFrameX == 1 * 36)
                 {
                     for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)     //40 is the max amount of items a chest can hold
                     {
-                        if (chest.Item[inventoryIndex].type == 0)
+                        if (chest.item[inventoryIndex].type == 0)
                         {
                             if (Main.rand.NextFloat(0f, 101f) < 40f)
-                            {
-                                chest.Item[inventoryIndex].SetDefaults(itemsToPlaceInIceChests[0]);
-                            }
+                                chest.item[inventoryIndex].SetDefaults(itemsToPlaceInIceChests[0]);
                             break;
                         }
                     }
@@ -109,7 +104,7 @@ namespace JoJoStands
             }
         }
 
-        public override void TileCountsAvailable(int[] tileCounts)
+        public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         {
             viralMeteoriteTiles = tileCounts[ModContent.TileType<ViralMeteoriteTile>()];
         }
@@ -138,7 +133,7 @@ namespace JoJoStands
                 int YCoord = 5;
                 while ((double)YCoord < Main.worldSurface)
                 {
-                    if (Main.tile[XCoord, YCoord].active() && Main.tile[XCoord, YCoord].type == JoJoStands.Instance.TileType("ViralMeteoriteTile>())
+                    if (Main.tile[XCoord, YCoord].HasTile && Main.tile[XCoord, YCoord].TileType == ModContent.TileType<ViralMeteoriteTile>())
                     {
                         num++;
                         if (num > num3)
@@ -161,7 +156,7 @@ namespace JoJoStands
                 int YCoord = (int)(Main.worldSurface * 0.3);
                 while (YCoord < Main.maxTilesY)
                 {
-                    if (Main.tile[XCoord, YCoord].active() && Main.tileSolid[(int)Main.tile[XCoord, YCoord].type])
+                    if (Main.tile[XCoord, YCoord].HasTile && Main.tileSolid[(int)Main.tile[XCoord, YCoord].TileType])
                     {
                         int YLevel = 0;
                         int meteoriteArea = 15;        //Size of the meteor as a radius
@@ -172,12 +167,12 @@ namespace JoJoStands
                                 if (WorldGen.SolidTile(i, j))
                                 {
                                     YLevel++;
-                                    if (Main.tile[i, j].type == TileID.Cloud || Main.tile[i, j].type == TileID.Sunplate)
+                                    if (Main.tile[i, j].TileType == TileID.Cloud || Main.tile[i, j].TileType == TileID.Sunplate)
                                     {
                                         YLevel -= 100;
                                     }
                                 }
-                                else if (Main.tile[i, j].liquid > 0)
+                                else if (Main.tile[i, j].LiquidAmount > 0)
                                 {
                                     YLevel--;
                                 }
@@ -248,7 +243,7 @@ namespace JoJoStands
             {
                 for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
                 {
-                    if (Main.tile[xCoord, yCoord].active() && TileID.Sets.BasicChest[(int)Main.tile[xCoord, yCoord].type])
+                    if (Main.tile[xCoord, yCoord].HasTile && TileID.Sets.BasicChest[(int)Main.tile[xCoord, yCoord].TileType])
                     {
                         return false;
                     }
@@ -266,11 +261,10 @@ namespace JoJoStands
                         float num6 = (float)Math.Sqrt((double)(tilePlacementX * tilePlacementX + tilePlacementY * tilePlacementY));
                         if ((double)num6 < (double)meteoriteArea * 0.9 + (double)Main.rand.Next(-4, 5))
                         {
-                            if (!Main.tileSolid[(int)Main.tile[xCoord, yCoord].type])
-                            {
-                                Main.tile[xCoord, yCoord].active(false);
-                            }
-                            Main.tile[xCoord, yCoord].type = (ushort)JoJoStands.Instance.TileType("ViralMeteoriteTile>();
+                            if (!Main.tileSolid[(int)Main.tile[xCoord, yCoord].TileType])
+                                Main.tile[xCoord, yCoord].ClearTile();
+
+                            Main.tile[xCoord, yCoord].TileType = (ushort)ModContent.TileType<ViralMeteoriteTile>();
                         }
                     }
                 }
@@ -287,7 +281,7 @@ namespace JoJoStands
                         float num11 = (float)Math.Sqrt((double)(num9 * num9 + num10 * num10));
                         if ((double)num11 < (double)meteoriteArea * 0.8 + (double)Main.rand.Next(-3, 4))
                         {
-                            Main.tile[xCoord, yCoord].active(false);
+                            Main.tile[xCoord, yCoord].ClearTile();
                         }
                     }
                 }
@@ -302,21 +296,21 @@ namespace JoJoStands
                     float num16 = (float)Math.Sqrt((double)(tilePlacementX * tilePlacementX + tilePlacementY * tilePlacementY));
                     if ((double)num16 < (double)meteoriteArea * 0.7)
                     {
-                        if (Main.tile[xCoord, yCoord].type == TileID.Trees || Main.tile[xCoord, yCoord].type == TileID.CorruptThorns || Main.tile[xCoord, yCoord].type == TileID.CrimtaneThorns)
+                        if (Main.tile[xCoord, yCoord].TileType == TileID.Trees || Main.tile[xCoord, yCoord].TileType == TileID.CorruptThorns || Main.tile[xCoord, yCoord].TileType == TileID.CrimsonThorns)
                         {
                             WorldGen.KillTile(xCoord, yCoord, false, false, false);
                         }
-                        Main.tile[xCoord, yCoord].liquid = 0;
+                        Main.tile[xCoord, yCoord].LiquidAmount = 0;
                     }
-                    if (Main.tile[xCoord, yCoord].type == JoJoStands.Instance.TileType("ViralMeteoriteTile>())
+                    if (Main.tile[xCoord, yCoord].TileType == ModContent.TileType<ViralMeteoriteTile>())
                     {
                         if (!WorldGen.SolidTile(xCoord - 1, yCoord) && !WorldGen.SolidTile(xCoord + 1, yCoord) && !WorldGen.SolidTile(xCoord, yCoord - 1) && !WorldGen.SolidTile(xCoord, yCoord + 1))
                         {
-                            Main.tile[xCoord, yCoord].active(false);
+                            Main.tile[xCoord, yCoord].ClearTile();
                         }
-                        else if ((Main.tile[xCoord, yCoord].halfBrick() || Main.tile[xCoord - 1, yCoord].topSlope()) && !WorldGen.SolidTile(xCoord, yCoord + 1))
+                        else if ((Main.tile[xCoord, yCoord].IsHalfBlock || Main.tile[xCoord - 1, yCoord].TopSlope) && !WorldGen.SolidTile(xCoord, yCoord + 1))
                         {
-                            Main.tile[xCoord, yCoord].active(false);
+                            Main.tile[xCoord, yCoord].ClearTile();
                         }
                     }
                     WorldGen.SquareTileFrame(xCoord, yCoord, true);
@@ -328,18 +322,18 @@ namespace JoJoStands
             {
                 for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
                 {
-                    if (yCoord > j + WorldGen.genRand.Next(-3, 4) - 3 && Main.tile[xCoord, yCoord].active() && Main.rand.Next(10) == 0)
+                    if (yCoord > j + WorldGen.genRand.Next(-3, 4) - 3 && Main.tile[xCoord, yCoord].HasTile && Main.rand.Next(10) == 0)
                     {
                         float tilePlacementX = (float)Math.Abs(i - xCoord);
                         float tilePlacementY = (float)Math.Abs(j - yCoord);
                         float num21 = (float)Math.Sqrt((double)(tilePlacementX * tilePlacementX + tilePlacementY * tilePlacementY));
                         if ((double)num21 < (double)meteoriteArea * 0.8)
                         {
-                            if (Main.tile[xCoord, yCoord].type == TileID.Trees || Main.tile[xCoord, yCoord].type == TileID.CorruptThorns || Main.tile[xCoord, yCoord].type == TileID.CrimtaneThorns)
+                            if (Main.tile[xCoord, yCoord].TileType == TileID.Trees || Main.tile[xCoord, yCoord].TileType == TileID.CorruptThorns || Main.tile[xCoord, yCoord].TileType == TileID.CrimsonThorns)
                             {
                                 WorldGen.KillTile(xCoord, yCoord, false, false, false);
                             }
-                            Main.tile[xCoord, yCoord].type = (ushort)JoJoStands.Instance.TileType("ViralMeteoriteTile>();
+                            Main.tile[xCoord, yCoord].TileType = (ushort)ModContent.TileType<ViralMeteoriteTile>();
                             WorldGen.SquareTileFrame(xCoord, yCoord, true);
                         }
                     }
@@ -350,18 +344,18 @@ namespace JoJoStands
             {
                 for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
                 {
-                    if (yCoord > j + WorldGen.genRand.Next(-2, 3) && Main.tile[xCoord, yCoord].active() && Main.rand.Next(20) == 0)
+                    if (yCoord > j + WorldGen.genRand.Next(-2, 3) && Main.tile[xCoord, yCoord].HasTile && Main.rand.Next(20) == 0)
                     {
                         float tilePlacementX = (float)Math.Abs(i - xCoord);
                         float tilePlacementY = (float)Math.Abs(j - yCoord);
                         float num26 = (float)Math.Sqrt((double)(tilePlacementX * tilePlacementX + tilePlacementY * tilePlacementY));
                         if ((double)num26 < (double)meteoriteArea * 0.85)
                         {
-                            if (Main.tile[xCoord, yCoord].type == TileID.Trees || Main.tile[xCoord, yCoord].type == TileID.CorruptThorns || Main.tile[xCoord, yCoord].type == TileID.CrimtaneThorns)
+                            if (Main.tile[xCoord, yCoord].TileType == TileID.Trees || Main.tile[xCoord, yCoord].TileType == TileID.CorruptThorns || Main.tile[xCoord, yCoord].TileType == TileID.CrimsonThorns)
                             {
                                 WorldGen.KillTile(xCoord, yCoord, false, false, false);
                             }
-                            Main.tile[xCoord, yCoord].type = (ushort)JoJoStands.Instance.TileType("ViralMeteoriteTile>();
+                            Main.tile[xCoord, yCoord].TileType = (ushort)ModContent.TileType<ViralMeteoriteTile>();
                             WorldGen.SquareTileFrame(xCoord, yCoord, true);
                         }
                     }
@@ -369,11 +363,11 @@ namespace JoJoStands
             }
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                Main.NewText("A dangerous virus now inhabits " + Main.worldName + "...", 50, 255, 130, false);
+                Main.NewText("A dangerous virus now inhabits " + Main.worldName + "...", new Color(50, 255, 130));
             }
             else if (Main.netMode == NetmodeID.Server)
             {
-                NetMessage.BroadcastChatMessage(NetworkText.FromKey("A dangerous virus now inhabits " + Main.worldName + "...", new object[0]), new Color(50, 255, 130), -1);
+                Terraria.Chat.ChatHelper.BroadcastChatMessage(NetworkText.FromKey("A dangerous virus now inhabits " + Main.worldName + "...", new object[0]), new Color(50, 255, 130), -1);
             }
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {

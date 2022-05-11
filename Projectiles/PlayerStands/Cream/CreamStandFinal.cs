@@ -1,7 +1,9 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Cream
 {
@@ -34,7 +36,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.creamVoidMode)
                 Projectile.hide = true;
             if (mPlayer.creamExposedMode)
@@ -130,7 +132,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             if (mPlayer.creamNormalToExposed)
             {
-                PlayAnimation("Transform>();
+                PlayAnimation("Transform");
                 if (mPlayer.creamFrame >= 5 && !mPlayer.creamAnimationReverse)
                 {
                     if (mPlayer.creamNormalToVoid)
@@ -149,7 +151,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             if (mPlayer.creamExposedToVoid)
             {
-                PlayAnimation("Transform2>();
+                PlayAnimation("Transform2");
                 if (mPlayer.creamFrame >= 7 && !mPlayer.creamAnimationReverse)
                 {
                     mPlayer.creamExposedToVoid = false;
@@ -222,55 +224,55 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void SelectAnimation()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (attackFrames && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 attackFrames = false;
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
             if (mPlayer.creamExposedMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid)
             {
-                PlayAnimation("Idle2>();
+                PlayAnimation("Idle2");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/Cream/Cream_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Cream/Cream_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 30, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 2, true);
             }
-            if (animationName == "Transform2>()
+            if (animationName == "Transform2")
             {
                 AnimateStand(animationName, 8, 99999, true);
             }
-            if (animationName == "Transform>()
+            if (animationName == "Transform")
             {
                 AnimateStand(animationName, 6, 99999, true);
             }
-            if (animationName == "Idle2>()
+            if (animationName == "Idle2")
             {
                 AnimateStand(animationName, 4, 30, true);
             }

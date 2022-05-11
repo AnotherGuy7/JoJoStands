@@ -1,10 +1,9 @@
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -38,10 +37,10 @@ namespace JoJoStands.Projectiles
             }
             for (int i = 0; i < 20; i++)
             {
-                int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Fire, Alpha: 100, Scale: 3.5f);
+                int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Alpha: 100, Scale: 3.5f);
                 Main.dust[dustIndex].noGravity = true;
                 Main.dust[dustIndex].velocity *= 7f;
-                dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Fire, Alpha: 100, Scale: 1.5f);
+                dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Alpha: 100, Scale: 1.5f);
                 Main.dust[dustIndex].velocity *= 3f;
             }
 
@@ -52,7 +51,7 @@ namespace JoJoStands.Projectiles
                 Vector2 dustVelocity = dustPosition - Projectile.Center;
                 dustVelocity.Normalize();
                 dustVelocity *= 7f;
-                int dustIndex = Dust.NewDust(dustPosition, Projectile.width, Projectile.height, DustID.Fire, dustVelocity.X, dustVelocity.Y, 100, Scale: 3.5f);
+                int dustIndex = Dust.NewDust(dustPosition, Projectile.width, Projectile.height, DustID.Torch, dustVelocity.X, dustVelocity.Y, 100, Scale: 3.5f);
                 Main.dust[dustIndex].noGravity = true;
             }
 

@@ -151,7 +151,7 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
 
             if (Main.netMode != NetmodeID.Server && armPartTexture == null)
-                armPartTexture = Mod.GetTexture("Projectiles/ExtendedZombieGrab_Part");
+                armPartTexture = Mod.Assets.Request<Texture2D>("Projectiles/ExtendedZombieGrab_Part").Value;
 
             Vector2 linkCenter = player.Center;
             Vector2 center = Projectile.Center;
@@ -160,7 +160,7 @@ namespace JoJoStands.Projectiles
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / armPartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(armPartTexture, pos, new Rectangle(0, 0, armPartTexture.Width, armPartTexture.Height), lightColor, rotation, new Vector2(armPartTexture.Width * 0.5f, armPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(armPartTexture, pos, new Rectangle(0, 0, armPartTexture.Width, armPartTexture.Height), lightColor, rotation, new Vector2(armPartTexture.Width * 0.5f, armPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

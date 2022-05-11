@@ -1,8 +1,13 @@
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Networking;
+using JoJoStands.Projectiles.Minions;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 {
@@ -39,7 +44,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             if (shootCount > 0)
                 shootCount--;
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -159,46 +164,46 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary>();
+                PlayAnimation("Secondary");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/GoldExperienceRequiem/GER_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/GoldExperienceRequiem/GER_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 12, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Secondary>()
+            if (animationName == "Secondary")
             {
                 AnimateStand(animationName, 11, 11, true);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 6, true);
             }

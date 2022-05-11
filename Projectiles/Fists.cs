@@ -258,7 +258,7 @@ namespace JoJoStands.Projectiles
                                 SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
                             }
                         }
-                        if (otherProj.type == ModContent.ProjectileType<Knife>() && Projectile.owner != otherProj.owner && player.team != Main.player[otherProj.owner].team)
+                        if (otherProj.type == ModContent.ProjectileType<KnifeProjectile>() && Projectile.owner != otherProj.owner && player.team != Main.player[otherProj.owner].team)
                         {
                             otherProj.owner = Projectile.owner;
                             otherProj.velocity = -otherProj.velocity * 0.4f;

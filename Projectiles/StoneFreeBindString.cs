@@ -111,7 +111,7 @@ namespace JoJoStands.Projectiles
         {
             if (stringTexture == null)
             {
-                stringTexture = Mod.GetTexture("Projectiles/StoneFreeString_Part>();
+                stringTexture = Mod.Assets.Request<Texture2D>("Projectiles/StoneFreeString_Part>().Value;
                 stringSourceRect = new Rectangle(0, 0, stringTexture.Width, stringTexture.Height);
                 stringOrigin = new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f);
             }
@@ -135,7 +135,7 @@ namespace JoJoStands.Projectiles
                     lightLevelIndex = 0f;
                 }
 
-                spriteBatch.Draw(stringTexture, pos, stringSourceRect, drawColor, stringRotation, stringOrigin, Projectile.scale * stringScale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(stringTexture, pos, stringSourceRect, drawColor, stringRotation, stringOrigin, Projectile.scale * stringScale, SpriteEffects.None, 0f);
             }
             return false;
         }

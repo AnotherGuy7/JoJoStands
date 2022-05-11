@@ -1,8 +1,10 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
@@ -33,7 +35,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Projectile.frameCounter++;
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
             {
@@ -150,7 +152,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         private void MovementAI()       //Pretty much the pet AI
         {
             Player player = Main.player[Projectile.owner];
-            PlayAnimation("Tank>();
+            PlayAnimation("Tank");
             Vector2 directionToPlayer = player.Center - Projectile.Center;
             directionToPlayer.Normalize();
             directionToPlayer *= player.moveSpeed;
@@ -220,7 +222,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanyTank>();
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/BadCompany/BadCompanyTank");
 
             AnimateStand(animationName, 2, 36 - (int)Projectile.velocity.X, true);
         }

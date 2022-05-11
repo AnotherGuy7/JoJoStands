@@ -5,7 +5,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
-    public class Card : ModProjectile
+    public class CardProjectile : ModProjectile
     {
         private bool setFrame = false;
 

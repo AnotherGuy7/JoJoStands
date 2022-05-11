@@ -1,11 +1,9 @@
-using System;
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class SilkPunches : ModProjectile
@@ -36,18 +34,18 @@ namespace JoJoStands.Projectiles
             {
                 if (Projectile.ai[0] < 2f)
                 {
-                    punchSpritesheet = Mod.GetTexture("Projectiles/SilkGloves_Punch>();
+                    punchSpritesheet = Mod.Assets.Request<Texture2D>("Projectiles/SilkGloves_Punch").Value;
                     amountOfFrames = 4;
                 }
                 else
                 {
                     if (Main.rand.Next(0, 2) == 0)
                     {
-                        punchSpritesheet = Mod.GetTexture("Projectiles/SilkGloves_Uppercut>();
+                        punchSpritesheet = Mod.Assets.Request<Texture2D>("Projectiles/SilkGloves_Uppercut").Value;
                     }
                     else
                     {
-                        punchSpritesheet = Mod.GetTexture("Projectiles/SilkGloves_Undercut>();
+                        punchSpritesheet = Mod.Assets.Request<Texture2D>("Projectiles/SilkGloves_Undercut").Value;
                     }
                     amountOfFrames = 5;
                 }
@@ -75,25 +73,22 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             int frameHeight = punchSpritesheet.Height / amountOfFrames;
             Rectangle sourceRect = new Rectangle(0, Projectile.frame * frameHeight, punchSpritesheet.Width, frameHeight);
             SpriteEffects effect = SpriteEffects.None;
             if (Projectile.direction == -1)
-            {
                 effect = SpriteEffects.FlipVertically;
-            }
-            spriteBatch.Draw(punchSpritesheet, Projectile.Center - Main.screenPosition, sourceRect, lightColor, Projectile.rotation, new Vector2(sourceRect.Width / 2f, sourceRect.Height / 2f), Projectile.scale, effect, 0f);
+
+            Main.EntitySpriteDraw(punchSpritesheet, Projectile.Center - Main.screenPosition, sourceRect, lightColor, Projectile.rotation, new Vector2(sourceRect.Width / 2f, sourceRect.Height / 2f), Projectile.scale, effect, 0);
             return false;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             if (Main.rand.Next(0, 2) == 0)
-            {
                 target.AddBuff(ModContent.BuffType<Sunburn>(), 12 * 60);
-            }
         }
     }
 }

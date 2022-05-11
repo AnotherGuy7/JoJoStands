@@ -1,12 +1,11 @@
-using System;
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class ChainedKunaiSwinging : ModProjectile
@@ -30,7 +29,7 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>());
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (player.dead)
             {
                 Projectile.Kill();
@@ -100,13 +99,13 @@ namespace JoJoStands.Projectiles
 
         private Texture2D chainedKunaiTexture;
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             if (chainedKunaiTexture == null && Main.netMode != NetmodeID.Server)
-                chainedKunaiTexture = Mod.GetTexture("Projectiles/ChainedKunai_Swinging>();
+                chainedKunaiTexture = Mod.Assets.Request<Texture2D>("Projectiles/ChainedKunai_Swinging").Value;
 
             Vector2 origin = new Vector2(chainedKunaiTexture.Width / 2f, chainedKunaiTexture.Height / 2f);
-            spriteBatch.Draw(chainedKunaiTexture, Projectile.Center - Main.screenPosition, null, Color.White * Projectile.alpha, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(chainedKunaiTexture, Projectile.Center - Main.screenPosition, null, Color.White * Projectile.alpha, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             return false;
         }
     }

@@ -758,7 +758,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Vector2 drawPosition = Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f);
                 Rectangle animRect = new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight);
                 Vector2 standOrigin = new Vector2(standTexture.Width / 2f, frameHeight / 2f);
-                spriteBatch.Draw(standTexture, drawPosition, animRect, drawColor, Projectile.rotation, standOrigin, 1f, effects, 0);
+                Main.EntitySpriteDraw(standTexture, drawPosition, animRect, drawColor, Projectile.rotation, standOrigin, 1f, effects, 0);
             }
         }
 
@@ -774,18 +774,18 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (!MyPlayer.RangeIndicators || Main.netMode == NetmodeID.Server || rangeIndicatorSize == Vector2.Zero)
                 return;
 
-            //Texture2D texture = Mod.GetTexture("Extras/RangeIndicator>();        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
+            //Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/RangeIndicator>().Value;        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
             Vector2 rangeIndicatorDrawPosition = player.Center - Main.screenPosition;
             Vector2 rangeIndicatorOrigin = rangeIndicatorSize / 2f;
             float rangeIndicatorAlpha = (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f);
 
             if (maxDistance > 0f)
-                spriteBatch.Draw(standRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.White * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(standRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.White * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);
 
             if (maxAltDistance > 0f)
             {
                 rangeIndicatorOrigin = secondaryRangeIndicatorSize / 2f;
-                spriteBatch.Draw(secondaryStandRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.Orange * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(secondaryStandRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.Orange * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);
             }
         }
 

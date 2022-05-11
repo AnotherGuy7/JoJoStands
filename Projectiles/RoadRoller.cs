@@ -1,9 +1,8 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Terraria.Audio
 
 namespace JoJoStands.Projectiles
 {
@@ -28,7 +27,7 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Projectile.timeLeft < 256)
             {
                 Projectile.alpha = -Projectile.timeLeft + 255;
@@ -52,7 +51,7 @@ namespace JoJoStands.Projectiles
                             damageMult += otherProj.damage / 50;
                         }
                         Dust.NewDust(otherProj.position, Projectile.width, Projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land>().WithVolume(.3f));
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
                         otherProj.Kill();
                     }
                 }
@@ -89,7 +88,7 @@ namespace JoJoStands.Projectiles
 
         public override bool ShouldUpdatePosition()
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             return !mPlayer.timestopActive;
         }
     }

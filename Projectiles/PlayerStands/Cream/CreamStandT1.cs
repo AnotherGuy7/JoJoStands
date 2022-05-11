@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Cream
 {
@@ -14,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override int punchDamage => 35;
         public override float punchKnockback => 8f;
-        public override int punchTime => 28;     
+        public override int punchTime => 28;
         public override int halfStandHeight => 36;
         public override float fistWhoAmI => 11f;
         public override int standOffset => 0;
@@ -26,7 +28,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             SelectAnimation();
             UpdateStandInfo();
             updateTimer = 0;
@@ -35,7 +37,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (updateTimer >= 90)      
+            if (updateTimer >= 90)
             {
                 updateTimer = 0;
                 Projectile.netUpdate = true;
@@ -110,18 +112,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
 
             }
         }
@@ -129,17 +131,17 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/Cream/Cream_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Cream/Cream_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 30, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 2, true);
             }

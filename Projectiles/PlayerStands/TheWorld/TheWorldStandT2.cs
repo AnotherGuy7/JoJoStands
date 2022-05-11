@@ -1,7 +1,10 @@
+using JoJoStands.Buffs.ItemBuff;
+using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 {
@@ -36,7 +39,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -61,7 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     timestopStartDelay = 120;
                 else
                 {
-                    Terraria.Audio.LegacySoundStyle zawarudo = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/TheWorld>();
+                    LegacySoundStyle zawarudo = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/TheWorld");
                     zawarudo.WithVolume(MyPlayer.ModSoundsVolume);
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
@@ -128,45 +131,45 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (abilityPose)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("AbilityPose>();
+                PlayAnimation("AbilityPose");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 2, 30, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "AbilityPose>()
+            if (animationName == "AbilityPose")
             {
                 AnimateStand(animationName, 1, 10, true);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 10, true);
             }

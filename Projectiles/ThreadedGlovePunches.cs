@@ -36,18 +36,18 @@ namespace JoJoStands.Projectiles
             {
                 if (Projectile.ai[0] < 2f)
                 {
-                    punchSpritesheet = Mod.GetTexture("Projectiles/ThreadedGloves_Punch>();
+                    punchSpritesheet = Mod.Assets.Request<Texture2D>("Projectiles/ThreadedGloves_Punch>().Value;
                     amountOfFrames = 4;
                 }
                 else
                 {
                     if (Main.rand.Next(0, 2) == 0)
                     {
-                        punchSpritesheet = Mod.GetTexture("Projectiles/ThreadedGloves_Uppercut>();
+                        punchSpritesheet = Mod.Assets.Request<Texture2D>("Projectiles/ThreadedGloves_Uppercut>().Value;
                     }
                     else
                     {
-                        punchSpritesheet = Mod.GetTexture("Projectiles/ThreadedGloves_Undercut>();
+                        punchSpritesheet = Mod.Assets.Request<Texture2D>("Projectiles/ThreadedGloves_Undercut>().Value;
                     }
                     amountOfFrames = 5;
                 }
@@ -84,7 +84,7 @@ namespace JoJoStands.Projectiles
             {
                 effect = SpriteEffects.FlipHorizontally;
             }
-            spriteBatch.Draw(punchSpritesheet, Projectile.Center - Main.screenPosition, sourceRect, lightColor, Projectile.rotation, new Vector2(sourceRect.Width / 2f, sourceRect.Height / 2f), Projectile.scale, effect, 0f);
+            Main.EntitySpriteDraw(punchSpritesheet, Projectile.Center - Main.screenPosition, sourceRect, lightColor, Projectile.rotation, new Vector2(sourceRect.Width / 2f, sourceRect.Height / 2f), Projectile.scale, effect, 0f);
             return false;
         }
 

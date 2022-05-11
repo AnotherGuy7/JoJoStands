@@ -158,7 +158,7 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
 
             if (Main.netMode != NetmodeID.Server)
-                hermitPurpleVinePartTexture = Mod.GetTexture("Projectiles/HermitPurpleVine_Part");
+                hermitPurpleVinePartTexture = Mod.Assets.Request<Texture2D>("Projectiles/HermitPurpleVine_Part").Value;
 
             Vector2 offset = new Vector2(12f * player.direction, 0f);
             Vector2 linkCenter = player.Center + offset;
@@ -168,7 +168,7 @@ namespace JoJoStands.Projectiles
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / hermitPurpleVinePartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(hermitPurpleVinePartTexture, pos, new Rectangle(0, 0, hermitPurpleVinePartTexture.Width, hermitPurpleVinePartTexture.Height), lightColor, rotation, new Vector2(hermitPurpleVinePartTexture.Width * 0.5f, hermitPurpleVinePartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(hermitPurpleVinePartTexture, pos, new Rectangle(0, 0, hermitPurpleVinePartTexture.Width, hermitPurpleVinePartTexture.Height), lightColor, rotation, new Vector2(hermitPurpleVinePartTexture.Width * 0.5f, hermitPurpleVinePartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

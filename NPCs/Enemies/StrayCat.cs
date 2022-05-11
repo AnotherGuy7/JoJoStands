@@ -1,8 +1,8 @@
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -10,73 +10,73 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 6; //this defines how many frames the npc sprite sheet has
+            Main.npcFrameCount[NPC.type] = 6; //this defines how many frames the NPC sprite sheet has
         }
 
         public override void SetDefaults()
         {
-            npc.width = 14; //the npc sprite width
-            npc.height = 14;  //the npc sprite height
-            npc.defense = 9;  //the npc defense
-            npc.lifeMax = 60;  // the npc life
-            npc.HitSound = SoundID.NPCHit1;  //the npc sound when is hit
-            npc.DeathSound = SoundID.NPCDeath1;  //the npc sound when he dies
-            npc.knockBackResist = 0f;  //the npc knockback resistance
-            npc.chaseable = true;       //whether or not minions can chase this npc
-            npc.damage = 21;       //the damage the npc does
-            npc.aiStyle = 0;        //no AI, to run void AI()
-            npc.value = Item.buyPrice(0, 0, 6, 60);
+            NPC.width = 14; //the NPC sprite width
+            NPC.height = 14;  //the NPC sprite height
+            NPC.defense = 9;  //the NPC defense
+            NPC.lifeMax = 60;  // the NPC life
+            NPC.HitSound = SoundID.NPCHit1;  //the NPC sound when is hit
+            NPC.DeathSound = SoundID.NPCDeath1;  //the NPC sound when he dies
+            NPC.knockBackResist = 0f;  //the NPC knockback resistance
+            NPC.chaseable = true;       //whether or not minions can chase this NPC
+            NPC.damage = 21;       //the damage the NPC does
+            NPC.aiStyle = 0;        //no AI, to run void AI()
+            NPC.value = Item.buyPrice(0, 0, 6, 60);
         }
 
-        //npc.ai[0] = timer before the NPC shoots
-        //npc.ai[1] = NPC state (0 = idle; 1 = shooting; 2 = defending)
-        //npc.ai[2] = cooldown befoer Stray Cat is set to shoot again
-        //npc.ai[3] = 
+        //NPC.ai[0] = timer before the NPC shoots
+        //NPC.ai[1] = NPC state (0 = idle; 1 = shooting; 2 = defending)
+        //NPC.ai[2] = cooldown befoer Stray Cat is set to shoot again
+        //NPC.ai[3] = 
 
         public override void AI()
         {
-            Player target = Main.player[npc.target];
-            npc.velocity.Y = 2f;
-            if (npc.Distance(target.position) <= 300f && npc.ai[1] == 0f)
+            Player target = Main.player[NPC.target];
+            NPC.velocity.Y = 2f;
+            if (NPC.Distance(target.position) <= 300f && NPC.ai[1] == 0f)
             {
-                npc.ai[0]++;
+                NPC.ai[0]++;
             }
-            if (npc.ai[0] > 0f && npc.ai[1] == 1f)
+            if (NPC.ai[0] > 0f && NPC.ai[1] == 1f)
             {
-                npc.ai[0]--;
+                NPC.ai[0]--;
             }
-            if (npc.ai[0] >= 210f)
+            if (NPC.ai[0] >= 210f)
             {
-                npc.ai[0] = 209f;
-                npc.ai[1] = 1f;
-                npc.netUpdate = true;
+                NPC.ai[0] = 209f;
+                NPC.ai[1] = 1f;
+                NPC.netUpdate = true;
             }
-            if (npc.ai[1] == 1f)
+            if (NPC.ai[1] == 1f)
             {
-                if (npc.ai[2] == 1f)
+                if (NPC.ai[2] == 1f)
                 {
-                    Vector2 shootVel = target.Center - npc.Center;
+                    Vector2 shootVel = target.Center - NPC.Center;
                     if (shootVel == Vector2.Zero)
                     {
                         shootVel = new Vector2(0f, 1f);
                     }
                     shootVel.Normalize();
                     shootVel *= 2f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.Center.X, npc.Center.Y, shootVel.X, shootVel.Y, ModContent.ProjectileType<AirBubble>(), npc.damage, 1f);
+                    int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, shootVel.X, shootVel.Y, ModContent.ProjectileType<AirBubble>(), NPC.damage, 1f);
                     Main.projectile[proj].netUpdate = true;
-                    npc.netUpdate = true;
-                    npc.ai[2] = 2f;
+                    NPC.netUpdate = true;
+                    NPC.ai[2] = 2f;
                 }
             }
-            if (target.position.X > npc.position.X)
+            if (target.position.X > NPC.position.X)
             {
-                npc.direction = -1;
-                npc.netUpdate = true;
+                NPC.direction = -1;
+                NPC.netUpdate = true;
             }
-            if (target.position.X < npc.position.X)
+            if (target.position.X < NPC.position.X)
             {
-                npc.direction = 1;
-                npc.netUpdate = true;
+                NPC.direction = 1;
+                NPC.netUpdate = true;
             }
         }
 
@@ -85,32 +85,32 @@ namespace JoJoStands.NPCs.Enemies
         public override void FindFrame(int frameHeight)
         {
             frameHeight = 14;
-            npc.spriteDirection = npc.direction;
-            if (npc.ai[1] == 1f)
+            NPC.spriteDirection = NPC.direction;
+            if (NPC.ai[1] == 1f)
             {
-                npc.frameCounter++;
-                if (npc.frameCounter >= 20)
+                NPC.frameCounter++;
+                if (NPC.frameCounter >= 20)
                 {
                     frame += 1;
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
                 }
-                if (npc.ai[2] == 0f && frame == 4)
+                if (NPC.ai[2] == 0f && frame == 4)
                 {
-                    npc.ai[2] = 1f;
+                    NPC.ai[2] = 1f;
                 }
                 if (frame >= 6)
                 {
                     frame = 0;
-                    npc.ai[1] = 0f;
-                    npc.ai[2] = 0f;
+                    NPC.ai[1] = 0f;
+                    NPC.ai[2] = 0f;
                 }
             }
-            npc.frame.Y = frame * frameHeight;
+            NPC.frame.Y = frame * frameHeight;
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (!NPC.downedPlantBoss && !spawnInfo.player.ZoneBeach && !spawnInfo.player.ZoneDesert && !spawnInfo.player.ZoneDungeon && spawnInfo.player.ZoneOverworldHeight)
+            if (!NPC.downedPlantBoss && !spawnInfo.Player.ZoneBeach && !spawnInfo.Player.ZoneDesert && !spawnInfo.Player.ZoneDungeon && spawnInfo.Player.ZoneOverworldHeight)
             {
                 return 0.04f;
             }

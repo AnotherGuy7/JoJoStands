@@ -135,7 +135,7 @@ namespace JoJoStands.Projectiles
                 offset = new Vector2(-31f, -2f);
             }
             if (Main.netMode != NetmodeID.Server)
-                starFingerPartTexture = Mod.GetTexture("Projectiles/StarFingerPart>();
+                starFingerPartTexture = Mod.Assets.Request<Texture2D>("Projectiles/StarFingerPart>().Value;
 
             Vector2 linkCenter = ownerProj.Center + offset;
             Vector2 center = Projectile.Center;
@@ -144,7 +144,7 @@ namespace JoJoStands.Projectiles
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / starFingerPartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(starFingerPartTexture, pos, new Rectangle(0, 0, starFingerPartTexture.Width, starFingerPartTexture.Height), lightColor, rotation, new Vector2(starFingerPartTexture.Width * 0.5f, starFingerPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(starFingerPartTexture, pos, new Rectangle(0, 0, starFingerPartTexture.Width, starFingerPartTexture.Height), lightColor, rotation, new Vector2(starFingerPartTexture.Width * 0.5f, starFingerPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

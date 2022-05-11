@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Utilities;
 using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
@@ -12,107 +13,102 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 16; //this defines how many frames the npc sprite sheet has
+            Main.npcFrameCount[NPC.type] = 16; //this defines how many frames the NPC sprite sheet has
         }
 
         public override void SetDefaults()
         {
-            npc.width = 38;
-            npc.height = 32;
-            npc.defense = 5;
-            npc.lifeMax = 110;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 1f;
-            npc.chaseable = true;
-            npc.damage = 5;
-            npc.aiStyle = 0;
+            NPC.width = 38;
+            NPC.height = 32;
+            NPC.defense = 5;
+            NPC.lifeMax = 110;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 1f;
+            NPC.chaseable = true;
+            NPC.damage = 5;
+            NPC.aiStyle = 0;
+            NPC.value = 3 * 100 * 100;
         }
 
-        //npc.ai[2] = is stand alive
-        //npc.ai[3] = is user alive
+        //NPC.ai[2] = is stand alive
+        //NPC.ai[3] = is user alive
 
         public override bool CheckActive()
         {
-            npc.ai[3] = 1f;
+            NPC.ai[3] = 1f;
             return base.CheckActive();
         }
 
         public override bool CheckDead()
         {
-            npc.ai[3] = 0f;
-            npc.ai[2] = 0f;
+            NPC.ai[3] = 0f;
+            NPC.ai[2] = 0f;
             return base.CheckDead();
         }
 
         public override void AI()       //a really trashy custom ai...
         {
-            npc.spriteDirection = npc.direction;
-            if (npc.active)
+            NPC.spriteDirection = NPC.direction;
+            if (NPC.active)
             {
-                npc.ai[0]++;
+                NPC.ai[0]++;
             }
-            if (npc.ai[0] == 1f && npc.ai[2] == 0f)
+            if (NPC.ai[0] == 1f && NPC.ai[2] == 0f)
             {
-                NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, Mod.NPCType("HighwayStar"), 0, 0f, 0f, npc.whoAmI, 0f, npc.target);
+                NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<HighwayStar>(), 0, 0f, 0f, NPC.whoAmI, 0f, NPC.target);
             }
-            if (npc.ai[2] == 0f)
+            if (NPC.ai[2] == 0f)
             {
                 standcounter++;
             }
             if (standcounter == 180)      //once the stand is dead, spawn another one but only one more time, which is why I never set standcounter to restart
             {
-                npc.ai[0] = 0f;
+                NPC.ai[0] = 0f;
             }
-            if (npc.justHit)        //run the other way when hit
+            if (NPC.justHit)        //run the other way when hit
             {
-                if (npc.direction == 1)
+                if (NPC.direction == 1)
                 {
-                    npc.ai[1] = 1f;
+                    NPC.ai[1] = 1f;
                 }
-                if (npc.direction == -1)
+                if (NPC.direction == -1)
                 {
-                    npc.spriteDirection = 1;
-                    npc.direction = 1;
-                    npc.ai[1] = 2f;
+                    NPC.spriteDirection = 1;
+                    NPC.direction = 1;
+                    NPC.ai[1] = 2f;
                 }
             }
-            if (npc.ai[1] == 1f)
+            if (NPC.ai[1] == 1f)
             {
-                npc.spriteDirection = -1;
-                npc.direction = -1;
-                npc.velocity.X = -2f;
+                NPC.spriteDirection = -1;
+                NPC.direction = -1;
+                NPC.velocity.X = -2f;
             }
-            if (npc.ai[1] == 2f)
+            if (NPC.ai[1] == 2f)
             {
-                npc.spriteDirection = 1;
-                npc.direction = 1;
-                npc.velocity.X = 2f;
+                NPC.spriteDirection = 1;
+                NPC.direction = 1;
+                NPC.velocity.X = 2f;
             }
-        }
-
-        public override void NPCLoot()
-        {
-            Item.NewItem(npc.getRect(), ItemID.GoldCoin, Main.rand.Next(1, 5));
-            Item.NewItem(npc.getRect(), ItemID.SilverCoin, Main.rand.Next(1, 100));
         }
 
         public override void FindFrame(int frameHeight)
         {
             frameHeight = 44;
-            npc.spriteDirection = npc.direction;
-            npc.frameCounter++;
-            if (npc.frameCounter >= 10)
+            NPC.spriteDirection = NPC.direction;
+            NPC.frameCounter++;
+            if (NPC.frameCounter >= 10)
             {
-                npc.frameCounter = 0;
+                NPC.frameCounter = 0;
             }
-            if (npc.life == npc.lifeMax)        //stand still frames
+            if (NPC.life == NPC.lifeMax)        //stand still frames
             {
                 frame = 1;
             }
-            if (npc.ai[1] == 1f || npc.ai[1] == 2f)        //run if he got hit frames
+            if (NPC.ai[1] == 1f || NPC.ai[1] == 2f)        //run if he got hit frames
             {
-                if (npc.frameCounter <= 10)
+                if (NPC.frameCounter <= 10)
                 {
                     frame += 1;
                 }
@@ -124,16 +120,15 @@ namespace JoJoStands.NPCs.Enemies
                 {
                     frame = 2;
                 }
-                npc.frame.Y = frame * frameHeight;
+                NPC.frame.Y = frame * frameHeight;
             }
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (Main.hardMode)
-            {
                 return SpawnCondition.OverworldNightMonster.Chance * 0.07f;
-            }
+
             return 0f;
         }
     }

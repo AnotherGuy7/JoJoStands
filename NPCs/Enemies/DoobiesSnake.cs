@@ -1,10 +1,8 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -12,66 +10,66 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 4;
+            Main.npcFrameCount[NPC.type] = 4;
         }
 
         public override void SetDefaults()
         {
-            npc.width = 40;
-            npc.height = 48;
-            npc.defense = 12;
-            npc.lifeMax = 50;
-            npc.damage = 100; 
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 0f;
-            npc.chaseable = true;
-            npc.noGravity = false;
-            npc.aiStyle = 3;
-            aiType = 73;
+            NPC.width = 40;
+            NPC.height = 48;
+            NPC.defense = 12;
+            NPC.lifeMax = 50;
+            NPC.damage = 100;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 0f;
+            NPC.chaseable = true;
+            NPC.noGravity = false;
+            NPC.aiStyle = 3;
+            AIType = 73;
         }
 
         private int frame = 0;
         public float JumpCooldown = 0;
         public override void AI()
         {
-            Player target = Main.player[npc.target];
-            if (target.dead || npc.target == -1)
+            Player target = Main.player[NPC.target];
+            if (target.dead || NPC.target == -1)
             {
-                npc.TargetClosest();
+                NPC.TargetClosest();
             }
-            if (npc.velocity.X > 0)
+            if (NPC.velocity.X > 0)
             {
-                npc.spriteDirection = 1;
+                NPC.spriteDirection = 1;
             }
-            if (npc.velocity.X < 0)
+            if (NPC.velocity.X < 0)
             {
-                npc.spriteDirection = -1;
+                NPC.spriteDirection = -1;
             }
-            if (npc.velocity.Y < 0 && !npc.collideX && JumpCooldown == 0f)
+            if (NPC.velocity.Y < 0 && !NPC.collideX && JumpCooldown == 0f)
             {
-                npc.velocity.Y = 0;
+                NPC.velocity.Y = 0;
             }
-            if (npc.collideX && JumpCooldown == 0f && npc.velocity.Y == 0) 
+            if (NPC.collideX && JumpCooldown == 0f && NPC.velocity.Y == 0)
             {
                 JumpCooldown = 45f;
-                npc.velocity.Y -= 8f;
+                NPC.velocity.Y -= 8f;
             }
-            if (npc.velocity.Y < 3f)
+            if (NPC.velocity.Y < 3f)
             {
-                npc.velocity.Y += 0.3f;
+                NPC.velocity.Y += 0.3f;
             }
             if (JumpCooldown > 0f)
             {
                 JumpCooldown--;
             }
-            if (npc.position.X - 25 >= target.position.X)
+            if (NPC.position.X - 25 >= target.position.X)
             {
-                npc.velocity.X = -0.75f;
+                NPC.velocity.X = -0.75f;
             }
-            if (npc.position.X + 25 < target.position.X)
+            if (NPC.position.X + 25 < target.position.X)
             {
-                npc.velocity.X = 0.75f;
+                NPC.velocity.X = 0.75f;
             }
         }
 
@@ -86,20 +84,20 @@ namespace JoJoStands.NPCs.Enemies
         public override void FindFrame(int frameHeight)
         {
             frameHeight = 48;
-            if (npc.velocity != Vector2.Zero)
+            if (NPC.velocity != Vector2.Zero)
             {
-                npc.frameCounter += Math.Abs(npc.velocity.X);
-                if (npc.frameCounter >= 10)
+                NPC.frameCounter += Math.Abs(NPC.velocity.X);
+                if (NPC.frameCounter >= 10)
                 {
                     frame += 1;
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
                 }
                 if (frame >= 3)
                 {
                     frame = 0;
                 }
             }
-            npc.frame.Y = frame * frameHeight;
+            NPC.frame.Y = frame * frameHeight;
         }
     }
 }

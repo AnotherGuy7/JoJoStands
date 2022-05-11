@@ -1,10 +1,6 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -13,7 +9,7 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 4;
+            Main.npcFrameCount[NPC.type] = 4;
         }
 
         public override string Texture
@@ -23,34 +19,34 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void SetDefaults()
         {
-            npc.width = 60;
-            npc.height = 62;
-            npc.defense = 6;
-            npc.lifeMax = 50;
-            npc.damage = 100; 
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 1f;
-            npc.chaseable = true;
-            npc.aiStyle = 14;
+            NPC.width = 60;
+            NPC.height = 62;
+            NPC.defense = 6;
+            NPC.lifeMax = 50;
+            NPC.damage = 100;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 1f;
+            NPC.chaseable = true;
+            NPC.aiStyle = 14;
         }
 
         private int frame = 0;
 
         public override void AI()
         {
-            Player target = Main.player[npc.target];
-            if (target.dead || npc.target == -1)
+            Player target = Main.player[NPC.target];
+            if (target.dead || NPC.target == -1)
             {
-                npc.TargetClosest();
+                NPC.TargetClosest();
             }
-            if (npc.velocity.X > 0)
+            if (NPC.velocity.X > 0)
             {
-                npc.spriteDirection = 1;
+                NPC.spriteDirection = 1;
             }
-            if (npc.velocity.X < 0)
+            if (NPC.velocity.X < 0)
             {
-                npc.spriteDirection = -1;
+                NPC.spriteDirection = -1;
             }
         }
 
@@ -65,17 +61,17 @@ namespace JoJoStands.NPCs.Enemies
         public override void FindFrame(int frameHeight)
         {
             frameHeight = 62;
-            npc.frameCounter += 1;
-            if (npc.frameCounter >= 10)
+            NPC.frameCounter += 1;
+            if (NPC.frameCounter >= 10)
             {
                 frame += 1;
-                npc.frameCounter = 0;
+                NPC.frameCounter = 0;
             }
             if (frame >= 3)
             {
                 frame = 0;
             }
-            npc.frame.Y = frame * frameHeight;
+            NPC.frame.Y = frame * frameHeight;
         }
     }
 }

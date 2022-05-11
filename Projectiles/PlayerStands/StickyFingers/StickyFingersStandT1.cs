@@ -1,5 +1,7 @@
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 {
@@ -81,7 +83,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
 
             if (animationName == "Idle")
             {

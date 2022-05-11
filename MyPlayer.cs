@@ -1,11 +1,19 @@
+using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Buffs.PlayerBuffs;
 using JoJoStands.Items;
 using JoJoStands.Items.Hamon;
+using JoJoStands.Mounts;
+using JoJoStands.Projectiles;
+using JoJoStands.Projectiles.Minions;
+using JoJoStands.Projectiles.PlayerStands.BadCompany;
+using JoJoStands.Projectiles.PlayerStands.Tusk;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -14,7 +22,6 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 using TerraUI.Objects;
@@ -204,15 +211,15 @@ namespace JoJoStands
         public override void OnEnterWorld(Player player)
         {
             int type = StandSlot.Item.type;
-            if (type == ModContent.ItemType<TuskAct3>()) || type == ModContent.ItemType<TuskAct4>()))
+            if (type == ModContent.ItemType<TuskAct3>() || type == ModContent.ItemType<TuskAct4>())
             {
                 tuskActNumber = 3;
             }
-            else if (type == ModContent.ItemType<TuskAct2>()))
+            else if (type == ModContent.ItemType<TuskAct2>())
             {
                 tuskActNumber = 2;
             }
-            else if (type == ModContent.ItemType<TuskAct1>()))
+            else if (type == ModContent.ItemType<TuskAct1>())
             {
                 tuskActNumber = 1;
             }
@@ -224,7 +231,7 @@ namespace JoJoStands
 
         public override void OnRespawn(Player player)
         {
-            if (player.whoAmI == Main.myPlayer && RespawnWithStandOut)
+            if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut)
                 SpawnStand();
         }
 
@@ -233,24 +240,24 @@ namespace JoJoStands
             for (int p = 0; p < Main.maxPlayers; p++)
             {
                 Player otherPlayer = Main.player[p];
-                MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>());
+                MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>();
                 if (otherPlayer.active)
                 {
-                    if (otherModPlayer.timestopActive && !otherPlayer.HasBuff(ModContent.BuffType<TheWorldBuff>())))       //if everyone has the effect and no one has the owner buff, turn it off
+                    if (otherModPlayer.timestopActive && !otherPlayer.HasBuff(ModContent.BuffType<TheWorldBuff>()))       //if everyone has the effect and no one has the owner buff, turn it off
                     {
-                        Main.NewText("The user has left, and time has begun to move once more...>());
+                        Main.NewText("The user has left, and time has begun to move once more...");
                         otherModPlayer.timestopActive = false;
                     }
-                    if (otherModPlayer.timeskipActive && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>())))
+                    if (otherModPlayer.timeskipActive && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))
                     {
-                        Main.NewText("The user has left, and time has begun to move once more...>());
+                        Main.NewText("The user has left, and time has begun to move once more...");
                         otherModPlayer.timeskipActive = false;
                     }
-                    if (otherModPlayer.backToZeroActive && !otherPlayer.HasBuff(ModContent.BuffType<BackToZero>())))
+                    if (otherModPlayer.backToZeroActive && !otherPlayer.HasBuff(ModContent.BuffType<BacktoZero>()))
                     {
                         otherModPlayer.backToZeroActive = false;
                     }
-                    if (otherModPlayer.deathLoopActive && !otherPlayer.HasBuff(ModContent.BuffType<DeathLoop>())))
+                    if (otherModPlayer.deathLoopActive && !otherPlayer.HasBuff(ModContent.BuffType<DeathLoop>()))
                     {
                         otherModPlayer.deathLoopActive = false;
                     }
@@ -272,107 +279,105 @@ namespace JoJoStands
             if (JoJoStands.StandAutoModeHotKey.JustPressed && !standAutoMode && standKeyPressTimer <= 0)
             {
                 standKeyPressTimer += 30;
-                Main.NewText("Stand Control: Auto>());
+                Main.NewText("Stand Control: Auto");
                 standAutoMode = true;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    Networking.ModNetHandler.playerSync.SendStandAutoMode(256, player.whoAmI, true, player.whoAmI);
+                    Networking.ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, true, Player.whoAmI);
             }
             if (JoJoStands.StandAutoModeHotKey.JustPressed && standAutoMode && standKeyPressTimer <= 0)
             {
                 standKeyPressTimer += 30;
-                Main.NewText("Stand Control: Manual>());
+                Main.NewText("Stand Control: Manual");
                 standAutoMode = false;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    Networking.ModNetHandler.playerSync.SendStandAutoMode(256, player.whoAmI, true, player.whoAmI);
+                    Networking.ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, true, Player.whoAmI);
             }
             if (JoJoStands.PoseHotKey.JustPressed && !poseMode)
             {
                 if (Sounds)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/menacing>()));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/menacing"));
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    Networking.ModNetHandler.playerSync.SendPoseMode(256, player.whoAmI, true, player.whoAmI);
+                    Networking.ModNetHandler.playerSync.SendPoseMode(256, Player.whoAmI, true, Player.whoAmI);
                 }
                 poseMode = true;
             }
             if (standChangingLocked)
                 return;
 
-            if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !player.HasBuff(ModContent.BuffType<Stolen>())))
+            if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Stolen>()))
             {
                 standOut = true;
                 standKeyPressTimer += 30;
                 SpawnStand();
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, true, player.whoAmI);      //we send it to 256 cause it's the server
-                }
+                    Networking.ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
             }
             if (JoJoStands.SpecialHotKey.Current && standAccessory)
             {
-                if (StandSlot.Item.type == ModContent.ItemType<CenturyBoyT1>()) || StandSlot.Item.type == ModContent.ItemType<CenturyBoyT2>()))
+                if (StandSlot.Item.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.Item.type == ModContent.ItemType<CenturyBoyT2>())
                 {
-                    player.AddBuff(ModContent.BuffType<CenturyBoyBuff>()), 2, true);
+                    Player.AddBuff(ModContent.BuffType<CenturyBoyBuff>(), 2, true);
                 }
-                if (StandSlot.Item.type == ModContent.ItemType<LockT3>()))
+                if (StandSlot.Item.type == ModContent.ItemType<LockT3>())
                 {
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
                         NPC npc = Main.npc[n];
-                        float distance = Vector2.Distance(player.Center, npc.Center);
+                        float distance = Vector2.Distance(Player.Center, npc.Center);
                         if (distance < (98f * 4f) && !npc.townNPC && !npc.immortal && !npc.hide)
                         {
                             if (npc.boss)
                             {
-                                npc.AddBuff(ModContent.BuffType<Locked>()), 60 * 10);
+                                npc.AddBuff(ModContent.BuffType<Locked>(), 60 * 10);
                             }
                             if (!npc.boss && npc.lifeMax > 5)
                             {
-                                npc.AddBuff(ModContent.BuffType<Locked>()), 60 * 30);
+                                npc.AddBuff(ModContent.BuffType<Locked>(), 60 * 30);
                             }
                         }
                     }
-                    player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " was over-guilted.>()), 50, player.direction);
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>()), AbilityCooldownTime(20));
+                    Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " was over-guilted."), 50, Player.direction);
+                    Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(20));
                     for (int i = 0; i < Main.maxPlayers; i++)
                     {
                         Player otherPlayer = Main.player[i];
-                        float distance = Vector2.Distance(player.Center, otherPlayer.Center);
-                        if (distance < (98f * 4f) && player.whoAmI != otherPlayer.whoAmI)
+                        float distance = Vector2.Distance(Player.Center, otherPlayer.Center);
+                        if (distance < (98f * 4f) && Player.whoAmI != otherPlayer.whoAmI)
                         {
-                            otherPlayer.AddBuff(ModContent.BuffType<Locked>()), 60 * 15);
+                            otherPlayer.AddBuff(ModContent.BuffType<Locked>(), 60 * 15);
                         }
                     }
                 }
-                if (StandSlot.Item.type == ModContent.ItemType<LockFinal>()))
+                if (StandSlot.Item.type == ModContent.ItemType<LockFinal>())
                 {
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
                         NPC npc = Main.npc[n];
-                        float distance = Vector2.Distance(player.Center, npc.Center);
+                        float distance = Vector2.Distance(Player.Center, npc.Center);
                         if (distance < (98f * 4f) && !npc.townNPC && !npc.immortal && !npc.hide)
                         {
                             if (npc.boss)
                             {
-                                npc.AddBuff(ModContent.BuffType<Locked>()), 60 * 15);
+                                npc.AddBuff(ModContent.BuffType<Locked>(), 60 * 15);
                             }
                             if (!npc.boss && npc.lifeMax > 5)
                             {
-                                npc.AddBuff(ModContent.BuffType<Locked>()), 60 * 45);
+                                npc.AddBuff(ModContent.BuffType<Locked>(), 60 * 45);
                             }
                         }
                     }
-                    player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " was over-guilted.>()), 25, player.direction);
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>()), AbilityCooldownTime(20));
+                    Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " was over-guilted."), 25, Player.direction);
+                    Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(20));
                     for (int i = 0; i < Main.maxPlayers; i++)
                     {
                         Player otherPlayer = Main.player[i];
-                        float distance = Vector2.Distance(player.Center, otherPlayer.Center);
-                        if (distance < (98f * 4f) && player.whoAmI != otherPlayer.whoAmI)
+                        float distance = Vector2.Distance(Player.Center, otherPlayer.Center);
+                        if (distance < (98f * 4f) && Player.whoAmI != otherPlayer.whoAmI)
                         {
-                            otherPlayer.AddBuff(ModContent.BuffType<Locked>()), 60 * 30);
+                            otherPlayer.AddBuff(ModContent.BuffType<Locked>(), 60 * 30);
                         }
                     }
                 }
@@ -411,14 +416,10 @@ namespace JoJoStands
                 {
                     showingCBLayer = false;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, false, player.whoAmI);
-                    }
+                        Networking.ModNetHandler.playerSync.SendCBLayer(256, Player.whoAmI, false, Player.whoAmI);
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
-                }
+                    Networking.ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, false, Player.whoAmI);
                 standKeyPressTimer += 30;
             }
         }
@@ -436,27 +437,24 @@ namespace JoJoStands
             StandDyeSlot.Item.SetDefaults(0);
         }
 
-        public override TagCompound Save()
+        public override void SaveData(TagCompound tag)
         {
-            return new TagCompound
-            {
-                { "StandInSlot", ItemIO.Save(StandSlot.Item) },
-                { "canRevertBTD", canRevertFromKQBTD },
-                { "DyeInDyeSlot", ItemIO.Save(StandDyeSlot.Item) },
-                { "usedEctoPearl", usedEctoPearl },
-                { "receivedArrowShard", receivedArrowShard },
-                { "piercedTimer", piercedTimer }
-            };
+            tag.Add("StandInSlot", ItemIO.Save(StandSlot.Item));
+            tag.Add("canRevertBTD", canRevertFromKQBTD);
+            tag.Add("DyeInDyeSlot", ItemIO.Save(StandDyeSlot.Item));
+            tag.Add("usedEctoPearl", usedEctoPearl);
+            tag.Add("receivedArrowShard", receivedArrowShard);
+            tag.Add("piercedTimer", piercedTimer);
         }
 
-        public override void Load(TagCompound tag)
+        public override void LoadData(TagCompound tag)
         {
-            StandSlot.Item = ItemIO.Load(tag.GetCompound("StandInSlot>())).Clone();
-            canRevertFromKQBTD = tag.GetBool("canRevertBTD>());
-            StandDyeSlot.Item = ItemIO.Load(tag.GetCompound("DyeInDyeSlot>())).Clone();
-            usedEctoPearl = tag.GetBool("usedEctoPearl>());
-            receivedArrowShard = tag.GetBool("receivedArrowShard>());
-            piercedTimer = tag.GetInt("piercedTimer>());
+            StandSlot.Item = ItemIO.Load(tag.GetCompound("StandInSlot")).Clone();
+            canRevertFromKQBTD = tag.GetBool("canRevertBTD");
+            StandDyeSlot.Item = ItemIO.Load(tag.GetCompound("DyeInDyeSlot")).Clone();
+            usedEctoPearl = tag.GetBool("usedEctoPearl");
+            receivedArrowShard = tag.GetBool("receivedArrowShard");
+            piercedTimer = tag.GetInt("piercedTimer");
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -480,7 +478,7 @@ namespace JoJoStands
 
                 if (!timestopActive && !standChangingLocked)        //so that it's not interactable during a timestop, cause switching stands during a timestop is... not good
                 {
-                    if (Main.mouseItem.IsAir || Main.mouseItem.modItem is StandItemClass)
+                    if (Main.mouseItem.IsAir || Main.mouseItem.ModItem is StandItemClass)
                         StandSlot.Update();
                     if (Main.mouseItem.IsAir || Main.mouseItem.dye != 0)
                         StandDyeSlot.Update();
@@ -501,7 +499,7 @@ namespace JoJoStands
                     {
                         NPC npc = Main.npc[i];
                         if (npc.active)
-                            spriteBatch.Draw(Main.npcTexture[npc.type], npc.getRect(), npc.frame, Color.Red, npc.rotation, npc.visualOffset, SpriteEffects.None, 0f);
+                            spriteBatch.Draw(GameContent.TextureAssets.Npc[npc.type].Value, npc.getRect(), npc.frame, Color.Red, npc.rotation, npc.visualOffset, SpriteEffects.None, 0f);
                     }
 
                     spriteBatch.End();     //ending the spriteBatch that started in PreDraw
@@ -514,32 +512,35 @@ namespace JoJoStands
             }*/
         }
 
-        public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
+        public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
         {
+            List<Item> startingItems = new List<Item>();
+
             if (Main.rand.Next(1, 5 + 1) == 1)
             {
                 int inheritanceStandChance = Main.rand.Next(0, JoJoStands.standTier1List.Count);
                 Item standTier1 = new Item();
                 standTier1.SetDefaults(JoJoStands.standTier1List[inheritanceStandChance]);
                 standTier1.stack = 1;
-                items.Add(standTier1);
+                startingItems.Add(standTier1);
             }
+            return startingItems;
         }
 
         public override void SetControls()
         {
-            if (standRemoteMode || player.HasBuff(ModContent.BuffType<CenturyBoyBuff>())) || creamVoidMode || creamExposedMode)
+            if (standRemoteMode || Player.HasBuff(ModContent.BuffType<CenturyBoyBuff>()) || creamVoidMode || creamExposedMode)
             {
-                if (standName.Contains("Aerosmith>()))
+                if (standName.Contains("Aerosmith"))
                     return;
 
-                player.controlUp = false;
-                player.controlDown = false;
-                player.controlLeft = false;
-                player.controlRight = false;
-                player.controlJump = false;
-                player.controlHook = false;
-                player.controlSmart = false;
+                Player.controlUp = false;
+                Player.controlDown = false;
+                Player.controlLeft = false;
+                Player.controlRight = false;
+                Player.controlJump = false;
+                Player.controlHook = false;
+                Player.controlSmart = false;
             }
         }
 
@@ -553,20 +554,20 @@ namespace JoJoStands
                 shadowDodgeCooldownTimer--;
 
             UpdateShaderStates();
-            if (standRemoteMode && standName == "Aerosmith>())
-                AerosmithRadar.Visible = StandSlot.Item.type == ModContent.ItemType<AerosmithT3>()) || StandSlot.Item.type == ModContent.ItemType<AerosmithFinal>());
+            if (standRemoteMode && standName == "Aerosmith")
+                AerosmithRadar.Visible = StandSlot.Item.type == ModContent.ItemType<AerosmithT3>() || StandSlot.Item.type == ModContent.ItemType<AerosmithFinal>();
             else
                 AerosmithRadar.Visible = false;
 
             if (poseMode)
             {
                 poseDuration--;
-                if ((poseDuration <= 0 || player.velocity != Vector2.Zero) && !Main.mouseLeft && !Main.mouseRight)
+                if ((poseDuration <= 0 || Player.velocity != Vector2.Zero) && !Main.mouseLeft && !Main.mouseRight)
                 {
                     menacingFrames = 0;
                     if (poseDuration <= 0)
                     {
-                        player.AddBuff(ModContent.BuffType<StrongWill>()), 30 * 60);
+                        Player.AddBuff(ModContent.BuffType<StrongWill>(), 30 * 60);
                     }
                     poseDuration = 300;
                     poseMode = false;
@@ -580,9 +581,9 @@ namespace JoJoStands
 
             if (timestopActive)
             {
-                Main.windSpeed = 0f;
+                Main.windSpeedCurrent = 0f;
             }
-            if (!player.dead && player.whoAmI == Main.myPlayer)
+            if (!Player.dead && Player.whoAmI == Main.myPlayer)
             {
                 ToBeContinued.Visible = false;
                 tbcCounter = 0;
@@ -591,12 +592,12 @@ namespace JoJoStands
             if (goldenSpinCounter > 0)          //golden spin stuff
             {
                 spinSubtractionTimer++;
-                if (spinSubtractionTimer >= 90 && player.mount.Type == Mod.GetMount("SlowDancerMount>()).Type)
+                if (spinSubtractionTimer >= 90 && Player.mount.Type == ModContent.MountType<SlowDancerMount>())
                 {
                     spinSubtractionTimer = 0;
                     goldenSpinCounter -= 2;
                 }
-                if (spinSubtractionTimer >= 60 && player.mount.Type != Mod.GetMount("SlowDancerMount>()).Type)
+                if (spinSubtractionTimer >= 60 && Player.mount.Type != ModContent.MountType<SlowDancerMount>())
                 {
                     spinSubtractionTimer = 0;
                     goldenSpinCounter -= 4;
@@ -622,7 +623,7 @@ namespace JoJoStands
                             tuskActNumber = 4;
                             forceChangedTusk = true;
                         }
-                        if (goldenSpinCounter <= 1)     //would reset anyway if the player isn't holding Tusk, cause it resets whenever you hold the Item again
+                        if (goldenSpinCounter <= 1)     //would reset anyway if the Player isn't holding Tusk, cause it resets whenever you hold the Item again
                         {
                             forceChangedTusk = false;
                         }
@@ -653,7 +654,7 @@ namespace JoJoStands
                         amountOfSexPistolsPlaced = 0;
                         changingSexPistolsPositions = true;
                         sexPistolsClickTimer = 0;
-                        Main.NewText("Click on any position to have a Sex Pistol stay around it. (Relative to the player)>());
+                        Main.NewText("Click on any position to have a Sex Pistol stay around it. (Relative to the Player)");
                     }
 
                     if (changingSexPistolsPositions)
@@ -664,7 +665,7 @@ namespace JoJoStands
                         if (Main.mouseLeft && sexPistolsClickTimer <= 0)
                         {
                             sexPistolsClickTimer += 30;
-                            sexPistolsOffsets[amountOfSexPistolsPlaced] = Main.MouseWorld - player.Center;
+                            sexPistolsOffsets[amountOfSexPistolsPlaced] = Main.MouseWorld - Player.Center;
                             amountOfSexPistolsPlaced++;
                             if (amountOfSexPistolsPlaced >= 6)
                             {
@@ -675,7 +676,7 @@ namespace JoJoStands
 
                     if (secondSpecialPressed && sexPistolsTier >= 3)
                     {
-                        player.AddBuff(ModContent.BuffType<BulletKickFrenzy>()), 60 * 60 * (sexPistolsTier - 2));
+                        Player.AddBuff(ModContent.BuffType<BulletKickFrenzy>(), 60 * 60 * (sexPistolsTier - 2));
                     }
                 }
                 else
@@ -697,7 +698,7 @@ namespace JoJoStands
                 SexPistolsUI.Visible = false;
             }
 
-            if (equippedTuskAct != 0 && player.whoAmI == Main.myPlayer)     //Tusk stuff
+            if (equippedTuskAct != 0 && Player.whoAmI == Main.myPlayer)     //Tusk stuff
             {
                 bool specialJustPressed = false;
                 if (!Main.dedServ)
@@ -733,15 +734,16 @@ namespace JoJoStands
 
                 if (tuskActNumber <= 3)
                 {
-                    if (player.ownedProjectileCounts[ModContent.ProjectileType<TuskAct" + tuskActNumber + "Pet>())] <= 0)
+
+                    if (Player.ownedProjectileCounts[Mod.Find<ModProjectile>("TuskAct" + tuskActNumber + "Pet").Type] <= 0)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<TuskAct" + tuskActNumber + "Pet>()), 0, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position, Player.velocity, Mod.Find<ModProjectile>("TuskAct" + tuskActNumber + "Pet").Type, 0, 0f, Main.myPlayer);
                     }
                 }
                 else
                 {
-                    if (player.ownedProjectileCounts[ModContent.ProjectileType<TuskAct4Stand>())] <= 0)
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<TuskAct4Stand>()), 0, 0f, Main.myPlayer);
+                    if (Player.ownedProjectileCounts[ModContent.ProjectileType<TuskAct4Stand>()] <= 0)
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position, Player.velocity, ModContent.ProjectileType<TuskAct4Stand>(), 0, 0f, Main.myPlayer);
                 }
                 if (tuskActNumber == 1)
                 {
@@ -749,119 +751,119 @@ namespace JoJoStands
                     {
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item67);
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
                         shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
                         shootVelocity *= 12f;       //multiply the angle by the speed to get the effect
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<Nail>()), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 4f, player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<Nail>(), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 4f, Player.whoAmI);
                     }
-                    if (Main.mouseRight && !player.channel && tuskShootCooldown <= 0)
+                    if (Main.mouseRight && !Player.channel && tuskShootCooldown <= 0)
                     {
                         tuskShootCooldown = 5;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<NailSlasher>()), (int)(28 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 5f, player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<NailSlasher>(), (int)(28 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 5f, Player.whoAmI);
                     }
-                    if (player.ownedProjectileCounts[ModContent.ProjectileType<NailSlasher>())] > 0)
+                    if (Player.ownedProjectileCounts[ModContent.ProjectileType<NailSlasher>()] > 0)
                         tuskShootCooldown = 2;
                 }
                 if (tuskActNumber == 2)
                 {
-                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
+                    if (Main.mouseLeft && !Player.channel && tuskShootCooldown <= 0)
                     {
-                        player.channel = true;
+                        Player.channel = true;
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item67);
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<ControllableNail>()), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 5f, player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ControllableNail>(), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 5f, Player.whoAmI);
                     }
-                    if (Main.mouseRight && !player.channel && tuskShootCooldown <= 0)
+                    if (Main.mouseRight && !Player.channel && tuskShootCooldown <= 0)
                     {
                         tuskShootCooldown = 5;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<NailSlasher>()), (int)(53 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 7f, player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<NailSlasher>(), (int)(53 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 7f, Player.whoAmI);
                     }
-                    if (player.ownedProjectileCounts[ModContent.ProjectileType<NailSlasher>())] > 0)
+                    if (Player.ownedProjectileCounts[ModContent.ProjectileType<NailSlasher>()] > 0)
                         tuskShootCooldown = 2;
                 }
                 if (tuskActNumber == 3)
                 {
-                    if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>())] <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>())] <= 0)
+                    if (Main.mouseLeft && !Player.channel && tuskShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>()] <= 0)
                     {
-                        player.channel = true;
+                        Player.channel = true;
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item67);
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<ControllableNail>()), (int)(122 * standDamageBoosts) + ((22 + equippedTuskAct - 3) * equippedTuskAct - 3), 6f, player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ControllableNail>(), (int)(122 * standDamageBoosts) + ((22 + equippedTuskAct - 3) * equippedTuskAct - 3), 6f, Player.whoAmI);
                     }
-                    if (Main.mouseRight && player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>())] <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>())] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>())))
+                    if (Main.mouseRight && Player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>()] <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] <= 0 && tuskShootCooldown <= 0 && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                     {
                         tuskShootCooldown += 60 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item78);
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 1.1f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<ArmWormholeNail>()), 80, 2f, player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ArmWormholeNail>(), 80, 2f, Player.whoAmI);
                     }
-                    if (specialJustPressed && player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>())] <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>())] <= 0 && tuskShootCooldown <= 0 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>())))
+                    if (specialJustPressed && Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>()] <= 0 && tuskShootCooldown <= 0 && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                     {
                         tuskShootCooldown += 120 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item78);
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 5f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<WormholeNail>()), 124, 8f, player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<WormholeNail>(), 124, 8f, Player.whoAmI);
                     }
                 }
                 if (tuskActNumber == 4)
                 {
                     if (standAutoMode)
                     {
-                        if (Main.mouseLeft && !player.channel && tuskShootCooldown <= 0)
+                        if (Main.mouseLeft && !Player.channel && tuskShootCooldown <= 0)
                         {
-                            player.channel = true;
+                            Player.channel = true;
                             tuskShootCooldown += 15 - standSpeedBoosts;
                             SoundEngine.PlaySound(SoundID.Item67);
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 4f;
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<ControllableNail>()), (int)(305 * standDamageBoosts), 7f, player.whoAmI);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ControllableNail>(), (int)(305 * standDamageBoosts), 7f, Player.whoAmI);
                         }
-                        if (Main.mouseRight && tuskShootCooldown <= 0 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>())))
+                        if (Main.mouseRight && tuskShootCooldown <= 0 && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                         {
                             tuskShootCooldown += 120 - standSpeedBoosts;
-                            SoundEngine.PlaySound(2, (int)player.Center.X, (int)player.Center.Y, 67, ModSoundsVolume, -1.2f);
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            SoundEngine.PlaySound(2, (int)Player.Center.X, (int)Player.Center.Y, 67, ModSoundsVolume, -1.2f);
+                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 16f;
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<ReqNail>()), 512, 0f, player.whoAmI);
-                            player.AddBuff(ModContent.BuffType<AbilityCooldown>()), AbilityCooldownTime(10));
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ReqNail>(), 512, 0f, Player.whoAmI);
+                            Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10));
                         }
                     }
                 }
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>())] > 0)
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0)
                 {
                     tuskShootCooldown = 30;
                 }
             }
-            if (hermitPurpleTier != 0 && player.whoAmI == Main.myPlayer)
+            if (hermitPurpleTier != 0 && Player.whoAmI == Main.myPlayer)
             {
                 bool specialJustPressed = false;
                 if (!Main.dedServ)
                     specialJustPressed = JoJoStands.SpecialHotKey.JustPressed;
 
-                HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>());
-                if (specialJustPressed && !player.HasBuff(ModContent.BuffType<AbilityCooldown>())) && hermitPurpleTier > 2 && hPlayer.amountOfHamon > 40)
+                HamonPlayer hPlayer = Player.GetModPlayer<HamonPlayer>();
+                if (specialJustPressed && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && hermitPurpleTier > 2 && hPlayer.amountOfHamon > 40)
                 {
                     if (hermitPurpleTier == 3)
                     {
                         hermitPurpleHamonBurstLeft = 3;
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>()), AbilityCooldownTime(30));
+                        Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(30));
                     }
                     if (hermitPurpleTier == 4)
                     {
                         hermitPurpleHamonBurstLeft = 5;
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>()), AbilityCooldownTime(20));
+                        Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(20));
                     }
                     hPlayer.amountOfHamon -= 40;
                 }
@@ -874,78 +876,78 @@ namespace JoJoStands
                 {
                     if (hermitPurpleTier == 1)
                     {
-                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>())] == 0)
+                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
                             hermitPurpleShootCooldown += 40 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>()), (int)(38 * standDamageBoosts), 4f, player.whoAmI);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(38 * standDamageBoosts), 4f, Player.whoAmI);
                         }
                     }
                     if (hermitPurpleTier == 2)
                     {
-                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>())] == 0)
+                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
                             hermitPurpleShootCooldown += 35 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>()), (int)(81 * standDamageBoosts), 6f, player.whoAmI);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(81 * standDamageBoosts), 6f, Player.whoAmI);
                         }
-                        if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>())] == 0)
+                        if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
                             hermitPurpleShootCooldown += 60 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>()), (int)(78 * standDamageBoosts), 0f, player.whoAmI);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(78 * standDamageBoosts), 0f, Player.whoAmI);
                         }
                     }
                     if (hermitPurpleTier == 3)
                     {
-                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>())] == 0)
+                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
                             hermitPurpleShootCooldown += 30 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>()), (int)(157 * standDamageBoosts), 7f, player.whoAmI);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(157 * standDamageBoosts), 7f, Player.whoAmI);
                         }
-                        if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>())] == 0)
+                        if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
                             hermitPurpleShootCooldown += 60 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>()), (int)(149 * standDamageBoosts), 0f, player.whoAmI);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(149 * standDamageBoosts), 0f, Player.whoAmI);
                         }
                     }
                     if (hermitPurpleTier == 4)
                     {
-                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>())] == 0)
+                        if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
                             hermitPurpleShootCooldown += 25 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>()), (int)(202 * standDamageBoosts), 8f, player.whoAmI);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(202 * standDamageBoosts), 8f, Player.whoAmI);
                         }
-                        if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>())] == 0)
+                        if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
                             hermitPurpleShootCooldown += 60 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>()), (int)(191 * standDamageBoosts), 0f, player.whoAmI);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(191 * standDamageBoosts), 0f, Player.whoAmI);
                         }
                     }
-                    if (player.controlHook && player.miscEquips[4].IsAir && player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleHook>())] == 0)       //player.miscEquips[4] is the hook slot
+                    if (Player.controlHook && Player.miscEquips[4].IsAir && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleHook>()] == 0)       //Player.miscEquips[4] is the hook slot
                     {
-                        Vector2 shootVelocity = Main.MouseWorld - player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
                         shootVelocity.Normalize();
                         shootVelocity *= 12f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleHook>()), 0, 0f, player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleHook>(), 0, 0f, Player.whoAmI);
                     }
                 }
             }
@@ -1009,30 +1011,30 @@ namespace JoJoStands
                     {
                         for (int i = 0; i < 12; i++)
                         {
-                            Vector2 position = player.Center + new Vector2(((Main.screenWidth / 2f) + Main.rand.Next(0, 100 + 1)) * -player.direction, -Main.screenHeight / 3f);
-                            Vector2 velocity = new Vector2(6f * player.direction, 0f);
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<BadCompanyBomberPlane>()), 0, 10f, player.whoAmI, badCompanyTier);
+                            Vector2 position = Player.Center + new Vector2(((Main.screenWidth / 2f) + Main.rand.Next(0, 100 + 1)) * -Player.direction, -Main.screenHeight / 3f);
+                            Vector2 velocity = new Vector2(6f * Player.direction, 0f);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<BadCompanyBomberPlane>(), 0, 10f, Player.whoAmI, badCompanyTier);
                         }
-                        player.AddBuff(ModContent.BuffType<Reinforcements>()), 120 * 60);
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>()), AbilityCooldownTime(5 * 60));       //6 minutes
+                        Player.AddBuff(ModContent.BuffType<Reinforcements>(), 120 * 60);
+                        Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(5 * 60));       //6 minutes
                     }
                     if (badCompanyTier == 4)
                     {
                         for (int i = 0; i < 24; i++)
                         {
-                            Vector2 position = player.Center + new Vector2(((Main.screenWidth / 2f) + Main.rand.Next(0, 100 + 1)) * -player.direction, -Main.screenHeight / 3f);
-                            Vector2 velocity = new Vector2(6f * player.direction, 0f);
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<BadCompanyBomberPlane>()), 0, 10f, player.whoAmI, badCompanyTier);
+                            Vector2 position = Player.Center + new Vector2(((Main.screenWidth / 2f) + Main.rand.Next(0, 100 + 1)) * -Player.direction, -Main.screenHeight / 3f);
+                            Vector2 velocity = new Vector2(6f * Player.direction, 0f);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<BadCompanyBomberPlane>(), 0, 10f, Player.whoAmI, badCompanyTier);
                         }
-                        player.AddBuff(ModContent.BuffType<Reinforcements>()), 180 * 60);
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>()), AbilityCooldownTime(3 * 60));       //5 minutes
+                        Player.AddBuff(ModContent.BuffType<Reinforcements>(), 180 * 60);
+                        Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(3 * 60));       //5 minutes
                     }
                 }
 
                 bool recalculateArmy = false;
-                int amountOfSoldiers = player.ownedProjectileCounts[ModContent.ProjectileType<BadCompanySoldier>())];
-                int amountOfTanks = player.ownedProjectileCounts[ModContent.ProjectileType<BadCompanyTank>())];
-                int amountOfChoppers = player.ownedProjectileCounts[ModContent.ProjectileType<BadCompanyChopper>())];
+                int amountOfSoldiers = Player.ownedProjectileCounts[ModContent.ProjectileType<BadCompanySoldier>()];
+                int amountOfTanks = Player.ownedProjectileCounts[ModContent.ProjectileType<BadCompanyTank>()];
+                int amountOfChoppers = Player.ownedProjectileCounts[ModContent.ProjectileType<BadCompanyChopper>()];
 
                 int unitsLeft = maxBadCompanyUnits - (amountOfSoldiers + (amountOfTanks * 4) + (amountOfChoppers * 6));
                 int expectedUnitsLeft = maxBadCompanyUnits - (badCompanySoldiers + (badCompanyTanks * 4) + (badCompanyChoppers * 6));
@@ -1041,7 +1043,7 @@ namespace JoJoStands
                 badCompanyUnitsLeft = expectedUnitsLeft;
 
                 int troopMult = 1;
-                if (player.HasBuff(ModContent.BuffType<Reinforcements>())))
+                if (Player.HasBuff(ModContent.BuffType<Reinforcements>()))
                 {
                     troopMult = 2;
                     recalculateArmy = true;
@@ -1050,15 +1052,15 @@ namespace JoJoStands
                 {
                     if (amountOfSoldiers < badCompanySoldiers * troopMult)     //Adding troops
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, player.velocity, ModContent.ProjectileType<BadCompanySoldier>()), 0, 0f, player.whoAmI, badCompanyTier);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Player.velocity, ModContent.ProjectileType<BadCompanySoldier>(), 0, 0f, Player.whoAmI, badCompanyTier);
                     }
                     if (amountOfTanks < badCompanyTanks)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, player.velocity, ModContent.ProjectileType<BadCompanyTank>()), 0, 0f, player.whoAmI, badCompanyTier);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Player.velocity, ModContent.ProjectileType<BadCompanyTank>(), 0, 0f, Player.whoAmI, badCompanyTier);
                     }
                     if (amountOfChoppers < badCompanyChoppers)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, player.velocity, ModContent.ProjectileType<BadCompanyChopper>()), 0, 0f, player.whoAmI, badCompanyTier);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Player.velocity, ModContent.ProjectileType<BadCompanyChopper>(), 0, 0f, Player.whoAmI, badCompanyTier);
                     }
 
                     //Removing troops
@@ -1067,7 +1069,7 @@ namespace JoJoStands
                         for (int p = 0; p < Main.maxProjectiles; p++)
                         {
                             Projectile Projectile = Main.projectile[p];
-                            if (Projectile.active && Projectile.type == ModContent.ProjectileType<BadCompanySoldier>()) && Projectile.owner == Main.myPlayer)
+                            if (Projectile.active && Projectile.type == ModContent.ProjectileType<BadCompanySoldier>() && Projectile.owner == Main.myPlayer)
                             {
                                 Projectile.Kill();
                                 break;
@@ -1079,7 +1081,7 @@ namespace JoJoStands
                         for (int p = 0; p < Main.maxProjectiles; p++)
                         {
                             Projectile Projectile = Main.projectile[p];
-                            if (Projectile.active && Projectile.type == ModContent.ProjectileType<BadCompanyTank>()) && Projectile.owner == Main.myPlayer)
+                            if (Projectile.active && Projectile.type == ModContent.ProjectileType<BadCompanyTank>() && Projectile.owner == Main.myPlayer)
                             {
                                 Projectile.Kill();
                                 break;
@@ -1091,7 +1093,7 @@ namespace JoJoStands
                         for (int p = 0; p < Main.maxProjectiles; p++)
                         {
                             Projectile Projectile = Main.projectile[p];
-                            if (Projectile.active && Projectile.type == ModContent.ProjectileType<BadCompanyChopper>()) && Projectile.owner == Main.myPlayer)
+                            if (Projectile.active && Projectile.type == ModContent.ProjectileType<BadCompanyChopper>() && Projectile.owner == Main.myPlayer)
                             {
                                 Projectile.Kill();
                                 break;
@@ -1099,7 +1101,7 @@ namespace JoJoStands
                         }
                     }
                 }
-                if (Main.mouseRight && badCompanyUIClickTimer <= 0 && player.whoAmI == Main.myPlayer)
+                if (Main.mouseRight && badCompanyUIClickTimer <= 0 && Player.whoAmI == Main.myPlayer)
                 {
                     badCompanyUIClickTimer = 30;
                     BadCompanyUnitsUI.Visible = !BadCompanyUnitsUI.Visible;
@@ -1108,15 +1110,15 @@ namespace JoJoStands
 
             if (silverChariotShirtless)
             {
-                player.statDefense = (int)(player.statDefense * 0.6f);
+                Player.statDefense = (int)(Player.statDefense * 0.6f);
                 standDamageBoosts += 0.8f;
                 standSpeedBoosts += 2;
                 standCritChangeBoosts += 25f;
             }
 
-            if (revived && !player.HasBuff(ModContent.BuffType<ArtificialSoul>())))
+            if (revived && !Player.HasBuff(ModContent.BuffType<ArtificialSoul>()))
             {
-                player.KillMe(PlayerDeathReason.ByCustomReason(player.name + "'s artificial soul has left him.>()), player.statLife + 1, player.direction);
+                Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + "'s artificial soul has left him."), Player.statLife + 1, Player.direction);
                 revived = false;
             }
         }
@@ -1128,13 +1130,13 @@ namespace JoJoStands
                 if (timestopEffectDurationTimer > 0)
                 {
                     if (timestopEffectDurationTimer >= 15 && !Filters.Scene["TimestopEffectShader"].IsActive() && TimestopEffects)
-                        Filters.Scene.Activate("TimestopEffectShader>());
+                        Filters.Scene.Activate("TimestopEffectShader");
 
                     if (timestopEffectDurationTimer == 14)
                     {
                         Filters.Scene["TimestopEffectShader"].Deactivate();
                         if (!Filters.Scene["GreyscaleEffect"].IsActive())
-                            Filters.Scene.Activate("GreyscaleEffect>());
+                            Filters.Scene.Activate("GreyscaleEffect");
                     }
                     timestopEffectDurationTimer--;
                 }
@@ -1150,19 +1152,19 @@ namespace JoJoStands
                 if (backToZeroActive)
                 {
                     if (!Filters.Scene["GreenEffect"].IsActive())
-                        Filters.Scene.Activate("GreenEffect>());
+                        Filters.Scene.Activate("GreenEffect");
                     if (Filters.Scene["GreyscaleEffect"].IsActive())
                         Filters.Scene["GreyscaleEffect"].Deactivate();
                     if (Filters.Scene["TimestopEffectShader"].IsActive())
                         Filters.Scene["TimestopEffectShader"].Deactivate();
                     if (Filters.Scene["RedEffect"].IsActive())
                         Filters.Scene["RedEffect"].Deactivate();
-                    if (player.HasBuff(ModContent.BuffType<TheWorldBuff>())))
-                        player.ClearBuff(ModContent.BuffType<TheWorldBuff>()));
-                    if (player.HasBuff(ModContent.BuffType<SkippingTime>())))
-                        player.ClearBuff(ModContent.BuffType<SkippingTime>()));
-                    if (player.HasBuff(ModContent.BuffType<ForesightBuff>())))
-                        player.ClearBuff(ModContent.BuffType<ForesightBuff>()));
+                    if (Player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+                        Player.ClearBuff(ModContent.BuffType<TheWorldBuff>());
+                    if (Player.HasBuff(ModContent.BuffType<SkippingTime>()))
+                        Player.ClearBuff(ModContent.BuffType<SkippingTime>());
+                    if (Player.HasBuff(ModContent.BuffType<ForesightBuff>()))
+                        Player.ClearBuff(ModContent.BuffType<ForesightBuff>());
 
                     timestopActive = false;     //second, get rid of the effects from everyone
                     timeskipActive = false;
@@ -1172,14 +1174,14 @@ namespace JoJoStands
                 if (!backToZeroActive && Filters.Scene["GreenEffect"].IsActive())
                     Filters.Scene["GreenEffect"].Deactivate();
                 if (epitaphForesightActive && !Filters.Scene["RedEffect"].IsActive())
-                    Filters.Scene.Activate("RedEffect>());
+                    Filters.Scene.Activate("RedEffect");
                 if (!epitaphForesightActive && Filters.Scene["RedEffect"].IsActive())
                     Filters.Scene["RedEffect"].Deactivate();
 
                 if (BiteTheDustEffects)
                 {
                     if (bitesTheDustActive && !Filters.Scene["BiteTheDustEffect"].IsActive())
-                        Filters.Scene.Activate("BiteTheDustEffect>());
+                        Filters.Scene.Activate("BiteTheDustEffect");
                     if (!bitesTheDustActive && Filters.Scene["BiteTheDustEffect"].IsActive())
                         Filters.Scene["BiteTheDustEffect"].Deactivate();
                     if (bitesTheDustActive && Filters.Scene["BiteTheDustEffect"].IsActive())
@@ -1191,7 +1193,7 @@ namespace JoJoStands
                     if (timeskipActive && timeSkipEffectTransitionTimer < 40)
                     {
                         if (!Filters.Scene["TimeSkipEffectShader"].IsActive())
-                            Filters.Scene.Activate("TimeSkipEffectShader>());
+                            Filters.Scene.Activate("TimeSkipEffectShader");
                         else
                         {
                             timeSkipEffectTransitionTimer++;
@@ -1211,7 +1213,7 @@ namespace JoJoStands
                 {
                     if (JoJoStandsWorld.VampiricNight && !Filters.Scene["ColorChangeEffect"].IsActive())
                     {
-                        Filters.Scene.Activate("ColorChangeEffect>());
+                        Filters.Scene.Activate("ColorChangeEffect");
                         ScreenShaderData shader = Filters.Scene["ColorChangeEffect"].GetShader();
                         shader.UseProgress((int)ColorChangeStyle.NormalToLightGreen);
                     }
@@ -1224,8 +1226,8 @@ namespace JoJoStands
 
         public override void PreUpdateMovement()
         {
-            if (timestopActive && !player.HasBuff(ModContent.BuffType<TheWorldBuff>())))
-                player.velocity = Vector2.Zero;
+            if (timestopActive && !Player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+                Player.velocity = Vector2.Zero;
         }
 
         public override void PostUpdateMiscEffects()
@@ -1234,7 +1236,7 @@ namespace JoJoStands
                 standRangeBoosts += 64f;
 
             if (standOut)
-                player.statDefense += standDefenseToAdd;
+                Player.statDefense += standDefenseToAdd;
         }
 
         public void SpawnStand()
@@ -1251,19 +1253,19 @@ namespace JoJoStands
                     standOut = false;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
+                        Networking.ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, false, Player.whoAmI);
                     }
                     return;
                 }
             }
 
-            if (!(inputItem.modItem is StandItemClass))
+            if (!(inputItem.ModItem is StandItemClass))
             {
                 Main.NewText("Something went wrong while summoning the Stand.", Color.Red);
                 return;
             }
 
-            StandItemClass standItem = inputItem.modItem as StandItemClass;
+            StandItemClass standItem = inputItem.ModItem as StandItemClass;
 
             standOut = true;
             standDefenseToAdd = 4 + (2 * standItem.standTier);
@@ -1271,38 +1273,38 @@ namespace JoJoStands
             if (standItem.standType == 2)
                 standDefenseToAdd /= 2;
 
-            if (!standItem.ManualStandSpawning(player))
+            if (!standItem.ManualStandSpawning(Player))
             {
                 string standClassName = standItem.standProjectileName + "StandT" + standItem.standTier;
-                if (standClassName.Contains("T4>()))
+                if (standClassName.Contains("T4"))
                     standClassName = standItem.standProjectileName + "StandFinal";
 
-                int standProjectileType = Mod.ProjectileType(standClassName);
+                int standProjectileType = Mod.Find<ModProjectile>(standClassName).Type;
 
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position, player.velocity, standProjectileType, 0, 0f, Main.myPlayer);
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position, Player.velocity, standProjectileType, 0, 0f, Main.myPlayer);
             }
         }
 
         public override void PreUpdateBuffs()
         {
-            if (timestopActive && !player.HasBuff(ModContent.BuffType<TheWorldBuff>())))
+            if (timestopActive && !Player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
             {
-                player.AddBuff(ModContent.BuffType<FrozeninTime>()), 2);
+                Player.AddBuff(ModContent.BuffType<FrozeninTime>(), 2);
             }
             if (deathLoopActive)       //if someone has deathloop turned on and you don't turn it on for you
             {
-                player.AddBuff(ModContent.BuffType<DeathLoop>()), 2);
+                Player.AddBuff(ModContent.BuffType<DeathLoop>(), 2);
             }
-            if (epitaphForesightActive && !player.HasBuff(ModContent.BuffType<ForesightBuff>())) && !player.HasBuff(ModContent.BuffType<ForeseenDebuff>())))
+            if (epitaphForesightActive && !Player.HasBuff(ModContent.BuffType<ForesightBuff>()) && !Player.HasBuff(ModContent.BuffType<ForeseenDebuff>()))
             {
-                player.AddBuff(ModContent.BuffType<ForeseenDebuff>()), 2);
+                Player.AddBuff(ModContent.BuffType<ForeseenDebuff>(), 2);
             }
         }
 
         public override void PostUpdateBuffs()
         {
             standCooldownReduction = 0f;        //it's here because it resets before the buffs can use it when its in ResetEffects()
-            if (player.HasBuff(ModContent.BuffType<Stolen>())))
+            if (Player.HasBuff(ModContent.BuffType<Stolen>()))
                 standOut = false;
         }
 
@@ -1319,7 +1321,7 @@ namespace JoJoStands
         {
             if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
             {
-                player.AddBuff(BuffID.ShadowDodge, 30 * 60);
+                Player.AddBuff(BuffID.ShadowDodge, 30 * 60);
                 shadowDodgeCooldownTimer += 90 * 60;
             }
         }
@@ -1328,17 +1330,17 @@ namespace JoJoStands
         {
             if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
             {
-                player.AddBuff(BuffID.ShadowDodge, 30 * 60);
+                Player.AddBuff(BuffID.ShadowDodge, 30 * 60);
                 shadowDodgeCooldownTimer += 90 * 60;
             }
         }
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
         {
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>());
+            HamonPlayer hPlayer = Player.GetModPlayer<HamonPlayer>();
             if (crystalArmorSetEquipped)
             {
-                Vector2 shootVel = player.Center + new Vector2(0f, -8f);
+                Vector2 shootVel = Player.Center + new Vector2(0f, -8f);
                 shootVel.Normalize();
                 shootVel *= 10f;
                 float numberProjectiles = 8;
@@ -1346,7 +1348,7 @@ namespace JoJoStands
                 for (int i = 0; i < numberProjectiles; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(shootVel.X, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, perturbedSpeed, ModContent.ProjectileType<CrystalShard>()), 15, 2f, player.whoAmI);
+                    int proj = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, perturbedSpeed, ModContent.ProjectileType<CrystalShard>(), 15, 2f, Player.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                 }
             }
@@ -1356,7 +1358,7 @@ namespace JoJoStands
                 npc.StrikeNPC(reflectedDamage, 3f * hermitPurpleTier, npc.direction);
                 if (hPlayer.amountOfHamon >= 30)
                 {
-                    npc.AddBuff(ModContent.BuffType<Sunburn>()), ((hPlayer.amountOfHamon / 30) * hermitPurpleTier) * 60);
+                    npc.AddBuff(ModContent.BuffType<Sunburn>(), ((hPlayer.amountOfHamon / 30) * hermitPurpleTier) * 60);
                     hPlayer.amountOfHamon -= 2;
                 }
             }
@@ -1364,7 +1366,7 @@ namespace JoJoStands
             {
                 int reflectedDamage = npc.damage * 4;       //This is becaues npc damage is pretty weak against the NPC itself
                 npc.StrikeNPC(reflectedDamage, 14f, npc.direction);
-                npc.AddBuff(ModContent.BuffType<Sunburn>()), (10 * (hermitPurpleTier - 2)) * 60);
+                npc.AddBuff(ModContent.BuffType<Sunburn>(), (10 * (hermitPurpleTier - 2)) * 60);
 
                 for (int i = 0; i < 60; i++)
                 {
@@ -1377,29 +1379,24 @@ namespace JoJoStands
                 }
                 hermitPurpleHamonBurstLeft -= 1;
             }
-            if (doobiesskullEquipped && player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>())] < 3)
+            if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
             {
-                Vector2 shootVelocity = player.position;
+                Vector2 shootVelocity = Player.position;
                 shootVelocity.Normalize();
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>()), 30, 2f, player.whoAmI);
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
             }
         }
         public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
         {
-            if (doobiesskullEquipped && player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>())] < 3)
+            if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
             {
-                Vector2 shootVelocity = player.position;
+                Vector2 shootVelocity = Player.position;
                 shootVelocity.Normalize();
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>()), 30, 2f, player.whoAmI);
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
             }
         }
 
-        public override void UpdateBiomes()     //from ExampleMod ZoneExample
-        {
-            ZoneViralMeteorite = JoJoStandsWorld.viralMeteoriteTiles > 20;
-        }
-
-        public override bool CustomBiomesMatch(Player other)
+        /*public override bool CustomBiomesMatch(Player other)
         {
             MyPlayer modOther = other.GetModPlayer<MyPlayer>());
             return ZoneViralMeteorite == modOther.ZoneViralMeteorite;
@@ -1422,40 +1419,39 @@ namespace JoJoStands
         {
             BitsByte flags = reader.ReadByte();
             ZoneViralMeteorite = flags[0];
-        }
+        }*/
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>())] > 0)
-            {
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0)
                 return false;
-            }
+
             return true;
         }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)       //that 1 last frame before you completely die
         {
-            if (player.whoAmI == Main.myPlayer)
+            if (Player.whoAmI == Main.myPlayer)
             {
                 if (DeathSoundID == 1)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/ToBeContinued4>()));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/ToBeContinued4>"));
                 }
                 if (DeathSoundID == 2)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/CAESAAAAAAAR>()));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/CAESAAAAAAAR"));
                 }
                 if (DeathSoundID == 3)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/GangTortureDance>()));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/GangTortureDance"));
                 }
                 if (DeathSoundID == 4)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/LastTrainHome>()));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/LastTrainHome"));
                 }
                 if (DeathSoundID == 5)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/KORE GA... WAGA KING CRIMSON NO NORIO KU>()));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/KORE GA... WAGA KING CRIMSON NO NORIO KU"));
                 }
                 if (DeathSoundID != 1)
                 {
@@ -1463,18 +1459,18 @@ namespace JoJoStands
                 }
             }
 
-            if (player.HasBuff(ModContent.BuffType<Pierced>())))
+            if (Player.HasBuff(ModContent.BuffType<Pierced>()))
             {
                 receivedArrowShard = false;
                 piercedTimer = 36000;
             }
 
-            if (!revived && player.HasItem(ModContent.ItemType<PokerChip>())))
+            if (!revived && Player.HasItem(ModContent.ItemType<PokerChip>()))
             {
                 revived = true;
-                player.AddBuff(ModContent.BuffType<ArtificialSoul>()), 3600);
-                player.ConsumeItem(ModContent.ItemType<PokerChip>()), true);
-                Main.NewText("The chip has given you new life!>());
+                Player.AddBuff(ModContent.BuffType<ArtificialSoul>(), 3600);
+                Player.ConsumeItem(ModContent.ItemType<PokerChip>(), true);
+                Main.NewText("The chip has given you new life!");
                 return false;
             }
             if (backToZeroActive)
@@ -1500,7 +1496,7 @@ namespace JoJoStands
             creamExposedToVoid = false;
             creamFrame = 0;
 
-            if (player.whoAmI == Main.myPlayer && DeathSoundID == 1)
+            if (Player.whoAmI == Main.myPlayer && DeathSoundID == 1)
             {
                 tbcCounter++;
                 if (tbcCounter >= 270)
@@ -1508,466 +1504,6 @@ namespace JoJoStands
                     ToBeContinued.Visible = true;
                 }
             }
-        }
-
-        public static readonly PlayerLayer MenacingPose = new PlayerLayer("JoJoStands", "Menacing Pose", PlayerLayer.MiscEffectsBack, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && drawPlayer.velocity == Vector2.Zero && mPlayer.poseMode)
-            {
-                Texture2D texture = Mod.GetTexture("Extras/Menacing>());
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
-                if (drawPlayer.direction == -1)
-                {
-                    drawX += 2;
-                }
-
-                mPlayer.poseFrameCounter++;
-                if (mPlayer.poseFrameCounter >= 7)
-                {
-                    mPlayer.menacingFrames += 1;
-                    mPlayer.poseFrameCounter = 0;
-                    if (mPlayer.menacingFrames >= 6)
-                    {
-                        mPlayer.menacingFrames = 0;
-                    }
-                }
-
-                int frameHeight = texture.Height / 6;
-                Vector2 drawPos = new Vector2(drawX, drawY);
-                Rectangle poseAnimRect = new Rectangle(0, frameHeight * mPlayer.menacingFrames, texture.Width, frameHeight);
-                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                Vector2 poseOrigin = new Vector2(texture.Width / 2f, frameHeight / 2f);
-                DrawData data = new DrawData(texture, drawPos, poseAnimRect, drawColor, drawPlayer.fullRotation, poseOrigin, 1f, SpriteEffects.None, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer AerosmithRadarCam = new PlayerLayer("JoJoStands", "Aerosmith Radar Cam", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.standRemoteMode && (mPlayer.StandSlot.Item.type == ModContent.ItemType<AerosmithT3>()) || mPlayer.StandSlot.Item.type == ModContent.ItemType<AerosmithFinal>())))
-            {
-                Texture2D texture = Mod.GetTexture("Extras/AerosmithRadar>());
-                int drawX = (int)(drawInfo.position.X + 4f + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.position.Y + 7f - Main.screenPosition.Y);
-                if (drawPlayer.direction == -1)
-                {
-                    drawX -= 2;
-                }
-                mPlayer.aerosmithRadarFrameCounter++;
-                if (mPlayer.aerosmithRadarFrameCounter >= 30)
-                    mPlayer.aerosmithRadarFrameCounter = 0;
-                int frame = mPlayer.aerosmithRadarFrameCounter / 16;
-                int frameHeight = texture.Height / 2;
-
-                Vector2 drawPos = new Vector2(drawX, drawY);
-                Rectangle animRect = new Rectangle(0, frameHeight * frame, texture.Width, frameHeight);
-                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                Vector2 origin = new Vector2(texture.Width / 2f, frameHeight / 2f);
-                DrawData data = new DrawData(texture, drawPos, animRect, drawColor, 0f, origin, 1f, SpriteEffects.None, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-
-
-        public static readonly PlayerLayer KCArmLayer = new PlayerLayer("JoJoStands", "KCArm", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.wearingEpitaph)
-            {
-                Texture2D texture = Mod.GetTexture("Extras/KCArm>());
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
-                SpriteEffects effects = SpriteEffects.None;
-                if (drawPlayer.direction == -1)
-                {
-                    drawX += 2;
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-
-                Vector2 drawPos = new Vector2(drawX, drawY);
-                Rectangle animRect = new Rectangle(0, 0, texture.Width, texture.Height);
-                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                Vector2 origin = new Vector2(texture.Width / 2f, texture.Height / 2f);
-                DrawData data = new DrawData(texture, drawPos, animRect, drawColor, 0f, origin, 1f, effects, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer HermitPurpleArmsLayer = new PlayerLayer("JoJoStands", "HermitPurpleArmsLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && mPlayer.hermitPurpleTier != 0)
-            {
-                Texture2D texture = Mod.GetTexture("Extras/HermitPurple_Arms>());
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y) - 4;
-                if (drawPlayer.direction == -1)
-                {
-                    drawX += 2;
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                if (drawPlayer.direction == 1)
-                {
-                    effects = SpriteEffects.None;
-                }
-                Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                if (mPlayer.hermitPurpleHamonBurstLeft > 0)        //No increment here because it's already incrememnted in the Body layer
-                {
-                    if (mPlayer.hermitPurpleSpecialFrameCounter >= 5)
-                    {
-                        color = Color.Yellow;
-                        if (mPlayer.hermitPurpleSpecialFrameCounter >= 10)
-                        {
-                            mPlayer.hermitPurpleSpecialFrameCounter = 0;
-                        }
-                    }
-                }
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), drawPlayer.bodyFrame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer HermitPurpleBodyLayer = new PlayerLayer("JoJoStands", "HermitPurpleBodyLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && mPlayer.hermitPurpleTier > 1)
-            {
-                Texture2D texture = Mod.GetTexture("Extras/HermitPurple_Body>());
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y) - 4;
-                if (drawPlayer.direction == -1)
-                {
-                    drawX += 2;
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                if (drawPlayer.direction == 1)
-                {
-                    effects = SpriteEffects.None;
-                }
-                Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                if (mPlayer.hermitPurpleHamonBurstLeft > 0)
-                {
-                    mPlayer.hermitPurpleSpecialFrameCounter++;
-                    if (mPlayer.hermitPurpleSpecialFrameCounter >= 5)
-                    {
-                        color = Color.Yellow;
-                        if (mPlayer.hermitPurpleSpecialFrameCounter >= 10)
-                        {
-                            mPlayer.hermitPurpleSpecialFrameCounter = 0;
-                        }
-                    }
-                }
-                Vector2 drawPos = new Vector2(drawX, drawY);
-                DrawData data = new DrawData(texture, drawPos, drawPlayer.bodyFrame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer CenturyBoyActivated = new PlayerLayer("JoJoStands", "CenturyBoyActivated", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //gotten from ExampleMod's MyPlayer, but I understand what is happening
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            SpriteEffects effects = SpriteEffects.None;
-            if (drawPlayer.active && mPlayer.showingCBLayer)
-            {
-                Texture2D texture = Mod.GetTexture("Extras/CB>());
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
-                if (drawPlayer.direction == -1)
-                {
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                if (drawPlayer.direction == 1)
-                {
-                    effects = SpriteEffects.None;
-                }
-                if (mPlayer.StandDyeSlot.Item.dye != 0)
-                {
-                    ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(mPlayer.StandDyeSlot.Item.type);
-                    shader.Apply(null);
-                }
-                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY - 9f), drawPlayer.bodyFrame, drawColor, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer SexPistolsLayer = new PlayerLayer("JoJoStands", "Sex Pistols Layer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.sexPistolsLeft != 0 && mPlayer.standOut && mPlayer.sexPistolsTier != 0)
-            {
-                int frame = 6 - mPlayer.sexPistolsLeft;       //frames 0-5
-                Texture2D texture = Mod.GetTexture("Extras/SexPistolsLayer>());
-                int drawX = (int)(drawInfo.position.X + 4f + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.position.Y + 20f - Main.screenPosition.Y);
-                if (drawPlayer.direction == -1)
-                {
-                    drawX = drawX - 2;
-                }
-                int frameHeight = texture.Height / 6;
-
-                Vector2 drawPos = new Vector2(drawX, drawY);
-                Rectangle sexPistolsAnimRect = new Rectangle(0, frameHeight * frame, texture.Width, frameHeight);
-                Color drawColor = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                DrawData data = new DrawData(texture, drawPos, sexPistolsAnimRect, drawColor, drawPlayer.fullRotation, new Vector2(texture.Width / 2f, frameHeight / 2f), 1f, SpriteEffects.None, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer PhantomHoodLongGlowmask = new PlayerLayer("JoJoStands", "Phantom Hood Long Glowmask", PlayerLayer.Head, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.phantomHoodLongEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodLong", EquipType.Head))
-            {
-                Texture2D texture = Mod.GetTexture("Extras/PhantomHoodLong_Head_Glowmask>());
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.position.Y - Main.screenPosition.Y) - 1;
-                SpriteEffects effects = SpriteEffects.None;
-                if (drawPlayer.direction == -1)
-                {
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                Vector2 offset = new Vector2(0f, 12f);
-                Vector2 pos = new Vector2(drawX, drawY) + offset;
-
-                DrawData data = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer PhantomHoodNeutralGlowmask = new PlayerLayer("JoJoStands", "Phantom Hood Neutral Glowmask", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.phantomHoodNeutralEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodNeutral", EquipType.Head))
-            {
-                Texture2D texture = Mod.GetTexture("Extras/PhantomHoodNeutral_Head_Glowmask>());
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.position.Y - Main.screenPosition.Y) - 1;
-                SpriteEffects effects = SpriteEffects.None;
-                if (drawPlayer.direction == -1)
-                {
-                    //drawX -= 2;
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                Vector2 offset = new Vector2(0f, 12f);
-                Vector2 pos = new Vector2(drawX, drawY) + offset;
-
-                DrawData data = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer PhantomHoodShortGlowmask = new PlayerLayer("JoJoStands", "Phantom Hood Short Glowmask", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.phantomHoodShortEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodShort", EquipType.Head))
-            {
-                Texture2D texture = Mod.GetTexture("Extras/PhantomHoodShort_Head_Glowmask>());
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.position.Y - Main.screenPosition.Y) - 1;
-                SpriteEffects effects = SpriteEffects.None;
-                if (drawPlayer.direction == -1)
-                {
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                Vector2 offset = new Vector2(0f, 12f);
-                Vector2 pos = new Vector2(drawX, drawY) + offset;
-
-                DrawData data = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White * alpha, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer PhantomChestplateGlowmask = new PlayerLayer("JoJoStands", "Phantom Chestplate Glowmask", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
-            {
-                Texture2D texture = Mod.GetTexture("Extras/PhantomChestplate_Body_Glowmask>());
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                float drawX = (int)drawInfo.position.X + drawPlayer.width / 2;
-                float drawY = (int)drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
-                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
-
-                DrawData data = new DrawData(texture, position, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, drawInfo.bodyOrigin, 1f, drawInfo.spriteEffects, 0);
-                data.shader = drawInfo.bodyArmorShader;
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer PhantomArmsGlowmask = new PlayerLayer("JoJoStands", "Phantom Chestplate Arms Glowmask", PlayerLayer.Arms, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
-            {
-                Texture2D texture = Mod.GetTexture("Extras/PhantomChestplate_Arms_Glowmask>());
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                float drawX = (int)drawInfo.position.X + drawPlayer.width / 2;
-                float drawY = (int)drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
-                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
-
-                DrawData data = new DrawData(texture, position, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, drawInfo.bodyOrigin, 1f, drawInfo.spriteEffects, 0);
-                data.shader = drawInfo.bodyArmorShader;
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer PhantomLeggingsGlowmask = new PlayerLayer("JoJoStands", "Phantom Leggings Glowmask", PlayerLayer.Legs, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.phantomLeggingsEquipped && drawPlayer.legs == Mod.GetEquipSlot("PhantomLeggings", EquipType.Legs))
-            {
-                Texture2D texture = Mod.GetTexture("Extras/PhantomLeggings_Legs_Glowmask>());
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                Vector2 offset = new Vector2(0f, 18f);
-                float drawX = (int)drawInfo.position.X + drawPlayer.width / 2;      //The reason we do this is cause position as a float moves the glowmask around too much
-                float drawY = (int)drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2;
-                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.legPosition - Main.screenPosition + offset;
-
-                DrawData data = new DrawData(texture, position, drawPlayer.legFrame, Color.White * alpha, drawPlayer.legRotation, drawInfo.legOrigin, 1f, drawInfo.spriteEffects, 0);
-                data.shader = drawInfo.legArmorShader;
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer BlackUmbrellaLayer = new PlayerLayer("JoJoStands", "Black Umbrella Layer", PlayerLayer.Head, delegate (PlayerDrawInfo drawInfo)     //made it a BackAcc so it draws at the very back
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>());
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>());
-            if (drawPlayer.active && mPlayer.blackUmbrellaEquipped)
-            {
-                Texture2D texture = Mod.GetTexture("Extras/UmbrellaHat>());
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                int drawX = (int)(drawInfo.position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.position.Y - Main.screenPosition.Y) - 1;
-                SpriteEffects effects = SpriteEffects.None;
-                if (drawPlayer.direction == -1)
-                {
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                Vector2 offset = new Vector2(0f, 0f);
-                Vector2 pos = new Vector2(drawX, drawY) + offset;
-
-                DrawData data = new DrawData(texture, pos, null, Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, effects, 0);
-                Main.playerDrawData.Add(data);
-            }
-        });
-
-        public override void ModifyDrawLayers(List<PlayerLayer> layers)
-        {
-            if (player.dead || (player.mount.Type != -1))
-            {
-                KCArmLayer.visible = false;
-                MenacingPose.visible = false;
-                AerosmithRadarCam.visible = false;
-                CenturyBoyActivated.visible = false;
-                SexPistolsLayer.visible = false;
-                PhantomHoodLongGlowmask.visible = false;
-                PhantomHoodNeutralGlowmask.visible = false;
-                PhantomHoodShortGlowmask.visible = false;
-                PhantomChestplateGlowmask.visible = false;
-                PhantomArmsGlowmask.visible = false;
-                PhantomLeggingsGlowmask.visible = false;
-                BlackUmbrellaLayer.visible = false;
-            }
-            else
-            {
-                SexPistolsLayer.visible = true;
-                KCArmLayer.visible = true;
-                MenacingPose.visible = true;
-                AerosmithRadarCam.visible = true;
-                CenturyBoyActivated.visible = true;
-                PhantomHoodLongGlowmask.visible = phantomHoodLongEquipped;
-                PhantomHoodNeutralGlowmask.visible = phantomHoodNeutralEquipped;
-                PhantomHoodShortGlowmask.visible = phantomHoodShortEquipped;
-                PhantomChestplateGlowmask.visible = phantomChestplateEquipped;
-                PhantomArmsGlowmask.visible = phantomChestplateEquipped;
-                PhantomLeggingsGlowmask.visible = phantomLeggingsEquipped;
-                BlackUmbrellaLayer.visible = blackUmbrellaEquipped;
-
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>())] != 0)
-                {
-                    for (int i = 0; i < layers.Count; i++)
-                    {
-                        layers[i].visible = false;
-                    }
-                }
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<Void>())] != 0 || player.ownedProjectileCounts[ModContent.ProjectileType<ExposingCream>())] != 0)
-                {
-                    for (int i = 0; i < layers.Count; i++)
-                    {
-                        layers[i].visible = false;
-                    }
-                }
-            }
-
-            int headLayer = layers.FindIndex(l => l == PlayerLayer.Head);       //Finding the head layer then as long as it exists we insert the armor over it
-            if (headLayer > -1)
-            {
-                layers.Insert(headLayer + 1, PhantomHoodLongGlowmask);
-                layers.Insert(headLayer + 1, PhantomHoodNeutralGlowmask);
-                layers.Insert(headLayer + 1, PhantomHoodShortGlowmask);
-                layers.Insert(headLayer + 1, BlackUmbrellaLayer);
-            }
-            int bodyLayer = layers.FindIndex(l => l == PlayerLayer.Body);
-            if (bodyLayer > -1)
-            {
-                layers.Insert(bodyLayer + 1, PhantomChestplateGlowmask);
-                int armsLayer = layers.FindIndex(l => l == PlayerLayer.Arms);
-                if (armsLayer > -1)
-                {
-                    layers.Insert(armsLayer + 1, PhantomArmsGlowmask);
-                }
-            }
-            int legsLayer = layers.FindIndex(l => l == PlayerLayer.Legs);
-            if (legsLayer > -1)
-            {
-                layers.Insert(legsLayer + 1, PhantomLeggingsGlowmask);
-            }
-
-            layers.Add(AerosmithRadarCam);
-            layers.Add(KCArmLayer);
-            layers.Add(MenacingPose);
-            layers.Add(CenturyBoyActivated);
-            layers.Add(SexPistolsLayer);
-            layers.Add(HermitPurpleBodyLayer);
-            layers.Add(HermitPurpleArmsLayer);
         }
     }
 }

@@ -75,7 +75,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             }
             Vector2 rota = Projectile.Center - Main.MouseWorld;
             Projectile.rotation = (-rota * Projectile.direction).ToRotation();
-            bombless = player.HasBuff(ModContent.BuffType<AbilityCooldown>();
+            bombless = player.HasBuff(ModContent.BuffType<AbilityCooldown>());
             Projectile.tileCollide = true;
 
             if (!mPlayer.standAutoMode)
@@ -133,9 +133,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 }
                 if (SpecialKeyPressedNoCooldown() && !bombless && player.whoAmI == Main.myPlayer)
                 {
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(, mPlayer.AbilityCooldownTime(10));
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
                     shootCount += newShootTime;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AerosmithBomb>(, 0, 3f, Projectile.owner, (projectileDamage + 21f) * (float)mPlayer.standDamageBoosts);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AerosmithBomb>(), 0, 3f, Projectile.owner, (projectileDamage + 21f) * (float)mPlayer.standDamageBoosts);
                     Main.projectile[proj].netUpdate = true;
                 }
             }

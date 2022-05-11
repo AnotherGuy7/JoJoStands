@@ -1,10 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JoJoStands.Buffs.ItemBuff;
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio
-
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.PlayerStands.SexPistols
 {
@@ -32,7 +31,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
             {
                 Projectile.timeLeft = 2;
@@ -101,7 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                             redirectionVelocity *= 16f;
                             otherProjectile.velocity = redirectionVelocity;
                             otherProjectile.penetrate += 1 + (mPlayer.sexPistolsTier / 2);
-                            otherProjectile.GetGlobalProjectile<JoJoGlobalProjectile>()).kickedBySexPistols = true;
+                            otherProjectile.GetGlobalProjectile<JoJoGlobalProjectile>().kickedBySexPistols = true;
                             SoundEngine.PlaySound(SoundID.Tink, (int)otherProjectile.Center.X, (int)otherProjectile.Center.Y, 1, 1f, 5f);
                             break;
                         }

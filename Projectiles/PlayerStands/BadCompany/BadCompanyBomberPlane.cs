@@ -1,7 +1,8 @@
-using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
@@ -34,12 +35,12 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 shootCount--;
             }
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
             {
                 Projectile.timeLeft = 2;
             }
-            PlayAnimation("BomberPlane>();
+            PlayAnimation("BomberPlane");
 
             if (!setStats)
             {
@@ -72,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanyBomberPlane>();
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/BadCompany/BadCompanyBomberPlane");
 
             AnimateStand(animationName, 3, 11, true);
         }

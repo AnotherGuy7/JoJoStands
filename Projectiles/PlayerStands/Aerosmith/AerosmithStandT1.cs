@@ -53,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;

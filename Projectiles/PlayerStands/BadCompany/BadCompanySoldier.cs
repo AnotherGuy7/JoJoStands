@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -33,7 +34,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
                 Projectile.timeLeft = 2;
 
@@ -82,11 +83,11 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 {
                     if (Main.MouseWorld.Y > Projectile.position.Y + centerDistance)
                     {
-                        PlayAnimation("AimDown>();
+                        PlayAnimation("AimDown");
                     }
                     else if (Main.MouseWorld.Y < Projectile.position.Y - centerDistance)
                     {
-                        PlayAnimation("AimUp>();
+                        PlayAnimation("AimUp");
                     }
                 }
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
@@ -123,11 +124,11 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     {
                         if (target.position.Y > Projectile.position.Y + centerDistance)
                         {
-                            PlayAnimation("AimDown>();
+                            PlayAnimation("AimDown");
                         }
                         if (target.position.Y < Projectile.position.Y - centerDistance)
                         {
-                            PlayAnimation("AimUp>();
+                            PlayAnimation("AimUp");
                         }
                     }
 
@@ -201,7 +202,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
             if (Projectile.ai[0] == 0f)
             {
-                PlayAnimation("Walk>();
+                PlayAnimation("Walk");
                 Projectile.tileCollide = true;
                 if (Projectile.velocity.Y < 6f)
                 {
@@ -220,7 +221,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             float distance = Vector2.Distance(player.Center, Projectile.Center);
             if (Projectile.ai[0] == 1f)        //Flying
             {
-                PlayAnimation("Parachute>();
+                PlayAnimation("Parachute");
                 if (distance >= MaxFlyingIdleDistance)
                 {
                     if (Math.Abs(player.velocity.X) > 1f || Math.Abs(player.velocity.Y) > 1f)
@@ -246,25 +247,25 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/BadCompany/BadCompanySoldier_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/BadCompany/BadCompanySoldier_" + animationName);
 
-            if (animationName == "Parachute>()
+            if (animationName == "Parachute")
             {
                 AnimateStand(animationName, 1, 120, true);
             }
-            if (animationName == "Prone>()
+            if (animationName == "Prone")
             {
                 AnimateStand(animationName, 1, 120, true);
             }
-            if (animationName == "AimUp>()
+            if (animationName == "AimUp")
             {
                 AnimateStand(animationName, 1, 120, true);
             }
-            if (animationName == "AimDown>()
+            if (animationName == "AimDown")
             {
                 AnimateStand(animationName, 1, 120, true);
             }
-            if (animationName == "Walk>()
+            if (animationName == "Walk")
             {
                 AnimateStand(animationName, 4, 20 - (int)Projectile.velocity.X, true);
             }

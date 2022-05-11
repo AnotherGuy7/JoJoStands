@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Tusk
 {
@@ -32,7 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
             SelectAnimation();
             UpdateStandInfo();
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             if (shootCount > 0)
                 shootCount--;
@@ -43,7 +44,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
             {
                 if (JoJoStands.SoundsLoaded && !playedSpawnCry)
                 {
-                    Terraria.Audio.LegacySoundStyle chumimiiin = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Chumimiiin>();
+                    LegacySoundStyle chumimiiin = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Chumimiiin");
                     chumimiiin.WithVolume(MyPlayer.ModSoundsVolume);
                     SoundEngine.PlaySound(chumimiiin, Projectile.position);
                     playedSpawnCry = true;
@@ -128,7 +129,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
         private readonly Vector2 rectangleCenterOffset = new Vector2(57f, 36f);
 
 
-        public override bool PreDrawExtras(SpriteBatch spriteBatch)
+        public override bool PreDrawExtras()
         {
             if (goldenRectangleEffectTimer > 0)
             {
@@ -137,7 +138,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 {
                     rectangleOffset = new Vector2(-30f, 0f);
                 }*/
-                spriteBatch.Draw(Mod.GetTexture("Extras/GoldenSpinComplete>(), ((Projectile.Center + new Vector2(-10 * Projectile.spriteDirection, 0f)) + rectangleOffset) - Main.screenPosition - rectangleCenterOffset, Color.White * (((float)goldenRectangleEffectTimer * 3.9215f) / 1000f));
+                Main.EntitySpriteDraw((Texture2D)ModContent.Request<Texture2D>("Extras/GoldenSpinComplete"), ((Projectile.Center + new Vector2(-10 * Projectile.spriteDirection, 0f)) + rectangleOffset) - Main.screenPosition - rectangleCenterOffset, null, Color.White * (((float)goldenRectangleEffectTimer * 3.9215f) / 1000f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             return true;
         }
@@ -147,24 +148,24 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/Tusk/TuskAct4_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Tusk/TuskAct4_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 12, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }

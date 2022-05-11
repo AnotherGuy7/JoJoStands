@@ -116,7 +116,7 @@ namespace JoJoStands.Projectiles
                 sinTimer = 0;
 
             if (stringTexture == null)
-                stringTexture = Mod.GetTexture("Projectiles/StoneFreeString_Part>();
+                stringTexture = Mod.Assets.Request<Texture2D>("Projectiles/StoneFreeString_Part>().Value;
 
             if (linkWhoAmI != -1)
             {
@@ -142,7 +142,7 @@ namespace JoJoStands.Projectiles
                         lightLevelIndex = 0f;
                     }
 
-                    spriteBatch.Draw(stringTexture, pos, new Rectangle(0, 0, stringTexture.Width, stringTexture.Height), drawColor, stringRotation, new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f), Projectile.scale * stringScale, SpriteEffects.None, 0f);
+                    Main.EntitySpriteDraw(stringTexture, pos, new Rectangle(0, 0, stringTexture.Width, stringTexture.Height), drawColor, stringRotation, new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f), Projectile.scale * stringScale, SpriteEffects.None, 0f);
                 }
             }
             return false;

@@ -1,10 +1,12 @@
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Items.Hamon;
+using JoJoStands.Items.Vampire;
+using JoJoStands.Projectiles;
+using JoJoStands.UI;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using JoJoStands.UI;
-using JoJoStands.Items.Vampire;
-using JoJoStands.Items.Hamon;
 
 namespace JoJoStands.NPCs.TownNPCs
 {
@@ -15,23 +17,23 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override void SetDefaults()
         {
-            npc.townNPC = true;
-            npc.friendly = true;
-            npc.width = 18;
-            npc.height = 46;
-            npc.aiStyle = 7;
-            npc.defense = 29;
-            npc.lifeMax = 460;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 1f;
-            Main.npcFrameCount[npc.type] = 25;
-            NPCID.Sets.ExtraFramesCount[npc.type] = 9;
-            NPCID.Sets.AttackFrameCount[npc.type] = 4;
-            NPCID.Sets.DangerDetectRange[npc.type] = 48;
-            NPCID.Sets.AttackType[npc.type] = 1;
-            NPCID.Sets.HatOffsetY[npc.type] = 4;
-            animationType = NPCID.Guide;
+            NPC.townNPC = true;
+            NPC.friendly = true;
+            NPC.width = 18;
+            NPC.height = 46;
+            NPC.aiStyle = 7;
+            NPC.defense = 29;
+            NPC.lifeMax = 460;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 1f;
+            Main.npcFrameCount[NPC.type] = 25;
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
+            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
+            NPCID.Sets.DangerDetectRange[NPC.type] = 48;
+            NPCID.Sets.AttackType[NPC.type] = 1;
+            NPCID.Sets.HatOffsetY[NPC.type] = 4;
+            AnimationType = NPCID.Guide;
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs, int money)
@@ -39,9 +41,13 @@ namespace JoJoStands.NPCs.TownNPCs
             return true;
         }
 
-        public override string TownNPCName()
+        public override List<string> SetNPCNameList()
         {
-            return "Zeppeli";
+            List<string> possibleNames = new List<string>();
+
+            possibleNames.Add("Zeppeli");
+
+            return possibleNames;
         }
 
         public override void SetChatButtons(ref string button, ref string button2)
@@ -52,7 +58,7 @@ namespace JoJoStands.NPCs.TownNPCs
         public override void OnChatButtonClicked(bool firstButton, ref bool openShop)
         {
             Player player = Main.LocalPlayer;
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>());
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (firstButton)
             {
                 if (hPlayer.learnedHamon)
@@ -61,10 +67,10 @@ namespace JoJoStands.NPCs.TownNPCs
                     return;
                 }
 
-                if (player.CountItem(ModContent.ItemType<SunDroplet>())) >= 5)
+                if (player.CountItem(ModContent.ItemType<SunDroplet>()) >= 5)
                 {
                     for (int i = 0; i < 5; i++)
-                        player.ConsumeItem(ModContent.ItemType<SunDroplet>()));
+                        player.ConsumeItem(ModContent.ItemType<SunDroplet>());
                     hPlayer.learnedHamon = true;
                     hPlayer.skillPointsAvailable = 1;
 
@@ -87,7 +93,7 @@ namespace JoJoStands.NPCs.TownNPCs
         public override string GetChat()       //Allows you to give this town NPC a chat message when a player talks to it.
         {
             Player player = Main.LocalPlayer;
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>());
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (!vPlayer.vampire)
             {
                 switch (Main.rand.Next(0, 4 + 1))
@@ -144,7 +150,7 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             if (!punchesActive)
             {
-                projType = ModContent.ProjectileType<ZeppeliHamonPunches>());
+                projType = ModContent.ProjectileType<ZeppeliHamonPunches>();
                 attackDelay = 1;
             }
         }

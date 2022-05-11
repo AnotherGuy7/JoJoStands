@@ -1,12 +1,11 @@
-using System;
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class ChainedClawProjectile : ModProjectile
@@ -31,7 +30,7 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>());
+            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (Main.player[Projectile.owner].dead)
             {
                 Projectile.Kill();
@@ -139,12 +138,12 @@ namespace JoJoStands.Projectiles
 
         private Texture2D stringPartTexture;
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
 
             if (Main.netMode != NetmodeID.Server && stringPartTexture == null)
-                stringPartTexture = Mod.GetTexture("Projectiles/ChainedClaw_Chain>();
+                stringPartTexture = Mod.Assets.Request<Texture2D>("Projectiles/ChainedClaw_Chain").Value;
 
             Vector2 linkCenter = player.Center;
             Vector2 center = Projectile.Center;
@@ -153,7 +152,7 @@ namespace JoJoStands.Projectiles
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / stringPartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                spriteBatch.Draw(stringPartTexture, pos, new Rectangle(0, 0, stringPartTexture.Width, stringPartTexture.Height), lightColor, rotation, new Vector2(stringPartTexture.Width * 0.5f, stringPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(stringPartTexture, pos, new Rectangle(0, 0, stringPartTexture.Width, stringPartTexture.Height), lightColor, rotation, new Vector2(stringPartTexture.Width * 0.5f, stringPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0);
             }
             return true;
         }

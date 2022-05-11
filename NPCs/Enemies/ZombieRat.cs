@@ -1,9 +1,9 @@
-using Microsoft.Xna.Framework;
+using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Buffs.Debuffs;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -11,122 +11,118 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 9;
+            Main.npcFrameCount[NPC.type] = 9;
         }
 
         public override void SetDefaults()
         {
-            npc.width = 48;
-            npc.height = 28;
-            npc.defense = 3;
-            npc.lifeMax = 35;
-            npc.damage = 12;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 1.8f;
-            npc.chaseable = true;
-            npc.noGravity = false;
-            npc.aiStyle = 0;
+            NPC.width = 48;
+            NPC.height = 28;
+            NPC.defense = 3;
+            NPC.lifeMax = 35;
+            NPC.damage = 12;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 1.8f;
+            NPC.chaseable = true;
+            NPC.noGravity = false;
+            NPC.aiStyle = 0;
+            NPC.value = 70;
         }
 
-        //npc.ai[0] = state (1 = Falling; 2 = Walking)
-        //npc.ai[1] = jump cooldown
-        //npc.ai[2] = whether or not it's being held by the bird
+        //NPC.ai[0] = state (1 = Falling; 2 = Walking)
+        //NPC.ai[1] = jump cooldown
+        //NPC.ai[2] = whether or not it's being held by the bird
 
         private const float AccelerationVelocity = 0.31f;
 
         public override void AI()
         {
-            npc.AddBuff(ModContent.BuffType<Vampire>(), 2);
-            if (npc.HasBuff(ModContent.BuffType<Sunburn>()))
+            NPC.AddBuff(ModContent.BuffType<Vampire>(), 2);
+            if (NPC.HasBuff(ModContent.BuffType<Sunburn>()))
             {
-                npc.defense = 0;
-                npc.damage = 0;
+                NPC.defense = 0;
+                NPC.damage = 0;
                 for (int i = 0; i < 9; i++)
                 {
-                    Dust.NewDust(npc.position, npc.width, npc.height, DustID.Smoke, Main.rand.NextFloat(-0.6f, 0.6f + 1f), Main.rand.NextFloat(-0.6f, 1f));
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Smoke, Main.rand.NextFloat(-0.6f, 0.6f + 1f), Main.rand.NextFloat(-0.6f, 1f));
                 }
-                npc.life = 0;
-                npc.checkDead();
+                NPC.life = 0;
+                NPC.checkDead();
             }
 
-            if (npc.ai[2] == 0f)
+            if (NPC.ai[2] == 0f)
             {
                 return;
             }
 
-            Player target = Main.player[npc.target];
-            if (target.dead || npc.target == -1)
+            Player target = Main.player[NPC.target];
+            if (target.dead || NPC.target == -1)
             {
-                npc.TargetClosest();
+                NPC.TargetClosest();
             }
 
-            if (npc.ai[1] > 0)
+            if (NPC.ai[1] > 0)
             {
-                npc.ai[1] -= 1;
+                NPC.ai[1] -= 1;
             }
-            if (npc.velocity.Y < 3f)
+            if (NPC.velocity.Y < 3f)
             {
-                npc.velocity.Y += 0.05f;
+                NPC.velocity.Y += 0.05f;
             }
 
-            if (target.position.X > npc.position.X)
+            if (target.position.X > NPC.position.X)
             {
-                npc.direction = 1;
+                NPC.direction = 1;
             }
             else
             {
-                npc.direction = -1;
+                NPC.direction = -1;
             }
 
-            if (Math.Abs(npc.velocity.X) <= 6f)
+            if (Math.Abs(NPC.velocity.X) <= 6f)
             {
-                npc.velocity.X += AccelerationVelocity * npc.direction;
+                NPC.velocity.X += AccelerationVelocity * NPC.direction;
             }
 
-            if (WorldGen.SolidOrSlopedTile((int)(npc.position.X / 16) + (int)Math.Ceiling(npc.width / 16f) + 1 * npc.direction, (int)(npc.position.Y / 16f) + (int)Math.Ceiling(npc.height / 16f) - 1) && npc.ai[1] <= 0f)
+            if (WorldGen.SolidOrSlopedTile((int)(NPC.position.X / 16) + (int)Math.Ceiling(NPC.width / 16f) + 1 * NPC.direction, (int)(NPC.position.Y / 16f) + (int)Math.Ceiling(NPC.height / 16f) - 1) && NPC.ai[1] <= 0f)
             {
-                npc.velocity.Y = -6f;
-                npc.frameCounter = -40;     //This is to delay animations
-                npc.ai[1] = 60f;
+                NPC.velocity.Y = -6f;
+                NPC.frameCounter = -40;     //This is to delay animations
+                NPC.ai[1] = 60f;
             }
-    }
-
-        public override void NPCLoot()
-        {
-            Item.NewItem(npc.getRect(), ItemID.CopperCoin, Main.rand.Next(0, 99 + 1));
         }
 
         private int frame = 0;
 
         public override void FindFrame(int frameHeight)
         {
-            if (npc.ai[2] == 0f)
+            if (NPC.ai[2] == 0f)
             {
                 return;
             }
 
             frameHeight = 28;
-            npc.spriteDirection = -npc.direction;
-            if (npc.ai[2] == 0f)
+            NPC.spriteDirection = -NPC.direction;
+            if (NPC.ai[2] == 0f)
             {
                 frame = 0;
             }
-            else if (npc.ai[2] == 1f && npc.ai[1] <= 0f)
+            else if (NPC.ai[2] == 1f && NPC.ai[1] <= 0f)
             {
-                npc.frameCounter += Math.Abs(npc.velocity.X);
-                if (npc.frameCounter >= 4)
+                NPC.frameCounter += Math.Abs(NPC.velocity.X);
+                if (NPC.frameCounter >= 4)
                 {
                     frame++;
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
 
-                    if (frame >= Main.npcFrameCount[npc.type])
+                    if (frame >= Main.npcFrameCount[NPC.type])
                     {
                         frame = 1;
                     }
                 }
             }
-            npc.frame.Y = frame * frameHeight;
+            NPC.frame.Y = frame * frameHeight;
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

@@ -1,9 +1,11 @@
+using JoJoStands.Items;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -11,22 +13,22 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 12; //this defines how many frames the npc sprite sheet has
+            Main.npcFrameCount[NPC.type] = 12; //this defines how many frames the NPC sprite sheet has
         }
 
         public override void SetDefaults()
         {
-            npc.width = 38; //the npc sprite width
-            npc.height = 32;  //the npc sprite height
-            npc.defense = 13;  //the npc defense
-            npc.lifeMax = 180;  // the npc life
-            npc.HitSound = SoundID.NPCHit1;  //the npc sound when is hit
-            npc.DeathSound = SoundID.NPCDeath1;  //the npc sound when he dies
-            npc.knockBackResist = 2f;  //the npc knockback resistance
-            npc.chaseable = true;       //whether or not minions can chase this npc
-            npc.damage = 14;       //the damage the npc does
-            npc.aiStyle = 0;        //no AI, to run void AI()
-            npc.noGravity = true;
+            NPC.width = 38; //the NPC sprite width
+            NPC.height = 32;  //the NPC sprite height
+            NPC.defense = 13;  //the NPC defense
+            NPC.lifeMax = 180;  // the NPC life
+            NPC.HitSound = SoundID.NPCHit1;  //the NPC sound when is hit
+            NPC.DeathSound = SoundID.NPCDeath1;  //the NPC sound when he dies
+            NPC.knockBackResist = 2f;  //the NPC knockback resistance
+            NPC.chaseable = true;       //whether or not minions can chase this NPC
+            NPC.damage = 14;       //the damage the NPC does
+            NPC.aiStyle = 0;        //no AI, to run void AI()
+            NPC.noGravity = true;
         }
 
         public float targetDistance = 0f;
@@ -45,105 +47,105 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void AI()
         {
-            Player target = Main.player[npc.target];
-            if (npc.life <= npc.lifeMax * 0.1)
+            Player target = Main.player[NPC.target];
+            if (NPC.life <= NPC.lifeMax * 0.1)
             {
                 runningAway = true;
-                npc.netUpdate = true;
+                NPC.netUpdate = true;
             }
-            if (npc.position.X > target.position.X)
+            if (NPC.position.X > target.position.X)
             {
-                npc.velocity.X = baseSpeed + 0.2f;
+                NPC.velocity.X = baseSpeed + 0.2f;
             }
-            if (npc.position.X <= target.position.X)
+            if (NPC.position.X <= target.position.X)
             {
-                npc.velocity.X = -baseSpeed;
+                NPC.velocity.X = -baseSpeed;
             }
             if (runningAway)
             {
-                if (npc.position.X > target.position.X)
+                if (NPC.position.X > target.position.X)
                 {
-                    npc.velocity.X = baseSpeed + 0.2f;
+                    NPC.velocity.X = baseSpeed + 0.2f;
                 }
-                if (npc.position.X <= target.position.X)
+                if (NPC.position.X <= target.position.X)
                 {
-                    npc.velocity.X = -baseSpeed;
+                    NPC.velocity.X = -baseSpeed;
                 }
             }
             if (!runningAway && !hasNoArrow && !dashing)
             {
-                if (npc.Center.X < target.position.X - 3f)
+                if (NPC.Center.X < target.position.X - 3f)
                 {
-                    npc.velocity.X = baseSpeed;
+                    NPC.velocity.X = baseSpeed;
                 }
-                if (npc.Center.X > target.position.X + 3f)
+                if (NPC.Center.X > target.position.X + 3f)
                 {
-                    npc.velocity.X = -baseSpeed;
+                    NPC.velocity.X = -baseSpeed;
                 }
-                if (npc.Center.X > target.position.X - 3f && npc.Center.X < target.position.X + 3f)
+                if (NPC.Center.X > target.position.X - 3f && NPC.Center.X < target.position.X + 3f)
                 {
-                    npc.velocity.X = 0f;
+                    NPC.velocity.X = 0f;
                 }
-                if (npc.Center.Y > target.position.Y + 3f)
+                if (NPC.Center.Y > target.position.Y + 3f)
                 {
-                    npc.velocity.Y = -baseSpeed;
+                    NPC.velocity.Y = -baseSpeed;
                 }
-                if (npc.Center.Y < target.position.Y - 3f)
+                if (NPC.Center.Y < target.position.Y - 3f)
                 {
-                    npc.velocity.Y = baseSpeed;
+                    NPC.velocity.Y = baseSpeed;
                 }
-                if (npc.Center.Y < target.position.Y + 3f && npc.Center.Y > target.position.Y - 3f)       //so that he keeps going until he reaches target.position.Y +- 5f
+                if (NPC.Center.Y < target.position.Y + 3f && NPC.Center.Y > target.position.Y - 3f)       //so that he keeps going until he reaches target.position.Y +- 5f
                 {
-                    npc.velocity.Y = 0f;
+                    NPC.velocity.Y = 0f;
                 }
-                npc.netUpdate = true;
+                NPC.netUpdate = true;
             }
             if (!dashing)
             {
-                if (npc.velocity.X > 0)
+                if (NPC.velocity.X > 0)
                 {
-                    npc.direction = 1;
+                    NPC.direction = 1;
                     tileDetectionAddition = 3;
                 }
-                if (npc.velocity.X < 0)
+                if (NPC.velocity.X < 0)
                 {
-                    npc.direction = -1;
+                    NPC.direction = -1;
                     tileDetectionAddition = -1;
                 }
             }
-            npc.spriteDirection = npc.direction;
-            if (npc.ai[0] > 0f)     //an attack timer
+            NPC.spriteDirection = NPC.direction;
+            if (NPC.ai[0] > 0f)     //an attack timer
             {
-                npc.ai[0] -= 1f;
+                NPC.ai[0] -= 1f;
             }
-            if (npc.ai[1] > 0f)     //dash timer
+            if (NPC.ai[1] > 0f)     //dash timer
             {
-                npc.velocity.X = 15 * npc.direction;
-                npc.ai[1] -= 1f;
+                NPC.velocity.X = 15 * NPC.direction;
+                NPC.ai[1] -= 1f;
             }
-            if (WorldGen.SolidTile((int)(npc.position.X / 16) + tileDetectionAddition, (int)(npc.position.Y / 16f)) || WorldGen.SolidTile((int)(npc.position.X / 16) + tileDetectionAddition, (int)(npc.position.Y / 16f) + 1) || WorldGen.SolidTile((int)(npc.position.X / 16) + tileDetectionAddition, (int)(npc.position.Y / 16f) + 2))
+            if (WorldGen.SolidTile((int)(NPC.position.X / 16) + tileDetectionAddition, (int)(NPC.position.Y / 16f)) || WorldGen.SolidTile((int)(NPC.position.X / 16) + tileDetectionAddition, (int)(NPC.position.Y / 16f) + 1) || WorldGen.SolidTile((int)(NPC.position.X / 16) + tileDetectionAddition, (int)(NPC.position.Y / 16f) + 2))
             {
-                npc.ai[3] += 1f;
+                NPC.ai[3] += 1f;
             }
-            if (npc.ai[3] >= 180f)
+            if (NPC.ai[3] >= 180f)
             {
                 paperFrames = true;
-                npc.noTileCollide = true;
+                NPC.noTileCollide = true;
             }
             if (paperFrames)
             {
-                npc.ai[3] -= 1f;
-                npc.noTileCollide = true;
-                if (npc.ai[3] <= 0)
+                NPC.ai[3] -= 1f;
+                NPC.noTileCollide = true;
+                if (NPC.ai[3] <= 0)
                 {
-                    npc.noTileCollide = false;
+                    NPC.noTileCollide = false;
                     paperFrames = false;
                 }
-                npc.netUpdate = true;
+                NPC.netUpdate = true;
             }
-            if (npc.ai[0] <= 0f && !hasNoArrow && !dashing && !throwingArrow && !paperFrames && !runningAway)
+            if (NPC.ai[0] <= 0f && !hasNoArrow && !dashing && !throwingArrow && !paperFrames && !runningAway)
             {
-                targetDistance = Vector2.Distance(npc.Center, target.Center);
+                targetDistance = Vector2.Distance(NPC.Center, target.Center);
                 if (targetDistance < 180f)
                 {
                     dashing = true;
@@ -158,17 +160,17 @@ namespace JoJoStands.NPCs.Enemies
             {
                 if (frame == 7 && yosarrowWhoAmI == -1)
                 {
-                    npc.ai[0] += 30f;
-                    Vector2 shootVel = target.Center - npc.Center;
+                    NPC.ai[0] += 30f;
+                    Vector2 shootVel = target.Center - NPC.Center;
                     if (shootVel == Vector2.Zero)
                     {
                         shootVel = new Vector2(0f, 1f);
                     }
                     shootVel.Normalize();
                     shootVel *= 16f;
-                    yosarrowWhoAmI = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.Center.X, npc.Center.Y, shootVel.X, shootVel.Y, ModContent.ProjectileType<Yosarrow>()), 21, 1f);
+                    yosarrowWhoAmI = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, shootVel, ModContent.ProjectileType<Yosarrow>(), 21, 1f);
                     Main.projectile[yosarrowWhoAmI].netUpdate = true;
-                    npc.netUpdate = true;
+                    NPC.netUpdate = true;
                 }
                 if (!throwFrames)       //goes false at the 10th frame
                 {
@@ -183,91 +185,91 @@ namespace JoJoStands.NPCs.Enemies
                 {
                     Projectile targetProjectile = Main.projectile[yosarrowWhoAmI];
                     targetProjectile.timeLeft++;
-                    targetDistance = Vector2.Distance(npc.Center, targetProjectile.Center);
-                    if (npc.Center.X < targetProjectile.position.X - 5f)
+                    targetDistance = Vector2.Distance(NPC.Center, targetProjectile.Center);
+                    if (NPC.Center.X < targetProjectile.position.X - 5f)
                     {
-                        npc.velocity.X = 5f;
-                        npc.direction = 1;
+                        NPC.velocity.X = 5f;
+                        NPC.direction = 1;
                     }
-                    if (npc.Center.X > targetProjectile.position.X + 5f)
+                    if (NPC.Center.X > targetProjectile.position.X + 5f)
                     {
-                        npc.velocity.X = -5f;
-                        npc.direction = -1;
+                        NPC.velocity.X = -5f;
+                        NPC.direction = -1;
                     }
-                    if (npc.Center.X > targetProjectile.position.X - 5f && npc.Center.X < targetProjectile.position.X + 5f)
+                    if (NPC.Center.X > targetProjectile.position.X - 5f && NPC.Center.X < targetProjectile.position.X + 5f)
                     {
-                        npc.velocity.X = 0f;
+                        NPC.velocity.X = 0f;
                     }
-                    if (npc.Center.Y > targetProjectile.position.Y + 5f)
+                    if (NPC.Center.Y > targetProjectile.position.Y + 5f)
                     {
-                        npc.velocity.Y = -5f;
+                        NPC.velocity.Y = -5f;
                     }
-                    if (npc.Center.Y < targetProjectile.position.Y - 5f)
+                    if (NPC.Center.Y < targetProjectile.position.Y - 5f)
                     {
-                        npc.velocity.Y = 5f;
+                        NPC.velocity.Y = 5f;
                     }
-                    if (npc.Center.Y < targetProjectile.position.Y + 5f && npc.Center.Y > targetProjectile.position.Y - 5f)
+                    if (NPC.Center.Y < targetProjectile.position.Y + 5f && NPC.Center.Y > targetProjectile.position.Y - 5f)
                     {
-                        npc.velocity.Y = 0f;
+                        NPC.velocity.Y = 0f;
                     }
                     if (targetDistance < 20f)
                     {
                         Main.projectile[yosarrowWhoAmI].Kill();
                         yosarrowWhoAmI = -1;
-                        npc.ai[0] += 150f + Main.rand.Next(0, 31);
-                        npc.netUpdate = true;
+                        NPC.ai[0] += 150f + Main.rand.Next(0, 31);
+                        NPC.netUpdate = true;
                         hasNoArrow = false;
                     }
                 }
                 if (yosarrowWhoAmI == -1)       //in case the projectlie dies somehow
                 {
-                    npc.ai[0] += 150f + Main.rand.Next(0, 31);
+                    NPC.ai[0] += 150f + Main.rand.Next(0, 31);
                     hasNoArrow = false;
-                    npc.netUpdate = true;
+                    NPC.netUpdate = true;
                 }
             }
             if (dashing)
             {
                 dashFrames = true;
-                if (npc.ai[1] <= 0f)
+                if (NPC.ai[1] <= 0f)
                 {
-                    npc.ai[1] += 45f;
-                    if (npc.Center.X < target.Center.X)
+                    NPC.ai[1] += 45f;
+                    if (NPC.Center.X < target.Center.X)
                     {
                         timesDashed += 1;
-                        npc.ai[2] = 1f;
+                        NPC.ai[2] = 1f;
                     }
-                    if (npc.Center.X > target.Center.X)
+                    if (NPC.Center.X > target.Center.X)
                     {
                         timesDashed += 1;
-                        npc.ai[2] = -1f;
+                        NPC.ai[2] = -1f;
                     }
                 }
-                if (npc.ai[2] == 1f)
+                if (NPC.ai[2] == 1f)
                 {
-                    npc.velocity.X = 15f;
-                    npc.velocity.Y = 0f;
-                    npc.direction = 1;
+                    NPC.velocity.X = 15f;
+                    NPC.velocity.Y = 0f;
+                    NPC.direction = 1;
                 }
-                if (npc.ai[2] == -1f)
+                if (NPC.ai[2] == -1f)
                 {
-                    npc.velocity.X = -15f;
-                    npc.velocity.Y = 0f;
-                    npc.direction = -1;
+                    NPC.velocity.X = -15f;
+                    NPC.velocity.Y = 0f;
+                    NPC.direction = -1;
                 }
-                if (npc.ai[2] != 0 && npc.ai[1] <= 10f)
+                if (NPC.ai[2] != 0 && NPC.ai[1] <= 10f)
                 {
-                    npc.ai[2] = 0f;
-                    npc.velocity = Vector2.Zero;
+                    NPC.ai[2] = 0f;
+                    NPC.velocity = Vector2.Zero;
                 }
                 if (timesDashed >= 3)
                 {
                     timesDashed = 0;
-                    npc.ai[0] += 150f + Main.rand.Next(0, 31);
+                    NPC.ai[0] += 150f + Main.rand.Next(0, 31);
                     dashFrames = false;
                     dashing = false;
                 }
-                npc.netUpdate = true;
+                NPC.netUpdate = true;
             }
         }
 
@@ -292,14 +294,14 @@ namespace JoJoStands.NPCs.Enemies
         public override void FindFrame(int frameHeight)
         {
             frameHeight = 38;
-            npc.spriteDirection = npc.direction;
-            npc.frameCounter++;
+            NPC.spriteDirection = NPC.direction;
+            NPC.frameCounter++;
             if (!hasNoArrow && !dashFrames && !throwFrames && !paperFrames)
             {
-                if (npc.frameCounter >= 12)
+                if (NPC.frameCounter >= 12)
                 {
                     frame += 1;
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
                 }
                 if (frame >= 4)
                 {
@@ -312,10 +314,10 @@ namespace JoJoStands.NPCs.Enemies
             }
             if (dashFrames)
             {
-                if (npc.frameCounter >= 12 && frame > 5)
+                if (NPC.frameCounter >= 12 && frame > 5)
                 {
                     frame += 1;
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
                 }
                 if (frame >= 6)
                 {
@@ -328,16 +330,16 @@ namespace JoJoStands.NPCs.Enemies
             }
             if (throwFrames)
             {
-                if (npc.frameCounter >= 20)
+                if (NPC.frameCounter >= 20)
                 {
                     if (frame != 9)
                     {
                         frame += 1;
-                        npc.frameCounter = 0;
+                        NPC.frameCounter = 0;
                     }
                     if (frame == 9)
                     {
-                        npc.frameCounter = 0;
+                        NPC.frameCounter = 0;
                         frame = 9;
                         throwFrames = false;
                     }
@@ -354,10 +356,10 @@ namespace JoJoStands.NPCs.Enemies
             }
             if (hasNoArrow)
             {
-                if (npc.frameCounter >= 12)
+                if (NPC.frameCounter >= 12)
                 {
                     frame += 1;
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
                 }
                 if (frame >= 2)
                 {
@@ -366,10 +368,10 @@ namespace JoJoStands.NPCs.Enemies
             }
             if (paperFrames)
             {
-                if (npc.frameCounter >= 12)
+                if (NPC.frameCounter >= 12)
                 {
                     frame += 1;
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
                 }
                 if (frame <= 9)
                 {
@@ -380,12 +382,12 @@ namespace JoJoStands.NPCs.Enemies
                     frame = 10;
                 }
             }
-            npc.frame.Y = frame * frameHeight;
+            NPC.frame.Y = frame * frameHeight;
         }
 
-        public override void NPCLoot()
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            Item.NewItem(npc.getRect(), ModContent.ItemType<StandArrow>()), 1);
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<StandArrow>(), 1));
         }
     }
 }

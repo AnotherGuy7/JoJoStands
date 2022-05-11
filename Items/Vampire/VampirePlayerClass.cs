@@ -594,10 +594,10 @@ namespace JoJoStands.Items.Vampire
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod Mod = ModLoader.GetMod("JoJoStands>();
-            VampirePlayer vampirePlayer = drawPlayer.GetModPlayer<VampirePlayer>());
+            VampirePlayer vampirePlayer = drawplayer.GetModPlayer<VampirePlayer>();
             if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<ProtectiveFilmBuff>()))
             {
-                Texture2D texture = Mod.GetTexture("Extras/ProtectiveFilmLayer>();
+                Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/ProtectiveFilmLayer>().Value;
                 int drawX = (int)drawInfo.position.X;
                 int drawY = (int)(drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
                 Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
@@ -617,10 +617,10 @@ namespace JoJoStands.Items.Vampire
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Mod Mod = ModLoader.GetMod("JoJoStands>();
-            VampirePlayer vampirePlayer = drawPlayer.GetModPlayer<VampirePlayer>());
+            VampirePlayer vampirePlayer = drawplayer.GetModPlayer<VampirePlayer>();
             if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<KnifeAmalgamation>()))
             {
-                Texture2D texture = Mod.GetTexture("Extras/KnivesLayer>();
+                Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/KnivesLayer>().Value;
                 int drawX = (int)drawInfo.position.X;
                 int drawY = (int)(drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
                 Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;

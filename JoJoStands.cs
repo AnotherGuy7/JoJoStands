@@ -24,6 +24,7 @@ using JoJoStands.Projectiles.PlayerStands.TestStand;
 using JoJoStands.Items.Tiles;
 using JoJoStands.Tiles;
 using JoJoStands.Items.CraftingMaterials;
+using Terraria.Audio;
 
 namespace JoJoStands
 {
@@ -251,7 +252,8 @@ namespace JoJoStands
                 Filters.Scene["BiteTheDustEffect"].Load();
 
                 //Misc
-                AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic"), ItemType<ViralMusicBox>(), TileType<ViralMusicBoxTile>());
+                AddMusicBox(SoundLoader.GetSoundSlot(SoundType.Music, "Sounds/Music/VMMusic"), ItemType<ViralMusicBox>(), TileType<ViralMusicBoxTile>());
+                
             }
         }
 

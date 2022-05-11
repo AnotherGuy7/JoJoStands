@@ -1,9 +1,11 @@
 using JoJoStands.NPCs;
+using JoJoStands.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 {
@@ -36,7 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -92,8 +94,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                         shootCount += 20;
                                         touchedNPC = true;
                                         foundNPCTarget = true;
-                                        npc.GetGlobalNPC<JoJoGlobalNPC>()).taggedByKillerQueen = true;
-                                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick>());
+                                        npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByKillerQueen = true;
+                                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick"));
                                         break;
                                     }
                                 }
@@ -105,7 +107,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                     shootCount += 20;
                                     touchedTile = true;
                                     savedPosition = Main.MouseWorld;
-                                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick>());
+                                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick"));
                                 }
                             }
                         }
@@ -120,13 +122,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                 NPC npc = Main.npc[n];
                                 if (npc.active)
                                 {
-                                    JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>());
+                                    JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>();
                                     if (jojoNPC.taggedByKillerQueen)
                                     {
                                         touchedNPC = false;
-                                        int Projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
-                                        Main.projectile[Projectile].timeLeft = 2;
-                                        Main.projectile[Projectile].netUpdate = true;
+                                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
+                                        Main.projectile[projectile].timeLeft = 2;
+                                        Main.projectile[projectile].netUpdate = true;
                                         jojoNPC.taggedByKillerQueen = false;
                                         break;
                                     }
@@ -137,9 +139,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                         {
                             touchedTile = false;
                             secondaryAbilityFrames = true;
-                            int Projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
-                            Main.projectile[Projectile].timeLeft = 2;
-                            Main.projectile[Projectile].netUpdate = true;
+                            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
+                            Main.projectile[projectile].timeLeft = 2;
+                            Main.projectile[projectile].netUpdate = true;
                             savedPosition = Vector2.Zero;
                         }
                     }
@@ -179,13 +181,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     explosionTimer++;
                     if (explosionTimer == 5)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick>());
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick"));
                     }
                     if (explosionTimer >= 90)
                     {
-                        int Projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedTarget.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
-                        Main.projectile[Projectile].timeLeft = 2;
-                        Main.projectile[Projectile].netUpdate = true;
+                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedTarget.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
+                        Main.projectile[projectile].timeLeft = 2;
+                        Main.projectile[projectile].netUpdate = true;
                         explosionTimer = 0;
                         savedTarget = null;
                     }
@@ -241,9 +243,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     float npcDistance = Vector2.Distance(npc.Center, savedPosition);
                     if (npcDistance < 50f && touchedTile)       //or youd need to go from its center, add half its width to the direction its facing, and then add 16 (also with direction) -- Direwolf
                     {
-                        int Projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
-                        Main.projectile[Projectile].timeLeft = 2;
-                        Main.projectile[Projectile].netUpdate = true;
+                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
+                        Main.projectile[projectile].timeLeft = 2;
+                        Main.projectile[projectile].netUpdate = true;
                         touchedTile = false;
                         savedPosition = Vector2.Zero;
                     }
@@ -251,12 +253,12 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
             }
         }
 
-        public override bool PreDrawExtras(SpriteBatch spriteBatch)
+        public override bool PreDrawExtras()
         {
             if (touchedTile)
             {
-                Texture2D texture = Mod.GetTexture("Extras/Bomb>();
-                spriteBatch.Draw(texture, savedPosition - Main.screenPosition, new Rectangle(0, 0, 16, 16), Color.White, 0f, new Vector2(16f / 2f), 1f, SpriteEffects.None, 0);
+                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("Extras/Bomb");
+                Main.EntitySpriteDraw(texture, savedPosition - Main.screenPosition, new Rectangle(0, 0, 16, 16), Color.White, 0f, new Vector2(16f / 2f), 1f, SpriteEffects.None, 0);
             }
             return true;
         }
@@ -266,49 +268,49 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary>();
+                PlayAnimation("Secondary");
                 if (Projectile.frame >= 4)      //cause it should only click once
                 {
                     secondaryAbilityFrames = false;
                 }
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/KillerQueen/KillerQueen_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/KillerQueen/KillerQueen_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 20, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Secondary>()
+            if (animationName == "Secondary")
             {
                 AnimateStand(animationName, 6, 18, true);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 2, true);
             }

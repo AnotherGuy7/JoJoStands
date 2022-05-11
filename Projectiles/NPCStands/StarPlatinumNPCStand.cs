@@ -1,9 +1,9 @@
+using JoJoStands.NPCs.TownNPCs;
+using JoJoStands.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using JoJoStands.NPCs.TownNPCs;
 
 namespace JoJoStands.Projectiles.NPCStands
 {
@@ -49,7 +49,7 @@ namespace JoJoStands.Projectiles.NPCStands
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC npc = Main.npc[n];
-                    if (npc.type == Mod.NPCType("MarineBiologist>())
+                    if (npc.type == ModContent.NPCType<MarineBiologist>())
                     {
                         jotaro = npc;
                         break;
@@ -121,7 +121,7 @@ namespace JoJoStands.Projectiles.NPCStands
                 return;
 
             if (Projectile.ai[0] == 0f)
-            {                    
+            {
                 attackFrames = true;
                 normalFrames = false;
                 Projectile.direction = 1;

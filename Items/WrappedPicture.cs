@@ -1,10 +1,9 @@
-using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using JoJoStands.Networking;
+using JoJoStands.NPCs.Enemies;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
@@ -12,8 +11,8 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Wrapped Picture>();
-            Tooltip.SetDefault("This wrapped photo vibrates and small sounds come from it...>();
+            DisplayName.SetDefault("Wrapped Picture");
+            Tooltip.SetDefault("This wrapped photo vibrates and small sounds come from it...");
         }
 
         public override void SetDefaults()
@@ -35,7 +34,7 @@ namespace JoJoStands.Items
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                int yoshihiro = NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 25, Mod.NPCType("Yoshihiro>());
+                int yoshihiro = NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 25, ModContent.NPCType<"Yoshihiro>());
                 if (Main.netMode == NetmodeID.Server)
                 {
                     NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, yoshihiro);
@@ -46,26 +45,26 @@ namespace JoJoStands.Items
 
         public override bool? UseItem(Player player)
         {
-            if (NPC.AnyNPCs(Mod.NPCType("Yoshihiro>()))
+            if (NPC.AnyNPCs(ModContent.NPCType<Yoshihiro>()))
             {
-                Main.NewText("There is already a Yoshihiro alive!>();
+                Main.NewText("There is already a Yoshihiro alive!");
                 return false;
             }
             else
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 25, Mod.NPCType("Yoshihiro>());
+                    NPC.NewNPC(player.GetSource_FromThis(), (int)player.Center.X, (int)player.Center.Y - 25, ModContent.NPCType<Yoshihiro>());
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    ModNetHandler.playerSync.SendYoshihiroToSpawn(256, player.whoAmI, Mod.NPCType("Yoshihiro>(), new Vector2(player.Center.X, player.Center.Y - 25));
+                    ModNetHandler.playerSync.SendYoshihiroToSpawn(256, player.whoAmI, ModContent.NPCType<Yoshihiro>(), new Vector2(player.Center.X, player.Center.Y - 25));
                 }
 
             }
             /*if (player.whoAmI == Main.myPlayer)
             {
-                int yoshihiro = NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 25, Mod.NPCType("Yoshihiro>());
+                int yoshihiro = NPC.NewNPC((int)player.Center.X, (int)player.Center.Y - 25, ModContent.NPCType<"Yoshihiro>());
                 if (Main.netMode != NetmodeID.SinglePlayer)
                 {
                     NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, yoshihiro);

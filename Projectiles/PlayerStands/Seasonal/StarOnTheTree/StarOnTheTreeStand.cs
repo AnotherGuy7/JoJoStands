@@ -1,7 +1,10 @@
+using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 {
@@ -37,7 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
             if (Main.rand.Next(0, 4 + 1) == 0)
@@ -58,7 +61,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     timestopStartDelay = 240;
                 else
                 {
-                    Terraria.Audio.LegacySoundStyle zawarudo = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/StarPlatinumTheWorld>();
+                    Terraria.Audio.LegacySoundStyle zawarudo = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/StarPlatinumTheWorld");
                     zawarudo.WithVolume(MyPlayer.ModSoundsVolume);
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
@@ -115,7 +118,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                 int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
                                 Main.projectile[proj].netUpdate = true;
                                 Projectile.netUpdate = true;
-                                if (bulletItem.Name.Contains("Bullet>())
+                                if (bulletItem.Name.Contains("Bullet"))
                                     player.ConsumeItem(bulletItem.type);
                             }
                         }
@@ -179,12 +182,12 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (flickFrames)
             {
@@ -196,30 +199,30 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 }
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Flick>();
+                PlayAnimation("Flick");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
                 Projectile.frame = 0;
                 if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                 {
                     secondaryAbilityFrames = false;
                 }
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void AnimationCompleted(string animationName)
         {
-            if (resetFrame && animationName == "Flick>()
+            if (resetFrame && animationName == "Flick")
             {
                 normalFrames = true;
                 flickFrames = false;
@@ -230,21 +233,21 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/Seasonal/StarOnTheTree/StarOnTheTree_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Seasonal/StarOnTheTree/StarOnTheTree_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 12, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "Flick>()
+            if (animationName == "Flick")
             {
                 AnimateStand(animationName, 4, 10, false);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 2, 12, true);
             }

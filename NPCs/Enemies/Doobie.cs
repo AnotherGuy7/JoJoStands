@@ -1,10 +1,12 @@
+using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -12,24 +14,24 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 4;
+            Main.npcFrameCount[NPC.type] = 4;
         }
 
         public override void SetDefaults()
         {
-            npc.width = 40;
-            npc.height = 48;
-            npc.defense = 24;
-            npc.lifeMax = 400;
-            npc.damage = 75; 
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 0.5f;
-            npc.chaseable = true;
-            npc.noGravity = false;
-            npc.daybreak = true;
-            npc.aiStyle = 3;
-            aiType = 73;
+            NPC.width = 40;
+            NPC.height = 48;
+            NPC.defense = 24;
+            NPC.lifeMax = 400;
+            NPC.damage = 75;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 0.5f;
+            NPC.chaseable = true;
+            NPC.noGravity = false;
+            NPC.daybreak = true;
+            NPC.aiStyle = 3;
+            AIType = 73;
         }
 
         private int frame = 0;
@@ -48,36 +50,36 @@ namespace JoJoStands.NPCs.Enemies
                 expertboost = 2;
             }
 
-            npc.AddBuff(ModContent.BuffType<Vampire>(), 2);
-            if (npc.HasBuff(ModContent.BuffType<Sunburn>()) && waiting)
+            NPC.AddBuff(ModContent.BuffType<Vampire>(), 2);
+            if (NPC.HasBuff(ModContent.BuffType<Sunburn>()) && waiting)
             {
                 waiting = false;
                 runCounter += 150;
             }
 
-            if (npc.life > npc.lifeMax)
+            if (NPC.life > NPC.lifeMax)
             {
-                npc.life = npc.lifeMax;
+                NPC.life = NPC.lifeMax;
             }
 
-            Player target = Main.player[npc.target];
-            if (target.dead || npc.target == -1)
+            Player target = Main.player[NPC.target];
+            if (target.dead || NPC.target == -1)
             {
-                npc.TargetClosest();
+                NPC.TargetClosest();
             }
 
             if (waiting)
             {
-                npc.aiStyle = 0;
-                npc.defense = 999999999;
-                npc.velocity.X = 0;
-                npc.knockBackResist = 0f;
-                if (npc.velocity.Y != 0)
+                NPC.aiStyle = 0;
+                NPC.defense = 999999999;
+                NPC.velocity.X = 0;
+                NPC.knockBackResist = 0f;
+                if (NPC.velocity.Y != 0)
                 {
                     waiting = false;
                     runCounter += 150;
                 }
-                if (npc.Distance(target.Center) <= 150f)
+                if (NPC.Distance(target.Center) <= 150f)
                 {
                     waiting = false;
                     runCounter += 150;
@@ -86,55 +88,55 @@ namespace JoJoStands.NPCs.Enemies
 
             if (!waiting)
             {
-                aiType = 73;
-                npc.aiStyle = 3;
-                if (npc.velocity.X > 0)
+                AIType = 73;
+                NPC.aiStyle = 3;
+                if (NPC.velocity.X > 0)
                 {
-                    npc.spriteDirection = 1;
+                    NPC.spriteDirection = 1;
                 }
-                if (npc.velocity.X < 0)
+                if (NPC.velocity.X < 0)
                 {
-                    npc.spriteDirection = -1;
+                    NPC.spriteDirection = -1;
                 }
                 if (runCounter > 0)
                 {
-                    npc.damage = 100 * expertboost;
-                    npc.immortal = true;
+                    NPC.damage = 100 * expertboost;
+                    NPC.immortal = true;
                     runCounter -= 1;
-                    npc.knockBackResist = 0f;
+                    NPC.knockBackResist = 0f;
                     if (lastdirection == 0)
                     {
-                        if (npc.position.X - 25 >= target.position.X)
+                        if (NPC.position.X - 25 >= target.position.X)
                         {
-                            npc.velocity.X = -4f;
+                            NPC.velocity.X = -4f;
                         }
-                        if (npc.position.X + 25 < target.position.X)
+                        if (NPC.position.X + 25 < target.position.X)
                         {
-                            npc.velocity.X = 4f;
+                            NPC.velocity.X = 4f;
                         }
                     }
                     if (lastdirection != 0)
                     {
-                       npc.velocity.X = lastdirection * 4f;
+                        NPC.velocity.X = lastdirection * 4f;
                     }
                 }
                 if (runCounter == 0)
                 {
-                    npc.immortal = false;
+                    NPC.immortal = false;
                     if (snakeCooldown > 0)
                     {
                         snakeCooldown -= 1;
                     }
-                    npc.knockBackResist = 0.5f;
-                    if (npc.HasBuff(ModContent.BuffType<Sunburn>()))
+                    NPC.knockBackResist = 0.5f;
+                    if (NPC.HasBuff(ModContent.BuffType<Sunburn>()))
                     {
-                        npc.defense = 0;
-                        npc.damage = 30 * expertboost;
+                        NPC.defense = 0;
+                        NPC.damage = 30 * expertboost;
                     }
                     else
                     {
-                        npc.defense = 24;
-                        npc.damage = 50 * expertboost;
+                        NPC.defense = 24;
+                        NPC.damage = 50 * expertboost;
                     }
                 }
             }
@@ -154,14 +156,14 @@ namespace JoJoStands.NPCs.Enemies
                 {
                     if (typeofsnake == 1)
                     {
-                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)Mod.NPCType("DoobiesSnake>());
+                        NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Top.X, (int)NPC.Top.Y, (int)ModContent.NPCType<DoobiesSnake>());
                         typeofsnake = 0;
                         snakeCooldown += 150;
                         snakeLimit += 1;
                     }
                     if (typeofsnake == 2)
                     {
-                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)Mod.NPCType("DoobiesChimeraSnake>());
+                        NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Top.X, (int)NPC.Top.Y, (int)ModContent.NPCType<DoobiesChimeraSnake>());
                         typeofsnake = 0;
                         snakeCooldown += 150;
                         snakeLimit += 1;
@@ -185,12 +187,12 @@ namespace JoJoStands.NPCs.Enemies
                     snakeLimit += 1;
                     if (typeofsnake == 1)
                     {
-                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)Mod.NPCType("DoobiesSnake>());
+                        NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Top.X, (int)NPC.Top.Y, (int)ModContent.NPCType<DoobiesSnake>());
                         typeofsnake = 0;
                     }
                     if (typeofsnake == 2)
                     {
-                        NPC.NewNPC((int)npc.Top.X, (int)npc.Top.Y, (int)Mod.NPCType("DoobiesChimeraSnake>());
+                        NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Top.X, (int)NPC.Top.Y, (int)ModContent.NPCType<DoobiesChimeraSnake>());
                         typeofsnake = 0;
                     }
                 }
@@ -206,14 +208,14 @@ namespace JoJoStands.NPCs.Enemies
             {
                 target.AddBuff(BuffID.Poisoned, 300);
             }
-            if (npc.life < npc.lifeMax)
+            if (NPC.life < NPC.lifeMax)
             {
                 int lifeStealAmount = damage / 2;
-                npc.life += lifeStealAmount;
+                NPC.life += lifeStealAmount;
             }
             if (lastdirection == 0)
             {
-                lastdirection = npc.direction;
+                lastdirection = NPC.direction;
             }
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -226,46 +228,47 @@ namespace JoJoStands.NPCs.Enemies
             {
                 target.AddBuff(BuffID.Poisoned, 600);
             }
-            if (npc.life < npc.lifeMax)
+            if (NPC.life < NPC.lifeMax)
             {
                 int lifeStealAmount = damage / 2;
-                npc.life += lifeStealAmount;
+                NPC.life += lifeStealAmount;
             }
         }
         public override void FindFrame(int frameHeight)
         {
             frameHeight = 48;
-            if (npc.velocity != Vector2.Zero)
+            if (NPC.velocity != Vector2.Zero)
             {
-                npc.frameCounter += Math.Abs(npc.velocity.X);
-                if (npc.frameCounter >= 10)
+                NPC.frameCounter += Math.Abs(NPC.velocity.X);
+                if (NPC.frameCounter >= 10)
                 {
                     frame += 1;
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
                 }
                 if (frame >= 3)
                 {
                     frame = 0;
                 }
             }
-            npc.frame.Y = frame * frameHeight;
+            NPC.frame.Y = frame * frameHeight;
         }
-        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (runCounter > 0)
             {
-                SpriteEffects effects = (npc.spriteDirection == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                Texture2D texture2d = Mod.GetTexture("NPCs/Enemies/Doobie>();
-                Vector2 vector2 = new Vector2((Main.npcTexture[npc.type].Width / 2), (Main.npcTexture[npc.type].Height / Main.npcFrameCount[npc.type] / 2));
-                Main.spriteBatch.Draw(texture2d, new Vector2(npc.position.X - Main.screenPosition.X + (npc.width / 2) - Main.npcTexture[npc.type].Width * npc.scale / 2f + vector2.X * npc.scale, npc.position.Y - Main.screenPosition.Y + npc.height - Main.npcTexture[npc.type].Height * npc.scale / Main.npcFrameCount[npc.type] + 4f + vector2.Y * npc.scale), new Rectangle?(npc.frame), Color.White, npc.rotation, vector2, npc.scale, effects, 0f);
-                for (int i = 1; i < npc.oldPos.Length; i++)
+                SpriteEffects effects = (NPC.spriteDirection == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                Texture2D texture2d = Mod.Assets.Request<Texture2D>("NPCs/Enemies/Doobie").Value;
+                Vector2 vector2 = new Vector2((TextureAssets.Npc[NPC.type].Value.Width / 2), (TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2));
+                spriteBatch.Draw(texture2d, new Vector2(NPC.position.X - Main.screenPosition.X + (NPC.width / 2) - TextureAssets.Npc[NPC.type].Value.Width * NPC.scale / 2f + vector2.X * NPC.scale, NPC.position.Y - Main.screenPosition.Y + NPC.height - TextureAssets.Npc[NPC.type].Value.Height * NPC.scale / Main.npcFrameCount[NPC.type] + 4f + vector2.Y * NPC.scale), new Rectangle?(NPC.frame), Color.White, NPC.rotation, vector2, NPC.scale, effects, 0f);
+                for (int i = 1; i < NPC.oldPos.Length; i++)
                 {
-                    Color color = Lighting.GetColor((int)(npc.position.X + npc.width * 0.5) / 16, (int)((npc.position.Y + npc.height * 0.5) / 16.0));
+                    Color color = Lighting.GetColor((int)(NPC.position.X + NPC.width * 0.5) / 16, (int)((NPC.position.Y + NPC.height * 0.5) / 16.0));
                     Color color2 = color;
                     color2 = Color.Lerp(color2, Color.Transparent, 0.5f);
-                    color2 = npc.GetAlpha(color2);
-                    color2 *= (npc.oldPos.Length - i) / 15f;
-                    Main.spriteBatch.Draw(texture2d, new Vector2(npc.position.X - Main.screenPosition.X + (npc.width / 2) - Main.npcTexture[npc.type].Width * npc.scale / 2f + vector2.X * npc.scale, npc.position.Y - Main.screenPosition.Y + npc.height - Main.npcTexture[npc.type].Height * npc.scale / Main.npcFrameCount[npc.type] + 4f + vector2.Y * npc.scale) - npc.velocity * i * 0.5f, new Rectangle?(npc.frame), color2, npc.rotation, vector2, npc.scale, effects, 0f);
+                    color2 = NPC.GetAlpha(color2);
+                    color2 *= (NPC.oldPos.Length - i) / 15f;
+                    spriteBatch.Draw(texture2d, new Vector2(NPC.position.X - Main.screenPosition.X + (NPC.width / 2) - TextureAssets.Npc[NPC.type].Value.Width * NPC.scale / 2f + vector2.X * NPC.scale, NPC.position.Y - Main.screenPosition.Y + NPC.height - TextureAssets.Npc[NPC.type].Value.Height * NPC.scale / Main.npcFrameCount[NPC.type] + 4f + vector2.Y * NPC.scale) - NPC.velocity * i * 0.5f, new Rectangle?(NPC.frame), color2, NPC.rotation, vector2, NPC.scale, effects, 0f);
                 }
             }
             return true;
@@ -275,9 +278,8 @@ namespace JoJoStands.NPCs.Enemies
         {
             float chance = 0f;
             if (JoJoStandsWorld.VampiricNight)
-            {
                 chance = 0.01f;
-            }
+
             return chance;
         }
     }

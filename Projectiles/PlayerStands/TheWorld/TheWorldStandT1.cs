@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 
@@ -80,7 +81,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
 
             if (animationName == "Idle")
             {

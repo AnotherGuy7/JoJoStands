@@ -4,6 +4,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
@@ -41,7 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -207,11 +208,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             }
         }
 
-        public override bool PreDrawExtras(SpriteBatch spriteBatch)
+        public override bool PreDrawExtras()
         {
             if (remoteControlled)
             {
-                Texture2D armTexture = Mod.GetTexture("Projectiles/PlayerStands/Whitesnake/Whitesnake_Arm>();
+                Texture2D armTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Whitesnake/Whitesnake_Arm");
                 Vector2 armOrigin = new Vector2(4f, 12f);
                 int armFrameHeight = 16;
                 Rectangle armSourceRect = new Rectangle(0, armFrame * armFrameHeight, 56, armFrameHeight);
@@ -222,7 +223,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     armEffect = SpriteEffects.FlipVertically;
                 }
 
-                spriteBatch.Draw(armTexture, armPosition - Main.screenPosition, armSourceRect, armColor, armRotation, armOrigin, 1f, armEffect, 0f);
+                Main.EntitySpriteDraw(armTexture, armPosition - Main.screenPosition, armSourceRect, armColor, armRotation, armOrigin, 1f, armEffect, 0);
             }
             return true;
         }
@@ -232,18 +233,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack>();
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary>();
+                PlayAnimation("Secondary");
             }
             if (gunRevealFrames)
             {
@@ -251,25 +252,25 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 remoteControlFrames = false;
-                PlayAnimation("GunReveal>();
+                PlayAnimation("GunReveal");
             }
             if (remoteControlFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("RemoteControl>();
+                PlayAnimation("RemoteControl");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void AnimationCompleted(string animationName)
         {
-            if (animationName == "GunReveal>()
+            if (animationName == "GunReveal")
             {
                 remoteControlled = true;
                 gunRevealFrames = false;
@@ -279,29 +280,29 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 30, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 3, newPunchTime, true);
             }
-            if (animationName == "Secondary>()
+            if (animationName == "Secondary")
             {
                 AnimateStand(animationName, 5, 10, true);
             }
-            if (animationName == "GunReveal>()
+            if (animationName == "GunReveal")
             {
                 AnimateStand(animationName, 5, 3, false);
             }
-            if (animationName == "RemoteControl>()
+            if (animationName == "RemoteControl")
             {
                 AnimateStand(animationName, 1, 15, true);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 10, true);
             }

@@ -1,9 +1,11 @@
+using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.Enemies
 {
@@ -11,24 +13,24 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[npc.type] = 22;
+            Main.npcFrameCount[NPC.type] = 22;
         }
 
         public override void SetDefaults()
         {
-            npc.width = 40;
-            npc.height = 48;
-            npc.defense = 24;
-            npc.lifeMax = 150;
-            npc.damage = 60;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 1f;
-            npc.chaseable = true;
-            npc.noGravity = false;
-            npc.daybreak = true;
-            npc.aiStyle = 3;
-            aiType = 199;
+            NPC.width = 40;
+            NPC.height = 48;
+            NPC.defense = 24;
+            NPC.lifeMax = 150;
+            NPC.damage = 60;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 1f;
+            NPC.chaseable = true;
+            NPC.noGravity = false;
+            NPC.daybreak = true;
+            NPC.aiStyle = 3;
+            AIType = 199;
         }
 
         private const int IdleFrame = 0;
@@ -50,39 +52,39 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void AI()
         {
-            Player target = Main.player[npc.target];
+            Player target = Main.player[NPC.target];
             if (runCounter > 0)
             {
                 runCounter -= 1;
             }
-            if (target.dead || npc.target == -1)
+            if (target.dead || NPC.target == -1)
             {
-                npc.TargetClosest();
+                NPC.TargetClosest();
             }
             if (Main.expertMode)
             {
                 expertDamageMultiplier = 2;
             }
 
-            npc.AddBuff(ModContent.BuffType<Vampire>(), 2);
-            if (npc.HasBuff(ModContent.BuffType<Sunburn>()))
+            NPC.AddBuff(ModContent.BuffType<Vampire>(), 2);
+            if (NPC.HasBuff(ModContent.BuffType<Sunburn>()))
             {
-                npc.defense = 0;
-                npc.damage = 20 * expertDamageMultiplier;
+                NPC.defense = 0;
+                NPC.damage = 20 * expertDamageMultiplier;
             }
             else
             {
-                npc.defense = 24;
-                npc.damage = 60 * expertDamageMultiplier;
+                NPC.defense = 24;
+                NPC.damage = 60 * expertDamageMultiplier;
             }
 
-            if (npc.velocity.X > 0)
+            if (NPC.velocity.X > 0)
             {
-                npc.spriteDirection = 1;
+                NPC.spriteDirection = 1;
             }
-            if (npc.velocity.X < 0)
+            if (NPC.velocity.X < 0)
             {
-                npc.spriteDirection = -1;
+                NPC.spriteDirection = -1;
             }
 
             if (poisonCooldown > 0)
@@ -90,23 +92,23 @@ namespace JoJoStands.NPCs.Enemies
                 poisonCooldown -= 1;
             }
 
-            if (npc.life > npc.lifeMax)
+            if (NPC.life > NPC.lifeMax)
             {
-                npc.life = npc.lifeMax;
+                NPC.life = NPC.lifeMax;
             }
 
             if (!poisonThrow)
             {
-                aiType = 199;
-                npc.aiStyle = 3;
-                if (npc.collideY && jumpCooldown == 0 && npc.velocity.Y == 0)      //jump jump jump
+                AIType = 199;
+                NPC.aiStyle = 3;
+                if (NPC.collideY && jumpCooldown == 0 && NPC.velocity.Y == 0)      //jump jump jump
                 {
                     jumpCooldown = 45;
-                    npc.velocity.Y -= 9f;
+                    NPC.velocity.Y -= 9f;
                 }
-                if (npc.velocity.Y < 3f)
+                if (NPC.velocity.Y < 3f)
                 {
-                    npc.velocity.Y += 0.15f;
+                    NPC.velocity.Y += 0.15f;
                 }
                 if (jumpCooldown > 0)
                 {
@@ -116,55 +118,55 @@ namespace JoJoStands.NPCs.Enemies
 
             if (runCounter == 0)
             {
-                if (npc.position.X >= target.position.X)
+                if (NPC.position.X >= target.position.X)
                 {
-                    if (npc.position.X - 50 >= target.position.X)
+                    if (NPC.position.X - 50 >= target.position.X)
                     {
-                        npc.direction = -1;
-                        npc.velocity.X = -3f;
+                        NPC.direction = -1;
+                        NPC.velocity.X = -3f;
                     }
                 }
-                if (npc.position.X < target.position.X)
+                if (NPC.position.X < target.position.X)
                 {
-                    if (npc.position.X + 50 < target.position.X)
+                    if (NPC.position.X + 50 < target.position.X)
                     {
-                        npc.direction = 1;
-                        npc.velocity.X = 3f;
+                        NPC.direction = 1;
+                        NPC.velocity.X = 3f;
                     }
                 }
             }
             if (runCounter != 0)
             {
-                if (npc.position.X >= target.position.X)
+                if (NPC.position.X >= target.position.X)
                 {
-                    npc.direction = 1;
-                    npc.velocity.X = 3f;
+                    NPC.direction = 1;
+                    NPC.velocity.X = 3f;
                 }
-                if (npc.position.X < target.position.X)
+                if (NPC.position.X < target.position.X)
                 {
-                    npc.direction = -1;
-                    npc.velocity.X = -3f;
+                    NPC.direction = -1;
+                    NPC.velocity.X = -3f;
                 }
             }
 
-            if (npc.Distance(target.Center) >= 300f && runCounter > 0)
+            if (NPC.Distance(target.Center) >= 300f && runCounter > 0)
             {
                 runCounter = 0;
                 poisonCooldown = 0;
             }
 
-            if (!npc.noTileCollide && npc.Distance(target.Center) <= 300f && poisonCooldown <= 0 && !target.dead)       //poison
+            if (!NPC.noTileCollide && NPC.Distance(target.Center) <= 300f && poisonCooldown <= 0 && !target.dead)       //poison
             {
                 poisonThrow = true;
             }
             if (poisonThrow)
             {
-                npc.aiStyle = 0;
-                npc.velocity.X = 0;
+                NPC.aiStyle = 0;
+                NPC.velocity.X = 0;
                 poisonThrowTimer += 1;
                 if (poisonThrowTimer == 45)
                 {
-                    Vector2 shootVel = target.Center - npc.Center;
+                    Vector2 shootVel = target.Center - NPC.Center;
                     if (shootVel == Vector2.Zero)
                     {
                         shootVel = new Vector2(0f, 0f);
@@ -172,19 +174,19 @@ namespace JoJoStands.NPCs.Enemies
                     shootVel.Normalize();
                     shootVel *= 10f;
                     float rotationInRadians = 0f;
-                    if (target.position.X < npc.position.X)
+                    if (target.position.X < NPC.position.X)
                     {
                         rotationInRadians = 30f;
                     }
-                    if (target.position.X > npc.position.X)
+                    if (target.position.X > NPC.position.X)
                     {
                         rotationInRadians = -30f;
                     }
                     float rotation = MathHelper.ToRadians(rotationInRadians);
                     Vector2 newSpeed = new Vector2(shootVel.X, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, 1) * 1f);
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.Center, newSpeed, ModContent.ProjectileType<AcidVenomFlask>(), 21 * expertDamageMultiplier, 1f);
+                    int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, newSpeed, ModContent.ProjectileType<AcidVenomFlask>(), 21 * expertDamageMultiplier, 1f);
                     Main.projectile[proj].netUpdate = true;
-                    npc.netUpdate = true;
+                    NPC.netUpdate = true;
                 }
                 if (poisonThrowTimer >= 90)
                 {
@@ -198,10 +200,10 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            if (npc.life < npc.lifeMax)
+            if (NPC.life < NPC.lifeMax)
             {
                 int lifeStealAmount = damage / 2;
-                npc.life += lifeStealAmount;
+                NPC.life += lifeStealAmount;
             }
             if (!poisonThrow && runCounter == 0)
             {
@@ -211,24 +213,24 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (npc.life < npc.lifeMax)
+            if (NPC.life < NPC.lifeMax)
             {
                 int lifeStealAmount = damage / 2;
-                npc.life += lifeStealAmount;
+                NPC.life += lifeStealAmount;
             }
         }
 
         public override void FindFrame(int frameHeight)
         {
             frameHeight = 56;
-            npc.frameCounter++;
-            float velX = Math.Abs(npc.velocity.X);
+            NPC.frameCounter++;
+            float velX = Math.Abs(NPC.velocity.X);
             if (velX > 0f)
             {
-                npc.frameCounter += velX;
-                if (npc.frameCounter >= 15)
+                NPC.frameCounter += velX;
+                if (NPC.frameCounter >= 15)
                 {
-                    npc.frameCounter = 0;
+                    NPC.frameCounter = 0;
                     frame += 1;
                     if (frame > WalkFramesMaximum)
                     {
@@ -240,7 +242,7 @@ namespace JoJoStands.NPCs.Enemies
             {
                 frame = IdleFrame;
             }
-            if (npc.velocity.Y != 0f)
+            if (NPC.velocity.Y != 0f)
             {
                 frame = JumpingFrame;
             }
@@ -251,16 +253,15 @@ namespace JoJoStands.NPCs.Enemies
                 int frameAddition = frameDifference * (poisonThrowTimer / timerFraction);
                 frame = PoisonThrowFramesMinimum + frameAddition;
             }
-            npc.frame.Y = frame * frameHeight;
+            NPC.frame.Y = frame * frameHeight;
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             float chance = 0f;
             if (JoJoStandsWorld.VampiricNight)
-            {
                 chance = 0.01f;
-            }
+
             return chance;
         }
     }

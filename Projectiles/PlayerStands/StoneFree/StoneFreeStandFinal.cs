@@ -1,7 +1,10 @@
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 {
@@ -45,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                 shootCount--;
 
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -93,7 +96,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                                 if (Vector2.Distance(firstStringPos, Main.MouseWorld) >= MaxTrapDistance)
                                 {
                                     stringConnectorPlaced = false;
-                                    Main.NewText("Your strings do not extend that far.>();
+                                    Main.NewText("Your strings do not extend that far.");
                                     return;
                                 }
 
@@ -166,48 +169,48 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             {
                 normalFrames = false;
                 if (!extendedBarrage)
-                    PlayAnimation("Attack>();
+                    PlayAnimation("Attack");
                 else
-                    PlayAnimation("ExtendedAttack>();
+                    PlayAnimation("ExtendedAttack");
             }
             if (normalFrames)
             {
-                PlayAnimation("Idle>();
+                PlayAnimation("Idle");
             }
             if (holdingStringNPC)
             {
-                PlayAnimation("StringHold>();
+                PlayAnimation("StringHold");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>()).poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Pose>();
+                PlayAnimation("Pose");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
 
-            if (animationName == "Idle>()
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 12, true);
             }
-            if (animationName == "Attack>()
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "ExtendedAttack>()
+            if (animationName == "ExtendedAttack")
             {
                 AnimateStand(animationName, 4, newPunchTime, true);
             }
-            if (animationName == "StringHold>()
+            if (animationName == "StringHold")
             {
                 AnimateStand(animationName, 1, 40, true);
             }
-            if (animationName == "Pose>()
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 2, 12, true);
             }

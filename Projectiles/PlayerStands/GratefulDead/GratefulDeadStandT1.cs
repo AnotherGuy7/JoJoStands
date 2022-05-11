@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
@@ -96,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = Mod.GetTexture("Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
 
             if (animationName == "Idle")
             {

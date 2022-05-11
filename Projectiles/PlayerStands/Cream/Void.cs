@@ -1,9 +1,10 @@
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Terraria.Audio;
 
 namespace JoJoStands.Projectiles.PlayerStands.Cream
 {
@@ -34,7 +35,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             mPlayer.creamVoidMode = true;
             player.position = Projectile.position + new Vector2(0f, 0f);
@@ -48,7 +49,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 bool specialPressed = false;
                 if (!Main.dedServ)
-                specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+                    specialPressed = JoJoStands.SpecialHotKey.JustPressed;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.VoidCamPosition = Projectile.position - new Vector2(halfScreenWidth, halfScreenHeight);
@@ -136,21 +137,21 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     Tile tileToDestroy = Main.tile[detectedTileX, detectedTileY];
                     if (mPlayer.creamTier <= 2)
                     {
-                        if (tileToDestroy.active() && tileToDestroy.type != TileID.LihzahrdBrick && tileToDestroy.type != TileID.BlueDungeonBrick && tileToDestroy.type != TileID.GreenDungeonBrick && tileToDestroy.type != TileID.PinkDungeonBrick && tileToDestroy.type != TileID.LihzahrdAltar && tileToDestroy.type != TileID.DemonAltar)
+                        if (tileToDestroy.HasTile && tileToDestroy.TileType != TileID.LihzahrdBrick && tileToDestroy.TileType != TileID.BlueDungeonBrick && tileToDestroy.TileType != TileID.GreenDungeonBrick && tileToDestroy.TileType != TileID.PinkDungeonBrick && tileToDestroy.TileType != TileID.LihzahrdAltar && tileToDestroy.TileType != TileID.DemonAltar)
                         {
                             WorldGen.KillTile(detectedTileX, detectedTileY, false, false, true);
                         }
                     }
                     if (mPlayer.creamTier >= 3)
                     {
-                        if (tileToDestroy.active() && tileToDestroy.type != TileID.LihzahrdBrick && tileToDestroy.type != TileID.LihzahrdAltar)
+                        if (tileToDestroy.HasTile && tileToDestroy.TileType != TileID.LihzahrdBrick && tileToDestroy.TileType != TileID.LihzahrdAltar)
                         {
                             WorldGen.KillTile(detectedTileX, detectedTileY, false, false, true);
                         }
                     }
-                    if (Main.tile[detectedTileX, detectedTileY].liquid > 0)
+                    if (Main.tile[detectedTileX, detectedTileY].LiquidAmount > 0)
                     {
-                        Main.tile[detectedTileX, detectedTileY].liquid = 0;
+                        Main.tile[detectedTileX, detectedTileY].LiquidAmount = 0;
                         WorldGen.SquareTileFrame(detectedTileX, detectedTileY, false);
                     }
                 }
@@ -170,20 +171,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
                 crit = true;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             target.AddBuff(ModContent.BuffType<MissingOrgans>(), 120 * mPlayer.creamTier);
         }
 
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             target.AddBuff(ModContent.BuffType<MissingOrgans>(), 60 * mPlayer.creamTier);
         }
 
@@ -197,9 +198,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             return false;
         }
 
-        public override bool TileCollideStyle(ref int widht, ref int height, ref bool fallThrough)
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
-            widht = Projectile.width - 4;
+            width = Projectile.width - 4;
             height = Projectile.height - 4;
             fallThrough = true;
             return true;
@@ -208,7 +209,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             mPlayer.creamVoidMode = false;
             player.fallStart = (int)player.position.Y;

@@ -4,7 +4,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -43,9 +42,10 @@ namespace JoJoStands.Projectiles
                 for (int k = 0; k < Main.maxNPCs; k++)
                 {
                     NPC npc = Main.npc[k];
-                    if (npc.type == Mod.NPCType("HamonMaster"))
+                    if (npc.type == ModContent.NPCType<HamonMaster>())
                     {
                         zeppeli = npc;
+                        break;
                     }
                 }
             }

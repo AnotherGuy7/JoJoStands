@@ -1,7 +1,8 @@
+using JoJoStands.Projectiles.NPCStands;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indicate the folder where it is to be read from, so you the texture will load correctly
 {
@@ -12,23 +13,23 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
 
         public override void SetDefaults()
         {
-            npc.townNPC = true;     //This defines if the npc is a town Npc or not
-            npc.friendly = true;        //this defines if the npc can hur you or not()
-            npc.width = 18;     //the npc sprite width
-            npc.height = 46;        //the npc sprite height
-            npc.aiStyle = 7;        //this is the npc ai style, 7 is Pasive Ai
-            npc.defense = 27;       //the npc defense
-            npc.lifeMax = 300;      // the npc life
-            npc.HitSound = SoundID.NPCHit1;     //the npc sound when is hit
-            npc.DeathSound = SoundID.NPCDeath1;     //the npc sound when he dies
-            npc.knockBackResist = 1f;       //the npc knockback resistance
-            Main.npcFrameCount[npc.type] = 26;      //this defines how many frames the npc sprite sheet has
-            NPCID.Sets.ExtraFramesCount[npc.type] = 9;
-            NPCID.Sets.AttackFrameCount[npc.type] = 4;
-            NPCID.Sets.DangerDetectRange[npc.type] = 250;       //this defines the npc danger detect range
-            NPCID.Sets.AttackType[npc.type] = 1;        //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
-            NPCID.Sets.HatOffsetY[npc.type] = 1;        //this defines the party hat position
-            animationType = NPCID.Guide;        //this copy the guide animation
+            NPC.townNPC = true;     //This defines if the NPC is a town Npc or not
+            NPC.friendly = true;        //this defines if the NPC can hur you or not()
+            NPC.width = 18;     //the NPC sprite width
+            NPC.height = 46;        //the NPC sprite height
+            NPC.aiStyle = 7;        //this is the NPC ai style, 7 is Pasive Ai
+            NPC.defense = 27;       //the NPC defense
+            NPC.lifeMax = 300;      // the NPC life
+            NPC.HitSound = SoundID.NPCHit1;     //the NPC sound when is hit
+            NPC.DeathSound = SoundID.NPCDeath1;     //the NPC sound when he dies
+            NPC.knockBackResist = 1f;       //the NPC knockback resistance
+            Main.npcFrameCount[NPC.type] = 26;      //this defines how many frames the NPC sprite sheet has
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
+            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
+            NPCID.Sets.DangerDetectRange[NPC.type] = 250;       //this defines the NPC danger detect range
+            NPCID.Sets.AttackType[NPC.type] = 1;        //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
+            NPCID.Sets.HatOffsetY[NPC.type] = 1;        //this defines the party hat position
+            AnimationType = NPCID.Guide;        //this copy the guide animation
         }
 
         public override bool CheckActive()
@@ -48,9 +49,13 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             return Main.hardMode;
         }
 
-        public override string TownNPCName()        //Allows you to give this town NPC any name when it spawns
+        public override List<string> SetNPCNameList()
         {
-            return "Pucci";
+            List<string> possibleNames = new List<string>();
+
+            possibleNames.Add("Pucci");
+
+            return possibleNames;
         }
 
         public override void SetChatButtons(ref string button, ref string button2)      //Allows you to set the text for the buttons that appear on this town NPC's chat window. 
@@ -67,14 +72,14 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
         {
             for (int i = 0; i < JoJoStands.standTier1List.Count; i++)       //auto builds the list of items, also sets their price to 1 platinum without affecting original items
             {
-                shop.Item[i].SetDefaults(JoJoStands.standTier1List[i]);
-                shop.Item[i].value = Item.buyPrice(0, 50, 0, 0);
+                shop.item[i].SetDefaults(JoJoStands.standTier1List[i]);
+                shop.item[i].value = Item.buyPrice(0, 50, 0, 0);
             }
         }
 
         public override string GetChat()       //Allows you to give this town NPC a chat message when a player talks to it.
         {
-            switch (Main.rand.Next(6))    //this are the messages when you talk to the npc, if you want to add more cases, you first need to change the Main.rand to the number of cases (default is included!)
+            switch (Main.rand.Next(6))    //this are the messages when you talk to the NPC, if you want to add more cases, you first need to change the Main.rand to the number of cases (default is included!)
             {
                 case 0:
                     return "I sell stand discs to people who want them... Want one?";
@@ -96,8 +101,8 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
 
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)     //Allows you to determine the damage and knockback of this town NPC attack
         {
-            damage = 40;        //npc damage
-            knockback = 2f;     //npc knockback
+            damage = 40;        //NPC damage
+            knockback = 2f;     //NPC knockback
         }
 
         public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)     //Allows you to determine the cooldown between each of this town NPC's attack. The cooldown will be a number greater than or equal to the first parameter, and less then the sum of the two parameters.

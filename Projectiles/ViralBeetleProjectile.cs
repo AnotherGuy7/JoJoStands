@@ -96,14 +96,14 @@ namespace JoJoStands.Projectiles
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            Texture2D texture = Mod.GetTexture("Projectiles/ViralBeetleProjectile>();
+            Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/ViralBeetleProjectile>().Value;
             int frameHeight = texture.Height / Main.projFrames[Projectile.type];
             SpriteEffects effects = SpriteEffects.None;
             if (Projectile.direction == -1)
             {
                 effects = SpriteEffects.FlipVertically;
             }
-            spriteBatch.Draw(texture, Projectile.position - Main.screenPosition, new Rectangle(0, Projectile.frame, Projectile.width, frameHeight), Color.White, Projectile.rotation, new Vector2(texture.Width / 2f, frameHeight / 2f), Projectile.scale, effects, 0f);
+            Main.EntitySpriteDraw(texture, Projectile.position - Main.screenPosition, new Rectangle(0, Projectile.frame, Projectile.width, frameHeight), Color.White, Projectile.rotation, new Vector2(texture.Width / 2f, frameHeight / 2f), Projectile.scale, effects, 0f);
             return false;
         }
 

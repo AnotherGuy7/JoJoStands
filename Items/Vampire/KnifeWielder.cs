@@ -76,7 +76,7 @@ namespace JoJoStands.Items.Vampire
                     Vector2 knifeVel = player.Center - knifePos;
                     knifeVel.Normalize();
                     knifeVel *= 14f;
-                    Projectile.NewProjectile(player.GetSource_FromThis(), knifePos, knifeVel, ModContent.ProjectileType<Projectiles.Knife>(), 47, 5f, player.whoAmI);
+                    Projectile.NewProjectile(player.GetSource_FromThis(), knifePos, knifeVel, ModContent.ProjectileType<Projectiles.KnifeProjectile>(), 47, 5f, player.whoAmI);
                 }
                 player.buffTime[player.FindBuffIndex(ModContent.BuffType<KnifeAmalgamation>())] -= 45 * 60;
             }

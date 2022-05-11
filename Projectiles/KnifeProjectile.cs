@@ -7,7 +7,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
-    public class Knife : ModProjectile
+    public class KnifeProjectile : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -37,9 +37,7 @@ namespace JoJoStands.Projectiles
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             target.immune[Projectile.owner] = 0;
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
         }
 
         public override void Kill(int timeLeft)

@@ -1,7 +1,10 @@
+using JoJoStands.Items;
+using JoJoStands.Items.Tiles;
+using JoJoStands.Projectiles;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.NPCs.TownNPCs
 {
@@ -10,25 +13,25 @@ namespace JoJoStands.NPCs.TownNPCs
     {
         public override void SetDefaults()
         {
-            npc.townNPC = true;
-            npc.friendly = true;
-            npc.width = 18;
-            npc.height = 46;
-            npc.aiStyle = 7;
-            npc.defense = 27;
-            npc.lifeMax = 300;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
-            npc.knockBackResist = 1f;
-            Main.npcFrameCount[npc.type] = 26;
-            NPCID.Sets.ExtraFramesCount[npc.type] = 9;
-            NPCID.Sets.AttackFrameCount[npc.type] = 4;
-            NPCID.Sets.DangerDetectRange[npc.type] = 150;
-            NPCID.Sets.AttackType[npc.type] = 0;
-            NPCID.Sets.AttackTime[npc.type] = 20;
-            NPCID.Sets.AttackAverageChance[npc.type] = 10;
-            NPCID.Sets.HatOffsetY[npc.type] = 2;
-            animationType = NPCID.Guide;
+            NPC.townNPC = true;
+            NPC.friendly = true;
+            NPC.width = 18;
+            NPC.height = 46;
+            NPC.aiStyle = 7;
+            NPC.defense = 27;
+            NPC.lifeMax = 300;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 1f;
+            Main.npcFrameCount[NPC.type] = 26;
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
+            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
+            NPCID.Sets.DangerDetectRange[NPC.type] = 150;
+            NPCID.Sets.AttackType[NPC.type] = 0;
+            NPCID.Sets.AttackTime[NPC.type] = 20;
+            NPCID.Sets.AttackAverageChance[NPC.type] = 10;
+            NPCID.Sets.HatOffsetY[NPC.type] = 2;
+            AnimationType = NPCID.Guide;
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs, int money)
@@ -36,9 +39,13 @@ namespace JoJoStands.NPCs.TownNPCs
             return Main.hardMode && numTownNPCs >= 5;
         }
 
-        public override string TownNPCName()
+        public override List<string> SetNPCNameList()
         {
-            return "D'Arby";
+            List<string> possibleNames = new List<string>();
+
+            possibleNames.Add("D'Arby");
+
+            return possibleNames;
         }
 
         public override void SetChatButtons(ref string button, ref string button2)
@@ -61,11 +68,11 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override void SetupShop(Chest shop, ref int nextSlot)
         {
-            shop.Item[nextSlot].SetDefaults(ModContent.ItemType<PackoCards>()));
+            shop.item[nextSlot].SetDefaults(ModContent.ItemType<PackoCards>());
             nextSlot++;
-            shop.Item[nextSlot].SetDefaults(ModContent.ItemType<PokerChip>()));
+            shop.item[nextSlot].SetDefaults(ModContent.ItemType<PokerChip>());
             nextSlot++;
-            shop.Item[nextSlot].SetDefaults(ModContent.ItemType<TarotTable>()));
+            shop.item[nextSlot].SetDefaults(ModContent.ItemType<TarotTable>());
             nextSlot++;
         }
 
@@ -104,7 +111,7 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
-            projType = ModContent.ProjectileType<Card>());
+            projType = ModContent.ProjectileType<CardProjectile>();
             attackDelay = 1;
         }
 

@@ -1,9 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -113,7 +113,7 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             if (linkWhoAmI != -1)
             {
@@ -122,16 +122,16 @@ namespace JoJoStands.Projectiles
 
                 float stringRotation = (linkCenter - projectileCenter).ToRotation();
                 float stringScale = 0.6f;
-                Texture2D stringTexture = Mod.GetTexture("Projectiles/EmeraldString>();
+                Texture2D stringTexture = Mod.Assets.Request<Texture2D>("Projectiles/EmeraldString").Value;
                 for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(projectileCenter, linkCenter) / (stringTexture.Width * stringScale)))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
                 {
                     Vector2 pos = Vector2.Lerp(projectileCenter, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                    spriteBatch.Draw(stringTexture, pos, new Rectangle(0, 0, stringTexture.Width, stringTexture.Height), lightColor, stringRotation, new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f), Projectile.scale * stringScale, SpriteEffects.None, 0f);
+                    Main.EntitySpriteDraw(stringTexture, pos, new Rectangle(0, 0, stringTexture.Width, stringTexture.Height), lightColor, stringRotation, new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f), Projectile.scale * stringScale, SpriteEffects.None, 0);
                 }
             }
 
             Vector2 origin = new Vector2(Projectile.width / 2f, Projectile.height / 2f);
-            spriteBatch.Draw(Main.projectileTexture[Projectile.type], Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(TextureAssets.Projectile[Projectile.type].Value, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             return false;
         }
 
