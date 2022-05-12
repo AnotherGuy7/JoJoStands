@@ -67,53 +67,39 @@ namespace JoJoStands.NPCs
             get { return true; }
         }
 
-        public override void NPCLoot(NPC npc)
-        {
-            Player player = Main.player[(int)Player.FindClosest(npc.position, npc.width, npc.height)];
-            if (Main.hardMode && (player.position.Y < (Main.worldSurface * 0.35) * 16f) && Main.rand.NextFloat(0, 101) < 7f)
-            {
-                Item.NewItem(npc.getRect(), ModContent.ItemType<SoulofTime>()), Main.rand.Next(1, 3));      //mininum amount = 1, maximum amount = 3
-            }
-            if (Main.hardMode && (npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC) && Main.rand.NextFloat(0, 101) <= 4f)
-            {
-                Item.NewItem(npc.getRect(), ModContent.ItemType<Hand>()));
-            }
-            if (player.ZoneOverworldHeight && !player.ZoneCorrupt && !player.ZoneCrimson && !player.ZoneDungeon && !player.ZoneJungle && !player.ZoneSnow && !player.ZoneDesert && !player.ZoneBeach && !player.ZoneHoly)
-            {
-                if (Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
-                {
-                    Item.NewItem(npc.getRect(), ModContent.ItemType<WillToFight>()));
-                }
-                if (!Main.dayTime && Main.rand.NextFloat(0, 101) <= 4f)
-                {
-                    Item.NewItem(npc.getRect(), ModContent.ItemType<WillToProtect>()));
-                }
-            }
-            if (player.ZoneUnderworldHeight && Main.rand.NextFloat(0, 101) <= 4f)
-            {
-                Item.NewItem(npc.getRect(), ModContent.ItemType<WillToDestroy>()));
-            }
-            if ((player.ZoneCorrupt || player.ZoneCrimson) && Main.rand.NextFloat(0, 101) <= 4f)
-            {
-                Item.NewItem(npc.getRect(), ModContent.ItemType<WillToControl>()));
-            }
-            if (player.ZoneDungeon && Main.rand.NextFloat(0, 101) <= 4f)
-            {
-                Item.NewItem(npc.getRect(), ModContent.ItemType<WillToEscape>()));
-            }
-            if (player.ZoneJungle && Main.rand.NextFloat(0, 101) <= 4f)
-            {
-                Item.NewItem(npc.getRect(), ModContent.ItemType<WillToChange>()));
-            }
-        }
-
         public override void ModifyGlobalLoot(GlobalLoot globalLoot)
         {
             IItemDropRule sunDropletRule = new LeadingConditionRule(new SunDropletCondition());
-            ItemDropRule.ByCondition((IItemDropRuleCondition)sunDropletRule, ModContent.ItemType<SunDroplet>(), 10, 1, 3));
-            globalLoot.Add(ItemDropRule.Common(ItemID.Shackle, 50));
+            sunDropletRule.OnSuccess(new CommonDrop(ModContent.ItemType<SunDroplet>(), 10, 1, 3));
+            globalLoot.Add(sunDropletRule);
 
-            globalLoot.Add(ItemDropRule.ByCondition(new Conditions));
+            IItemDropRule willToFightRule = new LeadingConditionRule(new WillToFightCondition());
+            willToFightRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToFight>(), 14));
+            globalLoot.Add(willToFightRule);
+
+            IItemDropRule willToProtectRule = new LeadingConditionRule(new WillToProtectCondition());
+            willToProtectRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToProtect>(), 14));
+            globalLoot.Add(willToProtectRule);
+
+            IItemDropRule willToDestroyRule = new LeadingConditionRule(new WillToDestroyCondition());
+            willToDestroyRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToDestroy>(), 14));
+            globalLoot.Add(willToDestroyRule);
+
+            IItemDropRule willToControlRule = new LeadingConditionRule(new WillToControlCondition());
+            willToControlRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToControl>(), 14));
+            globalLoot.Add(willToControlRule);
+
+            IItemDropRule willToEscapeRule = new LeadingConditionRule(new WillToEscapeCondition());
+            willToEscapeRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToEscape>(), 14));
+            globalLoot.Add(willToEscapeRule);
+
+            IItemDropRule willToChangeRule = new LeadingConditionRule(new WillToChangeCondition());
+            willToChangeRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToChange>(), 14));
+            globalLoot.Add(willToChangeRule);
+
+            IItemDropRule soulOfTimeRule = new LeadingConditionRule(new SoulOfTimeCondition());
+            soulOfTimeRule.OnSuccess(new CommonDrop(ModContent.ItemType<SoulofTime>(), 14));
+            globalLoot.Add(soulOfTimeRule);
         }
 
         /*public override bool SpecialNPCLoot(NPC npc)
@@ -131,6 +117,10 @@ namespace JoJoStands.NPCs
             if (npc.type == NPCID.WallofFlesh)
             {
                 npcLoot.Add(ItemDropRule.OneFromOptions(1, ModContent.ItemType<StandEmblem>(), ModContent.ItemType<HamonEmblem>()));
+            }
+            if (npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC)
+            {
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Hand>(), 25));
             }
         }
 
@@ -506,21 +496,21 @@ namespace JoJoStands.NPCs
                 if (mPlayer == null)
                     continue;
 
-                if (npc.boss && mPlayer.deathLoopActive && Buffs.ItemBuff.DeathLoop.LoopNPC == 0)
+                if (npc.boss && mPlayer.deathLoopActive && DeathLoop.LoopNPC == 0)
                 {
-                    Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
-                    Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
-                    Buffs.ItemBuff.DeathLoop.deathPositionY = npc.position.Y;
-                    Buffs.ItemBuff.DeathLoop.Looping3x = true;
-                    Buffs.ItemBuff.DeathLoop.Looping10x = false;
+                    DeathLoop.LoopNPC = npc.type;
+                    DeathLoop.deathPositionX = npc.position.X;
+                    DeathLoop.deathPositionY = npc.position.Y;
+                    DeathLoop.Looping3x = true;
+                    DeathLoop.Looping10x = false;
                 }
                 if (!npc.boss && mPlayer.deathLoopActive && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
                 {
-                    Buffs.ItemBuff.DeathLoop.LoopNPC = npc.type;
-                    Buffs.ItemBuff.DeathLoop.deathPositionX = npc.position.X;
-                    Buffs.ItemBuff.DeathLoop.deathPositionY = npc.position.Y;
-                    Buffs.ItemBuff.DeathLoop.Looping3x = false;
-                    Buffs.ItemBuff.DeathLoop.Looping10x = true;
+                    DeathLoop.LoopNPC = npc.type;
+                    DeathLoop.deathPositionX = npc.position.X;
+                    DeathLoop.deathPositionY = npc.position.Y;
+                    DeathLoop.Looping3x = false;
+                    DeathLoop.Looping10x = true;
                 }
             }
 
@@ -574,7 +564,7 @@ namespace JoJoStands.NPCs
             }
             if (taggedByKillerQueen)
             {
-                Texture2D bombTexture = Mod.Assets.Request<Texture2D>("Extras/Bomb").Value;
+                Texture2D bombTexture = ModContent.Request<Texture2D>("Extras/Bomb").Value;
 
                 Vector2 position = npc.Center - new Vector2(bombTexture.Width / 2f, (npc.height / 2f) + 18f);
                 spriteBatch.Draw(bombTexture, position - Main.screenPosition, Color.White);
@@ -604,12 +594,12 @@ namespace JoJoStands.NPCs
         {
             if (npc.HasBuff(ModContent.BuffType<RedBindDebuff>()))
             {
-                Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/BoundByRedBind").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("Extras/BoundByRedBind").Value;
                 spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), npc.scale, SpriteEffects.None, 0);
             }
             if (stunnedByBindingEmerald)
             {
-                Texture2D emeraldStringWebTexture = Mod.Assets.Request<Texture2D>("Extras/EmeraldStringWeb").Value;
+                Texture2D emeraldStringWebTexture = ModContent.Request<Texture2D>("Extras/EmeraldStringWeb").Value;
                 int textureWidth = 19;
                 int textureHeight = 19;
 
@@ -626,7 +616,7 @@ namespace JoJoStands.NPCs
             }
             if (boundByStrings)
             {
-                Texture2D bombTexture = Mod.Assets.Request<Texture2D>("Extras/BoundByStrings").Value;
+                Texture2D bombTexture = ModContent.Request<Texture2D>("Extras/BoundByStrings").Value;
                 Vector2 scale = new Vector2(npc.width, npc.height) / new Vector2(22, 14);
                 Vector2 origin = new Vector2(11, 7);
                 spriteBatch.Draw(bombTexture, npc.Center - Main.screenPosition, null, npc.color, npc.rotation, origin, scale, SpriteEffects.None, 0);
@@ -636,7 +626,7 @@ namespace JoJoStands.NPCs
         public override void OnHitPlayer(NPC npc, Player target, int damage, bool crit)
         {
             MyPlayer mPlayer = target.GetModPlayer<MyPlayer>();
-            int standSlotType = mPlayer.StandSlot.Item.type;
+            int standSlotType = mPlayer.StandSlot.SlotItem.type;
             if (target.HasBuff(ModContent.BuffType<BacktoZero>()))     //only affects the ones with the buff, everyone's bool should turn on and save positions normally
             {
                 npc.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
@@ -644,11 +634,11 @@ namespace JoJoStands.NPCs
                 btzTotalRewindTime = 5 * btzPositionIndex;
                 btzTotalRewindTimer = 5 * btzPositionIndex;
             }
-            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT1>())
+            if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT1>())
             {
                 npc.StrikeNPC((int)(npc.damage * 0.35f), 4f, -npc.direction);       //Dolly dagger is reflecting 35% of damage here, 70% in tier 2
             }
-            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT2>())
+            if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT2>())
             {
                 npc.StrikeNPC((int)(npc.damage * 0.7f), 6f, -npc.direction);
             }

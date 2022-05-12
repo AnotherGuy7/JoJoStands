@@ -6,7 +6,7 @@ using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    internal class HamonBarState : UIState      //ExamplpMod's ExampleUI, CoinPanel. Look for an easier and cleaner way of doig the text thing in the future
+    public class HamonBarState : UIState      //ExamplpMod's ExampleUI, CoinPanel. Look for an easier and cleaner way of doig the text thing in the future
     {
         internal static int sizeMode;
         public DragableUIPanel HamonBar;

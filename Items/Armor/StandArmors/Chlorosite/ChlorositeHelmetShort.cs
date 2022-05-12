@@ -1,8 +1,7 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Buffs.AccessoryBuff;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-
 
 namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
 {
@@ -11,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Chlorosite Helmet (Short-Ranged)>());
-            Tooltip.SetDefault("A helmet that is made with Chlorophyte infused with an otherworldly virus.\n15% Stand Damage>());
+            DisplayName.SetDefault("Chlorosite Helmet (Short-Ranged)");
+            Tooltip.SetDefault("A helmet that is made with Chlorophyte infused with an otherworldly virus.\n15% Stand Damage");
         }
 
         public override void SetDefaults()
@@ -26,32 +25,32 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == ModContent.ItemType<ChlorositeChestplate>()) && legs.type == ModContent.ItemType<ChlorositeLeggings>());
+            return body.type == ModContent.ItemType<ChlorositeChestplate>() && legs.type == ModContent.ItemType<ChlorositeLeggings>();
         }
 
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "+3 Stand Speed\nSummons a Viral Crystal";
-            player.GetModPlayer<MyPlayer>()).standSpeedBoosts += 3;
-            player.AddBuff(ModContent.BuffType<ViralCrystalBuff>()), 2);
+            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 3;
+            player.AddBuff(ModContent.BuffType<ViralCrystalBuff>(), 2);
         }
 
         public override void UpdateEquip(Player player)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standCritChangeBoosts += 3f;
             mPlayer.standDamageBoosts += 0.15f;
             mPlayer.chlorositeShortEqquipped = true;
 
             if (mPlayer.standType == 0)
             {
-                Item.type = ModContent.ItemType<ChlorositeHelmetNeutral>());
-                Item.SetDefaults(ModContent.ItemType<ChlorositeHelmetNeutral>()));
+                Item.type = ModContent.ItemType<ChlorositeHelmetNeutral>();
+                Item.SetDefaults(ModContent.ItemType<ChlorositeHelmetNeutral>());
             }
             if (mPlayer.standType == 2)
             {
-                Item.type = ModContent.ItemType<ChlorositeHelmetLong>());
-                Item.SetDefaults(ModContent.ItemType<ChlorositeHelmetLong>()));
+                Item.type = ModContent.ItemType<ChlorositeHelmetLong>();
+                Item.SetDefaults(ModContent.ItemType<ChlorositeHelmetLong>());
             }
         }
     }

@@ -44,6 +44,7 @@ namespace JoJoStands.Items
                 .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
                 .AddIngredient(ModContent.ItemType<WillToEscape>())
                 .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

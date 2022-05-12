@@ -1,18 +1,17 @@
-using Terraria.ID;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.StandArmors.Viral
 {
-	[AutoloadEquip(EquipType.Head)]
-	public class ViralArmorHelmetRanged : ModItem
-	{
+    [AutoloadEquip(EquipType.Head)]
+    public class ViralArmorHelmetRanged : ModItem
+    {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Helmet (Long-Range)>();
-            Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus.\nStand Damage Increase: +5%>();
+            DisplayName.SetDefault("Viral Helmet (Long-Range)");
+            Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus.\nStand Damage Increase: +5%");
         }
 
         public override void SetDefaults()

@@ -1,14 +1,14 @@
+using JoJoStands.Items.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.ObjectData;
 
 namespace JoJoStands.Tiles
 {
     public class ViralToiletTile : ModTile
     {
-        public override void SetDefaults()      //some of this is from ExampleMod/Tiles/ExmapleOre
+        public override void SetStaticDefaults()      //some of this is from ExampleMod/Tiles/ExmapleOre
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileLighted[Type] = true;
@@ -30,7 +30,7 @@ namespace JoJoStands.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 4, 4, ModContent.ItemType<ViralToilet>());
+            Item.NewItem(null, i * 16, j * 16, 4, 4, ModContent.ItemType<ViralToilet>());
         }
     }
 }

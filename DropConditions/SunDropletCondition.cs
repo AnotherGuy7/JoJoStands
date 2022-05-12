@@ -18,9 +18,8 @@ namespace JoJoStands.DropConditions
         public bool CanDrop(DropAttemptInfo info)
         {
             if (!info.IsInSimulation)
-            {
                 return Main.dayTime;
-            }
+
             return false;
         }
     }

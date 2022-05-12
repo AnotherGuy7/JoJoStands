@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
@@ -73,7 +74,7 @@ namespace TerraUI.Objects
         /// <summary>
         /// The Item shown in the slot.
         /// </summary>
-        public Item Item
+        public Item SlotItem
         {
             get { return Item; }
             set { Item = value; }
@@ -305,7 +306,7 @@ namespace TerraUI.Objects
         /// <param name="spriteBatch">drawing SpriteBatch</param>
         public void OnDrawItem(SpriteBatch spriteBatch)
         {
-            Texture2D texture2D = Main.itemTexture[Item.type];
+            Texture2D texture2D = TextureAssets.Item[Item.type].Value;
             Rectangle rectangle;
 
             if (Main.itemAnimations[Item.type] != null)
@@ -336,7 +337,7 @@ namespace TerraUI.Objects
             {
                 ChatManager.DrawColorCodedStringWithShadow(
                     spriteBatch,
-                    Main.fontItemStack,
+                    FontAssets.ItemStack.Value,
                     Item.stack.ToString(),
                     RelativePosition + new Vector2(9f, 22f) * Scale(false),
                     Color.White,
@@ -354,11 +355,11 @@ namespace TerraUI.Objects
         /// <param name="spriteBatch"></param>
         public void DrawTick(SpriteBatch spriteBatch)
         {
-            Texture2D tickTexture = Main.inventoryTickOnTexture;
+            Texture2D tickTexture = TextureAssets.InventoryTickOn.Value;
 
             if (!ItemVisible)
             {
-                tickTexture = Main.inventoryTickOffTexture;
+                tickTexture = TextureAssets.InventoryTickOff.Value;
             }
 
             tickRect = new Rectangle(Rectangle.Right - 18, Rectangle.Top - 2, tickTexture.Width, tickTexture.Height);

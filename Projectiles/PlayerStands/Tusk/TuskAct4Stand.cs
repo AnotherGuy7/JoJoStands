@@ -159,7 +159,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Tusk/TuskAct4_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Tusk/TuskAct4_" + animationName);
 
             if (animationName == "Idle")
             {

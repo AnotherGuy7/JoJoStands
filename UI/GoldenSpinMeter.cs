@@ -2,15 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Terraria.ModLoader.IO;
 using Terraria.UI;
-using Terraria.UI.Chat;
 
 namespace JoJoStands.UI
 {
-    internal class GoldenSpinMeter : UIState
+    public class GoldenSpinMeter : UIState
     {
         public DragableUIPanel GSpinMeter;
         public static bool Visible;
@@ -58,8 +54,8 @@ namespace JoJoStands.UI
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             float frame = (mPlayer.goldenSpinCounter / 300f) * 12f;
             int frameHeight = goldenRectangleTexture.Height / 12;      //12 frames in that sheet, both sheets are the same height
-            
-            spriteBatch.Draw(goldenRectangleTexture, GSpinMeter.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * (int)(frame - 1), goldenRectangleTexture.Width, frameHeight),  Color.Yellow);
+
+            spriteBatch.Draw(goldenRectangleTexture, GSpinMeter.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * (int)(frame - 1), goldenRectangleTexture.Width, frameHeight), Color.Yellow);
             spriteBatch.Draw(goldenRectangleSpinLineTexture, GSpinMeter.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * (int)(frame - 1), goldenRectangleSpinLineTexture.Width, frameHeight), Color.Yellow);
         }
     }

@@ -5,7 +5,7 @@ using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    internal class SexPistolsUI : UIState
+    public class SexPistolsUI : UIState
     {
         public DragableUIPanel sexPistolsUI;
         public static bool Visible;

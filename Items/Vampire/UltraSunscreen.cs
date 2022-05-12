@@ -42,7 +42,7 @@ namespace JoJoStands.Items.Vampire
                 .AddIngredient(ItemID.Sunflower)
                 .AddIngredient(ItemID.DemoniteBar)
                 .AddTile(TileID.WorkBenches)
-                .Register()
+                .Register();
 
         }
     }

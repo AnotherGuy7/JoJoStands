@@ -1,14 +1,14 @@
-using Microsoft.Xna.Framework;
-using Terraria;
 using JoJoStands.Projectiles.PlayerStands;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 
 namespace JoJoStands.Projectiles.Pets
 {
     public class TuskAct3Pet : StandClass
     {
         public override string Texture => Mod.Name + "/Projectiles/Pets/TuskAct3Pet";
-		public override string poseSoundName => "ItsBeenARoundaboutPath";
+        public override string poseSoundName => "ItsBeenARoundaboutPath";
 
         public override void SetStaticDefaults()
         {
@@ -26,7 +26,7 @@ namespace JoJoStands.Projectiles.Pets
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-			mPlayer.poseSoundName = poseSoundName;
+            mPlayer.poseSoundName = poseSoundName;
             if (mPlayer.tuskActNumber == 3)
                 Projectile.timeLeft = 2;
 
@@ -50,18 +50,18 @@ namespace JoJoStands.Projectiles.Pets
             Projectile.netUpdate = true;
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        public override bool PreDraw(ref Color drawColor)
         {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             SyncAndApplyDyeSlot();
             return true;
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)
+        public override void PostDraw(Color drawColor)
         {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
         }
     }
 }

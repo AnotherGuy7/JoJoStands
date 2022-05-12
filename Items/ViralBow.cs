@@ -23,7 +23,7 @@ namespace JoJoStands.Items
             Item.useAnimation = 30;
             Item.useTime = 30;
             Item.knockBack = 4f;
-            Item.ranged = true;
+            Item.DamageType = DamageClass.Ranged;
             Item.noUseGraphic = false;
             Item.UseSound = SoundID.Item1;
             Item.rare = ItemRarityID.LightRed;

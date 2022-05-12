@@ -1,10 +1,10 @@
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -37,7 +37,7 @@ namespace JoJoStands.Projectiles
             float dist = Vector2.Distance(player.Center, Projectile.Center);
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Zip>());
+                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Zip"));
                 playedSound = true;
             }
             if (dist >= 495f)       //about 30 tiles
@@ -73,10 +73,10 @@ namespace JoJoStands.Projectiles
 
         private Texture2D stickyFingersZipperPart;
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             if (Main.netMode != NetmodeID.Server)
-                stickyFingersZipperPart = Mod.Assets.Request<Texture2D>("Projectiles/Zipper_Part>().Value;
+                stickyFingersZipperPart = ModContent.Request<Texture2D>("JoJoStands/Projectiles/Zipper_Part").Value;
 
             Vector2 ownerCenter = Main.player[Projectile.owner].Center;
             Vector2 center = Projectile.Center;
@@ -91,7 +91,7 @@ namespace JoJoStands.Projectiles
                 distToProj = ownerCenter - center;    //update distance
                 distance = distToProj.Length();
 
-                Main.EntitySpriteDraw(stickyFingersZipperPart, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y), new Rectangle(0, 0, stickyFingersZipperPart.Width, stickyFingersZipperPart.Height), Color.White, projRotation, new Vector2(stickyFingersZipperPart.Width / 2f, stickyFingersZipperPart.Height / 2f), 1f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(stickyFingersZipperPart, new Vector2(center.X - Main.screenPosition.X, center.Y - Main.screenPosition.Y), new Rectangle(0, 0, stickyFingersZipperPart.Width, stickyFingersZipperPart.Height), Color.White, projRotation, new Vector2(stickyFingersZipperPart.Width / 2f, stickyFingersZipperPart.Height / 2f), 1f, SpriteEffects.None, 0);
             }
             return true;
         }

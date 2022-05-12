@@ -8,7 +8,7 @@ namespace JoJoStands.Projectiles.Minions
 {
     public class GEButterfly : ModProjectile
     {
-        public override string Texture { get { return "Terraria/NPC_" + NPCID.Butterfly; } }
+        public override string Texture { get { return "Terraria/Images/NPC_" + NPCID.Butterfly; } }
 
         public override void SetStaticDefaults()
         {

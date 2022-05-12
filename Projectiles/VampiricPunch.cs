@@ -1,12 +1,10 @@
-using System;
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class VampiricPunch : ModProjectile
@@ -36,9 +34,8 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
             Vector2 centerOffset = new Vector2((player.width / 2f) * player.direction, -24f);
             if (player.direction == -1)
-            {
                 centerOffset.X -= 24f;
-            }
+
             Projectile.position = player.Center + centerOffset;
             Projectile.spriteDirection = Projectile.direction = player.direction;
 
@@ -56,7 +53,7 @@ namespace JoJoStands.Projectiles
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
 
             vPlayer.StealHealthFrom(target, damage);
-            target.GetGlobalNPC<JoJoGlobalNPC>()).vampireUserLastHitIndex = player.whoAmI;
+            target.GetGlobalNPC<JoJoGlobalNPC>().vampireUserLastHitIndex = player.whoAmI;
             if (vPlayer.HasSkill(player, VampirePlayer.SavageInstincts))
                 if (Main.rand.Next(0, 100) <= vPlayer.lacerationChance)
                     target.AddBuff(ModContent.BuffType<Lacerated>(), (vPlayer.GetSkillLevel(player, VampirePlayer.SavageInstincts) * 4) * 60);

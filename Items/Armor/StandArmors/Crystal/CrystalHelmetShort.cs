@@ -1,7 +1,6 @@
-﻿using Terraria.ID;
-using Terraria;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.StandArmors.Crystal
@@ -11,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crystal Helmet (Short-Ranged)>();
-            Tooltip.SetDefault("A helmet made to empower the force of the wills\n+2 Stand Speed>();
+            DisplayName.SetDefault("Crystal Helmet (Short-Ranged)");
+            Tooltip.SetDefault("A helmet made to empower the force of the wills\n+2 Stand Speed");
         }
 
         public override void SetDefaults()

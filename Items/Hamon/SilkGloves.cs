@@ -178,7 +178,7 @@ namespace JoJoStands.Items.Hamon
                 .AddIngredient(ItemID.CrimtaneBar, 5)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 4)
                 .AddTile(TileID.Anvils)
-
+                .Register();
 
         }
     }

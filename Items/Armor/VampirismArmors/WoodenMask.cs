@@ -1,3 +1,4 @@
+using JoJoStands.Buffs.AccessoryBuff;
 using JoJoStands.UI;
 using Terraria;
 using Terraria.ID;

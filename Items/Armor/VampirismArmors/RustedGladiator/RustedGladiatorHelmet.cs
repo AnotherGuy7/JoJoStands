@@ -2,7 +2,6 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
@@ -12,7 +11,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A helmet worn by only the best of warriors.\n+5% Vampiric Damaage>();
+            Tooltip.SetDefault("A helmet worn by only the best of warriors.\n+5% Vampiric Damaage");
         }
 
         public override void SetDefaults()
@@ -40,7 +39,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
             player.setBonus = "Your physical abilities have been boosted.";
             player.moveSpeed += 0.3f;
             player.maxRunSpeed += 0.3f;
-            player.meleeSpeed += 0.3f;
+            player.GetAttackSpeed(DamageClass.Generic) += 0.3f;
             vPlayer.vampiricDamageMultiplier += 0.03f;
             player.jumpBoost = true;
             player.jumpSpeedBoost += 0.2f;

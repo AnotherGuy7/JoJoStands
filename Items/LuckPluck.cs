@@ -34,7 +34,7 @@ namespace JoJoStands.Items
                 .AddIngredient(ItemID.GoldBar, 4)
                 .AddIngredient(ItemID.Ruby)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
-                .AddTile(TileID.Anvils);
+                .AddTile(TileID.Anvils)
                 .Register();
         }
     }

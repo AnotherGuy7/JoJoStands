@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
 
             if (animationName == "Idle")
             {

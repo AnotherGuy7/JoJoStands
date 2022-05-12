@@ -1,19 +1,19 @@
+using JoJoStands.Items.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.ObjectData;
 
 namespace JoJoStands.Tiles
 {
     public class ViralMeteoriteTile : ModTile
     {
-        public override void SetDefaults()      //some of this is from ExampleMod/Tiles/ExmapleOre
+        public override void SetStaticDefaults()      //some of this is from ExampleMod/Tiles/ExmapleOre
         {
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileID.Sets.Ore[Type] = true;
-            Main.tileValue[Type] = 309;
+            //Main.tileValue[Type] = 309;
             Main.tileSpelunker[Type] = true; // The tile will be affected by spelunker highlighting
             Main.tileShine2[Type] = true; // Modifies the draw color slightly.
             Main.tileMergeDirt[Type] = true;
@@ -21,15 +21,15 @@ namespace JoJoStands.Tiles
             Main.tileLighted[Type] = true;
             TileObjectData.addTile(Type);
 
-            soundType = SoundID.Tink;
-            dustType = DustID.Silver;
-            drop = ModContent.ItemType<ViralMeteorite>();
-            mineResist = 3f;
-            minPick = 65;
+            SoundType = SoundID.Tink;
+            DustType = DustID.Silver;
+            ItemDrop = ModContent.ItemType<ViralMeteorite>();
+            MineResist = 3f;
+            MinPick = 65;
 
-            disableSmartCursor = true;
+            TileID.Sets.DisableSmartCursor[Type] = true;
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Viral Meteorite>();
+            name.SetDefault("Viral Meteorite");
             AddMapEntry(Color.LightGray, name);
         }
 
@@ -67,14 +67,12 @@ namespace JoJoStands.Tiles
                 Yadd = -1;
             }
             Tile tileTarget = Main.tile[i + Xadd, j + Yadd];
-            if (tileTarget.type == TileID.Meteorite)
+            if (tileTarget.TileType == TileID.Meteorite)
             {
-                tileTarget.type = (ushort)Mod.TileType(Name);
+                tileTarget.TileType = (ushort)ModContent.TileType<ViralMeteoriteTile>();
                 WorldGen.SquareTileFrame(i + Xadd, j + Yadd, true);
                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
                     NetMessage.SendTileSquare(-1, i + Xadd, j + Yadd, 1);
-                }
             }
         }
     }

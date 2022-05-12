@@ -1,7 +1,7 @@
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -44,9 +44,8 @@ namespace JoJoStands.Projectiles
             if (groundCheckTimer >= 30)
             {
                 if (!WorldGen.SolidTile((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f) + 1))
-                {
                     Projectile.Kill();
-                }
+
                 groundCheckTimer = 0;
             }
 
@@ -56,9 +55,7 @@ namespace JoJoStands.Projectiles
                 Projectile.frame++;
                 Projectile.frameCounter = 0;
                 if (Projectile.frame >= Main.projFrames[Projectile.type])
-                {
                     Projectile.frame = 0;
-                }
             }
 
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 169, 0f, 0f);

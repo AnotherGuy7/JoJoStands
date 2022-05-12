@@ -389,7 +389,7 @@ namespace JoJoStands.NPCs.Enemies
             if (dashing && !grabbingPlayer)
             {
                 SpriteEffects effects = (NPC.spriteDirection == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                Texture2D texture2d = Mod.Assets.Request<Texture2D>("NPCs/Enemies/JackTheRipper").Value;
+                Texture2D texture2d = ModContent.Request<Texture2D>("NPCs/Enemies/JackTheRipper").Value;
                 Vector2 center = new Vector2((Terraria.GameContent.TextureAssets.Npc[NPC.type].Value.Width / 2), (Terraria.GameContent.TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2));
                 spriteBatch.Draw(texture2d, new Vector2(NPC.position.X - Main.screenPosition.X + (NPC.width / 2) - Terraria.GameContent.TextureAssets.Npc[NPC.type].Value.Width * NPC.scale / 2f + center.X * NPC.scale, NPC.position.Y - Main.screenPosition.Y + NPC.height - Terraria.GameContent.TextureAssets.Npc[NPC.type].Value.Height * NPC.scale / Main.npcFrameCount[NPC.type] + 4f + center.Y * NPC.scale), new Rectangle?(NPC.frame), Color.White, NPC.rotation, center, NPC.scale, effects, 0);
                 for (int i = 1; i < NPC.oldPos.Length; i++)

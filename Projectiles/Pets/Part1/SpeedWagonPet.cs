@@ -1,8 +1,9 @@
+using JoJoStands.Buffs.PetBuffs;
+using JoJoStands.Dusts;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.Pets.Part1
 {
@@ -33,11 +34,9 @@ namespace JoJoStands.Projectiles.Pets.Part1
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            //MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            //MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!player.HasBuff(ModContent.BuffType<SpeedWagonPetBuff>()) || player.dead)
-            {
                 Projectile.Kill();
-            }
 
             Vector2 directionToPlayer = player.Center - Projectile.Center;
             directionToPlayer.Normalize();
@@ -86,7 +85,7 @@ namespace JoJoStands.Projectiles.Pets.Part1
                 if (!spawnedHat && hatIndex == -1)
                 {
                     hatSpawnPos = Projectile.Center + new Vector2(0f, -16f);
-                    hatIndex = Dust.NewDust(hatSpawnPos, Projectile.width, Projectile.height, Mod.DustType("SpeedWagonsHat>());
+                    hatIndex = Dust.NewDust(hatSpawnPos, Projectile.width, Projectile.height, ModContent.DustType<SpeedWagonsHat>());
                     spawnedHat = true;
                 }
                 if (distance >= 48f)

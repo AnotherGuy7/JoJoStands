@@ -261,7 +261,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
 
             if (animationName == "Idle")
             {

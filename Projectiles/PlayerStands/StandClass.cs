@@ -11,7 +11,6 @@ using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.PlayerStands
 {
@@ -553,8 +552,8 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             if (beginningSoundInstance == null)
             {
-                
-                
+
+
                 SoundEffect sound = SoundEngine.GetTrackableSoundByStyleId(SoundLoader.GetSoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/BattleCries/" + punchSoundName + "_Beginning"));
                 if (sound != null)
                 {
@@ -590,21 +589,24 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
                         beginningSoundInstance.Volume = MyPlayer.ModSoundsVolume;
-                        SoundEngine.PlaySoundInstance(beginningSoundInstance);                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
+                        beginningSoundInstance.Play();                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
+                        SoundInstanceGarbageCollector.Track(beginningSoundInstance);
                         playedBeginning = true;
                     }
                     if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
                     {
                         //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
                         punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
-                        SoundEngine.PlaySoundInstance(punchingSoundInstance);
+                        punchingSoundInstance.Play();
+                        SoundInstanceGarbageCollector.Track(punchingSoundInstance);
                         SyncSounds();
                     }
                 }
                 else
                 {
                     //punchingSoundInstance.Play();
-                    SoundEngine.PlaySoundInstance(punchingSoundInstance);
+                    punchingSoundInstance.Play();
+                    SoundInstanceGarbageCollector.Track(punchingSoundInstance);
                     SyncSounds();
                     playedBeginning = true;
                 }
@@ -675,7 +677,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void UpdateStandInfo()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             newPunchTime = punchTime - mPlayer.standSpeedBoosts;
             newShootTime = shootTime - mPlayer.standSpeedBoosts;
@@ -707,7 +709,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 if (spawnSoundName != "" && !playedSpawnSound)
                 {
-                    Terraria.Audio.LegacySoundStyle spawnSound = JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SummonCries/" + spawnSoundName);
+                    LegacySoundStyle spawnSound = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SummonCries/" + spawnSoundName);
                     spawnSound.WithVolume(MyPlayer.ModSoundsVolume);
                     SoundEngine.PlaySound(spawnSound, Projectile.position);
                     playedSpawnSound = true;
@@ -720,22 +722,22 @@ namespace JoJoStands.Projectiles.PlayerStands
             return false;
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)      //from ExampleMod ExampleDeathShader
+        public override bool PreDraw(ref Color drawColor)      //from ExampleMod ExampleDeathShader
         {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
 
-            DrawRangeIndicators(spriteBatch);       //not affected by dyes since it's starting a new batch with no effect
+            DrawRangeIndicators(Main.spriteBatch);       //not affected by dyes since it's starting a new batch with no effect
             SyncAndApplyDyeSlot();
-            DrawStand(spriteBatch, drawColor);
+            DrawStand(Main.spriteBatch, drawColor);
 
             return true;
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Color drawColor)     //manually drawing stands cause sometimes stands had too many frames, it's easier to manage this way, and dye effects didn't work for stands that were overriding PostDraw
+        public override void PostDraw(Color drawColor)     //manually drawing stands cause sometimes stands had too many frames, it's easier to manage this way, and dye effects didn't work for stands that were overriding PostDraw
         {
-            spriteBatch.End();     //ending the spriteBatch that started in PreDraw
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Main.spriteBatch.End();     //ending the spriteBatch that started in PreDraw
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
         }
 
         public SpriteEffects effects = SpriteEffects.None;
@@ -774,7 +776,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (!MyPlayer.RangeIndicators || Main.netMode == NetmodeID.Server || rangeIndicatorSize == Vector2.Zero)
                 return;
 
-            //Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/RangeIndicator>().Value;        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
+            //Texture2D texture = ModContent.Request<Texture2D>("Extras/RangeIndicator>().Value;        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
             Vector2 rangeIndicatorDrawPosition = player.Center - Main.screenPosition;
             Vector2 rangeIndicatorOrigin = rangeIndicatorSize / 2f;
             float rangeIndicatorAlpha = (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f);
@@ -795,28 +797,28 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void SyncAndApplyDyeSlot()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.StandDyeSlot.Item.dye != 0)
+            if (mPlayer.StandDyeSlot.SlotItem.dye != 0)
             {
-                ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(mPlayer.StandDyeSlot.Item.type);
+                ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(mPlayer.StandDyeSlot.SlotItem.type);
                 shader.Apply(null);     //has to be on top of whatever it's applying to (I spent hours and hours trying to find a solution and the only problem was that this was under it)
                 if (!sentDyePacket)       //we sync dye slot Item here
                 {
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.Item.type, player.whoAmI);
+                        ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.SlotItem.type, player.whoAmI);
                     }
                     sentDyePacket = true;
                 }
             }
-            if (mPlayer.StandDyeSlot.Item.dye == 0)
+            if (mPlayer.StandDyeSlot.SlotItem.dye == 0)
             {
                 if (sentDyePacket)
                 {
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.Item.type, player.whoAmI);
+                        ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.SlotItem.type, player.whoAmI);
                     }
                     sentDyePacket = false;
                 }
@@ -825,7 +827,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void Kill(int timeLeft)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             mPlayer.standType = 0;
             mPlayer.poseSoundName = "";
         }
@@ -868,7 +870,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void LimitDistance()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             Vector2 direction = player.Center - Projectile.Center;
             float distanceFromPlayer = direction.Length();
@@ -896,7 +898,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void LimitDistance(float maxDistance, bool affectedByRangeModifiers = false)
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (affectedByRangeModifiers)
                 maxDistance += mPlayer.standRangeBoosts;
 

@@ -7,7 +7,6 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Vampire
 {
@@ -55,9 +54,7 @@ namespace JoJoStands.Items.Vampire
             {
                 lungeChargeTimer++;
                 if (lungeChargeTimer > 180)
-                {
                     lungeChargeTimer = 180;
-                }
             }
             if (!Main.mouseLeft && lungeChargeTimer > 0 && useCool <= 0)
             {
@@ -81,7 +78,7 @@ namespace JoJoStands.Items.Vampire
                 launchVector.Normalize();
                 launchVector *= multiplier * 6;
                 player.velocity += launchVector;
-                Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<VampiricSlash>(), Item.damage * multiplier, Item.knockBack * multiplier, Item.owner);
+                Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<VampiricSlash>(), Item.damage * multiplier, Item.knockBack * multiplier, player.whoAmI);
                 SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 1, 1f, 0.2f);
                 lungeChargeTimer = 0;
             }
@@ -170,11 +167,8 @@ namespace JoJoStands.Items.Vampire
 
         public override void AddRecipes()
         {
-            Player player = Main.player[Main.myPlayer];
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-
             CreateRecipe()
-                .AddCondition(NetworkText.FromLiteral("ZombieRequirement"), r => vPlayer.zombie)
+                .AddCondition(NetworkText.FromLiteral("ZombieRequirement"), r => !Main.gameMenu && Main.LocalPlayer.GetModPlayer<VampirePlayer>().zombie)
                 .Register();
         }
     }

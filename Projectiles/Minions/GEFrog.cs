@@ -10,7 +10,7 @@ namespace JoJoStands.Projectiles.Minions
     public class GEFrog : ModProjectile
     {
 
-        public override string Texture { get { return "Terraria/NPC_" + NPCID.Frog; } }
+        public override string Texture { get { return "Terraria/Images/NPC_" + NPCID.Frog; } }
 
         public override void SetStaticDefaults()
         {

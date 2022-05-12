@@ -1,18 +1,17 @@
-using Terraria.ID;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.StandArmors.Viral
 {
-	[AutoloadEquip(EquipType.Head)]
-	public class ViralArmorHelmetMelee : ModItem
-	{
+    [AutoloadEquip(EquipType.Head)]
+    public class ViralArmorHelmetMelee : ModItem
+    {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Helmet (Short-Range)>();
-            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Speed Increase: -1>();
+            DisplayName.SetDefault("Viral Helmet (Short-Range)");
+            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Speed Increase: -1");
         }
 
         public override void SetDefaults()

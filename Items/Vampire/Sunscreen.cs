@@ -1,7 +1,7 @@
+using JoJoStands.Buffs.ItemBuff;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Vampire
 {
@@ -9,8 +9,8 @@ namespace JoJoStands.Items.Vampire
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sunscreen>();
-            Tooltip.SetDefault("For all the hot days you spend wandering.>();
+            DisplayName.SetDefault("Sunscreen");
+            Tooltip.SetDefault("For all the hot days you spend wandering.");
         }
 
         public override void SetDefaults()

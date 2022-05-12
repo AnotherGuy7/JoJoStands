@@ -1,7 +1,7 @@
+using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.PlayerStands.Cream
 {
@@ -33,7 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             Projectile.frame = 1;
             player.position = Projectile.position + new Vector2(0f, 0f);
@@ -88,9 +88,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
         }
 
-        public override bool TileCollideStyle(ref int widht, ref int height, ref bool fallThrough)
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
-            widht = Projectile.width + 14;
+            width = Projectile.width + 14;
             height = Projectile.height + 14;
             fallThrough = true;
             return true;
@@ -104,7 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.creamExposedMode = false;
             player.fallStart = (int)player.position.Y;
         }

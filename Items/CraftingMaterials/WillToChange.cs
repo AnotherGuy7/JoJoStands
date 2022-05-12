@@ -28,7 +28,7 @@ namespace JoJoStands.Items.CraftingMaterials
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            Texture2D texture = Mod.Assets.Request<Texture2D>("Items/CraftingMaterials/" + Name).Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Items/CraftingMaterials/" + Name).Value;
             DrawAnimation drawAnim = Main.itemAnimations[Item.type];
             Rectangle sourceRect = drawAnim.GetFrame(texture);
             Main.EntitySpriteDraw(texture, Item.Center - Main.screenPosition + new Vector2(0f, 1f), sourceRect, Color.White, 0f, new Vector2(texture.Width / 2f, Item.height / 2f), 1f, SpriteEffects.None, 0);     //animates faster than the normal animation???

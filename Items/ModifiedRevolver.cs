@@ -36,7 +36,7 @@ namespace JoJoStands.Items
             Item.rare = ItemRarityID.Yellow;
             Item.UseSound = SoundID.Item41;
             Item.autoReuse = false;
-            Item.ranged = true;
+            Item.DamageType = DamageClass.Ranged;
             Item.shoot = 10;
             Item.useAmmo = AmmoID.Bullet;
             Item.maxStack = 1;
@@ -50,32 +50,23 @@ namespace JoJoStands.Items
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SpecialHotKey.JustPressed;
             if (reloadCounter > 0)
-            {
                 reloadCounter--;
-            }
             if (mPlayer.revolverBulletsShot >= 6)       //do you really need this line?
-            {
                 reloadStart++;
-            }
             if (mPlayer.revolverBulletsShot != 6)
-            {
                 reloadStart = 0;
-            }
+
             if (reloadStart == 1)
             {
-                if (MyPlayer.Sounds)
-                {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload60"));
-                }
                 reloadCounter = 60;
+                if (MyPlayer.Sounds)
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload60"));
             }
             if (specialPressed && reloadCounter <= 1 && player.whoAmI == Main.myPlayer)
             {
-                if (MyPlayer.Sounds)
-                {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload30"));
-                }
                 reloadCounter = 30;
+                if (MyPlayer.Sounds)
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload30"));
             }
             if (reloadCounter == 1)
             {
@@ -104,13 +95,11 @@ namespace JoJoStands.Items
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (reloadCounter >= 1 || mPlayer.revolverBulletsShot >= 6)
-            {
                 return false;
-            }
+
             if (mPlayer.revolverBulletsShot < 6)
-            {
                 mPlayer.revolverBulletsShot += 1;
-            }
+
             if (player.altFunctionUse == 2 && reloadCounter == 0)
             {
                 Item.useTime = 5;

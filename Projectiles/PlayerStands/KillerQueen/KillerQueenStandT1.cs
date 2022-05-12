@@ -283,7 +283,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/KillerQueen/KillerQueen_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/KillerQueen/KillerQueen_" + animationName);
 
             if (animationName == "Idle")
             {

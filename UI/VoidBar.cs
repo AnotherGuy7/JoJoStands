@@ -7,7 +7,7 @@ using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    internal class VoidBar : UIState
+    public class VoidBar : UIState
     {
         public DragableUIPanel voidBarUI;
         public static bool Visible;

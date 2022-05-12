@@ -1,11 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using System;
 
 namespace JoJoStands.Projectiles
 {
@@ -95,7 +94,7 @@ namespace JoJoStands.Projectiles
                     {
                         if (otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), Projectile.Center, linkedProjectile.Center))
                         {
-                            otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " fell right into " + player.name + "'s string trap!>(), (int)Projectile.ai[1], -otherPlayer.direction);
+                            otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " fell right into " + player.name + "'s string trap!"), (int)Projectile.ai[1], -otherPlayer.direction);
                             linkedProjectile.Kill();
                             Projectile.Kill();
                             break;
@@ -109,14 +108,14 @@ namespace JoJoStands.Projectiles
         private Texture2D stringTexture;
         private Color drawColor;
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             sinTimer++;
             if (sinTimer >= 360)
                 sinTimer = 0;
 
             if (stringTexture == null)
-                stringTexture = Mod.Assets.Request<Texture2D>("Projectiles/StoneFreeString_Part>().Value;
+                stringTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StoneFreeString_Part").Value;
 
             if (linkWhoAmI != -1)
             {
@@ -142,7 +141,7 @@ namespace JoJoStands.Projectiles
                         lightLevelIndex = 0f;
                     }
 
-                    Main.EntitySpriteDraw(stringTexture, pos, new Rectangle(0, 0, stringTexture.Width, stringTexture.Height), drawColor, stringRotation, new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f), Projectile.scale * stringScale, SpriteEffects.None, 0f);
+                    Main.EntitySpriteDraw(stringTexture, pos, new Rectangle(0, 0, stringTexture.Width, stringTexture.Height), drawColor, stringRotation, new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f), Projectile.scale * stringScale, SpriteEffects.None, 0);
                 }
             }
             return false;

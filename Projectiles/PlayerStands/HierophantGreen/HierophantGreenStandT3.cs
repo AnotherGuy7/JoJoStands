@@ -314,7 +314,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/HierophantGreen/HierophantGreen_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/HierophantGreen/HierophantGreen_" + animationName);
 
             if (animationName == "Idle")
             {

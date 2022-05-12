@@ -82,7 +82,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
 
             if (animationName == "Idle")
             {

@@ -184,7 +184,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
 
             if (animationName == "Idle")
             {

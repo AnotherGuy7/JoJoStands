@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items
 {
@@ -48,12 +47,12 @@ namespace JoJoStands.Items
             }
         }
 
-        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
+        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
-            mult *= player.GetModPlayer<MyPlayer>().standDamageBoosts;
+            damage *= player.GetModPlayer<MyPlayer>().standDamageBoosts;
         }
 
-        public override void GetWeaponCrit(Player player, ref int crit)
+        public override void ModifyWeaponCrit(Player player, ref float crit)
         {
             crit = (int)player.GetModPlayer<MyPlayer>().standCritChangeBoosts;
         }
@@ -66,16 +65,16 @@ namespace JoJoStands.Items
         public override void RightClick(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.StandSlot.Item.type != 0)
+            if (mPlayer.StandSlot.SlotItem.type != 0)
             {
-                player.QuickSpawnItem(mPlayer.StandSlot.Item.type);
-                mPlayer.StandSlot.Item.type = Item.type;
-                mPlayer.StandSlot.Item.SetDefaults(Item.type);
+                player.QuickSpawnItem(player.GetSource_FromThis(), mPlayer.StandSlot.SlotItem.type);
+                mPlayer.StandSlot.SlotItem.type = Item.type;
+                mPlayer.StandSlot.SlotItem.SetDefaults(Item.type);
             }
-            if (mPlayer.StandSlot.Item.type == 0)
+            if (mPlayer.StandSlot.SlotItem.type == 0)
             {
-                mPlayer.StandSlot.Item.type = Item.type;
-                mPlayer.StandSlot.Item.SetDefaults(Item.type);
+                mPlayer.StandSlot.SlotItem.type = Item.type;
+                mPlayer.StandSlot.SlotItem.SetDefaults(Item.type);
             }
         }
 

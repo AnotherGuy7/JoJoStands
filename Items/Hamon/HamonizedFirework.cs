@@ -15,7 +15,6 @@ namespace JoJoStands.Items.Hamon
 
         public override void SetDefaults()
         {
-            Item.ranged = true;
             Item.damage = 23;
             Item.width = 26;
             Item.height = 30;
@@ -32,6 +31,7 @@ namespace JoJoStands.Items.Hamon
             Item.useStyle = ItemUseStyleID.Thrust;
             Item.shoot = ModContent.ProjectileType<HamonizedFireworkProjectile>();
             Item.shootSpeed = 15f;
+            Item.DamageType = DamageClass.Ranged;
         }
 
         public override bool CanUseItem(Player player)

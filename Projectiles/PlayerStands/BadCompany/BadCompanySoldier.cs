@@ -4,6 +4,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
@@ -247,7 +248,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/BadCompany/BadCompanySoldier_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanySoldier_" + animationName);
 
             if (animationName == "Parachute")
             {

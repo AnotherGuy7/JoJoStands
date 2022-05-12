@@ -258,7 +258,7 @@ namespace JoJoStands.NPCs.Enemies
             if (runCounter > 0)
             {
                 SpriteEffects effects = (NPC.spriteDirection == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                Texture2D texture2d = Mod.Assets.Request<Texture2D>("NPCs/Enemies/Doobie").Value;
+                Texture2D texture2d = ModContent.Request<Texture2D>("NPCs/Enemies/Doobie").Value;
                 Vector2 vector2 = new Vector2((TextureAssets.Npc[NPC.type].Value.Width / 2), (TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2));
                 spriteBatch.Draw(texture2d, new Vector2(NPC.position.X - Main.screenPosition.X + (NPC.width / 2) - TextureAssets.Npc[NPC.type].Value.Width * NPC.scale / 2f + vector2.X * NPC.scale, NPC.position.Y - Main.screenPosition.Y + NPC.height - TextureAssets.Npc[NPC.type].Value.Height * NPC.scale / Main.npcFrameCount[NPC.type] + 4f + vector2.Y * NPC.scale), new Rectangle?(NPC.frame), Color.White, NPC.rotation, vector2, NPC.scale, effects, 0f);
                 for (int i = 1; i < NPC.oldPos.Length; i++)

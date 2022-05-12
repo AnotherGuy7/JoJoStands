@@ -12,7 +12,6 @@ namespace JoJoStands.Projectiles
             Projectile.width = 10;
             Projectile.height = 10;
             Projectile.aiStyle = 0;
-            Projectile.magic = true;
             Projectile.timeLeft = 600;
             Projectile.friendly = true;
             Projectile.tileCollide = true;

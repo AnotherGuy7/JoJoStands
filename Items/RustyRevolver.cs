@@ -30,7 +30,7 @@ namespace JoJoStands.Items
             Item.rare = ItemRarityID.Green;
             Item.UseSound = SoundID.Item41;
             Item.autoReuse = false;
-            Item.ranged = true;
+            Item.DamageType = DamageClass.Ranged;
             Item.shoot = 10;
             Item.useAmmo = AmmoID.Bullet;
             Item.maxStack = 1;

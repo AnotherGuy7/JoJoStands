@@ -1,20 +1,17 @@
+using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Buffs.PlayerBuffs;
 using JoJoStands.NPCs;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader.IO;
-using JoJoStands.Buffs.Debuffs;
-using JoJoStands.Items.Vampire;
-using JoJoStands.Buffs.ItemBuff;
-using JoJoStands.Projectiles;
-using JoJoStands.Buffs.PlayerBuffs;
-using JoJoStands.Buffs.AccessoryBuff;
 
 namespace JoJoStands.Items.Vampire
 {
@@ -553,20 +550,17 @@ namespace JoJoStands.Items.Vampire
             return true;
         }
 
-        public override TagCompound Save()
+        public override void SaveData(TagCompound tag)
         {
-            return new TagCompound
-            {
-                { "vampireSkillPointsAvailable", vampireSkillPointsAvailable },
-                { "totalVampireSkillPointsEarned", totalVampireSkillPointsEarned },
-                { "vampiricLevel", vampiricLevel },
-                { "learnedAnyZombieAbility", learnedAnyZombieAbility },
-                { "zombieSkillKeys", learnedZombieSkills.Keys.ToList() },
-                { "zombieSkillValues", learnedZombieSkills.Values.ToList() },
-                { "zombieLevelKeys", zombieSkillLevels.Keys.ToList() },
-                { "zombieLevelValues", zombieSkillLevels.Values.ToList() },
-                { "enemyTypesKilled", enemyTypesKilled }
-            };
+            tag.Add("vampireSkillPointsAvailable", vampireSkillPointsAvailable);
+            tag.Add("totalVampireSkillPointsEarned", totalVampireSkillPointsEarned);
+            tag.Add("vampiricLevel", vampiricLevel);
+            tag.Add("learnedAnyZombieAbility", learnedAnyZombieAbility);
+            tag.Add("zombieSkillKeys", learnedZombieSkills.Keys.ToList());
+            tag.Add("zombieSkillValues", learnedZombieSkills.Values.ToList());
+            tag.Add("zombieLevelKeys", zombieSkillLevels.Keys.ToList());
+            tag.Add("zombieLevelValues", zombieSkillLevels.Values.ToList());
+            tag.Add("enemyTypesKilled", enemyTypesKilled);
         }
 
         public override void LoadData(TagCompound tag)
@@ -589,69 +583,5 @@ namespace JoJoStands.Items.Vampire
         {
             ResetVariables();
         }
-
-        /*public static readonly PlayerDrawLayer ProtectiveFilmLayer = new PlayerDrawLayer("JoJoStands", "ProtectiveFilmLayer", PlayerDrawLayer.FrontAcc, delegate (PlayerDrawInfo drawInfo)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>();
-            VampirePlayer vampirePlayer = drawplayer.GetModPlayer<VampirePlayer>();
-            if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<ProtectiveFilmBuff>()))
-            {
-                Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/ProtectiveFilmLayer>().Value;
-                int drawX = (int)drawInfo.position.X;
-                int drawY = (int)(drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
-                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
-                SpriteEffects effects = SpriteEffects.None;
-                if (drawPlayer.direction == -1)
-                {
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                DrawData data = new DrawData(texture, position, drawPlayer.bodyFrame, color * alpha, drawPlayer.fullRotation, drawPlayer.Size / 2f, 1f, effects, 0);
-                Main.PlayerDrawData.Add(data);
-            }
-        });
-
-        public static readonly PlayerLayer KnivesLayer = new PlayerLayer("JoJoStands", "KnivesLayer", PlayerLayer.FrontAcc, delegate (PlayerDrawInfo drawInfo)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands>();
-            VampirePlayer vampirePlayer = drawplayer.GetModPlayer<VampirePlayer>();
-            if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<KnifeAmalgamation>()))
-            {
-                Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/KnivesLayer>().Value;
-                int drawX = (int)drawInfo.position.X;
-                int drawY = (int)(drawInfo.position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
-                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
-                SpriteEffects effects = SpriteEffects.None;
-                if (drawPlayer.direction == -1)
-                {
-                    effects = SpriteEffects.FlipHorizontally;
-                }
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                Color color = Lighting.GetColor((int)((drawInfo.position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.position.Y + drawPlayer.height / 2f) / 16f));
-                DrawData data = new DrawData(texture, position, drawPlayer.bodyFrame, color * alpha, drawPlayer.fullRotation, drawPlayer.Size / 2f, 1f, effects, 0);
-                Main.PlayerDrawData.Add(data);
-            }
-        });
-
-        public override void ModifyDrawLayers(List<PlayerLayer> layers)
-        {
-            if (dyingVampire)
-            {
-                PlayerLayer.Legs.visible = false;
-                PlayerLayer.Body.visible = false;
-                PlayerLayer.Skin.visible = false;
-                PlayerLayer.Arms.visible = false;
-                PlayerLayer.HeldItem.visible = false;
-                PlayerLayer.ShieldAcc.visible = false;
-                PlayerLayer.ShoeAcc.visible = false;
-                PlayerLayer.BalloonAcc.visible = false;
-                PlayerLayer.Wings.visible = false;
-            }
-            layers.Add(ProtectiveFilmLayer);
-            layers.Add(KnivesLayer);
-        }*/
     }
 }

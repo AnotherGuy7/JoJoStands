@@ -57,7 +57,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>() && !attackFrames && !parryFrames && Projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && !parryFrames && Projectile.owner == Main.myPlayer)
                 {
                     HandleDrawOffsets();
                     normalFrames = false;
@@ -187,7 +187,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 pathAddition = "Shirtless_";
 
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/SilverChariot/SilverChariot_" + pathAddition + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/SilverChariot/SilverChariot_" + pathAddition + animationName);
 
             if (!Shirtless)
             {

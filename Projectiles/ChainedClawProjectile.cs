@@ -143,7 +143,7 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
 
             if (Main.netMode != NetmodeID.Server && stringPartTexture == null)
-                stringPartTexture = Mod.Assets.Request<Texture2D>("Projectiles/ChainedClaw_Chain").Value;
+                stringPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/ChainedClaw_Chain", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
             Vector2 linkCenter = player.Center;
             Vector2 center = Projectile.Center;

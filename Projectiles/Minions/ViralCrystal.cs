@@ -1,9 +1,9 @@
+using JoJoStands.Buffs.AccessoryBuff;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.Minions
 {
@@ -33,13 +33,10 @@ namespace JoJoStands.Projectiles.Minions
                 projectileYOffset = 0f;
 
             if (player.HasBuff(ModContent.BuffType<ViralCrystalBuff>()))
-            {
                 Projectile.timeLeft = 2;
-            }
             if (shootTimer > 0)
-            {
                 shootTimer--;
-            }
+
             Lighting.AddLight(Projectile.Center, 1f, 1f, 0.5f);
             Projectile.position = player.Center - new Vector2(Projectile.width / 2f, player.height + 18f + ((float)Math.Sin(projectileYOffset) * 4f));
             Projectile.spriteDirection = player.direction;

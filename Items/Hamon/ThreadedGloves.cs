@@ -1,3 +1,4 @@
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
@@ -191,7 +192,7 @@ namespace JoJoStands.Items.Hamon
             CreateRecipe()
                 .AddIngredient(ItemID.PalladiumBar, 4)
                 .AddIngredient(ItemID.LeadBar, 12)
-                .AddIngredient(ItemID.WhiteString, 3
+                .AddIngredient(ItemID.WhiteString, 3)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
                 .AddTile(TileID.Anvils)
                 .Register();

@@ -1,14 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    internal class AdjustableButton : UIImageButton
+    public class AdjustableButton : UIImageButton
     {
         private Texture2D buttonImage;
         private Texture2D overlayImage;
@@ -38,9 +37,9 @@ namespace JoJoStands.UI
         public float rotation;
 
 
-        public AdjustableButton(Texture2D texture, Vector2 position, Vector2 size, Color color, bool respondToFocusInput, float focusScale = 1.15f) : base(texture)
+        public AdjustableButton(Asset<Texture2D> texture, Vector2 position, Vector2 size, Color color, bool respondToFocusInput, float focusScale = 1.15f) : base(texture)
         {
-            buttonImage = texture;
+            buttonImage = (Texture2D)texture;
             SetButtonPosiiton(position);
             defaultSize = size;
             textureSize = texture.Size();
@@ -54,12 +53,12 @@ namespace JoJoStands.UI
             rectangle = new Rectangle(0, 0, (int)size.X, (int)size.Y);
         }
 
-        public AdjustableButton(Texture2D texture, Vector2 position, Vector2 size, Color color, float defaultAlpha = 0.4f, float activeAlpha = 1f, bool respondToFocusInput = true, float focusScale = 1.15f) : base(texture)
+        public AdjustableButton(Asset<Texture2D> texture, Vector2 position, Vector2 size, Color color, float defaultAlpha = 0.4f, float activeAlpha = 1f, bool respondToFocusInput = true, float focusScale = 1.15f) : base(texture)
         {
-            buttonImage = texture;
+            buttonImage = (Texture2D)texture;
             SetButtonPosiiton(position);
             defaultSize = size;
-            textureSize = texture.Size();
+            textureSize = ((Texture2D)texture).Size();
             drawColor = color;
             imageScale = 1f;
             rotation = 0f;

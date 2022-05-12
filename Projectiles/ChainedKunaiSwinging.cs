@@ -102,7 +102,7 @@ namespace JoJoStands.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             if (chainedKunaiTexture == null && Main.netMode != NetmodeID.Server)
-                chainedKunaiTexture = Mod.Assets.Request<Texture2D>("Projectiles/ChainedKunai_Swinging").Value;
+                chainedKunaiTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/ChainedKunai_Swinging").Value;
 
             Vector2 origin = new Vector2(chainedKunaiTexture.Width / 2f, chainedKunaiTexture.Height / 2f);
             Main.EntitySpriteDraw(chainedKunaiTexture, Projectile.Center - Main.screenPosition, null, Color.White * Projectile.alpha, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);

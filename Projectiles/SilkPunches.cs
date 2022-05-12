@@ -34,18 +34,18 @@ namespace JoJoStands.Projectiles
             {
                 if (Projectile.ai[0] < 2f)
                 {
-                    punchSpritesheet = Mod.Assets.Request<Texture2D>("Projectiles/SilkGloves_Punch").Value;
+                    punchSpritesheet = ModContent.Request<Texture2D>("JoJoStands/Projectiles/SilkGloves_Punch").Value;
                     amountOfFrames = 4;
                 }
                 else
                 {
                     if (Main.rand.Next(0, 2) == 0)
                     {
-                        punchSpritesheet = Mod.Assets.Request<Texture2D>("Projectiles/SilkGloves_Uppercut").Value;
+                        punchSpritesheet = ModContent.Request<Texture2D>("JoJoStands/Projectiles/SilkGloves_Uppercut").Value;
                     }
                     else
                     {
-                        punchSpritesheet = Mod.Assets.Request<Texture2D>("Projectiles/SilkGloves_Undercut").Value;
+                        punchSpritesheet = ModContent.Request<Texture2D>("JoJoStands/Projectiles/SilkGloves_Undercut").Value;
                     }
                     amountOfFrames = 5;
                 }

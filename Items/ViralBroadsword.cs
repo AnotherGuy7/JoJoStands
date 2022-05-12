@@ -34,7 +34,7 @@ namespace JoJoStands.Items
             Item.channel = true;
             Item.noMelee = true;
             Item.autoReuse = false;
-            Item.melee = true;
+            Item.DamageType = DamageClass.Melee;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

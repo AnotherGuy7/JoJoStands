@@ -11,7 +11,6 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Narancia's Pants");
             Tooltip.SetDefault("Dark, slim-fitting pants paired with an orange skirt. The shoes are surprisingly durable.");
-            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
         }
 
         public override void SetDefaults()

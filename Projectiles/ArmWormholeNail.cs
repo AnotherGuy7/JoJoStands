@@ -3,7 +3,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -30,7 +29,7 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Projectile.rotation += MathHelper.ToRadians(13f * Projectile.direction);
 
             if (player.whoAmI == Main.myPlayer && mPlayer.tuskShootCooldown <= 0)

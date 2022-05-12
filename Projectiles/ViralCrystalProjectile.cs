@@ -1,7 +1,7 @@
+using JoJoStands.Buffs.Debuffs;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class ViralCrystalProjectile : ModProjectile

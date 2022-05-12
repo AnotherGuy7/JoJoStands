@@ -1,7 +1,7 @@
+using JoJoStands.Buffs.Debuffs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -22,7 +22,7 @@ namespace JoJoStands.Projectiles
             Projectile.aiStyle = 99;
             Projectile.friendly = true;
             Projectile.penetrate = -1;
-            Projectile.melee = true;
+            Projectile.DamageType = DamageClass.Melee;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

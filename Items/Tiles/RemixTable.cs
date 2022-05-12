@@ -42,7 +42,7 @@ namespace JoJoStands.Items.Tiles
                 .AddIngredient(ItemID.LeadBar, 5)
                 .AddIngredient(ItemID.ShadowScale, 3)
                 .AddRecipeGroup("JoJoStandsWills")
-                .AddTile(TileID.Anvils);
+                .AddTile(TileID.Anvils)
                 .Register();
 
             CreateRecipe()

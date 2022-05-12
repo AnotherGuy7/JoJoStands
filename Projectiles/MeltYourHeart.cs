@@ -127,7 +127,7 @@ namespace JoJoStands.Projectiles
                     Yadd = -1;
                 }
                 Tile tileTarget = Main.tile[(int)(Projectile.Center.X /16f) + Xadd, (int)(Projectile.Center.Y / 16f) + Yadd];
-                if (tileTarget.active())
+                if (tileTarget.HasTile)
                 {
                     Projectile.ai[0] = checkNumber + 1;
                     Projectile.frame = 0;

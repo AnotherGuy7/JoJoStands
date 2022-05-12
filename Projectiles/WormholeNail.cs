@@ -1,8 +1,8 @@
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -40,7 +40,7 @@ namespace JoJoStands.Projectiles
             Lighting.AddLight(Projectile.Center, 2f, 2f, 2f);
             if (Projectile.owner == Main.myPlayer)
             {
-                if (player.GetModPlayer<MyPlayer>()).tuskActNumber != 3)
+                if (player.GetModPlayer<MyPlayer>().tuskActNumber != 3)
                 {
                     Projectile.Kill();
                 }
@@ -93,7 +93,7 @@ namespace JoJoStands.Projectiles
             }
             player.position = Projectile.position + new Vector2(0f, -35f);
             player.velocity.Y -= 6f;
-            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), player.GetModPlayer<MyPlayer>()).AbilityCooldownTime(20));
+            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), player.GetModPlayer<MyPlayer>().AbilityCooldownTime(20));
         }
     }
 }

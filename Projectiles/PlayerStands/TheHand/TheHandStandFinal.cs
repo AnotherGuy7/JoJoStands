@@ -197,7 +197,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         }
                         if (specialScrapeTimer > 60)
                         {
-                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR");
+                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR"));
                             for (int i = 0; i < Main.maxNPCs; i++)
                             {
                                 NPC npc = Main.npc[i];
@@ -401,7 +401,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (scrapeBarrageFrames)
             {
-                Texture2D scrapeTrail = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/TheHand/ScrapeBarrage_Scrape");
+                Texture2D scrapeTrail = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TheHand/ScrapeBarrage_Scrape");
                 //Main.EntitySpriteDraw(scrapeTrail, Projectile.Center - Main.screenPosition, new Rectangle(0, 2 - Projectile.frame, scrapeTrail.Width, scrapeTrail.Height / (Projectile.frame + 1)), Color.White);
                 int frameHeight = standTexture.Height / 7;
                 Main.EntitySpriteDraw(scrapeTrail, Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight), Color.White, 0f, new Vector2(scrapeTrail.Width / 2f, frameHeight / 2f), 1f, effects, 0);
@@ -482,7 +482,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
 
             if (animationName == "Idle")
             {

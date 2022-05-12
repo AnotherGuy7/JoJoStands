@@ -106,7 +106,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
 
             if (animationName == "Idle")
             {

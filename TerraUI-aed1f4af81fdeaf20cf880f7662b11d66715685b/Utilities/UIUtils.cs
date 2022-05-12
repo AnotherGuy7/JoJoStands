@@ -8,6 +8,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.UI;
 using TerraUI.Objects;
+using Terraria.GameContent;
 
 namespace TerraUI.Utilities {
     public static class UIUtils {
@@ -41,7 +42,7 @@ namespace TerraUI.Utilities {
 
             tex += "Textures/" + texture;
 
-            return Mod.Assets.Request<Texture2D>(tex).Value;
+            return ModContent.Request<Texture2D>(tex).Value;
         }
 
         /// <summary>
@@ -78,26 +79,26 @@ namespace TerraUI.Utilities {
                 case ItemSlot.Context.EquipMinecart:
                 case ItemSlot.Context.EquipPet:
                 case ItemSlot.Context.EquipLight:
-                    return Main.inventoryBack3Texture;
+                    return TextureAssets.InventoryBack3.Value;
                 case ItemSlot.Context.EquipArmorVanity:
                 case ItemSlot.Context.EquipAccessoryVanity:
-                    return Main.inventoryBack8Texture;
+                    return TextureAssets.InventoryBack8.Value;
                 case ItemSlot.Context.EquipDye:
-                    return Main.inventoryBack12Texture;
+                    return TextureAssets.InventoryBack12.Value;
                 case ItemSlot.Context.ChestItem:
-                    return Main.inventoryBack5Texture;
+                    return TextureAssets.InventoryBack5.Value;
                 case ItemSlot.Context.BankItem:
-                    return Main.inventoryBack2Texture;
+                    return TextureAssets.InventoryBack2.Value;
                 case ItemSlot.Context.GuideItem:
                 case ItemSlot.Context.PrefixItem:
                 case ItemSlot.Context.CraftingMaterial:
-                    return Main.inventoryBack4Texture;
+                    return TextureAssets.InventoryBack4.Value;
                 case ItemSlot.Context.TrashItem:
-                    return Main.inventoryBack7Texture;
+                    return TextureAssets.InventoryBack7.Value;
                 case ItemSlot.Context.ShopItem:
-                    return Main.inventoryBack6Texture;
+                    return TextureAssets.InventoryBack6.Value;
                 default:
-                    return Main.inventoryBackTexture;
+                    return TextureAssets.InventoryBack.Value;
             }
         }
 

@@ -1,6 +1,6 @@
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Tiles
 {
@@ -25,7 +25,7 @@ namespace JoJoStands.Items.Tiles
             Item.value = Item.buyPrice(0, 0, 45, 0);
             Item.rare = 1;
             Item.maxStack = 999;
-            Item.createTile = ModContent.TileType<ViralMeteoriteTile");
+            Item.createTile = ModContent.TileType<ViralMeteoriteTile>();
         }
     }
 }

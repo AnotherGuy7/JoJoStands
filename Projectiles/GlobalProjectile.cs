@@ -181,10 +181,10 @@ namespace JoJoStands.Projectiles
 
         public override void ModifyHitPlayer(Projectile Projectile, Player target, ref int damage, ref bool crit)
         {
-            MyPlayer mPlayer = target.GetModPlayer<MyPlayer>());
-            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT1>())
+            MyPlayer mPlayer = target.GetModPlayer<MyPlayer>();
+            if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT1>())
                 damage = (int)(damage * 0.35f);
-            if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT2>())
+            if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT2>())
                 damage = (int)(damage * 0.7f);
         }
 

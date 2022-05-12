@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent;
 
 namespace JoJoStands.UI
 {
-    internal class GoldExperienceRequiemAbilityWheel : AbilityWheel
+    public class GoldExperienceRequiemAbilityWheel : AbilityWheel
     {
         public static bool visible;
         private static GoldExperienceRequiemAbilityWheel goldExperienceRequiemAbilityWheel;
@@ -63,7 +64,7 @@ namespace JoJoStands.UI
             wheel.abilityNameText.SetText(wheel.abilityNames[0]);
             wheel.abilityNameText.Left.Pixels = wheel.wheelAlignPosition.X + wheel.wheelCenter.buttonPosition.X;
             wheel.abilityNameText.Top.Pixels = wheel.wheelAlignPosition.Y + wheel.wheelCenter.buttonPosition.Y + 60f;
-            wheel.abilityNameText.Left.Pixels += -Main.fontMouseText.MeasureString(wheel.abilityNames[0]).X * 2f * wheel.textScale;
+            wheel.abilityNameText.Left.Pixels += -FontAssets.MouseText.Value.MeasureString(wheel.abilityNames[0]).X * 2f * wheel.textScale;
             wheel.abilityNameText.Left.Pixels += 10f;
         }
 

@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
 
             if (animationName == "Idle")
             {

@@ -1,6 +1,6 @@
+using JoJoStands.Projectiles.Minions;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items
 {
@@ -8,8 +8,8 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stray Cat>();
-            Tooltip.SetDefault("An odd plant that is somehow a cat. It can fire bubbles invisible to the eye and is capable of causing meowsive damage.>();
+            DisplayName.SetDefault("Stray Cat");
+            Tooltip.SetDefault("An odd plant that is somehow a cat. It can fire bubbles invisible to the eye and is capable of causing meowsive damage.");
         }
 
         public override void SetDefaults()

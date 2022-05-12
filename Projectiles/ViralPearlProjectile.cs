@@ -1,13 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JoJoStands.Items;
+using JoJoStands.Items.Accessories;
+using JoJoStands.Items.CraftingMaterials;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
-    public class ViralPearl : ModProjectile
+    public class ViralPearlProjectile : ModProjectile
     {
         private int counter = 0;
 
@@ -46,26 +48,20 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
             if (Projectile.owner == Main.myPlayer)
             {
-                int Item = 0;
+                int itemIndex = 0;
                 if (!player.ZoneDungeon)
                 {
                     if (Main.rand.Next(0, 101) <= 90)
-                    {
-                        Item = Item.NewItem(Projectile.getRect(), ModContent.ItemType<ViralPearl>());
-                    }
+                        itemIndex = Item.NewItem(Projectile.GetSource_FromThis(), Projectile.getRect(), ModContent.ItemType<ViralPearl>());
                     else
-                    {
-                        Item = Item.NewItem(Projectile.getRect(), ModContent.ItemType<CrackedPearl>());
-                    }
+                        itemIndex = Item.NewItem(Projectile.GetSource_FromThis(), Projectile.getRect(), ModContent.ItemType<CrackedPearl>());
                 }
                 else
                 {
-                    Item = Item.NewItem(Projectile.getRect(), ModContent.ItemType<EctoPearl>());
+                    itemIndex = Item.NewItem(Projectile.GetSource_FromThis(), Projectile.getRect(), ModContent.ItemType<EctoPearl>());
                 }
-                if (Main.netMode == NetmodeID.MultiplayerClient && Item >= 0)
-                {
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Item, 1f);
-                }
+                if (Main.netMode == NetmodeID.MultiplayerClient && itemIndex >= 0)
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, itemIndex, 1f);
             }
         }
     }

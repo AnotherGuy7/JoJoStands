@@ -16,7 +16,7 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int i = 0; i < Main.maxPlayers; i++)       //first, get rid of all effect owners
@@ -67,7 +67,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 player.ClearBuff(Type);
 
             }*/
-            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.bitesTheDustActive = true;
             if (!player.HasBuff(Type))
             {

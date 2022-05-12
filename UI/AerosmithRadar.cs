@@ -9,7 +9,7 @@ using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    internal class AerosmithRadar : UIState
+    public class AerosmithRadar : UIState
     {
         public DragableUIPanel aerosmithRadarUI;
         public UIImage centerDot;

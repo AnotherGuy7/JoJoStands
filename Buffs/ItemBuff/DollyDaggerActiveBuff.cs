@@ -18,9 +18,9 @@ namespace JoJoStands.Buffs.ItemBuff
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standAccessory)     //rather than having to check the Stand Slot for any 4 items
             {
-                if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT1>())
+                if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT1>())
                     player.endurance += 0.35f;
-                if (mPlayer.StandSlot.Item.type == ModContent.ItemType<DollyDaggerT2>())
+                if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT2>())
                     player.endurance += 0.7f;
 
                 player.buffTime[buffIndex] = 10;

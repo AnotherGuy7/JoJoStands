@@ -1,8 +1,9 @@
+using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -94,16 +95,15 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/ViralBeetleProjectile>().Value;
+            Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/ViralBeetleProjectile").Value;
             int frameHeight = texture.Height / Main.projFrames[Projectile.type];
             SpriteEffects effects = SpriteEffects.None;
             if (Projectile.direction == -1)
-            {
                 effects = SpriteEffects.FlipVertically;
-            }
-            Main.EntitySpriteDraw(texture, Projectile.position - Main.screenPosition, new Rectangle(0, Projectile.frame, Projectile.width, frameHeight), Color.White, Projectile.rotation, new Vector2(texture.Width / 2f, frameHeight / 2f), Projectile.scale, effects, 0f);
+
+            Main.EntitySpriteDraw(texture, Projectile.position - Main.screenPosition, new Rectangle(0, Projectile.frame, Projectile.width, frameHeight), Color.White, Projectile.rotation, new Vector2(texture.Width / 2f, frameHeight / 2f), Projectile.scale, effects, 0);
             return false;
         }
 

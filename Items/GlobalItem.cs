@@ -20,6 +20,11 @@ namespace JoJoStands.Items
         private float normalFallSpeed = 0f;
         private bool gravitySaved = false;
 
+        public override GlobalItem Clone(Item item, Item itemClone)
+        {
+            return base.Clone(item, itemClone);
+        }
+
         public override void ModifyTooltips(Item Item, List<TooltipLine> tooltips)
         {
             Player player = Main.player[Main.myPlayer];

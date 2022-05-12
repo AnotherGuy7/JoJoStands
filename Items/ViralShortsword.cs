@@ -28,7 +28,7 @@ namespace JoJoStands.Items
             Item.value = Item.buyPrice(0, 1, 25, 0);
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.melee = true;
+            Item.DamageType = DamageClass.Melee;
         }
 
         public override void HoldItem(Player player)

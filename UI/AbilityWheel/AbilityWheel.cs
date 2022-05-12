@@ -5,12 +5,11 @@ using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    internal class AbilityWheel : UIState
+    public class AbilityWheel : UIState
     {
         public static MyPlayer mPlayer;
 
@@ -65,7 +64,7 @@ namespace JoJoStands.UI
             wheelCenter = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelCenter"), Vector2.Zero, new Vector2(54f), Color.White, 1f, 1f);
             wheelCenter.SetButtonPosiiton(new Vector2(60f));
             wheelCenter.SetButtonSize(new Vector2(54f));
-            wheelCenter.SetOverlayImage(ModContent.Request<Texture2D>(centerTexturePath), 0.15f);
+            wheelCenter.SetOverlayImage((Texture2D)ModContent.Request<Texture2D>(centerTexturePath), 0.15f);
             wheelCenter.owner = abilityWheel;
             wheelCenter.respondToFocus = false;
             abilityWheel.Append(wheelCenter);
@@ -74,7 +73,7 @@ namespace JoJoStands.UI
             for (int i = 0; i < amountOfAbilities; i++)
             {
                 abilityButtons[i] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelPiece"), wheelCenter.buttonCenter + (IndexToRadianPosition(i, 6) * wheelSpace), new Vector2(38f), Color.White, 1f, 1f);
-                abilityButtons[i].SetOverlayImage(ModContent.Request<Texture2D>(buttonTexturePath + abilityTextureNames[i]), 0.15f);
+                abilityButtons[i].SetOverlayImage((Texture2D)ModContent.Request<Texture2D>(buttonTexturePath + abilityTextureNames[i]), 0.15f);
                 abilityButtons[i].OnClick += ClickedAbility;
                 abilityButtons[i].OnScrollWheel += MouseScroll;
                 //abilityButtons[i].owner = abilityWheel;

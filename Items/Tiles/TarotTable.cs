@@ -1,7 +1,7 @@
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Tiles
 {
@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Tiles
             Item.value = Item.buyPrice(0, 20, 50, 0);
             Item.rare = ItemRarityID.Blue;
             Item.maxStack = 1;
-            Item.createTile = ModContent.TileType<TarotTableTile");
+            Item.createTile = ModContent.TileType<TarotTableTile>();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace JoJoStands.Projectiles.Pets.Part1
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            //MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            //MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!player.HasBuff(ModContent.BuffType<DioPetBuff>()) || player.dead)
                 Projectile.Kill();
 

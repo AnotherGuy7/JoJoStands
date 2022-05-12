@@ -92,6 +92,8 @@ namespace JoJoStands
         public int chosenAbility = 0;
         public int timeSkipEffectTransitionTimer = 0;
         public float biteTheDustEffectProgress = 0f;
+        public int poseFrameCounter = 0;
+        public int menacingFrames = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -139,8 +141,6 @@ namespace JoJoStands
 
         private int standKeyPressTimer = 0;
         private int spinSubtractionTimer = 0;
-        private int poseFrameCounter = 0;
-        private int menacingFrames = 0;
         private int tbcCounter = 0;
 
         private bool forceChangedTusk = false;
@@ -210,7 +210,7 @@ namespace JoJoStands
 
         public override void OnEnterWorld(Player player)
         {
-            int type = StandSlot.Item.type;
+            int type = StandSlot.SlotItem.type;
             if (type == ModContent.ItemType<TuskAct3>() || type == ModContent.ItemType<TuskAct4>())
             {
                 tuskActNumber = 3;
@@ -317,11 +317,11 @@ namespace JoJoStands
             }
             if (JoJoStands.SpecialHotKey.Current && standAccessory)
             {
-                if (StandSlot.Item.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.Item.type == ModContent.ItemType<CenturyBoyT2>())
+                if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
                 {
                     Player.AddBuff(ModContent.BuffType<CenturyBoyBuff>(), 2, true);
                 }
-                if (StandSlot.Item.type == ModContent.ItemType<LockT3>())
+                if (StandSlot.SlotItem.type == ModContent.ItemType<LockT3>())
                 {
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
@@ -351,7 +351,7 @@ namespace JoJoStands
                         }
                     }
                 }
-                if (StandSlot.Item.type == ModContent.ItemType<LockFinal>())
+                if (StandSlot.SlotItem.type == ModContent.ItemType<LockFinal>())
                 {
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
@@ -428,20 +428,20 @@ namespace JoJoStands
         {
             StandSlot = new UIItemSlot(Vector2.Zero, hoverText: "Enter Stand Here", scaleToInventory: true);
             StandSlot.BackOpacity = .8f;
-            StandSlot.Item = new Item();
-            StandSlot.Item.SetDefaults(0);
+            StandSlot.SlotItem = new Item();
+            StandSlot.SlotItem.SetDefaults(0);
 
             StandDyeSlot = new UIItemSlot(StandSlot.Position - new Vector2(60f, 0f), 52, context: ItemSlot.Context.EquipDye, "Enter Dye Here", scaleToInventory: true);
             StandDyeSlot.BackOpacity = .8f;
-            StandDyeSlot.Item = new Item();
-            StandDyeSlot.Item.SetDefaults(0);
+            StandDyeSlot.SlotItem = new Item();
+            StandDyeSlot.SlotItem.SetDefaults(0);
         }
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Add("StandInSlot", ItemIO.Save(StandSlot.Item));
+            tag.Add("StandInSlot", ItemIO.Save(StandSlot.SlotItem));
             tag.Add("canRevertBTD", canRevertFromKQBTD);
-            tag.Add("DyeInDyeSlot", ItemIO.Save(StandDyeSlot.Item));
+            tag.Add("DyeInDyeSlot", ItemIO.Save(StandDyeSlot.SlotItem));
             tag.Add("usedEctoPearl", usedEctoPearl);
             tag.Add("receivedArrowShard", receivedArrowShard);
             tag.Add("piercedTimer", piercedTimer);
@@ -449,9 +449,9 @@ namespace JoJoStands
 
         public override void LoadData(TagCompound tag)
         {
-            StandSlot.Item = ItemIO.Load(tag.GetCompound("StandInSlot")).Clone();
+            StandSlot.SlotItem = ItemIO.Load(tag.GetCompound("StandInSlot")).Clone();
             canRevertFromKQBTD = tag.GetBool("canRevertBTD");
-            StandDyeSlot.Item = ItemIO.Load(tag.GetCompound("DyeInDyeSlot")).Clone();
+            StandDyeSlot.SlotItem = ItemIO.Load(tag.GetCompound("DyeInDyeSlot")).Clone();
             usedEctoPearl = tag.GetBool("usedEctoPearl");
             receivedArrowShard = tag.GetBool("receivedArrowShard");
             piercedTimer = tag.GetInt("piercedTimer");
@@ -555,7 +555,7 @@ namespace JoJoStands
 
             UpdateShaderStates();
             if (standRemoteMode && standName == "Aerosmith")
-                AerosmithRadar.Visible = StandSlot.Item.type == ModContent.ItemType<AerosmithT3>() || StandSlot.Item.type == ModContent.ItemType<AerosmithFinal>();
+                AerosmithRadar.Visible = StandSlot.SlotItem.type == ModContent.ItemType<AerosmithT3>() || StandSlot.SlotItem.type == ModContent.ItemType<AerosmithFinal>();
             else
                 AerosmithRadar.Visible = false;
 
@@ -1241,7 +1241,7 @@ namespace JoJoStands
 
         public void SpawnStand()
         {
-            Item inputItem = StandSlot.Item;
+            Item inputItem = StandSlot.SlotItem;
             if (standChangingLocked)
                 return;
 

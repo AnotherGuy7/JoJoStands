@@ -85,7 +85,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/SilverChariot/SilverChariot_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/SilverChariot/SilverChariot_" + animationName);
 
             if (animationName == "Idle")
             {

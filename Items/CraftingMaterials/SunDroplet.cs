@@ -2,7 +2,6 @@ using JoJoStands.Items.Hamon;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.CraftingMaterials
 {
@@ -28,10 +27,9 @@ namespace JoJoStands.Items.CraftingMaterials
         {
             HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (clickTimer > 0)
-            {
                 clickTimer--;
-            }
-            if (player.whoAmI == Item.owner)
+
+            if (player.whoAmI == Main.myPlayer)
             {
                 if (Main.mouseRight && Item.stack > 20 && clickTimer <= 0)
                 {

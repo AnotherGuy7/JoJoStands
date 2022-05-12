@@ -113,7 +113,7 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
 
             if (Main.netMode != NetmodeID.Server && stringPartTexture == null)
-                stringPartTexture = Mod.Assets.Request<Texture2D>("Projectiles/ChainedKunai_StringPart").Value;
+                stringPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/ChainedKunai_StringPart").Value;
 
             Vector2 linkCenter = player.Center + offset;
             Vector2 center = Projectile.Center;

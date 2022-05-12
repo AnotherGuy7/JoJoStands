@@ -212,7 +212,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         {
             if (remoteControlled)
             {
-                Texture2D armTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Whitesnake/Whitesnake_Arm");
+                Texture2D armTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Whitesnake_Arm");
                 Vector2 armOrigin = new Vector2(4f, 12f);
                 int armFrameHeight = 16;
                 Rectangle armSourceRect = new Rectangle(0, armFrame * armFrameHeight, 56, armFrameHeight);
@@ -280,7 +280,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
 
             if (animationName == "Idle")
             {

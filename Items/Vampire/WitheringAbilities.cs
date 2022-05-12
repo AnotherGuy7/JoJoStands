@@ -70,7 +70,7 @@ namespace JoJoStands.Items.Vampire
                 launchVector *= multiplier * 4f;
                 player.velocity += launchVector;
                 useCool += Item.useTime + (6 * (punchChargeTimer / 30));
-                Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<VampiricPunch>(), Item.damage * multiplier, Item.knockBack * multiplier, Item.owner);
+                Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<VampiricPunch>(), Item.damage * multiplier, Item.knockBack * multiplier, player.whoAmI);
                 SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 1, 1f, 0.2f);
                 punchChargeTimer = 0;
             }
@@ -115,11 +115,8 @@ namespace JoJoStands.Items.Vampire
 
         public override void AddRecipes()
         {
-            Player player = Main.player[Main.myPlayer];
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-
             CreateRecipe()
-                .AddCondition(NetworkText.FromLiteral("ZombieRequirement"), r => vPlayer.zombie && vPlayer.HasSkill(player, VampirePlayer.WitheringAbilities))
+                .AddCondition(NetworkText.FromLiteral("ZombieRequirement"), r => !Main.gameMenu && Main.LocalPlayer.GetModPlayer<VampirePlayer>().zombie && Main.LocalPlayer.GetModPlayer<VampirePlayer>().HasSkill(Main.LocalPlayer, VampirePlayer.WitheringAbilities))
                 .Register();
         }
     }

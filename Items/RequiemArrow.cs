@@ -25,7 +25,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<StandArrow>());
+                .AddIngredient(ModContent.ItemType<StandArrow>())
                 .AddIngredient(ModContent.ItemType<ViralPearl>())
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();

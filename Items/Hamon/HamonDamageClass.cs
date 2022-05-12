@@ -112,7 +112,7 @@ namespace JoJoStands.Items.Hamon
             }
             if (Main.hardMode)      //wall of flesh
             {
-                mult *= 1.3f;
+                damage *= 1.3f;
             }
             if (NPC.downedMechBoss1)        //any mechboss orders
             {

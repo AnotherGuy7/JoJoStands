@@ -103,7 +103,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 if (!attackFrames && !parryFrames)
                 {
-                    if (!Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>())
+                    if (!Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                         StayBehind();
                     else
                         GoInFront();
@@ -187,7 +187,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 pathAddition = "Shirtless_";
 
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/SilverChariot/SilverChariot_" + pathAddition + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/SilverChariot/SilverChariot_" + pathAddition + animationName);
 
             if (!Shirtless)
             {
@@ -214,23 +214,23 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             }
             else
             {
-                if (animationName == "Idle>()
+                if (animationName == "Idle")
                 {
                     AnimateStand("Shirtless" + animationName, 4, 30, true);
                 }
-                if (animationName == "Attack>()
+                if (animationName == "Attack")
                 {
                     AnimateStand("Shirtless" + animationName, 5, newPunchTime, true);
                 }
-                if (animationName == "Secondary>()
+                if (animationName == "Secondary")
                 {
                     AnimateStand("Shirtless" + animationName, 1, 1, true);
                 }
-                if (animationName == "Parry>()
+                if (animationName == "Parry")
                 {
                     AnimateStand("Shirtless" + animationName, 6, 8, false);
                 }
-                if (animationName == "Pose>()
+                if (animationName == "Pose")
                 {
                     AnimateStand(animationName, 1, 10, true);
                 }

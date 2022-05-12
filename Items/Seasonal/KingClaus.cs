@@ -1,7 +1,7 @@
+using JoJoStands.Projectiles.PlayerStands.KingCrimson;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Seasonal
 {
@@ -13,8 +13,8 @@ namespace JoJoStands.Items.Seasonal
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Agent Crimson>();
-            Tooltip.SetDefault("Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!\nConsecutive Donuts deal greater damage.\nSpecial: Skip 10 seconds of time!\nSecond Special: Use Epitaph for 9 seconds!\nUsed in Stand Slot>();
+            DisplayName.SetDefault("Agent Crimson");
+            Tooltip.SetDefault("Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!\nConsecutive Donuts deal greater damage.\nSpecial: Skip 10 seconds of time!\nSecond Special: Use Epitaph for 9 seconds!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -30,7 +30,7 @@ namespace JoJoStands.Items.Seasonal
 
         public override bool ManualStandSpawning(Player player)
         {
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<KingClausStand>(), 0, 0f, Main.myPlayer);
+            Projectile.NewProjectile(player.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<KingClausStand>(), 0, 0f, Main.myPlayer);
             return true;
         }
     }

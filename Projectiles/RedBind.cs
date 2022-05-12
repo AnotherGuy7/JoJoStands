@@ -1,9 +1,8 @@
-using System;
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -82,7 +81,7 @@ namespace JoJoStands.Projectiles
             Projectile.Kill();
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
+        public override bool PreDraw(ref Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
         {
             Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
             Vector2 ownerCenterOffset = new Vector2(4f, -4.5f);
@@ -91,11 +90,11 @@ namespace JoJoStands.Projectiles
 
             Vector2 ownerCenter = ownerProj.Center + ownerCenterOffset;
             Vector2 center = Projectile.Center + new Vector2(0f, -1f);
-            Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/RedBind_Part>().Value;
+            Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/RedBind_Part").Value;
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, ownerCenter) / texture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, ownerCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                Main.EntitySpriteDraw(texture, pos, new Rectangle(0, 0, texture.Width, texture.Height), lightColor, Projectile.rotation, new Vector2(texture.Width * 0.5f, texture.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture, pos, new Rectangle(0, 0, texture.Width, texture.Height), lightColor, Projectile.rotation, new Vector2(texture.Width * 0.5f, texture.Height * 0.5f), 1f, SpriteEffects.None, 0);
             }
             return true;
         }

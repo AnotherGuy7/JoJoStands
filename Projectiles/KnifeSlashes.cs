@@ -1,10 +1,10 @@
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -86,7 +86,7 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
 
-            target.GetGlobalNPC<JoJoGlobalNPC>()).vampireUserLastHitIndex = player.whoAmI;
+            target.GetGlobalNPC<JoJoGlobalNPC>().vampireUserLastHitIndex = player.whoAmI;
             if (vPlayer.HasSkill(player, VampirePlayer.SavageInstincts))
                 if (Main.rand.Next(0, 100) <= vPlayer.lacerationChance)
                     target.AddBuff(ModContent.BuffType<Lacerated>(), (vPlayer.GetSkillLevel(player, VampirePlayer.SavageInstincts) * 4) * 60);

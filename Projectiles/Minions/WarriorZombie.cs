@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles.Minions
                 Projectile.velocity.Y += 0.2f;
 
             Vector3 lightLevel = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16).ToVector3();
-            if (lightLevel.Length() > 1.3f && Main.dayTime && Main.tile[(int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16].wall == 0)
+            if (lightLevel.Length() > 1.3f && Main.dayTime && Main.tile[(int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16].WallType == 0)
             {
                 Projectile.Kill();
             }

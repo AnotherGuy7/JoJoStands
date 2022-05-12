@@ -9,10 +9,8 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kira's Pants")
+            DisplayName.SetDefault("Kira's Pants");
             Tooltip.SetDefault("A simple pair of pants for a quiet lifestyle.");
-
-            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
         }
 
         public override void SetDefaults()

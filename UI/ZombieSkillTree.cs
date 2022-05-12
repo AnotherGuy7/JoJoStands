@@ -7,12 +7,11 @@ using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    internal class ZombieSkillTree : UIState
+    public class ZombieSkillTree : UIState
     {
         public static bool Visible;
 
@@ -44,7 +43,7 @@ namespace JoJoStands.UI
         public static void OpenZombieSkillTree()
         {
             Visible = true;
-            JoJoStands.Instance.ZombieSkillTreeUI.InitializeButtons(1);
+            JoJoStandsSystem.ZombieSkillTreeUI.InitializeButtons(1);
         }
 
         public override void Update(GameTime gameTime)
@@ -119,10 +118,10 @@ namespace JoJoStands.UI
             zombieSkillTreeXButton.OnClick += OnClickZombieSkillTreeXButton;
             ZombieSkillTreePanel.Append(zombieSkillTreeXButton);
 
-            skillTreeTextures[0] = ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page1");
-            skillTreeTextures[1] = ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page2");
-            skillTreeTextures[2] = ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page3");
-            unknownSkillTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/VampireIcon_Unknown");
+            skillTreeTextures[0] = (Texture2D)(Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page1");
+            skillTreeTextures[1] = (Texture2D)(Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page2");
+            skillTreeTextures[2] = (Texture2D)(Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page3");
+            unknownSkillTexture = (Texture2D)(Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/VampireIcon_Unknown");
 
             for (int b = 0; b < MaxButtonsPerPage; b++)
             {
@@ -285,7 +284,7 @@ namespace JoJoStands.UI
         {
             for (int b = 0; b < MaxButtonsPerPage; b++)
             {
-                zombieSkillIcons[b].SetImage(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireIcon_Empty"));
+                zombieSkillIcons[b].SetImage((Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/VampireIcon_Empty"));
                 zombieSkillIcons[b].invisible = false;
                 zombieSkillIcons[b].lockedInFocus = false;
                 slotsToLock[b] = false;
@@ -311,13 +310,13 @@ namespace JoJoStands.UI
             {
                 case 1:
                     SetElementPosition(zombieSkillIcons[0], new Vector2(352f, 206f));
-                    zombieSkillIconImages[0] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_0");
+                    zombieSkillIconImages[0] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_0");
                     zombieSkillIcons[0].SetImage(zombieSkillIconImages[0]);
                     zombieSkillIconTooltips[0] = "Learn of your newfound abilities as a Zombie.";
                     zombieSkillIcons[0].lockedInFocus = true;        //Zombie is always learned
 
                     SetElementPosition(zombieSkillIcons[1], new Vector2(260f, 206f));
-                    zombieSkillIconImages[1] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_1");
+                    zombieSkillIconImages[1] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_1");
                     zombieSkillIcons[1].SetImage(zombieSkillIconImages[1]);
                     zombieSkillIconTooltips[1] = "Your new structure gives you unparalleled strength and speed.\nWhen a zombie, your damage and movement speed is increased by 4%.";
                     affectedSkillSlotIndexes[1] = VampirePlayer.UndeadConstitution;
@@ -325,7 +324,7 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(1);
 
                     SetElementPosition(zombieSkillIcons[2], new Vector2(134f, 206f));
-                    zombieSkillIconImages[2] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_2");
+                    zombieSkillIconImages[2] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_2");
                     zombieSkillIcons[2].SetImage(zombieSkillIconImages[2]);
                     zombieSkillIconTooltips[2] = "Getting crafty with nearby materials proves to be of use.\nAllows you to right-click Dirt or Mud Blocks to rub yourself in those tiles, granting some protection against Sunburn.";
                     affectedSkillSlotIndexes[2] = VampirePlayer.ProtectiveFilm;
@@ -334,7 +333,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(2, 1);
 
                     SetElementPosition(zombieSkillIcons[3], new Vector2(235f, 79f));
-                    zombieSkillIconImages[3] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_3");
+                    zombieSkillIconImages[3] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_3");
                     zombieSkillIcons[3].SetImage(zombieSkillIconImages[3]);
                     zombieSkillIconTooltips[3] = "Being a zombie has made you much more attentive.\nAt night, every 20s, enemies at full health are highlighted and damage dealt to them while they are highlighted is multiplied by 1.2x.";
                     affectedSkillSlotIndexes[3] = VampirePlayer.UndeadPerception;
@@ -343,7 +342,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(3, 1);
 
                     SetElementPosition(zombieSkillIcons[4], new Vector2(112f, 79f));
-                    zombieSkillIconImages[4] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_4");
+                    zombieSkillIconImages[4] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_4");
                     zombieSkillIcons[4].SetImage(zombieSkillIconImages[4]);
                     zombieSkillIconTooltips[4] = "The taste of blood strengthens you.\nAllows you to use Blood Suck using your Zombie Abilities.";
                     affectedSkillSlotIndexes[4] = VampirePlayer.BloodSuck;
@@ -355,7 +354,7 @@ namespace JoJoStands.UI
                     }
 
                     SetElementPosition(zombieSkillIcons[5], new Vector2(43f, 79f));
-                    zombieSkillIconImages[5] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_6");
+                    zombieSkillIconImages[5] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_6");
                     zombieSkillIcons[5].SetImage(zombieSkillIconImages[5]);
                     zombieSkillIconTooltips[5] = "Your twisted, deteriorated form has many hidden advantages.\nAllows you to use the withering abilities. (Will become freely craftable once this skill is unlocked)";
                     affectedSkillSlotIndexes[5] = VampirePlayer.WitheringAbilities;
@@ -368,7 +367,7 @@ namespace JoJoStands.UI
 
                 case 2:
                     SetElementPosition(zombieSkillIcons[0], new Vector2(330f, 79f));
-                    zombieSkillIconImages[0] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_7");
+                    zombieSkillIconImages[0] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_7");
                     zombieSkillIcons[0].SetImage(zombieSkillIconImages[0]);
                     zombieSkillIconTooltips[0] = "Your experience in savagery has sharpened your intellect, granting you knowledge on where to strike next.\nAll vampiric weapons have a 7% of inflicting Lacerated!";
                     affectedSkillSlotIndexes[0] = VampirePlayer.SavageInstincts;
@@ -377,7 +376,7 @@ namespace JoJoStands.UI
                     CheckForSpecificAbiltyUnlocked(0, VampirePlayer.WitheringAbilities);
 
                     SetElementPosition(zombieSkillIcons[1], new Vector2(249f, 79f));
-                    zombieSkillIconImages[1] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_1");
+                    zombieSkillIconImages[1] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_1");
                     zombieSkillIcons[1].SetImage(zombieSkillIconImages[1]);
                     zombieSkillIconTooltips[1] = "Your new structure gives you unparalleled strength and speed.\nWhen a zombie, your damage and movement speed is increased by 7%.";
                     affectedSkillSlotIndexes[1] = VampirePlayer.UndeadConstitution;
@@ -386,7 +385,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(1, 0);
 
                     SetElementPosition(zombieSkillIcons[2], new Vector2(295f, 128f));
-                    zombieSkillIconImages[2] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_8");
+                    zombieSkillIconImages[2] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_8");
                     zombieSkillIcons[2].SetImage(zombieSkillIconImages[2]);
                     zombieSkillIconTooltips[2] = "Being entombed has its perks.\nWhen a zombie, hold DOWN while standing still for 3 seconds to bury yourself underground. While underground, life regeneration is increased. Press JUMP to get out.";
                     affectedSkillSlotIndexes[2] = VampirePlayer.UndergroundRecovery;
@@ -395,7 +394,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(2, 0);
 
                     SetElementPosition(zombieSkillIcons[3], new Vector2(294f, 171f));
-                    zombieSkillIconImages[3] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_9");
+                    zombieSkillIconImages[3] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_9");
                     zombieSkillIcons[3].SetImage(zombieSkillIconImages[3]);
                     zombieSkillIconTooltips[3] = "Your heightened senses make reacting to incoming danger basic instinct.\n8% Chance to dodge incoming damage.";
                     affectedSkillSlotIndexes[3] = VampirePlayer.EvasiveInstincts;
@@ -404,7 +403,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(3, 0);
 
                     SetElementPosition(zombieSkillIcons[4], new Vector2(216f, 171f));
-                    zombieSkillIconImages[4] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_5");
+                    zombieSkillIconImages[4] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_5");
                     zombieSkillIcons[4].SetImage(zombieSkillIconImages[4]);
                     zombieSkillIconTooltips[4] = "The use of knives as a weapon shines out to you.\nAllows you to use the knife wielder abilities. (Will become freely craftable once this skill is unlocked)";
                     affectedSkillSlotIndexes[4] = VampirePlayer.KnifeWielder;
@@ -413,7 +412,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(4, 3);
 
                     SetElementPosition(zombieSkillIcons[5], new Vector2(215f, 243f));
-                    zombieSkillIconImages[5] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_3");
+                    zombieSkillIconImages[5] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_3");
                     zombieSkillIcons[5].SetImage(zombieSkillIconImages[5]);
                     zombieSkillIconTooltips[5] = "Being a zombie has made you much more attentive.\nAt night, every 10s, enemies at full health are highlighted and damage dealt to them while they are highlighted is multiplied by 1.4x.";
                     affectedSkillSlotIndexes[5] = VampirePlayer.UndeadPerception;
@@ -422,7 +421,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(5, 4);
 
                     SetElementPosition(zombieSkillIcons[6], new Vector2(135f, 171f));
-                    zombieSkillIconImages[6] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_10");
+                    zombieSkillIconImages[6] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_10");
                     zombieSkillIcons[6].SetImage(zombieSkillIconImages[6]);
                     zombieSkillIconTooltips[6] = "Those who don't fear you will have to be shown who the top is.\nWhile a boss is summoned: +8% Movement Speed\n+10% Damage\n+15% Jump Speed";
                     affectedSkillSlotIndexes[6] = VampirePlayer.TopOfTheChain;
@@ -431,7 +430,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(6, 4);
 
                     SetElementPosition(zombieSkillIcons[7], new Vector2(101f, 105f));
-                    zombieSkillIconImages[7] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_4");
+                    zombieSkillIconImages[7] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_4");
                     zombieSkillIcons[7].SetImage(zombieSkillIconImages[7]);
                     zombieSkillIconTooltips[7] = "The taste of blood strengthens you.\nBlood Suck abilities have been improved.";
                     affectedSkillSlotIndexes[7] = VampirePlayer.BloodSuck;
@@ -440,7 +439,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(7, 6);
 
                     SetElementPosition(zombieSkillIcons[8], new Vector2(67f, 171f));
-                    zombieSkillIconImages[8] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_11");
+                    zombieSkillIconImages[8] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_11");
                     zombieSkillIcons[8].SetImage(zombieSkillIconImages[8]);
                     zombieSkillIconTooltips[8] = "Your insides are more than enough of a danger to your surroundings.\nAllows you to use the Entrails Abilities.";
                     affectedSkillSlotIndexes[8] = VampirePlayer.EntrailAbilities;
@@ -449,7 +448,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(8, 6);
 
                     SetElementPosition(zombieSkillIcons[9], new Vector2(25f, 243f));
-                    zombieSkillIconImages[9] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_7");
+                    zombieSkillIconImages[9] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_7");
                     zombieSkillIcons[9].SetImage(zombieSkillIconImages[9]);
                     zombieSkillIconTooltips[9] = "Your experience in savagery has sharpened your intellect, granting you knowledge on where to strike next.\nAll vampiric weapons have a 12% of inflicting Lacerated!";
                     affectedSkillSlotIndexes[9] = VampirePlayer.SavageInstincts;
@@ -462,7 +461,7 @@ namespace JoJoStands.UI
 
                 case 3:
                     SetElementPosition(zombieSkillIcons[0], new Vector2(332f, 178f));
-                    zombieSkillIconImages[0] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_13");
+                    zombieSkillIconImages[0] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_13");
                     zombieSkillIcons[0].SetImage(zombieSkillIconImages[0]);
                     zombieSkillIconTooltips[0] = "Repeatedly seeing the actions of your enemies makes them much more predictable.\nVampiric Damage done to enemies is increased by the amount of times that type of enemy has been killed.";
                     affectedSkillSlotIndexes[0] = VampirePlayer.ExperiencedBeast;
@@ -471,7 +470,7 @@ namespace JoJoStands.UI
                     CheckForSpecificAbiltyUnlocked(0, VampirePlayer.SavageInstincts, 2);
 
                     SetElementPosition(zombieSkillIcons[1], new Vector2(237f, 159f));
-                    zombieSkillIconImages[1] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_8");
+                    zombieSkillIconImages[1] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_8");
                     zombieSkillIcons[1].SetImage(zombieSkillIconImages[1]);
                     zombieSkillIconTooltips[1] = "Being entombed has its perks.\nWhen a zombie, hold DOWN while standing still for 3 seconds to bury yourself underground. While underground, life regeneration is greatly increased. Press JUMP to get out.";
                     affectedSkillSlotIndexes[1] = VampirePlayer.UndergroundRecovery;
@@ -480,7 +479,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(1, 0);
 
                     SetElementPosition(zombieSkillIcons[2], new Vector2(237f, 228f));
-                    zombieSkillIconImages[2] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_12");
+                    zombieSkillIconImages[2] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_12");
                     zombieSkillIcons[2].SetImage(zombieSkillIconImages[2]);
                     zombieSkillIconTooltips[2] = "Your might cannot be bested, but dying in battle isn't a testament to that.\nWhen your health reaches 0, 30% chance to regain 30% of maximum health back. Maximum health is set to 30% of its original capacity.";
                     affectedSkillSlotIndexes[2] = VampirePlayer.FinalPush;
@@ -490,7 +489,7 @@ namespace JoJoStands.UI
 
 
                     SetElementPosition(zombieSkillIcons[3], new Vector2(139f, 159f));
-                    zombieSkillIconImages[3] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_9");
+                    zombieSkillIconImages[3] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_9");
                     zombieSkillIcons[3].SetImage(zombieSkillIconImages[3]);
                     zombieSkillIconTooltips[3] = "Your heightened senses make reacting to incoming danger basic instinct.\n12% Chance to dodge incoming damage.";
                     affectedSkillSlotIndexes[3] = VampirePlayer.EvasiveInstincts;
@@ -499,7 +498,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(3, 1);
 
                     SetElementPosition(zombieSkillIcons[4], new Vector2(140f, 96f));
-                    zombieSkillIconImages[4] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_10");
+                    zombieSkillIconImages[4] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_10");
                     zombieSkillIcons[4].SetImage(zombieSkillIconImages[4]);
                     zombieSkillIconTooltips[4] = "Those who don't fear you will have to be shown who the top is.\nWhile a boss is summoned: +11% Movement Speed\n+16% Damage\n+20% Jump Speed";
                     affectedSkillSlotIndexes[4] = VampirePlayer.TopOfTheChain;
@@ -507,7 +506,7 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(4, 2);
 
                     SetElementPosition(zombieSkillIcons[5], new Vector2(140f, 27f));
-                    zombieSkillIconImages[5] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_13");
+                    zombieSkillIconImages[5] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_13");
                     zombieSkillIcons[5].SetImage(zombieSkillIconImages[5]);
                     zombieSkillIconTooltips[5] = "Repeatedly seeing the actions of your enemies makes them much more predictable.\nVampiric Damage done to enemies is increased by the amount of times that type of enemy has been killed.";
                     affectedSkillSlotIndexes[5] = VampirePlayer.ExperiencedBeast;
@@ -516,7 +515,7 @@ namespace JoJoStands.UI
                     CheckForIconLock(5, 4);
 
                     SetElementPosition(zombieSkillIcons[6], new Vector2(238f, 96f));
-                    zombieSkillIconImages[6] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_4");
+                    zombieSkillIconImages[6] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_4");
                     zombieSkillIcons[6].SetImage(zombieSkillIconImages[6]);
                     zombieSkillIconTooltips[6] = "The use of knives as a weapon shines out to you.\nAllows you to use the knife wielder abilities. (Will become freely craftable once this skill is unlocked)";
                     affectedSkillSlotIndexes[6] = VampirePlayer.BloodSuck;
@@ -524,7 +523,7 @@ namespace JoJoStands.UI
                     CheckForIconAbilityUnlocked(6, 3);
 
                     SetElementPosition(zombieSkillIcons[7], new Vector2(330f, 79f));
-                    zombieSkillIconImages[7] = ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_1");
+                    zombieSkillIconImages[7] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ZombieIcon_1");
                     zombieSkillIcons[7].SetImage(zombieSkillIconImages[7]);
                     zombieSkillIconTooltips[7] = "Your new structure gives you unparalleled strength and speed.\nWhen a zombie, your damage and movement speed is increased by 10%.";
                     affectedSkillSlotIndexes[7] = VampirePlayer.UndeadConstitution;

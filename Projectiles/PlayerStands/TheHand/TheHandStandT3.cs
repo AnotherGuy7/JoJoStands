@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
                     if (!Main.mouseRight && chargeTimer != 0 && scrapeFrames && Projectile.frame == 1 && Projectile.owner == Main.myPlayer)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR");
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR"));
                         Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                         distanceToTeleport.Normalize();
                         distanceToTeleport *= chargeTimer / 45f;
@@ -255,7 +255,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     distanceToTeleport = Main.MouseWorld - player.position;
                 distanceToTeleport.Normalize();
                 distanceToTeleport *= (98f + mPlayer.standRangeBoosts) * (chargeTimer / 45f);
-                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), Vector2.Zero, 1f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             if (scrapeFrames)
             {
@@ -266,7 +266,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (scrapeBarrageFrames)
             {
-                Texture2D scrapeTrail = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/TheHand/ScrapeBarrage_Scrape");
+                Texture2D scrapeTrail = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TheHand/ScrapeBarrage_Scrape");
                 //Main.EntitySpriteDraw(scrapeTrail, Projectile.Center - Main.screenPosition, new Rectangle(0, 2 - Projectile.frame, scrapeTrail.Width, scrapeTrail.Height / (Projectile.frame + 1)), Color.White);
                 int frameHeight = standTexture.Height / 7;
                 Main.EntitySpriteDraw(scrapeTrail, Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight), Color.White, 0f, new Vector2(scrapeTrail.Width / 2f, frameHeight / 2f), 1f, effects, 0);
@@ -347,7 +347,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TheHand/TheHand_" + animationName);
 
             if (animationName == "Idle")
             {

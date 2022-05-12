@@ -1,7 +1,6 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -12,7 +11,6 @@ namespace JoJoStands.Projectiles
             Projectile.width = 20;
             Projectile.height = 18;
             Projectile.aiStyle = 0;
-            Projectile.ranged = true;
             Projectile.timeLeft = 800;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
@@ -25,13 +23,10 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
             Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
             if (Projectile.timeLeft == 790)
-            {
                 Projectile.velocity *= 0;
-            }
+
             if (hamonPlayer.amountOfHamon >= 1)
-            {
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 169, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
-            }
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
         }
     }

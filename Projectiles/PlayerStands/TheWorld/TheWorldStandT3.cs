@@ -188,7 +188,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     }
 
                     mPlayer.poseMode = true;
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>()), mPlayer.AbilityCooldownTime(15));
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(15));
                 }
             }
             if (mPlayer.standAutoMode)
@@ -212,39 +212,39 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (attackFrames)
             {
                 normalFrames = false;
-                PlayAnimation("Attack")
+                PlayAnimation("Attack");
             }
             if (normalFrames)
             {
                 attackFrames = false;
-                PlayAnimation("Idle")
+                PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
                 normalFrames = false;
                 attackFrames = false;
-                PlayAnimation("Secondary")
+                PlayAnimation("Secondary");
             }
             if (abilityPose)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                PlayAnimation("AbilityPose")
+                PlayAnimation("AbilityPose");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
                 normalFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
-                PlayAnimation("Pose")
+                PlayAnimation("Pose");
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
 
             if (animationName == "Idle")
             {

@@ -1,9 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JoJoStands.Projectiles;
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
@@ -11,8 +10,8 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Pearl Ring>();
-            Tooltip.SetDefault("Right Click to remove the Pearl. Be careful not to break it!>();
+            DisplayName.SetDefault("Viral Pearl Ring");
+            Tooltip.SetDefault("Right Click to remove the Pearl. Be careful not to break it!");
         }
 
         public override void SetDefaults()
@@ -36,7 +35,7 @@ namespace JoJoStands.Items.Accessories
         {
             if (player.altFunctionUse == 2)
             {
-                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<ViralPearl>(), 0, 0f, player.whoAmI);
+                int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<ViralPearlProjectile>(), 0, 0f, player.whoAmI);
                 Main.projectile[proj].netUpdate = true;
                 Item.TurnToAir();
             }

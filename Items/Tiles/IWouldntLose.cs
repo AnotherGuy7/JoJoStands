@@ -1,6 +1,6 @@
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Tiles
 {
@@ -24,7 +24,7 @@ namespace JoJoStands.Items.Tiles
             Item.consumable = true;
             Item.value = Item.buyPrice(0, 2, 0, 0);
             Item.rare = 1;
-            Item.createTile = ModContent.TileType<IWouldntLoseTile");
+            Item.createTile = ModContent.TileType<IWouldntLoseTile>();
         }
     }
 }

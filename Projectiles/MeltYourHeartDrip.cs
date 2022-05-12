@@ -1,7 +1,6 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -12,7 +11,6 @@ namespace JoJoStands.Projectiles
             Projectile.width = 14;
             Projectile.height = 20;
             Projectile.aiStyle = 0;
-            Projectile.ranged = true;
             Projectile.timeLeft = 1800;
             Projectile.friendly = true;
             Projectile.tileCollide = true;

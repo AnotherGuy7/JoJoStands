@@ -14,7 +14,7 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.HasBuff(Type)
+            if (player.HasBuff(Type))
             {
                 if (player.controlDown)
                 {

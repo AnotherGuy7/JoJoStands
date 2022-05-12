@@ -11,7 +11,6 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Kira's (Kosaku) Pants");
             Tooltip.SetDefault("A nice pair of pants, for any time of day.");
-            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
         }
 
         public override void SetDefaults()

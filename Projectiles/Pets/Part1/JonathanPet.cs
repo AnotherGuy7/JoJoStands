@@ -1,8 +1,8 @@
+using JoJoStands.Buffs.PetBuffs;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.Pets.Part1
 {
@@ -28,11 +28,9 @@ namespace JoJoStands.Projectiles.Pets.Part1
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            //MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            //MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!player.HasBuff(ModContent.BuffType<JonathanPetBuff>()) || player.dead)
-            {
                 Projectile.Kill();
-            }
 
             Vector2 directionToPlayer = player.Center - Projectile.Center;
             directionToPlayer.Normalize();

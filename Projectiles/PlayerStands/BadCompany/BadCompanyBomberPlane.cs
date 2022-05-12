@@ -73,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/BadCompany/BadCompanyBomberPlane");
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanyBomberPlane");
 
             AnimateStand(animationName, 3, 11, true);
         }

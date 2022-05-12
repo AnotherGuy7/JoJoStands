@@ -31,7 +31,7 @@ namespace JoJoStands.Items
             Item.rare = ItemRarityID.LightRed;
             Item.UseSound = SoundID.Item41;
             Item.autoReuse = false;
-            Item.ranged = true;
+            Item.DamageType = DamageClass.Ranged;
             Item.shoot = 10;
             Item.useAmmo = AmmoID.Bullet;
             Item.maxStack = 1;
@@ -45,32 +45,23 @@ namespace JoJoStands.Items
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SpecialHotKey.JustPressed;
             if (reloadCounter > 0)
-            {
                 reloadCounter--;
-            }
             if (mPlayer.revolverBulletsShot >= 6)       //do you really need this line?
-            {
                 reloadStart++;
-            }
             if (mPlayer.revolverBulletsShot != 6)
-            {
                 reloadStart = 0;
-            }
+
             if (reloadStart == 1)
             {
-                if (MyPlayer.Sounds)
-                {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload180"));
-                }
                 reloadCounter = 180;
+                if (MyPlayer.Sounds)
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload180"));
             }
             if (specialPressed && reloadCounter <= 1 && player.whoAmI == Main.myPlayer)
             {
-                if (MyPlayer.Sounds)
-                {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload120"));
-                }
                 reloadCounter = 120;
+                if (MyPlayer.Sounds)
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Reload120"));
             }
             if (reloadCounter == 1)
             {

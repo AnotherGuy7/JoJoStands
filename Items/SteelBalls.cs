@@ -28,7 +28,7 @@ namespace JoJoStands.Items
             Item.value = 7;
             Item.rare = 6;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<SteelBallP>();
+            Item.shoot = ModContent.ProjectileType<SteelBallProjectile>();
             Item.shootSpeed = 16f;
             Item.useTurn = true;
         }
@@ -60,7 +60,7 @@ namespace JoJoStands.Items
 
         public override bool CanUseItem(Player player)
         {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<SteelBallP>()] >= 2)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<SteelBallProjectile>()] >= 2)
                 return false;
 
             return true;

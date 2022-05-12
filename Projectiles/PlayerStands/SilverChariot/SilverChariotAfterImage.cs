@@ -143,24 +143,22 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             }
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        public override bool PreDraw(ref Color drawColor)
         {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
 
             SyncAndApplyDyeSlot();
-            DrawStand(spriteBatch, drawColor);
+            DrawStand(drawColor);
 
             return true;
         }
 
-        private void DrawStand(SpriteBatch spriteBatch, Color drawColor)
+        private void DrawStand(Color drawColor)
         {
             effects = SpriteEffects.None;
             if (Projectile.spriteDirection == -1)
-            {
                 effects = SpriteEffects.FlipHorizontally;
-            }
 
             drawColor *= Projectile.alpha / 255f;
             if (standTexture != null && Main.netMode != NetmodeID.Server)
@@ -210,7 +208,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/SilverChariot/SilverChariot_Shirtless_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/SilverChariot/SilverChariot_Shirtless_" + animationName);
             {
                 if (animationName == "Idle")
                 {

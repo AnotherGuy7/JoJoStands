@@ -1,14 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    internal class BadCompanyUnitsUI : UIState
+    public class BadCompanyUnitsUI : UIState
     {
         public DragableUIPanel UnitsUIPanel;
         public static bool Visible;
@@ -60,12 +60,12 @@ namespace JoJoStands.UI
             unitsLeftText.Height.Set(20f, 0f);
             UnitsUIPanel.Append(unitsLeftText);
 
-            Texture2D soldierTextureImage = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanySoldier_Prone");
+            Asset<Texture2D> soldierTextureImage = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanySoldier_Prone");
             soldierTexture = new UIImage(soldierTextureImage);
             soldierTexture.HAlign = 0.1f;
             soldierTexture.VAlign = 0.5f;
-            soldierTexture.Width.Set(soldierTextureImage.Width, 0f);
-            soldierTexture.Height.Set(soldierTextureImage.Height, 0f);
+            soldierTexture.Width.Set(soldierTextureImage.Value.Width, 0f);
+            soldierTexture.Height.Set(soldierTextureImage.Value.Height, 0f);
             UnitsUIPanel.Append(soldierTexture);
 
             soldiersActiveText = new UIText("0");
@@ -75,30 +75,30 @@ namespace JoJoStands.UI
             soldiersActiveText.Height.Set(20f, 0f);
             UnitsUIPanel.Append(soldiersActiveText);
 
-            Texture2D leftButtonTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/LeftArrow");
+            Asset<Texture2D> leftButtonTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/LeftArrow");
             subtractSoldierButton = new UIImageButton(leftButtonTexture);
             subtractSoldierButton.HAlign = soldiersActiveText.HAlign - buttonPadding;
             subtractSoldierButton.VAlign = soldiersActiveText.VAlign;
-            subtractSoldierButton.Width.Set(leftButtonTexture.Width, 0f);
-            subtractSoldierButton.Height.Set(leftButtonTexture.Height, 0f);
+            subtractSoldierButton.Width.Set(leftButtonTexture.Value.Width, 0f);
+            subtractSoldierButton.Height.Set(leftButtonTexture.Value.Height, 0f);
             subtractSoldierButton.OnClick += OnClickSubtractSoldierButton;
             UnitsUIPanel.Append(subtractSoldierButton);
 
-            Texture2D rightButtonTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/RightArrow");
+            Asset<Texture2D> rightButtonTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/RightArrow");
             addSoldierButton = new UIImageButton(rightButtonTexture);
             addSoldierButton.HAlign = soldiersActiveText.HAlign + buttonPadding;
             addSoldierButton.VAlign = soldiersActiveText.VAlign;
-            addSoldierButton.Width.Set(rightButtonTexture.Width, 0f);
-            addSoldierButton.Height.Set(rightButtonTexture.Height, 0f);
+            addSoldierButton.Width.Set(rightButtonTexture.Value.Width, 0f);
+            addSoldierButton.Height.Set(rightButtonTexture.Value.Height, 0f);
             addSoldierButton.OnClick += OnClickAddSoldierButton;
             UnitsUIPanel.Append(addSoldierButton);
 
-            Texture2D tankTextureImage = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanyTank");
+            Asset<Texture2D> tankTextureImage = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanyTank");
             tankTexture = new UIImage(tankTextureImage);
             tankTexture.HAlign = 0.5f;
             tankTexture.VAlign = 0.5f;
-            tankTexture.Width.Set(tankTextureImage.Width, 0f);
-            tankTexture.Height.Set(tankTextureImage.Height, 0f);
+            tankTexture.Width.Set(tankTextureImage.Value.Width, 0f);
+            tankTexture.Height.Set(tankTextureImage.Value.Height, 0f);
             UnitsUIPanel.Append(tankTexture);
 
             tanksActiveText = new UIText("0");
@@ -111,25 +111,25 @@ namespace JoJoStands.UI
             subtractTankButton = new UIImageButton(leftButtonTexture);
             subtractTankButton.HAlign = tanksActiveText.HAlign - buttonPadding;
             subtractTankButton.VAlign = tanksActiveText.VAlign;
-            subtractTankButton.Width.Set(leftButtonTexture.Width, 0f);
-            subtractTankButton.Height.Set(leftButtonTexture.Height, 0f);
+            subtractTankButton.Width.Set(leftButtonTexture.Value.Width, 0f);
+            subtractTankButton.Height.Set(leftButtonTexture.Value.Height, 0f);
             subtractTankButton.OnClick += OnClickSubtractTankButton;
             UnitsUIPanel.Append(subtractTankButton);
 
             addTankButton = new UIImageButton(rightButtonTexture);
             addTankButton.HAlign = tanksActiveText.HAlign + buttonPadding;
             addTankButton.VAlign = tanksActiveText.VAlign;
-            addTankButton.Width.Set(rightButtonTexture.Width, 0f);
-            addTankButton.Height.Set(rightButtonTexture.Height, 0f);
+            addTankButton.Width.Set(rightButtonTexture.Value.Width, 0f);
+            addTankButton.Height.Set(rightButtonTexture.Value.Height, 0f);
             addTankButton.OnClick += OnClickAddTankButton;
             UnitsUIPanel.Append(addTankButton);
 
-            Texture2D chopperTextureImage = ModContent.Request<Texture2D>("JoJoStands/Extras/UnitsUIChopper");
+            Asset<Texture2D> chopperTextureImage = ModContent.Request<Texture2D>("JoJoStands/Extras/UnitsUIChopper");
             chopperTexture = new UIImage(chopperTextureImage);
             chopperTexture.HAlign = 0.9f;
             chopperTexture.VAlign = 0.5f;
-            chopperTexture.Width.Set(chopperTextureImage.Width, 0f);
-            chopperTexture.Height.Set(chopperTextureImage.Height, 0f);
+            chopperTexture.Width.Set(chopperTextureImage.Value.Width, 0f);
+            chopperTexture.Height.Set(chopperTextureImage.Value.Height, 0f);
             UnitsUIPanel.Append(chopperTexture);
 
             choppersActiveText = new UIText("0");
@@ -142,16 +142,16 @@ namespace JoJoStands.UI
             subtractChopperButton = new UIImageButton(leftButtonTexture);
             subtractChopperButton.HAlign = choppersActiveText.HAlign - buttonPadding;
             subtractChopperButton.VAlign = choppersActiveText.VAlign;
-            subtractChopperButton.Width.Set(leftButtonTexture.Width, 0f);
-            subtractChopperButton.Height.Set(leftButtonTexture.Height, 0f);
+            subtractChopperButton.Width.Set(leftButtonTexture.Value.Width, 0f);
+            subtractChopperButton.Height.Set(leftButtonTexture.Value.Height, 0f);
             subtractChopperButton.OnClick += OnClickSubtractChopperButton;
             UnitsUIPanel.Append(subtractChopperButton);
 
             addChopperButton = new UIImageButton(rightButtonTexture);
             addChopperButton.HAlign = choppersActiveText.HAlign + buttonPadding;
             addChopperButton.VAlign = choppersActiveText.VAlign;
-            addChopperButton.Width.Set(rightButtonTexture.Width, 0f);
-            addChopperButton.Height.Set(rightButtonTexture.Height, 0f);
+            addChopperButton.Width.Set(rightButtonTexture.Value.Width, 0f);
+            addChopperButton.Height.Set(rightButtonTexture.Value.Height, 0f);
             addChopperButton.OnClick += OnClickAddChopperButton;
             UnitsUIPanel.Append(addChopperButton);
 

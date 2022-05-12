@@ -1,19 +1,19 @@
+using JoJoStands.Items.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Tiles
 {
     public class ViralBrickTile : ModTile
     {
-        public override void SetDefaults()      //some of this is from ExampleMod/Tiles/ExmapleOre
+        public override void SetStaticDefaults()      //some of this is from ExampleMod/Tiles/ExmapleOre
         {
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileLighted[Type] = true;
-            drop = ModContent.ItemType<ViralBrick>();
+            ItemDrop = ModContent.ItemType<ViralBrick>();
 
             AddMapEntry(new Color(200, 200, 200));
         }

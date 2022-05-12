@@ -11,7 +11,6 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Okuyasu's Pants");
             Tooltip.SetDefault("A pair of pants worn by Okuyasu Nijimura, with two belts.");
-            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
         }
 
         public override void SetDefaults()

@@ -1,8 +1,8 @@
+using JoJoStands.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.Minions
 {
@@ -56,7 +56,7 @@ namespace JoJoStands.Projectiles.Minions
                     }
                 }
             }
-            if (player.HeldItem.type == ModContent.ItemType<StrayCat>()) && player.altFunctionUse == 2)
+            if (player.HeldItem.type == ModContent.ItemType<StrayCat>() && player.altFunctionUse == 2)
             {
                 Projectile.Kill();
             }
@@ -88,20 +88,18 @@ namespace JoJoStands.Projectiles.Minions
                         }
                         shootVel.Normalize();
                         shootVel *= 2f;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<AirBubble>()), 104, 1f, Projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<AirBubble>(), 104, 1f, Projectile.owner);
                         Main.projectile[proj].hostile = false;
                         Main.projectile[proj].friendly = true;
                         Main.projectile[proj].netUpdate = true;
                         canShoot = false;
-
                     }
                 }
 
                 Projectile.direction = 1;
                 if (target.position.X < Projectile.position.X)
-                {
                     Projectile.direction = -1;
-                }
+
                 Projectile.spriteDirection = Projectile.direction;
             }
         }

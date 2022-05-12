@@ -189,7 +189,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/GoldExperienceRequiem/GER_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/GoldExperienceRequiem/GER_" + animationName);
 
             if (animationName == "Idle")
             {

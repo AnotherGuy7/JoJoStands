@@ -9,7 +9,7 @@ namespace JoJoStands.Projectiles.Minions
 {
     public class GEScorpion : ModProjectile
     {
-        public override string Texture { get { return "Terraria/NPC_" + NPCID.ScorpionBlack; } }
+        public override string Texture { get { return "Terraria/Images/NPC_" + NPCID.ScorpionBlack; } }
 
         public override void SetStaticDefaults()
         {

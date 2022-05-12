@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 
 namespace JoJoStands.UI
@@ -39,7 +40,7 @@ namespace JoJoStands.UI
             }
 
             uiText.SetText(newText);
-            Height.Pixels = Main.fontMouseText.MeasureString(uiText.Text).Y + 8f;
+            Height.Pixels = FontAssets.MouseText.Value.MeasureString(uiText.Text).Y + 8f;
         }
 
         public override void Update(GameTime gameTime)

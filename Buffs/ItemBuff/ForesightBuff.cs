@@ -22,7 +22,7 @@ namespace JoJoStands.Buffs.ItemBuff
         {
             if (!player.HasBuff(Type))
             {
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {

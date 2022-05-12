@@ -101,11 +101,8 @@ namespace JoJoStands.Items.Vampire
 
         public override void AddRecipes()
         {
-            Player player = Main.player[Main.myPlayer];
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-
             CreateRecipe()
-                .AddCondition(NetworkText.FromLiteral("ZombieRequirement"), r => vPlayer.zombie && vPlayer.HasSkill(player, VampirePlayer.EntrailAbilities))
+                .AddCondition(NetworkText.FromLiteral("ZombieRequirement"), r => !Main.gameMenu && Main.LocalPlayer.GetModPlayer<VampirePlayer>().zombie && Main.LocalPlayer.GetModPlayer<VampirePlayer>().HasSkill(Main.LocalPlayer, VampirePlayer.EntrailAbilities))
                 .Register();
         }
     }

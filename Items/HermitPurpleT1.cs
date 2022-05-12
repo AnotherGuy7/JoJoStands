@@ -14,8 +14,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hermit Purple (Tier 1)>();
-            Tooltip.SetDefault("Left-click to use Hermit Purple as a whip!\nUsed in Stand Slot>();
+            DisplayName.SetDefault("Hermit Purple (Tier 1)");
+            Tooltip.SetDefault("Left-click to use Hermit Purple as a whip!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

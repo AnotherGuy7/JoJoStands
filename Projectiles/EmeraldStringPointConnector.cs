@@ -122,7 +122,7 @@ namespace JoJoStands.Projectiles
 
                 float stringRotation = (linkCenter - projectileCenter).ToRotation();
                 float stringScale = 0.6f;
-                Texture2D stringTexture = Mod.Assets.Request<Texture2D>("Projectiles/EmeraldString").Value;
+                Texture2D stringTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/EmeraldString").Value;
                 for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(projectileCenter, linkCenter) / (stringTexture.Width * stringScale)))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
                 {
                     Vector2 pos = Vector2.Lerp(projectileCenter, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view

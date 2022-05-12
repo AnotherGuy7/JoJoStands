@@ -1,23 +1,21 @@
-using System;
-using Terraria.ID;
-using Terraria;
+using JoJoStands.Projectiles.PlayerStands.TestStand;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items
 {
-	public class TestStand : StandItemClass
-	{
+    public class TestStand : StandItemClass
+    {
         public override int standSpeed => 12;
         public override int standType => 1;
 
         public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Test Stand>();
-			Tooltip.SetDefault("A faceless stand with unknown abilities...>();
-		}
+        {
+            DisplayName.SetDefault("Test Stand");
+            Tooltip.SetDefault("A faceless stand with unknown abilities...");
+        }
 
         public override void SetDefaults()
         {
@@ -38,7 +36,7 @@ namespace JoJoStands.Items
         {
             if (player.name == "Mod Test Shadow>()
             {
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
                 if (player.whoAmI == Main.myPlayer)
                 {
                     if (player.ownedProjectileCounts[ModContent.ProjectileType<TestStand>()] <= 0 && !mPlayer.StandOut)
@@ -62,16 +60,15 @@ namespace JoJoStands.Items
         {
             if (MyPlayer.testStandUnlocked)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<TestStand>(), 0, 0f, Main.myPlayer);
+                Projectile.NewProjectile(player.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<TestStandStand>(), 0, 0f, Main.myPlayer);
             }
             else
             {
                 Main.NewText("You are not worthy.", Color.Red);
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
                     Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
-                }
-                player.GetModPlayer<MyPlayer>()).standOut = false;
+
+                player.GetModPlayer<MyPlayer>().standOut = false;
             }
             return true;
         }

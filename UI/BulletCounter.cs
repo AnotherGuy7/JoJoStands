@@ -5,7 +5,7 @@ using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    internal class BulletCounter : UIState
+    public class BulletCounter : UIState
     {
         public DragableUIPanel bulletCountUI;
         public static bool Visible;

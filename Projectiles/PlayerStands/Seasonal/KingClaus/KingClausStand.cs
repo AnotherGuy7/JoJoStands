@@ -263,7 +263,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/Seasonal/KingClaus/KingClaus_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Seasonal/KingClaus/KingClaus_" + animationName);
 
             if (animationName == "Idle")
             {

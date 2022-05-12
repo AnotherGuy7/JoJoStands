@@ -22,7 +22,7 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)       //it should only affect the user with this buff on
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (player.HasBuff(Type))
             {
                 player.statDefense += 99999;

@@ -23,7 +23,7 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (!player.HasBuff(Type)
+            if (!player.HasBuff(Type))
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {

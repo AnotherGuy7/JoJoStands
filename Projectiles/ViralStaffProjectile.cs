@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -12,7 +11,7 @@ namespace JoJoStands.Projectiles
             Projectile.width = 10;
             Projectile.height = 10;
             Projectile.aiStyle = 0;
-            Projectile.magic = true;
+            Projectile.DamageType = DamageClass.Magic;
             Projectile.timeLeft = 600;
             Projectile.friendly = true;
             Projectile.tileCollide = true;

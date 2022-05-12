@@ -100,7 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("Projectiles/PlayerStands/GoldExperience/GoldExperience_" + animationName);
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/GoldExperience/GoldExperience_" + animationName);
 
             if (animationName == "Idle")
             {

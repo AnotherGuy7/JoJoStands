@@ -5,7 +5,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -31,7 +30,7 @@ namespace JoJoStands.Projectiles
             //Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);     //aiStyle 13 without the types
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/StarFinger>());
+                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/StarFinger"));
                 playedSound = true;
             }
             ownerProj = Main.projectile[(int)Projectile.ai[0]];
@@ -105,11 +104,9 @@ namespace JoJoStands.Projectiles
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -121,7 +118,7 @@ namespace JoJoStands.Projectiles
         private Vector2 offset;
         private Texture2D starFingerPartTexture;
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             if (ownerProj == null)
                 return false;
@@ -135,7 +132,7 @@ namespace JoJoStands.Projectiles
                 offset = new Vector2(-31f, -2f);
             }
             if (Main.netMode != NetmodeID.Server)
-                starFingerPartTexture = Mod.Assets.Request<Texture2D>("Projectiles/StarFingerPart>().Value;
+                starFingerPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFingerPart").Value;
 
             Vector2 linkCenter = ownerProj.Center + offset;
             Vector2 center = Projectile.Center;
@@ -144,7 +141,7 @@ namespace JoJoStands.Projectiles
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / starFingerPartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                Main.EntitySpriteDraw(starFingerPartTexture, pos, new Rectangle(0, 0, starFingerPartTexture.Width, starFingerPartTexture.Height), lightColor, rotation, new Vector2(starFingerPartTexture.Width * 0.5f, starFingerPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(starFingerPartTexture, pos, new Rectangle(0, 0, starFingerPartTexture.Width, starFingerPartTexture.Height), lightColor, rotation, new Vector2(starFingerPartTexture.Width * 0.5f, starFingerPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0);
             }
             return true;
         }

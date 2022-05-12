@@ -1,3 +1,4 @@
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -5,7 +6,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -49,7 +49,7 @@ namespace JoJoStands.Projectiles
             Projectile.rotation = (-rota * Projectile.direction).ToRotation();
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(JoJoStands.JoJoStandsSounds.GetLegacySoundSlot(SoundType.Custom, "Sounds/SoundEffects/Zip>());
+                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Zip"));
                 playedSound = true;
             }
 
@@ -111,32 +111,26 @@ namespace JoJoStands.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>());
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             if (Main.rand.Next(0, 101) <= 50)
-            {
                 target.AddBuff(ModContent.BuffType<Zipped>(), 300);
-            }
         }
 
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
             if (Main.rand.Next(0, 101) <= 50)
-            {
                 target.AddBuff(ModContent.BuffType<Zipped>(), 300);
-            }
         }
 
         private Texture2D stickyFingersZipperPart;
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
+        public override bool PreDraw(ref Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
         {
             Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
             Vector2 ownerCenterOffset = Vector2.Zero;
@@ -149,14 +143,14 @@ namespace JoJoStands.Projectiles
                 ownerCenterOffset = new Vector2(4f, -4.5f);
             }
             if (Main.netMode != NetmodeID.Server)
-                stickyFingersZipperPart = Mod.Assets.Request<Texture2D>("Projectiles/Zipper_Part>().Value;
+                stickyFingersZipperPart = ModContent.Request<Texture2D>("JoJoStands/Projectiles/Zipper_Part").Value;
 
             Vector2 ownerCenter = ownerProj.Center + ownerCenterOffset;
             Vector2 center = Projectile.Center + new Vector2(0f, -1f);
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, ownerCenter) / stickyFingersZipperPart.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, ownerCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                Main.EntitySpriteDraw(stickyFingersZipperPart, pos, new Rectangle(0, 0, stickyFingersZipperPart.Width, stickyFingersZipperPart.Height), lightColor, Projectile.rotation, new Vector2(stickyFingersZipperPart.Width * 0.5f, stickyFingersZipperPart.Height * 0.5f), 1f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(stickyFingersZipperPart, pos, new Rectangle(0, 0, stickyFingersZipperPart.Width, stickyFingersZipperPart.Height), lightColor, Projectile.rotation, new Vector2(stickyFingersZipperPart.Width * 0.5f, stickyFingersZipperPart.Height * 0.5f), 1f, SpriteEffects.None, 0);
             }
             return true;
         }
