@@ -248,7 +248,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         {
             if (touchedTile)
             {
-                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("Extras/Bomb");
+                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Bomb");
                 Main.EntitySpriteDraw(texture, savedPosition - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
             }
             return true;

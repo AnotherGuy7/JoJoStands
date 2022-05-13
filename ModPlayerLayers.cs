@@ -21,7 +21,7 @@ namespace JoJoStands
             Player drawPlayer = drawInfo.drawPlayer;
             if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<ProtectiveFilmBuff>()))
             {
-                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("Extras/ProtectiveFilmLayer");
+                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ProtectiveFilmLayer");
                 int drawX = (int)drawInfo.Position.X;
                 int drawY = (int)(drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
                 Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
@@ -52,7 +52,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && drawPlayer.velocity == Vector2.Zero && mPlayer.poseMode)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/Menacing").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/Menacing").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
                 if (drawPlayer.direction == -1)
@@ -93,7 +93,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.standRemoteMode && (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithFinal>()))
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/AerosmithRadar").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/AerosmithRadar").Value;
                 int drawX = (int)(drawInfo.Position.X + 4f + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.Position.Y + 7f - Main.screenPosition.Y);
                 if (drawPlayer.direction == -1)
@@ -131,7 +131,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.wearingEpitaph)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/KCArm").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/KCArm").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
                 SpriteEffects effects = SpriteEffects.None;
@@ -166,7 +166,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.hermitPurpleTier != 0)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/HermitPurple_Arms").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HermitPurple_Arms").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y) - 4;
                 SpriteEffects effects = SpriteEffects.None;
@@ -208,7 +208,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.hermitPurpleTier > 1)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/HermitPurple_Body").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HermitPurple_Body").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y) - 4;
                 SpriteEffects effects = SpriteEffects.None;
@@ -252,7 +252,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.showingCBLayer)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/CB").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/CB").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
                 SpriteEffects effects = SpriteEffects.None;
@@ -288,7 +288,7 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.sexPistolsLeft != 0 && mPlayer.standOut && mPlayer.sexPistolsTier != 0)
             {
                 int frame = 6 - mPlayer.sexPistolsLeft;       //frames 0-5
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/SexPistolsLayer").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/SexPistolsLayer").Value;
                 int drawX = (int)(drawInfo.Position.X + 4f + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
                 if (drawPlayer.direction == -1)
@@ -318,7 +318,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomHoodLongEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodLong", EquipType.Head))
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/PhantomHoodLong_Head_Glowmask").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomHoodLong_Head_Glowmask").Value;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
                 int drawY = (int)(drawInfo.Position.Y - Main.screenPosition.Y) - 1;
@@ -349,7 +349,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomHoodNeutralEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodNeutral", EquipType.Head))
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/PhantomHoodNeutral_Head_Glowmask").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomHoodNeutral_Head_Glowmask").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
                 int drawY = (int)(drawInfo.Position.Y - Main.screenPosition.Y) - 1;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -380,7 +380,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomHoodShortEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodShort", EquipType.Head))
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/PhantomHoodShort_Head_Glowmask").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomHoodShort_Head_Glowmask").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
                 int drawY = (int)(drawInfo.Position.Y - Main.screenPosition.Y) - 1;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -411,7 +411,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/PhantomChestplate_Body_Glowmask").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Body_Glowmask").Value;
                 float drawX = (int)drawInfo.Position.X + drawPlayer.width / 2;
                 float drawY = (int)drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -438,7 +438,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/PhantomChestplate_Arms_Glowmask").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Arms_Glowmask").Value;
                 float drawX = (int)drawInfo.Position.X + drawPlayer.width / 2;
                 float drawY = (int)drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
                 Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
@@ -465,7 +465,7 @@ namespace JoJoStands
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomLeggingsEquipped && drawPlayer.legs == Mod.GetEquipSlot("PhantomLeggings", EquipType.Legs))
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/PhantomLeggings_Legs_Glowmask").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomLeggings_Legs_Glowmask").Value;
                 Vector2 offset = new Vector2(0f, 18f);
                 float drawX = (int)drawInfo.Position.X + drawPlayer.width / 2;      //The reason we do this is cause position as a float moves the glowmask around too much
                 float drawY = (int)drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2;

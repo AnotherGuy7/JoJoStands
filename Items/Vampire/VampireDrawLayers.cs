@@ -20,7 +20,7 @@ namespace JoJoStands.Items.Vampire
 
             if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<ProtectiveFilmBuff>()))
             {
-                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("Extras/ProtectiveFilmLayer");
+                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ProtectiveFilmLayer");
                 int drawX = (int)drawInfo.Position.X;
                 int drawY = (int)(drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
                 Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
@@ -53,7 +53,7 @@ namespace JoJoStands.Items.Vampire
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.blackUmbrellaEquipped)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/UmbrellaHat").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/UmbrellaHat").Value;
 
 
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
@@ -86,7 +86,7 @@ namespace JoJoStands.Items.Vampire
             VampirePlayer vampirePlayer = drawPlayer.GetModPlayer<VampirePlayer>();
             if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<KnifeAmalgamation>()))
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/KnivesLayer").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/KnivesLayer").Value;
                 int drawX = (int)drawInfo.Position.X;
                 int drawY = (int)(drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
                 Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;

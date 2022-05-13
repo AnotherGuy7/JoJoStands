@@ -5,6 +5,7 @@ using JoJoStands.Projectiles;
 using JoJoStands.UI;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent.Personalities;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,6 +15,26 @@ namespace JoJoStands.NPCs.TownNPCs
     public class HamonMaster : ModNPC
     {
         public static bool punchesActive = false;
+
+        public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[NPC.type] = 25;
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
+            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
+            NPCID.Sets.DangerDetectRange[NPC.type] = 48;
+            NPCID.Sets.AttackType[NPC.type] = 1;
+            NPCID.Sets.HatOffsetY[NPC.type] = 4;
+            NPC.Happiness.SetBiomeAffection<ForestBiome>(AffectionLevel.Love);
+            NPC.Happiness.SetBiomeAffection<DungeonBiome>(AffectionLevel.Hate);
+            NPC.Happiness.SetBiomeAffection<UndergroundBiome>(AffectionLevel.Hate);
+            NPC.Happiness.SetBiomeAffection<SnowBiome>(AffectionLevel.Like);
+            NPC.Happiness.SetBiomeAffection<HallowBiome>(AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection<Priest>(AffectionLevel.Hate);
+            NPC.Happiness.SetNPCAffection<MarineBiologist>(AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection(NPCID.Dryad, AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection(NPCID.Nurse, AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection(NPCID.WitchDoctor, AffectionLevel.Dislike);
+        }
 
         public override void SetDefaults()
         {
@@ -27,12 +48,6 @@ namespace JoJoStands.NPCs.TownNPCs
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 1f;
-            Main.npcFrameCount[NPC.type] = 25;
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
-            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
-            NPCID.Sets.DangerDetectRange[NPC.type] = 48;
-            NPCID.Sets.AttackType[NPC.type] = 1;
-            NPCID.Sets.HatOffsetY[NPC.type] = 4;
             AnimationType = NPCID.Guide;
         }
 

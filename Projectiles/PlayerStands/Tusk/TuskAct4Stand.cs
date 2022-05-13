@@ -138,7 +138,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 {
                     rectangleOffset = new Vector2(-30f, 0f);
                 }*/
-                Main.EntitySpriteDraw((Texture2D)ModContent.Request<Texture2D>("Extras/GoldenSpinComplete"), ((Projectile.Center + new Vector2(-10 * Projectile.spriteDirection, 0f)) + rectangleOffset) - Main.screenPosition - rectangleCenterOffset, null, Color.White * (((float)goldenRectangleEffectTimer * 3.9215f) / 1000f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw((Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/GoldenSpinComplete"), ((Projectile.Center + new Vector2(-10 * Projectile.spriteDirection, 0f)) + rectangleOffset) - Main.screenPosition - rectangleCenterOffset, null, Color.White * (((float)goldenRectangleEffectTimer * 3.9215f) / 1000f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             return true;
         }

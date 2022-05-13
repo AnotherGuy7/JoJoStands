@@ -1,6 +1,7 @@
 using JoJoStands.Projectiles.NPCStands;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent.Personalities;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -10,6 +11,26 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
     public class Priest : ModNPC    //It's name is 'priest' so that when it dies, it says "Pucci the priest"
     {
         public static bool userIsAlive = false;
+
+        public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[NPC.type] = 26;      //this defines how many frames the NPC sprite sheet has
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
+            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
+            NPCID.Sets.DangerDetectRange[NPC.type] = 250;       //this defines the NPC danger detect range
+            NPCID.Sets.AttackType[NPC.type] = 1;        //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
+            NPCID.Sets.HatOffsetY[NPC.type] = 1;        //this defines the party hat position
+            NPC.Happiness.SetBiomeAffection<DesertBiome>(AffectionLevel.Love);
+            NPC.Happiness.SetBiomeAffection<OceanBiome>(AffectionLevel.Like);
+            NPC.Happiness.SetBiomeAffection<UndergroundBiome>(AffectionLevel.Hate);
+            NPC.Happiness.SetBiomeAffection<SnowBiome>(AffectionLevel.Hate);
+            NPC.Happiness.SetBiomeAffection<HallowBiome>(AffectionLevel.Dislike);
+            NPC.Happiness.SetNPCAffection<Gambler>(AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection<HamonMaster>(AffectionLevel.Dislike);
+            NPC.Happiness.SetNPCAffection<MarineBiologist>(AffectionLevel.Hate);
+            NPC.Happiness.SetNPCAffection(NPCID.Dryad, AffectionLevel.Hate);
+            NPC.Happiness.SetNPCAffection(NPCID.Merchant, AffectionLevel.Dislike);
+        }
 
         public override void SetDefaults()
         {
@@ -23,12 +44,6 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             NPC.HitSound = SoundID.NPCHit1;     //the NPC sound when is hit
             NPC.DeathSound = SoundID.NPCDeath1;     //the NPC sound when he dies
             NPC.knockBackResist = 1f;       //the NPC knockback resistance
-            Main.npcFrameCount[NPC.type] = 26;      //this defines how many frames the NPC sprite sheet has
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
-            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
-            NPCID.Sets.DangerDetectRange[NPC.type] = 250;       //this defines the NPC danger detect range
-            NPCID.Sets.AttackType[NPC.type] = 1;        //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
-            NPCID.Sets.HatOffsetY[NPC.type] = 1;        //this defines the party hat position
             AnimationType = NPCID.Guide;        //this copy the guide animation
         }
 

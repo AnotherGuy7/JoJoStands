@@ -384,7 +384,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
             if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && MyPlayer.RangeIndicators && chargeTimer != 0)
             {
-                Texture2D positionIndicator = (Texture2D)ModContent.Request<Texture2D>("Extras/PositionIndicator");
+                Texture2D positionIndicator = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/PositionIndicator");
                 Vector2 distanceToTeleport = Vector2.Zero;
                 if (Projectile.owner == Main.myPlayer)
                     distanceToTeleport = Main.MouseWorld - player.position;
@@ -394,7 +394,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (scrapeFrames)
             {
-                Texture2D scrapeTrail = (Texture2D)ModContent.Request<Texture2D>("Extras/ScrapeTrail");
+                Texture2D scrapeTrail = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ScrapeTrail");
                 //Main.EntitySpriteDraw(scrapeTrail, Projectile.Center - Main.screenPosition, new Rectangle(0, 2 - Projectile.frame, scrapeTrail.Width, scrapeTrail.Height / (Projectile.frame + 1)), Color.White);
                 int frameHeight = standTexture.Height / 2;
                 Main.EntitySpriteDraw(scrapeTrail, Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight), Color.White, 0f, new Vector2(scrapeTrail.Width / 2f, frameHeight / 2f), 1f, effects, 0);

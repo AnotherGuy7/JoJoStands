@@ -4,6 +4,7 @@ using JoJoStands.Items.Vanities;
 using JoJoStands.Projectiles.NPCStands;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent.Personalities;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,6 +15,24 @@ namespace JoJoStands.NPCs.TownNPCs
     {
         public static bool userIsAlive = false;
         public static int standDamage = 0;
+
+        public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[NPC.type] = 25;
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
+            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
+            NPCID.Sets.DangerDetectRange[NPC.type] = 50; //this defines the NPC danger detect range
+            NPCID.Sets.AttackType[NPC.type] = 1; //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
+            NPCID.Sets.HatOffsetY[NPC.type] = 4; //this defines the party hat position
+            NPC.Happiness.SetBiomeAffection<OceanBiome>(AffectionLevel.Love);
+            NPC.Happiness.SetBiomeAffection<DesertBiome>(AffectionLevel.Hate);
+            NPC.Happiness.SetBiomeAffection<UndergroundBiome>(AffectionLevel.Dislike);
+            NPC.Happiness.SetNPCAffection<Priest>(AffectionLevel.Hate);
+            NPC.Happiness.SetNPCAffection<Gambler>(AffectionLevel.Hate);
+            NPC.Happiness.SetNPCAffection<HamonMaster>(AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection(NPCID.Angler, AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Dislike);
+        }
 
         public override void SetDefaults()
         {
@@ -27,12 +46,6 @@ namespace JoJoStands.NPCs.TownNPCs
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 1f;
-            Main.npcFrameCount[NPC.type] = 25;
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
-            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
-            NPCID.Sets.DangerDetectRange[NPC.type] = 50; //this defines the NPC danger detect range
-            NPCID.Sets.AttackType[NPC.type] = 1; //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
-            NPCID.Sets.HatOffsetY[NPC.type] = 4; //this defines the party hat position
             AnimationType = NPCID.Guide;  //this copy the guide animation
         }
 

@@ -564,7 +564,7 @@ namespace JoJoStands.NPCs
             }
             if (taggedByKillerQueen)
             {
-                Texture2D bombTexture = ModContent.Request<Texture2D>("Extras/Bomb").Value;
+                Texture2D bombTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Bomb").Value;
 
                 Vector2 position = npc.Center - new Vector2(bombTexture.Width / 2f, (npc.height / 2f) + 18f);
                 spriteBatch.Draw(bombTexture, position - Main.screenPosition, Color.White);
@@ -594,12 +594,12 @@ namespace JoJoStands.NPCs
         {
             if (npc.HasBuff(ModContent.BuffType<RedBindDebuff>()))
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/BoundByRedBind").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/BoundByRedBind").Value;
                 spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), npc.scale, SpriteEffects.None, 0);
             }
             if (stunnedByBindingEmerald)
             {
-                Texture2D emeraldStringWebTexture = ModContent.Request<Texture2D>("Extras/EmeraldStringWeb").Value;
+                Texture2D emeraldStringWebTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/EmeraldStringWeb").Value;
                 int textureWidth = 19;
                 int textureHeight = 19;
 
@@ -616,7 +616,7 @@ namespace JoJoStands.NPCs
             }
             if (boundByStrings)
             {
-                Texture2D bombTexture = ModContent.Request<Texture2D>("Extras/BoundByStrings").Value;
+                Texture2D bombTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/BoundByStrings").Value;
                 Vector2 scale = new Vector2(npc.width, npc.height) / new Vector2(22, 14);
                 Vector2 origin = new Vector2(11, 7);
                 spriteBatch.Draw(bombTexture, npc.Center - Main.screenPosition, null, npc.color, npc.rotation, origin, scale, SpriteEffects.None, 0);

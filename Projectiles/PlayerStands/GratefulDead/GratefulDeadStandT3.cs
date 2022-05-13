@@ -167,7 +167,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (MyPlayer.RangeIndicators)
             {
-                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("Extras/RangeIndicator");
+                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/RangeIndicator");
                 Main.EntitySpriteDraw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), ((20f * 16f) + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
             }
             return true;

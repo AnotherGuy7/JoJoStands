@@ -21,19 +21,19 @@ namespace JoJoStands.Items.Hamon
             SpriteEffects effects = SpriteEffects.None;
             if (drawPlayer.active && hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("Extras/HamonChargeI").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HamonChargeI").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
                 if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 2)
                 {
-                    texture = ModContent.Request<Texture2D>("Extras/HamonChargeII").Value;
+                    texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HamonChargeII").Value;
 
 
 
                 }
                 if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 1.5)
                 {
-                    texture = ModContent.Request<Texture2D>("Extras/HamonChargeIII").Value;
+                    texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HamonChargeIII").Value;
 
 
 
@@ -80,7 +80,7 @@ namespace JoJoStands.Items.Hamon
             HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
             if (drawPlayer.active && hamonPlayer.defensiveHamonAuraActive)
             {
-                Texture2D auraTexture = ModContent.Request<Texture2D>("Extras/DefensiveHamonAura").Value;
+                Texture2D auraTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/DefensiveHamonAura").Value;
 
 
 

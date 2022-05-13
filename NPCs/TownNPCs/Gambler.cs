@@ -3,6 +3,7 @@ using JoJoStands.Items.Tiles;
 using JoJoStands.Projectiles;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent.Personalities;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,6 +12,29 @@ namespace JoJoStands.NPCs.TownNPCs
     [AutoloadHead]
     public class Gambler : ModNPC
     {
+        public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[NPC.type] = 26;
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
+            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
+            NPCID.Sets.DangerDetectRange[NPC.type] = 150;
+            NPCID.Sets.AttackType[NPC.type] = 0;
+            NPCID.Sets.AttackTime[NPC.type] = 20;
+            NPCID.Sets.AttackAverageChance[NPC.type] = 10;
+            NPCID.Sets.HatOffsetY[NPC.type] = 2;
+            NPC.Happiness.SetBiomeAffection<DesertBiome>(AffectionLevel.Love);
+            NPC.Happiness.SetBiomeAffection<OceanBiome>(AffectionLevel.Hate);
+            NPC.Happiness.SetBiomeAffection<DungeonBiome>(AffectionLevel.Dislike);
+            NPC.Happiness.SetBiomeAffection<HallowBiome>(AffectionLevel.Dislike);
+            NPC.Happiness.SetNPCAffection<Priest>(AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection<MarineBiologist>(AffectionLevel.Hate);
+            NPC.Happiness.SetNPCAffection<HamonMaster>(AffectionLevel.Hate);
+            NPC.Happiness.SetNPCAffection(579, AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Like);
+            NPC.Happiness.SetNPCAffection(NPCID.Merchant, AffectionLevel.Dislike);
+            NPC.Happiness.SetNPCAffection(NPCID.TaxCollector, AffectionLevel.Hate);
+        }
+
         public override void SetDefaults()
         {
             NPC.townNPC = true;
@@ -23,14 +47,6 @@ namespace JoJoStands.NPCs.TownNPCs
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 1f;
-            Main.npcFrameCount[NPC.type] = 26;
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
-            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
-            NPCID.Sets.DangerDetectRange[NPC.type] = 150;
-            NPCID.Sets.AttackType[NPC.type] = 0;
-            NPCID.Sets.AttackTime[NPC.type] = 20;
-            NPCID.Sets.AttackAverageChance[NPC.type] = 10;
-            NPCID.Sets.HatOffsetY[NPC.type] = 2;
             AnimationType = NPCID.Guide;
         }
 
