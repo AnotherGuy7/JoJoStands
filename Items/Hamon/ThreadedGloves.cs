@@ -40,7 +40,6 @@ namespace JoJoStands.Items.Hamon
 
         private int punchCounter = 0;
         private int numberOfPunches = 0;
-        private int punchCooldown = 0;
         private int heldEnemyIndex = -1;
         private int heldEnemyTimer = 0;
         private bool enemyBeingGrabbed = false;

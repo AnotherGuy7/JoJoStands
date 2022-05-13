@@ -2,7 +2,6 @@ using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -23,7 +22,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         private int btdStartDelay = 0;
         private int bubbleDamage = 684;      //not using projectileDamage cause this one changes
 
-        private int btdPlaceTimer = 0;
         private int btdPositionSaveTimer = 0;
         private int btdPositionIndex = 0;
         private int btdRevertTimer = 0;

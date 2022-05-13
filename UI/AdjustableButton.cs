@@ -160,7 +160,7 @@ namespace JoJoStands.UI
         /// Sets the default texture for the button.
         /// </summary>
         /// <param name="texture">The texture the button will have.</param>
-        public new void SetImage(Texture2D texture)
+        public void SetImage(Texture2D texture)
         {
             buttonImage = texture;
         }

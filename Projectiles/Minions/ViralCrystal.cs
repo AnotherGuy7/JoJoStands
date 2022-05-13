@@ -4,6 +4,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace JoJoStands.Projectiles.Minions
 {
@@ -11,7 +12,6 @@ namespace JoJoStands.Projectiles.Minions
     {
         private int shootTimer = 0;
         private const float shootSpeed = 10f;
-        private NPC npcTarget = null;
         private float projectileYOffset = 0f;
 
         public override void SetDefaults()
@@ -60,7 +60,7 @@ namespace JoJoStands.Projectiles.Minions
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<ViralCrystalProjectile>(), 81, 4f, Projectile.owner);
-                    SoundEngine.PlaySound(3, Projectile.Center, 5);
+                    SoundEngine.PlaySound(SoundID.NPCHit, Projectile.Center, 5);
                 }
             }
         }

@@ -29,7 +29,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override int standType => 1;
 
         private int updateTimer = 0;
-        private Vector2 velocityAddition;
         private int timeskipStartDelay = 0;
         private int blockSearchTimer = 0;
 
@@ -150,7 +149,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             {
                                 for (int i = 0; i < 20; i++)
                                 {
-                                    Dust.NewDust(player.position, player.width, player.height, 114);
+                                    Dust.NewDust(player.position, player.width, player.height, DustID.Clentaminator_Red);
                                 }
 
                                 otherProj.penetrate -= 1;
@@ -170,7 +169,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip"));
                                 for (int i = 0; i < 20; i++)
                                 {
-                                    Dust.NewDust(player.position, player.width, player.height, 114);
+                                    Dust.NewDust(player.position, player.width, player.height, DustID.Clentaminator_Red);
                                 }
                             }
                         }
@@ -182,7 +181,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         {
                             for (int i = 0; i < 20; i++)
                             {
-                                Dust.NewDust(player.position, player.width, player.height, 114);
+                                Dust.NewDust(player.position, player.width, player.height, DustID.Clentaminator_Red);
                             }
 
                             Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);
@@ -197,7 +196,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                             for (int i = 0; i < 20; i++)
                             {
-                                Dust.NewDust(player.position, player.width, player.height, 114);
+                                Dust.NewDust(player.position, player.width, player.height, DustID.Clentaminator_Red);
                             }
                         }
                     }

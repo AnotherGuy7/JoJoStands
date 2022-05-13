@@ -60,6 +60,8 @@ namespace JoJoStands.UI
                 redDotTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/RedDot");
             if (orangeDotTexture == null)
                 orangeDotTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/OrangeDot");
+            if (dataPoints == null)
+                dataPoints = new AerosmithRadarPoint[Main.maxNPCs];
 
             spriteBatch.Draw(aerosmithRadarTexture, aerosmithRadarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 1, aerosmithRadarTexture.Width, aerosmithRadarTexture.Height), new Color(255f, 255f, 255f, 255f));
 

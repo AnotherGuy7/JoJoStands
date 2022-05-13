@@ -28,7 +28,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override int standType => 1;
 
         private int updateTimer = 0;
-        private Vector2 velocityAddition;
         private int timeskipStartDelay = 0;
         private int blockSearchTimer = 0;
 

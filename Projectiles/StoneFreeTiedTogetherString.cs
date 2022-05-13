@@ -21,7 +21,6 @@ namespace JoJoStands.Projectiles
             Projectile.penetrate = -1;
         }
 
-        private int linkWhoAmI = -1;
         private NPC heldNPC;
         private bool living = true;
         private float previousDistance = 0f;

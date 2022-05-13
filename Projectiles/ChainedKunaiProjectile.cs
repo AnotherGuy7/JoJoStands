@@ -82,7 +82,7 @@ namespace JoJoStands.Projectiles
                 Projectile.velocity.X = num166;
                 Projectile.velocity.Y = num167;
             }
-            int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
+            int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch);
             Main.dust[dustIndex].noGravity = true;
         }
 
@@ -105,7 +105,6 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        private Vector2 offset;
         private Texture2D stringPartTexture;
 
         public override bool PreDraw(ref Color lightColor)
@@ -115,7 +114,7 @@ namespace JoJoStands.Projectiles
             if (Main.netMode != NetmodeID.Server && stringPartTexture == null)
                 stringPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/ChainedKunai_StringPart").Value;
 
-            Vector2 linkCenter = player.Center + offset;
+            Vector2 linkCenter = player.Center;
             Vector2 center = Projectile.Center;
             float rotation = (linkCenter - center).ToRotation();
 

@@ -337,7 +337,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     if (Vector2.Distance(sleepingGasFormPosition, dustPosition) > SleepingGasEffectRadius)
                         continue;
 
-                    int dustIndex = Dust.NewDust(dustPosition, 1, 1, 63, Scale: 1.6f);
+                    int dustIndex = Dust.NewDust(dustPosition, 1, 1, DustID.WhiteTorch, Scale: 1.6f);
                     Main.dust[dustIndex].noGravity = true;
                     Main.dust[dustIndex].fadeIn = 2f;
                     if (Main.rand.Next(0, 7 + 1) != 0)
@@ -470,31 +470,31 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             if (Main.netMode != NetmodeID.Server)
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
 
-            if (animationName == "Idle") ;
+            if (animationName == "Idle")
             {
                 AnimateStand(animationName, 4, 30, true);
             }
-            if (animationName == "Attack") ;
+            if (animationName == "Attack")
             {
                 AnimateStand(animationName, 3, newPunchTime, true);
             }
-            if (animationName == "Secondary") ;
+            if (animationName == "Secondary")
             {
                 AnimateStand(animationName, 5, 10, true);
             }
-            if (animationName == "GunReveal") ;
+            if (animationName == "GunReveal")
             {
                 AnimateStand(animationName, 5, 3, false);
             }
-            if (animationName == "RemoteControl") ;
+            if (animationName == "RemoteControl")
             {
                 AnimateStand(animationName, 1, 15, true);
             }
-            if (animationName == "Pose") ;
+            if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 10, true);
             }
-            if (animationName == "Steal") ;
+            if (animationName == "Steal")
             {
                 AnimateStand(animationName, 7, 15, false);
             }
