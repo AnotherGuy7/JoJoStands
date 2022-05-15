@@ -38,6 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             mPlayer.creamVoidMode = true;
+            mPlayer.hideAllPlayerLayers = true;
             player.position = Projectile.position + new Vector2(0f, 0f);
             player.AddBuff(ModContent.BuffType<SphericalVoid>(), 2);
             if (player.mount.Type != 0)
@@ -55,9 +56,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 mPlayer.VoidCamPosition = Projectile.position - new Vector2(halfScreenWidth, halfScreenHeight);
 
                 if (player.dead || !mPlayer.standOut || player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] >= 2)
-                {
                     Projectile.Kill();
-                }
+
                 if (mPlayer.voidCounter <= 0 || Main.mouseRight && mPlayer.creamTier > 2 || specialPressed && !Main.mouseLeft)
                 {
                     if (specialPressed && !Main.mouseLeft || mPlayer.creamTier == 2 && mPlayer.voidCounter <= 0)
@@ -158,14 +158,23 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
 
             Projectile.frameCounter++;
-            if (Projectile.frameCounter >= 12)
+            if (Projectile.frameCounter >= 5)
             {
                 Projectile.frame++;
                 Projectile.frameCounter = 0;
                 if (Projectile.frame >= 3)
-                {
                     Projectile.frame = 0;
-                }
+            }
+
+            for (int i = 0; i < Main.rand.Next(2, 4 + 1); i++)
+            {
+                int dustIndex = 0;
+                if (Main.rand.Next(0, 1 + 1) == 0)
+                    dustIndex = Dust.NewDust(Projectile.position, Projectile.width + 6, Projectile.height + 6, DustID.PurpleCrystalShard);
+                else
+                    dustIndex = Dust.NewDust(Projectile.position, Projectile.width + 6, Projectile.height + 6, DustID.PurpleTorch);
+
+                Main.dust[dustIndex].noGravity = true;
             }
         }
 

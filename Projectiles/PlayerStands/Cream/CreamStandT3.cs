@@ -85,7 +85,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     }
                     if (shootCount <= 0 && Projectile.frame == 2)
                     {
-                        shootCount += newPunchTime;
+                        shootCount += newPunchTime / 2;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
@@ -258,7 +258,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             if (animationName == "Attack")
             {
-                AnimateStand(animationName, 4, newPunchTime, true);
+                AnimateStand(animationName, 4, newPunchTime / 2, true);
             }
             if (animationName == "Pose")
             {

@@ -48,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             mPlayer.silverChariotShirtless = Shirtless;
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && player.whoAmI == Main.myPlayer && !secondaryAbilityFrames)
+                if (Main.mouseLeft && !secondaryAbilityFrames && Projectile.owner == Main.myPlayer)
                 {
                     Punch(punchMovementSpeed);
                 }
@@ -57,7 +57,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && !parryFrames && Projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && Projectile.owner == Main.myPlayer)
                 {
                     HandleDrawOffsets();
                     normalFrames = false;
@@ -73,6 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                             if (parryRectangle.Intersects(otherProj.Hitbox) && otherProj.type != Projectile.type && !otherProj.friendly)
                             {
                                 parryFrames = true;
+                                secondaryAbilityFrames = false;
                                 otherProj.owner = Projectile.owner;
                                 otherProj.damage *= 2;
                                 otherProj.velocity *= -1;
@@ -205,7 +206,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 if (animationName == "Parry")
                 {
-                    AnimateStand(animationName, 6, 8, false);
+                    AnimateStand(animationName, 6, 3, false);
                 }
                 if (animationName == "Pose")
                 {
@@ -228,7 +229,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 if (animationName == "Parry")
                 {
-                    AnimateStand("Shirtless" + animationName, 6, 8, false);
+                    AnimateStand("Shirtless" + animationName, 6, 3, false);
                 }
                 if (animationName == "Pose")
                 {

@@ -47,7 +47,7 @@ namespace JoJoStands.Projectiles.Minions
                         {
                             if (MyPlayer.Sounds)
                             {
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
+                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/Punch_land").WithVolume(.3f));
                             }
                             Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
                             otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " loved the damage reflection given by " + player.name + "'s damage-reflecting tree too much."), otherProj.damage, 1, true);

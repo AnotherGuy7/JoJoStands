@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                         touchedNPC = true;
                                         foundNPCTarget = true;
                                         npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByKillerQueen = true;
-                                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick"));
+                                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/KQButtonClick"));
                                         break;
                                     }
                                 }
@@ -99,7 +99,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                     shootCount += 20;
                                     touchedTile = true;
                                     savedPosition = Main.MouseWorld;
-                                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick"));
+                                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/KQButtonClick"));
                                 }
                             }
                         }
@@ -118,7 +118,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                     if (jojoNPC.taggedByKillerQueen)
                                     {
                                         touchedNPC = false;
-                                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
+                                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts), npc.whoAmI);
                                         Main.projectile[projectile].timeLeft = 2;
                                         Main.projectile[projectile].netUpdate = true;
                                         jojoNPC.taggedByKillerQueen = false;
@@ -172,11 +172,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     explosionTimer++;
                     if (explosionTimer == 5)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/KQButtonClick"));
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/KQButtonClick"));
                     }
                     if (explosionTimer >= 90)
                     {
-                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedTarget.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
+                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedTarget.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts), savedTarget.whoAmI);
                         Main.projectile[projectile].timeLeft = 2;
                         Main.projectile[projectile].netUpdate = true;
                         explosionTimer = 0;

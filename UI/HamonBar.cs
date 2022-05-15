@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JoJoStands.Items.Hamon;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -6,70 +7,54 @@ using Terraria.UI;
 
 namespace JoJoStands.UI
 {
-    public class HamonBarState : UIState      //ExamplpMod's ExampleUI, CoinPanel. Look for an easier and cleaner way of doig the text thing in the future
+    public class HamonBar : UIState
     {
-        internal static int sizeMode;
-        public DragableUIPanel HamonBar;
-        public static bool Visible;
+        public static bool visible;
+        public static int sizeMode;
+
+        public DragableUIPanel hamonBar;
         public UIText hamonDisplay;
         public static Texture2D hamonBarTexture;
         public static bool changedInConfig = false;
 
         public static void ShowHamonBar()
         {
-            Visible = true;
+            visible = true;
         }
 
         public static void HideHamonBar()
         {
-            Visible = false;
+            visible = false;
         }
 
         public override void Update(GameTime gameTime)
         {
             Player player = Main.player[Main.myPlayer];
-            Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
-            if (sizeMode >= 4)
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            if (!visible)
             {
-                sizeMode = 3;
+                base.Update(gameTime);
+                return;
             }
+
+            if (sizeMode >= 4)
+                sizeMode = 3;
             if (sizeMode <= 0)
             {
                 sizeMode = 0;
-                Visible = false;
+                visible = false;
             }
-            if (sizeMode == 1)      //default size
-            {
-                Visible = true;
-                HamonBar.Width.Set(140f, 0f);
-                HamonBar.Height.Set(96f, 0f);
 
-                hamonDisplay.Left.Set(28f, 0f);
-                hamonDisplay.Top.Set(80f, 0f);
-            }
-            if (sizeMode == 2)
-            {
-                Visible = true;
-                HamonBar.Width.Set(210f, 0f);
-                HamonBar.Height.Set(144f, 0f);
+            hamonBar.Width.Set(70f + (70 * sizeMode), 0f);
+            hamonBar.Height.Set(48f + (48 * sizeMode), 0f);
+            hamonDisplay.Left.Set(30f + (30 * sizeMode), 0f);
+            hamonDisplay.Top.Set(80f + (40 * sizeMode), 0f);
 
-                hamonDisplay.Left.Set(60f, 0f);
-                hamonDisplay.Top.Set(120f, 0f);
-            }
-            if (sizeMode == 3)
-            {
-                Visible = true;
-                HamonBar.Width.Set(280f, 0f);
-                HamonBar.Height.Set(192f, 0f);
-
-                hamonDisplay.Left.Set(90f, 0f);
-                hamonDisplay.Top.Set(150f, 0f);
-            }
             hamonDisplay.SetText(hamonPlayer.amountOfHamon + "/" + hamonPlayer.maxHamon);
             if (changedInConfig)
             {
-                HamonBar.Left.Set(MyPlayer.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
-                HamonBar.Top.Set(MyPlayer.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
+                hamonBar.Left.Set(MyPlayer.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
+                hamonBar.Top.Set(MyPlayer.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
                 changedInConfig = false;
             }
 
@@ -79,29 +64,29 @@ namespace JoJoStands.UI
 
         public override void OnInitialize()
         {
-            HamonBar = new DragableUIPanel();
-            HamonBar.Left.Set(MyPlayer.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
-            HamonBar.Top.Set(MyPlayer.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
-            HamonBar.Width.Set(140f, 0f);
-            HamonBar.Height.Set(96f, 0f);
-            HamonBar.BackgroundColor = new Color(0, 0, 0, 0);       //make it invisible so that the image is there itself
-            HamonBar.BorderColor = new Color(0, 0, 0, 0);
+            hamonBar = new DragableUIPanel();
+            hamonBar.Left.Set(MyPlayer.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
+            hamonBar.Top.Set(MyPlayer.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
+            hamonBar.Width.Set(140f, 0f);
+            hamonBar.Height.Set(96f, 0f);
+            hamonBar.BackgroundColor = new Color(0, 0, 0, 0);       //make it invisible so that the image is there itself
+            hamonBar.BorderColor = new Color(0, 0, 0, 0);
 
             hamonDisplay = new UIText(0 + "/" + 0);
             hamonDisplay.Left.Set(70f, 0f);
             hamonDisplay.Top.Set(150f, 0f);
             hamonDisplay.Width.Set(22f, 0f);
             hamonDisplay.Height.Set(22f, 0f);
-            HamonBar.Append(hamonDisplay);
+            hamonBar.Append(hamonDisplay);
 
-            Append(HamonBar);
+            Append(hamonBar);
             base.OnInitialize();
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)       //from ExampleMod's ExampleUI
         {
             Player player = Main.player[Main.myPlayer];
-            Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             int frame = 0;
             int frameHeight = hamonBarTexture.Height / 24;      //24 frames in that sheet
             if (hamonPlayer.amountOfHamon >= 3 && hamonPlayer.amountOfHamon <= 12)
@@ -200,7 +185,20 @@ namespace JoJoStands.UI
             {
                 frame = 23;
             }
-            spriteBatch.Draw(hamonBarTexture, HamonBar.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * frame, hamonBarTexture.Width, frameHeight), Color.Yellow);
+
+            /*Rectangle clippingRect = hamonBar.GetClippingRectangle(spriteBatch);
+            //lostSpace.X = clippingRect.Width - (int)(clippingRect.Width * Main.UIScale);
+            Point lostSpace = new Point((int)(clippingRect.Width * (1f / Main.UIScale)), (int)(clippingRect.Height * (1f / Main.UIScale)));
+            lostSpace = Point.Zero;
+            //lostSpace -= (clippingRect.Size() * (1f / Main.UIScale)).ToPoint();
+
+            Rectangle scaledRect = new Rectangle((int)(clippingRect.X * (1f / Main.UIScale)) + lostSpace.X, (int)(clippingRect.Y * (1f / Main.UIScale)) + lostSpace.Y, (int)(clippingRect.Width * Main.UIScale), (int)(clippingRect.Height * Main.UIScale));
+            if (Main.UIScale > 1f)
+            {
+                scaledRect.X = (int)(clippingRect.X / Main.UIScale) + lostSpace.X;
+                scaledRect.Y = (int)(clippingRect.Y / Main.UIScale) + lostSpace.Y;
+            }*/
+            spriteBatch.Draw(hamonBarTexture, hamonBar.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * frame, hamonBarTexture.Width, frameHeight), Color.Yellow);
         }
     }
 }

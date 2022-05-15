@@ -51,7 +51,7 @@ namespace JoJoStands.Projectiles
                             damageMult += otherProj.damage / 50;
                         }
                         Dust.NewDust(otherProj.position, Projectile.width, Projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/Punch_land").WithVolume(.3f));
                         otherProj.Kill();
                     }
                 }

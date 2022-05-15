@@ -36,6 +36,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             Projectile.frame = 1;
+            mPlayer.hideAllPlayerLayers = true;
             player.position = Projectile.position + new Vector2(0f, 0f);
             player.AddBuff(ModContent.BuffType<Exposing>(), 2);
 

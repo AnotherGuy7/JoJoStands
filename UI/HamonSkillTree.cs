@@ -1,6 +1,7 @@
 ﻿using JoJoStands.Items.Hamon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
@@ -120,32 +121,32 @@ namespace JoJoStands.UI
             SetElementPosition(hamonSkillPointsText, new Vector2(0f, 295f));
             HamonSkillTreePanel.Append(hamonSkillPointsText);
 
-            hamonSkillTreeUpArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonTreeUpArrow"));
+            hamonSkillTreeUpArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonTreeUpArrow", AssetRequestMode.ImmediateLoad));
             SetElementSize(hamonSkillTreeUpArrow, new Vector2(32f, 32f));
             SetElementPosition(hamonSkillTreeUpArrow, new Vector2(10f, 10f));
             hamonSkillTreeUpArrow.OnClick += OnClickHamonSkillTreeUpArrow;
             HamonSkillTreePanel.Append(hamonSkillTreeUpArrow);
 
-            hamonSkillTreeDownArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonTreeDownArrow"));
+            hamonSkillTreeDownArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonTreeDownArrow", AssetRequestMode.ImmediateLoad));
             SetElementSize(hamonSkillTreeDownArrow, new Vector2(32f, 32f));
             SetElementPosition(hamonSkillTreeDownArrow, new Vector2(10f, 46f));
             hamonSkillTreeDownArrow.OnClick += OnClickHamonSkillTreeDownArrow;
             HamonSkillTreePanel.Append(hamonSkillTreeDownArrow);
 
-            hamonSkillTreeXButton = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonTreeXButton"));
+            hamonSkillTreeXButton = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonTreeXButton", AssetRequestMode.ImmediateLoad));
             SetElementSize(hamonSkillTreeXButton, new Vector2(32f, 32f));
             SetElementPosition(hamonSkillTreeXButton, new Vector2(360f, 6f));
             hamonSkillTreeXButton.OnClick += OnClickHamonSkillTreeXButton;
             HamonSkillTreePanel.Append(hamonSkillTreeXButton);
 
-            skillTreeTextures[0] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/HamonSkillTree_Page1");
-            skillTreeTextures[1] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/HamonSkillTree_Page2");
-            skillTreeTextures[2] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/HamonSkillTree_Page3");
-            unknownSkillTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/HamonIcon_Unknown");
+            skillTreeTextures[0] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/HamonSkillTree_Page1", AssetRequestMode.ImmediateLoad);
+            skillTreeTextures[1] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/HamonSkillTree_Page2", AssetRequestMode.ImmediateLoad);
+            skillTreeTextures[2] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/HamonSkillTree_Page3", AssetRequestMode.ImmediateLoad);
+            unknownSkillTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/HamonIcon_Unknown", AssetRequestMode.ImmediateLoad);
 
             for (int b = 0; b < hamonSkillIcons.Length; b++)
             {
-                hamonSkillIcons[b] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonIcon_Empty"), Vector2.Zero, new Vector2(30f, 30f), Color.White, true);
+                hamonSkillIcons[b] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonIcon_Empty", AssetRequestMode.ImmediateLoad), Vector2.Zero, new Vector2(30f, 30f), Color.White, true);
                 SetElementSize(hamonSkillIcons[b], new Vector2(30f, 30f));
                 hamonSkillIcons[b].OnClick += OnClickAnyIcon;        //This ties *all* of the buttons to the same method
                 hamonSkillIcons[b].OnDoubleClick += OnDoubleClickAnyIcon;

@@ -17,7 +17,6 @@ namespace JoJoStands.Items.Vampire
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-
             if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<ProtectiveFilmBuff>()))
             {
                 Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ProtectiveFilmLayer");
@@ -47,15 +46,10 @@ namespace JoJoStands.Items.Vampire
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
-
-
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.blackUmbrellaEquipped)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/UmbrellaHat").Value;
-
-
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
                 int drawY = (int)(drawInfo.Position.Y - Main.screenPosition.Y) - 1;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -82,7 +76,6 @@ namespace JoJoStands.Items.Vampire
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             VampirePlayer vampirePlayer = drawPlayer.GetModPlayer<VampirePlayer>();
             if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<KnifeAmalgamation>()))
             {

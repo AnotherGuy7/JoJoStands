@@ -30,6 +30,7 @@ namespace JoJoStands.Items.Vanities
         public override void UpdateEquip(Player player)
         {
             player.invis = true;
+            player.GetModPlayer<MyPlayer>().hideAllPlayerLayers = true;
         }
 
         public override void AddRecipes()

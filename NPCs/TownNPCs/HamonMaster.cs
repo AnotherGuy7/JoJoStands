@@ -96,6 +96,7 @@ namespace JoJoStands.NPCs.TownNPCs
                         hPlayer.skillPointsAvailable = 3;
                         Main.npcChatText = "Amazing! You truly have the capability to become a master Hamon User! Your untapped Hamon is far beyond what I had expected it to be. Tell me, were your predecessors Hamon Users too?";
                     }
+                    HamonBar.ShowHamonBar();
                 }
                 else
                 {

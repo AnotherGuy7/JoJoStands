@@ -4,6 +4,7 @@ using JoJoStands.Items.Vampire;
 using JoJoStands.Mounts;
 using JoJoStands.NPCs;
 using JoJoStands.Projectiles;
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,9 +97,7 @@ namespace JoJoStands.Items.Hamon
             maxHamonCounter = 300;
             hamonStage = 0;
             if (!usingItemThatIgnoresEnemyDamage)
-            {
                 enemyToIgnoreDamageFromIndex = -1;
-            }
 
             usingItemThatIgnoresEnemyDamage = false;
             chargingHamon = false;
@@ -109,8 +108,14 @@ namespace JoJoStands.Items.Hamon
         public override void OnEnterWorld(Player Player)
         {
             if (learnedHamonSkills.Count != ExpectedAmountOfHamonSkills)
-            {
                 RebuildHamonAbilitiesDictionaries();
+
+            if (learnedHamon)
+                HamonBar.ShowHamonBar();
+            else
+            {
+                if (HamonBar.visible)
+                    HamonBar.HideHamonBar();
             }
         }
 
@@ -198,6 +203,9 @@ namespace JoJoStands.Items.Hamon
                     hamonIncreaseBonus += 3;
                     break;
             }
+
+            if (!learnedHamon)
+                return;
 
             if (vPlayer.zombie || vPlayer.vampire)
                 return;
@@ -613,7 +621,8 @@ namespace JoJoStands.Items.Hamon
             hamonAmountRequirements.Add(StandHamonImbue, 0);
 
             learnedAnyAbility = false;
-            Main.NewText("Rebuilt Hamon Skills Dictionaries.", Color.Yellow);
+            if (learnedHamon)
+                Main.NewText("Rebuilt Hamon Skills Dictionaries.", Color.Yellow);
         }
 
         public override void OnHitNPC(Item Item, NPC target, int damage, float knockback, bool crit)

@@ -67,7 +67,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (timeskipStartDelay >= 80)
                 {
                     player.AddBuff(ModContent.BuffType<PreTimeSkip>(), 10);
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip"));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/TimeSkip"));
                     timeskipStartDelay = 0;
                 }
             }
@@ -166,7 +166,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 }
                                 player.position += repositionOffset;
                                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(6));
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip"));
+                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/TimeSkip"));
                                 for (int i = 0; i < 20; i++)
                                 {
                                     Dust.NewDust(player.position, player.width, player.height, DustID.Clentaminator_Red);
@@ -192,7 +192,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             player.position += repositionOffset;
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(6));
                             npc.StrikeNPC(newPunchDamage * 2, punchKnockback * 1.5f, Projectile.direction);
-                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/TimeSkip"));
+                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/TimeSkip"));
 
                             for (int i = 0; i < 20; i++)
                             {

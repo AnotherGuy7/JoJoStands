@@ -2,6 +2,7 @@ using JoJoStands.Items.Hamon;
 using System.ComponentModel;
 using Terraria;
 using Terraria.ModLoader.Config;
+using static JoJoStands.MyPlayer;
 
 namespace JoJoStands
 {
@@ -10,8 +11,8 @@ namespace JoJoStands
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [Label("Death Sound Options")]
-        [Tooltip("Allows you to choose which deathsound to use. Use /deathsoundlist to see the available sounds!")]
-        public int deathsound;
+        [Tooltip("Allows you to choose which deathsound to use")]
+        public DeathSoundType deathSound;
 
         [DefaultValue(1)]
         [Label("Hamon Bar's Size")]
@@ -61,10 +62,10 @@ namespace JoJoStands
         [Tooltip("Allows you to choose how transparent the Range Indicator is.")]
         public int RangeIndicatorVisibility;
 
-        [DefaultValue(MyPlayer.StandSearchType.Bosses)]
+        [DefaultValue(StandSearchType.Bosses)]
         [Label("Stand Auto Mode Targetting Preference")]
         [Tooltip("Select the type of enemy your Stand should prioritize first when in Auto Mode!")]
-        public MyPlayer.StandSearchType StandSearchType;
+        public StandSearchType StandSearchType;
 
         [DefaultValue(39)]
         [Label("Stand Slot X Position")]
@@ -100,7 +101,7 @@ namespace JoJoStands
         public override void OnChanged()        //couldn't use Player player = Main.LocalPlayer cause it wasn't set to an instance of an object
         {
             MyPlayer.RangeIndicatorAlpha = RangeIndicatorVisibility;
-            MyPlayer.DeathSoundID = deathsound;
+            MyPlayer.DeathSoundID = deathSound;
             MyPlayer.Sounds = Sounds;
             MyPlayer.TimestopEffects = TimestopEffects;
             MyPlayer.RangeIndicators = RangeIndicators;
@@ -112,26 +113,13 @@ namespace JoJoStands
             MyPlayer.SecretReferences = SecretReferences;
             MyPlayer.ModSoundsVolume = soundVolume;
             HamonPlayer.HamonEffects = HamonEffects;
-            UI.HamonBarState.changedInConfig = true;
-            UI.HamonBarState.sizeMode = HamonBarSize;
+            UI.HamonBar.changedInConfig = true;
+            UI.HamonBar.sizeMode = HamonBarSize;
             MyPlayer.ColorChangeEffects = ColorChangeEffects;
             MyPlayer.standSearchType = StandSearchType;
             MyPlayer.TimeskipEffects = TimeskipEffects;
             MyPlayer.BiteTheDustEffects = BitetheDustEffects;
             MyPlayer.RespawnWithStandOut = RespawnWithStandOut;
-            if (JoJoStands.JoJoStandsSounds == null)
-            {
-                if (deathsound >= 6)
-                {
-                    Main.NewText("There are no deathsounds over 5!");
-                    deathsound = 0;
-                }
-                if (deathsound <= -1)
-                {
-                    Main.NewText("There are no deathsounds under 0!");
-                    deathsound = 0;
-                }
-            }
             if (HamonBarSize >= 4)
             {
                 Main.NewText("You can only choose numbers between 0-3!");
@@ -141,11 +129,11 @@ namespace JoJoStands
             {
                 Main.NewText("You can only choose numbers between 0-3!");
                 HamonBarSize = 0;
-                UI.HamonBarState.Visible = false;
+                UI.HamonBar.visible = false;
             }
             if (HamonBarSize != 0)
             {
-                UI.HamonBarState.Visible = true;
+                UI.HamonBar.visible = true;
             }
         }
     }

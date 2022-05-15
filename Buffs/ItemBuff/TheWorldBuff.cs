@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Networking;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -47,7 +48,7 @@ namespace JoJoStands.Buffs.ItemBuff
                     mPlayer.timestopActive = false;
                     ModNetHandler.effectSync.SendTimestop(256, player.whoAmI, false, player.whoAmI);
                 }
-                //SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/timestop_stop>());
+                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/timestop_stop"));
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 if (Filters.Scene["GreyscaleEffect"].IsActive())
                     Filters.Scene["GreyscaleEffect"].Deactivate();

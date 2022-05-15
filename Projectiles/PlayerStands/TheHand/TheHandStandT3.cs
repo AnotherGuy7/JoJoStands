@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
                     if (!Main.mouseRight && chargeTimer != 0 && scrapeFrames && Projectile.frame == 1 && Projectile.owner == Main.myPlayer)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR"));
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/BRRR"));
                         Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                         distanceToTeleport.Normalize();
                         distanceToTeleport *= chargeTimer / 45f;
@@ -134,7 +134,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage * 2, punchKnockback, Projectile.owner, fistWhoAmI);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
-                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR").SoundId, -1, -1, SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR").Style, MyPlayer.ModSoundsVolume, Main.rand.NextFloat(0, 0.8f + 1f));
+                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/BRRR").SoundId, -1, -1, SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/BRRR").Style, MyPlayer.ModSoundsVolume, Main.rand.NextFloat(0, 0.8f + 1f));
                         }
                         LimitDistance();
                     }
@@ -166,7 +166,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         scrapeFrames = true;
                         if (specialScrapeTimer <= 60)
                         {
-                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR"));
+                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/BRRR"));
                             for (int i = 0; i < Main.maxNPCs; i++)
                             {
                                 NPC npc = Main.npc[i];
@@ -197,7 +197,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         }
                         if (specialScrapeTimer > 60)
                         {
-                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/BRRR"));
+                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/BRRR"));
                             for (int i = 0; i < Main.maxNPCs; i++)
                             {
                                 NPC npc = Main.npc[i];

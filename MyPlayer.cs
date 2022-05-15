@@ -30,7 +30,6 @@ namespace JoJoStands
 {
     public class MyPlayer : ModPlayer
     {
-        public static int DeathSoundID;        //make them static to have them be true for all of you, instead of having to manually set it true for each of your characters
         public static int RangeIndicatorAlpha;
         public static bool Sounds = true;
         public static bool TimestopEffects = false;
@@ -46,6 +45,7 @@ namespace JoJoStands
         public static bool TimeskipEffects = false;
         public static bool BiteTheDustEffects = false;
         public static bool RespawnWithStandOut = true;
+        public static DeathSoundType DeathSoundID;
         public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
         public static StandSearchType standSearchType = StandSearchType.Bosses;
         public static bool testStandUnlocked = false;
@@ -125,6 +125,7 @@ namespace JoJoStands
         public bool blackUmbrellaEquipped = false;
         public bool silverChariotShirtless = false;      //hot shirtless daddy silver chariot *moan*
         public bool standChangingLocked = false;
+        public bool hideAllPlayerLayers = false;
         //Ozi is to blame for the comment above.
 
         public bool timestopActive;
@@ -182,6 +183,16 @@ namespace JoJoStands
             NormalToDarkBlue
         }
 
+        public enum DeathSoundType
+        {
+            None,
+            Roundabout,
+            Caesar,
+            KonoMeAmareriMaroreriMerareMaro,
+            LastTrainHome,
+            KingCrimsonNoNorioKu
+        }
+
         public override void ResetEffects()
         {
             standRemoteMode = false;
@@ -199,6 +210,7 @@ namespace JoJoStands
             doobiesskullEquipped = false;
             blackUmbrellaEquipped = false;
             silverChariotShirtless = false;
+            hideAllPlayerLayers = false;
             BulletCounter.Visible = false;
 
             standDamageBoosts = 1f;
@@ -296,7 +308,7 @@ namespace JoJoStands
             {
                 if (Sounds)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/menacing"));
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/menacing"));
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
@@ -1433,27 +1445,18 @@ namespace JoJoStands
         {
             if (Player.whoAmI == Main.myPlayer)
             {
-                if (DeathSoundID == 1)
-                {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/ToBeContinued4>"));
-                }
-                if (DeathSoundID == 2)
-                {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/CAESAAAAAAAR"));
-                }
-                if (DeathSoundID == 3)
-                {
+                if (DeathSoundID == DeathSoundType.Roundabout)
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/ToBeContinued"));
+                else if (DeathSoundID == DeathSoundType.Caesar)
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/Caesar"));
+                else if (DeathSoundID == DeathSoundType.KonoMeAmareriMaroreriMerareMaro)
                     SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/GangTortureDance"));
-                }
-                if (DeathSoundID == 4)
-                {
+                else if (DeathSoundID == DeathSoundType.LastTrainHome)
                     SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/LastTrainHome"));
-                }
-                if (DeathSoundID == 5)
-                {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/KORE GA... WAGA KING CRIMSON NO NORIO KU"));
-                }
-                if (DeathSoundID != 1)
+                else if (DeathSoundID == DeathSoundType.KingCrimsonNoNorioKu)
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/KingCrimsonSpeech"));
+
+                if (DeathSoundID != DeathSoundType.Roundabout)
                 {
                     ToBeContinued.Visible = true;
                 }
@@ -1496,12 +1499,22 @@ namespace JoJoStands
             creamExposedToVoid = false;
             creamFrame = 0;
 
-            if (Player.whoAmI == Main.myPlayer && DeathSoundID == 1)
+            if (Player.whoAmI == Main.myPlayer && DeathSoundID == DeathSoundType.Roundabout)
             {
                 tbcCounter++;
                 if (tbcCounter >= 270)
-                {
                     ToBeContinued.Visible = true;
+            }
+        }
+
+        public override void HideDrawLayers(PlayerDrawSet drawInfo)
+        {
+            MyPlayer mPlayer = Player.GetModPlayer<MyPlayer>();
+            if (mPlayer.hideAllPlayerLayers)
+            {
+                foreach (var layer in PlayerDrawLayerLoader.Layers)
+                {
+                    layer.Hide();
                 }
             }
         }

@@ -7,9 +7,10 @@ namespace JoJoStands.UI
 {
     public class ToBeContinued : UIState
     {
-        public UIImage TBCArrow;
         public static bool Visible;
         public static Texture2D TBCArrowTexture;
+
+        private UIImage toBeContinuedArrow;
 
         public override void Update(GameTime gameTime)
         {
@@ -18,15 +19,15 @@ namespace JoJoStands.UI
 
         public override void OnInitialize()
         {
-            TBCArrow = new UIImage(TBCArrowTexture);
-            TBCArrow.Left.Set(80f, 0f);
-            TBCArrow.Top.Set(510f, 0f);
-            TBCArrow.Width.Set(180f, 0f);
-            TBCArrow.Height.Set(300f, 0f);
-            TBCArrow.ImageScale = 2f;
+            toBeContinuedArrow = new UIImage(TBCArrowTexture);
+            toBeContinuedArrow.Width.Set(280f, 0f);
+            toBeContinuedArrow.Height.Set(52f, 0f);
+            toBeContinuedArrow.ImageScale = 1.5f;
+            toBeContinuedArrow.HAlign = 0.06f;
+            toBeContinuedArrow.VAlign = 0.97f;
+            //toBeContinuedArrow.ImageScale = 2f;
 
-            Append(TBCArrow);
-            base.OnInitialize();
+            Append(toBeContinuedArrow);
         }
     }
 }

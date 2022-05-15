@@ -60,13 +60,18 @@ namespace JoJoStands.Projectiles
                 NPC npc = Main.npc[n];
                 if (npc.active)
                 {
+                    if (Projectile.ai[1] != 0f && npc.whoAmI == Projectile.ai[1])
+                    {
+                        npc.StrikeNPC((int)(Projectile.ai[0] * 1.2f), 7f, npc.direction);
+                        continue;
+                    }
+
                     if (npc.lifeMax > 5 && !npc.friendly && !npc.hide && !npc.immortal && Vector2.Distance(Projectile.Center, npc.Center) <= ExplosionRadius)
                     {
                         int hitDirection = -1;
                         if (npc.position.X - Projectile.position.X > 0)
-                        {
                             hitDirection = 1;
-                        }
+
                         npc.StrikeNPC((int)Projectile.ai[0], 7f, hitDirection);
                     }
                 }

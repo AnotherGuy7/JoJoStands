@@ -1,8 +1,19 @@
 using JoJoStands.Items;
+using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Items.Seasonal;
+using JoJoStands.Items.Tiles;
 using JoJoStands.Networking;
+using JoJoStands.Projectiles;
+using JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem;
+using JoJoStands.Projectiles.PlayerStands.StarPlatinum;
+using JoJoStands.Projectiles.PlayerStands.TestStand;
+using JoJoStands.Projectiles.PlayerStands.TheWorld;
+using JoJoStands.Projectiles.PlayerStands.Tusk;
+using JoJoStands.Tiles;
 using JoJoStands.UI;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,20 +23,6 @@ using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Terraria.UI;
-using JoJoStands.Items.Seasonal;
-using Microsoft.Xna.Framework.Input;
-using JoJoStands.Projectiles.PlayerStands.TheWorld;
-using JoJoStands.Projectiles.PlayerStands.StarPlatinum;
-using JoJoStands.Projectiles;
-using JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem;
-using JoJoStands.Projectiles.PlayerStands.Tusk;
-using JoJoStands.Projectiles.PlayerStands.TestStand;
-using JoJoStands.Items.Tiles;
-using JoJoStands.Tiles;
-using JoJoStands.Items.CraftingMaterials;
-using Terraria.Audio;
-using ReLogic.Content;
 
 namespace JoJoStands
 {
@@ -55,7 +52,7 @@ namespace JoJoStands
             SoundsLoaded = ModLoader.TryGetMod("JoJoStandsSounds", out JoJoStandsSounds);
             FanStandsLoaded = ModLoader.TryGetMod("JoJoFanStands", out JoJoFanStands);
 
-            HamonBarState.hamonBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/HamonBar", AssetRequestMode.ImmediateLoad);
+            HamonBar.hamonBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/HamonBar", AssetRequestMode.ImmediateLoad);
             ToBeContinued.TBCArrowTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/TBCArrow", AssetRequestMode.ImmediateLoad);
             BulletCounter.bulletCounterTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/BulletCounter", AssetRequestMode.ImmediateLoad);
             AerosmithRadar.aerosmithRadarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/AerosmithRadar", AssetRequestMode.ImmediateLoad);
@@ -112,7 +109,7 @@ namespace JoJoStands
             StandOutHotKey = KeybindLoader.RegisterKeybind(Instance, "Stand Out", Keys.G);
             PoseHotKey = KeybindLoader.RegisterKeybind(Instance, "Pose", Keys.V);
             StandAutoModeHotKey = KeybindLoader.RegisterKeybind(Instance, "Stand Auto Mode", Keys.C);
-            
+
 
             if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
             {
@@ -140,14 +137,14 @@ namespace JoJoStands
                 //timeskipShaderEffect.Parameters["frontStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars>());
                 Ref<Effect> timeskipShader = new Ref<Effect>(timeskipShaderEffect);      // The path to the compiled shader file.
                 Filters.Scene["TimeSkipEffectShader"] = new Filter(new ScreenShaderData(timeskipShader, "TimeSkipEffectShader"), EffectPriority.VeryHigh);
-                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KingCrimsonBackStars"), 0);
-                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars"), 1);
+                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KingCrimsonBackStars", AssetRequestMode.ImmediateLoad), 0);
+                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars", AssetRequestMode.ImmediateLoad), 1);
                 Filters.Scene["TimeSkipEffectShader"].Load();
                 //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["backStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonBackStars>());
                 //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["frontStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars>());
                 Ref<Effect> biteTheDustEffectShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/BiteTheDustEffectShader", AssetRequestMode.ImmediateLoad));
                 Filters.Scene["BiteTheDustEffect"] = new Filter(new ScreenShaderData(biteTheDustEffectShader, "BiteTheDustEffectShader"), EffectPriority.VeryHigh);
-                Filters.Scene["BiteTheDustEffect"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KillerQueenBTDImage"), 0);
+                Filters.Scene["BiteTheDustEffect"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KillerQueenBTDImage", AssetRequestMode.ImmediateLoad), 0);
                 Filters.Scene["BiteTheDustEffect"].Load();
 
                 //Misc
@@ -169,7 +166,7 @@ namespace JoJoStands
             FanStandsLoaded = false;
             JoJoStandsSounds = null;
             ToBeContinued.TBCArrowTexture = null;
-            HamonBarState.hamonBarTexture = null;
+            HamonBar.hamonBarTexture = null;
             BulletCounter.bulletCounterTexture = null;
             AerosmithRadar.aerosmithRadarTexture = null;
             GoldenSpinMeter.goldenRectangleTexture = null;

@@ -11,7 +11,7 @@ namespace JoJoStands
     public class JoJoStandsSystem : ModSystem
     {
         public static ToBeContinued TBCarrow;
-        public static HamonBarState HamonBarInterface;
+        public static HamonBar HamonBarInterface;
         public static GoldenSpinMeter GoldenSpinInterface;
         public static BulletCounter bulletCounter;
         public static AerosmithRadar aerosmithRadar;
@@ -45,7 +45,7 @@ namespace JoJoStands
             if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
             {
                 //UI Stuff
-                HamonBarInterface = new HamonBarState();
+                HamonBarInterface = new HamonBar();
                 HamonBarInterface.Activate();
                 _hamonbarInterface = new UserInterface();
                 _hamonbarInterface.SetState(HamonBarInterface);
@@ -124,7 +124,7 @@ namespace JoJoStands
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (HamonBarState.Visible)
+            if (HamonBar.visible)
                 _hamonbarInterface.Update(gameTime);
 
             if (ToBeContinued.Visible)
@@ -174,7 +174,7 @@ namespace JoJoStands
 
         private bool DrawUI()       //also from Terraria Interface for Dummies
         {
-            if (HamonBarState.Visible)
+            if (HamonBar.visible)
                 _hamonbarInterface.Draw(Main.spriteBatch, new GameTime());
 
             if (ToBeContinued.Visible)

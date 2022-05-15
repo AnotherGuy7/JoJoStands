@@ -255,7 +255,7 @@ namespace JoJoStands.Projectiles
                             Main.dust[dust].noGravity = false;
                             if (MyPlayer.Sounds && Main.netMode != NetmodeID.Server)
                             {
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
+                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/Punch_land").WithVolume(.3f));
                             }
                         }
                         if (otherProj.type == ModContent.ProjectileType<KnifeProjectile>() && Projectile.owner != otherProj.owner && player.team != Main.player[otherProj.owner].team)
@@ -266,7 +266,7 @@ namespace JoJoStands.Projectiles
                             Main.dust[dust].noGravity = false;
                             if (MyPlayer.Sounds && Main.netMode != NetmodeID.Server)
                             {
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
+                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/Punch_land").WithVolume(.3f));
                             }
                         }
                     }

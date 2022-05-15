@@ -16,7 +16,6 @@ namespace JoJoStands.Items.Hamon
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
             SpriteEffects effects = SpriteEffects.None;
             if (drawPlayer.active && hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
@@ -25,19 +24,9 @@ namespace JoJoStands.Items.Hamon
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
                 if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 2)
-                {
                     texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HamonChargeII").Value;
-
-
-
-                }
                 if (hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 1.5)
-                {
                     texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HamonChargeIII").Value;
-
-
-
-                }
 
                 if (drawPlayer.direction == -1)
                 {
@@ -52,9 +41,7 @@ namespace JoJoStands.Items.Hamon
                     hamonPlayer.hamonLayerFrame += 1;
                     hamonPlayer.hamonLayerFrameCounter = 0;
                     if (hamonPlayer.hamonLayerFrame >= 7)
-                    {
                         hamonPlayer.hamonLayerFrame = 0;
-                    }
                 }
 
                 DrawData drawData = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameHeight * hamonPlayer.hamonLayerFrame, texture.Width, frameHeight), Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
@@ -73,24 +60,15 @@ namespace JoJoStands.Items.Hamon
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
-
-
-
             HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
             if (drawPlayer.active && hamonPlayer.defensiveHamonAuraActive)
             {
                 Texture2D auraTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/DefensiveHamonAura").Value;
-
-
-
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
-
                 if (drawPlayer.direction == -1)
-                {
                     drawX += 2;
-                }
+
                 int frameHeight = auraTexture.Height / 7;
                 hamonPlayer.defensiveHamonLayerFrameCounter++;
                 if (hamonPlayer.defensiveHamonLayerFrameCounter >= 8)
@@ -98,9 +76,7 @@ namespace JoJoStands.Items.Hamon
                     hamonPlayer.defensiveHamonLayerFrame += 1;
                     hamonPlayer.defensiveHamonLayerFrameCounter = 0;
                     if (hamonPlayer.defensiveHamonLayerFrame >= 7)
-                    {
                         hamonPlayer.defensiveHamonLayerFrame = 0;
-                    }
                 }
 
                 Vector2 Position = new Vector2(drawX, drawY);

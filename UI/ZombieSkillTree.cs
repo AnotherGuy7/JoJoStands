@@ -1,6 +1,7 @@
 ﻿using JoJoStands.Items.Vampire;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
@@ -100,32 +101,32 @@ namespace JoJoStands.UI
             SetElementPosition(zombieSkillPointsText, new Vector2(0f, 295f));
             ZombieSkillTreePanel.Append(zombieSkillPointsText);
 
-            zombieSkillTreeLeftArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireSkillTreeLeftArrow"));
+            zombieSkillTreeLeftArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireSkillTreeLeftArrow", AssetRequestMode.ImmediateLoad));
             SetElementSize(zombieSkillTreeLeftArrow, new Vector2(32f, 32f));
             SetElementPosition(zombieSkillTreeLeftArrow, new Vector2(10f, 10f));
             zombieSkillTreeLeftArrow.OnClick += OnClickZombieSkillTreeUpArrow;
             ZombieSkillTreePanel.Append(zombieSkillTreeLeftArrow);
 
-            zombieSkillTreeRightArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireSkillTreeRightArrow"));
+            zombieSkillTreeRightArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireSkillTreeRightArrow", AssetRequestMode.ImmediateLoad));
             SetElementSize(zombieSkillTreeRightArrow, new Vector2(32f, 32f));
             SetElementPosition(zombieSkillTreeRightArrow, new Vector2(46f, 10f));
             zombieSkillTreeRightArrow.OnClick += OnClickZombieSkillTreeDownArrow;
             ZombieSkillTreePanel.Append(zombieSkillTreeRightArrow);
 
-            zombieSkillTreeXButton = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireSkillTreeXButton"));
+            zombieSkillTreeXButton = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireSkillTreeXButton", AssetRequestMode.ImmediateLoad));
             SetElementSize(zombieSkillTreeXButton, new Vector2(32f, 32f));
             SetElementPosition(zombieSkillTreeXButton, new Vector2(364f, 7f));
             zombieSkillTreeXButton.OnClick += OnClickZombieSkillTreeXButton;
             ZombieSkillTreePanel.Append(zombieSkillTreeXButton);
 
-            skillTreeTextures[0] = (Texture2D)(Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page1");
-            skillTreeTextures[1] = (Texture2D)(Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page2");
-            skillTreeTextures[2] = (Texture2D)(Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page3");
-            unknownSkillTexture = (Texture2D)(Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/VampireIcon_Unknown");
+            skillTreeTextures[0] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page1", AssetRequestMode.ImmediateLoad);
+            skillTreeTextures[1] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page2", AssetRequestMode.ImmediateLoad);
+            skillTreeTextures[2] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page3", AssetRequestMode.ImmediateLoad);
+            unknownSkillTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/VampireIcon_Unknown", AssetRequestMode.ImmediateLoad);
 
             for (int b = 0; b < MaxButtonsPerPage; b++)
             {
-                zombieSkillIcons[b] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireIcon_Empty"), Vector2.Zero, new Vector2(30f, 30f), Color.White, true);
+                zombieSkillIcons[b] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireIcon_Empty", AssetRequestMode.ImmediateLoad), Vector2.Zero, new Vector2(30f, 30f), Color.White, true);
                 SetElementSize(zombieSkillIcons[b], new Vector2(30f, 30f));
                 zombieSkillIcons[b].OnClick += OnClickAnyIcon;        //This ties *all* of the buttons to the same method
                 zombieSkillIcons[b].OnDoubleClick += OnDoubleClickAnyIcon;

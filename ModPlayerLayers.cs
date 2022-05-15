@@ -1,5 +1,4 @@
-﻿using JoJoStands.Buffs.ItemBuff;
-using JoJoStands.Items;
+﻿using JoJoStands.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -9,35 +8,6 @@ using Terraria.ModLoader;
 
 namespace JoJoStands
 {
-    public class PoseDrawLayer : PlayerDrawLayer
-    {
-        public override Position GetDefaultPosition()
-        {
-            return new AfterParent(PlayerDrawLayers.FrontAccFront);
-        }
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            if (drawPlayer.active && drawPlayer.HasBuff(ModContent.BuffType<ProtectiveFilmBuff>()))
-            {
-                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/ProtectiveFilmLayer");
-                int drawX = (int)drawInfo.Position.X;
-                int drawY = (int)(drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2f - 1f);
-                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
-                SpriteEffects effects = SpriteEffects.None;
-                if (drawPlayer.direction == -1)
-                    effects = SpriteEffects.FlipHorizontally;
-
-                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                Color color = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
-                DrawData drawData = new DrawData(texture, position, drawPlayer.bodyFrame, color * alpha, drawPlayer.fullRotation, drawPlayer.Size / 2f, 1f, effects, 0);
-
-                drawInfo.DrawDataCache.Add(drawData);
-            }
-        }
-    }
-
     public class MenacingPoseLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition()
@@ -48,7 +18,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && drawPlayer.velocity == Vector2.Zero && mPlayer.poseMode)
             {
@@ -89,7 +58,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.standRemoteMode && (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithFinal>()))
             {
@@ -127,7 +95,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.wearingEpitaph)
             {
@@ -162,7 +129,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.hermitPurpleTier != 0)
             {
@@ -204,7 +170,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.hermitPurpleTier > 1)
             {
@@ -248,7 +213,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.showingCBLayer)
             {
@@ -283,7 +247,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.sexPistolsLeft != 0 && mPlayer.standOut && mPlayer.sexPistolsTier != 0)
             {
@@ -345,7 +308,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomHoodNeutralEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodNeutral", EquipType.Head))
             {
@@ -376,7 +338,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomHoodShortEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodShort", EquipType.Head))
             {
@@ -401,23 +362,24 @@ namespace JoJoStands
     {
         public override Position GetDefaultPosition()
         {
-            return new AfterParent(PlayerDrawLayers.Torso);
+            return new BeforeParent(PlayerDrawLayers.MountBack);
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Body_Glowmask").Value;
-                float drawX = (int)drawInfo.Position.X + drawPlayer.width / 2;
-                float drawY = (int)drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
 
-                DrawData drawData = new DrawData(texture, position, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
+                Vector2 drawOffset = new Vector2(0f, drawInfo.drawPlayer.Size.Y / 4f);
+                drawOffset.Y += 1f;
+                Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - new Vector2(drawInfo.torsoOffset) - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
+                drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
+
+                DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
                 //data.shader = drawInfo.bodyArmorShader;
                 drawInfo.DrawDataCache.Add(drawData);
             }
@@ -434,19 +396,19 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
+            if (!drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Arms_Glowmask").Value;
-                float drawX = (int)drawInfo.Position.X + drawPlayer.width / 2;
-                float drawY = (int)drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2 + 4f;
-                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.bodyPosition - Main.screenPosition;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
+                Vector2 drawOffset = new Vector2(0f, drawInfo.drawPlayer.Size.Y / 4f);
+                drawOffset.Y += 1f;
+                Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - drawInfo.frontShoulderOffset - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
+                drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
 
-                DrawData drawData = new DrawData(texture, position, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
+                DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
                 //drawData.shader = drawInfo.bodyArmorShader;
-                drawInfo.DrawDataCache.Add(drawData);
+                //drawInfo.DrawDataCache.Add(drawData);
             }
         }
     }
@@ -461,7 +423,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomLeggingsEquipped && drawPlayer.legs == Mod.GetEquipSlot("PhantomLeggings", EquipType.Legs))
             {

@@ -133,7 +133,7 @@ namespace JoJoStands.Projectiles.Minions
                             Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, Projectile.width, Projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
                             if (MyPlayer.Sounds)
                             {
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/Punch_land").WithVolume(.3f));
+                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/Punch_land").WithVolume(.3f));
                             }
                             otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " missed his target and hit " + player.name + "'s damage-reflecting frog."), otherProj.damage, 1, true);
                             otherProj.Kill();

@@ -52,7 +52,7 @@ namespace JoJoStands.Buffs.ItemBuff
                         int spawnedNPC = NPC.NewNPC(player.GetSource_FromThis(), (int)deathPositionX, (int)deathPositionY, LoopNPC);
                         Main.npc[spawnedNPC].GetGlobalNPC<NPCs.JoJoGlobalNPC>().spawnedByDeathLoop = true;
                         deathTimes += 1;
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/GEDeathLoop"));
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/GEDeathLoop"));
                         deathLoopTimer = 0;
                     }
                     if (deathLoopTimer >= 60 && deathTimes == (2 + deathTimeAdd))
@@ -69,7 +69,7 @@ namespace JoJoStands.Buffs.ItemBuff
                         int spawnedNPC = NPC.NewNPC(player.GetSource_FromThis(), (int)deathPositionX, (int)deathPositionY, LoopNPC);
                         Main.npc[spawnedNPC].GetGlobalNPC<NPCs.JoJoGlobalNPC>().spawnedByDeathLoop = true;
                         deathTimes += 1;
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/sound/GEDeathLoop"));
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/GEDeathLoop"));
                         deathLoopTimer = 0;
                     }
                     if (deathLoopTimer >= 30 && deathTimes == (9 + deathTimeAdd))
