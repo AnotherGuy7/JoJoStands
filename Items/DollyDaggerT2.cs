@@ -65,9 +65,6 @@ namespace JoJoStands.Items
             return true;
         }
 
-        public override void RightClick(Player player)
-        { }
-
         public override bool ManualStandSpawning(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

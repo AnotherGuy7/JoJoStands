@@ -18,11 +18,8 @@ namespace JoJoStands.UI
         {
             MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             spinAmountText.SetText("Spin: " + mPlayer.goldenSpinCounter);
-
             if (mPlayer.goldenSpinCounter <= 0)
-            {
                 Visible = false;
-            }
 
             base.Update(gameTime);
         }

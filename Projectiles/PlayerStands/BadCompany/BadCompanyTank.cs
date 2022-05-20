@@ -64,13 +64,11 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     projectileDamage = 86;
                     shootTime = 120;
                 }
-                speedRandom = Main.rand.NextFloat(-0.05f, 0.05f);
+                speedRandom = Main.rand.NextFloat(-0.03f, 0.03f);
                 setStats = true;
 
                 for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
-                {
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
-                }
             }
 
             if (!mPlayer.standAutoMode)
@@ -78,6 +76,11 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 MovementAI();
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
                 {
+                    if (Main.MouseWorld.X >= Projectile.position.X)
+                        Projectile.spriteDirection = Projectile.direction = 1;
+                    else
+                        Projectile.spriteDirection = Projectile.direction = -1;
+
                     if (shootCount <= 0)
                     {
                         shootCount += shootTime - mPlayer.standSpeedBoosts;
@@ -113,13 +116,10 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 if (target != null)
                 {
                     if (target.position.X >= Projectile.position.X)
-                    {
                         Projectile.spriteDirection = Projectile.direction = 1;
-                    }
                     else
-                    {
                         Projectile.spriteDirection = Projectile.direction = -1;
-                    }
+
                     if (shootCount <= 0)
                     {
                         shootCount += shootTime - mPlayer.standSpeedBoosts;
@@ -138,6 +138,11 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 }
             }
             Projectile.tileCollide = !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
+            if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height))
+            {
+                Projectile.velocity.Y = 0f;
+                Projectile.position.Y -= 2f;
+            }
         }
 
         public override void Kill(int timeLeft)
@@ -167,32 +172,25 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             }
 
             if (Projectile.position.X > player.position.X)
-            {
                 Projectile.direction = -1;
-            }
             else
-            {
                 Projectile.direction = 1;
-            }
+
             Projectile.spriteDirection = Projectile.direction;
 
             if (Projectile.ai[0] == 0f)
             {
                 Projectile.tileCollide = true;
                 if (Projectile.velocity.Y < 6f)
-                {
                     Projectile.velocity.Y += 0.3f;
-                }
 
                 if (xDist >= IdleRange)
-                {
                     Projectile.velocity.X = directionToPlayer.X * xDist / 14;
-                }
                 else
-                {
                     Projectile.velocity.X *= 0.96f + speedRandom;
-                }
             }
+
+            Projectile.velocity *= 0.98f;
             float distance = Vector2.Distance(player.Center, Projectile.Center);
             if (Projectile.ai[0] == 1f)        //Flying
             {

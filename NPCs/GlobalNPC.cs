@@ -1,6 +1,6 @@
 using JoJoStands.Buffs.AccessoryBuff;
 using JoJoStands.Buffs.Debuffs;
-using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.DropConditions;
 using JoJoStands.Items;
 using JoJoStands.Items.Accessories;
@@ -281,7 +281,7 @@ namespace JoJoStands.NPCs
             {
                 if (playerPositionOnSkip == Vector2.Zero)
                 {
-                    playerPositionOnSkip = Main.player[Buffs.ItemBuff.PreTimeSkip.userIndex].position;
+                    playerPositionOnSkip = Main.player[PreTimeSkip.userIndex].position;
                 }
                 if (aiStyleSave == 0 && npc.aiStyle != 0)
                 {
@@ -414,7 +414,7 @@ namespace JoJoStands.NPCs
             if (spawnedByDeathLoop)
             {
                 deathTimer++;
-                if ((deathTimer >= 30 && Buffs.ItemBuff.DeathLoop.Looping10x) || (deathTimer >= 60 && Buffs.ItemBuff.DeathLoop.Looping3x))
+                if ((deathTimer >= 30 && DeathLoop.Looping10x) || (deathTimer >= 60 && DeathLoop.Looping3x))
                 {
                     if (npc.immortal || npc.hide)
                     {
@@ -504,7 +504,7 @@ namespace JoJoStands.NPCs
                     DeathLoop.Looping3x = true;
                     DeathLoop.Looping10x = false;
                 }
-                if (!npc.boss && mPlayer.deathLoopActive && Buffs.ItemBuff.DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
+                if (!npc.boss && mPlayer.deathLoopActive && DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
                 {
                     DeathLoop.LoopNPC = npc.type;
                     DeathLoop.deathPositionX = npc.position.X;

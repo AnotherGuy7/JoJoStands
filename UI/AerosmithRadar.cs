@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -31,7 +32,7 @@ namespace JoJoStands.UI
             aerosmithRadarUI.BackgroundColor = new Color(0, 0, 0, 0);
             aerosmithRadarUI.BorderColor = new Color(0, 0, 0, 0);
 
-            centerDot = new UIImage(ModContent.Request<Texture2D>("JoJoStands/UI/GreenDot"));
+            centerDot = new UIImage(ModContent.Request<Texture2D>("JoJoStands/UI/GreenDot", AssetRequestMode.ImmediateLoad));
             centerDot.Left.Set(58f, 0f);
             centerDot.Top.Set(62f, 0f);
             centerDot.Width.Set(10f, 0f);
@@ -57,9 +58,9 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (redDotTexture == null)
-                redDotTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/RedDot");
+                redDotTexture = ModContent.Request<Texture2D>("JoJoStands/UI/RedDot").Value;
             if (orangeDotTexture == null)
-                orangeDotTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/OrangeDot");
+                orangeDotTexture = ModContent.Request<Texture2D>("JoJoStands/UI/OrangeDot").Value;
             if (dataPoints == null)
                 dataPoints = new AerosmithRadarPoint[Main.maxNPCs];
 

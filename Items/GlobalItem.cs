@@ -1,3 +1,4 @@
+using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Items.Hamon;
 using JoJoStands.Items.Vampire;

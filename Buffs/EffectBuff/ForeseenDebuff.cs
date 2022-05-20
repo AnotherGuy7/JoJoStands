@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace JoJoStands.Buffs.ItemBuff
+namespace JoJoStands.Buffs.EffectBuff
 {
     public class ForeseenDebuff : ModBuff
     {

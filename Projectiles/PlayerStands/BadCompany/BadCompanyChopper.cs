@@ -74,6 +74,11 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 MovementAI();
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
                 {
+                    if (Main.MouseWorld.X >= Projectile.position.X)
+                        Projectile.spriteDirection = Projectile.direction = 1;
+                    else
+                        Projectile.spriteDirection = Projectile.direction = -1;
+
                     if (shootCount <= 0)
                     {
                         shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
@@ -110,13 +115,9 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 if (target != null)
                 {
                     if (target.position.X >= Projectile.position.X)
-                    {
                         Projectile.spriteDirection = Projectile.direction = 1;
-                    }
                     else
-                    {
                         Projectile.spriteDirection = Projectile.direction = -1;
-                    }
                     if (shootCount <= 0)
                     {
                         shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
@@ -145,8 +146,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             }
         }
 
-        private const float MaxRange = 300f;
-        private const float IdleRange = 80f;        //Range in which the chopper is idle
+        private const float MaxRange = 360f;
+        private const float IdleRange = 140f;        //Range in which the chopper is idle
 
         private void MovementAI()       //Pretty much the pet AI
         {
@@ -157,26 +158,24 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             directionToPlayer *= player.moveSpeed;
 
             if (Projectile.position.X > player.position.X)
-            {
                 Projectile.direction = -1;
-            }
             else
-            {
                 Projectile.direction = 1;
-            }
             Projectile.spriteDirection = Projectile.direction;
+
+            Projectile.velocity *= 0.99f;
             float distance = Vector2.Distance(player.Center, Projectile.Center);
             if (distance >= IdleRange)
             {
                 if (Math.Abs(player.velocity.X) > 1f || Math.Abs(player.velocity.Y) > 1f)
                 {
-                    directionToPlayer *= distance / 16f;
-                    Projectile.velocity = directionToPlayer;
+                    directionToPlayer *= distance / (IdleRange / 2f);
+                    Projectile.velocity += directionToPlayer;
                 }
                 else
                 {
-                    directionToPlayer *= 0.9f * (distance / 60f);
-                    Projectile.velocity = directionToPlayer;
+                    directionToPlayer *= 0.5f * (distance / 160f);
+                    Projectile.velocity += directionToPlayer;
                 }
             }
             if (distance >= MaxRange)        //Out of range

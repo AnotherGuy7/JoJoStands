@@ -1,5 +1,6 @@
 using JoJoStands.Buffs.AccessoryBuff;
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Buffs.PlayerBuffs;
 using JoJoStands.Items;
@@ -190,7 +191,7 @@ namespace JoJoStands
             Caesar,
             KonoMeAmareriMaroreriMerareMaro,
             LastTrainHome,
-            KingCrimsonNoNorioKu
+            KingCrimsonNoNorioKu,
         }
 
         public override void ResetEffects()
@@ -578,11 +579,10 @@ namespace JoJoStands
                 {
                     menacingFrames = 0;
                     if (poseDuration <= 0)
-                    {
                         Player.AddBuff(ModContent.BuffType<StrongWill>(), 30 * 60);
-                    }
-                    poseDuration = 300;
+
                     poseMode = false;
+                    poseDuration = 300;
                     JoJoStands.testStandPassword.Add(Convert.ToChar((int)MathHelper.ToDegrees(1.36136f)));
                     JoJoStands.testStandPassword.Add(Convert.ToChar((int)Math.Sqrt(4999) + 1));
                     JoJoStands.testStandPassword.Add(Convert.ToChar(byte.MaxValue - 186));
@@ -617,28 +617,20 @@ namespace JoJoStands
                 if (goldenSpinCounter <= 1)
                 {
                     achievedInfiniteSpin = false;
-                    if (GoldenSpinMeter.Visible)
-                    {
-                        GoldenSpinMeter.Visible = false;
-                    }
+                    GoldenSpinMeter.Visible = false;
                 }
                 if (equippedTuskAct != 0)
                 {
                     if (goldenSpinCounter > 0)
                     {
-                        if (!GoldenSpinMeter.Visible)
-                        {
-                            GoldenSpinMeter.Visible = true;
-                        }
+                        GoldenSpinMeter.Visible = true;
                         if (achievedInfiniteSpin && !forceChangedTusk)
                         {
                             tuskActNumber = 4;
                             forceChangedTusk = true;
                         }
                         if (goldenSpinCounter <= 1)     //would reset anyway if the Player isn't holding Tusk, cause it resets whenever you hold the Item again
-                        {
                             forceChangedTusk = false;
-                        }
                     }
                 }
 
@@ -663,10 +655,13 @@ namespace JoJoStands
 
                     if (specialPressed)
                     {
+                        changingSexPistolsPositions = !changingSexPistolsPositions;
                         amountOfSexPistolsPlaced = 0;
-                        changingSexPistolsPositions = true;
                         sexPistolsClickTimer = 0;
-                        Main.NewText("Click on any position to have a Sex Pistol stay around it. (Relative to the Player)");
+                        if (changingSexPistolsPositions)
+                            Main.NewText("Sex Pistol Placement Mode: On");
+                        else
+                            Main.NewText("Sex Pistol Placement Mode: Off");
                     }
 
                     if (changingSexPistolsPositions)
@@ -676,20 +671,16 @@ namespace JoJoStands
 
                         if (Main.mouseLeft && sexPistolsClickTimer <= 0)
                         {
-                            sexPistolsClickTimer += 30;
+                            sexPistolsClickTimer += 20;
                             sexPistolsOffsets[amountOfSexPistolsPlaced] = Main.MouseWorld - Player.Center;
                             amountOfSexPistolsPlaced++;
                             if (amountOfSexPistolsPlaced >= 6)
-                            {
                                 changingSexPistolsPositions = false;
-                            }
                         }
                     }
 
                     if (secondSpecialPressed && sexPistolsTier >= 3)
-                    {
                         Player.AddBuff(ModContent.BuffType<BulletKickFrenzy>(), 60 * 60 * (sexPistolsTier - 2));
-                    }
                 }
                 else
                 {
@@ -1113,6 +1104,7 @@ namespace JoJoStands
                         }
                     }
                 }
+                Player.AddBuff(ModContent.BuffType<BadCompanyActiveBuff>(), 2);
                 if (Main.mouseRight && badCompanyUIClickTimer <= 0 && Player.whoAmI == Main.myPlayer)
                 {
                     badCompanyUIClickTimer = 30;

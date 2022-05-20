@@ -5,7 +5,7 @@ using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace JoJoStands.Buffs.ItemBuff
+namespace JoJoStands.Buffs.EffectBuff
 {
     public class BacktoZero : ModBuff
     {

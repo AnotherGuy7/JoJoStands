@@ -1,4 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
@@ -725,7 +726,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override bool PreDraw(ref Color drawColor)      //from ExampleMod ExampleDeathShader
         {
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
 
             DrawRangeIndicators(Main.spriteBatch);       //not affected by dyes since it's starting a new batch with no effect
             SyncAndApplyDyeSlot();
@@ -737,7 +738,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override void PostDraw(Color drawColor)     //manually drawing stands cause sometimes stands had too many frames, it's easier to manage this way, and dye effects didn't work for stands that were overriding PostDraw
         {
             Main.spriteBatch.End();     //ending the spriteBatch that started in PreDraw
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
         }
 
         public SpriteEffects effects = SpriteEffects.None;
@@ -926,13 +927,115 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// Find the closest NPC to the player.
         /// Criteria for the search is set by the MyPlayer.standSearchType field.
         /// </summary>
-        /// <param name="maxDetectionRange"></param>
+        /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
         /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
         public NPC FindNearestTarget(float maxDetectionRange)
         {
             NPC target = null;
             Player player = Main.player[Projectile.owner];
             switch (MyPlayer.standSearchType)
+            {
+                case MyPlayer.StandSearchType.Bosses:
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < maxDetectionRange && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                if (npc.boss)       //is gonna try to detect bosses over anything
+                                {
+                                    target = npc;
+                                    break;
+                                }
+                                else        //if it fails to detect a boss, it'll detect the next best thing
+                                {
+                                    target = npc;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchType.Closest:
+                    float closestDistance = maxDetectionRange;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < closestDistance && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                closestDistance = distance;
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchType.Farthest:
+                    float farthestDistance = 0f;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance > farthestDistance && distance < maxDetectionRange && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                farthestDistance = distance;
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchType.LeastHealth:
+                    int leasthealth = int.MaxValue;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < maxDetectionRange && npc.life < leasthealth && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                leasthealth = npc.life;
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchType.MostHealth:
+                    int mosthealth = 0;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                mosthealth = npc.life;
+                            }
+                        }
+                    }
+                    break;
+            }
+            return target;
+        }
+
+        /// <summary>
+        /// Finds the closest NPC to the player with the given search type.
+        /// </summary>
+        /// <param name="searchType">The search type criteria to search with</param>
+        /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
+        /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
+        public NPC FindNearestTarget(MyPlayer.StandSearchType searchType, float maxDetectionRange)
+        {
+            NPC target = null;
+            Player player = Main.player[Projectile.owner];
+            switch (searchType)
             {
                 case MyPlayer.StandSearchType.Bosses:
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system

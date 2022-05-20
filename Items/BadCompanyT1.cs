@@ -36,7 +36,7 @@ namespace JoJoStands.Items
 
             mPlayer.badCompanyTier = standTier;
             mPlayer.maxBadCompanyUnits = 6 * standTier;
-            return false;
+            return true;
         }
 
         public override void AddRecipes()

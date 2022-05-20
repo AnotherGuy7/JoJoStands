@@ -4,7 +4,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace JoJoStands.Buffs.ItemBuff
+namespace JoJoStands.Buffs.EffectBuff
 {
     public class DeathLoop : ModBuff
     {

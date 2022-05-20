@@ -1,4 +1,4 @@
-using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Buffs.EffectBuff;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;

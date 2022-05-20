@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles
             }
             if (Projectile.ai[0] == 8f)
             {
-                target.AddBuff(ModContent.BuffType<Old>(), (7 + ((int)Projectile.ai[1] * 2)) * 60);
+                target.AddBuff(ModContent.BuffType<Aging>(), (7 + ((int)Projectile.ai[1] * 2)) * 60);
             }
             if (Projectile.ai[0] == 9f)
             {
@@ -188,7 +188,7 @@ namespace JoJoStands.Projectiles
             }
             if (Projectile.ai[0] == 8f)
             {
-                target.AddBuff(ModContent.BuffType<Old>(), (1 + (int)Projectile.ai[1]) * 60);
+                target.AddBuff(ModContent.BuffType<Aging>(), (1 + (int)Projectile.ai[1]) * 60);
             }
             if (Projectile.ai[0] == 9f)
             {

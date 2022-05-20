@@ -1,4 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Networking;
 using System;
 using Terraria;
@@ -6,7 +7,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace JoJoStands.Buffs.ItemBuff
+namespace JoJoStands.Buffs.EffectBuff
 {
     public class SkippingTime : ModBuff
     {

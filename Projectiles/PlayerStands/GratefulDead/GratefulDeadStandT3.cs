@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     npc.direction = -Projectile.direction;
                     npc.position = Projectile.position + new Vector2(5f * Projectile.direction, -2f - npc.height / 3f);
                     npc.velocity = Vector2.Zero;
-                    npc.AddBuff(ModContent.BuffType<Old2>(), 2);
+                    npc.AddBuff(ModContent.BuffType<RapidAging>(), 2);
                     if (!npc.active)
                     {
                         grabFrames = false;
@@ -138,7 +138,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         float distance = Vector2.Distance(player.Center, npc.Center);
                         if (distance < (20f * 16f) && !npc.immortal && !npc.hide)
                         {
-                            npc.AddBuff(ModContent.BuffType<Old>(), 2);
+                            npc.AddBuff(ModContent.BuffType<Aging>(), 2);
                         }
                     }
                 }
@@ -150,11 +150,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         float distance = Vector2.Distance(player.Center, otherPlayer.Center);
                         if (distance < (20f * 16f) && otherPlayer.whoAmI != player.whoAmI)
                         {
-                            otherPlayer.AddBuff(ModContent.BuffType<Old>(), 2);
+                            otherPlayer.AddBuff(ModContent.BuffType<Aging>(), 2);
                         }
                     }
                 }
-                player.AddBuff(ModContent.BuffType<Old>(), 2);
+                player.AddBuff(ModContent.BuffType<Aging>(), 2);
             }
             if (mPlayer.standAutoMode)
             {

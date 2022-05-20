@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
             Projectile.friendly = true;
         }
 
-        private const float BaseKickRadius = 16f;
+        private const float BaseKickRadius = 24f;
         private const int BaseKickCooldownTime = 120;
         private const int MaxAmountOfDusts = 20;
 
@@ -49,7 +49,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                 kickRestTimer--;
             }
             kickRadius = (BaseKickRadius * mPlayer.sexPistolsTier) + mPlayer.standRangeBoosts / 2f;
-            kickCooldownTime = BaseKickCooldownTime - (15 * mPlayer.sexPistolsTier);
+            kickCooldownTime = BaseKickCooldownTime - (15 * mPlayer.sexPistolsTier) - (2 * mPlayer.standSpeedBoosts);
 
             if (!mPlayer.standAutoMode)
             {
@@ -76,15 +76,18 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                     for (int p = 0; p < Main.maxProjectiles; p++)
                     {
                         Projectile otherProjectile = Main.projectile[p];
-                        if (otherProjectile.active && otherProjectile.type != Projectile.type && otherProjectile.owner == Projectile.owner && Projectile.Distance(otherProjectile.Center) <= kickRadius)
+                        if (otherProjectile.active && otherProjectile.type != Projectile.type && otherProjectile.DamageType == DamageClass.Ranged && otherProjectile.owner == Projectile.owner && Projectile.Distance(otherProjectile.Center) <= kickRadius)
                         {
                             NPC target = null;
+                            float closestDistance = 999f;
                             for (int n = 0; n < Main.maxNPCs; n++)
                             {
                                 NPC possibleTarget = Main.npc[n];
-                                if (possibleTarget.active && possibleTarget.lifeMax > 5 && !possibleTarget.immortal && !possibleTarget.hide && !possibleTarget.townNPC)
+                                float distance = Vector2.Distance(possibleTarget.Center, Projectile.Center);
+                                if (possibleTarget.active && possibleTarget.lifeMax > 5 && !possibleTarget.immortal && !possibleTarget.hide && !possibleTarget.townNPC && distance < closestDistance)
                                 {
                                     target = possibleTarget;
+                                    closestDistance = distance;
                                     break;
                                 }
                             }
@@ -95,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                             if (!player.HasBuff(ModContent.BuffType<BulletKickFrenzy>()))
                                 kickRestTimer += kickCooldownTime;
 
-                            Vector2 redirectionVelocity = target.Center - Projectile.Center;
+                            Vector2 redirectionVelocity = target.Center - otherProjectile.Center;
                             redirectionVelocity.Normalize();
                             redirectionVelocity *= 16f;
                             otherProjectile.velocity = redirectionVelocity;

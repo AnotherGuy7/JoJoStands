@@ -1,3 +1,4 @@
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.ModLoader;

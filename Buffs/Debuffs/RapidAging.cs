@@ -4,11 +4,11 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Old2 : ModBuff
+    public class RapidAging : ModBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Old");
+            DisplayName.SetDefault("Rapid Aging");
             Description.SetDefault("You can feel your entire life energy leaving.");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
@@ -20,9 +20,8 @@ namespace JoJoStands.Buffs.Debuffs
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.lifeRegen > 0)
-            {
                 player.lifeRegen = 0;
-            }
+
             player.lifeRegenTime = 120;
             player.lifeRegen -= 16;
             player.moveSpeed *= 0.8f;
@@ -30,6 +29,7 @@ namespace JoJoStands.Buffs.Debuffs
             player.GetAttackSpeed(DamageClass.Generic) *= 0.5f;
             player.statDefense = (int)(player.statDefense * 0.8f);
         }
+
         public override void Update(NPC npc, ref int buffIndex)
         {
             Player player = Main.player[Main.myPlayer];

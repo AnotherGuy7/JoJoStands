@@ -1,4 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Networking;
 using Microsoft.Xna.Framework;

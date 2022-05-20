@@ -5,11 +5,11 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Old : ModBuff
+    public class Aging : ModBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Old");
+            DisplayName.SetDefault("Aging");
             Description.SetDefault("Your knees are shaking, you feel powerless and tired.");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
@@ -25,9 +25,8 @@ namespace JoJoStands.Buffs.Debuffs
                 return;
 
             if (player.lifeRegen > 0)
-            {
                 player.lifeRegen = 0;
-            }
+
             player.lifeRegenTime = 120;
             player.lifeRegen -= 4 * damageMultiplication;
             player.moveSpeed *= 0.94f;
@@ -64,9 +63,8 @@ namespace JoJoStands.Buffs.Debuffs
             {
                 npc.lifeRegen = -4 * damageMultiplication;
                 if (Math.Abs(npc.velocity.X) > savedVelocityX)
-                {
                     npc.velocity.X *= 0.9f;
-                }
+
                 if (!oneTimeEffectsApplied)
                 {
                     npc.defense = (int)(npc.defense * 0.9f);

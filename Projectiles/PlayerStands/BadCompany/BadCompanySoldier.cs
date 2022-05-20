@@ -25,7 +25,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         private new int projectileDamage = 0;
         private new int shootTime = 0;
         private float speedRandom = 0f;     //So the AI isn't always the same
-        private int centerDistance = 30;      //Height of the center of the Projectile (used for 
+        private int centerDistance = 30;      //Height of the center of the Projectile
+        private int stabCooldownTimer = 0;
 
         public override void AI()
         {
@@ -33,6 +34,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             updateTimer++;
             if (shootCount > 0)
                 shootCount--;
+            if (stabCooldownTimer > 0)
+                stabCooldownTimer--;
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -68,7 +71,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     shootTime = 60;
                 }
                 shootTime += Main.rand.Next(0, 15 + 1);
-                speedRandom = Main.rand.NextFloat(-0.05f, 0.05f);
+                speedRandom = Main.rand.NextFloat(-0.03f, 0.03f);
                 setStats = true;
 
                 for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
@@ -95,24 +98,53 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 {
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X <= Projectile.position.X)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.spriteDirection = Projectile.direction;
 
-                    if (shootCount <= 0)
+                    NPC targetNPC = null;
+                    for (int i = 0; i < Main.maxNPCs; i++)
                     {
-                        shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
-                        SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
+                        NPC npc = Main.npc[i];
+                        if (npc.active && npc.lifeMax > 5 && !npc.townNPC && Vector2.Distance(npc.Center, Main.MouseWorld) <= 24f && Vector2.Distance(npc.Center, Projectile.Center) <= 3 * 16f)
                         {
-                            shootVel = new Vector2(0f, 1f);
+                            targetNPC = npc;
+                            break;
                         }
-                        shootVel.Normalize();
-                        shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
-                        Main.projectile[proj].netUpdate = true;
+                    }
+
+                    if (targetNPC != null)
+                    {
+                        Vector2 velocity = targetNPC.Center - Projectile.Center;
+                        velocity.Normalize();
+                        velocity *= 1.3f;
+                        Projectile.velocity = velocity;
+                        if (stabCooldownTimer <= 0)
+                        {
+                            PlayAnimation("Stab");
+                            targetNPC.StrikeNPC((int)(projectileDamage * 1.5f), 1.2f, Projectile.damage);
+                            stabCooldownTimer += 45 + Main.rand.Next(1, 6 + 1);
+                        }
+                    }
+                    else
+                    {
+                        if (Main.MouseWorld.X >= Projectile.position.X)
+                            Projectile.spriteDirection = Projectile.direction = 1;
+                        else
+                            Projectile.spriteDirection = Projectile.direction = -1;
+
+                        if (shootCount <= 0)
+                        {
+                            shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
+                            SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= shootSpeed;
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
+                            Main.projectile[proj].netUpdate = true;
+                        }
                     }
                 }
             }
@@ -135,9 +167,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
                     Projectile.direction = 1;
                     if (target.position.X <= Projectile.position.X)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.spriteDirection = Projectile.direction;
 
                     if (shootCount <= 0)
@@ -162,6 +192,11 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             }
 
             Projectile.tileCollide = !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
+            if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height))
+            {
+                Projectile.velocity.Y = 0f;
+                Projectile.position.Y -= 2f;
+            }
         }
 
         public override void Kill(int timeLeft)
@@ -192,13 +227,9 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             }
 
             if (Projectile.position.X > player.position.X)
-            {
                 Projectile.direction = -1;
-            }
             else
-            {
                 Projectile.direction = 1;
-            }
             Projectile.spriteDirection = Projectile.direction;
 
             if (Projectile.ai[0] == 0f)
@@ -206,23 +237,20 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 PlayAnimation("Walk");
                 Projectile.tileCollide = true;
                 if (Projectile.velocity.Y < 6f)
-                {
                     Projectile.velocity.Y += 0.3f;
-                }
 
                 if (xDist >= IdleRange)
-                {
                     Projectile.velocity.X = directionToPlayer.X * xDist / 14;
-                }
                 else
-                {
                     Projectile.velocity.X *= 0.96f + speedRandom;
-                }
             }
+
+            Projectile.velocity *= 0.99f;
             float distance = Vector2.Distance(player.Center, Projectile.Center);
             if (Projectile.ai[0] == 1f)        //Flying
             {
                 PlayAnimation("Parachute");
+                Projectile.velocity.Y += 0.03f;
                 if (distance >= MaxFlyingIdleDistance)
                 {
                     if (Math.Abs(player.velocity.X) > 1f || Math.Abs(player.velocity.Y) > 1f)
@@ -265,6 +293,10 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (animationName == "AimDown")
             {
                 AnimateStand(animationName, 1, 120, true);
+            }
+            if (animationName == "Stab")
+            {
+                AnimateStand(animationName, 4, 20 - (int)Projectile.velocity.X, true);
             }
             if (animationName == "Walk")
             {

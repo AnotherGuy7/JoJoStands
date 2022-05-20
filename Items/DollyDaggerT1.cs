@@ -31,9 +31,6 @@ namespace JoJoStands.Items
             Item.value = Item.buyPrice(0, 2, 0, 0);
         }
 
-        public override void RightClick(Player player)
-        { }
-
         public override bool ManualStandSpawning(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

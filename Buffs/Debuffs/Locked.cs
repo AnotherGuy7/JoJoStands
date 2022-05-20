@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace JoJoStands.Buffs.AccessoryBuff
+namespace JoJoStands.Buffs.Debuffs
 {
     public class Locked : ModBuff
     {

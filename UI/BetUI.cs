@@ -86,9 +86,9 @@ namespace JoJoStands.UI
 
         public override void OnInitialize()
         {
-            Asset<Texture2D> UpArrow = ModContent.Request<Texture2D>("JoJoStands/Extras/UpArrow");
-            Asset<Texture2D> DownArrow = ModContent.Request<Texture2D>("JoJoStands/Extras/DownArrow");
-            Asset<Texture2D> playTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonPlay");
+            Asset<Texture2D> UpArrow = ModContent.Request<Texture2D>("JoJoStands/Extras/UpArrow", AssetRequestMode.ImmediateLoad);
+            Asset<Texture2D> DownArrow = ModContent.Request<Texture2D>("JoJoStands/Extras/DownArrow", AssetRequestMode.ImmediateLoad);
+            Asset<Texture2D> playTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonPlay", AssetRequestMode.ImmediateLoad);
 
             Bet = new DragableUIPanel();
             Bet.HAlign = 0.5f;
@@ -113,7 +113,7 @@ namespace JoJoStands.UI
             betButton.OnClick += new MouseEvent(BetButtonClicked);
             Bet.Append(betButton);
 
-            Asset<Texture2D> closeTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonDelete");
+            Asset<Texture2D> closeTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonDelete", AssetRequestMode.ImmediateLoad);
             UIImageButton closeButton = new UIImageButton(closeTexture);
             closeButton.Top.Set(0f, 0f);
             closeButton.Left.Set(0f, 0f);
@@ -255,9 +255,7 @@ namespace JoJoStands.UI
         {
             SoundEngine.PlaySound(SoundID.MenuClose);
             if (chosenGame == 0)
-            {
                 Visible = false;
-            }
         }
 
         private void BetButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -265,17 +263,12 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             SoundEngine.PlaySound(SoundID.MenuTick);
             if (pCoins != 0 || gCoins != 0 && chosenGame == 0)
-            {
                 chosenGame = Main.rand.Next(1, 4);
-            }
             else
-            {
                 Main.NewText("It wouldn't be gambling without some loss and gain.");
-            }
+
             if (chosenGame != 0)
-            {
                 Main.NewText("We are already betting... Can't you see that?");
-            }
         }
 
         private void RockButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -743,7 +736,7 @@ namespace JoJoStands.UI
         {
             if (set == 1)       //Rock Paper Scissors buttons
             {
-                Asset<Texture2D> rockTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Rock");
+                Asset<Texture2D> rockTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Rock", AssetRequestMode.ImmediateLoad);
                 rockButton = new UIImageButton(rockTexture);
                 rockButton.HAlign = 0.2f;
                 rockButton.VAlign = 0.3f;
@@ -752,7 +745,7 @@ namespace JoJoStands.UI
                 rockButton.OnClick += new MouseEvent(RockButtonClicked);
                 playArea.Append(rockButton);
 
-                Asset<Texture2D> paperTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Paper");
+                Asset<Texture2D> paperTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Paper", AssetRequestMode.ImmediateLoad);
                 paperButton = new UIImageButton(paperTexture);
                 paperButton.HAlign = 0.2f;
                 paperButton.VAlign = 0.6f;
@@ -761,7 +754,7 @@ namespace JoJoStands.UI
                 paperButton.OnClick += new MouseEvent(PaperButtonClicked);
                 playArea.Append(paperButton);
 
-                Asset<Texture2D> scissorTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Scissors");
+                Asset<Texture2D> scissorTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Scissors", AssetRequestMode.ImmediateLoad);
                 scissorsButton = new UIImageButton(scissorTexture);
                 scissorsButton.HAlign = 0.2f;
                 scissorsButton.VAlign = 0.9f;
@@ -772,7 +765,7 @@ namespace JoJoStands.UI
             }
             else if (set == 2)      //Roll button
             {
-                Asset<Texture2D> playTexture = ModContent.Request<Texture2D>("Terraria/UI/ButtonPlay");
+                Asset<Texture2D> playTexture = ModContent.Request<Texture2D>("Terraria/UI/ButtonPlay", AssetRequestMode.ImmediateLoad);
                 rollButton = new UIImageButton(playTexture);
                 rollButton.HAlign = 0.5f;
                 rollButton.VAlign = 0.8f;
@@ -788,7 +781,7 @@ namespace JoJoStands.UI
             }
             else if (set == 3)
             {
-                drawPile = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/card_back"));
+                drawPile = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/card_back", AssetRequestMode.ImmediateLoad));
                 drawPile.HAlign = 0.9f;
                 drawPile.VAlign = 0.4f;
                 drawPile.Height.Set(58f, 0f);
@@ -829,7 +822,7 @@ namespace JoJoStands.UI
                 NPCCard2Image.Width.Set(npcCardTexture2.Value.Width, 0f);
                 playArea.Append(NPCCard2Image);
 
-                ShowCardsButton = new UIImageButton(ModContent.Request<Texture2D>("Terraria/UI/ButtonPlay"));
+                ShowCardsButton = new UIImageButton(ModContent.Request<Texture2D>("Terraria/UI/ButtonPlay", AssetRequestMode.ImmediateLoad));
                 ShowCardsButton.HAlign = 0.9f;
                 ShowCardsButton.VAlign = 0.65f;
                 ShowCardsButton.Height.Set(30f, 0f);
@@ -843,28 +836,28 @@ namespace JoJoStands.UI
                 Texture2D npcResultTexture = null;
                 if (playerChoice == 1)
                 {
-                    playerResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Rock_Right");
+                    playerResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Rock_Right", AssetRequestMode.ImmediateLoad);
                 }
                 if (playerChoice == 2)
                 {
-                    playerResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Paper_Right");
+                    playerResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Paper_Right", AssetRequestMode.ImmediateLoad);
                 }
                 if (playerChoice == 3)
                 {
-                    playerResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Scissors_Right");
+                    playerResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Scissors_Right", AssetRequestMode.ImmediateLoad);
                 }
 
                 if (randomSign == 1)
                 {
-                    npcResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Rock_Left");
+                    npcResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Rock_Left", AssetRequestMode.ImmediateLoad);
                 }
                 if (randomSign == 2)
                 {
-                    npcResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Paper_Left");
+                    npcResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Paper_Left", AssetRequestMode.ImmediateLoad);
                 }
                 if (randomSign == 3)
                 {
-                    npcResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Scissors_Left");
+                    npcResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Scissors_Left", AssetRequestMode.ImmediateLoad);
                 }
 
                 if (playerResultTexture != null)

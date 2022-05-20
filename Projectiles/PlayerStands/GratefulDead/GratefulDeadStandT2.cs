@@ -97,7 +97,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     npc.direction = -Projectile.direction;
                     npc.position = Projectile.position + new Vector2(5f * Projectile.direction, -2f - npc.height / 3f);
                     npc.velocity = Vector2.Zero;
-                    npc.AddBuff(ModContent.BuffType<Old2>(), 2);
+                    npc.AddBuff(ModContent.BuffType<RapidAging>(), 2);
                     if (!npc.active)
                     {
                         grabFrames = false;
