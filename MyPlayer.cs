@@ -6,6 +6,7 @@ using JoJoStands.Buffs.PlayerBuffs;
 using JoJoStands.Items;
 using JoJoStands.Items.Hamon;
 using JoJoStands.Mounts;
+using JoJoStands.Networking;
 using JoJoStands.Projectiles;
 using JoJoStands.Projectiles.Minions;
 using JoJoStands.Projectiles.PlayerStands.BadCompany;
@@ -125,9 +126,11 @@ namespace JoJoStands
         public bool doobiesskullEquipped = false;
         public bool blackUmbrellaEquipped = false;
         public bool silverChariotShirtless = false;      //hot shirtless daddy silver chariot *moan*
+        //Ozi is to blame for the comment above.
         public bool standChangingLocked = false;
         public bool hideAllPlayerLayers = false;
-        //Ozi is to blame for the comment above.
+        public bool standRespawnQueued = false;
+        public bool canStandAttack = true;
 
         public bool timestopActive;
         public bool timeskipPreEffect;
@@ -213,6 +216,7 @@ namespace JoJoStands
             silverChariotShirtless = false;
             hideAllPlayerLayers = false;
             BulletCounter.Visible = false;
+            canStandAttack = true;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -244,8 +248,11 @@ namespace JoJoStands
 
         public override void OnRespawn(Player player)
         {
-            if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut)
-                SpawnStand();
+            if (Player.whoAmI == Main.myPlayer)
+            {
+                tbcCounter = 0;
+                ToBeContinued.Visible = false;
+            }
         }
 
         public override void PlayerDisconnect(Player player)        //runs for everyone that hasn't left
@@ -295,7 +302,7 @@ namespace JoJoStands
                 Main.NewText("Stand Control: Auto");
                 standAutoMode = true;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    Networking.ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, true, Player.whoAmI);
+                    ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, true, Player.whoAmI);
             }
             if (JoJoStands.StandAutoModeHotKey.JustPressed && standAutoMode && standKeyPressTimer <= 0)
             {
@@ -303,18 +310,16 @@ namespace JoJoStands
                 Main.NewText("Stand Control: Manual");
                 standAutoMode = false;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    Networking.ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, true, Player.whoAmI);
+                    ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, true, Player.whoAmI);
             }
             if (JoJoStands.PoseHotKey.JustPressed && !poseMode)
             {
                 if (Sounds)
-                {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/menacing"));
-                }
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/PoseSound"));
+
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    Networking.ModNetHandler.playerSync.SendPoseMode(256, Player.whoAmI, true, Player.whoAmI);
-                }
+                    ModNetHandler.playerSync.SendPoseMode(256, Player.whoAmI, true, Player.whoAmI);
+
                 poseMode = true;
             }
             if (standChangingLocked)
@@ -326,7 +331,7 @@ namespace JoJoStands
                 standKeyPressTimer += 30;
                 SpawnStand();
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    Networking.ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
+                    ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
             }
             if (JoJoStands.SpecialHotKey.Current && standAccessory)
             {
@@ -429,10 +434,10 @@ namespace JoJoStands
                 {
                     showingCBLayer = false;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                        Networking.ModNetHandler.playerSync.SendCBLayer(256, Player.whoAmI, false, Player.whoAmI);
+                        ModNetHandler.playerSync.SendCBLayer(256, Player.whoAmI, false, Player.whoAmI);
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    Networking.ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, false, Player.whoAmI);
+                    ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, false, Player.whoAmI);
                 standKeyPressTimer += 30;
             }
         }
@@ -531,9 +536,9 @@ namespace JoJoStands
 
             if (Main.rand.Next(1, 5 + 1) == 1)
             {
-                int inheritanceStandChance = Main.rand.Next(0, JoJoStands.standTier1List.Count);
+                int inheritanceStandType = Main.rand.Next(0, JoJoStands.standTier1List.Count);
                 Item standTier1 = new Item();
-                standTier1.SetDefaults(JoJoStands.standTier1List[inheritanceStandChance]);
+                standTier1.SetDefaults(JoJoStands.standTier1List[inheritanceStandType]);
                 standTier1.stack = 1;
                 startingItems.Add(standTier1);
             }
@@ -595,10 +600,11 @@ namespace JoJoStands
             {
                 Main.windSpeedCurrent = 0f;
             }
-            if (!Player.dead && Player.whoAmI == Main.myPlayer)
+
+            if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut && standRespawnQueued)
             {
-                ToBeContinued.Visible = false;
-                tbcCounter = 0;
+                SpawnStand();
+                standRespawnQueued = false;
             }
 
             if (goldenSpinCounter > 0)          //golden spin stuff
@@ -886,6 +892,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(38 * standDamageBoosts), 4f, Player.whoAmI);
+                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(4, 7 + 1) / 10f);
                         }
                     }
                     if (hermitPurpleTier == 2)
@@ -897,6 +904,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(81 * standDamageBoosts), 6f, Player.whoAmI);
+                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(7, 10 + 1) / 10f);
                         }
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
@@ -905,6 +913,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(78 * standDamageBoosts), 0f, Player.whoAmI);
+                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(4, 7 + 1) / 10f);
                         }
                     }
                     if (hermitPurpleTier == 3)
@@ -916,6 +925,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(157 * standDamageBoosts), 7f, Player.whoAmI);
+                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(4, 7 + 1) / 10f);
                         }
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
@@ -935,6 +945,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(202 * standDamageBoosts), 8f, Player.whoAmI);
+                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(4, 7 + 1) / 10f);
                         }
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
@@ -1449,9 +1460,7 @@ namespace JoJoStands
                     SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/KingCrimsonSpeech"));
 
                 if (DeathSoundID != DeathSoundType.Roundabout)
-                {
                     ToBeContinued.Visible = true;
-                }
             }
 
             if (Player.HasBuff(ModContent.BuffType<Pierced>()))
@@ -1477,6 +1486,7 @@ namespace JoJoStands
             standOut = false;
             revived = false;
             standChangingLocked = false;
+            standRespawnQueued = true;
             return true;
         }
 

@@ -38,13 +38,13 @@ namespace JoJoStands.Projectiles
                 return;
             }
 
-            float direction = player.Center.X - Projectile.Center.X;
-            if (direction > 0)
+            float xDifference = player.Center.X - Projectile.Center.X;
+            if (xDifference > 2)
             {
                 Projectile.direction = -1;
                 player.ChangeDir(-1);
             }
-            if (direction < 0)
+            else if (xDifference < -2)
             {
                 Projectile.direction = 1;
                 player.ChangeDir(1);
@@ -52,17 +52,6 @@ namespace JoJoStands.Projectiles
             //Projectile.spriteDirection = Projectile.direction;
             Vector2 rota = player.Center - Projectile.Center;
             Projectile.rotation = (-rota).ToRotation();
-            if (Projectile.alpha == 0)
-            {
-                if (Projectile.position.X + (float)(Projectile.width / 2) > player.position.X + (float)(player.width / 2))
-                {
-                    player.ChangeDir(1);
-                }
-                else
-                {
-                    player.ChangeDir(-1);
-                }
-            }
             Vector2 projectileCenter = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
             float playerDifferenceX = player.position.X + (float)(player.width / 2) - projectileCenter.X;
             float playerDifferenceY = player.position.Y + (float)(player.height / 2) - projectileCenter.Y;
@@ -103,9 +92,7 @@ namespace JoJoStands.Projectiles
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

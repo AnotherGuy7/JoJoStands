@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -76,10 +77,13 @@ namespace JoJoStands.Items
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut && !mPlayer.standAutoMode && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory)
             {
-                if (Item.potion || Item.mountType != -1)      //default value for mountType is -1
+                if (PlayerInput.Triggers.Current.SmartSelect)
                     return true;
 
-                if (!player.controlMount && Item.mountType != -1)        //if the player isn't pressing controlMount AND the Item's mount is actually something, 
+                if (Item.potion || Item.mountType != MountID.None)      //default value for mountType is -1
+                    return true;
+
+                if (!player.controlMount && Item.mountType != MountID.None)        //if the player isn't pressing controlMount AND the Item's mount is actually something, 
                     return false;
 
                 else if ((!player.controlQuickMana || !player.controlQuickHeal) && Item.potion)

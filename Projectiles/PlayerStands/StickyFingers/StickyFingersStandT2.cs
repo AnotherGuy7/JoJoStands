@@ -42,7 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
             if (!mPlayer.standAutoMode)
             {
-                secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] != 0;
+                secondaryAbility = secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] != 0;
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0)
                 {
                     Punch();
@@ -54,7 +54,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 }
                 if (!attackFrames)
                 {
-                    if (!secondaryAbilityFrames)
+                    if (!secondaryAbility)
                         StayBehind();
                     else
                         GoInFront();

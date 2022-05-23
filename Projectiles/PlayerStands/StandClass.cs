@@ -728,9 +728,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
 
-            DrawRangeIndicators(Main.spriteBatch);       //not affected by dyes since it's starting a new batch with no effect
+            DrawRangeIndicators();       //not affected by dyes since it's starting a new batch with no effect
             SyncAndApplyDyeSlot();
-            DrawStand(Main.spriteBatch, drawColor);
+            DrawStand(drawColor);
 
             return true;
         }
@@ -746,7 +746,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <summary>
         /// Draws the Stand.
         /// </summary>
-        private void DrawStand(SpriteBatch spriteBatch, Color drawColor)
+        private void DrawStand(Color drawColor)
         {
             if (useProjectileAlpha)
                 drawColor *= Projectile.alpha / 255f;
@@ -770,7 +770,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// Only draws if the MyPlayer.RangeIndicators field is set to true.
         /// </summary>
         /// <param name="spriteBatch"></param>
-        private void DrawRangeIndicators(SpriteBatch spriteBatch)
+        private void DrawRangeIndicators()
         {
             Player player = Main.player[Projectile.owner];
 

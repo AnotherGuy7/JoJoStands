@@ -58,13 +58,19 @@ namespace JoJoStands.NPCs
         public Vector2 playerPositionOnSkip = Vector2.Zero;
         public Vector2 preTimestopVelocity = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
-        public Vector2[] foresightPosition = new Vector2[400];
-        public Rectangle[] foresightFrames = new Rectangle[400];
-        public Vector2[] foresightRotations = new Vector2[400];      //although this is a Vector2, I'm storing rotations in X and Direction in Y
+        public ForesightSaveData[] foresightData = new ForesightSaveData[200];
 
         public override bool InstancePerEntity
         {
             get { return true; }
+        }
+
+        public struct ForesightSaveData
+        {
+            public Vector2 position;
+            public Rectangle frame;
+            public int direction;
+            public float rotation;
         }
 
         public override void ModifyGlobalLoot(GlobalLoot globalLoot)
@@ -352,10 +358,10 @@ namespace JoJoStands.NPCs
                 }
                 if (foresightSaveTimer <= 1)
                 {
-                    foresightPosition[foresightPositionIndex] = npc.position;
-                    foresightFrames[foresightPositionIndex] = npc.frame;
-                    foresightRotations[foresightPositionIndex].X = npc.rotation;
-                    foresightRotations[foresightPositionIndex].Y = npc.direction;
+                    foresightData[foresightPositionIndex].position = npc.position;
+                    foresightData[foresightPositionIndex].frame = npc.frame;
+                    foresightData[foresightPositionIndex].rotation = npc.rotation;
+                    foresightData[foresightPositionIndex].direction = npc.direction;
                     foresightPositionIndex++;       //second so that something saves in [0] and goes up from there
                     foresightPositionIndexMax++;
                     foresightSaveTimer = 5;
@@ -369,31 +375,30 @@ namespace JoJoStands.NPCs
                     foresightResetIndex = true;
                 }
                 npc.velocity = Vector2.Zero;
-                npc.position = foresightPosition[foresightPositionIndex];
-                npc.frame = foresightFrames[foresightPositionIndex];
-                npc.rotation = foresightRotations[foresightPositionIndex].X;
-                npc.direction = (int)foresightRotations[foresightPositionIndex].Y;
+                npc.position = foresightData[foresightPositionIndex].position;
+                npc.frame = foresightData[foresightPositionIndex].frame;
+                npc.rotation = foresightData[foresightPositionIndex].rotation;
+                npc.direction = (int)foresightData[foresightPositionIndex].direction;
                 if (foresightSaveTimer > 0)
-                {
                     foresightSaveTimer--;
-                }
+
                 if (foresightSaveTimer <= 1)
                 {
                     foresightPositionIndex++;
                     foresightSaveTimer = 5;
                     if (foresightPositionIndex >= 1)
                     {
-                        if (foresightPosition[foresightPositionIndex - 1] != Vector2.Zero)
+                        if (foresightData[foresightPositionIndex].position != Vector2.Zero)
                         {
-                            foresightPosition[foresightPositionIndex - 1] = Vector2.Zero;
+                            foresightData[foresightPositionIndex].position = Vector2.Zero;
                         }
-                        if (foresightRotations[foresightPositionIndex - 1].X != 0f)
+                        if (foresightData[foresightPositionIndex].rotation != 0f)
                         {
-                            foresightRotations[foresightPositionIndex - 1].X = 0f;
+                            foresightData[foresightPositionIndex].rotation = 0f;
                         }
-                        if (foresightRotations[foresightPositionIndex - 1].Y != 0f)
+                        if (foresightData[foresightPositionIndex].direction != 0)
                         {
-                            foresightRotations[foresightPositionIndex - 1].Y = 0f;
+                            foresightData[foresightPositionIndex].direction = 0;
                         }
                     }
                 }
@@ -538,14 +543,11 @@ namespace JoJoStands.NPCs
                 for (int i = 0; i < foresightPositionIndexMax; i++)
                 {
                     SpriteEffects effects = SpriteEffects.None;
-                    if (foresightRotations[i].Y == 1)
-                    {
+                    if (foresightData[foresightPositionIndex].direction == 1)
                         effects = SpriteEffects.FlipHorizontally;
-                    }
-                    if (foresightPosition[i] != Vector2.Zero)
-                    {
-                        spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, foresightPosition[i] - Main.screenPosition, foresightFrames[i], Color.DarkRed, foresightRotations[i].X, Vector2.Zero, npc.scale, effects, 0f);
-                    }
+
+                    if (foresightData[foresightPositionIndex].position != Vector2.Zero)
+                        spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, foresightData[foresightPositionIndex].position - Main.screenPosition, foresightData[foresightPositionIndex].frame, Color.DarkRed, foresightData[foresightPositionIndex].rotation, Vector2.Zero, npc.scale, effects, 0f);
                 }
             }
             if (player.backToZeroActive && btzTotalRewindTimer != 0)
@@ -555,9 +557,8 @@ namespace JoJoStands.NPCs
                     float alpha = 1f / (Math.Abs((float)(btzTotalRewindTimer - (5 * a))) + 1f);
                     SpriteEffects spriteEffect = SpriteEffects.None;
                     if (npc.direction == 1)
-                    {
                         spriteEffect = SpriteEffects.FlipHorizontally;
-                    }
+
                     Vector2 position = BtZPositions[a] - Main.screenPosition;
                     spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, position, npc.frame, Color.White * alpha, npc.rotation, Vector2.Zero, npc.scale, spriteEffect, 0f);
                 }
@@ -565,7 +566,6 @@ namespace JoJoStands.NPCs
             if (taggedByKillerQueen)
             {
                 Texture2D bombTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Bomb").Value;
-
                 Vector2 position = npc.Center - new Vector2(bombTexture.Width / 2f, (npc.height / 2f) + 18f);
                 spriteBatch.Draw(bombTexture, position - Main.screenPosition, Color.White);
             }
