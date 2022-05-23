@@ -1,5 +1,7 @@
 ﻿using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Items.Hamon;
+using JoJoStands.Items.Vampire;
+using JoJoStands.NPCs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -19,36 +21,24 @@ namespace JoJoStands.Items.Accessories
         {
             Item.width = 20;
             Item.height = 28;
-            Item.maxStack = 1;
-            Item.value = Item.buyPrice(gold: 14, silver: 50);
-            Item.rare = ItemRarityID.LightPurple;
+            Item.value = Item.buyPrice(silver: 10, copper: 50);
+            Item.rare = ItemRarityID.Green;
             Item.accessory = true;
-            Item.scale = 0.8f;
-        }
-
-        public override void HoldItem(Player player)
-        {
-            Lighting.AddLight(player.Center, 1f, 0f, 0f);
+            Item.maxStack = 1;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            hamonPlayer.hamonDamageBoosts += 0.5f;
-            hamonPlayer.hamonKnockbackBoosts += 0.5f;
-            if (Main.dayTime)
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            if (vPlayer.anyMaskForm)
             {
-                player.GetDamage(DamageClass.Melee) += 0.23f;
-                player.GetAttackSpeed(DamageClass.Melee) += 0.18f;
-                player.GetDamage(DamageClass.Magic) += 0.23f;
-                player.manaRegen *= 3;
-                player.lifeRegen += 2;
+                for (int n = 0; n < Main.maxNPCs; n++)
+                {
+                    NPC npc = Main.npc[n];
+                    if (npc.active && (!npc.boss && vPlayer.enemyTypesKilled[npc.type] < 10) || (npc.boss && vPlayer.enemyTypesKilled[npc.type] == 0))
+                        npc.GetGlobalNPC<JoJoGlobalNPC>().zombieHightlightTimer = 2;
+                }
             }
-
-            player.lifeRegen += 1;
-            player.waterWalk = true;
-            player.waterWalk2 = true;
-            Lighting.AddLight(player.Center, 1f, 0f, 0f);
         }
 
         public override void AddRecipes()
