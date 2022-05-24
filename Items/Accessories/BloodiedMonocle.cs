@@ -1,6 +1,4 @@
-﻿using JoJoStands.Items.CraftingMaterials;
-using JoJoStands.Items.Hamon;
-using JoJoStands.Items.Vampire;
+﻿using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs;
 using Terraria;
 using Terraria.ID;
@@ -14,7 +12,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bloodied Monocle");
-            Tooltip.SetDefault("While undead and worn, enemies whose blood has not been consumed are highlighted.");
+            Tooltip.SetDefault("While undead, enemies whose blood has not been consumed are highlighted.");
         }
 
         public override void SetDefaults()

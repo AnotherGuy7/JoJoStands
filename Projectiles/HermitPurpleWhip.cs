@@ -59,9 +59,8 @@ namespace JoJoStands.Projectiles
             if (living)
             {
                 if (distance > 120f)
-                {
                     living = false;
-                }
+
                 Projectile.ai[1] += 1f;
                 if (Projectile.ai[1] > 5f)
                 {
@@ -77,9 +76,8 @@ namespace JoJoStands.Projectiles
                 Projectile.tileCollide = false;
                 float num169 = 20f;
                 if (distance < 50f)
-                {
                     Projectile.Kill();
-                }
+
                 distance = num169 / distance;
                 playerDifferenceX *= distance;
                 playerDifferenceY *= distance;
@@ -107,18 +105,28 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[Projectile.owner];
 
-            if (Main.netMode != NetmodeID.Server)
-                hermitPurpleVinePartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/HermitPurpleVine_Part").Value;
+            if (Main.netMode != NetmodeID.Server && hermitPurpleVinePartTexture == null)
+                hermitPurpleVinePartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/HermitPurpleVine_Part", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
             Vector2 offset = new Vector2(12f * player.direction, 0f);
             Vector2 linkCenter = player.Center + offset;
             Vector2 center = Projectile.Center;
             float rotation = (linkCenter - center).ToRotation();
+            float loopIncrement = 1 / (Vector2.Distance(center, linkCenter) / hermitPurpleVinePartTexture.Width);
+            float lightLevelIndex = 0f;
+            Color drawColor = lightColor;
 
             for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / hermitPurpleVinePartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
-                Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
-                Main.EntitySpriteDraw(hermitPurpleVinePartTexture, pos, new Rectangle(0, 0, hermitPurpleVinePartTexture.Width, hermitPurpleVinePartTexture.Height), lightColor, rotation, new Vector2(hermitPurpleVinePartTexture.Width * 0.5f, hermitPurpleVinePartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0);
+                lightLevelIndex += loopIncrement;
+                Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;
+                if (lightLevelIndex >= 0.1f)
+                {
+                    drawColor = Lighting.GetColor((int)(pos.X + Main.screenPosition.X) / 16, (int)(pos.Y + Main.screenPosition.Y) / 16);
+                    lightLevelIndex = 0f;
+                }
+
+                Main.EntitySpriteDraw(hermitPurpleVinePartTexture, pos, new Rectangle(0, 0, hermitPurpleVinePartTexture.Width, hermitPurpleVinePartTexture.Height), drawColor, rotation, new Vector2(hermitPurpleVinePartTexture.Width * 0.5f, hermitPurpleVinePartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0);
             }
             return true;
         }

@@ -130,6 +130,7 @@ namespace JoJoStands
         public bool standChangingLocked = false;
         public bool hideAllPlayerLayers = false;
         public bool standRespawnQueued = false;
+        public bool stickyFingersAmbushMode = false;
         public bool canStandAttack = true;
 
         public bool timestopActive;
@@ -216,6 +217,7 @@ namespace JoJoStands
             silverChariotShirtless = false;
             hideAllPlayerLayers = false;
             BulletCounter.Visible = false;
+            stickyFingersAmbushMode = false;
             canStandAttack = true;
 
             standDamageBoosts = 1f;
@@ -403,16 +405,17 @@ namespace JoJoStands
             if (JoJoStands.StandOutHotKey.JustPressed && standOut && standKeyPressTimer <= 0)
             {
                 standOut = false;
-                standType = 0;
+                standAccessory = false;
+                standRemoteMode = false;
                 poseSoundName = "";
                 standName = "";
-                standRemoteMode = false;
+                standType = 0;
                 standDefenseToAdd = 0;
-                creamTier = 0;
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
                 gratefulDeadTier = 0;
 
+                creamTier = 0;
                 voidCounter = 0;
                 creamNormalToExposed = false;
                 creamNormalToVoid = false;
@@ -421,8 +424,8 @@ namespace JoJoStands
 
                 badCompanyTier = 0;
 
-                if (standAccessory)
-                    standAccessory = false;
+                stickyFingersAmbushMode = false;
+
                 if (StoneFreeAbilityWheel.visible)
                     StoneFreeAbilityWheel.CloseAbilityWheel();
                 if (equippedTuskAct != 0)
@@ -536,9 +539,9 @@ namespace JoJoStands
 
             if (Main.rand.Next(1, 5 + 1) == 1)
             {
-                int inheritanceStandType = Main.rand.Next(0, JoJoStands.standTier1List.Count);
+                int inheritanceStandChance = Main.rand.Next(0, JoJoStands.standTier1List.Count);
                 Item standTier1 = new Item();
-                standTier1.SetDefaults(JoJoStands.standTier1List[inheritanceStandType]);
+                standTier1.SetDefaults(JoJoStands.standTier1List[inheritanceStandChance]);
                 standTier1.stack = 1;
                 startingItems.Add(standTier1);
             }
@@ -547,7 +550,7 @@ namespace JoJoStands
 
         public override void SetControls()
         {
-            if (standRemoteMode || Player.HasBuff(ModContent.BuffType<CenturyBoyBuff>()) || creamVoidMode || creamExposedMode)
+            if (standRemoteMode || Player.HasBuff(ModContent.BuffType<CenturyBoyBuff>()) || stickyFingersAmbushMode || creamVoidMode || creamExposedMode)
             {
                 if (standName.Contains("Aerosmith"))
                     return;
@@ -597,14 +600,15 @@ namespace JoJoStands
             }
 
             if (timestopActive)
-            {
                 Main.windSpeedCurrent = 0f;
-            }
 
-            if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut && standRespawnQueued)
+            if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut && standRespawnQueued && !Player.dead)
             {
-                SpawnStand();
+                standOut = true;
                 standRespawnQueued = false;
+                SpawnStand();
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
             }
 
             if (goldenSpinCounter > 0)          //golden spin stuff
@@ -888,7 +892,7 @@ namespace JoJoStands
                         if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
                             hermitPurpleShootCooldown += 40 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(38 * standDamageBoosts), 4f, Player.whoAmI);
@@ -900,7 +904,7 @@ namespace JoJoStands
                         if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
                             hermitPurpleShootCooldown += 35 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(81 * standDamageBoosts), 6f, Player.whoAmI);
@@ -909,7 +913,7 @@ namespace JoJoStands
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
                             hermitPurpleShootCooldown += 60 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(78 * standDamageBoosts), 0f, Player.whoAmI);
@@ -921,7 +925,7 @@ namespace JoJoStands
                         if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
                             hermitPurpleShootCooldown += 30 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(157 * standDamageBoosts), 7f, Player.whoAmI);
@@ -930,7 +934,7 @@ namespace JoJoStands
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
                             hermitPurpleShootCooldown += 60 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(149 * standDamageBoosts), 0f, Player.whoAmI);
@@ -941,7 +945,7 @@ namespace JoJoStands
                         if (Main.mouseLeft && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
                             hermitPurpleShootCooldown += 25 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(202 * standDamageBoosts), 8f, Player.whoAmI);
@@ -950,7 +954,7 @@ namespace JoJoStands
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
                             hermitPurpleShootCooldown += 60 - standSpeedBoosts;
-                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(191 * standDamageBoosts), 0f, Player.whoAmI);
@@ -958,7 +962,7 @@ namespace JoJoStands
                     }
                     if (Player.controlHook && Player.miscEquips[4].IsAir && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleHook>()] == 0)       //Player.miscEquips[4] is the hook slot
                     {
-                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 12f;
                         Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleHook>(), 0, 0f, Player.whoAmI);
@@ -1440,6 +1444,17 @@ namespace JoJoStands
         {
             if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0)
                 return false;
+
+            if (Player.HasBuff<ZipperDodge>())
+            {
+                if (JoJoStands.SoundsLoaded)
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Zip"));
+
+                Player.immune = true;
+                Player.immuneTime = 30;
+                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
+                return false;
+            }
 
             return true;
         }

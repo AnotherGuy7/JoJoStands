@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -22,7 +23,15 @@ namespace JoJoStands.Items.Food
             Item.UseSound = SoundID.Item2;
             Item.rare = ItemRarityID.Green;
             Item.useStyle = ItemUseStyleID.EatFood;
+            Item.holdStyle = ItemHoldStyleID.HoldFront;
             Item.consumable = true;
+        }
+
+        public override void HoldStyle(Player player, Rectangle heldItemFrame)
+        {
+            Vector2 offset = new Vector2((Item.width / 2) * player.direction, -Item.height / 2);
+            offset += new Vector2(Main.rand.Next(-2, 2 + 1), Main.rand.Next(-2, 2 + 1));
+            player.itemLocation -= offset;
         }
 
         public override bool? UseItem(Player player)

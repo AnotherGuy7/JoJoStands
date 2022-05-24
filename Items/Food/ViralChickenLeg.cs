@@ -1,5 +1,6 @@
 using JoJoStands.Buffs.PlayerBuffs;
 using JoJoStands.Items.CraftingMaterials;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,15 +16,22 @@ namespace JoJoStands.Items.Food
 
         public override void SetDefaults()
         {
-            Item.width = 10;
-            Item.height = 10;
+            Item.width = 24;
+            Item.height = 26;
             Item.useTime = 20;
             Item.useAnimation = 20;
-            Item.value = Item.buyPrice(0, 0, 20, 0);
+            Item.value = Item.buyPrice(silver: 12);
             Item.UseSound = SoundID.Item2;
             Item.rare = ItemRarityID.Green;
             Item.useStyle = ItemUseStyleID.EatFood;
+            Item.holdStyle = ItemHoldStyleID.HoldFront;
             Item.consumable = true;
+        }
+
+        public override void HoldStyle(Player player, Rectangle heldItemFrame)
+        {
+            Vector2 offset = new Vector2((Item.width / 2) * player.direction, -Item.height / 2);
+            player.itemLocation -= offset;
         }
 
         public override bool? UseItem(Player player)
