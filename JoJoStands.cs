@@ -113,41 +113,7 @@ namespace JoJoStands
 
             if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
             {
-                //Shader Stuff
-                Ref<Effect> timestopShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/TimestopEffect", AssetRequestMode.ImmediateLoad));      // The path to the compiled shader file.
-                Filters.Scene["TimestopEffectShader"] = new Filter(new ScreenShaderData(timestopShader, "TimestopEffectShader"), EffectPriority.VeryHigh);
-                Filters.Scene["TimestopEffectShader"].Load();
-                Ref<Effect> greyscaleShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/Greyscale", AssetRequestMode.ImmediateLoad));
-                Filters.Scene["GreyscaleEffect"] = new Filter(new ScreenShaderData(greyscaleShader, "GreyscaleEffect"), EffectPriority.VeryHigh);
-                Filters.Scene["GreyscaleEffect"].Load();
-                Ref<Effect> greenShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/GreenEffect", AssetRequestMode.ImmediateLoad));
-                Filters.Scene["GreenEffect"] = new Filter(new ScreenShaderData(greenShader, "GreenEffect"), EffectPriority.VeryHigh);
-                Filters.Scene["GreenEffect"].Load();
-                Ref<Effect> redShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/RedEffect", AssetRequestMode.ImmediateLoad));
-                Filters.Scene["RedEffect"] = new Filter(new ScreenShaderData(redShader, "RedEffect"), EffectPriority.VeryHigh);
-                Filters.Scene["RedEffect"].Load();
-                Ref<Effect> colorChangeShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/ColorChangeEffect", AssetRequestMode.ImmediateLoad));
-                Filters.Scene["ColorChangeEffect"] = new Filter(new ScreenShaderData(colorChangeShader, "ColorChangeEffect"), EffectPriority.VeryHigh);
-                Filters.Scene["ColorChangeEffect"].Load();
-                Ref<Effect> voidGradientShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/VoidBarGradient", AssetRequestMode.ImmediateLoad));
-                GameShaders.Misc["JoJoStandsVoidGradient"] = new MiscShaderData(voidGradientShader, "VoidBarGradient");
-
-                Effect timeskipShaderEffect = (Effect)Request<Effect>("JoJoStands/Effects/TimeSkipEffectShader", AssetRequestMode.ImmediateLoad);
-                //timeskipShaderEffect.Parameters["backStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonBackStars>());
-                //timeskipShaderEffect.Parameters["frontStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars>());
-                Ref<Effect> timeskipShader = new Ref<Effect>(timeskipShaderEffect);      // The path to the compiled shader file.
-                Filters.Scene["TimeSkipEffectShader"] = new Filter(new ScreenShaderData(timeskipShader, "TimeSkipEffectShader"), EffectPriority.VeryHigh);
-                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KingCrimsonBackStars", AssetRequestMode.ImmediateLoad), 0);
-                Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars", AssetRequestMode.ImmediateLoad), 1);
-                Filters.Scene["TimeSkipEffectShader"].Load();
-                //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["backStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonBackStars>());
-                //Filters.Scene["TimeSkipEffectShader"].GetShader().Shader.Parameters["frontStarsImage"].SetValue(Request<Texture2D>("JoJoStands/Extras/KingCrimsonFrontStars>());
-                Ref<Effect> biteTheDustEffectShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/BiteTheDustEffectShader", AssetRequestMode.ImmediateLoad));
-                Filters.Scene["BiteTheDustEffect"] = new Filter(new ScreenShaderData(biteTheDustEffectShader, "BiteTheDustEffectShader"), EffectPriority.VeryHigh);
-                Filters.Scene["BiteTheDustEffect"].GetShader().UseImage((Texture2D)Request<Texture2D>("JoJoStands/Extras/KillerQueenBTDImage", AssetRequestMode.ImmediateLoad), 0);
-                Filters.Scene["BiteTheDustEffect"].Load();
-
-                //Misc
+                JoJoStandsShaders.LoadShaders();
                 MusicLoader.AddMusicBox(Instance, MusicLoader.GetMusicSlot(Instance, "Sounds/Music/VMMusic"), ItemType<ViralMusicBox>(), TileType<ViralMusicBoxTile>());
             }
         }

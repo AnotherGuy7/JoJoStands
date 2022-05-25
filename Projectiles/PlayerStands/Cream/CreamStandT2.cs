@@ -54,7 +54,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;

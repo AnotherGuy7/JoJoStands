@@ -46,7 +46,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;

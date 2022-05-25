@@ -1,6 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -74,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !secondaryAbilityFrames && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 {
                     HandleDrawOffsets();
                     attackFrames = true;

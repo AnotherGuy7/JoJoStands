@@ -17,16 +17,19 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int halfStandHeight => 34;
         public override float fistWhoAmI => 8f;
         public override float tierNumber => 1f;
-        public override int standOffset => -4;
+        public override int standOffset => 32;
         public override int standType => 1;
         public override string poseSoundName => "OnceWeDecideToKillItsDone";
         public override string spawnSoundName => "The Grateful Dead";
+
+        private const float GasDetectionDist = 30 * 16f;
 
         public int updateTimer = 0;
 
         private bool grabFrames = false;
         private bool secondaryFrames = false;
-        private bool activatedGas = false;
+        private bool gasActive = false;
+        public float gasRange = GasDetectionDist;
 
         public override void AI()
         {
@@ -47,6 +50,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 Projectile.netUpdate = true;
             }
 
+            mPlayer.gratefulDeadGasActive = gasActive;
             if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryFrames && !grabFrames)
@@ -120,28 +124,23 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             if (SpecialKeyPressed() && shootCount <= 0)
             {
                 shootCount += 30;
-                activatedGas = !activatedGas;
-                if (activatedGas)
-                {
+                gasActive = !gasActive;
+                if (gasActive)
                     Main.NewText("Gas Spread: On");
-                }
                 else
-                {
                     Main.NewText("Gas Spread: Off");
-                }
             }
-            if (activatedGas)
+            if (gasActive)
             {
+                gasRange = GasDetectionDist + mPlayer.standRangeBoosts;
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC npc = Main.npc[i];
                     if (npc.active)
                     {
                         float distance = Vector2.Distance(player.Center, npc.Center);
-                        if (distance < (30f * 16f) && !npc.immortal && !npc.hide)
-                        {
+                        if (distance < gasRange && !npc.immortal && !npc.hide)
                             npc.AddBuff(ModContent.BuffType<Aging>(), 2);
-                        }
                     }
                 }
                 for (int i = 0; i < Main.maxPlayers; i++)
@@ -150,12 +149,13 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     if (otherPlayer.active)
                     {
                         float distance = Vector2.Distance(player.Center, otherPlayer.Center);
-                        if (distance < (30f * 16f) && otherPlayer.whoAmI != player.whoAmI)
-                        {
+                        if (distance < gasRange && otherPlayer.whoAmI != player.whoAmI)
                             otherPlayer.AddBuff(ModContent.BuffType<Aging>(), 2);
-                        }
                     }
                 }
+                if (Main.rand.Next(0, 12 + 1) == 0)
+                    Dust.NewDust(Projectile.Center - new Vector2(gasRange / 2f, 0f), (int)gasRange, Projectile.height, ModContent.DustType<Dusts.GratefulDeadCloud>());
+
                 player.AddBuff(ModContent.BuffType<Aging>(), 2);
             }
             if (mPlayer.standAutoMode)
@@ -164,14 +164,25 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
         }
 
+        private Texture2D gasRangeIndicatorTexture;
+        private float gasTextureSize;
+        private Vector2 gasTextureOrigin;
+        private Rectangle gasTextureSourceRect;
+
         public override bool PreDrawExtras()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (MyPlayer.RangeIndicators)
+            if (MyPlayer.RangeIndicators && gasActive)
             {
-                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/RangeIndicator");
-                Main.EntitySpriteDraw(texture, player.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.Red * ((MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), ((30f * 16f) + mPlayer.standRangeBoosts) / 160f, SpriteEffects.None, 0);
+                if (gasRange != gasTextureSize)
+                {
+                    gasRangeIndicatorTexture = GenerateRangeIndicatorTexture(gasRange, 0);
+                    gasTextureOrigin = new Vector2(gasRangeIndicatorTexture.Width / 2f, gasRangeIndicatorTexture.Height / 2f);
+                    gasTextureSourceRect = new Rectangle(0, 0, gasRangeIndicatorTexture.Width, gasRangeIndicatorTexture.Height);
+                    gasTextureSize = gasRange;
+                }
+                if (gasRangeIndicatorTexture != null)
+                    Main.EntitySpriteDraw(gasRangeIndicatorTexture, player.Center - Main.screenPosition, gasTextureSourceRect, Color.Red * ((MyPlayer.RangeIndicatorAlpha / 100f) * 255f), 0f, gasTextureOrigin, 2f, SpriteEffects.None, 0);
             }
             return true;
         }

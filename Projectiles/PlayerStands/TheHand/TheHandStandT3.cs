@@ -255,7 +255,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     distanceToTeleport = Main.MouseWorld - player.position;
                 distanceToTeleport.Normalize();
                 distanceToTeleport *= (98f + mPlayer.standRangeBoosts) * (chargeTimer / 45f);
-                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * ((MyPlayer.RangeIndicatorAlpha / 100f) * 255f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             if (scrapeFrames)
             {

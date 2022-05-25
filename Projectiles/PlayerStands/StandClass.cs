@@ -5,10 +5,12 @@ using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameInput;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -182,6 +184,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void Punch(float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f)
         {
             Player player = Main.player[Projectile.owner];
+            if (!player.GetModPlayer<MyPlayer>().canStandBasicAttack)
+                return;
 
             HandleDrawOffsets();
             normalFrames = false;
@@ -203,13 +207,10 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
             if (mouseDistance > 40f)
-            {
                 Projectile.velocity = player.velocity + velocityAddition;
-            }
             if (mouseDistance <= 40f)
-            {
                 Projectile.velocity = Vector2.Zero;
-            }
+
             PlayPunchSound();
             if (shootCount <= 0)
             {
@@ -511,6 +512,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <returns></returns>
         public Texture2D GenerateRangeIndicatorTexture(float dist, int sizeUpdateID = 1)
         {
+            if (Main.dedServ)
+                return null;
+
             dist /= 2f;     //For smaller texture sizes which we will scale up later. Also prevents mixels.
             int size = (int)dist * 2;
             Vector2 center = new Vector2(size) / 2f;
@@ -553,9 +557,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             if (beginningSoundInstance == null)
             {
-
-
-                SoundEffect sound = SoundEngine.GetTrackableSoundByStyleId(SoundLoader.GetSoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/BattleCries/" + punchSoundName + "_Beginning"));
+                SoundEffect sound = ModContent.Request<SoundEffect>("JoJoStandsSounds/Sounds/BattleCries/" + punchSoundName + "_Beginning", AssetRequestMode.ImmediateLoad).Value;
                 if (sound != null)
                 {
                     beginningSoundInstance = sound.CreateInstance();
@@ -564,7 +566,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             if (punchingSoundInstance == null)
             {
-                SoundEffect sound = SoundEngine.GetTrackableSoundByStyleId(SoundLoader.GetSoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/BattleCries/" + punchSoundName));
+                SoundEffect sound = ModContent.Request<SoundEffect>("JoJoStandsSounds/Sounds/BattleCries/" + punchSoundName, AssetRequestMode.ImmediateLoad).Value;
                 punchingSoundInstance = sound.CreateInstance();
                 punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
             }
@@ -657,16 +659,14 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 playedBeginning = false;
             }
-            if (Projectile.netUpdate)       //We put it here cause we don't want to sync this all the time, but specifically whenever this method is called (Idles)
-            {
+            if (Projectile.netUpdate)       //It's put here because we don't want to sync this all the time. Only whenever this method is called (Idles).
                 SyncSounds();
-            }
         }
 
         /// <summary>
         /// Adjusts the draw offsets of the Stand based on its Projectile.spriteDirection field.
         /// </summary>
-        public void HandleDrawOffsets()     //this method kind of lost its usage when we found a better way to do offsets but whatever
+        public void HandleDrawOffsets()     //this method kind of lost its usage when we found a better way to do offsets but whatever; Future AG: No it did not.
         {
             DrawOffsetX = standOffset * Projectile.spriteDirection;
         }
@@ -692,6 +692,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 newPunchTime = 2;
             if (newShootTime <= 5)
                 newShootTime = 5;
+            if (PlayerInput.Triggers.Current.SmartSelect || player.dead)
+                mPlayer.canStandBasicAttack = false;
             if (JoJoStands.SoundsLoaded && mPlayer.standHitTime > 0)
                 mPlayer.standHitTime--;
 
@@ -780,7 +782,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             //Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/RangeIndicator>().Value;        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
             Vector2 rangeIndicatorDrawPosition = player.Center - Main.screenPosition;
             Vector2 rangeIndicatorOrigin = rangeIndicatorSize / 2f;
-            float rangeIndicatorAlpha = (((float)MyPlayer.RangeIndicatorAlpha * 3.9215f) / 1000f);
+            float rangeIndicatorAlpha = ((MyPlayer.RangeIndicatorAlpha / 100f) * 255f);
 
             if (maxDistance > 0f)
                 Main.EntitySpriteDraw(standRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.White * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);

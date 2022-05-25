@@ -14,18 +14,29 @@ namespace JoJoStands
         [Tooltip("Allows you to choose which deathsound to use")]
         public DeathSoundType deathSound;
 
-        [DefaultValue(1)]
-        [Label("Hamon Bar's Size")]
-        public int HamonBarSize;
-
         [DefaultValue(true)]
         [Tooltip("Determines whether or not you want to hear custom sounds or vanilla sounds.")]
         public bool Sounds;
 
         [DefaultValue(true)]
+        [Label("Automatic Usages")]
+        [Tooltip("Determines whether or not you want abilities to automatically activate, such as Killer Queen's bomb and The World's (Auto Mode) Knives")]
+        public bool AutomaticActivations;
+
+        [DefaultValue(true)]
+        [Label("Respawn With Stand Out")]
+        [Tooltip("Determiens whether or not you want to always respawn with your Stand out.")]
+        public bool RespawnWithStandOut;
+
+        [DefaultValue(true)]
         [Label("Hamon Effects")]
         [Tooltip("Determines whether or not you want to see Hamon effects.")]
         public bool HamonEffects;
+
+        [DefaultValue(false)]
+        [Label("Range Indicators")]
+        [Tooltip("Determines whether or not you want to see the range indicators for stands that need them.")]
+        public bool RangeIndicators;
 
         [DefaultValue(true)]
         [Label("Timestop Effects")]
@@ -42,30 +53,20 @@ namespace JoJoStands
         [Tooltip("Determines whether or not you want to see the bite the dust effects.")]
         public bool BitetheDustEffects;
 
+        [DefaultValue(true)]
+        [Label("Color Change Effects")]
+        [Tooltip("Determiens whether or not you want to see the world color changes.")]
+        public bool ColorChangeEffects;
+
         [DefaultValue(false)]
-        [Label("Range Indicators")]
-        [Tooltip("Determines whether or not you want to see the range indicators for stands that need them.")]
-        public bool RangeIndicators;
-
-        [DefaultValue(true)]
-        [Label("Automatic Usages")]
-        [Tooltip("Determines whether or not you want abilities to automatically activate, such as Killer Queen's bomb and The World's (Auto Mode) Knives")]
-        public bool AutomaticActivations;
-
-        [DefaultValue(true)]
-        [Label("Respawn With Stand Out")]
-        [Tooltip("Determiens whether or not you want to always respawn with your Stand out.")]
-        public bool RespawnWithStandOut;
+        [Label("Hidden References")]
+        [Tooltip("Whether or not you want to see hidden references. (Some of these references can cause you to die!)")]
+        public bool SecretReferences;
 
         [DefaultValue(100)]
         [Label("Range Indicator Visibility")]
         [Tooltip("Allows you to choose how transparent the Range Indicator is.")]
         public int RangeIndicatorVisibility;
-
-        [DefaultValue(StandSearchType.Bosses)]
-        [Label("Stand Auto Mode Targetting Preference")]
-        [Tooltip("Select the type of enemy your Stand should prioritize first when in Auto Mode!")]
-        public StandSearchType StandSearchType;
 
         [DefaultValue(39)]
         [Label("Stand Slot X Position")]
@@ -75,6 +76,10 @@ namespace JoJoStands
         [Label("Stand Slot Y Position")]
         public int StandSlotPositionY;
 
+        [DefaultValue(1)]
+        [Label("Hamon Bar Size")]
+        public int HamonBarSize;
+
         [DefaultValue(90)]
         [Label("Hamon Bar X Position")]
         public int HamonBarPositionX;
@@ -83,20 +88,15 @@ namespace JoJoStands
         [Label("Hamon Bar Y Position")]
         public int HamonBarPositionY;
 
-        [DefaultValue(false)]
-        [Label("Hidden References")]
-        [Tooltip("Whether or not you want to see hidden references. (Some of these references can cause you to die!)")]
-        public bool SecretReferences;
-
-        [DefaultValue(0.4f)]
+        [DefaultValue(40)]
         [Label("Sound Volume")]
         [Tooltip("Volume of barrage sounds")]
-        public float soundVolume;
+        public int soundVolume;
 
-        [DefaultValue(true)]
-        [Label("Color Change Effects")]
-        [Tooltip("Determiens whether or not you want to see the world color changes.")]
-        public bool ColorChangeEffects;
+        [DefaultValue(StandSearchType.Bosses)]
+        [Label("Stand Auto Mode Targetting Preference")]
+        [Tooltip("Select the type of enemy your Stand should prioritize first when in Auto Mode!")]
+        public StandSearchType StandSearchType;
 
         public override void OnChanged()        //couldn't use Player player = Main.LocalPlayer cause it wasn't set to an instance of an object
         {
@@ -111,7 +111,7 @@ namespace JoJoStands
             MyPlayer.HamonBarPositionX = HamonBarPositionX;
             MyPlayer.HamonBarPositionY = HamonBarPositionY;
             MyPlayer.SecretReferences = SecretReferences;
-            MyPlayer.ModSoundsVolume = soundVolume;
+            MyPlayer.ModSoundsVolume = soundVolume / 100f;
             HamonPlayer.HamonEffects = HamonEffects;
             UI.HamonBar.changedInConfig = true;
             UI.HamonBar.sizeMode = HamonBarSize;

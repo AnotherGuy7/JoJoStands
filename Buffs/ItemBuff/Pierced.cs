@@ -17,15 +17,15 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (player.whoAmI != Main.myPlayer)
+                return;
+
             mPlayer.piercedTimer--;
-            if (player.whoAmI == Main.myPlayer)
+            if (mPlayer.piercedTimer <= 0 || player.buffTime[buffIndex] <= 2)
             {
-                if (mPlayer.piercedTimer <= 0 || player.buffTime[buffIndex] <= 2)
-                {
-                    player.QuickSpawnItem(player.GetSource_FromThis(), Main.rand.Next(JoJoStands.standTier1List.ToArray()));
-                    mPlayer.piercedTimer = 36000;
-                    player.ClearBuff(Type);
-                }
+                player.QuickSpawnItem(player.GetSource_Buff(buffIndex), Main.rand.Next(JoJoStands.standTier1List.ToArray()));
+                mPlayer.piercedTimer = 36000;
+                player.ClearBuff(Type);
             }
         }
     }

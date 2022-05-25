@@ -362,7 +362,7 @@ namespace JoJoStands
     {
         public override Position GetDefaultPosition()
         {
-            return new BeforeParent(PlayerDrawLayers.MountBack);
+            return new AfterParent(PlayerDrawLayers.FrontAccFront);
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
@@ -378,7 +378,6 @@ namespace JoJoStands
                 drawOffset.Y += 1f;
                 Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - new Vector2(drawInfo.torsoOffset) - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
                 drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
-
                 DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
                 //data.shader = drawInfo.bodyArmorShader;
                 drawInfo.DrawDataCache.Add(drawData);
@@ -386,7 +385,7 @@ namespace JoJoStands
         }
     }
 
-    public class PhantomArmsGlowmaskLayer : PlayerDrawLayer
+    /*public class PhantomArmsGlowmaskLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition()
         {
@@ -397,7 +396,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (!drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
+            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Arms_Glowmask").Value;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -406,12 +405,12 @@ namespace JoJoStands
                 Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - drawInfo.frontShoulderOffset - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
                 drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
 
-                DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
+                DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, drawInfo.bodyOrigin drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
                 //drawData.shader = drawInfo.bodyArmorShader;
                 //drawInfo.DrawDataCache.Add(drawData);
             }
         }
-    }
+    }*/
 
     public class PhantomLeggingsLayer : PlayerDrawLayer
     {
@@ -427,13 +426,13 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.phantomLeggingsEquipped && drawPlayer.legs == Mod.GetEquipSlot("PhantomLeggings", EquipType.Legs))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomLeggings_Legs_Glowmask").Value;
-                Vector2 offset = new Vector2(0f, 18f);
-                float drawX = (int)drawInfo.Position.X + drawPlayer.width / 2;      //The reason we do this is cause position as a float moves the glowmask around too much
-                float drawY = (int)drawInfo.Position.Y + drawPlayer.height - drawPlayer.bodyFrame.Height / 2;
+                Vector2 drawOffset = new Vector2(0f, drawInfo.drawPlayer.Size.Y / 4f);
+                drawOffset.Y += 1f;
+                Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.legPosition - Main.screenPosition - drawInfo.legsOffset - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
+                drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                Vector2 position = new Vector2(drawX, drawY) + drawPlayer.legPosition - Main.screenPosition + offset;
 
-                DrawData drawData = new DrawData(texture, position, drawPlayer.legFrame, Color.White * alpha, drawPlayer.legRotation, /*drawInfo.legOrigin*/ drawInfo.legsOffset, 1f, drawInfo.playerEffect, 0);
+                DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.legFrame, Color.White * alpha, drawPlayer.legRotation, /*drawInfo.legOrigin*/ drawInfo.legsOffset, 1f, drawInfo.playerEffect, 0);
                 //data.shader = drawInfo.legArmorShader;
                 drawInfo.DrawDataCache.Add(drawData);
             }

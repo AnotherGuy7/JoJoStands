@@ -15,7 +15,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int halfStandHeight => 34;
         public override float fistWhoAmI => 8f;
         public override float tierNumber => 1f;
-        public override int standOffset => -4;
+        public override int standOffset => 32;
         public override int standType => 1;
         public override string poseSoundName => "OnceWeDecideToKillItsDone";
         public override string spawnSoundName => "The Grateful Dead";

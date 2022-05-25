@@ -45,9 +45,7 @@ namespace JoJoStands.Items
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.sexPistolsTier != 0 && (item.shoot == 10 || item.useAmmo == AmmoID.Bullet))
-            {
                 damage *= 1f + (0.05f * mPlayer.sexPistolsTier);
-            }
         }
 
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

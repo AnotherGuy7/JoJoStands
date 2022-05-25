@@ -131,7 +131,8 @@ namespace JoJoStands
         public bool hideAllPlayerLayers = false;
         public bool standRespawnQueued = false;
         public bool stickyFingersAmbushMode = false;
-        public bool canStandAttack = true;
+        public bool gratefulDeadGasActive = false;
+        public bool canStandBasicAttack = true;
 
         public bool timestopActive;
         public bool timeskipPreEffect;
@@ -218,7 +219,8 @@ namespace JoJoStands
             hideAllPlayerLayers = false;
             BulletCounter.Visible = false;
             stickyFingersAmbushMode = false;
-            canStandAttack = true;
+            gratefulDeadGasActive = false;
+            canStandBasicAttack = true;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -1148,36 +1150,25 @@ namespace JoJoStands
             {
                 if (timestopEffectDurationTimer > 0)
                 {
-                    if (timestopEffectDurationTimer >= 15 && !Filters.Scene["TimestopEffectShader"].IsActive() && TimestopEffects)
-                        Filters.Scene.Activate("TimestopEffectShader");
-
-                    if (timestopEffectDurationTimer == 14)
-                    {
-                        Filters.Scene["TimestopEffectShader"].Deactivate();
-                        if (!Filters.Scene["GreyscaleEffect"].IsActive())
-                            Filters.Scene.Activate("GreyscaleEffect");
-                    }
                     timestopEffectDurationTimer--;
+                    JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.TimestopEffect, timestopEffectDurationTimer >= 15);
+                    JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.TimestopGreyscaleEffect, timestopEffectDurationTimer < 15);
                 }
 
                 if (!timestopActive)
                 {
-                    if (Filters.Scene["GreyscaleEffect"].IsActive())
-                        Filters.Scene["GreyscaleEffect"].Deactivate();
-                    if (Filters.Scene["TimestopEffectShader"].IsActive())
-                        Filters.Scene["TimestopEffectShader"].Deactivate();
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopEffect);
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopGreyscaleEffect);
                 }
 
                 if (backToZeroActive)
                 {
-                    if (!Filters.Scene["GreenEffect"].IsActive())
-                        Filters.Scene.Activate("GreenEffect");
-                    if (Filters.Scene["GreyscaleEffect"].IsActive())
-                        Filters.Scene["GreyscaleEffect"].Deactivate();
-                    if (Filters.Scene["TimestopEffectShader"].IsActive())
-                        Filters.Scene["TimestopEffectShader"].Deactivate();
-                    if (Filters.Scene["RedEffect"].IsActive())
-                        Filters.Scene["RedEffect"].Deactivate();
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopGreyscaleEffect);
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopEffect);
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.EpitaphRedEffect);
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.BtZGreenEffect);
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestkipEffect);
+
                     if (Player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
                         Player.ClearBuff(ModContent.BuffType<TheWorldBuff>());
                     if (Player.HasBuff(ModContent.BuffType<SkippingTime>()))
@@ -1190,56 +1181,44 @@ namespace JoJoStands
                     timeskipPreEffect = false;
                     epitaphForesightActive = false;
                 }
-                if (!backToZeroActive && Filters.Scene["GreenEffect"].IsActive())
-                    Filters.Scene["GreenEffect"].Deactivate();
-                if (epitaphForesightActive && !Filters.Scene["RedEffect"].IsActive())
-                    Filters.Scene.Activate("RedEffect");
-                if (!epitaphForesightActive && Filters.Scene["RedEffect"].IsActive())
-                    Filters.Scene["RedEffect"].Deactivate();
+                JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.BtZGreenEffect, backToZeroActive);
+                JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.EpitaphRedEffect, epitaphForesightActive);
 
                 if (BiteTheDustEffects)
                 {
-                    if (bitesTheDustActive && !Filters.Scene["BiteTheDustEffect"].IsActive())
-                        Filters.Scene.Activate("BiteTheDustEffect");
-                    if (!bitesTheDustActive && Filters.Scene["BiteTheDustEffect"].IsActive())
-                        Filters.Scene["BiteTheDustEffect"].Deactivate();
-                    if (bitesTheDustActive && Filters.Scene["BiteTheDustEffect"].IsActive())
-                        Filters.Scene["BiteTheDustEffect"].GetShader().UseProgress(biteTheDustEffectProgress);
+                    JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.BiteTheDustEffect, bitesTheDustActive);
+                    JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BiteTheDustEffect, biteTheDustEffectProgress);
                 }
 
                 if (TimeskipEffects)
                 {
                     if (timeskipActive && timeSkipEffectTransitionTimer < 40)
                     {
-                        if (!Filters.Scene["TimeSkipEffectShader"].IsActive())
-                            Filters.Scene.Activate("TimeSkipEffectShader");
-                        else
-                        {
-                            timeSkipEffectTransitionTimer++;
-                            Filters.Scene["TimeSkipEffectShader"].GetShader().UseProgress((float)timeSkipEffectTransitionTimer / 40f);
-                        }
+                        timeSkipEffectTransitionTimer++;
+                        JoJoStandsShaders.ActivateShader(JoJoStandsShaders.TimestkipEffect);
+                        JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.TimestkipEffect, (float)timeSkipEffectTransitionTimer / 40f);
                     }
                     if (!timeskipActive && timeSkipEffectTransitionTimer > 0)
                     {
                         timeSkipEffectTransitionTimer--;
-                        Filters.Scene["TimeSkipEffectShader"].GetShader().UseProgress((float)timeSkipEffectTransitionTimer / 40f);
+                        JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.TimestkipEffect, (float)timeSkipEffectTransitionTimer / 40f);
                         if (timeSkipEffectTransitionTimer <= 0)
-                            Filters.Scene["TimeSkipEffectShader"].Deactivate();
+                            JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestkipEffect);
                     }
                 }
+                JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.GratefulDeadGasEffect, gratefulDeadGasActive);
 
                 if (ColorChangeEffects)
                 {
-                    if (JoJoStandsWorld.VampiricNight && !Filters.Scene["ColorChangeEffect"].IsActive())
+                    if (JoJoStandsWorld.VampiricNight && !JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect))
                     {
-                        Filters.Scene.Activate("ColorChangeEffect");
-                        ScreenShaderData shader = Filters.Scene["ColorChangeEffect"].GetShader();
-                        shader.UseProgress((int)ColorChangeStyle.NormalToLightGreen);
+                        Filters.Scene.Activate(JoJoStandsShaders.BattlePaletteSwitchEffect);
+                        JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BattlePaletteSwitchEffect, (int)ColorChangeStyle.NormalToLightGreen);
                     }
                 }
 
-                if (!JoJoStandsWorld.VampiricNight && Filters.Scene["ColorChangeEffect"].IsActive() || (Filters.Scene["ColorChangeEffect"].IsActive() && !ColorChangeEffects))
-                    Filters.Scene["ColorChangeEffect"].Deactivate();
+                if (!JoJoStandsWorld.VampiricNight && JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) || (JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) && !ColorChangeEffects))
+                    Filters.Scene[JoJoStandsShaders.BattlePaletteSwitchEffect].Deactivate();
             }
         }
 
