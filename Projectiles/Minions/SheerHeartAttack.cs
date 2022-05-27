@@ -75,7 +75,7 @@ namespace JoJoStands.Projectiles.Minions
 
                 if (!saidKocchiwomiro)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/Kocchiwomiro"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Kocchiwomiro"));
                     saidKocchiwomiro = true;
                 }
                 if (npcTarget.position.X > Projectile.position.X)

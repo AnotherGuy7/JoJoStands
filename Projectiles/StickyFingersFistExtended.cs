@@ -49,7 +49,7 @@ namespace JoJoStands.Projectiles
             Projectile.rotation = (-rota * Projectile.direction).ToRotation();
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Zip"));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
                 playedSound = true;
             }
 

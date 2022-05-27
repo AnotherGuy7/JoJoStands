@@ -85,9 +85,10 @@ namespace JoJoStands.Projectiles.Minions
             hitcooldown += 60;
             target.AddBuff(BuffID.Poisoned, 300);
         }
+
         public override void Kill(int timeLeft)
         {
-            SoundEngine.PlaySound(5, (int)Projectile.position.X, (int)Projectile.position.Y);
+            SoundEngine.PlaySound(SoundID.NPCDeath5, Projectile.Center);
         }
     }
 }

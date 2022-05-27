@@ -2,6 +2,7 @@ using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -63,7 +64,9 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            SoundEngine.PlaySound(2, (int)Projectile.Center.X, (int)Projectile.Center.Y, 62, 1f, 1.9f);
+            SoundStyle item62 = SoundID.Item62;
+            item62.Pitch = 1.9f;
+            SoundEngine.PlaySound(item62, Projectile.Center);
         }
     }
 }

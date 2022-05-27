@@ -75,8 +75,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     secondaryAbilityFrames = true;
                     if (JoJoStands.SoundsLoaded)
                     {
-                        Terraria.Audio.LegacySoundStyle redBind = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/RedBind");
-                        redBind.WithVolume(MyPlayer.ModSoundsVolume);
+                        SoundStyle redBind = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RedBind");
+                        redBind.Volume = MyPlayer.ModSoundsVolume;
                         SoundEngine.PlaySound(redBind, Projectile.position);
                     }
 
@@ -104,9 +104,9 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     }
                     if (JoJoStands.SoundsLoaded)
                     {
-                        Terraria.Audio.LegacySoundStyle crossFireHurricane = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/CrossfireHurricaneSpecial");
-                        crossFireHurricane.WithVolume(MyPlayer.ModSoundsVolume);
-                        SoundEngine.PlaySound(crossFireHurricane, Projectile.position);
+                        SoundStyle crossFireHurricane = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/CrossfireHurricaneSpecial");
+                        crossFireHurricane.Volume = MyPlayer.ModSoundsVolume;
+                        SoundEngine.PlaySound(crossFireHurricane, Projectile.Center);
                     }
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(25));
                     secondRingTimer = 1;

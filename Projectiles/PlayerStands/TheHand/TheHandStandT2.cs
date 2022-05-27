@@ -75,7 +75,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 }
                 if (!Main.mouseRight && chargeTimer != 0 && Projectile.owner == Main.myPlayer && scrapeFrames && Projectile.frame == 1)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/BRRR"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR"));
                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                     distanceToTeleport.Normalize();
                     /*distanceToTeleport *= 98f * (chargeTimer / 60f);

@@ -1,7 +1,6 @@
 using JoJoStands.Items;
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Items.Seasonal;
-using JoJoStands.Items.Tiles;
 using JoJoStands.Networking;
 using JoJoStands.Projectiles;
 using JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem;
@@ -9,7 +8,6 @@ using JoJoStands.Projectiles.PlayerStands.StarPlatinum;
 using JoJoStands.Projectiles.PlayerStands.TestStand;
 using JoJoStands.Projectiles.PlayerStands.TheWorld;
 using JoJoStands.Projectiles.PlayerStands.Tusk;
-using JoJoStands.Tiles;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,8 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -114,7 +110,6 @@ namespace JoJoStands
             if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
             {
                 JoJoStandsShaders.LoadShaders();
-                MusicLoader.AddMusicBox(Instance, MusicLoader.GetMusicSlot(Instance, "Sounds/Music/VMMusic"), ItemType<ViralMusicBox>(), TileType<ViralMusicBoxTile>());
             }
         }
 

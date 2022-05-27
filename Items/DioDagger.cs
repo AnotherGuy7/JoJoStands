@@ -41,7 +41,9 @@ namespace JoJoStands.Items
             {
                 JoJoStandsWorld.VampiricNight = true;
                 Main.NewText("Dio's Minions have arrived!", new Color(50, 255, 130));
-                SoundEngine.PlaySound(15, (int)player.Center.X, (int)player.Center.Y, 0, 1f, -1.9f);
+                SoundStyle item15 = SoundID.Item15;
+                item15.Pitch = -1.9f;
+                SoundEngine.PlaySound(item15, player.Center);
                 player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " has succumbed to fate, just like a certain father once did."), 1, -player.direction);
             }
             return true;

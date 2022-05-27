@@ -319,7 +319,7 @@ namespace JoJoStands
             if (JoJoStands.PoseHotKey.JustPressed && !poseMode)
             {
                 if (Sounds)
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/PoseSound"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
 
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     ModNetHandler.playerSync.SendPoseMode(256, Player.whoAmI, true, Player.whoAmI);
@@ -847,7 +847,9 @@ namespace JoJoStands
                         if (Main.mouseRight && tuskShootCooldown <= 0 && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                         {
                             tuskShootCooldown += 120 - standSpeedBoosts;
-                            SoundEngine.PlaySound(2, (int)Player.Center.X, (int)Player.Center.Y, 67, ModSoundsVolume, -1.2f);
+                            SoundStyle item67 = SoundID.Item67;
+                            item67.Pitch = -1.2f;
+                            SoundEngine.PlaySound(item67, Player.Center);
                             Vector2 shootVelocity = Main.MouseWorld - Player.position;
                             shootVelocity.Normalize();
                             shootVelocity *= 16f;
@@ -898,7 +900,9 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(38 * standDamageBoosts), 4f, Player.whoAmI);
-                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(4, 7 + 1) / 10f);
+                            SoundStyle itemSound = SoundID.Item;
+                            itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
+                            SoundEngine.PlaySound(itemSound, Player.Center);
                         }
                     }
                     if (hermitPurpleTier == 2)
@@ -910,7 +914,9 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(81 * standDamageBoosts), 6f, Player.whoAmI);
-                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(7, 10 + 1) / 10f);
+                            SoundStyle itemSound = SoundID.Item;
+                            itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
+                            SoundEngine.PlaySound(itemSound, Player.Center);
                         }
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
@@ -919,7 +925,9 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(78 * standDamageBoosts), 0f, Player.whoAmI);
-                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(4, 7 + 1) / 10f);
+                            SoundStyle itemSound = SoundID.Item;
+                            itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
+                            SoundEngine.PlaySound(itemSound, Player.Center);
                         }
                     }
                     if (hermitPurpleTier == 3)
@@ -931,7 +939,9 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(157 * standDamageBoosts), 7f, Player.whoAmI);
-                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(4, 7 + 1) / 10f);
+                            SoundStyle itemSound = SoundID.Item;
+                            itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
+                            SoundEngine.PlaySound(itemSound, Player.Center);
                         }
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
@@ -951,7 +961,9 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(202 * standDamageBoosts), 8f, Player.whoAmI);
-                            SoundEngine.PlaySound(SoundID.Item, (int)Player.Center.X, (int)Player.Center.Y, pitchOffset: Main.rand.Next(4, 7 + 1) / 10f);
+                            SoundStyle itemSound = SoundID.Item;
+                            itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
+                            SoundEngine.PlaySound(itemSound, Player.Center);
                         }
                         if (Main.mouseRight && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleGrab>()] == 0)
                         {
@@ -1427,7 +1439,7 @@ namespace JoJoStands
             if (Player.HasBuff<ZipperDodge>())
             {
                 if (JoJoStands.SoundsLoaded)
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Zip"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
 
                 Player.immune = true;
                 Player.immuneTime = 30;
@@ -1443,15 +1455,15 @@ namespace JoJoStands
             if (Player.whoAmI == Main.myPlayer)
             {
                 if (DeathSoundID == DeathSoundType.Roundabout)
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/ToBeContinued"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/ToBeContinued"));
                 else if (DeathSoundID == DeathSoundType.Caesar)
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/Caesar"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/Caesar"));
                 else if (DeathSoundID == DeathSoundType.KonoMeAmareriMaroreriMerareMaro)
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/GangTortureDance"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/GangTortureDance"));
                 else if (DeathSoundID == DeathSoundType.LastTrainHome)
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/LastTrainHome"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/LastTrainHome"));
                 else if (DeathSoundID == DeathSoundType.KingCrimsonNoNorioKu)
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Deathsounds/KingCrimsonSpeech"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/KingCrimsonSpeech"));
 
                 if (DeathSoundID != DeathSoundType.Roundabout)
                     ToBeContinued.Visible = true;

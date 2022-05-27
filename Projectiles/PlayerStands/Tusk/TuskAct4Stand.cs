@@ -44,9 +44,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
             {
                 if (JoJoStands.SoundsLoaded && !playedSpawnCry)
                 {
-                    LegacySoundStyle chumimiiin = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Chumimiiin");
-                    chumimiiin.WithVolume(MyPlayer.ModSoundsVolume);
-                    SoundEngine.PlaySound(chumimiiin, Projectile.position);
+                    SoundStyle sound = new SoundStyle("JoJoStands/Sounds/SoundEffects/Chumimiiin", SoundType.Sound);
+                    sound.Volume = MyPlayer.ModSoundsVolume;
+                    SoundEngine.PlaySound(sound, Projectile.Center);
                     playedSpawnCry = true;
                 }
                 for (int i = 0; i < Main.rand.Next(4, 6 + 1); i++)

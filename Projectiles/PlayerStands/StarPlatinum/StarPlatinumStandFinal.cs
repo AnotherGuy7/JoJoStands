@@ -56,8 +56,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     timestopStartDelay = 240;
                 else
                 {
-                    Terraria.Audio.LegacySoundStyle zawarudo = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/StarPlatinumTheWorld");
-                    zawarudo.WithVolume(MyPlayer.ModSoundsVolume);
+                    SoundStyle zawarudo = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/StarPlatinumTheWorld");
+                    zawarudo.Volume = MyPlayer.ModSoundsVolume;
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
                 }
@@ -102,17 +102,18 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                             {
                                 shootCount += 80;
                                 Main.mouseLeft = false;
-                                SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 41, 1f, 2.8f);
                                 Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                                 if (shootVel == Vector2.Zero)
-                                {
                                     shootVel = new Vector2(0f, 1f);
-                                }
+
                                 shootVel.Normalize();
                                 shootVel *= 12f;
                                 int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
                                 Main.projectile[proj].netUpdate = true;
                                 Projectile.netUpdate = true;
+                                SoundStyle item41 = SoundID.Item41;
+                                item41.Pitch = 2.8f;
+                                SoundEngine.PlaySound(item41, player.Center);
                                 if (bulletItem.Name.Contains("Bullet"))
                                     player.ConsumeItem(bulletItem.type);
                             }
@@ -126,9 +127,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                             Main.mouseLeft = false;
                             Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(altDamage * mPlayer.standDamageBoosts), 4f, Projectile.owner, Projectile.whoAmI);

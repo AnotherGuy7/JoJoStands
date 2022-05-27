@@ -142,7 +142,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                         player.AddBuff(ModContent.BuffType<SurpriseAttack>(), 7 * 60);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(15));
                         if (JoJoStands.SoundsLoaded)
-                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Zip"));
+                            SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
                     }
                 }
                 if (SpecialKeyPressed() && shootCount <= 0 && !secondaryAbility && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersTraversalZipper>()] == 0 && !zipperAmbush)

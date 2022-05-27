@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Tiles
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A music box with a tune encrypted into it.");
+            MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(Mod, "Sounds/Music/VMMusic"), ModContent.ItemType<ViralMusicBox>(), ModContent.TileType<ViralMusicBoxTile>());
         }
 
         public override void SetDefaults()

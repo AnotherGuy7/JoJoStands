@@ -46,7 +46,7 @@ namespace JoJoStands.Projectiles
             {
                 Dust.NewDust(Projectile.Center, Projectile.width / 2, Projectile.height / 2, DustID.Lead, -Projectile.velocity.X * 0.1f, -Projectile.velocity.Y * 0.1f);
             }
-            SoundEngine.PlaySound(0, (int)Projectile.Center.X, (int)Projectile.Center.Y, 1);
+            SoundEngine.PlaySound(SoundID.Tink, Projectile.Center);
         }
     }
 }

@@ -277,9 +277,9 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod Mod = ModLoader.GetMod("JoJoStands");
+            Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.phantomHoodLongEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodLong", EquipType.Head))
+            if (drawPlayer.active && mPlayer.phantomHoodLongEquipped && drawPlayer.head == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomHoodLong", EquipType.Head))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomHoodLong_Head_Glowmask").Value;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -309,7 +309,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.phantomHoodNeutralEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodNeutral", EquipType.Head))
+            if (drawPlayer.active && mPlayer.phantomHoodNeutralEquipped && drawPlayer.head == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomHoodNeutral", EquipType.Head))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomHoodNeutral_Head_Glowmask").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
@@ -339,7 +339,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.phantomHoodShortEquipped && drawPlayer.head == Mod.GetEquipSlot("PhantomHoodShort", EquipType.Head))
+            if (drawPlayer.active && mPlayer.phantomHoodShortEquipped && drawPlayer.head == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomHoodShort", EquipType.Head))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomHoodShort_Head_Glowmask").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
@@ -369,7 +369,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
+            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Body_Glowmask").Value;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -396,7 +396,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == Mod.GetEquipSlot("PhantomChestplate", EquipType.Body))
+            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Arms_Glowmask").Value;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
@@ -423,7 +423,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.phantomLeggingsEquipped && drawPlayer.legs == Mod.GetEquipSlot("PhantomLeggings", EquipType.Legs))
+            if (drawPlayer.active && mPlayer.phantomLeggingsEquipped && drawPlayer.legs == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomLeggings", EquipType.Legs))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomLeggings_Legs_Glowmask").Value;
                 Vector2 drawOffset = new Vector2(0f, drawInfo.drawPlayer.Size.Y / 4f);

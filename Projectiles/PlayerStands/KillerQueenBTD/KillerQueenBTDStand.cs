@@ -149,7 +149,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
                     player.AddBuff(ModContent.BuffType<BitesTheDust>(), 10);
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/BiteTheDustEffect>"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BiteTheDustEffect>"));
                 }
                 else
                     btdStartDelay = 205;
@@ -161,8 +161,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
-                    LegacySoundStyle btdSound = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/BiteTheDust");
-                    SoundEffectInstance biteTheDust = SoundEngine.PlaySound((int)btdSound.Type, (int)Projectile.position.X, (int)Projectile.position.Y, btdSound.Style, MyPlayer.ModSoundsVolume);
+                    SoundStyle btdSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/BiteTheDust");
+                    btdSound.Volume = MyPlayer.ModSoundsVolume;
+                    SoundEngine.PlaySound(btdSound, Projectile.Center);
                     btdStartDelay = 1;
                 }
             }
@@ -204,7 +205,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         player.ChangeDir(savedPlayerData.playerDirection);
                         //player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(120));
                         player.ClearBuff(ModContent.BuffType<BitesTheDust>());
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/KQButtonClick"));
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick"));
 
                         for (int i = 0; i < savedPlayerData.buffTypes.Length; i++)
                         {
@@ -279,7 +280,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     secondaryAbilityFrames = true;
                     Projectile.ai[0] = 1f;      //to detonate all bombos
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/KQButtonClick"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick"));
                 }
                 if (secondaryAbilityFrames && Projectile.ai[0] == 1f)
                 {

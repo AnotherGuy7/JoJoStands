@@ -52,8 +52,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     timestopStartDelay = 120;
                 else
                 {
-                    LegacySoundStyle zawarudo = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/TheWorld");
-                    zawarudo.WithVolume(MyPlayer.ModSoundsVolume);
+                    SoundStyle zawarudo = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/TheWorld");
+                    zawarudo.Volume = MyPlayer.ModSoundsVolume;
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
                 }
@@ -106,9 +106,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         GoInFront();
                         Projectile.direction = 1;
                         if (Main.MouseWorld.X < Projectile.position.X)
-                        {
                             Projectile.direction = -1;
-                        }
+
                         Projectile.spriteDirection = Projectile.direction;
                     }
                     secondaryAbilityFrames = false;
@@ -125,9 +124,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         float knivesAngleSpread = MathHelper.ToRadians(15f);
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= 100f;
                         for (int i = 0; i < numberOfKnives; i++)
@@ -144,14 +142,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 if (SpecialKeyPressed() && player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<RoadRoller>()] == 0)
                 {
                     if (JoJoStands.SoundsLoaded)
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/RoadRollerDa"));
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RoadRollerDa"));
 
                     shootCount += 12;
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= shootSpeed + 4f;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RoadRoller>(), 512, 12f, player.whoAmI);

@@ -60,7 +60,9 @@ namespace JoJoStands.Items.CraftingMaterials
                     hPlayer.skillPointsAvailable += 1;
                     Item.stack -= 20;
                     clickTimer = 60;
-                    SoundEngine.PlaySound(SoundID.Item, Style: 25, pitchOffset: -0.8f);
+                    SoundStyle itemSoud = SoundID.Item;
+                    itemSoud.Pitch = -0.8f;
+                    SoundEngine.PlaySound(itemSoud, player.Center);
                 }
             }
         }

@@ -47,11 +47,11 @@ namespace JoJoStands.Projectiles
                     {
                         velocityAdd += otherProj.velocity / 75f;
                         if (damageMult <= 4f)
-                        {
                             damageMult += otherProj.damage / 50;
-                        }
                         Dust.NewDust(otherProj.position, Projectile.width, Projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/Punch_land").WithVolume(.3f));
+                        SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
+                        punchSound.Volume = 0.21f;
+                        SoundEngine.PlaySound(punchSound, Projectile.Center);
                         otherProj.Kill();
                     }
                 }

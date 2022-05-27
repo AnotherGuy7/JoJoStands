@@ -72,7 +72,9 @@ namespace JoJoStands.NPCs.Enemies
 
             if (Main.rand.Next(0, 251) <= 2)
             {
-                SoundEngine.PlaySound(14, (int)NPC.position.X, (int)NPC.position.Y, 1, Main.soundVolume, -0.8f);
+                SoundStyle zombieMoan = SoundID.Zombie1;
+                zombieMoan.Pitch = -1.6f;
+                SoundEngine.PlaySound(zombieMoan, NPC.Center);
             }
 
             float targetDistance = 0f;

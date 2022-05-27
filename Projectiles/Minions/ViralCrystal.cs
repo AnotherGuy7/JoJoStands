@@ -60,7 +60,7 @@ namespace JoJoStands.Projectiles.Minions
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<ViralCrystalProjectile>(), 81, 4f, Projectile.owner);
-                    SoundEngine.PlaySound(SoundID.NPCHit, Projectile.Center, 5);
+                    SoundEngine.PlaySound(SoundID.NPCHit5, Projectile.Center);
                 }
             }
         }

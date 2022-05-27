@@ -74,8 +74,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     secondaryAbilityFrames = true;
                     if (JoJoStands.SoundsLoaded)
                     {
-                        Terraria.Audio.LegacySoundStyle redBind = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/RedBind");
-                        redBind.WithVolume(MyPlayer.ModSoundsVolume);
+                        SoundStyle redBind = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RedBind");
+                        redBind.Volume = MyPlayer.ModSoundsVolume;
                         SoundEngine.PlaySound(redBind, Projectile.position);
                     }
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;

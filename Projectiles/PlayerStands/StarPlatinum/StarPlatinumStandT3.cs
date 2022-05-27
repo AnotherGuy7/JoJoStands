@@ -78,12 +78,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                             {
                                 shootCount += 120;
                                 Main.mouseLeft = false;
-                                SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y,  41, 1f, 2.8f);
+                                SoundStyle item41 = SoundID.Item41;
+                                item41.Pitch = 2.8f;
+                                SoundEngine.PlaySound(item41, player.Center);
                                 Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                                 if (shootVel == Vector2.Zero)
-                                {
                                     shootVel = new Vector2(0f, 1f);
-                                }
+
                                 shootVel.Normalize();
                                 shootVel *= 12f;
                                 int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
@@ -102,9 +103,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                             Main.mouseLeft = false;
                             Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);

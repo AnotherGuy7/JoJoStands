@@ -52,8 +52,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     timestopStartDelay = 120;
                 else
                 {
-                    LegacySoundStyle zawarudo = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/TheWorld");
-                    zawarudo.WithVolume(MyPlayer.ModSoundsVolume);
+                    SoundStyle zawarudo = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/TheWorld");
+                    zawarudo.Volume = MyPlayer.ModSoundsVolume;
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
                 }

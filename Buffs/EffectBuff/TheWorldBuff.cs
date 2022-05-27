@@ -48,7 +48,7 @@ namespace JoJoStands.Buffs.EffectBuff
                     mPlayer.timestopActive = false;
                     ModNetHandler.effectSync.SendTimestop(256, player.whoAmI, false, player.whoAmI);
                 }
-                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/timestop_stop"));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_stop"));
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 if (Filters.Scene["GreyscaleEffect"].IsActive())
                     Filters.Scene["GreyscaleEffect"].Deactivate();

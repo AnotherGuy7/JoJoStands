@@ -21,7 +21,7 @@ namespace JoJoStands.Tiles
             Main.tileLighted[Type] = true;
             TileObjectData.addTile(Type);
 
-            SoundType = SoundID.Tink;
+            HitSound = SoundID.Tink;
             DustType = DustID.Silver;
             ItemDrop = ModContent.ItemType<ViralMeteorite>();
             MineResist = 3f;

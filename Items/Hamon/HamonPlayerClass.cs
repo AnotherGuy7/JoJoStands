@@ -533,7 +533,9 @@ namespace JoJoStands.Items.Hamon
                     }
                     amountOfHamon -= hamonAmountRequirements[SunShackles];
                     sunShacklesHeldTimer = 0;
-                    SoundEngine.PlaySound(2, (int)Player.position.X, (int)Player.position.Y, 8, 1f, 0.8f);
+                    SoundStyle item8 = SoundID.Item8;
+                    item8.Pitch = 0.8f;
+                    SoundEngine.PlaySound(item8, Player.Center);
                 }
             }
 

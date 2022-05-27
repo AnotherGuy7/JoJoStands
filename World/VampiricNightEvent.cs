@@ -7,7 +7,7 @@ namespace JoJoStands.World
     {
         public override bool IsSceneEffectActive(Player player) => JoJoStandsWorld.VampiricNight;
 
-        public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/VNight");
+        public override int Music => MusicLoader.GetMusicSlot(Mod, "JoJoStands/Sounds/Music/VNight");
         public override SceneEffectPriority Priority => SceneEffectPriority.Event;
     }
 }

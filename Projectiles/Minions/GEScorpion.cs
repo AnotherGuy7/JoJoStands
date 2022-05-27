@@ -106,7 +106,11 @@ namespace JoJoStands.Projectiles.Minions
                         {
                             Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, Projectile.width, Projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
                             if (MyPlayer.Sounds)
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/Punch_land").WithVolume(.3f));
+                            {
+                                SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
+                                punchSound.Volume = 0.21f;
+                                SoundEngine.PlaySound(punchSound, Projectile.Center);
+                            }
 
                             otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " couldn't resist hurting " + player.name + "'s damage-reflecting scorpion."), otherProj.damage, 1, true);
                             otherProj.Kill();

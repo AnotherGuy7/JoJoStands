@@ -39,7 +39,7 @@ namespace JoJoStands.Projectiles
             float dist = Vector2.Distance(player.Center, Projectile.Center);
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Zip"));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
                 playedSound = true;
             }
 

@@ -100,9 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     spawningField = true;
                     formPosition = Projectile.position;
                     if (JoJoStands.SoundsLoaded)
-                    {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/EmeraldSplash"));
-                    }
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EmeraldSplash"), Projectile.Center);
                 }
                 if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
                 {

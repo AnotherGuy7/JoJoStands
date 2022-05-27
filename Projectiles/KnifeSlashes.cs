@@ -4,6 +4,7 @@ using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -76,7 +77,10 @@ namespace JoJoStands.Projectiles
                 {
                     Projectile.frame = 0;
                     Projectile.rotation = MathHelper.ToRadians(Main.rand.Next(0, 360 + 1));
-                    SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 1, 1f, 0.6f + Main.rand.NextFloat(-0.1f, 0.1f));
+                    SoundStyle itemSound = SoundID.Item;
+                    itemSound.Pitch = 0.6f;
+                    itemSound.PitchVariance = 0.1f;
+                    SoundEngine.PlaySound(itemSound, player.Center);
                 }
             }
         }

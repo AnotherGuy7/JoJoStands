@@ -59,7 +59,9 @@ namespace JoJoStands.Items.Vampire
                 shootVel.Normalize();
                 shootVel *= 12f;
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<VampiricVeinSpike>(), Item.damage, Item.knockBack, player.whoAmI);
-                SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 17, 1f, -0.6f);
+                SoundStyle item17 = SoundID.Item17;
+                item17.Pitch = -0.6f;
+                SoundEngine.PlaySound(item17, player.Center);
             }
 
             if (Main.mouseRight && useCool <= 0)
@@ -70,7 +72,9 @@ namespace JoJoStands.Items.Vampire
                 shootVel *= 12f;
                 int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<VampiricVeinGrab>(), (int)(Item.damage * 1.2f), 0f, player.whoAmI);
                 Main.projectile[proj].netUpdate = true;
-                SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 17, 1f, -0.6f);
+                SoundStyle item17 = SoundID.Item17;
+                item17.Pitch = -0.6f;
+                SoundEngine.PlaySound(item17, player.Center);
             }
 
             bool specialPressed = false;

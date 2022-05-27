@@ -71,7 +71,9 @@ namespace JoJoStands.Items.Vampire
                 player.velocity += launchVector;
                 useCool += Item.useTime + (6 * (punchChargeTimer / 30));
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<VampiricPunch>(), Item.damage * multiplier, Item.knockBack * multiplier, player.whoAmI);
-                SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 1, 1f, 0.2f);
+                SoundStyle itemSound = SoundID.Item;
+                itemSound.Pitch = 0.2f;
+                SoundEngine.PlaySound(itemSound, player.Center);
                 punchChargeTimer = 0;
             }
 

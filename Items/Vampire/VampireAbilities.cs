@@ -101,7 +101,9 @@ namespace JoJoStands.Items.Vampire
                 launchVector *= multiplier * 6;
                 player.velocity += launchVector;
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<VampiricSlash>(), Item.damage * multiplier, Item.knockBack * multiplier, player.whoAmI);
-                SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 1, 1f, 0.2f);
+                SoundStyle itemSound = SoundID.Item1;
+                itemSound.Pitch = 0.2f;
+                SoundEngine.PlaySound(itemSound, player.Center);
                 lungeChargeTimer = 0;
             }
             if (Main.mouseRight && useCool <= 0)
@@ -160,7 +162,9 @@ namespace JoJoStands.Items.Vampire
                             player.HealEffect(suckAmount);
                             player.statLife += suckAmount;
                             heldNPC.StrikeNPC(suckAmount, 0f, player.direction);
-                            SoundEngine.PlaySound(SoundID.Item, (int)player.position.X, (int)player.position.Y, 3, 1f, -0.8f);
+                            SoundStyle item3 = SoundID.Item3;
+                            item3.Pitch = -0.8f;
+                            SoundEngine.PlaySound(item3, player.Center);
                             heldEnemyTimer = 0;
                         }
                     }
@@ -186,7 +190,9 @@ namespace JoJoStands.Items.Vampire
                             shootVel *= 12f;
                             int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center.X, player.Center.Y - 20f, shootVel.X, shootVel.Y, ModContent.ProjectileType<SpaceRipperStingyEyes>(), 82, 4f, Main.myPlayer, 1f);
                             Main.projectile[proj].netUpdate = true;
-                            SoundEngine.PlaySound(2, (int)player.position.X, (int)player.position.Y, 12, 1f, -2.4f);
+                            SoundStyle itemSound = SoundID.Item;
+                            itemSound.Pitch = 0.2f;
+                            SoundEngine.PlaySound(itemSound, player.Center);
                         }
                         if (eyeLaserChargeUpTimer >= 165)
                         {

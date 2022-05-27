@@ -54,9 +54,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         shootCount += newShootTime;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
 
@@ -101,9 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     spawningField = true;
                     formPosition = Projectile.position;
                     if (JoJoStands.SoundsLoaded)
-                    {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/EmeraldSplash"));
-                    }
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EmeraldSplash"), Projectile.Center);
                 }
                 if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
                 {

@@ -104,7 +104,9 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                             otherProjectile.velocity = redirectionVelocity;
                             otherProjectile.penetrate += 1 + (mPlayer.sexPistolsTier / 2);
                             otherProjectile.GetGlobalProjectile<JoJoGlobalProjectile>().kickedBySexPistols = true;
-                            SoundEngine.PlaySound(SoundID.Tink, (int)otherProjectile.Center.X, (int)otherProjectile.Center.Y, 1, 1f, 5f);
+                            SoundStyle tinkSound = SoundID.Tink;
+                            tinkSound.Pitch = 5f;
+                            SoundEngine.PlaySound(tinkSound, otherProjectile.Center);
                             break;
                         }
                     }

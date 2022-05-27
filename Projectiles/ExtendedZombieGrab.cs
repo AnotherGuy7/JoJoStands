@@ -79,7 +79,9 @@ namespace JoJoStands.Projectiles
                 if (heldEnemyTimer >= 60)
                 {
                     vPlayer.StealHealthFrom(heldNPC, heldNPC.lifeMax, 0f, 16, true);
-                    SoundEngine.PlaySound(SoundID.Item, (int)player.position.X, (int)player.position.Y, 3, 1f, -0.8f);
+                    SoundStyle item3 = SoundID.Item3;
+                    item3.Pitch = -0.8f;
+                    SoundEngine.PlaySound(item3, player.Center);
                     heldEnemyTimer = 0;
                 }
                 Projectile.frame = 1;

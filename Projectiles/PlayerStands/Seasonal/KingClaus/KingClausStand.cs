@@ -62,9 +62,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     timeskipStartDelay = 80;
                 else
                 {
-                    LegacySoundStyle kingCrimson = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/KingCrimson");
-                    kingCrimson.WithVolume(MyPlayer.ModSoundsVolume);
-                    SoundEngine.PlaySound(kingCrimson, Projectile.position);
+                    SoundStyle kingCrimson = new SoundStyle("JoJoStands/Sounds/SoundEffects/KingCrimson");
+                    kingCrimson.Volume = MyPlayer.ModSoundsVolume;
+                    SoundEngine.PlaySound(kingCrimson, Projectile.Center);
                     timeskipStartDelay = 1;
                 }
             }
@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (timeskipStartDelay >= 80)
                 {
                     player.AddBuff(ModContent.BuffType<PreTimeSkip>(), 10);
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/TimeSkip"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
                     timeskipStartDelay = 0;
                 }
             }
@@ -174,7 +174,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 }
                                 player.position += repositionOffset;
                                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(4));
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/TimeSkip"));
+                                SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
                                 for (int i = 0; i < 20; i++)
                                 {
                                     Dust.NewDust(player.position, player.width, player.height, 6);
@@ -200,7 +200,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             player.position += repositionOffset;
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(4));
                             npc.StrikeNPC(newPunchDamage * 2, punchKnockback * 1.5f, Projectile.direction);
-                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/TimeSkip"));
+                            SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
 
                             for (int i = 0; i < 20; i++)
                             {

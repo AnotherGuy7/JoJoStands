@@ -146,7 +146,9 @@ namespace JoJoStands.Items.Hamon
                         hamonPlayer.amountOfHamon -= 5;
                         heldNPC.StrikeNPC(Item.damage, 0f, player.direction);
                         heldNPC.AddBuff(ModContent.BuffType<Sunburn>(), 5 * 60);
-                        SoundEngine.PlaySound(SoundID.Item, (int)player.position.X, (int)player.position.Y, 3, 1f, -0.8f);
+                        SoundStyle item3 = SoundID.Item3;
+                        item3.Pitch = -0.8f;
+                        SoundEngine.PlaySound(item3, player.Center);
                         heldEnemyTimer = 0;
                     }
                 }

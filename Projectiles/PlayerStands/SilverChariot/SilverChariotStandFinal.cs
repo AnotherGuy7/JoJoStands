@@ -81,7 +81,9 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 otherProj.hostile = false;
                                 otherProj.friendly = true;
                                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(3));
-                                SoundEngine.PlaySound(SoundID.NPCHit4.SoundId, (int)Projectile.Center.X, (int)Projectile.Center.Y, SoundID.NPCHit4.Style, Main.soundVolume, Main.rand.Next(4, 6 + 1) / 10f);
+                                SoundStyle npcHit4 = SoundID.NPCHit4;
+                                npcHit4.Pitch = Main.rand.Next(4, 6 + 1) / 10f;
+                                SoundEngine.PlaySound(npcHit4, Projectile.Center);
                             }
                         }
                     }
@@ -96,7 +98,9 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 secondaryAbilityFrames = false;
                                 parryFrames = true;
                                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(3));
-                                SoundEngine.PlaySound(SoundID.NPCHit4.SoundId, (int)Projectile.Center.X, (int)Projectile.Center.Y, SoundID.NPCHit4.Style, Main.soundVolume, Main.rand.Next(4, 6 + 1) / 10f);
+                                SoundStyle npcHit4 = SoundID.NPCHit4;
+                                npcHit4.Pitch = Main.rand.Next(4, 6 + 1) / 10f;
+                                SoundEngine.PlaySound(npcHit4, Projectile.Center);
                             }
                         }
                     }

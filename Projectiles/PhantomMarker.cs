@@ -63,13 +63,15 @@ namespace JoJoStands.Projectiles
             {
                 Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.Electric, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f));
             }
-            SoundEffectInstance explosionSFX = SoundEngine.PlaySound(SoundID.Item62);
+            SoundStyle explosionSFX = SoundID.Item62;
             float volume = 1f - (Vector2.Distance(Main.player[Projectile.owner].position, Projectile.Center) / ExplosionSoundDistance);
             volume = Math.Clamp(volume, 0f, 1f);
             explosionSFX.Volume = volume;
-            Vector2 positionDifference = Main.player[Projectile.owner].position - Projectile.Center;
+            SoundEngine.PlaySound(explosionSFX, Projectile.Center);
+            /*Vector2 positionDifference = Main.player[Projectile.owner].position - Projectile.Center;
             float pan = -(positionDifference.X / Math.Abs(positionDifference.X)) * volume;
             explosionSFX.Pan = pan;
+            explosionSFX.*/
         }
     }
 }

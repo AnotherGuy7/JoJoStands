@@ -95,7 +95,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             mPlayer.timestopEffectDurationTimer = 60;
             mPlayer.timestopActive = true;
             if (JoJoStands.JoJoStandsSounds == null)
-                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/GameSounds/timestop_start"));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_start"));
 
             player.AddBuff(ModContent.BuffType<TheWorldBuff>(), seconds * 60, true);
             if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -629,7 +629,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (punchingSoundInstance != null)
                 {
                     Player player = Main.player[Projectile.owner];
-                    string path = "Sounds/BattleCries/" + punchSoundName;
+                    string path = "JoJoStands/Sounds/BattleCries/" + punchSoundName;
                     SoundState state = punchingSoundInstance.State;
                     //SendSoundInstance(int sender, string soundPath, SoundState state, Vector2 pos (this one has to be sent as individual float values), float soundTravelDistance = 10f), which is the method called here
                     JoJoStands.JoJoStandsSounds.Call("SendSoundInstance", player.whoAmI, path, state, Projectile.Center.X, Projectile.Center.Y, 40);
@@ -712,8 +712,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 if (spawnSoundName != "" && !playedSpawnSound)
                 {
-                    LegacySoundStyle spawnSound = SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SummonCries/" + spawnSoundName);
-                    spawnSound.WithVolume(MyPlayer.ModSoundsVolume);
+                    SoundStyle spawnSound = new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/" + spawnSoundName);
+                    spawnSound.Volume = MyPlayer.ModSoundsVolume;
                     SoundEngine.PlaySound(spawnSound, Projectile.position);
                     playedSpawnSound = true;
                 }

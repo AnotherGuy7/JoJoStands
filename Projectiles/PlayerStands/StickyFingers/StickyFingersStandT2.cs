@@ -141,7 +141,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                         player.AddBuff(ModContent.BuffType<SurpriseAttack>(), 3 * 60);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(25));
                         if (JoJoStands.SoundsLoaded)
-                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(JoJoStands.JoJoStandsSounds, "Sounds/SoundEffects/Zip"));
+                            SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
                     }
                 }
             }
