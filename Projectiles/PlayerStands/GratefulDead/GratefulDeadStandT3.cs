@@ -208,22 +208,22 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 PlayAnimation("Idle");
             }
             if (secondaryFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (grabFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryFrames = false;
                 PlayAnimation("Grab");
@@ -231,7 +231,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

@@ -272,7 +272,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     if (player.whoAmI == Main.myPlayer)
                     {
-                        normalFrames = true;
+                        idleFrames = true;
                         attackFrames = false;
                     }
                 }
@@ -287,7 +287,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     if (Projectile.frame >= 2)
                     {
                         Projectile.ai[0] = 0f;
-                        normalFrames = true;
+                        idleFrames = true;
                         attackFrames = false;
                         secondaryAbilityFrames = false;
                     }
@@ -299,7 +299,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 if (target != null)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
                     {
@@ -327,7 +327,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 }
                 else
                 {
-                    normalFrames = true;
+                    idleFrames = true;
                     attackFrames = false;
                 }
             }
@@ -349,17 +349,17 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }

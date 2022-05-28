@@ -56,7 +56,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual bool useProjectileAlpha { get; } = false;
 
 
-        public bool normalFrames = false;       //Much easier to sync animations this way rather than syncing everything about it
+        public bool idleFrames = false;       //Much easier to sync animations this way rather than syncing everything about it
         public bool attackFrames = false;
         public bool secondaryAbilityFrames = false;
         public int newPunchTime = 0;       //so we don't have to type newPunchTime all the time
@@ -189,7 +189,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 return;
 
             HandleDrawOffsets();
-            normalFrames = false;
+            idleFrames = false;
             attackFrames = true;
             float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
             Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
@@ -228,6 +228,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             LimitDistance();
             Projectile.netUpdate = true;
+            SendStandData(Direction);
         }
 
         /// <summary>
@@ -237,7 +238,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
 
-            normalFrames = true;
+            idleFrames = true;
             attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
@@ -259,7 +260,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
 
-            normalFrames = true;
+            idleFrames = true;
             attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
@@ -267,9 +268,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
             Projectile.velocity *= 0.8f;
             if (!secondaryAbilityFrames)
-            {
                 Projectile.direction = Projectile.spriteDirection = player.direction;
-            }
+
             Projectile.rotation = 0;
             HandleDrawOffsets();
             LimitDistance();
@@ -283,7 +283,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
 
-            normalFrames = true;
+            idleFrames = true;
             attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X += (float)((12 + player.width / 2) * player.direction);
@@ -321,7 +321,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (target != null)
             {
                 attackFrames = true;
-                normalFrames = false;
+                idleFrames = false;
 
                 Projectile.direction = 1;
                 if (target.position.X - Projectile.Center.X <= 0f)
@@ -353,7 +353,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             else
             {
-                normalFrames = true;
+                idleFrames = true;
                 attackFrames = false;
             }
             LimitDistance();
@@ -385,7 +385,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (targetDist > punchDetectionDist || secondaryAbility || target == null)
             {
                 Vector2 areaBehindPlayer = player.Center;
-                normalFrames = true;
+                idleFrames = true;
                 attackFrames = false;
                 if (secondaryAbility)
                 {
@@ -406,7 +406,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (targetDist < punchDetectionDist && !secondaryAbility)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     secondaryAbilityFrames = false;
 
                     Projectile.direction = 1;
@@ -456,7 +456,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (secondaryAbility)
                 {
                     attackFrames = false;
-                    normalFrames = false;
+                    idleFrames = false;
                     secondaryAbilityFrames = true;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0f)
@@ -497,7 +497,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         secondaryAbility = false;
                         secondaryAbilityFrames = false;
-                        normalFrames = true;
+                        idleFrames = true;
                     }
                 }
             }
@@ -720,6 +720,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        private bool previousIdle;
+
         public void UpdateStandSync()
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -731,6 +733,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Projectile.netUpdate = true;
                 netUpdateTimer = 0;
             }
+            if (previousIdle != idleFrames)
+                SendStandData(NowIdle);
+
+            previousIdle = idleFrames;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -850,17 +856,19 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void SendExtraAI(BinaryWriter writer)
         {
-            writer.Write(normalFrames);
+            writer.Write(idleFrames);
             writer.Write(attackFrames);
             writer.Write(secondaryAbilityFrames);
+            writer.Write((byte)(Projectile.direction + 2));
             SendExtraStates(writer);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
-            normalFrames = reader.ReadBoolean();
+            idleFrames = reader.ReadBoolean();
             attackFrames = reader.ReadBoolean();
             secondaryAbilityFrames = reader.ReadBoolean();
+            Projectile.direction = reader.ReadByte() - 2;
             ReceiveExtraStates(reader);
         }
 
@@ -1140,6 +1148,45 @@ namespace JoJoStands.Projectiles.PlayerStands
                     break;
             }
             return target;
+        }
+
+        private const byte Direction = 0;
+        private const byte NowIdle = 1;
+
+        public void SendStandData(byte dataType)
+        {
+            int value1 = 0;
+            int value2 = 0;
+            int value3 = 0;
+
+            switch (dataType)
+            {
+                case Direction:
+                    value1 = Projectile.direction;
+                    break;
+                case NowIdle:
+                    if (idleFrames)
+                        value1 = 1;
+                    else
+                        value1 = 0;
+                    break;
+            }
+
+            StandPacketHandler.SendStandData(dataType, Projectile.whoAmI, value1, value2, value3);
+        }
+
+        public void ReceiveStandData(byte dataType, int value1, int value2, int value3)
+        {
+            switch (dataType)
+            {
+                case Direction:
+                    Projectile.direction = value1;
+                    break;
+                case NowIdle:
+                    idleFrames = value1 == 1;
+                    break;
+            }
+            Main.NewText("J");
         }
 
         /// <summary>

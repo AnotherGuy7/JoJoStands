@@ -60,12 +60,10 @@ namespace JoJoStands.Networking
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().poseMode = poseModeVal;
-
             }
             else
             {
                 SendPoseMode(-1, fromWho, poseModeVal, whoAmI);
-
             }
         }
 
@@ -84,7 +82,6 @@ namespace JoJoStands.Networking
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().standOut = standOutVal;
-
             }
             else
             {

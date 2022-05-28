@@ -183,10 +183,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
@@ -199,13 +199,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     Projectile.frameCounter = 0;
                     resetFrame = true;
                 }
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Flick");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
                 Projectile.frame = 0;
@@ -216,7 +216,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }
@@ -226,7 +226,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         {
             if (resetFrame && animationName == "Flick")
             {
-                normalFrames = true;
+                idleFrames = true;
                 flickFrames = false;
                 resetFrame = false;
             }

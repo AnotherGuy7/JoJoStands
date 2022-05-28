@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 {
                     shootCount += 15;
                     attackFrames = false;
-                    normalFrames = false;
+                    idleFrames = false;
                     secondaryAbilityFrames = false;
                     Projectile.frame = 0;
                     Projectile.frameCounter = 0;
@@ -232,23 +232,23 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (gunRevealFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 remoteControlFrames = false;
@@ -256,13 +256,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             }
             if (remoteControlFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("RemoteControl");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

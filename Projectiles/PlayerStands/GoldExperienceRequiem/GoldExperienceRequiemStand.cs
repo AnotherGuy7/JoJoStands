@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 {
                     if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && mPlayer.chosenAbility == 0)
                     {
-                        normalFrames = false;
+                        idleFrames = false;
                         attackFrames = false;
                         secondaryAbilityFrames = true;
                     }
@@ -128,7 +128,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
                 if (secondaryAbilityFrames)
                 {
-                    normalFrames = false;
+                    idleFrames = false;
                     attackFrames = false;
                     Projectile.netUpdate = true;
                     if (Projectile.frame == 8 && shootCount <= 0)
@@ -164,23 +164,23 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Pose");

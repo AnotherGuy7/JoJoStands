@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && !parryFrames && Projectile.owner == Main.myPlayer)
                 {
-                    normalFrames = false;
+                    idleFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
                     Projectile.netUpdate = true;
@@ -131,7 +131,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     Projectile.position = player.Center + (MathHelper.ToRadians(angle).ToRotationVector2() * (4f * 16f));
                     if (!secondaryAbilityFrames && !parryFrames)
                     {
-                        normalFrames = true;
+                        idleFrames = true;
                         Projectile.spriteDirection = Projectile.direction = player.direction;
                     }
                     HandleDrawOffsets();
@@ -172,34 +172,34 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (parryFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 if (Projectile.frame >= 5)
                 {
                     parryFrames = false;
-                    normalFrames = true;
+                    idleFrames = true;
                 }
                 PlayAnimation("Parry");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

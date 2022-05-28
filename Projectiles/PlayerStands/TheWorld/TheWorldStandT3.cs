@@ -71,7 +71,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (timestopPoseTimer > 0)
             {
                 timestopPoseTimer--;
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 abilityPose = true;
@@ -115,7 +115,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 }
                 if (Main.mouseRight && player.HasItem(ModContent.ItemType<Knife>()) && Projectile.owner == Main.myPlayer)
                 {
-                    normalFrames = false;
+                    idleFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
                     if (shootCount <= 0 && Projectile.frame == 1)
@@ -211,30 +211,30 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (abilityPose)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("AbilityPose");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Pose");

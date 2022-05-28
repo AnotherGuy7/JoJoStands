@@ -83,7 +83,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (timestopPoseTimer > 0)
             {
                 timestopPoseTimer--;
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 abilityPose = true;
                 Main.mouseLeft = false;
@@ -130,23 +130,23 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (abilityPose)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("AbilityPose");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

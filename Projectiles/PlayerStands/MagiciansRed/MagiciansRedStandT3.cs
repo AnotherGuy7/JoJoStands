@@ -66,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 {
                     if (player.whoAmI == Main.myPlayer)
                     {
-                        normalFrames = true;
+                        idleFrames = true;
                         attackFrames = false;
                     }
                 }
@@ -116,7 +116,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 if (target != null)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
 
                     Projectile.direction = 1;
                     if (target.position.X - player.position.X < 0f)
@@ -148,7 +148,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 }
                 else
                 {
-                    normalFrames = true;
+                    idleFrames = true;
                     attackFrames = false;
                 }
             }
@@ -158,23 +158,23 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Pose");

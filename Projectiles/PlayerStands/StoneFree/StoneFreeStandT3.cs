@@ -162,13 +162,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 if (!extendedBarrage)
                     PlayAnimation("Attack");
                 else
                     PlayAnimation("ExtendedAttack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 PlayAnimation("Idle");
             }
@@ -178,7 +178,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

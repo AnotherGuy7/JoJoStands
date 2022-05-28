@@ -56,7 +56,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && Projectile.owner == Main.myPlayer)
                 {
-                    normalFrames = false;
+                    idleFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
                     Projectile.netUpdate = true;
@@ -116,30 +116,30 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (parryFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Parry");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }
@@ -149,7 +149,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         {
             if (animationName == "Parry")
             {
-                normalFrames = true;
+                idleFrames = true;
                 parryFrames = false;
             }
         }

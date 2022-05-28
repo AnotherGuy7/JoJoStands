@@ -81,7 +81,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 if (target != null)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     PlayPunchSound();
 
                     Vector2 velocity = (target.position + new Vector2(0f, -4f)) - Projectile.position;
@@ -117,9 +117,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 else
                 {
                     attackFrames = false;
-                    normalFrames = true;
+                    idleFrames = true;
                 }
-                if (target == null || (!attackFrames && normalFrames))
+                if (target == null || (!attackFrames && idleFrames))
                 {
                     StayBehind();
                 }
@@ -147,10 +147,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 PlayAnimation("Idle");
             }

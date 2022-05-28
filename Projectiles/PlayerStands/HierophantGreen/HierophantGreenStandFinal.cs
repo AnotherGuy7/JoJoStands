@@ -48,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (Main.mouseLeft && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     if (shootCount <= 0)
                     {
                         SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
@@ -75,7 +75,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 }
                 if (!Main.mouseLeft && player.whoAmI == Main.myPlayer)        //The reason it's not an else is because it would count the owner part too
                 {
-                    normalFrames = true;
+                    idleFrames = true;
                     attackFrames = false;
                 }
                 if (!attackFrames)
@@ -137,7 +137,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
@@ -176,7 +176,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     if (Projectile.owner == Main.myPlayer)
                     {
                         attackFrames = false;
-                        normalFrames = true;
+                        idleFrames = true;
                     }
                 }
                 if (SpecialKeyPressed() && shootCount <= 0 && Projectile.scale >= 0.5f)
@@ -212,7 +212,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (target != null)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
                     {
@@ -248,7 +248,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 }
                 else
                 {
-                    normalFrames = true;
+                    idleFrames = true;
                     attackFrames = false;
                 }
                 LimitDistance(MaxRemoteModeDistance);
@@ -291,17 +291,17 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode || spawningField)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

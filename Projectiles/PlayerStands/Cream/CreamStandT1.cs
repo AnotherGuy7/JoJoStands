@@ -49,7 +49,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     Projectile.netUpdate = true;
 
                     float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
@@ -111,17 +111,17 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
 

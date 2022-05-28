@@ -38,7 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
@@ -68,7 +68,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     if (player.whoAmI == Main.myPlayer)
                     {
-                        normalFrames = true;
+                        idleFrames = true;
                         attackFrames = false;
                     }
                 }
@@ -83,7 +83,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (target != null)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
                     {
@@ -120,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 else
                 {
-                    normalFrames = true;
+                    idleFrames = true;
                     attackFrames = false;
                 }
             }
@@ -130,17 +130,17 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }
