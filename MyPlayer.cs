@@ -261,29 +261,32 @@ namespace JoJoStands
 
         public override void PlayerDisconnect(Player player)        //runs for everyone that hasn't left
         {
-            for (int p = 0; p < Main.maxPlayers; p++)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                Player otherPlayer = Main.player[p];
-                MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>();
-                if (otherPlayer.active)
+                for (int p = 0; p < Main.maxPlayers; p++)
                 {
-                    if (otherModPlayer.timestopActive && !otherPlayer.HasBuff(ModContent.BuffType<TheWorldBuff>()))       //if everyone has the effect and no one has the owner buff, turn it off
+                    Player otherPlayer = Main.player[p];
+                    MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>();
+                    if (otherPlayer.active)
                     {
-                        Main.NewText("The user has left, and time has begun to move once more...");
-                        otherModPlayer.timestopActive = false;
-                    }
-                    if (otherModPlayer.timeskipActive && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))
-                    {
-                        Main.NewText("The user has left, and time has begun to move once more...");
-                        otherModPlayer.timeskipActive = false;
-                    }
-                    if (otherModPlayer.backToZeroActive && !otherPlayer.HasBuff(ModContent.BuffType<BacktoZero>()))
-                    {
-                        otherModPlayer.backToZeroActive = false;
-                    }
-                    if (otherModPlayer.deathLoopActive && !otherPlayer.HasBuff(ModContent.BuffType<DeathLoop>()))
-                    {
-                        otherModPlayer.deathLoopActive = false;
+                        if (otherModPlayer.timestopActive && !otherPlayer.HasBuff(ModContent.BuffType<TheWorldBuff>()))       //if everyone has the effect and no one has the owner buff, turn it off
+                        {
+                            Main.NewText("The user has left, and time has begun to move once more...");
+                            otherModPlayer.timestopActive = false;
+                        }
+                        if (otherModPlayer.timeskipActive && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))
+                        {
+                            Main.NewText("The user has left, and time has begun to move once more...");
+                            otherModPlayer.timeskipActive = false;
+                        }
+                        if (otherModPlayer.backToZeroActive && !otherPlayer.HasBuff(ModContent.BuffType<BacktoZero>()))
+                        {
+                            otherModPlayer.backToZeroActive = false;
+                        }
+                        if (otherModPlayer.deathLoopActive && !otherPlayer.HasBuff(ModContent.BuffType<DeathLoop>()))
+                        {
+                            otherModPlayer.deathLoopActive = false;
+                        }
                     }
                 }
             }

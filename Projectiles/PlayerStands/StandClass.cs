@@ -80,6 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         private SoundEffectInstance punchingSoundInstance = null;
         private Vector2 rangeIndicatorSize;
         private Vector2 secondaryRangeIndicatorSize;
+        private int netUpdateTimer = 0;
         //private int rangeIndicatorSize = 0;
         //private int secondaryRangeIndicatorSize = 0;
 
@@ -190,7 +191,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             HandleDrawOffsets();
             normalFrames = false;
             attackFrames = true;
-            Projectile.netUpdate = true;
             float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
             Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
             velocityAddition = Main.MouseWorld - Projectile.position;
@@ -225,9 +225,9 @@ namespace JoJoStands.Projectiles.PlayerStands
                 int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner, fistWhoAmI, tierNumber);
                 Main.projectile[proj].timeLeft = (int)(Main.projectile[proj].timeLeft * punchLifeTimeMultiplier);
                 Main.projectile[proj].netUpdate = true;
-                Projectile.netUpdate = true;
             }
             LimitDistance();
+            Projectile.netUpdate = true;
         }
 
         /// <summary>
@@ -629,7 +629,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (punchingSoundInstance != null)
                 {
                     Player player = Main.player[Projectile.owner];
-                    string path = "JoJoStands/Sounds/BattleCries/" + punchSoundName;
+                    string path = "JoJoStandsSounds/Sounds/BattleCries/" + punchSoundName;
                     SoundState state = punchingSoundInstance.State;
                     //SendSoundInstance(int sender, string soundPath, SoundState state, Vector2 pos (this one has to be sent as individual float values), float soundTravelDistance = 10f), which is the method called here
                     JoJoStands.JoJoStandsSounds.Call("SendSoundInstance", player.whoAmI, path, state, Projectile.Center.X, Projectile.Center.Y, 40);
@@ -717,6 +717,19 @@ namespace JoJoStands.Projectiles.PlayerStands
                     SoundEngine.PlaySound(spawnSound, Projectile.position);
                     playedSpawnSound = true;
                 }
+            }
+        }
+
+        public void UpdateStandSync()
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                return;
+
+            netUpdateTimer++;
+            if (netUpdateTimer >= 90)
+            {
+                Projectile.netUpdate = true;
+                netUpdateTimer = 0;
             }
         }
 
