@@ -38,9 +38,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Projectile.frameCounter++;
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
-            {
                 Projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
@@ -51,17 +50,17 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 if (Projectile.ai[0] == 2f)
                 {
-                    projectileDamage = 45;
+                    projectileDamage = 76;
                     shootTime = 200;
                 }
                 else if (Projectile.ai[0] == 3f)
                 {
-                    projectileDamage = 67;
+                    projectileDamage = 125;
                     shootTime = 160;
                 }
                 else if (Projectile.ai[0] == 4f)
                 {
-                    projectileDamage = 86;
+                    projectileDamage = 187;
                     shootTime = 120;
                 }
                 speedRandom = Main.rand.NextFloat(-0.03f, 0.03f);

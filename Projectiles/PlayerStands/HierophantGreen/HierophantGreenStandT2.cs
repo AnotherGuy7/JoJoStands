@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -19,7 +20,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override string spawnSoundName => "Hierophant Green";
 
         private bool pointShot = false;
-        private bool remotelyControlled = false;
+        private bool remoteControlled = false;
 
         private const float MaxRemoteModeDistance = 40f * 16f;
 
@@ -56,7 +57,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             Projectile.direction = (Projectile.spriteDirection = player.direction);*/
 
 
-            if (!mPlayer.standAutoMode && !remotelyControlled)
+            if (!mPlayer.standAutoMode && !remoteControlled)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -112,10 +113,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
                 {
                     shootCount += 30;
-                    remotelyControlled = true;
+                    remoteControlled = true;
                 }
             }
-            if (!mPlayer.standAutoMode && remotelyControlled)
+            if (!mPlayer.standAutoMode && remoteControlled)
             {
                 mPlayer.standRemoteMode = true;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
@@ -211,7 +212,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
                 {
                     shootCount += 30;
-                    remotelyControlled = false;
+                    remoteControlled = false;
                 }
             }
             if (mPlayer.standAutoMode)
@@ -265,6 +266,17 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 LimitDistance(MaxRemoteModeDistance);
             }
         }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(remoteControlled);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            remoteControlled = reader.ReadBoolean();
+        }
+
 
         public override void SelectAnimation()
         {

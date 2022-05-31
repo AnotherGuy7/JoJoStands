@@ -219,18 +219,16 @@ namespace JoJoStands
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/CB").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
                 int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
-                SpriteEffects effects = SpriteEffects.None;
+                SpriteEffects effects = SpriteEffects.FlipHorizontally;
                 if (drawPlayer.direction == 1)
                     effects = SpriteEffects.None;
-                else
-                    effects = SpriteEffects.FlipHorizontally;
+
                 if (mPlayer.StandDyeSlot.SlotItem.dye != 0)
                 {
                     ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(mPlayer.StandDyeSlot.SlotItem.type);
                     shader.Apply(null);
                 }
                 Color drawColor = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
-
                 DrawData drawData = new DrawData(texture, new Vector2(drawX, drawY - 9f), drawPlayer.bodyFrame, drawColor, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }

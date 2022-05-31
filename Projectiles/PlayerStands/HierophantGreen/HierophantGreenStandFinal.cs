@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -21,7 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         private bool spawningField = false;
         private int numberSpawned = 0;
         private bool pointShot = false;
-        private bool remotelyControlled = false;
+        private bool remoteControlled = false;
         private bool linkShotForSpecial = false;
         private Vector2 formPosition = Vector2.Zero;
 
@@ -43,7 +44,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!mPlayer.standAutoMode && !remotelyControlled)
+            if (!mPlayer.standAutoMode && !remoteControlled)
             {
                 if (Main.mouseLeft && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
@@ -105,10 +106,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
                 {
                     shootCount += 30;
-                    remotelyControlled = true;
+                    remoteControlled = true;
                 }
             }
-            if (!mPlayer.standAutoMode && remotelyControlled)
+            if (!mPlayer.standAutoMode && remoteControlled)
             {
                 mPlayer.standRemoteMode = true;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
@@ -122,9 +123,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X < Projectile.Center.X)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.netUpdate = true;
                     Projectile.spriteDirection = Projectile.direction;
                     LimitDistance(MaxRemoteModeDistance);
@@ -141,19 +140,15 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
-
                         Projectile.direction = 1;
                         if (Main.MouseWorld.X < Projectile.Center.X)
-                        {
                             Projectile.direction = -1;
-                        }
                         Projectile.spriteDirection = Projectile.direction;
 
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
 
@@ -203,7 +198,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
                 {
                     shootCount += 30;
-                    remotelyControlled = false;
+                    remoteControlled = false;
                 }
             }
             if (mPlayer.standAutoMode)
@@ -287,6 +282,16 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 }
             }
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(remoteControlled);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            remoteControlled = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

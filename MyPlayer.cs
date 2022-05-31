@@ -690,7 +690,9 @@ namespace JoJoStands
                             sexPistolsOffsets[amountOfSexPistolsPlaced] = Main.MouseWorld - Player.Center;
                             amountOfSexPistolsPlaced++;
                             if (amountOfSexPistolsPlaced >= 6)
-                                changingSexPistolsPositions = false;
+                                amountOfSexPistolsPlaced = 0;
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                                ModNetHandler.playerSync.SendSexPistolPosition(256, Player.whoAmI, amountOfSexPistolsPlaced, sexPistolsOffsets[amountOfSexPistolsPlaced]);
                         }
                     }
 
@@ -903,7 +905,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(38 * standDamageBoosts), 4f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item;
+                            SoundStyle itemSound = SoundID.Item2;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
@@ -917,7 +919,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(81 * standDamageBoosts), 6f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item;
+                            SoundStyle itemSound = SoundID.Item2;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
@@ -928,7 +930,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(78 * standDamageBoosts), 0f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item;
+                            SoundStyle itemSound = SoundID.Item2;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
@@ -942,7 +944,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(157 * standDamageBoosts), 7f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item;
+                            SoundStyle itemSound = SoundID.Item2;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
@@ -964,7 +966,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(202 * standDamageBoosts), 8f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item;
+                            SoundStyle itemSound = SoundID.Item2;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }

@@ -99,7 +99,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         }
                     }
                 }
-                if (!Main.mouseRight)
+                if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
                     secondaryAbilityFrames = false;
                 }

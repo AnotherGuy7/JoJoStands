@@ -3,6 +3,7 @@ using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -71,8 +72,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !secondaryAbilityFrames && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 {
                     HandleDrawOffsets();
-                    attackFrames = true;
                     idleFrames = false;
+                    attackFrames = true;
                     Projectile.netUpdate = true;
 
                     float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
@@ -80,9 +81,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X < Projectile.position.X)
-                    {
                         Projectile.direction = -1;
-                    }
+
                     Projectile.spriteDirection = Projectile.direction;
 
                     Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
@@ -144,7 +144,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             {
                                 for (int i = 0; i < 20; i++)
                                 {
-                                    Dust.NewDust(player.position, player.width, player.height, 114);
+                                    Dust.NewDust(player.position, player.width, player.height, DustID.Clentaminator_Red);
                                 }
 
                                 otherProj.penetrate -= 1;
@@ -164,7 +164,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
                                 for (int i = 0; i < 20; i++)
                                 {
-                                    Dust.NewDust(player.position, player.width, player.height, 114);
+                                    Dust.NewDust(player.position, player.width, player.height, DustID.Clentaminator_Red);
                                 }
                             }
                         }

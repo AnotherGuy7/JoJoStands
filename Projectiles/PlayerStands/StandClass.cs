@@ -731,6 +731,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 Projectile.netUpdate = true;
                 netUpdateTimer = 0;
+                SyncSounds();
             }
         }
 

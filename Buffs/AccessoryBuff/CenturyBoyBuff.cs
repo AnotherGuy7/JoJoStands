@@ -11,7 +11,6 @@ namespace JoJoStands.Buffs.AccessoryBuff
 {
     public class CenturyBoyBuff : ModBuff
     {
-        private bool resetLimitTimer = false;
         private int limitTimer = 36000;       //like 10 minutes
         private int breathSave = 0;
 
@@ -38,11 +37,6 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.maxRunSpeed = 0f;
             player.noFallDmg = true;
 
-            if (!resetLimitTimer && limitTimer > 0)
-            {
-                limitTimer = 0;
-                resetLimitTimer = true;
-            }
             if (MyPlayer.SecretReferences)
             {
                 limitTimer--;

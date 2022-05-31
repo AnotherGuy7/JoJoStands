@@ -222,9 +222,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 armRotation = (Main.MouseWorld - Projectile.Center).ToRotation();
                 armPosition = Projectile.Center + new Vector2(-18f * Projectile.spriteDirection, -4f);
                 if (Projectile.spriteDirection == -1)
-                {
                     armPosition += new Vector2(6f, -8f);
-                }
+
                 HandleDrawOffsets();
                 if (shootCount > 0)
                     armFrame = 1;
@@ -260,9 +259,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X < Projectile.Center.X)
-                    {
                         Projectile.direction = -1;
-                    }
+
                     Projectile.spriteDirection = Projectile.direction;
 
                     if (Vector2.Distance(Projectile.Center, player.Center) >= RemoteControlMaxDistance)
@@ -284,9 +282,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     canShootAgain = false;
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X < Projectile.Center.X)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.spriteDirection = Projectile.direction;
 
                     Vector2 shootVel = Main.MouseWorld - armPosition;
@@ -386,11 +382,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(stealFrames);
+            writer.Write(remoteControlled);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             stealFrames = reader.ReadBoolean();
+            remoteControlled = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

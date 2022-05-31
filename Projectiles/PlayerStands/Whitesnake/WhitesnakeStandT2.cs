@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -219,6 +220,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 Main.EntitySpriteDraw(armTexture, armPosition - Main.screenPosition, armSourceRect, armColor, armRotation, armOrigin, 1f, armEffect, 0);
             }
             return true;
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(remoteControlled);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            remoteControlled = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

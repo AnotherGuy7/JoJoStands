@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -13,6 +14,7 @@ namespace JoJoStands.Networking
         public const byte CBLayer = 3;
         public const byte Yoshihiro = 4;
         public const byte DyeItem = 5;
+        public const byte SexPistolPosition = 6;
         //public const byte Sounds = 6;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
@@ -35,6 +37,9 @@ namespace JoJoStands.Networking
                     break;
                 case CBLayer:
                     ReceiveCBLayer(reader, fromWho);
+                    break;
+                case SexPistolPosition:
+                    ReceiveSexPistolPosition(reader, fromWho);
                     break;
                 /*case Yoshihiro:
 					ReceiveYoshihiroSpawn(reader, fromWho);
@@ -60,12 +65,10 @@ namespace JoJoStands.Networking
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().poseMode = poseModeVal;
-
             }
             else
             {
                 SendPoseMode(-1, fromWho, poseModeVal, whoAmI);
-
             }
         }
 
@@ -84,12 +87,10 @@ namespace JoJoStands.Networking
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().standOut = standOutVal;
-
             }
             else
             {
                 SendStandOut(-1, fromWho, standOutVal, whoAmI);
-
             }
         }
 
@@ -108,7 +109,6 @@ namespace JoJoStands.Networking
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().standAutoMode = autoModeVal;
-
             }
             else
             {
@@ -132,7 +132,6 @@ namespace JoJoStands.Networking
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().showingCBLayer = visibiltyValue;
-
             }
             else
             {
@@ -175,9 +174,7 @@ namespace JoJoStands.Networking
             Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.type = dyeItemType;
             Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.SetDefaults(dyeItemType);
             if (Main.netMode == NetmodeID.Server)
-            {
                 SendDyeItem(-1, fromWho, dyeItemType, oneWhoEquipped);
-            }
         }
 
         /*public void SendSoundInstance(int toWho, int fromWho, string soundName, Vector2 pos, int travelDist = 10, SoundState state = SoundState.Paused)
@@ -202,5 +199,25 @@ namespace JoJoStands.Networking
 				SendSoundInstance(-1, fromWho, sound, pos);
 			}
 		}*/
+
+        public void SendSexPistolPosition(int toWho, int fromWho, int index, Vector2 pos)
+        {
+            ModPacket packet = GetPacket(DyeItem, fromWho);
+            packet.Write(index);
+            packet.Write((int)pos.X);
+            packet.Write((int)pos.Y);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ReceiveSexPistolPosition(BinaryReader reader, int fromWho)
+        {
+            int index = reader.ReadInt32();
+            int posX = reader.ReadInt32();
+            int posY = reader.ReadInt32();
+
+            Main.player[fromWho].GetModPlayer<MyPlayer>().sexPistolsOffsets[index] = new Vector2(posX, posY);
+            if (Main.netMode == NetmodeID.Server)
+                SendSexPistolPosition(-1, fromWho, index, new Vector2(posX, posY));
+        }
     }
 }

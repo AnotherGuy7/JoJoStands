@@ -19,7 +19,7 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sex Pistols (Final)");
+            DisplayName.SetDefault("Sex Pistols (Final Tier)");
             Tooltip.SetDefault("Use a gun and have Sex Pistols kick the bullet!\nIncreases bullet damages by 20% and adds two penetration points.\nSpecial: Configure all Sex Pistols's placement!\nSecond Special: Bullet Kick Frenzy\nUsed in Stand Slot");
         }
 

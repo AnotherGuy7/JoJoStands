@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -21,7 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         private bool spawningField = false;
         private int numberSpawned = 0;
         private bool pointShot = false;
-        private bool remotelyControlled = false;
+        private bool remoteControlled = false;
         private bool linkShotForSpecial = false;
         private Vector2 formPosition = Vector2.Zero;
 
@@ -44,7 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 35, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
             Projectile.scale = ((50 - player.ownedProjectileCounts[ModContent.ProjectileType<EmeraldStringPointConnector>()]) * 2f) / 100f;
 
-            if (!mPlayer.standAutoMode && !remotelyControlled)
+            if (!mPlayer.standAutoMode && !remoteControlled)
             {
                 if (Main.mouseLeft && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
@@ -106,10 +107,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
                 {
                     shootCount += 30;
-                    remotelyControlled = true;
+                    remoteControlled = true;
                 }
             }
-            if (!mPlayer.standAutoMode && remotelyControlled)
+            if (!mPlayer.standAutoMode && remoteControlled)
             {
                 mPlayer.standRemoteMode = true;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
@@ -204,7 +205,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
                 {
                     shootCount += 30;
-                    remotelyControlled = false;
+                    remoteControlled = false;
                 }
             }
             if (mPlayer.standAutoMode)
@@ -290,6 +291,17 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 }
             }
         }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(remoteControlled);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            remoteControlled = reader.ReadBoolean();
+        }
+
 
         public override void SelectAnimation()
         {

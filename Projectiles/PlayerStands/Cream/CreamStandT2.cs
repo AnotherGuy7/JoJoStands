@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -36,11 +37,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 shootCount--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.creamVoidMode)
-                Projectile.hide = true;
+            Projectile.hide = mPlayer.creamVoidMode;
             if (mPlayer.creamExposedMode)
-                Projectile.hide = false;
-            if (!mPlayer.creamVoidMode)
                 Projectile.hide = false;
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
@@ -199,6 +197,24 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 BasicPunchAI();
             }
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            writer.Write(mPlayer.creamExposedMode);
+            writer.Write(mPlayer.creamVoidMode);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            mPlayer.creamExposedMode = reader.ReadBoolean();
+            mPlayer.creamVoidMode = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

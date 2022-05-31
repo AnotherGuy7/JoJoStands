@@ -388,11 +388,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(stealFrames);
+            writer.Write(remoteControlled);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             stealFrames = reader.ReadBoolean();
+            remoteControlled = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

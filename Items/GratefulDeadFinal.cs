@@ -20,7 +20,7 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Grateful Dead (Final)");
+            DisplayName.SetDefault("Grateful Dead (Final Tier)");
             Tooltip.SetDefault("Punch enemies to make them age and right-click to grab them!\nSpecial: Spread Gas\nMore effective on hot biomes.\nUsed in Stand Slot");
         }
 
