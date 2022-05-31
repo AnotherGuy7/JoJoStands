@@ -22,7 +22,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override string poseSoundName => "NobodyCanFoolMeTwice";
         public override string spawnSoundName => "The Hand";
 
-        private int updateTimer = 0;
         private bool scrapeFrames = false;
         private bool scrapeBarrageFrames = false;
         private int chargeTimer = 0;
@@ -33,13 +32,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         {
             if (scrapeFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
             }
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -47,12 +46,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
-
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
 
             if (!mPlayer.standAutoMode)
             {
@@ -102,7 +95,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     {
                         HandleDrawOffsets();
                         attackFrames = false;
-                        normalFrames = false;
+                        idleFrames = false;
                         scrapeBarrageFrames = true;
                         Projectile.netUpdate = true;
 
@@ -393,7 +386,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     distanceToTeleport = Main.MouseWorld - player.position;
                 distanceToTeleport.Normalize();
                 distanceToTeleport *= 98f * (chargeTimer / 30f);
-                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * ((MyPlayer.RangeIndicatorAlpha / 100f) * 255f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * MyPlayer.RangeIndicatorAlpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             if (scrapeFrames)
             {
@@ -430,17 +423,17 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Charge");
             }
@@ -452,19 +445,19 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     Projectile.frameCounter = 0;
                     resetFrame = true;
                 }
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Scrape");
             }
             if (scrapeBarrageFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("ScrapeBarrage");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 scrapeFrames = false;
@@ -476,7 +469,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         {
             if (resetFrame && animationName == "Scrape")
             {
-                normalFrames = true;
+                idleFrames = true;
                 scrapeFrames = false;
                 resetFrame = false;
             }

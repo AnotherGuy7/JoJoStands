@@ -23,7 +23,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override string spawnSoundName => "Sticky Fingers";
         public override bool useProjectileAlpha => true;
 
-        private int updateTimer = 0;
         private int mouseRightHoldTimer = 0;
         private bool mouseRightForceRelease = false;
         private bool zipperAmbush = false;
@@ -35,7 +34,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -43,12 +42,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
-
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
 
             if (!mPlayer.standAutoMode)
             {
@@ -175,23 +168,23 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

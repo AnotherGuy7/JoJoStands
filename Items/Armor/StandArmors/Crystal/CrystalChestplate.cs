@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
         {
             DisplayName.SetDefault("Crystal Chestplate");
             Tooltip.SetDefault("A shiny chestplate that uses crystals to sharpen your soul...\n+10% Stand Crit Chance");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 4, 0, 0);
+            Item.value = Item.buyPrice(gold: 2, silver: 75);
             Item.rare = ItemRarityID.LightPurple;
             Item.defense = 10;
         }

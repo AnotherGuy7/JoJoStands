@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A chestplate that follows your skeletal outlines. Made from the bones of your enemies and an ore that's traveled the universe.\n+12% Vampiric Damage");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

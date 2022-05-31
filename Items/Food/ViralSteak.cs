@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Food
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("An already warm, juicy, and mediun-rare steak.\nBoosts Stand Range and Stand Damage for 3m.");
+            SacrificeTotal = 5;
         }
 
         public override void SetDefaults()
@@ -20,6 +21,7 @@ namespace JoJoStands.Items.Food
             Item.height = 22;
             Item.useTime = 20;
             Item.useAnimation = 20;
+            Item.maxStack = 99;
             Item.value = Item.buyPrice(silver: 15, copper: 25);
             Item.UseSound = SoundID.Item2;
             Item.rare = ItemRarityID.Green;

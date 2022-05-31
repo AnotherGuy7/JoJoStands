@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
         {
             DisplayName.SetDefault("Chlorosite Greaves");
             Tooltip.SetDefault("A couple of greaves that is made with Chlorophyte infused with an otherworldly virus.\n8% movement speed\n9% Stand Crit Chance");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.value = Item.buyPrice(gold: 3, silver: 50);
             Item.rare = ItemRarityID.LightPurple;
             Item.defense = 12;
         }

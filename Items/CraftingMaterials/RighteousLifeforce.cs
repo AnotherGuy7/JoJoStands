@@ -15,15 +15,16 @@ namespace JoJoStands.Items.CraftingMaterials
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(8, 4));
             DisplayName.SetDefault("Righteous Lifeforce");
             Tooltip.SetDefault("The power of someone who sets things right");
+            SacrificeTotal = 3;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 20;
-            Item.height = 20;
+            Item.width = 32;
+            Item.height = 42;
             Item.maxStack = 99;
             Item.rare = ItemRarityID.Yellow;
-            Item.value = Item.buyPrice(0, 0, 75, 0);
+            Item.value = Item.buyPrice(gold: 2);
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
@@ -44,8 +45,8 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WillToFight>(), 3)
-                .AddIngredient(ModContent.ItemType<WillToProtect>(), 3)
+                .AddIngredient(ItemType<WillToFight>(), 3)
+                .AddIngredient(ItemType<WillToProtect>(), 3)
                 .AddIngredient(ItemID.SoulofSight, 3)
                 .AddIngredient(ItemID.Ectoplasm, 4)
                 .Register();

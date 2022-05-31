@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Visceral
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A helmet made out of your vicitms' extremeties.\n+8% Vampiric Damage");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

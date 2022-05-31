@@ -14,6 +14,7 @@ namespace JoJoStands.Items.CraftingMaterials
             DisplayName.SetDefault("Will to Fight");
             Tooltip.SetDefault("A physical outlook upon the world, aggressive and fiery.");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(7, 8));
+            SacrificeTotal = 25;
         }
 
         public override void SetDefaults()

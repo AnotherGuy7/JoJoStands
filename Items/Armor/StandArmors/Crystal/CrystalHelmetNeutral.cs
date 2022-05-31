@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
         {
             DisplayName.SetDefault("Crystal Helmet (Neutral)");
             Tooltip.SetDefault("A helmet made to empower the force of the wills\nStand stat buffs change depending on stand type.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.value = Item.buyPrice(gold: 2);
             Item.rare = ItemRarityID.LightPurple;
             Item.defense = 6;
         }

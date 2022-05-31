@@ -2,7 +2,6 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Accessories
 {
@@ -13,6 +12,7 @@ namespace JoJoStands.Items.Accessories
         {
             DisplayName.SetDefault("Dio's Scarf");
             Tooltip.SetDefault("A scarf that's been through many fights, betrayals, and murders...\nGrants 15% Damage Resistance to undead enemies.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

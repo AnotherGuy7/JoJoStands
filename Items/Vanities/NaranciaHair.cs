@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Vanities
             DisplayName.SetDefault("Narancia's Wig");
             Tooltip.SetDefault("A wig resembling the hairstyle of Narancia Ghirga. Smells like gunpowder.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
+            Item.width = 20;
             Item.height = 18;
-            Item.rare = 6;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

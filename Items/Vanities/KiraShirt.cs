@@ -11,13 +11,14 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Kira's Shirt");
             Tooltip.SetDefault("A well-tended jacket, perfect for work.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
+            Item.width = 26;
             Item.height = 18;
-            Item.rare = 6;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

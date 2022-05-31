@@ -13,6 +13,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A bow that injects Viral Meteroite into its ammo.\nAll arrows shot become Viral Arrows that chase down all enemies.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

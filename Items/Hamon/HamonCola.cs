@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Hamon
         {
             DisplayName.SetDefault("Hamon-Infused Cola");
             Tooltip.SetDefault("Drink this hamon-infused cola to feel stronger or shoot it all at your enemies!");
+            SacrificeTotal = 15;
         }
 
         public override void SetDefaults()
@@ -19,13 +20,9 @@ namespace JoJoStands.Items.Hamon
             Item.height = 10;
             Item.useTime = 24;
             Item.useAnimation = 24;
-            Item.useStyle = 3;
-            Item.value = Item.buyPrice(0, 0, 8, 50);
-            Item.rare = 3;
-            Item.damage = 34;
-            Item.useTime = 24;
-            Item.useAnimation = 24;
-            Item.useStyle = 3;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.value = Item.buyPrice(silver: 8, copper: 50);
+            Item.rare = ItemRarityID.Orange;
             Item.knockBack = 3f;
             Item.UseSound = null;
             Item.shoot = ModContent.ProjectileType<HamonSodaBottleCap>();
@@ -45,7 +42,7 @@ namespace JoJoStands.Items.Hamon
                 Item.damage = 34;
                 Item.useTime = 24;
                 Item.useAnimation = 24;
-                Item.useStyle = 3;
+                Item.useStyle = ItemUseStyleID.Thrust;
                 Item.knockBack = 3f;
                 Item.UseSound = null;
                 Item.shoot = ModContent.ProjectileType<HamonSodaBottleCap>();
@@ -54,12 +51,12 @@ namespace JoJoStands.Items.Hamon
             }
             if (player.altFunctionUse != 2 && !player.HasBuff(BuffID.PotionSickness))
             {
+                Item.potion = true;
+                Item.UseSound = SoundID.Item3;
                 player.statLife += 75;
                 player.HealEffect(75);
                 player.AddBuff(BuffID.Swiftness, 1500);
                 player.AddBuff(BuffID.Regeneration, 1500);
-                Item.UseSound = SoundID.Item3;
-                Item.potion = true;
                 player.GetModPlayer<HamonPlayer>().amountOfHamon += 10;
             }
             return true;

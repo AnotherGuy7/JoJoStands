@@ -15,9 +15,9 @@ namespace JoJoStands.Items.Vanities
 
         public override void SetDefaults()
         {
-            Item.width = 18;
+            Item.width = 22;
             Item.height = 18;
-            Item.rare = 6;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

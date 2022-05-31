@@ -1,3 +1,4 @@
+using JoJoStands.Items.Hamon;
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -13,7 +14,9 @@ namespace JoJoStands.Items
         {
             DisplayName.SetDefault("Steel Balls");
             Tooltip.SetDefault("These steel balls have been passed down from generation to generation...\nRequires 5 hamon to throw effectively.");
+            SacrificeTotal = 1;
         }
+
         public override void SetDefaults()
         {
             Item.damage = 74;
@@ -21,35 +24,35 @@ namespace JoJoStands.Items
             Item.height = 32;
             Item.useTime = 45;
             Item.useAnimation = 45;
-            Item.useStyle = 3;
-            Item.noUseGraphic = true;
             Item.maxStack = 1;
             Item.knockBack = 2f;
-            Item.value = 7;
-            Item.rare = 6;
-            Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<SteelBallProjectile>();
             Item.shootSpeed = 16f;
+            Item.noUseGraphic = true;
             Item.useTurn = true;
+            Item.autoReuse = true;
+            Item.rare = ItemRarityID.LightPurple;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.shoot = ModContent.ProjectileType<SteelBallProjectile>();
+            Item.value = Item.buyPrice(gold: 2, silver: 45);
         }
 
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
-            Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
+            HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
             if (hamonPlayer.amountOfHamon >= 5)
                 damage.Flat += 33f;
         }
 
         public override void ModifyWeaponKnockback(Player player, ref StatModifier knockback)
         {
-            Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
+            HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
             if (hamonPlayer.amountOfHamon >= 5)
                 knockback += 1f;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
+            HamonPlayer hamonPlayer = player.GetModPlayer<Hamon.HamonPlayer>();
             if (hamonPlayer.amountOfHamon >= 5)
             {
                 velocity *= 2f;

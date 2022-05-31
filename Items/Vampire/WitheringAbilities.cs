@@ -15,6 +15,7 @@ namespace JoJoStands.Items.Vampire
         {
             DisplayName.SetDefault("Withering Abilities");
             Tooltip.SetDefault("Hold left-click to charge up a punch! Right-click to extend your arm and grab enemies to crush them in place!\nSpecial: Throw up acidic bile! Enemies hit with the bile will be marked for 45s.");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()

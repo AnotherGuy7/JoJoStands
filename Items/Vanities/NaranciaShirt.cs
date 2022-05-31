@@ -11,13 +11,14 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Narancia's Vest");
             Tooltip.SetDefault("A dark, slim-fitting vest with a collar and straps. Perfect for flexing your arms like a runway.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 22;
+            Item.height = 24;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

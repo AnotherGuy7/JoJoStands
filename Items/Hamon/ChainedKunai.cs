@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Hamon
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Swing around and throw this hamon-infused Kunai!\nSpecial: Hamon Breathing");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()

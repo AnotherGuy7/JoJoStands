@@ -15,6 +15,7 @@ namespace JoJoStands.Items.Vampire
         {
             DisplayName.SetDefault("Entrail Abilities");
             Tooltip.SetDefault("Left-click to shoot out a sharp vein at your enemies! Right-click to send out a vein to entangle your enemies!\nSpecial: In exchange for some health, shoot an extremely pressurized blood stream in the direction of your mouse. Inflicts Lacerated! on enemies.");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()

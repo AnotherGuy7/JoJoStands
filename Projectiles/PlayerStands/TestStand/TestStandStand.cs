@@ -28,6 +28,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
         {
             SelectAnimation();
             UpdateStandInfo();
+            UpdateStandSync();
             //rippleEffectTimer--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -73,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                 if (timestopPoseTimer > 0)
                 {
                     timestopPoseTimer--;
-                    normalFrames = false;
+                    idleFrames = false;
                     attackFrames = false;
                     Projectile.frame = 6;
                     Main.mouseLeft = false;
@@ -95,10 +96,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");

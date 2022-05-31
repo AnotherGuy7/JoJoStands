@@ -25,14 +25,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
         private bool abilityPose = false;
         private int timestopPoseTimer = 0;
-        private int updateTimer = 0;
         private int timestopStartDelay = 0;
 
         public override void AI()
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -41,11 +40,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopStartDelay <= 0)
             {
                 if (JoJoStands.JoJoStandsSounds == null)
@@ -71,7 +65,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (timestopPoseTimer > 0)
             {
                 timestopPoseTimer--;
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 abilityPose = true;
@@ -115,7 +109,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 }
                 if (Main.mouseRight && player.HasItem(ModContent.ItemType<Knife>()) && Projectile.owner == Main.myPlayer)
                 {
-                    normalFrames = false;
+                    idleFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
                     if (shootCount <= 0 && Projectile.frame == 1)
@@ -211,30 +205,30 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (abilityPose)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("AbilityPose");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Pose");

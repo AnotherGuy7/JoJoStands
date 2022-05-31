@@ -10,14 +10,15 @@ namespace JoJoStands.Items.Vanities
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Jonathan Top");
-            Tooltip.SetDefault("Jonathan Top");
+            Tooltip.SetDefault("A blue shirt with shoulderpads to protect its wearer from any harm that comes their way.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 30;
+            Item.height = 16;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

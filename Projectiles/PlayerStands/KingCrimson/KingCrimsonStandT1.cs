@@ -24,13 +24,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override string spawnSoundName => "King Crimson";
         public override int standType => 1;
 
-        private int updateTimer = 0;
-
         public override void AI()
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (shootCount > 0)
@@ -38,19 +36,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
-
             if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     Projectile.netUpdate = true;
 
                     float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
@@ -112,17 +104,17 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

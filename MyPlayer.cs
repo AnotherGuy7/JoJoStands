@@ -32,7 +32,7 @@ namespace JoJoStands
 {
     public class MyPlayer : ModPlayer
     {
-        public static int RangeIndicatorAlpha;
+        public static float RangeIndicatorAlpha;
         public static bool Sounds = true;
         public static bool TimestopEffects = false;
         public static bool RangeIndicators = false;

@@ -11,13 +11,14 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Brotherly Suit");
             Tooltip.SetDefault("A navy suit with white stripes.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 30;
+            Item.height = 20;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

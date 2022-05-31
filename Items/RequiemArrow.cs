@@ -11,6 +11,7 @@ namespace JoJoStands.Items
         {
             DisplayName.SetDefault("Requiem Arrow");
             Tooltip.SetDefault("This mysterious arrow is used to maximize some stands' potential.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

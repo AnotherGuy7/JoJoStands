@@ -1,5 +1,6 @@
 using JoJoStands.Projectiles.Minions;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -19,12 +20,12 @@ namespace JoJoStands.Items
             Item.height = 32;
             Item.useTime = 12;
             Item.useAnimation = 12;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.maxStack = 1;
             Item.knockBack = 2f;
             Item.value = 0;
             Item.noUseGraphic = true;
-            Item.rare = 6;
+            Item.rare = ItemRarityID.LightPurple;
             Item.shoot = ModContent.ProjectileType<MatureStrayCatMinion>();
         }
 
@@ -36,7 +37,7 @@ namespace JoJoStands.Items
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
-                Item.shoot = 0;
+                Item.shoot = ProjectileID.None;
             else
                 Item.shoot = ModContent.ProjectileType<MatureStrayCatMinion>();
             return true;

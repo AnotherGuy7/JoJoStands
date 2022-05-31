@@ -11,21 +11,19 @@ namespace JoJoStands.Items.Hamon
         {
             DisplayName.SetDefault("Hamon-Infused Tequila");
             Tooltip.SetDefault("Drink this hamon-infused tequila to feel stronger, healthier, and tougher... or shoot it all at your enemies!");
+            SacrificeTotal = 5;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 10;
-            Item.height = 10;
-            Item.useTime = 24;
-            Item.useAnimation = 24;
-            Item.useStyle = 3;
-            Item.value = Item.buyPrice(0, 6, 48, 62);
-            Item.rare = 3;
             Item.damage = 57;
+            Item.width = 34;
+            Item.height = 34;
             Item.useTime = 24;
             Item.useAnimation = 24;
-            Item.useStyle = 3;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.value = Item.buyPrice(gold: 7, silver: 50);
+            Item.rare = ItemRarityID.Orange;
             Item.knockBack = 4f;
             Item.UseSound = null;
             Item.shoot = ModContent.ProjectileType<HamonTequilaBottleCap>();
@@ -45,7 +43,7 @@ namespace JoJoStands.Items.Hamon
                 Item.damage = 57;
                 Item.useTime = 24;
                 Item.useAnimation = 24;
-                Item.useStyle = 3;
+                Item.useStyle = ItemUseStyleID.Thrust;
                 Item.knockBack = 4f;
                 Item.UseSound = null;
                 Item.shoot = ModContent.ProjectileType<HamonTequilaBottleCap>();
@@ -54,14 +52,14 @@ namespace JoJoStands.Items.Hamon
             }
             if (player.altFunctionUse != 2 && !player.HasBuff(BuffID.PotionSickness))
             {
+                Item.potion = true;
+                Item.UseSound = SoundID.Item3;
                 player.statLife += 175;
                 player.HealEffect(75);
                 player.AddBuff(BuffID.Swiftness, 1800);
                 player.AddBuff(BuffID.Regeneration, 1800);
                 player.AddBuff(BuffID.ManaRegeneration, 1800);
                 player.AddBuff(BuffID.Ironskin, 1800);
-                Item.UseSound = SoundID.Item3;
-                Item.potion = true;
                 player.GetModPlayer<HamonPlayer>().amountOfHamon += 40;
             }
             return true;

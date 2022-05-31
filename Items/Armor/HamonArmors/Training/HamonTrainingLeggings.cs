@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.HamonArmors.Training
         {
             DisplayName.SetDefault("Hamon Training Leggings");
             Tooltip.SetDefault("You can feel a light rush in your legs...\nIncreases Hamon Damage by 5%\nIncreases movement speed");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 18;
-            Item.value = Item.buyPrice(0, 0, 65, 0);
+            Item.value = Item.buyPrice(silver: 50);
             Item.rare = ItemRarityID.Green;
             Item.defense = 4;
         }

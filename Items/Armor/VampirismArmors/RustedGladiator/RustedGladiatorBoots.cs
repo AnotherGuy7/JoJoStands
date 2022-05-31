@@ -2,7 +2,6 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 
 namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
@@ -13,6 +12,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Boots that have trampled over the lives of many.\n+5% Vampiric Knockback");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

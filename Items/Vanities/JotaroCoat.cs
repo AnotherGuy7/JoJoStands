@@ -11,13 +11,14 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Jotaro's Coat");
             Tooltip.SetDefault("A black school uniform. Very unique.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 42;
+            Item.height = 42;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

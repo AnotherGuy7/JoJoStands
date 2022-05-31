@@ -11,13 +11,14 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Pompous Shirt");
             Tooltip.SetDefault("A lavender shirt, with a green tie and Union Jack patch. Very tacky.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
+            Item.width = 26;
             Item.height = 18;
-            Item.rare = 6;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

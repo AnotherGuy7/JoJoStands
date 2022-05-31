@@ -34,6 +34,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             Projectile.penetrate = 1;
             Projectile.timeLeft = 0;
             Projectile.ignoreWater = true;
+            Projectile.frame = 2;
         }
 
         public override float shootSpeed => 12f;
@@ -49,6 +50,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         {
             SelectFrame();
             UpdateStandInfo();
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -103,11 +105,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 }
                 else
                 {
-                    if (!fallingFromSpace)
-                    {
-                        Projectile.velocity *= 0.95f;
-                    }
                     Projectile.rotation = 0f;
+                    if (!fallingFromSpace)
+                        Projectile.velocity *= 0.95f;
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
@@ -117,9 +117,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, newProjectileDamage, 3f, Projectile.owner);
@@ -191,9 +190,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                             SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                             Vector2 shootVel = target.Center - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, newProjectileDamage, 3f, Projectile.owner);
@@ -211,18 +209,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
         public void SelectFrame()
         {
-            if (Projectile.frame <= 1)
-                Projectile.frame = 2;
-
             Projectile.frameCounter++;
             if (Projectile.frameCounter >= 8)
             {
                 Projectile.frame += 1;
                 Projectile.frameCounter = 0;
                 if (Projectile.frame >= 4)
-                {
                     Projectile.frame = 2;
-                }
             }
         }
     }

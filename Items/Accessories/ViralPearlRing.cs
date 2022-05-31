@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Accessories
         {
             DisplayName.SetDefault("Viral Pearl Ring");
             Tooltip.SetDefault("Right Click to remove the Pearl. Be careful not to break it!");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -20,7 +21,7 @@ namespace JoJoStands.Items.Accessories
             Item.height = 30;
             Item.accessory = true;
             Item.rare = ItemRarityID.LightRed;
-            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.value = Item.buyPrice(gold: 2);
             Item.useStyle = ItemUseStyleID.EatFood;
             Item.maxStack = 1;
             Item.consumable = true;

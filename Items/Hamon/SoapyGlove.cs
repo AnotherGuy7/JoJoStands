@@ -16,6 +16,7 @@ namespace JoJoStands.Items.Hamon
         {
             DisplayName.SetDefault("Soapy Glove");
             Tooltip.SetDefault("Shoot controllable bubbles! \nExperience goes up after each conquer... \nRight-click requires more than 3 hamon\nSpecial: Hamon Breathing");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()
@@ -74,6 +75,8 @@ namespace JoJoStands.Items.Hamon
                 damage += 6;
                 type = ModContent.ProjectileType<CutterHamonBubble>();
                 knockback = 8f;
+                Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
+                return false;
             }
             if (player.altFunctionUse != 2 && hamonPlayer.amountOfHamon > 1)
             {
@@ -82,11 +85,15 @@ namespace JoJoStands.Items.Hamon
                     damage += 24;
                     type = ModContent.ProjectileType<HamonBloodBubble>();
                     hamonPlayer.amountOfHamon -= 1;
+                    Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
+                    return false;
                 }
                 else
                 {
                     type = ModContent.ProjectileType<HamonBubble>();
                     hamonPlayer.amountOfHamon -= 1;
+                    Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
+                    return false;
                 }
             }
             return true;

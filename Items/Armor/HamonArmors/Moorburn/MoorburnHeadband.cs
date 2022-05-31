@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.HamonArmors.Moorburn
         {
             DisplayName.SetDefault("Moorburn Headband");
             Tooltip.SetDefault("A headband purified by Hamon.\nIncreases Hamon Damage by 12%");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 20;
             Item.height = 10;
-            Item.value = Item.buyPrice(0, 0, 55, 50);
+            Item.value = Item.buyPrice(silver: 75);
             Item.rare = ItemRarityID.Green;
             Item.defense = 4;
         }

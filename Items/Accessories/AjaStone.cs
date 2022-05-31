@@ -13,6 +13,7 @@ namespace JoJoStands.Items.Accessories
         {
             DisplayName.SetDefault("Red Stone of Aja");
             Tooltip.SetDefault("Wear this stone to walk on water, increase your regenerative capabilities, and increase your max hamon!");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -36,18 +37,13 @@ namespace JoJoStands.Items.Accessories
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             hamonPlayer.hamonDamageBoosts += 0.5f;
             hamonPlayer.hamonKnockbackBoosts += 0.5f;
-            if (Main.dayTime)
-            {
-                player.GetDamage(DamageClass.Melee) += 0.23f;
-                player.GetAttackSpeed(DamageClass.Melee) += 0.18f;
-                player.GetDamage(DamageClass.Magic) += 0.23f;
-                player.manaRegen *= 3;
-                player.lifeRegen += 2;
-            }
+            player.GetDamage(DamageClass.Generic) += 0.2f;
+            player.GetAttackSpeed(DamageClass.Generic) += 0.15f;
 
-            player.lifeRegen += 1;
             player.waterWalk = true;
             player.waterWalk2 = true;
+            player.lifeRegenCount += 8;
+            hamonPlayer.hamonIncreaseBonus += 2;
             Lighting.AddLight(player.Center, 1f, 0f, 0f);
         }
 

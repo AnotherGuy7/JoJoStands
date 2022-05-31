@@ -13,6 +13,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A shiny sword that gives you the might to swing effortlessly...");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

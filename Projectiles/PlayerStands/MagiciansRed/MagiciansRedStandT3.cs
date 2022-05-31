@@ -19,7 +19,6 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override string poseSoundName => "ThePowerToWieldFlameAtWill";
         public override string spawnSoundName => "Magicians Red";
 
-
         private int chanceToDebuff = 50;
         private int debuffDuration = 420;
 
@@ -27,6 +26,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         {
             SelectAnimation();
             UpdateStandInfo();
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -52,9 +52,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                         shootCount += newShootTime;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
@@ -66,7 +65,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 {
                     if (player.whoAmI == Main.myPlayer)
                     {
-                        normalFrames = true;
+                        idleFrames = true;
                         attackFrames = false;
                     }
                 }
@@ -81,9 +80,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     }
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= 16f;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RedBind>(), newProjectileDamage, 3f, Projectile.owner, Projectile.whoAmI, debuffDuration - 60);
@@ -116,13 +114,11 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 if (target != null)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
 
                     Projectile.direction = 1;
                     if (target.position.X - player.position.X < 0f)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.spriteDirection = Projectile.direction;
 
                     Projectile.velocity = target.Center - Projectile.Center;
@@ -148,7 +144,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 }
                 else
                 {
-                    normalFrames = true;
+                    idleFrames = true;
                     attackFrames = false;
                 }
             }
@@ -158,23 +154,23 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Pose");

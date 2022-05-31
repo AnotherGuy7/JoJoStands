@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Tiles
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A toilet in which the toilet itself is a living creature.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -21,7 +22,7 @@ namespace JoJoStands.Items.Tiles
             Item.autoReuse = true;
             Item.useAnimation = 10;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
             Item.value = Item.buyPrice(0, 0, 50, 0);
             Item.rare = ItemRarityID.Yellow;

@@ -24,12 +24,12 @@ namespace JoJoStands.Items
             Item.height = 32;
             Item.useTime = 12;
             Item.useAnimation = 12;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.maxStack = 1;
             Item.knockBack = 2f;
             Item.value = 0;
             Item.noUseGraphic = true;
-            Item.rare = 6;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         /*public override void HoldItem(Player player)

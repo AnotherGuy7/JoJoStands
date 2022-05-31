@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Food
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A stand that absorbs electricity to become stronger and faster. It was caught and crushed into a fine powder, which was then sprinkled on this red hot chili pepper.");
+            SacrificeTotal = 89987;
         }
 
         public override void SetDefaults()
@@ -19,6 +20,7 @@ namespace JoJoStands.Items.Food
             Item.height = 28;
             Item.useTime = 20;
             Item.useAnimation = 20;
+            Item.maxStack = 5;
             Item.value = Item.buyPrice(copper: 2);
             Item.UseSound = SoundID.Item2;
             Item.rare = ItemRarityID.Green;

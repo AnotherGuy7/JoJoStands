@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Food
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A golden, sour, yet refreshing drink that boosts your mental capabilities somehow.\nBoosts Stand Damage and Stand Speed for 2m.");
+            SacrificeTotal = 5;
         }
 
         public override void SetDefaults()
@@ -20,6 +21,7 @@ namespace JoJoStands.Items.Food
             Item.height = 30;
             Item.useTime = 20;
             Item.useAnimation = 20;
+            Item.maxStack = 99;
             Item.value = Item.buyPrice(silver: 10, copper: 50);
             Item.UseSound = SoundID.Item2;
             Item.rare = ItemRarityID.Green;

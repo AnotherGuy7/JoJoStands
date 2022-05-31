@@ -13,12 +13,13 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
         {
             DisplayName.SetDefault("Adamantite Alloy Helmet (Neutral)");
             Tooltip.SetDefault("A helmet fused with Viral Meteorite to empower the user.\nStand stat buffs change depending on stand type.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 22;
-            Item.height = 24;
+            Item.width = 24;
+            Item.height = 28;
             Item.value = Item.buyPrice(0, 3, 0, 0);
             Item.rare = ItemRarityID.LightRed;
             Item.defense = 14;

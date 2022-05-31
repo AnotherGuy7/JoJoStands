@@ -25,7 +25,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override string spawnSoundName => "Star Platinum";
         public override int standType => 1;
 
-        private int updateTimer = 0;
         private bool flickFrames = false;
         private bool resetFrame = false;
 
@@ -33,7 +32,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -41,12 +40,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
-
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
 
             if (!mPlayer.standAutoMode)
             {
@@ -152,10 +145,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
@@ -168,13 +161,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     Projectile.frameCounter = 0;
                     resetFrame = true;
                 }
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Flick");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
                 Projectile.frame = 0;
@@ -185,7 +178,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }
@@ -195,7 +188,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         {
             if (resetFrame && animationName == "Flick")
             {
-                normalFrames = true;
+                idleFrames = true;
                 flickFrames = false;
                 resetFrame = false;
             }

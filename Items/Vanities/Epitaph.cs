@@ -2,7 +2,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-
 namespace JoJoStands.Items.Vanities
 {
     [AutoloadEquip(EquipType.Head)]
@@ -11,15 +10,15 @@ namespace JoJoStands.Items.Vanities
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Wearing this makes you want to use a frog as a phone");
-
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 8;
+            Item.width = 20;
+            Item.height = 24;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

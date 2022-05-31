@@ -24,7 +24,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         public override string spawnSoundName => "Star Platinum";*/
         public override int standType => 1;
 
-        private int updateTimer = 0;
         private bool stringConnectorPlaced = false;
         private Vector2 firstStringPos;
         private bool extendedBarrage = false;
@@ -35,7 +34,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -43,12 +42,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
-
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
 
             if (!mPlayer.standAutoMode)
             {
@@ -110,19 +103,19 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 if (!extendedBarrage)
                     PlayAnimation("Attack");
                 else
                     PlayAnimation("ExtendedAttack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 PlayAnimation("Idle");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

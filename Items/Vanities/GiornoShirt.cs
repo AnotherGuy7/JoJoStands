@@ -11,13 +11,14 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Mafioso Suit");
             Tooltip.SetDefault("A pink suit with a large, heart-shaped chest window.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 30;
+            Item.height = 22;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

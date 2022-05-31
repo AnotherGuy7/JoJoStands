@@ -1,8 +1,7 @@
-﻿using Terraria.ID;
+﻿using JoJoStands.Items.Vampire;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using JoJoStands.Items.Vampire;
 
 namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
 {
@@ -12,6 +11,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A chestplate scarred by its intense fights throughout the ages.\n+4% Life Steal gains");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

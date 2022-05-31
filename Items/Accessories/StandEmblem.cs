@@ -1,9 +1,6 @@
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
@@ -13,6 +10,7 @@ namespace JoJoStands.Items.Accessories
         {
             DisplayName.SetDefault("Stand Emblem");
             Tooltip.SetDefault("15% increased stand damage");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -21,7 +19,7 @@ namespace JoJoStands.Items.Accessories
             Item.height = 30;
             Item.accessory = true;
             Item.rare = ItemRarityID.LightRed;
-            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.value = Item.buyPrice(gold: 2);
             Item.maxStack = 1;
         }
 

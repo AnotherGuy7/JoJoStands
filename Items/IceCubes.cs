@@ -11,6 +11,7 @@ namespace JoJoStands.Items
         {
             DisplayName.SetDefault("Ice Cubes");
             Tooltip.SetDefault("Ice cubes that are in perfect size for eating.");
+            SacrificeTotal = 10;
         }
 
         public override void SetDefaults()

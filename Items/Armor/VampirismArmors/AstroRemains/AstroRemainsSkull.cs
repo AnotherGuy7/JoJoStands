@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A deer skull with a surprisingly sturdy exterior.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

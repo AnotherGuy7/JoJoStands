@@ -11,15 +11,15 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Jockey's Bandana");
             Tooltip.SetDefault("A sky blue bandana, adorned with stars. There is a horseshoe in the center.");
-
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.height = 16;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

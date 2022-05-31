@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Vampire
         {
             DisplayName.SetDefault("Sunscreen");
             Tooltip.SetDefault("For all the hot days you spend wandering.");
+            SacrificeTotal = 10;
         }
 
         public override void SetDefaults()
@@ -20,7 +21,7 @@ namespace JoJoStands.Items.Vampire
             Item.useTime = 20;
             Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.HoldUp;
-            Item.value = Item.buyPrice(0, 0, 10, 0);
+            Item.value = Item.buyPrice(silver: 2, copper: 50);
             Item.rare = ItemRarityID.Green;
             Item.consumable = true;
             Item.maxStack = 99;

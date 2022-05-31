@@ -13,14 +13,15 @@ namespace JoJoStands.Items.Accessories
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 8));
             Tooltip.SetDefault("An amulet that perfectly represents and enchances the form of the soul.\n30% increased Stand attack damage\n2 increased Stand Speed\n20% Stand Ability cooldown reduction\n30% increased Stand crit chance\nMakes melee stands inflict Infected on enemies.\nIncreased defense while the Stand is out");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 16;
-            Item.height = 16;
+            Item.width = 38;
+            Item.height = 38;
             Item.maxStack = 1;
-            Item.value = Item.buyPrice(1, 0, 0, 0);
+            Item.value = Item.buyPrice(platinum: 1);
             Item.rare = ItemRarityID.Red;
             Item.accessory = true;
         }

@@ -1,29 +1,29 @@
-using Terraria.ID;
-using Terraria;
 using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Items.CraftingMaterials
 {
-	public class WillToChange : ModItem
-	{
-		public override void SetStaticDefaults()
+    public class WillToChange : ModItem
+    {
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Will to Change");
             Tooltip.SetDefault("A physical outlook upon the world, morphing and changing.");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(7, 15));
+            SacrificeTotal = 25;
         }
 
         public override void SetDefaults()
         {
-			Item.width = 16;
-			Item.height = 16;
-			Item.maxStack = 99;
-			Item.rare = ItemRarityID.Green;
-			Item.value = Item.buyPrice(0, 0, 7, 0);
+            Item.width = 16;
+            Item.height = 16;
+            Item.maxStack = 99;
+            Item.rare = ItemRarityID.Green;
+            Item.value = Item.buyPrice(0, 0, 7, 0);
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)

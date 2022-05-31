@@ -18,7 +18,7 @@ namespace JoJoStands.Items.Armor.HamonArmors.Moorburn
         {
             Item.width = 22;
             Item.height = 18;
-            Item.value = Item.buyPrice(0, 0, 80, 0);
+            Item.value = Item.buyPrice(silver: 80);
             Item.rare = ItemRarityID.Green;
             Item.defense = 6;
         }

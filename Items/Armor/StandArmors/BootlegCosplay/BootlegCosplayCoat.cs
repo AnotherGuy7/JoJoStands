@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
         {
             DisplayName.SetDefault("Bootleg Cosplay Coat");
             Tooltip.SetDefault("A coat that's the length of a robe but still counts as a coat.\n+1 Stand Speed");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 26;
-            Item.height = 28;
-            Item.value = Item.buyPrice(0, 0, 10, 0);
+            Item.width = 42;
+            Item.height = 42;
+            Item.value = Item.buyPrice(silver: 8, copper: 75);
             Item.rare = ItemRarityID.Blue;
             Item.defense = 4;
         }

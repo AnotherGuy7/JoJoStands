@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.IronSlop
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("War shorts made with iron? Allows you to feel the breeze!");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

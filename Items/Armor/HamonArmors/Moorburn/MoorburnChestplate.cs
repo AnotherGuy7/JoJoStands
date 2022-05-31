@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.HamonArmors.Moorburn
         {
             DisplayName.SetDefault("Moorburn Chestplate");
             Tooltip.SetDefault("A heavy chestplate bathed in the energy of the Sun Droplets.\nIncreases Hamon Regen speed by 6%");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 36;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 1, 25, 0);
+            Item.value = Item.buyPrice(gold: 1, silver: 15);
             Item.rare = ItemRarityID.Green;
             Item.defense = 8;
         }

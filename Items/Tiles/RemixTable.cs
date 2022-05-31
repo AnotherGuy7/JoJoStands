@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Tiles
         {
             DisplayName.SetDefault("Remix Table");
             Tooltip.SetDefault("A plain looking DJ’s table, imbued with the Meteoric virus. Allows you to create and modify Stands.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -21,10 +22,10 @@ namespace JoJoStands.Items.Tiles
             Item.autoReuse = true;
             Item.useAnimation = 30;
             Item.useTime = 30;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.value = Item.buyPrice(0, 0, 45, 0);
-            Item.rare = 1;
+            Item.value = Item.buyPrice(silver: 50);
+            Item.rare = ItemRarityID.Blue;
             Item.maxStack = 999;
             Item.createTile = ModContent.TileType<RemixTableTile>();
         }

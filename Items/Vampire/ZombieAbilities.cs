@@ -16,6 +16,7 @@ namespace JoJoStands.Items.Vampire
         {
             DisplayName.SetDefault("Zombie Abilities");
             Tooltip.SetDefault("Left-click to lunge at enemies! Hold left-click to charge up the lunge and make it stronger!");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()

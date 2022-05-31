@@ -13,6 +13,7 @@ namespace JoJoStands.Items.PetItems
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("An old, tattered letter.\nSummons a Mini Dio Brando");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

@@ -30,7 +30,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override int standType => 1;
         public override bool useProjectileAlpha => true;
 
-        public int updateTimer = 0;
         private bool parryFrames = false;
         private int parryCooldownTime = 0;
 
@@ -38,21 +37,14 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
-            if (shootCount > 0)
-            {
-                shootCount--;
-            }
+            UpdateStandSync();
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.silverChariotShirtless)
                 Projectile.timeLeft = 2;
+            if (shootCount > 0)
+                shootCount--;
 
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
             if (parryCooldownTime == 0)
             {
                 if (Projectile.ai[1] == 3f)
@@ -74,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && !parryFrames && Projectile.owner == Main.myPlayer)
                 {
-                    normalFrames = false;
+                    idleFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
                     Projectile.netUpdate = true;
@@ -113,9 +105,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
                     Projectile.direction = 1;
                     if (Projectile.position.X <= player.position.X)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.spriteDirection = Projectile.direction;
                 }
                 if (!Main.mouseRight)
@@ -131,7 +121,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     Projectile.position = player.Center + (MathHelper.ToRadians(angle).ToRotationVector2() * (4f * 16f));
                     if (!secondaryAbilityFrames && !parryFrames)
                     {
-                        normalFrames = true;
+                        idleFrames = true;
                         Projectile.spriteDirection = Projectile.direction = player.direction;
                     }
                     HandleDrawOffsets();
@@ -172,34 +162,34 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (parryFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 if (Projectile.frame >= 5)
                 {
                     parryFrames = false;
-                    normalFrames = true;
+                    idleFrames = true;
                 }
                 PlayAnimation("Parry");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

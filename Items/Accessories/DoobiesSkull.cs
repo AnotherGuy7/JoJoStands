@@ -1,9 +1,6 @@
-﻿using Terraria.ID;
-using Terraria;
-using Microsoft.Xna.Framework;
+﻿using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Terraria.Localization;
+using Terraria.ID;
 
 namespace JoJoStands.Items.Accessories
 {
@@ -13,18 +10,19 @@ namespace JoJoStands.Items.Accessories
         {
             DisplayName.SetDefault("Doobies Skull");
             Tooltip.SetDefault("WIP");
+            SacrificeTotal = 1;
         }
         public override void SetDefaults()
         {
             Item.width = 44;
             Item.height = 50;
             Item.maxStack = 1;
-            Item.value = Item.buyPrice(0, 5, 0, 0);
-            Item.rare = 2;
+            Item.value = Item.buyPrice(gold: 2);
+            Item.rare = ItemRarityID.Green;
             Item.accessory = true;
         }
         public override void UpdateEquip(Player player)
-        {      
+        {
             player.GetModPlayer<MyPlayer>().doobiesskullEquipped = true;
         }
     }

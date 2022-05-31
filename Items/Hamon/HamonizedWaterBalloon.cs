@@ -13,6 +13,7 @@ namespace JoJoStands.Items.Hamon
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Left-click to throw this Hamon-Infused Balloon and right-click to drop it as a trap!\nRequires 4 or more Hamon to be used.\nSpecial: Hamon Breathing");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -49,9 +50,8 @@ namespace JoJoStands.Items.Hamon
         public override bool? UseItem(Player player)
         {
             if (player.whoAmI == Main.myPlayer)
-            {
                 player.ConsumeItem(Item.type);
-            }
+
             return true;
         }
 

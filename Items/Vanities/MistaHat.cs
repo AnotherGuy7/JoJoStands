@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Vanities
             DisplayName.SetDefault("Mista's Cap");
             Tooltip.SetDefault("A patterned red and white hat, with an arrow in the center. It has a secret pocket for bullets.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 18;
             Item.height = 18;
-            Item.rare = 6;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

@@ -14,6 +14,7 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A warm droplet... It seems to react to you.\nRight-click while holding more than 20 to gain a Hamon SKill Point.\nUsed for creating Hamon weapons.");
+            SacrificeTotal = 20;
         }
 
         public override void SetDefaults()
@@ -21,7 +22,7 @@ namespace JoJoStands.Items.CraftingMaterials
             Item.width = 32;
             Item.height = 40;
             Item.maxStack = 99;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             Item.value = Item.buyPrice(copper: 20);
         }
 

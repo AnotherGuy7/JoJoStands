@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Vanities
             DisplayName.SetDefault("Polnareff's Hair");
             Tooltip.SetDefault("Wear this to feel like a masterful swordsman.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 34;
+            Item.height = 38;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

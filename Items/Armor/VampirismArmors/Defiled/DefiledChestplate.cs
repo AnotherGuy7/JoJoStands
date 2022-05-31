@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Defiled
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A chestplate wrapped in corruption stingers, perfect for keeping off the enemies.\n+12% Vampiric Knockback\nApplies a thorns effect while the chestplate is being worn.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

@@ -13,13 +13,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
         {
             DisplayName.SetDefault("Phantom Chestplate");
             Tooltip.SetDefault("A bright, glowing chestplate made with an adaptable virus and ectoplasm.\n+8% Stand Crit Chance\n+1 Stand Speed\n12% Incoming Damage Reduction");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 4, 0, 0);
+            Item.value = Item.buyPrice(gold: 6);
             Item.rare = ItemRarityID.Yellow;
             Item.defense = 20;
         }

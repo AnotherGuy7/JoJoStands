@@ -11,13 +11,14 @@ namespace JoJoStands.Items.Accessories
         {
             DisplayName.SetDefault("Iced Water");
             Tooltip.SetDefault("Water with ice in it, perfect to stay hydrated and cool.");
+            SacrificeTotal = 1;
         }
         public override void SetDefaults()
         {
             Item.width = 16;
             Item.height = 16;
             Item.maxStack = 1;
-            Item.value = Item.buyPrice(0, 0, 25, 0);
+            Item.value = Item.buyPrice(silver: 25);
             Item.rare = ItemRarityID.Blue;
             Item.accessory = true;
         }

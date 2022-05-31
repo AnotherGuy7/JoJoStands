@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Food
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A well-made cupcake on a tiny plate, all with a tiny viral structure on top!\nBoosts Stand Damage and Stand Crit Chances for 2m.");
+            SacrificeTotal = 5;
         }
 
         public override void SetDefaults()
@@ -20,6 +21,7 @@ namespace JoJoStands.Items.Food
             Item.height = 40;
             Item.useTime = 20;
             Item.useAnimation = 20;
+            Item.maxStack = 99;
             Item.value = Item.buyPrice(silver: 12, copper: 50);
             Item.UseSound = SoundID.Item2;
             Item.rare = ItemRarityID.Green;

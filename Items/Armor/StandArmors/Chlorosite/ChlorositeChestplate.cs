@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
         {
             DisplayName.SetDefault("Chlorosite Chestplate");
             Tooltip.SetDefault("A chestplate that is made with Chlorophyte infused with an otherworldly virus.\n+7% Stand Crit Chance\n+6% Stand Damage");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 4, 0, 0);
+            Item.value = Item.buyPrice(gold: 5, silver: 50);
             Item.rare = ItemRarityID.LightPurple;
             Item.defense = 17;
         }

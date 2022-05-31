@@ -51,6 +51,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         {
             SelectFrame();
             UpdateStandInfo();
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -226,15 +227,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 {
                     Projectile.frame += 1;
                     Projectile.frameCounter = 0;
+                    if (Projectile.frame >= 4)
+                        Projectile.frame = 2;
                 }
                 if (Projectile.frame <= 1)
-                {
                     Projectile.frame = 2;
-                }
-                if (Projectile.frame >= 4)
-                {
-                    Projectile.frame = 2;
-                }
+
             }
             else
             {

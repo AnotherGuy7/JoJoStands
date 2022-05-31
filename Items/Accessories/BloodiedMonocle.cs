@@ -13,6 +13,7 @@ namespace JoJoStands.Items.Accessories
         {
             DisplayName.SetDefault("Bloodied Monocle");
             Tooltip.SetDefault("While undead, enemies whose blood has not been consumed are highlighted.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

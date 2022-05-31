@@ -12,6 +12,7 @@ namespace JoJoStands.Items
         {
             DisplayName.SetDefault("Slow Dancer's Saddle");
             Tooltip.SetDefault("A blue saddle that belongs to a fast race horse...");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

@@ -55,8 +55,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual Texture2D standTexture { get; set; }
         public virtual bool useProjectileAlpha { get; } = false;
 
+        public static int StandNetworkUpdateTime = 90;
 
-        public bool normalFrames = false;       //Much easier to sync animations this way rather than syncing everything about it
+        public bool idleFrames = false;       //Much easier to sync animations this way rather than syncing everything about it
         public bool attackFrames = false;
         public bool secondaryAbilityFrames = false;
         public int newPunchTime = 0;       //so we don't have to type newPunchTime all the time
@@ -189,7 +190,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 return;
 
             HandleDrawOffsets();
-            normalFrames = false;
+            idleFrames = false;
             attackFrames = true;
             float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
             Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
@@ -237,7 +238,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
 
-            normalFrames = true;
+            idleFrames = true;
             attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
@@ -259,7 +260,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
 
-            normalFrames = true;
+            idleFrames = true;
             attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
@@ -283,7 +284,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
 
-            normalFrames = true;
+            idleFrames = true;
             attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X += (float)((12 + player.width / 2) * player.direction);
@@ -321,7 +322,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (target != null)
             {
                 attackFrames = true;
-                normalFrames = false;
+                idleFrames = false;
 
                 Projectile.direction = 1;
                 if (target.position.X - Projectile.Center.X <= 0f)
@@ -353,7 +354,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             else
             {
-                normalFrames = true;
+                idleFrames = true;
                 attackFrames = false;
             }
             LimitDistance();
@@ -385,7 +386,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (targetDist > punchDetectionDist || secondaryAbility || target == null)
             {
                 Vector2 areaBehindPlayer = player.Center;
-                normalFrames = true;
+                idleFrames = true;
                 attackFrames = false;
                 if (secondaryAbility)
                 {
@@ -406,7 +407,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (targetDist < punchDetectionDist && !secondaryAbility)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
                     secondaryAbilityFrames = false;
 
                     Projectile.direction = 1;
@@ -456,7 +457,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (secondaryAbility)
                 {
                     attackFrames = false;
-                    normalFrames = false;
+                    idleFrames = false;
                     secondaryAbilityFrames = true;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0f)
@@ -497,7 +498,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         secondaryAbility = false;
                         secondaryAbilityFrames = false;
-                        normalFrames = true;
+                        idleFrames = true;
                     }
                 }
             }
@@ -726,7 +727,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 return;
 
             netUpdateTimer++;
-            if (netUpdateTimer >= 90)
+            if (netUpdateTimer >= StandNetworkUpdateTime)
             {
                 Projectile.netUpdate = true;
                 netUpdateTimer = 0;
@@ -795,7 +796,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             //Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/RangeIndicator>().Value;        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
             Vector2 rangeIndicatorDrawPosition = player.Center - Main.screenPosition;
             Vector2 rangeIndicatorOrigin = rangeIndicatorSize / 2f;
-            float rangeIndicatorAlpha = ((MyPlayer.RangeIndicatorAlpha / 100f) * 255f);
+            float rangeIndicatorAlpha = MyPlayer.RangeIndicatorAlpha;
 
             if (maxDistance > 0f)
                 Main.EntitySpriteDraw(standRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.White * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);
@@ -850,7 +851,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void SendExtraAI(BinaryWriter writer)
         {
-            writer.Write(normalFrames);
+            writer.Write(idleFrames);
             writer.Write(attackFrames);
             writer.Write(secondaryAbilityFrames);
             SendExtraStates(writer);
@@ -858,7 +859,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
-            normalFrames = reader.ReadBoolean();
+            idleFrames = reader.ReadBoolean();
             attackFrames = reader.ReadBoolean();
             secondaryAbilityFrames = reader.ReadBoolean();
             ReceiveExtraStates(reader);

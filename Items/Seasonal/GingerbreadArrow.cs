@@ -9,6 +9,7 @@ namespace JoJoStands.Items.Seasonal
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Stab yourself with this to for a 55% chance to give yourself a Christmas stand!.. or so it seemed?\nEat this arrow to gain a Christmas Stand.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -18,9 +19,9 @@ namespace JoJoStands.Items.Seasonal
             Item.useTime = 15;
             Item.useAnimation = 15;
             Item.maxStack = 1;
-            Item.useStyle = 3;
+            Item.useStyle = ItemUseStyleID.Thrust;
             Item.noUseGraphic = true;
-            Item.rare = 8;
+            Item.rare = ItemRarityID.Yellow;
             Item.consumable = true;
         }
 

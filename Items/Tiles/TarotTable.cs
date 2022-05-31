@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Tiles
         {
             DisplayName.SetDefault("Tarot Table");
             Tooltip.SetDefault("A table that reacts to Stand Users, granting them greater power as they wish it.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -23,7 +24,7 @@ namespace JoJoStands.Items.Tiles
             Item.useTime = 30;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.value = Item.buyPrice(0, 20, 50, 0);
+            Item.value = Item.buyPrice(gold: 15, silver: 50);
             Item.rare = ItemRarityID.Blue;
             Item.maxStack = 1;
             Item.createTile = ModContent.TileType<TarotTableTile>();

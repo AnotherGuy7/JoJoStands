@@ -20,18 +20,17 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 10f;
         public override int standType => 1;
+        private const int AfterImagesLimit = 3;
 
-        public int updateTimer = 0;
         private bool parryFrames = false;
         private bool Shirtless = false;
         private float punchMovementSpeed = 5f;
-        private int afterImagesLimit = 3;
 
         public override void AI()
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -40,11 +39,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
             mPlayer.silverChariotShirtless = Shirtless;
             if (!mPlayer.standAutoMode)
             {
@@ -60,7 +54,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && Projectile.owner == Main.myPlayer)
                 {
                     HandleDrawOffsets();
-                    normalFrames = false;
+                    idleFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
                     Projectile.netUpdate = true;
@@ -119,9 +113,9 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         punchMovementSpeed = 7.5f;
                         if (!player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] == 0)
                         {
-                            for (int i = 0; i < afterImagesLimit; i++)
+                            for (int i = 0; i < AfterImagesLimit; i++)
                             {
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<SilverChariotAfterImage>(), 0, 0f, Projectile.owner, i, afterImagesLimit);
+                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<SilverChariotAfterImage>(), 0, 0f, Projectile.owner, i, AfterImagesLimit);
                                 Main.projectile[proj].netUpdate = true;
                                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
                             }
@@ -143,30 +137,30 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (parryFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 PlayAnimation("Parry");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }
@@ -176,7 +170,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         {
             if (animationName == "Parry")
             {
-                normalFrames = true;
+                idleFrames = true;
                 parryFrames = false;
             }
         }

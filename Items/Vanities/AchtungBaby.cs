@@ -17,14 +17,16 @@ namespace JoJoStands.Items.Vanities
             ArmorIDs.Body.Sets.HidesArms[Item.bodySlot] = true;
             ArmorIDs.Legs.Sets.HidesTopSkin[Item.legSlot] = true;
             ArmorIDs.Legs.Sets.HidesBottomSkin[Item.legSlot] = true;*/
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 8;
+            Item.width = 50;
+            Item.height = 40;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
+            Item.scale = 0.8f;
         }
 
         public override void UpdateEquip(Player player)

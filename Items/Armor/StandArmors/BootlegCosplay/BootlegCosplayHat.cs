@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
         {
             DisplayName.SetDefault("Bootleg Cosplay Hat");
             Tooltip.SetDefault("A hat that tends to merge with your hair.\n+4% Stand Critical Hit Chance");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 26;
-            Item.height = 28;
-            Item.value = Item.buyPrice(0, 0, 10, 0);
+            Item.height = 18;
+            Item.value = Item.buyPrice(silver: 4, copper: 50);
             Item.rare = ItemRarityID.Blue;
             Item.defense = 3;
         }

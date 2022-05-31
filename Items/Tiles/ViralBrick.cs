@@ -20,9 +20,9 @@ namespace JoJoStands.Items.Tiles
             Item.autoReuse = true;
             Item.useAnimation = 10;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.value = Item.buyPrice(0, 0, 50, 0);
+            Item.value = Item.buyPrice(silver: 30);
             Item.rare = ItemRarityID.Blue;
             Item.maxStack = 999;
             Item.createTile = ModContent.TileType<ViralBrickTile>();

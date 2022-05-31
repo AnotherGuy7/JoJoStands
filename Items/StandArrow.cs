@@ -11,6 +11,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Stab yourself with this to for a 55% chance to give yourself a stand!");
+            SacrificeTotal = 2;
         }
 
         public override void SetDefaults()

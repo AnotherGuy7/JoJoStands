@@ -12,6 +12,7 @@ namespace JoJoStands.Items
         {
             DisplayName.SetDefault("Luck and Pluck");
             Tooltip.SetDefault("The sword of an old gladiator.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

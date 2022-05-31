@@ -63,7 +63,7 @@ namespace JoJoStands
         [Tooltip("Whether or not you want to see hidden references. (Some of these references can cause you to die!)")]
         public bool SecretReferences;
 
-        [DefaultValue(100)]
+        [DefaultValue(40)]
         [Label("Range Indicator Visibility")]
         [Tooltip("Allows you to choose how transparent the Range Indicator is.")]
         public int RangeIndicatorVisibility;
@@ -100,7 +100,7 @@ namespace JoJoStands
 
         public override void OnChanged()        //couldn't use Player player = Main.LocalPlayer cause it wasn't set to an instance of an object
         {
-            MyPlayer.RangeIndicatorAlpha = RangeIndicatorVisibility;
+            MyPlayer.RangeIndicatorAlpha = (float)RangeIndicatorVisibility / 100f;
             MyPlayer.DeathSoundID = deathSound;
             MyPlayer.Sounds = Sounds;
             MyPlayer.TimestopEffects = TimestopEffects;

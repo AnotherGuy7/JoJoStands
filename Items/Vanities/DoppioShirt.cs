@@ -11,13 +11,14 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Doppio's Shirt");
             Tooltip.SetDefault("A purple shirt with many holes in it. Looks like it's been ripped from the inside multiple times...");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 26;
+            Item.height = 22;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

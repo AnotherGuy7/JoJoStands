@@ -11,6 +11,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A shiny but tiny sword that gives you the speed and strength to dash away!");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

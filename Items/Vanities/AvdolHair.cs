@@ -1,6 +1,5 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Vanities
 {
@@ -11,15 +10,15 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Fortuneteller Wig");
             Tooltip.SetDefault("A wig, styled after a fortuneteller, and Stand user.");
-
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
+            Item.width = 20;
             Item.height = 18;
-            Item.rare = 6;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

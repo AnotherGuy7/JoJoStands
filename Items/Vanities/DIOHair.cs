@@ -11,15 +11,15 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("DIO's Hair");
             Tooltip.SetDefault("Hair fit for the 'Ruler of Humanity', with a headband.");
-
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 24;
+            Item.height = 20;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

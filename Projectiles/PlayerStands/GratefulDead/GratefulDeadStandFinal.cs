@@ -24,8 +24,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
         private const float GasDetectionDist = 30 * 16f;
 
-        public int updateTimer = 0;
-
         private bool grabFrames = false;
         private bool secondaryFrames = false;
         private bool gasActive = false;
@@ -35,7 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -44,13 +42,39 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
+            mPlayer.gratefulDeadGasActive = gasActive;
+            if (gasActive)
             {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
+                gasRange = GasDetectionDist + mPlayer.standRangeBoosts;
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    NPC npc = Main.npc[i];
+                    if (npc.active)
+                    {
+                        float distance = Vector2.Distance(player.Center, npc.Center);
+                        if (distance < gasRange && !npc.immortal && !npc.hide)
+                            npc.AddBuff(ModContent.BuffType<Aging>(), 2);
+                    }
+                }
+                if (Main.netMode != NetmodeID.SinglePlayer)
+                {
+                    for (int i = 0; i < Main.maxPlayers; i++)
+                    {
+                        Player otherPlayer = Main.player[i];
+                        if (otherPlayer.active && otherPlayer.InOpposingTeam(player) && otherPlayer.whoAmI != player.whoAmI)
+                        {
+                            float distance = Vector2.Distance(player.Center, otherPlayer.Center);
+                            if (distance < gasRange)
+                                otherPlayer.AddBuff(ModContent.BuffType<Aging>(), 2);
+                        }
+                    }
+                }
+                if (Main.rand.Next(0, 12 + 1) == 0)
+                    Dust.NewDust(Projectile.Center - new Vector2(gasRange / 2f, 0f), (int)gasRange, Projectile.height, ModContent.DustType<Dusts.GratefulDeadCloud>());
+
+                player.AddBuff(ModContent.BuffType<Aging>(), 2);
             }
 
-            mPlayer.gratefulDeadGasActive = gasActive;
             if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryFrames && !grabFrames)
@@ -111,6 +135,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         Projectile.ai[0] = -1f;
                         shootCount += 30;
                     }
+                    Projectile.netUpdate = true;
                     LimitDistance();
                 }
                 if (!Main.mouseRight && (grabFrames || secondaryFrames))
@@ -119,6 +144,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     Projectile.ai[0] = -1f;
                     shootCount += 30;
                     secondaryFrames = false;
+                    Projectile.netUpdate = true;
                 }
             }
             if (SpecialKeyPressed() && shootCount <= 0)
@@ -130,44 +156,16 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 else
                     Main.NewText("Gas Spread: Off");
             }
-            if (gasActive)
-            {
-                gasRange = GasDetectionDist + mPlayer.standRangeBoosts;
-                for (int i = 0; i < Main.maxNPCs; i++)
-                {
-                    NPC npc = Main.npc[i];
-                    if (npc.active)
-                    {
-                        float distance = Vector2.Distance(player.Center, npc.Center);
-                        if (distance < gasRange && !npc.immortal && !npc.hide)
-                            npc.AddBuff(ModContent.BuffType<Aging>(), 2);
-                    }
-                }
-                for (int i = 0; i < Main.maxPlayers; i++)
-                {
-                    Player otherPlayer = Main.player[i];
-                    if (otherPlayer.active)
-                    {
-                        float distance = Vector2.Distance(player.Center, otherPlayer.Center);
-                        if (distance < gasRange && otherPlayer.whoAmI != player.whoAmI)
-                            otherPlayer.AddBuff(ModContent.BuffType<Aging>(), 2);
-                    }
-                }
-                if (Main.rand.Next(0, 12 + 1) == 0)
-                    Dust.NewDust(Projectile.Center - new Vector2(gasRange / 2f, 0f), (int)gasRange, Projectile.height, ModContent.DustType<Dusts.GratefulDeadCloud>());
-
-                player.AddBuff(ModContent.BuffType<Aging>(), 2);
-            }
             if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }
         }
 
-        private Texture2D gasRangeIndicatorTexture;
         private float gasTextureSize;
         private Vector2 gasTextureOrigin;
         private Rectangle gasTextureSourceRect;
+        private Texture2D gasRangeIndicatorTexture;
 
         public override bool PreDrawExtras()
         {
@@ -182,7 +180,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     gasTextureSize = gasRange;
                 }
                 if (gasRangeIndicatorTexture != null)
-                    Main.EntitySpriteDraw(gasRangeIndicatorTexture, player.Center - Main.screenPosition, gasTextureSourceRect, Color.Red * ((MyPlayer.RangeIndicatorAlpha / 100f) * 255f), 0f, gasTextureOrigin, 2f, SpriteEffects.None, 0);
+                    Main.EntitySpriteDraw(gasRangeIndicatorTexture, player.Center - Main.screenPosition, gasTextureSourceRect, Color.Red * MyPlayer.RangeIndicatorAlpha, 0f, gasTextureOrigin, 2f, SpriteEffects.None, 0);
             }
             return true;
         }
@@ -190,11 +188,13 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(grabFrames);
+            writer.Write(gasActive);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             grabFrames = reader.ReadBoolean();
+            gasActive = reader.ReadBoolean();
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -207,22 +207,22 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 PlayAnimation("Idle");
             }
             if (secondaryFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (grabFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryFrames = false;
                 PlayAnimation("Grab");
@@ -230,7 +230,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

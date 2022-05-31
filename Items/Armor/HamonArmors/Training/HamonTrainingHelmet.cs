@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.HamonArmors.Training
         {
             DisplayName.SetDefault("Hamon Training Hat");
             Tooltip.SetDefault("A comfy hat that gives your head a clear concious...\nIncreases Hamon Damage by 5%");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 40;
             Item.height = 40;
-            Item.value = Item.buyPrice(0, 0, 50, 0);
+            Item.value = Item.buyPrice(silver: 35);
             Item.rare = ItemRarityID.Green;
             Item.defense = 4;
         }

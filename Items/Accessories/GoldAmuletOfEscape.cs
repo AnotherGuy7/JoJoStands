@@ -14,13 +14,14 @@ namespace JoJoStands.Items.Accessories
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Amulet of Escape");
             Tooltip.SetDefault("1 increased Stand attack speed");
+            SacrificeTotal = 1;
         }
         public override void SetDefaults()
         {
             Item.width = 16;
             Item.height = 16;
             Item.maxStack = 1;
-            Item.value = Item.buyPrice(0, 0, 25, 0);
+            Item.value = Item.buyPrice(silver: 25);
             Item.rare = ItemRarityID.Blue;
             Item.accessory = true;
         }

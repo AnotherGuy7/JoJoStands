@@ -1,26 +1,25 @@
-using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
+using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.CraftingMaterials
 {
-	public class Hand : ModItem
-	{
-		public override void SetStaticDefaults()
+    public class Hand : ModItem
+    {
+        public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hand");
-			Tooltip.SetDefault("A hand that a certain individual would kill for.");
-		}
+            Tooltip.SetDefault("A hand that a certain individual would kill for.");
+            SacrificeTotal = 3;
+        }
 
-		public override void SetDefaults()
+        public override void SetDefaults()
         {
-			Item.width = 20;
-			Item.height = 20;
-			Item.maxStack = 99;
-            Item.value = Item.buyPrice(0, 0, 24, 0);
-            Item.rare = 8;
-		}
+            Item.width = 36;
+            Item.height = 22;
+            Item.maxStack = 99;
+            Item.value = Item.buyPrice(silver: 25);
+            Item.rare = ItemRarityID.Yellow;
+        }
     }
 }

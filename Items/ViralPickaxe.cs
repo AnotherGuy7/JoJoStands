@@ -10,6 +10,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A gold pickaxe that progressively increases mining speed.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

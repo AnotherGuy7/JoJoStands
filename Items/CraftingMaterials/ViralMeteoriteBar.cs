@@ -11,7 +11,7 @@ namespace JoJoStands.Items.CraftingMaterials
         {
             DisplayName.SetDefault("Viral Meteorite Bar");
             Tooltip.SetDefault("You feel your soul interacting with the metal.");
-
+            SacrificeTotal = 25;
         }
 
         public override void SetDefaults()
@@ -20,7 +20,7 @@ namespace JoJoStands.Items.CraftingMaterials
             Item.height = 32;
             Item.maxStack = 999;
             Item.rare = ItemRarityID.Green;
-            Item.value = Item.buyPrice(0, 0, 50, 0);
+            Item.value = Item.buyPrice(silver: 50);
         }
 
         public override void AddRecipes()

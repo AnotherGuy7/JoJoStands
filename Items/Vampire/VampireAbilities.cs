@@ -16,7 +16,8 @@ namespace JoJoStands.Items.Vampire
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Vampire Abilities");
-            //Tooltip.SetDefault("Left-click to lunge and hold right-click to grab an enemy and suck their blood!\nSpecial: Switch the abilities used for right-click!");
+            Tooltip.SetDefault("Left-click to lunge and hold right-click to grab an enemy and suck their blood!\nSpecial: Switch the abilities used for right-click!");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()

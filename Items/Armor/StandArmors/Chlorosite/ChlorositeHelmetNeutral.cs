@@ -13,13 +13,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
         {
             DisplayName.SetDefault("Chlorosite Helmet (Neutral)");
             Tooltip.SetDefault("A helmet that is made with Chlorophyte infused with an otherworldly virus.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 3, 0, 0);
+            Item.value = Item.buyPrice(gold: 4, silver: 75);
             Item.rare = ItemRarityID.LightRed;
             Item.defense = 6;
         }

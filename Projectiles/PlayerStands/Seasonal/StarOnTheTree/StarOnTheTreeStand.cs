@@ -27,7 +27,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override string spawnSoundName => "Star Platinum";
         public override int standType => 1;
 
-        private int updateTimer = 0;
         private int timestopStartDelay = 0;
         private bool flickFrames = false;
         private bool resetFrame = false;
@@ -36,7 +35,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -46,16 +45,11 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 Projectile.timeLeft = 2;
             if (Main.rand.Next(0, 4 + 1) == 0)
             {
-                int dust = Dust.NewDust(Projectile.position - new Vector2(0f, halfStandHeight), 58, 64, 71);
+                int dust = Dust.NewDust(Projectile.position - new Vector2(0f, halfStandHeight), 58, 64, DustID.UndergroundHallowedEnemies);
                 Main.dust[dust].noGravity = true;
             }
             Lighting.AddLight(Projectile.Center + new Vector2(0f, -halfStandHeight + 2f), 1f / 2f, 0.88f / 2f, 0.9f / 2f);
 
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopStartDelay <= 0)
             {
                 if (JoJoStands.JoJoStandsSounds == null)
@@ -183,10 +177,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
@@ -199,13 +193,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     Projectile.frameCounter = 0;
                     resetFrame = true;
                 }
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Flick");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
                 Projectile.frame = 0;
@@ -216,7 +210,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }
@@ -226,7 +220,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         {
             if (resetFrame && animationName == "Flick")
             {
-                normalFrames = true;
+                idleFrames = true;
                 flickFrames = false;
                 resetFrame = false;
             }

@@ -10,13 +10,14 @@ namespace JoJoStands.Items.Vanities
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Koichi's Shirt");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 30;
+            Item.height = 22;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

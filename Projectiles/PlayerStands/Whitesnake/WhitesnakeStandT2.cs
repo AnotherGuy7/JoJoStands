@@ -23,7 +23,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
         private const float RemoteControlMaxDistance = 40f * 16f;
 
-        private int updateTimer = 0;
         private bool remoteControlled = false;
         private bool gunRevealFrames = false;
         private bool remoteControlFrames = false;
@@ -37,7 +36,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -45,12 +44,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
-
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
 
             remoteControlFrames = remoteControlled;
             if (!mPlayer.standAutoMode && !remoteControlled)
@@ -98,7 +91,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 {
                     shootCount += 15;
                     attackFrames = false;
-                    normalFrames = false;
+                    idleFrames = false;
                     secondaryAbilityFrames = false;
                     Projectile.frame = 0;
                     Projectile.frameCounter = 0;
@@ -232,23 +225,23 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
             if (gunRevealFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 secondaryAbilityFrames = false;
                 remoteControlFrames = false;
@@ -256,13 +249,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             }
             if (remoteControlFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("RemoteControl");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

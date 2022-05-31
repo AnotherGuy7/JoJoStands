@@ -11,26 +11,24 @@ namespace JoJoStands.Items.Hamon
         {
             DisplayName.SetDefault("Hamon-Infused Vino");
             Tooltip.SetDefault("Drink this hamon-infused vino to feel stronger and healthier or shoot it all at your enemies!");
+            SacrificeTotal = 10;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 10;
-            Item.height = 10;
-            Item.useTime = 24;
-            Item.useAnimation = 24;
-            Item.useStyle = 3;
-            Item.value = Item.buyPrice(0, 2, 18, 68);
-            Item.rare = 3;
             Item.damage = 42;
+            Item.width = 34;
+            Item.height = 34;
             Item.useTime = 24;
             Item.useAnimation = 24;
-            Item.useStyle = 3;
+            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.value = Item.buyPrice(gold: 2, silver: 50);
+            Item.rare = ItemRarityID.Orange;
             Item.knockBack = 3f;
             Item.UseSound = null;
             Item.shoot = ModContent.ProjectileType<HamonVinoBottleCap>();
-            Item.shootSpeed = 24f;
             Item.potion = false;
+            Item.shootSpeed = 24f;
         }
 
         public override bool AltFunctionUse(Player player)
@@ -45,22 +43,22 @@ namespace JoJoStands.Items.Hamon
                 Item.damage = 42;
                 Item.useTime = 24;
                 Item.useAnimation = 24;
-                Item.useStyle = 3;
+                Item.useStyle = ItemUseStyleID.Thrust;
                 Item.knockBack = 3f;
                 Item.UseSound = null;
                 Item.shoot = ModContent.ProjectileType<HamonVinoBottleCap>();
-                Item.shootSpeed = 24f;
                 Item.potion = false;
+                Item.shootSpeed = 24f;
             }
             if (player.altFunctionUse != 2 && !player.HasBuff(BuffID.PotionSickness))
             {
+                Item.potion = true;
+                Item.UseSound = SoundID.Item3;
                 player.statLife += 125;
                 player.HealEffect(75);
                 player.AddBuff(BuffID.Swiftness, 1650);
                 player.AddBuff(BuffID.Regeneration, 1650);
                 player.AddBuff(BuffID.ManaRegeneration, 1650);
-                Item.UseSound = SoundID.Item3;
-                Item.potion = true;
                 player.GetModPlayer<HamonPlayer>().amountOfHamon += 25;
             }
             return true;

@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Vanities
             DisplayName.SetDefault("Brotherly Wig");
             Tooltip.SetDefault("A slicked back blond wig, resembling a certain assassin.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 20;
+            Item.height = 14;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

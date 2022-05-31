@@ -13,13 +13,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
         {
             DisplayName.SetDefault("Requiem Crown (Neutral)");
             Tooltip.SetDefault("A crown made from the finest materials space has offered so far.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 15, 0, 0);
+            Item.value = Item.buyPrice(gold: 17, silver: 50);
             Item.rare = ItemRarityID.Red;
             Item.defense = 10;
         }

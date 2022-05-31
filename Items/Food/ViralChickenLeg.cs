@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Food
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A dry, breaded (chicken?) leg that, when eaten, makes you feel much better.\nBoosts Stand Speed and player defense for 3m.");
+            SacrificeTotal = 5;
         }
 
         public override void SetDefaults()
@@ -20,6 +21,7 @@ namespace JoJoStands.Items.Food
             Item.height = 26;
             Item.useTime = 20;
             Item.useAnimation = 20;
+            Item.maxStack = 99;
             Item.value = Item.buyPrice(silver: 12);
             Item.UseSound = SoundID.Item2;
             Item.rare = ItemRarityID.Green;

@@ -1,6 +1,7 @@
 using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace JoJoStands.Items.Tiles
 {
@@ -10,6 +11,7 @@ namespace JoJoStands.Items.Tiles
         {
             DisplayName.SetDefault("Quiet Life");
             Tooltip.SetDefault("`D.Storm`");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -20,10 +22,10 @@ namespace JoJoStands.Items.Tiles
             Item.autoReuse = true;
             Item.useAnimation = 30;
             Item.useTime = 30;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.value = Item.buyPrice(0, 2, 0, 0);
-            Item.rare = 1;
+            Item.value = Item.buyPrice(gold: 2);
+            Item.rare = ItemRarityID.Blue;
             Item.createTile = ModContent.TileType<QuietLifeTile>();
         }
     }

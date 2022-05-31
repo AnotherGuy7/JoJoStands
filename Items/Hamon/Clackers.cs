@@ -14,6 +14,7 @@ namespace JoJoStands.Items.Hamon
         {
             DisplayName.SetDefault("Clacker Balls");
             Tooltip.SetDefault("These clackers are now deadly weapons while infused with Hamon.\nRight-click requires more than 5 hamon\nSpecial: Hamon Breathing");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()
@@ -23,12 +24,12 @@ namespace JoJoStands.Items.Hamon
             Item.height = 32;
             Item.useTime = 60;
             Item.useAnimation = 60;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.noUseGraphic = true;
             Item.autoReuse = true;
             Item.maxStack = 1;
             Item.knockBack = 2f;
-            Item.rare = 4;
+            Item.rare = ItemRarityID.LightRed;
             Item.shootSpeed = 8f;
             Item.useTurn = true;
             Item.noWet = true;
@@ -48,7 +49,10 @@ namespace JoJoStands.Items.Hamon
                 velocity *= 1.25f;
                 type = ModContent.ProjectileType<ChargedClackerProjectile>();
                 hamonPlayer.amountOfHamon -= 5;
+                Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
+                return false;
             }
+
             return true;
         }
 

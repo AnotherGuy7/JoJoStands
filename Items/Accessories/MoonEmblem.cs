@@ -2,7 +2,6 @@ using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.Accessories
 {
@@ -12,6 +11,7 @@ namespace JoJoStands.Items.Accessories
         {
             DisplayName.SetDefault("Moon Emblem");
             Tooltip.SetDefault("15% increased vampiric damage");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

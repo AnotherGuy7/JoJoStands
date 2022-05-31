@@ -10,6 +10,7 @@ namespace JoJoStands.Items
         {
             DisplayName.SetDefault("Hunter's Knife");
             Tooltip.SetDefault("A sharp knife that is best suited to be thrown.");
+            SacrificeTotal = 150;
         }
         public override void SetDefaults()
         {

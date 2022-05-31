@@ -20,7 +20,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override string poseSoundName => "OnceWeDecideToKillItsDone";
         public override string spawnSoundName => "The Grateful Dead";
 
-        private int updateTimer = 0;
         private bool grabFrames = false;
         private bool secondaryFrames = false;
 
@@ -28,7 +27,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -36,12 +35,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
-
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
 
             if (!mPlayer.standAutoMode)
             {
@@ -80,16 +73,16 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 PlayAnimation("Idle");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

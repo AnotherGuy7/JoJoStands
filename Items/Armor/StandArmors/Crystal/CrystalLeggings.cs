@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
         {
             DisplayName.SetDefault("Crystal Leggings");
             Tooltip.SetDefault("Leggings made out of crystal.\n12% movement speed");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
-            Item.height = 24;
-            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.height = 18;
+            Item.value = Item.buyPrice(gold: 1, silver: 25);
             Item.rare = ItemRarityID.LightPurple;
             Item.defense = 7;
         }

@@ -22,7 +22,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
         private const int BaseKickCooldownTime = 120;
         private const int MaxAmountOfDusts = 20;
 
-        public int updateTimer = 0;
         private int kickRestTimer = 0;
         private float kickRadius = 0f;
         private int kickCooldownTime = 0;
@@ -33,21 +32,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
-            {
                 Projectile.timeLeft = 2;
-            }
-
-            updateTimer++;
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
-
             if (kickRestTimer > 0)
-            {
                 kickRestTimer--;
-            }
+
             kickRadius = (BaseKickRadius * mPlayer.sexPistolsTier) + mPlayer.standRangeBoosts / 2f;
             kickCooldownTime = BaseKickCooldownTime - (15 * mPlayer.sexPistolsTier) - (2 * mPlayer.standSpeedBoosts);
 
@@ -61,7 +49,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                 {
                     float rotation = MathHelper.ToRadians(((360 / MaxAmountOfDusts) * i) - 90f);        //60 since it's the max amount of dusts that is supposed to circle it
                     Vector2 dustPosition = Projectile.Center + (rotation.ToRotationVector2() * kickRadius);
-                    int dustIndex = Dust.NewDust(dustPosition, 1, 1, 169);
+                    int dustIndex = Dust.NewDust(dustPosition, 1, 1, DustID.IchorTorch);
                     Main.dust[dustIndex].noGravity = true;
                     Main.dust[dustIndex].noLight = true;
                 }
@@ -88,7 +76,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                                 {
                                     target = possibleTarget;
                                     closestDistance = distance;
-                                    break;
                                 }
                             }
 

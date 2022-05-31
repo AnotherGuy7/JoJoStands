@@ -24,6 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         {
             SelectAnimation();
             UpdateStandInfo();
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -47,9 +48,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                         shootCount += newShootTime;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
@@ -61,7 +61,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 {
                     if (player.whoAmI == Main.myPlayer)
                     {
-                        normalFrames = true;
+                        idleFrames = true;
                         attackFrames = false;
                     }
                 }
@@ -72,13 +72,11 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 if (target != null)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
 
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0f)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.spriteDirection = Projectile.direction;
 
                     Projectile.velocity = target.Center - Projectile.Center;
@@ -92,9 +90,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                             shootCount += newShootTime;
                             Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
@@ -105,7 +102,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 }
                 else
                 {
-                    normalFrames = true;
+                    idleFrames = true;
                     attackFrames = false;
                 }
             }
@@ -115,17 +112,17 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

@@ -27,14 +27,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
         private bool abilityPose = false;
         private int timestopPoseTimer = 0;
-        private int updateTimer = 0;
         private int timestopStartDelay = 0;
 
         public override void AI()
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -43,7 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (Projectile.spriteDirection == 1)
+            /*if (Projectile.spriteDirection == 1)
             {
                 DrawOffsetX = -10;
             }
@@ -51,13 +50,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             {
                 DrawOffsetX = -60;
             }
-            DrawOriginOffsetY = -halfStandHeight;
+            DrawOriginOffsetY = -halfStandHeight;*/
 
-            if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
-            {
-                updateTimer = 0;
-                Projectile.netUpdate = true;
-            }
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopStartDelay <= 0)
             {
                 if (JoJoStands.JoJoStandsSounds == null)
@@ -83,7 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (timestopPoseTimer > 0)
             {
                 timestopPoseTimer--;
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 abilityPose = true;
                 Main.mouseLeft = false;
@@ -130,23 +124,23 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (abilityPose)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("AbilityPose");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

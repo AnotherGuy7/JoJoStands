@@ -27,21 +27,15 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         private bool touchedTile = false;
 
         public static NPC savedTarget = null;
-        private int updateTimer = 0;
 
         public override void AI()
         {
             SelectAnimation();
             UpdateStandInfo();
-            updateTimer++;
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
-            if (updateTimer >= 90)
-            {
-                Projectile.netUpdate = true;
-                updateTimer = 0;
-            }
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
@@ -66,7 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 {
                     shootCount += 10;
                     attackFrames = false;
-                    normalFrames = false;
+                    idleFrames = false;
                     float mouseToPlayerDistance = Vector2.Distance(Main.MouseWorld, player.Center);
 
                     if (!touchedNPC && !touchedTile)
@@ -161,7 +155,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 if (savedTarget != null && touchedTargetDistance > newMaxDistance + 8f)       //if the target leaves and the bomb won't damage you, detonate the enemy
                 {
                     attackFrames = false;
-                    normalFrames = false;
+                    idleFrames = false;
                     secondaryAbilityFrames = true;
                     explosionTimer++;
                     if (explosionTimer == 5)
@@ -179,7 +173,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 if (target != null)
                 {
                     attackFrames = true;
-                    normalFrames = false;
+                    idleFrames = false;
 
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
@@ -197,14 +191,12 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             shootCount += newPunchTime;
                             Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             if (Projectile.direction == 1)
-                            {
                                 shootVel *= shootSpeed;
-                            }
+
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), 3f, Projectile.owner, fistWhoAmI, tierNumber);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
@@ -213,7 +205,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 }
                 else
                 {
-                    normalFrames = true;
+                    idleFrames = true;
                     attackFrames = false;
                 }
             }
@@ -251,17 +243,17 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         {
             if (attackFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (normalFrames)
+            if (idleFrames)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
             if (secondaryAbilityFrames)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
                 if (Projectile.frame >= 4)      //cause it should only click once
@@ -271,7 +263,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {
-                normalFrames = false;
+                idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
             }

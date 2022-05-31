@@ -13,13 +13,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
         {
             DisplayName.SetDefault("Phantom Greaves");
             Tooltip.SetDefault("A couple of greaves that is made with ectoplasm and a strong virus.\n+10% Movement Speed\n+5% Stand Crit Chance");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 2, 0, 0);
+            Item.value = Item.buyPrice(gold: 4, silver: 50);
             Item.rare = ItemRarityID.Yellow;
             Item.defense = 15;
         }

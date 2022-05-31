@@ -15,15 +15,16 @@ namespace JoJoStands.Items.CraftingMaterials
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(8, 4));
             DisplayName.SetDefault("Tainted Lifeforce");
             Tooltip.SetDefault("The aura of someone remorselessly wicked");
+            SacrificeTotal = 3;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 20;
-            Item.height = 20;
+            Item.width = 32;
+            Item.height = 44;
             Item.maxStack = 99;
             Item.rare = ItemRarityID.Yellow;
-            Item.value = Item.buyPrice(0, 0, 75, 0);
+            Item.value = Item.buyPrice(gold: 2);
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
@@ -44,8 +45,8 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WillToEscape>(), 3)
-                .AddIngredient(ModContent.ItemType<WillToDestroy>(), 3)
+                .AddIngredient(ItemType<WillToEscape>(), 3)
+                .AddIngredient(ItemType<WillToDestroy>(), 3)
                 .AddIngredient(ItemID.SoulofNight, 3)
                 .AddIngredient(ItemID.Ectoplasm, 4)
                 .Register();

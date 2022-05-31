@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Food
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("A regular ol' hamburger... but sprinkled with Viral Powder!\nBoosts Stand Damage, Stand Crit Chance, Stand Speed, and player defense for 5m.");
+            SacrificeTotal = 5;
         }
 
         public override void SetDefaults()
@@ -20,6 +21,7 @@ namespace JoJoStands.Items.Food
             Item.height = 32;
             Item.useTime = 20;
             Item.useAnimation = 20;
+            Item.maxStack = 99;
             Item.value = Item.buyPrice(silver: 40);
             Item.UseSound = SoundID.Item2;
             Item.rare = ItemRarityID.Green;

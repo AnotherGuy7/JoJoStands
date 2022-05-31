@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Hamon
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Throw this chained claw to grab enemies and inject Hamon into them!\nRequires 5 or more Hamon to inject Hamon while an enemy is grabbed.\nSpecial: Hamon Breathing");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()

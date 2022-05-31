@@ -14,6 +14,7 @@ namespace JoJoStands.Items.Accessories
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Amulet of Manipulation");
             Tooltip.SetDefault("20% Stand Ability cooldown reduction\nMakes melee stands inflict Cursed Flames on enemies.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
@@ -21,7 +22,7 @@ namespace JoJoStands.Items.Accessories
             Item.width = 16;
             Item.height = 16;
             Item.maxStack = 1;
-            Item.value = Item.buyPrice(0, 50, 0, 0);
+            Item.value = Item.buyPrice(gold: 10);
             Item.rare = ItemRarityID.Lime;
             Item.accessory = true;
         }

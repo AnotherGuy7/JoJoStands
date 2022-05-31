@@ -11,15 +11,15 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Italian Wig");
             Tooltip.SetDefault("A wig, fashioned into a unique hairstyle with three loops in the front.");
-
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 32;
+            Item.height = 30;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

@@ -15,6 +15,7 @@ namespace JoJoStands.Items.Vampire
         {
             DisplayName.SetDefault("Knife Wielder Abilities (Zombie)");
             Tooltip.SetDefault("Left-click to lunge at enemies with knives and right-click to bury knives into you.\nSpecial: Shoot all of the knives inside of you outward!\nNote: 16 or more knives are required for Knife Amalgamation. Knife Amalgamation is required to use the Special.");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()

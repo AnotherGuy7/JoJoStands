@@ -11,13 +11,14 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Diavolo's Net");
             Tooltip.SetDefault("Large red robes, accessorized with a golden necklace.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 32;
+            Item.height = 32;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

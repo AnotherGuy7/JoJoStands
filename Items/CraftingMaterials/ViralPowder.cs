@@ -10,6 +10,7 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Viral Meteorite turned into dust. Tastes pretty good!");
+            SacrificeTotal = 50;
         }
 
         public override void SetDefaults()
@@ -18,7 +19,7 @@ namespace JoJoStands.Items.CraftingMaterials
             Item.height = 20;
             Item.maxStack = 999;
             Item.rare = ItemRarityID.Blue;
-            Item.value = Item.buyPrice(0, 0, 0, 25);
+            Item.value = Item.buyPrice(copper: 25);
         }
 
         public override void AddRecipes()

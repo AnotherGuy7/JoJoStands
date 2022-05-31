@@ -15,20 +15,20 @@ namespace JoJoStands.Items.CraftingMaterials
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(8, 4));
             DisplayName.SetDefault("Caring Lifeforce");
             Tooltip.SetDefault("The spirit of someone whose only wish is to help");
+            SacrificeTotal = 3;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 20;
-            Item.height = 20;
+            Item.width = 32;
+            Item.height = 42;
             Item.maxStack = 99;
             Item.rare = ItemRarityID.Yellow;
-            Item.value = Item.buyPrice(0, 0, 75, 0);
+            Item.value = Item.buyPrice(gold: 2);
         }
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-
             Texture2D texture = (Texture2D)Request<Texture2D>("JoJoStands/Items/CraftingMaterials/" + Name);
             DrawAnimation drawAnim = Main.itemAnimations[Item.type];
             Rectangle sourceRect = drawAnim.GetFrame(texture);
@@ -45,8 +45,8 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WillToProtect>(), 3)
-                .AddIngredient(ModContent.ItemType<WillToChange>(), 3)
+                .AddIngredient(ItemType<WillToProtect>(), 3)
+                .AddIngredient(ItemType<WillToChange>(), 3)
                 .AddIngredient(ItemID.SoulofLight, 3)
                 .AddIngredient(ItemID.Ectoplasm, 4)
                 .Register();

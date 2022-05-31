@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
         {
             DisplayName.SetDefault("Requiem Greaves");
             Tooltip.SetDefault("Greaves made with the finest metal out there, enchanced with Viral Meteorite.\n+8% Stand Crit Chance\n+14% Movement Speed");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 17, 0, 0);
+            Item.value = Item.buyPrice(gold: 16);
             Item.rare = ItemRarityID.Red;
             Item.defense = 16;
         }

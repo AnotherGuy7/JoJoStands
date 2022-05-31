@@ -10,13 +10,14 @@ namespace JoJoStands.Items.CraftingMaterials
         {
             DisplayName.SetDefault("Chlorosite Bar");
             Tooltip.SetDefault("A gem of nature corrupted by an otherworldly virus...");
+            SacrificeTotal = 25;
         }
         public override void SetDefaults()
         {
-            Item.width = 32;
-            Item.height = 32;
-            Item.value = Item.buyPrice(0, 1, 90, 0);
-            Item.rare = 1;
+            Item.width = 30;
+            Item.height = 24;
+            Item.value = Item.buyPrice(gold: 3);
+            Item.rare = ItemRarityID.Blue;
             Item.maxStack = 999;
         }
         public override void AddRecipes()

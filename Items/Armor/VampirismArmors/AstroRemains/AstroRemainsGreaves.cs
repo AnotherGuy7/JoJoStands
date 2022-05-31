@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.AstroRemains
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Greaves that have seen the depths of the Dungeon and the expanse of the universe.\n+10% Movement Speed while using Vampiric Items");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

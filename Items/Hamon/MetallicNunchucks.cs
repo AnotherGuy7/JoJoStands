@@ -11,6 +11,7 @@ namespace JoJoStands.Items.Hamon
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Swing around these metallic nunchucks and then deal heavy blows to enemies!\nSpecial: Hamon Breathing");
+            SacrificeTotal = 1;
         }
 
         public override void SafeSetDefaults()

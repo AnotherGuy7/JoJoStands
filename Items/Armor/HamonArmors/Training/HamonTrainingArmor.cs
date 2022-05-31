@@ -12,13 +12,14 @@ namespace JoJoStands.Items.Armor.HamonArmors.Training
         {
             DisplayName.SetDefault("Hamon Training Vest");
             Tooltip.SetDefault("You can feel your lungs becoming mightier...\nIncreases Hamon Damage by 10%");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 30;
             Item.height = 22;
-            Item.value = Item.buyPrice(0, 0, 75, 0);
+            Item.value = Item.buyPrice(silver: 65);
             Item.rare = ItemRarityID.Green;
             Item.defense = 5;
         }

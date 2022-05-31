@@ -10,12 +10,13 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Old Man's Shirt");
             Tooltip.SetDefault("A yellow, roughed up shirt that looks as if it were part of a long adventure.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
+            Item.width = 32;
+            Item.height = 26;
             Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }

@@ -54,6 +54,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         {
             SelectFrame();
             UpdateStandInfo();
+            UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
 
@@ -108,11 +109,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 }
                 else
                 {
-                    if (!fallingFromSpace)
-                    {
-                        Projectile.velocity *= 0.95f;
-                    }
                     Projectile.rotation = 0f;
+                    if (!fallingFromSpace)
+                        Projectile.velocity *= 0.95f;
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
@@ -203,9 +202,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                             SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                             Vector2 shootVel = target.Center - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, newProjectileDamage, 3f, Projectile.owner);
@@ -240,15 +238,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 {
                     Projectile.frame += 1;
                     Projectile.frameCounter = 0;
+                    if (Projectile.frame >= 4)
+                        Projectile.frame = 2;
                 }
                 if (Projectile.frame <= 1)
-                {
                     Projectile.frame = 2;
-                }
-                if (Projectile.frame >= 4)
-                {
-                    Projectile.frame = 2;
-                }
+
             }
             else
             {
@@ -258,9 +253,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     Projectile.frameCounter = 0;
                 }
                 if (Projectile.frame >= 2)
-                {
                     Projectile.frame = 0;
-                }
             }
         }
     }

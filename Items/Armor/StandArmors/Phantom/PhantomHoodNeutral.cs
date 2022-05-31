@@ -16,13 +16,14 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
         {
             DisplayName.SetDefault("Phantom Hood (Neutral)");
             Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
             Item.width = 22;
             Item.height = 24;
-            Item.value = Item.buyPrice(0, 3, 0, 0);
+            Item.value = Item.buyPrice(gold: 5, silver: 52);
             Item.rare = ItemRarityID.Yellow;
             Item.defense = 8;
         }

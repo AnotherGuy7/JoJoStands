@@ -14,6 +14,7 @@ namespace JoJoStands.Items
         {
             Tooltip.SetDefault("A gold and well designed staff.\nShoots enemy chasing orbs.");
             Item.staff[Item.type] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

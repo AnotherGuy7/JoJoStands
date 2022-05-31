@@ -10,14 +10,15 @@ namespace JoJoStands.Items.Vanities
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Kakyoin's Coat");
-            Tooltip.SetDefault("Kakyoin's Coat");
+            Tooltip.SetDefault("A green coat!");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.rare = 6;
+            Item.width = 40;
+            Item.height = 40;
+            Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
 

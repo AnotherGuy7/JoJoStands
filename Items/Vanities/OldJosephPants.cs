@@ -10,12 +10,13 @@ namespace JoJoStands.Items.Vanities
         {
             DisplayName.SetDefault("Old Man's Pants");
             Tooltip.SetDefault("Dirty brown pants. At least he shoes look nice!");
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
+            Item.width = 26;
+            Item.height = 22;
             Item.rare = ItemRarityID.LightPurple;
             Item.vanity = true;
         }
