@@ -37,7 +37,6 @@ namespace JoJoStands.Items
         public override void OnConsumeItem(Player player)
         {
             SoundEngine.PlaySound(SoundID.Item3, player.Center);
-
             if (player.HasBuff(ModContent.BuffType<Vampire>()))
                 player.ClearBuff(ModContent.BuffType<Vampire>());
             if (player.HasBuff(ModContent.BuffType<AjaVampire>()))
