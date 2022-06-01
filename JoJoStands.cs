@@ -113,6 +113,14 @@ namespace JoJoStands
             }
         }
 
+        public override void Close()
+        {
+            standTier1List.Clear();
+            timestopImmune.Clear();
+            christmasStands.Clear();
+            testStandPassword.Clear();
+        }
+
         public override void Unload()
         {
             SpecialHotKey = null;
@@ -120,9 +128,10 @@ namespace JoJoStands
             PoseHotKey = null;
             StandAutoModeHotKey = null;
             StandOutHotKey = null;
-            standTier1List.Clear();
-            timestopImmune.Clear();
-            testStandPassword.Clear();
+            standTier1List = null;
+            timestopImmune = null;
+            christmasStands = null;
+            testStandPassword = null;
             SoundsLoaded = false;
             FanStandsLoaded = false;
             JoJoStandsSounds = null;

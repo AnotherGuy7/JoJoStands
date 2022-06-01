@@ -8,7 +8,6 @@ using JoJoStands.Items.Hamon;
 using JoJoStands.Mounts;
 using JoJoStands.Networking;
 using JoJoStands.Projectiles;
-using JoJoStands.Projectiles.Minions;
 using JoJoStands.Projectiles.PlayerStands.BadCompany;
 using JoJoStands.Projectiles.PlayerStands.Tusk;
 using JoJoStands.UI;
@@ -21,7 +20,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -1221,18 +1219,6 @@ namespace JoJoStands
                     }
                 }
                 JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.GratefulDeadGasEffect, gratefulDeadGasActive);
-
-                if (ColorChangeEffects)
-                {
-                    if (JoJoStandsWorld.VampiricNight && !JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect))
-                    {
-                        Filters.Scene.Activate(JoJoStandsShaders.BattlePaletteSwitchEffect);
-                        JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BattlePaletteSwitchEffect, (int)ColorChangeStyle.NormalToLightGreen);
-                    }
-                }
-
-                if (!JoJoStandsWorld.VampiricNight && JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) || (JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) && !ColorChangeEffects))
-                    Filters.Scene[JoJoStandsShaders.BattlePaletteSwitchEffect].Deactivate();
             }
         }
 

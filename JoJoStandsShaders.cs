@@ -1,10 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
@@ -24,7 +19,6 @@ namespace JoJoStands
         public const string GratefulDeadGasEffect = "GasEffect";
         public const string VoidBarGradient = "JoJoStandsVoidGradient";
         public const string BattlePaletteSwitchEffect = "ColorChangeEffect";
-
 
         public static void ActivateShader(string shaderName)
         {
