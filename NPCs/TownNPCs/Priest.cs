@@ -26,7 +26,6 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             NPC.Happiness.SetBiomeAffection<SnowBiome>(AffectionLevel.Hate);
             NPC.Happiness.SetBiomeAffection<HallowBiome>(AffectionLevel.Dislike);
             NPC.Happiness.SetNPCAffection<Gambler>(AffectionLevel.Like);
-            NPC.Happiness.SetNPCAffection<HamonMaster>(AffectionLevel.Dislike);
             NPC.Happiness.SetNPCAffection<MarineBiologist>(AffectionLevel.Hate);
             NPC.Happiness.SetNPCAffection(NPCID.Dryad, AffectionLevel.Hate);
             NPC.Happiness.SetNPCAffection(NPCID.Merchant, AffectionLevel.Dislike);

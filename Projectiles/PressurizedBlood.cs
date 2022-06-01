@@ -28,10 +28,5 @@ namespace JoJoStands.Projectiles
                 Main.dust[newDust].noGravity = true;
             }
         }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.AddBuff(ModContent.BuffType<Lacerated>(), 15 * 60);
-        }
     }
 }

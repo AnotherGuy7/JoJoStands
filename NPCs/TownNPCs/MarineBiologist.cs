@@ -29,7 +29,6 @@ namespace JoJoStands.NPCs.TownNPCs
             NPC.Happiness.SetBiomeAffection<UndergroundBiome>(AffectionLevel.Dislike);
             NPC.Happiness.SetNPCAffection<Priest>(AffectionLevel.Hate);
             NPC.Happiness.SetNPCAffection<Gambler>(AffectionLevel.Hate);
-            NPC.Happiness.SetNPCAffection<HamonMaster>(AffectionLevel.Like);
             NPC.Happiness.SetNPCAffection(NPCID.Angler, AffectionLevel.Like);
             NPC.Happiness.SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Dislike);
         }

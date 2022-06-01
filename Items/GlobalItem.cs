@@ -1,7 +1,5 @@
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Items.Hamon;
-using JoJoStands.Items.Vampire;
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -25,20 +23,6 @@ namespace JoJoStands.Items
         public override GlobalItem Clone(Item item, Item itemClone)
         {
             return base.Clone(item, itemClone);
-        }
-
-        public override void ModifyTooltips(Item Item, List<TooltipLine> tooltips)
-        {
-            Player player = Main.player[Main.myPlayer];
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            if (player.whoAmI != Main.myPlayer || !vPlayer.learnedAnyZombieAbility)
-                return;
-
-            if ((Item.type == ItemID.DirtBlock || Item.type == ItemID.MudBlock) && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm))
-            {
-                TooltipLine secondaryUseTooltip = new TooltipLine(JoJoStands.Instance, "Secondary Use", "Right-click to consume 5 of this Item and apply a protective film around yourself.");
-                tooltips.Add(secondaryUseTooltip);
-            }
         }
 
         public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)
@@ -122,70 +106,6 @@ namespace JoJoStands.Items
             {
                 normalFallSpeed = 0f;
                 normalGravity = 0f;
-            }
-        }
-
-        public override void HoldItem(Item Item, Player player)
-        {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-
-            if (generalPurposeTimer > 0)
-                generalPurposeTimer--;
-
-            if (!Item.noMelee && !mPlayer.standOut)
-            {
-                bool specialJustPressed = false;
-                if (!Main.dedServ)
-                    specialJustPressed = JoJoStands.SpecialHotKey.JustPressed;
-
-                if (specialJustPressed)
-                {
-                    if (generalPurposeTimer <= 0)
-                    {
-                        generalPurposeTimer = 30;
-                    }
-                    else
-                    {
-                        if (hPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.WeaponsHamonImbueSkill) && hPlayer.learnedHamonSkills[HamonPlayer.WeaponsHamonImbueSkill] && hPlayer.amountOfHamon >= hPlayer.hamonAmountRequirements[HamonPlayer.WeaponsHamonImbueSkill])
-                        {
-                            player.AddBuff(ModContent.BuffType<HamonWeaponImbueBuff>(), 240 * 60);
-                            hPlayer.amountOfHamon -= hPlayer.hamonAmountRequirements[HamonPlayer.WeaponsHamonImbueSkill];
-                        }
-                        generalPurposeTimer = 0;
-                    }
-                }
-            }
-
-            if (Item.type == ItemID.DirtBlock || Item.type == ItemID.MudBlock)
-            {
-                if (!vPlayer.zombie && !vPlayer.vampire)
-                    return;
-
-                if (!MyPlayer.AutomaticActivations)
-                {
-                    if (Item.stack >= 5 && Main.mouseRight && generalPurposeTimer <= 0 && player.whoAmI == Main.myPlayer && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm))
-                    {
-                        generalPurposeTimer += 30;
-                        player.AddBuff(ModContent.BuffType<ProtectiveFilmBuff>(), 60 * 60);
-                        for (int i = 0; i < 5; i++)
-                        {
-                            player.ConsumeItem(Item.type);
-                        }
-                    }
-                }
-                else
-                {
-                    if (Item.stack >= 5 && player.whoAmI == Main.myPlayer && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm) && !player.HasBuff(ModContent.BuffType<ProtectiveFilmBuff>()))
-                    {
-                        player.AddBuff(ModContent.BuffType<ProtectiveFilmBuff>(), 60 * 60);
-                        for (int i = 0; i < 5; i++)
-                        {
-                            player.ConsumeItem(Item.type);
-                        }
-                    }
-                }
             }
         }
 

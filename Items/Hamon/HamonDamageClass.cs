@@ -1,5 +1,4 @@
 using JoJoStands.Buffs.Debuffs;
-using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,33 +31,17 @@ namespace JoJoStands.Items.Hamon
         {
             Player player = Main.LocalPlayer;
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             bool specialPressed = false;
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SpecialHotKey.Current;
 
             if (specialPressed)
             {
-                if (vPlayer.zombie || vPlayer.vampire)
-                {
-                    player.AddBuff(ModContent.BuffType<Sunburn>(), 5 * 60);
-                    return;
-                }
                 increaseCounter++;
                 player.velocity.X /= 3f;
                 hamonPlayer.hamonIncreaseCounter = 0;
                 hamonPlayer.chargingHamon = true;
                 Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
-                if (hamonPlayer.learnedHamonSkills[HamonPlayer.PoisonCancellation])
-                {
-                    for (int b = 0; b < player.buffType.Length; b++)
-                    {
-                        if (player.buffType[b] == BuffID.Poisoned)
-                        {
-                            player.buffTime[b] -= 5;
-                        }
-                    }
-                }
             }
             if (increaseCounter >= 30)
             {
@@ -142,13 +125,6 @@ namespace JoJoStands.Items.Hamon
             {
                 damage *= 1.5f;
             }
-        }
-
-        public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
-        {
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
-            if (hPlayer.learnedHamonSkills[HamonPlayer.SunTag] && target.GetGlobalNPC<JoJoGlobalNPC>().sunTagged)
-                damage = (int)(damage * 1.15f);
         }
 
         public override void ModifyWeaponKnockback(Player player, ref StatModifier knockback)
