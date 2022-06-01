@@ -17,11 +17,11 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            Item.width = 24;
-            Item.height = 24;
+            Item.width = 32;
+            Item.height = 22;
             Item.useTime = 30;
             Item.useAnimation = 30;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.rare = ItemRarityID.Pink;
             Item.noMelee = true;
             Item.mountType = ModContent.MountType<SlowDancerMount>();

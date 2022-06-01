@@ -14,7 +14,7 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 10;
+            Main.projFrames[Projectile.type] = 13;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
 
@@ -23,16 +23,17 @@ namespace JoJoStands.Projectiles.Minions
             Projectile.width = 18;
             Projectile.height = 20;
             Projectile.friendly = true;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 60 * 10;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
         }
 
-        private const float searchDistance = 18f * 16f;
+        private const float SearchDistance = 18f * 16f;
 
         private int maxReflection = 15;
         private int jumpTimer = 0;
         private bool walking = false;
+        private bool spawnEffectsPlayed = false;
 
         public override void AI()
         {
@@ -77,6 +78,15 @@ namespace JoJoStands.Projectiles.Minions
             {
                 walking = true;
             }
+            if (!spawnEffectsPlayed)
+            {
+                for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+                {
+                    int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch, Main.rand.NextFloat(-1.1f, 1.1f + 1f), Main.rand.NextFloat(-1.1f, 1.1f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
+                    Main.dust[dustIndex].noGravity = true;
+                }
+                spawnEffectsPlayed = true;
+            }
 
             NPC npcTarget = null;
             for (int n = 0; n < Main.maxNPCs; n++)
@@ -86,10 +96,9 @@ namespace JoJoStands.Projectiles.Minions
                 {
                     npcTarget = possibleTarget;
                     float distance = Projectile.Distance(possibleTarget.Center);
-                    if (distance < searchDistance)
-                    {
+                    if (distance < SearchDistance)
                         npcTarget = possibleTarget;
-                    }
+
                     break;
                 }
             }
@@ -171,6 +180,10 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void Kill(int timeLeft)
         {
+            for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+            }
             SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.position);
         }
 

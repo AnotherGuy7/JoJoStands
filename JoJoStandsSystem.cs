@@ -116,6 +116,53 @@ namespace JoJoStands
                 _goldExperienceRequiemAbilityWheelUI.SetState(GoldExperienceRequiemAbilityWheelUI);
             }
         }
+
+        public override void Unload()
+        {
+            TBCarrow = null;
+            HamonBarInterface = null;
+            GoldenSpinInterface = null;
+            bulletCounter = null;
+            aerosmithRadar = null;
+            betUI = null;
+            sexPistolsUI = null;
+            VoidBarUI = null;
+            HamonSkillTreeUI = null;
+            UnitsUI = null;
+            ZombieSkillTreeUI = null;
+            StoneFreeAbilityWheelUI = null;
+            for (int i = 0; i < StoneFreeAbilityWheel.stoneFreeAbilityWheel.abilityButtons.Length; i++)
+                StoneFreeAbilityWheel.stoneFreeAbilityWheel.abilityButtons[i] = null;
+            StoneFreeAbilityWheel.stoneFreeAbilityWheel.abilityDescriptionsPanel = null;
+            StoneFreeAbilityWheel.stoneFreeAbilityWheel = null;
+            GoldExperienceAbilityWheelUI = null;
+            for (int i = 0; i < GoldExperienceAbilityWheel.goldExperienceAbilityWheel.abilityButtons.Length; i++)
+                GoldExperienceAbilityWheel.goldExperienceAbilityWheel.abilityButtons[i] = null;
+            GoldExperienceAbilityWheel.goldExperienceAbilityWheel.abilityDescriptionsPanel = null;
+            GoldExperienceAbilityWheel.goldExperienceAbilityWheel = null;
+            GoldExperienceRequiemAbilityWheelUI = null;
+            for (int i = 0; i < GoldExperienceRequiemAbilityWheel.goldExperienceRequiemAbilityWheel.abilityButtons.Length; i++)
+                GoldExperienceRequiemAbilityWheel.goldExperienceRequiemAbilityWheel.abilityButtons[i] = null;
+            GoldExperienceRequiemAbilityWheel.goldExperienceRequiemAbilityWheel.abilityDescriptionsPanel = null;
+            GoldExperienceRequiemAbilityWheel.goldExperienceRequiemAbilityWheel = null;
+            AbilityWheel.mPlayer = null;
+
+            _betUI = null;
+            _hamonbarInterface = null;
+            _goldenSpinInterface = null;
+            _tbcarrow = null;
+            _bulletcounter = null;
+            _aerosmithRadar = null;
+            _sexPistolsUI = null;
+            _voidbarUI = null;
+            _hamonSkillTreeUI = null;
+            _unitsUI = null;
+            _zombieSkillTreeUI = null;
+            _stoneFreeAbilityWheelUI = null;
+            _goldExperienceAbilityWheelUI = null;
+            _goldExperienceRequiemAbilityWheelUI = null;
+        }
+
         public override void PostDrawInterface(SpriteBatch spriteBatch)
         {
             MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();

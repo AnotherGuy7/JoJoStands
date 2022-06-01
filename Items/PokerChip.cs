@@ -1,6 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
-
+using Terraria.ID;
 
 namespace JoJoStands.Items
 {
@@ -14,16 +14,16 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 18;
-            Item.value = Item.buyPrice(0, 35, 72, 0);
-            Item.rare = 8;
+            Item.width = 34;
+            Item.height = 34;
+            Item.value = Item.buyPrice(gold: 40, silver: 45);
+            Item.rare = ItemRarityID.LightPurple;
             Item.maxStack = 1;
         }
 
         public override void OnConsumeItem(Player player)
         {
-            player.statLife += (player.statLifeMax / 2);
+            player.statLife += player.statLifeMax / 2;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace JoJoStands.UI
     public class GoldExperienceAbilityWheel : AbilityWheel
     {
         public static bool visible;
-        private static GoldExperienceAbilityWheel goldExperienceAbilityWheel;
+        public static GoldExperienceAbilityWheel goldExperienceAbilityWheel;
 
         private const int AmountOfAbilities = 4;
         public override int amountOfAbilities => AmountOfAbilities;

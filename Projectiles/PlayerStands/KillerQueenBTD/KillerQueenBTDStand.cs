@@ -3,6 +3,7 @@ using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -36,6 +37,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         private bool bitesTheDustActivated;
         private PlayerData savedPlayerData;
         private WorldData savedWorldData;
+        private bool saveDataCreated = false;       //For use with all clients that aren't 
 
         public struct PlayerData
         {
@@ -94,7 +96,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 GoInFront();
 
             bitesTheDustActive = player.HasBuff(ModContent.BuffType<BitesTheDust>());
-            if (SpecialKeyPressed() && !bitesTheDustActive)
+            if ((SpecialKeyPressed() && !bitesTheDustActive) || (bitesTheDustActive && !saveDataCreated))
             {
                 btdPositionIndex = 0;
                 amountOfSavedData = 0;
@@ -141,6 +143,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         savedWorldData.npcData[i].active = true;
                     }
                 }
+                Projectile.netUpdate = true;
+                saveDataCreated = true;
             }
 
             if (SpecialKeyPressed() && bitesTheDustActive && btdStartDelay <= 0)
@@ -150,10 +154,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
                     player.AddBuff(ModContent.BuffType<BitesTheDust>(), 10);
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BiteTheDustEffect>"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BiteTheDustEffect"));
                 }
                 else
                     btdStartDelay = 205;
+                Projectile.netUpdate = true;
             }
             if (JoJoStands.SoundsLoaded && btdStartDelay > 0)
             {
@@ -166,10 +171,14 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     btdSound.Volume = MyPlayer.ModSoundsVolume;
                     SoundEngine.PlaySound(btdSound, Projectile.Center);
                     btdStartDelay = 1;
+                    Projectile.netUpdate = true;
                 }
             }
             if (bitesTheDustActive && !bitesTheDustActivated)
             {
+                if (!saveDataCreated)
+                    return;
+
                 btdPositionSaveTimer++;
                 if (btdPositionSaveTimer >= 30)
                 {
@@ -236,6 +245,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                                 npc.life = savedData.health;
                             }
                         }
+                        saveDataCreated = false;
                     }
                 }
             }
@@ -344,6 +354,18 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 currentTimeAmount = (int)(currentTimeAmount * 0.8);
             }
             return rewindTime;
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(bitesTheDustActive);
+            writer.Write(bitesTheDustActivated);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            bitesTheDustActive = reader.ReadBoolean();
+            bitesTheDustActivated = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

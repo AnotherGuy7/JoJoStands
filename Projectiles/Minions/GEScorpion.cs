@@ -31,6 +31,7 @@ namespace JoJoStands.Projectiles.Minions
 
         private const float DetectionDistance = 20f * 16f;
         private bool walking = false;
+        private bool spawnEffectsPlayed = false;
 
         public override void AI()
         {
@@ -53,8 +54,17 @@ namespace JoJoStands.Projectiles.Minions
             {
                 walking = true;
             }
+            if (!spawnEffectsPlayed)
+            {
+                for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+                {
+                    int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch, Main.rand.NextFloat(-1.1f, 1.1f + 1f), Main.rand.NextFloat(-1.1f, 1.1f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
+                    Main.dust[dustIndex].noGravity = true;
+                }
+                spawnEffectsPlayed = true;
+            }
             NPC npcTarget = null;
-            for (int n = 0; n < 200; n++)
+            for (int n = 0; n < Main.maxNPCs; n++)
             {
                 NPC npc = Main.npc[n];
                 if (npc.active && !npc.dontTakeDamage && !npc.friendly && npc.lifeMax > 5 && npc.type != NPCID.TargetDummy && npc.type != NPCID.CultistTablet)
@@ -142,6 +152,10 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void Kill(int timeLeft)
         {
+            for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+            }
             SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.position);
         }
 

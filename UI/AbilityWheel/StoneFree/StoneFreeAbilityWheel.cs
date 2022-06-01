@@ -7,7 +7,7 @@ namespace JoJoStands.UI
     public class StoneFreeAbilityWheel : AbilityWheel
     {
         public static bool visible;
-        private static StoneFreeAbilityWheel stoneFreeAbilityWheel;
+        public static StoneFreeAbilityWheel stoneFreeAbilityWheel;
 
         private const int AmountOfAbilities = 5;
         public override int amountOfAbilities => AmountOfAbilities;

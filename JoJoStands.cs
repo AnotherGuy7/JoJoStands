@@ -24,13 +24,12 @@ namespace JoJoStands
 {
     public class JoJoStands : Mod
     {
+        public static JoJoStands Instance;
         public static bool SoundsLoaded = false;
         public static bool FanStandsLoaded = false;
         public static Mod JoJoStandsSounds;
         public static Mod JoJoFanStands;
 
-        internal static JoJoStands Instance => GetInstance<JoJoStands>();        //internal so that it's only usable inside this specific project
-        internal static CustomizableOptions customizableConfig;
 
         public static ModKeybind SpecialHotKey;
         public static ModKeybind SecondSpecialHotKey;
@@ -45,6 +44,7 @@ namespace JoJoStands
 
         public override void Load()
         {
+            Instance = GetInstance<JoJoStands>();
             SoundsLoaded = ModLoader.TryGetMod("JoJoStandsSounds", out JoJoStandsSounds);
             FanStandsLoaded = ModLoader.TryGetMod("JoJoFanStands", out JoJoFanStands);
 
@@ -116,10 +116,10 @@ namespace JoJoStands
         public override void Unload()
         {
             SpecialHotKey = null;
+            SecondSpecialHotKey = null;
             PoseHotKey = null;
             StandAutoModeHotKey = null;
             StandOutHotKey = null;
-            customizableConfig = null;
             standTier1List.Clear();
             timestopImmune.Clear();
             testStandPassword.Clear();
@@ -135,6 +135,7 @@ namespace JoJoStands
             SexPistolsUI.sexPistolsUITexture = null;
             VoidBar.VoidBarTexture = null;
             VoidBar.VoidBarBarTexture = null;
+            Instance = null;
         }
 
         public override void AddRecipeGroups()

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -61,10 +62,10 @@ namespace JoJoStands.UI
             abilityWheel.BorderColor = Color.Transparent;
             abilityWheel.OnScrollWheel += MouseScroll;
 
-            wheelCenter = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelCenter"), Vector2.Zero, new Vector2(54f), Color.White, 1f, 1f);
+            wheelCenter = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelCenter", AssetRequestMode.ImmediateLoad), Vector2.Zero, new Vector2(54f), Color.White, 1f, 1f);
             wheelCenter.SetButtonPosiiton(new Vector2(60f));
             wheelCenter.SetButtonSize(new Vector2(54f));
-            wheelCenter.SetOverlayImage((Texture2D)ModContent.Request<Texture2D>(centerTexturePath), 0.15f);
+            wheelCenter.SetOverlayImage((Texture2D)ModContent.Request<Texture2D>(centerTexturePath, AssetRequestMode.ImmediateLoad), 0.15f);
             wheelCenter.owner = abilityWheel;
             wheelCenter.respondToFocus = false;
             abilityWheel.Append(wheelCenter);
@@ -73,7 +74,7 @@ namespace JoJoStands.UI
             for (int i = 0; i < amountOfAbilities; i++)
             {
                 abilityButtons[i] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelPiece"), wheelCenter.buttonCenter + (IndexToRadianPosition(i, 6) * wheelSpace), new Vector2(38f), Color.White, 1f, 1f);
-                abilityButtons[i].SetOverlayImage((Texture2D)ModContent.Request<Texture2D>(buttonTexturePath + abilityTextureNames[i], ReLogic.Content.AssetRequestMode.ImmediateLoad), 0.15f);
+                abilityButtons[i].SetOverlayImage((Texture2D)ModContent.Request<Texture2D>(buttonTexturePath + abilityTextureNames[i], AssetRequestMode.ImmediateLoad), 0.15f);
                 abilityButtons[i].OnClick += ClickedAbility;
                 abilityButtons[i].OnScrollWheel += MouseScroll;
                 //abilityButtons[i].owner = abilityWheel;
@@ -121,7 +122,6 @@ namespace JoJoStands.UI
                         mPlayer.chosenAbility = 0;
                 }
                 abilityChanged = true;
-
                 abilityNameText.SetText(abilityNames[mPlayer.chosenAbility]);
 
                 for (int i = 0; i < abilitiesShown; i++)
@@ -166,12 +166,12 @@ namespace JoJoStands.UI
             if (abilityChanged)
             {
                 float currentAngle = (wheelCenter.screenPosition - abilityButtons[mPlayer.chosenAbility].screenPosition).ToRotation();
-                if (currentAngle > 0.1f)
-                    wheelRotation -= MathHelper.ToRadians(120f);
-                else if (currentAngle < 0.1f)
-                    wheelRotation += MathHelper.ToRadians(120f);
+                if (currentAngle > 0.05f)
+                    wheelRotation -= MathHelper.ToRadians(190f);
+                else if (currentAngle < -0.05f)
+                    wheelRotation += MathHelper.ToRadians(190f);
 
-                if (Math.Abs(currentAngle) <= 0.1f)
+                if (Math.Abs(currentAngle) <= 0.05f)
                 {
                     wheelRotation += -currentAngle / 2f;
                     abilityChanged = false;

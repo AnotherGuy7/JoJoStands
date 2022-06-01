@@ -1,6 +1,7 @@
 using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -29,8 +30,10 @@ namespace JoJoStands.Projectiles.Minions
         }
 
         private const float DetectionDistance = 16f * 16f;
+
         private NPC npcTarget = null;
-        private bool Up = false;
+        private bool goingUp = false;
+        private bool spawnEffectsPlayed = false;
 
         public override void AI()
         {
@@ -56,17 +59,17 @@ namespace JoJoStands.Projectiles.Minions
             {
                 if (Projectile.velocity.Y <= -0.3f)
                 {
-                    Up = false;
+                    goingUp = false;
                 }
                 if (Projectile.velocity.Y >= 0.3f)
                 {
-                    Up = true;
+                    goingUp = true;
                 }
-                if (!Up)
+                if (!goingUp)
                 {
                     Projectile.velocity.Y += 0.05f;
                 }
-                if (Up)
+                if (goingUp)
                 {
                     Projectile.velocity.Y -= 0.05f;
                 }
@@ -100,6 +103,7 @@ namespace JoJoStands.Projectiles.Minions
                     Projectile.direction = -1;
                 }
             }
+
             Projectile.frameCounter++;
             if (Projectile.frameCounter >= 8)
             {
@@ -114,6 +118,25 @@ namespace JoJoStands.Projectiles.Minions
             {
                 Projectile.frame = 9;
             }
+
+            if (!spawnEffectsPlayed)
+            {
+                for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+                {
+                    int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch, Main.rand.NextFloat(-1.1f, 1.1f + 1f), Main.rand.NextFloat(-1.1f, 1.1f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
+                    Main.dust[dustIndex].noGravity = true;
+                }
+                spawnEffectsPlayed = true;
+            }
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+            }
+            SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.position);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

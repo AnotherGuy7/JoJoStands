@@ -113,7 +113,6 @@ namespace JoJoStands.Networking
             else
             {
                 SendStandAutoMode(-1, fromWho, autoModeVal, whoAmI);
-
             }
         }
 

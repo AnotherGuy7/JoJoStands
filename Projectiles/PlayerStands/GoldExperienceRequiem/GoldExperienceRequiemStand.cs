@@ -85,7 +85,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         regencounter++;
                         if (Main.rand.Next(0, 2 + 1) == 0)
                         {
-                            int dustIndex = Dust.NewDust(player.position, player.width, player.height, 169, SpeedY: Main.rand.NextFloat(-1.1f, -0.6f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
+                            int dustIndex = Dust.NewDust(player.position, player.width, player.height, DustID.IchorTorch, SpeedY: Main.rand.NextFloat(-1.1f, -0.6f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
                             Main.dust[dustIndex].noGravity = true;
                         }
                     }
@@ -105,9 +105,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         player.AddBuff(ModContent.BuffType<BacktoZero>(), 1200);
                         mPlayer.backToZeroActive = true;
                         if (Main.netMode == NetmodeID.MultiplayerClient)
-                        {
                             ModNetHandler.effectSync.SendBTZ(256, player.whoAmI, true, player.whoAmI);
-                        }
                     }
                 }
 

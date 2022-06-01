@@ -29,6 +29,7 @@ namespace JoJoStands.Projectiles
             player.immune = true;
             player.noFallDmg = true;
             player.controlUseItem = false;
+            player.GetModPlayer<MyPlayer>().hideAllPlayerLayers = true;
             if (player.HasBuff(BuffID.Suffocation))
             {
                 player.ClearBuff(BuffID.Suffocation);

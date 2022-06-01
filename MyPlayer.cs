@@ -317,7 +317,7 @@ namespace JoJoStands
                 Main.NewText("Stand Control: Manual");
                 standAutoMode = false;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, true, Player.whoAmI);
+                    ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, false, Player.whoAmI);
             }
             if (JoJoStands.PoseHotKey.JustPressed && !poseMode)
             {
@@ -352,7 +352,7 @@ namespace JoJoStands
                     {
                         NPC npc = Main.npc[n];
                         float distance = Vector2.Distance(Player.Center, npc.Center);
-                        if (distance < (98f * 4f) && !npc.townNPC && !npc.immortal && !npc.hide)
+                        if (npc.active && !npc.townNPC && !npc.immortal && !npc.hide && distance < (98f * 4f))
                         {
                             if (npc.boss)
                             {
@@ -370,7 +370,7 @@ namespace JoJoStands
                     {
                         Player otherPlayer = Main.player[i];
                         float distance = Vector2.Distance(Player.Center, otherPlayer.Center);
-                        if (distance < (98f * 4f) && Player.whoAmI != otherPlayer.whoAmI)
+                        if (otherPlayer.active && distance < (98f * 4f) && Player.whoAmI != otherPlayer.whoAmI)
                         {
                             otherPlayer.AddBuff(ModContent.BuffType<Locked>(), 60 * 15);
                         }
@@ -382,7 +382,7 @@ namespace JoJoStands
                     {
                         NPC npc = Main.npc[n];
                         float distance = Vector2.Distance(Player.Center, npc.Center);
-                        if (distance < (98f * 4f) && !npc.townNPC && !npc.immortal && !npc.hide)
+                        if (npc.active && !npc.townNPC && !npc.immortal && !npc.hide && distance < (98f * 4f))
                         {
                             if (npc.boss)
                             {
@@ -400,7 +400,7 @@ namespace JoJoStands
                     {
                         Player otherPlayer = Main.player[i];
                         float distance = Vector2.Distance(Player.Center, otherPlayer.Center);
-                        if (distance < (98f * 4f) && Player.whoAmI != otherPlayer.whoAmI)
+                        if (otherPlayer.active && distance < (98f * 4f) && Player.whoAmI != otherPlayer.whoAmI)
                         {
                             otherPlayer.AddBuff(ModContent.BuffType<Locked>(), 60 * 30);
                         }

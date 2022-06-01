@@ -221,7 +221,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 {
                     NPC npc = Main.npc[n];
                     float npcDistance = Vector2.Distance(npc.Center, savedPosition);
-                    if (npcDistance < 50f && touchedTile)       //or youd need to go from its center, add half its width to the direction its facing, and then add 16 (also with direction) -- Direwolf
+                    if (npc.active && !npc.friendly && npcDistance < 50f && touchedTile)       //or youd need to go from its center, add half its width to the direction its facing, and then add 16 (also with direction) -- Direwolf
                     {
                         int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
                         Main.projectile[projectile].timeLeft = 2;

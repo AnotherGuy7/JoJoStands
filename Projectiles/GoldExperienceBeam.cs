@@ -2,6 +2,7 @@ using JoJoStands.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace JoJoStands.Projectiles
 {
@@ -9,8 +10,8 @@ namespace JoJoStands.Projectiles
     {
         public override void SetDefaults()
         {
-            Projectile.width = 50;
-            Projectile.height = 8;
+            Projectile.width = 42;
+            Projectile.height = 4;
             Projectile.aiStyle = 0;
             Projectile.timeLeft = 600;
             Projectile.friendly = true;
@@ -21,7 +22,7 @@ namespace JoJoStands.Projectiles
         public override void Kill(int timeLeft)
         {
             Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<GEScorpion>(), 1, 0f, Main.myPlayer);
-            int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
+            int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch);
             Main.dust[dustIndex].noGravity = true;
         }
 

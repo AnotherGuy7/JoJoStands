@@ -130,6 +130,7 @@ namespace JoJoStands.NPCs
             }
         }
 
+
         public override void GetChat(NPC npc, ref string chat)
         {
             if (MyPlayer.SecretReferences)
@@ -415,6 +416,14 @@ namespace JoJoStands.NPCs
                     foresightPositionIndexMax = 0;
                 }*/
                 return false;
+            }
+            if (taggedByButterfly)
+            {
+                if (Main.rand.Next(0, 3 + 1) == 0)
+                {
+                    int dustIndex = Dust.NewDust(npc.position, npc.width, npc.height, DustID.IchorTorch, SpeedY: Main.rand.NextFloat(-1.1f, -0.6f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
+                    Main.dust[dustIndex].noGravity = true;
+                }
             }
             if (spawnedByDeathLoop)
             {

@@ -26,6 +26,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             Projectile.ignoreWater = true;
             DrawOffsetX = -10;
             DrawOriginOffsetY = -10;
+            Projectile.netImportant = true;
         }
 
         private int voidDashTimer = 0;
@@ -51,6 +52,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 bool specialPressed = false;
                 if (!Main.dedServ)
                     specialPressed = JoJoStands.SpecialHotKey.JustPressed;
+
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.VoidCamPosition = Projectile.position - new Vector2(halfScreenWidth, halfScreenHeight);
@@ -61,9 +63,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 if (mPlayer.voidCounter <= 0 || Main.mouseRight && mPlayer.creamTier > 2 || specialPressed && !Main.mouseLeft)
                 {
                     if (specialPressed && !Main.mouseLeft || mPlayer.creamTier == 2 && mPlayer.voidCounter <= 0)
-                    {
                         mPlayer.creamNormalToVoid = true;
-                    }
+
                     Projectile.Kill();
                     mPlayer.creamFrame = 7;
                     mPlayer.creamExposedToVoid = true;
@@ -73,6 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     shootVelocity.Normalize();
                     shootVelocity *= 5f;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<ExposingCream>(), 0, 6f, player.whoAmI);
+                    Projectile.netUpdate = true;
                 }
                 if (savedDashVelocity != Vector2.Zero)
                 {
@@ -84,6 +86,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                         voidDashCooldownTimer = 180;
                         savedDashVelocity = Vector2.Zero;
                     }
+                    Projectile.netUpdate = true;
                 }
                 else if (specialPressed && Main.mouseLeft && savedDashVelocity == Vector2.Zero && voidDashTimer <= 0)       //Dash option
                 {
@@ -107,10 +110,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                         player.ChangeDir(1);
                     else
                         player.ChangeDir(-1);
+                    Projectile.netUpdate = true;
                 }
                 else
                 {
                     Projectile.velocity = Vector2.Zero;
+                    Projectile.netUpdate = true;
                 }
             }
             Projectile.spriteDirection = player.direction;
@@ -168,7 +173,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
             for (int i = 0; i < Main.rand.Next(2, 4 + 1); i++)
             {
-                int dustIndex = 0;
+                int dustIndex;
                 if (Main.rand.Next(0, 1 + 1) == 0)
                     dustIndex = Dust.NewDust(Projectile.position, Projectile.width + 6, Projectile.height + 6, DustID.PurpleCrystalShard);
                 else

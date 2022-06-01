@@ -30,7 +30,7 @@ namespace JoJoStands.Projectiles.Minions
         }
 
         private bool timeLeftDeclared = false;
-        private bool shrinkAndDie = false;
+        private bool shrinking = false;
 
         public override void AI()
         {
@@ -85,9 +85,9 @@ namespace JoJoStands.Projectiles.Minions
 
             if (Projectile.timeLeft <= 181)
             {
-                shrinkAndDie = true;
+                shrinking = true;
             }
-            if (!shrinkAndDie)
+            if (!shrinking)
             {
                 if (Projectile.frame <= 11)
                     Projectile.frameCounter++;
@@ -97,8 +97,13 @@ namespace JoJoStands.Projectiles.Minions
                     Projectile.frame += 1;
                     Projectile.frameCounter = 0;
                 }
+                if (Main.rand.Next(0, 3 + 1) == 0)
+                {
+                    int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch, Main.rand.NextFloat(-1.1f, -0.6f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
+                    Main.dust[dustIndex].noGravity = true;
+                }
             }
-            if (shrinkAndDie)
+            if (shrinking)
             {
                 Projectile.frameCounter++;
                 if (Projectile.frameCounter >= 14)
