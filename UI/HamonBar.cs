@@ -47,8 +47,8 @@ namespace JoJoStands.UI
 
             hamonBar.Width.Set(70f + (70 * sizeMode), 0f);
             hamonBar.Height.Set(48f + (48 * sizeMode), 0f);
-            hamonDisplay.Left.Set(30f + (30 * sizeMode), 0f);
-            hamonDisplay.Top.Set(80f + (40 * sizeMode), 0f);
+            hamonDisplay.Left.Set(5f + (30 * sizeMode), 0f);
+            hamonDisplay.Top.Set(30f + (40 * sizeMode), 0f);
 
             hamonDisplay.SetText(hamonPlayer.amountOfHamon + "/" + hamonPlayer.maxHamon);
             if (changedInConfig)
@@ -87,9 +87,9 @@ namespace JoJoStands.UI
         {
             Player player = Main.player[Main.myPlayer];
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            int frame = 0;
+            int frame = (int)MathHelper.Clamp(hamonPlayer.amountOfHamon / 11, 0, 23);
             int frameHeight = hamonBarTexture.Height / 24;      //24 frames in that sheet
-            if (hamonPlayer.amountOfHamon >= 3 && hamonPlayer.amountOfHamon <= 12)
+            /*if (hamonPlayer.amountOfHamon >= 3 && hamonPlayer.amountOfHamon <= 12)
             {
                 frame = 0;
             }
@@ -184,7 +184,7 @@ namespace JoJoStands.UI
             if (hamonPlayer.amountOfHamon >= 341 && hamonPlayer.amountOfHamon <= 360)
             {
                 frame = 23;
-            }
+            }*/
 
             /*Rectangle clippingRect = hamonBar.GetClippingRectangle(spriteBatch);
             //lostSpace.X = clippingRect.Width - (int)(clippingRect.Width * Main.UIScale);

@@ -58,7 +58,7 @@ namespace JoJoStands.NPCs
         public Vector2 playerPositionOnSkip = Vector2.Zero;
         public Vector2 preTimestopVelocity = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
-        public ForesightSaveData[] foresightData = new ForesightSaveData[200];
+        public ForesightSaveData[] foresightData = new ForesightSaveData[120];
 
         public override bool InstancePerEntity
         {
@@ -354,11 +354,11 @@ namespace JoJoStands.NPCs
             {
                 applyingForesightPositions = true;
                 if (foresightSaveTimer > 0)
-                {
                     foresightSaveTimer--;
-                }
-                if (foresightSaveTimer <= 1)
+
+                if (foresightSaveTimer <= 0)
                 {
+                    foresightData[foresightPositionIndex] = new ForesightSaveData();
                     foresightData[foresightPositionIndex].position = npc.position;
                     foresightData[foresightPositionIndex].frame = npc.frame;
                     foresightData[foresightPositionIndex].rotation = npc.rotation;
@@ -366,6 +366,11 @@ namespace JoJoStands.NPCs
                     foresightPositionIndex++;       //second so that something saves in [0] and goes up from there
                     foresightPositionIndexMax++;
                     foresightSaveTimer = 5;
+                    if (foresightPositionIndex >= foresightData.Length)
+                    {
+                        foresightPositionIndex--;
+                        foresightPositionIndexMax--;
+                    }
                 }
             }
             if (!player.epitaphForesightActive && applyingForesightPositions)
@@ -383,25 +388,16 @@ namespace JoJoStands.NPCs
                 if (foresightSaveTimer > 0)
                     foresightSaveTimer--;
 
-                if (foresightSaveTimer <= 1)
+                if (foresightSaveTimer <= 0)
                 {
+                    if (foresightData[foresightPositionIndex].position != Vector2.Zero)
+                        foresightData[foresightPositionIndex].position = Vector2.Zero;
+                    if (foresightData[foresightPositionIndex].rotation != 0f)
+                        foresightData[foresightPositionIndex].rotation = 0f;
+                    if (foresightData[foresightPositionIndex].direction != 0)
+                        foresightData[foresightPositionIndex].direction = 0;
                     foresightPositionIndex++;
                     foresightSaveTimer = 5;
-                    if (foresightPositionIndex >= 1)
-                    {
-                        if (foresightData[foresightPositionIndex].position != Vector2.Zero)
-                        {
-                            foresightData[foresightPositionIndex].position = Vector2.Zero;
-                        }
-                        if (foresightData[foresightPositionIndex].rotation != 0f)
-                        {
-                            foresightData[foresightPositionIndex].rotation = 0f;
-                        }
-                        if (foresightData[foresightPositionIndex].direction != 0)
-                        {
-                            foresightData[foresightPositionIndex].direction = 0;
-                        }
-                    }
                 }
                 if (foresightPositionIndex >= foresightPositionIndexMax)
                 {
@@ -552,11 +548,13 @@ namespace JoJoStands.NPCs
                 for (int i = 0; i < foresightPositionIndexMax; i++)
                 {
                     SpriteEffects effects = SpriteEffects.None;
-                    if (foresightData[foresightPositionIndex].direction == 1)
+                    if (foresightData[i].direction == 1)
                         effects = SpriteEffects.FlipHorizontally;
 
-                    if (foresightData[foresightPositionIndex].position != Vector2.Zero)
-                        spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, foresightData[foresightPositionIndex].position - Main.screenPosition, foresightData[foresightPositionIndex].frame, Color.DarkRed, foresightData[foresightPositionIndex].rotation, Vector2.Zero, npc.scale, effects, 0f);
+                    float alpha = Math.Abs(foresightPositionIndex - i) / 10f;
+                    alpha = Math.Clamp(alpha, 0f, 1f);
+                    if (foresightData[i].position != Vector2.Zero)
+                        spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, foresightData[i].position - Main.screenPosition, foresightData[i].frame, Color.DarkRed * alpha, foresightData[i].rotation, Vector2.Zero, npc.scale, effects, 0f);
                 }
             }
             if (player.backToZeroActive && btzTotalRewindTimer != 0)

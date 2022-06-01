@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
 {
-    public class ReqNail : ModProjectile
+    public class InfiniteSpinNail : ModProjectile
     {
         public override string Texture
         {

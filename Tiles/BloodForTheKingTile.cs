@@ -11,10 +11,10 @@ namespace JoJoStands.Tiles
         public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
-            TileObjectData.newTile.CoordinatePadding = 2;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
             TileObjectData.newTile.Width = 6;
             TileObjectData.newTile.Height = 4;
+            TileObjectData.newTile.CoordinatePadding = 2;
             TileObjectData.newTile.CoordinateHeights = new int[]
             {
                 16,

@@ -424,7 +424,8 @@ namespace JoJoStands.Items.Vampire
             enemyTypesKilled = new int[1200];
 
             learnedAnyZombieAbility = false;
-            Main.NewText("Rebuilt Vampire Skill Dictionaries.", Color.Red);
+            if (vampiricLevel != 0)
+                Main.NewText("Rebuilt Vampire Skill Dictionaries.", Color.Red);
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)

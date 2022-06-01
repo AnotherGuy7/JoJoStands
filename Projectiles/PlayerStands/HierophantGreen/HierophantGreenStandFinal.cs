@@ -48,8 +48,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             {
                 if (Main.mouseLeft && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
-                    attackFrames = true;
                     idleFrames = false;
+                    attackFrames = true;
                     if (shootCount <= 0)
                     {
                         SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         Projectile.netUpdate = true;
                     }
                 }
-                if (!Main.mouseLeft && player.whoAmI == Main.myPlayer)        //The reason it's not an else is because it would count the owner part too
+                if (!Main.mouseLeft && Projectile.owner == Main.myPlayer)        //The reason it's not an else is because it would count the owner part too
                 {
                     idleFrames = true;
                     attackFrames = false;
@@ -92,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     shootVel *= shootSpeed;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BindingEmeraldString>(), newProjectileDamage / 2, 0f, Projectile.owner, 30);
                     Main.projectile[proj].netUpdate = true;
-                    SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
                 }
 
@@ -184,9 +184,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     shootCount += 15;
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, connectorType, 0, 3f, player.whoAmI);
@@ -212,9 +211,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     idleFrames = false;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
-                    {
                         Projectile.direction = -1;
-                    }
+
                     Projectile.spriteDirection = Projectile.direction;
                     if (shootCount <= 0)
                     {
@@ -224,9 +222,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         {
                             Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
                             float numberProjectiles = 6;

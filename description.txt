@@ -1,10 +1,11 @@
 JoJo Stands:
+JoJoStands is a mod where we're trying to implement many stands and items from 1-7.
 
-JoJoStands Wiki... in the forum post
+The JoJoStands Wiki can be found in the forum post
 
-Discord Link... also in the forum post.
+The Discord Link can also be found in the forum post
 
 Credits:
-The JoJoStands Contributors: Placement, Phil, Techno, Blu, Hey Mister, Joser, Niker, D.Storm, Benney, NekroSektor, Ozi, StringsArn'tRealNumbers, Xenon, Com-Obie, Gundam_Belphagor, KrimsonHeadshot, Sicco-Jo, Pyther, Sewer Creature, and Archerous.
+The JoJoStands Contributors: Placement, Phil, Techno, Blu, Hey Mister, Joser, Niker, D.Storm, Benney, NekroSektor, Ozi, StringsArn'tRealNumbers, Xenon, Com-Obie, Gundam_Belphagor, KrimsonHeadshot, Sicco-Jo, Pyther, Sewer Creature, Bruhimsons, and Archerous.
 Alana Gilston, for making TerraUI which helped us make the Stand Slot
 The ExampleMod devs, cause it's a good everything reference

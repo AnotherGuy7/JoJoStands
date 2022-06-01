@@ -278,14 +278,12 @@ namespace JoJoStands.Projectiles.PlayerStands
         }
 
         /// <summary>
-        /// Has the Stand switch to its idle state and go in front of the player.
+        /// Has the Stand go in front of the player.
         /// </summary>
         public void GoInFront()
         {
             Player player = Main.player[Projectile.owner];
 
-            idleFrames = true;
-            attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X += (float)((12 + player.width / 2) * player.direction);
             areaBehindPlayer.Y -= -35f + halfStandHeight;

@@ -31,6 +31,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
         private int timeskipStartDelay = 0;
         private int blockSearchTimer = 0;
+        private bool preparingTimeskip = false;
 
         public override void AI()
         {
@@ -39,6 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
+
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
@@ -46,24 +48,27 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && timeskipStartDelay <= 0)
             {
-                if (JoJoStands.JoJoStandsSounds == null)
+                if (!JoJoStands.SoundsLoaded)
                     timeskipStartDelay = 80;
                 else
                 {
                     SoundStyle kingCrimson = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/KingCrimson");
                     kingCrimson.Volume = MyPlayer.ModSoundsVolume;
                     SoundEngine.PlaySound(kingCrimson, Projectile.position);
-                    timeskipStartDelay = 1;
+                    timeskipStartDelay = 0;
                 }
+                preparingTimeskip = true;
             }
-            if (timeskipStartDelay != 0)
+            if (preparingTimeskip)
             {
                 timeskipStartDelay++;
                 if (timeskipStartDelay >= 80)
                 {
+                    shootCount += 15;
                     player.AddBuff(ModContent.BuffType<PreTimeSkip>(), 10);
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
                     timeskipStartDelay = 0;
+                    preparingTimeskip = false;
                 }
             }
 
@@ -155,7 +160,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 secondaryAbilityFrames = false;
 
                                 Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);
-                                while (WorldGen.SolidTile((int)(player.position.X + repositionOffset.X) / 16, (int)(player.position.Y + repositionOffset.Y) / 16))
+                                while (WorldGen.SolidTile((int)(player.Center.X + repositionOffset.X) / 16, (int)(player.Center.Y + repositionOffset.Y) / 16))
                                 {
                                     repositionOffset.Y -= 16f;
                                 }
@@ -176,11 +181,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         {
                             for (int i = 0; i < 20; i++)
                             {
-                                Dust.NewDust(player.position, player.width, player.height, 114);
+                                Dust.NewDust(player.position, player.width, player.height, DustID.Clentaminator_Red);
                             }
 
                             Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);
-                            while (WorldGen.SolidTile((int)(player.position.X + repositionOffset.X) / 16, (int)(player.position.Y + repositionOffset.Y) / 16))
+                            while (WorldGen.SolidTile((int)(player.Center.X + repositionOffset.X) / 16, (int)(player.Center.Y + repositionOffset.Y) / 16))
                             {
                                 repositionOffset.Y -= 16f;
                             }
@@ -191,7 +196,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                             for (int i = 0; i < 20; i++)
                             {
-                                Dust.NewDust(player.position, player.width, player.height, 114);
+                                Dust.NewDust(player.position, player.width, player.height, DustID.Clentaminator_Red);
                             }
                         }
                     }
@@ -205,14 +210,12 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 {
                     StayBehind();
                 }
-                if (SecondSpecialKeyPressed() && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
+                if (SecondSpecialKeyPressed() && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && !preparingTimeskip && Projectile.owner == Main.myPlayer)
                 {
                     player.AddBuff(ModContent.BuffType<ForesightBuff>(), 540);
                     mPlayer.epitaphForesightActive = true;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
                         ModNetHandler.effectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
-                    }
                 }
             }
             if (mPlayer.standAutoMode)

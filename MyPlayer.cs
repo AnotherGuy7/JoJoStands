@@ -96,6 +96,7 @@ namespace JoJoStands
         public float biteTheDustEffectProgress = 0f;
         public int poseFrameCounter = 0;
         public int menacingFrames = 0;
+        public int slowDancerSprintTime = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -771,7 +772,7 @@ namespace JoJoStands
                     {
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item67);
-                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
                         shootVelocity *= 12f;       //multiply the angle by the speed to get the effect
                         Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<Nail>(), (int)(21 * standDamageBoosts) + ((22 + equippedTuskAct - 1) * equippedTuskAct - 1), 4f, Player.whoAmI);
@@ -791,7 +792,7 @@ namespace JoJoStands
                         Player.channel = true;
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item67);
-                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
                         Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ControllableNail>(), (int)(49 * standDamageBoosts) + ((22 + equippedTuskAct - 2) * equippedTuskAct - 2), 5f, Player.whoAmI);
@@ -811,7 +812,7 @@ namespace JoJoStands
                         Player.channel = true;
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item67);
-                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
                         Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ControllableNail>(), (int)(122 * standDamageBoosts) + ((22 + equippedTuskAct - 3) * equippedTuskAct - 3), 6f, Player.whoAmI);
@@ -820,7 +821,7 @@ namespace JoJoStands
                     {
                         tuskShootCooldown += 60 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item78);
-                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 1.1f;
                         Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ArmWormholeNail>(), 80, 2f, Player.whoAmI);
@@ -829,7 +830,7 @@ namespace JoJoStands
                     {
                         tuskShootCooldown += 120 - standSpeedBoosts;
                         SoundEngine.PlaySound(SoundID.Item78);
-                        Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                        Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 5f;
                         Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<WormholeNail>(), 124, 8f, Player.whoAmI);
@@ -844,7 +845,7 @@ namespace JoJoStands
                             Player.channel = true;
                             tuskShootCooldown += 15 - standSpeedBoosts;
                             SoundEngine.PlaySound(SoundID.Item67);
-                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 4f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ControllableNail>(), (int)(305 * standDamageBoosts), 7f, Player.whoAmI);
@@ -855,10 +856,10 @@ namespace JoJoStands
                             SoundStyle item67 = SoundID.Item67;
                             item67.Pitch = -1.2f;
                             SoundEngine.PlaySound(item67, Player.Center);
-                            Vector2 shootVelocity = Main.MouseWorld - Player.position;
+                            Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 16f;
-                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ReqNail>(), 512, 0f, Player.whoAmI);
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<InfiniteSpinNail>(), 512, 0f, Player.whoAmI);
                             Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10));
                         }
                     }
@@ -905,7 +906,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(38 * standDamageBoosts), 4f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item2;
+                            SoundStyle itemSound = SoundID.Item1;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
@@ -919,7 +920,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(81 * standDamageBoosts), 6f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item2;
+                            SoundStyle itemSound = SoundID.Item1;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
@@ -930,7 +931,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 8f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(78 * standDamageBoosts), 0f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item2;
+                            SoundStyle itemSound = SoundID.Item1;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
@@ -944,7 +945,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(157 * standDamageBoosts), 7f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item2;
+                            SoundStyle itemSound = SoundID.Item1;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
@@ -966,7 +967,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 14f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleWhip>(), (int)(202 * standDamageBoosts), 8f, Player.whoAmI);
-                            SoundStyle itemSound = SoundID.Item2;
+                            SoundStyle itemSound = SoundID.Item1;
                             itemSound.Pitch = Main.rand.Next(4, 7 + 1) / 10f;
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }

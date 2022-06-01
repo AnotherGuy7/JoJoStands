@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override int halfStandHeight => 44;
         public override float fistWhoAmI => 9f;
         public override int standType => 1;
-        public override int standOffset => -20;
+        public override int standOffset => 22;
         public override float maxDistance => 147f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
         public override string poseSoundName => "YouWereTwoSecondsTooLate";
         public override string spawnSoundName => "Whitesnake";
@@ -220,11 +220,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
                 floatTimer += 0.06f;
                 armRotation = (Main.MouseWorld - Projectile.Center).ToRotation();
-                armPosition = Projectile.Center + new Vector2(-18f * Projectile.spriteDirection, -4f);
+                armPosition = Projectile.Center + new Vector2(0f, -4f);
                 if (Projectile.spriteDirection == -1)
-                {
-                    armPosition += new Vector2(6f, -8f);
-                }
+                    armPosition += new Vector2(2f, -8f);
+
                 HandleDrawOffsets();
                 if (shootCount > 0)
                     armFrame = 1;
@@ -260,9 +259,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X < Projectile.Center.X)
-                    {
                         Projectile.direction = -1;
-                    }
+
                     Projectile.spriteDirection = Projectile.direction;
 
                     if (Vector2.Distance(Projectile.Center, player.Center) >= RemoteControlMaxDistance)
@@ -289,10 +287,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     }
                     Projectile.spriteDirection = Projectile.direction;
 
+                    Vector2 bulletSpawnPosition = armPosition + new Vector2(0f, -4f);
                     Vector2 shootVel = Main.MouseWorld - armPosition;
                     shootVel.Normalize();
                     shootVel *= 12f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), armPosition, shootVel, ProjectileID.Bullet, (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ProjectileID.Bullet, (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
                     Main.projectile[proj].netUpdate = true;
                     Projectile.netUpdate = true;
                     Projectile.velocity -= shootVel * 0.02f;

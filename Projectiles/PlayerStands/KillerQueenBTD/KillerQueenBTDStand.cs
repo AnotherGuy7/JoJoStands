@@ -92,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
             if (!attackFrames)
                 StayBehind();
-            if (attackFrames)
+            else
                 GoInFront();
 
             bitesTheDustActive = player.HasBuff(ModContent.BuffType<BitesTheDust>());
@@ -226,10 +226,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         mPlayer.standChangingLocked = false;
 
                         Main.time = savedWorldData.worldTime;
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        /*for (int i = 0; i < Main.maxNPCs; i++)
                         {
                             NPCData savedData = savedWorldData.npcData[i];
-                            if (!Main.npc[i].active)
+                            if (!Main.npc[i].active || Main.npc[i].type != savedData.type)
                             {
                                 NPC remadeNPC = Main.npc[NPC.NewNPC(Projectile.GetSource_FromThis(), (int)savedData.position.X, (int)savedData.position.Y, savedData.type)];
                                 remadeNPC.life = savedData.health;
@@ -244,7 +244,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                                 npc.ai = savedData.ai;
                                 npc.life = savedData.health;
                             }
-                        }
+                        }*/
                         saveDataCreated = false;
                     }
                 }
@@ -264,9 +264,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             shootCount += newShootTime;
                             Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Bubble>(), newBubbleDamage, 6f, Projectile.owner, 1f, Projectile.whoAmI);
@@ -276,7 +275,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     }
                     if (Projectile.frame >= 5)
                     {
-                        attackFrames = false;
+                        Projectile.frame = 0;
                     }
                 }
                 else if (!secondaryAbilityFrames)
@@ -287,11 +286,12 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         attackFrames = false;
                     }
                 }
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f)
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f && shootCount <= 0)
                 {
                     secondaryAbilityFrames = true;
                     Projectile.ai[0] = 1f;      //to detonate all bombos
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick"));
+                    shootCount += 45;
                 }
                 if (secondaryAbilityFrames && Projectile.ai[0] == 1f)
                 {
@@ -368,6 +368,12 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             bitesTheDustActivated = reader.ReadBoolean();
         }
 
+        /*public override void AnimationCompleted(string animationName)
+        {
+            if (animationName == "Attack")
+                Projectile.frame = 5;
+        }*/
+
         public override void SelectAnimation()
         {
             if (attackFrames)
@@ -399,7 +405,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             }
             if (animationName == "Attack")
             {
-                AnimateStand(animationName, 6, newShootTime / 2, true);
+                AnimateStand(animationName, 6, newShootTime / 2, false);
             }
             if (animationName == "Secondary")
             {

@@ -45,7 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
             {
                 if (JoJoStands.SoundsLoaded && !playedSpawnCry)
                 {
-                    SoundStyle sound = new SoundStyle("JoJoStands/Sounds/SoundEffects/Chumimiiin", SoundType.Sound);
+                    SoundStyle sound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Chumimiiin", SoundType.Sound);
                     sound.Volume = MyPlayer.ModSoundsVolume;
                     SoundEngine.PlaySound(sound, Projectile.Center);
                     playedSpawnCry = true;
@@ -53,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 for (int i = 0; i < Main.rand.Next(4, 6 + 1); i++)
                 {
                     Vector2 dustSpeed = Projectile.velocity + new Vector2(Main.rand.NextFloat(-5f, 5f + 1f), Main.rand.NextFloat(-5f, 5f + 1f));
-                    Dust.NewDust(Projectile.position - new Vector2(0f, halfStandHeight), Projectile.width, halfStandHeight * 2, 169, dustSpeed.X, dustSpeed.Y);
+                    Dust.NewDust(Projectile.position - new Vector2(0f, halfStandHeight), Projectile.width, halfStandHeight * 2, DustID.IchorTorch, dustSpeed.X, dustSpeed.Y);
                 }
             }
             if (goldenRectangleEffectTimer > 0)
@@ -103,9 +103,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                             shootCount += newPunchTime;
                             Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner);

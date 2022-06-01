@@ -121,11 +121,29 @@ namespace JoJoStands.Mounts
             return false;
         }
 
+        private readonly Vector2 size = new Vector2(126, 82);
+
         public override void UpdateEffects(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Math.Abs(player.velocity.X) >= 13f)
+            {
+                mPlayer.slowDancerSprintTime++;
                 mPlayer.goldenSpinCounter += 1;
+                if (mPlayer.slowDancerSprintTime >= 60)
+                    mPlayer.goldenSpinCounter += mPlayer.slowDancerSprintTime / 60;
+            }
+            else
+                mPlayer.slowDancerSprintTime = 0;
+
+            if (mPlayer.slowDancerSprintTime >= 60)
+            {
+                for (int i = 0; i < Main.rand.Next(4, 6 + 1); i++)
+                {
+                    Vector2 dustSpeed = player.velocity * (Main.rand.Next(8, 10) / 10f);
+                    Dust.NewDust(player.MountedCenter - (size / 2f), (int)size.X, (int)size.Y, DustID.IchorTorch, dustSpeed.X, dustSpeed.Y);
+                }
+            }
         }
     }
 }

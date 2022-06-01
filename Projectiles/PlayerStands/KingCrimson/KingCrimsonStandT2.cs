@@ -29,6 +29,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
         private int timeskipStartDelay = 0;
         private int blockSearchTimer = 0;
+        private bool preparingTimeskip = false;
 
         public override void AI()
         {
@@ -44,7 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && timeskipStartDelay <= 0)
             {
-                if (JoJoStands.JoJoStandsSounds == null)
+                if (!JoJoStands.SoundsLoaded)
                     timeskipStartDelay = 80;
                 else
                 {
@@ -53,8 +54,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     SoundEngine.PlaySound(kingCrimson, Projectile.position);
                     timeskipStartDelay = 1;
                 }
+                preparingTimeskip = true;
             }
-            if (timeskipStartDelay != 0)
+
+            if (preparingTimeskip)
             {
                 timeskipStartDelay++;
                 if (timeskipStartDelay >= 80)
@@ -62,6 +65,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     player.AddBuff(ModContent.BuffType<PreTimeSkip>(), 10);
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
                     timeskipStartDelay = 0;
+                    preparingTimeskip = false;
                 }
             }
 
@@ -79,9 +83,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X < Projectile.position.X)
-                    {
                         Projectile.direction = -1;
-                    }
+
                     Projectile.spriteDirection = Projectile.direction;
 
                     Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
@@ -101,9 +104,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         shootCount += newPunchTime / 2;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner, fistWhoAmI);
@@ -153,7 +155,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 secondaryAbilityFrames = false;
 
                                 Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);
-                                while (WorldGen.SolidTile((int)(player.position.X + repositionOffset.X) / 16, (int)(player.position.Y + repositionOffset.Y) / 16))
+                                while (WorldGen.SolidTile((int)(player.Center.X + repositionOffset.X) / 16, (int)(player.Center.Y + repositionOffset.Y) / 16))
                                 {
                                     repositionOffset.Y -= 16f;
                                 }
@@ -178,7 +180,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             }
 
                             Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);
-                            while (WorldGen.SolidTile((int)(player.position.X + repositionOffset.X) / 16, (int)(player.position.Y + repositionOffset.Y) / 16))
+                            while (WorldGen.SolidTile((int)(player.Center.X + repositionOffset.X) / 16, (int)(player.Center.Y + repositionOffset.Y) / 16))
                             {
                                 repositionOffset.Y -= 16f;
                             }
