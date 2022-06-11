@@ -44,6 +44,8 @@ namespace JoJoStands.Items.Hamon
         public override void HoldItem(Player player)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            hamonPlayer.learnedHamon = true;
+            UI.HamonBar.ShowHamonBar();
             ChargeHamon();
             if (player.whoAmI == Main.myPlayer)
             {
@@ -73,12 +75,6 @@ namespace JoJoStands.Items.Hamon
             if (player.statLife <= 25)
                 player.AddBuff(ModContent.BuffType<RUUUN>(), 360);
         }
-
-        /*public override void OnCraft(Recipe recipe)       //Re-enable for patch
-        {
-            Main.LocalPlayer.GetModPlayer<HamonPlayer>().learnedHamon = true;
-            UI.HamonBar.ShowHamonBar();
-        }*/
 
         public override void AddRecipes()
         {

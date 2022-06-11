@@ -31,9 +31,7 @@ namespace JoJoStands
         private UserInterface _aerosmithRadar;
         private UserInterface _sexPistolsUI;
         private UserInterface _voidbarUI;
-        private UserInterface _hamonSkillTreeUI;
         private UserInterface _unitsUI;
-        private UserInterface _zombieSkillTreeUI;
         private UserInterface _stoneFreeAbilityWheelUI;
         private UserInterface _goldExperienceAbilityWheelUI;
         private UserInterface _goldExperienceRequiemAbilityWheelUI;
@@ -141,9 +139,7 @@ namespace JoJoStands
             _aerosmithRadar = null;
             _sexPistolsUI = null;
             _voidbarUI = null;
-            _hamonSkillTreeUI = null;
             _unitsUI = null;
-            _zombieSkillTreeUI = null;
             _stoneFreeAbilityWheelUI = null;
             _goldExperienceAbilityWheelUI = null;
             _goldExperienceRequiemAbilityWheelUI = null;
