@@ -12,7 +12,7 @@ namespace JoJoStands
 {
     public class JoJoStandsWorld : ModSystem
     {
-        private bool meteorDropped = false;
+        private bool viralMeteoriteDropped = false;
         private bool vampiricNightQueued = false;
         private bool checkedForVampiricEvent = false;
         private int vampiricNightStartTimer = 0;
@@ -22,7 +22,7 @@ namespace JoJoStands
 
         public override void OnWorldLoad()
         {
-            meteorDropped = false;
+            viralMeteoriteDropped = false;
             vampiricNightQueued = false;
             viralMeteoriteTiles = 0;
 
@@ -31,22 +31,22 @@ namespace JoJoStands
 
         public override void SaveWorldData(TagCompound tag)
         {
-            tag.Add("meteorDropped", meteorDropped);
+            tag.Add("meteorDropped", viralMeteoriteDropped);
             tag.Add("vampiricNight", VampiricNight);
         }
 
         public override void LoadWorldData(TagCompound tag)
         {
-            meteorDropped = tag.GetBool("meteorDropped");
+            viralMeteoriteDropped = tag.GetBool("meteorDropped");
             VampiricNight = tag.GetBool("vampiricNight");
         }
 
         public override void PreUpdateWorld()
         {
-            if (NPC.downedBoss3 && !meteorDropped && Main.dayTime)
+            if (NPC.downedBoss3 && !viralMeteoriteDropped && Main.dayTime)
             {
                 DropViralMeteorite();
-                meteorDropped = true;
+                viralMeteoriteDropped = true;
             }
 
             if (!Main.dayTime)

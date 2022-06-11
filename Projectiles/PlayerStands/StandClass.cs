@@ -1,6 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -51,11 +50,20 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual string punchSoundName { get; } = "";
         public virtual string poseSoundName { get; } = "";
         public virtual string spawnSoundName { get; } = "";
-        public virtual int standType { get; } = 0;
+        public virtual StandType standType { get; } = StandType.None;
         public virtual Texture2D standTexture { get; set; }
         public virtual bool useProjectileAlpha { get; } = false;
 
+        public virtual bool CanUseSaladDye { get; } = false;
+
         public static int StandNetworkUpdateTime = 90;
+
+        public enum StandType
+        {
+            None,
+            Melee,
+            Ranged
+        }
 
         public bool idleFrames = false;       //Much easier to sync animations this way rather than syncing everything about it
         public bool attackFrames = false;
@@ -187,7 +195,11 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
             if (!player.GetModPlayer<MyPlayer>().canStandBasicAttack)
+            {
+                idleFrames = true;
+                attackFrames = false;
                 return;
+            }
 
             HandleDrawOffsets();
             idleFrames = false;
@@ -696,8 +708,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (JoJoStands.SoundsLoaded && mPlayer.standHitTime > 0)
                 mPlayer.standHitTime--;
 
-            if (mPlayer.standType != standType)
-                mPlayer.standType = standType;
+            if (mPlayer.standType != (int)standType)
+                mPlayer.standType = (int)standType;
 
             if (MyPlayer.RangeIndicators && newMaxDistance > 0)
             {
@@ -788,7 +800,6 @@ namespace JoJoStands.Projectiles.PlayerStands
         private void DrawRangeIndicators()
         {
             Player player = Main.player[Projectile.owner];
-
             if (!MyPlayer.RangeIndicators || Main.netMode == NetmodeID.Server || rangeIndicatorSize == Vector2.Zero)
                 return;
 
@@ -1140,6 +1151,20 @@ namespace JoJoStands.Projectiles.PlayerStands
                     break;
             }
             return target;
+        }
+
+        public Texture2D GetStandTexture(string texturePath, string standAnimationName)
+        {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            string newTexturePath = texturePath;
+            if (mPlayer.usingStandTextureDye)
+            {
+                if (mPlayer.currentTextureDye == MyPlayer.StandTextureDye.Salad && CanUseSaladDye)
+                    newTexturePath += mPlayer.dyePathAddition;
+            }
+
+            newTexturePath += standAnimationName;
+            return (Texture2D)ModContent.Request<Texture2D>(newTexturePath);
         }
 
         /// <summary>

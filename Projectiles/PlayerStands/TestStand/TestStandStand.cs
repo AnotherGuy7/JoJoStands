@@ -14,7 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
         public override int punchDamage => 70;
         public override int halfStandHeight => 37;
         public override int punchTime => 7;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
 
         private int timestopPoseTimer = 0;
 

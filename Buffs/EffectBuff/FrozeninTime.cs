@@ -12,7 +12,6 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             DisplayName.SetDefault("Frozen in Time");
             Description.SetDefault("You have been stopped along with time");
-            Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }

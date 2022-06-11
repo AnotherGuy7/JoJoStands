@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -109,6 +110,76 @@ namespace JoJoStands.Projectiles.Minions
             }
         }
 
+        private void Explode()
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            int bombDamage = (int)(350 * mPlayer.standDamageBoosts);
+            if (Projectile.ai[0] == 1f)
+                bombDamage = (int)(724 * mPlayer.standDamageBoosts);
+
+            //Normal grenade explosion effects
+            for (int i = 0; i < 30; i++)
+            {
+                int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, Alpha: 100, Scale: 1.5f);
+                Main.dust[dustIndex].velocity *= 1.4f;
+            }
+            for (int i = 0; i < 20; i++)
+            {
+                int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Alpha: 100, Scale: 3.5f);
+                Main.dust[dustIndex].noGravity = true;
+                Main.dust[dustIndex].velocity *= 7f;
+                dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Alpha: 100, Scale: 1.5f);
+                Main.dust[dustIndex].velocity *= 3f;
+            }
+
+            for (int i = 0; i < 25; i++)        //Extra explosion effects
+            {
+                float angle = (360f / 25f) * i;
+                Vector2 dustPosition = Projectile.Center + (angle.ToRotationVector2() * 7f);
+                Vector2 dustVelocity = dustPosition - Projectile.Center;
+                dustVelocity.Normalize();
+                dustVelocity *= 7f;
+                int dustIndex = Dust.NewDust(dustPosition, Projectile.width, Projectile.height, DustID.Torch, dustVelocity.X, dustVelocity.Y, 100, Scale: 3.5f);
+                Main.dust[dustIndex].noGravity = true;
+            }
+
+            for (int n = 0; n < Main.maxNPCs; n++)
+            {
+                NPC npc = Main.npc[n];
+                if (npc.active)
+                {
+                    if (npc.lifeMax > 5 && !npc.friendly && !npc.hide && !npc.immortal && Vector2.Distance(Projectile.Center, npc.Center) <= 5f * 16f)
+                    {
+                        int hitDirection = -1;
+                        if (npc.position.X - Projectile.position.X > 0)
+                            hitDirection = 1;
+
+                        npc.StrikeNPC(bombDamage, 7f, hitDirection);
+                    }
+                }
+            }
+            for (int p = 0; p < Main.maxPlayers; p++)
+            {
+                Player otherPlayer = Main.player[p];
+                if (otherPlayer.active && !otherPlayer.dead)
+                {
+                    if (Vector2.Distance(Projectile.Center, otherPlayer.Center) > 5f * 16f)
+                        continue;
+
+                    if (p == otherPlayer.whoAmI || Main.player[Projectile.owner].team == otherPlayer.team)
+                        bombDamage = (int)(bombDamage * 0.25f);
+
+                    int hitDirection = -1;
+                    if (otherPlayer.position.X - Projectile.position.X > 0)
+                        hitDirection = 1;
+
+                    otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " had too high a heat signurature."), bombDamage, hitDirection);
+                }
+            }
+            SoundEngine.PlaySound(SoundID.Item62);
+        }
+
         public override bool PreDraw(ref Color drawColor)
         {
             Main.spriteBatch.End();
@@ -125,31 +196,25 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             target.immune[Projectile.owner] = 0;
-            if (Projectile.ai[0] == 0f)
-            {
-                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, (int)(350 * mPlayer.standDamageBoosts), 7f, Projectile.owner);
-                Main.projectile[proj].friendly = true;
-                Main.projectile[proj].timeLeft = 2;
-                Main.projectile[proj].netUpdate = true;
-                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
-            }
-            if (Projectile.ai[0] == 1f)
-            {
-                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ProjectileID.GrenadeIII, (int)(724 * mPlayer.standDamageBoosts), 7f, Projectile.owner);
-                Main.projectile[proj].friendly = true;
-                Main.projectile[proj].timeLeft = 2;
-                Main.projectile[proj].netUpdate = true;
-                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(4));
-            }
+            Explode();
+
             enemiesHit++;
             if (enemiesHit >= 5)
-            {
                 Projectile.Kill();
-            }
+
             npcTarget = null;
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (Projectile.ai[0] == 0f)
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
+
+            if (Projectile.ai[0] == 1f)
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(4));
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

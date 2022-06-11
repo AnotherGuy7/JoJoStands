@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles
                         }
                     }
                 }
-                if (Main.netMode != NetmodeID.SinglePlayer)
+                if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
                 {
                     for (int p = 0; p < Main.maxPlayers; p++)
                     {

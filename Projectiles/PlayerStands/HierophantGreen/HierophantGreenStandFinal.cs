@@ -1,6 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
@@ -15,9 +14,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int projectileDamage => 72;
         public override int halfStandHeight => 30;
         public override int standOffset => 0;
-        public override int standType => 2;
+        public override StandType standType => StandType.Ranged;
         public override string poseSoundName => "ItsTheVictorWhoHasJustice";
         public override string spawnSoundName => "Hierophant Green";
+        public override bool CanUseSaladDye => true;
 
         private bool spawningField = false;
         private int numberSpawned = 0;
@@ -48,6 +48,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             {
                 if (Main.mouseLeft && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
+                    if (!mPlayer.canStandBasicAttack)
+                        return;
+
                     idleFrames = false;
                     attackFrames = true;
                     if (shootCount <= 0)
@@ -314,7 +317,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/HierophantGreen/HierophantGreen_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/HierophantGreen", "/HierophantGreen_" + animationName);
 
             if (animationName == "Idle")
             {

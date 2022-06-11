@@ -18,16 +18,16 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             Projectile.width = 38;
             Projectile.height = 1;
             Projectile.netImportant = true;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
         }
 
         public override float maxDistance => 98f;
-        public override int punchDamage => 32;
+        public override int punchDamage => 26;
         public override int punchTime => 7;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 10f;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
         public override bool useProjectileAlpha => true;
 
         private bool parryFrames = false;

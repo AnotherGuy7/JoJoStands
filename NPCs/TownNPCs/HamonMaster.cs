@@ -5,6 +5,7 @@ using JoJoStands.Projectiles;
 using JoJoStands.UI;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -49,6 +50,14 @@ namespace JoJoStands.NPCs.TownNPCs
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 1f;
             AnimationType = NPCID.Guide;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+                new FlavorTextBestiaryInfoElement("A master of a certain ancient style called 'Hamon' in search of an apprentice to pass on his knowledge to. Loves red wine!")
+            });
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs, int money)

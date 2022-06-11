@@ -9,7 +9,6 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             DisplayName.SetDefault("Bites The Dust");
             Description.SetDefault("The ultimate weapon against failure.");
-            Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false;
         }

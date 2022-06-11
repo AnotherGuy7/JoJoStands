@@ -11,18 +11,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
     {
         public override string poseSoundName => "ItsBeenARoundaboutPath";
         public override string punchSoundName => "Tusk_Ora";
-
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[Projectile.type] = 8;
-        }
+        public override bool CanUseSaladDye => true;
 
         public override float maxDistance => 98f;
-        public override int punchDamage => 105;
-        public override int punchTime => 12;
+        public override int punchDamage => 162;
+        public override int punchTime => 10;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 0f;
-        public override int standType => 2;
+        public override StandType standType => StandType.Ranged;
         public override int standOffset => 20;
 
         private int goldenRectangleEffectTimer = 256;
@@ -91,9 +87,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
 
                     Projectile.direction = 1;
                     if ((target.position - Projectile.Center).X < 0f)
-                    {
                         Projectile.direction = -1;
-                    }
+
                     Projectile.spriteDirection = Projectile.direction;
 
                     if (Main.myPlayer == Projectile.owner)
@@ -128,7 +123,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
 
         private readonly Vector2 rectangleCenterOffset = new Vector2(57f, 36f);
 
-
         public override bool PreDrawExtras()
         {
             if (goldenRectangleEffectTimer > 0)
@@ -159,7 +153,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Tusk/TuskAct4_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Tusk", "/TuskAct4_" + animationName);
 
             if (animationName == "Idle")
             {

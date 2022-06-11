@@ -22,9 +22,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 0f;
         /*public override string punchSoundName => "Ora";
-        public override string poseSoundName => "YareYareDaze";
-        public override string spawnSoundName => "Star Platinum";*/
-        public override int standType => 1;
+        public override string poseSoundName => "YareYareDaze";*/
+        public override string spawnSoundName => "Stone Free";
+        public override StandType standType => StandType.Melee;
 
         private bool stringConnectorPlaced = false;
         private Vector2 firstStringPos;
@@ -204,7 +204,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             }
             if (animationName == "Pose")
             {
-                AnimateStand(animationName, 2, 12, true);
+                AnimateStand(animationName, 1, 60, true);
             }
         }
     }

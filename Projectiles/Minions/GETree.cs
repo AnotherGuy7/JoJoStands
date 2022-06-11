@@ -20,7 +20,7 @@ namespace JoJoStands.Projectiles.Minions
             Projectile.width = 22;
             Projectile.height = 41;
             Projectile.friendly = true;
-            Projectile.penetrate = 9999;
+            Projectile.penetrate = -1;
             Projectile.timeLeft = 5;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
@@ -35,7 +35,7 @@ namespace JoJoStands.Projectiles.Minions
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if (Main.netMode != NetmodeID.SinglePlayer)
+            if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int p = 0; p < Main.maxProjectiles; p++)
                 {
@@ -43,15 +43,18 @@ namespace JoJoStands.Projectiles.Minions
                     if (otherProj.active && Projectile.Hitbox.Intersects(otherProj.Hitbox))
                     {
                         Player otherPlayer = Main.player[otherProj.owner];
-                        if (Projectile.owner != otherProj.owner && player.team != otherPlayer.team)
+                        if (Projectile.owner != otherProj.owner && player.InOpposingTeam(otherPlayer))
                         {
-                            Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
-                            otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " loved the damage reflection given by " + player.name + "'s damage-reflecting tree too much."), otherProj.damage, 1, true);
+                            Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.Torch);
+                            otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " loved the damage reflection given by " + player.name + "'s damage-reflecting tree a little too much."), otherProj.damage, otherPlayer.direction, true);
                             otherProj.Kill();
+
                             if (MyPlayer.Sounds)
                             {
                                 SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
-                                punchSound.Volume = 0.21f;
+                                punchSound.Volume = 0.6f;
+                                punchSound.Pitch = 0f;
+                                punchSound.PitchVariance = 0.2f;
                                 SoundEngine.PlaySound(punchSound, Projectile.Center);
                             }
                         }
@@ -62,31 +65,15 @@ namespace JoJoStands.Projectiles.Minions
             Projectile.velocity.X = 0f;
             Projectile.velocity.Y = 3f;
             Projectile.direction = -1;
-            if (Projectile.ai[0] == 2f && !timeLeftDeclared)
+            if (!timeLeftDeclared)
             {
-                Projectile.timeLeft = 900;
-                timeLeftDeclared = true;
-            }
-            if (Projectile.ai[0] == 3f && !timeLeftDeclared)
-            {
-                Projectile.timeLeft = 1200;
-                timeLeftDeclared = true;
-            }
-            if (Projectile.ai[0] == 4f && !timeLeftDeclared)
-            {
-                Projectile.timeLeft = 1500;
-                timeLeftDeclared = true;
-            }
-            if (Projectile.ai[0] == 5f && !timeLeftDeclared)
-            {
-                Projectile.timeLeft = 1800;
+                Projectile.timeLeft = 900 + (300 * ((int)Projectile.ai[0] - 1));
                 timeLeftDeclared = true;
             }
 
             if (Projectile.timeLeft <= 181)
-            {
                 shrinking = true;
-            }
+
             if (!shrinking)
             {
                 if (Projectile.frame <= 11)

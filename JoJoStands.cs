@@ -30,7 +30,6 @@ namespace JoJoStands
         public static Mod JoJoStandsSounds;
         public static Mod JoJoFanStands;
 
-
         public static ModKeybind SpecialHotKey;
         public static ModKeybind SecondSpecialHotKey;
         public static ModKeybind StandOutHotKey;
@@ -79,6 +78,7 @@ namespace JoJoStands
             standTier1List.Add(ItemType<HermitPurpleT1>());
             standTier1List.Add(ItemType<BadCompanyT1>());
             standTier1List.Add(ItemType<CreamT1>());
+            standTier1List.Add(ItemType<StoneFreeT1>());
 
             timestopImmune.Add(ProjectileType<TheWorldStandT2>());     //only the timestop capable stands as people shouldn't switch anyway
             timestopImmune.Add(ProjectileType<TheWorldStandT3>());
@@ -113,6 +113,16 @@ namespace JoJoStands
             }
         }
 
+        public override void Close()
+        {
+            standTier1List.Clear();
+            timestopImmune.Clear();
+            christmasStands.Clear();
+            testStandPassword.Clear();
+
+            base.Close();
+        }
+
         public override void Unload()
         {
             SpecialHotKey = null;
@@ -120,9 +130,10 @@ namespace JoJoStands
             PoseHotKey = null;
             StandAutoModeHotKey = null;
             StandOutHotKey = null;
-            standTier1List.Clear();
-            timestopImmune.Clear();
-            testStandPassword.Clear();
+            standTier1List = null;
+            timestopImmune = null;
+            christmasStands = null;
+            testStandPassword = null;
             SoundsLoaded = false;
             FanStandsLoaded = false;
             JoJoStandsSounds = null;

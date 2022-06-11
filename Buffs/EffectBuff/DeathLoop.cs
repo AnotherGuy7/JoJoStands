@@ -1,4 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -11,9 +12,9 @@ namespace JoJoStands.Buffs.EffectBuff
         public static int deathTimes = 0;
         public static bool Looping3x = false;
         public static bool Looping10x = false;
-        public static float deathPositionX = 0f;
-        public static float deathPositionY = 0f;
-        public static int LoopNPC = 0;
+        public static Vector2 deathPosition;
+        public static int deathNPCType = 0;
+
         public int deathTimeAdd = 0;
         public int deathLoopTimer = 0;
 
@@ -21,7 +22,6 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             DisplayName.SetDefault("Death Loop");
             Description.SetDefault("The next enemy you kill will go through endless deaths...");
-            Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that you can't cancel it or it breaks everything
         }
@@ -39,7 +39,7 @@ namespace JoJoStands.Buffs.EffectBuff
             if ((deathTimes < (3 + deathTimeAdd) && Looping3x) || (deathTimes < (10 + deathTimeAdd) && Looping10x))
                 player.AddBuff(ModContent.BuffType<DeathLoop>(), 2);
 
-            if (deathLoopTimer >= 60)       //sometimes it w
+            if (deathLoopTimer >= 60)
                 deathLoopTimer = 0;
 
             if (!player.GetModPlayer<MyPlayer>().timestopActive)        //so the effect stops during a timestop
@@ -49,10 +49,10 @@ namespace JoJoStands.Buffs.EffectBuff
                     deathLoopTimer++;
                     if (deathLoopTimer >= 60 && deathTimes <= (1 + deathTimeAdd))
                     {
-                        int spawnedNPC = NPC.NewNPC(player.GetSource_FromThis(), (int)deathPositionX, (int)deathPositionY, LoopNPC);
+                        int spawnedNPC = NPC.NewNPC(player.GetSource_FromThis(), (int)deathPosition.X, (int)deathPosition.Y, deathNPCType);
                         Main.npc[spawnedNPC].GetGlobalNPC<NPCs.JoJoGlobalNPC>().spawnedByDeathLoop = true;
-                        deathTimes += 1;
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/GEDeathLoop"));
+                        deathTimes += 1;
                         deathLoopTimer = 0;
                     }
                     if (deathLoopTimer >= 60 && deathTimes == (2 + deathTimeAdd))
@@ -66,10 +66,10 @@ namespace JoJoStands.Buffs.EffectBuff
                     deathLoopTimer++;
                     if (deathLoopTimer >= 30 && deathTimes <= (8 + deathTimeAdd))
                     {
-                        int spawnedNPC = NPC.NewNPC(player.GetSource_FromThis(), (int)deathPositionX, (int)deathPositionY, LoopNPC);
+                        int spawnedNPC = NPC.NewNPC(player.GetSource_FromThis(), (int)deathPosition.X, (int)deathPosition.Y, deathNPCType);
                         Main.npc[spawnedNPC].GetGlobalNPC<NPCs.JoJoGlobalNPC>().spawnedByDeathLoop = true;
-                        deathTimes += 1;
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/GEDeathLoop"));
+                        deathTimes += 1;
                         deathLoopTimer = 0;
                     }
                     if (deathLoopTimer >= 30 && deathTimes == (9 + deathTimeAdd))
@@ -83,14 +83,13 @@ namespace JoJoStands.Buffs.EffectBuff
             {
                 mPlayer.deathLoopActive = false;
                 deathTimes = 0;
-                Looping3x = false;
                 deathLoopTimer = 0;
+                Looping3x = false;
                 Looping10x = false;
                 player.ClearBuff(ModContent.BuffType<DeathLoop>());
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(60));
-                deathPositionX = 0f;
-                deathPositionY = 0f;
-                LoopNPC = 0;
+                deathPosition = Vector2.Zero;
+                deathNPCType = 0;
             }
         }
     }

@@ -40,8 +40,8 @@ namespace JoJoStands.Buffs.Debuffs
                 npc.lifeRegen = 0;
 
             Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f, 0, Scale: 2f);
-            npc.lifeRegenExpectedLossPerSecond = 20;
-            npc.lifeRegen -= 60;
+            npc.lifeRegenExpectedLossPerSecond = 10 * MyPlayer.worldEstimatedStandTier;
+            npc.lifeRegen -= 20 * MyPlayer.worldEstimatedStandTier;
 
             if (npc.noGravity)
             {

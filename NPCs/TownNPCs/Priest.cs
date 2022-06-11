@@ -1,6 +1,7 @@
 using JoJoStands.Projectiles.NPCStands;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -45,6 +46,14 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             NPC.DeathSound = SoundID.NPCDeath1;     //the NPC sound when he dies
             NPC.knockBackResist = 1f;       //the NPC knockback resistance
             AnimationType = NPCID.Guide;        //this copy the guide animation
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                new FlavorTextBestiaryInfoElement("A Priest visiting from Florida who came here after hearing of a certain someone's arrival. He says he's trying to achieve heaven... What does that even mean?")
+            });
         }
 
         public override bool CheckActive()

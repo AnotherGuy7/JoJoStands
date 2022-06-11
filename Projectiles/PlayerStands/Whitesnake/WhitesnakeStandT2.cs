@@ -16,11 +16,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override int punchTime => 13;
         public override int halfStandHeight => 32;
         public override float fistWhoAmI => 9f;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
         public override int standOffset => 22;
-        public override float maxDistance => 147f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
+        public override float maxDistance => 148f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
         public override string poseSoundName => "YouWereTwoSecondsTooLate";
         public override string spawnSoundName => "Whitesnake";
+        public override bool CanUseSaladDye => true;
 
         private const float RemoteControlMaxDistance = 40f * 16f;
 
@@ -58,7 +59,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && shootCount <= 0 && !secondaryAbilityFrames && Projectile.owner == Main.myPlayer)
                 {
                     Projectile.frame = 0;
                     secondaryAbilityFrames = true;
@@ -204,7 +205,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         {
             if (remoteControlled)
             {
-                Texture2D armTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Whitesnake_Arm");
+                Texture2D armTexture;
+                if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().currentTextureDye == MyPlayer.StandTextureDye.Salad)
+                    armTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Salad/Whitesnake_Arm");
+                else
+                    armTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Whitesnake_Arm");
+                
                 Vector2 armOrigin = new Vector2(4f, 12f);
                 int armFrameHeight = 16;
                 Rectangle armSourceRect = new Rectangle(0, armFrame * armFrameHeight, 56, armFrameHeight);
@@ -282,7 +288,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Whitesnake", "/Whitesnake_" + animationName);
 
             if (animationName == "Idle")
             {

@@ -12,7 +12,6 @@ namespace JoJoStands.Projectiles.Pets
 
         public override void SetStaticDefaults()
         {
-            Main.projPet[Projectile.type] = true;
             Main.projFrames[Projectile.type] = 4;
         }
 
@@ -43,11 +42,9 @@ namespace JoJoStands.Projectiles.Pets
                 Projectile.frame += 1;
                 Projectile.frameCounter = 0;
                 if (Projectile.frame >= 4)
-                {
                     Projectile.frame = 0;
-                }
             }
-            Projectile.netUpdate = true;
+            //Projectile.netUpdate = true;
         }
 
         public override bool PreDraw(ref Color drawColor)

@@ -1,4 +1,3 @@
-using JoJoStands.Buffs.AccessoryBuff;
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.DropConditions;
@@ -49,6 +48,7 @@ namespace JoJoStands.NPCs
         public int lockRegenCounter = 0;
         public bool forceDeath = false;
         public int btzPositionIndex = 0;
+        public bool taggedForDeathLoop = false;
         public bool spawnedByDeathLoop = false;
         public int deathTimer = 0;
         public int zombieHightlightTimer = 0;
@@ -499,26 +499,21 @@ namespace JoJoStands.NPCs
             for (int p = 0; p < Main.maxPlayers; p++)       //Searches if any player has death loop on
             {
                 Player player = Main.player[p];
-                MyPlayer mPlayer = null;
-                if (player.active)
-                    mPlayer = player.GetModPlayer<MyPlayer>();
-
-                if (mPlayer == null)
+                if (!player.active)
                     continue;
 
-                if (npc.boss && mPlayer.deathLoopActive && DeathLoop.LoopNPC == 0)
+                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+                if (npc.boss && mPlayer.deathLoopActive && DeathLoop.deathNPCType == 0)
                 {
-                    DeathLoop.LoopNPC = npc.type;
-                    DeathLoop.deathPositionX = npc.position.X;
-                    DeathLoop.deathPositionY = npc.position.Y;
+                    DeathLoop.deathNPCType = npc.type;
+                    DeathLoop.deathPosition = npc.position;
                     DeathLoop.Looping3x = true;
                     DeathLoop.Looping10x = false;
                 }
-                if (!npc.boss && mPlayer.deathLoopActive && DeathLoop.LoopNPC == 0 && !npc.friendly && npc.lifeMax > 5)
+                if (!npc.boss && mPlayer.deathLoopActive && DeathLoop.deathNPCType == 0 && !npc.friendly && npc.lifeMax > 5)
                 {
-                    DeathLoop.LoopNPC = npc.type;
-                    DeathLoop.deathPositionX = npc.position.X;
-                    DeathLoop.deathPositionY = npc.position.Y;
+                    DeathLoop.deathNPCType = npc.type;
+                    DeathLoop.deathPosition = npc.position;
                     DeathLoop.Looping3x = false;
                     DeathLoop.Looping10x = true;
                 }
@@ -537,6 +532,16 @@ namespace JoJoStands.NPCs
                     if (vPlayer.totalVampireSkillPointsEarned % 5 == 0)
                         vPlayer.vampiricLevel += 1;
                 }
+            }
+
+            if (npc.boss)
+            {
+                if (npc.type == NPCID.SkeletronHead)
+                    MyPlayer.worldEstimatedStandTier = 2;
+                else if (npc.type == NPCID.TheDestroyer || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer || npc.type == NPCID.SkeletronPrime)
+                    MyPlayer.worldEstimatedStandTier = 3;
+                else if (npc.type == NPCID.Plantera)
+                    MyPlayer.worldEstimatedStandTier = 4;
             }
         }
 

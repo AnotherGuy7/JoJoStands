@@ -13,6 +13,10 @@ namespace JoJoStands
         [Tooltip("Throttles how often the Stand is synced. Can have negative effects on network stability on higher frequencies.")]
         public StandSyncFrequency standSyncFrequency;
 
+        [DefaultValue(true)]
+        [Tooltip("Determines whether or not to enable PvP interactions and damage calculations.\nUseful for increasing the length of Stand fights and enabling")]
+        public bool PvPMode;
+
         public enum StandSyncFrequency
         {
             Sparingly,          //3s
@@ -38,6 +42,7 @@ namespace JoJoStands
                     StandClass.StandNetworkUpdateTime = 2;
                     break;
             }
+            MyPlayer.StandPvPMode = PvPMode;
         }
     }
 }

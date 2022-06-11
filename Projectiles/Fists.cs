@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.NPCs;
+using JoJoStands.Projectiles.PlayerStands.KillerQueen;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -15,7 +16,20 @@ namespace JoJoStands.Projectiles
             get { return Mod.Name + "/Projectiles/Fists"; }
         }
 
-        public override void SetDefaults()      //0 = SP; 1 = TW; 2 = GE; 3 = GER; 4 = SF's; 5 = KQ (Stand); 6 = KC; 7 = TH; 8 = GD; 9 = WS; 10 = SC; 11 = Cream
+        public const byte StarPlatinum = 0;
+        public const byte TheWorld = 1;
+        public const byte GoldExperience = 2;
+        public const byte GoldExperienceRequiem = 3;
+        public const int StickyFingers = 4;
+        public const byte KillerQueen = 5;
+        public const byte KingCrimson = 6;
+        public const byte TheHand = 7;
+        public const byte GratefulDead = 8;
+        public const byte Whitesnake = 9;
+        public const byte SilverChariot = 10;
+        public const byte Cream = 11;
+
+        public override void SetDefaults()
         {
             Projectile.width = 30;
             Projectile.height = 30;
@@ -30,23 +44,26 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            int standType = (int)Projectile.ai[0];
+            int standTier = (int)Projectile.ai[1];
             if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             if (JoJoStands.SoundsLoaded)
                 mPlayer.standHitTime += 2;
 
-            if (Projectile.ai[0] == 2f)
+            if (standType == GoldExperience)
             {
-                if (Projectile.ai[1] == 3f)
+                if (standTier == 3)
                 {
                     target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
                 }
-                if (Projectile.ai[1] == 4f)
+                if (standTier == 4)
                 {
                     target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
                 }
             }
-            if (Projectile.ai[0] == 3f)
+
+            if (standType == GoldExperienceRequiem)
             {
                 target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
                 if (mPlayer.backToZeroActive)
@@ -55,30 +72,33 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
                 }
             }
-            if (Projectile.ai[0] == 4f)
+
+            if (standType == StickyFingers)
             {
-                target.AddBuff(ModContent.BuffType<Zipped>(), (2 * (int)Projectile.ai[1]) * 60);
+                target.AddBuff(ModContent.BuffType<Zipped>(), (2 * (int)standTier) * 60);
             }
-            if (Projectile.ai[0] == 5f)
+
+            if (standType == KillerQueen)
             {
-                if (Projectile.ai[1] == 1f)
+                if (standTier == 1)
                 {
-                    PlayerStands.KillerQueen.KillerQueenStandT1.savedTarget = target;
+                    KillerQueenStandT1.savedTarget = target;
                 }
-                if (Projectile.ai[1] == 2f)
+                if (standTier == 2)
                 {
-                    PlayerStands.KillerQueen.KillerQueenStandT2.savedTarget = target;
+                    KillerQueenStandT2.savedTarget = target;
                 }
-                if (Projectile.ai[1] == 3f)
+                if (standTier == 3)
                 {
-                    PlayerStands.KillerQueen.KillerQueenStandT3.savedTarget = target;
+                    KillerQueenStandT3.savedTarget = target;
                 }
-                if (Projectile.ai[1] == 4f)
+                if (standTier == 4)
                 {
-                    PlayerStands.KillerQueen.KillerQueenStandFinal.savedTarget = target;
+                    KillerQueenStandFinal.savedTarget = target;
                 }
             }
-            if (Projectile.ai[0] == 6f)
+
+            if (standType == KingCrimson)
             {
                 JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
                 damage = (int)(damage * jojoNPC.kingCrimsonDonutMultiplier);
@@ -92,59 +112,56 @@ namespace JoJoStands.Projectiles
                     player.ClearBuff(ModContent.BuffType<PowerfulStrike>());
                 }
             }
-            if (Projectile.ai[0] == 7f)
+
+            if (standType == TheHand)
             {
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (4 + (int)Projectile.ai[1]) * 60);
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (4 + (int)standTier) * 60);
             }
-            if (Projectile.ai[0] == 8f)
+
+            if (standType == GratefulDead)
             {
-                target.AddBuff(ModContent.BuffType<Aging>(), (7 + ((int)Projectile.ai[1] * 2)) * 60);
+                target.AddBuff(ModContent.BuffType<Aging>(), (7 + ((int)standTier * 2)) * 60);
             }
-            if (Projectile.ai[0] == 9f)
+
+            if (standType == Whitesnake)
             {
                 if (Main.rand.NextFloat(0, 101) >= 94)
-                    target.AddBuff(BuffID.Confused, (2 + (int)Projectile.ai[1]) * 60);
+                    target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
             }
-            if (Projectile.ai[0] == 10f)
+
+            if (standType == SilverChariot)
             {
                 if (Main.rand.NextFloat(0, 101) >= 75)
                 {
-                    target.AddBuff(BuffID.Bleeding, (5 * (int)Projectile.ai[1]) * 60);
-                    player.GetArmorPenetration(DamageClass.Generic) += 5 * (int)Projectile.ai[1];
+                    target.AddBuff(BuffID.Bleeding, (5 * (int)standTier) * 60);
+                    player.GetArmorPenetration(DamageClass.Generic) += 5 * (int)standTier;
                 }
             }
-            if (Projectile.ai[0] == 11f)
+
+            if (standType == Cream)
             {
                 target.AddBuff(ModContent.BuffType<MissingOrgans>(), 120 * mPlayer.creamTier);
             }
 
             if (mPlayer.destroyAmuletEquipped)
             {
-                if (Main.rand.NextFloat(0, 101) >= 93)
-                {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 7)
                     target.AddBuff(BuffID.OnFire, 3 * 60);
-                }
             }
             if (mPlayer.greaterDestroyEquipped)
             {
-                if (Main.rand.NextFloat(0, 101) >= 80)
-                {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
                     target.AddBuff(BuffID.CursedInferno, 6 * 60);
-                }
             }
             if (mPlayer.awakenedAmuletEquipped)
             {
-                if (Main.rand.NextFloat(0, 101) >= 80)
-                {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
                     target.AddBuff(ModContent.BuffType<Infected>(), 9 * 60);
-                }
             }
             if (mPlayer.crackedPearlEquipped)
             {
-                if (Main.rand.NextFloat(0, 101) >= 60)
-                {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
                     target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-                }
             }
 
             if (!target.boss)
@@ -159,76 +176,75 @@ namespace JoJoStands.Projectiles
             {
                 crit = true;
             }*/
-            if (Projectile.ai[0] == 2f)
+            int standType = (int)Projectile.ai[0];
+            int standTier = (int)Projectile.ai[1];
+
+            if (standType == GoldExperience)
             {
-                if (Projectile.ai[1] == 3f)
+                if (standTier == 3f)
                 {
                     target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
                 }
-                if (Projectile.ai[1] == 4f)
+                if (standTier == 4f)
                 {
                     target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
                 }
             }
-            if (Projectile.ai[0] == 3f)
+
+            if (standType == GoldExperienceRequiem)
             {
-                target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
+                target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
                 if (mPlayer.backToZeroActive)
-                {
                     target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
-                }
             }
-            if (Projectile.ai[0] == 4f)
+
+            if (standType == StickyFingers)
             {
-                target.AddBuff(ModContent.BuffType<Zipped>(), (int)Projectile.ai[1] * 60);
+                target.AddBuff(ModContent.BuffType<Zipped>(), (int)standTier * 60);
             }
-            if (Projectile.ai[0] == 7f)
+
+            if (standType == TheHand)
             {
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)Projectile.ai[1] * 60);
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
             }
-            if (Projectile.ai[0] == 8f)
+
+            if (standType == GratefulDead)
             {
-                target.AddBuff(ModContent.BuffType<Aging>(), (1 + (int)Projectile.ai[1]) * 60);
+                target.AddBuff(ModContent.BuffType<Aging>(), (1 + (int)standTier) * 60);
             }
-            if (Projectile.ai[0] == 9f)
+
+            if (standType == Whitesnake)
             {
                 if (Main.rand.NextFloat(0, 101) >= 94)
                 {
-                    target.AddBuff(BuffID.Confused, (2 + (int)Projectile.ai[1]) * 60);
+                    target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
                 }
             }
-            if (Projectile.ai[0] == 11f)
+
+            if (standType == Cream)
             {
                 target.AddBuff(ModContent.BuffType<MissingOrgans>(), 60 * mPlayer.creamTier);
             }
 
             if (mPlayer.destroyAmuletEquipped)
             {
-                if (Main.rand.NextFloat(0, 101) >= 93)
-                {
-                    target.AddBuff(BuffID.OnFire, 3 * 60);
-                }
+                if (Main.rand.NextFloat(1, 100 + 1) <= 7)
+                    target.AddBuff(BuffID.OnFire, 4 * 60);
             }
             if (mPlayer.greaterDestroyEquipped)
             {
-                if (Main.rand.NextFloat(0, 101) >= 80)
-                {
-                    target.AddBuff(BuffID.CursedInferno, 10 * 60);
-                }
-            }
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.NextFloat(0, 101) >= 60)
-                {
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-                }
+                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
+                    target.AddBuff(BuffID.CursedInferno, 6 * 60);
             }
             if (mPlayer.awakenedAmuletEquipped)
             {
-                if (Main.rand.NextFloat(0, 101) >= 80)
-                {
-                    target.AddBuff(ModContent.BuffType<Infected>(), 9 * 60);
-                }
+                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 8 * 60);
+            }
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
             }
         }
 
@@ -242,34 +258,38 @@ namespace JoJoStands.Projectiles
                 SoundEngine.PlaySound(SoundID.Item1);
                 playedSound = true;
             }
-            if (Main.netMode != NetmodeID.SinglePlayer)
+
+            if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int p = 0; p < Main.maxProjectiles; p++)
                 {
                     Projectile otherProj = Main.projectile[p];
-                    if (otherProj.active && Projectile.Hitbox.Intersects(otherProj.Hitbox))
+                    if (otherProj.active && Projectile.owner != otherProj.owner && player.InOpposingTeam(Main.player[otherProj.owner]) && Projectile.Hitbox.Intersects(otherProj.Hitbox))
                     {
-                        if (otherProj.type == Projectile.type && Projectile.owner != otherProj.owner && player.team != Main.player[otherProj.owner].team)
+                        if (otherProj.type == Projectile.type)
                         {
-                            int dust = Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
-                            Main.dust[dust].noGravity = false;
+                            int dust = Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f);
+                            Main.dust[dust].noGravity = true;
                             if (MyPlayer.Sounds && Main.netMode != NetmodeID.Server)
                             {
                                 SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
-                                punchSound.Volume = 0.21f;
+                                punchSound.Volume = 0.6f;
+                                punchSound.Pitch = 0f;
+                                punchSound.PitchVariance = 0.2f;
                                 SoundEngine.PlaySound(punchSound, Projectile.Center);
                             }
                         }
-                        if (otherProj.type == ModContent.ProjectileType<KnifeProjectile>() && Projectile.owner != otherProj.owner && player.team != Main.player[otherProj.owner].team)
+                        else if (otherProj.type == ModContent.ProjectileType<KnifeProjectile>())
                         {
                             otherProj.owner = Projectile.owner;
-                            otherProj.velocity = -otherProj.velocity * 0.4f;
-                            int dust = Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.FlameBurst, otherProj.velocity.X * -0.5f, otherProj.velocity.Y * -0.5f);
-                            Main.dust[dust].noGravity = false;
+                            otherProj.velocity = Projectile.velocity * 0.8f;
+                            SoundEngine.PlaySound(SoundID.Tink, Projectile.Center);
                             if (MyPlayer.Sounds && Main.netMode != NetmodeID.Server)
                             {
                                 SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
-                                punchSound.Volume = 0.21f;
+                                punchSound.Volume = 0.5f;
+                                punchSound.Pitch = 0f;
+                                punchSound.PitchVariance = 0.2f;
                                 SoundEngine.PlaySound(punchSound, Projectile.Center);
                             }
                         }

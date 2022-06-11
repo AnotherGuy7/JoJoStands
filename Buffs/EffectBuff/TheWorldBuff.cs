@@ -14,7 +14,6 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             DisplayName.SetDefault("The World");
             Description.SetDefault("Time... has been stopped!");
-            Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
@@ -24,7 +23,8 @@ namespace JoJoStands.Buffs.EffectBuff
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (!player.HasBuff(Type))
+            mPlayer.timestopOwner = true;
+            if (!player.HasBuff(Type) || mPlayer.forceShutDownEffect)
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
@@ -36,10 +36,9 @@ namespace JoJoStands.Buffs.EffectBuff
                     {
                         Player otherPlayers = Main.player[i];
                         if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
-                        {
                             sendFalse = !otherPlayers.HasBuff(Type);      //don't send the packet and let the buff end if you weren't the only timestop owner
-                        }
-                        if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
+
+                        if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen) (Who actually does this!?! - AG 2022)
                             sendFalse = true;
                     }
                 }

@@ -16,7 +16,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Projectile.height = 26;
         }
 
-        public override int standType => 2;
+        public override string poseSoundName => "StandReadyFire";
+        public override StandType standType => StandType.Ranged;
         public override float shootSpeed => 12f;
 
         public int updateTimer = 0;
@@ -39,6 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.poseSoundName = poseSoundName;
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
                 Projectile.timeLeft = 2;
 
@@ -94,7 +96,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         PlayAnimation("AimUp");
                     }
                 }
-                if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
+                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer)
                 {
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X <= Projectile.position.X)
@@ -196,6 +198,20 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 Projectile.velocity.Y = 0f;
                 Projectile.position.Y -= 2f;
+            }
+
+            if (mPlayer.poseDuration <= 20)
+            {
+                if (mPlayer.poseDuration >= 18 && shootCount == 0)
+                    shootCount += Main.rand.Next(0, 20 + 1);
+
+                if (shootCount <= 0)
+                {
+                    shootCount += mPlayer.poseDuration + 1;
+                    SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0f, -shootSpeed), ProjectileID.Bullet, 1, 0f, Projectile.owner);
+                    Main.projectile[proj].netUpdate = true;
+                }
             }
         }
 

@@ -20,7 +20,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override int punchTime => 5;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 10f;
-        public override int standType => 1;
+        public override string spawnSoundName => "Silver Chariot";
+        public override StandType standType => StandType.Melee;
         private const int AfterImagesLimit = 5;
 
         private bool parryFrames = false;
@@ -114,7 +115,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 if (SpecialKeyPressed())
                 {
                     Shirtless = !Shirtless;
-
                     if (Shirtless)
                     {
                         punchMovementSpeed = 7.5f;

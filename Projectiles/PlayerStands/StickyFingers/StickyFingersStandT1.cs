@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override int halfStandHeight => 39;
         public override float fistWhoAmI => 4f;
         public override float tierNumber => 1f;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
         public override string punchSoundName => "Ari";
         public override string poseSoundName => "Arrivederci";
         public override string spawnSoundName => "Sticky Fingers";

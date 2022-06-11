@@ -19,10 +19,10 @@ namespace JoJoStands.Tiles
             AnimationFrameHeight = 54;      //you put the entre animation frame size here, not in tiles
             TileID.Sets.DisableSmartCursor[Type] = true;
 
-            TileObjectData.newTile.CoordinatePadding = 2;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.newTile.Width = 2;
             TileObjectData.newTile.Height = 3;
+            TileObjectData.newTile.CoordinatePadding = 2;
             TileObjectData.newTile.CoordinateHeights = new int[]
             {
                 16,

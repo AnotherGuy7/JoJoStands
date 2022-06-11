@@ -1,7 +1,5 @@
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
@@ -16,10 +14,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override float shootSpeed => 4f;
         public override int shootTime => 30;
         public override int halfStandHeight => 37;
-        public override int standType => 2;
+        public override StandType standType => StandType.Ranged;
         public override int standOffset => -10;
         public override string poseSoundName => "IWouldntLose";
         public override string spawnSoundName => "Killer Queen";
+        //public override bool CanUseSaladDye => true;
 
         private int btdStartDelay = 0;
         private int bubbleDamage = 684;      //not using projectileDamage cause this one changes
@@ -255,6 +254,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f)
                 {
+                    if (!mPlayer.canStandBasicAttack)
+                    {
+                        idleFrames = true;
+                        attackFrames = false;
+                        return;
+                    }
+
                     attackFrames = true;
                     Projectile.netUpdate = true;
                     if (Projectile.frame == 4 && !mPlayer.standAutoMode)

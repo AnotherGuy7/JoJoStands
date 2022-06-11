@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override int halfStandHeight => 39;
         public override float fistWhoAmI => 4f;
         public override float tierNumber => 3f;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
         public override string punchSoundName => "Ari";
         public override string poseSoundName => "Arrivederci";
         public override string spawnSoundName => "Sticky Fingers";
@@ -46,18 +46,21 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             if (!mPlayer.standAutoMode)
             {
                 secondaryAbility = secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] != 0;
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0 && !zipperAmbush)
                 {
                     Punch();
                 }
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
+                    {
                         attackFrames = false;
+                        idleFrames = true;
+                    }
                 }
                 if (!attackFrames)
                 {
-                    if (!secondaryAbilityFrames)
+                    if (!secondaryAbility)
                         StayBehind();
                     else
                         GoInFront();
@@ -70,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     if (mouseRightHoldTimer >= 60)
                         mouseRightForceRelease = true;
                 }
-                if (Main.mouseRightRelease && !mouseRightJustReleased && mouseRightPressed && mouseRightHoldTimer >= 5)
+                if (Main.mouseRightRelease && !mouseRightJustReleased && mouseRightPressed && mouseRightHoldTimer >= 5 && Projectile.owner == Main.myPlayer)
                 {
                     mouseRightPressed = false;
                     mouseRightJustReleased = true;
@@ -137,14 +140,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                             SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
                     }
                 }
-                if (SpecialKeyPressed() && shootCount <= 0 && !secondaryAbility && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersTraversalZipper>()] == 0)
+                if (SpecialKeyPressed() && shootCount <= 0 && !secondaryAbility && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersTraversalZipper>()] == 0 && !zipperAmbush)
                 {
                     shootCount += 20;
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= shootSpeed * 3;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersTraversalZipper>(), 0, 0f, Projectile.owner, 0f);
@@ -162,6 +164,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             {
                 PunchAndShootAI(ModContent.ProjectileType<StickyFingersFistExtended>(), shootMax: 1);
             }
+        }
+
+        public override bool PreDrawExtras()
+        {
+            if (zipperAmbush)
+                Projectile.alpha = 0;
+            else
+                Projectile.alpha = 255;
+            return true;
         }
 
         public override void SelectAnimation()

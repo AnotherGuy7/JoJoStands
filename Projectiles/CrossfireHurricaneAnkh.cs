@@ -15,8 +15,8 @@ namespace JoJoStands.Projectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = 12;
-            Projectile.height = 20;
+            Projectile.width = 52;
+            Projectile.height = 50;
             Projectile.aiStyle = 0;
             Projectile.timeLeft = 360;
             Projectile.friendly = true;
@@ -40,7 +40,7 @@ namespace JoJoStands.Projectiles
             Projectile.ai[0] += 1 * rotationMult;
             Vector2 offset = player.Center + (Projectile.ai[1].ToRotationVector2() * Projectile.ai[0]);
             Projectile.position = offset;
-            int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 6, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, default(Color), 3.5f);
+            int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, Scale: 3.5f);
             Main.dust[dustIndex].noGravity = true;
             Main.dust[dustIndex].velocity *= 1.4f;
 
@@ -55,17 +55,15 @@ namespace JoJoStands.Projectiles
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
+
+            target.immune[Projectile.owner] = 0;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             if (Main.rand.Next(0, 101) < 50f)
-            {
                 target.AddBuff(BuffID.OnFire, 300);
-            }
         }
     }
 }

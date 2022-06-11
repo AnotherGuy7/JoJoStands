@@ -104,7 +104,7 @@ namespace JoJoStands.Projectiles.Minions
             }
 
             Player player = Main.player[Projectile.owner];
-            if (Main.netMode != NetmodeID.SinglePlayer)
+            if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int p = 0; p < Main.maxProjectiles; p++)
                 {
@@ -114,11 +114,14 @@ namespace JoJoStands.Projectiles.Minions
                     {
                         if (Projectile.owner != otherProj.owner && player.team != otherPlayer.team && Projectile.damage < 75)
                         {
-                            Dust.NewDust(Main.projectile[p].position + Main.projectile[p].velocity, Projectile.width, Projectile.height, DustID.FlameBurst, Main.projectile[p].velocity.X * -0.5f, Main.projectile[p].velocity.Y * -0.5f);
+                            int dustIndex = Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.Torch);
+                            Main.dust[dustIndex].noGravity = true;
                             if (MyPlayer.Sounds)
                             {
                                 SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
-                                punchSound.Volume = 0.21f;
+                                punchSound.Volume = 0.6f;
+                                punchSound.Pitch = 0f;
+                                punchSound.PitchVariance = 0.2f;
                                 SoundEngine.PlaySound(punchSound, Projectile.Center);
                             }
 

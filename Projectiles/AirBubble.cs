@@ -1,11 +1,8 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
- 
+
 namespace JoJoStands.Projectiles
 {
     public class AirBubble : ModProjectile
@@ -22,9 +19,17 @@ namespace JoJoStands.Projectiles
             Projectile.ignoreWater = true;
         }
 
+        private int sinTimer = 0;
+
         public override void AI()
         {
-            if (Projectile.ai[0] == 0f)
+            sinTimer += 4;
+            if (sinTimer >= 360)
+                sinTimer = 0;
+
+            Projectile.alpha = (int)(255f * Math.Sin(MathHelper.ToRadians(sinTimer)));
+
+            /*if (Projectile.ai[0] == 0f)
             {
                 Projectile.alpha += 6;
             }
@@ -39,12 +44,25 @@ namespace JoJoStands.Projectiles
             if (Projectile.alpha <= 0)
             {
                 Projectile.ai[0] = 0f;
-            }
+            }*/
         }
 
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             Projectile.Kill();
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                float circlePos = i;
+                Vector2 spawnPos = Projectile.Center + (circlePos.ToRotationVector2() * 8f);
+                Vector2 velocity = spawnPos - Projectile.Center;
+                velocity.Normalize();
+                Dust dustIndex = Dust.NewDustPerfect(spawnPos, 21, velocity * 0.8f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
+                dustIndex.noGravity = true;
+            }
         }
     }
 }

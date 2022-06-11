@@ -18,7 +18,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override float maxAltDistance => 165f;     //about 10 tiles
         public override string poseSoundName => "IWouldntLose";
         public override string spawnSoundName => "Killer Queen";
-        public override int standType => 1;
+        public override bool CanUseSaladDye => true;
+        public override StandType standType => StandType.Melee;
 
 
         private int explosionTimer = 0;
@@ -272,7 +273,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/KillerQueen/KillerQueen_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/KillerQueen", "/KillerQueen_" + animationName);
 
             if (animationName == "Idle")
             {

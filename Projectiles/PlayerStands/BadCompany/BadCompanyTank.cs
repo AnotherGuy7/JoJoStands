@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Projectile.height = 14;
         }
 
-        public override int standType => 2;
+        public override StandType standType => StandType.Ranged;
 
         public int updateTimer = 0;
 
@@ -73,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (!mPlayer.standAutoMode)
             {
                 MovementAI();
-                if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
+                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer)
                 {
                     if (Main.MouseWorld.X >= Projectile.position.X)
                         Projectile.spriteDirection = Projectile.direction = 1;

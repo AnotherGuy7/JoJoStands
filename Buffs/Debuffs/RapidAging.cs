@@ -43,7 +43,7 @@ namespace JoJoStands.Buffs.Debuffs
                 oneTimeEffectsApplied = true;
             }
 
-            npc.lifeRegen = -250;
+            npc.lifeRegen = -npc.lifeMax / 16;
             if (Math.Abs(npc.velocity.X) > savedVelocityX)
                 npc.velocity.X *= 0.8f;
             if (mPlayer.gratefulDeadTier == 3)
