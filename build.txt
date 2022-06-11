@@ -1,5 +1,5 @@
 author = AnotherGuy
-version = 2.3
+version = 2.3.1
 displayName = JoJoStands
 homepage = https://forums.terraria.org/index.php?threads/jojostands.77244/
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, .config\*, .sln\*,  .sqlite\*,  .config\*,  .lock\*,  .ide\*,  .ide-shm\*,  .ide-wal\*,  .cache\*,  .nupkg\*,  .rels\*,  .psmdcp\*,  .nuspec\*
