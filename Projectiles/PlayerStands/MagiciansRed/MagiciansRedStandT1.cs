@@ -9,7 +9,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
     public class MagiciansRedStandT1 : StandClass
     {
         public override float shootSpeed => 8f;
-        public override int standType => 2;
+        public override StandType standType => StandType.Ranged;
         public override int projectileDamage => 16;
         public override int shootTime => 20;
         public override int halfStandHeight => 35;
@@ -42,6 +42,13 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
+                    if (!mPlayer.canStandBasicAttack)
+                    {
+                        idleFrames = true;
+                        attackFrames = false;
+                        return;
+                    }
+
                     attackFrames = true;
                     if (shootCount <= 0)
                     {
@@ -105,6 +112,13 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     idleFrames = true;
                     attackFrames = false;
                 }
+            }
+
+            if (Main.rand.Next(0, 20 + 1) == 0)
+            {
+                int dustIndex = Dust.NewDust(Projectile.position + new Vector2(0, -halfStandHeight), Projectile.width, halfStandHeight * 2, DustID.Torch, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, Scale: 2.1f);
+                Main.dust[dustIndex].noGravity = true;
+                Main.dust[dustIndex].velocity *= 1.4f;
             }
         }
 

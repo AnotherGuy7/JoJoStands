@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Projectile.height = 26;
         }
 
-        public override int standType => 2;
+        public override StandType standType => StandType.Ranged;
 
         public int updateTimer = 0;
 
@@ -31,16 +31,14 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             SelectAnimation();
             updateTimer++;
             if (shootCount > 0)
-            {
                 shootCount--;
-            }
+
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Projectile.frameCounter++;
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
-            {
                 Projectile.timeLeft = 2;
-            }
+
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
             {
                 updateTimer = 0;
@@ -72,7 +70,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (!mPlayer.standAutoMode)
             {
                 MovementAI();
-                if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
+                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer)
                 {
                     if (Main.MouseWorld.X >= Projectile.position.X)
                         Projectile.spriteDirection = Projectile.direction = 1;

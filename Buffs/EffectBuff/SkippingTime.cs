@@ -15,7 +15,6 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             DisplayName.SetDefault("Skipping Time");
             Description.SetDefault("Time is skipping");
-            Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
 
@@ -26,7 +25,7 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (player.HasBuff(ModContent.BuffType<SkippingTime>()))
+            if (player.HasBuff(ModContent.BuffType<SkippingTime>()) && !mPlayer.forceShutDownEffect)
             {
                 player.immune = true;
                 player.controlUseItem = false;
@@ -83,13 +82,11 @@ namespace JoJoStands.Buffs.EffectBuff
                     {
                         Player otherPlayer = Main.player[i];
                         if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI)
-                        {
                             sendFalse = !otherPlayer.HasBuff(Type);
-                        }
+
                         if (player.active && !otherPlayer.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
-                        {
                             sendFalse = true;
-                        }
+
                         Array.Clear(PreTimeSkip.playerVelocity, i, 1);
                         if (otherPlayer.active && i != player.whoAmI)
                             otherPlayer.AddBuff(ModContent.BuffType<TimeSkipConfusion>(), 5 * 60);

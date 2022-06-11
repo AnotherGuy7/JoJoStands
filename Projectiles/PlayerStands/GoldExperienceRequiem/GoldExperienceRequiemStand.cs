@@ -30,7 +30,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override string punchSoundName => "GER_Muda";
         public override string poseSoundName => "ThisIsRequiem";
         public override string spawnSoundName => "Gold Experience";
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
 
         private int regencounter = 0;
         //private string[] abilityNames = new string[5] { "Scorpion Beam", "Tree", "Death-Loop", "Limb Recreation", "Back to Zero" };
@@ -73,8 +73,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     }
                     if (Main.mouseRight && Collision.SolidCollision(Main.MouseWorld, 1, 1) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && mPlayer.chosenAbility == 1)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld.X, Main.MouseWorld.Y - 16f, 0f, 0f, ModContent.ProjectileType<GETree>(), 1, 0f, Projectile.owner, tierNumber);
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
+                        int yPos = (((int)Main.MouseWorld.Y / 16) - 3) * 16;
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld.X, yPos, 0f, 0f, ModContent.ProjectileType<GETree>(), 1, 0f, Projectile.owner, tierNumber);
+                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(12));
                     }
                     if (Main.mouseRight && mPlayer.chosenAbility == 2 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<DeathLoop>()))
                     {

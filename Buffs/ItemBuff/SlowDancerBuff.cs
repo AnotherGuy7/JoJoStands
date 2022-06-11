@@ -12,6 +12,7 @@ namespace JoJoStands.Buffs.ItemBuff
             DisplayName.SetDefault("Slow Dancer");
             Description.SetDefault("A fast horse capable of generating large amounts of spin energy.");
             Main.buffNoTimeDisplay[Type] = true;
+            Main.buffNoSave[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)

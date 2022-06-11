@@ -11,7 +11,6 @@ namespace JoJoStands.Tiles
     {
         public override void SetStaticDefaults()      //some of this is from ExampleMod/Tiles/ExmapleOre
         {
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileID.Sets.Ore[Type] = true;
             //Main.tileValue[Type] = 309;
             Main.tileSpelunker[Type] = true; // The tile will be affected by spelunker highlighting
@@ -19,6 +18,8 @@ namespace JoJoStands.Tiles
             Main.tileMergeDirt[Type] = true;
             Main.tileSolid[Type] = true;
             Main.tileLighted[Type] = true;
+
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.addTile(Type);
 
             HitSound = SoundID.Tink;

@@ -21,7 +21,7 @@ namespace JoJoStands.Buffs.ItemBuff
                 if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT1>())
                     player.endurance += 0.35f;
                 if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT2>())
-                    player.endurance += 0.7f;
+                    player.endurance = 0.7f;
 
                 player.buffTime[buffIndex] = 10;
             }

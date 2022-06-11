@@ -11,11 +11,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override int punchTime => 14;
         public override int halfStandHeight => 44;
         public override float fistWhoAmI => 9f;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
         public override int standOffset => 22;
-        public override float maxDistance => 147f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
+        public override float maxDistance => 148f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
         public override string poseSoundName => "YouWereTwoSecondsTooLate";
         public override string spawnSoundName => "Whitesnake";
+        public override bool CanUseSaladDye => true;
 
         public override void AI()
         {
@@ -75,7 +76,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Whitesnake_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Whitesnake", "/Whitesnake_" + animationName);
 
             if (animationName == "Idle")
             {

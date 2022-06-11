@@ -33,9 +33,8 @@ namespace JoJoStands.Projectiles
 
             //player.ownedProjectileCounts[ModContent.ProjectileType<ViralBeetleProjectile>()]
             if (player.HasBuff(ModContent.BuffType<ViralBeetleBuff>()))
-            {
-                Projectile.timeLeft = 10;
-            }
+                Projectile.timeLeft = 2;
+
             float radius = Projectile.ai[0] * 24f;     //Radius, in which ai[0] is it's spawn number
             if (Projectile.ai[0] != 2f)
             {
@@ -54,20 +53,16 @@ namespace JoJoStands.Projectiles
             Projectile.position = offset;
             Lighting.AddLight(Projectile.Center, 2.55f / 3f, 2.14f / 3f, 0.88f / 3f);
 
+            Projectile.direction = -1;
             if (Projectile.position.X > player.position.X)
-            {
                 Projectile.direction = 1;
-            }
-            else
-            {
-                Projectile.direction = -1;
-            }
+
             Projectile.spriteDirection = Projectile.direction;
 
             for (int p = 0; p < Main.maxProjectiles; p++)
             {
                 Projectile otherProj = Main.projectile[p];
-                if (otherProj.active)
+                if (otherProj.active && otherProj.owner != player.whoAmI)
                 {
                     if (Projectile.Hitbox.Intersects(otherProj.Hitbox) && otherProj.type != Projectile.type && (otherProj.hostile || !otherProj.friendly))
                     {
@@ -79,19 +74,15 @@ namespace JoJoStands.Projectiles
             }
 
             if (Projectile.penetrate <= 0)
-            {
                 Projectile.Kill();
-            }
 
             Projectile.frameCounter++;
             if (Projectile.frameCounter >= 15)
             {
                 Projectile.frame++;
-                if (Projectile.frame >= Main.projFrames[Projectile.type])
-                {
-                    Projectile.frame = 0;
-                }
                 Projectile.frameCounter = 0;
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
+                    Projectile.frame = 0;
             }
         }
 

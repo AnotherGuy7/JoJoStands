@@ -14,7 +14,6 @@ namespace JoJoStands.Projectiles.Pets
 
         public override void SetStaticDefaults()
         {
-            Main.projPet[Projectile.type] = true;
             Main.projFrames[Projectile.type] = 4;
         }
 

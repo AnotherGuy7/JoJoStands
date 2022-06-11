@@ -10,7 +10,6 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             DisplayName.SetDefault("Foreseen");
             Description.SetDefault("Your actions have already been seen...");
-            Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
             Main.buffNoTimeDisplay[Type] = true;
         }
@@ -25,7 +24,7 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             player.AddBuff(Type, 2);
-            if (player.HasBuff(Type) && mPlayer.epitaphForesightActive)
+            if (player.HasBuff(Type) && mPlayer.epitaphForesightActive && !mPlayer.forceShutDownEffect)
             {
                 saveTimer++;
                 if (saveTimer >= 30)

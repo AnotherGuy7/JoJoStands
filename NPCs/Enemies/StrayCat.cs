@@ -1,6 +1,7 @@
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -10,22 +11,29 @@ namespace JoJoStands.NPCs.Enemies
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[NPC.type] = 6; //this defines how many frames the NPC sprite sheet has
+            Main.npcFrameCount[NPC.type] = 6;
         }
 
         public override void SetDefaults()
         {
-            NPC.width = 14; //the NPC sprite width
-            NPC.height = 14;  //the NPC sprite height
-            NPC.defense = 9;  //the NPC defense
-            NPC.lifeMax = 60;  // the NPC life
-            NPC.HitSound = SoundID.NPCHit1;  //the NPC sound when is hit
-            NPC.DeathSound = SoundID.NPCDeath1;  //the NPC sound when he dies
-            NPC.knockBackResist = 0f;  //the NPC knockback resistance
-            NPC.chaseable = true;       //whether or not minions can chase this NPC
-            NPC.damage = 21;       //the damage the NPC does
-            NPC.aiStyle = 0;        //no AI, to run void AI()
-            NPC.value = Item.buyPrice(0, 0, 6, 60);
+            NPC.width = 14;
+            NPC.height = 14;
+            NPC.defense = 9;
+            NPC.lifeMax = 60;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.Grass;
+            NPC.knockBackResist = 0f;
+            NPC.chaseable = true;
+            NPC.damage = 24;
+            NPC.aiStyle = 0;
+            NPC.value = Item.buyPrice(silver: 6, copper: 50);
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface
+            });
         }
 
         //NPC.ai[0] = timer before the NPC shoots
@@ -57,9 +65,8 @@ namespace JoJoStands.NPCs.Enemies
                 {
                     Vector2 shootVel = target.Center - NPC.Center;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= 2f;
                     int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, shootVel.X, shootVel.Y, ModContent.ProjectileType<AirBubble>(), NPC.damage, 1f);
@@ -110,13 +117,18 @@ namespace JoJoStands.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (!NPC.downedPlantBoss && !spawnInfo.Player.ZoneBeach && !spawnInfo.Player.ZoneDesert && !spawnInfo.Player.ZoneDungeon && spawnInfo.Player.ZoneOverworldHeight)
+            float spawnWeight = 0f;
+            if (!NPC.downedPlantBoss && NPC.downedBoss3 && spawnInfo.Player.ZoneForest)
+                spawnWeight = 0.04f;
+
+            return spawnWeight;
+        }
+
+        public override void OnKill()
+        {
+            for (int i = 0; i < Main.rand.Next(2, 7 + 1); i++)
             {
-                return 0.04f;
-            }
-            else
-            {
-                return 0f;
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Grass);
             }
         }
     }

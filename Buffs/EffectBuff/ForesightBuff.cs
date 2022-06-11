@@ -12,7 +12,6 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             DisplayName.SetDefault("Foresight");
             Description.SetDefault("You are staring into the future...");
-            Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
 
@@ -20,9 +19,9 @@ namespace JoJoStands.Buffs.EffectBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (!player.HasBuff(Type))
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (!player.HasBuff(Type) || mPlayer.forceShutDownEffect)
             {
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {

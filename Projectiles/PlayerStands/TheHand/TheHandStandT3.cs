@@ -14,7 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
     {
         public override float maxDistance => 98f;
         public override float maxAltDistance => 327f;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
         public override int punchDamage => 52;
         public override int punchTime => 11;
         public override int halfStandHeight => 37;
@@ -93,6 +93,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 {
                     if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility)
                     {
+                        if (!player.GetModPlayer<MyPlayer>().canStandBasicAttack)
+                        {
+                            idleFrames = true;
+                            scrapeBarrageFrames = false;
+                            attackFrames = false;
+                            return;
+                        }
+
                         HandleDrawOffsets();
                         attackFrames = false;
                         idleFrames = false;

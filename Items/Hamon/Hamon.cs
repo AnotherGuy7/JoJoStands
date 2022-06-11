@@ -74,6 +74,12 @@ namespace JoJoStands.Items.Hamon
                 player.AddBuff(ModContent.BuffType<RUUUN>(), 360);
         }
 
+        /*public override void OnCraft(Recipe recipe)       //Re-enable for patch
+        {
+            Main.LocalPlayer.GetModPlayer<HamonPlayer>().learnedHamon = true;
+            UI.HamonBar.ShowHamonBar();
+        }*/
+
         public override void AddRecipes()
         {
             CreateRecipe()

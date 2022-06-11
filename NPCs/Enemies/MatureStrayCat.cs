@@ -1,6 +1,7 @@
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,18 +16,27 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void SetDefaults()
         {
-            NPC.width = 16; //the NPC sprite width
-            NPC.height = 20;  //the NPC sprite height
-            NPC.defense = 47;  //the NPC defense
-            NPC.lifeMax = 400;  // the NPC life
-            NPC.HitSound = SoundID.NPCHit1;  //the NPC sound when is hit
-            NPC.DeathSound = SoundID.NPCDeath1;  //the NPC sound when he dies
-            NPC.knockBackResist = 0f;  //the NPC knockback resistance
-            NPC.chaseable = true;       //whether or not minions can chase this NPC
-            NPC.damage = 120;       //the damage the NPC does
-            NPC.aiStyle = 0;        //no AI, to run void AI()
-            NPC.value = Item.buyPrice(0, 0, 82, 40);
+            NPC.width = 16;
+            NPC.height = 20;
+            NPC.defense = 47;
+            NPC.lifeMax = 400;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 0f;
+            NPC.chaseable = true;
+            NPC.damage = 120;
+            NPC.aiStyle = 0;
+            NPC.value = Item.buyPrice(gold: 1, silver: 75);
             NPC.catchItem = (short)ModContent.ItemType<Items.StrayCat>();
+            NPC.rarity = 2;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+                new FlavorTextBestiaryInfoElement("A peculiar plant(?) that seems to react differently to different people, though hostile to most!")
+            });
         }
 
         //NPC.ai[0] = timer before the NPC shoots

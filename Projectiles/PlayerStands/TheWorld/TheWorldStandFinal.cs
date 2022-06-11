@@ -21,7 +21,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override string punchSoundName => "Muda";
         public override string poseSoundName => "ComeAsCloseAsYouLike";
         public override string spawnSoundName => "The World";
-        public override int standType => 1;
+        public override bool CanUseSaladDye => true;
+        public override StandType standType => StandType.Melee;
 
         private bool abilityPose = false;
         private int timestopPoseTimer = 0;
@@ -72,9 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 Main.mouseLeft = false;
                 Main.mouseRight = false;
                 if (timestopPoseTimer <= 1)
-                {
                     abilityPose = false;
-                }
             }
 
             if (!mPlayer.standAutoMode)
@@ -136,7 +135,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 if (SpecialKeyPressed() && player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<RoadRoller>()] == 0)
                 {
                     if (JoJoStands.SoundsLoaded)
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RoadRollerDa"));
+                    {
+                        SoundStyle roadRollerDa = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RoadRollerDa");
+                        roadRollerDa.Volume = MyPlayer.ModSoundsVolume;
+                        SoundEngine.PlaySound(roadRollerDa);
+                    }
 
                     shootCount += 12;
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
@@ -251,12 +254,16 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
         public override void PlayAnimation(string animationName)
         {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TheWorld/TheWorld_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/TheWorld", "/TheWorld_" + animationName);
 
             if (animationName == "Idle")
             {
-                AnimateStand(animationName, 2, 30, true);
+                if (mPlayer.currentTextureDye == MyPlayer.StandTextureDye.Salad)
+                    AnimateStand(animationName, 4, 15, true);
+                else
+                    AnimateStand(animationName, 2, 30, true);
             }
             if (animationName == "Attack")
             {

@@ -22,7 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override int halfStandHeight => 36;
         public override float fistWhoAmI => 11f;
         public override int standOffset => 0;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
 
         private Vector2 velocityAddition;
         private int framechangecounter = 0;

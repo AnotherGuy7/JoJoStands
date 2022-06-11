@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override int halfStandHeight => 39;
         public override float fistWhoAmI => 4f;
         public override float tierNumber => 4f;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
         public override string punchSoundName => "Ari";
         public override string poseSoundName => "Arrivederci";
         public override string spawnSoundName => "Sticky Fingers";
@@ -116,7 +116,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     if (Main.mouseRight && shootCount <= 0)
                     {
                         zipperAmbush = false;
-                        player.immune = false;
+                        player.immune = true;
+                        player.immuneTime = 15;
                         for (int i = 0; i < Main.maxNPCTypes; i++)
                             player.npcTypeNoAggro[i] = false;
 

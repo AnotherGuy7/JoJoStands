@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
@@ -29,6 +30,15 @@ namespace JoJoStands.NPCs.Enemies
             NPC.damage = 5;
             NPC.aiStyle = 0;
             NPC.value = 3 * 100 * 100;
+            NPC.rarity = 2;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+                new FlavorTextBestiaryInfoElement("An ex-gang member who suffered an accident and lost his old life. He was saved by another Stand User and continued on a different path.")
+            });
         }
 
         //NPC.ai[2] = is stand alive

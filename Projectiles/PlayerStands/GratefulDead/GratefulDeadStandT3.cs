@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override float fistWhoAmI => 8f;
         public override float tierNumber => 1f;
         public override int standOffset => 32;
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
         public override string poseSoundName => "OnceWeDecideToKillItsDone";
         public override string spawnSoundName => "The Grateful Dead";
 
@@ -57,7 +57,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         }
                     }
                 }
-                if (Main.netMode != NetmodeID.SinglePlayer)
+                if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
                 {
                     for (int i = 0; i < Main.maxPlayers; i++)
                     {

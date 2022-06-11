@@ -15,9 +15,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int projectileDamage => 32;
         public override int halfStandHeight => 30;
         public override int standOffset => 0;
-        public override int standType => 2;
+        public override StandType standType => StandType.Ranged;
         public override string poseSoundName => "ItsTheVictorWhoHasJustice";
         public override string spawnSoundName => "Hierophant Green";
+        public override bool CanUseSaladDye => true;
 
         private bool pointShot = false;
         private bool remoteControlled = false;
@@ -61,6 +62,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
+                    if (!mPlayer.canStandBasicAttack)
+                        return;
+
                     attackFrames = true;
                     idleFrames = false;
                     Projectile.netUpdate = true;
@@ -301,7 +305,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/HierophantGreen/HierophantGreen_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/HierophantGreen", "/HierophantGreen_" + animationName);
 
             if (animationName == "Idle")
             {

@@ -22,7 +22,7 @@ namespace JoJoStands.Buffs.Debuffs
                 player.lifeRegen = 0;
 
             player.lifeRegenTime = 0;
-            player.lifeRegen -= 20;
+            player.lifeRegen -= 10 + (5 * MyPlayer.worldEstimatedStandTier);
             player.moveSpeed *= 0.6f;
             Dust.NewDust(player.position, player.width, player.height, DustID.Blood, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
         }
@@ -35,8 +35,8 @@ namespace JoJoStands.Buffs.Debuffs
                 npc.lifeRegen = 0;
 
             Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f);
-            npc.lifeRegenExpectedLossPerSecond = 20;
-            npc.lifeRegen -= 60;
+            npc.lifeRegenExpectedLossPerSecond = 10 + (5 * MyPlayer.worldEstimatedStandTier);
+            npc.lifeRegen -= 20 + (10 * MyPlayer.worldEstimatedStandTier);
             if (Math.Abs(npc.velocity.X) > savedVelocityX)
                 npc.velocity.X *= 0.9f;
         }

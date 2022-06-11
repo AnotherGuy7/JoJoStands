@@ -41,8 +41,8 @@ namespace JoJoStands.Projectiles
         public override bool PreAI(Projectile Projectile)
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            if (Mplayer.timestopActive)
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.timestopActive)
             {
                 timeLeftSave++;
                 if (timeLeftSave >= 6 && savedTimeLeft == 0)
@@ -50,10 +50,10 @@ namespace JoJoStands.Projectiles
 
                 if (!stoppedInTime)
                 {
-                    Projectile.damage = (int)(Projectile.damage * 0.8f);        //projectiles in timestop lose 20% damage, so it's not as OP
-                    if (player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && JoJoStands.timestopImmune.Contains(Projectile.type))
-                        timestopImmune = true;
                     stoppedInTime = true;
+                    Projectile.damage = (int)(Projectile.damage * 0.8f);        //projectiles in timestop lose 20% damage, so it's not as OP
+                    if (player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && mPlayer.timestopOwner && JoJoStands.timestopImmune.Contains(Projectile.type))
+                        timestopImmune = true;
                 }
                 if (!timestopImmune)
                 {
@@ -70,14 +70,14 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (Mplayer.timeskipPreEffect)     //saves it, this is for projectiles like minions, controllable projectiles, etc.
+            if (mPlayer.timeskipPreEffect)     //saves it, this is for projectiles like minions, controllable projectiles, etc.
                 preSkipVel = Projectile.velocity;
-            if (Mplayer.timeskipActive)        //deploys it
+            if (mPlayer.timeskipActive)        //deploys it
                 Projectile.velocity = preSkipVel;
             else
                 preSkipVel = Vector2.Zero;
 
-            if (Mplayer.epitaphForesightActive && !Projectile.minion)
+            if (mPlayer.epitaphForesightActive && !Projectile.minion)
             {
                 applyingForesightPositions = true;
                 if (foresightSaveTimer > 0)
@@ -94,7 +94,7 @@ namespace JoJoStands.Projectiles
                     foresightSaveTimer = 15;
                 }
             }
-            if (!Mplayer.epitaphForesightActive && applyingForesightPositions)
+            if (!mPlayer.epitaphForesightActive && applyingForesightPositions)
             {
                 if (!foresightResetIndex)
                 {
@@ -151,7 +151,7 @@ namespace JoJoStands.Projectiles
             }
 
             if (kickedBySexPistols)
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 204, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
+                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.TreasureSparkle, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
             return true;
         }
 
@@ -197,8 +197,9 @@ namespace JoJoStands.Projectiles
 
         public override bool ShouldUpdatePosition(Projectile Projectile)        //thanks, HellGoesOn for telling me this hook even existed
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-            if (mPlayer.timestopActive && Projectile.timeLeft <= savedTimeLeft)        //the ones who can move in Za Warudo's projectiles, like minions, fists, every other Projectile should freeze
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.timestopActive && mPlayer.timestopOwner && Projectile.timeLeft <= savedTimeLeft)        //the ones who can move in Za Warudo's projectiles, like minions, fists, every other Projectile should freeze
                 return timestopImmune;      //if it's owner isn't a timestop owner, always stop the Projectile
 
             return true;

@@ -18,10 +18,9 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            if (player.buffTime[buffIndex] <= 1)
-            {
+            player.buffTime[buffIndex] -= 6;
+            if (player.buffTime[buffIndex] <= 2)
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), player.GetModPlayer<MyPlayer>().AbilityCooldownTime(120));
-            }
         }
     }
 }

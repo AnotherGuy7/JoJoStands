@@ -15,15 +15,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             Main.projFrames[Projectile.type] = 10;
         }
 
-        public override int punchDamage => 83;
+        public override int punchDamage => 92;
         public override int punchTime => 7;
-        public override int altDamage => 68;
+        public override int altDamage => 139;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 0f;
         public override string punchSoundName => "Ora";
         public override string poseSoundName => "YareYareDaze";
         public override string spawnSoundName => "Star Platinum";
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
 
         private bool flickFrames = false;
         private bool resetFrame = false;
@@ -100,7 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(altDamage * mPlayer.standDamageBoosts) - 39, 2f, Projectile.owner, Projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                         }

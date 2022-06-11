@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles
             Projectile.width = 18;
             Projectile.height = 12;
             Projectile.aiStyle = 0;
-            Projectile.timeLeft = 300;
+            Projectile.timeLeft = 600;
             Projectile.penetrate = -1;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
@@ -29,11 +29,12 @@ namespace JoJoStands.Projectiles
 
         private bool distanceLimitReached = false;
         private bool attachedToTile = false;
+        private bool previousControlJump = false;
 
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if (player.dead)
+            if (player.dead || player.controlHook)
             {
                 Projectile.Kill();
                 return;
@@ -79,22 +80,30 @@ namespace JoJoStands.Projectiles
                 velocity.Normalize();
                 velocity *= 16f;
                 Projectile.velocity = velocity;
-
             }
 
             if (attachedToTile)
             {
-                if (player.controlJump)
+                if (player.controlJump && !previousControlJump)
                 {
                     Projectile.Kill();
                     return;
                 }
 
-                Vector2 velocity = Projectile.position - player.position;
-                velocity.Normalize();
-                velocity *= 12f;
-                player.velocity = velocity;
+                float distance = Projectile.Distance(player.Center);
+                if (distance > 1 * 16f)
+                {
+                    Vector2 velocity = Projectile.position - player.position;
+                    velocity.Normalize();
+                    velocity *= 12f;
+                    player.velocity = velocity;
+                }
+                else
+                {
+                    player.wingTime = 0;
+                }
             }
+            previousControlJump = player.controlJump;
         }
 
         private Texture2D hermitPurpleVinePartTexture;

@@ -3,6 +3,7 @@ using JoJoStands.Items.Tiles;
 using JoJoStands.Projectiles;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -47,6 +48,14 @@ namespace JoJoStands.NPCs.TownNPCs
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 1f;
             AnimationType = NPCID.Guide;
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                new FlavorTextBestiaryInfoElement("Came all the way from Egypt after losing a life or death bet. He repeatedly promises to never cheat again.")
+            });
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs, int money)
@@ -96,7 +105,7 @@ namespace JoJoStands.NPCs.TownNPCs
             switch (Main.rand.Next(4))
             {
                 case 0:
-                    return "Why don't you try to bet? C'mon, i'll even go easy on you!";
+                    return "Why don't you try to bet? C'mon, I'll even go easy on you!";
                 case 1:
                     return "I should've played... How could I have been fooled by such an obvious bluff...";
                 case 2:
@@ -104,7 +113,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 case 3:
                     return "Cheating? It's only cheating if you're caught!";
                 default:
-                    return "I am D'Arby, the worlds best gambler!";
+                    return "I am D'Arby, the worlds greatest gambler!";
             }
         }
 

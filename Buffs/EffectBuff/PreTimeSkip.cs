@@ -14,7 +14,6 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             DisplayName.SetDefault("Skipping Time");
             Description.SetDefault("Time is skipping");
-            Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
@@ -22,9 +21,10 @@ namespace JoJoStands.Buffs.EffectBuff
         public override void Update(Player player, ref int buffIndex)
         {
             userIndex = player.whoAmI;
-            if (player.HasBuff(ModContent.BuffType<PreTimeSkip>()))
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (player.HasBuff(ModContent.BuffType<PreTimeSkip>()) && !mPlayer.forceShutDownEffect)
             {
-                for (int i = 0; i < 255; i++)
+                for (int i = 0; i < Main.maxPlayers; i++)
                 {
                     Player otherPlayer = Main.player[i];
                     if (otherPlayer.active && !otherPlayer.HasBuff(ModContent.BuffType<PreTimeSkip>()) && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))

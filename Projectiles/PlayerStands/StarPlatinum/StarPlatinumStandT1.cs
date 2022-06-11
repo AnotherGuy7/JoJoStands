@@ -14,14 +14,14 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         }
 
         public override float maxDistance => 98f;
-        public override int punchDamage => 22;
+        public override int punchDamage => 23;
         public override int punchTime => 9;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 0f;
         public override string punchSoundName => "Ora";
         public override string poseSoundName => "YareYareDaze";
         public override string spawnSoundName => "Star Platinum";
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
 
         public override void AI()
         {

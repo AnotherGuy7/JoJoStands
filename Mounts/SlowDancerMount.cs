@@ -130,7 +130,7 @@ namespace JoJoStands.Mounts
             {
                 mPlayer.slowDancerSprintTime++;
                 mPlayer.goldenSpinCounter += 1;
-                if (mPlayer.slowDancerSprintTime >= 60)
+                if (mPlayer.slowDancerSprintTime >= 60 && mPlayer.goldenSpinCounter < 300)
                     mPlayer.goldenSpinCounter += mPlayer.slowDancerSprintTime / 60;
             }
             else

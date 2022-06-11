@@ -23,7 +23,7 @@ namespace JoJoStands.Buffs.EffectBuff
         public override void Update(Player player, ref int buffIndex)       //it should only affect the user with this buff on
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (player.HasBuff(Type))
+            if (player.HasBuff(Type) && !mPlayer.forceShutDownEffect)
             {
                 player.statDefense += 99999;
                 player.endurance = 1f;
@@ -43,13 +43,10 @@ namespace JoJoStands.Buffs.EffectBuff
                     {
                         Player otherPlayers = Main.player[i];
                         if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
-                        {
                             sendFalse = !otherPlayers.HasBuff(Type);
-                        }
+
                         if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
-                        {
                             sendFalse = true;
-                        }
                     }
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)

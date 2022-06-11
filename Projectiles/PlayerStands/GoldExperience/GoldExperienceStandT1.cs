@@ -25,7 +25,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
         public override string punchSoundName => "GER_Muda";
         public override string poseSoundName => "TheresADreamInMyHeart";
         public override string spawnSoundName => "Gold Experience";
-        public override int standType => 1;
+        public override StandType standType => StandType.Melee;
 
         public override void AI()
         {
