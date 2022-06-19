@@ -38,6 +38,7 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<MagiciansRedT2>())
+                .AddIngredient(ItemID.HallowedBar, 7)
                 .AddIngredient(ModContent.ItemType<WillToEscape>())
                 .AddIngredient(ModContent.ItemType<WillToProtect>())
                 .AddIngredient(ItemID.LivingFireBlock, 32)

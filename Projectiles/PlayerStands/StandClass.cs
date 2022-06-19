@@ -102,8 +102,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            mPlayer.timestopEffectDurationTimer = 60;
             mPlayer.timestopActive = true;
+            mPlayer.timestopEffectDurationTimer = 60;
             if (JoJoStands.JoJoStandsSounds == null)
                 SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_start"));
 
@@ -194,13 +194,15 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void Punch(float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f)
         {
             Player player = Main.player[Projectile.owner];
-            if (!player.GetModPlayer<MyPlayer>().canStandBasicAttack)
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (!mPlayer.canStandBasicAttack)
             {
                 idleFrames = true;
                 attackFrames = false;
                 return;
             }
 
+            movementSpeed += mPlayer.standTier;
             HandleDrawOffsets();
             idleFrames = false;
             attackFrames = true;

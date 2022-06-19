@@ -1,4 +1,5 @@
 ﻿using JoJoStands.Buffs.Debuffs;
+using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
@@ -53,6 +54,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         float distance = Vector2.Distance(player.Center, npc.Center);
                         if (distance < gasRange && !npc.immortal && !npc.hide)
                         {
+                            npc.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
                             npc.AddBuff(ModContent.BuffType<Aging>(), 2);
                         }
                     }

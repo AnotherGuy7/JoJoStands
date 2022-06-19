@@ -14,7 +14,7 @@ namespace JoJoStands.NPCs.TownNPCs
     [AutoloadHead]
     public class MarineBiologist : ModNPC
     {
-        public static bool userIsAlive = false;
+        public static bool UserIsAlive = false;
         public static int standDamage = 0;
 
         public override void SetStaticDefaults()
@@ -26,6 +26,7 @@ namespace JoJoStands.NPCs.TownNPCs
             NPCID.Sets.AttackType[NPC.type] = 1; //this is the attack type,  0 (throwing), 1 (shooting), or 2 (magic). 3 (melee) 
             NPCID.Sets.HatOffsetY[NPC.type] = 4; //this defines the party hat position
             NPC.Happiness.SetBiomeAffection<OceanBiome>(AffectionLevel.Love);
+            NPC.Happiness.SetBiomeAffection<ForestBiome>(AffectionLevel.Like);
             NPC.Happiness.SetBiomeAffection<DesertBiome>(AffectionLevel.Hate);
             NPC.Happiness.SetBiomeAffection<UndergroundBiome>(AffectionLevel.Dislike);
             NPC.Happiness.SetNPCAffection<Priest>(AffectionLevel.Hate);
@@ -104,7 +105,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<HierophantGreenT2>())
                 {
-                    Main.npcChatText = "You now have the ability to shoot wires that wrap and paralyze your enemies. Enemies that are wrapped in your wires will not be able to move for a short time, so use that time wisely. Hierphant Green is also able to be controlled at much farther distances now, so take advantage of that to set up tripwires and shoot from advantageous positions.";
+                    Main.npcChatText = "You now have the ability to shoot wires that wrap and paralyze your enemies. Enemies that are wrapped in your wires will not be able to move for a short time, so use that time wisely. Hierophant Green is also able to be controlled at much farther distances now, so take advantage of that to set up tripwires and shoot from advantageous positions.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<HierophantGreenT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<HierophantGreenFinal>())
                 {
@@ -136,7 +137,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<KillerQueenBTD>())
                 {
-                    Main.npcChatText = "You've unlocked yet another power... Bites The Dust. Bites the Dust allows you to rewind time back to the beginning of the day, causing enemies to explode during the rewind. Not only that, you can now shoot bubbles that you've touched and have them pierce up to 7 enemies before exploding.";
+                    Main.npcChatText = "You've unlocked yet another power... Bites The Dust. Bites the Dust allows you to rewind time back to the moment you first activated the ability. It's useful for dodging lethal events that you know will happen in the future, in theory anyway. We only know this much because of the way its original user acted before his... final moments.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AchtungBaby>())
                 {
@@ -448,13 +449,13 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override bool CheckActive()
         {
-            userIsAlive = true;
+            UserIsAlive = true;
             return true;
         }
 
         public override bool CheckDead()
         {
-            userIsAlive = false;
+            UserIsAlive = false;
             return true;
         }
 

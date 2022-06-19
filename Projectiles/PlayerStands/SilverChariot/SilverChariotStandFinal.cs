@@ -51,7 +51,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
+                    {
+                        idleFrames = true;
                         attackFrames = false;
+                    }
                 }
                 if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && Projectile.owner == Main.myPlayer)
                 {
@@ -106,7 +109,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 if (!attackFrames && !parryFrames)
                 {
-                    if (!Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                    if (!secondaryAbilityFrames)
                         StayBehind();
                     else
                         GoInFront();

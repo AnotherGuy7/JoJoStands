@@ -40,16 +40,7 @@ namespace JoJoStands.Items
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<HierophantGreenT2>())
                 .AddIngredient(ItemID.Emerald, 6)
-                .AddIngredient(ItemID.OrichalcumBar, 6)
-                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
-                .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<HierophantGreenT2>())
-                .AddIngredient(ItemID.Emerald, 6)
-                .AddIngredient(ItemID.MythrilBar, 6)
+                .AddIngredient(ItemID.HallowedBar, 6)
                 .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
                 .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
                 .AddTile(ModContent.TileType<RemixTableTile>())

@@ -84,10 +84,7 @@ namespace JoJoStands.Networking
                 else
                 {
                     Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timestopEffectDurationTimer = 60;
-                    if (Filters.Scene["GreyscaleEffect"].IsActive())
-                    {
-                        Filters.Scene["GreyscaleEffect"].Deactivate();
-                    }
+                    //JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopGreyscaleEffect);
                 }
                 SendTimestopBackToOwner(timestopOwner, Main.myPlayer, timestopValue, Main.myPlayer);
             }

@@ -1,4 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -119,13 +120,16 @@ namespace JoJoStands.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             if (Main.rand.Next(0, 101) <= 50)
-                target.AddBuff(ModContent.BuffType<Zipped>(), 300);
+            {
+                target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = Projectile.owner;
+                target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
+            }
         }
 
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
             if (Main.rand.Next(0, 101) <= 50)
-                target.AddBuff(ModContent.BuffType<Zipped>(), 300);
+                target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
         }
 
         private Texture2D stickyFingersZipperPart;

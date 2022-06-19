@@ -92,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                     Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
                     velocityAddition.Normalize();
-                    velocityAddition *= 5f;
+                    velocityAddition *= 5f + mPlayer.standTier;
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
                     {

@@ -49,7 +49,7 @@ namespace JoJoStands.Items
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<BadCompanyT1>())
                 .AddIngredient(ItemID.HellstoneBar, 8)
-                .AddIngredient(ItemID.MusketBall)
+                .AddIngredient(ItemID.MusketBall, 50)
                 .AddIngredient(ModContent.ItemType<WillToDestroy>(), 2)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();

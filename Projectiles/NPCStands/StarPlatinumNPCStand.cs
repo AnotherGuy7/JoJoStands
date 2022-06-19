@@ -44,7 +44,7 @@ namespace JoJoStands.Projectiles.NPCStands
         public override void AI()
         {
             NPC jotaro = null;
-            if (MarineBiologist.userIsAlive)
+            if (MarineBiologist.UserIsAlive)
             {
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles.NPCStands
             if (jotaro != null)
             {
                 Vector2 vector131 = jotaro.Center;
-                vector131.X -= (float)((15 + jotaro.width / 2) * jotaro.direction);
+                vector131.X -= (float)((8 + jotaro.width / 2) * jotaro.direction);
                 vector131.Y -= 15f;
                 Projectile.Center = Vector2.Lerp(Projectile.Center, vector131, 0.2f);
                 Projectile.velocity *= 0.8f;
@@ -86,11 +86,11 @@ namespace JoJoStands.Projectiles.NPCStands
             }
 
             NPC target = null;
+            normalFrames = true;
             for (int n = 0; n < Main.maxNPCs; n++)
             {
-                normalFrames = true;
                 NPC npc = Main.npc[n];
-                if (npc.CanBeChasedBy(this, false))
+                if (npc.active && npc.CanBeChasedBy(this))
                 {
                     float distance = Vector2.Distance(npc.Center, Projectile.Center);
                     if (distance < MaximumDetectionDistance && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height))
@@ -102,14 +102,11 @@ namespace JoJoStands.Projectiles.NPCStands
                 }
             }
 
-            SelectFrame();
             if (Projectile.ai[1] > 0f)
             {
                 Projectile.ai[1] += 1f;
-                if (Main.rand.Next(3) == 0)
-                {
+                if (Main.rand.Next(0, 3 + 1) == 0)
                     Projectile.ai[1] += 1f;
-                }
             }
             if (Projectile.ai[1] > shootCool)
             {
@@ -117,27 +114,22 @@ namespace JoJoStands.Projectiles.NPCStands
                 Projectile.netUpdate = true;
             }
 
-            if (target == null)
-                return;
-
-            if (Projectile.ai[0] == 0f)
+            if (target != null)
             {
                 attackFrames = true;
                 normalFrames = false;
                 Projectile.direction = 1;
                 if (target.position.X - Projectile.Center.X < 0f)
-                {
-                    Projectile.spriteDirection = (Projectile.direction = -1);
-                }
+                    Projectile.direction = -1;
+
                 Projectile.spriteDirection = Projectile.direction;
                 if (Projectile.ai[1] == 0f)
                 {
                     Projectile.ai[1] = 1f;
                     Vector2 shootVel = target.position - Projectile.Center;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<NPCStandFists>(), MarineBiologist.standDamage, 1f, Main.myPlayer, 0, 0);
@@ -147,9 +139,9 @@ namespace JoJoStands.Projectiles.NPCStands
                 }
             }
             else
-            {
                 attackFrames = false;
-            }
+
+            SelectFrame();
         }
 
         public override void Kill(int timeLeft)
@@ -168,9 +160,7 @@ namespace JoJoStands.Projectiles.NPCStands
                     Projectile.frame += 1;
                     Projectile.frameCounter = 0;
                     if (Projectile.frame >= 4)
-                    {
                         Projectile.frame = 2;
-                    }
                 }
             }
             if (normalFrames)
@@ -182,9 +172,7 @@ namespace JoJoStands.Projectiles.NPCStands
                     Projectile.frameCounter = 0;
                 }
                 if (Projectile.frame >= 2)
-                {
                     Projectile.frame = 0;
-                }
             }
         }
     }

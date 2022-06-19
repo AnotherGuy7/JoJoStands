@@ -18,39 +18,46 @@ namespace JoJoStands.Buffs.EffectBuff
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
-        public bool sendFalse = false;
+        private bool otherTimestopsActive = false;
 
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.timestopOwner = true;
+            mPlayer.ableToOverrideTimestop = true;
             if (!player.HasBuff(Type) || mPlayer.forceShutDownEffect)
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     mPlayer.timestopActive = false;
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_stop"));
                 }
                 else
                 {
-                    for (int i = 0; i < Main.maxPlayers; i++)
+                    otherTimestopsActive = false;
+                    for (int p = 0; p < Main.maxPlayers; p++)
                     {
-                        Player otherPlayers = Main.player[i];
-                        if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
-                            sendFalse = !otherPlayers.HasBuff(Type);      //don't send the packet and let the buff end if you weren't the only timestop owner
+                        Player otherPlayer = Main.player[p];
+                        if (otherPlayer.active && p != Main.myPlayer && otherPlayer.HasBuff(Type))
+                        {
+                            otherTimestopsActive = true;
+                            break;
+                        }
+                    }
 
-                        if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen) (Who actually does this!?! - AG 2022)
-                            sendFalse = true;
+                    if (Main.netMode == NetmodeID.MultiplayerClient && !otherTimestopsActive)
+                    {
+                        mPlayer.timestopActive = false;
+                        ModNetHandler.effectSync.SendTimestop(256, player.whoAmI, false, player.whoAmI);
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_stop"));
                     }
                 }
-                if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)
-                {
-                    mPlayer.timestopActive = false;
-                    ModNetHandler.effectSync.SendTimestop(256, player.whoAmI, false, player.whoAmI);
-                }
-                SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_stop"));
+
+                mPlayer.timestopOwner = false;
+                mPlayer.ableToOverrideTimestop = false;
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
-                if (Filters.Scene["GreyscaleEffect"].IsActive())
-                    Filters.Scene["GreyscaleEffect"].Deactivate();
+                if (!otherTimestopsActive)
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopGreyscaleEffect);
             }
         }
     }

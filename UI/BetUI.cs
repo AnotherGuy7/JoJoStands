@@ -765,7 +765,7 @@ namespace JoJoStands.UI
             }
             else if (set == 2)      //Roll button
             {
-                Asset<Texture2D> playTexture = ModContent.Request<Texture2D>("Terraria/UI/ButtonPlay", AssetRequestMode.ImmediateLoad);
+                Asset<Texture2D> playTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonPlay", AssetRequestMode.ImmediateLoad);
                 rollButton = new UIImageButton(playTexture);
                 rollButton.HAlign = 0.5f;
                 rollButton.VAlign = 0.8f;
@@ -822,7 +822,7 @@ namespace JoJoStands.UI
                 NPCCard2Image.Width.Set(npcCardTexture2.Value.Width, 0f);
                 playArea.Append(NPCCard2Image);
 
-                ShowCardsButton = new UIImageButton(ModContent.Request<Texture2D>("Terraria/UI/ButtonPlay", AssetRequestMode.ImmediateLoad));
+                ShowCardsButton = new UIImageButton(ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonPlay", AssetRequestMode.ImmediateLoad));
                 ShowCardsButton.HAlign = 0.9f;
                 ShowCardsButton.VAlign = 0.65f;
                 ShowCardsButton.Height.Set(30f, 0f);

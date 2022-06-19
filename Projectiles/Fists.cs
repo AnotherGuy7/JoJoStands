@@ -75,6 +75,7 @@ namespace JoJoStands.Projectiles
 
             if (standType == StickyFingers)
             {
+                target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
                 target.AddBuff(ModContent.BuffType<Zipped>(), (2 * (int)standTier) * 60);
             }
 

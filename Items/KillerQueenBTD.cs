@@ -1,6 +1,7 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Projectiles.PlayerStands.KillerQueenBTD;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -40,12 +41,12 @@ namespace JoJoStands.Items
 
         public override void HoldItem(Player player)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (player.whoAmI == Main.myPlayer)
+            if (player.whoAmI == Main.myPlayer && Main.mouseRight)
             {
+                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
                 if (mPlayer.canRevertFromKQBTD)
                 {
-                    if (Main.mouseRight && mPlayer.revertTimer <= 0)
+                    if (mPlayer.revertTimer <= 0)
                     {
                         Item.type = ModContent.ItemType<KillerQueenFinal>();
                         Item.SetDefaults(ModContent.ItemType<KillerQueenFinal>());
@@ -53,6 +54,8 @@ namespace JoJoStands.Items
                         mPlayer.revertTimer += 30;
                     }
                 }
+                else
+                    Main.NewText("Killer Queen: Stray Cat cannot revert back to Killer Queen because Killer Queen: Stray Cat has not been crafted yet!", Color.Red);
             }
         }
 

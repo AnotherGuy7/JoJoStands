@@ -45,13 +45,14 @@ namespace JoJoStands.Buffs.Debuffs
         }
         public override void Update(NPC npc, ref int buffIndex)
         {
-            Player player = Main.player[Main.myPlayer];
+            Player player = Main.player[npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().standDebuffEffectOwner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (savedVelocityX == -1)
-                savedVelocityX = Math.Abs(npc.velocity.X) / MyPlayer.worldEstimatedStandTier;
+                savedVelocityX = Math.Abs(npc.velocity.X) / mPlayer.standTier;
 
             if (player.ZoneSnow || player.ZoneSkyHeight)
                 damageMultiplication = 0;
-            if (!player.ZoneUndergroundDesert)
+            if (player.ZoneUndergroundDesert)
                 damageMultiplication = 1;
             if (player.ZoneDesert)
                 damageMultiplication = 2;
@@ -72,10 +73,10 @@ namespace JoJoStands.Buffs.Debuffs
                 return;
             }
 
-            npc.lifeRegen = (-4 * MyPlayer.worldEstimatedStandTier) * damageMultiplication;
+            npc.lifeRegen = (-12 * mPlayer.standTier) * damageMultiplication;
             if (!oneTimeEffectsApplied)
             {
-                npc.defense = (int)(npc.defense * (1f - (0.2f * MyPlayer.worldEstimatedStandTier)));
+                npc.defense = (int)(npc.defense * (1f - (0.2f * mPlayer.standTier)));
                 oneTimeEffectsApplied = true;
             }
         }

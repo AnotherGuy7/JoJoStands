@@ -71,6 +71,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     timestopStartDelay = 0;
                 }
             }
+            if (mPlayer.timestopActive && !mPlayer.timestopOwner)
+                return;
 
             if (!mPlayer.standAutoMode)
             {

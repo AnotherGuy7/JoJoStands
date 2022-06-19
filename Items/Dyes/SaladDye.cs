@@ -21,5 +21,24 @@ namespace JoJoStands.Items.Dyes
             mPlayer.usingStandTextureDye = true;
             mPlayer.currentTextureDye = MyPlayer.StandTextureDye.Salad;
         }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Waterleaf)
+                .AddIngredient(ItemID.Deathweed)
+                .AddIngredient(ItemID.Shiverthorn)
+                .AddIngredient(ItemID.Fireblossom)
+                .AddTile(TileID.DyeVat)
+                .Register();
+
+            CreateRecipe()
+            .AddIngredient(ItemID.Waterleaf)
+            .AddIngredient(ItemID.Deathweed)
+            .AddIngredient(ItemID.Shiverthorn)
+            .AddIngredient(ItemID.Fireblossom)
+            .AddTile(TileID.DyeVat)
+            .Register();
+        }
     }
 }

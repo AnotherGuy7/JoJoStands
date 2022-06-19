@@ -59,9 +59,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     shootCount += 120;
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);

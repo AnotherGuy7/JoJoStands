@@ -42,7 +42,7 @@ namespace JoJoStands.Buffs.EffectBuff
             if (deathLoopTimer >= 60)
                 deathLoopTimer = 0;
 
-            if (!player.GetModPlayer<MyPlayer>().timestopActive)        //so the effect stops during a timestop
+            if (!mPlayer.timestopActive)        //so the effect stops during a timestop
             {
                 if (Looping3x)
                 {

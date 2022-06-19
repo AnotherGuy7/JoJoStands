@@ -45,7 +45,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<StandArrow>())
+                .AddIngredient(ModContent.ItemType<StoneFreeT2>())
                 .AddIngredient(ItemID.HallowedBar, 14)
                 .AddIngredient(ItemID.Silk, 16)
                 .AddIngredient(ModContent.ItemType<WillToChange>(), 2)

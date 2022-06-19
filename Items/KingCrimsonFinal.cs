@@ -46,6 +46,17 @@ namespace JoJoStands.Items
                 .AddIngredient(ModContent.ItemType<TaintedLifeforce>())
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<KingCrimsonT3>())
+                .AddIngredient(ItemID.ChlorophyteBar, 13)
+                .AddIngredient(ItemID.PlatinumCrown)
+                .AddIngredient(ModContent.ItemType<SoulofTime>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToControl>(), 3)
+                .AddIngredient(ModContent.ItemType<WillToEscape>(), 3)
+                .AddIngredient(ModContent.ItemType<TaintedLifeforce>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
         }
     }
 }

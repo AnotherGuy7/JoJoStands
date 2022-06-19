@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,6 +17,7 @@ namespace JoJoStands.Buffs.EffectBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (player.HasBuff(Type))
             {
                 player.controlUseItem = false;
@@ -34,12 +34,15 @@ namespace JoJoStands.Buffs.EffectBuff
                 player.controlUp = false;
                 player.maxRunSpeed = 0;
                 player.moveSpeed = 0;
+                player.mount._frameCounter = 2;
+                if (JoJoStands.timestopOverrideStands.Contains(mPlayer.StandSlot.SlotItem.type))
+                    mPlayer.ableToOverrideTimestop = true;
             }
             else
             {
+                mPlayer.ableToOverrideTimestop = false;
                 if (Main.netMode != NetmodeID.Server)
-                    if (Filters.Scene["GreyscaleEffect"].IsActive())
-                        Filters.Scene["GreyscaleEffect"].Deactivate();
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopGreyscaleEffect);
             }
         }
     }

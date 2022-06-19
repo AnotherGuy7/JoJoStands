@@ -45,7 +45,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<StandArrow>())
+                .AddIngredient(ModContent.ItemType<StoneFreeT3>())
                 .AddIngredient(ItemID.Ectoplasm, 16)
                 .AddIngredient(ItemID.Silk, 20)
                 .AddIngredient(ModContent.ItemType<DeterminedLifeforce>())
