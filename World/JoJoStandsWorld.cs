@@ -13,32 +13,23 @@ namespace JoJoStands
     public class JoJoStandsWorld : ModSystem
     {
         private bool viralMeteoriteDropped = false;
-        private bool vampiricNightQueued = false;
-        private bool checkedForVampiricEvent = false;
-        private int vampiricNightStartTimer = 0;
 
-        public static bool VampiricNight = false;
         public static int viralMeteoriteTiles = 0;
 
         public override void OnWorldLoad()
         {
             viralMeteoriteDropped = false;
-            vampiricNightQueued = false;
             viralMeteoriteTiles = 0;
-
-            VampiricNight = false;
         }
 
         public override void SaveWorldData(TagCompound tag)
         {
             tag.Add("meteorDropped", viralMeteoriteDropped);
-            tag.Add("vampiricNight", VampiricNight);
         }
 
         public override void LoadWorldData(TagCompound tag)
         {
             viralMeteoriteDropped = tag.GetBool("meteorDropped");
-            VampiricNight = tag.GetBool("vampiricNight");
         }
 
         public override void PreUpdateWorld()
@@ -47,39 +38,6 @@ namespace JoJoStands
             {
                 DropViralMeteorite();
                 viralMeteoriteDropped = true;
-            }
-
-            if (!Main.dayTime)
-            {
-                if (!checkedForVampiricEvent && NPC.downedBoss1 && !VampiricNight)
-                {
-                    if (Main.rand.Next(0, 12 + 1) == 0)
-                    {
-                        vampiricNightQueued = true;
-                        Main.NewText("You feel the dirt under you rumbling slightly...", new Color(50, 255, 130));
-                    }
-                    checkedForVampiricEvent = true;
-                }
-                if (vampiricNightQueued)
-                {
-                    vampiricNightStartTimer++;
-                    if (vampiricNightStartTimer >= 20 * 60)
-                    {
-                        VampiricNight = true;
-                        vampiricNightQueued = false;
-                        vampiricNightStartTimer = 0;
-                        Main.NewText("Dio's Minions have arrived!", new Color(50, 255, 130));
-                    }
-                }
-            }
-            else
-            {
-                checkedForVampiricEvent = false;
-                if (VampiricNight)
-                {
-                    Main.NewText("The zombies have been pushed back... For now...", new Color(50, 255, 130));
-                    VampiricNight = false;
-                }
             }
         }
 
