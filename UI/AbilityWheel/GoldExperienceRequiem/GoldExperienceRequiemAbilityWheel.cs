@@ -9,7 +9,7 @@ namespace JoJoStands.UI
         public static bool visible;
         public static GoldExperienceRequiemAbilityWheel goldExperienceRequiemAbilityWheel;
 
-        private const int AmountOfAbilities = 5;
+        private const int AmountOfAbilities = 4;
         public override int amountOfAbilities => AmountOfAbilities;
         public override string buttonTexturePath => "JoJoStands/UI/AbilityWheel/GoldExperienceRequiem/";
         public override string centerTexturePath => "JoJoStands/Items/GoldExperienceRequiem";
@@ -19,7 +19,6 @@ namespace JoJoStands.UI
             "           Tree",
             "     Death Loop",
             "Limb Recreation",
-            "   Back to Zero"
         };
 
         public override string[] abilityTextureNames => new string[AmountOfAbilities]
@@ -28,7 +27,6 @@ namespace JoJoStands.UI
             "Tree",
             "DeathLoop",
             "LimbRecreation",
-            "BtZ"
         };
 
 
@@ -38,7 +36,6 @@ namespace JoJoStands.UI
             "Allows Gold Experience Requiem to create a damage reflecting tree.",
             "Allows Gold Experience Requiem to have the last thing it kills enter a death loop. Enemies are looped 10x and bosses are looped 3x.",
             "Allows Gold Experience Requiem to recreate lost limbs. Hold right-click to use.",
-            "Allows Gold Experience Requiem to nullify all actions done to it within a certain time frame."
         };
 
         public override void ExtraInitialize()

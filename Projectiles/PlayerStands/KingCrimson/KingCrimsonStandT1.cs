@@ -49,15 +49,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X < Projectile.position.X)
-                    {
-                        Projectile.spriteDirection = -1;
                         Projectile.direction = -1;
-                    }
+
                     Projectile.spriteDirection = Projectile.direction;
 
                     Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
                     velocityAddition.Normalize();
-                    velocityAddition *= 5f;
+                    velocityAddition *= 5f + mPlayer.standTier;
 
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
@@ -73,9 +71,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         shootCount += newPunchTime / 2;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner, fistWhoAmI);

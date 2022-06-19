@@ -75,6 +75,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 if (timestopPoseTimer <= 1)
                     abilityPose = false;
             }
+            if (mPlayer.timestopActive && !mPlayer.timestopOwner)
+                return;
 
             if (!mPlayer.standAutoMode)
             {

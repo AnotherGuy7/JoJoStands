@@ -36,6 +36,22 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                 Projectile.timeLeft = 2;
             if (shootCount > 0)
                 shootCount--;
+            if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+            {
+                Timestop(30);
+                timestopPoseTimer += 60;
+            }
+            if (timestopPoseTimer > 0)
+            {
+                timestopPoseTimer--;
+                idleFrames = false;
+                attackFrames = false;
+                Projectile.frame = 6;
+                Main.mouseLeft = false;
+                Main.mouseRight = false;
+            }
+            if (mPlayer.timestopActive && !mPlayer.timestopOwner)
+                return;
 
             if (!mPlayer.standAutoMode)
             {
@@ -51,34 +67,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                 if (!attackFrames)
                 {
                     StayBehind();
-                }
-                if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
-                {
-                    Timestop(30);
-                    timestopPoseTimer += 60;
-                }
-                if (JoJoStands.SpecialHotKey.JustPressed && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<RoadRoller>()] == 0)
-                {
-                    shootCount += 12;
-                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                    if (shootVel == Vector2.Zero)
-                    {
-                        shootVel = new Vector2(0f, 1f);
-                    }
-                    shootVel.Normalize();
-                    shootVel *= shootSpeed + 4f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RoadRoller>(), 120, 5f, Projectile.owner);
-                    Main.projectile[proj].netUpdate = true;
-                    Projectile.netUpdate = true;
-                }
-                if (timestopPoseTimer > 0)
-                {
-                    timestopPoseTimer--;
-                    idleFrames = false;
-                    attackFrames = false;
-                    Projectile.frame = 6;
-                    Main.mouseLeft = false;
-                    Main.mouseRight = false;
                 }
                 /*if (rippleEffectTimer <= 0)
                 {

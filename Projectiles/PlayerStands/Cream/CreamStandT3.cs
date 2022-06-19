@@ -65,7 +65,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
                     velocityAddition = Main.MouseWorld - Projectile.position;
                     velocityAddition.Normalize();
-                    velocityAddition *= 5f;
+                    velocityAddition *= 5f + mPlayer.standTier;
                     mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
                     {

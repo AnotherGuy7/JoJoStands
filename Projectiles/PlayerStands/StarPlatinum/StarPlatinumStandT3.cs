@@ -69,7 +69,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                             flickFrames = true;
                             if (Projectile.frame == 1)
                             {
-                                shootCount += 120;
+                                shootCount += 60;
                                 Main.mouseLeft = false;
                                 SoundStyle item41 = SoundID.Item41;
                                 item41.Pitch = 2.8f;

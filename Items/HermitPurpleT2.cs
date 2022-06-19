@@ -48,8 +48,8 @@ namespace JoJoStands.Items
                 .AddIngredient(ModContent.ItemType<HermitPurpleT1>())
                 .AddIngredient(ItemID.HellstoneBar, 7)
                 .AddIngredient(ItemID.Amethyst, 3)
-                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
         }

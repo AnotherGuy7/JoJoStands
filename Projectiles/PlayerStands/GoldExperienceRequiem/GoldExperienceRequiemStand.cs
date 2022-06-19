@@ -48,6 +48,16 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
+            if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<BacktoZero>()))
+            {
+                player.AddBuff(ModContent.BuffType<BacktoZero>(), 1200);
+                mPlayer.backToZeroActive = true;
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    ModNetHandler.effectSync.SendBTZ(256, player.whoAmI, true, player.whoAmI);
+            }
+            if (mPlayer.timestopActive)
+                return;
+
             if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
@@ -101,16 +111,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         player.HealEffect(healamount);
                         regencounter = 0;
                     }
-                    if (Main.mouseRight && mPlayer.chosenAbility == 4 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<BacktoZero>()))
-                    {
-                        player.AddBuff(ModContent.BuffType<BacktoZero>(), 1200);
-                        mPlayer.backToZeroActive = true;
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                            ModNetHandler.effectSync.SendBTZ(256, player.whoAmI, true, player.whoAmI);
-                    }
                 }
 
-                if (SpecialKeyPressedNoCooldown())
+                if (SecondSpecialKeyPressedNoCooldown())
                 {
                     if (!GoldExperienceRequiemAbilityWheel.visible)
                         GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 5);

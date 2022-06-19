@@ -1,3 +1,4 @@
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -95,7 +96,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 GoInFront();
 
             bitesTheDustActive = player.HasBuff(ModContent.BuffType<BitesTheDust>());
-            if ((SpecialKeyPressed() && !bitesTheDustActive) || (bitesTheDustActive && !saveDataCreated))
+            if (!bitesTheDustActive && saveDataCreated)
+                saveDataCreated = false;
+
+            if ((SpecialKeyPressed() && !bitesTheDustActive) || (bitesTheDustActive && !saveDataCreated && !playerHasAbilityCooldown))
             {
                 btdPositionIndex = 0;
                 amountOfSavedData = 0;
@@ -148,18 +152,17 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
             if (SpecialKeyPressed() && bitesTheDustActive && btdStartDelay <= 0)
             {
-                if (JoJoStands.SoundsLoaded)
+                if (!JoJoStands.SoundsLoaded)
                 {
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
-                    player.AddBuff(ModContent.BuffType<BitesTheDust>(), 10);
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BiteTheDustEffect"));
                 }
                 else
                     btdStartDelay = 205;
                 Projectile.netUpdate = true;
             }
-            if (JoJoStands.SoundsLoaded && btdStartDelay > 0)
+            if (JoJoStands.SoundsLoaded && !bitesTheDustActivated && btdStartDelay > 0)
             {
                 btdStartDelay--;
                 if (btdStartDelay <= 0)
@@ -169,11 +172,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     SoundStyle btdSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/BiteTheDust");
                     btdSound.Volume = MyPlayer.ModSoundsVolume;
                     SoundEngine.PlaySound(btdSound, Projectile.Center);
-                    btdStartDelay = 1;
                     Projectile.netUpdate = true;
                 }
             }
-            if (bitesTheDustActive && !bitesTheDustActivated)
+            if (bitesTheDustActive && !bitesTheDustActivated)       //Records
             {
                 if (!saveDataCreated)
                     return;
@@ -188,7 +190,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     amountOfSavedData++;
                 }
             }
-            if (bitesTheDustActivated)
+            if (bitesTheDustActivated)      //Actual activation
             {
                 btdRevertTimer++;
                 currentRewindTime++;
@@ -212,8 +214,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         player.position = savedPlayerData.playerBTDPos;
                         player.inventory = savedPlayerData.playerBTDInventory;
                         player.ChangeDir(savedPlayerData.playerDirection);
-                        //player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(120));
                         player.ClearBuff(ModContent.BuffType<BitesTheDust>());
+                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(120));
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick"));
 
                         for (int i = 0; i < savedPlayerData.buffTypes.Length; i++)

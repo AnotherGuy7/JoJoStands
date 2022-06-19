@@ -37,6 +37,7 @@ namespace JoJoStands
         public static ModKeybind PoseHotKey;
 
         public static List<int> timestopImmune = new List<int>();
+        public static List<int> timestopOverrideStands = new List<int>();
         public static List<int> standTier1List = new List<int>();
         public static List<int> christmasStands = new List<int>();
         public static List<char> testStandPassword = new List<char>();      //  :) Have *fuuuuuuun!*
@@ -93,6 +94,16 @@ namespace JoJoStands
             timestopImmune.Add(ProjectileType<TestStandStand>());
             timestopImmune.Add(ProjectileType<StarOnTheTreeStand>());
 
+            timestopOverrideStands.Add(ItemType<TheWorldT2>());
+            timestopOverrideStands.Add(ItemType<TheWorldT3>());
+            timestopOverrideStands.Add(ItemType<TheWorldFinal>());
+            timestopOverrideStands.Add(ItemType<StarPlatinumFinal>());
+            timestopOverrideStands.Add(ItemType<GoldExperienceRequiem>());
+            timestopOverrideStands.Add(ItemType<TuskAct4>());
+            timestopOverrideStands.Add(ItemType<TestStand>());
+            timestopOverrideStands.Add(ItemType<StarOnTheTree>());
+
+
             christmasStands.Add(ItemType<StarOnTheTree>());
             christmasStands.Add(ItemType<KingClaus>());
 
@@ -117,6 +128,7 @@ namespace JoJoStands
         {
             standTier1List.Clear();
             timestopImmune.Clear();
+            timestopOverrideStands.Clear();
             christmasStands.Clear();
             testStandPassword.Clear();
 
@@ -132,6 +144,7 @@ namespace JoJoStands
             StandOutHotKey = null;
             standTier1List = null;
             timestopImmune = null;
+            timestopOverrideStands = null;
             christmasStands = null;
             testStandPassword = null;
             SoundsLoaded = false;

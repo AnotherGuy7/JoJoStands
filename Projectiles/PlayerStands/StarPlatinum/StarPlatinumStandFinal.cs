@@ -64,6 +64,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     timestopStartDelay = 0;
                 }
             }
+            if (mPlayer.timestopActive && !mPlayer.timestopOwner)
+                return;
 
             if (!mPlayer.standAutoMode)
             {
@@ -93,7 +95,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                             flickFrames = true;
                             if (Projectile.frame == 1)
                             {
-                                shootCount += 80;
+                                shootCount += 40;
                                 Main.mouseLeft = false;
                                 Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                                 if (shootVel == Vector2.Zero)

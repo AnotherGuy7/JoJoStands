@@ -22,7 +22,6 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-
             player.lifeRegenTime = 0;
             if (player.lifeRegen > 0)
                 player.lifeRegen = 0;
@@ -33,6 +32,7 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
+            MyPlayer mPlayer = Main.player[npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().standDebuffEffectOwner].GetModPlayer<MyPlayer>();
             if (savedVelocity == Vector2.Zero)
                 savedVelocity = npc.velocity * 0.5f;
 
@@ -40,8 +40,8 @@ namespace JoJoStands.Buffs.Debuffs
                 npc.lifeRegen = 0;
 
             Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f, 0, Scale: 2f);
-            npc.lifeRegenExpectedLossPerSecond = 10 * MyPlayer.worldEstimatedStandTier;
-            npc.lifeRegen -= 20 * MyPlayer.worldEstimatedStandTier;
+            npc.lifeRegenExpectedLossPerSecond = 10 * mPlayer.standTier;
+            npc.lifeRegen -= 20 * mPlayer.standTier;
 
             if (npc.noGravity)
             {

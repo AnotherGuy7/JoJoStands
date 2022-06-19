@@ -35,12 +35,6 @@ namespace JoJoStands.Items
             Item.rare = ItemRarityID.LightPurple;
         }
 
-        public override bool ManualStandSpawning(Player player)
-        {
-            player.GetModPlayer<MyPlayer>().gratefulDeadTier = standTier;
-            return false;
-        }
-
         public override void AddRecipes()
         {
             CreateRecipe()

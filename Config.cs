@@ -63,11 +63,6 @@ namespace JoJoStands
         [Tooltip("Whether or not you want to see hidden references. (Some of these references can cause you to die!)")]
         public bool SecretReferences;
 
-        [DefaultValue(false)]
-        [Label("Wills Debug Mode")]
-        [Tooltip("Enabling this option displays whether or not the Wills to Fight/Protect can drop.")]
-        public bool WillsDropDebug;
-
         [DefaultValue(40)]
         [Label("Range Indicator Visibility")]
         [Tooltip("Allows you to choose how transparent the Range Indicator is.")]
@@ -120,7 +115,6 @@ namespace JoJoStands
             MyPlayer.SecretReferences = SecretReferences;
             MyPlayer.ModSoundsVolume = soundVolume / 100f;
             HamonPlayer.HamonEffects = HamonEffects;
-            MyPlayer.WillsDebug = WillsDropDebug;
             UI.HamonBar.changedInConfig = true;
             UI.HamonBar.sizeMode = HamonBarSize;
             MyPlayer.ColorChangeEffects = ColorChangeEffects;

@@ -1,0 +1,71 @@
+﻿Mods: {
+	JoJoStands: {
+		#This is what displays during all of an NPC's happiness levels. Note that the localization key for these should always be TownNPCMood.*NPCName*.*Mood* or else it won't display properly.
+		TownNPCMood: {
+			Gambler: {
+				Content: Life is a lot less stressful here than it was back in Egypt.
+				NoHome: I may cheat sometimes but I'll never cheat if you give me a place to stay!
+				LoveSpace: I love the space I have to store all my cards, and better yet my rewards!
+				FarFromHome: There's nobody to gamble with all the way out here.
+				DislikeCrowded: There may be a little too many people for me to cheat in a gamble.
+				HateCrowded: There are too many spying eyes around me for me to make my move...
+				LikeBiome: "{BiomeName} seems like a place where a lot of gambling goes on."
+				LoveBiome: "Environments like {BiomeName} remind me of where I used to live before that day."
+				DislikeBiome: "{BiomeName} has unique traits to it... But those traits don't suit that of a gambler!"
+				HateBiome: "I really despise living in {BiomeName}. I'd rather relive a certain bet than stay here any longer."
+				LikeNPC: "{NPCName} really knows how to gamble!"
+				LoveNPC: "That {NPCName} cheats just as well as I do! Gambling with {NPCName} is like gambling against myself!"
+				DislikeNPC: "{NPCName} is very suspicious of me, and I don't like people who are suspicious of me."
+				HateNPC: "{NPCName} is NOT allowed to gamble with me. They're rather perceptive in a high-stakes bet. Get them away from here!"
+			}
+			HamonMaster: {
+				Content: 
+				NoHome: 
+				LoveSpace: 
+				FarFromHome: 
+				DislikeCrowded: 
+				HateCrowded: 
+				LikeBiome: ""
+				LoveBiome: ""
+				DislikeBiome: "" 
+				HateBiome: ""
+				LikeNPC: ""
+				LoveNPC: ""
+				DislikeNPC: "" 
+				HateNPC: ""
+			}
+			MarineBiologist: {
+				Content: This area reminds me of Morioh, with its lively scenery and chaos.
+				NoHome: While I was brought here by certain matters you wouldn't understand, a place to stay would help me while I'm here.
+				LoveSpace: Finally. No distractions or others to interrupt my work.
+				FarFromHome: It looks like I've gone too far. Good grief... Could you point me in the direction of the building?
+				DislikeCrowded: The large amount of people here has me cautious. Who knows... one of these people be enemy Stand users.
+				HateCrowded: It's too dangerous for me to stay here with this many people around. If I get targeted by another Stand User, I'm not sure I'd be able to keep the casualties low.
+				LikeBiome: "{BiomeName} has some interesting locations I'd like to check out."
+				LoveBiome: "{BiomeName} habitat seems to have a large variety of marine life. I'd like to research them while I'm here."
+				DislikeBiome: "Normally I'm not very picky about where I stay, but {BiomeName} sure has a lot of faults."
+				HateBiome: "Good grief, this {BiomeName} reminds me of Egypt and the journey we all went through to kill DIO. I hate it."
+				LikeNPC: "That {NPCName} guy seems to know a thing or two about marine life."
+				LoveNPC: "{NPCName} seems like they'd be a good associate for the SPW."
+				DislikeNPC: "{NPCName} is really getting on my nerves."
+				HateNPC: "{NPCName} emanates a bad aura... They're dangerous."
+			}
+			Priest: {
+				Content: Compared to the prison, this place is not so bad.
+				NoHome: If you could direct me toward some shelter, Fate will smile upon you and repay you in full for your kindness.
+				LoveSpace: Tell me, do you believe it was 'Gravity' that brought me to this spacious village? I certainly do.
+				FarFromHome: I don't need you to guide back to my home. Fate will guide me right back to it.
+				DislikeCrowded: There's starting to be a little too many people here, no?
+				HateCrowded: Such a crowd of people is bound to bring its own share of sins. We must separate ourselves so as to not 
+				LikeBiome: "{BiomeName} is a place with admirable qualities."
+				LoveBiome: "God's will has blessed me with a home in {BiomeName}! DIO would've loved to reside here!"
+				DislikeBiome: "I wouldn't normally live in {BiomeName}, but if this is where I must live then I believe a certain Gravity must've pushed here for a special reason."
+				HateBiome: "{BiomeName} is not where I had expected my Gravity to take me. This must be some sort of trial I'm expected to overcome."
+				LikeNPC: "{NPCName} is a follower of Fate. They're at least respectable in that regard."
+				LoveNPC: "It must've been Gravity that allowed me and {NPCName} to meet."
+				DislikeNPC: "The Fate in store for {NPCName} will not be a good one." 
+				HateNPC: "2, 3, 5, 7, 11... Oh, I didn't realize you were there. I overheard {NPCName} disregarding the power of Gravity and almost lost my temper there."
+			}
+		}
+	}
+}

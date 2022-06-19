@@ -23,15 +23,20 @@ namespace JoJoStands.Projectiles
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
-        public Vector2[] foresightPosition = new Vector2[50];
-        public int[] foresightFrames = new int[50];
-        public float[] foresightRotations = new float[50];      //although this is a Vector2, I'm storing rotations in X and Direction in Y
-        public int[] foresightDirections = new int[50];
+        public ForesightData[] foresightData = new ForesightData[50];
         public bool stoppedInTime = false;
         //public bool checkedForImmunity = false;
         public bool timestopImmune = false;
         public bool autoModeSexPistols = false;
         public bool kickedBySexPistols = false;
+
+        public struct ForesightData
+        {
+            public Vector2 position;
+            public int frame;
+            public float rotation;
+            public int direction;
+        }
 
         public override bool InstancePerEntity
         {
@@ -44,10 +49,6 @@ namespace JoJoStands.Projectiles
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.timestopActive)
             {
-                timeLeftSave++;
-                if (timeLeftSave >= 6 && savedTimeLeft == 0)
-                    savedTimeLeft = Projectile.timeLeft - 5;     //so they stop don't stop immediately
-
                 if (!stoppedInTime)
                 {
                     stoppedInTime = true;
@@ -55,19 +56,48 @@ namespace JoJoStands.Projectiles
                     if (player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && mPlayer.timestopOwner && JoJoStands.timestopImmune.Contains(Projectile.type))
                         timestopImmune = true;
                 }
-                if (!timestopImmune)
-                {
-                    if ((Projectile.timeLeft <= savedTimeLeft) || Projectile.minion)
-                    {
-                        Projectile.frameCounter = 1;
-                        if (savedTimeLeft > 0)      //for the projectiles that don't have enough time left before they die
-                            Projectile.timeLeft = savedTimeLeft;
-                        else
-                            Projectile.timeLeft = 2;
 
-                        return false;
-                    }
+                if (timestopImmune)
+                {
+                    if (!player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+                        timestopImmune = false;
+
+                    return true;
                 }
+
+                timeLeftSave++;
+                if (timeLeftSave >= 6 && savedTimeLeft == 0)
+                    savedTimeLeft = Projectile.timeLeft - 5;     //so they stop don't stop immediatel
+
+                if ((Projectile.timeLeft <= savedTimeLeft) || Projectile.minion)
+                {
+                    Projectile.frameCounter = 2;
+                    if (savedTimeLeft > 0)      //for the projectiles that don't have enough time left before they die
+                        Projectile.timeLeft = savedTimeLeft;
+                    else
+                        Projectile.timeLeft = 2;
+
+                    if (mPlayer.ableToOverrideTimestop)
+                    {
+                        if (player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+                        {
+                            timeLeftSave = 0;
+                            savedTimeLeft = 0;
+                            timestopImmune = true;
+                        }
+
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+            if (!mPlayer.timestopActive && timeLeftSave > 0)
+            {
+                timeLeftSave = 0;
+                savedTimeLeft = 0;
+                stoppedInTime = false;
+                timestopImmune = false;
             }
 
             if (mPlayer.timeskipPreEffect)     //saves it, this is for projectiles like minions, controllable projectiles, etc.
@@ -85,13 +115,22 @@ namespace JoJoStands.Projectiles
 
                 if (foresightSaveTimer <= 0)
                 {
-                    foresightPosition[foresightPositionIndex] = Projectile.position;
-                    foresightFrames[foresightPositionIndex] = Projectile.frame;
-                    foresightRotations[foresightPositionIndex] = Projectile.rotation;
-                    foresightDirections[foresightPositionIndex] = Projectile.direction;
+                    ForesightData data = new ForesightData()
+                    {
+                        position = Projectile.position,
+                        frame = Projectile.frame,
+                        rotation = Projectile.rotation,
+                        direction = Projectile.direction
+                    };
+                    foresightData[foresightPositionIndex] = data;
                     foresightPositionIndex++;       //second so that something saves in [0] and goes up from there
                     foresightPositionIndexMax++;
                     foresightSaveTimer = 15;
+                    if (foresightPositionIndex >= 50)
+                    {
+                        foresightPositionIndex = 49;
+                        foresightPositionIndexMax = 49;
+                    }
                 }
             }
             if (!mPlayer.epitaphForesightActive && applyingForesightPositions)
@@ -102,8 +141,9 @@ namespace JoJoStands.Projectiles
                     foresightResetIndex = true;
                 }
                 Projectile.velocity = Vector2.Zero;
-                Projectile.position = foresightPosition[foresightPositionIndex];
-                Projectile.rotation = foresightRotations[foresightPositionIndex];
+                Projectile.position = foresightData[foresightPositionIndex].position;
+                Projectile.rotation = foresightData[foresightPositionIndex].rotation;
+                Projectile.direction = foresightData[foresightPositionIndex].direction;
                 if (foresightSaveTimer > 0)
                     foresightSaveTimer--;
 
@@ -112,14 +152,7 @@ namespace JoJoStands.Projectiles
                     foresightPositionIndex++;
                     foresightSaveTimer = 15;
                     if (foresightPositionIndex >= 1)
-                    {
-                        if (foresightPosition[foresightPositionIndex - 1] != Vector2.Zero)
-                            foresightPosition[foresightPositionIndex - 1] = Vector2.Zero;
-                        if (foresightDirections[foresightPositionIndex - 1] != 0)
-                            foresightDirections[foresightPositionIndex - 1] = 0;
-                        if (foresightRotations[foresightPositionIndex - 1] != 0f)
-                            foresightRotations[foresightPositionIndex - 1] = 0f;
-                    }
+                        foresightData[foresightPositionIndex - 1].position = Vector2.Zero;
                 }
                 if (foresightPositionIndex >= foresightPositionIndexMax)
                 {
@@ -152,6 +185,7 @@ namespace JoJoStands.Projectiles
 
             if (kickedBySexPistols)
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.TreasureSparkle, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
+
             return true;
         }
 
@@ -163,18 +197,18 @@ namespace JoJoStands.Projectiles
             {
                 for (int i = 0; i < 50; i++)
                 {
-                    if (foresightPosition[i] != Vector2.Zero)
+                    if (foresightData[i].position == Vector2.Zero)
                         continue;
 
                     SpriteEffects effects = SpriteEffects.None;
                     int frameHeight = TextureAssets.Projectile[projectile.type].Value.Height / Main.projFrames[projectile.type];
-                    if (foresightDirections[i] == 1)
+                    if (foresightData[i].direction == 1)
                         effects = SpriteEffects.FlipHorizontally;
 
-                    Vector2 drawPosition = foresightPosition[i] - Main.screenPosition;
+                    Vector2 drawPosition = foresightData[i].position - Main.screenPosition;
                     Rectangle animRect = new Rectangle(0, projectile.frame * frameHeight, projectile.width, frameHeight);
                     Vector2 drawOrigin = projectile.Size / 2f;
-                    Main.EntitySpriteDraw(TextureAssets.Projectile[projectile.type].Value, drawPosition, animRect, Color.DarkRed, foresightRotations[i], drawOrigin, projectile.scale, effects, 0);
+                    Main.EntitySpriteDraw(TextureAssets.Projectile[projectile.type].Value, drawPosition, animRect, Color.DarkRed, foresightData[i].rotation, drawOrigin, projectile.scale, effects, 0);
                 }
             }
             return true;
@@ -199,8 +233,11 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.timestopActive && mPlayer.timestopOwner && Projectile.timeLeft <= savedTimeLeft)        //the ones who can move in Za Warudo's projectiles, like minions, fists, every other Projectile should freeze
-                return timestopImmune;      //if it's owner isn't a timestop owner, always stop the Projectile
+            if (timestopImmune)
+                return true;
+
+            if (mPlayer.timestopActive && !mPlayer.timestopOwner && Projectile.timeLeft <= savedTimeLeft)
+                return false;
 
             return true;
         }

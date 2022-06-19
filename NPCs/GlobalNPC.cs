@@ -55,6 +55,7 @@ namespace JoJoStands.NPCs
         public int bindingEmeraldDurationTimer = 0;
         public float kingCrimsonDonutMultiplier = 1f;
         public int vampireUserLastHitIndex = -1;        //An index of the vampiric player who last hit the enemy
+        public int standDebuffEffectOwner = 0;
         public Vector2 playerPositionOnSkip = Vector2.Zero;
         public Vector2 preTimestopVelocity = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
@@ -75,7 +76,24 @@ namespace JoJoStands.NPCs
 
         public override void ModifyGlobalLoot(GlobalLoot globalLoot)
         {
-            IItemDropRule sunDropletRule = new LeadingConditionRule(new SunDropletCondition());
+            globalLoot.Add(ItemDropRule.ByCondition(new SunDropletCondition(), ModContent.ItemType<SunDroplet>(), 10, 1, 3));
+
+            globalLoot.Add(ItemDropRule.ByCondition(new WillToFightCondition(), ModContent.ItemType<WillToFight>(), 14));
+
+            globalLoot.Add(ItemDropRule.ByCondition(new WillToProtectCondition(), ModContent.ItemType<WillToProtect>(), 14));
+
+            globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<WillToChange>(), 14));
+
+            globalLoot.Add(ItemDropRule.ByCondition(new WillToControlCondition(), ModContent.ItemType<WillToControl>(), 14));
+
+            globalLoot.Add(ItemDropRule.ByCondition(new WillToDestroyCondition(), ModContent.ItemType<WillToDestroy>(), 14));
+
+            globalLoot.Add(ItemDropRule.ByCondition(new WillToEscapeCondition(), ModContent.ItemType<WillToEscape>(), 14));
+
+            globalLoot.Add(ItemDropRule.ByCondition(new SoulOfTimeCondition(), ModContent.ItemType<SoulofTime>(), 14));
+
+
+            /*IItemDropRule sunDropletRule = new LeadingConditionRule(new SunDropletCondition());
             sunDropletRule.OnSuccess(new CommonDrop(ModContent.ItemType<SunDroplet>(), 10, 1, 3));
             globalLoot.Add(sunDropletRule);
 
@@ -105,7 +123,7 @@ namespace JoJoStands.NPCs
 
             IItemDropRule soulOfTimeRule = new LeadingConditionRule(new SoulOfTimeCondition());
             soulOfTimeRule.OnSuccess(new CommonDrop(ModContent.ItemType<SoulofTime>(), 14));
-            globalLoot.Add(soulOfTimeRule);
+            globalLoot.Add(soulOfTimeRule);*/
         }
 
         /*public override bool SpecialNPCLoot(NPC npc)
@@ -532,16 +550,6 @@ namespace JoJoStands.NPCs
                     if (vPlayer.totalVampireSkillPointsEarned % 5 == 0)
                         vPlayer.vampiricLevel += 1;
                 }
-            }
-
-            if (npc.boss)
-            {
-                if (npc.type == NPCID.SkeletronHead)
-                    MyPlayer.worldEstimatedStandTier = 2;
-                else if (npc.type == NPCID.TheDestroyer || npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer || npc.type == NPCID.SkeletronPrime)
-                    MyPlayer.worldEstimatedStandTier = 3;
-                else if (npc.type == NPCID.Plantera)
-                    MyPlayer.worldEstimatedStandTier = 4;
             }
         }
 

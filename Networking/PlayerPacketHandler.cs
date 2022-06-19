@@ -87,6 +87,8 @@ namespace JoJoStands.Networking
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().standOut = standOutVal;
+                if (!standOutVal)
+                    Main.player[whoAmI].GetModPlayer<MyPlayer>().standTier = 0;
             }
             else
             {

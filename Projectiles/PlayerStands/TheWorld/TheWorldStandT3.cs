@@ -73,10 +73,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 Main.mouseLeft = false;
                 Main.mouseRight = false;
                 if (timestopPoseTimer <= 1)
-                {
                     abilityPose = false;
-                }
             }
+            if (mPlayer.timestopActive && !mPlayer.timestopOwner)
+                return;
 
             if (!mPlayer.standAutoMode)
             {

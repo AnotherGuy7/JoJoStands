@@ -11,6 +11,7 @@ using JoJoStands.Networking;
 using JoJoStands.Projectiles;
 using JoJoStands.Projectiles.Minions;
 using JoJoStands.Projectiles.PlayerStands.BadCompany;
+using JoJoStands.Projectiles.PlayerStands.SilverChariot;
 using JoJoStands.Projectiles.PlayerStands.Tusk;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
@@ -53,7 +54,6 @@ namespace JoJoStands
         public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
         public static StandSearchType standSearchType = StandSearchType.Bosses;
         public static bool testStandUnlocked = false;
-        public static bool WillsDebug = false;
 
         public int goldenSpinCounter = 0;
         public int shadowDodgeCooldownTimer = 0;        //does Vanilla not have one of these?
@@ -65,7 +65,6 @@ namespace JoJoStands
         public int timestopEffectDurationTimer = 0;
         public int sexPistolsLeft = 6;
         public int sexPistolsTier = 0;
-        public int gratefulDeadTier = 0;
         public int revolverBulletsShot = 0;
         public int sexPistolsRecoveryTimer = 0;
         public int aerosmithWhoAmI = 0;
@@ -76,6 +75,7 @@ namespace JoJoStands
         public int standSpeedBoosts = 0;
         public float standCooldownReduction = 0f;
         public int standType = 0;           //0 = no type; 1 = Melee; 2 = Ranged;
+        public int standTier = 0;
         public int piercedTimer = 36000;
         public int hermitPurpleTier = 0;
         public int hermitPurpleShootCooldown = 0;
@@ -140,6 +140,7 @@ namespace JoJoStands
         public bool usingStandTextureDye = false;
         public bool forceShutDownEffect = false;
         public bool badCompanyDefaultArmy = true;
+        public bool ableToOverrideTimestop = false;
 
         public bool timestopActive;
         public bool timestopOwner;
@@ -179,8 +180,6 @@ namespace JoJoStands
         private int amountOfSexPistolsPlaced = 0;
         private int sexPistolsClickTimer = 0;
         private bool changingSexPistolsPositions = false;
-
-        public static int worldEstimatedStandTier = 1;
 
         public enum StandSearchType
         {
@@ -286,6 +285,7 @@ namespace JoJoStands
 
         public override void PlayerDisconnect(Player player)        //runs for everyone that hasn't left
         {
+            MyPlayer mPlayer = Player.GetModPlayer<MyPlayer>();
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 for (int p = 0; p < Main.maxPlayers; p++)
@@ -294,17 +294,17 @@ namespace JoJoStands
                     MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>();
                     if (otherPlayer.active)
                     {
-                        if (otherModPlayer.timestopActive && !otherPlayer.HasBuff(ModContent.BuffType<TheWorldBuff>()))       //if everyone has the effect and no one has the owner buff, turn it off
+                        if (mPlayer.timestopActive && !otherPlayer.HasBuff(ModContent.BuffType<TheWorldBuff>()))       //if everyone has the effect and no one has the owner buff, turn it off
                         {
                             Main.NewText("The user has left, and time has begun to move once more...");
                             otherModPlayer.timestopActive = false;
                         }
-                        if (otherModPlayer.timeskipActive && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))
+                        if (mPlayer.timeskipActive && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))
                         {
                             Main.NewText("The user has left, and time has begun to move once more...");
                             otherModPlayer.timeskipActive = false;
                         }
-                        if (otherModPlayer.backToZeroActive && !otherPlayer.HasBuff(ModContent.BuffType<BacktoZero>()))
+                        if (mPlayer.backToZeroActive && !otherPlayer.HasBuff(ModContent.BuffType<BacktoZero>()))
                         {
                             otherModPlayer.backToZeroActive = false;
                         }
@@ -437,13 +437,14 @@ namespace JoJoStands
                 standOut = false;
                 standAccessory = false;
                 standRemoteMode = false;
+                ableToOverrideTimestop = false;
                 poseSoundName = "";
                 standName = "";
                 standType = 0;
+                standTier = 0;
                 standDefenseToAdd = 0;
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
-                gratefulDeadTier = 0;
 
                 creamTier = 0;
                 voidCounter = 0;
@@ -496,7 +497,6 @@ namespace JoJoStands
             tag.Add("usedEctoPearl", usedEctoPearl);
             tag.Add("receivedArrowShard", receivedArrowShard);
             tag.Add("piercedTimer", piercedTimer);
-            tag.Add("worldEstimatedTier", worldEstimatedStandTier);
         }
 
         public override void LoadData(TagCompound tag)
@@ -507,7 +507,6 @@ namespace JoJoStands
             usedEctoPearl = tag.GetBool("usedEctoPearl");
             receivedArrowShard = tag.GetBool("receivedArrowShard");
             piercedTimer = tag.GetInt("piercedTimer");
-            worldEstimatedStandTier = tag.GetInt("worldEstimatedTier");
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -637,6 +636,8 @@ namespace JoJoStands
 
             if (timestopActive)
                 Main.windSpeedCurrent = 0f;
+            if (PlayerInput.Triggers.Current.SmartSelect || Player.dead)
+                canStandBasicAttack = false;
 
             if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut && standRespawnQueued && !Player.dead)
             {
@@ -1187,15 +1188,6 @@ namespace JoJoStands
                 standCritChangeBoosts -= 10f;
             }
 
-            if (WillsDebug)
-            {
-                Color textColor = Color.LightGreen;
-                if (!Player.ZoneForest)
-                    textColor = Color.Red;
-
-                Main.NewText("Will to Fight/Protect Generic Conditions Fulfilled: " + Player.ZoneForest + " (" + Player.ZoneForest + "; " + Player.ZonePurity + ")", textColor);
-            }
-
             if (revived && !Player.HasBuff(ModContent.BuffType<ArtificialSoul>()))
             {
                 Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + "'s artificial soul has left him."), Player.statLife + 1, Player.direction);
@@ -1207,10 +1199,10 @@ namespace JoJoStands
         {
             if (!Main.dedServ)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside
             {
-                if (timestopEffectDurationTimer > 0)
+                if (TimestopEffects && timestopEffectDurationTimer > 0)
                 {
                     timestopEffectDurationTimer--;
-                    JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.TimestopEffect, timestopEffectDurationTimer >= 15);
+                    JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.TimestopEffect, timestopEffectDurationTimer >= 15 && !JoJoStandsShaders.ShaderActive(JoJoStandsShaders.TimestopGreyscaleEffect));
                     JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.TimestopGreyscaleEffect, timestopEffectDurationTimer < 15);
                 }
 
@@ -1309,8 +1301,8 @@ namespace JoJoStands
             {
                 if (!JoJoStands.FanStandsLoaded)
                 {
-                    Main.NewText("There is no stand in the Stand Slot!", Color.Red);
                     standOut = false;
+                    Main.NewText("There is no Stand in the Stand Slot!", Color.Red);
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                         ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, false, Player.whoAmI);
                     return;
@@ -1335,6 +1327,7 @@ namespace JoJoStands
             StandItemClass standItem = inputItem.ModItem as StandItemClass;
 
             standOut = true;
+            standTier = standItem.standTier;
             standDefenseToAdd = 4 + (2 * standItem.standTier);
             standName = standItem.standProjectileName;
             if (standItem.standType == 2)
@@ -1411,6 +1404,12 @@ namespace JoJoStands
             }
         }
 
+        public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
+        {
+            if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0)
+                damage *= 2;
+        }
+
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
         {
             HamonPlayer hPlayer = Player.GetModPlayer<HamonPlayer>();
@@ -1462,6 +1461,7 @@ namespace JoJoStands
                 Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
             }
         }
+
         public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
         {
             if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
@@ -1470,6 +1470,12 @@ namespace JoJoStands
                 shootVelocity.Normalize();
                 Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
             }
+        }
+
+        public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
+        {
+            if (StandPvPMode && Main.netMode != NetmodeID.SinglePlayer && target.GetModPlayer<MyPlayer>().standOut)
+                damage /= 2;
         }
 
         /*public override bool CustomBiomesMatch(Player other)
@@ -1512,12 +1518,6 @@ namespace JoJoStands
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
                 return false;
             }
-
-            if (silverChariotShirtless)
-                damage *= 2;
-
-            if (StandPvPMode && Main.netMode != NetmodeID.SinglePlayer && pvp && Main.player[damageSource.SourcePlayerIndex].GetModPlayer<MyPlayer>().standOut)
-                damage /= 2;
 
             return true;
         }
@@ -1572,6 +1572,16 @@ namespace JoJoStands
         public override void UpdateDead()
         {
             standOut = false;
+            standAccessory = false;
+            standRemoteMode = false;
+            ableToOverrideTimestop = false;
+            poseSoundName = "";
+            standName = "";
+            standType = 0;
+            standTier = 0;
+            standDefenseToAdd = 0;
+            sexPistolsTier = 0;
+            hermitPurpleTier = 0;
 
             creamTier = 0;
             voidCounter = 0;

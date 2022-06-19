@@ -7,7 +7,6 @@ namespace JoJoStands.Items.Dyes
     public class StandDye : ModItem
     {
         public virtual string DyePath { get; }
-        public virtual Effect DyeEffect { get; }
 
         public virtual void OnEquipDye(Player player)
         {

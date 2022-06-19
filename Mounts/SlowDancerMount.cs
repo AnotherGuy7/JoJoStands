@@ -115,7 +115,9 @@ namespace JoJoStands.Mounts
                     }
                 }
             }
-            if (!WorldGen.SolidTile((int)(mountedPlayer.position.X / 16f), (int)(mountedPlayer.position.Y / 16f) + 5) || mountedPlayer.velocity.Y != 0f)
+
+            bool standingOnPlatform = TileID.Sets.Platforms[Main.tile[(int)(mountedPlayer.position.X / 16f), (int)(mountedPlayer.position.Y / 16f) + 5].TileType];
+            if ((!WorldGen.SolidTile((int)(mountedPlayer.position.X / 16f), (int)(mountedPlayer.position.Y / 16f) + 5) && !standingOnPlatform) || mountedPlayer.velocity.Y != 0f)
                 mount._frame = 15;
 
             return false;

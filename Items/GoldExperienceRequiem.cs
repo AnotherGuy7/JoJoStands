@@ -18,7 +18,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Gold Experience (Requiem)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use abilities! \nSpecial: Switches the abilities used for right-click!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use the chosen abilities!\nSpecial: Use Back to Zero to nullify the actions of all enemies who touch you!\nSecond Special: Switches the abilities used for right-click!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -35,7 +35,7 @@ namespace JoJoStands.Items
         public override bool ManualStandSpawning(Player player)
         {
             Projectile.NewProjectile(player.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<GoldExperienceRequiemStand>(), 0, 0f, Main.myPlayer);
-            GoldExperienceRequiemAbilityWheel.OpenAbilityWheel(player.GetModPlayer<MyPlayer>(), 5);
+            GoldExperienceRequiemAbilityWheel.OpenAbilityWheel(player.GetModPlayer<MyPlayer>(), 4);
             return true;
         }
 
