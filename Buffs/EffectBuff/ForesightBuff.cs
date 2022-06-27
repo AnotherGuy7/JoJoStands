@@ -22,7 +22,7 @@ namespace JoJoStands.Buffs.EffectBuff
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!player.HasBuff(Type) || mPlayer.forceShutDownEffect)
             {
-                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(mPlayer.kingCrimsonAbilityCooldownTime));
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     mPlayer.epitaphForesightActive = false;

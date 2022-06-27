@@ -32,7 +32,7 @@ namespace JoJoStands.Items.Accessories
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             vPlayer.noSunBurning = true;
-            player.GetModPlayer<MyPlayer>().blackUmbrellaEquipped = true;
+            player.GetModPlayer<VampirePlayer>().blackUmbrellaEquipped = true;
         }
 
         public override void AddRecipes()

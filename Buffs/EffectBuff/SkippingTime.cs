@@ -70,7 +70,7 @@ namespace JoJoStands.Buffs.EffectBuff
                     Main.npc[n].AddBuff(ModContent.BuffType<TimeSkipConfusion>(), 120);
                 }
                 SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timeskip_end"));
-                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(mPlayer.kingCrimsonAbilityCooldownTime));
                 player.AddBuff(ModContent.BuffType<PowerfulStrike>(), 2);
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {

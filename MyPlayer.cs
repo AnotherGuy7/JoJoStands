@@ -100,6 +100,7 @@ namespace JoJoStands
         public int poseFrameCounter = 0;
         public int menacingFrames = 0;
         public int slowDancerSprintTime = 0;
+        public int kingCrimsonAbilityCooldownTime = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -127,8 +128,6 @@ namespace JoJoStands
         public bool creamExposedToVoid = false;
         public bool creamAnimationReverse = false;
         public bool creamNormalToVoid = false;
-        public bool doobiesskullEquipped = false;
-        public bool blackUmbrellaEquipped = false;
         public bool silverChariotShirtless = false;      //hot shirtless daddy silver chariot *moan*
         //Ozi is to blame for the comment above.
         public bool standChangingLocked = false;
@@ -231,8 +230,6 @@ namespace JoJoStands
             phantomHoodShortEquipped = false;
             phantomChestplateEquipped = false;
             phantomLeggingsEquipped = false;
-            doobiesskullEquipped = false;
-            blackUmbrellaEquipped = false;
             silverChariotShirtless = false;
             hideAllPlayerLayers = false;
             BulletCounter.Visible = false;
@@ -1453,22 +1450,6 @@ namespace JoJoStands
                     dust.noGravity = true;
                 }
                 hermitPurpleHamonBurstLeft -= 1;
-            }
-            if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
-            {
-                Vector2 shootVelocity = Player.position;
-                shootVelocity.Normalize();
-                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
-            }
-        }
-
-        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
-        {
-            if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
-            {
-                Vector2 shootVelocity = Player.position;
-                shootVelocity.Normalize();
-                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
             }
         }
 

@@ -4,6 +4,7 @@ using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Buffs.PlayerBuffs;
 using JoJoStands.NPCs;
 using JoJoStands.Projectiles;
+using JoJoStands.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,8 @@ namespace JoJoStands.Items.Vampire
         public bool wearingDiosScarf = false;
         public bool wearingAstroRemainsSet = false;
         public bool wearingVisceralChestplate = false;
+        public bool doobiesskullEquipped = false;
+        public bool blackUmbrellaEquipped = false;
 
         public int[] enemyTypesKilled = new int[1200];
         public int vampireSkillPointsAvailable = 1;
@@ -109,6 +112,8 @@ namespace JoJoStands.Items.Vampire
 
             wearingDiosScarf = false;
             wearingAstroRemainsSet = false;
+            doobiesskullEquipped = false;
+            blackUmbrellaEquipped = false;
         }
 
         public override void PreUpdate()
@@ -449,6 +454,12 @@ namespace JoJoStands.Items.Vampire
             {
                 npc.AddBuff(ModContent.BuffType<Lacerated>(), 15 * 60);
             }
+            if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
+            {
+                Vector2 shootVelocity = Player.position;
+                shootVelocity.Normalize();
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
+            }
         }
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
@@ -483,6 +494,16 @@ namespace JoJoStands.Items.Vampire
                 float multiplier = 1f;
                 multiplier += MathHelper.Clamp(enemyTypesKilled[npc.type] / 1000f, 0f, 0.16f + (0.02f * (GetSkillLevel(ExperiencedBeast - 1))));
                 damage = (int)(damage * multiplier);
+            }
+        }
+
+        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
+        {
+            if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
+            {
+                Vector2 shootVelocity = Player.position;
+                shootVelocity.Normalize();
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
             }
         }
 

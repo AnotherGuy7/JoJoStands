@@ -1,8 +1,8 @@
-﻿using Terraria;
+﻿using JoJoStands.Items.Vampire;
+using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles.Minions
 {
@@ -32,8 +32,8 @@ namespace JoJoStands.Projectiles.Minions
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (player.dead || !player.active || Projectile.timeLeft == 0 || !mPlayer.doobiesskullEquipped)
+            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
+            if (player.dead || !player.active || Projectile.timeLeft == 0 || !vPlayer.doobiesskullEquipped)
             {
                 Projectile.Kill();
                 return;

@@ -46,7 +46,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && timeskipStartDelay <= 0)
+            if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && timeskipStartDelay <= 0)
             {
                 if (!JoJoStands.SoundsLoaded)
                     timeskipStartDelay = 80;
@@ -69,8 +69,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
                     timeskipStartDelay = 0;
                     preparingTimeskip = false;
+                    mPlayer.kingCrimsonAbilityCooldownTime = 30;
                 }
             }
+            if (player.HasBuff(ModContent.BuffType<SkippingTime>()) && player.HasBuff(ModContent.BuffType<ForesightBuff>()))
+                mPlayer.kingCrimsonAbilityCooldownTime = 45;
 
             if (!mPlayer.standAutoMode)
             {
@@ -210,10 +213,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 {
                     StayBehind();
                 }
-                if (SecondSpecialKeyPressed() && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && !preparingTimeskip && Projectile.owner == Main.myPlayer)
+                if (SecondSpecialKeyPressed() && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && !preparingTimeskip && Projectile.owner == Main.myPlayer)
                 {
                     player.AddBuff(ModContent.BuffType<ForesightBuff>(), 540);
                     mPlayer.epitaphForesightActive = true;
+                    mPlayer.kingCrimsonAbilityCooldownTime = 30;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                         ModNetHandler.effectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
                 }

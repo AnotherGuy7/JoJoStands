@@ -46,8 +46,8 @@ namespace JoJoStands.Items.Vampire
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.blackUmbrellaEquipped)
+            VampirePlayer vPlayer = drawPlayer.GetModPlayer<VampirePlayer>();
+            if (drawPlayer.active && vPlayer.blackUmbrellaEquipped)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/UmbrellaHat").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
