@@ -20,7 +20,7 @@ namespace JoJoStands.Items.Accessories
             Item.width = 18;
             Item.height = 18;
             Item.value = Item.buyPrice(platinum: 1, gold: 50);
-            Item.rare = 10;
+            Item.rare = ItemRarityID.Red;
             Item.defense = 20;
         }
 

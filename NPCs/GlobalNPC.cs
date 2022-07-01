@@ -48,6 +48,7 @@ namespace JoJoStands.NPCs
         public int deathTimer = 0;
         public int bindingEmeraldDurationTimer = 0;
         public float kingCrimsonDonutMultiplier = 1f;
+        public int standDebuffEffectOwner = 0;
         public Vector2 playerPositionOnSkip = Vector2.Zero;
         public Vector2 preTimestopVelocity = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
