@@ -191,13 +191,13 @@ namespace JoJoStands.Items
 
         public override void AddRecipes()
         {
-            Recipe revolverRecipe = Mod.CreateRecipe(ItemID.Revolver);
+            Recipe revolverRecipe = Recipe.Create(ItemID.Revolver);
             revolverRecipe.AddIngredient(ModContent.ItemType<RustyRevolver>());
             revolverRecipe.AddIngredient(ItemID.IronBar, 16);
             revolverRecipe.AddTile(TileID.Anvils);
             revolverRecipe.Register();
 
-            revolverRecipe = Mod.CreateRecipe(ItemID.Revolver);
+            revolverRecipe = Recipe.Create(ItemID.Revolver);
             revolverRecipe.AddIngredient(ModContent.ItemType<RustyRevolver>());
             revolverRecipe.AddIngredient(ItemID.LeadBar, 16);
             revolverRecipe.AddTile(TileID.Anvils);

@@ -6,7 +6,7 @@ namespace JoJoStands.UI
 {
     public class GoldExperienceAbilityWheel : AbilityWheel
     {
-        public static bool visible;
+        public static bool Visible;
         public static GoldExperienceAbilityWheel goldExperienceAbilityWheel;
 
         private const int AmountOfAbilities = 4;
@@ -32,10 +32,10 @@ namespace JoJoStands.UI
 
         public override string[] abilityDescriptions => new string[AmountOfAbilities]
         {
-            "Allows Gold Experience to create a damage reflecting frog.",
-            "Allows Gold Experience to create a damage reflecting tree.",
-            "Allows Gold Experience to create a butterfly. This butterfly will double the drop chances of any enemy that kills it.",
-            "Allows Gold Experience to recreate lost limbs. Hold right-click to use."
+            "Creates a damage reflecting frog. Enemies who come in contact with the frog have the damage reflected back to them.",
+            "Creates a damage reflecting tree. Enemies that come in contact with the tree are damaged and projectiles are reflected.",
+            "Creates a butterfly. Enemies who kill this butterfly have their drop chances doubled.",
+            "Recreates lost limbs. Hold right-click while standing still to heal health.",
         };
 
         public override void ExtraInitialize()
@@ -45,7 +45,7 @@ namespace JoJoStands.UI
 
         public static void OpenAbilityWheel(MyPlayer modPlayer, int amountOfAbilities)
         {
-            visible = true;
+            Visible = true;
             mPlayer = modPlayer;
             mPlayer.chosenAbility = 0;
 
@@ -57,17 +57,17 @@ namespace JoJoStands.UI
                 if (i > wheel.abilitiesShown - 1)
                     wheel.abilityButtons[i].invisible = true;
             }
-            wheel.wheelAlignPosition = new Vector2(Main.screenWidth * wheel.abilityWheel.HAlign, Main.screenHeight * wheel.abilityWheel.VAlign);
+            wheel.wheelCenterPosition = new Vector2(Main.screenWidth * wheel.abilityWheel.HAlign, Main.screenHeight * wheel.abilityWheel.VAlign);
             wheel.abilityNameText.SetText(wheel.abilityNames[0]);
-            wheel.abilityNameText.Left.Pixels = wheel.wheelAlignPosition.X + wheel.wheelCenter.buttonPosition.X;
-            wheel.abilityNameText.Top.Pixels = wheel.wheelAlignPosition.Y + wheel.wheelCenter.buttonPosition.Y + 60f;
+            wheel.abilityNameText.Left.Pixels = wheel.wheelCenterPosition.X + wheel.wheelCenter.buttonPosition.X;
+            wheel.abilityNameText.Top.Pixels = wheel.wheelCenterPosition.Y + wheel.wheelCenter.buttonPosition.Y + 60f;
             wheel.abilityNameText.Left.Pixels += -FontAssets.MouseText.Value.MeasureString(wheel.abilityNames[0]).X * 2f * wheel.textScale;
             wheel.abilityNameText.Left.Pixels += 10f;
         }
 
         public static void CloseAbilityWheel()
         {
-            visible = false;
+            Visible = false;
         }
     }
 }

@@ -9,7 +9,6 @@ using JoJoStands.Items.Hamon;
 using JoJoStands.Mounts;
 using JoJoStands.Networking;
 using JoJoStands.Projectiles;
-using JoJoStands.Projectiles.Minions;
 using JoJoStands.Projectiles.PlayerStands.BadCompany;
 using JoJoStands.Projectiles.PlayerStands.SilverChariot;
 using JoJoStands.Projectiles.PlayerStands.Tusk;
@@ -23,7 +22,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -50,6 +48,7 @@ namespace JoJoStands
         public static bool BiteTheDustEffects = false;
         public static bool RespawnWithStandOut = true;
         public static bool StandPvPMode = false;
+        public static bool AbilityWheelDescriptions = true;
         public static DeathSoundType DeathSoundID;
         public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
         public static StandSearchType standSearchType = StandSearchType.Bosses;
@@ -140,6 +139,7 @@ namespace JoJoStands
         public bool forceShutDownEffect = false;
         public bool badCompanyDefaultArmy = true;
         public bool ableToOverrideTimestop = false;
+        public bool stoneFreeWeaveAbilityActive = false;
 
         public bool timestopActive;
         public bool timestopOwner;
@@ -442,6 +442,7 @@ namespace JoJoStands
                 standDefenseToAdd = 0;
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
+                stoneFreeWeaveAbilityActive = false;
 
                 creamTier = 0;
                 voidCounter = 0;
@@ -454,7 +455,7 @@ namespace JoJoStands
 
                 stickyFingersAmbushMode = false;
 
-                if (StoneFreeAbilityWheel.visible)
+                if (StoneFreeAbilityWheel.Visible)
                     StoneFreeAbilityWheel.CloseAbilityWheel();
                 if (equippedTuskAct != 0)
                 {
@@ -635,15 +636,6 @@ namespace JoJoStands
                 Main.windSpeedCurrent = 0f;
             if (PlayerInput.Triggers.Current.SmartSelect || Player.dead)
                 canStandBasicAttack = false;
-
-            if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut && standRespawnQueued && !Player.dead)
-            {
-                standOut = true;
-                standRespawnQueued = false;
-                SpawnStand();
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
-            }
 
             if (goldenSpinCounter > 0)          //golden spin stuff
             {
@@ -1192,6 +1184,18 @@ namespace JoJoStands
             }
         }
 
+        public override void PostUpdate()
+        {
+            if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut && standRespawnQueued && !Player.dead)
+            {
+                standOut = true;
+                standRespawnQueued = false;
+                SpawnStand();
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
+            }
+        }
+
         private void UpdateShaderStates()
         {
             if (!Main.dedServ)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside
@@ -1338,7 +1342,7 @@ namespace JoJoStands
 
                 int standProjectileType = Mod.Find<ModProjectile>(standClassName).Type;
 
-                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position, Player.velocity, standProjectileType, 0, 0f, Main.myPlayer);
+                Projectile.NewProjectile(inputItem.GetSource_FromThis(), Player.position, Player.velocity, standProjectileType, 0, 0f, Main.myPlayer);
 
                 if (JoJoStands.SoundsLoaded)
                 {
@@ -1405,6 +1409,15 @@ namespace JoJoStands
         {
             if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0)
                 damage *= 2;
+
+            if (stoneFreeWeaveAbilityActive)
+                damage = (int)(damage * 0.93f);
+        }
+
+        public override void ModifyHitByProjectile(Projectile proj, ref int damage, ref bool crit)
+        {
+            if (stoneFreeWeaveAbilityActive)
+                damage = (int)(damage * 0.8f);
         }
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
@@ -1497,6 +1510,7 @@ namespace JoJoStands
                 Player.immune = true;
                 Player.immuneTime = 30;
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
+                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
                 return false;
             }
 
@@ -1563,6 +1577,7 @@ namespace JoJoStands
             standDefenseToAdd = 0;
             sexPistolsTier = 0;
             hermitPurpleTier = 0;
+            stoneFreeWeaveAbilityActive = false;
 
             creamTier = 0;
             voidCounter = 0;

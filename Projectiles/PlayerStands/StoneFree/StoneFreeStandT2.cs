@@ -8,12 +8,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 {
     public class StoneFreeStandT2 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 10;
-        }
-
         public override float maxDistance => 98f;
         public override int punchDamage => 39;
         public override int punchTime => 10;

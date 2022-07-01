@@ -87,8 +87,8 @@ namespace JoJoStands
             timestopImmune.Add(ProjectileType<StarPlatinumStandFinal>());
             //MyPlayer.stopImmune.Add(ProjectileType("StickyFingersFistExtended>());
             timestopImmune.Add(ProjectileType<RoadRoller>());
-            timestopImmune.Add(ProjectileType<HamonPunches>());
             timestopImmune.Add(ProjectileType<Fists>());
+            timestopImmune.Add(ProjectileType<HamonPunches>());
             timestopImmune.Add(ProjectileType<GoldExperienceRequiemStand>());
             timestopImmune.Add(ProjectileType<TuskAct4Stand>());
             timestopImmune.Add(ProjectileType<TestStandStand>());

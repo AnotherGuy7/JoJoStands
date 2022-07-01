@@ -20,6 +20,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             Projectile.netImportant = true;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
+            Projectile.shouldFallThrough = true;
         }
 
         public override float maxDistance => 98f;

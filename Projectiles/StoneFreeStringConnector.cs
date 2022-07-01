@@ -24,6 +24,7 @@ namespace JoJoStands.Projectiles
         }
 
         private int linkWhoAmI = -1;
+        private int attackTimes = -1;
 
         public override void AI()
         {
@@ -33,6 +34,9 @@ namespace JoJoStands.Projectiles
                 Projectile.Kill();
                 return;
             }
+
+            if (attackTimes == -1)
+                attackTimes = player.GetModPlayer<MyPlayer>().standTier;
 
             linkWhoAmI = (int)Projectile.ai[0];
             Projectile linkedProjectile = Main.projectile[linkWhoAmI];
@@ -57,8 +61,12 @@ namespace JoJoStands.Projectiles
                     {
                         npc.StrikeNPC((int)Projectile.ai[1], 0f, -npc.direction);
                         objectHit = true;
-                        linkedProjectile.Kill();
-                        Projectile.Kill();
+                        attackTimes--;
+                        if (attackTimes <= 0)
+                        {
+                            linkedProjectile.Kill();
+                            Projectile.Kill();
+                        }
                         break;
                     }
                 }
@@ -75,8 +83,12 @@ namespace JoJoStands.Projectiles
                     {
                         otherProj.Kill();
                         objectHit = true;
-                        linkedProjectile.Kill();
-                        Projectile.Kill();
+                        attackTimes--;
+                        if (attackTimes <= 0)
+                        {
+                            linkedProjectile.Kill();
+                            Projectile.Kill();
+                        }
                         break;
                     }
                 }
@@ -95,8 +107,12 @@ namespace JoJoStands.Projectiles
                         if (otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), Projectile.Center, linkedProjectile.Center))
                         {
                             otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " fell right into " + player.name + "'s string trap!"), (int)Projectile.ai[1], -otherPlayer.direction);
-                            linkedProjectile.Kill();
-                            Projectile.Kill();
+                            attackTimes--;
+                            if (attackTimes <= 0)
+                            {
+                                linkedProjectile.Kill();
+                                Projectile.Kill();
+                            }
                             break;
                         }
                     }

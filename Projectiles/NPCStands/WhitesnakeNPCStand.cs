@@ -13,11 +13,6 @@ namespace JoJoStands.Projectiles.NPCStands
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 8;
-            Main.projPet[Projectile.type] = true;
-            ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
-            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
-            ProjectileID.Sets.LightPet[Projectile.type] = true;
-            Main.projPet[Projectile.type] = true;
         }
 
         public override void SetDefaults()

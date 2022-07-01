@@ -10,10 +10,16 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
     public class BadCompanySoldier : StandClass
     {
+        public override void SetStaticDefaults()
+        {
+            Main.projPet[Projectile.type] = true;
+        }
+
         public override void SetDefaults()
         {
             Projectile.width = 16;
             Projectile.height = 26;
+            Projectile.shouldFallThrough = false;
         }
 
         public override string poseSoundName => "StandReadyFire";
@@ -233,7 +239,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             directionToPlayer.Normalize();
             directionToPlayer *= player.moveSpeed;
             float xDist = Math.Abs(player.position.X - Projectile.position.X);
-            if (!WorldGen.SolidTile((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f) + 2))
+            bool standingOnPlatform = TileID.Sets.Platforms[Main.tile[(int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f) + 1].TileType];
+            if (!WorldGen.SolidTile((int)(Projectile.position.X / 16f), (int)(Projectile.position.Y / 16f) + 2) && !standingOnPlatform)
             {
                 Projectile.ai[0] = 1f;
             }

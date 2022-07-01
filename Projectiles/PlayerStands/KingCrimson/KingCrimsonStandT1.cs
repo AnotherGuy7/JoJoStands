@@ -8,12 +8,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 {
     public class KingCrimsonStandT1 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 11;
-        }
-
         public override int punchDamage => 42;
         public override float punchKnockback => 2f;
         public override int punchTime => 26;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in

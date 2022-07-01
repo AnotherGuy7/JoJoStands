@@ -10,12 +10,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 {
     public class GoldExperienceStandT1 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 13;
-        }
-
         public override int punchDamage => 16;
         public override int punchTime => 12;
         public override int halfStandHeight => 35;

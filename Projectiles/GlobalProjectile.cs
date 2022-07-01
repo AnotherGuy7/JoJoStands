@@ -13,10 +13,6 @@ namespace JoJoStands.Projectiles
 {
     public class JoJoGlobalProjectile : GlobalProjectile
     {
-        public int savedTimeLeft = 0;
-        public int timeLeftSave = 0;
-        public Vector2 preSkipVel = Vector2.Zero;
-
         //Epitaph stuff
         public bool applyingForesightPositions = false;
         public bool foresightResetIndex = false;
@@ -29,6 +25,9 @@ namespace JoJoStands.Projectiles
         public bool timestopImmune = false;
         public bool autoModeSexPistols = false;
         public bool kickedBySexPistols = false;
+        public float timestopFreezeProgress = 0f;
+        public int timestopStartTimeLeft = 0;
+        public Vector2 preSkipVel = Vector2.Zero;
 
         public struct ForesightData
         {
@@ -53,6 +52,7 @@ namespace JoJoStands.Projectiles
                 {
                     stoppedInTime = true;
                     Projectile.damage = (int)(Projectile.damage * 0.8f);        //projectiles in timestop lose 20% damage, so it's not as OP
+                    timestopStartTimeLeft = Projectile.timeLeft;
                     if (player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && mPlayer.timestopOwner && JoJoStands.timestopImmune.Contains(Projectile.type))
                         timestopImmune = true;
                 }
@@ -64,27 +64,24 @@ namespace JoJoStands.Projectiles
 
                     return true;
                 }
+                if (timestopFreezeProgress < 1f)
+                {
+                    timestopFreezeProgress += 0.1f;
+                    Projectile.velocity *= 0.9f;
+                }
 
-                timeLeftSave++;
-                if (timeLeftSave >= 6 && savedTimeLeft == 0)
-                    savedTimeLeft = Projectile.timeLeft - 5;     //so they stop don't stop immediatel
-
-                if ((Projectile.timeLeft <= savedTimeLeft) || Projectile.minion)
+                if (timestopFreezeProgress >= 1f || Projectile.minion)
                 {
                     Projectile.frameCounter = 2;
-                    if (savedTimeLeft > 0)      //for the projectiles that don't have enough time left before they die
-                        Projectile.timeLeft = savedTimeLeft;
+                    if (timestopStartTimeLeft > 2)      //for the projectiles that don't have enough time left before they die
+                        Projectile.timeLeft = timestopStartTimeLeft;
                     else
                         Projectile.timeLeft = 2;
 
-                    if (mPlayer.ableToOverrideTimestop)
+                    if (mPlayer.ableToOverrideTimestop && JoJoStands.timestopImmune.Contains(Projectile.type))
                     {
                         if (player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
-                        {
-                            timeLeftSave = 0;
-                            savedTimeLeft = 0;
                             timestopImmune = true;
-                        }
 
                         return true;
                     }
@@ -92,12 +89,20 @@ namespace JoJoStands.Projectiles
                     return false;
                 }
             }
-            if (!mPlayer.timestopActive && timeLeftSave > 0)
+            if (!mPlayer.timestopActive)
             {
-                timeLeftSave = 0;
-                savedTimeLeft = 0;
-                stoppedInTime = false;
-                timestopImmune = false;
+                if (timestopFreezeProgress > 0f)
+                {
+                    timestopFreezeProgress -= 0.1f;
+                    Projectile.velocity *= 1.1f;
+                }
+                else
+                {
+                    stoppedInTime = false;
+                    timestopImmune = false;
+                    timestopFreezeProgress = 0f;
+                    timestopStartTimeLeft = 0;
+                }
             }
 
             if (mPlayer.timeskipPreEffect)     //saves it, this is for projectiles like minions, controllable projectiles, etc.
@@ -236,7 +241,7 @@ namespace JoJoStands.Projectiles
             if (timestopImmune)
                 return true;
 
-            if (mPlayer.timestopActive && !mPlayer.timestopOwner && Projectile.timeLeft <= savedTimeLeft)
+            if (mPlayer.timestopActive && timestopFreezeProgress >= 1f)
                 return false;
 
             return true;

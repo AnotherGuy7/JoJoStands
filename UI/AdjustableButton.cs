@@ -16,6 +16,7 @@ namespace JoJoStands.UI
         private Vector2 textureSize;
         private Vector2 overlaySize;
         private Rectangle rectangle;
+        private Rectangle clickRect;
         private float imageScale;
         private float overlayScaleReduction;
         private float defaultAlpha = 0.4f;
@@ -28,6 +29,7 @@ namespace JoJoStands.UI
         public Vector2 screenPosition;
         public Vector2 buttonCenter;
         public Vector2 buttonSize;
+        public Vector2 origin;
         public Color drawColor = Color.White;
         public float drawAlpha = 0f;
         public bool respondToFocus = false;
@@ -51,6 +53,7 @@ namespace JoJoStands.UI
             focusScaleAmount = focusScale;
             respondToFocus = respondToFocusInput;
             rectangle = new Rectangle(0, 0, (int)size.X, (int)size.Y);
+            clickRect = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
         }
 
         public AdjustableButton(Asset<Texture2D> texture, Vector2 position, Vector2 size, Color color, float defaultAlpha = 0.4f, float activeAlpha = 1f, bool respondToFocusInput = true, float focusScale = 1.15f) : base(texture)
@@ -67,6 +70,7 @@ namespace JoJoStands.UI
             focusScaleAmount = focusScale;
             respondToFocus = respondToFocusInput;
             rectangle = new Rectangle(0, 0, (int)size.X, (int)size.Y);
+            clickRect = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
             this.defaultAlpha = defaultAlpha;
             this.activeAlpha = activeAlpha;
         }
@@ -121,7 +125,7 @@ namespace JoJoStands.UI
             if (invisible)
                 return;
 
-            Vector2 origin = textureSize / 2f;
+            origin = textureSize / 2f;
             Vector2 ownerPosition = Vector2.Zero;
 
             if (owner != null)
@@ -187,6 +191,8 @@ namespace JoJoStands.UI
             Left.Pixels = pos.X;
             buttonPosition = new Vector2(Left.Pixels, Top.Pixels);
             buttonCenter = buttonPosition + (buttonSize / 2f);
+            clickRect.X = (int)(buttonPosition.X - origin.X);
+            clickRect.Y = (int)(buttonPosition.Y - origin.Y);
 
             /*if (owner != null)
             {
@@ -212,6 +218,17 @@ namespace JoJoStands.UI
         {
             buttonPosition = new Vector2(Left.Pixels, Top.Pixels);
             buttonCenter = buttonPosition + (buttonSize / 2f);
+            clickRect.X = (int)(buttonPosition.X - origin.X);
+            clickRect.Y = (int)(buttonPosition.Y - origin.Y);
+        }
+
+        /// <summary>
+        /// Checks whether or not the button is being hovered over using a custom rectangle.
+        /// </summary>
+        /// <returns>Whether or not the button is being hovered over with the cursor.</returns>
+        public bool IsButtonHoveredOver()
+        {
+            return clickRect.Contains(Main.MouseScreen.ToPoint());
         }
 
         public void SetButtonSize(Vector2 size)

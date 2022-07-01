@@ -1,7 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Networking;
+using JoJoStands.NPCs;
 using JoJoStands.Projectiles.Minions;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
@@ -14,12 +14,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 {
     public class GoldExperienceRequiemStand : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 4;
-        }
-
         public override float maxDistance => 98f;
         public override int punchDamage => 138;
         public override int punchTime => 9;
@@ -87,9 +81,27 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld.X, yPos, 0f, 0f, ModContent.ProjectileType<GETree>(), 1, 0f, Projectile.owner, tierNumber);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(12));
                     }
-                    if (Main.mouseRight && mPlayer.chosenAbility == 2 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<DeathLoop>()))
+                    if (Main.mouseRight && mPlayer.chosenAbility == 2 && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<DeathLoop>()))
                     {
-                        player.AddBuff(ModContent.BuffType<DeathLoop>(), 1500);
+                        bool targetSuccess = false;
+                        for (int n = 0; n < Main.maxNPCs; n++)
+                        {
+                            NPC npc = Main.npc[n];
+                            if (npc.active && !npc.townNPC && npc.lifeMax > 5 && Vector2.Distance(Main.MouseWorld, npc.Center) <= 16f)
+                            {
+                                targetSuccess = true;
+                                DeathLoop.targetNPCWhoAmI = npc.whoAmI;
+                                npc.GetGlobalNPC<JoJoGlobalNPC>().taggedForDeathLoop = true;
+                            }
+                        }
+
+                        if (targetSuccess)
+                            player.AddBuff(ModContent.BuffType<DeathLoop>(), 30 * 60);
+                        else
+                        {
+                            shootCount += 60;
+                            Main.NewText("Right-Click the enemy to target");
+                        }
                     }
                     if (Main.mouseRight && player.velocity == Vector2.Zero && mPlayer.chosenAbility == 3)
                     {
@@ -115,7 +127,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
                 if (SecondSpecialKeyPressedNoCooldown())
                 {
-                    if (!GoldExperienceRequiemAbilityWheel.visible)
+                    if (!GoldExperienceRequiemAbilityWheel.Visible)
                         GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 5);
                     else
                         GoldExperienceAbilityWheel.CloseAbilityWheel();

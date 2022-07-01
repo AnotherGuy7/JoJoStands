@@ -6,7 +6,7 @@ namespace JoJoStands.UI
 {
     public class StoneFreeAbilityWheel : AbilityWheel
     {
-        public static bool visible;
+        public static bool Visible;
         public static StoneFreeAbilityWheel stoneFreeAbilityWheel;
 
         private const int AmountOfAbilities = 5;
@@ -34,11 +34,11 @@ namespace JoJoStands.UI
 
         public override string[] abilityDescriptions => new string[AmountOfAbilities]
         {
-            "Allows Stone Free to turn its arms into strings, letting its punched travel farther but hit slightly weaker.",
-            "Allows Stone Free to tie strings onto two tiles to create a string trap. Enemies are hurt by the string and enemy projectiles are stopped by the string.",
-            "Allows Stone Free to tie an enemy up. Certain enemies can move despite being tied up.",
-            "Allows Stone Free to tie and drag enemies. The closer the enemy is to Stone Free, the greater the strangle damage they receive. Pull efforts are increased with proximity.",
-            "Allows Stone Free to create a condensed string shield."
+            "[Changes Special]\nTurns Stone Free's arms into strings, allowing Stone Free's punches to travel farther but pack less of a punch.",
+            "Ties strings onto two tiles to create a string trap. Enemies are hurt by the string and enemy projectiles are stopped by the string. The two tiles have to be clicked individually.",
+            "[Changes Special]\nTie an enemy up. Certain enemies can move despite being tied up!",
+            "Ties and drag enemies. The closer the enemy is to Stone Free, the greater the strangle damage they receive. Move the mouse toward you to pull. Pull efforts are increased with proximity.",
+            "[Changes Special]\nCreates a condensed string shield. While in use, you take 20% less damage from projectiles and 7% less damage from enemies. Cannot use other string abilities while this ability is active."
         };
 
         public override void ExtraInitialize()
@@ -48,7 +48,7 @@ namespace JoJoStands.UI
 
         public static void OpenAbilityWheel(MyPlayer modPlayer, int amountOfAbilities)
         {
-            visible = true;
+            Visible = true;
             mPlayer = modPlayer;
             mPlayer.chosenAbility = 0;
 
@@ -60,17 +60,17 @@ namespace JoJoStands.UI
                 if (i > wheel.abilitiesShown - 1)
                     wheel.abilityButtons[i].invisible = true;
             }
-            wheel.wheelAlignPosition = new Vector2(Main.screenWidth * wheel.abilityWheel.HAlign, Main.screenHeight * wheel.abilityWheel.VAlign);
+            wheel.wheelCenterPosition = new Vector2(Main.screenWidth * wheel.abilityWheel.HAlign, Main.screenHeight * wheel.abilityWheel.VAlign);
             wheel.abilityNameText.SetText(wheel.abilityNames[0]);
-            wheel.abilityNameText.Left.Pixels = wheel.wheelAlignPosition.X + wheel.wheelCenter.buttonPosition.X;
-            wheel.abilityNameText.Top.Pixels = wheel.wheelAlignPosition.Y + wheel.wheelCenter.buttonPosition.Y + 60f;
+            wheel.abilityNameText.Left.Pixels = wheel.wheelCenterPosition.X + wheel.wheelCenter.buttonPosition.X;
+            wheel.abilityNameText.Top.Pixels = wheel.wheelCenterPosition.Y + wheel.wheelCenter.buttonPosition.Y + 60f;
             wheel.abilityNameText.Left.Pixels += -FontAssets.MouseText.Value.MeasureString(wheel.abilityNames[0]).X * 2f * wheel.textScale;
             wheel.abilityNameText.Left.Pixels += 10f;
         }
 
         public static void CloseAbilityWheel()
         {
-            visible = false;
+            Visible = false;
         }
     }
 }

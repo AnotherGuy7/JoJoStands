@@ -10,12 +10,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 {
     public class TheWorldStandT2 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 10;
-        }
-
         public override int punchDamage => 42;
         public override int punchTime => 10;
         public override int halfStandHeight => 44;

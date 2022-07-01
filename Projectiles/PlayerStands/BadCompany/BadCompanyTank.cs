@@ -10,11 +10,16 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
     public class BadCompanyTank : StandClass
     {
+        public override void SetStaticDefaults()
+        {
+            Main.projPet[Projectile.type] = true;
+        }
 
         public override void SetDefaults()
         {
             Projectile.width = 30;
             Projectile.height = 14;
+            Projectile.shouldFallThrough = false;
         }
 
         public override StandType standType => StandType.Ranged;

@@ -10,12 +10,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 {
     public class StoneFreeStandT3 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 10;
-        }
-
         public override float maxDistance => 98f;
         public override int punchDamage => 65;
         public override int punchTime => 9;
@@ -127,7 +121,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 
                 if (SecondSpecialKeyPressedNoCooldown())
                 {
-                    if (!StoneFreeAbilityWheel.visible)
+                    if (!StoneFreeAbilityWheel.Visible)
                         StoneFreeAbilityWheel.OpenAbilityWheel(mPlayer, 4);
                     else
                         StoneFreeAbilityWheel.CloseAbilityWheel();

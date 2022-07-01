@@ -10,12 +10,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 {
     public class StarPlatinumStandFinal : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 10;
-        }
-
         public override int punchDamage => 118;
         public override int punchTime => 6;
         public override int altDamage => 178;

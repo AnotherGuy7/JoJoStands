@@ -10,12 +10,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 {
     public class StoneFreeStandFinal : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 10;
-        }
-
         public override float maxDistance => 98f;
         public override int punchDamage => 65;
         public override int punchTime => 9;
@@ -68,7 +62,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer && shootCount <= 0 && !playerHasAbilityCooldown)
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.stoneFreeWeaveAbilityActive && shootCount <= 0 && !playerHasAbilityCooldown)
                 {
                     if (mPlayer.chosenAbility == StringTraps)
                     {
@@ -114,9 +108,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 
                 if (SpecialKeyPressed())
                 {
-                    if (mPlayer.chosenAbility == ExtendedBarrageAbility)
+                    if (mPlayer.chosenAbility == ExtendedBarrageAbility && !mPlayer.stoneFreeWeaveAbilityActive)
                         extendedBarrage = !extendedBarrage;
-                    else if (mPlayer.chosenAbility == Bind)
+                    else if (mPlayer.chosenAbility == Bind && !mPlayer.stoneFreeWeaveAbilityActive)
                     {
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         shootVel.Normalize();
@@ -124,15 +118,18 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StoneFreeBindString>(), 4, 0f, player.whoAmI, Projectile.whoAmI, 18);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
                     }
-                    else if (mPlayer.chosenAbility == WeaveShield)
-                    {
 
+                    if (mPlayer.chosenAbility == WeaveShield)
+                    {
+                        mPlayer.stoneFreeWeaveAbilityActive = !mPlayer.stoneFreeWeaveAbilityActive;
+                        if (mPlayer.stoneFreeWeaveAbilityActive)
+                            player.AddBuff(ModContent.BuffType<Buffs.ItemBuff.Weave>(), 2);
                     }
                 }
 
                 if (SecondSpecialKeyPressedNoCooldown())
                 {
-                    if (!StoneFreeAbilityWheel.visible)
+                    if (!StoneFreeAbilityWheel.Visible)
                         StoneFreeAbilityWheel.OpenAbilityWheel(mPlayer, 5);
                     else
                         StoneFreeAbilityWheel.CloseAbilityWheel();

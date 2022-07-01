@@ -514,26 +514,29 @@ namespace JoJoStands.NPCs
 
         public override void OnKill(NPC npc)
         {
-            for (int p = 0; p < Main.maxPlayers; p++)       //Searches if any player has death loop on
+            if (taggedForDeathLoop)
             {
-                Player player = Main.player[p];
-                if (!player.active)
-                    continue;
+                for (int p = 0; p < Main.maxPlayers; p++)       //Searches if any player has death loop on
+                {
+                    Player player = Main.player[p];
+                    if (!player.active)
+                        continue;
 
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                if (npc.boss && mPlayer.deathLoopActive && DeathLoop.deathNPCType == 0)
-                {
-                    DeathLoop.deathNPCType = npc.type;
-                    DeathLoop.deathPosition = npc.position;
-                    DeathLoop.Looping3x = true;
-                    DeathLoop.Looping10x = false;
-                }
-                if (!npc.boss && mPlayer.deathLoopActive && DeathLoop.deathNPCType == 0 && !npc.friendly && npc.lifeMax > 5)
-                {
-                    DeathLoop.deathNPCType = npc.type;
-                    DeathLoop.deathPosition = npc.position;
-                    DeathLoop.Looping3x = false;
-                    DeathLoop.Looping10x = true;
+                    MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+                    if (npc.boss && mPlayer.deathLoopActive && DeathLoop.deathNPCType == 0)
+                    {
+                        DeathLoop.deathNPCType = npc.type;
+                        DeathLoop.deathPosition = npc.position;
+                        DeathLoop.Looping3x = true;
+                        DeathLoop.Looping10x = false;
+                    }
+                    if (!npc.boss && mPlayer.deathLoopActive && DeathLoop.deathNPCType == 0 && !npc.friendly && npc.lifeMax > 5)
+                    {
+                        DeathLoop.deathNPCType = npc.type;
+                        DeathLoop.deathPosition = npc.position;
+                        DeathLoop.Looping3x = false;
+                        DeathLoop.Looping10x = true;
+                    }
                 }
             }
 
@@ -602,6 +605,9 @@ namespace JoJoStands.NPCs
 
             if (npc.HasBuff(ModContent.BuffType<Lacerated>()) && Main.player[Main.myPlayer].GetModPlayer<VampirePlayer>().anyMaskForm)
                 drawColor = Color.OrangeRed;
+
+            if (taggedForDeathLoop)
+                drawColor = Color.Purple;
 
             if (highlightedByTheHandMarker)
             {

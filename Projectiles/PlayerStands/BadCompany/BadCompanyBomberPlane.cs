@@ -8,7 +8,6 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
     public class BadCompanyBomberPlane : StandClass
     {
-
         public override void SetDefaults()
         {
             Projectile.width = 40;

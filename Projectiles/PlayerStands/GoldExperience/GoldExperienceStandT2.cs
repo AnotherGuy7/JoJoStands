@@ -11,12 +11,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 {
     public class GoldExperienceStandT2 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 13;
-        }
-
         public override int punchDamage => 41;
         public override int punchTime => 11;
         public override int halfStandHeight => 35;
@@ -60,7 +54,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                 {
                     if (SpecialKeyPressedNoCooldown())
                     {
-                        if (!GoldExperienceAbilityWheel.visible)
+                        if (!GoldExperienceAbilityWheel.Visible)
                             GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 2);
                         else
                             GoldExperienceAbilityWheel.CloseAbilityWheel();

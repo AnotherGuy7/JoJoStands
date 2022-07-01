@@ -15,11 +15,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
-            Main.projPet[Projectile.type] = true;
-            ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
-            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
-            ProjectileID.Sets.LightPet[Projectile.type] = true;
-            Main.projPet[Projectile.type] = true;
         }
 
         public override void SetDefaults()

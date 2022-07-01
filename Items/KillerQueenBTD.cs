@@ -39,23 +39,21 @@ namespace JoJoStands.Items
             Item.rare = ItemRarityID.LightPurple;
         }
 
+        private int rightClickTimer = 0;
+
         public override void HoldItem(Player player)
         {
             if (player.whoAmI == Main.myPlayer && Main.mouseRight)
             {
                 MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                if (mPlayer.canRevertFromKQBTD)
+                mPlayer.canRevertFromKQBTD = true;
+                if (mPlayer.revertTimer <= 0)
                 {
-                    if (mPlayer.revertTimer <= 0)
-                    {
-                        Item.type = ModContent.ItemType<KillerQueenFinal>();
-                        Item.SetDefaults(ModContent.ItemType<KillerQueenFinal>());
-                        SoundEngine.PlaySound(SoundID.Grab);
-                        mPlayer.revertTimer += 30;
-                    }
+                    Item.type = ModContent.ItemType<KillerQueenFinal>();
+                    Item.SetDefaults(ModContent.ItemType<KillerQueenFinal>());
+                    SoundEngine.PlaySound(SoundID.Grab);
+                    mPlayer.revertTimer += 30;
                 }
-                else
-                    Main.NewText("Killer Queen: Stray Cat cannot revert back to Killer Queen because Killer Queen: Stray Cat has not been crafted yet!", Color.Red);
             }
         }
 
@@ -63,11 +61,6 @@ namespace JoJoStands.Items
         {
             Projectile.NewProjectile(player.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<KillerQueenBTDStand>(), 0, 0f, Main.myPlayer);
             return true;
-        }
-
-        public override void OnCraft(Recipe recipe)
-        {
-            Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().canRevertFromKQBTD = true;
         }
 
         public override void AddRecipes()

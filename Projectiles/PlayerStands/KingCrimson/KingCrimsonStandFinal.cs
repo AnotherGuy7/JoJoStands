@@ -3,7 +3,6 @@ using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -13,12 +12,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 {
     public class KingCrimsonStandFinal : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 11;
-        }
-
         public override int punchDamage => 186;
         public override float punchKnockback => 5f;
         public override int punchTime => 20;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
@@ -111,9 +104,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         shootCount += newPunchTime / 2;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner, fistWhoAmI);
@@ -157,9 +149,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                                 otherProj.penetrate -= 1;
                                 if (otherProj.penetrate <= 0)
-                                {
-                                    Projectile.Kill();
-                                }
+                                    otherProj.Kill();
+
                                 secondaryAbilityFrames = false;
 
                                 Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);
@@ -226,6 +217,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             {
                 BasicPunchAI();
             }
+            Projectile.shouldFallThrough = true;
         }
 
         public override void SelectAnimation()
