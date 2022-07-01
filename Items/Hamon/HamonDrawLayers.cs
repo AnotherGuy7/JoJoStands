@@ -18,7 +18,7 @@ namespace JoJoStands.Items.Hamon
             Player drawPlayer = drawInfo.drawPlayer;
             HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
             SpriteEffects effects = SpriteEffects.None;
-            if (HamonPlayer.HamonEffects && drawPlayer.active && hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
+            if (HamonPlayer.HamonEffects && drawPlayer.active && !drawPlayer.dead && hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HamonChargeI").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
@@ -61,7 +61,7 @@ namespace JoJoStands.Items.Hamon
         {
             Player drawPlayer = drawInfo.drawPlayer;
             HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
-            if (drawPlayer.active && hamonPlayer.defensiveHamonAuraActive)
+            if (drawPlayer.active && !drawPlayer.dead && hamonPlayer.defensiveHamonAuraActive)
             {
                 Texture2D auraTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/DefensiveHamonAura").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
