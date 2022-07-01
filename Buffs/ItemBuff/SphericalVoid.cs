@@ -23,7 +23,10 @@ namespace JoJoStands.Buffs.ItemBuff
             player.longInvince = true;
             player.controlUseItem = false;
             player.controlUseTile = false;
-            player.buffImmune[BuffID.Poisoned] = true;
+            player.preventAllItemPickups = true;
+            player.lavaImmune = true;
+            player.velocity.X = -1f;
+            player.velocity.Y = -1f;
             player.buffImmune[BuffID.Venom] = true;
             player.buffImmune[BuffID.CursedInferno] = true;
             player.buffImmune[BuffID.Electrified] = true;
@@ -44,6 +47,7 @@ namespace JoJoStands.Buffs.ItemBuff
             player.buffImmune[BuffID.Slow] = true;
             player.buffImmune[BuffID.Confused] = true;
             player.buffImmune[BuffID.Silenced] = true;
+            player.buffImmune[BuffID.OnFire] = true;
             player.AddBuff(BuffID.Obstructed, 2);
 
             if (player.HasBuff(BuffID.Suffocation))
