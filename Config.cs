@@ -29,6 +29,11 @@ namespace JoJoStands
         public bool RespawnWithStandOut;
 
         [DefaultValue(true)]
+        [Label("Ability Wheel Ability Tooltips")]
+        [Tooltip("Whether or not you want ability descriptions to pop up whenever you hover over an ability in the Ability Wheel.")]
+        public bool AbilityWheelDescriptions;
+
+        [DefaultValue(true)]
         [Label("Hamon Effects")]
         [Tooltip("Determines whether or not you want to see Hamon effects.")]
         public bool HamonEffects;
@@ -88,6 +93,10 @@ namespace JoJoStands
         [Label("Hamon Bar Y Position")]
         public int HamonBarPositionY;
 
+        [DefaultValue(50)]
+        [Label("Ability Wheel Y Position")]
+        public int AbilityWheelYPos;
+
         [DefaultValue(40)]
         [Label("Sound Volume")]
         [Tooltip("Volume of barrage sounds")]
@@ -122,6 +131,8 @@ namespace JoJoStands
             MyPlayer.TimeskipEffects = TimeskipEffects;
             MyPlayer.BiteTheDustEffects = BitetheDustEffects;
             MyPlayer.RespawnWithStandOut = RespawnWithStandOut;
+            MyPlayer.AbilityWheelDescriptions = AbilityWheelDescriptions;
+            UI.AbilityWheel.VAlign = AbilityWheelYPos / 100f;
             if (HamonBarSize >= 4)
             {
                 Main.NewText("You can only choose numbers between 0-3!");

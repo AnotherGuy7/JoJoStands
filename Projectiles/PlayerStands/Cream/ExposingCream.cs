@@ -26,8 +26,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.hide = true;
-            DrawOffsetX = -10;
-            DrawOriginOffsetY = -10;
         }
 
         public override void AI()
@@ -91,13 +89,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
-            width = Projectile.width + 14;
-            height = Projectile.height + 14;
+            width = Projectile.width + 4;
+            height = Projectile.height + 4;
             fallThrough = true;
             return true;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            return false;
+        }
+
+        public override bool? CanCutTiles()
         {
             return false;
         }

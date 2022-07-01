@@ -7,12 +7,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 {
     public class SilverChariotStandT1 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 10;
-        }
-
         public override float maxDistance => 98f;
         public override int punchDamage => 12;
         public override int punchTime => 8;

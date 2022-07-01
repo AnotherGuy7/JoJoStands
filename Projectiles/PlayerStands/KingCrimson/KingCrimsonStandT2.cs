@@ -11,12 +11,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 {
     public class KingCrimsonStandT2 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 11;
-        }
-
         public override int punchDamage => 74;
         public override float punchKnockback => 3f;
         public override int punchTime => 24;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
@@ -150,9 +144,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                                 otherProj.penetrate -= 1;
                                 if (otherProj.penetrate <= 0)
-                                {
-                                    Projectile.Kill();
-                                }
+                                    otherProj.Kill();
+
                                 secondaryAbilityFrames = false;
 
                                 Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);

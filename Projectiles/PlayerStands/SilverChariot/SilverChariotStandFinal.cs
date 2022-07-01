@@ -10,11 +10,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 {
     public class SilverChariotStandFinal : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 10;
-        }
         public override float maxDistance => 98f;
         public override int punchDamage => 76;
         public override int punchTime => 5;
@@ -145,6 +140,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
         public override void SelectAnimation()
         {
+            if (parryFrames)
+            {
+                idleFrames = false;
+                attackFrames = false;
+                secondaryAbilityFrames = false;
+                PlayAnimation("Parry");
+            }
             if (attackFrames)
             {
                 idleFrames = false;
@@ -160,13 +162,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Secondary");
-            }
-            if (parryFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                secondaryAbilityFrames = false;
-                PlayAnimation("Parry");
             }
             if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
             {

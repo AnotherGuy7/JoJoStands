@@ -14,6 +14,7 @@ namespace JoJoStands.Buffs.EffectBuff
         public static bool Looping10x = false;
         public static Vector2 deathPosition;
         public static int deathNPCType = 0;
+        public static int targetNPCWhoAmI = -1;
 
         public int deathTimeAdd = 0;
         public int deathLoopTimer = 0;
@@ -79,7 +80,7 @@ namespace JoJoStands.Buffs.EffectBuff
                     }
                 }
             }
-            if ((deathTimes >= (3 + deathTimeAdd) && Looping3x) || (deathTimes >= (10 + deathTimeAdd) && Looping10x))
+            if ((deathTimes >= (3 + deathTimeAdd) && Looping3x) || (deathTimes >= (10 + deathTimeAdd) && Looping10x) || targetNPCWhoAmI == -1 || !mPlayer.standOut)
             {
                 mPlayer.deathLoopActive = false;
                 deathTimes = 0;
@@ -90,6 +91,7 @@ namespace JoJoStands.Buffs.EffectBuff
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(60));
                 deathPosition = Vector2.Zero;
                 deathNPCType = 0;
+                targetNPCWhoAmI = -1;
             }
         }
     }

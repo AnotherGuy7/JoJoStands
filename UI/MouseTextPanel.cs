@@ -2,9 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
@@ -20,9 +17,12 @@ namespace JoJoStands.UI
         public bool wrapText = false;
         public int textCharacterLimit = 0;
 
+        private readonly string[] StringSplitters = new string[1] { " " };
+
         public MouseTextPanel(int width, int height, string defaultText = "", bool wrapAllText = false, int textWrapCharacterLimit = 0)
         {
             Width.Pixels = width;
+            Height.Pixels = height;
             wrapText = wrapAllText;
             textCharacterLimit = textWrapCharacterLimit;
 
@@ -34,13 +34,11 @@ namespace JoJoStands.UI
         {
             visible = true;
             if (wrapText)
-            {
-                string[] stringSplitters = new string[1] { " " };
-                newText = WrapText(newText, textCharacterLimit, stringSplitters);
-            }
+                newText = WrapText(newText, textCharacterLimit, StringSplitters);
 
             uiText.SetText(newText);
-            Height.Pixels = FontAssets.MouseText.Value.MeasureString(uiText.Text).Y + 8f;
+            Width.Pixels = FontAssets.MouseText.Value.MeasureString(newText).X * Main.UIScale + 8f;
+            Height.Pixels = FontAssets.MouseText.Value.MeasureString(newText).Y * Main.UIScale + 8f;
         }
 
         public override void Update(GameTime gameTime)
@@ -50,9 +48,19 @@ namespace JoJoStands.UI
 
             Left.Pixels = Main.MouseScreen.X + 10f - ownerPos.X;
             Top.Pixels = Main.MouseScreen.Y + 10f - ownerPos.Y;
+            if (Left.Pixels < 2)
+                Left.Pixels = 2;
+            if (Left.Pixels + Width.Pixels >= Main.screenWidth)
+                Left.Pixels = Main.screenWidth - Width.Pixels - 2;
+            if (Top.Pixels < 2)
+                Top.Pixels = 2;
+            if (Top.Pixels + Height.Pixels >= Main.screenHeight)
+                Top.Pixels = Main.screenHeight - Height.Pixels - 2;
 
             uiText.Left.Pixels = 4f;
             uiText.Top.Pixels = 2f;
+            Width.Pixels = FontAssets.MouseText.Value.MeasureString(uiText.Text).X * Main.UIScale + 8f;
+            Height.Pixels = FontAssets.MouseText.Value.MeasureString(uiText.Text).Y * Main.UIScale + 8f;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

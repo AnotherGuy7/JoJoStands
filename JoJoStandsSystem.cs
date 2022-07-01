@@ -18,10 +18,13 @@ namespace JoJoStands
         public static BetUI betUI;
         public static SexPistolsUI sexPistolsUI;
         public static VoidBar VoidBarUI;
+        public static HamonSkillTree HamonSkillTreeUI;
         public static BadCompanyUnitsUI UnitsUI;
+        public static ZombieSkillTree ZombieSkillTreeUI;
         public static StoneFreeAbilityWheel StoneFreeAbilityWheelUI;
         public static GoldExperienceAbilityWheel GoldExperienceAbilityWheelUI;
         public static GoldExperienceRequiemAbilityWheel GoldExperienceRequiemAbilityWheelUI;
+        public static GlobalMouseTextPanel GlobalMouseTextPanelUI;
 
         private UserInterface _betUI;
         private UserInterface _hamonbarInterface;
@@ -31,10 +34,13 @@ namespace JoJoStands
         private UserInterface _aerosmithRadar;
         private UserInterface _sexPistolsUI;
         private UserInterface _voidbarUI;
+        private UserInterface _hamonSkillTreeUI;
         private UserInterface _unitsUI;
+        private UserInterface _zombieSkillTreeUI;
         private UserInterface _stoneFreeAbilityWheelUI;
         private UserInterface _goldExperienceAbilityWheelUI;
         private UserInterface _goldExperienceRequiemAbilityWheelUI;
+        private UserInterface _globalMouseTextPanel;
 
         public override void OnModLoad()
         {
@@ -81,10 +87,20 @@ namespace JoJoStands
                 _voidbarUI = new UserInterface();
                 _voidbarUI.SetState(VoidBarUI);
 
+                HamonSkillTreeUI = new HamonSkillTree();
+                HamonSkillTreeUI.Activate();
+                _hamonSkillTreeUI = new UserInterface();
+                _hamonSkillTreeUI.SetState(HamonSkillTreeUI);
+
                 UnitsUI = new BadCompanyUnitsUI();
                 UnitsUI.Activate();
                 _unitsUI = new UserInterface();
                 _unitsUI.SetState(UnitsUI);
+
+                ZombieSkillTreeUI = new ZombieSkillTree();
+                ZombieSkillTreeUI.Activate();
+                _zombieSkillTreeUI = new UserInterface();
+                _zombieSkillTreeUI.SetState(ZombieSkillTreeUI);
 
                 StoneFreeAbilityWheelUI = new StoneFreeAbilityWheel();
                 StoneFreeAbilityWheelUI.Activate();
@@ -100,6 +116,11 @@ namespace JoJoStands
                 GoldExperienceRequiemAbilityWheelUI.Activate();
                 _goldExperienceRequiemAbilityWheelUI = new UserInterface();
                 _goldExperienceRequiemAbilityWheelUI.SetState(GoldExperienceRequiemAbilityWheelUI);
+
+                GlobalMouseTextPanelUI = new GlobalMouseTextPanel(4, 4);
+                GlobalMouseTextPanelUI.Activate();
+                _globalMouseTextPanel = new UserInterface();
+                _globalMouseTextPanel.SetState(GlobalMouseTextPanelUI);
             }
         }
 
@@ -113,23 +134,24 @@ namespace JoJoStands
             betUI = null;
             sexPistolsUI = null;
             VoidBarUI = null;
+            HamonSkillTreeUI = null;
             UnitsUI = null;
+            ZombieSkillTreeUI = null;
             StoneFreeAbilityWheelUI = null;
+            GlobalMouseTextPanelUI = null;
             for (int i = 0; i < StoneFreeAbilityWheel.stoneFreeAbilityWheel.abilityButtons.Length; i++)
                 StoneFreeAbilityWheel.stoneFreeAbilityWheel.abilityButtons[i] = null;
-            StoneFreeAbilityWheel.stoneFreeAbilityWheel.abilityDescriptionsPanel = null;
             StoneFreeAbilityWheel.stoneFreeAbilityWheel = null;
             GoldExperienceAbilityWheelUI = null;
             for (int i = 0; i < GoldExperienceAbilityWheel.goldExperienceAbilityWheel.abilityButtons.Length; i++)
                 GoldExperienceAbilityWheel.goldExperienceAbilityWheel.abilityButtons[i] = null;
-            GoldExperienceAbilityWheel.goldExperienceAbilityWheel.abilityDescriptionsPanel = null;
             GoldExperienceAbilityWheel.goldExperienceAbilityWheel = null;
             GoldExperienceRequiemAbilityWheelUI = null;
             for (int i = 0; i < GoldExperienceRequiemAbilityWheel.goldExperienceRequiemAbilityWheel.abilityButtons.Length; i++)
                 GoldExperienceRequiemAbilityWheel.goldExperienceRequiemAbilityWheel.abilityButtons[i] = null;
-            GoldExperienceRequiemAbilityWheel.goldExperienceRequiemAbilityWheel.abilityDescriptionsPanel = null;
             GoldExperienceRequiemAbilityWheel.goldExperienceRequiemAbilityWheel = null;
             AbilityWheel.mPlayer = null;
+            GlobalMouseTextPanel.globalMouseTextPanel = null;
 
             _betUI = null;
             _hamonbarInterface = null;
@@ -139,10 +161,13 @@ namespace JoJoStands
             _aerosmithRadar = null;
             _sexPistolsUI = null;
             _voidbarUI = null;
+            _hamonSkillTreeUI = null;
             _unitsUI = null;
+            _zombieSkillTreeUI = null;
             _stoneFreeAbilityWheelUI = null;
             _goldExperienceAbilityWheelUI = null;
             _goldExperienceRequiemAbilityWheelUI = null;
+            _globalMouseTextPanel = null;
         }
 
         public override void PostDrawInterface(SpriteBatch spriteBatch)
@@ -177,17 +202,26 @@ namespace JoJoStands
             if (VoidBar.Visible)
                 _voidbarUI.Update(gameTime);
 
+            if (HamonSkillTree.Visible)
+                _hamonSkillTreeUI.Update(gameTime);
+
             if (BadCompanyUnitsUI.Visible)
                 _unitsUI.Update(gameTime);
 
-            if (StoneFreeAbilityWheel.visible)
+            if (ZombieSkillTree.Visible)
+                _zombieSkillTreeUI.Update(gameTime);
+
+            if (StoneFreeAbilityWheel.Visible)
                 _stoneFreeAbilityWheelUI.Update(gameTime);
 
-            if (GoldExperienceAbilityWheel.visible)
+            if (GoldExperienceAbilityWheel.Visible)
                 _goldExperienceAbilityWheelUI.Update(gameTime);
 
-            if (GoldExperienceRequiemAbilityWheel.visible)
+            if (GoldExperienceRequiemAbilityWheel.Visible)
                 _goldExperienceRequiemAbilityWheelUI.Update(gameTime);
+
+            if (GlobalMouseTextPanelUI.visible)
+                _globalMouseTextPanel.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)     //from ExampleMod's ExampleUI
@@ -221,17 +255,26 @@ namespace JoJoStands
             if (VoidBar.Visible)
                 _voidbarUI.Draw(Main.spriteBatch, new GameTime());
 
+            if (HamonSkillTree.Visible)
+                _hamonSkillTreeUI.Draw(Main.spriteBatch, new GameTime());
+
             if (BadCompanyUnitsUI.Visible)
                 _unitsUI.Draw(Main.spriteBatch, new GameTime());
 
-            if (StoneFreeAbilityWheel.visible)
+            if (ZombieSkillTree.Visible)
+                _zombieSkillTreeUI.Draw(Main.spriteBatch, new GameTime());
+
+            if (StoneFreeAbilityWheel.Visible)
                 _stoneFreeAbilityWheelUI.Draw(Main.spriteBatch, new GameTime());
 
-            if (GoldExperienceAbilityWheel.visible)
+            if (GoldExperienceAbilityWheel.Visible)
                 _goldExperienceAbilityWheelUI.Draw(Main.spriteBatch, new GameTime());
 
-            if (GoldExperienceRequiemAbilityWheel.visible)
+            if (GoldExperienceRequiemAbilityWheel.Visible)
                 _goldExperienceRequiemAbilityWheelUI.Draw(Main.spriteBatch, new GameTime());
+
+            if (GlobalMouseTextPanelUI.visible)
+                _globalMouseTextPanel.Draw(Main.spriteBatch, new GameTime());
 
             return true;
         }

@@ -154,6 +154,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     Projectile.netUpdate = true;
                     if (player.HasBuff<ZipperDodge>())
                         player.ClearBuff(ModContent.BuffType<ZipperDodge>());
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(3));
                 }
                 if (SecondSpecialKeyPressed() && !player.HasBuff<ZipperDodge>())
                 {

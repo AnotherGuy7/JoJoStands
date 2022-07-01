@@ -114,7 +114,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     secondaryAbilityFrames = true;
                     if (shootCount <= 0 && Projectile.frame == 1)
                     {
-                        shootCount += 13;       // has to be half if the framecounter + 1 (2 if shootCount goes to -1)
+                        shootCount += 16;       // has to be half if the framecounter + 1 (2 if shootCount goes to -1)
                         float numberOfKnives = 4;
                         float knivesAngleSpread = MathHelper.ToRadians(15f);
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
@@ -273,7 +273,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             }
             if (animationName == "Secondary")
             {
-                AnimateStand(animationName, 2, 24, true);
+                AnimateStand(animationName, 2, 14, true);
             }
             if (animationName == "AbilityPose")
             {

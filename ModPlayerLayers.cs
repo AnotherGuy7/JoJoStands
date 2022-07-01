@@ -436,4 +436,32 @@ namespace JoJoStands
             }
         }
     }
+
+    public class StoneFreeWeaveLayer : PlayerDrawLayer
+    {
+        public override Position GetDefaultPosition()
+        {
+            return new AfterParent(PlayerDrawLayers.FrontAccFront);
+        }
+
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.stoneFreeWeaveAbilityActive)
+            {
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/StoneFreeWeaveLayer").Value;
+                float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
+
+                Vector2 drawOffset = new Vector2(0f, drawInfo.drawPlayer.Size.Y / 4f);
+                drawOffset.Y += 1f;
+                Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - new Vector2(drawInfo.torsoOffset) - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
+                Color drawColor = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
+                drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
+                DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, drawColor * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
+                //data.shader = drawInfo.bodyArmorShader;
+                drawInfo.DrawDataCache.Add(drawData);
+            }
+        }
+    }
 }

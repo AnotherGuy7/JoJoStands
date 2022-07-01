@@ -4,15 +4,18 @@ using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
 using System;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
+using static JoJoStands.UI.GlobalMouseTextPanel;
 
 namespace JoJoStands.UI
 {
     public class AbilityWheel : UIState
     {
         public static MyPlayer mPlayer;
+        public static float VAlign = 0.5f;
 
         public virtual string centerTexturePath { get; }
         public virtual string[] abilityNames { get; }
@@ -29,9 +32,8 @@ namespace JoJoStands.UI
         public UIPanel abilityWheel;
         public AdjustableButton wheelCenter;
         public AdjustableButton[] abilityButtons;
-        public MouseTextPanel abilityDescriptionsPanel;
         public UIText abilityNameText;
-        public Vector2 wheelAlignPosition;
+        public Vector2 wheelCenterPosition;
         public float wheelRotation = 0f;
         public int abilitiesShown = 0;
 
@@ -55,7 +57,7 @@ namespace JoJoStands.UI
         {
             abilityWheel = new UIPanel();
             abilityWheel.HAlign = 0.98f;
-            abilityWheel.VAlign = 0.5f;
+            abilityWheel.VAlign = VAlign;
             abilityWheel.Width.Set(120f, 0f);
             abilityWheel.Height.Set(120f, 0f);
             abilityWheel.BackgroundColor = Color.Transparent;
@@ -81,10 +83,6 @@ namespace JoJoStands.UI
                 abilityWheel.Append(abilityButtons[i]);
             }
 
-            abilityDescriptionsPanel = new MouseTextPanel(480, 1, "None", true, 24);
-            abilityDescriptionsPanel.ownerPos = new Vector2(Main.screenWidth * abilityWheel.HAlign, Main.screenHeight * abilityWheel.VAlign);
-            abilityWheel.Append(abilityDescriptionsPanel);
-
             abilityNameText = new UIText("A", textScale);
             abilityNameText.Left.Pixels = 0f;
             abilityNameText.Top.Pixels = 100f;
@@ -104,7 +102,7 @@ namespace JoJoStands.UI
         {
             if (IsMouseHovering && inputTimer <= 0)
             {
-                inputTimer += 3;
+                //inputTimer += 3;
                 int newScrollValue = Mouse.GetState().ScrollWheelValue;
                 int wheelDifference = previousScrollValue - newScrollValue;
                 previousScrollValue = newScrollValue;
@@ -162,14 +160,15 @@ namespace JoJoStands.UI
                 inputTimer--;
             if (alphaTimer > 0)
                 alphaTimer--;
+            wheelCenterPosition = new Vector2(Main.screenWidth * abilityWheel.HAlign, Main.screenHeight * abilityWheel.VAlign);
 
             if (abilityChanged)
             {
                 float currentAngle = (wheelCenter.screenPosition - abilityButtons[mPlayer.chosenAbility].screenPosition).ToRotation();
                 if (currentAngle > 0.05f)
-                    wheelRotation -= MathHelper.ToRadians(190f);
+                    wheelRotation -= MathHelper.ToRadians(290f);
                 else if (currentAngle < -0.05f)
-                    wheelRotation += MathHelper.ToRadians(190f);
+                    wheelRotation += MathHelper.ToRadians(290f);
 
                 if (Math.Abs(currentAngle) <= 0.05f)
                 {
@@ -178,17 +177,21 @@ namespace JoJoStands.UI
                 }
             }
 
-            abilityDescriptionsPanel.visible = false;
-            for (int i = 0; i < abilitiesShown; i++)
+            if (MyPlayer.AbilityWheelDescriptions)
             {
-                abilityButtons[i].SetButtonPosiiton(wheelCenter.screenPosition + (IndexToRadianPosition(i, abilitiesShown, wheelRotation) * wheelSpace));
-
-                AdjustableButton button = abilityButtons[i];
-                if (button.IsMouseHovering)
+                bool mouseHoveringOverButton = false;
+                for (int i = 0; i < abilitiesShown; i++)
                 {
-                    abilityDescriptionsPanel.ShowText(abilityDescriptions[i]);
-                    abilityDescriptionsPanel.ownerPos = wheelAlignPosition - new Vector2(abilityWheel.Width.Pixels / 2f, abilityWheel.Height.Pixels / 2f);      //On screen changes, it had to update
+                    abilityButtons[i].SetButtonPosiiton(wheelCenter.screenPosition + (IndexToRadianPosition(i, abilitiesShown, wheelRotation) * wheelSpace));
+
+                    AdjustableButton button = abilityButtons[i];
+                    if (button.IsButtonHoveredOver())
+                    {
+                        globalMouseTextPanel.ShowText(abilityDescriptions[i], 32);
+                        mouseHoveringOverButton = true;
+                    }
                 }
+                globalMouseTextPanel.visible = mouseHoveringOverButton;
             }
 
             if (inputTimer <= 0)
@@ -251,7 +254,7 @@ namespace JoJoStands.UI
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             float alpha = 0.4f;
-            if (Vector2.Distance(wheelAlignPosition + wheelCenter.buttonPosition, Main.MouseScreen) <= 60)
+            if (Vector2.Distance(wheelCenterPosition + wheelCenter.buttonPosition, Main.MouseScreen) <= 60)
                 alpha = 1f;
 
             if (alphaTimer > 0)

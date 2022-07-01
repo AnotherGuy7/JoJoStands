@@ -1,5 +1,4 @@
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -11,12 +10,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 {
     public class StarOnTheTreeStand : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 10;
-        }
-
         public override int punchDamage => 106;
         public override int punchTime => 6;
         public override int altDamage => 84;

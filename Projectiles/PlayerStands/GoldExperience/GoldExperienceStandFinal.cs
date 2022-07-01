@@ -68,7 +68,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 
                     if (SpecialKeyPressedNoCooldown())
                     {
-                        if (!GoldExperienceAbilityWheel.visible)
+                        if (!GoldExperienceAbilityWheel.Visible)
                             GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 4);
                         else
                             GoldExperienceAbilityWheel.CloseAbilityWheel();

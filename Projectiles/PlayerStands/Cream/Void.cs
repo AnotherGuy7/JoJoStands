@@ -120,10 +120,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             Projectile.spriteDirection = player.direction;
 
-            int creamLeftX = (int)(Projectile.position.X / 16f) - 1;
-            int creamRightX = (int)((Projectile.position.X + (float)Projectile.width) / 16f) + 2;
+            int creamLeftX = (int)(Projectile.position.X / 16f);
+            int creamRightX = (int)((Projectile.position.X + (float)Projectile.width) / 16f) + 1;
             int creamUpY = (int)(Projectile.position.Y / 16f) - 1;
-            int creamDownY = (int)((Projectile.position.Y + (float)Projectile.height) / 16f) + 2;
+            int creamDownY = (int)((Projectile.position.Y + (float)Projectile.height) / 16f) + 1;
 
             if (creamLeftX < 0)
                 creamLeftX = 0;

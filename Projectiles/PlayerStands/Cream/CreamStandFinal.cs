@@ -10,12 +10,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 {
     public class CreamStandFinal : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 11;
-        }
-
         public override int punchDamage => 176;
         public override float punchKnockback => 2f;
         public override int punchTime => 22;

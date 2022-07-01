@@ -30,6 +30,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             Projectile.penetrate = 1;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
+            Projectile.shouldFallThrough = true;
         }
 
         public override string Texture => Mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
