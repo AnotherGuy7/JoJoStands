@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.UI;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
@@ -102,7 +103,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         PlayAnimation("AimUp");
                     }
                 }
-                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer)
+                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer && !BadCompanyUnitsUI.Visible)
                 {
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X <= Projectile.position.X)

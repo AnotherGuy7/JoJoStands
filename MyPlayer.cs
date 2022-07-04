@@ -1062,7 +1062,7 @@ namespace JoJoStands
                 if (!Main.dedServ)
                     specialPressed = JoJoStands.SpecialHotKey.JustPressed;
 
-                if (specialPressed)
+                if (specialPressed && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
                     if (badCompanyTier == 3)
                     {

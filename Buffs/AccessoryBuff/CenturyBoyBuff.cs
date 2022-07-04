@@ -36,6 +36,10 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.controlUseTile = false;
             player.maxRunSpeed = 0f;
             player.noFallDmg = true;
+            player.lavaImmune = true;
+            player.longInvince = true;
+            player.noKnockback = true;
+            player.endurance = 1f;
 
             if (MyPlayer.SecretReferences)
             {

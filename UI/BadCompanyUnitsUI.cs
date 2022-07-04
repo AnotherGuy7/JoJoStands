@@ -26,6 +26,9 @@ namespace JoJoStands.UI
         private UIImage chopperTexture;
         private UIImageButton addChopperButton;
         private UIImageButton subtractChopperButton;
+        private UIImageButton subtractAllSoldiersButton;
+        private UIImageButton subtractAllTanksButton;
+        private UIImageButton subtractAllChoppersButton;
 
         private float buttonPadding = 0.14f;
         private float textDistanceFromTexture = 0.3f;
@@ -155,7 +158,62 @@ namespace JoJoStands.UI
             addChopperButton.OnClick += OnClickAddChopperButton;
             UnitsUIPanel.Append(addChopperButton);
 
+            Asset<Texture2D> XButtonTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/XButton", AssetRequestMode.ImmediateLoad);
+            subtractAllSoldiersButton = new UIImageButton(XButtonTexture);
+            subtractAllSoldiersButton.HAlign = soldiersActiveText.HAlign - 0.03f;
+            subtractAllSoldiersButton.VAlign = soldiersActiveText.VAlign + 0.2f;
+            subtractAllSoldiersButton.Width.Set(XButtonTexture.Value.Width, 0f);
+            subtractAllSoldiersButton.Height.Set(XButtonTexture.Value.Height, 0f);
+            subtractAllSoldiersButton.OnClick += OnClickSubtractAllSoldiers;
+            UnitsUIPanel.Append(subtractAllSoldiersButton);
+
+            subtractAllTanksButton = new UIImageButton(XButtonTexture);
+            subtractAllTanksButton.HAlign = tanksActiveText.HAlign;
+            subtractAllTanksButton.VAlign = tanksActiveText.VAlign + 0.2f;
+            subtractAllTanksButton.Width.Set(XButtonTexture.Value.Width, 0f);
+            subtractAllTanksButton.Height.Set(XButtonTexture.Value.Height, 0f);
+            subtractAllTanksButton.OnClick += OnClickSubtractAllTanks;
+            UnitsUIPanel.Append(subtractAllTanksButton);
+
+            subtractAllChoppersButton = new UIImageButton(XButtonTexture);
+            subtractAllChoppersButton.HAlign = choppersActiveText.HAlign + 0.03f;
+            subtractAllChoppersButton.VAlign = choppersActiveText.VAlign + 0.2f;
+            subtractAllChoppersButton.Width.Set(XButtonTexture.Value.Width, 0f);
+            subtractAllChoppersButton.Height.Set(XButtonTexture.Value.Height, 0f);
+            subtractAllChoppersButton.OnClick += OnClickSubtractAllChoppers;
+            UnitsUIPanel.Append(subtractAllChoppersButton);
+
             Append(UnitsUIPanel);
+        }
+
+        private void OnClickSubtractAllSoldiers(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Player player = Main.player[Main.myPlayer];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (!Main.gamePaused)
+            {
+                mPlayer.badCompanySoldiers = 0;
+            }
+        }
+
+        private void OnClickSubtractAllTanks(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Player player = Main.player[Main.myPlayer];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (!Main.gamePaused)
+            {
+                mPlayer.badCompanyTanks = 0;
+            }
+        }
+
+        private void OnClickSubtractAllChoppers(UIMouseEvent evt, UIElement listeningElement)
+        {
+            Player player = Main.player[Main.myPlayer];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (!Main.gamePaused)
+            {
+                mPlayer.badCompanyChoppers = 0;
+            }
         }
 
         private void OnClickSubtractSoldierButton(UIMouseEvent evt, UIElement listeningElement)
@@ -166,7 +224,7 @@ namespace JoJoStands.UI
             if (mPlayer.badCompanyTier == 0)
                 return;
 
-            if (mPlayer.badCompanySoldiers > 0)
+            if (mPlayer.badCompanySoldiers > 0 && !Main.gamePaused)
                 mPlayer.badCompanySoldiers--;
         }
 
@@ -178,7 +236,7 @@ namespace JoJoStands.UI
             if (mPlayer.badCompanyTier == 0)
                 return;
 
-            if (mPlayer.badCompanyUnitsLeft >= 1)
+            if (mPlayer.badCompanyUnitsLeft >= 1 && !Main.gamePaused)
                 mPlayer.badCompanySoldiers++;
         }
 
@@ -192,7 +250,7 @@ namespace JoJoStands.UI
 
             if (mPlayer.badCompanyTier >= 2)
             {
-                if (mPlayer.badCompanyTanks > 0)
+                if (mPlayer.badCompanyTanks > 0 && !Main.gamePaused) 
                     mPlayer.badCompanyTanks--;
             }
         }
@@ -205,7 +263,7 @@ namespace JoJoStands.UI
             if (mPlayer.badCompanyTier == 0)
                 return;
 
-            if (mPlayer.badCompanyTier >= 2)
+            if (mPlayer.badCompanyTier >= 2 && !Main.gamePaused)
             {
                 if (mPlayer.badCompanyUnitsLeft >= 4)
                     mPlayer.badCompanyTanks++;
@@ -222,7 +280,7 @@ namespace JoJoStands.UI
 
             if (mPlayer.badCompanyTier >= 3)
             {
-                if (mPlayer.badCompanyChoppers > 0)
+                if (mPlayer.badCompanyChoppers > 0 && !Main.gamePaused)
                     mPlayer.badCompanyChoppers--;
             }
         }
@@ -237,7 +295,7 @@ namespace JoJoStands.UI
 
             if (mPlayer.badCompanyTier >= 3)
             {
-                if (mPlayer.badCompanyUnitsLeft >= 6)
+                if (mPlayer.badCompanyUnitsLeft >= 6 && !Main.gamePaused)
                     mPlayer.badCompanyChoppers++;
             }
         }
