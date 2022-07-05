@@ -292,7 +292,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     Vector2 shootVel = Main.MouseWorld - armPosition;
                     shootVel.Normalize();
                     shootVel *= 12f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ProjectileID.Bullet, (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
                     Main.projectile[proj].netUpdate = true;
                     Projectile.netUpdate = true;
                     Projectile.velocity -= shootVel * 0.02f;

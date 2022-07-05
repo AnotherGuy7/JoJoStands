@@ -23,6 +23,7 @@ namespace JoJoStands.Projectiles
 
         private const float ExplosionRadius = 6f * 16f;
         private bool manuallyTriggered = false;
+        private bool crit = false;
 
         public override void AI()
         {
@@ -64,6 +65,9 @@ namespace JoJoStands.Projectiles
 
         public override void Kill(int timeLeft)
         {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+                crit = true;
             for (int i = 0; i < 30; i++)
             {
                 int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, Alpha: 100, Scale: 1.5f);
@@ -100,7 +104,7 @@ namespace JoJoStands.Projectiles
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
 
-                        npc.StrikeNPC(Projectile.damage, 7f, hitDirection);
+                        npc.StrikeNPC(Projectile.damage, 7f, hitDirection, crit);
                     }
                 }
             }

@@ -36,6 +36,7 @@ namespace JoJoStands.Projectiles.Minions
             Projectile.ignoreWater = true;
         }
 
+        private bool crit = false;
 
         public override void AI()
         {
@@ -114,6 +115,8 @@ namespace JoJoStands.Projectiles.Minions
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+                crit = true;
             int bombDamage = (int)(350 * mPlayer.standDamageBoosts);
             if (Projectile.ai[0] == 1f)
                 bombDamage = (int)(724 * mPlayer.standDamageBoosts);
@@ -155,7 +158,7 @@ namespace JoJoStands.Projectiles.Minions
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
 
-                        npc.StrikeNPC(bombDamage, 7f, hitDirection);
+                        npc.StrikeNPC(bombDamage, 7f, hitDirection, crit);
                     }
                 }
             }

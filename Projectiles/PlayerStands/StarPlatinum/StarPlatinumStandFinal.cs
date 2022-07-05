@@ -98,13 +98,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                 shootVel.Normalize();
                                 shootVel *= 12f;
                                 int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
+                                Main.projectile[proj].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
                                 Main.projectile[proj].netUpdate = true;
                                 Projectile.netUpdate = true;
                                 SoundStyle item41 = SoundID.Item41;
                                 item41.Pitch = 2.8f;
                                 SoundEngine.PlaySound(item41, player.Center);
-                                if (bulletItem.Name.Contains("Bullet"))
-                                    player.ConsumeItem(bulletItem.type);
+                                player.ConsumeItem(bulletItem.type);
                             }
                         }
                     }
