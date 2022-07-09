@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     }
                     Projectile.netUpdate = true;
                 }
-                else if (specialPressed && Main.mouseLeft && savedDashVelocity == Vector2.Zero && voidDashTimer <= 0)       //Dash option
+                else if (specialPressed && Main.mouseLeft && savedDashVelocity == Vector2.Zero && voidDashTimer <= 0 && mPlayer.creamTier >= 2)       //Dash option
                 {
                     mPlayer.voidCounter -= 1;
                     savedDashVelocity = Main.MouseWorld - Projectile.position;
