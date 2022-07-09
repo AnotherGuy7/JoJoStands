@@ -31,8 +31,22 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
+            bool specialPressed = false;
+            if (!Main.dedServ)
+                specialPressed = JoJoStands.SpecialHotKey.JustPressed;
             Player player = Main.player[Projectile.owner];
-
+            if (player.position.X >= Projectile.position.X)
+                player.ChangeDir(-1);
+            else
+                player.ChangeDir(1);
+            if (specialPressed && stopped) 
+            {
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), (int)recoveredTime);
+                Projectile.Kill();
+            }
+            player.noFallDmg = true;
+            if (player.HasBuff(BuffID.Suffocation))
+                player.ClearBuff(BuffID.Suffocation);
             Vector2 velocity;
             velocity = Projectile.Center - player.Center;
             velocity.Normalize();
@@ -111,6 +125,11 @@ namespace JoJoStands.Projectiles
                 Main.EntitySpriteDraw(stickyFingersZipperPart, pos, stickyFingersPartSourceRect, drawColor, stringRotation, stickyFingersPartOrigin, Projectile.scale * stringScale, SpriteEffects.None, 0);
             }
             return true;
+        }
+        public override void Kill(int timeLeft)
+        {
+            Player player = Main.player[Projectile.owner];
+            player.fallStart = (int)player.position.Y;
         }
     }
 }

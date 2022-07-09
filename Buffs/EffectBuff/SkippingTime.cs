@@ -24,12 +24,12 @@ namespace JoJoStands.Buffs.EffectBuff
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-
             if (player.HasBuff(ModContent.BuffType<SkippingTime>()) && !mPlayer.forceShutDownEffect)
             {
-                player.immune = true;
+                player.shadowDodge = true;
+                player.shadowDodgeCount = -1;
                 player.controlUseItem = false;
-                player.AddBuff(BuffID.NightOwl, 2);
+                player.nightVision = true;
                 mPlayer.timeskipActive = true;
                 for (int i = 0; i < Main.maxPlayers; i++)
                 {

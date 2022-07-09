@@ -140,7 +140,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
                     shootVelocity.Normalize();
                     shootVelocity *= 5f;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<Void>(), (int)((50 * mPlayer.creamTier) * mPlayer.standDamageBoosts), 6f, player.whoAmI);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<Void>(), (int)((punchDamage / 2) * mPlayer.standDamageBoosts), 6f, player.whoAmI);
                 }
                 if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse && mPlayer.creamNormalToExposed)
                 {

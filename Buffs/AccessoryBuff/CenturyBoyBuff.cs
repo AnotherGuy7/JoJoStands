@@ -24,23 +24,24 @@ namespace JoJoStands.Buffs.AccessoryBuff
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            player.controlUseItem = false;
+            player.shadowDodge = true;
+            player.shadowDodgeCount = -1;
             player.moveSpeed = 0f;
             player.lifeRegen = 0;
-            player.immune = true;
             player.manaRegen = 0;
-            player.dashType = 0;
+            player.lavaImmune = true;
+            player.noFallDmg = true;
+            player.controlUseItem = false;
             player.controlQuickHeal = false;
             player.controlQuickMana = false;
             player.controlRight = false;
             player.controlUseTile = false;
             player.maxRunSpeed = 0f;
-            player.noFallDmg = true;
-            player.lavaImmune = true;
-            player.longInvince = true;
-            player.noKnockback = true;
-            player.endurance = 1f;
-
+            if (!Main.gamePaused)
+            {
+                player.shadowDodge = true;
+                player.shadowDodgeCount = -1;
+            }
             if (MyPlayer.SecretReferences)
             {
                 limitTimer--;

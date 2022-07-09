@@ -1011,7 +1011,14 @@ namespace JoJoStands
             if (creamTier != 0)        //Cream stuff
             {
                 VoidBar.Visible = true;
-                voidCounterMax = (creamTier - 1) * 4;
+                if (creamTier == 1)
+                {
+                    voidCounterMax = 4;
+                }
+                if (creamTier > 1)
+                {
+                    voidCounterMax = (creamTier - 1) * 4;
+                }
                 if (voidCounter < voidCounterMax)
                 {
                     if (!creamVoidMode && !creamExposedMode)
@@ -1407,7 +1414,7 @@ namespace JoJoStands
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
         {
-            if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0)
+            if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
                 damage *= 2;
 
             if (stoneFreeWeaveAbilityActive)
@@ -1464,6 +1471,24 @@ namespace JoJoStands
                 }
                 hermitPurpleHamonBurstLeft -= 1;
             }
+            if (Player.HasBuff<ZipperDodge>())
+            {
+                if (JoJoStands.SoundsLoaded)
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
+                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
+            }
+        }
+
+        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
+        {
+            if (Player.HasBuff<ZipperDodge>())
+            {
+                if (JoJoStands.SoundsLoaded)
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
+                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
+            }
         }
 
         public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
@@ -1501,19 +1526,6 @@ namespace JoJoStands
         {
             if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0)
                 return false;
-
-            if (Player.HasBuff<ZipperDodge>())
-            {
-                if (JoJoStands.SoundsLoaded)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
-
-                Player.immune = true;
-                Player.immuneTime = 30;
-                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
-                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
-                return false;
-            }
-
             return true;
         }
 

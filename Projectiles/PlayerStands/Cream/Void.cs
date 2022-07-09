@@ -62,7 +62,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
                 if (mPlayer.voidCounter <= 0 || Main.mouseRight && mPlayer.creamTier > 2 || specialPressed && !Main.mouseLeft)
                 {
-                    if (specialPressed && !Main.mouseLeft || mPlayer.creamTier == 2 && mPlayer.voidCounter <= 0)
+                    if (specialPressed && !Main.mouseLeft || mPlayer.creamTier <= 2 && mPlayer.voidCounter <= 0)
                         mPlayer.creamNormalToVoid = true;
 
                     Projectile.Kill();
@@ -93,7 +93,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     mPlayer.voidCounter -= 1;
                     savedDashVelocity = Main.MouseWorld - Projectile.position;
                     savedDashVelocity.Normalize();
-                    savedDashVelocity *= 12f;
+                    savedDashVelocity *= 16f;
 
                     if (Main.MouseWorld.X > Projectile.position.X)
                         player.ChangeDir(1);
@@ -104,9 +104,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     Projectile.velocity = Main.MouseWorld - Projectile.position;
                     Projectile.velocity.Normalize();
-                    Projectile.velocity *= 5f + mPlayer.creamTier;      // 7f, 8f, 9f
+                    if (mPlayer.creamTier >= 2)
+                        Projectile.velocity *= 8f + mPlayer.creamTier;      // 10f, 11f, 12f
+                    else
+                        Projectile.velocity *= 0f;
 
-                    if (Main.MouseWorld.X > Projectile.position.X)
+                    if (mPlayer.creamTier >= 2 && Main.MouseWorld.X > Projectile.position.X)
                         player.ChangeDir(1);
                     else
                         player.ChangeDir(-1);

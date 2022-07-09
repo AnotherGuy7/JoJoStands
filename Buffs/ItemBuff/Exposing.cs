@@ -19,6 +19,16 @@ namespace JoJoStands.Buffs.ItemBuff
             player.noFallDmg = true;
             player.controlUseItem = false;
             player.controlUseTile = false;
+            player.controlLeft = false;
+            player.controlJump = false;
+            player.controlRight = false;
+            player.controlDown = false;
+            player.controlRight = false;
+            player.controlUp = false;
+            player.controlMount = false;
+            player.gravControl = false;
+            player.gravControl2 = false;
+            player.controlTorch = false;
             player.statDefense -= 12;
             player.velocity.X = -1f;
             player.velocity.Y = -1f;

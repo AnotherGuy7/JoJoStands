@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,28 +19,32 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override StandType standType => StandType.Melee;
 
         private Vector2 velocityAddition;
+        private float mouseDistance;
+        private int framechangecounter = 0;
 
         public override void AI()
         {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             SelectAnimation();
             UpdateStandInfo();
             UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            Projectile.hide = mPlayer.creamVoidMode;
+            if (mPlayer.creamExposedMode)
+                Projectile.hide = false;
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
                     idleFrames = false;
                     Projectile.netUpdate = true;
-
                     float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
                     Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
 
@@ -51,8 +57,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     velocityAddition = Main.MouseWorld - Projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f + mPlayer.standTier;
-
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+                    mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
                     {
                         Projectile.velocity = player.velocity + velocityAddition;
@@ -85,31 +90,150 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     StayBehind();
                 }
+                if (SpecialKeyPressed() && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamVoidMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid)
+                {
+                    mPlayer.creamFrame = 0;
+                    if (mPlayer.creamExposedMode)
+                        mPlayer.creamExposedToVoid = true;
+
+                    if (!mPlayer.creamExposedMode)
+                    {
+                        mPlayer.creamNormalToExposed = true;
+                        mPlayer.creamNormalToVoid = true;
+                    }
+                }
             }
-            if (mPlayer.standAutoMode)
+            if (mPlayer.creamNormalToExposed)
+            {
+                PlayAnimation("Transform");
+                if (mPlayer.creamFrame >= 5 && !mPlayer.creamAnimationReverse)
+                {
+                    if (mPlayer.creamNormalToVoid)
+                    {
+                        mPlayer.creamExposedToVoid = true;
+                        mPlayer.creamNormalToVoid = false;
+                    }
+                    mPlayer.creamNormalToExposed = false;
+                    mPlayer.creamFrame = 0;
+                    SoundEngine.PlaySound(SoundID.Item78);
+                    Vector2 shootVelocity = Main.MouseWorld - player.position;
+                    shootVelocity.Normalize();
+                    shootVelocity *= 5f;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<ExposingCream>(), 0, 6f, player.whoAmI);
+                }
+            }
+            if (mPlayer.creamExposedToVoid)
+            {
+                PlayAnimation("Transform2");
+                if (mPlayer.creamFrame >= 7 && !mPlayer.creamAnimationReverse)
+                {
+                    mPlayer.creamExposedToVoid = false;
+                    SoundEngine.PlaySound(SoundID.Item78);
+                    Vector2 shootVelocity = Main.MouseWorld - player.position;
+                    shootVelocity.Normalize();
+                    shootVelocity *= 5f;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<Void>(), (int)((punchDamage / 2) * mPlayer.standDamageBoosts), 6f, player.whoAmI);
+                }
+                if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse && mPlayer.creamNormalToExposed)
+                {
+                    mPlayer.creamNormalToExposed = false;
+                    mPlayer.creamAnimationReverse = false;
+                }
+                if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse && mPlayer.creamExposedToVoid)
+                {
+                    mPlayer.creamExposedToVoid = false;
+                    if (!mPlayer.creamNormalToVoid)
+                        mPlayer.creamAnimationReverse = false;
+
+                    if (mPlayer.creamNormalToVoid)
+                    {
+                        mPlayer.creamFrame = 5;
+                        mPlayer.creamNormalToExposed = true;
+                        mPlayer.creamNormalToVoid = false;
+                    }
+                }
+            }
+            if (mPlayer.creamExposedToVoid || mPlayer.creamVoidMode || mPlayer.creamExposedMode)
+            {
+                HandleDrawOffsets();
+                Vector2 vector131 = player.Center;
+                vector131.X += (float)((player.width / 2) * player.direction);
+                vector131.Y -= -35 + halfStandHeight;
+                Projectile.Center = Vector2.Lerp(Projectile.Center, vector131, 1f);
+                Projectile.velocity *= 0.5f;
+                Projectile.direction = (Projectile.spriteDirection = player.direction);
+                Projectile.rotation = 0;
+                LimitDistance();
+            }
+            if (mPlayer.creamExposedToVoid || mPlayer.creamNormalToExposed)
+            {
+                Projectile.frame = mPlayer.creamFrame;
+                if (mPlayer.creamAnimationReverse)
+                {
+                    framechangecounter += 1;
+                    if (framechangecounter == 15)
+                    {
+                        mPlayer.creamFrame -= 1;
+                        framechangecounter = 0;
+                    }
+                }
+                if (!mPlayer.creamAnimationReverse)
+                {
+                    framechangecounter += 1;
+                    if (framechangecounter == 15)
+                    {
+                        mPlayer.creamFrame += 1;
+                        framechangecounter = 0;
+                    }
+                }
+            }
+            if (mPlayer.standAutoMode && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed)
             {
                 BasicPunchAI();
             }
         }
 
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            writer.Write(mPlayer.creamExposedMode);
+            writer.Write(mPlayer.creamVoidMode);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            mPlayer.creamExposedMode = reader.ReadBoolean();
+            mPlayer.creamVoidMode = reader.ReadBoolean();
+        }
+
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (attackFrames && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 idleFrames = false;
                 PlayAnimation("Attack");
             }
-            if (idleFrames)
+            if (idleFrames && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 idleFrames = false;
                 attackFrames = false;
                 PlayAnimation("Pose");
-
+            }
+            if (mPlayer.creamExposedMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid)
+            {
+                PlayAnimation("Idle2");
             }
         }
 
@@ -129,6 +253,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             if (animationName == "Pose")
             {
                 AnimateStand(animationName, 1, 2, true);
+            }
+            if (animationName == "Transform2")
+            {
+                AnimateStand(animationName, 8, 99999, true);
+            }
+            if (animationName == "Transform")
+            {
+                AnimateStand(animationName, 6, 99999, true);
+            }
+            if (animationName == "Idle2")
+            {
+                AnimateStand(animationName, 4, 30, true);
             }
         }
     }

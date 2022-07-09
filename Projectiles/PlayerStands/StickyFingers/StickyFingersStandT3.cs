@@ -108,6 +108,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 {
                     player.immune = true;
                     player.immuneTime = 2;
+                    player.shadowDodge = true;
+                    player.shadowDodgeCount = -1;
                     for (int i = 0; i < Main.maxNPCTypes; i++)
                         player.npcTypeNoAggro[i] = true;
 

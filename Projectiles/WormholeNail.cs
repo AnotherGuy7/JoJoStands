@@ -26,7 +26,8 @@ namespace JoJoStands.Projectiles
             Projectile.rotation += MathHelper.ToRadians(13f * Projectile.direction);
             player.AddBuff(BuffID.Obstructed, 2);
             player.position = Projectile.Center;
-            player.immune = true;
+            player.shadowDodge = true;
+            player.shadowDodgeCount = -1;
             player.noFallDmg = true;
             player.controlUseItem = false;
             player.GetModPlayer<MyPlayer>().hideAllPlayerLayers = true;

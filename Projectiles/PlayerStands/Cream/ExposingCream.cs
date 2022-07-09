@@ -68,7 +68,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     Projectile.velocity = Main.MouseWorld - Projectile.position;
                     Projectile.velocity.Normalize();
-                    Projectile.velocity *= (1f + mPlayer.creamTier);
+                    Projectile.velocity *= (4f + mPlayer.creamTier); // 7f, 8f
 
                     if (Main.MouseWorld.X > Projectile.position.X)
                     {
