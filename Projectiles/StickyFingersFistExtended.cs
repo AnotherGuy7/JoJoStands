@@ -136,15 +136,20 @@ namespace JoJoStands.Projectiles
 
         public override bool PreDraw(ref Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
         {
+            Player player = Main.player[Projectile.owner];
             Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
             Vector2 ownerCenterOffset = Vector2.Zero;
             if (ownerProj.spriteDirection == -1)
             {
                 ownerCenterOffset = new Vector2(-16f, -10f);
+                if (ownerProj.spriteDirection != player.direction)
+                    ownerCenterOffset += new Vector2(50f, 0f);
             }
             if (ownerProj.spriteDirection == 1)
             {
                 ownerCenterOffset = new Vector2(4f, -4.5f);
+                if (ownerProj.spriteDirection != player.direction)
+                    ownerCenterOffset += new Vector2(-50f, 0f);
             }
             if (Main.netMode != NetmodeID.Server)
                 stickyFingersZipperPart = ModContent.Request<Texture2D>("JoJoStands/Projectiles/Zipper_Part").Value;

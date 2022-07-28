@@ -32,13 +32,7 @@ namespace JoJoStands.Items.Armor.HamonArmors.Moorburn
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.CrimtaneBar, 20)
-                .AddIngredient(ModContent.ItemType<SunDroplet>(), 10)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.DemoniteBar, 20)
+                .AddRecipeGroup("JoJoStandsEvilBar", 20)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 10)
                 .AddTile(TileID.Anvils)
                 .Register();

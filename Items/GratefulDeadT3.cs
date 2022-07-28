@@ -39,16 +39,7 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<GratefulDeadT2>())
-                .AddIngredient(ItemID.Ichor, 10)
-                .AddIngredient(ItemID.Bone, 15)
-                .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
-                .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<GratefulDeadT2>())
-                .AddIngredient(ItemID.CursedFlame, 10)
+                .AddRecipeGroup("JoJoStandsCursedIchor", 10)
                 .AddIngredient(ItemID.Bone, 15)
                 .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
                 .AddIngredient(ModContent.ItemType<WillToChange>(), 2)

@@ -38,16 +38,11 @@ namespace JoJoStands.Items.Accessories
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 3)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 3)
                 .AddIngredient(ItemID.Silk, 2)
                 .AddIngredient(ModContent.ItemType<Sunscreen>())
                 .Register();
 
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 3)
-                .AddIngredient(ItemID.Silk, 2)
-                .AddIngredient(ModContent.ItemType<Sunscreen>())
-                .Register();
         }
     }
 }

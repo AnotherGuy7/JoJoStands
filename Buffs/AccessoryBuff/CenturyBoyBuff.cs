@@ -37,11 +37,6 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.controlRight = false;
             player.controlUseTile = false;
             player.maxRunSpeed = 0f;
-            if (!Main.gamePaused)
-            {
-                player.shadowDodge = true;
-                player.shadowDodgeCount = -1;
-            }
             if (MyPlayer.SecretReferences)
             {
                 limitTimer--;

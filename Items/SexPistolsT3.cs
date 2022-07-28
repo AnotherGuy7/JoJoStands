@@ -54,18 +54,7 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<SexPistolsT2>())
-                .AddIngredient(ItemID.PalladiumOre, 20)
-                .AddIngredient(ItemID.Topaz, 2)
-                .AddIngredient(ItemID.FallenStar, 5)
-                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
-                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
-                .AddIngredient(ItemID.MeteorShot, 160)
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<SexPistolsT2>())
-                .AddIngredient(ItemID.CobaltOre, 20)
+                .AddRecipeGroup("JoJoStandsCobalt-TierBar", 20)
                 .AddIngredient(ItemID.Topaz, 2)
                 .AddIngredient(ItemID.FallenStar, 5)
                 .AddIngredient(ModContent.ItemType<WillToFight>(), 2)

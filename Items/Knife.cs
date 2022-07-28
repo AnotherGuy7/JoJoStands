@@ -41,12 +41,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe(75)
-                .AddIngredient(ItemID.IronBar, 3)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe(75)
-                .AddIngredient(ItemID.LeadBar, 3)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 3)
                 .AddTile(TileID.Anvils)
                 .Register();
         }

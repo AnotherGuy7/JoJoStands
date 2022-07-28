@@ -21,9 +21,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cream (Final Tier)");
-
-            Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to envelop yourself in Void!\nSpecial: Completely become a ball of Void and consume everything in your way!\nUsed in Stand Slot");
-
+            Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash! (works differently when owner is in Void)\nSpecial: Completely become a ball of Void and consume everything in your way!\nSecond Special: Envelop yourself in Void!\nWarning! Cream's abilities are extremely destructive to the area around!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

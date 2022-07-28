@@ -33,29 +33,8 @@ namespace JoJoStands.Items.Tiles
         public override void AddRecipes()
         {
             CreateRecipe()      //anvil + copper + any will
-                .AddIngredient(ItemID.IronBar, 5)
-                .AddIngredient(ItemID.ShadowScale)
-                .AddRecipeGroup("JoJoStandsWills")
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 5)
-                .AddIngredient(ItemID.ShadowScale, 3)
-                .AddRecipeGroup("JoJoStandsWills")
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 5)
-                .AddIngredient(ItemID.TissueSample, 3)
-                .AddRecipeGroup("JoJoStandsWills")
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 5)
-                .AddIngredient(ItemID.TissueSample, 3)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 5)
+                .AddRecipeGroup("JoJoStandsShadowTissue", 3)
                 .AddRecipeGroup("JoJoStandsWills")
                 .AddTile(TileID.Anvils)
                 .Register();

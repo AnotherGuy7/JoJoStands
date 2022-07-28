@@ -53,30 +53,9 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 6)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 6)
                 .AddIngredient(ItemID.Ruby, 2)
-                .AddIngredient(ItemID.DemoniteBar, 4)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 6)
-                .AddIngredient(ItemID.Ruby, 2)
-                .AddIngredient(ItemID.CrimtaneBar, 4)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 6)
-                .AddIngredient(ItemID.Ruby, 2)
-                .AddIngredient(ItemID.DemoniteBar, 4)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 6)
-                .AddIngredient(ItemID.Ruby, 2)
-                .AddIngredient(ItemID.CrimtaneBar, 4)
+                .AddRecipeGroup("JoJoStandsEvilBar", 4)
                 .AddTile(TileID.Anvils)
                 .Register();
         }

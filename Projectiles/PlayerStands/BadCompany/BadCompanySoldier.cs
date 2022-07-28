@@ -207,7 +207,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 Projectile.position.Y -= 2f;
             }
 
-            if (mPlayer.poseDuration <= 20)
+            if (mPlayer.poseDuration <= 20 && !player.controlUseItem)
             {
                 if (mPlayer.poseDuration >= 18 && shootCount == 0)
                     shootCount += Main.rand.Next(0, 20 + 1);

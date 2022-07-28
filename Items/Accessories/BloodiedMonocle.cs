@@ -43,12 +43,7 @@ namespace JoJoStands.Items.Accessories
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.GoldBar, 2)
-                .AddIngredient(ItemID.Glass, 2)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.PlatinumBar, 2)
+                .AddRecipeGroup("JoJoStandsGold-TierBar", 2)
                 .AddIngredient(ItemID.Glass, 2)
                 .Register();
         }

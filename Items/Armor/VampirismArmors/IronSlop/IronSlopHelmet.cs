@@ -41,13 +41,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors.IronSlop
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 9)
-                .AddIngredient(ItemID.MudBlock, 10)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 9)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 9)
                 .AddIngredient(ItemID.MudBlock, 10)
                 .AddTile(TileID.Anvils)
                 .Register();

@@ -1,5 +1,6 @@
 ﻿using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using JoJoStands;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -40,18 +41,7 @@ namespace JoJoStands.Items
                 .AddIngredient(ModContent.ItemType<SilverChariotT3>())
                 .AddIngredient(ItemID.ChlorophyteBar, 14)
                 .AddIngredient(ItemID.Ectoplasm, 5)
-                .AddIngredient(ItemID.GoldBar, 4)
-                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
-                .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
-                .AddIngredient(ModContent.ItemType<RighteousLifeforce>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<SilverChariotT3>())
-                .AddIngredient(ItemID.ChlorophyteBar, 14)
-                .AddIngredient(ItemID.Ectoplasm, 5)
-                .AddIngredient(ItemID.PlatinumBar, 4)
+                .AddRecipeGroup("JoJoStandsGold-TierBar", 4)
                 .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
                 .AddIngredient(ModContent.ItemType<WillToProtect>(), 2)
                 .AddIngredient(ModContent.ItemType<RighteousLifeforce>())

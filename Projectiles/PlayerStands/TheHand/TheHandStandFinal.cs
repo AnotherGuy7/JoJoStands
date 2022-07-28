@@ -60,6 +60,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
                 if (!scrapeMode)
                 {
+                    if (scrapeBarrageFrames)
+                    {
+                        shootCount = 0;
+                        scrapeBarrageFrames = false;
+                    }
                     if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility && !scrapeFrames)
                     {
                         Punch();

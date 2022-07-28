@@ -29,7 +29,6 @@ namespace JoJoStands.Buffs.ItemBuff
             player.gravControl = false;
             player.gravControl2 = false;
             player.controlTorch = false;
-            player.statDefense -= 12;
             player.velocity.X = -1f;
             player.velocity.Y = -1f;
             player.preventAllItemPickups = true;

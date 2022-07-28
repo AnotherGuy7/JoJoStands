@@ -168,32 +168,8 @@ namespace JoJoStands.Items.Hamon
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.CobaltBar, 4)
-                .AddIngredient(ItemID.LeadBar, 12)
-                .AddIngredient(ItemID.WhiteString, 3)
-                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.CobaltBar, 4)
-                .AddIngredient(ItemID.IronBar, 12)
-                .AddIngredient(ItemID.WhiteString, 3)
-                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.PalladiumBar, 4)
-                .AddIngredient(ItemID.LeadBar, 12)
-                .AddIngredient(ItemID.WhiteString, 3)
-                .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.PalladiumBar, 4)
-                .AddIngredient(ItemID.LeadBar, 12)
+                .AddRecipeGroup("JoJoStandsCobalt-TierBar", 4)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 12)
                 .AddIngredient(ItemID.WhiteString, 3)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
                 .AddTile(TileID.Anvils)

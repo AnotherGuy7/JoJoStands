@@ -170,19 +170,10 @@ namespace JoJoStands.Items.Hamon
             CreateRecipe()
                 .AddIngredient(ItemID.Silk, 8)
                 .AddIngredient(ItemID.PinkGel, 3)
-                .AddIngredient(ItemID.DemoniteBar, 5)
+                .AddRecipeGroup("JoJoStandsEvilBar", 5)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 4)
                 .AddTile(TileID.Anvils)
                 .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.Silk, 8)
-                .AddIngredient(ItemID.PinkGel, 3)
-                .AddIngredient(ItemID.CrimtaneBar, 5)
-                .AddIngredient(ModContent.ItemType<SunDroplet>(), 4)
-                .AddTile(TileID.Anvils)
-                .Register();
-
         }
     }
 }

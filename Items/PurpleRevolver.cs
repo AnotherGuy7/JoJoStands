@@ -115,14 +115,7 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ItemID.Revolver)
-                .AddIngredient(ItemID.MythrilBar, 6)
-                .AddIngredient(ItemID.Obsidian, 15)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.Revolver)
-                .AddIngredient(ItemID.OrichalcumBar, 6)
+                .AddRecipeGroup("JoJoStandsMythril-TierBar", 6)
                 .AddIngredient(ItemID.Obsidian, 15)
                 .AddTile(TileID.Anvils)
                 .Register();

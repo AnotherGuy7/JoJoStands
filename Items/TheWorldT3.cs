@@ -39,17 +39,7 @@ namespace JoJoStands.Items
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<TheWorldT2>())
                 .AddIngredient(ItemID.HallowedBar, 19)
-                .AddIngredient(ItemID.GoldBar, 15)
-                .AddIngredient(ModContent.ItemType<SoulofTime>(), 2)
-                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
-                .AddIngredient(ModContent.ItemType<WillToControl>(), 2)
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<TheWorldT2>())
-                .AddIngredient(ItemID.HallowedBar, 19)
-                .AddIngredient(ItemID.PlatinumBar, 15)
+                .AddRecipeGroup("JoJoStandsGold-TierBar", 15)
                 .AddIngredient(ModContent.ItemType<SoulofTime>(), 2)
                 .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
                 .AddIngredient(ModContent.ItemType<WillToControl>(), 2)

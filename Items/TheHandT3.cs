@@ -37,14 +37,7 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<TheHandT2>())
-                .AddIngredient(ItemID.TitaniumBar, 18)
-                .AddIngredient(ModContent.ItemType<WillToDestroy>(), 2)
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<TheHandT2>())
-                .AddIngredient(ItemID.AdamantiteBar, 18)
+                .AddRecipeGroup("JoJoStandsAdamantite-TierBar", 18)
                 .AddIngredient(ModContent.ItemType<WillToDestroy>(), 2)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();

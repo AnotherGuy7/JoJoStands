@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TerraUI;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
@@ -17,6 +18,7 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
+            Main.mapEnabled = false;
             player.shadowDodge = true;
             player.shadowDodgeCount = -1;
             player.noFallDmg = true;

@@ -31,8 +31,8 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 6)
-                .AddIngredient(ItemID.GoldBar, 4)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 6)
+                .AddRecipeGroup("JoJoStandsGold-TierBar", 4)
                 .AddIngredient(ItemID.Ruby)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 5)
                 .AddTile(TileID.Anvils)

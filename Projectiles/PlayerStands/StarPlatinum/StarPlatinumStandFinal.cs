@@ -104,7 +104,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                 SoundStyle item41 = SoundID.Item41;
                                 item41.Pitch = 2.8f;
                                 SoundEngine.PlaySound(item41, player.Center);
-                                player.ConsumeItem(bulletItem.type);
+                                if (bulletItem.type != ItemID.EndlessMusketPouch)
+                                {
+                                    player.ConsumeItem(bulletItem.type);
+                                }
                             }
                         }
                     }

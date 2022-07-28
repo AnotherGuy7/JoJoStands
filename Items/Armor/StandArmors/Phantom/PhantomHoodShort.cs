@@ -60,7 +60,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
         public override void UpdateEquip(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.phantomHoodShortEquipped = false;
+            mPlayer.phantomHoodShortEquipped = true;
             mPlayer.standCritChangeBoosts += 10f;
             mPlayer.standSpeedBoosts += 1;
 

@@ -39,19 +39,9 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<WhitesnakeT1>())
-                .AddIngredient(ItemID.DemoniteBar, 9)
+                .AddRecipeGroup("JoJoStandsEvilBar", 9)
                 .AddIngredient(ItemID.Diamond)
-                .AddIngredient(ItemID.RottenChunk, 5)
-                .AddIngredient(ModContent.ItemType<WillToControl>())
-                .AddIngredient(ModContent.ItemType<WillToChange>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WhitesnakeT1>())
-                .AddIngredient(ItemID.CrimtaneBar, 9)
-                .AddIngredient(ItemID.Diamond)
-                .AddIngredient(ItemID.Vertebrae, 5)
+                .AddRecipeGroup("JoJoStandsRottenVertebrae", 5)
                 .AddIngredient(ModContent.ItemType<WillToControl>())
                 .AddIngredient(ModContent.ItemType<WillToChange>())
                 .AddTile(ModContent.TileType<RemixTableTile>())

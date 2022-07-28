@@ -35,10 +35,13 @@ namespace JoJoStands.Projectiles
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SpecialHotKey.JustPressed;
             Player player = Main.player[Projectile.owner];
-            if (player.position.X >= Projectile.position.X)
-                player.ChangeDir(-1);
-            else
-                player.ChangeDir(1);
+            if (Projectile.timeLeft < 1199)
+            {
+                if (player.position.X >= Projectile.position.X)
+                    player.ChangeDir(-1);
+                else
+                    player.ChangeDir(1);
+            }
             if (specialPressed && stopped) 
             {
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), (int)recoveredTime);

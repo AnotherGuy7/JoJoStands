@@ -47,7 +47,6 @@ namespace JoJoStands
             }
         }
     }
-
     public class AerosmithRadarCameraLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition()
@@ -62,10 +61,15 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.standRemoteMode && (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithFinal>()))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/AerosmithRadar").Value;
-                int drawX = (int)(drawInfo.Position.X + 4f + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.Position.Y + 7f - Main.screenPosition.Y);
+                int drawX = (int)(drawInfo.Position.X + 3f + drawPlayer.width / 2f);
+                SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
-                    drawX -= 2;
+                {
+                    drawX -= 6;
+                    effects = SpriteEffects.FlipHorizontally;
+                }
+                if (drawPlayer.direction == 1)
+                    effects = SpriteEffects.None;
 
                 mPlayer.aerosmithRadarFrameCounter++;
                 if (mPlayer.aerosmithRadarFrameCounter >= 30)
@@ -74,12 +78,11 @@ namespace JoJoStands
                 int frame = mPlayer.aerosmithRadarFrameCounter / 16;
                 int frameHeight = texture.Height / 2;
 
-                Vector2 drawPos = new Vector2(drawX, drawY);
+                Vector2 drawPos = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 3f + (int)drawPlayer.gfxOffY) - Main.screenPosition;
                 Rectangle animRect = new Rectangle(0, frameHeight * frame, texture.Width, frameHeight);
                 Color drawColor = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
-                Vector2 origin = new Vector2(texture.Width / 2f, frameHeight / 2f);
 
-                DrawData drawData = new DrawData(texture, drawPos, animRect, drawColor, 0f, origin, 1f, SpriteEffects.None, 0);
+                DrawData drawData = new DrawData(texture, drawPos, animRect, drawColor, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }
@@ -99,21 +102,21 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.wearingEpitaph)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/KCArm").Value;
-                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
+                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - 1f);
                 SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
                 {
                     drawX += 2;
                     effects = SpriteEffects.FlipHorizontally;
                 }
+                if (drawPlayer.direction == 1)
+                    effects = SpriteEffects.None;
 
-                Vector2 drawPos = new Vector2(drawX, drawY);
+                Vector2 drawPos = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 10f + (int)drawPlayer.gfxOffY) - Main.screenPosition;
                 Rectangle animRect = new Rectangle(0, 0, texture.Width, texture.Height);
                 Color drawColor = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
-                Vector2 origin = new Vector2(texture.Width / 2f, texture.Height / 2f);
 
-                DrawData drawData = new DrawData(texture, drawPos, animRect, drawColor, 0f, origin, 1f, effects, 0);
+                DrawData drawData = new DrawData(texture, drawPos, animRect, drawColor, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }
@@ -133,8 +136,8 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.hermitPurpleTier != 0)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HermitPurple_Arms").Value;
-                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y) - 4;
+                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - 1f);
+                Vector2 drawPos = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 20f + (int)drawPlayer.gfxOffY + 4) - Main.screenPosition;
                 SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
                 {
@@ -154,7 +157,7 @@ namespace JoJoStands
                             mPlayer.hermitPurpleSpecialFrameCounter = 0;
                     }
                 }
-                DrawData drawData = new DrawData(texture, new Vector2(drawX, drawY), drawPlayer.bodyFrame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                DrawData drawData = new DrawData(texture, drawPos, drawPlayer.bodyFrame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }
@@ -174,8 +177,8 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.hermitPurpleTier > 1)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HermitPurple_Body").Value;
-                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);
-                int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y) - 4;
+                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - 1f);
+                Vector2 drawPos = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 20f + (int)drawPlayer.gfxOffY + 4) - Main.screenPosition;
                 SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
                 {
@@ -196,7 +199,6 @@ namespace JoJoStands
                             mPlayer.hermitPurpleSpecialFrameCounter = 0;
                     }
                 }
-                Vector2 drawPos = new Vector2(drawX, drawY);
                 DrawData drawData = new DrawData(texture, drawPos, drawPlayer.bodyFrame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
@@ -207,7 +209,7 @@ namespace JoJoStands
     {
         public override Position GetDefaultPosition()
         {
-            return new AfterParent(PlayerDrawLayers.Torso);
+            return new AfterParent(PlayerDrawLayers.ArmOverItem);
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
@@ -217,8 +219,8 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.showingCBLayer)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/CB").Value;
-                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.Position.Y + 20f - Main.screenPosition.Y);
+                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f);
+                Vector2 vector = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 11f + (int)drawPlayer.gfxOffY) - Main.screenPosition;
                 SpriteEffects effects = SpriteEffects.FlipHorizontally;
                 if (drawPlayer.direction == 1)
                     effects = SpriteEffects.None;
@@ -229,7 +231,7 @@ namespace JoJoStands
                     shader.Apply(null);
                 }
                 Color drawColor = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
-                DrawData drawData = new DrawData(texture, new Vector2(drawX, drawY - 9f), drawPlayer.bodyFrame, drawColor, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                DrawData drawData = new DrawData(texture, vector, drawPlayer.bodyFrame, drawColor, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }
@@ -281,16 +283,14 @@ namespace JoJoStands
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomHoodLong_Head_Glowmask").Value;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.Position.Y - Main.screenPosition.Y) - 1;
+                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f);
                 SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
                     effects = SpriteEffects.FlipHorizontally;
 
-                Vector2 offset = new Vector2(0f, 12f);
-                Vector2 pos = new Vector2(drawX, drawY) + offset;
+                Vector2 vector = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 12f + (int)drawPlayer.gfxOffY) - Main.screenPosition;
 
-                DrawData drawData = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                DrawData drawData = new DrawData(texture, vector, drawPlayer.bodyFrame, Color.White * alpha, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }
@@ -310,17 +310,15 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.phantomHoodNeutralEquipped && drawPlayer.head == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomHoodNeutral", EquipType.Head))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomHoodNeutral_Head_Glowmask").Value;
-                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.Position.Y - Main.screenPosition.Y) - 1;
+                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f);
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
                 SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
                     effects = SpriteEffects.FlipHorizontally;
 
-                Vector2 offset = new Vector2(0f, 12f);
-                Vector2 pos = new Vector2(drawX, drawY) + offset;
+                Vector2 vector = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 12f + (int)drawPlayer.gfxOffY) - Main.screenPosition;
 
-                DrawData drawData = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                DrawData drawData = new DrawData(texture, vector, drawPlayer.bodyFrame, Color.White * alpha, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }
@@ -340,17 +338,15 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.phantomHoodShortEquipped && drawPlayer.head == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomHoodShort", EquipType.Head))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomHoodShort_Head_Glowmask").Value;
-                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.Position.Y - Main.screenPosition.Y) - 1;
+                int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f);
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
                 SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
                     effects = SpriteEffects.FlipHorizontally;
 
-                Vector2 offset = new Vector2(0f, 12f);
-                Vector2 pos = new Vector2(drawX, drawY) + offset;
+                Vector2 vector = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 12f + (int)drawPlayer.gfxOffY) - Main.screenPosition;
 
-                DrawData drawData = new DrawData(texture, pos, drawPlayer.bodyFrame, Color.White * alpha, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
+                DrawData drawData = new DrawData(texture, vector, drawPlayer.bodyFrame, Color.White * alpha, 0f, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }
@@ -370,13 +366,11 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Body_Glowmask").Value;
+                Rectangle rectangle = Utils.Frame(texture, 9, 4, drawPlayer.bodyFrame.X, drawPlayer.bodyFrame.Y, 0, 0);
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-
-                Vector2 drawOffset = new Vector2(0f, drawInfo.drawPlayer.Size.Y / 4f);
-                drawOffset.Y += 1f;
-                Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - new Vector2(drawInfo.torsoOffset) - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
+                Vector2 drawPosition = new Vector2(drawInfo.Position.X, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 10f + (int)drawPlayer.gfxOffY) + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - new Vector2(drawInfo.torsoOffset) - (drawInfo.drawPlayer.Size / 2f);
                 drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
-                DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
+                DrawData drawData = new DrawData(texture, drawPosition, rectangle, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
                 //data.shader = drawInfo.bodyArmorShader;
                 drawInfo.DrawDataCache.Add(drawData);
             }
@@ -398,9 +392,7 @@ namespace JoJoStands
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Arms_Glowmask").Value;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
-                Vector2 drawOffset = new Vector2(0f, drawInfo.drawPlayer.Size.Y / 4f);
-                drawOffset.Y += 1f;
-                Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - drawInfo.frontShoulderOffset - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
+                Vector2 drawPosition = new Vector2(drawInfo.Position.X, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 10f + (int)drawPlayer.gfxOffY) + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - drawInfo.frontShoulderOffset - (drawInfo.drawPlayer.Size / 2f);
                 drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
 
                 DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, Color.White * alpha, drawPlayer.bodyRotation, drawInfo.bodyOrigin drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
@@ -424,9 +416,7 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.phantomLeggingsEquipped && drawPlayer.legs == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomLeggings", EquipType.Legs))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomLeggings_Legs_Glowmask").Value;
-                Vector2 drawOffset = new Vector2(0f, drawInfo.drawPlayer.Size.Y / 4f);
-                drawOffset.Y += 1f;
-                Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.legPosition - Main.screenPosition - drawInfo.legsOffset - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
+                Vector2 drawPosition = new Vector2(drawInfo.Position.X, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 10f + (int)drawPlayer.gfxOffY) + drawInfo.drawPlayer.legPosition - Main.screenPosition - drawInfo.legsOffset - (drawInfo.drawPlayer.Size / 2f);
                 drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
 
@@ -453,9 +443,7 @@ namespace JoJoStands
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/StoneFreeWeaveLayer").Value;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
 
-                Vector2 drawOffset = new Vector2(0f, drawInfo.drawPlayer.Size.Y / 4f);
-                drawOffset.Y += 1f;
-                Vector2 drawPosition = drawInfo.Position + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - new Vector2(drawInfo.torsoOffset) - (drawInfo.drawPlayer.Size / 2f) + drawOffset;
+                Vector2 drawPosition = new Vector2(drawInfo.Position.X, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 10f + (int)drawPlayer.gfxOffY) + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - new Vector2(drawInfo.torsoOffset) - (drawInfo.drawPlayer.Size / 2f);
                 Color drawColor = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
                 drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
                 DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, drawColor * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);

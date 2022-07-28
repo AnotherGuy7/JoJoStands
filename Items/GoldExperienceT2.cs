@@ -46,17 +46,7 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<GoldExperienceT1>())
-                .AddIngredient(ItemID.GoldBar, 12)
-                .AddIngredient(ItemID.Acorn, 20)
-                .AddIngredient(ItemID.LifeCrystal)
-                .AddIngredient(ModContent.ItemType<WillToControl>())
-                .AddIngredient(ModContent.ItemType<WillToFight>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<GoldExperienceT1>())
-                .AddIngredient(ItemID.PlatinumBar, 12)
+                .AddRecipeGroup("JoJoStandsGold-TierBar", 12)
                 .AddIngredient(ItemID.Acorn, 20)
                 .AddIngredient(ItemID.LifeCrystal)
                 .AddIngredient(ModContent.ItemType<WillToControl>())

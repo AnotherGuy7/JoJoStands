@@ -34,14 +34,8 @@ namespace JoJoStands.Items.Vampire
             CreateRecipe(3)
                 .AddIngredient(ModContent.ItemType<Sunscreen>(), 3)
                 .AddIngredient(ItemID.Sunflower)
+                .AddRecipeGroup("JoJoStandsEvilBar")
                 .AddIngredient(ItemID.CrimtaneBar)
-                .AddTile(TileID.WorkBenches)
-                .Register();
-
-            CreateRecipe(3)
-                .AddIngredient(ModContent.ItemType<Sunscreen>(), 3)
-                .AddIngredient(ItemID.Sunflower)
-                .AddIngredient(ItemID.DemoniteBar)
                 .AddTile(TileID.WorkBenches)
                 .Register();
 

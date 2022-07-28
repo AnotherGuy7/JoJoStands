@@ -29,26 +29,8 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 20)
-                .AddIngredient(ItemID.PalladiumBar, 13)
-                .AddIngredient(ItemID.SoulofNight)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 20)
-                .AddIngredient(ItemID.PalladiumBar, 13)
-                .AddIngredient(ItemID.SoulofNight)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 20)
-                .AddIngredient(ItemID.CobaltBar, 13)
-                .AddIngredient(ItemID.SoulofNight)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 20)
-                .AddIngredient(ItemID.CobaltBar, 13)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 20)
+                .AddRecipeGroup("JoJoStandsCobalt-TierBar", 13)
                 .AddIngredient(ItemID.SoulofNight)
                 .Register();
         }

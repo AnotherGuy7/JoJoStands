@@ -10,7 +10,7 @@ namespace JoJoStands.Items.Vanities
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Wearing this makes you want to use a frog as a phone");
-            ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
+            ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
             SacrificeTotal = 1;
         }
 
@@ -22,7 +22,7 @@ namespace JoJoStands.Items.Vanities
             Item.vanity = true;
         }
 
-        public override void UpdateVanity(Player player)
+        public override void UpdateEquip(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.wearingEpitaph = true;

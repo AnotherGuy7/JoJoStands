@@ -123,6 +123,7 @@ namespace JoJoStands
         public bool receivedArrowShard = false;
         public bool creamExposedMode = false;
         public bool creamVoidMode = false;
+        public bool creamDash = false;
         public bool creamNormalToExposed = false;
         public bool creamExposedToVoid = false;
         public bool creamAnimationReverse = false;
@@ -245,6 +246,7 @@ namespace JoJoStands
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
             standCritChangeBoosts = 5f;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
+            Main.mapEnabled = true;
         }
 
 
@@ -449,6 +451,7 @@ namespace JoJoStands
                 creamNormalToExposed = false;
                 creamNormalToVoid = false;
                 creamExposedToVoid = false;
+                creamDash = false;
                 creamFrame = 0;
 
                 badCompanyTier = 0;
@@ -1021,7 +1024,7 @@ namespace JoJoStands
                 }
                 if (voidCounter < voidCounterMax)
                 {
-                    if (!creamVoidMode && !creamExposedMode)
+                    if (!creamVoidMode && !creamExposedMode && !creamDash)
                     {
                         voidTimer += 1;
                         if (voidTimer >= 120)
@@ -1051,6 +1054,11 @@ namespace JoJoStands
                             voidTimer = 0;
                         }
                     }
+                }
+                if (!standOut)
+                {
+                    creamTier = 0;
+                    voidCounter = 0;
                 }
             }
             else
@@ -1383,6 +1391,8 @@ namespace JoJoStands
             standCooldownReduction = 0f;        //it's here because it resets before the buffs can use it when its in ResetEffects()
             if (Player.HasBuff(ModContent.BuffType<Stolen>()))
                 standOut = false;
+            if (!Player.HasBuff(ModContent.BuffType<SphericalVoid>()))
+                Main.mapEnabled = true;
         }
 
         public int AbilityCooldownTime(int seconds) //Sometimes we won't want to reduce the cooldown so that's why reduction defaults to 0
@@ -1596,6 +1606,7 @@ namespace JoJoStands
             creamNormalToExposed = false;
             creamNormalToVoid = false;
             creamExposedToVoid = false;
+            creamDash = false;
             creamFrame = 0;
 
             if (Player.whoAmI == Main.myPlayer && DeathSoundID == DeathSoundType.Roundabout)

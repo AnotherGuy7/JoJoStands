@@ -47,32 +47,8 @@ namespace JoJoStands.Items.Hamon
         {
             CreateRecipe()
                 .AddIngredient(ItemID.Chain, 5)
-                .AddIngredient(ItemID.IronBar, 8)
-                .AddIngredient(ItemID.DemoniteBar, 6)
-                .AddIngredient(ModContent.ItemType<SunDroplet>(), 3)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.Chain, 5)
-                .AddIngredient(ItemID.LeadBar, 8)
-                .AddIngredient(ItemID.DemoniteBar, 6)
-                .AddIngredient(ModContent.ItemType<SunDroplet>(), 3)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.Chain, 5)
-                .AddIngredient(ItemID.LeadBar, 8)
-                .AddIngredient(ItemID.CrimtaneBar, 6)
-                .AddIngredient(ModContent.ItemType<SunDroplet>(), 3)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.Chain, 5)
-                .AddIngredient(ItemID.LeadBar, 8)
-                .AddIngredient(ItemID.CrimtaneBar, 6)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 8)
+                .AddRecipeGroup("JoJoStandsEvilBar", 6)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 3)
                 .AddTile(TileID.Anvils)
                 .Register();

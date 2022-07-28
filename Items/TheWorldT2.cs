@@ -39,16 +39,7 @@ namespace JoJoStands.Items
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<TheWorldT1>())
                 .AddIngredient(ItemID.HellstoneBar, 25)
-                .AddIngredient(ItemID.GoldWatch)
-                .AddIngredient(ModContent.ItemType<WillToFight>())
-                .AddIngredient(ModContent.ItemType<WillToControl>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<TheWorldT1>())
-                .AddIngredient(ItemID.HellstoneBar, 25)
-                .AddIngredient(ItemID.PlatinumWatch)
+                .AddRecipeGroup("JoJoStandsWatch")
                 .AddIngredient(ModContent.ItemType<WillToFight>())
                 .AddIngredient(ModContent.ItemType<WillToControl>())
                 .AddTile(ModContent.TileType<RemixTableTile>())

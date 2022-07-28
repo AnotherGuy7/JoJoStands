@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         }
                     }
                 }
-                if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
+                if (!Main.mouseRight && Projectile.owner == Main.myPlayer || secondaryAbilityFrames && player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
                     secondaryAbilityFrames = false;
                 }
@@ -174,6 +174,11 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override void AnimationCompleted(string animationName)
         {
             if (animationName == "Parry")
+            {
+                idleFrames = true;
+                parryFrames = false;
+            }
+            if (animationName == "ShirtlessParry")
             {
                 idleFrames = true;
                 parryFrames = false;

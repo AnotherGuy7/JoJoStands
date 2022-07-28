@@ -40,16 +40,7 @@ namespace JoJoStands.Items
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<WhitesnakeT3>())
                 .AddIngredient(ItemID.Ectoplasm, 7)
-                .AddIngredient(ItemID.CursedFlame, 5)
-                .AddIngredient(ItemID.VialofVenom)
-                .AddIngredient(ModContent.ItemType<TaintedLifeforce>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WhitesnakeT3>())
-                .AddIngredient(ItemID.Ectoplasm, 7)
-                .AddIngredient(ItemID.Ichor, 5)
+                .AddRecipeGroup("JoJoStandsCursedIchor", 5)
                 .AddIngredient(ItemID.VialofVenom)
                 .AddIngredient(ModContent.ItemType<TaintedLifeforce>())
                 .AddTile(ModContent.TileType<RemixTableTile>())

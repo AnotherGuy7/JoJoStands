@@ -39,16 +39,7 @@ namespace JoJoStands.Items
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<KingCrimsonT1>())
                 .AddIngredient(ItemID.Hellstone, 15)
-                .AddIngredient(ItemID.CrimtaneBar, 3)
-                .AddIngredient(ModContent.ItemType<WillToControl>())
-                .AddIngredient(ModContent.ItemType<WillToEscape>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<KingCrimsonT1>())
-                .AddIngredient(ItemID.Hellstone, 15)
-                .AddIngredient(ItemID.DemoniteBar, 3)
+                .AddRecipeGroup("JoJoStandsEvilBar", 3)
                 .AddIngredient(ModContent.ItemType<WillToControl>())
                 .AddIngredient(ModContent.ItemType<WillToEscape>())
                 .AddTile(ModContent.TileType<RemixTableTile>())
