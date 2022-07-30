@@ -27,7 +27,7 @@ namespace JoJoStands.Buffs.EffectBuff
             if (player.HasBuff(ModContent.BuffType<SkippingTime>()) && !mPlayer.forceShutDownEffect)
             {
                 player.shadowDodge = true;
-                player.shadowDodgeCount = -1;
+                player.shadowDodgeCount = -100f;
                 player.controlUseItem = false;
                 player.nightVision = true;
                 mPlayer.timeskipActive = true;

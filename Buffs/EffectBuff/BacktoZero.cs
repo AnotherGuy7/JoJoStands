@@ -26,7 +26,7 @@ namespace JoJoStands.Buffs.EffectBuff
             if (player.HasBuff(Type) && !mPlayer.forceShutDownEffect)
             {
                 player.shadowDodge = true;
-                player.shadowDodgeCount = -1;
+                player.shadowDodgeCount = -100f;
                 player.lifeRegen += 2;
             }
             else

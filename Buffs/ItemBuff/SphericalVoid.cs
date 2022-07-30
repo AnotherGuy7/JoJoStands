@@ -20,7 +20,9 @@ namespace JoJoStands.Buffs.ItemBuff
         {
             Main.mapEnabled = false;
             player.shadowDodge = true;
-            player.shadowDodgeCount = -1;
+            player.shadowDodgeCount = -100f;
+            player.blind = true;
+            player.blackout = true;
             player.noFallDmg = true;
             player.lavaImmune = true;
             player.controlUseItem = false;
