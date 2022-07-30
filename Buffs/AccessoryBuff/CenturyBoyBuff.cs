@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -25,7 +26,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             player.shadowDodge = true;
-            player.shadowDodgeCount = -1;
+            player.shadowDodgeCount = -100f;
             player.moveSpeed = 0f;
             player.lifeRegen = 0;
             player.manaRegen = 0;

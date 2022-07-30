@@ -15,7 +15,7 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void Update(Player player, ref int buffIndex)
         {
             player.shadowDodge = true;
-            player.shadowDodgeCount = -1;
+            player.shadowDodgeCount = -100f;
             if (player.GetModPlayer<MyPlayer>().standName.Contains("StickyFingers") && !Main.mouseRight)
                 player.buffTime[buffIndex] = 2;
         }
