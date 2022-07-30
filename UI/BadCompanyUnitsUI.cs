@@ -96,7 +96,7 @@ namespace JoJoStands.UI
             addSoldierButton.OnClick += OnClickAddSoldierButton;
             UnitsUIPanel.Append(addSoldierButton);
 
-            Asset<Texture2D> tankTextureImage = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanyTank", AssetRequestMode.ImmediateLoad);
+            Asset<Texture2D> tankTextureImage = ModContent.Request<Texture2D>("JoJoStands/Extras/UnitsUITank", AssetRequestMode.ImmediateLoad);
             tankTexture = new UIImage(tankTextureImage);
             tankTexture.HAlign = 0.5f;
             tankTexture.VAlign = 0.5f;
