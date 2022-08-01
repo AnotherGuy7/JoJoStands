@@ -222,6 +222,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
         }
 
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            bool creamdash = true;
+            if (mPlayer.creamDash)
+                creamdash = false;
+            return creamdash;
+        }
+
         public override void SendExtraStates(BinaryWriter writer)
         {
             Player player = Main.player[Projectile.owner];

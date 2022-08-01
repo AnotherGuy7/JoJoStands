@@ -27,7 +27,7 @@ namespace JoJoStands.Projectiles
             player.AddBuff(BuffID.Obstructed, 2);
             player.position = Projectile.Center;
             player.shadowDodge = true;
-            player.shadowDodgeCount = -1;
+            player.shadowDodgeCount = -100f;
             player.noFallDmg = true;
             player.controlUseItem = false;
             player.GetModPlayer<MyPlayer>().hideAllPlayerLayers = true;

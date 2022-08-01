@@ -62,7 +62,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     Projectile.velocity = targetposition - Projectile.Center;
                     Projectile.velocity.Normalize();
-                    Projectile.velocity *= 6f + mPlayer.creamTier;
+                    Projectile.velocity *= 6f;
                     if (distance2 <= 10f)
                         returnback = false;
                 }
@@ -75,7 +75,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     }
                     Projectile.velocity = player.Center - Projectile.Center;
                     Projectile.velocity.Normalize();
-                    Projectile.velocity *= 4f + mPlayer.creamTier * 2;
+                    Projectile.velocity *= 5f + mPlayer.creamTier;
                 }
             }
             if (!voidwithoutplayer)
@@ -175,6 +175,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 if (!returnback && distance <= 40f)
                 {
                     SoundEngine.PlaySound(SoundID.Item78);
+                    mPlayer.voidCounter += 2;
                 }
                 mPlayer.creamDash = false;
                 Projectile.Kill();
