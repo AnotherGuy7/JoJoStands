@@ -130,14 +130,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         if (mouseDistance <= 40f)
                             Projectile.velocity = Vector2.Zero;
 
-                        if (shootCount <= 0 && Projectile.frame == 1 || Projectile.frame == 4)
+                        if (shootCount <= 0 && (Projectile.frame == 1 || Projectile.frame == 4))
                         {
-                            shootCount += newPunchTime;
+                            shootCount += (int)(newPunchTime * 1.4);
                             Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
 
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage * 2, punchKnockback, Projectile.owner, fistWhoAmI);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2), punchKnockback, Projectile.owner, fistWhoAmI);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                             SoundStyle theHandScrapeSound = new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR");
@@ -157,6 +157,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     }
                     if (Main.mouseRight && !playerHasAbilityCooldown)
                     {
+                        if (mPlayer.playerJustHit)
+                        {
+                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(3));
+                            specialScrapeTimer = 0;
+                        }
+
                         specialScrapeTimer++;
                         for (int i = 0; i < Main.maxNPCs; i++)
                         {
@@ -217,7 +223,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                                 Vector2 npcPos = npc.position - (npcSize / 2f);
                                 if (Collision.CheckAABBvLineCollision(npcPos, npcSize, Projectile.Center, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
                                 {
-                                    npc.StrikeNPC(60 * (specialScrapeTimer / 60), 0f, player.direction);     //damage goes up at a rate of 60dmg/s
+                                    npc.StrikeNPC(145 * (specialScrapeTimer / 30), 0f, player.direction);     //damage goes up at a rate of 145dmg/(1/2 s)
                                     npc.AddBuff(ModContent.BuffType<MissingOrgans>(), 10 * 60);
                                 }
                             }
@@ -376,7 +382,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (animationName == "ScrapeBarrage")
             {
-                AnimateStand(animationName, 7, (int)(newPunchTime * 2.2), true);
+                AnimateStand(animationName, 7, (int)(newPunchTime * 1.3), true);
             }
             if (animationName == "Pose")
             {

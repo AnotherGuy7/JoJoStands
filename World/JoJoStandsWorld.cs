@@ -3,6 +3,7 @@ using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Chat;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -19,6 +20,8 @@ namespace JoJoStands
 
         public static bool VampiricNight = false;
         public static int viralMeteoriteTiles = 0;
+
+        private static readonly Color WorldEventTextColor = new Color(50, 255, 130);
 
         public override void OnWorldLoad()
         {
@@ -56,7 +59,7 @@ namespace JoJoStands
                     if (Main.rand.Next(0, 12 + 1) == 0)
                     {
                         vampiricNightQueued = true;
-                        Main.NewText("You feel the dirt under you rumbling slightly...", new Color(50, 255, 130));
+                        Main.NewText("You feel the dirt under you rumbling slightly...", WorldEventTextColor);
                     }
                     checkedForVampiricEvent = true;
                 }
@@ -68,7 +71,7 @@ namespace JoJoStands
                         VampiricNight = true;
                         vampiricNightQueued = false;
                         vampiricNightStartTimer = 0;
-                        Main.NewText("Dio's Minions have arrived!", new Color(50, 255, 130));
+                        Main.NewText("Dio's Minions have arrived!", WorldEventTextColor);
                     }
                 }
             }
@@ -77,7 +80,7 @@ namespace JoJoStands
                 checkedForVampiricEvent = false;
                 if (VampiricNight)
                 {
-                    Main.NewText("The zombies have been pushed back... For now...", new Color(50, 255, 130));
+                    Main.NewText("The zombies have been pushed back... For now...", WorldEventTextColor);
                     VampiricNight = false;
                 }
             }
@@ -322,7 +325,7 @@ namespace JoJoStands
             {
                 for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
                 {
-                    if (yCoord > j + WorldGen.genRand.Next(-3, 4) - 3 && Main.tile[xCoord, yCoord].HasTile && Main.rand.Next(10) == 0)
+                    if (yCoord > j + WorldGen.genRand.Next(-3, 4) - 3 && Main.tile[xCoord, yCoord].HasTile && Main.rand.NextBool(10))
                     {
                         float tilePlacementX = (float)Math.Abs(i - xCoord);
                         float tilePlacementY = (float)Math.Abs(j - yCoord);
@@ -344,7 +347,7 @@ namespace JoJoStands
             {
                 for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
                 {
-                    if (yCoord > j + WorldGen.genRand.Next(-2, 3) && Main.tile[xCoord, yCoord].HasTile && Main.rand.Next(20) == 0)
+                    if (yCoord > j + WorldGen.genRand.Next(-2, 3) && Main.tile[xCoord, yCoord].HasTile && Main.rand.NextBool(20))
                     {
                         float tilePlacementX = (float)Math.Abs(i - xCoord);
                         float tilePlacementY = (float)Math.Abs(j - yCoord);
@@ -363,16 +366,17 @@ namespace JoJoStands
             }
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                Main.NewText("A dangerous virus now inhabits " + Main.worldName + "...", new Color(50, 255, 130));
+                Main.NewText("A dangerous virus now inhabits " + Main.worldName + "... Perhaps Jotaro the Marine Biologist may know something about it.", WorldEventTextColor);
             }
             else if (Main.netMode == NetmodeID.Server)
             {
-                Terraria.Chat.ChatHelper.BroadcastChatMessage(NetworkText.FromKey("A dangerous virus now inhabits " + Main.worldName + "...", new object[0]), new Color(50, 255, 130), -1);
+                ChatHelper.BroadcastChatMessage(NetworkText.FromKey("A dangerous virus now inhabits " + Main.worldName + "... Perhaps Jotaro the Marine Biologist may know something about it.", new object[0]), WorldEventTextColor, -1);
             }
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendTileSquare(-1, i, j, 40, TileChangeType.None);
             }
+            Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().awaitingViralMeteoriteTip = true;
             return true;
         }
     }

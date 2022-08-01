@@ -141,6 +141,10 @@ namespace JoJoStands
         public bool badCompanyDefaultArmy = true;
         public bool ableToOverrideTimestop = false;
         public bool stoneFreeWeaveAbilityActive = false;
+        public bool abilityWheelTipDisplayed = false;
+        public bool awaitingViralMeteoriteTip = false;
+        public bool hotbarLocked = false;
+        public bool playerJustHit = false;
 
         public bool timestopActive;
         public bool timestopOwner;
@@ -158,6 +162,7 @@ namespace JoJoStands
         private int standKeyPressTimer = 0;
         private int spinSubtractionTimer = 0;
         private int tbcCounter = 0;
+        private int playerJustHitTime = 0;
 
         private bool forceChangedTusk = false;
 
@@ -445,6 +450,7 @@ namespace JoJoStands
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
                 stoneFreeWeaveAbilityActive = false;
+                hotbarLocked = false;
 
                 creamTier = 0;
                 voidCounter = 0;
@@ -498,6 +504,7 @@ namespace JoJoStands
             tag.Add("usedEctoPearl", usedEctoPearl);
             tag.Add("receivedArrowShard", receivedArrowShard);
             tag.Add("piercedTimer", piercedTimer);
+            tag.Add("abilityWheelTipDisplayed", abilityWheelTipDisplayed);
         }
 
         public override void LoadData(TagCompound tag)
@@ -508,6 +515,7 @@ namespace JoJoStands
             usedEctoPearl = tag.GetBool("usedEctoPearl");
             receivedArrowShard = tag.GetBool("receivedArrowShard");
             piercedTimer = tag.GetInt("piercedTimer");
+            abilityWheelTipDisplayed = tag.GetBool("abilityWheelTipDisplayed");
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -639,6 +647,14 @@ namespace JoJoStands
                 Main.windSpeedCurrent = 0f;
             if (PlayerInput.Triggers.Current.SmartSelect || Player.dead)
                 canStandBasicAttack = false;
+            if (hotbarLocked && standOut && !standAutoMode)
+                Player.selectedItem = 0;
+            if (playerJustHitTime > 0)
+            {
+                playerJustHitTime--;
+                if (playerJustHitTime <= 0)
+                    playerJustHit = false;
+            }
 
             if (goldenSpinCounter > 0)          //golden spin stuff
             {
@@ -1209,6 +1225,8 @@ namespace JoJoStands
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
             }
+            if (hotbarLocked && standOut && !standAutoMode)
+                Player.selectedItem = 0;
         }
 
         private void UpdateShaderStates()
@@ -1488,10 +1506,14 @@ namespace JoJoStands
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
                 Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
             }
+            playerJustHit = true;
+            playerJustHitTime = 2;
         }
 
         public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
         {
+            playerJustHit = true;
+            playerJustHitTime = 2;
             if (Player.HasBuff<ZipperDodge>())
             {
                 if (JoJoStands.SoundsLoaded)

@@ -17,6 +17,7 @@ namespace JoJoStands.Projectiles
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
+            Projectile.penetrate = 3;
         }
 
         public override void Kill(int timeLeft)

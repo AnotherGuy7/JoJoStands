@@ -21,7 +21,7 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Killer Queen (Final Tier)");
+            DisplayName.SetDefault("Killer Queen (1st Bomb Final Tier)");
             Tooltip.SetDefault("Left-click to punch and right-click to trigger any block! \nRange: 16 blocks \nSpecial: Sheer Heart Attack!\nUsed in Stand Slot");
         }
 

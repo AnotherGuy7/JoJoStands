@@ -39,8 +39,6 @@ namespace JoJoStands.Items
             Item.rare = ItemRarityID.LightPurple;
         }
 
-        private int rightClickTimer = 0;
-
         public override void HoldItem(Player player)
         {
             if (player.whoAmI == Main.myPlayer && Main.mouseRight)
