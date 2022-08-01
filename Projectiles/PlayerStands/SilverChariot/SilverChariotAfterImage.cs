@@ -109,7 +109,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
                 }
-                if (!Main.mouseRight)
+                if (!Main.mouseRight || secondaryAbilityFrames && player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
                     secondaryAbilityFrames = false;
                 }

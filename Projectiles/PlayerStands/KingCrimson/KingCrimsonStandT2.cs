@@ -60,6 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
                     timeskipStartDelay = 0;
                     preparingTimeskip = false;
+                    mPlayer.kingCrimsonAbilityCooldownTime = 30;
                 }
             }
 

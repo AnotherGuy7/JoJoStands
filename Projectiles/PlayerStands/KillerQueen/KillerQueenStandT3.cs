@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
     public class KillerQueenStandT3 : StandClass
     {
         public override int punchDamage => 59;
-        public override int altDamage => 220;
+        public override int altDamage => 278;
         public override int punchTime => 10;
         public override int halfStandHeight => 37;
         public override float fistWhoAmI => 5f;
@@ -87,7 +87,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             }
                             if (!foundNPCTarget)
                             {
-                                if (Collision.SolidCollision(Main.MouseWorld, 1, 1) && !touchedTile)
+                                bool mouseOnPlatform = TileID.Sets.Platforms[Main.tile[(int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f)].TileType];
+                                if ((Collision.SolidCollision(Main.MouseWorld, 1, 1) || mouseOnPlatform) && !touchedTile)
                                 {
                                     shootCount += 20;
                                     touchedTile = true;

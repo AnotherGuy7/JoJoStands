@@ -40,15 +40,7 @@ namespace JoJoStands.Items
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<GratefulDeadT3>())
                 .AddIngredient(ItemID.ShroomiteBar, 14)
-                .AddIngredient(ItemID.Ichor, 20)
-                .AddIngredient(ModContent.ItemType<DeterminedLifeforce>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<GratefulDeadT3>())
-                .AddIngredient(ItemID.ShroomiteBar, 14)
-                .AddIngredient(ItemID.CursedFlame, 20)
+                .AddRecipeGroup("JoJoStandsCursedIchor", 20)
                 .AddIngredient(ModContent.ItemType<DeterminedLifeforce>())
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();

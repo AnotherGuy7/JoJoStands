@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.UI;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
@@ -48,13 +49,13 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 if (Projectile.ai[0] == 3f)
                 {
-                    projectileDamage = 49;
+                    projectileDamage = ((int)(49 * mPlayer.standDamageBoosts));
                     shootTime = 12;
                     chopperInaccuracy = 25;
                 }
                 else if (Projectile.ai[0] == 4f)
                 {
-                    projectileDamage = 62;
+                    projectileDamage = ((int)(62 * mPlayer.standDamageBoosts));
                     shootTime = 7;
                     chopperInaccuracy = 15;
                 }
@@ -69,7 +70,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (!mPlayer.standAutoMode)
             {
                 MovementAI();
-                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer)
+                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer && !BadCompanyUnitsUI.Visible) 
                 {
                     if (Main.MouseWorld.X >= Projectile.position.X)
                         Projectile.spriteDirection = Projectile.direction = 1;
@@ -88,7 +89,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -127,7 +128,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }

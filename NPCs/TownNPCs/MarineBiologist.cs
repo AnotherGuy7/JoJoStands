@@ -83,9 +83,16 @@ namespace JoJoStands.NPCs.TownNPCs
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (firstButton)
             {
+                if (mPlayer.awaitingViralMeteoriteTip)
+                {
+                    mPlayer.awaitingViralMeteoriteTip = false;
+                    Main.npcChatText = "Did you feel that too? It felt as if a certain force were pulling us toward the meteor. That is no ordinary meteor, we must find it immediately. If that meteorite happened to be a Viral Meteorite, we must take care of that virus as soon as possible before it falls into the wrong hands again. Make sure to check the entire surface of the world for it. If you can't find it, check your sky islands and chasms as well. Hurry!";
+                    return;
+                }
+
                 if (player.HeldItem.type == ModContent.ItemType<Hamon>())
                 {
-                    Main.npcChatText = "I haven't heard much about it but that old man tells me that .";
+                    Main.npcChatText = "I haven't heard much about it, but that old man tells me that Hamon is a versatile use of sun-like energy. From what he's told me, it can increase your physical capabilities and be used defensively or offensively, healing being one of its most useful uses. If that's all true, it's no wonder that man has lived this long.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<StarPlatinumT1>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<StarPlatinumT2>())
                 {
@@ -329,7 +336,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CreamT1>())
                 {
-                    Main.npcChatText = "That Stand makes me... nervous, and I cannot tell you why. Anyways, uh, Cream can harness the void and erase things, almost like that blockhead friend of Josuke’s.\nJust like the rest, Cream cannot do very much at this stage. It can throw a mean chop though, and it can cause enemies to lose their organs. Literally.";
+                    Main.npcChatText = "That Stand makes me... nervous, and I cannot tell you why. Anyways, uh, Cream can harness the void and erase things, almost like that blockhead friend of Josuke's.\nJust like the rest, Cream cannot do very much at this stage. It can throw a mean chop though, and it can cause enemies to lose their organs. Literally.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CreamT2>())
                 {
@@ -373,11 +380,11 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<BadCompanyFinal>())
                 {
-                    Main.npcChatText = "This Stand is surely something to be afraid of. You now have a small militia under your command, with soldiers, tanks, attack helicopters, and war planes under your command. It amazes how Josuke was able to survive that battle.";
+                    Main.npcChatText = "This Stand is surely something to be afraid of. You now have a small militia under your command, with soldiers, tanks, attack helicopters, and war planes under your command. It amazes me that Josuke was able to survive that battle.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<StoneFreeT1>())
                 {
-                    Main.npcChatText = "That’s... my daughter's stand. Its power allows you to turn it into string. While that may sound very mundane or useless, trust me when I say that it is no joke.\nAt this point, Stone Free has not gained the ability to do much besides punching, but it’s quite the punch, if I do say so myself.";
+                    Main.npcChatText = "That's... my daughter's stand. Its power allows you to turn it into string. While that may sound very mundane or useless, trust me when I say that it is no joke.\nAt this point, Stone Free has not gained the ability to do much besides punching, but it's quite the punch, if I do say so myself.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<StoneFreeT2>())
                 {
@@ -385,11 +392,11 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<StoneFreeT3>())
                 {
-                    Main.npcChatText = "Your strings have strengthened considerably. Now, you can use Stone Free’s threads to bind enemies, stopping them in their tracks. Who knows, you may be able to bind them and drag them to you as well.";
+                    Main.npcChatText = "Your strings have strengthened considerably. Now, you can use Stone Free's threads to bind enemies, stopping them in their tracks. Who knows, you may be able to bind them and drag them to you as well.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<StoneFreeFinal>())
                 {
-                    Main.npcChatText = "This final power-up from Stone Free allows you to weave Stone Free’s thread into a strong shield to protect yourself from harm. Now, go forth and spin a legendary tale with this power!";
+                    Main.npcChatText = "This final power-up from Stone Free allows you to weave Stone Free's thread into a strong shield to protect yourself from harm. Now, go forth and spin a legendary tale with this power!";
                 }
 
                 if (mPlayer.StandSlot.SlotItem.IsAir)

@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -24,19 +25,19 @@ namespace JoJoStands.Buffs.AccessoryBuff
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            player.controlUseItem = false;
+            player.shadowDodge = true;
+            player.shadowDodgeCount = -100f;
             player.moveSpeed = 0f;
             player.lifeRegen = 0;
-            player.immune = true;
             player.manaRegen = 0;
-            player.dashType = 0;
+            player.lavaImmune = true;
+            player.noFallDmg = true;
+            player.controlUseItem = false;
             player.controlQuickHeal = false;
             player.controlQuickMana = false;
             player.controlRight = false;
             player.controlUseTile = false;
             player.maxRunSpeed = 0f;
-            player.noFallDmg = true;
-
             if (MyPlayer.SecretReferences)
             {
                 limitTimer--;

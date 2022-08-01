@@ -25,10 +25,9 @@ namespace JoJoStands.Buffs.EffectBuff
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (player.HasBuff(Type) && !mPlayer.forceShutDownEffect)
             {
-                player.statDefense += 99999;
-                player.endurance = 1f;
+                player.shadowDodge = true;
+                player.shadowDodgeCount = -100f;
                 player.lifeRegen += 2;
-                player.noKnockback = true;
             }
             else
             {

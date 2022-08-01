@@ -38,19 +38,8 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<StarPlatinumT1>())
-                .AddIngredient(ItemID.PlatinumBar, 12)
-                .AddIngredient(ItemID.Hellstone, 20)
-                .AddIngredient(ItemID.Amethyst, 2)
-                .AddIngredient(ItemID.FallenStar, 5)
-                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
-                .AddIngredient(ModContent.ItemType<WillToProtect>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<StarPlatinumT1>())
-                .AddIngredient(ItemID.GoldBar, 12)
-                .AddIngredient(ItemID.Hellstone, 20)
+                .AddRecipeGroup("JoJoStandsGold-TierBar", 12)
+                .AddIngredient(ItemID.HellstoneBar, 20)
                 .AddIngredient(ItemID.Amethyst, 2)
                 .AddIngredient(ItemID.FallenStar, 5)
                 .AddIngredient(ModContent.ItemType<WillToFight>(), 2)

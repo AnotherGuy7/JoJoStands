@@ -25,14 +25,6 @@ namespace JoJoStands.Items.Dyes
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.Waterleaf)
-                .AddIngredient(ItemID.Deathweed)
-                .AddIngredient(ItemID.Shiverthorn)
-                .AddIngredient(ItemID.Fireblossom)
-                .AddTile(TileID.DyeVat)
-                .Register();
-
-            CreateRecipe()
             .AddIngredient(ItemID.Waterleaf)
             .AddIngredient(ItemID.Deathweed)
             .AddIngredient(ItemID.Shiverthorn)

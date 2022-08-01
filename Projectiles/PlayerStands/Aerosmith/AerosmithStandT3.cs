@@ -121,7 +121,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, newProjectileDamage, 3f, Projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -201,7 +201,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, newProjectileDamage, 3f, Projectile.owner);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                         }
                     }

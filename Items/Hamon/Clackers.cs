@@ -77,13 +77,7 @@ namespace JoJoStands.Items.Hamon
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 30)
-                .AddIngredient(ItemID.Cobweb, 25)
-                .AddIngredient(ModContent.ItemType<SunDroplet>(), 45)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 30)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 30)
                 .AddIngredient(ItemID.Cobweb, 25)
                 .AddIngredient(ModContent.ItemType<SunDroplet>(), 45)
                 .Register();

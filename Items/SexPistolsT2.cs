@@ -54,21 +54,11 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<SexPistolsT1>())
-                .AddIngredient(ItemID.IronBar, 20)
+                .AddRecipeGroup("JoJoStandsIron-TierBar", 20)
                 .AddIngredient(ItemID.FallenStar, 4)
                 .AddIngredient(ModContent.ItemType<WillToFight>())
                 .AddIngredient(ModContent.ItemType<WillToProtect>())
-                .AddIngredient(ItemID.SilverBullet, 50)
-                .AddTile(ModContent.TileType<RemixTableTile>())
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<SexPistolsT1>())
-                .AddIngredient(ItemID.LeadBar, 20)
-                .AddIngredient(ItemID.FallenStar, 4)
-                .AddIngredient(ModContent.ItemType<WillToFight>())
-                .AddIngredient(ModContent.ItemType<WillToProtect>())
-                .AddIngredient(ItemID.SilverBullet, 50)
+                .AddRecipeGroup("JoJoStandsSilverBullet", 50)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
         }

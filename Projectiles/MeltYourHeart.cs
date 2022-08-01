@@ -99,6 +99,13 @@ namespace JoJoStands.Projectiles
                 target.AddBuff(BuffID.Confused, 120);
         }
 
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+                crit = true;
+        }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             for (int i = 0; i < 4; i++)

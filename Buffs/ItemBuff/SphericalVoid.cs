@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TerraUI;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
@@ -17,14 +18,28 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.endurance = 1f;
-            player.immune = true;
+            Main.mapEnabled = false;
+            player.shadowDodge = true;
+            player.shadowDodgeCount = -100f;
+            player.blind = true;
+            player.blackout = true;
             player.noFallDmg = true;
-            player.longInvince = true;
+            player.lavaImmune = true;
             player.controlUseItem = false;
             player.controlUseTile = false;
+            player.controlLeft = false;
+            player.controlJump = false;
+            player.controlRight = false;
+            player.controlDown = false;
+            player.controlQuickHeal = false;
+            player.controlQuickMana = false;
+            player.controlRight = false;
+            player.controlUp = false;
+            player.controlMount = false;
+            player.gravControl = false;
+            player.gravControl2 = false;
+            player.controlTorch = false;
             player.preventAllItemPickups = true;
-            player.lavaImmune = true;
             player.velocity.X = -1f;
             player.velocity.Y = -1f;
             player.buffImmune[BuffID.Venom] = true;

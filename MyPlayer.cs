@@ -123,6 +123,7 @@ namespace JoJoStands
         public bool receivedArrowShard = false;
         public bool creamExposedMode = false;
         public bool creamVoidMode = false;
+        public bool creamDash = false;
         public bool creamNormalToExposed = false;
         public bool creamExposedToVoid = false;
         public bool creamAnimationReverse = false;
@@ -140,6 +141,10 @@ namespace JoJoStands
         public bool badCompanyDefaultArmy = true;
         public bool ableToOverrideTimestop = false;
         public bool stoneFreeWeaveAbilityActive = false;
+        public bool abilityWheelTipDisplayed = false;
+        public bool awaitingViralMeteoriteTip = false;
+        public bool hotbarLocked = false;
+        public bool playerJustHit = false;
 
         public bool timestopActive;
         public bool timestopOwner;
@@ -157,6 +162,7 @@ namespace JoJoStands
         private int standKeyPressTimer = 0;
         private int spinSubtractionTimer = 0;
         private int tbcCounter = 0;
+        private int playerJustHitTime = 0;
 
         private bool forceChangedTusk = false;
 
@@ -245,6 +251,7 @@ namespace JoJoStands
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
             standCritChangeBoosts = 5f;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
+            Main.mapEnabled = true;
         }
 
 
@@ -443,12 +450,14 @@ namespace JoJoStands
                 sexPistolsTier = 0;
                 hermitPurpleTier = 0;
                 stoneFreeWeaveAbilityActive = false;
+                hotbarLocked = false;
 
                 creamTier = 0;
                 voidCounter = 0;
                 creamNormalToExposed = false;
                 creamNormalToVoid = false;
                 creamExposedToVoid = false;
+                creamDash = false;
                 creamFrame = 0;
 
                 badCompanyTier = 0;
@@ -495,6 +504,7 @@ namespace JoJoStands
             tag.Add("usedEctoPearl", usedEctoPearl);
             tag.Add("receivedArrowShard", receivedArrowShard);
             tag.Add("piercedTimer", piercedTimer);
+            tag.Add("abilityWheelTipDisplayed", abilityWheelTipDisplayed);
         }
 
         public override void LoadData(TagCompound tag)
@@ -505,6 +515,7 @@ namespace JoJoStands
             usedEctoPearl = tag.GetBool("usedEctoPearl");
             receivedArrowShard = tag.GetBool("receivedArrowShard");
             piercedTimer = tag.GetInt("piercedTimer");
+            abilityWheelTipDisplayed = tag.GetBool("abilityWheelTipDisplayed");
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -636,6 +647,14 @@ namespace JoJoStands
                 Main.windSpeedCurrent = 0f;
             if (PlayerInput.Triggers.Current.SmartSelect || Player.dead)
                 canStandBasicAttack = false;
+            if (hotbarLocked && standOut && !standAutoMode)
+                Player.selectedItem = 0;
+            if (playerJustHitTime > 0)
+            {
+                playerJustHitTime--;
+                if (playerJustHitTime <= 0)
+                    playerJustHit = false;
+            }
 
             if (goldenSpinCounter > 0)          //golden spin stuff
             {
@@ -1011,10 +1030,17 @@ namespace JoJoStands
             if (creamTier != 0)        //Cream stuff
             {
                 VoidBar.Visible = true;
-                voidCounterMax = (creamTier - 1) * 4;
+                if (creamTier == 1)
+                {
+                    voidCounterMax = 4;
+                }
+                if (creamTier > 1)
+                {
+                    voidCounterMax = (creamTier - 1) * 4;
+                }
                 if (voidCounter < voidCounterMax)
                 {
-                    if (!creamVoidMode && !creamExposedMode)
+                    if (!creamVoidMode && !creamExposedMode && !creamDash)
                     {
                         voidTimer += 1;
                         if (voidTimer >= 120)
@@ -1045,6 +1071,11 @@ namespace JoJoStands
                         }
                     }
                 }
+                if (!standOut)
+                {
+                    creamTier = 0;
+                    voidCounter = 0;
+                }
             }
             else
             {
@@ -1062,7 +1093,7 @@ namespace JoJoStands
                 if (!Main.dedServ)
                     specialPressed = JoJoStands.SpecialHotKey.JustPressed;
 
-                if (specialPressed)
+                if (specialPressed && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
                     if (badCompanyTier == 3)
                     {
@@ -1194,6 +1225,8 @@ namespace JoJoStands
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
             }
+            if (hotbarLocked && standOut && !standAutoMode)
+                Player.selectedItem = 0;
         }
 
         private void UpdateShaderStates()
@@ -1364,6 +1397,8 @@ namespace JoJoStands
             standCooldownReduction = 0f;        //it's here because it resets before the buffs can use it when its in ResetEffects()
             if (Player.HasBuff(ModContent.BuffType<Stolen>()))
                 standOut = false;
+            if (!Player.HasBuff(ModContent.BuffType<SphericalVoid>()))
+                Main.mapEnabled = true;
         }
 
         public int AbilityCooldownTime(int seconds) //Sometimes we won't want to reduce the cooldown so that's why reduction defaults to 0
@@ -1395,7 +1430,7 @@ namespace JoJoStands
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
         {
-            if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0)
+            if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
                 damage *= 2;
 
             if (stoneFreeWeaveAbilityActive)
@@ -1452,6 +1487,28 @@ namespace JoJoStands
                 }
                 hermitPurpleHamonBurstLeft -= 1;
             }
+            if (Player.HasBuff<ZipperDodge>())
+            {
+                if (JoJoStands.SoundsLoaded)
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
+                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
+            }
+            playerJustHit = true;
+            playerJustHitTime = 2;
+        }
+
+        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
+        {
+            playerJustHit = true;
+            playerJustHitTime = 2;
+            if (Player.HasBuff<ZipperDodge>())
+            {
+                if (JoJoStands.SoundsLoaded)
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
+                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
+            }
         }
 
         public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
@@ -1489,19 +1546,6 @@ namespace JoJoStands
         {
             if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0)
                 return false;
-
-            if (Player.HasBuff<ZipperDodge>())
-            {
-                if (JoJoStands.SoundsLoaded)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
-
-                Player.immune = true;
-                Player.immuneTime = 30;
-                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
-                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
-                return false;
-            }
-
             return true;
         }
 
@@ -1572,6 +1616,7 @@ namespace JoJoStands
             creamNormalToExposed = false;
             creamNormalToVoid = false;
             creamExposedToVoid = false;
+            creamDash = false;
             creamFrame = 0;
 
             if (Player.whoAmI == Main.myPlayer && DeathSoundID == DeathSoundType.Roundabout)

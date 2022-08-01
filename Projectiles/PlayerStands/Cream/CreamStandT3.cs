@@ -21,6 +21,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         private Vector2 velocityAddition;
         private float mouseDistance;
         private int framechangecounter = 0;
+        private int dashproj = 0;
 
         public override void AI()
         {
@@ -38,9 +39,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 Projectile.timeLeft = 2;
 
 
-            if (!mPlayer.standAutoMode)
+            if (!mPlayer.standAutoMode && !mPlayer.creamDash)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
                 {
                     HandleDrawOffsets();
                     attackFrames = true;
@@ -93,13 +94,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     StayBehind();
                 }
-                if (Main.mouseRight && !mPlayer.creamExposedMode && player.ownedProjectileCounts[ModContent.ProjectileType<ExposingCream>()] <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid)
+                if (SecondSpecialKeyPressed() && !mPlayer.creamExposedMode && player.ownedProjectileCounts[ModContent.ProjectileType<ExposingCream>()] <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamDash)
                 {
                     mPlayer.creamFrame = 0;
                     if (!mPlayer.creamVoidMode)
                         mPlayer.creamNormalToExposed = true;
                 }
-                if (SpecialKeyPressed() && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamVoidMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid)
+                if (SpecialKeyPressed() && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamVoidMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamDash)
                 {
                     mPlayer.creamFrame = 0;
                     if (mPlayer.creamExposedMode)
@@ -110,6 +111,35 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                         mPlayer.creamNormalToExposed = true;
                         mPlayer.creamNormalToVoid = true;
                     }
+                }
+                if (Main.mouseRight && !Main.mouseLeft && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamVoidMode! && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash && mPlayer.voidCounter >= 4)
+                {
+                    mPlayer.voidCounter -= 4;
+                    mPlayer.creamDash = true;
+                }
+            }
+            if (mPlayer.creamDash)
+            {
+                if (player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0)
+                {
+                    SoundEngine.PlaySound(SoundID.Item78);
+                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                    if (shootVel == Vector2.Zero)
+                        shootVel = new Vector2(0f, 1f);
+                    shootVel.Normalize();
+                    dashproj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Void>(), (int)((punchDamage * 0.5f) * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
+                    Main.projectile[dashproj].netUpdate = true;
+                    Projectile.netUpdate = true;
+                }
+                if (player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] >= 1)
+                {
+                    Projectile.spriteDirection = Main.projectile[dashproj].spriteDirection;
+                    Vector2 vector = Main.projectile[dashproj].Center;
+                    Projectile.Center = Vector2.Lerp(Projectile.Center, vector, 1f);
+                    if (Main.projectile[dashproj].hide)
+                        Projectile.hide = false;
+                    else
+                        Projectile.hide = true;
                 }
             }
             if (mPlayer.creamNormalToExposed)
@@ -141,7 +171,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
                     shootVelocity.Normalize();
                     shootVelocity *= 5f;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<Void>(), (int)((50 * mPlayer.creamTier) * mPlayer.standDamageBoosts), 6f, player.whoAmI);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<Void>(), (int)((punchDamage * 0.5f) * mPlayer.standDamageBoosts), 6f, player.whoAmI);
                 }
                 if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse && mPlayer.creamNormalToExposed)
                 {
@@ -196,7 +226,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     }
                 }
             }
-            if (mPlayer.standAutoMode && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed)
+            if (mPlayer.standAutoMode && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
             {
                 BasicPunchAI();
             }
@@ -240,7 +270,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 attackFrames = false;
                 PlayAnimation("Pose");
             }
-            if (mPlayer.creamExposedMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid)
+            if (mPlayer.creamExposedMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid || mPlayer.creamDash)
             {
                 PlayAnimation("Idle2");
             }

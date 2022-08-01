@@ -71,16 +71,7 @@ namespace JoJoStands.Items.Hamon
                 .AddIngredient(ItemID.BottledWater)
                 .AddIngredient(ItemID.BottledHoney, 3)
                 .AddIngredient(ItemID.Ale)
-                .AddIngredient(ItemID.Ichor, 2)
-                .AddIngredient(ItemID.Glass, 2)
-                .AddTile(TileID.Kegs)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.BottledWater)
-                .AddIngredient(ItemID.BottledHoney, 3)
-                .AddIngredient(ItemID.Ale)
-                .AddIngredient(ItemID.CursedFlame, 2)
+                .AddRecipeGroup("JoJoStandsCursedIchor", 2)
                 .AddIngredient(ItemID.Glass, 2)
                 .AddTile(TileID.Kegs)
                 .Register();

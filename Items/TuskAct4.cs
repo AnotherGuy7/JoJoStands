@@ -15,7 +15,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tusk (ACT 4)");
-            Tooltip.SetDefault("Use the infinite energy inside you... \nWhile in Manual Mode: Left-click to deliver a flurry of punches with TA4.\nWhile in Auto Mode: Hold left-click to shoot and control a spinning nail and right-click to shoot an infinite spin nail!\nSpecial: Switch to previous acts!");
+            Tooltip.SetDefault("Use the infinite energy inside you... \nWhile in Manual Mode: Left-click to deliver a flurry of punches with TA4.\nWhile in Auto Mode: Hold left-click to shoot and control a spinning nail and right-click to shoot an infinite spin nail!\nSpecial: Switch to previous acts!\nNote: To use Tusk Act 4, Spin Energy must be built up by first running at full speed with Slow Dancer. Slow Dancer can be summoned using the Slow Dancer's Saddle item.");
         }
 
         public override void SetDefaults()

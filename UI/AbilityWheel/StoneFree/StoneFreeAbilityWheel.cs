@@ -66,11 +66,18 @@ namespace JoJoStands.UI
             wheel.abilityNameText.Top.Pixels = wheel.wheelCenterPosition.Y + wheel.wheelCenter.buttonPosition.Y + 60f;
             wheel.abilityNameText.Left.Pixels += -FontAssets.MouseText.Value.MeasureString(wheel.abilityNames[0]).X * 2f * wheel.textScale;
             wheel.abilityNameText.Left.Pixels += 10f;
+            Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().hotbarLocked = true;
+            if (!Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().abilityWheelTipDisplayed)
+            {
+                Main.NewText("*To use the Ability Wheel, use the numbers 1-x OR hover over the ability wheel with your cursor and scroll up or down!*", Color.Gold);
+                Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().abilityWheelTipDisplayed = true;
+            }
         }
 
         public static void CloseAbilityWheel()
         {
             Visible = false;
+            Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().hotbarLocked = false;
         }
     }
 }

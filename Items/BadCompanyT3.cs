@@ -49,18 +49,9 @@ namespace JoJoStands.Items
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<BadCompanyT2>())
                 .AddIngredient(ItemID.HallowedBar, 12)
-                .AddIngredient(ItemID.CursedBullet, 150)
+                .AddRecipeGroup("JoJoStandsEvilBullet", 150)
                 .AddIngredient(ModContent.ItemType<WillToDestroy>(), 3)
                 .AddTile(ModContent.TileType<RemixTableTile>())
-
-                .Register();
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<BadCompanyT2>())
-                .AddIngredient(ItemID.HallowedBar, 12)
-                .AddIngredient(ItemID.IchorBullet, 150)
-                .AddIngredient(ModContent.ItemType<WillToDestroy>(), 3)
-                .AddTile(ModContent.TileType<RemixTableTile>())
-
                 .Register();
         }
     }

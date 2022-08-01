@@ -26,6 +26,7 @@ namespace JoJoStands.Projectiles
         }
 
         private const float ExplosionRadius = 5.5f * 16f;
+        private bool crit = false;
 
         public override void Kill(int timeLeft)
         {
@@ -57,12 +58,15 @@ namespace JoJoStands.Projectiles
 
             for (int n = 0; n < Main.maxNPCs; n++)
             {
+                MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+                if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+                    crit = true;
                 NPC npc = Main.npc[n];
                 if (npc.active)
                 {
                     if (Projectile.ai[1] != 0f && npc.whoAmI == Projectile.ai[1])
                     {
-                        npc.StrikeNPC((int)(Projectile.ai[0] * 1.2f), 7f, npc.direction);
+                        npc.StrikeNPC((int)(Projectile.ai[0] * 1.2f), 7f, npc.direction, crit);
                         continue;
                     }
 
@@ -72,7 +76,7 @@ namespace JoJoStands.Projectiles
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
 
-                        npc.StrikeNPC((int)Projectile.ai[0], 7f, hitDirection);
+                        npc.StrikeNPC((int)Projectile.ai[0], 7f, hitDirection, crit);
                     }
                 }
             }

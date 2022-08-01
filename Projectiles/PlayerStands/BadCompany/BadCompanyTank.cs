@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.UI;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
@@ -55,17 +56,17 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 if (Projectile.ai[0] == 2f)
                 {
-                    projectileDamage = 76;
+                    projectileDamage = ((int)(76 * mPlayer.standDamageBoosts));
                     shootTime = 200;
                 }
                 else if (Projectile.ai[0] == 3f)
                 {
-                    projectileDamage = 125;
+                    projectileDamage = ((int)(125 * mPlayer.standDamageBoosts));
                     shootTime = 160;
                 }
                 else if (Projectile.ai[0] == 4f)
                 {
-                    projectileDamage = 187;
+                    projectileDamage = ((int)(187 * mPlayer.standDamageBoosts));
                     shootTime = 120;
                 }
                 speedRandom = Main.rand.NextFloat(-0.03f, 0.03f);
@@ -78,7 +79,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (!mPlayer.standAutoMode)
             {
                 MovementAI();
-                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer)
+                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer && !BadCompanyUnitsUI.Visible)
                 {
                     if (Main.MouseWorld.X >= Projectile.position.X)
                         Projectile.spriteDirection = Projectile.direction = 1;

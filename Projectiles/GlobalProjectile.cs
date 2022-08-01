@@ -25,6 +25,7 @@ namespace JoJoStands.Projectiles
         public bool timestopImmune = false;
         public bool autoModeSexPistols = false;
         public bool kickedBySexPistols = false;
+        public bool kickedByStarPlatinum = false;
         public float timestopFreezeProgress = 0f;
         public int timestopStartTimeLeft = 0;
         public Vector2 preSkipVel = Vector2.Zero;
@@ -232,6 +233,13 @@ namespace JoJoStands.Projectiles
         {
             if (kickedBySexPistols)
                 damage = (int)(damage * 1.05f);
+            if (kickedByStarPlatinum)
+            {
+                MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+                if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+                    crit = true;
+            }
+
         }
 
         public override bool ShouldUpdatePosition(Projectile Projectile)        //thanks, HellGoesOn for telling me this hook even existed

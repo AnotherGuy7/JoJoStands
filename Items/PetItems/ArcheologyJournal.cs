@@ -41,7 +41,7 @@ namespace JoJoStands.Items.PetItems
         {
             CreateRecipe()
                 .AddIngredient(ItemID.TatteredCloth, 3)
-                .AddIngredient(ItemID.GoldBar, 2)
+                .AddRecipeGroup("JoJoStandsGold-TierBar", 2)
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }

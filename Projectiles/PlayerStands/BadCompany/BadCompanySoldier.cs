@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.UI;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
@@ -60,22 +61,22 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 if (Projectile.ai[0] == 1f)
                 {
-                    projectileDamage = 9;
+                    projectileDamage = ((int)(9 * mPlayer.standDamageBoosts));
                     shootTime = 90;
                 }
                 else if (Projectile.ai[0] == 2f)
                 {
-                    projectileDamage = 18;
+                    projectileDamage = ((int)(18 * mPlayer.standDamageBoosts));
                     shootTime = 80;
                 }
                 else if (Projectile.ai[0] == 3f)
                 {
-                    projectileDamage = 31;
+                    projectileDamage = ((int)(31 * mPlayer.standDamageBoosts));
                     shootTime = 70;
                 }
                 else if (Projectile.ai[0] == 4f)
                 {
-                    projectileDamage = 40;
+                    projectileDamage = ((int)(40 * mPlayer.standDamageBoosts));
                     shootTime = 60;
                 }
                 shootTime += Main.rand.Next(0, 15 + 1);
@@ -102,7 +103,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         PlayAnimation("AimUp");
                     }
                 }
-                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer)
+                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer && !BadCompanyUnitsUI.Visible)
                 {
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X <= Projectile.position.X)
@@ -150,7 +151,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                         }
                     }
@@ -189,7 +190,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ProjectileID.Bullet, projectileDamage, 3f, Projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -206,7 +207,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 Projectile.position.Y -= 2f;
             }
 
-            if (mPlayer.poseDuration <= 20)
+            if (mPlayer.poseDuration <= 20 && !player.controlUseItem)
             {
                 if (mPlayer.poseDuration >= 18 && shootCount == 0)
                     shootCount += Main.rand.Next(0, 20 + 1);

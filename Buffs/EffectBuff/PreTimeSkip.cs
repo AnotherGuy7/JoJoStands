@@ -52,6 +52,8 @@ namespace JoJoStands.Buffs.EffectBuff
                     player.AddBuff(ModContent.BuffType<SkippingTime>(), 300);
                 else if (player.ownedProjectileCounts[ModContent.ProjectileType<KingCrimsonStandFinal>()] == 1)
                     player.AddBuff(ModContent.BuffType<SkippingTime>(), 600);
+                else if (player.ownedProjectileCounts[ModContent.ProjectileType<KingClausStand>()] == 1)
+                    player.AddBuff(ModContent.BuffType<SkippingTime>(), 600);
                 player.GetModPlayer<MyPlayer>().timeskipPreEffect = false;
             }
         }

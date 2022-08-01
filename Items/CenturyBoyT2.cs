@@ -44,18 +44,11 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<CenturyBoyT1>())
-                .AddIngredient(ItemID.CobaltBar, 6)
+                .AddRecipeGroup("JoJoStandsCobalt-TierBar", 6)
                 .AddIngredient(ItemID.HallowedBar, 4)
                 .AddIngredient(ItemID.Dynamite, 5)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
-
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<CenturyBoyT1>())
-                .AddIngredient(ItemID.PalladiumBar, 6)
-                .AddIngredient(ItemID.HallowedBar, 4)
-                .AddIngredient(ItemID.Dynamite, 5)
-                .AddTile(ModContent.TileType<RemixTableTile>());
         }
     }
 }

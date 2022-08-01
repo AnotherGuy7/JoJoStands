@@ -75,10 +75,12 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                 shootVel.Normalize();
                                 shootVel *= 12f;
                                 int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
+                                Main.projectile[proj].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
                                 Main.projectile[proj].netUpdate = true;
-                                Projectile.netUpdate = true;
-                                if (bulletItem.Name.Contains("Bullet"))
+                                if (bulletItem.type != ItemID.EndlessMusketPouch)
+                                {
                                     player.ConsumeItem(bulletItem.type);
+                                }
                             }
                         }
                     }
