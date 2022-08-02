@@ -35,13 +35,19 @@ namespace JoJoStands.Items.Hamon
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SpecialHotKey.Current;
 
+            if (player.breath <= 1)
+                return;
+
             if (specialPressed)
             {
+
                 increaseCounter++;
                 player.velocity.X /= 3f;
                 hamonPlayer.hamonIncreaseCounter = 0;
                 hamonPlayer.chargingHamon = true;
                 Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
+                if (increaseCounter % 10 == 0 && player.breath != player.breathMax)
+                    player.breath -= 4;
             }
             if (increaseCounter >= 30)
             {
