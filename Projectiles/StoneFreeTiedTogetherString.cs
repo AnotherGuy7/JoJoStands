@@ -42,11 +42,13 @@ namespace JoJoStands.Projectiles
             {
                 Projectile.direction = -1;
                 player.direction = -1;
+                ownerProj.direction = -1;
             }
             if (direction < 0)
             {
                 Projectile.direction = 1;
                 player.direction = 1;
+                ownerProj.direction = 1;
             }
             Vector2 rota = player.Center - Projectile.Center;
             Projectile.rotation = (-rota).ToRotation();
@@ -110,7 +112,7 @@ namespace JoJoStands.Projectiles
         {
             if (stringTexture == null)
             {
-                stringTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StoneFreeString_Part").Value;
+                stringTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StoneFreeString_Part", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
                 stringSourceRect = new Rectangle(0, 0, stringTexture.Width, stringTexture.Height);
                 stringOrigin = new Vector2(stringTexture.Width * 0.5f, stringTexture.Height * 0.5f);
             }

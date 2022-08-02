@@ -54,10 +54,10 @@ namespace JoJoStands.UI
 
             StoneFreeAbilityWheel wheel = stoneFreeAbilityWheel;
             wheel.abilitiesShown = amountOfAbilities;
-            for (int i = 0; i < AmountOfAbilities; i++)
+            for (int i = 0; i < amountOfAbilities; i++)
             {
-                wheel.abilityButtons[i].SetButtonPosiiton(wheel.wheelCenter.buttonPosition + (wheel.IndexToRadianPosition(i, AmountOfAbilities, wheel.wheelRotation) * wheel.wheelSpace));
-                if (i > wheel.abilitiesShown - 1)
+                wheel.abilityButtons[i].SetButtonPosiiton(wheel.wheelCenter.buttonPosition + (wheel.IndexToRadianPosition(i, wheel.abilitiesShown, wheel.wheelRotation) * wheel.wheelSpace));
+                if (i >= wheel.abilitiesShown)
                     wheel.abilityButtons[i].invisible = true;
             }
             wheel.wheelCenterPosition = new Vector2(Main.screenWidth * wheel.abilityWheel.HAlign, Main.screenHeight * wheel.abilityWheel.VAlign);

@@ -485,7 +485,9 @@ namespace JoJoStands.NPCs
 
                 if (npc.boss)
                 {
-                    npc.velocity *= 0.8f;
+                    if (Vector2.Distance(npc.position, npc.position + npc.velocity) > 3f)
+                        npc.velocity *= 0.94f;
+
                     return true;
                 }
 

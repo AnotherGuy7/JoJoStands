@@ -24,6 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         private Vector2 firstStringPos;
         private bool extendedBarrage = false;
         private bool holdingStringNPC = false;      //Holding an NPC via string
+        private int heldStringProjectileIndex;
 
         private const int ExtendedBarrageAbility = 0;
         private const int StringTraps = 1;
@@ -97,13 +98,23 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         shootVel.Normalize();
                         shootVel *= 12f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StoneFreeTiedTogetherString>(), 4, 0f, player.whoAmI, Projectile.whoAmI);
+                        heldStringProjectileIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StoneFreeTiedTogetherString>(), 4, 0f, player.whoAmI, Projectile.whoAmI);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(8));
                     }
                 }
                 holdingStringNPC = player.ownedProjectileCounts[ModContent.ProjectileType<StoneFreeTiedTogetherString>()] > 0;
                 if (holdingStringNPC)
-                    GoInFront();
+                {
+                    if (Main.projectile[heldStringProjectileIndex].active)
+                    {
+                        float direction = player.Center.X - Main.projectile[heldStringProjectileIndex].Center.X;
+                        if (direction > 0)
+                            Projectile.direction = -1;
+                        if (direction < 0)
+                            Projectile.direction = 1;
+                    }
+                    GoInFront(Projectile.direction);
+                }
 
                 if (SpecialKeyPressed())
                 {
@@ -127,7 +138,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         StoneFreeAbilityWheel.CloseAbilityWheel();
                 }
 
-                if (!attackFrames)
+                if (!attackFrames && !holdingStringNPC)
                 {
                     StayBehind();
                 }
