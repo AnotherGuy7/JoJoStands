@@ -366,11 +366,11 @@ namespace JoJoStands
             if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomChestplate", EquipType.Body))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Body_Glowmask").Value;
-                Rectangle rectangle = Utils.Frame(texture, 9, 4, drawPlayer.bodyFrame.X, drawPlayer.bodyFrame.Y, 0, 0);
+                Rectangle sourceRect = drawPlayer.bodyFrame;
                 float alpha = (255 - drawPlayer.immuneAlpha) / 255f;
                 Vector2 drawPosition = new Vector2(drawInfo.Position.X, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 10f + (int)drawPlayer.gfxOffY) + drawInfo.drawPlayer.bodyPosition - Main.screenPosition - new Vector2(drawInfo.torsoOffset) - (drawInfo.drawPlayer.Size / 2f);
                 drawPosition = drawPosition.ToPoint().ToVector2();      //So they become ints
-                DrawData drawData = new DrawData(texture, drawPosition, rectangle, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
+                DrawData drawData = new DrawData(texture, drawPosition, sourceRect, Color.White * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
                 //data.shader = drawInfo.bodyArmorShader;
                 drawInfo.DrawDataCache.Add(drawData);
             }

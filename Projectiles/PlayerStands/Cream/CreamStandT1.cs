@@ -110,7 +110,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     if (shootVel == Vector2.Zero)
                         shootVel = new Vector2(0f, 1f);
                     shootVel.Normalize();
-                    dashproj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Void>(), (int)((punchDamage * 0.5f) * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
+                    dashproj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Void>(), (int)((punchDamage * 1.3f) * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
                     Main.projectile[dashproj].netUpdate = true;
                     Projectile.netUpdate = true;
                 }
@@ -129,6 +129,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 BasicPunchAI();
             }
+        }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            bool creamdash = true;
+            if (mPlayer.creamDash)
+                creamdash = false;
+            return creamdash;
         }
 
         public override void SelectAnimation()

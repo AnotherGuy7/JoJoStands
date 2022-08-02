@@ -114,6 +114,7 @@ namespace JoJoStands
         public bool chlorositeShortEqquipped = false;
         public bool crystalArmorSetEquipped = false;
         public bool crackedPearlEquipped = false;
+        public bool heartHeadbandEquipped = false;
         public bool phantomHoodLongEquipped = false;
         public bool phantomHoodNeutralEquipped = false;
         public bool phantomHoodShortEquipped = false;
@@ -231,6 +232,7 @@ namespace JoJoStands
             crystalArmorSetEquipped = false;
             wearingTitaniumMask = false;
             awakenedAmuletEquipped = false;
+            heartHeadbandEquipped = false;
             phantomHoodLongEquipped = false;
             phantomHoodNeutralEquipped = false;
             phantomHoodShortEquipped = false;
@@ -275,6 +277,8 @@ namespace JoJoStands
                 sexPistolsOffsets[i] = new Vector2(Main.rand.NextFloat(-40f, 40f + 1f), Main.rand.NextFloat(-40f, 40f + 1f));
             }
             forceShutDownEffect = false;
+            ToBeContinued.Visible = false;
+            tbcCounter = 0;
         }
 
         public override void OnRespawn(Player player)

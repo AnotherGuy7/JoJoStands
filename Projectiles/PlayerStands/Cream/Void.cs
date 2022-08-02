@@ -47,8 +47,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 voidwithoutplayer = true;
                 targetposition = Main.MouseWorld;
-
             }
+
             if (voidwithoutplayer)
             {
                 tiledestroycooldown++;
@@ -58,11 +58,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     Projectile.spriteDirection = 1;
                 if (distance >= 800f)
                     returnback = false;
+
                 if (returnback)
                 {
                     Projectile.velocity = targetposition - Projectile.Center;
                     Projectile.velocity.Normalize();
-                    Projectile.velocity *= 6f + mPlayer.creamTier;
+                    Projectile.velocity *= 8f + (mPlayer.creamTier * 2f);
                     if (distance2 <= 10f)
                         returnback = false;
                 }
@@ -75,7 +76,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     }
                     Projectile.velocity = player.Center - Projectile.Center;
                     Projectile.velocity.Normalize();
-                    Projectile.velocity *= 4f + mPlayer.creamTier * 2;
+                    Projectile.velocity *= 6f + mPlayer.creamTier;
                 }
             }
             if (!voidwithoutplayer)
@@ -94,8 +95,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     bool specialPressed = false;
                     bool secondspecialPressed = false;
                     if (!Main.dedServ)
+                    {
                         specialPressed = JoJoStands.SpecialHotKey.JustPressed;
-                    secondspecialPressed = JoJoStands.SecondSpecialHotKey.JustPressed;
+                        secondspecialPressed = JoJoStands.SecondSpecialHotKey.JustPressed;
+                    }
 
                     float halfScreenWidth = (float)Main.screenWidth / 2f;
                     float halfScreenHeight = (float)Main.screenHeight / 2f;
@@ -175,12 +178,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 if (!returnback && distance <= 40f)
                 {
                     SoundEngine.PlaySound(SoundID.Item78);
+                    mPlayer.voidCounter += 2;
                 }
                 mPlayer.creamDash = false;
                 Projectile.Kill();
             }
 
-            if (returnback)
+            if (returnback && !mPlayer.heartHeadbandEquipped)
             {
                 int creamLeftX = (int)(Projectile.position.X / 16f) - 1;
                 int creamRightX = (int)((Projectile.position.X + (float)Projectile.width) / 16f) + 2;
@@ -283,6 +287,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         {
             if (returnback && voidwithoutplayer && tiledestroycooldown >= 20)
                 returnback = false;
+
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().heartHeadbandEquipped)
+                Projectile.velocity *= -0.6f;
+
             return false;
         }
 

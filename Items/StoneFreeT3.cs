@@ -38,7 +38,7 @@ namespace JoJoStands.Items
 
         public override bool ManualStandSpawning(Player player)
         {
-            StoneFreeAbilityWheel.OpenAbilityWheel(player.GetModPlayer<MyPlayer>(), 5);
+            StoneFreeAbilityWheel.OpenAbilityWheel(player.GetModPlayer<MyPlayer>(), 4);
             return false;
         }
 

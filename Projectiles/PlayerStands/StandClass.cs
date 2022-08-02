@@ -191,7 +191,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// Stand ID and Stand Tier Number are passed into the fist Projectile.
         /// </summary>
         /// <param name="movementSpeed">How fast the Stand moves while it's punching</param>
-        ///  /// <param name="punchLifeTimeMultiplier">A multiplier for the punch projectiles' lifetime.</param>
+        /// <param name="punchLifeTimeMultiplier">A multiplier for the punch projectiles' lifetime.</param>
         public void Punch(float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f)
         {
             Player player = Main.player[Projectile.owner];
@@ -294,17 +294,21 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         /// <summary>
         /// Has the Stand go in front of the player.
+        /// <param name="forcedDirection">The direction the Stand will be forced to face.</param>
         /// </summary>
-        public void GoInFront()
+        public void GoInFront(int forcedDirection = 0)
         {
             Player player = Main.player[Projectile.owner];
+            int direction = player.direction;
+            if (forcedDirection != 0)
+                direction = forcedDirection;
 
             Vector2 areaBehindPlayer = player.Center;
-            areaBehindPlayer.X += (float)((12 + player.width / 2) * player.direction);
+            areaBehindPlayer.X += (float)((12 + player.width / 2) * direction);
             areaBehindPlayer.Y -= -35f + halfStandHeight;
             Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
             Projectile.velocity *= 0.8f;
-            Projectile.direction = (Projectile.spriteDirection = player.direction);
+            Projectile.direction = (Projectile.spriteDirection = direction);
             Projectile.rotation = 0;
             HandleDrawOffsets();
             LimitDistance();

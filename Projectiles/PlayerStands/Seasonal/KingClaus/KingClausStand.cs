@@ -24,6 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         private Vector2 velocityAddition;
         private int timeskipStartDelay = 0;
         private int blockSearchTimer = 0;
+        private bool preparingTimeskip = false;
 
         public override void AI()
         {
@@ -43,28 +44,34 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 Main.dust[dust].noGravity = true;
             }
 
-            if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && timeskipStartDelay <= 0)
+            if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && timeskipStartDelay <= 0)
             {
-                if (JoJoStands.JoJoStandsSounds == null)
+                if (!JoJoStands.SoundsLoaded)
                     timeskipStartDelay = 80;
                 else
                 {
-                    SoundStyle kingCrimson = new SoundStyle("JoJoStands/Sounds/SoundEffects/KingCrimson");
+                    SoundStyle kingCrimson = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/KingCrimson");
                     kingCrimson.Volume = MyPlayer.ModSoundsVolume;
-                    SoundEngine.PlaySound(kingCrimson, Projectile.Center);
-                    timeskipStartDelay = 1;
+                    SoundEngine.PlaySound(kingCrimson, Projectile.position);
+                    timeskipStartDelay = 0;
                 }
+                preparingTimeskip = true;
             }
-            if (timeskipStartDelay != 0)
+            if (preparingTimeskip)
             {
                 timeskipStartDelay++;
                 if (timeskipStartDelay >= 80)
                 {
+                    shootCount += 15;
                     player.AddBuff(ModContent.BuffType<PreTimeSkip>(), 10);
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
                     timeskipStartDelay = 0;
+                    preparingTimeskip = false;
+                    mPlayer.kingCrimsonAbilityCooldownTime = 30;
                 }
             }
+            if (player.HasBuff(ModContent.BuffType<SkippingTime>()) && player.HasBuff(ModContent.BuffType<ForesightBuff>()))
+                mPlayer.kingCrimsonAbilityCooldownTime = 45;
 
             if (!mPlayer.standAutoMode)
             {
