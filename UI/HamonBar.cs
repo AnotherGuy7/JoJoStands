@@ -87,7 +87,7 @@ namespace JoJoStands.UI
         {
             Player player = Main.player[Main.myPlayer];
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            int frame = (int)MathHelper.Clamp(hamonPlayer.amountOfHamon / 11, 0, 23);
+            int frame = (int)MathHelper.Clamp(hamonPlayer.amountOfHamon / 12, 1, 23) - 1;
             int frameHeight = hamonBarTexture.Height / 24;      //24 frames in that sheet
             /*if (hamonPlayer.amountOfHamon >= 3 && hamonPlayer.amountOfHamon <= 12)
             {

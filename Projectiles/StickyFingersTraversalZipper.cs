@@ -50,6 +50,7 @@ namespace JoJoStands.Projectiles
             player.noFallDmg = true;
             if (player.HasBuff(BuffID.Suffocation))
                 player.ClearBuff(BuffID.Suffocation);
+
             Vector2 velocity;
             velocity = Projectile.Center - player.Center;
             velocity.Normalize();
@@ -71,7 +72,11 @@ namespace JoJoStands.Projectiles
             }
             if (stopped)
             {
+                Vector2 expectedPosition = player.position + (velocity * 12f);
                 player.position += velocity * 12f;
+                if (Vector2.Distance(player.position, expectedPosition) >= 12f)
+                    player.position += velocity * 24f;
+
                 player.velocity = velocity * 6f;
                 /*if (recoveredTime == 0f && Projectile.ai[0] == 0f)      //max here can be 9 seconds 
                 {

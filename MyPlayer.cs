@@ -277,6 +277,8 @@ namespace JoJoStands
                 sexPistolsOffsets[i] = new Vector2(Main.rand.NextFloat(-40f, 40f + 1f), Main.rand.NextFloat(-40f, 40f + 1f));
             }
             forceShutDownEffect = false;
+            ToBeContinued.Visible = false;
+            tbcCounter = 0;
         }
 
         public override void OnRespawn(Player player)

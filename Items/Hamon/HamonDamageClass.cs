@@ -44,6 +44,9 @@ namespace JoJoStands.Items.Hamon
                     player.AddBuff(ModContent.BuffType<Sunburn>(), 5 * 60);
                     return;
                 }
+                if (player.breath <= 1)
+                    return;
+
                 increaseCounter++;
                 player.velocity.X /= 3f;
                 hamonPlayer.hamonIncreaseCounter = 0;
@@ -59,6 +62,8 @@ namespace JoJoStands.Items.Hamon
                         }
                     }
                 }
+                if (increaseCounter % 10 == 0 && player.breath != player.breathMax)
+                    player.breath -= 4;
             }
             if (increaseCounter >= 30)
             {
