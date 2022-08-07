@@ -35,7 +35,8 @@ namespace JoJoStands.Items.Accessories
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<StoneMask>())
                 .AddIngredient(ModContent.ItemType<AjaStone>())
-                .AddTile(TileID.MythrilAnvil);
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }
