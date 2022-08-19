@@ -8,6 +8,7 @@ using JoJoStands.Items.Tiles;
 using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs.Enemies;
 using JoJoStands.NPCs.TownNPCs;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -18,11 +19,26 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
+using Terraria.Audio;
 
 namespace JoJoStands.NPCs
 {
     public class JoJoGlobalNPC : GlobalNPC
     {
+
+        private int CDsavedAIstyle = 0; // i'm sorry, i know there's too much here, but without it, everything breaks (c) Proos <3
+        private float CDsavedKnockbackRes = 0;
+        private int CDfallDamage = 0;
+        private int CDoldPositionY = (int)Vector2.Zero.Y;
+        private bool CDsavedTileCollide = false;
+        private bool CDonlyOnce = false;
+        private SoundStyle? CDsavedHitSound = SoundID.PlayerHit;
+
+        public bool crazyDiamondFullHealth = false;
+        public int crazyDiamondHeal = 0;
+        public int CDstonePunch = 0;
+
+
         public bool frozenInTime = false;
         public bool affectedbyBtz = false;
         public bool taggedByButterfly = false;
@@ -224,6 +240,49 @@ namespace JoJoStands.NPCs
         public override bool PreAI(NPC npc)
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+
+            {
+                if (npc.HasBuff(ModContent.BuffType<YoAngelo>())) //crazy diamond stuff
+                {
+                    CDstonePunch = 0;
+                    if (npc.aiStyle != -101510150)
+                    {
+                        CDsavedAIstyle = npc.aiStyle;
+                        CDsavedHitSound = npc.HitSound;
+                        CDsavedKnockbackRes = npc.knockBackResist;
+                        CDsavedTileCollide = npc.noTileCollide;
+                        npc.aiStyle = -101510150;
+                        npc.HitSound = SoundID.NPCHit41;
+                        npc.knockBackResist = 100f;
+                        npc.noTileCollide = false;
+                    }
+                    if (CDoldPositionY == (int)Vector2.Zero.Y)
+                        CDoldPositionY = (int)npc.Center.Y;
+                    CDfallDamage = (int)npc.Center.Y - CDoldPositionY;
+                    if (!CDonlyOnce && npc.collideY && CDfallDamage > 200)
+                    {
+                        CDonlyOnce = true;
+                        npc.StrikeNPCNoInteraction((CDfallDamage - 200 + npc.defense / 4) * 2, 0f, 0, true, true, true);
+                    }
+                }
+                if (!npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+                {
+                    if (CDstonePunch >= 7)
+                        npc.AddBuff(ModContent.BuffType<YoAngelo>(), 360);
+
+                    if (npc.aiStyle == -101510150)
+                    {
+                        CDonlyOnce = false;
+                        CDoldPositionY = (int)Vector2.Zero.Y;
+                        CDfallDamage = 0;
+                        npc.aiStyle = CDsavedAIstyle;
+                        npc.HitSound = CDsavedHitSound;
+                        npc.knockBackResist = CDsavedKnockbackRes;
+                        npc.noTileCollide = CDsavedTileCollide;
+                    }
+                }
+            }
+
             if (zombieHightlightTimer > 0)
                 zombieHightlightTimer--;
 
@@ -616,6 +675,8 @@ namespace JoJoStands.NPCs
                 highlightedByTheHandMarker = false;
                 drawColor = Color.LightBlue;
             }
+            if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+                drawColor = Color.Gray;
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -722,6 +783,19 @@ namespace JoJoStands.NPCs
             {
                 npc.lifeRegen = -4;
             }
+            if (crazyDiamondFullHealth)
+            {
+                int restoration = npc.lifeMax - npc.life;
+                npc.life += restoration;
+                npc.HealEffect(restoration, true);
+                crazyDiamondFullHealth = false;
+            }
+            if (crazyDiamondHeal > 0)
+            {
+                npc.life += crazyDiamondHeal;
+                npc.HealEffect(crazyDiamondHeal, true);
+                crazyDiamondHeal = 0;
+            }
         }
 
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
@@ -737,6 +811,23 @@ namespace JoJoStands.NPCs
                 pool.Add(ModContent.NPCType<WangChan>(), 0.02f);
                 pool.Add(ModContent.NPCType<JackTheRipper>(), 0.02f);
             }
+        }
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            Player player = Main.player[projectile.owner];
+            if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+            {
+                if (crit && player.HasBuff(ModContent.BuffType<BlindRage>()) && projectile.type == ModContent.ProjectileType<Fists>())
+                    damage = (int)(damage * 2f);
+                else
+                    damage = (int)(damage * 0.2f);
+            }
+        }
+
+        public override void ModifyHitByItem(NPC npc, Player player, Item item, ref int damage, ref float knockback, ref bool crit)
+        {
+            if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+                damage = (int)(damage * 0.2f);
         }
     }
 }

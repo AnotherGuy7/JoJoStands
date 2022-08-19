@@ -1,7 +1,9 @@
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.NPCs;
 using JoJoStands.Projectiles.PlayerStands.KillerQueen;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -28,6 +30,11 @@ namespace JoJoStands.Projectiles
         public const byte Whitesnake = 9;
         public const byte SilverChariot = 10;
         public const byte Cream = 11;
+        public const byte CrazyDiamond = 12;
+
+        private bool onlyOnce = false;
+        private int standType = 0;
+        private int standTier = 0;
 
         public override void SetDefaults()
         {
@@ -44,8 +51,6 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            int standType = (int)Projectile.ai[0];
-            int standTier = (int)Projectile.ai[1];
             if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             if (JoJoStands.SoundsLoaded)
@@ -139,9 +144,12 @@ namespace JoJoStands.Projectiles
                 }
             }
 
+            if (standType == CrazyDiamond && player.HasBuff(ModContent.BuffType<BlindRage>()) && !target.HasBuff(ModContent.BuffType<YoAngelo>()))
+                target.GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
+
             if (standType == Cream)
             {
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 120 * mPlayer.creamTier);
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
             }
 
             if (mPlayer.destroyAmuletEquipped)
@@ -169,14 +177,14 @@ namespace JoJoStands.Projectiles
                 target.velocity.X *= 0.2f;
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        /*public override void OnHitPvp(Player target, int damage, bool crit)       //this unfortunately does not work, so i left a temporary "solution" to the problem in the AI until the Boss fixes the problem (c) Proos <3
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            /*if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)     //Unlike in ModifyHitNPC, this one doesn't actually change if it's a crit or not, just detects
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)     //Unlike in ModifyHitNPC, this one doesn't actually change if it's a crit or not, just detects
             {
                 crit = true;
-            }*/
+            }
             int standType = (int)Projectile.ai[0];
             int standTier = (int)Projectile.ai[1];
 
@@ -247,13 +255,16 @@ namespace JoJoStands.Projectiles
                 if (Main.rand.NextFloat(1, 100 + 1) <= 40)
                     target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
             }
-        }
+        }*/
 
         private bool playedSound = false;
 
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            standType = (int)Projectile.ai[0];
+            standTier = (int)Projectile.ai[1];
             if (!playedSound)
             {
                 SoundEngine.PlaySound(SoundID.Item1);
@@ -297,6 +308,217 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
+            for (int p = 0; p < Main.maxPlayers; p++)      //temporary "solution" (ñ) Proos <3
+            {
+                Player otherPlayer = Main.player[p];
+                if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]))
+                {
+                    if ((Projectile.Hitbox.Intersects(otherPlayer.Hitbox)) && !onlyOnce)
+                    {
+                        if (standType == GoldExperience)
+                        {
+                            if (standTier == 3f)
+                            {
+                                otherPlayer.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
+                            }
+                            if (standTier == 4f)
+                            {
+                                otherPlayer.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
+                            }
+                        }
+
+                        if (standType == GoldExperienceRequiem)
+                        {
+                            otherPlayer.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
+                            if (mPlayer.backToZeroActive)
+                            {
+                                otherPlayer.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
+                            }
+                        }
+
+                        if (standType == StickyFingers)
+                        {
+                            otherPlayer.AddBuff(ModContent.BuffType<Zipped>(), (int)standTier * 60);
+                        }
+
+                        if (standType == TheHand)
+                        {
+                            otherPlayer.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
+                        }
+
+                        if (standType == GratefulDead)
+                        {
+                            otherPlayer.AddBuff(ModContent.BuffType<Aging>(), (1 + (int)standTier) * 60);
+                        }
+
+                        if (standType == Whitesnake)
+                        {
+                            if (Main.rand.NextFloat(0, 101) >= 94)
+                            {
+                                otherPlayer.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
+                            }
+                        }
+
+                        if (standType == CrazyDiamond && player.HasBuff(ModContent.BuffType<BlindRage>()) && !otherPlayer.HasBuff(ModContent.BuffType<YoAngelo>()))
+                            otherPlayer.GetModPlayer<MyPlayer>().crazyDiamondStonePunch += 1;
+
+                        if (standType == Cream)
+                        {
+                            otherPlayer.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
+                        }
+
+                        if (mPlayer.destroyAmuletEquipped && !mPlayer.crazyDiamondRestorationMode)
+                        {
+                            if (Main.rand.NextFloat(1, 100 + 1) <= 7)
+                            {
+                                otherPlayer.AddBuff(BuffID.OnFire, 4 * 60);
+                            }
+                        }
+                        if (mPlayer.greaterDestroyEquipped && !mPlayer.crazyDiamondRestorationMode)
+                        {
+                            if (Main.rand.NextFloat(1, 100 + 1) <= 20)
+                            {
+                                otherPlayer.AddBuff(BuffID.CursedInferno, 6 * 60);
+                            }
+                        }
+                        if (mPlayer.awakenedAmuletEquipped && !mPlayer.crazyDiamondRestorationMode)
+                        {
+                            if (Main.rand.NextFloat(1, 100 + 1) <= 20)
+                            {
+                                otherPlayer.AddBuff(ModContent.BuffType<Infected>(), 8 * 60);
+                            }
+                        }
+                        if (mPlayer.crackedPearlEquipped && !mPlayer.crazyDiamondRestorationMode)
+                        {
+                            if (Main.rand.NextFloat(1, 100 + 1) <= 40)
+                            {
+                                otherPlayer.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+                            }
+                        }
+                        onlyOnce = true;
+                    }
+                }
+            }
+            if (mPlayer.crazyDiamondRestorationMode)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
+                if (mPlayer.standTier > 1)
+                {
+                    int detectLeftX = (int)(Projectile.position.X / 16f) - 1;
+                    int detectRightX = (int)((Projectile.position.X + (float)Projectile.width) / 16f) + 1;
+                    int detectUpY = (int)(Projectile.position.Y / 16f) - 1;
+                    int detectDownY = (int)((Projectile.position.Y + (float)Projectile.height) / 16f) + 1;
+
+                    if (detectLeftX < 0)
+                        detectLeftX = 0;
+                    if (detectRightX > Main.maxTilesX)
+                        detectRightX = Main.maxTilesX;
+
+                    if (detectUpY < 0)
+                        detectUpY = 0;
+                    if (detectDownY > Main.maxTilesY)
+                        detectDownY = Main.maxTilesY;
+                    for (int detectedTileX = detectLeftX; detectedTileX < detectRightX; detectedTileX++)
+                    {
+                        for (int detectedTileY = detectUpY; detectedTileY < detectDownY; detectedTileY++)
+                        {
+                            Vector2 tile = new Vector2(detectedTileX, detectedTileY);
+                            Tile tile2 = Main.tile[detectedTileX, detectedTileY];
+                            var checkTile = new MyPlayer.ExtraTile(tile2.TileType, new Vector2(detectedTileX, detectedTileY));
+                            if (tile2.TileType != TileID.LihzahrdBrick && tile2.TileType != TileID.LihzahrdAltar && tile2.HasTile)
+                            {
+                                if (!tile2.HasActuator || tile2.HasActuator && tile2.IsActuated)
+                                {
+                                    if (mPlayer.ExtraTileCheck.Count < 100 * standTier)
+                                    {
+                                        mPlayer.ExtraTileCheck.Add(checkTile);
+                                        mPlayer.ExtraTileCheck.ForEach(mPlayer.Destroy);
+                                    }
+                                    if (mPlayer.ExtraTileCheck.Count == 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0)
+                                    {
+                                        Main.NewText("Stop destroyng public property! Now restore it!");
+                                        mPlayer.crazyDiamondMessageCooldown += 180;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                for (int n = 0; n < Main.maxNPCs; n++)
+                {
+                    NPC npc = Main.npc[n];
+                    int heal = (int)(Projectile.damage * 0.2f);
+                    int lifeLeft = npc.lifeMax - npc.life;
+                    if (npc.active && !npc.hide)
+                    {
+                        if (Projectile.Hitbox.Intersects(npc.Hitbox) && !onlyOnce)
+                        {
+                            SoundEngine.PlaySound(npc.HitSound, npc.Center);
+                            if (lifeLeft > 0)
+                            {
+                                heal = (int)Main.rand.NextFloat((int)(heal * 0.85f), (int)(heal * 1.15f));
+                                if (heal > lifeLeft)
+                                    heal = lifeLeft;
+
+                                npc.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondHeal = heal;
+
+                                if (!npc.townNPC && Main.rand.NextFloat(1, 100) <= 5)
+                                    npc.lifeMax = npc.life;
+                            }
+                            onlyOnce = true;
+                        }
+                    }
+                }
+                for (int p = 0; p < Main.maxPlayers; p++)
+                {
+                    Player otherPlayer = Main.player[p];
+                    int heal = (int)(Projectile.damage * 0.2f);
+                    int lifeLeft = otherPlayer.statLifeMax - otherPlayer.statLife;
+                    if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI)
+                    {
+                        if ((Projectile.Hitbox.Intersects(otherPlayer.Hitbox)) && !onlyOnce)
+                        {
+                            SoundEngine.PlaySound(SoundID.NPCHit1, otherPlayer.Center);
+                            if (lifeLeft > 0)
+                            {
+                                heal = (int)Main.rand.NextFloat((int)(heal * 0.85f), (int)(heal * 1.15f));
+                                if (heal > lifeLeft)
+                                    heal = lifeLeft;
+                                otherPlayer.Heal(heal);
+                                if (Main.rand.NextFloat(1, 100) <= 5)
+                                {
+                                    if (otherPlayer.HasBuff(BuffID.Lifeforce))
+                                        otherPlayer.ClearBuff(BuffID.Lifeforce);
+                                    if (!otherPlayer.HasBuff(BuffID.Lifeforce) && otherPlayer.statLifeMax > 100)
+                                        otherPlayer.AddBuff(ModContent.BuffType<ImproperRestoration>(), 2);
+                                }
+                            }
+                            otherPlayer.AddBuff(ModContent.BuffType<Restoration>(), 60);
+                            onlyOnce = true;
+                        }
+                    }
+                }
+            }
+            if (player.HasBuff(ModContent.BuffType<BlindRage>()))
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 1);
+        }
+        public override bool? CanHitNPC(NPC target)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.crazyDiamondRestorationMode)
+                return false;
+            else
+                return null;
+        }
+        public override bool CanHitPvp(Player target)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.crazyDiamondRestorationMode)
+                return false;
+            else
+                return true;
         }
     }
 }

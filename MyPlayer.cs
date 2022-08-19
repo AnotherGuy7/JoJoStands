@@ -187,6 +187,37 @@ namespace JoJoStands
         private int sexPistolsClickTimer = 0;
         private bool changingSexPistolsPositions = false;
 
+
+        public class ExtraTile //crazy diamond some new stuff
+        {
+            public ushort tileType { get; set; }
+            public Vector2 tilePosition { get; set; }
+
+            public ExtraTile(ushort tileType, Vector2 tilePosition)
+            {
+                this.tileType = tileType;
+                this.tilePosition = tilePosition;
+            }
+        }
+        public void Destroy(ExtraTile ExtraTile)
+        {
+            Vector2 vector2 = ExtraTile.tilePosition;
+            WorldGen.KillTile((int)vector2.X, (int)vector2.Y, false, false, true);
+        }
+        public void Restore(ExtraTile ExtraTile)
+        {
+            Vector2 vector2 = ExtraTile.tilePosition;
+            WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, ExtraTile.tileType, false, true);
+        }
+
+        public List<ExtraTile> ExtraTileCheck = new List<ExtraTile>();
+        public bool crazyDiamondRestorationMode = false;
+        public int crazyDiamondMessageCooldown = 0;
+        public int crazyDiamondStonePunch = 0;
+        public int oldMaxHP = 0;
+        public int improperRestorationstack = 1;
+        public int maxHP = 0;
+
         public enum StandSearchType
         {
             Bosses,
@@ -294,6 +325,7 @@ namespace JoJoStands
         public override void PlayerDisconnect(Player player)        //runs for everyone that hasn't left
         {
             MyPlayer mPlayer = Player.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer2 = player.GetModPlayer<MyPlayer>();
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 for (int p = 0; p < Main.maxPlayers; p++)
@@ -323,6 +355,9 @@ namespace JoJoStands
                     }
                 }
             }
+            mPlayer2.ExtraTileCheck.ForEach(Restore);
+            mPlayer2.crazyDiamondMessageCooldown = 0;
+            mPlayer2.ExtraTileCheck.Clear();
         }
 
         public override void ModifyScreenPosition()     //used HERO's Mods FlyCam as a reference for this
@@ -336,7 +371,7 @@ namespace JoJoStands
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (JoJoStands.StandAutoModeHotKey.JustPressed && !standAutoMode && standKeyPressTimer <= 0)
+            if (JoJoStands.StandAutoModeHotKey.JustPressed && !standAutoMode && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Auto");
@@ -344,7 +379,7 @@ namespace JoJoStands
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, true, Player.whoAmI);
             }
-            if (JoJoStands.StandAutoModeHotKey.JustPressed && standAutoMode && standKeyPressTimer <= 0)
+            if (JoJoStands.StandAutoModeHotKey.JustPressed && standAutoMode && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Manual");
@@ -352,7 +387,7 @@ namespace JoJoStands
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, false, Player.whoAmI);
             }
-            if (JoJoStands.PoseHotKey.JustPressed && !poseMode)
+            if (JoJoStands.PoseHotKey.JustPressed && !poseMode && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 if (Sounds)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
@@ -365,7 +400,7 @@ namespace JoJoStands
             if (standChangingLocked)
                 return;
 
-            if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Stolen>()))
+            if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Stolen>()) && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 standOut = true;
                 standKeyPressTimer += 30;
@@ -440,7 +475,7 @@ namespace JoJoStands
                     }
                 }
             }
-            if (JoJoStands.StandOutHotKey.JustPressed && standOut && standKeyPressTimer <= 0)
+            if (JoJoStands.StandOutHotKey.JustPressed && standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 standOut = false;
                 standAccessory = false;
@@ -455,6 +490,11 @@ namespace JoJoStands
                 hermitPurpleTier = 0;
                 stoneFreeWeaveAbilityActive = false;
                 hotbarLocked = false;
+
+                crazyDiamondRestorationMode = false;
+                ExtraTileCheck.ForEach(Restore);
+                crazyDiamondMessageCooldown = 0;
+                ExtraTileCheck.Clear();
 
                 creamTier = 0;
                 voidCounter = 0;
@@ -509,6 +549,9 @@ namespace JoJoStands
             tag.Add("receivedArrowShard", receivedArrowShard);
             tag.Add("piercedTimer", piercedTimer);
             tag.Add("abilityWheelTipDisplayed", abilityWheelTipDisplayed);
+            tag.Add("oldMaxHP", oldMaxHP);
+            tag.Add("improperRestorationstack", improperRestorationstack);
+            tag.Add("maxHP", maxHP);
         }
 
         public override void LoadData(TagCompound tag)
@@ -520,6 +563,9 @@ namespace JoJoStands
             receivedArrowShard = tag.GetBool("receivedArrowShard");
             piercedTimer = tag.GetInt("piercedTimer");
             abilityWheelTipDisplayed = tag.GetBool("abilityWheelTipDisplayed");
+            oldMaxHP = tag.GetInt("oldMaxHP");
+            improperRestorationstack = tag.GetInt("improperRestorationstack");
+            maxHP = tag.GetInt("maxHP");
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -615,6 +661,32 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
+            {
+                if (!Player.HasBuff(ModContent.BuffType<ImproperRestoration>()) && oldMaxHP > 0) //crazy diamond stuff (i'll move it later (c) Proos <3)
+                {
+                    Player.statLifeMax = oldMaxHP;
+                    oldMaxHP = 0;
+                    improperRestorationstack = 1;
+                    maxHP = 0;
+                }
+
+                if (!standOut)
+                {
+                    crazyDiamondRestorationMode = false;
+                    ExtraTileCheck.ForEach(Restore);
+                    crazyDiamondMessageCooldown = 0;
+                    ExtraTileCheck.Clear();
+                }
+
+                if (crazyDiamondMessageCooldown > 0)
+                    crazyDiamondMessageCooldown--;
+
+                if (crazyDiamondStonePunch >= 3)
+                    Player.AddBuff(ModContent.BuffType<YoAngelo>(), 360);
+                if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
+                    crazyDiamondStonePunch = 0;
+            }
+
             if (standKeyPressTimer > 0)
                 standKeyPressTimer--;
             if (revertTimer > 0)
@@ -1448,15 +1520,20 @@ namespace JoJoStands
         {
             if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
                 damage *= 2;
-
             if (stoneFreeWeaveAbilityActive)
                 damage = (int)(damage * 0.93f);
+            if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
+                damage = (int)(damage * 0.2f);
         }
 
         public override void ModifyHitByProjectile(Projectile proj, ref int damage, ref bool crit)
         {
+            if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
+                damage *= 2;
             if (stoneFreeWeaveAbilityActive)
                 damage = (int)(damage * 0.8f);
+            if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
+                damage = (int)(damage * 0.2f);
         }
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
@@ -1627,6 +1704,11 @@ namespace JoJoStands
             hermitPurpleTier = 0;
             stoneFreeWeaveAbilityActive = false;
 
+            crazyDiamondRestorationMode = false;
+            ExtraTileCheck.ForEach(Restore);
+            crazyDiamondMessageCooldown = 0;
+            ExtraTileCheck.Clear();
+
             creamTier = 0;
             voidCounter = 0;
             creamNormalToExposed = false;
@@ -1654,5 +1736,13 @@ namespace JoJoStands
                 }
             }
         }
+        public override void ModifyNursePrice(NPC nurse, int health, bool removeDebuffs, ref int price)
+        {
+            if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
+            {
+                price = price + 10000 * improperRestorationstack;
+            }
+        }
+
     }
 }
