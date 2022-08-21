@@ -16,7 +16,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Crazy Diamond (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate! \nSpecial: Switch to Restoration Mode \nLeft-click in Restoration Mode to do healing punch! \nUsed in Stand Slot");
+            Tooltip.SetDefault("Punch enemies at a really fast rate! \nSpecial: Switch to Restoration Mode \nLeft-click in Restoration Mode to do healing punch and right-click to uncraft item you hold! \nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

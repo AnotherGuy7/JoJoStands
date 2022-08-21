@@ -399,7 +399,7 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            if (mPlayer.crazyDiamondRestorationMode)
+            if (mPlayer.crazyDiamondRestorationMode && !mPlayer.standAutoMode)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
                 if (mPlayer.standTier > 1)
@@ -454,7 +454,7 @@ namespace JoJoStands.Projectiles
                         if (Projectile.Hitbox.Intersects(npc.Hitbox) && !onlyOnce)
                         {
                             SoundEngine.PlaySound(npc.HitSound, npc.Center);
-                            if (lifeLeft > 0)
+                            if (lifeLeft > 0 && !npc.HasBuff(ModContent.BuffType<MissingOrgans>()))
                             {
                                 heal = (int)Main.rand.NextFloat((int)(heal * 0.85f), (int)(heal * 1.15f));
                                 if (heal > lifeLeft)
@@ -465,6 +465,7 @@ namespace JoJoStands.Projectiles
                                 if (!npc.townNPC && Main.rand.NextFloat(1, 100) <= 5)
                                     npc.lifeMax = npc.life;
                             }
+                            npc.AddBuff(ModContent.BuffType<Restoration>(), 60);
                             onlyOnce = true;
                         }
                     }
@@ -479,7 +480,7 @@ namespace JoJoStands.Projectiles
                         if ((Projectile.Hitbox.Intersects(otherPlayer.Hitbox)) && !onlyOnce)
                         {
                             SoundEngine.PlaySound(SoundID.NPCHit1, otherPlayer.Center);
-                            if (lifeLeft > 0)
+                            if (lifeLeft > 0 && !otherPlayer.HasBuff(ModContent.BuffType<MissingOrgans>()))
                             {
                                 heal = (int)Main.rand.NextFloat((int)(heal * 0.85f), (int)(heal * 1.15f));
                                 if (heal > lifeLeft)

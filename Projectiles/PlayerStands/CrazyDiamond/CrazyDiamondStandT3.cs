@@ -219,6 +219,8 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                     onlyOneTarget = 0;
                                     healingFramesRepeatTimer = 0;
                                     int heal = npc.lifeMax - npc.life;
+                                    if (npc.HasBuff(ModContent.BuffType<MissingOrgans>()))
+                                        heal = 0;
                                     if (npc.active && !npc.hide && !npc.immortal)
                                     {
                                         npc.AddBuff(ModContent.BuffType<Restoration>(), 360);
@@ -270,6 +272,8 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                     onlyOneTarget = 0;
                                     healingFramesRepeatTimer = 0;
                                     heal = otherPlayer.statLifeMax - otherPlayer.statLife;
+                                    if (otherPlayer.HasBuff(ModContent.BuffType<MissingOrgans>()))
+                                        heal = 0;
                                     if (otherPlayer.whoAmI != player.whoAmI)
                                     {
                                         if (heal > 0)

@@ -158,6 +158,12 @@ namespace JoJoStands.Items
                 }
             }
 
+            if (Main.mouseRight && !mPlayer.standAutoMode && mPlayer.crazyDiamondRestorationMode && mPlayer.ExtraTileCheck.Count == 0 && generalPurposeTimer == 0)
+            {
+                mPlayer.ItemBreak(Item);
+                generalPurposeTimer = 30;
+            }
+
             if (Item.type == ItemID.DirtBlock || Item.type == ItemID.MudBlock)
             {
                 if (!vPlayer.zombie && !vPlayer.vampire)

@@ -218,6 +218,30 @@ namespace JoJoStands
         public int improperRestorationstack = 1;
         public int maxHP = 0;
 
+        public void ItemBreak(Item item)
+        {
+            List<Recipe> howManyRecipesHere = new List<Recipe>();
+            for (int r = 0; r < Main.recipe.Length; r++)
+            {
+                if (Main.recipe[r] != null && Main.recipe[r].createItem.type == item.type && item.stack >= Main.recipe[r].createItem.stack)
+                {
+                    howManyRecipesHere.Add(Main.recipe[r]);
+                    for (int i = 0; i < Main.recipe[r].createItem.stack; i++)
+                        Player.ConsumeItem(item.type);
+                    Uncraft(howManyRecipesHere[(int)Main.rand.NextFloat(0, howManyRecipesHere.Count - 1)]);
+                    break;
+                }
+            }
+        }
+        public void Uncraft(Recipe recipe)
+        {
+            recipe.requiredItem.ForEach(Uncraft2);
+        }
+        public void Uncraft2(Item item)
+        {
+            Player.QuickSpawnItem(Player.InheritSource(Player), item.type, item.stack);
+        }
+
         public enum StandSearchType
         {
             Bosses,
