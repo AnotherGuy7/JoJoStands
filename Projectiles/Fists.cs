@@ -424,7 +424,7 @@ namespace JoJoStands.Projectiles
                         {
                             Vector2 tile = new Vector2(detectedTileX, detectedTileY);
                             Tile tile2 = Main.tile[detectedTileX, detectedTileY];
-                            var checkTile = new MyPlayer.ExtraTile(tile2.TileType, new Vector2(detectedTileX, detectedTileY));
+                            var checkTile = new MyPlayer.ExtraTile(tile2.TileType, new Vector2(detectedTileX, detectedTileY), tile2.Slope, tile2.IsHalfBlock);
                             if (tile2.TileType != TileID.LihzahrdBrick && tile2.TileType != TileID.LihzahrdAltar && tile2.HasTile)
                             {
                                 if (!tile2.HasActuator || tile2.HasActuator && tile2.IsActuated)

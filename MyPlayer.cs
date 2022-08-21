@@ -27,6 +27,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 using TerraUI.Objects;
+using System.Text;
 
 namespace JoJoStands
 {
@@ -192,11 +193,15 @@ namespace JoJoStands
         {
             public ushort tileType { get; set; }
             public Vector2 tilePosition { get; set; }
+            public SlopeType tileSlope { get; set; }
+            public bool tileHalf { get; set; }
 
-            public ExtraTile(ushort tileType, Vector2 tilePosition)
+            public ExtraTile(ushort tileType, Vector2 tilePosition, SlopeType tileSlope, bool tileHalf)
             {
                 this.tileType = tileType;
                 this.tilePosition = tilePosition;
+                this.tileSlope = tileSlope;
+                this.tileHalf = tileHalf;
             }
         }
         public void Destroy(ExtraTile ExtraTile)
@@ -208,6 +213,9 @@ namespace JoJoStands
         {
             Vector2 vector2 = ExtraTile.tilePosition;
             WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, ExtraTile.tileType, false, true);
+            Tile tile = Main.tile[(int)vector2.X, (int)vector2.Y];
+            tile.Slope = ExtraTile.tileSlope;
+            tile.IsHalfBlock = ExtraTile.tileHalf;
         }
 
         public List<ExtraTile> ExtraTileCheck = new List<ExtraTile>();
@@ -217,19 +225,24 @@ namespace JoJoStands
         public int oldMaxHP = 0;
         public int improperRestorationstack = 1;
         public int maxHP = 0;
+        public int globalCooldown = 0;
 
         public void ItemBreak(Item item)
         {
-            List<Recipe> howManyRecipesHere = new List<Recipe>();
-            for (int r = 0; r < Main.recipe.Length; r++)
+            if (globalCooldown == 0)
             {
-                if (Main.recipe[r] != null && Main.recipe[r].createItem.type == item.type && item.stack >= Main.recipe[r].createItem.stack)
+                List<Recipe> howManyRecipesHere = new List<Recipe>();
+                for (int r = 0; r < Main.recipe.Length; r++)
                 {
-                    howManyRecipesHere.Add(Main.recipe[r]);
-                    for (int i = 0; i < Main.recipe[r].createItem.stack; i++)
-                        Player.ConsumeItem(item.type);
-                    Uncraft(howManyRecipesHere[(int)Main.rand.NextFloat(0, howManyRecipesHere.Count - 1)]);
-                    break;
+                    if (Main.recipe[r] != null && Main.recipe[r].createItem.type == item.type && item.stack >= Main.recipe[r].createItem.stack)
+                    {
+                        howManyRecipesHere.Add(Main.recipe[r]);
+                        for (int i = 0; i < Main.recipe[r].createItem.stack; i++)
+                            Player.ConsumeItem(item.type);
+                        Uncraft(howManyRecipesHere[0]);
+                        globalCooldown = 30;
+                        break;
+                    }
                 }
             }
         }
@@ -704,6 +717,9 @@ namespace JoJoStands
 
                 if (crazyDiamondMessageCooldown > 0)
                     crazyDiamondMessageCooldown--;
+
+                if (globalCooldown > 0)
+                    globalCooldown--;
 
                 if (crazyDiamondStonePunch >= 3)
                     Player.AddBuff(ModContent.BuffType<YoAngelo>(), 360);
