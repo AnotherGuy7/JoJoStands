@@ -441,7 +441,7 @@ namespace JoJoStands.Projectiles
                                     }
                                 }
                             }
-                            if (mPlayer.ExtraTileCheck.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0 && tile2.TileType == TileID.LihzahrdBrick && tile2.TileType == TileID.LihzahrdAltar)
+                            if (mPlayer.ExtraTileCheck.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0 && tile2.TileType == TileID.LihzahrdBrick)
                             {
                                 Main.NewText("Tile is Unbreakable");
                                 mPlayer.crazyDiamondMessageCooldown += 180;
