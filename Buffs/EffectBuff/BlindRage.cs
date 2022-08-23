@@ -21,7 +21,7 @@ namespace JoJoStands.Buffs.EffectBuff
             if (player.HasBuff(Type))
                 mPlayer.standDamageBoosts += 0.5f;
             else
-                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(47));
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
         }
     }
 }

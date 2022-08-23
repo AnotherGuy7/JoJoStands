@@ -427,7 +427,7 @@ namespace JoJoStands.Projectiles
                             var checkTile = new MyPlayer.ExtraTile(tile2.TileType, new Vector2(detectedTileX, detectedTileY), tile2.Slope, tile2.IsHalfBlock);
                             if (tile2.TileType != TileID.LihzahrdBrick && tile2.TileType != TileID.LihzahrdAltar && tile2.HasTile)
                             {
-                                if (!tile2.HasActuator || tile2.HasActuator && tile2.IsActuated)
+                                if (!tile2.HasActuator || tile2.HasActuator && !tile2.IsActuated)
                                 {
                                     if (mPlayer.ExtraTileCheck.Count < 100 * standTier)
                                     {
@@ -441,13 +441,18 @@ namespace JoJoStands.Projectiles
                                     }
                                 }
                             }
+                            if (mPlayer.ExtraTileCheck.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0 && tile2.TileType == TileID.LihzahrdBrick && tile2.TileType == TileID.LihzahrdAltar)
+                            {
+                                Main.NewText("Tile is Unbreakable");
+                                mPlayer.crazyDiamondMessageCooldown += 180;
+                            }
                         }
                     }
                 }
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC npc = Main.npc[n];
-                    int heal = (int)(Projectile.damage * 0.2f);
+                    int heal = (int)(Projectile.damage * 0.25f);
                     int lifeLeft = npc.lifeMax - npc.life;
                     if (npc.active && !npc.hide)
                     {
@@ -473,7 +478,7 @@ namespace JoJoStands.Projectiles
                 for (int p = 0; p < Main.maxPlayers; p++)
                 {
                     Player otherPlayer = Main.player[p];
-                    int heal = (int)(Projectile.damage * 0.2f);
+                    int heal = (int)(Projectile.damage * 0.25f);
                     int lifeLeft = otherPlayer.statLifeMax - otherPlayer.statLife;
                     if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI)
                     {
