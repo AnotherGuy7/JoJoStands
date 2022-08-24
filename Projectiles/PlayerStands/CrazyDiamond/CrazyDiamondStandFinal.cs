@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.GameContent.UI;
 using JoJoStands.NPCs;
 
 namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
@@ -62,6 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             if (blindRage) 
             {
                 Punch();
+                player.direction = Projectile.spriteDirection;
                 Projectile.Center = new Vector2(player.Center.X, player.Center.Y);
             }
 
@@ -77,14 +79,9 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         attackFrames = false;
                 }
                 if (!attackFrames && !healingFrames && onlyOneTarget == 0)
-                {
-                    if (!secondaryAbilityFrames)
-                        StayBehind();
-                    else
-                        GoInFront();
-                    if (flickFrames)
-                        StayBehindWithAbility();
-                }
+                    StayBehind();
+                if (flickFrames)
+                    StayBehindWithAbility();
                 if (SpecialKeyPressedNoCooldown() && !healingFrames && !flickFrames && onlyOneTarget == 0)
                 {
                     restore = !restore;
@@ -132,6 +129,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     if (SecondSpecialKeyPressed() && onlyOneTarget == 0) 
                     {
                         player.AddBuff(ModContent.BuffType<BlindRage>(), 600);
+                        EmoteBubble.NewBubble(1, new WorldUIAnchor(player), 600);
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound")); 
                     }
                 }
@@ -229,7 +227,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                         else
                                             npc.lifeMax = npc.life;
                                     }
-                                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
+                                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(45));
                                 }
                             }
                             if (Vector2.Distance(npc.Center, player.Center) > 200f)
@@ -280,7 +278,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                             otherPlayer.Heal(heal);
                                         otherPlayer.AddBuff(ModContent.BuffType<Restoration>(), 360);
                                     }
-                                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
+                                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(45));
                                 }
                             }
                             if (Vector2.Distance(otherPlayer.Center, player.Center) > 200f)

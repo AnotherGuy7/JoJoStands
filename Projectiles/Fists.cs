@@ -145,7 +145,10 @@ namespace JoJoStands.Projectiles
             }
 
             if (standType == CrazyDiamond && player.HasBuff(ModContent.BuffType<BlindRage>()) && !target.HasBuff(ModContent.BuffType<YoAngelo>()))
+            {
+                target.AddBuff(ModContent.BuffType<Restoration>(), 60);
                 target.GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
+            }
 
             if (standType == Cream)
             {
@@ -360,7 +363,10 @@ namespace JoJoStands.Projectiles
                         }
 
                         if (standType == CrazyDiamond && player.HasBuff(ModContent.BuffType<BlindRage>()) && !otherPlayer.HasBuff(ModContent.BuffType<YoAngelo>()))
+                        {
+                            otherPlayer.AddBuff(ModContent.BuffType<Restoration>(), 60);
                             otherPlayer.GetModPlayer<MyPlayer>().crazyDiamondStonePunch += 1;
+                        }
 
                         if (standType == Cream)
                         {
@@ -506,7 +512,10 @@ namespace JoJoStands.Projectiles
                 }
             }
             if (player.HasBuff(ModContent.BuffType<BlindRage>()))
+            {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 1);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
+            }
         }
         public override bool? CanHitNPC(NPC target)
         {

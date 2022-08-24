@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -240,6 +241,10 @@ namespace JoJoStands.Projectiles
                     crit = true;
             }
 
+        }
+        public override void ModifyHitPvp(Projectile projectile, Player target, ref int damage, ref bool crit)
+        {
+            target.AddBuff(ModContent.BuffType<LifePunch>(), 800);
         }
 
         public override bool ShouldUpdatePosition(Projectile Projectile)        //thanks, HellGoesOn for telling me this hook even existed

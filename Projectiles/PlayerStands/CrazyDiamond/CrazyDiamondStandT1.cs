@@ -46,12 +46,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         attackFrames = false;
                 }
                 if (!attackFrames)
-                {
-                    if (!secondaryAbilityFrames)
-                        StayBehind();
-                    else
-                        GoInFront();
-                }
+                    StayBehind();
                 if (SpecialKeyPressedNoCooldown())
                 {
                     restore = !restore;
