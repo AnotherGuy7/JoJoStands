@@ -814,20 +814,14 @@ namespace JoJoStands.NPCs
         }
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            Player player = Main.player[projectile.owner];
             if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
-            {
-                if (crit && player.HasBuff(ModContent.BuffType<BlindRage>()) && projectile.type == ModContent.ProjectileType<Fists>())
-                    damage = (int)(damage * 2f);
-                else
-                    damage = (int)(damage * 0.2f);
-            }
+                damage = (int)(damage * 0.1f);
         }
 
         public override void ModifyHitByItem(NPC npc, Player player, Item item, ref int damage, ref float knockback, ref bool crit)
         {
             if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
-                damage = (int)(damage * 0.2f);
+                damage = (int)(damage * 0.1f);
         }
     }
 }

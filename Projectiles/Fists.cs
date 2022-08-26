@@ -513,6 +513,7 @@ namespace JoJoStands.Projectiles
             }
             if (player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
+                Projectile.ArmorPenetration = 100;
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 1);
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
             }

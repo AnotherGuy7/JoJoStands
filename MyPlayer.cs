@@ -728,8 +728,8 @@ namespace JoJoStands
                 if (globalCooldown > 0)
                     globalCooldown--;
 
-                if (crazyDiamondStonePunch >= 3)
-                    Player.AddBuff(ModContent.BuffType<YoAngelo>(), 360);
+                if (crazyDiamondStonePunch >= 1)
+                    Player.AddBuff(ModContent.BuffType<YoAngelo>(), 180);
                 if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
                     crazyDiamondStonePunch = 0;
             }
@@ -1570,7 +1570,7 @@ namespace JoJoStands
             if (stoneFreeWeaveAbilityActive)
                 damage = (int)(damage * 0.93f);
             if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
-                damage = (int)(damage * 0.2f);
+                damage = (int)(damage * 0.1f);
         }
 
         public override void ModifyHitByProjectile(Projectile proj, ref int damage, ref bool crit)
@@ -1580,7 +1580,7 @@ namespace JoJoStands
             if (stoneFreeWeaveAbilityActive)
                 damage = (int)(damage * 0.8f);
             if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
-                damage = (int)(damage * 0.2f);
+                damage = (int)(damage * 0.1f);
         }
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
