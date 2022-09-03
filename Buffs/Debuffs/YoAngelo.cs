@@ -7,6 +7,8 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class YoAngelo : ModBuff
     {
+
+        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Stoned; } }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Yo, Angelo");

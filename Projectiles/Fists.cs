@@ -31,6 +31,7 @@ namespace JoJoStands.Projectiles
         public const byte SilverChariot = 10;
         public const byte Cream = 11;
         public const byte CrazyDiamond = 12;
+        public const byte TowerOfGray = 13; //"fist"
 
         private bool onlyOnce = false;
         private int standType = 0;
@@ -122,6 +123,12 @@ namespace JoJoStands.Projectiles
             if (standType == TheHand)
             {
                 target.AddBuff(ModContent.BuffType<MissingOrgans>(), (4 + (int)standTier) * 60);
+            }
+
+            if (standType == TowerOfGray)
+            {
+                if (mPlayer.towerOfGrayDamageMult != 1f)
+                    target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
             }
 
             if (standType == GratefulDead)
@@ -268,7 +275,7 @@ namespace JoJoStands.Projectiles
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             standType = (int)Projectile.ai[0];
             standTier = (int)Projectile.ai[1];
-            if (!playedSound)
+            if (!playedSound && mPlayer.towerOfGrayTier == 0)
             {
                 SoundEngine.PlaySound(SoundID.Item1);
                 playedSound = true;
@@ -517,12 +524,14 @@ namespace JoJoStands.Projectiles
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 1);
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
             }
+            if (standType == TowerOfGray)
+                Projectile.ArmorPenetration = 10 * mPlayer.towerOfGrayTier;
         }
         public override bool? CanHitNPC(NPC target)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.crazyDiamondRestorationMode)
+            if (mPlayer.crazyDiamondRestorationMode || target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames != 0)
                 return false;
             else
                 return null;

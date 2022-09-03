@@ -27,7 +27,6 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 using TerraUI.Objects;
-using System.Text;
 
 namespace JoJoStands
 {
@@ -234,6 +233,9 @@ namespace JoJoStands
         public int maxHP = 0;
         public int globalCooldown = 0;
 
+        public int towerOfGrayTier = 0;
+        public float towerOfGrayDamageMult = 1f;
+
         public void ItemBreak(Item item)
         {
             if (globalCooldown == 0)
@@ -329,6 +331,8 @@ namespace JoJoStands
             standSpeedBoosts = 0;
             standCritChangeBoosts = 5f;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
             Main.mapEnabled = true;
+
+            towerOfGrayDamageMult = 1f;
         }
 
 
@@ -540,6 +544,8 @@ namespace JoJoStands
                 crazyDiamondMessageCooldown = 0;
                 ExtraTileCheck.Clear();
 
+                towerOfGrayTier = 0;
+
                 creamTier = 0;
                 voidCounter = 0;
                 creamNormalToExposed = false;
@@ -720,6 +726,8 @@ namespace JoJoStands
                     ExtraTileCheck.ForEach(Restore);
                     crazyDiamondMessageCooldown = 0;
                     ExtraTileCheck.Clear();
+
+                    towerOfGrayTier = 0;
                 }
 
                 if (crazyDiamondMessageCooldown > 0)
@@ -728,7 +736,7 @@ namespace JoJoStands
                 if (globalCooldown > 0)
                     globalCooldown--;
 
-                if (crazyDiamondStonePunch >= 1)
+                if (crazyDiamondStonePunch > 2)
                     Player.AddBuff(ModContent.BuffType<YoAngelo>(), 180);
                 if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
                     crazyDiamondStonePunch = 0;
@@ -1755,6 +1763,8 @@ namespace JoJoStands
             ExtraTileCheck.ForEach(Restore);
             crazyDiamondMessageCooldown = 0;
             ExtraTileCheck.Clear();
+
+            towerOfGrayTier = 0;
 
             creamTier = 0;
             voidCounter = 0;

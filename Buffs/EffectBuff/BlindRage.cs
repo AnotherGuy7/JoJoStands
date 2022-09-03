@@ -7,6 +7,7 @@ namespace JoJoStands.Buffs.EffectBuff
 {
     public class BlindRage : ModBuff
     {
+        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Wrath; } }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blind Rage");

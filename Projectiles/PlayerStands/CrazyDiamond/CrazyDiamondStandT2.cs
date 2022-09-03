@@ -105,7 +105,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 }
                 if (restore)
                 {
-                    if (Main.mouseRight && rightClickCooldown == 0 && mPlayer.ExtraTileCheck.Count > 0)
+                    if (Main.mouseRight && rightClickCooldown == 0 && mPlayer.ExtraTileCheck.Count > 0 && Projectile.owner == Main.myPlayer)
                     {
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/RestoreSound"));
                         rightClickCooldown += 180;

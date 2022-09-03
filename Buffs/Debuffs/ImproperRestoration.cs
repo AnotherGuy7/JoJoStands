@@ -1,10 +1,12 @@
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace JoJoStands.Buffs.Debuffs
 {
     public class ImproperRestoration : ModBuff
     {
+        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Weak; } }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Improper Restoration");

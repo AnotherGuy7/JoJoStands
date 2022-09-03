@@ -38,6 +38,7 @@ namespace JoJoStands.NPCs
         public int crazyDiamondHeal = 0;
         public int CDstonePunch = 0;
 
+        public int towerOfGrayImmunityFrames = 0;
 
         public bool frozenInTime = false;
         public bool affectedbyBtz = false;
@@ -240,6 +241,9 @@ namespace JoJoStands.NPCs
         public override bool PreAI(NPC npc)
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+
+            if (towerOfGrayImmunityFrames > 0)
+                towerOfGrayImmunityFrames--;
 
             {
                 if (npc.HasBuff(ModContent.BuffType<YoAngelo>())) //crazy diamond stuff

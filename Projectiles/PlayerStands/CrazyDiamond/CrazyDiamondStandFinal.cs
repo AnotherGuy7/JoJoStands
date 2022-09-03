@@ -82,7 +82,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     StayBehind();
                 if (flickFrames)
                     StayBehindWithAbility();
-                if (SpecialKeyPressedNoCooldown() && !healingFrames && !flickFrames && onlyOneTarget == 0)
+                if (SpecialKeyPressedNoCooldown() && !healingFrames && !flickFrames && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer)
                 {
                     restore = !restore;
                     if (restore)
@@ -126,7 +126,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             }
                         }
                     }
-                    if (SecondSpecialKeyPressed() && onlyOneTarget == 0) 
+                    if (SecondSpecialKeyPressed() && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer) 
                     {
                         player.AddBuff(ModContent.BuffType<BlindRage>(), 600);
                         EmoteBubble.NewBubble(1, new WorldUIAnchor(player), 600);
@@ -135,7 +135,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 }
                 if (restore)
                 {
-                    if (Main.mouseRight && rightClickCooldown == 0 && mPlayer.ExtraTileCheck.Count > 0)
+                    if (Main.mouseRight && rightClickCooldown == 0 && mPlayer.ExtraTileCheck.Count > 0 && Projectile.owner == Main.myPlayer)
                     {
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/RestoreSound"));
                         rightClickCooldown += 180;
@@ -147,17 +147,20 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         mPlayer.crazyDiamondMessageCooldown = 0;
                         mPlayer.ExtraTileCheck.Clear();
                     }
-                    if (SecondSpecialKeyPressed() && onlyOneTarget == 0)
+                    if (SecondSpecialKeyPressed() && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer)
                     {
                         for (int n = 0; n < Main.maxNPCs; n++)
                         {
                             NPC npc = Main.npc[n];
-                            if (Vector2.Distance(Main.MouseWorld, npc.Center) <= 20f && Vector2.Distance(player.Center, npc.Center) > 200f)
-                                Main.NewText("Target too far");
-                            if (Vector2.Distance(Main.MouseWorld, npc.Center) <= 20f && Vector2.Distance(player.Center, npc.Center) <= 200f && !healingFrames && onlyOneTarget < 1)
+                            if (npc.active && !npc.hide && !npc.immortal)
                             {
-                                onlyOneTarget += 1;
-                                healingTargetNPC = npc.whoAmI;
+                                if (Vector2.Distance(Main.MouseWorld, npc.Center) <= 20f && Vector2.Distance(player.Center, npc.Center) > 200f)
+                                    Main.NewText("Target too far");
+                                if (Vector2.Distance(Main.MouseWorld, npc.Center) <= 20f && Vector2.Distance(player.Center, npc.Center) <= 200f && !healingFrames && onlyOneTarget < 1)
+                                {
+                                    onlyOneTarget += 1;
+                                    healingTargetNPC = npc.whoAmI;
+                                }
                             }
                         }
                         if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -198,6 +201,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                     Projectile.frame = 0;
                                     healingFrames = true;
                                 }
+                                Projectile.netUpdate = true;
                             }
                             if (healingFrames && !returnToOwner)
                             {
@@ -219,16 +223,14 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                     int heal = npc.lifeMax - npc.life;
                                     if (npc.HasBuff(ModContent.BuffType<MissingOrgans>()))
                                         heal = 0;
-                                    if (npc.active && !npc.hide && !npc.immortal)
-                                    {
-                                        npc.AddBuff(ModContent.BuffType<Restoration>(), 360);
-                                        if (npc.townNPC && heal > 0)
-                                            npc.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondFullHealth = true;
-                                        else
-                                            npc.lifeMax = npc.life;
-                                    }
+                                    npc.AddBuff(ModContent.BuffType<Restoration>(), 360);
+                                    if (npc.townNPC && heal > 0)
+                                        npc.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondFullHealth = true;
+                                    else
+                                        npc.lifeMax = npc.life;
                                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(45));
                                 }
+                                Projectile.netUpdate = true;
                             }
                             if (Vector2.Distance(npc.Center, player.Center) > 200f)
                             {
@@ -251,6 +253,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                     Projectile.frame = 0;
                                     healingFrames = true;
                                 }
+                                Projectile.netUpdate = true;
                             }
                             if (healingFrames && !returnToOwner)
                             {
@@ -280,6 +283,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                     }
                                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(45));
                                 }
+                                Projectile.netUpdate = true;
                             }
                             if (Vector2.Distance(otherPlayer.Center, player.Center) > 200f)
                             {
@@ -306,6 +310,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                 onlyOneTarget = 0;
                                 healingFramesRepeatTimer = 0;
                             }
+                            Projectile.netUpdate = true;
                         }
                         if (onlyOneTarget == 0)
                         {
