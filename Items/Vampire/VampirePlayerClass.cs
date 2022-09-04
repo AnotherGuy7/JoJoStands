@@ -456,9 +456,9 @@ namespace JoJoStands.Items.Vampire
             }
             if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
             {
-                Vector2 shootVelocity = Player.position;
+                Vector2 shootVelocity = Player.Center;
                 shootVelocity.Normalize();
-                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), (int)(30*vampiricDamageMultiplier), 2f, Player.whoAmI);
             }
         }
 
@@ -501,9 +501,9 @@ namespace JoJoStands.Items.Vampire
         {
             if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
             {
-                Vector2 shootVelocity = Player.position;
+                Vector2 shootVelocity = Player.Center;
                 shootVelocity.Normalize();
-                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Top, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), 30, 2f, Player.whoAmI);
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<ChimeraSnake>(), (int)(30*vampiricDamageMultiplier), 2f, Player.whoAmI);
             }
         }
 

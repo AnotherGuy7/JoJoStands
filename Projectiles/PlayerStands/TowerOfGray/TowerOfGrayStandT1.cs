@@ -415,5 +415,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                 }
             }
         }
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            width = Projectile.width - 18;
+            height = Projectile.height - 8;
+            fallThrough = true;
+            return true;
+        }
     }
 }

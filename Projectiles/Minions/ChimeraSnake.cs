@@ -15,16 +15,17 @@ namespace JoJoStands.Projectiles.Minions
             ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
-        public override void SetDefaults()
+        public override void SetDefaults() //snake don't work properly, later i'll improve it (C) Proos <3
         {
-            Projectile.friendly = true;
-            Projectile.minion = true;
             Projectile.penetrate = 3;
-            Projectile.damage = 30;
             Projectile.width = 60;
             Projectile.height = 62;
-            Projectile.aiStyle = 54;
+            Projectile.aiStyle = 0;
             Projectile.timeLeft = 1200;
+            Projectile.ignoreWater = true;
+            Projectile.tileCollide = true;
+            Projectile.friendly = true;
+            Projectile.minion = true;
         }
 
         private int hitcooldown = 60;
@@ -40,17 +41,7 @@ namespace JoJoStands.Projectiles.Minions
             }
 
             if (hitcooldown > 0)
-            {
-                hitcooldown -= 1;
-            }
-            if (hitcooldown == 0)
-            {
-                Projectile.damage = 30;
-            }
-            if (hitcooldown > 0)
-            {
-                Projectile.damage = 0;
-            }
+                hitcooldown--;
 
             Projectile.frameCounter++;
             if (Projectile.frameCounter >= 10)
@@ -58,9 +49,7 @@ namespace JoJoStands.Projectiles.Minions
                 Projectile.frame += 1;
                 Projectile.frameCounter = 0;
                 if (Projectile.frame > 3)
-                {
                     Projectile.frame = 0;
-                }
             }
         }
 
@@ -89,6 +78,18 @@ namespace JoJoStands.Projectiles.Minions
         public override void Kill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.NPCDeath5, Projectile.Center);
+        }
+        public override bool CanHitPvp(Player target)
+        {
+            if (hitcooldown > 0)
+                return false;
+            return true;
+        }
+        public override bool? CanHitNPC(NPC target)
+        {
+            if (hitcooldown > 0)
+                return false;
+            return null;
         }
     }
 }

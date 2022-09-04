@@ -175,7 +175,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                             for (int n = 0; n < Main.maxNPCs; n++)
                             {
                                 NPC npc = Main.npc[n];
-                                if (npc.active && !npc.hide && !npc.immortal && Projectile.Distance(npc.Center) <= 900f && !npc.friendly)
+                                if (npc.active && !npc.hide && !npc.immortal && Projectile.Distance(npc.Center) <= 900f && !npc.friendly & npc.lifeMax > 5)
                                     specialTargets.Add(npc.whoAmI);
                             }
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
@@ -513,6 +513,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                         frameMultUpdate = 2;
                 }
             }
+        }
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            width = Projectile.width - 18;
+            height = Projectile.height - 8;
+            fallThrough = true;
+            return true;
         }
     }
 }
