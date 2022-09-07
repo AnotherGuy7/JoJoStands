@@ -87,9 +87,9 @@ namespace JoJoStands.Projectiles.Minions
         }
         public override bool? CanHitNPC(NPC target)
         {
-            if (hitcooldown > 0)
+            if (hitcooldown > 0 || target.townNPC)
                 return false;
-            return null;
+            return true;
         }
     }
 }

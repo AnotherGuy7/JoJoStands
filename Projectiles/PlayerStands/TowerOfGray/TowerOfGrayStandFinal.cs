@@ -37,10 +37,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             Projectile.ignoreWater = true;
         }
 
-        public override int punchDamage => 45;
-        public override int punchTime => 7;
+        public override int projectileDamage => 45;
+        public override int shootTime => 7;
         public override float fistWhoAmI => 13f;
-        public override StandType standType => StandType.Melee;
+        public override StandType standType => StandType.Ranged;
 
         private bool returnToPlayer = false;
         private bool returnToRange = false;
@@ -95,9 +95,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                     Projectile.spriteDirection = -1;
             }
 
-            if (mPlayer.usedEctoPearl && noRemoteRange == 250f)
+            if (mPlayer.usedEctoPearl && noRemoteRange == 400f)
                 noRemoteRange *= 1.5f;
-            if (mPlayer.usedEctoPearl && remoteRange == 550f)
+            if (mPlayer.usedEctoPearl && remoteRange == 1000f)
                 remoteRange *= 1.5f;
 
             if (!remoteMode)
@@ -109,10 +109,16 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                     emote += 180;
                     EmoteBubble.NewBubble(89, new WorldUIAnchor(player), emote);
                 }
+                player.eyeHelper.BlinkBecausePlayerGotHurt();
                 range = remoteRange;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
+                if (shootCount <= 0)
+                {
+                    shootCount += newShootTime;
+                    AttackAI(Main.MouseWorld);
+                }
                 if (!mouseControlled)
                     MovementAI(Projectile.Center + new Vector2(100f * Projectile.spriteDirection, 0f), 0f);
             }
@@ -150,9 +156,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                             if (distance <= 25f)
                                 MovementAI(Main.MouseWorld, (distance * (10f + player.moveSpeed)) / 25);
                         }
-                        if (shootCount <= 0)
+                        if (shootCount <= 0 && !remoteMode)
                         {
-                            shootCount += newPunchTime;
+                            shootCount += newShootTime;
                             AttackAI(Main.MouseWorld);
                         }
                         LimitDistance(range);
@@ -254,7 +260,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                     if (target != null)
                     {
                         stinger = true;
-                        if (Projectile.Distance(target.Center) > 30f)
+                        if (Projectile.Distance(target.Center) > 50f)
                         {
                             MovementAI(target.Center, 10f);
 
@@ -268,14 +274,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                         {
                             if (Main.myPlayer == Projectile.owner)
                             {
-                                shootCount += newPunchTime;
+                                shootCount += newShootTime;
                                 Vector2 shootVel = target.Center - Projectile.Center;
                                 if (shootVel == Vector2.Zero)
                                     shootVel = new Vector2(0f, 1f);
 
                                 shootVel.Normalize();
-                                shootVel *= shootSpeed;
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.5f), 3f, Projectile.owner, fistWhoAmI, tierNumber);
+                                shootVel *= 0f;
+                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * 0.5f), 3f, Projectile.owner, fistWhoAmI, tierNumber);
                                 Main.projectile[proj].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }
@@ -285,7 +291,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
                 if (!dash && special == -1) //return to stand range after ability
                 {
-                    if (mPlayer.standAutoMode && target == null || !mPlayer.standAutoMode && !mouseControlled)
+                    if (mPlayer.standAutoMode && target == null || !mPlayer.standAutoMode && !mouseControlled && !remoteMode)
                         stinger = false;
 
                     if (Vector2.Distance(Projectile.Center, player.Center) > range + 20f && !returnToPlayer && !returnToRange)
@@ -408,8 +414,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                 shootVel = new Vector2(0f, 1f);
             }
             shootVel.Normalize();
-            shootVel *= shootSpeed;
-            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * mPlayer.towerOfGrayDamageMult), 3f, Projectile.owner, fistWhoAmI, tierNumber);
+            shootVel *= 0f;
+            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * mPlayer.towerOfGrayDamageMult), 3f, Projectile.owner, fistWhoAmI, tierNumber);
             Main.projectile[proj].netUpdate = true;
             Projectile.netUpdate = true;
         }
