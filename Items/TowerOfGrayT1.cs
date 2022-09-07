@@ -9,7 +9,7 @@ namespace JoJoStands.Items
     public class TowerOfGrayT1 : StandItemClass
     {
         public override int standSpeed => 10;
-        public override int standType => 1;
+        public override int standType => 2;
         public override string standProjectileName => "TowerOfGray";
         public override int standTier => 1;
 
