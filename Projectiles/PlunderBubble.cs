@@ -48,13 +48,13 @@ namespace JoJoStands.Projectiles
             {
                 crit = true;
             }
-            if (Main.rand.NextBool(10) && hasPlunderItem == false && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+            if (Main.rand.NextBool(5) && hasPlunderItem == false && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
 
             {
                 target.AddBuff(ModContent.BuffType<ParchedDebuff>(), 200);
                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
             }
-            if (Main.rand.NextBool(15) && hasPlunderItem == false && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+            if (Main.rand.NextBool(7) && hasPlunderItem == false && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
 
             {
                 target.AddBuff(ModContent.BuffType<Asphyxiating>(), 350);
@@ -62,26 +62,26 @@ namespace JoJoStands.Projectiles
             }
 
 
-            if (Main.rand.NextBool(8) && player.HeldItem.type == ItemID.Torch)
+            if (Main.rand.NextBool(3) && player.HeldItem.type == ItemID.Torch)
             {
                 target.AddBuff(BuffID.OnFire, 190);
             }
 
-            if (Main.rand.NextBool(8) && player.HeldItem.type == ItemID.IchorTorch)
+            if (Main.rand.NextBool(3) && player.HeldItem.type == ItemID.IchorTorch)
             {
                 target.AddBuff(BuffID.Ichor, 280);
             }
 
-            if (Main.rand.NextBool(8) && player.HeldItem.type == ItemID.CursedTorch)
+            if (Main.rand.NextBool(3) && player.HeldItem.type == ItemID.CursedTorch)
             {
                 target.AddBuff(BuffID.CursedInferno, 230);
             }
-            if (Main.rand.NextBool(8) && player.HeldItem.type == ItemID.IceTorch)
+            if (Main.rand.NextBool(3) && player.HeldItem.type == ItemID.IceTorch)
             {
                 target.AddBuff(BuffID.Frostburn, 230);
             }
 
-            if (Main.rand.NextBool(8) && player.HeldItem.type == ModContent.ItemType<ViralMeteoriteBar>())
+            if (Main.rand.NextBool(3) && player.HeldItem.type == ModContent.ItemType<ViralMeteoriteBar>())
             {
                 target.AddBuff(ModContent.BuffType<Infected>(), 280);
             }
