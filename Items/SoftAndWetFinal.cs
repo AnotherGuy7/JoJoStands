@@ -34,23 +34,7 @@ namespace JoJoStands.Items
             Item.rare = ItemRarityID.LightPurple;
         }
 
-        public override void HoldItem(Player player)
-        {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (player.whoAmI == Main.myPlayer)
-            {
-                if (mPlayer.canRevertFromGoBeyond)
-                {
-                    if (Main.mouseRight && mPlayer.revertTimer <= 0)
-                    {
-                        Item.type = ModContent.ItemType<SoftAndWetGoBeyond>();
-                        Item.SetDefaults(ModContent.ItemType<SoftAndWetGoBeyond>());
-                        SoundEngine.PlaySound(SoundID.Grab);
-                        mPlayer.revertTimer += 30;
-                    }
-                }
-            }
-        }
+
 
         public override void AddRecipes()
         {

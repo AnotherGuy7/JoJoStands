@@ -35,21 +35,7 @@ namespace JoJoStands.Items
             Item.rare = ItemRarityID.LightPurple;
         }
 
-        public override void HoldItem(Player player)
-        {
-            if (player.whoAmI == Main.myPlayer && Main.mouseRight)
-            {
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                mPlayer.canRevertFromGoBeyond = true;
-                if (mPlayer.revertTimer <= 0)
-                {
-                    Item.type = ModContent.ItemType<SoftAndWetFinal>();
-                    Item.SetDefaults(ModContent.ItemType<SoftAndWetFinal>());
-                    SoundEngine.PlaySound(SoundID.Grab);
-                    mPlayer.revertTimer += 30;
-                }
-            }
-        }
+
         public override bool ManualStandSpawning(Player player)
         {
             Projectile.NewProjectile(player.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<SoftAndWetGoBeyondStand>(), 0, 0f, Main.myPlayer);
