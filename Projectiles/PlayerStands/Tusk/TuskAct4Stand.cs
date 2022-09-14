@@ -9,17 +9,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
 {
     public class TuskAct4Stand : StandClass
     {
-        public override string poseSoundName => "ItsBeenARoundaboutPath";
-        public override string punchSoundName => "Tusk_Ora";
+        public override string PoseSoundName => "ItsBeenARoundaboutPath";
+        public override string PunchSoundName => "Tusk_Ora";
         public override bool CanUseSaladDye => true;
 
-        public override float maxDistance => 98f;
-        public override int punchDamage => 162;
-        public override int punchTime => 10;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 0f;
-        public override StandType standType => StandType.Ranged;
-        public override int standOffset => 20;
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 162;
+        public override int PunchTime => 10;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 0;
+        public override int TierNumber => 4;
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override int StandOffset => 20;
 
         private int goldenRectangleEffectTimer = 256;
         private bool playedSpawnCry = false;
@@ -49,7 +50,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 for (int i = 0; i < Main.rand.Next(4, 6 + 1); i++)
                 {
                     Vector2 dustSpeed = Projectile.velocity + new Vector2(Main.rand.NextFloat(-5f, 5f + 1f), Main.rand.NextFloat(-5f, 5f + 1f));
-                    Dust.NewDust(Projectile.position - new Vector2(0f, halfStandHeight), Projectile.width, halfStandHeight * 2, DustID.IchorTorch, dustSpeed.X, dustSpeed.Y);
+                    Dust.NewDust(Projectile.position - new Vector2(0f, HalfStandHeight), Projectile.width, HalfStandHeight * 2, DustID.IchorTorch, dustSpeed.X, dustSpeed.Y);
                 }
             }
             if (goldenRectangleEffectTimer > 0)
@@ -101,8 +102,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                                 shootVel = new Vector2(0f, 1f);
 
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner);
+                            shootVel *= ProjectileSpeed;
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                             Main.projectile[proj].timeLeft = 3;
                             Projectile.netUpdate = true;

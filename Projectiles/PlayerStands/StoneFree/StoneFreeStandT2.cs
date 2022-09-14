@@ -8,15 +8,16 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 {
     public class StoneFreeStandT2 : StandClass
     {
-        public override float maxDistance => 98f;
-        public override int punchDamage => 39;
-        public override int punchTime => 10;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 0f;
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 39;
+        public override int PunchTime => 10;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 0;
+        public override int TierNumber => 2;
         /*public override string punchSoundName => "Ora";
         public override string poseSoundName => "YareYareDaze";*/
-        public override string spawnSoundName => "Stone Free";
-        public override StandType standType => StandType.Melee;
+        public override string SpawnSoundName => "Stone Free";
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         private bool stringConnectorPlaced = false;
         private Vector2 firstStringPos;
@@ -78,7 +79,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 
                             stringConnectorPlaced = false;
                             int stringPointIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firstStringPos, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringPoint>(), 0, 0f, player.whoAmI);
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringConnector>(), 0, 0f, player.whoAmI, stringPointIndex, punchDamage + 29 * (int)mPlayer.standDamageBoosts);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringConnector>(), 0, 0f, player.whoAmI, stringPointIndex, PunchDamage + 29 * (int)mPlayer.standDamageBoosts);
                         }
                     }
                 }

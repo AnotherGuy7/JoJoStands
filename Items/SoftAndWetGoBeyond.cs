@@ -55,6 +55,7 @@ namespace JoJoStands.Items
             Projectile.NewProjectile(player.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<SoftAndWetGoBeyondStand>(), 0, 0f, Main.myPlayer);
             return true;
         }
+
         public override void AddRecipes()
         {
             CreateRecipe()

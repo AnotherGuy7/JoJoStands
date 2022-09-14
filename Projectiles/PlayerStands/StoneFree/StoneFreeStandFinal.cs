@@ -10,15 +10,16 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 {
     public class StoneFreeStandFinal : StandClass
     {
-        public override float maxDistance => 98f;
-        public override int punchDamage => 65;
-        public override int punchTime => 9;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 0f;
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 65;
+        public override int PunchTime => 9;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 0;
+        public override int TierNumber => 4;
         /*public override string punchSoundName => "Ora";
         public override string poseSoundName => "YareYareDaze";*/
-        public override string spawnSoundName => "Stone Free";
-        public override StandType standType => StandType.Melee;
+        public override string SpawnSoundName => "Stone Free";
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         private bool stringConnectorPlaced = false;
         private Vector2 firstStringPos;
@@ -89,7 +90,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 
                                 stringConnectorPlaced = false;
                                 int stringPointIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firstStringPos, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringPoint>(), 0, 0f, player.whoAmI);
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringConnector>(), 0, 0f, player.whoAmI, stringPointIndex, punchDamage + 29 * (int)mPlayer.standDamageBoosts);
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringConnector>(), 0, 0f, player.whoAmI, stringPointIndex, PunchDamage + 29 * (int)mPlayer.standDamageBoosts);
                             }
                         }
                     }

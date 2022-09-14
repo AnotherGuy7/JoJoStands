@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Projectile.tileCollide = false;
         }
 
-        public override StandType standType => StandType.Ranged;
+        public override StandAttackType StandType => StandAttackType.Ranged;
 
         public int updateTimer = 0;
 

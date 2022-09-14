@@ -10,14 +10,14 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 {
     public class MagiciansRedStandT3 : StandClass
     {
-        public override float shootSpeed => 8f;
-        public override StandType standType => StandType.Ranged;
-        public override int projectileDamage => 74;
-        public override int shootTime => 16;
-        public override int halfStandHeight => 35;
-        public override int standOffset => 0;
-        public override string poseSoundName => "ThePowerToWieldFlameAtWill";
-        public override string spawnSoundName => "Magicians Red";
+        public override float ProjectileSpeed => 8f;
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override int ProjectileDamage => 74;
+        public override int ShootTime => 16;
+        public override int HalfStandHeight => 35;
+        public override int StandOffset => 0;
+        public override string PoseSoundName => "ThePowerToWieldFlameAtWill";
+        public override string SpawnSoundName => "Magicians Red";
 
         private int chanceToDebuff = 50;
         private int debuffDuration = 420;
@@ -62,7 +62,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
                         Main.projectile[proj].netUpdate = true;
                         Projectile.netUpdate = true;
@@ -142,7 +142,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
@@ -158,7 +158,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
             if (Main.rand.Next(0, 10 + 1) == 0)
             {
-                int dustIndex = Dust.NewDust(Projectile.position + new Vector2(0, -halfStandHeight), Projectile.width, halfStandHeight * 2, DustID.Torch, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, Scale: 2.1f);
+                int dustIndex = Dust.NewDust(Projectile.position + new Vector2(0, -HalfStandHeight), Projectile.width, HalfStandHeight * 2, DustID.Torch, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, Scale: 2.1f);
                 Main.dust[dustIndex].noGravity = true;
                 Main.dust[dustIndex].velocity *= 1.4f;
             }

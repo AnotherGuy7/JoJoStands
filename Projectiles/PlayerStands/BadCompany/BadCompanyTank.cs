@@ -23,7 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Projectile.shouldFallThrough = false;
         }
 
-        public override StandType standType => StandType.Ranged;
+        public override StandAttackType StandType => StandAttackType.Ranged;
 
         public int updateTimer = 0;
 

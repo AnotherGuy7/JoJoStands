@@ -9,13 +9,13 @@ namespace JoJoStands.Projectiles.PlayerStands
 {
     public class HierophantGreenStandT1 : StandClass
     {
-        public override int shootTime => 40;
-        public override int projectileDamage => 12;
-        public override int halfStandHeight => 30;
-        public override int standOffset => 0;
-        public override StandType standType => StandType.Ranged;
-        public override string poseSoundName => "ItsTheVictorWhoHasJustice";
-        public override string spawnSoundName => "Hierophant Green";
+        public override int ShootTime => 40;
+        public override int ProjectileDamage => 12;
+        public override int HalfStandHeight => 30;
+        public override int StandOffset => 0;
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override string PoseSoundName => "ItsTheVictorWhoHasJustice";
+        public override string SpawnSoundName => "Hierophant Green";
         public override bool CanUseSaladDye => true;
 
         public override void AI()
@@ -51,7 +51,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
 
                         float numberProjectiles = 3;        //incraeses by 1 each tier
                         float rotation = MathHelper.ToRadians(15);      //increases by 5 every tier
@@ -106,7 +106,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                                 shootVel = new Vector2(0f, 1f);
 
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
 
                             float numberProjectiles = 3;
                             float rotation = MathHelper.ToRadians(15);
@@ -115,7 +115,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
                                 perturbedSpeed *= randomSpeedOffset;
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), (int)((projectileDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, player.whoAmI);
+                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), (int)((ProjectileDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, player.whoAmI);
                                 Main.projectile[proj].netUpdate = true;
                             }
                             Projectile.netUpdate = true;

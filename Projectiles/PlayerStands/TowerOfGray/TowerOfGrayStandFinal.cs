@@ -37,10 +37,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             Projectile.ignoreWater = true;
         }
 
-        public override int projectileDamage => 45;
-        public override int shootTime => 7;
-        public override float fistWhoAmI => 13f;
-        public override StandType standType => StandType.Ranged;
+        public override int ProjectileDamage => 45;
+        public override int ShootTime => 7;
+        public override int FistWhoAmI => 13;
+        public override int TierNumber => 4;
+        public override StandAttackType StandType => StandAttackType.Ranged;
 
         private bool returnToPlayer = false;
         private bool returnToRange = false;
@@ -281,7 +282,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
                                 shootVel.Normalize();
                                 shootVel *= 0f;
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * 0.5f), 3f, Projectile.owner, fistWhoAmI, tierNumber);
+                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * 0.5f), 3f, Projectile.owner, FistWhoAmI, TierNumber);
                                 Main.projectile[proj].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }
@@ -394,6 +395,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
         {
             if (Projectile.owner == Main.myPlayer)
             {
+                if (target == Projectile.Center)
+                    return;
+
                 Projectile.velocity = target - Projectile.Center;
                 Projectile.velocity.Normalize();
                 Projectile.velocity *= speed;
@@ -415,7 +419,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             }
             shootVel.Normalize();
             shootVel *= 0f;
-            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * mPlayer.towerOfGrayDamageMult), 3f, Projectile.owner, fistWhoAmI, tierNumber);
+            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * mPlayer.towerOfGrayDamageMult), 3f, Projectile.owner, FistWhoAmI, TierNumber);
             Main.projectile[proj].netUpdate = true;
             Projectile.netUpdate = true;
         }

@@ -10,16 +10,16 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 {
     public class GoldExperienceStandT1 : StandClass
     {
-        public override int punchDamage => 16;
-        public override int punchTime => 12;
-        public override int halfStandHeight => 35;
-        public override float fistWhoAmI => 2f;
-        public override float tierNumber => 1f;
-        public override int standOffset => 32;
-        public override string punchSoundName => "GER_Muda";
-        public override string poseSoundName => "TheresADreamInMyHeart";
-        public override string spawnSoundName => "Gold Experience";
-        public override StandType standType => StandType.Melee;
+        public override int PunchDamage => 16;
+        public override int PunchTime => 12;
+        public override int HalfStandHeight => 35;
+        public override int FistWhoAmI => 2;
+        public override int TierNumber => 1;
+        public override int StandOffset => 32;
+        public override string PunchSoundName => "GER_Muda";
+        public override string PoseSoundName => "TheresADreamInMyHeart";
+        public override string SpawnSoundName => "Gold Experience";
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
         {
@@ -51,7 +51,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                 }
                 if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && Projectile.owner == Main.myPlayer)
                 {
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<GEFrog>(), 1, 0f, Projectile.owner, tierNumber, tierNumber - 1f);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<GEFrog>(), 1, 0f, Projectile.owner, TierNumber, TierNumber - 1f);
                     Main.projectile[proj].netUpdate = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(6));
                 }

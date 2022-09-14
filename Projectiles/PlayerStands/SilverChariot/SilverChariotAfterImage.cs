@@ -23,13 +23,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             Projectile.shouldFallThrough = true;
         }
 
-        public override float maxDistance => 98f;
-        public override int punchDamage => 26;
-        public override int punchTime => 7;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 10f;
-        public override StandType standType => StandType.Melee;
-        public override bool useProjectileAlpha => true;
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 26;
+        public override int PunchTime => 7;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 10;
+        public override StandAttackType StandType => StandAttackType.Melee;
+        public override bool UseProjectileAlpha => true;
 
         private bool parryFrames = false;
         private int parryCooldownTime = 0;

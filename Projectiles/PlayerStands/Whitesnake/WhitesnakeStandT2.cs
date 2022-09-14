@@ -11,16 +11,17 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
     public class WhitesnakeStandT2 : StandClass
     {
-        public override int punchDamage => 38;
-        public override int altDamage => 25;
-        public override int punchTime => 13;
-        public override int halfStandHeight => 32;
-        public override float fistWhoAmI => 9f;
-        public override StandType standType => StandType.Melee;
-        public override int standOffset => 22;
-        public override float maxDistance => 148f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
-        public override string poseSoundName => "YouWereTwoSecondsTooLate";
-        public override string spawnSoundName => "Whitesnake";
+        public override int PunchDamage => 38;
+        public override int AltDamage => 25;
+        public override int PunchTime => 13;
+        public override int HalfStandHeight => 32;
+        public override int FistWhoAmI => 9;
+        public override int TierNumber => 2;
+        public override StandAttackType StandType => StandAttackType.Melee;
+        public override int StandOffset => 22;
+        public override float MaxDistance => 148f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
+        public override string PoseSoundName => "YouWereTwoSecondsTooLate";
+        public override string SpawnSoundName => "Whitesnake";
         public override bool CanUseSaladDye => true;
 
         private const float RemoteControlMaxDistance = 40f * 16f;
@@ -76,7 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         }
                         shootVel.Normalize();
                         shootVel *= 8f;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<MeltYourHeart>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<MeltYourHeart>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                         Projectile.netUpdate = true;
                         secondaryAbilityFrames = false;
@@ -178,7 +179,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     Vector2 shootVel = Main.MouseWorld - armPosition;
                     shootVel.Normalize();
                     shootVel *= 12f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
                     Main.projectile[proj].netUpdate = true;
                     Projectile.netUpdate = true;
                     Projectile.velocity -= shootVel * 0.02f;

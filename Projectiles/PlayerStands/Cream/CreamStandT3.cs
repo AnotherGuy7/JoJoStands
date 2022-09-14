@@ -10,13 +10,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 {
     public class CreamStandT3 : StandClass
     {
-        public override int punchDamage => 116;
-        public override float punchKnockback => 10f;
-        public override int punchTime => 24;
-        public override int halfStandHeight => 36;
-        public override float fistWhoAmI => 11f;
-        public override int standOffset => 0;
-        public override StandType standType => StandType.Melee;
+        public override int PunchDamage => 116;
+        public override float PunchKnockback => 10f;
+        public override int PunchTime => 24;
+        public override int HalfStandHeight => 36;
+        public override int FistWhoAmI => 11;
+        public override int TierNumber => 3;
+        public override int StandOffset => 0;
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         private Vector2 velocityAddition;
         private float mouseDistance;
@@ -78,8 +79,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner, fistWhoAmI);
+                        shootVel *= ProjectileSpeed;
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
                         Main.projectile[proj].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
@@ -127,7 +128,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     if (shootVel == Vector2.Zero)
                         shootVel = new Vector2(0f, 1f);
                     shootVel.Normalize();
-                    dashproj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Void>(), (int)((punchDamage * 1.3f) * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
+                    dashproj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Void>(), (int)((PunchDamage * 1.3f) * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
                     Main.projectile[dashproj].netUpdate = true;
                     Projectile.netUpdate = true;
                 }
@@ -171,7 +172,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
                     shootVelocity.Normalize();
                     shootVelocity *= 5f;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<Void>(), (int)((punchDamage * 0.5f) * mPlayer.standDamageBoosts), 6f, player.whoAmI);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<Void>(), (int)((PunchDamage * 0.5f) * mPlayer.standDamageBoosts), 6f, player.whoAmI);
                 }
                 if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse && mPlayer.creamNormalToExposed)
                 {
@@ -197,7 +198,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 HandleDrawOffsets();
                 Vector2 vector131 = player.Center;
                 vector131.X += (float)((player.width / 2) * player.direction);
-                vector131.Y -= -35 + halfStandHeight;
+                vector131.Y -= -35 + HalfStandHeight;
                 Projectile.Center = Vector2.Lerp(Projectile.Center, vector131, 1f);
                 Projectile.velocity *= 0.5f;
                 Projectile.direction = (Projectile.spriteDirection = player.direction);

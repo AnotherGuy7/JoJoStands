@@ -11,17 +11,17 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 {
     public class StickyFingersStandT2 : StandClass
     {
-        public override int punchDamage => 37;
-        public override int altDamage => 31;
-        public override int punchTime => 11;
-        public override int halfStandHeight => 39;
-        public override float fistWhoAmI => 4f;
-        public override float tierNumber => 2f;
-        public override StandType standType => StandType.Melee;
-        public override string punchSoundName => "Ari";
-        public override string poseSoundName => "Arrivederci";
-        public override string spawnSoundName => "Sticky Fingers";
-        public override bool useProjectileAlpha => true;
+        public override int PunchDamage => 37;
+        public override int AltDamage => 31;
+        public override int PunchTime => 11;
+        public override int HalfStandHeight => 39;
+        public override int FistWhoAmI => 4;
+        public override int TierNumber => 2;
+        public override StandAttackType StandType => StandAttackType.Melee;
+        public override string PunchSoundName => "Ari";
+        public override string PoseSoundName => "Arrivederci";
+        public override string SpawnSoundName => "Sticky Fingers";
+        public override bool UseProjectileAlpha => true;
 
         private int mouseRightHoldTimer = 0;
         private bool mouseRightForceRelease = false;
@@ -88,8 +88,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersFistExtended>(), (int)(altDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
+                        shootVel *= ProjectileSpeed;
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersFistExtended>(), (int)(AltDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
                         Main.projectile[proj].netUpdate = true;
                         Projectile.netUpdate = true;
                     }

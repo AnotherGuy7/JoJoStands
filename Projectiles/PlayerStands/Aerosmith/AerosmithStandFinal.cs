@@ -33,12 +33,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             Projectile.ignoreWater = true;
         }
 
-        public override float shootSpeed => 12f;       //how fast the Projectile the minion shoots goes
-        public override int projectileDamage => 75;
-        public override int shootTime => 6;      //+2 every tier
-        public override StandType standType => StandType.Ranged;
-        public override string poseSoundName => "VolareVia";
-        public override string spawnSoundName => "Aerosmith";
+        public override float ProjectileSpeed => 12f;       //how fast the Projectile the minion shoots goes
+        public override int ProjectileDamage => 75;
+        public override int ShootTime => 6;      //+2 every tier
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override string PoseSoundName => "VolareVia";
+        public override string SpawnSoundName => "Aerosmith";
 
         private bool bombless = false;
 
@@ -107,7 +107,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                         SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
@@ -188,7 +188,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                             SoundEngine.PlaySound(SoundID.Item11, Projectile.position);

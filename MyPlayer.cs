@@ -158,6 +158,7 @@ namespace JoJoStands
         public bool bitesTheDustActive = false;
         public bool poseMode = false;
         public bool canRevertFromKQBTD = false;
+        public bool canRevertFromGoBeyond = false;
         public bool showingCBLayer = false;     //this is a bool that's needed to sync so that the Century Boy layer shows up for other clients in Multiplayer
 
         private int standKeyPressTimer = 0;

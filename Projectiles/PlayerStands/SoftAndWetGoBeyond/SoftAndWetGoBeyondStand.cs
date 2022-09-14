@@ -11,15 +11,15 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
     public class SoftAndWetGoBeyondStand : StandClass
     {
 
-        public override float maxDistance => 98f;
-        public override int punchDamage => 116;
-        public override int punchTime => 9;
-        public override int halfStandHeight => 48;
-        public override int altDamage => 320;
-        public override int standOffset => 0;
-        public override float fistWhoAmI => 0f;
-        public override float tierNumber => 5f;
-        public override StandType standType => StandType.Ranged;
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 116;
+        public override int PunchTime => 9;
+        public override int HalfStandHeight => 48;
+        public override int AltDamage => 320;
+        public override int StandOffset => 0;
+        public override int FistWhoAmI => 0;
+        public override int TierNumber => 5;
+        public override StandAttackType StandType => StandAttackType.Ranged;
 
         public override void AI()
         {
@@ -84,7 +84,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                         shootVel.Normalize();
                         shootVel *= 6f;
                         Vector2 shootPosition = Projectile.position + new Vector2(40f, -10f);
-                        int hvb = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, shootVel, ModContent.ProjectileType<HighVelocityBubble>(), (int)(altDamage * mPlayer.standDamageBoosts), 8f, Projectile.owner, Projectile.whoAmI); ;
+                        int hvb = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, shootVel, ModContent.ProjectileType<HighVelocityBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 8f, Projectile.owner, Projectile.whoAmI); ;
                         shootCount += 1;
                         SoundEngine.PlaySound(SoundID.Item130);
                         Main.projectile[hvb].netUpdate = true;

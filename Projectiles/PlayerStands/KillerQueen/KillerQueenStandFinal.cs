@@ -11,16 +11,17 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 {
     public class KillerQueenStandFinal : StandClass
     {
-        public override int punchDamage => 74;
-        public override int altDamage => 365;
-        public override int punchTime => 9;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 5f;
-        public override float maxAltDistance => 262f;     //about 10 tiles
-        public override string poseSoundName => "IWouldntLose";
-        public override string spawnSoundName => "Killer Queen";
+        public override int PunchDamage => 74;
+        public override int AltDamage => 365;
+        public override int PunchTime => 9;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 5;
+        public override int TierNumber => 4;
+        public override float MaxAltDistance => 262f;     //about 10 tiles
+        public override string PoseSoundName => "IWouldntLose";
+        public override string SpawnSoundName => "Killer Queen";
         public override bool CanUseSaladDye => true;
-        public override StandType standType => StandType.Melee;
+        public override StandAttackType StandType => StandAttackType.Melee;
 
 
         private Vector2 savedPosition = Vector2.Zero;
@@ -67,7 +68,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
                     if (!touchedNPC && !touchedTile)
                     {
-                        if (mouseToPlayerDistance < maxAltDistance)
+                        if (mouseToPlayerDistance < MaxAltDistance)
                         {
                             bool foundNPCTarget = false;
                             for (int n = 0; n < Main.maxNPCs; n++)
@@ -113,7 +114,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                     if (jojoNPC.taggedByKillerQueen)
                                     {
                                         touchedNPC = false;
-                                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts), npc.whoAmI);
+                                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(AltDamage * mPlayer.standDamageBoosts), npc.whoAmI);
                                         Main.projectile[projectile].timeLeft = 2;
                                         Main.projectile[projectile].netUpdate = true;
                                         jojoNPC.taggedByKillerQueen = false;
@@ -126,7 +127,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                         {
                             touchedTile = false;
                             secondaryAbilityFrames = true;
-                            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
+                            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(AltDamage * mPlayer.standDamageBoosts));
                             Main.projectile[projectile].timeLeft = 2;
                             Main.projectile[projectile].netUpdate = true;
                             savedPosition = Vector2.Zero;
@@ -170,7 +171,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
                     if (explosionTimer >= 90)
                     {
-                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedTarget.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts), savedTarget.whoAmI);
+                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedTarget.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(AltDamage * mPlayer.standDamageBoosts), savedTarget.whoAmI);
                         Main.projectile[projectile].timeLeft = 2;
                         Main.projectile[projectile].netUpdate = true;
                         explosionTimer = 0;
@@ -202,9 +203,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
                             shootVel.Normalize();
                             if (Projectile.direction == 1)
-                                shootVel *= shootSpeed;
+                                shootVel *= ProjectileSpeed;
 
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), 3f, Projectile.owner, fistWhoAmI, tierNumber);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), 3f, Projectile.owner, FistWhoAmI, TierNumber);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                         }
@@ -225,7 +226,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     float npcDistance = Vector2.Distance(npc.Center, savedPosition);
                     if (npc.active && !npc.friendly && npcDistance < 50f && touchedTile)       //or youd need to go from its center, add half its width to the direction its facing, and then add 16 (also with direction) -- Direwolf
                     {
-                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(altDamage * mPlayer.standDamageBoosts));
+                        int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(AltDamage * mPlayer.standDamageBoosts));
                         Main.projectile[projectile].timeLeft = 2;
                         Main.projectile[projectile].netUpdate = true;
                         touchedTile = false;

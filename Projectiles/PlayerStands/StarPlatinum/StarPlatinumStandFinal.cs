@@ -10,15 +10,16 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 {
     public class StarPlatinumStandFinal : StandClass
     {
-        public override int punchDamage => 118;
-        public override int punchTime => 6;
-        public override int altDamage => 178;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 0f;
-        public override string punchSoundName => "Ora";
-        public override string poseSoundName => "YareYareDaze";
-        public override string spawnSoundName => "Star Platinum";
-        public override StandType standType => StandType.Melee;
+        public override int PunchDamage => 118;
+        public override int PunchTime => 6;
+        public override int AltDamage => 178;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 0;
+        public override int TierNumber => 4;
+        public override string PunchSoundName => "Ora";
+        public override string PoseSoundName => "YareYareDaze";
+        public override string SpawnSoundName => "Star Platinum";
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         private int timestopStartDelay = 0;
         private bool flickFrames = false;
@@ -97,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
                                 shootVel.Normalize();
                                 shootVel *= 12f;
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
+                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
                                 Main.projectile[proj].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
                                 Main.projectile[proj].netUpdate = true;
                                 Projectile.netUpdate = true;
@@ -122,8 +123,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                 shootVel = new Vector2(0f, 1f);
 
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(altDamage * mPlayer.standDamageBoosts) - 56, 4f, Projectile.owner, Projectile.whoAmI);
+                            shootVel *= ProjectileSpeed;
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts) - 56, 4f, Projectile.owner, Projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                         }

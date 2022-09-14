@@ -7,15 +7,16 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 {
     public class TheWorldStandT1 : StandClass
     {
-        public override int punchDamage => 19;
-        public override int punchTime => 11;
-        public override int halfStandHeight => 44;
-        public override float fistWhoAmI => 1f;
-        public override string punchSoundName => "Muda";
-        public override string poseSoundName => "ComeAsCloseAsYouLike";
-        public override string spawnSoundName => "The World";
+        public override int PunchDamage => 19;
+        public override int PunchTime => 11;
+        public override int HalfStandHeight => 44;
+        public override int FistWhoAmI => 1;
+        public override int TierNumber => 1;
+        public override string PunchSoundName => "Muda";
+        public override string PoseSoundName => "ComeAsCloseAsYouLike";
+        public override string SpawnSoundName => "The World";
         public override bool CanUseSaladDye => true;
-        public override StandType standType => StandType.Melee;
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
         {

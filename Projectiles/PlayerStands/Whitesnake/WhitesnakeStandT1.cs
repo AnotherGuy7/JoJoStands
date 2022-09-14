@@ -7,15 +7,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
     public class WhitesnakeStandT1 : StandClass
     {
-        public override int punchDamage => 16;
-        public override int punchTime => 14;
-        public override int halfStandHeight => 44;
-        public override float fistWhoAmI => 9f;
-        public override StandType standType => StandType.Melee;
-        public override int standOffset => 22;
-        public override float maxDistance => 148f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
-        public override string poseSoundName => "YouWereTwoSecondsTooLate";
-        public override string spawnSoundName => "Whitesnake";
+        public override int PunchDamage => 16;
+        public override int PunchTime => 14;
+        public override int HalfStandHeight => 44;
+        public override int FistWhoAmI => 9;
+        public override int TierNumber => 1;
+        public override StandAttackType StandType => StandAttackType.Melee;
+        public override int StandOffset => 22;
+        public override float MaxDistance => 148f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
+        public override string PoseSoundName => "YouWereTwoSecondsTooLate";
+        public override string SpawnSoundName => "Whitesnake";
         public override bool CanUseSaladDye => true;
 
         public override void AI()

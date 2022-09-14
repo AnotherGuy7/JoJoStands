@@ -12,15 +12,16 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 {
     public class TheHandStandT3 : StandClass
     {
-        public override float maxDistance => 98f;
-        public override float maxAltDistance => 327f;
-        public override StandType standType => StandType.Melee;
-        public override int punchDamage => 52;
-        public override int punchTime => 11;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 7f;
-        public override string poseSoundName => "NobodyCanFoolMeTwice";
-        public override string spawnSoundName => "The Hand";
+        public override float MaxDistance => 98f;
+        public override float MaxAltDistance => 327f;
+        public override StandAttackType StandType => StandAttackType.Melee;
+        public override int PunchDamage => 52;
+        public override int PunchTime => 11;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 7;
+        public override int TierNumber => 3;
+        public override string PoseSoundName => "NobodyCanFoolMeTwice";
+        public override string SpawnSoundName => "The Hand";
 
         private bool scrapeFrames = false;
         private bool scrapeBarrageFrames = false;
@@ -135,9 +136,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             shootCount += (int)(newPunchTime * 1.4);
                             Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
 
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2), punchKnockback, Projectile.owner, fistWhoAmI);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2), PunchKnockback, Projectile.owner, FistWhoAmI);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                             SoundStyle theHandScrapeSound = new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR");

@@ -8,15 +8,16 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 {
     public class StarPlatinumStandT2 : StandClass
     {
-        public override int punchDamage => 56;
-        public override int punchTime => 8;
-        public override int altDamage => 65;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 0f;
-        public override string punchSoundName => "Ora";
-        public override string poseSoundName => "YareYareDaze";
-        public override string spawnSoundName => "Star Platinum";
-        public override StandType standType => StandType.Melee;
+        public override int PunchDamage => 56;
+        public override int PunchTime => 8;
+        public override int AltDamage => 65;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 0;
+        public override int TierNumber => 2;
+        public override string PunchSoundName => "Ora";
+        public override string PoseSoundName => "YareYareDaze";
+        public override string SpawnSoundName => "Star Platinum";
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
         {
@@ -56,8 +57,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                         shootVel = new Vector2(0f, 1f);
 
                     shootVel.Normalize();
-                    shootVel *= shootSpeed;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);
+                    shootVel *= ProjectileSpeed;
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                     Projectile.netUpdate = true;
                 }

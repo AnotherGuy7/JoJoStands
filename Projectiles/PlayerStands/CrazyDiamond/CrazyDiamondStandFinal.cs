@@ -13,13 +13,13 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 {
     public class CrazyDiamondStandFinal : StandClass
     {
-        public override int punchDamage => 108;
-        public override int punchTime => 7;
-        public override int altDamage => 162;
-        public override int halfStandHeight => 51;
-        public override float fistWhoAmI => 12f;
-        public override float tierNumber => 4f;
-        public override StandType standType => StandType.Melee;
+        public override int PunchDamage => 108;
+        public override int PunchTime => 7;
+        public override int AltDamage => 162;
+        public override int HalfStandHeight => 51;
+        public override int FistWhoAmI => 12;
+        public override int TierNumber => 4;
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         private bool healingFrames = false;
         private bool flickFrames = false;
@@ -113,7 +113,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                     shootVel.Normalize();
                                     shootVel *= 12f;
 
-                                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2 (0, 18f), shootVel, bulletItem.shoot, (int)(altDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
+                                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2 (0, 18f), shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
                                     Main.projectile[proj].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
                                     Main.projectile[proj].netUpdate = true;
                                     Projectile.netUpdate = true;

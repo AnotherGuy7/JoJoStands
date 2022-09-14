@@ -7,14 +7,15 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 {
     public class TheHandStandT1 : StandClass
     {
-        public override float maxDistance => 98f;
-        public override int punchDamage => 17;
-        public override int punchTime => 13;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 7f;
-        public override StandType standType => StandType.Melee;
-        public override string poseSoundName => "NobodyCanFoolMeTwice";
-        public override string spawnSoundName => "The Hand";
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 17;
+        public override int PunchTime => 13;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 7;
+        public override int TierNumber => 1;
+        public override StandAttackType StandType => StandAttackType.Melee;
+        public override string PoseSoundName => "NobodyCanFoolMeTwice";
+        public override string SpawnSoundName => "The Hand";
 
         public override void AI()
         {

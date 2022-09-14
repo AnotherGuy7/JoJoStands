@@ -10,7 +10,7 @@ namespace JoJoStands.Projectiles.Pets
     public class TuskAct1Pet : StandClass   //for SyncAndApplyDyeSlot method
     {
         public override string Texture => Mod.Name + "/Projectiles/Pets/TuskAct1Pet";
-        public override string poseSoundName => "ItsBeenARoundaboutPath";
+        public override string PoseSoundName => "ItsBeenARoundaboutPath";
 
         public override void SetStaticDefaults()
         {
@@ -33,7 +33,7 @@ namespace JoJoStands.Projectiles.Pets
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.poseSoundName = poseSoundName;
+            mPlayer.poseSoundName = PoseSoundName;
             if (mPlayer.tuskActNumber == 1)
                 Projectile.timeLeft = 2;
 

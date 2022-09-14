@@ -14,14 +14,14 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
     public class SoftAndWetStandFinal : StandClass
     {
 
-        public override float maxDistance => 98f;
-        public override int punchDamage => 96;
-        public override int punchTime => 9;
-        public override int halfStandHeight => 48;
-        public override int altDamage => ((int)(tierNumber * 15));
-        public override int standOffset => 0;
-        public override float fistWhoAmI => 0f;
-        public override float tierNumber => 4f;
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 96;
+        public override int PunchTime => 9;
+        public override int HalfStandHeight => 48;
+        public override int AltDamage => ((int)(TierNumber * 15));
+        public override int StandOffset => 0;
+        public override int FistWhoAmI => 0;
+        public override int TierNumber => 4;
 
         public bool trapOn = false;
         public bool touchedTile = false;
@@ -30,7 +30,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
 
 
         public bool bubbleBarrier = false;
-        public override StandType standType => StandType.Melee;
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
         {
@@ -70,7 +70,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                         shootVel = new Vector2(0f, 1f);
                     shootVel.Normalize();
                     shootVel *= 3f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI); ;
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI); ;
                     shootCount += 1;
                     Main.projectile[proj].netUpdate = true;
                     Projectile.netUpdate = true;

@@ -7,15 +7,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 {
     public class StickyFingersStandT1 : StandClass
     {
-        public override int punchDamage => 15;
-        public override int punchTime => 12;
-        public override int halfStandHeight => 39;
-        public override float fistWhoAmI => 4f;
-        public override float tierNumber => 1f;
-        public override StandType standType => StandType.Melee;
-        public override string punchSoundName => "Ari";
-        public override string poseSoundName => "Arrivederci";
-        public override string spawnSoundName => "Sticky Fingers";
+        public override int PunchDamage => 15;
+        public override int PunchTime => 12;
+        public override int HalfStandHeight => 39;
+        public override int FistWhoAmI => 4;
+        public override int TierNumber => 1;
+        public override StandAttackType StandType => StandAttackType.Melee;
+        public override string PunchSoundName => "Ari";
+        public override string PoseSoundName => "Arrivederci";
+        public override string SpawnSoundName => "Sticky Fingers";
 
         public override void AI()
         {

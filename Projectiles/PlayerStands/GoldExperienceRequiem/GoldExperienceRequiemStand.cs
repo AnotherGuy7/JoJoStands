@@ -14,17 +14,17 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 {
     public class GoldExperienceRequiemStand : StandClass
     {
-        public override float maxDistance => 98f;
-        public override int punchDamage => 138;
-        public override int punchTime => 9;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 3f;
-        public override float tierNumber => 5f;
-        public override int standOffset => 28;
-        public override string punchSoundName => "GER_Muda";
-        public override string poseSoundName => "ThisIsRequiem";
-        public override string spawnSoundName => "Gold Experience";
-        public override StandType standType => StandType.Melee;
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 138;
+        public override int PunchTime => 9;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 3;
+        public override int TierNumber => 5;
+        public override int StandOffset => 28;
+        public override string PunchSoundName => "GER_Muda";
+        public override string PoseSoundName => "ThisIsRequiem";
+        public override string SpawnSoundName => "Gold Experience";
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         private int regencounter = 0;
         //private string[] abilityNames = new string[5] { "Scorpion Beam", "Tree", "Death-Loop", "Limb Recreation", "Back to Zero" };
@@ -81,10 +81,10 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     if (Main.mouseRight && (Collision.SolidCollision(Main.MouseWorld, 1, 1) || mouseOnPlatform) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && mPlayer.chosenAbility == 1)
                     {
                         int yPos = (((int)Main.MouseWorld.Y / 16) - 3) * 16;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld.X, yPos, 0f, 0f, ModContent.ProjectileType<GETree>(), 1, 0f, Projectile.owner, tierNumber);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld.X, yPos, 0f, 0f, ModContent.ProjectileType<GETree>(), 1, 0f, Projectile.owner, TierNumber);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(12));
                     }
-                    if (Main.mouseRight && mPlayer.chosenAbility == 2 && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<DeathLoop>()) && mouseDistance < maxDistance)
+                    if (Main.mouseRight && mPlayer.chosenAbility == 2 && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<DeathLoop>()) && mouseDistance < MaxDistance)
                     {
                         bool targetSuccess = false;
                         for (int n = 0; n < Main.maxNPCs; n++)

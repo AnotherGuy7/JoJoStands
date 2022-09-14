@@ -33,6 +33,7 @@ namespace JoJoStands.Items
             Item.value = 0;
             Item.rare = ItemRarityID.LightPurple;
         }
+
         public override void HoldItem(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -50,6 +51,7 @@ namespace JoJoStands.Items
                 }
             }
         }
+
         public override void AddRecipes()
         {
             CreateRecipe()

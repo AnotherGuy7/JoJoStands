@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Projectile.height = 26;
         }
 
-        public override StandType standType => StandType.Ranged;
+        public override StandAttackType StandType => StandAttackType.Ranged;
 
         public int updateTimer = 0;
 
@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
@@ -127,7 +127,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }

@@ -13,16 +13,17 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 {
     public class TheWorldStandT3 : StandClass
     {
-        public override int punchDamage => 68;
-        public override int altDamage => 47;
-        public override int punchTime => 9;
-        public override int halfStandHeight => 44;
-        public override float fistWhoAmI => 1f;
-        public override string punchSoundName => "Muda";
-        public override string poseSoundName => "ComeAsCloseAsYouLike";
-        public override string spawnSoundName => "The World";
+        public override int PunchDamage => 68;
+        public override int AltDamage => 47;
+        public override int PunchTime => 9;
+        public override int HalfStandHeight => 44;
+        public override int FistWhoAmI => 1;
+        public override int TierNumber => 3;
+        public override string PunchSoundName => "Muda";
+        public override string PoseSoundName => "ComeAsCloseAsYouLike";
+        public override string SpawnSoundName => "The World";
         public override bool CanUseSaladDye => true;
-        public override StandType standType => StandType.Melee;
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         private bool abilityPose = false;
         private int timestopPoseTimer = 0;
@@ -129,7 +130,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         {
                             Vector2 shootPosition = Projectile.position + new Vector2(5f, -3f);
                             Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-knivesSpread, knivesSpread, i / (numberOfKnives - 1))) * 0.2f;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             player.ConsumeItem(ModContent.ItemType<Knife>());
                             Projectile.netUpdate = true;
@@ -162,7 +163,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         Vector2 velocity = target.position - position;
                         velocity.Normalize();
                         velocity *= 8f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<KnifeProjectile>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
                     }
 
                     int secondRingKnives = 30;
@@ -174,7 +175,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         Vector2 velocity = target.position - position;
                         velocity.Normalize();
                         velocity *= 8f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<KnifeProjectile>(), (int)(altDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
                     }
 
                     for (int i = 0; i < firstRingKnives + secondRingKnives; i++)

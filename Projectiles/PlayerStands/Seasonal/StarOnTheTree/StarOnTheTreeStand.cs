@@ -10,15 +10,16 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 {
     public class StarOnTheTreeStand : StandClass
     {
-        public override int punchDamage => 106;
-        public override int punchTime => 6;
-        public override int altDamage => 84;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 0f;
-        public override string punchSoundName => "Ora";
-        public override string poseSoundName => "YareYareDaze";
-        public override string spawnSoundName => "Star Platinum";
-        public override StandType standType => StandType.Melee;
+        public override int PunchDamage => 106;
+        public override int PunchTime => 6;
+        public override int AltDamage => 84;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 0;
+        public override int TierNumber => 4;
+        public override string PunchSoundName => "Ora";
+        public override string PoseSoundName => "YareYareDaze";
+        public override string SpawnSoundName => "Star Platinum";
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         private int timestopStartDelay = 0;
         private bool flickFrames = false;
@@ -38,10 +39,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 Projectile.timeLeft = 2;
             if (Main.rand.Next(0, 4 + 1) == 0)
             {
-                int dust = Dust.NewDust(Projectile.position - new Vector2(0f, halfStandHeight), 58, 64, DustID.UndergroundHallowedEnemies);
+                int dust = Dust.NewDust(Projectile.position - new Vector2(0f, HalfStandHeight), 58, 64, DustID.UndergroundHallowedEnemies);
                 Main.dust[dust].noGravity = true;
             }
-            Lighting.AddLight(Projectile.Center + new Vector2(0f, -halfStandHeight + 2f), 1f / 2f, 0.88f / 2f, 0.9f / 2f);
+            Lighting.AddLight(Projectile.Center + new Vector2(0f, -HalfStandHeight + 2f), 1f / 2f, 0.88f / 2f, 0.9f / 2f);
 
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopStartDelay <= 0)
             {
@@ -103,7 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
                                 shootVel.Normalize();
                                 shootVel *= 12f;
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(altDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
+                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
                                 Main.projectile[proj].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
                                 Main.projectile[proj].netUpdate = true;
                                 Projectile.netUpdate = true;
@@ -129,8 +130,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                 shootVel = new Vector2(0f, 1f);
 
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(altDamage * mPlayer.standDamageBoosts), 4f, Projectile.owner, Projectile.whoAmI);
+                            shootVel *= ProjectileSpeed;
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts), 4f, Projectile.owner, Projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                         }

@@ -34,13 +34,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             Projectile.ignoreWater = true;
         }
 
-        public override float shootSpeed => 12f;
+        public override float ProjectileSpeed => 12f;
 
-        public override int projectileDamage => 63;
-        public override int shootTime => 8;      //+2 every tier
-        public override StandType standType => StandType.Ranged;
-        public override string poseSoundName => "VolareVia";
-        public override string spawnSoundName => "Aerosmith";
+        public override int ProjectileDamage => 63;
+        public override int ShootTime => 8;      //+2 every tier
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override string PoseSoundName => "VolareVia";
+        public override string SpawnSoundName => "Aerosmith";
 
         private bool bombless = false;
         private bool fallingFromSpace = false;
@@ -120,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
@@ -200,7 +200,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                                 shootVel = new Vector2(0f, 1f);
 
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                         }

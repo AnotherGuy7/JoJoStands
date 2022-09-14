@@ -11,13 +11,13 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 {
     public class HierophantGreenStandT3 : StandClass
     {
-        public override int shootTime => 20;
-        public override int projectileDamage => 56;
-        public override int halfStandHeight => 30;
-        public override int standOffset => 0;
-        public override StandType standType => StandType.Ranged;
-        public override string poseSoundName => "ItsTheVictorWhoHasJustice";
-        public override string spawnSoundName => "Hierophant Green";
+        public override int ShootTime => 20;
+        public override int ProjectileDamage => 56;
+        public override int HalfStandHeight => 30;
+        public override int StandOffset => 0;
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override string PoseSoundName => "ItsTheVictorWhoHasJustice";
+        public override string SpawnSoundName => "Hierophant Green";
         public override bool CanUseSaladDye => true;
 
         private bool spawningField = false;
@@ -63,7 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
 
                         float numberProjectiles = 5;
                         float rotation = MathHelper.ToRadians(25);
@@ -94,7 +94,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     shootCount += 30;
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     shootVel.Normalize();
-                    shootVel *= shootSpeed;
+                    shootVel *= ProjectileSpeed;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BindingEmeraldString>(), newProjectileDamage / 2, 0f, Projectile.owner, 25);
                     Main.projectile[proj].netUpdate = true;
                     SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
@@ -161,7 +161,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
 
                         float numberProjectiles = 5;
                         float rotation = MathHelper.ToRadians(25);
@@ -199,7 +199,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         shootVel = new Vector2(0f, 1f);
                     }
                     shootVel.Normalize();
-                    shootVel *= shootSpeed;
+                    shootVel *= ProjectileSpeed;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, connectorType, 0, 3f, player.whoAmI);
                     Main.projectile[proj].netUpdate = true;
                     SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
@@ -239,7 +239,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
 
                             float numberProjectiles = 5;
                             float rotation = MathHelper.ToRadians(25);
@@ -248,7 +248,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                             {
                                 Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
                                 perturbedSpeed *= randomSpeedOffset;
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), (int)((projectileDamage * mPlayer.standDamageBoosts) * 0.9f), 3f, player.whoAmI);
+                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), (int)((ProjectileDamage * mPlayer.standDamageBoosts) * 0.9f), 3f, player.whoAmI);
                                 Main.projectile[proj].netUpdate = true;
                             }
                             Projectile.netUpdate = true;

@@ -12,15 +12,16 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 {
     public class KingCrimsonStandFinal : StandClass
     {
-        public override int punchDamage => 186;
-        public override float punchKnockback => 5f;
-        public override int punchTime => 20;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
-        public override int halfStandHeight => 32;
-        public override float fistWhoAmI => 6f;
-        public override int standOffset => 0;
-        public override string poseSoundName => "AllThatRemainsAreTheResults";
-        public override string spawnSoundName => "King Crimson";
-        public override StandType standType => StandType.Melee;
+        public override int PunchDamage => 186;
+        public override float PunchKnockback => 5f;
+        public override int PunchTime => 20;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
+        public override int HalfStandHeight => 32;
+        public override int FistWhoAmI => 6;
+        public override int TierNumber => 4;
+        public override int StandOffset => 0;
+        public override string PoseSoundName => "AllThatRemainsAreTheResults";
+        public override string SpawnSoundName => "King Crimson";
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         private int timeskipStartDelay = 0;
         private int blockSearchTimer = 0;
@@ -107,8 +108,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, punchKnockback, Projectile.owner, fistWhoAmI);
+                        shootVel *= ProjectileSpeed;
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
                         Main.projectile[proj].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
@@ -185,7 +186,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             }
                             player.position += repositionOffset;
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(4));
-                            npc.StrikeNPC(newPunchDamage * 2, punchKnockback * 1.5f, Projectile.direction);
+                            npc.StrikeNPC(newPunchDamage * 2, PunchKnockback * 1.5f, Projectile.direction);
                             SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
 
                             for (int i = 0; i < 20; i++)

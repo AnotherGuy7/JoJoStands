@@ -34,12 +34,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             Projectile.ignoreWater = true;
         }
 
-        public override float shootSpeed => 12f;
-        public override int projectileDamage => 42;
-        public override int shootTime => 10;      //+2 every tier
-        public override StandType standType => StandType.Ranged;
-        public override string poseSoundName => "VolareVia";
-        public override string spawnSoundName => "Aerosmith";
+        public override float ProjectileSpeed => 12f;
+        public override int ProjectileDamage => 42;
+        public override int ShootTime => 10;      //+2 every tier
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override string PoseSoundName => "VolareVia";
+        public override string SpawnSoundName => "Aerosmith";
 
         private bool bombless = false;
         private bool fallingFromSpace = false;
@@ -119,7 +119,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
@@ -128,7 +128,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 {
                     shootCount += newShootTime;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(15));
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AerosmithBomb>(), 0, 3f, Projectile.owner, (projectileDamage + 21) * (float)mPlayer.standDamageBoosts);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AerosmithBomb>(), 0, 3f, Projectile.owner, (ProjectileDamage + 21) * (float)mPlayer.standDamageBoosts);
                     Main.projectile[proj].netUpdate = true;
                 }
             }
@@ -200,7 +200,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                                 shootVel = new Vector2(0f, 1f);
 
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                         }

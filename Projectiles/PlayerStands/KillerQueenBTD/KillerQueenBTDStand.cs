@@ -12,13 +12,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 {
     public class KillerQueenBTDStand : StandClass
     {
-        public override float shootSpeed => 4f;
-        public override int shootTime => 30;
-        public override int halfStandHeight => 37;
-        public override StandType standType => StandType.Ranged;
-        public override int standOffset => -10;
-        public override string poseSoundName => "IWouldntLose";
-        public override string spawnSoundName => "Killer Queen";
+        public override float ProjectileSpeed => 4f;
+        public override int ShootTime => 30;
+        public override int HalfStandHeight => 37;
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override int StandOffset => -10;
+        public override string PoseSoundName => "IWouldntLose";
+        public override string SpawnSoundName => "Killer Queen";
         //public override bool CanUseSaladDye => true;
 
         private int btdStartDelay = 0;
@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             {
                 bubbleDamage = 456;
             }
-            DrawOriginOffsetY = -halfStandHeight;
+            DrawOriginOffsetY = -HalfStandHeight;
             int newBubbleDamage = (int)(bubbleDamage * mPlayer.standDamageBoosts);
 
             if (!attackFrames)
@@ -275,7 +275,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                                 shootVel = new Vector2(0f, 1f);
 
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Bubble>(), newBubbleDamage, 6f, Projectile.owner, 1f, Projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
@@ -337,7 +337,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                                 shootVel = new Vector2(0f, 1f);
                             }
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Bubble>(), newBubbleDamage, 6f, Projectile.owner, 0f, Projectile.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;

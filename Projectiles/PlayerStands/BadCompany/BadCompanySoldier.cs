@@ -23,9 +23,9 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Projectile.shouldFallThrough = false;
         }
 
-        public override string poseSoundName => "StandReadyFire";
-        public override StandType standType => StandType.Ranged;
-        public override float shootSpeed => 12f;
+        public override string PoseSoundName => "StandReadyFire";
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override float ProjectileSpeed => 12f;
 
         public int updateTimer = 0;
 
@@ -47,7 +47,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.poseSoundName = poseSoundName;
+            mPlayer.poseSoundName = PoseSoundName;
             if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
                 Projectile.timeLeft = 2;
 
@@ -150,7 +150,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                                 shootVel = new Vector2(0f, 1f);
 
                             shootVel.Normalize();
-                            shootVel *= shootSpeed;
+                            shootVel *= ProjectileSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                         }
@@ -189,7 +189,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
-                        shootVel *= shootSpeed;
+                        shootVel *= ProjectileSpeed;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
@@ -216,7 +216,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 {
                     shootCount += mPlayer.poseDuration + 1;
                     SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0f, -shootSpeed), ProjectileID.Bullet, 1, 0f, Projectile.owner);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0f, -ProjectileSpeed), ProjectileID.Bullet, 1, 0f, Projectile.owner);
                     Main.projectile[proj].netUpdate = true;
                 }
             }

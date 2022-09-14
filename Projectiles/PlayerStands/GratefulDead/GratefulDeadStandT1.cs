@@ -8,17 +8,17 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 {
     public class GratefulDeadStandT1 : StandClass
     {
-        public override float shootSpeed => 16f;
-        public override float maxDistance => 98f;
-        public override int punchDamage => 16;
-        public override int punchTime => 13;
-        public override int halfStandHeight => 34;
-        public override float fistWhoAmI => 8f;
-        public override float tierNumber => 1f;
-        public override int standOffset => 32;
-        public override StandType standType => StandType.Melee;
-        public override string poseSoundName => "OnceWeDecideToKillItsDone";
-        public override string spawnSoundName => "The Grateful Dead";
+        public override float ProjectileSpeed => 16f;
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 16;
+        public override int PunchTime => 13;
+        public override int HalfStandHeight => 34;
+        public override int FistWhoAmI => 8;
+        public override int TierNumber => 1;
+        public override int StandOffset => 32;
+        public override StandAttackType StandType => StandAttackType.Melee;
+        public override string PoseSoundName => "OnceWeDecideToKillItsDone";
+        public override string SpawnSoundName => "The Grateful Dead";
 
         private bool grabFrames = false;
         private bool secondaryFrames = false;
@@ -99,7 +99,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
             if (animationName == "Attack")
             {
-                AnimateStand(animationName, 4, punchTime, true);
+                AnimateStand(animationName, 4, PunchTime, true);
             }
             if (animationName == "Pose")
             {

@@ -7,13 +7,14 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 {
     public class StoneFreeStandT1 : StandClass
     {
-        public override float maxDistance => 98f;
-        public override int punchDamage => 16;
-        public override int punchTime => 11;
-        public override int halfStandHeight => 37;
-        public override float fistWhoAmI => 0f;
-        public override string spawnSoundName => "Stone Free";
-        public override StandType standType => StandType.Melee;
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 16;
+        public override int PunchTime => 11;
+        public override int HalfStandHeight => 37;
+        public override int FistWhoAmI => 0;
+        public override int TierNumber => 1;
+        public override string SpawnSoundName => "Stone Free";
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
         {
