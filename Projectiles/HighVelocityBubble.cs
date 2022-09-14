@@ -29,7 +29,6 @@ namespace JoJoStands.Projectiles
         }
         private const float ExplosionRadius = 3f * 8f;
         private bool crit = false;
-        private int sinTimer = 0;
         public override void AI()
         {
             Projectile.frameCounter++;
@@ -42,11 +41,6 @@ namespace JoJoStands.Projectiles
             {
                 Projectile.frame = 0;
             }
-            sinTimer += 4;
-            if (sinTimer >= 360)
-                sinTimer = 0;
-
-            Projectile.alpha = (int)(255f * Math.Sin(MathHelper.ToRadians(sinTimer)));
         }
         public override void Kill(int timeLeft)
         {

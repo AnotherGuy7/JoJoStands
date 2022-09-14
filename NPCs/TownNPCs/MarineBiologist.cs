@@ -401,11 +401,11 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetT1>())
                 {
-                    Main.npcChatText = "Did you let a bubble loose in here? Be careful not to let it pop near me. These things are capable of taking something from whatever they pop next to. I’d prefer to keep my eyesight.\nThey also seem to take effects from things you hold in your hand. I wonder what would happen if these sorts of bubbles popped…";
+                    Main.npcChatText = "Did you let a bubble loose in here? Be careful not to let it pop near me. These things are capable of taking something from whatever they pop next to. I'd prefer to keep my eyesight.\nThey also seem to take effects from things you hold in your hand. I wonder what would happen if these sorts of bubbles popped.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetT2>())
                 {
-                    Main.npcChatText = "Hmm… it seems these bubbles are more durable than I thought. You should be able to coat yourself in one, giving you some welcome protection. This Stand sure is full of surprises…";
+                    Main.npcChatText = "Hmm. Seems these bubbles are more durable than I thought. You should be able to coat yourself in one, giving you some welcome protection. This Stand sure is full of surprises.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetT3>())
                 {
@@ -413,11 +413,11 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetFinal>())
                 {
-                    Main.npcChatText = "This power… it can’t be. It seems the bubbles can now be used to plant bombs in the ground. This kind of power seems unsettlingly familiar. We’ll chalk this up to coincidence. For now…";
+                    Main.npcChatText = "This power! It can't be. It seems the bubbles can now be used to plant bombs in the ground. This kind of power seems unsettlingly familiar. We'll chalk this up to coincidence. For now.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetGoBeyond>())
                 {
-                    Main.npcChatText = "My suspicions are all but confirmed. I knew this explosive power seemed familiar. But it‘s changed. Evolved. It ‘goes beyond’ nature.\nHow do I explain this? The short of it is that your bubbles are actually a line spinning at incredible speeds. If this line reaches a vanishing point, there’s no telling what your bubbles can achieve. They could transcend logic, itself. How terrifying…";
+                    Main.npcChatText = "My suspicions are all but confirmed. I knew this explosive power seemed familiar. But it's changed. Evolved. It 'goes beyond' nature.\nHow do I explain this? The short of it is that your bubbles are actually a line spinning at incredible speeds. If this line reaches a vanishing point, there’s no telling what your bubbles can achieve. They could transcend logic, itself. How terrifying…";
                 }
 
                 if (mPlayer.StandSlot.SlotItem.IsAir)
