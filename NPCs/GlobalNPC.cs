@@ -46,6 +46,7 @@ namespace JoJoStands.NPCs
         public bool applyingForesightPositions = false;
         public bool foresightResetIndex = false;
         public bool taggedWithPhantomMarker = false;
+        public bool oneTimeEffectsApplied = false;
         public bool grabbedByHermitPurple = false;
         public bool taggedByKillerQueen = false;
         public bool sunTagged = false;
