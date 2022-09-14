@@ -8,6 +8,6 @@ The JoJoStands Wiki: https://terrariamods.fandom.com/wiki/JoJoStands
 The Discord Link: https://discord.gg/EYKBhpK
 
 Credits:
-The JoJoStands Contributors: Placement, Phil, Techno, Blu, Hey Mister, Joser, Niker, D.Storm, Benney, NekroSektor, Ozi, StringsArn'tRealNumbers, Xenon, Com-Obie, Gundam_Belphagor, KrimsonHeadshot, Sicco-Jo, Pyther, Prooooooos21, Sewer Creature, Bruhimsons, and Archerous.
+The JoJoStands Contributors: Placement, Phil, Techno, Blu, Hey Mister, Joser, Niker, D.Storm, Benney, NekroSektor, Ozi, StringsArn'tRealNumbers, Xenon, Com-Obie, Gundam_Belphagor, KrimsonHeadshot, Sicco-Jo, Pyther, Prooooooos21, Sewer Creature, Bruhimsons, Archerous, and SolarSunne.
 Alana Gilston, for making TerraUI which helped us make the Stand Slot
 The ExampleMod devs, cause it's a good everything reference
