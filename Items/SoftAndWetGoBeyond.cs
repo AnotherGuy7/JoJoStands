@@ -18,7 +18,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Soft and Wet (Go Beyond!)");
-            Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a non-existent bubble!\nSpecial: Explosive Spin!\nRight-Click while holding the Item to revert back to Soft & Wet Final (You can revert back to Go Beyond!)");
+            Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a non-existent bubble!\nSpecial: Explosive Spin!");
         }
         public override string Texture
         {

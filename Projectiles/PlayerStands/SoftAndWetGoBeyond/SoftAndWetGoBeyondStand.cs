@@ -110,7 +110,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                     Projectile.netUpdate = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(20));
 
-
+                }
+                if (SecondSpecialKeyPressed() && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+                {
+                    player.AddBuff(ModContent.BuffType<BarrierBuff>(), 600);
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(22));
+                    Vector2 playerFollow = Vector2.Zero;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, playerFollow, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
                 }
             }
                 if (mPlayer.standAutoMode)
