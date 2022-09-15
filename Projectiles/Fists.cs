@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace JoJoStands.Projectiles
 {
@@ -437,8 +438,8 @@ namespace JoJoStands.Projectiles
                         {
                             Vector2 tile = new Vector2(detectedTileX, detectedTileY);
                             Tile tile2 = Main.tile[detectedTileX, detectedTileY];
-                            var checkTile = new MyPlayer.ExtraTile(tile2.TileType, new Vector2(detectedTileX, detectedTileY), tile2.Slope, tile2.IsHalfBlock);
-                            if (tile2.TileType != TileID.LihzahrdBrick && tile2.TileType != TileID.LihzahrdAltar && tile2.HasTile)
+                            var checkTile = new MyPlayer.ExtraTile(tile2.TileType, new Vector2(detectedTileX, detectedTileY), tile2.Slope, tile2.IsHalfBlock, tile2.TileFrameY, tile2.TileFrameX, tile2.TileFrameNumber);
+                            if (tile2.TileType != TileID.LihzahrdBrick && tile2.TileType != TileID.LihzahrdAltar && tile2.HasTile && Main.tileSolid[tile2.TileType])
                             {
                                 if (!tile2.HasActuator || tile2.HasActuator && !tile2.IsActuated)
                                 {

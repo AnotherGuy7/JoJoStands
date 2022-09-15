@@ -188,20 +188,25 @@ namespace JoJoStands
         private int sexPistolsClickTimer = 0;
         private bool changingSexPistolsPositions = false;
 
-
         public class ExtraTile //crazy diamond some new stuff
         {
             public ushort tileType { get; set; }
             public Vector2 tilePosition { get; set; }
             public SlopeType tileSlope { get; set; }
             public bool tileHalf { get; set; }
+            public short tileY { get; set; }
+            public short tileX { get; set; }
+            public int tileFrame { get; set; }
 
-            public ExtraTile(ushort tileType, Vector2 tilePosition, SlopeType tileSlope, bool tileHalf)
+            public ExtraTile(ushort tileType, Vector2 tilePosition, SlopeType tileSlope, bool tileHalf, short tileY, short tileX, int tileFrame)
             {
                 this.tileType = tileType;
                 this.tilePosition = tilePosition;
                 this.tileSlope = tileSlope;
                 this.tileHalf = tileHalf;
+                this.tileY = tileY;
+                this.tileX = tileX;
+                this.tileFrame = tileFrame;
             }
         }
         public void Destroy(ExtraTile ExtraTile)
@@ -213,16 +218,43 @@ namespace JoJoStands
         public void Restore(ExtraTile ExtraTile)
         {
             Vector2 vector2 = ExtraTile.tilePosition;
-            if (ExtraTile.tileType != TileID.Grass || ExtraTile.tileType != TileID.CorruptGrass || ExtraTile.tileType != TileID.CrimsonGrass || ExtraTile.tileType != TileID.HallowedGrass || ExtraTile.tileType != TileID.JungleGrass || ExtraTile.tileType != TileID.MushroomGrass || ExtraTile.tileType != TileID.GolfGrass || ExtraTile.tileType != TileID.GolfGrassHallowed)
-                WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, ExtraTile.tileType, false, true);
-            if (ExtraTile.tileType == TileID.Grass || ExtraTile.tileType == TileID.CorruptGrass || ExtraTile.tileType == TileID.CrimsonGrass || ExtraTile.tileType == TileID.HallowedGrass || ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
-                WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, TileID.Dirt, false, true);
-            if (ExtraTile.tileType == TileID.JungleGrass || ExtraTile.tileType == TileID.MushroomGrass)
-                WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, TileID.Mud, false, true);
             Tile tile = Main.tile[(int)vector2.X, (int)vector2.Y];
-            tile.Slope = ExtraTile.tileSlope;
-            tile.IsHalfBlock = ExtraTile.tileHalf;
-            NetMessage.SendTileSquare(-1, (int)vector2.X, (int)vector2.Y, 1);
+            if (!tile.HasTile)
+            {
+                if (ExtraTile.tileType != TileID.Grass || ExtraTile.tileType != TileID.CorruptGrass || ExtraTile.tileType != TileID.CrimsonGrass || ExtraTile.tileType != TileID.HallowedGrass || ExtraTile.tileType != TileID.JungleGrass || ExtraTile.tileType != TileID.MushroomGrass || ExtraTile.tileType != TileID.GolfGrass || ExtraTile.tileType != TileID.GolfGrassHallowed)
+                    WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, ExtraTile.tileType, false, true);
+                if (ExtraTile.tileType == TileID.Grass || ExtraTile.tileType == TileID.CorruptGrass || ExtraTile.tileType == TileID.CrimsonGrass || ExtraTile.tileType == TileID.HallowedGrass || ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
+                    Restore2(TileID.Dirt, TileID.Grass, vector2);
+                if (ExtraTile.tileType == TileID.CorruptGrass || ExtraTile.tileType == TileID.CrimsonGrass || ExtraTile.tileType == TileID.HallowedGrass || ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
+                    Restore2(TileID.Dirt, TileID.CorruptGrass, vector2);
+                if (ExtraTile.tileType == TileID.CrimsonGrass || ExtraTile.tileType == TileID.HallowedGrass || ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
+                    Restore2(TileID.Dirt, TileID.CrimsonGrass, vector2);
+                if (ExtraTile.tileType == TileID.HallowedGrass || ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
+                    Restore2(TileID.Dirt, TileID.HallowedGrass, vector2);
+                if (ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
+                    Restore2(TileID.Dirt, TileID.GolfGrass, vector2);
+                if (ExtraTile.tileType == TileID.GolfGrassHallowed)
+                    Restore2(TileID.Dirt, TileID.GolfGrassHallowed, vector2);
+                if (ExtraTile.tileType == TileID.JungleGrass)
+                    Restore2(TileID.Mud, TileID.JungleGrass, vector2);
+                if (ExtraTile.tileType == TileID.MushroomGrass)
+                    Restore2(TileID.Mud, TileID.MushroomGrass, vector2);
+                if (tile.TileType == TileID.Traps)
+                {
+                    tile.TileFrameNumber = ExtraTile.tileFrame;
+                    tile.TileFrameY = ExtraTile.tileY;
+                    tile.TileFrameX = ExtraTile.tileX;
+                }
+                tile.Slope = ExtraTile.tileSlope;
+                tile.IsHalfBlock = ExtraTile.tileHalf;
+                NetMessage.SendTileSquare(-1, (int)vector2.X, (int)vector2.Y, 1);
+            }
+        }
+
+        public void Restore2(ushort MainTileID, ushort GrassTileID, Vector2 vector2)
+        {
+            WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, MainTileID, false, true);
+            WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, GrassTileID, false, true);
         }
 
         public List<ExtraTile> ExtraTileCheck = new List<ExtraTile>();

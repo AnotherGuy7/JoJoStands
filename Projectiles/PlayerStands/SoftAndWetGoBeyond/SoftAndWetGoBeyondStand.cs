@@ -1,4 +1,6 @@
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.PlayerBuffs;
+using JoJoStands.Buffs.EffectBuff;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
