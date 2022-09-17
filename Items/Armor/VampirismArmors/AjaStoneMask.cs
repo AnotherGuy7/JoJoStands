@@ -36,7 +36,8 @@ namespace JoJoStands.Items.Armor.VampirismArmors
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<StoneMask>())
                 .AddIngredient(ModContent.ItemType<AjaStone>())
-                .AddTile(TileID.MythrilAnvil);
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }
