@@ -72,7 +72,7 @@ namespace JoJoStands.Items.Vampire
                 player.velocity += launchVector;
                 useCool += Item.useTime + (6 * (punchChargeTimer / 30));
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<VampiricPunch>(), Item.damage * multiplier, Item.knockBack * multiplier, player.whoAmI);
-                SoundStyle itemSound = SoundID.Item;
+                SoundStyle itemSound = new SoundStyle("Terraria/Sounds/Item_1");
                 itemSound.Pitch = 0.2f;
                 SoundEngine.PlaySound(itemSound, player.Center);
                 punchChargeTimer = 0;

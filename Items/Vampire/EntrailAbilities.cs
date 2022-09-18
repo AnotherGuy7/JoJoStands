@@ -60,7 +60,7 @@ namespace JoJoStands.Items.Vampire
                 shootVel.Normalize();
                 shootVel *= 12f;
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<VampiricVeinSpike>(), Item.damage, Item.knockBack, player.whoAmI);
-                SoundStyle item17 = SoundID.Item17;
+                SoundStyle item17 = new SoundStyle("Terraria/Sounds/Item_17");
                 item17.Pitch = -0.6f;
                 SoundEngine.PlaySound(item17, player.Center);
             }
@@ -73,7 +73,7 @@ namespace JoJoStands.Items.Vampire
                 shootVel *= 12f;
                 int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<VampiricVeinGrab>(), (int)(Item.damage * 1.2f), 0f, player.whoAmI);
                 Main.projectile[proj].netUpdate = true;
-                SoundStyle item17 = SoundID.Item17;
+                SoundStyle item17 = new SoundStyle("Terraria/Sounds/Item_17");
                 item17.Pitch = -0.6f;
                 SoundEngine.PlaySound(item17, player.Center);
             }

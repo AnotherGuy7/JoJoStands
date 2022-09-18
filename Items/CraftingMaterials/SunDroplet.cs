@@ -61,9 +61,9 @@ namespace JoJoStands.Items.CraftingMaterials
                     hPlayer.skillPointsAvailable += 1;
                     Item.stack -= 20;
                     clickTimer = 60;
-                    SoundStyle itemSoud = SoundID.Item;
-                    itemSoud.Pitch = -0.8f;
-                    SoundEngine.PlaySound(itemSoud, player.Center);
+                    SoundStyle item1 = new SoundStyle("Terraria/Sounds/Item_1");
+                    item1.Pitch = -0.8f;
+                    SoundEngine.PlaySound(item1, player.Center);
                 }
             }
         }
