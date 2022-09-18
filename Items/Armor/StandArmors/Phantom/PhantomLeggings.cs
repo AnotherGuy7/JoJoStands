@@ -30,7 +30,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.phantomLeggingsEquipped = true;
             mPlayer.standCritChangeBoosts += 5f;
-            player.moveSpeed += player.moveSpeed * 1.08f;
+            player.moveSpeed *= 1.10f;
         }
 
 
