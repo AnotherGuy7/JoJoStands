@@ -77,10 +77,11 @@ namespace JoJoStands.Projectiles
                 {
                     Projectile.frame = 0;
                     Projectile.rotation = MathHelper.ToRadians(Main.rand.Next(0, 360 + 1));
-                    SoundStyle itemSound = SoundID.Item;
-                    itemSound.Pitch = 0.6f;
-                    itemSound.PitchVariance = 0.1f;
-                    SoundEngine.PlaySound(itemSound, player.Center);
+                    SoundStyle item1 = new SoundStyle("Terraria/Sounds/Item_1");
+                    item1.Pitch = -0.8f;
+                    SoundEngine.PlaySound(item1, player.Center);
+                    item1.PitchVariance = 0.1f;
+                    SoundEngine.PlaySound(item1, player.Center);
                 }
             }
         }
