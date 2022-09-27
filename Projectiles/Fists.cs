@@ -9,6 +9,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using System.IO;
 
 namespace JoJoStands.Projectiles
 {
@@ -33,6 +34,8 @@ namespace JoJoStands.Projectiles
         public const byte Cream = 11;
         public const byte CrazyDiamond = 12;
         public const byte TowerOfGray = 13; //"fist"
+        public const byte SoftAndWet = 14;
+        public const byte Echoes = 15;
 
         private bool onlyOnce = false;
         private int standType = 0;
@@ -184,8 +187,9 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
             }
 
-            if (!target.boss)
+            if (!target.boss && standType != TowerOfGray)
                 target.velocity.X *= 0.2f;
+
         }
 
         /*public override void OnHitPvp(Player target, int damage, bool crit)       //this unfortunately does not work, so i left a temporary "solution" to the problem in the AI until the Boss fixes the problem (c) Proos <3

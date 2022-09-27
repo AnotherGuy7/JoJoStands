@@ -30,6 +30,8 @@ namespace JoJoStands.Projectiles
         public int timestopStartTimeLeft = 0;
         public Vector2 preSkipVel = Vector2.Zero;
 
+        public bool onlyOnceforFists = false;
+
         public struct ForesightData
         {
             public Vector2 position;
@@ -240,10 +242,6 @@ namespace JoJoStands.Projectiles
                     crit = true;
             }
 
-        }
-        public override void ModifyHitPvp(Projectile projectile, Player target, ref int damage, ref bool crit)
-        {
-            target.AddBuff(ModContent.BuffType<LifePunch>(), 800);
         }
 
         public override bool ShouldUpdatePosition(Projectile Projectile)        //thanks, HellGoesOn for telling me this hook even existed

@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Networking;
+using JoJoStands.Projectiles.PlayerStands.Echoes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -294,12 +295,16 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void StayBehind()
         {
             Player player = Main.player[Projectile.owner];
-
+            float offsetY = 0f;
+            if (Projectile.type == ModContent.ProjectileType<EchoesStandT2>())
+                offsetY = 40f;
+            if (Projectile.type == ModContent.ProjectileType<EchoesStandFinal>())
+                offsetY = 10f;
             idleFrames = true;
             attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
-            areaBehindPlayer.Y -= -35f + HalfStandHeight;
+            areaBehindPlayer.Y -= -35f + HalfStandHeight + offsetY;
             Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
             Projectile.velocity *= 0.8f;
             Projectile.direction = Projectile.spriteDirection = player.direction;
@@ -346,7 +351,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 direction = forcedDirection;
 
             Vector2 areaBehindPlayer = player.Center;
-            areaBehindPlayer.X += (float)((12 + player.width / 2) * direction);
+            float offsetX = 50f;
+            areaBehindPlayer.X += (float)((12 + offsetX + player.width / 2) * direction);
             areaBehindPlayer.Y -= -35f + HalfStandHeight;
             Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
             Projectile.velocity *= 0.8f;
@@ -368,10 +374,13 @@ namespace JoJoStands.Projectiles.PlayerStands
             HandleDrawOffsets();
             if (!attackFrames)
             {
+                float offsetY = 0f;
+                if (Projectile.type == ModContent.ProjectileType<EchoesStandT2>())
+                    offsetY = 40f;
                 Vector2 vector131 = player.Center;
                 vector131.X -= (float)((12 + player.width / 2) * player.direction);
                 Projectile.direction = (Projectile.spriteDirection = player.direction);
-                vector131.Y -= -35f + HalfStandHeight;
+                vector131.Y -= -35f + HalfStandHeight + offsetY;
                 Projectile.Center = Vector2.Lerp(Projectile.Center, vector131, 0.2f);
                 Projectile.velocity *= 0.8f;
                 Projectile.rotation = 0;

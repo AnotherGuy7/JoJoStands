@@ -26,8 +26,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private Vector2 velocityAddition;
-        private float mouseDistance;
+        private Vector2 velocity;
         private int dashproj = 0;
+        private bool dashprojspawn = false;
 
         public override void AI()
         {
@@ -63,7 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     velocityAddition = Main.MouseWorld - Projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f + mPlayer.standTier;
-                    mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
                     {
                         Projectile.velocity = player.velocity + velocityAddition;
@@ -96,34 +97,59 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 {
                     StayBehind();
                 }
-                if (Main.mouseRight && !Main.mouseLeft && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamVoidMode! && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash && mPlayer.voidCounter >= 4)
+                if (Main.mouseRight && !Main.mouseLeft && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamVoidMode! && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash && mPlayer.voidCounter >= 4 && Projectile.owner == Main.myPlayer)
                 {
                     mPlayer.voidCounter -= 4;
                     mPlayer.creamDash = true;
                 }
             }
+            float distance = Vector2.Distance(player.Center, Projectile.Center);
             if (mPlayer.creamDash)
             {
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0)
+                if (Projectile.owner == Main.myPlayer && !dashprojspawn && player.ownedProjectileCounts[ModContent.ProjectileType<DashVoid>()] <= 0)
                 {
                     SoundEngine.PlaySound(SoundID.Item78);
-                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                    if (shootVel == Vector2.Zero)
-                        shootVel = new Vector2(0f, 1f);
-                    shootVel.Normalize();
-                    dashproj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Void>(), (int)((PunchDamage * 1.3f) * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
+                    Vector2 shootVelocity = Main.MouseWorld - Projectile.Center;
+                    velocity = Main.MouseWorld;
+                    if (shootVelocity == Vector2.Zero)
+                        shootVelocity = new Vector2(0f, 1f);
+                    shootVelocity.Normalize();
+                    shootVelocity *= 8f + (mPlayer.creamTier * 2f);
+                    dashproj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVelocity, ModContent.ProjectileType<DashVoid>(), (int)((PunchDamage * 1.3f) * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI, 0);
                     Main.projectile[dashproj].netUpdate = true;
                     Projectile.netUpdate = true;
                 }
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] >= 1)
+                if (dashprojspawn && player.ownedProjectileCounts[ModContent.ProjectileType<DashVoid>()] <= 0)
                 {
-                    Projectile.spriteDirection = Main.projectile[dashproj].spriteDirection;
-                    Vector2 vector = Main.projectile[dashproj].Center;
-                    Projectile.Center = Vector2.Lerp(Projectile.Center, vector, 1f);
-                    if (Main.projectile[dashproj].hide)
-                        Projectile.hide = false;
+                    if (Projectile.velocity.X < 0)
+                        Projectile.spriteDirection = -1;
                     else
-                        Projectile.hide = true;
+                        Projectile.spriteDirection = 1;
+                    Projectile.velocity = player.Center - Projectile.Center;
+                    Projectile.velocity.Normalize();
+                    Projectile.velocity *= 6f + mPlayer.creamTier + player.moveSpeed;
+                    Projectile.netUpdate = true;
+                    if (distance <= 40f)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item78);
+                        mPlayer.voidCounter += 2;
+                        mPlayer.creamDash = false;
+                        dashprojspawn = false;
+                    }
+                }
+            }
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<DashVoid>()] >= 1)
+            {
+                dashprojspawn = true;
+                Vector2 vector = Main.projectile[dashproj].Center;
+                Projectile.Center = Vector2.Lerp(Projectile.Center, vector, 1f);
+                Projectile.hide = true;
+                if (Vector2.Distance(velocity, Projectile.Center) <= 10f || distance >= 800f || player.dead || !mPlayer.standOut || distance >= 1200f)
+                {
+                    if (mPlayer.creamDash && distance >= 1200f)
+                        mPlayer.standOut = false;
+                    Main.projectile[dashproj].Kill();
+                    SoundEngine.PlaySound(SoundID.Item78);
                 }
             }
             if (mPlayer.standAutoMode && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
@@ -140,6 +166,26 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             if (mPlayer.creamDash)
                 creamdash = false;
             return creamdash;
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            writer.Write(mPlayer.creamDash);
+            writer.Write(dashprojspawn);
+            writer.Write(dashproj);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            mPlayer.creamDash = reader.ReadBoolean();
+            dashprojspawn = reader.ReadBoolean();
+            dashproj = reader.ReadInt32();
         }
 
         public override void SelectAnimation()
@@ -189,6 +235,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 AnimateStand(animationName, 4, 30, true);
             }
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            mPlayer.creamDash = false;
         }
     }
 }

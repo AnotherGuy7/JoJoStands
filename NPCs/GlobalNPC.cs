@@ -25,13 +25,14 @@ namespace JoJoStands.NPCs
 {
     public class JoJoGlobalNPC : GlobalNPC
     {
+        private bool resetEffects = false;
+        private bool savedTileCollide = false;
 
         private int CDsavedAIstyle = 0; // i'm sorry, i know there's too much here, but without it, everything breaks (c) Proos <3
         private float CDsavedKnockbackRes = 0;
-        private int CDfallDamage = 0;
-        private int CDoldPositionY = (int)Vector2.Zero.Y;
-        private bool CDsavedTileCollide = false;
-        private bool CDonlyOnce = false;
+        private int fallDamage = 0;
+        private int oldPositionY = (int)Vector2.Zero.Y;
+        private bool onlyOnce = false;
         private SoundStyle? CDsavedHitSound = SoundID.PlayerHit;
 
         public bool crazyDiamondFullHealth = false;
@@ -39,6 +40,18 @@ namespace JoJoStands.NPCs
         public int CDstonePunch = 0;
 
         public int towerOfGrayImmunityFrames = 0;
+
+        private int echoesDamageTimer1 = 30; //3 Freeze
+        private bool echoesCrit1 = false;
+        private int echoesDamageTimer2 = 60; //ACT 1 sounds
+        private bool echoesCrit2 = false;
+
+        public int echoesFreeze = 0;
+        public int echoesSoundIntensivity = 2;
+        public int echoesSoundIntensivityMax = 48;
+
+        public float echoesCrit = 5f;
+        public float echoesDamageBoost = 1f;
 
         public bool frozenInTime = false;
         public bool affectedbyBtz = false;
@@ -78,6 +91,9 @@ namespace JoJoStands.NPCs
         public Vector2 preTimestopVelocity = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
         public ForesightSaveData[] foresightData = new ForesightSaveData[120];
+
+        private int offsetPostDraw = 0;
+        private int timerPostDraw = 0;
 
         public override bool InstancePerEntity
         {
@@ -166,7 +182,6 @@ namespace JoJoStands.NPCs
             }
         }
 
-
         public override void GetChat(NPC npc, ref string chat)
         {
             if (MyPlayer.SecretReferences)
@@ -237,53 +252,160 @@ namespace JoJoStands.NPCs
                 shop.item[nextSlot].SetDefaults(ModContent.ItemType<BloodForTheKing>());
                 nextSlot++;
             }
+            for (int n = 0; n < Main.maxNPCs; n++)
+            {
+                NPC npc = Main.npc[n];
+                if (npc.type == type && npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
+                {
+                    for (int i = 0; i < shop.item.Length; i++)
+                        shop.item[i].shopCustomPrice = (int)(shop.item[i].GetStoreValue() * 0.8f); 
+                }
+            }
         }
+
 
         public override bool PreAI(NPC npc)
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-
-            if (towerOfGrayImmunityFrames > 0)
-                towerOfGrayImmunityFrames--;
-
+            if (!player.timeskipActive && !player.timestopActive && !player.backToZeroActive)
             {
-                if (npc.HasBuff(ModContent.BuffType<YoAngelo>())) //crazy diamond stuff
+                if (npc.aiStyle != 101510150 && !npc.HasBuff(ModContent.BuffType<YoAngelo>()) && echoesFreeze == 0)
                 {
-                    CDstonePunch = 0;
-                    if (npc.aiStyle != -101510150)
+                    if (resetEffects)
                     {
-                        CDsavedAIstyle = npc.aiStyle;
-                        CDsavedHitSound = npc.HitSound;
-                        CDsavedKnockbackRes = npc.knockBackResist;
-                        CDsavedTileCollide = npc.noTileCollide;
-                        npc.aiStyle = -101510150;
-                        npc.HitSound = SoundID.NPCHit41;
-                        npc.knockBackResist = 100f;
-                        npc.noTileCollide = false;
+                        resetEffects = false;
+                        onlyOnce = false;
+                        npc.noTileCollide = savedTileCollide;
+                        oldPositionY = (int)Vector2.Zero.Y;
+                        fallDamage = 0;
                     }
-                    if (CDoldPositionY == (int)Vector2.Zero.Y)
-                        CDoldPositionY = (int)npc.Center.Y;
-                    CDfallDamage = (int)npc.Center.Y - CDoldPositionY;
-                    if (!CDonlyOnce && npc.collideY && CDfallDamage > 200)
+                    savedTileCollide = npc.noTileCollide;
+                }
+
+                if (echoesFreeze > 0)
+                {
+                    if (echoesDamageTimer1 > 0)
+                        echoesDamageTimer1--;
+                    int defence = 0;
+                    if (echoesCrit1)
+                        defence = 4;
+                    else
+                        defence = 2;
+                    if (oldPositionY == (int)Vector2.Zero.Y)
+                        oldPositionY = (int)npc.Center.Y;
+                    fallDamage = (int)npc.Center.Y - oldPositionY;
+                    if (!onlyOnce && npc.collideY && fallDamage > 50)
                     {
-                        CDonlyOnce = true;
-                        npc.StrikeNPCNoInteraction((CDfallDamage - 200 + npc.defense / 4) * 2, 0f, 0, true, true, true);
+                        onlyOnce = true;
+                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f) + npc.defense / defence), 0f, 0, echoesCrit1);
+                    }
+                    if (echoesDamageTimer1 == 0 && npc.collideY)
+                    {
+                        echoesDamageTimer1 = 30;
+                        if (Main.rand.NextFloat(1, 100 + 1) <= echoesCrit)
+                            echoesCrit1 = true;
+                        else
+                            echoesCrit1 = false;
+                        int freezeDamage = (int)(128 * echoesDamageBoost);
+                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + npc.defense / defence, 0f, 0, echoesCrit1);
+                    }
+
+                    echoesFreeze--;
+                    if (npc.boss)
+                        npc.velocity.X *= 0.66f;
+                    if (!npc.boss)
+                        npc.velocity.X *= 0.1f;
+                    npc.noTileCollide = false;
+                    npc.velocity = new Vector2(npc.velocity.X, npc.position.Y - 100f);
+                    npc.velocity.Normalize();
+                    if (!npc.noTileCollide)
+                        npc.velocity.Y *= 12f;
+                    if (echoesFreeze <= 2)
+                    {
+                        resetEffects = true;
+                        echoesFreeze = 0;
                     }
                 }
-                if (!npc.HasBuff(ModContent.BuffType<YoAngelo>()))
-                {
-                    if (CDstonePunch >= 7)
-                        npc.AddBuff(ModContent.BuffType<YoAngelo>(), 360);
 
-                    if (npc.aiStyle == -101510150)
+                if (npc.HasBuff(ModContent.BuffType<Sound>()))
+                {
+                    if (echoesSoundIntensivity > echoesSoundIntensivityMax)
+                        echoesSoundIntensivity = echoesSoundIntensivityMax;
+                    if (echoesDamageTimer2 > 0)
+                        echoesDamageTimer2--;
+                    int defence = 0;
+                    if (echoesCrit2)
+                        defence = 4;
+                    else
+                        defence = 2;
+                    if (echoesDamageTimer2 == 0)
                     {
-                        CDonlyOnce = false;
-                        CDoldPositionY = (int)Vector2.Zero.Y;
-                        CDfallDamage = 0;
-                        npc.aiStyle = CDsavedAIstyle;
-                        npc.HitSound = CDsavedHitSound;
-                        npc.knockBackResist = CDsavedKnockbackRes;
-                        npc.noTileCollide = CDsavedTileCollide;
+                        echoesDamageTimer2 = 60;
+                        SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
+                        int soundDamage = (int)(echoesSoundIntensivity * echoesDamageBoost);
+                        float volume = 0.6f;
+                        if (npc.HasBuff(ModContent.BuffType<SMACK>()))
+                        {
+                            volume *= 4;
+                            soundDamage *= 2;
+                        }
+                        punchSound.Volume = volume;
+                        punchSound.Pitch = 0f;
+                        punchSound.PitchVariance = 0.2f;
+                        SoundEngine.PlaySound(punchSound, npc.Center);
+                        if (Main.rand.NextFloat(1, 100 + 1) <= echoesCrit)
+                            echoesCrit2 = true;
+                        else
+                            echoesCrit2 = false;
+                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + npc.defense / defence, 0f, 0, echoesCrit2);
+                        if (Main.rand.NextFloat(1, 100) <= 15 && !npc.boss)
+                            npc.AddBuff(BuffID.Confused, 300);
+                    }
+                }
+
+                if (echoesFreeze == 0)
+                    echoesDamageTimer1 = 30;
+                if (!npc.HasBuff(ModContent.BuffType<Sound>()))
+                    echoesDamageTimer2 = 60;
+
+                if (towerOfGrayImmunityFrames > 0)
+                    towerOfGrayImmunityFrames--;
+
+                {
+                    if (npc.HasBuff(ModContent.BuffType<YoAngelo>())) //crazy diamond stuff
+                    {
+                        CDstonePunch = 0;
+                        if (npc.aiStyle != -101510150)
+                        {
+                            CDsavedAIstyle = npc.aiStyle;
+                            CDsavedHitSound = npc.HitSound;
+                            CDsavedKnockbackRes = npc.knockBackResist;
+                            npc.aiStyle = -101510150;
+                            npc.HitSound = SoundID.NPCHit41;
+                            npc.knockBackResist = 100f;
+                            npc.noTileCollide = false;
+                        }
+                        if (oldPositionY == (int)Vector2.Zero.Y)
+                            oldPositionY = (int)npc.Center.Y;
+                        fallDamage = (int)npc.Center.Y - oldPositionY;
+                        if (!onlyOnce && npc.collideY && fallDamage > 200)
+                        {
+                            onlyOnce = true;
+                            npc.StrikeNPCNoInteraction((fallDamage - 200 + npc.defense / 4) * 2, 0f, 0, true, true, true);
+                        }
+                    }
+                    if (!npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+                    {
+                        if (CDstonePunch >= 7)
+                            npc.AddBuff(ModContent.BuffType<YoAngelo>(), 360);
+
+                        if (npc.aiStyle == -101510150)
+                        {
+                            npc.aiStyle = CDsavedAIstyle;
+                            npc.HitSound = CDsavedHitSound;
+                            npc.knockBackResist = CDsavedKnockbackRes;
+                            resetEffects = true;
+                        }
                     }
                 }
             }
@@ -688,8 +810,11 @@ namespace JoJoStands.NPCs
         {
             if (npc.HasBuff(ModContent.BuffType<RedBindDebuff>()))
             {
+                float newHeight = npc.height / 18;
+                float newWidht = npc.width / 16;
+                float scale = (newHeight + newWidht) / 2;
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/BoundByRedBind").Value;
-                spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), npc.scale, SpriteEffects.None, 0);
+                spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), scale, SpriteEffects.None, 0);
             }
             if (stunnedByBindingEmerald)
             {
@@ -714,6 +839,32 @@ namespace JoJoStands.NPCs
                 Vector2 scale = new Vector2(npc.width, npc.height) / new Vector2(22, 14);
                 Vector2 origin = new Vector2(11, 7);
                 spriteBatch.Draw(bombTexture, npc.Center - Main.screenPosition, null, npc.color, npc.rotation, origin, scale, SpriteEffects.None, 0);
+            }
+            if (npc.HasBuff(ModContent.BuffType<SMACK>()))
+            {
+                if (timerPostDraw == 0)
+                    timerPostDraw = 10;
+                if (timerPostDraw == 10)
+                    offsetPostDraw = 30;
+                if (timerPostDraw == 5)
+                    offsetPostDraw = 0;
+                if (timerPostDraw > 0)
+                    timerPostDraw--;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/SMACK").Value;
+                spriteBatch.Draw(texture, new Vector2(npc.Center.X, npc.Center.Y - npc.height/2) - Main.screenPosition, new Rectangle(0, offsetPostDraw, 56, 30), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+            }
+            if (npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
+            {
+                if (timerPostDraw == 0)
+                    timerPostDraw = 10;
+                if (timerPostDraw == 10)
+                    offsetPostDraw = 32;
+                if (timerPostDraw == 5)
+                    offsetPostDraw = 0;
+                if (timerPostDraw > 0)
+                    timerPostDraw--;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/BelieveInMe").Value;
+                spriteBatch.Draw(texture, new Vector2(npc.Center.X, npc.Center.Y - npc.height / 2) - Main.screenPosition, new Rectangle(0, offsetPostDraw, 54, 32), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
             }
         }
 
@@ -821,12 +972,16 @@ namespace JoJoStands.NPCs
         {
             if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
                 damage = (int)(damage * 0.1f);
+            if (npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
+                damage = (int)(damage * 0.5f);
         }
 
         public override void ModifyHitByItem(NPC npc, Player player, Item item, ref int damage, ref float knockback, ref bool crit)
         {
             if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
                 damage = (int)(damage * 0.1f);
+            if (npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
+                damage = (int)(damage * 0.5f);
         }
     }
 }

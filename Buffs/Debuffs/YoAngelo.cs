@@ -46,7 +46,8 @@ namespace JoJoStands.Buffs.Debuffs
             Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Stone, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f);
             npc.velocity = new Vector2(Vector2.Zero.X, npc.position.Y - 100f);
             npc.velocity.Normalize();
-            npc.velocity.Y *= 10f;
+            if (!npc.noTileCollide)
+                npc.velocity.Y *= 12f;
         }
     }
 }

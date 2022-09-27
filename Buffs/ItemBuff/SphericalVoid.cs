@@ -18,7 +18,6 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void Update(Player player, ref int buffIndex)
         {
-            Main.mapEnabled = false;
             player.shadowDodge = true;
             player.shadowDodgeCount = -100f;
             player.blind = true;

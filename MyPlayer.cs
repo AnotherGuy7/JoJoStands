@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -81,6 +82,7 @@ namespace JoJoStands
         public int hermitPurpleSpecialFrameCounter = 0;
         public int hermitPurpleHamonBurstLeft = 0;
         public int creamTier = 0;
+        public bool creamReturnBack = false;
         public int voidCounter = 0;
         public int voidCounterMax = 0;
         public int voidTimer = 0;
@@ -146,6 +148,7 @@ namespace JoJoStands
         public bool awaitingViralMeteoriteTip = false;
         public bool hotbarLocked = false;
         public bool playerJustHit = false;
+        public bool collideY = false;
 
         public bool timestopActive;
         public bool timestopOwner;
@@ -269,6 +272,24 @@ namespace JoJoStands
         public int towerOfGrayTier = 0;
         public float towerOfGrayDamageMult = 1f;
 
+        public int echoesTier = 0;
+        public int echoesACT = 0;
+
+        public int echoesFreeze = 0;
+        public int echoesSoundIntensivity = 2;
+        public int echoesSoundIntensivityMax = 48;
+
+        public float echoesCrit = 5f;
+        public float echoesDamageBoost = 1f;
+
+        private int echoesDamageTimer1 = 60; //3 Freeze
+        private bool echoesCrit1 = false;
+        private int echoesDamageTimer2 = 120; //ACT 1 sounds
+        private bool echoesCrit2 = false;
+
+        private int offsetPostDraw = 0;
+        private int timerPostDraw = 0;
+
         public void ItemBreak(Item item)
         {
             if (globalCooldown == 0)
@@ -363,9 +384,10 @@ namespace JoJoStands
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
             standCritChangeBoosts = 5f;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
-            Main.mapEnabled = true;
 
             towerOfGrayDamageMult = 1f;
+
+            collideY = false;
         }
 
 
@@ -587,6 +609,8 @@ namespace JoJoStands
                 creamDash = false;
                 creamFrame = 0;
 
+                echoesTier = 0;
+
                 badCompanyTier = 0;
 
                 stickyFingersAmbushMode = false;
@@ -682,7 +706,6 @@ namespace JoJoStands
                     }
                 }
             }
-
             /*if (timeskipActive)
             {
                 RenderTarget2D renderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
@@ -708,6 +731,36 @@ namespace JoJoStands
                     spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
                 }
             }*/
+        }
+
+        public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+        {
+            if (Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
+            {
+                if (timerPostDraw == 0)
+                    timerPostDraw = 10;
+                if (timerPostDraw == 10)
+                    offsetPostDraw = 32;
+                if (timerPostDraw == 5)
+                    offsetPostDraw = 0;
+                if (timerPostDraw > 0)
+                    timerPostDraw--;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/BelieveInMe").Value;
+                Main.spriteBatch.Draw(texture, new Vector2(Player.Center.X, Player.Center.Y - Player.height / 2) - Main.screenPosition, new Rectangle(0, offsetPostDraw, 54, 32), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+            }
+            if (Player.HasBuff(ModContent.BuffType<SMACK>()))
+            {
+                if (timerPostDraw == 0)
+                    timerPostDraw = 10;
+                if (timerPostDraw == 10)
+                    offsetPostDraw = 30;
+                if (timerPostDraw == 5)
+                    offsetPostDraw = 0;
+                if (timerPostDraw > 0)
+                    timerPostDraw--;
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/SMACK").Value;
+                Main.spriteBatch.Draw(texture, new Vector2(Player.Center.X, Player.Center.Y - Player.height / 2) - Main.screenPosition, new Rectangle(0, offsetPostDraw, 56, 30), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+            }
         }
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
@@ -744,6 +797,83 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
+            { 
+
+                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT3>()) //echoes stuff (i'll move it later (c) Proos <3)
+                    echoesTier = 4;
+
+                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT1>()) 
+                    echoesTier = 2;
+
+                if (echoesFreeze > 0)
+                {
+                    if (Player.velocity.Y != 0f)
+                        Player.velocity.Y += 12f;
+                    Player.noFallDmg = false;
+                    Player.velocity.X *= 0.66f;
+                    if (collideY)
+                    {
+                        if (echoesDamageTimer1 > 0)
+                            echoesDamageTimer1--;
+                        int defence = 0;
+                        if (echoesCrit1)
+                            defence = 4;
+                        else
+                            defence = 2;
+                        if (echoesDamageTimer1 == 0)
+                        {
+                            echoesDamageTimer1 = 60;
+                            if (Main.rand.NextFloat(1, 100 + 1) <= echoesCrit)
+                                echoesCrit1 = true;
+                            else
+                                echoesCrit1 = false;
+                            int freezeDamage = (int)(128 * echoesDamageBoost) / 2;
+                            Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + Player.statDefense / defence, 0, true, false, echoesCrit1);
+                        }
+                    }
+                    echoesFreeze--;
+                }
+
+                if (Player.HasBuff(ModContent.BuffType<Sound>()))
+                {
+                    if (echoesSoundIntensivity > echoesSoundIntensivityMax)
+                        echoesSoundIntensivity = echoesSoundIntensivityMax;
+                    if (echoesDamageTimer2 > 0)
+                        echoesDamageTimer2--;
+                    int defence = 0;
+                    if (echoesCrit2)
+                        defence = 4;
+                    else
+                        defence = 2;
+                    if (echoesDamageTimer2 == 0)
+                    {
+                        echoesDamageTimer2 = 120;
+                        SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
+                        float volume = 0.6f;
+                        int soundDamage = (int)(echoesSoundIntensivity * echoesDamageBoost) / 2;
+                        if (Player.HasBuff(ModContent.BuffType<SMACK>()))
+                        {
+                            volume *= 4;
+                            soundDamage *= 2;
+                        }
+                        punchSound.Volume = volume;
+                        punchSound.Pitch = 0f;
+                        punchSound.PitchVariance = 0.2f;
+                        SoundEngine.PlaySound(punchSound, Player.Center);
+                        if (Main.rand.NextFloat(1, 100 + 1) <= echoesCrit)
+                            echoesCrit2 = true;
+                        else
+                            echoesCrit2 = false;
+                        Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + Player.statDefense / defence, 0, true, false, echoesCrit2);
+                        if (Main.rand.NextFloat(1, 100) <= 15 )
+                            Player.AddBuff(BuffID.Confused, 180);
+                    }
+                }
+                if (echoesFreeze == 0)
+                    echoesDamageTimer1 = 60;
+                if (!Player.HasBuff(ModContent.BuffType<Sound>()))
+                    echoesDamageTimer2 = 120;
+            }
             {
                 if (!Player.HasBuff(ModContent.BuffType<ImproperRestoration>()) && oldMaxHP > 0) //crazy diamond stuff (i'll move it later (c) Proos <3)
                 {
@@ -761,6 +891,9 @@ namespace JoJoStands
                     ExtraTileCheck.Clear();
 
                     towerOfGrayTier = 0;
+
+                    echoesTier = 0;
+                    echoesACT = 0;
                 }
 
                 if (crazyDiamondMessageCooldown > 0)
@@ -1573,8 +1706,6 @@ namespace JoJoStands
             standCooldownReduction = 0f;        //it's here because it resets before the buffs can use it when its in ResetEffects()
             if (Player.HasBuff(ModContent.BuffType<Stolen>()))
                 standOut = false;
-            if (!Player.HasBuff(ModContent.BuffType<SphericalVoid>()))
-                Main.mapEnabled = true;
         }
 
         public int AbilityCooldownTime(int seconds) //Sometimes we won't want to reduce the cooldown so that's why reduction defaults to 0
@@ -1610,6 +1741,8 @@ namespace JoJoStands
                 damage *= 2;
             if (stoneFreeWeaveAbilityActive)
                 damage = (int)(damage * 0.93f);
+            if (Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
+                damage = (int)(damage * 0.8f);
             if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
                 damage = (int)(damage * 0.1f);
         }
@@ -1618,7 +1751,7 @@ namespace JoJoStands
         {
             if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
                 damage *= 2;
-            if (stoneFreeWeaveAbilityActive)
+            if (stoneFreeWeaveAbilityActive || Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
                 damage = (int)(damage * 0.8f);
             if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
                 damage = (int)(damage * 0.1f);
@@ -1799,6 +1932,9 @@ namespace JoJoStands
 
             towerOfGrayTier = 0;
 
+            echoesTier = 0;
+            echoesACT = 0;
+
             creamTier = 0;
             voidCounter = 0;
             creamNormalToExposed = false;
@@ -1829,10 +1965,9 @@ namespace JoJoStands
         public override void ModifyNursePrice(NPC nurse, int health, bool removeDebuffs, ref int price)
         {
             if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-            {
                 price = price + 10000 * improperRestorationstack;
-            }
+            if (nurse.HasBuff(ModContent.BuffType<BelieveInMe>()))
+                price = (int)(price * 0.8f);
         }
-
     }
 }
