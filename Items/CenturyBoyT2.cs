@@ -1,3 +1,4 @@
+using JoJoStands.Networking;
 using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
@@ -34,8 +35,7 @@ namespace JoJoStands.Items
             mPlayer.standName = "CenturyBoy";
             mPlayer.showingCBLayer = true;
             mPlayer.standAccessory = true;
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                Networking.ModNetHandler.playerSync.SendCBLayer(256, player.whoAmI, true, player.whoAmI);
+            SyncCall.SyncCenturyBoyState(player.whoAmI, true);
 
             return true;
         }

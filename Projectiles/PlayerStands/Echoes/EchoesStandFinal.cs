@@ -63,7 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             if (!mPlayer.standAutoMode)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !threeFreeze && !mPlayer.poseMode)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !threeFreeze && !mPlayer.posing)
                 {
                     Punch();
                 }
@@ -76,7 +76,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     StayBehind();
                 if (threeFreeze)
                     GoInFront();
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.poseMode && !attackFrames) //3freeze activation
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing && !attackFrames) //3freeze activation
                 {
                     Projectile.frame = 0;
                     threeFreeze = true;
@@ -216,7 +216,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

@@ -134,7 +134,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 attackFrames = false;
                 PlayAnimation("AbilityPose");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

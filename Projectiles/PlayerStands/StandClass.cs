@@ -276,9 +276,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 shootCount += newPunchTime;
                 Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                 if (shootVel == Vector2.Zero)
-                {
                     shootVel = new Vector2(0f, 1f);
-                }
+
                 shootVel.Normalize();
                 shootVel *= ProjectileSpeed;
                 int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
@@ -890,10 +889,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 shader.Apply(null);     //has to be on top of whatever it's applying to (I spent hours and hours trying to find a solution and the only problem was that this was under it)
                 if (!sentDyePacket)       //we sync dye slot Item here
                 {
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.SlotItem.type, player.whoAmI);
-                    }
+                    SyncCall.SyncCurrentDyeItem(player.whoAmI, mPlayer.StandDyeSlot.SlotItem.type);
                     sentDyePacket = true;
                 }
             }
@@ -901,10 +897,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 if (sentDyePacket)
                 {
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        ModNetHandler.playerSync.SendDyeItem(256, player.whoAmI, mPlayer.StandDyeSlot.SlotItem.type, player.whoAmI);
-                    }
+                    SyncCall.SyncCurrentDyeItem(player.whoAmI, mPlayer.StandDyeSlot.SlotItem.type);
                     sentDyePacket = false;
                 }
             }
@@ -955,25 +948,20 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void LimitDistance()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             Vector2 direction = player.Center - Projectile.Center;
             float distanceFromPlayer = direction.Length();
             if (distanceFromPlayer > newMaxDistance)
             {
                 direction.Normalize();
-                direction *= 0.8f;
-                Projectile.velocity = player.velocity + direction;
+                Projectile.Center = player.Center + (-direction * (newMaxDistance));
+                if (Math.Abs(Projectile.Center.X + Projectile.velocity.X - player.Center.X) > newMaxDistance - (Projectile.width / 2f))     //Controls the separate vector components
+                    Projectile.velocity.X = player.velocity.X;
+                if (Math.Abs(Projectile.Center.Y + Projectile.velocity.Y - player.Center.Y) > newMaxDistance - (HalfStandHeight))
+                    Projectile.velocity.Y = player.velocity.Y;
 
                 if (distanceFromPlayer >= newMaxDistance + 16)
-                {
-                    if (!mPlayer.standAutoMode)
-                    {
-                        Main.mouseLeft = false;
-                        Main.mouseRight = false;
-                    }
                     Projectile.Center = player.Center;
-                }
             }
         }
 
@@ -992,18 +980,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (distanceFromPlayer > maxDistance)
             {
                 direction.Normalize();
-                direction *= 0.8f;
-                Projectile.velocity = player.velocity + direction;
+                Projectile.Center = player.Center + (-direction * (newMaxDistance));
+                if (Math.Abs(Projectile.Center.X + Projectile.velocity.X - player.Center.X) > newMaxDistance - (Projectile.width / 2f))     //Controls the separate vector components
+                    Projectile.velocity.X = player.velocity.X;
+                if (Math.Abs(Projectile.Center.Y + Projectile.velocity.Y - player.Center.Y) > newMaxDistance - (HalfStandHeight))
+                    Projectile.velocity.Y = player.velocity.Y;
 
                 if (distanceFromPlayer >= maxDistance + 16)
-                {
-                    if (!mPlayer.standAutoMode)
-                    {
-                        Main.mouseLeft = false;
-                        Main.mouseRight = false;
-                    }
                     Projectile.Center = player.Center;
-                }
             }
         }
 

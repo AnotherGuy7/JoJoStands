@@ -19,7 +19,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && drawPlayer.velocity == Vector2.Zero && mPlayer.poseMode)
+            if (drawPlayer.active && drawPlayer.velocity == Vector2.Zero && mPlayer.posing)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/Menacing").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - Main.screenPosition.X - 1f);

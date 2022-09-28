@@ -176,7 +176,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

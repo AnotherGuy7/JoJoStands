@@ -27,8 +27,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private int regencounter = 0;
-        //private string[] abilityNames = new string[5] { "Scorpion Beam", "Tree", "Death-Loop", "Limb Recreation", "Back to Zero" };
-
 
         public override void AI()
         {
@@ -90,11 +88,12 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         for (int n = 0; n < Main.maxNPCs; n++)
                         {
                             NPC npc = Main.npc[n];
-                            if (npc.active && !npc.townNPC && npc.lifeMax > 5 && Vector2.Distance(Main.MouseWorld, npc.Center) <= 16f)
+                            if (npc.active && !npc.townNPC && npc.lifeMax > 5 && Vector2.Distance(Main.MouseWorld, npc.Center) <= npc.Size.Length())
                             {
                                 targetSuccess = true;
-                                DeathLoop.targetNPCWhoAmI = npc.whoAmI;
+                                mPlayer.deathLoopNPCWhoAmI = npc.whoAmI;
                                 npc.GetGlobalNPC<JoJoGlobalNPC>().taggedForDeathLoop = true;
+                                SyncCall.SyncDeathLoopInfo(player.whoAmI, (byte)npc.whoAmI, npc.type);
                             }
                         }
 
@@ -102,7 +101,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                             player.AddBuff(ModContent.BuffType<DeathLoop>(), 30 * 60);
                         else
                         {
-                            shootCount += 60;
+                            shootCount += 15;
                             Main.NewText("Right-Click the enemy to target");
                         }
                     }
@@ -188,7 +187,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 attackFrames = false;
                 PlayAnimation("Secondary");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

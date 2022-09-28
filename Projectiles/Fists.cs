@@ -10,6 +10,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using System.IO;
+using JoJoStands.DataStructures;
 
 namespace JoJoStands.Projectiles
 {
@@ -272,6 +273,86 @@ namespace JoJoStands.Projectiles
             }
         }*/
 
+        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)     //Unlike in ModifyHitNPC, this one doesn't actually change if it's a crit or not, just detects
+            {
+                crit = true;
+            }
+            int standType = (int)Projectile.ai[0];
+            int standTier = (int)Projectile.ai[1];
+
+            if (standType == GoldExperience)
+            {
+                if (standTier == 3f)
+                {
+                    target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
+                }
+                if (standTier == 4f)
+                {
+                    target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
+                }
+            }
+
+            if (standType == GoldExperienceRequiem)
+            {
+                target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
+                if (mPlayer.backToZeroActive)
+                    target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
+            }
+
+            if (standType == StickyFingers)
+            {
+                target.AddBuff(ModContent.BuffType<Zipped>(), (int)standTier * 60);
+            }
+
+            if (standType == TheHand)
+            {
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
+            }
+
+            if (standType == GratefulDead)
+            {
+                target.AddBuff(ModContent.BuffType<Aging>(), (1 + (int)standTier) * 60);
+            }
+
+            if (standType == Whitesnake)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 94)
+                {
+                    target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
+                }
+            }
+
+            if (standType == Cream)
+            {
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 60 * mPlayer.creamTier);
+            }
+
+            if (mPlayer.destroyAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 7)
+                    target.AddBuff(BuffID.OnFire, 4 * 60);
+            }
+            if (mPlayer.greaterDestroyEquipped)
+            {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
+                    target.AddBuff(BuffID.CursedInferno, 6 * 60);
+            }
+            if (mPlayer.awakenedAmuletEquipped)
+            {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 8 * 60);
+            }
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+            }
+        }
+
         private bool playedSound = false;
 
         public override void AI()
@@ -419,7 +500,7 @@ namespace JoJoStands.Projectiles
             }
             if (mPlayer.crazyDiamondRestorationMode && !mPlayer.standAutoMode)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch);
                 if (mPlayer.standTier > 1)
                 {
                     int detectLeftX = (int)(Projectile.position.X / 16f) - 1;
@@ -442,24 +523,24 @@ namespace JoJoStands.Projectiles
                         {
                             Vector2 tile = new Vector2(detectedTileX, detectedTileY);
                             Tile tile2 = Main.tile[detectedTileX, detectedTileY];
-                            var checkTile = new MyPlayer.ExtraTile(tile2.TileType, new Vector2(detectedTileX, detectedTileY), tile2.Slope, tile2.IsHalfBlock, tile2.TileFrameY, tile2.TileFrameX, tile2.TileFrameNumber);
+                            var checkTile = new DestroyedTileData(tile2.TileType, new Vector2(detectedTileX, detectedTileY), tile2.Slope, tile2.IsHalfBlock, tile2.TileFrameY, tile2.TileFrameX, tile2.TileFrameNumber);
                             if (tile2.TileType != TileID.LihzahrdBrick && tile2.TileType != TileID.LihzahrdAltar && tile2.HasTile && Main.tileSolid[tile2.TileType])
                             {
                                 if (!tile2.HasActuator || tile2.HasActuator && !tile2.IsActuated)
                                 {
-                                    if (mPlayer.ExtraTileCheck.Count < 100 * standTier)
+                                    if (mPlayer.crazyDiamondDestroyedTileData.Count < 100 * standTier)
                                     {
-                                        mPlayer.ExtraTileCheck.Add(checkTile);
-                                        mPlayer.ExtraTileCheck.ForEach(mPlayer.Destroy);
+                                        mPlayer.crazyDiamondDestroyedTileData.Add(checkTile);
+                                        mPlayer.crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Destroy);
                                     }
-                                    if (mPlayer.ExtraTileCheck.Count == 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0)
+                                    if (mPlayer.crazyDiamondDestroyedTileData.Count == 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0)
                                     {
                                         Main.NewText("Stop destroyng public property! Now restore it!");
                                         mPlayer.crazyDiamondMessageCooldown += 180;
                                     }
                                 }
                             }
-                            if (mPlayer.ExtraTileCheck.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0 && tile2.TileType == TileID.LihzahrdBrick)
+                            if (mPlayer.crazyDiamondDestroyedTileData.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0 && tile2.TileType == TileID.LihzahrdBrick)
                             {
                                 Main.NewText("Tile is Unbreakable");
                                 mPlayer.crazyDiamondMessageCooldown += 180;

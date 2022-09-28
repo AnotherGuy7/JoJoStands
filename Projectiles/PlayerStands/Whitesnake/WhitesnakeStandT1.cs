@@ -66,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

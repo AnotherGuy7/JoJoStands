@@ -266,7 +266,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 if (Projectile.frame >= 4)      //cause it should only click once
                     secondaryAbilityFrames = false;
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

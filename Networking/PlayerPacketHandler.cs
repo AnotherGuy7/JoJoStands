@@ -1,8 +1,11 @@
+using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
+using System;
 using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Humanizer.In;
 
 namespace JoJoStands.Networking
 {
@@ -15,6 +18,7 @@ namespace JoJoStands.Networking
         public const byte Yoshihiro = 4;
         public const byte DyeItem = 5;
         public const byte SexPistolPosition = 6;
+        public const byte DeathLoopInfo = 7;
         //public const byte Sounds = 6;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
@@ -47,10 +51,13 @@ namespace JoJoStands.Networking
                 case DyeItem:
                     ReceiveDyeItem(reader, fromWho);
                     break;
+                case DeathLoopInfo:
+                    ReceiveDeathLoopInfo(reader, fromWho);
+                    break;
             }
         }
 
-        public void SendPoseMode(int toWho, int fromWho, bool poseModeValue, int whoAmI)        //send the packet whenever its called to
+        public void SendPoseMode(int toWho, int fromWho, bool poseModeValue, byte whoAmI)        //send the packet whenever its called to
         {
             ModPacket packet = GetPacket(PoseMode, fromWho);
             packet.Write(poseModeValue);
@@ -61,10 +68,10 @@ namespace JoJoStands.Networking
         public void ReceivePoseMode(BinaryReader reader, int fromWho)       //HandlePacket leads the packet here and it is read and applied
         {
             bool poseModeVal = reader.ReadBoolean();
-            int whoAmI = reader.ReadInt32();
+            byte whoAmI = reader.ReadByte();
             if (Main.netMode != NetmodeID.Server)
             {
-                Main.player[whoAmI].GetModPlayer<MyPlayer>().poseMode = poseModeVal;
+                Main.player[whoAmI].GetModPlayer<MyPlayer>().posing = poseModeVal;
             }
             else
             {
@@ -72,7 +79,7 @@ namespace JoJoStands.Networking
             }
         }
 
-        public void SendStandOut(int toWho, int fromWho, bool standOutValue, int whoAmI)
+        public void SendStandOut(int toWho, int fromWho, bool standOutValue, byte whoAmI)
         {
             ModPacket packet = GetPacket(StandOut, fromWho);
             packet.Write(standOutValue);
@@ -83,7 +90,7 @@ namespace JoJoStands.Networking
         public void ReceiveStandOut(BinaryReader reader, int fromWho)
         {
             bool standOutVal = reader.ReadBoolean();
-            int whoAmI = reader.ReadInt32();
+            byte whoAmI = reader.ReadByte();
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().standOut = standOutVal;
@@ -96,7 +103,7 @@ namespace JoJoStands.Networking
             }
         }
 
-        public void SendStandAutoMode(int toWho, int fromWho, bool autoModeValue, int whoAmI)
+        public void SendStandAutoMode(int toWho, int fromWho, bool autoModeValue, byte whoAmI)
         {
             ModPacket packet = GetPacket(StandAutoMode, fromWho);
             packet.Write(autoModeValue);
@@ -107,7 +114,7 @@ namespace JoJoStands.Networking
         public void ReceiveStandAutoMode(BinaryReader reader, int fromWho)
         {
             bool autoModeVal = reader.ReadBoolean();
-            int whoAmI = reader.ReadInt32();
+            byte whoAmI = reader.ReadByte();
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().standAutoMode = autoModeVal;
@@ -118,7 +125,7 @@ namespace JoJoStands.Networking
             }
         }
 
-        public void SendCBLayer(int toWho, int fromWho, bool visibility, int whoAmI)
+        public void SendCBLayer(int toWho, int fromWho, bool visibility, byte whoAmI)
         {
             ModPacket packet = GetPacket(CBLayer, fromWho);
             packet.Write(visibility);
@@ -129,7 +136,7 @@ namespace JoJoStands.Networking
         public void ReceiveCBLayer(BinaryReader reader, int fromWho)
         {
             bool visibiltyValue = reader.ReadBoolean();
-            int whoAmI = reader.ReadInt32();
+            byte whoAmI = reader.ReadByte();
             if (Main.netMode != NetmodeID.Server)
             {
                 Main.player[whoAmI].GetModPlayer<MyPlayer>().showingCBLayer = visibiltyValue;
@@ -160,7 +167,7 @@ namespace JoJoStands.Networking
 			}
 		}*/
 
-        public void SendDyeItem(int toWho, int fromWho, int dyeItemType, int whoAmI)
+        public void SendDyeItem(int toWho, int fromWho, int dyeItemType, byte whoAmI)
         {
             ModPacket packet = GetPacket(DyeItem, fromWho);
             packet.Write(dyeItemType);
@@ -171,7 +178,7 @@ namespace JoJoStands.Networking
         public void ReceiveDyeItem(BinaryReader reader, int fromWho)
         {
             int dyeItemType = reader.ReadInt32();
-            int oneWhoEquipped = reader.ReadInt32();
+            byte oneWhoEquipped = reader.ReadByte();
             Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.type = dyeItemType;
             Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.SetDefaults(dyeItemType);
             if (Main.netMode == NetmodeID.Server)
@@ -201,9 +208,10 @@ namespace JoJoStands.Networking
 			}
 		}*/
 
-        public void SendSexPistolPosition(int toWho, int fromWho, int index, Vector2 pos)
+        public void SendSexPistolPosition(int toWho, int fromWho, byte whoAmI, byte index, Vector2 pos)
         {
             ModPacket packet = GetPacket(DyeItem, fromWho);
+            packet.Write(whoAmI);
             packet.Write(index);
             packet.Write((int)pos.X);
             packet.Write((int)pos.Y);
@@ -212,13 +220,35 @@ namespace JoJoStands.Networking
 
         public void ReceiveSexPistolPosition(BinaryReader reader, int fromWho)
         {
-            int index = reader.ReadInt32();
+            byte whoAmI = reader.ReadByte();
+            byte index = reader.ReadByte();
             int posX = reader.ReadInt32();
             int posY = reader.ReadInt32();
 
-            Main.player[fromWho].GetModPlayer<MyPlayer>().sexPistolsOffsets[index] = new Vector2(posX, posY);
+            Main.player[whoAmI].GetModPlayer<MyPlayer>().sexPistolsOffsets[index] = new Vector2(posX, posY);
             if (Main.netMode == NetmodeID.Server)
-                SendSexPistolPosition(-1, fromWho, index, new Vector2(posX, posY));
+                SendSexPistolPosition(-1, fromWho, whoAmI, index, new Vector2(posX, posY));
+        }
+
+        public void SendDeathLoopInfo(int toWho, int fromWho, byte whoAmI, byte targetWhoAmI, int targetNPCType)
+        {
+            ModPacket packet = GetPacket(DeathLoopInfo, fromWho);
+            packet.Write(whoAmI);
+            packet.Write(targetWhoAmI);
+            packet.Write(targetNPCType);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ReceiveDeathLoopInfo(BinaryReader reader, int fromWho)
+        {
+            byte whoAmI = reader.ReadByte();
+            byte targetWhoAmI = reader.ReadByte();
+            int targetNPCType = reader.ReadInt32();
+
+            Main.player[fromWho].GetModPlayer<MyPlayer>().deathLoopNPCWhoAmI = targetWhoAmI;
+            Main.player[fromWho].GetModPlayer<MyPlayer>().deathLoopNPCType = targetNPCType;
+            if (Main.netMode == NetmodeID.Server)
+                SendDeathLoopInfo(-1, fromWho, whoAmI, targetWhoAmI, targetNPCType);
         }
     }
 }

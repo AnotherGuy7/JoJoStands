@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -56,12 +55,24 @@ namespace JoJoStands.Projectiles
                 if (npc.active)
                 {
                     if (npc.Distance(Projectile.position) <= ExplosionChainDistance && npc.lifeMax > 5 && !npc.friendly && !npc.immortal && !npc.hide)
+                    {
                         npc.StrikeNPC(78, 5f, Projectile.direction);
+                        for (int d = 0; d < 40; d++)
+                        {
+                            Vector2 dustPosition = Vector2.Lerp(Main.npc[(int)Projectile.ai[0]].Center, npc.Center, d * (1 / 40f));
+                            int dustIndex = Dust.NewDust(dustPosition, 4, 4, DustID.BlueTorch, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f));
+                            Main.dust[dustIndex].noGravity = true;
+                            Main.dust[dustIndex].noLight = true;
+                        }
+                    }
+
                 }
             }
             for (int d = 0; d < 15; d++)
             {
-                Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.Electric, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f));
+                int dustIndex = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.Electric, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f));
+                Main.dust[dustIndex].noGravity = true;
+                Main.dust[dustIndex].noLight = true;
             }
             SoundStyle explosionSFX = SoundID.Item62;
             float volume = 1f - (Vector2.Distance(Main.player[Projectile.owner].position, Projectile.Center) / ExplosionSoundDistance);

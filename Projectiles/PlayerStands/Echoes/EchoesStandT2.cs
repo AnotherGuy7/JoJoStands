@@ -71,7 +71,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             {
                 if (!remoteMode)
                 {
-                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.poseMode && !returnToPlayer)
+                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing && !returnToPlayer)
                     {
                         Punch();
                     }
@@ -256,7 +256,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     float halfScreenHeight = (float)Main.screenHeight / 2f;
                     mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
                     Projectile.rotation = Projectile.velocity.X * 0.05f;
-                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.poseMode)
+                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing)
                     {
                         if (distance > 25f)
                             MovementAI(Main.MouseWorld, 8f + player.moveSpeed);
@@ -264,7 +264,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                             MovementAI(Main.MouseWorld, (distance * (8f + player.moveSpeed)) / 25);
                         mouseControlled = true;
                     }
-                    if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.poseMode)
+                    if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing)
                     {
                         attackFrames = true;
                         PlayPunchSound();
@@ -412,7 +412,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
-            if (mPlayer.poseMode)
+            if (mPlayer.posing)
             {
                 idleFrames = false;
                 attackFrames = false;

@@ -201,7 +201,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         player.ConsumeItem(ModContent.ItemType<Knife>());
                     }
 
-                    mPlayer.poseMode = true;
+                    mPlayer.posing = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(15));
                 }
             }
@@ -246,7 +246,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 secondaryAbilityFrames = false;
                 PlayAnimation("AbilityPose");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

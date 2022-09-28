@@ -1,3 +1,4 @@
+using JoJoStands.DataStructures;
 using JoJoStands.Items;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
@@ -379,12 +380,13 @@ namespace JoJoStands
             Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().awaitingViralMeteoriteTip = true;
             return true;
         }
+
         public override void PreSaveAndQuit()
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-            player.ExtraTileCheck.ForEach(player.Restore);
+            player.crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
             player.crazyDiamondMessageCooldown = 0;
-            player.ExtraTileCheck.Clear();
+            player.crazyDiamondDestroyedTileData.Clear();
         }
     }
 }

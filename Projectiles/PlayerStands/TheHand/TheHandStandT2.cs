@@ -188,7 +188,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 secondaryAbilityFrames = false;
                 PlayAnimation("Scrape");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

@@ -3,6 +3,7 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Buffs.PlayerBuffs;
+using JoJoStands.DataStructures;
 using JoJoStands.Items;
 using JoJoStands.Items.Dyes;
 using JoJoStands.Items.Hamon;
@@ -17,7 +18,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -149,6 +149,10 @@ namespace JoJoStands
         public bool hotbarLocked = false;
         public bool playerJustHit = false;
         public bool collideY = false;
+        public int deathLoopNPCType = 0;
+        public Vector2 deathLoopPosition;
+        public int deathLoopNPCWhoAmI = -1;
+        public bool deathLoopNPCIsBoss = false;
 
         public bool timestopActive;
         public bool timestopOwner;
@@ -159,7 +163,7 @@ namespace JoJoStands
         public bool epitaphForesightActive;
         public bool standAccessory = false;
         public bool bitesTheDustActive = false;
-        public bool poseMode = false;
+        public bool posing = false;
         public bool canRevertFromKQBTD = false;
         public bool canRevertFromGoBeyond = false;
         public bool showingCBLayer = false;     //this is a bool that's needed to sync so that the Century Boy layer shows up for other clients in Multiplayer
@@ -191,76 +195,7 @@ namespace JoJoStands
         private int sexPistolsClickTimer = 0;
         private bool changingSexPistolsPositions = false;
 
-        public class ExtraTile //crazy diamond some new stuff
-        {
-            public ushort tileType { get; set; }
-            public Vector2 tilePosition { get; set; }
-            public SlopeType tileSlope { get; set; }
-            public bool tileHalf { get; set; }
-            public short tileY { get; set; }
-            public short tileX { get; set; }
-            public int tileFrame { get; set; }
-
-            public ExtraTile(ushort tileType, Vector2 tilePosition, SlopeType tileSlope, bool tileHalf, short tileY, short tileX, int tileFrame)
-            {
-                this.tileType = tileType;
-                this.tilePosition = tilePosition;
-                this.tileSlope = tileSlope;
-                this.tileHalf = tileHalf;
-                this.tileY = tileY;
-                this.tileX = tileX;
-                this.tileFrame = tileFrame;
-            }
-        }
-        public void Destroy(ExtraTile ExtraTile)
-        {
-            Vector2 vector2 = ExtraTile.tilePosition;
-            WorldGen.KillTile((int)vector2.X, (int)vector2.Y, false, false, true);
-            NetMessage.SendTileSquare(-1, (int)vector2.X, (int)vector2.Y, 1);
-        }
-        public void Restore(ExtraTile ExtraTile)
-        {
-            Vector2 vector2 = ExtraTile.tilePosition;
-            Tile tile = Main.tile[(int)vector2.X, (int)vector2.Y];
-            if (!tile.HasTile)
-            {
-                if (ExtraTile.tileType != TileID.Grass || ExtraTile.tileType != TileID.CorruptGrass || ExtraTile.tileType != TileID.CrimsonGrass || ExtraTile.tileType != TileID.HallowedGrass || ExtraTile.tileType != TileID.JungleGrass || ExtraTile.tileType != TileID.MushroomGrass || ExtraTile.tileType != TileID.GolfGrass || ExtraTile.tileType != TileID.GolfGrassHallowed)
-                    WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, ExtraTile.tileType, false, true);
-                if (ExtraTile.tileType == TileID.Grass || ExtraTile.tileType == TileID.CorruptGrass || ExtraTile.tileType == TileID.CrimsonGrass || ExtraTile.tileType == TileID.HallowedGrass || ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
-                    Restore2(TileID.Dirt, TileID.Grass, vector2);
-                if (ExtraTile.tileType == TileID.CorruptGrass || ExtraTile.tileType == TileID.CrimsonGrass || ExtraTile.tileType == TileID.HallowedGrass || ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
-                    Restore2(TileID.Dirt, TileID.CorruptGrass, vector2);
-                if (ExtraTile.tileType == TileID.CrimsonGrass || ExtraTile.tileType == TileID.HallowedGrass || ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
-                    Restore2(TileID.Dirt, TileID.CrimsonGrass, vector2);
-                if (ExtraTile.tileType == TileID.HallowedGrass || ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
-                    Restore2(TileID.Dirt, TileID.HallowedGrass, vector2);
-                if (ExtraTile.tileType == TileID.GolfGrass || ExtraTile.tileType == TileID.GolfGrassHallowed)
-                    Restore2(TileID.Dirt, TileID.GolfGrass, vector2);
-                if (ExtraTile.tileType == TileID.GolfGrassHallowed)
-                    Restore2(TileID.Dirt, TileID.GolfGrassHallowed, vector2);
-                if (ExtraTile.tileType == TileID.JungleGrass)
-                    Restore2(TileID.Mud, TileID.JungleGrass, vector2);
-                if (ExtraTile.tileType == TileID.MushroomGrass)
-                    Restore2(TileID.Mud, TileID.MushroomGrass, vector2);
-                if (tile.TileType == TileID.Traps)
-                {
-                    tile.TileFrameNumber = ExtraTile.tileFrame;
-                    tile.TileFrameY = ExtraTile.tileY;
-                    tile.TileFrameX = ExtraTile.tileX;
-                }
-                tile.Slope = ExtraTile.tileSlope;
-                tile.IsHalfBlock = ExtraTile.tileHalf;
-                NetMessage.SendTileSquare(-1, (int)vector2.X, (int)vector2.Y, 1);
-            }
-        }
-
-        public void Restore2(ushort MainTileID, ushort GrassTileID, Vector2 vector2)
-        {
-            WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, MainTileID, false, true);
-            WorldGen.PlaceTile((int)vector2.X, (int)vector2.Y, GrassTileID, false, true);
-        }
-
-        public List<ExtraTile> ExtraTileCheck = new List<ExtraTile>();
+        public List<DestroyedTileData> crazyDiamondDestroyedTileData = new List<DestroyedTileData>();
         public bool crazyDiamondRestorationMode = false;
         public int crazyDiamondMessageCooldown = 0;
         public int crazyDiamondStonePunch = 0;
@@ -458,9 +393,9 @@ namespace JoJoStands
                     }
                 }
             }
-            mPlayer2.ExtraTileCheck.ForEach(Restore);
+            mPlayer2.crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
             mPlayer2.crazyDiamondMessageCooldown = 0;
-            mPlayer2.ExtraTileCheck.Clear();
+            mPlayer2.crazyDiamondDestroyedTileData.Clear();
         }
 
         public override void ModifyScreenPosition()     //used HERO's Mods FlyCam as a reference for this
@@ -479,37 +414,30 @@ namespace JoJoStands
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Auto");
                 standAutoMode = true;
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, true, Player.whoAmI);
+                SyncCall.SyncAutoMode(Player.whoAmI, true);
             }
             if (JoJoStands.StandAutoModeHotKey.JustPressed && standAutoMode && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Manual");
                 standAutoMode = false;
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.playerSync.SendStandAutoMode(256, Player.whoAmI, false, Player.whoAmI);
+                SyncCall.SyncAutoMode(Player.whoAmI, false);
             }
-            if (JoJoStands.PoseHotKey.JustPressed && !poseMode && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (JoJoStands.PoseHotKey.JustPressed && !posing && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 if (Sounds)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
-
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.playerSync.SendPoseMode(256, Player.whoAmI, true, Player.whoAmI);
-
-                poseMode = true;
+                posing = true;
+                SyncCall.SyncPoseState(Player.whoAmI, true);
             }
             if (standChangingLocked)
                 return;
 
             if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Stolen>()) && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
-                standOut = true;
-                standKeyPressTimer += 30;
                 SpawnStand();
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
+                standKeyPressTimer += 30;
+                SyncCall.SyncStandOut(Player.whoAmI, standOut);
             }
             if (JoJoStands.SpecialHotKey.Current && standAccessory)
             {
@@ -595,9 +523,9 @@ namespace JoJoStands
                 hotbarLocked = false;
 
                 crazyDiamondRestorationMode = false;
-                ExtraTileCheck.ForEach(Restore);
+                crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
                 crazyDiamondMessageCooldown = 0;
-                ExtraTileCheck.Clear();
+                crazyDiamondDestroyedTileData.Clear();
 
                 towerOfGrayTier = 0;
 
@@ -625,12 +553,10 @@ namespace JoJoStands
                 if (showingCBLayer)
                 {
                     showingCBLayer = false;
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        ModNetHandler.playerSync.SendCBLayer(256, Player.whoAmI, false, Player.whoAmI);
+                    SyncCall.SyncCenturyBoyState(Player.whoAmI, false);
                 }
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, false, Player.whoAmI);
                 standKeyPressTimer += 30;
+                SyncCall.SyncStandOut(Player.whoAmI, false);
             }
         }
 
@@ -797,12 +723,12 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
-            { 
+            {
 
                 if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT3>()) //echoes stuff (i'll move it later (c) Proos <3)
                     echoesTier = 4;
 
-                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT1>()) 
+                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT1>())
                     echoesTier = 2;
 
                 if (echoesFreeze > 0)
@@ -865,7 +791,7 @@ namespace JoJoStands
                         else
                             echoesCrit2 = false;
                         Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + Player.statDefense / defence, 0, true, false, echoesCrit2);
-                        if (Main.rand.NextFloat(1, 100) <= 15 )
+                        if (Main.rand.NextFloat(1, 100) <= 15)
                             Player.AddBuff(BuffID.Confused, 180);
                     }
                 }
@@ -886,9 +812,9 @@ namespace JoJoStands
                 if (!standOut)
                 {
                     crazyDiamondRestorationMode = false;
-                    ExtraTileCheck.ForEach(Restore);
+                    crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
                     crazyDiamondMessageCooldown = 0;
-                    ExtraTileCheck.Clear();
+                    crazyDiamondDestroyedTileData.Clear();
 
                     towerOfGrayTier = 0;
 
@@ -921,7 +847,7 @@ namespace JoJoStands
             else
                 AerosmithRadar.Visible = false;
 
-            if (poseMode)
+            if (posing)
             {
                 poseDuration--;
                 if ((poseDuration <= 0 || Player.velocity != Vector2.Zero) && !Main.mouseLeft && !Main.mouseRight)
@@ -930,7 +856,7 @@ namespace JoJoStands
                     if (poseDuration <= 0)
                         Player.AddBuff(ModContent.BuffType<StrongWill>(), 30 * 60);
 
-                    poseMode = false;
+                    posing = false;
                     poseDuration = 300;
                     JoJoStands.testStandPassword.Add(Convert.ToChar((int)MathHelper.ToDegrees(1.36136f)));
                     JoJoStands.testStandPassword.Add(Convert.ToChar((int)Math.Sqrt(4999) + 1));
@@ -1028,8 +954,7 @@ namespace JoJoStands
                             amountOfSexPistolsPlaced++;
                             if (amountOfSexPistolsPlaced >= 6)
                                 amountOfSexPistolsPlaced = 0;
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                                ModNetHandler.playerSync.SendSexPistolPosition(256, Player.whoAmI, amountOfSexPistolsPlaced, sexPistolsOffsets[amountOfSexPistolsPlaced]);
+                            SyncCall.SyncSexPistolPosition(Player.whoAmI, amountOfSexPistolsPlaced, sexPistolsOffsets[amountOfSexPistolsPlaced]);
                         }
                     }
 
@@ -1516,11 +1441,9 @@ namespace JoJoStands
         {
             if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut && standRespawnQueued && !Player.dead)
             {
-                standOut = true;
-                standRespawnQueued = false;
                 SpawnStand();
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, true, Player.whoAmI);      //we send it to 256 cause it's the server
+                standRespawnQueued = false;
+                SyncCall.SyncStandOut(Player.whoAmI, standOut);
             }
             if (hotbarLocked && standOut && !standAutoMode)
                 Player.selectedItem = 0;
@@ -1634,8 +1557,6 @@ namespace JoJoStands
                 {
                     standOut = false;
                     Main.NewText("There is no Stand in the Stand Slot!", Color.Red);
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, false, Player.whoAmI);
                     return;
                 }
             }
@@ -1644,8 +1565,6 @@ namespace JoJoStands
             {
                 Main.NewText("There are no available minion slots!", Color.Red);
                 standOut = false;
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.playerSync.SendStandOut(256, Player.whoAmI, false, Player.whoAmI);
                 return;
             }
 
@@ -1671,7 +1590,6 @@ namespace JoJoStands
                     standClassName = standItem.standProjectileName + "StandFinal";
 
                 int standProjectileType = Mod.Find<ModProjectile>(standClassName).Type;
-
                 Projectile.NewProjectile(inputItem.GetSource_FromThis(), Player.position, Player.velocity, standProjectileType, 0, 0f, Main.myPlayer);
 
                 if (JoJoStands.SoundsLoaded)
@@ -1926,9 +1844,9 @@ namespace JoJoStands
             stoneFreeWeaveAbilityActive = false;
 
             crazyDiamondRestorationMode = false;
-            ExtraTileCheck.ForEach(Restore);
+            crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
             crazyDiamondMessageCooldown = 0;
-            ExtraTileCheck.Clear();
+            crazyDiamondDestroyedTileData.Clear();
 
             towerOfGrayTier = 0;
 

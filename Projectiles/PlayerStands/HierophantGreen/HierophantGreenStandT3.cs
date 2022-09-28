@@ -319,7 +319,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode || spawningField)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing || spawningField)
             {
                 idleFrames = false;
                 attackFrames = false;

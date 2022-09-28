@@ -306,7 +306,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 attackFrames = false;
                 PlayAnimation("Idle");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
             {
                 idleFrames = false;
                 attackFrames = false;

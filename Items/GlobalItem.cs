@@ -158,7 +158,7 @@ namespace JoJoStands.Items
                 }
             }
 
-            if (Main.mouseRight && !mPlayer.standAutoMode && mPlayer.crazyDiamondRestorationMode && mPlayer.ExtraTileCheck.Count == 0 && generalPurposeTimer == 0)
+            if (Main.mouseRight && !mPlayer.standAutoMode && mPlayer.crazyDiamondRestorationMode && mPlayer.crazyDiamondDestroyedTileData.Count == 0 && generalPurposeTimer == 0)
             {
                 mPlayer.ItemBreak(Item);
                 generalPurposeTimer = 30;

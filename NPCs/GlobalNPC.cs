@@ -302,10 +302,8 @@ namespace JoJoStands.NPCs
                     if (echoesDamageTimer1 == 0 && npc.collideY)
                     {
                         echoesDamageTimer1 = 30;
-                        if (Main.rand.NextFloat(1, 100 + 1) <= echoesCrit)
-                            echoesCrit1 = true;
-                        else
-                            echoesCrit1 = false;
+                        echoesCrit1 = Main.rand.NextFloat(1, 100 + 1) <= echoesCrit;
+
                         int freezeDamage = (int)(128 * echoesDamageBoost);
                         npc.StrikeNPC((int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + npc.defense / defence, 0f, 0, echoesCrit1);
                     }
@@ -353,10 +351,8 @@ namespace JoJoStands.NPCs
                         punchSound.Pitch = 0f;
                         punchSound.PitchVariance = 0.2f;
                         SoundEngine.PlaySound(punchSound, npc.Center);
-                        if (Main.rand.NextFloat(1, 100 + 1) <= echoesCrit)
-                            echoesCrit2 = true;
-                        else
-                            echoesCrit2 = false;
+                        echoesCrit2 = Main.rand.NextFloat(1, 100 + 1) <= echoesCrit;
+
                         npc.StrikeNPC((int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + npc.defense / defence, 0f, 0, echoesCrit2);
                         if (Main.rand.NextFloat(1, 100) <= 15 && !npc.boss)
                             npc.AddBuff(BuffID.Confused, 300);
@@ -371,41 +367,39 @@ namespace JoJoStands.NPCs
                 if (towerOfGrayImmunityFrames > 0)
                     towerOfGrayImmunityFrames--;
 
+                if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))       //crazy diamond stuff
                 {
-                    if (npc.HasBuff(ModContent.BuffType<YoAngelo>())) //crazy diamond stuff
+                    CDstonePunch = 0;
+                    if (npc.aiStyle != -101510150)
                     {
-                        CDstonePunch = 0;
-                        if (npc.aiStyle != -101510150)
-                        {
-                            CDsavedAIstyle = npc.aiStyle;
-                            CDsavedHitSound = npc.HitSound;
-                            CDsavedKnockbackRes = npc.knockBackResist;
-                            npc.aiStyle = -101510150;
-                            npc.HitSound = SoundID.NPCHit41;
-                            npc.knockBackResist = 100f;
-                            npc.noTileCollide = false;
-                        }
-                        if (oldPositionY == (int)Vector2.Zero.Y)
-                            oldPositionY = (int)npc.Center.Y;
-                        fallDamage = (int)npc.Center.Y - oldPositionY;
-                        if (!onlyOnce && npc.collideY && fallDamage > 200)
-                        {
-                            onlyOnce = true;
-                            npc.StrikeNPCNoInteraction((fallDamage - 200 + npc.defense / 4) * 2, 0f, 0, true, true, true);
-                        }
+                        CDsavedAIstyle = npc.aiStyle;
+                        CDsavedHitSound = npc.HitSound;
+                        CDsavedKnockbackRes = npc.knockBackResist;
+                        npc.aiStyle = -101510150;
+                        npc.HitSound = SoundID.NPCHit41;
+                        npc.knockBackResist = 100f;
+                        npc.noTileCollide = false;
                     }
-                    if (!npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+                    if (oldPositionY == (int)Vector2.Zero.Y)
+                        oldPositionY = (int)npc.Center.Y;
+                    fallDamage = (int)npc.Center.Y - oldPositionY;
+                    if (!onlyOnce && npc.collideY && fallDamage > 200)
                     {
-                        if (CDstonePunch >= 7)
-                            npc.AddBuff(ModContent.BuffType<YoAngelo>(), 360);
+                        onlyOnce = true;
+                        npc.StrikeNPCNoInteraction((fallDamage - 200 + npc.defense / 4) * 2, 0f, 0, true, true, true);
+                    }
+                }
+                if (!npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+                {
+                    if (CDstonePunch >= 7)
+                        npc.AddBuff(ModContent.BuffType<YoAngelo>(), 360);
 
-                        if (npc.aiStyle == -101510150)
-                        {
-                            npc.aiStyle = CDsavedAIstyle;
-                            npc.HitSound = CDsavedHitSound;
-                            npc.knockBackResist = CDsavedKnockbackRes;
-                            resetEffects = true;
-                        }
+                    if (npc.aiStyle == -101510150)
+                    {
+                        npc.aiStyle = CDsavedAIstyle;
+                        npc.HitSound = CDsavedHitSound;
+                        npc.knockBackResist = CDsavedKnockbackRes;
+                        resetEffects = true;
                     }
                 }
             }
@@ -446,9 +440,7 @@ namespace JoJoStands.NPCs
                 if (affectedbyBtz)
                 {
                     if (btzTotalRewindTimer > 0)
-                    {
                         btzTotalRewindTimer--;
-                    }
 
                     btZSaveTimer--;
                     if (btZSaveTimer <= 0)
@@ -458,9 +450,8 @@ namespace JoJoStands.NPCs
                             btzPositionIndex -= 1;
                             npc.position = BtZPositions[btzPositionIndex];
                             if (npc.position == BtZPositions[btzPositionIndex])
-                            {
                                 Array.Clear(BtZPositions, btzPositionIndex, 1);
-                            }
+
                             btZSaveTimer = 5;
                         }
                         npc.netUpdate = true;
@@ -628,7 +619,7 @@ namespace JoJoStands.NPCs
             if (spawnedByDeathLoop)
             {
                 deathTimer++;
-                if ((deathTimer >= 30 && DeathLoop.Looping10x) || (deathTimer >= 60 && DeathLoop.Looping3x))
+                if ((deathTimer >= 30 && !player.deathLoopNPCIsBoss) || (deathTimer >= 60 && player.deathLoopNPCIsBoss))
                 {
                     if (npc.immortal || npc.hide)
                     {
@@ -702,29 +693,21 @@ namespace JoJoStands.NPCs
 
         public override void OnKill(NPC npc)
         {
-            if (taggedForDeathLoop)
+            if (taggedForDeathLoop)     //This is client side, run ONLY for the person who tagged the enemy
             {
-                for (int p = 0; p < Main.maxPlayers; p++)       //Searches if any player has death loop on
+                Player player = Main.player[Main.myPlayer];
+                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+                if (npc.boss && mPlayer.deathLoopActive && mPlayer.deathLoopNPCType == 0)
                 {
-                    Player player = Main.player[p];
-                    if (!player.active)
-                        continue;
-
-                    MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                    if (npc.boss && mPlayer.deathLoopActive && DeathLoop.deathNPCType == 0)
-                    {
-                        DeathLoop.deathNPCType = npc.type;
-                        DeathLoop.deathPosition = npc.position;
-                        DeathLoop.Looping3x = true;
-                        DeathLoop.Looping10x = false;
-                    }
-                    if (!npc.boss && mPlayer.deathLoopActive && DeathLoop.deathNPCType == 0 && !npc.friendly && npc.lifeMax > 5)
-                    {
-                        DeathLoop.deathNPCType = npc.type;
-                        DeathLoop.deathPosition = npc.position;
-                        DeathLoop.Looping3x = false;
-                        DeathLoop.Looping10x = true;
-                    }
+                    mPlayer.deathLoopNPCType = npc.type;
+                    mPlayer.deathLoopPosition = npc.position;
+                    mPlayer.deathLoopNPCIsBoss = true;
+                }
+                if (!npc.boss && mPlayer.deathLoopActive && mPlayer.deathLoopNPCType == 0 && !npc.friendly && npc.lifeMax > 5)
+                {
+                    mPlayer.deathLoopNPCType = npc.type;
+                    mPlayer.deathLoopPosition = npc.position;
+                    mPlayer.deathLoopNPCIsBoss = false;
                 }
             }
 

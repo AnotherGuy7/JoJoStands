@@ -188,7 +188,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 PlayAnimation("Parry");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

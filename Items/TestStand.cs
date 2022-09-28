@@ -1,3 +1,4 @@
+using JoJoStands.Networking;
 using JoJoStands.Projectiles.PlayerStands.TestStand;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -65,10 +66,8 @@ namespace JoJoStands.Items
             else
             {
                 Main.NewText("You are not worthy.", Color.Red);
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    Networking.ModNetHandler.playerSync.SendStandOut(256, player.whoAmI, false, player.whoAmI);
-
                 player.GetModPlayer<MyPlayer>().standOut = false;
+                SyncCall.SyncStandOut(player.whoAmI, false);
             }
             return true;
         }

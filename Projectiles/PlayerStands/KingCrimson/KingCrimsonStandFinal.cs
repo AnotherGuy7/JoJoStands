@@ -239,7 +239,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 attackFrames = false;
                 PlayAnimation("Block");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

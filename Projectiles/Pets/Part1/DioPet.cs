@@ -131,7 +131,7 @@ namespace JoJoStands.Projectiles.Pets.Part1
                     Projectile.frame = 5;
                 }
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 Projectile.frame = 6;
             }

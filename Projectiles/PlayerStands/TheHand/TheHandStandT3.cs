@@ -340,7 +340,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 idleFrames = false;
                 PlayAnimation("ScrapeBarrage");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;

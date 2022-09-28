@@ -8,6 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.UI;
 using JoJoStands.NPCs;
+using JoJoStands.DataStructures;
 
 namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 {
@@ -135,7 +136,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 }
                 if (restore)
                 {
-                    if (Main.mouseRight && rightClickCooldown == 0 && mPlayer.ExtraTileCheck.Count > 0 && Projectile.owner == Main.myPlayer)
+                    if (Main.mouseRight && rightClickCooldown == 0 && mPlayer.crazyDiamondDestroyedTileData.Count > 0 && Projectile.owner == Main.myPlayer)
                     {
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/RestoreSound"));
                         rightClickCooldown += 180;
@@ -143,9 +144,9 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     if (rightClickCooldown == 10)
                     {
                         rightClickCooldown -= 1;
-                        mPlayer.ExtraTileCheck.ForEach(mPlayer.Restore);
+                        mPlayer.crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
                         mPlayer.crazyDiamondMessageCooldown = 0;
-                        mPlayer.ExtraTileCheck.Clear();
+                        mPlayer.crazyDiamondDestroyedTileData.Clear();
                     }
                     if (SecondSpecialKeyPressed() && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer)
                     {
@@ -392,7 +393,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 attackFrames = false;
                 PlayAnimation("Heal");
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().poseMode)
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
             {
                 idleFrames = false;
                 attackFrames = false;
