@@ -7,27 +7,39 @@ using Microsoft.Xna.Framework;
 using JoJoStands.NPCs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.Debuffs;
+using Terraria.DataStructures;
 
 namespace JoJoStands.Projectiles.PlayerStands.Echoes
 {
     public class EchoesStandFinal : StandClass
     {
-        public override int PunchDamage => 64;
+        public override int PunchDamage => 68;
         public override int PunchTime => 8;
         public override int HalfStandHeight => 28;
         public override int FistWhoAmI => 15;
         public override int TierNumber => 4;
         public override int StandOffset => 20;
+        public override int standYOffset => 10;
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private int ACT = 3;
-        private bool threeFreeze = false;
+        private int changeActCooldown = 20;
         private int onlyOneTarget = 0;
         private int targetPlayer = -1;
         private int targetNPC = -1;
         private int crutch = 90;
+
         private float x1 = 0f;
 
+        private bool threeFreeze = false;
+        private bool returnToPlayer = false;
+        private bool changeACT = false;
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (Projectile.ai[0] == 2f)
+                returnToPlayer = true;
+            idleFrames = true;
+        }
         public override void AI()
         {
             SelectAnimation();
@@ -35,6 +47,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
+            if (changeActCooldown > 0)
+                changeActCooldown--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
@@ -61,7 +75,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 threeFreeze = false;
 
 
-            if (!mPlayer.standAutoMode)
+            if (!mPlayer.standAutoMode && !returnToPlayer)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !threeFreeze && !mPlayer.posing)
                 {
@@ -121,16 +135,29 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
                 }
+                if (SecondSpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer && changeActCooldown == 0 && mPlayer.echoesTier > 3)
+                {
+                    changeACT = true;
+                    Projectile.Kill();
+                }
             }
             if (onlyOneTarget > 0) //3freeze
             {
                 if (targetNPC != -1)
                 {
                     NPC npc = Main.npc[targetNPC];
-                    npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
-                    npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                    npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
-                    onlyOneTarget = 0;
+                    crutch--;
+                    if (crutch <= 0)
+                    {
+                        onlyOneTarget = 0;
+                        crutch = 90;
+                    }
+                    if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
+                    {
+                        npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
+                        npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
+                        npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
+                    }
                 }
                 if (targetPlayer != -1)
                 {
@@ -197,12 +224,51 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                 }
             }
-            if (mPlayer.standAutoMode)
+            if (mPlayer.standAutoMode && !returnToPlayer)
             {
                 BasicPunchAI();
             }
+            if (Projectile.Distance(player.Center) >= newMaxDistance + 10f && !returnToPlayer) //if suddenly stand is too far
+                returnToPlayer = true;
+            if (Projectile.Distance(player.Center) <= 20f)
+                returnToPlayer = false;
+
+            if (returnToPlayer)
+            {
+                Projectile.tileCollide = false;
+                if (Projectile.velocity.X > 0)
+                    Projectile.spriteDirection = 1;
+                if (Projectile.velocity.X < 0)
+                    Projectile.spriteDirection = -1;
+                if (Projectile.owner == Main.myPlayer)
+                {
+                    if (player.Center == Projectile.Center)
+                        return;
+
+                    Projectile.velocity = player.Center - Projectile.Center;
+                    Projectile.velocity.Normalize();
+                    Projectile.velocity *= 8f + player.moveSpeed * 2;
+                }
+                Projectile.netUpdate = true;
+            }
+
+            if (player.teleporting)
+                Projectile.position = player.position;
         }
 
+        public override void Kill(int timeLeft)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            float remoteModeOnSpawn = 0f;
+            if (Projectile.Distance(player.Center) >= newMaxDistance + 10f)
+                remoteModeOnSpawn = 2f;
+            if (changeACT)
+            {
+                player.maxMinions += 1;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandT2>(), 0, 0f, Main.myPlayer, remoteModeOnSpawn);
+            }
+        }
 
         public override void SelectAnimation()
         {
@@ -261,7 +327,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             writer.Write(targetNPC);
             writer.Write(targetPlayer);
             writer.Write(crutch);
+
             writer.Write(threeFreeze);
+            writer.Write(returnToPlayer);
+
             writer.Write(x1);
         }
 
@@ -272,7 +341,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             targetNPC = reader.ReadInt32();
             targetPlayer = reader.ReadInt32();
             crutch = reader.ReadInt32();
+
             threeFreeze = reader.ReadBoolean();
+            returnToPlayer = reader.ReadBoolean();
+
             x1 = reader.ReadSingle();
         }
     }

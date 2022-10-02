@@ -5,22 +5,22 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class EchoesACT3 : StandItemClass
+    public class EchoesACT0 : StandItemClass
     {
-        public override int standSpeed => 8;
+        public override int standSpeed => 2;
         public override int standType => 1;
         public override string standProjectileName => "Echoes";
-        public override int standTier => 4;
+        public override int standTier => 1;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Echoes (ACT 3)");
+            DisplayName.SetDefault("Echoes (ACT 0)");
             Tooltip.SetDefault("WIP");
         }
 
         public override void SetDefaults()
         {
-            Item.damage = 68;
+            Item.damage = 108;
             Item.width = 32;
             Item.height = 32;
             Item.maxStack = 1;

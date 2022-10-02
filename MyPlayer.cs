@@ -199,6 +199,7 @@ namespace JoJoStands
         public bool crazyDiamondRestorationMode = false;
         public int crazyDiamondMessageCooldown = 0;
         public int crazyDiamondStonePunch = 0;
+        public int crazyDiamondTileDestruction = 0;
         public int oldMaxHP = 0;
         public int improperRestorationstack = 1;
         public int maxHP = 0;
@@ -234,12 +235,27 @@ namespace JoJoStands
                 {
                     if (Main.recipe[r] != null && Main.recipe[r].createItem.type == item.type && item.stack >= Main.recipe[r].createItem.stack)
                     {
-                        howManyRecipesHere.Add(Main.recipe[r]);
-                        for (int i = 0; i < Main.recipe[r].createItem.stack; i++)
+                        if (item.type != ItemID.IronBar && item.type != ItemID.LeadBar)
+                        {
+                            howManyRecipesHere.Add(Main.recipe[r]);
+                            for (int i = 0; i < Main.recipe[r].createItem.stack; i++)
+                                Player.ConsumeItem(item.type);
+                            Uncraft(howManyRecipesHere[0]);
+                            globalCooldown = 30;
+                            break;
+                        }
+                        if (item.type == ItemID.IronBar)
+                        {
                             Player.ConsumeItem(item.type);
-                        Uncraft(howManyRecipesHere[0]);
-                        globalCooldown = 30;
-                        break;
+                            Player.QuickSpawnItem(Player.InheritSource(Player), ItemID.IronOre, 3);
+                            break;
+                        }
+                        if (item.type == ItemID.LeadBar)
+                        {
+                            Player.ConsumeItem(item.type);
+                            Player.QuickSpawnItem(Player.InheritSource(Player), ItemID.LeadOre, 3);
+                            break;
+                        }
                     }
                 }
             }
@@ -724,12 +740,20 @@ namespace JoJoStands
         public override void PreUpdate()
         {
             {
-
                 if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT3>()) //echoes stuff (i'll move it later (c) Proos <3)
                     echoesTier = 4;
 
+                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT2>())
+                    echoesTier = 3;
+
                 if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT1>())
                     echoesTier = 2;
+
+                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT0>())
+                    echoesTier = 1;
+
+                if (StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT0>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT1>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT2>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT3>())
+                    echoesTier = 0;
 
                 if (echoesFreeze > 0)
                 {
@@ -753,7 +777,7 @@ namespace JoJoStands
                                 echoesCrit1 = true;
                             else
                                 echoesCrit1 = false;
-                            int freezeDamage = (int)(128 * echoesDamageBoost) / 2;
+                            int freezeDamage = (int)(136 * echoesDamageBoost) / 2;
                             Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + Player.statDefense / defence, 0, true, false, echoesCrit1);
                         }
                     }
@@ -824,6 +848,17 @@ namespace JoJoStands
 
                 if (crazyDiamondMessageCooldown > 0)
                     crazyDiamondMessageCooldown--;
+
+                if (Player == Main.player[Main.myPlayer])
+                {
+                    if (Main.mouseLeft && !standAutoMode)
+                    {
+                        if (crazyDiamondTileDestruction < 60)
+                            crazyDiamondTileDestruction++;
+                    }
+                    else
+                        crazyDiamondTileDestruction = 0;
+                }
 
                 if (globalCooldown > 0)
                     globalCooldown--;

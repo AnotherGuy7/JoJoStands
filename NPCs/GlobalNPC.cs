@@ -304,7 +304,7 @@ namespace JoJoStands.NPCs
                         echoesDamageTimer1 = 30;
                         echoesCrit1 = Main.rand.NextFloat(1, 100 + 1) <= echoesCrit;
 
-                        int freezeDamage = (int)(128 * echoesDamageBoost);
+                        int freezeDamage = (int)(136 * echoesDamageBoost);
                         npc.StrikeNPC((int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + npc.defense / defence, 0f, 0, echoesCrit1);
                     }
 

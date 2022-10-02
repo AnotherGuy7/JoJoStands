@@ -498,7 +498,7 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            if (mPlayer.crazyDiamondRestorationMode && !mPlayer.standAutoMode)
+            if (mPlayer.crazyDiamondRestorationMode && !mPlayer.standAutoMode && mPlayer.crazyDiamondTileDestruction >= 60)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch);
                 if (mPlayer.standTier > 1)
@@ -611,7 +611,11 @@ namespace JoJoStands.Projectiles
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
             }
             if (standType == TowerOfGray)
+            {
+                Projectile.Hitbox = new Rectangle(Projectile.Hitbox.X, Projectile.Hitbox.Y, (int)(Projectile.Hitbox.Width * 1.1f), (int)(Projectile.Hitbox.Height * 1.1f));
+                Projectile.penetrate = 2;
                 Projectile.ArmorPenetration = 10 * mPlayer.towerOfGrayTier;
+            }
         }
         public override bool? CanHitNPC(NPC target)
         {

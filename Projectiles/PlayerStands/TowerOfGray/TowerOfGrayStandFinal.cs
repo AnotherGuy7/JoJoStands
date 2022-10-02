@@ -37,7 +37,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             Projectile.ignoreWater = true;
         }
 
-        public override int ProjectileDamage => 45;
+        public override int ProjectileDamage => 54;
         public override int ShootTime => 7;
         public override int FistWhoAmI => 13;
         public override int TierNumber => 4;
@@ -92,9 +92,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
             if (Vector2.Distance(player.Center, Main.MouseWorld) < range && mouseControlled || !mouseControlled || Vector2.Distance(player.Center, Projectile.Center) <= range * 0.9f && mouseControlled)
             {
-                if (Projectile.velocity.X > 0)
+                if (Projectile.velocity.X > 0.5f)
                     Projectile.spriteDirection = 1;
-                if (Projectile.velocity.X < 0)
+                if (Projectile.velocity.X < -0.5f)
                     Projectile.spriteDirection = -1;
             }
 
@@ -155,9 +155,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                         if (Vector2.Distance(Projectile.Center, player.Center) < range - remote + MovementSafetyDistance)
                         {
                             if (mouseDistance > 25f)
-                                MovementAI(Main.MouseWorld, 10f + player.moveSpeed);
+                                MovementAI(Main.MouseWorld, 18f + player.moveSpeed*2);
                             else
-                                MovementAI(Main.MouseWorld, (mouseDistance * (10f + player.moveSpeed)) / 25);
+                                MovementAI(Main.MouseWorld, (mouseDistance * (18f + player.moveSpeed*2)) / 25);
+                            if (Vector2.Distance(player.Center, Projectile.Center) >  range * 0.9f && Vector2.Distance(player.Center, Main.MouseWorld) > range * 0.9f)
+                            {
+                                Projectile.velocity *= 0f;
+                                Projectile.netUpdate = true;
+                            }
                         }
                         if (shootCount <= 0 && !remoteMode)
                         {

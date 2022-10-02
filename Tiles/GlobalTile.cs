@@ -1,4 +1,3 @@
-
 using Terraria;
 using Terraria.ModLoader;
 
@@ -12,6 +11,5 @@ namespace JoJoStands.Tiles
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.collideY = true;
         }
-
     }
 }

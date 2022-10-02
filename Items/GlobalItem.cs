@@ -133,7 +133,6 @@ namespace JoJoStands.Items
 
             if (generalPurposeTimer > 0)
                 generalPurposeTimer--;
-
             if (!Item.noMelee && !mPlayer.standOut)
             {
                 bool specialJustPressed = false;
@@ -157,11 +156,18 @@ namespace JoJoStands.Items
                     }
                 }
             }
-
             if (Main.mouseRight && !mPlayer.standAutoMode && mPlayer.crazyDiamondRestorationMode && mPlayer.crazyDiamondDestroyedTileData.Count == 0 && generalPurposeTimer == 0)
             {
-                mPlayer.ItemBreak(Item);
-                generalPurposeTimer = 30;
+                for (int i = 0; i < 54; i++)
+                {
+                    Item ItemSelect = player.inventory[i];
+                    if (ItemSelect == Item)
+                    {
+                        mPlayer.ItemBreak(Item);
+                        generalPurposeTimer = 30;
+                        break;
+                    }
+                }
             }
 
             if (Item.type == ItemID.DirtBlock || Item.type == ItemID.MudBlock)

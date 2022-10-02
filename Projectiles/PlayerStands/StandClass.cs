@@ -26,7 +26,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             Projectile.height = 1;
             Projectile.friendly = true;
             Projectile.minion = true;
-            Projectile.netImportant = true;
             Projectile.minionSlots = 1;
             Projectile.penetrate = 1;
             Projectile.tileCollide = true;
@@ -79,7 +78,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// The Stand's X offset while drawn. This value is halved, so multiply by 2 if trying to apply a direct and known constant offset.
         /// </summary>
         public virtual int StandOffset { get; } = 60;            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
-        //public virtual int standYOffset { get; } = 0;
+        public virtual int standYOffset { get; } = 0;
         public virtual int TierNumber { get; }
         public virtual float PunchKnockback { get; } = 3f;
         public virtual string PunchSoundName { get; } = "";
@@ -294,16 +293,11 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void StayBehind()
         {
             Player player = Main.player[Projectile.owner];
-            float offsetY = 0f;
-            if (Projectile.type == ModContent.ProjectileType<EchoesStandT2>())
-                offsetY = 40f;
-            if (Projectile.type == ModContent.ProjectileType<EchoesStandFinal>())
-                offsetY = 10f;
             idleFrames = true;
             attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
-            areaBehindPlayer.Y -= -35f + HalfStandHeight + offsetY;
+            areaBehindPlayer.Y -= -35f + HalfStandHeight + standYOffset;
             Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
             Projectile.velocity *= 0.8f;
             Projectile.direction = Projectile.spriteDirection = player.direction;

@@ -419,6 +419,38 @@ namespace JoJoStands.NPCs.TownNPCs
                 {
                     Main.npcChatText = "Good grief, you really did go beyond your normal capabilities. I've seen this type of explosive power before, back in Morioh, but it's changed. Evolved. It 'goes beyond' nature.\nYour bubbles are not 'just' bubbles. They're actually a thin line spinning at incredible speeds. If this line reaches a vanishing point, there's no telling what your bubbles can achieve. They could transcend logic, itself. How terrifying...";
                 }
+                else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CrazyDiamondT1>())
+                {
+                    Main.npcChatText = "Is that- so it is... That is Crazy Diamond, the stand of a kid with a good heart, and a strange do... Just do not tell him I said that. Like many Stands, Crazy Diamond packs quite the punch, but do not let that fool you. Beneath its tough exterior, it harbors a kind ability. You can restore anything you touch, healing wounds, and even reverting things into their original parts. You can do a lot of good with this Stand.";
+                }
+                else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CrazyDiamondT2>())
+                {
+                    Main.npcChatText = "This brings back memories. You should now be able to flick bullets using immense power of Crazy Diamond. You are a real deadeye. With this additional strength, you should be able to break through just about anything, just remember to restore anything of value. This Stand is not capable of bringing things back from the dead.";
+                }
+                else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CrazyDiamondT3>())
+                {
+                    Main.npcChatText = "Good grief... It looks like angry ticks of that punk have found their way into Crazy Diamond. I will refrain from mentioning anything about your hair, just to be safe. You are now capable of flying into an uncontrollable rage, causing Crazy Diamond to start attacking things without prejudice. You will even start fusing people into stone, at this point. I have seen it done before. In other news, your restoration should be a lot more potent now, capable of bringing back anyone from the brink of defeat.";
+                }
+                else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CrazyDiamondFinal>())
+                {
+                    Main.npcChatText = "Well, it looks like you have gotten the hang of Crazy Diamond. It is gotten much stronger too. I can not help but feel just a bit nostalgic. All I ask is that you use this ability to protect those who need it, and punish those who threaten them. You will need a golden heart to use Crazy Diamond to its fullest potential. Do you have what it takes?";
+                }
+                else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<TowerOfGrayT1>())
+                {
+                    Main.npcChatText = "Ugh... I thought I would never have to see that nasty bug again. This is one of the first Stands DIO sent after me and my friends. You will have to forgive my disgust. Anyways, Tower of Gray is capable of traveling far distances, all while attacking with its piercing tongue. Do with that what you will.";
+                }
+                else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<TowerOfGrayT2>())
+                {
+                    Main.npcChatText = "The bug gotten stronger... good grief. It can now move at crazy speeds, even my Star Platinum has trouble keeping up with it. Tower of Gray should now be able to tear through enemies like a bullet. It is useful, if not a bit gruesome.";
+                }
+                else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<TowerOfGrayT3>())
+                {
+                    Main.npcChatText = "The old man who possessed that Stand had some sick tendencies. He enjoyed taking the tongues out of his victims, using the insane precision for dastardly pleasures. I still shudder at the thought of that night. Anyways, Tower of Gray is capable of tearing out the tongues of a whole lot of people at once, like an unfortunate shish-kabob... Just do not get any ideas, okay?";
+                }
+                else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<TowerOfGrayFinal>())
+                {
+                    Main.npcChatText = "It seems you have reached this bug potential. It’s piercing tongue is a weapon one would be a fool to ignore. Now, if that is all, I will be on my way. I would like to keep my distance from that thing.";
+                }
 
                 if (mPlayer.StandSlot.SlotItem.IsAir)
                 {
