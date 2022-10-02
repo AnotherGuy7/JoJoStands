@@ -191,7 +191,7 @@ namespace JoJoStands.Items.Vampire
                             shootVel *= 12f;
                             int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center.X, player.Center.Y - 20f, shootVel.X, shootVel.Y, ModContent.ProjectileType<SpaceRipperStingyEyes>(), 82, 4f, Main.myPlayer, 1f);
                             Main.projectile[proj].netUpdate = true;
-                            SoundStyle item3 = new SoundStyle("Terraria/Sounds/Item_3");
+                            SoundStyle item3 = new SoundStyle("Terraria/Sounds/Item_72");
                             item3.Pitch = 0.2f;
                             SoundEngine.PlaySound(item3, player.Center);
                         }
