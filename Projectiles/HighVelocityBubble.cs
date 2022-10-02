@@ -1,47 +1,50 @@
-using JoJoStands.Buffs.Debuffs;
-using Microsoft.Xna.Framework;
-using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace JoJoStands.Projectiles
 {
     public class HighVelocityBubble : ModProjectile
     {
-
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
         }
+
         public override void SetDefaults()
         {
-            Projectile.width = 20;
-            Projectile.height = 20;
+            Projectile.width = 26;
+            Projectile.height = 26;
             Projectile.aiStyle = 0;
             Projectile.timeLeft = 200;
             Projectile.friendly = true;
             Projectile.penetrate = 3;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
-            Projectile.scale = (int)1.5;
         }
+
         private const float ExplosionRadius = 3f * 8f;
         private bool crit = false;
+
         public override void AI()
         {
             Projectile.frameCounter++;
-            if (Projectile.frameCounter > 12)
+            if (Projectile.frameCounter >= 5)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame++;
+                if (Projectile.frame >= 4)
+                    Projectile.frame = 0;
             }
-            if (Projectile.frame >= 4)
-            {
-                Projectile.frame = 0;
-            }
+
+            int dustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Cloud, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
+            Main.dust[dustIndex].noGravity = true;
+            dustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.IceTorch, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
+            Main.dust[dustIndex].noLightEmittence = true;
+            Main.dust[dustIndex].noGravity = true;
         }
+
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];

@@ -1,3 +1,5 @@
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Items.CraftingMaterials;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -9,13 +11,11 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
 {
     public class SoftAndWetStandT1 : StandClass
     {
-
-        public override float MaxDistance => 98f;
         public override int PunchDamage => 16;
-        public override int PunchTime => 11;
-        public override int HalfStandHeight => 48;
+        public override int PunchTime => 12;
+        public override int HalfStandHeight => 38;
         public override int AltDamage => ((int)(TierNumber * 15));
-        public override int StandOffset => 0;
+        public override int StandOffset => 54;
         public override int FistWhoAmI => 0;
         public override int TierNumber => 1;
         public override StandAttackType StandType => StandAttackType.Melee;
@@ -49,25 +49,47 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                 {
                     StayBehindWithAbility();
                 }
-                if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
-                    shootCount += 60;
-                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                    SoundEngine.PlaySound(SoundID.SplashWeak);
-                    if (shootVel == Vector2.Zero)
-                        shootVel = new Vector2(0f, 1f);
-                    shootVel.Normalize();
-                    shootVel *= 3f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI); ;
-                    shootCount += 1;
-                    Main.projectile[proj].netUpdate = true;
-                    Projectile.netUpdate = true;
+                    GoInFront();
+                    if (shootCount <= 0)
+                    {
+                        shootCount += 60;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                        SoundEngine.PlaySound(SoundID.SplashWeak);
+                        if (shootVel == Vector2.Zero)
+                            shootVel = new Vector2(0f, 1f);
+
+                        shootVel.Normalize();
+                        shootVel *= 3f;
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
+                        shootCount += 1;
+                        Main.projectile[proj].netUpdate = true;
+                        Projectile.netUpdate = true;
+                    }
                 }
             }
             if (mPlayer.standAutoMode)
             {
                 BasicPunchAI();
             }
+        }
+
+        public int GetPlunderBubbleType()
+        {
+            Player player = Main.player[Projectile.owner];
+            if (player.HeldItem.type == ItemID.Torch)
+                return PlunderBubble.Plunder_Fire;
+            if (player.HeldItem.type == ItemID.IchorTorch)
+                return PlunderBubble.Plunder_Ichor;
+            if (player.HeldItem.type == ItemID.CursedTorch)
+                return PlunderBubble.Plunder_Cursed;
+            if (player.HeldItem.type == ItemID.IceTorch)
+                return PlunderBubble.Plunder_Ice;
+            if (player.HeldItem.type == ModContent.ItemType<ViralPowder>())
+                return PlunderBubble.Plunder_Viral;
+
+            return PlunderBubble.Plunder_None;
         }
 
         public override void SelectAnimation()

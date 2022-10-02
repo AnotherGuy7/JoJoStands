@@ -18,7 +18,7 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void SetDefaults()
         {
-            NPC.width = 40; //the NPC sprite width
+            NPC.width = 38; //the NPC sprite width
             NPC.height = 48;  //the NPC sprite height
             NPC.defense = 13;  //the NPC defense
             NPC.lifeMax = 80;  // the NPC life

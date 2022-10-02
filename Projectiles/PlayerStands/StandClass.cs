@@ -951,13 +951,13 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             Vector2 direction = player.Center - Projectile.Center;
             float distanceFromPlayer = direction.Length();
-            if (distanceFromPlayer > newMaxDistance)
+            if (distanceFromPlayer >= newMaxDistance)
             {
                 direction.Normalize();
-                Projectile.Center = player.Center + (-direction * (newMaxDistance));
+                Projectile.Center = player.Center + (-direction * newMaxDistance);
                 if (Math.Abs(Projectile.Center.X + Projectile.velocity.X - player.Center.X) > newMaxDistance - (Projectile.width / 2f))     //Controls the separate vector components
                     Projectile.velocity.X = player.velocity.X;
-                if (Math.Abs(Projectile.Center.Y + Projectile.velocity.Y - player.Center.Y) > newMaxDistance - (HalfStandHeight))
+                if (Math.Abs(Projectile.Center.Y + Projectile.velocity.Y - player.Center.Y) > newMaxDistance - HalfStandHeight)
                     Projectile.velocity.Y = player.velocity.Y;
 
                 if (distanceFromPlayer >= newMaxDistance + 16)
@@ -977,13 +977,13 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             Vector2 direction = player.Center - Projectile.Center;
             float distanceFromPlayer = direction.Length();
-            if (distanceFromPlayer > maxDistance)
+            if (distanceFromPlayer >= maxDistance)
             {
                 direction.Normalize();
-                Projectile.Center = player.Center + (-direction * (newMaxDistance));
-                if (Math.Abs(Projectile.Center.X + Projectile.velocity.X - player.Center.X) > newMaxDistance - (Projectile.width / 2f))     //Controls the separate vector components
+                Projectile.Center = player.Center + (-direction * maxDistance);
+                if (Math.Abs(Projectile.Center.X + Projectile.velocity.X - player.Center.X) > maxDistance - (Projectile.width / 2f))     //Controls the separate vector components
                     Projectile.velocity.X = player.velocity.X;
-                if (Math.Abs(Projectile.Center.Y + Projectile.velocity.Y - player.Center.Y) > newMaxDistance - (HalfStandHeight))
+                if (Math.Abs(Projectile.Center.Y + Projectile.velocity.Y - player.Center.Y) > maxDistance - HalfStandHeight)
                     Projectile.velocity.Y = player.velocity.Y;
 
                 if (distanceFromPlayer >= maxDistance + 16)

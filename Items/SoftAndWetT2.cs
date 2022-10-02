@@ -9,20 +9,22 @@ namespace JoJoStands.Items
 {
     public class SoftAndWetT2 : StandItemClass
     {
-        public override int standSpeed => 10;
+        public override int standSpeed => 11;
         public override int standType => 1;
         public override string standProjectileName => "SoftAndWet";
         public override int standTier => 2;
+
+        public override string Texture
+        {
+            get { return Mod.Name + "/Items/SoftAndWetT1"; }
+        }
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Soft and Wet (Tier 2)");
             Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a Plunder Bubble!\nSecond Special: Bubble Barrier!\nUsed in Stand Slot");
         }
-        public override string Texture
-        {
-            get { return Mod.Name + "/Items/SoftAndWetT1"; }
-        }
+
         public override void SetDefaults()
         {
             Item.damage = 38;

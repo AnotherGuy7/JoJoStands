@@ -145,9 +145,8 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         shootCount += newPunchTime;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= 12f;
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<GoldExperienceBeam>(), newPunchDamage + 11, 6f, Projectile.owner);
@@ -211,7 +210,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             }
             if (animationName == "Secondary")
             {
-                AnimateStand(animationName, 11, 11, true);
+                AnimateStand(animationName, 11, 6, true);
             }
             if (animationName == "Pose")
             {

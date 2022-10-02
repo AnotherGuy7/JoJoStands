@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using JoJoStands.Buffs.Debuffs;
 using Terraria.GameContent.UI;
-
+using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 {
@@ -42,6 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
         public override int FistWhoAmI => 13;
         public override int TierNumber => 4;
         public override StandAttackType StandType => StandAttackType.Ranged;
+        private const int MovementSafetyDistance = 10;
 
         private bool returnToPlayer = false;
         private bool returnToRange = false;
@@ -68,6 +69,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
         private Vector2 dashPoint = Vector2.Zero;
         private Vector2 projPos = Vector2.Zero;
+        private Vector2 rangeIndicatorSize;
 
         private List<int> specialTargets = new List<int>();
 
@@ -136,7 +138,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             Projectile.tileCollide = true;
             mouseControlled = false;
 
-            float distance = Vector2.Distance(Projectile.Center, Main.MouseWorld);
             NPC target = FindNearestTarget(range);
             if (!returnToPlayer && !returnToRange) // basic stand control
             {
@@ -150,21 +151,22 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                             remote = 0f;
                         if (!remoteMode)
                             remote = 20f;
-                        if (Vector2.Distance(Projectile.Center, player.Center) < range - remote)
+                        float mouseDistance = Vector2.Distance(Projectile.Center, Main.MouseWorld);
+                        if (Vector2.Distance(Projectile.Center, player.Center) < range - remote + MovementSafetyDistance)
                         {
-                            if (distance > 25f)
+                            if (mouseDistance > 25f)
                                 MovementAI(Main.MouseWorld, 10f + player.moveSpeed);
-                            if (distance <= 25f)
-                                MovementAI(Main.MouseWorld, (distance * (10f + player.moveSpeed)) / 25);
+                            else
+                                MovementAI(Main.MouseWorld, (mouseDistance * (10f + player.moveSpeed)) / 25);
                         }
                         if (shootCount <= 0 && !remoteMode)
                         {
                             shootCount += newShootTime;
                             AttackAI(Main.MouseWorld);
                         }
-                        LimitDistance(range);
+                        LimitDistance(range - remote);
                     }
-                    if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>())) //right click abilty activation
+                    if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))         //right click abilty activation
                     {
                         if (Projectile.owner == Main.myPlayer)
                         {
@@ -426,6 +428,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
         public override bool PreDraw(ref Color lightColor)
         {
+            Player player = Main.player[Projectile.owner];
             if (dash || returnToPlayer || returnToRange || special != -1)
             {
                 if (arrayClear)
@@ -458,6 +461,17 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                     }
                 }
             }
+            /*rangeIndicatorSize = new Vector2(range);
+            if (MyPlayer.RangeIndicators && Main.netMode != NetmodeID.Server && rangeIndicatorSize != Vector2.Zero && range > 0f)
+            {
+                Vector2 rangeIndicatorDrawPosition = player.Center - Main.screenPosition;
+                Vector2 rangeIndicatorOrigin = rangeIndicatorSize / 2f;
+                float rangeIndicatorAlpha = MyPlayer.RangeIndicatorAlpha;
+                if (Math.Abs((int)rangeIndicatorSize.X - (int)range) > 1)     //Comparing via subtraction to have a minimum error count of 1
+                    standRangeIndicatorTexture = GenerateRangeIndicatorTexture(range, 0);
+
+                Main.EntitySpriteDraw(standRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.White * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);
+            }*/
             return true;
         }
 

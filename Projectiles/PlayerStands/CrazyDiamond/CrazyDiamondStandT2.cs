@@ -1,17 +1,15 @@
-using JoJoStands.Buffs.Debuffs;
 using JoJoStands.DataStructures;
 using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 {
     public class CrazyDiamondStandT2 : StandClass
     {
-        public override int PunchDamage => 54;
+        public override int PunchDamage => 52;
         public override int PunchTime => 9;
         public override int AltDamage => 81;
         public override int HalfStandHeight => 51;
@@ -21,10 +19,9 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
         private bool flickFrames = false;
         private bool resetFrame = false;
-        private bool restore = false;
+        private bool restorationMode = false;
 
         private int rightClickCooldown = 0;
-        private int standTier = 2;
 
         public override void AI()
         {
@@ -33,17 +30,14 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (rightClickCooldown > 0)
                 rightClickCooldown--;
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            mPlayer.standTier = standTier;
-            mPlayer.crazyDiamondRestorationMode = restore;
-
-
+            mPlayer.crazyDiamondRestorationMode = restorationMode;
             if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !flickFrames)
@@ -61,13 +55,13 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     StayBehindWithAbility();
                 if (SpecialKeyPressedNoCooldown() && !flickFrames)
                 {
-                    restore = !restore;
-                    if (restore)
+                    restorationMode = !restorationMode;
+                    if (restorationMode)
                         Main.NewText("Restoration Mode: Active");
                     else
                         Main.NewText("Restoration Mode: Disabled");
                 }
-                if (!restore)
+                if (!restorationMode)
                 {
                     if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                     {
@@ -78,19 +72,18 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             if (bulletItem.shoot != -1)
                             {
                                 flickFrames = true;
-                                Projectile.frame = 1;
-                                if (Projectile.frame == 1)
+                                if (Projectile.frame == 2)
                                 {
                                     shootCount += 40;
                                     Main.mouseLeft = false;
-                                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                                    Vector2 shootVel = Main.MouseWorld - (Projectile.Center - new Vector2(0, 18f));
                                     if (shootVel == Vector2.Zero)
                                         shootVel = new Vector2(0f, 1f);
 
                                     shootVel.Normalize();
                                     shootVel *= 12f;
 
-                                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2 (0, 18f), shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
+                                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(0, 18f), shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
                                     Main.projectile[proj].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
                                     Main.projectile[proj].netUpdate = true;
                                     Projectile.netUpdate = true;
@@ -104,7 +97,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         }
                     }
                 }
-                if (restore)
+                if (restorationMode)
                 {
                     if (Main.mouseRight && rightClickCooldown == 0 && mPlayer.crazyDiamondDestroyedTileData.Count > 0 && Projectile.owner == Main.myPlayer)
                     {
@@ -120,7 +113,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     }
                 }
             }
-            if (restore)
+            if (restorationMode)
                 Lighting.AddLight(Projectile.position, 11);
             if (mPlayer.standAutoMode)
                 BasicPunchAI();
@@ -200,7 +193,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             string pathAddition = "";
-            if (restore)
+            if (restorationMode)
                 pathAddition = "Restoration_";
 
             if (Main.netMode != NetmodeID.Server)
@@ -223,20 +216,19 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 AnimateStand(animationName, 4, 12, true);
             }
         }
+
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(flickFrames);
-            writer.Write(restore);
+            writer.Write(restorationMode);
             writer.Write(rightClickCooldown);
-            writer.Write(standTier);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             flickFrames = reader.ReadBoolean();
-            restore = reader.ReadBoolean();
+            restorationMode = reader.ReadBoolean();
             rightClickCooldown = reader.ReadInt32();
-            standTier = reader.ReadInt32();
         }
     }
 }

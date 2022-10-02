@@ -7,20 +7,22 @@ namespace JoJoStands.Items
 {
     public class SoftAndWetT3 : StandItemClass
     {
-        public override int standSpeed => 9;
+        public override int standSpeed => 10;
         public override int standType => 1;
         public override string standProjectileName => "SoftAndWet";
         public override int standTier => 3;
+
+        public override string Texture
+        {
+            get { return Mod.Name + "/Items/SoftAndWetT1"; }
+        }
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Soft and Wet (Tier 3)");
             Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a Plunder Bubble!\nPassive: Bubble Generation\nSecond Special: Bubble Barrier!\nUsed in Stand Slot");
         }
-        public override string Texture
-        {
-            get { return Mod.Name + "/Items/SoftAndWetT1"; }
-        }
+
         public override void SetDefaults()
         {
             Item.damage = 63;
@@ -36,9 +38,9 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<SoftAndWetT2>())
-                .AddIngredient(ModContent.ItemType<WillToFight>(), 3)
-                .AddIngredient(ModContent.ItemType<WillToChange>(), 3)
-                .AddIngredient(ItemID.BubbleMachine)
+                .AddIngredient(ModContent.ItemType<WillToFight>(), 2)
+                .AddIngredient(ModContent.ItemType<WillToChange>())
+                .AddIngredient(ItemID.WaterBucket)
                 .AddIngredient(ItemID.HallowedBar, 10)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();

@@ -14,7 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 {
     public class CrazyDiamondStandFinal : StandClass
     {
-        public override int PunchDamage => 108;
+        public override int PunchDamage => 105;
         public override int PunchTime => 7;
         public override int AltDamage => 162;
         public override int HalfStandHeight => 51;
@@ -37,7 +37,6 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         private int healingTargetPlayer = -1;
         private int rightClickCooldown = 0;
         private int heal = 0;
-        private int standTier = 4;
 
         public override void AI()
         {
@@ -53,9 +52,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            mPlayer.standTier = standTier;
             mPlayer.crazyDiamondRestorationMode = restore;
-
             if (player.HasBuff(ModContent.BuffType<BlindRage>()))
                 blindRage = true;
             if(!player.HasBuff(ModContent.BuffType<BlindRage>()))
@@ -102,12 +99,11 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             if (bulletItem.shoot != -1)
                             {
                                 flickFrames = true;
-                                Projectile.frame = 1;
-                                if (Projectile.frame == 1)
+                                if (Projectile.frame == 2)
                                 {
                                     shootCount += 40;
                                     Main.mouseLeft = false;
-                                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                                    Vector2 shootVel = Main.MouseWorld - (Projectile.Center - new Vector2(0, 18f));
                                     if (shootVel == Vector2.Zero)
                                         shootVel = new Vector2(0f, 1f);
 
@@ -454,7 +450,6 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             writer.Write(healingTargetPlayer);
             writer.Write(rightClickCooldown);
             writer.Write(healingFramesRepeatTimer);
-            writer.Write(standTier);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
@@ -469,7 +464,6 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             healingTargetPlayer = reader.ReadInt32();
             rightClickCooldown = reader.ReadInt32();
             healingFramesRepeatTimer = reader.ReadInt32();
-            standTier = reader.ReadInt32();
         }
     }
 }

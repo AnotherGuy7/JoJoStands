@@ -41,6 +41,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
         public override int FistWhoAmI => 13;
         public override int TierNumber => 2;
         public override StandAttackType StandType => StandAttackType.Ranged;
+        private const int MovementSafetyDistance = 10;
 
         private bool returnToPlayer = false;
         private bool returnToRange = false;
@@ -129,7 +130,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             Projectile.tileCollide = true;
             mouseControlled = false;
 
-            float distance = Vector2.Distance(Projectile.Center, Main.MouseWorld);
             NPC target = FindNearestTarget(range);
             if (!returnToPlayer && !returnToRange) // basic stand control
             {
@@ -143,19 +143,20 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                             remote = 0f;
                         if (!remoteMode)
                             remote = 20f;
-                        if (Vector2.Distance(Projectile.Center, player.Center) < range - remote)
+                        float mouseDistance = Vector2.Distance(Projectile.Center, Main.MouseWorld);
+                        if (Vector2.Distance(Projectile.Center, player.Center) < range - remote + MovementSafetyDistance)
                         {
-                            if (distance > 25f)
+                            if (mouseDistance > 25f)
                                 MovementAI(Main.MouseWorld, 10f + player.moveSpeed);
-                            if (distance <= 25f)
-                                MovementAI(Main.MouseWorld, (distance * (10f + player.moveSpeed)) / 25);
+                            else
+                                MovementAI(Main.MouseWorld, (mouseDistance * (10f + player.moveSpeed)) / 25);
                         }
                         if (shootCount <= 0 && !remoteMode)
                         {
                             shootCount += newShootTime;
                             AttackAI(Main.MouseWorld);
                         }
-                        LimitDistance(range);
+                        LimitDistance(range - remote);
                     }
                     if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>())) //right click abilty activation
                     {

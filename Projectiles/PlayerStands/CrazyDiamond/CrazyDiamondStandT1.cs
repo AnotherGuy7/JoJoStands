@@ -6,16 +6,14 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 {
     public class CrazyDiamondStandT1 : StandClass
     {
-        public override int PunchDamage => 22;
+        public override int PunchDamage => 21;
         public override int PunchTime => 10;
         public override int HalfStandHeight => 51;
         public override int FistWhoAmI => 12;
         public override int TierNumber => 1;
         public override StandAttackType StandType => StandAttackType.Melee;
 
-        private bool restore = false;
-        private int standTier = 1;
-
+        private bool restrationMode = false;
 
         public override void AI()
         {
@@ -26,14 +24,10 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 shootCount--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            mPlayer.standTier = standTier;
-            mPlayer.crazyDiamondRestorationMode = restore;
-
-
+            mPlayer.crazyDiamondRestorationMode = restrationMode;
             if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
@@ -49,14 +43,14 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     StayBehind();
                 if (SpecialKeyPressedNoCooldown())
                 {
-                    restore = !restore;
-                    if (restore)
+                    restrationMode = !restrationMode;
+                    if (restrationMode)
                         Main.NewText("Restoration Mode: Active");
                     else
                         Main.NewText("Restoration Mode: Disabled");
                 }
             }
-            if (restore)
+            if (restrationMode)
                 Lighting.AddLight(Projectile.position, 11);
             if (mPlayer.standAutoMode)
                 BasicPunchAI();
@@ -87,7 +81,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             string pathAddition = "";
-            if (restore)
+            if (restrationMode)
                 pathAddition = "Restoration_";
 
             if (Main.netMode != NetmodeID.Server)
@@ -108,14 +102,12 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         }
         public override void SendExtraStates(BinaryWriter writer)
         {
-            writer.Write(restore);
-            writer.Write(standTier);
+            writer.Write(restrationMode);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
-            restore = reader.ReadBoolean();
-            standTier = reader.ReadInt32();
+            restrationMode = reader.ReadBoolean();
         }
     }
 }

@@ -401,15 +401,15 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetT1>())
                 {
-                    Main.npcChatText = "Did you let a bubble loose in here? Be careful not to let it pop near me. These things are capable of taking something from whatever they pop next to. I'd prefer to keep my eyesight.\nThey also seem to take effects from things you hold in your hand. I wonder what would happen if these sorts of bubbles popped.";
+                    Main.npcChatText = "Did you let a bubble loose in here? Be careful not to let it pop near me. Those bubbles are capable of taking something from whatever they pop next to, and I'd prefer to keep my eyesight.\nOn top of that, the bubbles can apply those stolen properties to anything they pop close to. Have you tried holding a torch out and shooting a bubble? I wonder what would happen if those sorts of bubbles popped.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetT2>())
                 {
-                    Main.npcChatText = "Hmm. Seems these bubbles are more durable than I thought. You should be able to coat yourself in one, giving you some welcome protection. This Stand sure is full of surprises.";
+                    Main.npcChatText = "Hmm. Seems these bubbles are more durable than I thought. With your ability, I'm sure you can create larger, defensive bubbles now. You should be able to coat yourself in one, giving you some welcome protection.";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetT3>())
                 {
-                    Main.npcChatText = "Soft & Wet can now create bubbles while in the heat of battle. They seem to do a great deal of damage on impact, making you quite the threat.";
+                    Main.npcChatText = "Soft & Wet can now create bubbles while in the heat of battle. They seem to do a great deal of damage on impact, making you quite the threat. Your bubbles are getting more and more powerful, I wonder if there's a certain force behind their abilities?";
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetFinal>())
                 {
@@ -417,7 +417,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<SoftAndWetGoBeyond>())
                 {
-                    Main.npcChatText = "My suspicions are all but confirmed. I knew this explosive power seemed familiar. But it's changed. Evolved. It 'goes beyond' nature.\nHow do I explain this? The short of it is that your bubbles are actually a line spinning at incredible speeds. If this line reaches a vanishing point, there’s no telling what your bubbles can achieve. They could transcend logic, itself. How terrifying…";
+                    Main.npcChatText = "Good grief, you really did go beyond your normal capabilities. I've seen this type of explosive power before, back in Morioh, but it's changed. Evolved. It 'goes beyond' nature.\nYour bubbles are not 'just' bubbles. They're actually a thin line spinning at incredible speeds. If this line reaches a vanishing point, there's no telling what your bubbles can achieve. They could transcend logic, itself. How terrifying...";
                 }
 
                 if (mPlayer.StandSlot.SlotItem.IsAir)

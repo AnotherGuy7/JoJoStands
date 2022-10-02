@@ -1,3 +1,4 @@
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,13 +8,19 @@ namespace JoJoStands.NPCs.Enemies
 {
     public class HighwayStar : ModNPC
     {
-        public bool walkFrames = false;
-        public bool chaseFrames = false;
-        public bool transformFramesInto = false;
-        public bool transformFramesOutof = false;
-        public int frame = 0;
-        public float velocity = 0f;
-        public NPC NPCOwner;
+        private int frame = 0;
+        private float velocity = 0f;
+        private AnimationState animationState;
+        private AnimationState oldAnimationState;
+        private NPC NPCOwner;
+
+        public enum AnimationState
+        {
+            Walking,
+            TransformingInto,
+            TransformingOutOf,
+            Chasing
+        }
 
         public override void SetStaticDefaults()
         {
@@ -52,7 +59,6 @@ namespace JoJoStands.NPCs.Enemies
         {
             Player target = Main.player[NPC.target];
             NPCOwner = Main.npc[(int)NPC.ai[2]];
-            NPC.noGravity = true;
             if (NPCOwner.ai[3] == 0f)      //if Yuya is dead
             {
                 NPC.active = false;
@@ -61,57 +67,34 @@ namespace JoJoStands.NPCs.Enemies
             if (!NPC.active)        //if Highway Star is dead
             {
                 NPC.ai[2] = 0f;
+                return;
             }
+
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead)        //if no target or that target is dead
-            {
-                walkFrames = true;
-                chaseFrames = false;
-                transformFramesInto = false;
-                transformFramesOutof = false;
-            }
-            if (target.velocity.X <= 2f && target.velocity.X >= -2f)     //if the target is standing still or moving slowly, to walk to the target
+                animationState = AnimationState.Walking;
+
+            if (Math.Abs(target.velocity.X) <= 2f)     //if the target is standing still or moving slowly, to walk to the target
             {
                 if (NPC.ai[0] <= 31f || NPC.ai[0] >= 1f)        //from 31 to 0, transform out
                 {
                     NPC.ai[0]--;
                 }
             }
-            if (target.velocity.X >= 2f || target.velocity.X <= -2f)        //if the target's velocity is greater than 2 in either direction
+            if (Math.Abs(target.velocity.X) > 2f)        //if the target's velocity is greater than 2 in either direction
             {
-                chaseFrames = true;
-                walkFrames = false;
-                transformFramesInto = false;
-                transformFramesOutof = false;
+                animationState = AnimationState.Chasing;
                 velocity = 6.1f;
-                if (NPC.ai[0] >= 0f || NPC.ai[0] <= 30f)        //from 0 to 31, transform in
-                {
+                if (NPC.ai[0] <= 30f)        //from 0 to 31, transform in
                     NPC.ai[0]++;
-                }
             }
             if (NPC.ai[0] == 0f)        //the walking one
             {
                 velocity = 2f;
-                walkFrames = true;
-                chaseFrames = false;
-                transformFramesInto = false;
-                transformFramesOutof = false;
+                animationState = AnimationState.Walking;
             }
             if (NPC.ai[0] >= 1f && NPC.ai[0] <= 30f)        //the transformation one
             {
-                if (target.velocity.X >= 2f || target.velocity.X <= -2f)
-                {
-                    transformFramesInto = true;
-                    transformFramesOutof = false;
-                    walkFrames = false;
-                    chaseFrames = false;
-                }
-                if (target.velocity.X == 0f)
-                {
-                    transformFramesInto = true;
-                    transformFramesOutof = false;
-                    walkFrames = false;
-                    chaseFrames = false;
-                }
+                animationState = AnimationState.TransformingInto;
             }
             NPC.TargetClosest(true);        //walking velocity is 2-3f, diagonal velocity (flying with wings) is 8-9f, velocity with a UFO is 7-8f, most boots have 5-6f, while Lightning and Frostpark boots have 6.5-6.7f (all for players)
             if (NPC.ai[0] == 31f)        //chasing
@@ -171,87 +154,64 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void FindFrame(int frameHeight)
         {
+            if (oldAnimationState != animationState)
+            {
+                oldAnimationState = animationState;
+                NPC.frameCounter = 0;
+                frame = 0;
+            }
+
             frameHeight = 50;       //NPC.frame.Y to x * frameHeight
             NPC.frameCounter++;
-            if (NPC.frameCounter >= 61)
+            if (animationState == AnimationState.Walking)
             {
-                NPC.frameCounter = 0;
-            }
-            if (walkFrames)
-            {
-                transformFramesInto = false;
-                transformFramesOutof = false;
-                chaseFrames = false;
-                if (NPC.frameCounter == 20)
+                if (NPC.frameCounter >= 20)
                 {
                     frame += 1;
                     NPC.frameCounter = 0;
+                    if (frame >= 4)
+                        frame = 1;
                 }
-                if (frame >= 4)
-                {
+                if (frame == 0)
                     frame = 1;
-                }
-                if (frame <= 0)
-                {
-                    frame = 1;
-                }
             }
-            if (transformFramesInto)
+            if (animationState == AnimationState.TransformingInto)
             {
-                walkFrames = false;
-                chaseFrames = false;
-                transformFramesOutof = false;
                 if (NPC.frameCounter >= 15)
                 {
                     frame += 1;
                     NPC.frameCounter = 0;
+                    if (frame >= 7)
+                        frame = 5;
                 }
-                if (frame <= 5)
-                {
+                if (frame < 5)
                     frame = 5;
-                }
-                if (frame >= 7)
-                {
-                    frame = 5;
-                }
             }
-            if (transformFramesOutof)
+            if (animationState == AnimationState.TransformingOutOf)
             {
-                walkFrames = false;
-                chaseFrames = false;
-                transformFramesOutof = false;
                 if (NPC.frameCounter >= 15)
                 {
                     frame -= 1;
                     NPC.frameCounter = 0;
+                    if (frame >= 7)
+                        frame = 7;
                 }
-                if (frame <= 5)
-                {
+                if (frame < 5)
                     frame = 5;
-                }
-                if (frame >= 7)
-                {
-                    frame = 7;
-                }
+
             }
-            if (chaseFrames)
+            if (animationState == AnimationState.Chasing)
             {
-                walkFrames = false;
-                transformFramesInto = false;
-                transformFramesOutof = false;
-                frame++;
-                if (NPC.frameCounter == 60)
+                NPC.frameCounter++;
+                if (NPC.frameCounter >= 60)
                 {
                     frame += 1;
+                    NPC.frameCounter = 0;
+                    if (frame >= 9)
+                        frame = 7;
                 }
-                if (frame <= 7)
-                {
+                if (frame < 7)
                     frame = 7;
-                }
-                if (frame >= 9)
-                {
-                    frame = 7;
-                }
             }
             NPC.frame.Y = frame * frameHeight;
         }

@@ -1,5 +1,4 @@
 using JoJoStands.Buffs.Debuffs;
-using JoJoStands.Buffs.PlayerBuffs;
 using JoJoStands.Buffs.EffectBuff;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,21 +6,21 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.Buffs.ItemBuff;
 
 namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
 {
     public class SoftAndWetGoBeyondStand : StandClass
     {
-
-        public override float MaxDistance => 98f;
-        public override int PunchDamage => 116;
-        public override int PunchTime => 9;
-        public override int HalfStandHeight => 48;
+        public override int PunchDamage => 109;
+        public override int PunchTime => 8;
+        public override int HalfStandHeight => 38;
         public override int AltDamage => 320;
-        public override int StandOffset => 0;
+        public override int StandOffset => 54;
         public override int FistWhoAmI => 0;
         public override int TierNumber => 5;
         public override StandAttackType StandType => StandAttackType.Ranged;
+        private int highVelocityBubbleChargeUpTimer = 0;
 
         public override void AI()
         {
@@ -60,50 +59,42 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                         GoInFront();
                         Projectile.direction = 1;
                         if (Main.MouseWorld.X < Projectile.position.X)
-                        {
                             Projectile.direction = -1;
-                        }
                         Projectile.spriteDirection = Projectile.direction;
                         secondaryAbilityFrames = false;
                     }
                 }
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
-
                     idleFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;
-                    if (Projectile.frame == 4 && shootCount <= 0)
+                    highVelocityBubbleChargeUpTimer++;
+                    if (highVelocityBubbleChargeUpTimer >= 60)
                     {
-
-                        shootCount += 38;
+                        shootCount += 45;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= 6f;
-                        Vector2 shootPosition = Projectile.position + new Vector2(40f, -10f);
-                        int hvb = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, shootVel, ModContent.ProjectileType<HighVelocityBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 8f, Projectile.owner, Projectile.whoAmI); ;
-                        shootCount += 1;
-                        SoundEngine.PlaySound(SoundID.Item130);
+                        Vector2 shootPosition = Projectile.position + new Vector2(40f * Projectile.direction, -10f);
+                        int hvb = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, shootVel, ModContent.ProjectileType<HighVelocityBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 8f, Projectile.owner, Projectile.whoAmI);
                         Main.projectile[hvb].netUpdate = true;
                         Projectile.netUpdate = true;
+                        highVelocityBubbleChargeUpTimer = 0;
+                        SoundEngine.PlaySound(SoundID.Item130);
                     }
-    
-
                 }
+                if (highVelocityBubbleChargeUpTimer > 0 && !Main.mouseRight)
+                    highVelocityBubbleChargeUpTimer = 0;
                 if (SpecialKeyPressed() && Projectile.owner == Main.myPlayer)
                 {
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                    int dustIndex = Dust.NewDust(player.position, player.width, player.height, DustID.t_Martian, Scale: Main.rand.NextFloat(1f, 2f + 1f));
-                    Main.dust[dustIndex].noGravity = true;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= 2f;
                     int expspin = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<ExplosiveSpin>(), (int)(500 * mPlayer.standDamageBoosts), 0f, Projectile.owner, Projectile.whoAmI);
@@ -111,6 +102,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                     Main.projectile[expspin].netUpdate = true;
                     Projectile.netUpdate = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(20));
+                    int dustIndex = Dust.NewDust(player.position, player.width, player.height, DustID.t_Martian, Scale: Main.rand.NextFloat(1f, 2f + 1f));
+                    Main.dust[dustIndex].noGravity = true;
 
                 }
                 if (SecondSpecialKeyPressed() && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
@@ -121,12 +114,12 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, playerFollow, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
                 }
             }
-                if (mPlayer.standAutoMode)
-                {
-                    BasicPunchAI();
-                }
-            
+            if (mPlayer.standAutoMode)
+            {
+                BasicPunchAI();
+            }
         }
+
         public override void SelectAnimation()
         {
             if (attackFrames)
@@ -168,7 +161,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
             }
             if (animationName == "Secondary")
             {
-                AnimateStand(animationName, 5, 24, true);
+                AnimateStand(animationName, 5, 6, true, 0, 3);
             }
             if (animationName == "Pose")
             {
