@@ -38,6 +38,11 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         private int rightClickCooldown = 0;
         private int heal = 0;
 
+        private bool selectEntity = false;
+        private bool selectEntity2 = false;
+        private int messageCooldown = 0;
+        private int messageCooldown2 = 0;
+
         public override void AI()
         {
             SelectAnimation();
@@ -51,6 +56,11 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 rightClickCooldown--;
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
+
+            Rectangle rectangle = Rectangle.Empty;
+
+            if (Projectile.owner == player.whoAmI)
+                rectangle = new Rectangle((int)(Main.MouseWorld.X), (int)(Main.MouseWorld.Y), 20, 20);
 
             mPlayer.crazyDiamondRestorationMode = restore;
             if (player.HasBuff(ModContent.BuffType<BlindRage>()))
@@ -87,6 +97,40 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         Main.NewText("Restoration Mode: Active");
                     else
                         Main.NewText("Restoration Mode: Disabled");
+                }
+                bool message = false; //select target message
+                bool message2 = false; //target too far message
+                if (Projectile.owner == player.whoAmI)
+                {
+                    for (int n = 0; n < Main.maxNPCs; n++)
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && !npc.hide && !npc.immortal)
+                        {
+                            if (npc.Hitbox.Intersects(rectangle))
+                            {
+                                message = true;
+                                if (Vector2.Distance(Projectile.Center, npc.Center) <= 200f)
+                                    message2 = true;
+                            }
+                        }
+                    }
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        for (int p = 0; p < Main.maxPlayers; p++)
+                        {
+                            Player otherPlayer = Main.player[p];
+                            if (otherPlayer.active)
+                            {
+                                if (otherPlayer.Hitbox.Intersects(rectangle))
+                                {
+                                    message = true;
+                                    if (Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 200f)
+                                        message2 = true;
+                                }
+                            }
+                        }
+                    }
                 }
                 if (!restore)
                 {
@@ -151,13 +195,18 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             NPC npc = Main.npc[n];
                             if (npc.active && !npc.hide && !npc.immortal)
                             {
-                                if (Vector2.Distance(Main.MouseWorld, npc.Center) <= 20f && Vector2.Distance(player.Center, npc.Center) > 200f)
-                                    Main.NewText("Target too far");
-                                if (Vector2.Distance(Main.MouseWorld, npc.Center) <= 20f && Vector2.Distance(player.Center, npc.Center) <= 200f && !healingFrames && onlyOneTarget < 1)
+                                if (npc.Hitbox.Intersects(rectangle))
                                 {
-                                    onlyOneTarget += 1;
-                                    healingTargetNPC = npc.whoAmI;
+                                    if (Vector2.Distance(Projectile.Center, npc.Center) > 200f && messageCooldown2 == 0 && !message2)
+                                        selectEntity2 = true;
+                                    if (Vector2.Distance(Projectile.Center, npc.Center) <= 200f && !healingFrames && onlyOneTarget < 1)
+                                    {
+                                        onlyOneTarget += 1;
+                                        healingTargetNPC = npc.whoAmI;
+                                    }
                                 }
+                                if (!npc.Hitbox.Intersects(rectangle) && messageCooldown == 0 && !message)
+                                    selectEntity = true;
                             }
                         }
                         if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -167,13 +216,18 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                 Player otherPlayer = Main.player[p];
                                 if (otherPlayer.active)
                                 {
-                                    if (Vector2.Distance(Main.MouseWorld, otherPlayer.Center) <= 20f && Vector2.Distance(player.Center, otherPlayer.Center) > 200f)
-                                        Main.NewText("Target too far");
-                                    if (Vector2.Distance(Main.MouseWorld, otherPlayer.Center) <= 20f && Vector2.Distance(player.Center, otherPlayer.Center) <= 200f && !healingFrames && onlyOneTarget < 1 && otherPlayer.whoAmI != player.whoAmI)
+                                    if (otherPlayer.Hitbox.Intersects(rectangle))
                                     {
-                                        onlyOneTarget += 1;
-                                        healingTargetPlayer = otherPlayer.whoAmI;
+                                        if (Vector2.Distance(Projectile.Center, otherPlayer.Center) > 200f && messageCooldown2 == 0 && !message2)
+                                            selectEntity2 = true;
+                                        if (Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 200f && onlyOneTarget < 1 && !healingFrames && otherPlayer.whoAmI != player.whoAmI)
+                                        {
+                                            onlyOneTarget += 1;
+                                            healingTargetPlayer = otherPlayer.whoAmI;
+                                        }
                                     }
+                                    if (!otherPlayer.Hitbox.Intersects(rectangle) && messageCooldown == 0 && !message)
+                                        selectEntity = true;
                                 }
                             }
                         }
@@ -181,20 +235,27 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     if (onlyOneTarget > 0)
                     {
                         float offset = 0f;
+                        float offset2 = 0f;
                         if (offsetDirection)
-                            offset = 20f;
+                            offset = -60f * Projectile.spriteDirection;
+                        if (Projectile.spriteDirection == -1)
+                            offset2 = 24f;
                         if (healingTargetNPC != -1)
                         {
                             NPC npc = Main.npc[healingTargetNPC];
                             if (!healingFrames && !returnToOwner)
                             {
+                                if (npc.Center.X > Projectile.Center.X)
+                                    Projectile.spriteDirection = 1;
+                                if (npc.Center.X < Projectile.Center.X)
+                                    Projectile.spriteDirection = -1;
                                 Projectile.velocity = npc.Center - Projectile.Center;
                                 Projectile.velocity.Normalize();
                                 Projectile.velocity *= 6f;
-                                if (Projectile.position.X >= npc.position.X)
-                                    offsetDirection = true;
                                 if (Vector2.Distance(Projectile.Center, npc.Center) <= 20f)
                                 {
+                                    if (Projectile.spriteDirection != player.direction)
+                                        offsetDirection = true;
                                     Projectile.frame = 0;
                                     healingFrames = true;
                                 }
@@ -202,7 +263,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             }
                             if (healingFrames && !returnToOwner)
                             {
-                                Projectile.position = new Vector2(npc.Center.X - 10f - offset, npc.Center.Y - 20f);
+                                Projectile.position = new Vector2(npc.Center.X - 10f - offset - offset2, npc.Center.Y - 20f);
                                 if (Projectile.frame == 0 && !healingFramesRepeatTimerOnlyOnce)
                                 {
                                     healingFramesRepeatTimer += 1;
@@ -240,13 +301,17 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             Player otherPlayer = Main.player[healingTargetPlayer];
                             if (!healingFrames && !returnToOwner)
                             {
+                                if (otherPlayer.Center.X > Projectile.Center.X)
+                                    Projectile.spriteDirection = 1;
+                                if (otherPlayer.Center.X < Projectile.Center.X)
+                                    Projectile.spriteDirection = -1;
                                 Projectile.velocity = otherPlayer.Center - Projectile.Center;
                                 Projectile.velocity.Normalize();
                                 Projectile.velocity *= 6f;
-                                if (Projectile.position.X >= otherPlayer.position.X)
-                                    offsetDirection = true;
                                 if (Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 20f)
                                 {
+                                    if (Projectile.spriteDirection != player.direction)
+                                        offsetDirection = true;
                                     Projectile.frame = 0;
                                     healingFrames = true;
                                 }
@@ -254,7 +319,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             }
                             if (healingFrames && !returnToOwner)
                             {
-                                Projectile.position = new Vector2(otherPlayer.Center.X - 10f - offset, otherPlayer.Center.Y - 20f);
+                                Projectile.position = new Vector2(otherPlayer.Center.X - 10f - offset - offset2, otherPlayer.Center.Y - 20f);
                                 if (Projectile.frame == 0 && !healingFramesRepeatTimerOnlyOnce)
                                 {
                                     healingFramesRepeatTimer += 1;
@@ -296,7 +361,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                 Projectile.spriteDirection = 1;
                             Projectile.velocity = player.Center - Projectile.Center;
                             Projectile.velocity.Normalize();
-                            Projectile.velocity *= 6f;
+                            Projectile.velocity *= 6f + player.moveSpeed;
                             idleFrames = true;
                             if (Vector2.Distance(Projectile.Center, player.Center) <= 20f)
                             {
@@ -317,6 +382,22 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     }
                 }
             }
+            if (selectEntity2)
+            {
+                Main.NewText("Target too far");
+                selectEntity2 = false;
+                messageCooldown2 += 90;
+            }
+            if (selectEntity)
+            {
+                Main.NewText("Select target with mouse");
+                selectEntity = false;
+                messageCooldown += 90;
+            }
+            if (messageCooldown > 0)
+                messageCooldown--;
+            if (messageCooldown2 > 0)
+                messageCooldown2--;
             if (restore)
                 Lighting.AddLight(Projectile.position, 11);
             if (mPlayer.standAutoMode && onlyOneTarget == 0)
@@ -328,6 +409,8 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 healingFramesRepeatTimerOnlyOnce = false;
                 BasicPunchAI();
             }
+            if (player.teleporting)
+                Projectile.position = player.position;
 
         }
 

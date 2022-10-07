@@ -2,15 +2,12 @@
 using Terraria.ModLoader;
 using Terraria.ID;
 using JoJoStands.Buffs.Debuffs;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
     public class BelieveInMe : ModBuff
     {
-        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Regeneration; } }
+        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Shine; } }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Believe in me!");
@@ -20,7 +17,7 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             player.noKnockback = true;
             player.longInvince = true;
-            player.moveSpeed *= 1.5f;
+            player.moveSpeed *= 1.25f;
             if (player.HasBuff(ModContent.BuffType<SMACK>()))
                 player.ClearBuff(ModContent.BuffType<SMACK>());
         }

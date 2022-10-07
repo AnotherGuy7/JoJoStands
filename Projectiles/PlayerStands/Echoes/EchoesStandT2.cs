@@ -191,6 +191,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         if (!Main.npc[targetNPC].townNPC)
                         {
                             Main.npc[targetNPC].AddBuff(ModContent.BuffType<SMACK>(), 900);
+                            Main.npc[targetNPC].GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
                             onlyOneTarget = 0;
                         }
                         else
@@ -337,15 +338,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                 }
                                 if (!npc.boss)
                                     soundIntensivity *= 2;
-                                npc.AddBuff(ModContent.BuffType<Sound>(), 600);
+                                npc.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
+                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
                                 npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = maxDamage;
                                 if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
                                     npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += soundIntensivity;
-                                if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && npc.boss && npc.lifeMax >= 10000 && npc.HasBuff(ModContent.BuffType<SMACK>()) && npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax == npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity && Main.hardMode)
-                                {
-                                    evolve = true;
-                                    Projectile.Kill();
-                                }
                                 proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists = true;
                             }
                         }
@@ -358,7 +355,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                     MyPlayer mOtherPlayer = otherPlayer.GetModPlayer<MyPlayer>();
                                     if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && otherPlayer.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
                                     {
-                                        mOtherPlayer.echoesCrit = mPlayer.standCritChangeBoosts;
                                         mOtherPlayer.echoesDamageBoost = mPlayer.standDamageBoosts;
                                         int maxDamage = 48;
                                         int soundIntensivity = 2;
@@ -372,7 +368,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                             maxDamage = 108;
                                             soundIntensivity = 8;
                                         }
-                                        otherPlayer.AddBuff(ModContent.BuffType<Sound>(), 360);
+                                        otherPlayer.AddBuff(ModContent.BuffType<Tinnitus>(), 360);
                                         mOtherPlayer.echoesSoundIntensivityMax = maxDamage;
                                         if (mOtherPlayer.echoesSoundIntensivity < mOtherPlayer.echoesSoundIntensivityMax)
                                             mOtherPlayer.echoesSoundIntensivity += soundIntensivity;
@@ -400,7 +396,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     Projectile.tileCollide = false;
                     MovementAI(player.Center, 8f + player.moveSpeed * 2);
                 }
-
+                if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && Main.hardMode && mPlayer.echoesACT2Evolve >= 10000)
+                {
+                    evolve = true;
+                    Projectile.Kill();
+                }
                 if (player.teleporting)
                     Projectile.position = player.position;
             }
@@ -511,6 +511,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (evolve)
             {
                 player.maxMinions += 1;
+                mPlayer.echoesACT2Evolve = 0;
                 mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesACT2>();
                 mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesACT2>());
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandT3>(), 0, 0f, Main.myPlayer, remoteModeOnSpawn);

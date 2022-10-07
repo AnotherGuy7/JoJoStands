@@ -41,7 +41,7 @@ namespace JoJoStands.Items
                 .AddIngredient(ItemID.Ectoplasm, 8)
                 .AddIngredient(ItemID.LargeDiamond, 1)
                 .AddIngredient(ItemID.LifeCrystal, 7)
-                .AddIngredient(ModContent.ItemType<CaringLifeforce>())
+                .AddIngredient(ModContent.ItemType<RighteousLifeforce>())
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
         }

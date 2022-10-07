@@ -1,5 +1,4 @@
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,6 +30,9 @@ namespace JoJoStands.Projectiles
         public Vector2 preSkipVel = Vector2.Zero;
 
         public bool onlyOnceforFists = false;
+        public int echoesTailTipType = 0; // 1 - boing, 2 - kaboom, 3 - wooosh, 4 - sizzle
+        public int echoesTailTipTier = 0;
+        public int echoesTailTipStage = 0; 
 
         public struct ForesightData
         {

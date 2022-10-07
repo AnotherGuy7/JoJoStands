@@ -1,5 +1,6 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
+using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.DropConditions;
 using JoJoStands.Items;
 using JoJoStands.Items.Accessories;
@@ -8,7 +9,6 @@ using JoJoStands.Items.Tiles;
 using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs.Enemies;
 using JoJoStands.NPCs.TownNPCs;
-using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -46,12 +46,21 @@ namespace JoJoStands.NPCs
         private int echoesDamageTimer2 = 60; //ACT 1 sounds
         private bool echoesCrit2 = false;
 
+        public int echoesDebuffOwner = -1;
+
         public int echoesFreeze = 0;
         public int echoesSoundIntensivity = 2;
         public int echoesSoundIntensivityMax = 48;
 
         public float echoesCrit = 5f;
         public float echoesDamageBoost = 1f;
+        public float theLockCrit = 5f;
+        public float theLockDamageBoost = 1f;
+
+        public bool echoesBoing = false;
+        public bool echoesKaboom = false;
+
+        private Vector2 echoesFallingPoint = Vector2.Zero;
 
         public bool frozenInTime = false;
         public bool affectedbyBtz = false;
@@ -94,6 +103,8 @@ namespace JoJoStands.NPCs
 
         private int offsetPostDraw = 0;
         private int timerPostDraw = 0;
+        private int theLockVisualOffset = 0;
+        private int theLockVisualTimer = 0;
 
         public override bool InstancePerEntity
         {
@@ -267,6 +278,7 @@ namespace JoJoStands.NPCs
         public override bool PreAI(NPC npc)
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            echoesBoing = false;
             if (!player.timeskipActive && !player.timestopActive && !player.backToZeroActive)
             {
                 if (npc.aiStyle != 101510150 && !npc.HasBuff(ModContent.BuffType<YoAngelo>()) && echoesFreeze == 0)
@@ -281,7 +293,17 @@ namespace JoJoStands.NPCs
                     }
                     savedTileCollide = npc.noTileCollide;
                 }
-
+                if (echoesKaboom)
+                {
+                    if (npc.velocity.Y < 0)
+                        echoesFallingPoint = npc.Bottom;
+                    fallDamage = (int)npc.Center.Y - (int)echoesFallingPoint.Y;
+                    if (npc.collideY && fallDamage > 1)
+                    {
+                        echoesKaboom = false;
+                        npc.StrikeNPC(((int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f)) + npc.defense / 4), 0f, 0, true, true, true);
+                    }
+                }
                 if (echoesFreeze > 0)
                 {
                     if (echoesDamageTimer1 > 0)
@@ -325,7 +347,7 @@ namespace JoJoStands.NPCs
                     }
                 }
 
-                if (npc.HasBuff(ModContent.BuffType<Sound>()))
+                if (npc.HasBuff(ModContent.BuffType<Tinnitus>()))
                 {
                     if (echoesSoundIntensivity > echoesSoundIntensivityMax)
                         echoesSoundIntensivity = echoesSoundIntensivityMax;
@@ -352,16 +374,38 @@ namespace JoJoStands.NPCs
                         punchSound.PitchVariance = 0.2f;
                         SoundEngine.PlaySound(punchSound, npc.Center);
                         echoesCrit2 = Main.rand.NextFloat(1, 100 + 1) <= echoesCrit;
-
-                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + npc.defense / defence, 0f, 0, echoesCrit2);
+                        int soundDamage2 = (int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + npc.defense / defence;
+                        npc.StrikeNPC(soundDamage2, 0f, 0, echoesCrit2);
                         if (Main.rand.NextFloat(1, 100) <= 15 && !npc.boss)
                             npc.AddBuff(BuffID.Confused, 300);
+
+                        if (echoesDebuffOwner != -1)
+                        {
+                            Player ownerDebuff = Main.player[echoesDebuffOwner];
+                            MyPlayer modOwnerDebuff = ownerDebuff.GetModPlayer<MyPlayer>();
+                            if (ownerDebuff.dead || !ownerDebuff.active)
+                                echoesDebuffOwner = -1;
+                            if (npc.type == NPCID.Golem || npc.type == NPCID.GolemFistLeft || npc.type == NPCID.GolemFistRight || npc.type == NPCID.GolemHead)
+                            {
+                                if (echoesCrit2)
+                                    modOwnerDebuff.echoesACT3Evolve += soundDamage2 * 2;
+                                if (!echoesCrit2)
+                                    modOwnerDebuff.echoesACT3Evolve += soundDamage2;
+                            }
+                            if (npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer)
+                            {
+                                if (echoesCrit2)
+                                    modOwnerDebuff.echoesACT2Evolve += soundDamage2 * 2;
+                                if (!echoesCrit2)
+                                    modOwnerDebuff.echoesACT2Evolve += soundDamage2;
+                            }
+                        }
                     }
                 }
 
                 if (echoesFreeze == 0)
                     echoesDamageTimer1 = 30;
-                if (!npc.HasBuff(ModContent.BuffType<Sound>()))
+                if (!npc.HasBuff(ModContent.BuffType<Tinnitus>()))
                     echoesDamageTimer2 = 60;
 
                 if (towerOfGrayImmunityFrames > 0)
@@ -640,9 +684,16 @@ namespace JoJoStands.NPCs
                 npc.defense = (int)(npc.defense * 0.95);
                 if (lockRegenCounter >= 60)    //increases lifeRegen damage every second
                 {
+                    bool lockCrit = Main.rand.NextFloat(1, 100 + 1) <= theLockCrit;
+                    int defence = 2;
+                    if (lockCrit)
+                        defence = 4;
+                    int lockDamage = 2;
+                    if (!npc.boss)
+                        lockDamage = 4;
                     lockRegenCounter = 0;
-                    lifeRegenIncrement += 2;
-                    npc.StrikeNPC(lifeRegenIncrement, 0f, 1);
+                    lifeRegenIncrement += lockDamage;
+                    npc.StrikeNPC((int)(lifeRegenIncrement*theLockDamageBoost)+npc.defense/defence, 0f, 0, lockCrit);
                 }
             }
 
@@ -849,6 +900,39 @@ namespace JoJoStands.NPCs
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/BelieveInMe").Value;
                 spriteBatch.Draw(texture, new Vector2(npc.Center.X, npc.Center.Y - npc.height / 2) - Main.screenPosition, new Rectangle(0, offsetPostDraw, 54, 32), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
             }
+            if (npc.HasBuff(ModContent.BuffType<Locked>()))
+            {
+                float offset = 1.25f;
+                SpriteEffects effects = SpriteEffects.None;
+                if (npc.spriteDirection == 1)
+                    effects = SpriteEffects.None;
+                if (npc.spriteDirection == -1)
+                    effects = SpriteEffects.FlipHorizontally;
+
+                if (effects == SpriteEffects.None)
+                    offset = 6f;
+
+                if (theLockVisualOffset < 9)
+                {
+                    if (theLockVisualTimer < 10)
+                        theLockVisualTimer++;
+                    if (theLockVisualTimer == 10)
+                    {
+                        theLockVisualTimer = 0;
+                        theLockVisualOffset += 1;
+                    }
+                }
+                float newHeight = npc.height / 22;
+                float newWidht = npc.width / 22;
+                float scale = (newHeight*0.75f) + (newWidht*0.25f);
+                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/TheLock").Value;
+                spriteBatch.Draw(texture, npc.Center - Main.screenPosition, new Rectangle(0, theLockVisualOffset*22, 22, 22), drawColor, npc.rotation, new Vector2(texture.Width/offset, texture.Height / 18f), scale, effects, 0);
+            }
+            if (!npc.HasBuff(ModContent.BuffType<Locked>()))
+            {
+                theLockVisualTimer = 0;
+                theLockVisualOffset = 0;
+            }
         }
 
         public override void OnHitPlayer(NPC npc, Player target, int damage, bool crit)
@@ -874,42 +958,49 @@ namespace JoJoStands.NPCs
             {
                 npc.AddBuff(BuffID.Frostburn, 240);
             }
-            if (npc.boss)
+            if (target.HasBuff(ModContent.BuffType<LockActiveBuff>()))
             {
-                if (standSlotType == ModContent.ItemType<LockT1>())
+                theLockCrit = mPlayer.standCritChangeBoosts;
+                theLockDamageBoost = mPlayer.standDamageBoosts;
+                if (npc.boss)
                 {
-                    npc.AddBuff(ModContent.BuffType<Locked>(), 3 * 60);
+                    lockRegenCounter += 4;
+                    if (standSlotType == ModContent.ItemType<LockT1>())
+                    {
+                        npc.AddBuff(ModContent.BuffType<Locked>(), 3 * 60);
+                    }
+                    if (standSlotType == ModContent.ItemType<LockT2>())
+                    {
+                        npc.AddBuff(ModContent.BuffType<Locked>(), 6 * 60);
+                    }
+                    if (standSlotType == ModContent.ItemType<LockT3>())
+                    {
+                        npc.AddBuff(ModContent.BuffType<Locked>(), 9 * 60);
+                    }
+                    if (standSlotType == ModContent.ItemType<LockFinal>())
+                    {
+                        npc.AddBuff(ModContent.BuffType<Locked>(), 12 * 60);
+                    }
                 }
-                if (standSlotType == ModContent.ItemType<LockT2>())
+                else
                 {
-                    npc.AddBuff(ModContent.BuffType<Locked>(), 6 * 60);
-                }
-                if (standSlotType == ModContent.ItemType<LockT3>())
-                {
-                    npc.AddBuff(ModContent.BuffType<Locked>(), 9 * 60);
-                }
-                if (standSlotType == ModContent.ItemType<LockFinal>())
-                {
-                    npc.AddBuff(ModContent.BuffType<Locked>(), 12 * 60);
-                }
-            }
-            else
-            {
-                if (standSlotType == ModContent.ItemType<LockT1>())
-                {
-                    npc.AddBuff(ModContent.BuffType<Locked>(), 5 * 60);
-                }
-                if (standSlotType == ModContent.ItemType<LockT2>())
-                {
-                    npc.AddBuff(ModContent.BuffType<Locked>(), 10 * 60);
-                }
-                if (standSlotType == ModContent.ItemType<LockT3>())
-                {
-                    npc.AddBuff(ModContent.BuffType<Locked>(), 15 * 60);
-                }
-                if (standSlotType == ModContent.ItemType<LockFinal>())
-                {
-                    npc.AddBuff(ModContent.BuffType<Locked>(), 20 * 60);
+                    lockRegenCounter += 8;
+                    if (standSlotType == ModContent.ItemType<LockT1>())
+                    {
+                        npc.AddBuff(ModContent.BuffType<Locked>(), 5 * 60);
+                    }
+                    if (standSlotType == ModContent.ItemType<LockT2>())
+                    {
+                        npc.AddBuff(ModContent.BuffType<Locked>(), 10 * 60);
+                    }
+                    if (standSlotType == ModContent.ItemType<LockT3>())
+                    {
+                        npc.AddBuff(ModContent.BuffType<Locked>(), 15 * 60);
+                    }
+                    if (standSlotType == ModContent.ItemType<LockFinal>())
+                    {
+                        npc.AddBuff(ModContent.BuffType<Locked>(), 20 * 60);
+                    }
                 }
             }
             if (removeZombieHighlightOnHit)

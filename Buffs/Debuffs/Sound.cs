@@ -1,11 +1,13 @@
 ﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using JoJoStands.Buffs.PlayerBuffs;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Sound : ModBuff
+    public class Tinnitus : ModBuff
     {
+        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Confused; } }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tinnitus");

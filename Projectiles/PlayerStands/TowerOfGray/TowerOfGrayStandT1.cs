@@ -58,9 +58,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
         private int frameMultUpdate = 0;
         private int emote = 0;
 
-        private float range = 250f; 
+        private float range = 250f;
         private float noRemoteRange = 250f; //250f 300f 350f 400f
-        private float remoteRange = 550f; //550f 700f 850f 1000f
+        private float remoteRange = 750f; //750f 900f 1050f 1200f
 
         private Vector2 projPos = Vector2.Zero;
 
@@ -91,7 +91,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
             if (mPlayer.usedEctoPearl && noRemoteRange == 250f)
                 noRemoteRange *= 1.5f;
-            if (mPlayer.usedEctoPearl && remoteRange == 550f)
+            if (mPlayer.usedEctoPearl && remoteRange == 750f)
                 remoteRange *= 1.5f;
 
             if (!remoteMode)
@@ -103,6 +103,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                     emote += 180;
                     EmoteBubble.NewBubble(89, new WorldUIAnchor(player), emote);
                 }
+                player.aggro -= 1200;
                 player.eyeHelper.BlinkBecausePlayerGotHurt();
                 range = remoteRange;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
@@ -125,9 +126,15 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
             Projectile.rotation = Projectile.velocity.X * 0.05f;
             Projectile.tileCollide = true;
-            mouseControlled = false;
 
             NPC target = FindNearestTarget(range);
+
+
+            if (!Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                mouseControlled = false;
+            if (mPlayer.standAutoMode && target == null || !mPlayer.standAutoMode && !mouseControlled && !remoteMode)
+                stinger = false;
+
             if (!returnToPlayer && !returnToRange) // basic stand control
             {
                 if (!mPlayer.standAutoMode)
@@ -205,9 +212,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                         }
                     }
                 }
-
-                if (mPlayer.standAutoMode && target == null || !mPlayer.standAutoMode && !mouseControlled && !remoteMode)
-                    stinger = false;
 
                 if (Vector2.Distance(Projectile.Center, player.Center) > range + 20f && !returnToPlayer && !returnToRange)
                 {
@@ -300,6 +304,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                 Projectile.tileCollide = false;
                 MovementAI(player.Center, 20f + player.moveSpeed * 2);
             }
+            if (player.teleporting)
+                Projectile.position = player.position;
         }
 
         private void MovementAI(Vector2 target, float speed)

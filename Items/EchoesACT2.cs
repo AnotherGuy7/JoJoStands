@@ -28,5 +28,17 @@ namespace JoJoStands.Items
             Item.noUseGraphic = true;
             Item.rare = ItemRarityID.LightPurple;
         }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<EchoesACT1>())
+                .AddIngredient(ItemID.HallowedBar, 12)
+                .AddIngredient(ItemID.MusicBox)
+                .AddIngredient(ItemID.Emerald, 2)
+                .AddIngredient(ModContent.ItemType<WillToChange>(), 4)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+        }
     }
 }

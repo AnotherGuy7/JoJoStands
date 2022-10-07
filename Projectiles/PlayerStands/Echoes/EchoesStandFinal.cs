@@ -171,7 +171,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                     if (mOtherPlayer.echoesFreeze <= 15)
                     {
-                        mOtherPlayer.echoesCrit = mPlayer.standCritChangeBoosts;
                         mOtherPlayer.echoesDamageBoost = mPlayer.standDamageBoosts;
                         mOtherPlayer.echoesFreeze += 30;
                     }
@@ -212,7 +211,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                     MyPlayer mOtherPlayer = otherPlayer.GetModPlayer<MyPlayer>();
                                     if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && otherPlayer.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
                                     {
-                                        mOtherPlayer.echoesCrit = mPlayer.standCritChangeBoosts;
                                         mOtherPlayer.echoesDamageBoost = mPlayer.standDamageBoosts;
                                         if (mOtherPlayer.echoesFreeze <= 15)
                                             mOtherPlayer.echoesFreeze += 30;

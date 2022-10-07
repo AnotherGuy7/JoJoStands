@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using JoJoStands.Buffs.PlayerBuffs;
 
@@ -6,6 +7,7 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class SMACK : ModBuff
     {
+        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Horrified; } }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("SMACK!");
@@ -15,12 +17,12 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.AddBuff(ModContent.BuffType<Sound>(), 600);
+            npc.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.AddBuff(ModContent.BuffType<Sound>(), 360);
+            player.AddBuff(ModContent.BuffType<Tinnitus>(), 360);
             if (player.HasBuff(ModContent.BuffType<StrongWill>()))
                 player.ClearBuff(buffIndex);
         }

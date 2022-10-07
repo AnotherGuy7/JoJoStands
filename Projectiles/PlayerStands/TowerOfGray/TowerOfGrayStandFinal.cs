@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using JoJoStands.Buffs.Debuffs;
 using Terraria.GameContent.UI;
-using Terraria.ID;
 
 namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 {
@@ -65,7 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
         private float range = 250f;
         private float noRemoteRange = 400f; //250f 300f 350f 400f
-        private float remoteRange = 1000f; //550f 700f 850f 1000f
+        private float remoteRange = 1200f; //750f 900f 1050f 1200f
 
         private Vector2 dashPoint = Vector2.Zero;
         private Vector2 projPos = Vector2.Zero;
@@ -100,7 +99,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
             if (mPlayer.usedEctoPearl && noRemoteRange == 400f)
                 noRemoteRange *= 1.5f;
-            if (mPlayer.usedEctoPearl && remoteRange == 1000f)
+            if (mPlayer.usedEctoPearl && remoteRange == 1200f)
                 remoteRange *= 1.5f;
 
             if (!remoteMode)
@@ -112,6 +111,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                     emote += 180;
                     EmoteBubble.NewBubble(89, new WorldUIAnchor(player), emote);
                 }
+                player.aggro -= 1200;
                 player.eyeHelper.BlinkBecausePlayerGotHurt();
                 range = remoteRange;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
@@ -136,9 +136,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
             Projectile.rotation = Projectile.velocity.X * 0.05f;
             Projectile.tileCollide = true;
-            mouseControlled = false;
 
             NPC target = FindNearestTarget(range);
+
+            if (!Main.mouseLeft && !dash && special == -1 && Projectile.owner == Main.myPlayer)
+                mouseControlled = false;
+            if (mPlayer.standAutoMode && target == null || !mPlayer.standAutoMode && !mouseControlled && !remoteMode)
+                stinger = false;
+
             if (!returnToPlayer && !returnToRange) // basic stand control
             {
                 if (!mPlayer.standAutoMode)
@@ -224,17 +229,17 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                             MovementAI(targetSpecial.Center, 0f);
                         }
                         mPlayer.towerOfGrayDamageMult = 10f;
-                        if (Projectile.Distance(targetSpecial.Center) <= 20f && pause == 0 && targetSpecial.active && specialTargets.Count == 1)
+                        if (Projectile.Distance(targetSpecial.Center) <= 10f && pause == 0 && targetSpecial.active && specialTargets.Count == 1)
                         {
                             AttackAI(targetSpecial.Center);
                             specialTargets.Clear();
-                            pause += 15;
+                            pause += 10;
                         }
-                        if (Projectile.Distance(targetSpecial.Center) <= 25f && pause == 0 && specialTargets.Count > 1 && targetSpecial.active)
+                        if (Projectile.Distance(targetSpecial.Center) <= 10f && pause == 0 && specialTargets.Count > 1 && targetSpecial.active)
                         {
                             AttackAI(targetSpecial.Center);
                             specialTargets.Remove(specialTargets[0]);
-                            pause += 15;
+                            pause += 10;
                         }
                         if (specialTargets.Count > 1 && !targetSpecial.active)
                             specialTargets.Remove(specialTargets[0]);
@@ -299,9 +304,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
                 if (!dash && special == -1) //return to stand range after ability
                 {
-                    if (mPlayer.standAutoMode && target == null || !mPlayer.standAutoMode && !mouseControlled && !remoteMode)
-                        stinger = false;
-
                     if (Vector2.Distance(Projectile.Center, player.Center) > range + 20f && !returnToPlayer && !returnToRange)
                     {
                         arrayClear = true;
@@ -395,6 +397,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                 dash = false;
                 dashPoint = Vector2.Zero;
                 MovementAI(player.Center, 20f + player.moveSpeed * 2);
+            }
+            if (player.teleporting)
+            {
+                Projectile.position = player.position;
+                dash = false;
             }
         }
 

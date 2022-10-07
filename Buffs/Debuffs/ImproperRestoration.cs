@@ -6,7 +6,7 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class ImproperRestoration : ModBuff
     {
-        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Weak; } }
+        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Horrified; } }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Improper Restoration");

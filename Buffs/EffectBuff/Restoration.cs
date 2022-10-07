@@ -7,7 +7,7 @@ namespace JoJoStands.Buffs.EffectBuff
 {
     public class Restoration : ModBuff
     {
-        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Regeneration; } }
+        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Lifeforce; } }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Restoration");

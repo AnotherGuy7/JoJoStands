@@ -54,6 +54,8 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 Lighting.AddLight(Projectile.position, 11);
             if (mPlayer.standAutoMode)
                 BasicPunchAI();
+            if (player.teleporting)
+                Projectile.position = player.position;
         }
 
 

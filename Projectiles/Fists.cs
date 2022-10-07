@@ -8,8 +8,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
-using System.IO;
 using JoJoStands.DataStructures;
 
 namespace JoJoStands.Projectiles
@@ -61,6 +59,30 @@ namespace JoJoStands.Projectiles
                 crit = true;
             if (JoJoStands.SoundsLoaded)
                 mPlayer.standHitTime += 2;
+
+            if (standType == Echoes)
+            {
+                if (mPlayer.echoesTier == 3)
+                {
+                    if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
+                    {
+                        if (crit)
+                            mPlayer.echoesACT3Evolve += damage*2;
+                        if (!crit)
+                            mPlayer.echoesACT3Evolve += damage;
+                    }
+                }
+                if (mPlayer.echoesTier == 2)
+                {
+                    if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
+                    {
+                        if (crit)
+                            mPlayer.echoesACT2Evolve += damage * 2;
+                        if (!crit)
+                            mPlayer.echoesACT2Evolve += damage;
+                    }
+                }
+            }
 
             if (standType == GoldExperience)
             {
@@ -498,10 +520,10 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            if (mPlayer.crazyDiamondRestorationMode && !mPlayer.standAutoMode && mPlayer.crazyDiamondTileDestruction >= 60)
+            if (mPlayer.crazyDiamondRestorationMode && !mPlayer.standAutoMode)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch);
-                if (mPlayer.standTier > 1)
+                if (mPlayer.standTier > 1 && mPlayer.crazyDiamondTileDestruction >= 60)
                 {
                     int detectLeftX = (int)(Projectile.position.X / 16f) - 1;
                     int detectRightX = (int)((Projectile.position.X + (float)Projectile.width) / 16f) + 1;
@@ -524,7 +546,7 @@ namespace JoJoStands.Projectiles
                             Vector2 tile = new Vector2(detectedTileX, detectedTileY);
                             Tile tile2 = Main.tile[detectedTileX, detectedTileY];
                             var checkTile = new DestroyedTileData(tile2.TileType, new Vector2(detectedTileX, detectedTileY), tile2.Slope, tile2.IsHalfBlock, tile2.TileFrameY, tile2.TileFrameX, tile2.TileFrameNumber);
-                            if (tile2.TileType != TileID.LihzahrdBrick && tile2.TileType != TileID.LihzahrdAltar && tile2.HasTile && Main.tileSolid[tile2.TileType])
+                            if (tile2.TileType != TileID.LihzahrdBrick && tile2.TileType != TileID.LihzahrdAltar && tile2.HasTile && Main.tileSolid[tile2.TileType] && !Main.tileSand[tile2.TileType] && !Main.tileSolidTop[tile2.TileType])
                             {
                                 if (!tile2.HasActuator || tile2.HasActuator && !tile2.IsActuated)
                                 {
@@ -551,7 +573,7 @@ namespace JoJoStands.Projectiles
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC npc = Main.npc[n];
-                    int heal = (int)(Projectile.damage * 0.25f);
+                    int heal = (int)(Projectile.damage * 0.2f);
                     int lifeLeft = npc.lifeMax - npc.life;
                     if (npc.active && !npc.hide)
                     {
@@ -560,6 +582,8 @@ namespace JoJoStands.Projectiles
                             SoundEngine.PlaySound(npc.HitSound, npc.Center);
                             if (lifeLeft > 0 && !npc.HasBuff(ModContent.BuffType<MissingOrgans>()))
                             {
+                                if (heal > 20)
+                                    heal = 20;
                                 heal = (int)Main.rand.NextFloat((int)(heal * 0.85f), (int)(heal * 1.15f));
                                 if (heal > lifeLeft)
                                     heal = lifeLeft;
@@ -577,7 +601,7 @@ namespace JoJoStands.Projectiles
                 for (int p = 0; p < Main.maxPlayers; p++)
                 {
                     Player otherPlayer = Main.player[p];
-                    int heal = (int)(Projectile.damage * 0.25f);
+                    int heal = (int)(Projectile.damage * 0.2f);
                     int lifeLeft = otherPlayer.statLifeMax - otherPlayer.statLife;
                     if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI)
                     {
@@ -586,6 +610,8 @@ namespace JoJoStands.Projectiles
                             SoundEngine.PlaySound(SoundID.NPCHit1, otherPlayer.Center);
                             if (lifeLeft > 0 && !otherPlayer.HasBuff(ModContent.BuffType<MissingOrgans>()))
                             {
+                                if (heal > 20)
+                                    heal = 20;
                                 heal = (int)Main.rand.NextFloat((int)(heal * 0.85f), (int)(heal * 1.15f));
                                 if (heal > lifeLeft)
                                     heal = lifeLeft;

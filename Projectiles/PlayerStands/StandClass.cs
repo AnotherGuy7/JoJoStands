@@ -367,13 +367,10 @@ namespace JoJoStands.Projectiles.PlayerStands
             HandleDrawOffsets();
             if (!attackFrames)
             {
-                float offsetY = 0f;
-                if (Projectile.type == ModContent.ProjectileType<EchoesStandT2>())
-                    offsetY = 40f;
                 Vector2 vector131 = player.Center;
                 vector131.X -= (float)((12 + player.width / 2) * player.direction);
                 Projectile.direction = (Projectile.spriteDirection = player.direction);
-                vector131.Y -= -35f + HalfStandHeight + offsetY;
+                vector131.Y -= -35f + HalfStandHeight +standYOffset;
                 Projectile.Center = Vector2.Lerp(Projectile.Center, vector131, 0.2f);
                 Projectile.velocity *= 0.8f;
                 Projectile.rotation = 0;
