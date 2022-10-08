@@ -60,7 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             Rectangle rectangle = Rectangle.Empty;
 
             if (Projectile.owner == player.whoAmI)
-                rectangle = new Rectangle((int)(Main.MouseWorld.X), (int)(Main.MouseWorld.Y), 20, 20);
+                rectangle = new Rectangle((int)(Main.MouseWorld.X - 10), (int)(Main.MouseWorld.Y - 10), 20, 20);
 
             mPlayer.crazyDiamondRestorationMode = restore;
             if (player.HasBuff(ModContent.BuffType<BlindRage>()))

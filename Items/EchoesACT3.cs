@@ -15,7 +15,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 3)");
-            Tooltip.SetDefault("WIP");
+            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate! \nRight-click: Three Freeze! Pin any enemy to the ground! Pinned enemy takes damage! \nSpecial: Three Freeze Barrage! Normal attack inflict Three Freeze effect for a short time! \nSecond Special: Switch to previous acts!");
         }
 
         public override void SetDefaults()

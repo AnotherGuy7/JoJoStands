@@ -15,7 +15,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 0)");
-            Tooltip.SetDefault("WIP");
+            Tooltip.SetDefault("Left-click to... throw? \nOnly Strong Will can help you!");
         }
 
         public override void SetDefaults()

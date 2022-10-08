@@ -15,7 +15,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 1)");
-            Tooltip.SetDefault("WIP");
+            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate! \nRight-click: Place sound mark at entity! \nSpecial: Remote Control \nPassive: Normal attack inflict debuff that get stronger with each hit! Sound mark increases damage of debuff!");
         }
 
         public override void SetDefaults()

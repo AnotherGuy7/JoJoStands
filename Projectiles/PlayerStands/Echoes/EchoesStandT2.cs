@@ -79,7 +79,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             Rectangle rectangle = Rectangle.Empty;
 
             if (Projectile.owner == player.whoAmI)
-                rectangle = new Rectangle((int)(Main.MouseWorld.X), (int)(Main.MouseWorld.Y), 20, 20);
+                rectangle = new Rectangle((int)(Main.MouseWorld.X - 10), (int)(Main.MouseWorld.Y - 10), 20, 20);
 
             if (mPlayer.usedEctoPearl && remoteRange == 1200f)
                 remoteRange *= 1.5f;

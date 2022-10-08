@@ -15,7 +15,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 2)");
-            Tooltip.SetDefault("WIP");
+            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate! \nRight-click: Sound effect selection! \nHold right-click: Create the chosen sound effect at the mouse point! \nSpecial: Remote Control \nSecond Special: Switch to previous act!");
         }
 
         public override void SetDefaults()

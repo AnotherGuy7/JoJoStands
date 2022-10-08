@@ -58,11 +58,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             mPlayer.echoesACT = ACT;
             Rectangle rectangle = Rectangle.Empty;
 
-            if (Projectile.owner == player.whoAmI)
-                rectangle = new Rectangle((int)(Main.MouseWorld.X), (int)(Main.MouseWorld.Y), 20, 20);
-
             if (Projectile.owner == Main.myPlayer)
+            {
+                rectangle = new Rectangle((int)(Main.MouseWorld.X-10), (int)(Main.MouseWorld.Y-10), 20, 20);
                 x1 = Main.MouseWorld.X;
+            }
 
             if (threeFreeze)
             {
@@ -126,8 +126,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 {
                     int secretReference = 0;
                     if (MyPlayer.SecretReferences)
-                        secretReference = 5;
-                    if (Main.rand.NextFloat(1, 100 + 1) <= secretReference)
+                        secretReference = 3;
+                    if (Main.rand.NextFloat(1, 100) <= secretReference)
                         Main.NewText("My God... ACT 3  is such a downgrade. The ability to just pin someone to the ground and swear... I added this ability just to use the special bind! (C) Prooooooos21", Color.Magenta);
                     else
                         Main.NewText("Okay, master! Let's kill da ho! Beeetch!", Color.LightGreen);
