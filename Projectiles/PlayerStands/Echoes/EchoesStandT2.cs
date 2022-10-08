@@ -311,99 +311,97 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
                     LimitDistance(remoteRange);
                 }
-
-                for (int f = 0; f < Main.maxProjectiles; f++) //bassboosted punches
+            }
+            for (int f = 0; f < Main.maxProjectiles; f++) //bassboosted punches
+            {
+                Projectile proj = Main.projectile[f];
+                if (proj.type == ModContent.ProjectileType<Fists>() && proj.owner == player.whoAmI)
                 {
-                    Projectile proj = Main.projectile[f];
-                    if (proj.type == ModContent.ProjectileType<Fists>() && proj.owner == player.whoAmI)
+                    for (int n = 0; n < Main.maxNPCs; n++)
                     {
-                        for (int n = 0; n < Main.maxNPCs; n++)
+                        NPC npc = Main.npc[n];
+                        if (npc.active && !npc.hide && !npc.immortal && !npc.friendly && npc.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
                         {
-                            NPC npc = Main.npc[n];
-                            if (npc.active && !npc.hide && !npc.immortal && !npc.friendly && npc.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
+                            npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
+                            npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
+                            int maxDamage = 48;
+                            int soundIntensivity = 2;
+                            if (mPlayer.echoesTier == 3)
                             {
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                                int maxDamage = 48;
-                                int soundIntensivity = 2;
-                                if (mPlayer.echoesTier == 3)
-                                {
-                                    maxDamage = 72;
-                                    soundIntensivity = 4;
-                                }
-                                if (mPlayer.echoesTier == 4)
-                                {
-                                    maxDamage = 108;
-                                    soundIntensivity = 8;
-                                }
-                                if (!npc.boss)
-                                    soundIntensivity *= 2;
-                                npc.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = maxDamage;
-                                if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
-                                    npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += soundIntensivity;
-                                proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists = true;
+                                maxDamage = 72;
+                                soundIntensivity = 4;
                             }
-                        }
-                        if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
-                        {
-                            for (int p = 0; p < Main.maxPlayers; p++)
+                            if (mPlayer.echoesTier == 4)
                             {
+                                maxDamage = 108;
+                                soundIntensivity = 8;
+                            }
+                            if (!npc.boss)
+                                soundIntensivity *= 2;
+                            npc.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
+                            npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
+                            npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = maxDamage;
+                            if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
+                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += soundIntensivity;
+                            proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists = true;
+                        }
+                    }
+                    if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
+                    {
+                        for (int p = 0; p < Main.maxPlayers; p++)
+                        {
+                            {
+                                Player otherPlayer = Main.player[p];
+                                MyPlayer mOtherPlayer = otherPlayer.GetModPlayer<MyPlayer>();
+                                if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && otherPlayer.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
                                 {
-                                    Player otherPlayer = Main.player[p];
-                                    MyPlayer mOtherPlayer = otherPlayer.GetModPlayer<MyPlayer>();
-                                    if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && otherPlayer.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
+                                    mOtherPlayer.echoesDamageBoost = mPlayer.standDamageBoosts;
+                                    int maxDamage = 48;
+                                    int soundIntensivity = 2;
+                                    if (mPlayer.echoesTier == 3)
                                     {
-                                        mOtherPlayer.echoesDamageBoost = mPlayer.standDamageBoosts;
-                                        int maxDamage = 48;
-                                        int soundIntensivity = 2;
-                                        if (mPlayer.echoesTier == 3)
-                                        {
-                                            maxDamage = 72;
-                                            soundIntensivity = 4;
-                                        }
-                                        if (mPlayer.echoesTier == 4)
-                                        {
-                                            maxDamage = 108;
-                                            soundIntensivity = 8;
-                                        }
-                                        otherPlayer.AddBuff(ModContent.BuffType<Tinnitus>(), 360);
-                                        mOtherPlayer.echoesSoundIntensivityMax = maxDamage;
-                                        if (mOtherPlayer.echoesSoundIntensivity < mOtherPlayer.echoesSoundIntensivityMax)
-                                            mOtherPlayer.echoesSoundIntensivity += soundIntensivity;
-                                        proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists = true;
+                                        maxDamage = 72;
+                                        soundIntensivity = 4;
                                     }
+                                    if (mPlayer.echoesTier == 4)
+                                    {
+                                        maxDamage = 108;
+                                        soundIntensivity = 8;
+                                    }
+                                    otherPlayer.AddBuff(ModContent.BuffType<Tinnitus>(), 360);
+                                    mOtherPlayer.echoesSoundIntensivityMax = maxDamage;
+                                    if (mOtherPlayer.echoesSoundIntensivity < mOtherPlayer.echoesSoundIntensivityMax)
+                                        mOtherPlayer.echoesSoundIntensivity += soundIntensivity;
+                                    proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists = true;
                                 }
                             }
                         }
                     }
                 }
-
-                if (mPlayer.standAutoMode && !returnToPlayer) //automode
-                {
-                    remoteMode = false;
-                    BasicPunchAI();
-                }
-
-                if (Projectile.Distance(player.Center) >= newMaxDistance + 10f && !returnToPlayer && !remoteMode) //if suddenly stand is too far
-                    returnToPlayer = true;
-                if (Projectile.Distance(player.Center) <= 20f)
-                    returnToPlayer = false;
-
-                if (returnToPlayer)
-                {
-                    Projectile.tileCollide = false;
-                    MovementAI(player.Center, 8f + player.moveSpeed * 2);
-                }
-                if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && Main.hardMode && mPlayer.echoesACT2Evolve >= 10000)
-                {
-                    evolve = true;
-                    Projectile.Kill();
-                }
-                if (player.teleporting)
-                    Projectile.position = player.position;
             }
+            if (mPlayer.standAutoMode && !returnToPlayer) //automode
+            {
+                remoteMode = false;
+                BasicPunchAI();
+            }
+
+            if (Projectile.Distance(player.Center) >= newMaxDistance + 10f && !returnToPlayer && !remoteMode) //if suddenly stand is too far
+                returnToPlayer = true;
+            if (Projectile.Distance(player.Center) <= 20f)
+                returnToPlayer = false;
+
+            if (returnToPlayer)
+            {
+                Projectile.tileCollide = false;
+                MovementAI(player.Center, 8f + player.moveSpeed * 2);
+            }
+            if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && Main.hardMode && mPlayer.echoesACT2Evolve >= 10000)
+            {
+                evolve = true;
+                Projectile.Kill();
+            }
+            if (player.teleporting)
+                Projectile.position = player.position;
         }
 
         private void MovementAI(Vector2 target, float speed)

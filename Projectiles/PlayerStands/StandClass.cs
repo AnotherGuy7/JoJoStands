@@ -319,7 +319,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             attackFrames = false;
             Vector2 areaBehindPlayer = player.Center;
             areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
-            areaBehindPlayer.Y -= -35f + HalfStandHeight;
+            areaBehindPlayer.Y -= -35f + HalfStandHeight + standYOffset;
             Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
             Projectile.velocity *= 0.8f;
             if (!secondaryAbilityFrames)
