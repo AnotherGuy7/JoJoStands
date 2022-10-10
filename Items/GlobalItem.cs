@@ -201,6 +201,17 @@ namespace JoJoStands.Items
             }
         }
 
+        public override bool ReforgePrice(Item item, ref int reforgePrice, ref bool canApplyDiscount)
+        {
+            Player player = Main.player[Main.myPlayer];
+            for (int n = 0; n < Main.maxNPCs; n++)
+            {
+                NPC npc = Main.npc[n];
+                if (npc.type == NPCID.GoblinTinkerer && npc.HasBuff(ModContent.BuffType<BelieveInMe>()) && npc.active && player.talkNPC == npc.whoAmI)
+                    reforgePrice -= (int)(reforgePrice*0.2f);
+            }
+            return base.ReforgePrice(item, ref reforgePrice, ref canApplyDiscount);
+        }
         public override void AddRecipes()
         {
             Recipe revolverRecipe = Recipe.Create(ItemID.Revolver);

@@ -363,7 +363,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomChestplate", EquipType.Body))
+            if (drawPlayer.active && mPlayer.phantomChestplateEquipped && drawPlayer.body == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomChestplate", EquipType.Body) && !drawPlayer.mount.Active)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/PhantomChestplate_Body_Glowmask").Value;
                 Rectangle sourceRect = drawPlayer.bodyFrame;

@@ -240,6 +240,7 @@ namespace JoJoStands.NPCs
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
+            Player player = Main.player[Main.myPlayer];
             if (type == NPCID.Merchant)
             {
                 shop.item[nextSlot].SetDefaults(ModContent.ItemType<Sunscreen>());
@@ -266,10 +267,15 @@ namespace JoJoStands.NPCs
             for (int n = 0; n < Main.maxNPCs; n++)
             {
                 NPC npc = Main.npc[n];
-                if (npc.type == type && npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
+                if (npc.type == type && npc.HasBuff(ModContent.BuffType<BelieveInMe>()) && npc.active && player.talkNPC == npc.whoAmI)
                 {
                     for (int i = 0; i < shop.item.Length; i++)
-                        shop.item[i].shopCustomPrice = (int)(shop.item[i].GetStoreValue() * 0.8f); 
+                        shop.item[i].value -= (int)(shop.item[i].value * 0.2f);
+                    for (int i = 0; i < 54; i++)
+                    {
+                        Item ItemSelect = player.inventory[i];
+                        ItemSelect.value += (int)(ItemSelect.value * 0.2f);
+                    }
                 }
             }
         }

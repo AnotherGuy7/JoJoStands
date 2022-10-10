@@ -1978,7 +1978,7 @@ namespace JoJoStands
             if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 price = price + 10000 * improperRestorationstack;
             if (nurse.HasBuff(ModContent.BuffType<BelieveInMe>()))
-                price = (int)(price * 0.8f);
+                price -= (int)(price * 0.2f);
         }
     }
 }
