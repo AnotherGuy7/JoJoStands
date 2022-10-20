@@ -14,7 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
     public class SoftAndWetStandT3 : StandClass
     {
         public override int PunchDamage => 63;
-        public override int PunchTime => 10;
+        public override int PunchTime => 12;
         public override int HalfStandHeight => 38;
         public override int AltDamage => ((int)(TierNumber * 15));
         public override int StandOffset => 54;

@@ -42,10 +42,30 @@ namespace JoJoStands.Networking
                 ModNetHandler.playerSync.SendSexPistolPosition(256, whoAmI, (byte)whoAmI, (byte)sexPistolIndex, sexPistolPosition);
         }
 
-        public static void SyncDeathLoopInfo(int whoAmI, byte targetWhoAmI, int targetNPCType)
+        public static void SyncDeathLoopInfo(int whoAmI, int targetWhoAmI)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModNetHandler.playerSync.SendDeathLoopInfo(256, whoAmI, (byte)whoAmI, targetWhoAmI, targetNPCType);
+                ModNetHandler.playerSync.SendDeathLoopInfo(256, whoAmI, (byte)whoAmI, targetWhoAmI);
+        }
+        public static void SyncArrowEarringInfo(int whoAmI, int targetNPCwhoAmI, int damage, bool crit)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                ModNetHandler.playerSync.SendArrowEarringInfo(256, whoAmI, (byte)whoAmI, targetNPCwhoAmI, damage, crit);
+        }
+        public static void SyncFistsEffectNPCInfo(int whoAmI, int targetNPCwhoAmI, int fistWhoAmI, int stat1, int stat2, int stat3, float stat4, float stat5)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                ModNetHandler.playerSync.SendFistsEffectNPCInfo(256, whoAmI, (byte)whoAmI, targetNPCwhoAmI, fistWhoAmI, stat1, stat2, stat3, stat4, stat5);
+        }
+        public static void SyncOtherPlayerDebuff(int whoAmI, int targetPlayerWhoAmI, int debuffType, int debuffTime)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                ModNetHandler.playerSync.SendOtherPlayerDebuff(256, whoAmI, (byte)whoAmI, targetPlayerWhoAmI, debuffType, debuffTime);
+        }
+        public static void SyncOtherPlayerExtraEffect(int whoAmI, int targetPlayerWhoAmI, int effectType, int int1, int int2, float float1, float float2)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                ModNetHandler.playerSync.SendOtherPlayerExtraEffect(256, whoAmI, (byte)whoAmI, targetPlayerWhoAmI, effectType, int1, int2, float1, float2);
         }
     }
 }

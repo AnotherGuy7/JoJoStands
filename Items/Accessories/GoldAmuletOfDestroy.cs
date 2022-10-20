@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Accessories
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Amulet of Destroy");
-            Tooltip.SetDefault("Makes melee stands inflict On Fire on enemies.");
+            Tooltip.SetDefault("5 increased Stand armor penetration");
             SacrificeTotal = 1;
         }
         public override void SetDefaults()
@@ -28,7 +28,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().destroyAmuletEquipped = true;
+            player.GetModPlayer<MyPlayer>().standArmorPenetration += 5;
         }
 
         public override bool CanEquipAccessory(Player player, int slot, bool modded)

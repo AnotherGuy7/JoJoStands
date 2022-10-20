@@ -9,6 +9,8 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using JoJoStands.DataStructures;
+using System.IO;
+using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles
 {
@@ -37,6 +39,7 @@ namespace JoJoStands.Projectiles
         public const byte Echoes = 15;
 
         private bool onlyOnce = false;
+        private bool playedSound = false;
         private int standType = 0;
         private int standTier = 0;
 
@@ -49,340 +52,15 @@ namespace JoJoStands.Projectiles
             Projectile.ignoreWater = true;
             Projectile.timeLeft = 4;
             Projectile.alpha = 255;     //completely transparent
+            Projectile.netImportant = true;
         }
-
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
-            if (JoJoStands.SoundsLoaded)
-                mPlayer.standHitTime += 2;
-
-            if (standType == Echoes)
-            {
-                if (mPlayer.echoesTier == 3)
-                {
-                    if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
-                    {
-                        if (crit)
-                            mPlayer.echoesACT3Evolve += damage*2;
-                        if (!crit)
-                            mPlayer.echoesACT3Evolve += damage;
-                    }
-                }
-                if (mPlayer.echoesTier == 2)
-                {
-                    if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
-                    {
-                        if (crit)
-                            mPlayer.echoesACT2Evolve += damage * 2;
-                        if (!crit)
-                            mPlayer.echoesACT2Evolve += damage;
-                    }
-                }
-            }
-
-            if (standType == GoldExperience)
-            {
-                if (standTier == 3)
-                {
-                    target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
-                }
-                if (standTier == 4)
-                {
-                    target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
-                }
-            }
-
-            if (standType == GoldExperienceRequiem)
-            {
-                target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
-                if (mPlayer.backToZeroActive)
-                {
-                    target.GetGlobalNPC<JoJoGlobalNPC>().affectedbyBtz = true;
-                    target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
-                }
-            }
-
-            if (standType == StickyFingers)
-            {
-                target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
-                target.AddBuff(ModContent.BuffType<Zipped>(), (2 * (int)standTier) * 60);
-            }
-
-            if (standType == KillerQueen)
-            {
-                if (standTier == 1)
-                {
-                    KillerQueenStandT1.savedTarget = target;
-                }
-                if (standTier == 2)
-                {
-                    KillerQueenStandT2.savedTarget = target;
-                }
-                if (standTier == 3)
-                {
-                    KillerQueenStandT3.savedTarget = target;
-                }
-                if (standTier == 4)
-                {
-                    KillerQueenStandFinal.savedTarget = target;
-                }
-            }
-
-            if (standType == KingCrimson)
-            {
-                JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
-                damage = (int)(damage * jojoNPC.kingCrimsonDonutMultiplier);
-                jojoNPC.kingCrimsonDonutMultiplier += 0.06f;
-
-                if (player.HasBuff(ModContent.BuffType<PowerfulStrike>()))
-                {
-                    damage *= 6;
-                    knockback *= 3f;
-                    jojoNPC.kingCrimsonDonutMultiplier += 0.24f;
-                    player.ClearBuff(ModContent.BuffType<PowerfulStrike>());
-                }
-            }
-
-            if (standType == TheHand)
-            {
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (4 + (int)standTier) * 60);
-            }
-
-            if (standType == TowerOfGray)
-            {
-                if (mPlayer.towerOfGrayDamageMult != 1f)
-                    target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
-            }
-
-            if (standType == GratefulDead)
-            {
-                target.AddBuff(ModContent.BuffType<Aging>(), (7 + ((int)standTier * 2)) * 60);
-            }
-
-            if (standType == Whitesnake)
-            {
-                if (Main.rand.NextFloat(0, 101) >= 94)
-                    target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
-            }
-
-            if (standType == SilverChariot)
-            {
-                if (Main.rand.NextFloat(0, 101) >= 75)
-                {
-                    target.AddBuff(BuffID.Bleeding, (5 * (int)standTier) * 60);
-                    player.GetArmorPenetration(DamageClass.Generic) += 5 * (int)standTier;
-                }
-            }
-
-            if (standType == CrazyDiamond && player.HasBuff(ModContent.BuffType<BlindRage>()) && !target.HasBuff(ModContent.BuffType<YoAngelo>()))
-            {
-                target.AddBuff(ModContent.BuffType<Restoration>(), 60);
-                target.GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
-            }
-
-            if (standType == Cream)
-            {
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
-            }
-
-            if (mPlayer.destroyAmuletEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 7)
-                    target.AddBuff(BuffID.OnFire, 3 * 60);
-            }
-            if (mPlayer.greaterDestroyEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
-                    target.AddBuff(BuffID.CursedInferno, 6 * 60);
-            }
-            if (mPlayer.awakenedAmuletEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 9 * 60);
-            }
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
-
-            if (!target.boss && standType != TowerOfGray)
-                target.velocity.X *= 0.2f;
-
-        }
-
-        /*public override void OnHitPvp(Player target, int damage, bool crit)       //this unfortunately does not work, so i left a temporary "solution" to the problem in the AI until the Boss fixes the problem (c) Proos <3
-        {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)     //Unlike in ModifyHitNPC, this one doesn't actually change if it's a crit or not, just detects
-            {
-                crit = true;
-            }
-            int standType = (int)Projectile.ai[0];
-            int standTier = (int)Projectile.ai[1];
-
-            if (standType == GoldExperience)
-            {
-                if (standTier == 3f)
-                {
-                    target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
-                }
-                if (standTier == 4f)
-                {
-                    target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
-                }
-            }
-
-            if (standType == GoldExperienceRequiem)
-            {
-                target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
-                if (mPlayer.backToZeroActive)
-                    target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
-            }
-
-            if (standType == StickyFingers)
-            {
-                target.AddBuff(ModContent.BuffType<Zipped>(), (int)standTier * 60);
-            }
-
-            if (standType == TheHand)
-            {
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
-            }
-
-            if (standType == GratefulDead)
-            {
-                target.AddBuff(ModContent.BuffType<Aging>(), (1 + (int)standTier) * 60);
-            }
-
-            if (standType == Whitesnake)
-            {
-                if (Main.rand.NextFloat(0, 101) >= 94)
-                {
-                    target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
-                }
-            }
-
-            if (standType == Cream)
-            {
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 60 * mPlayer.creamTier);
-            }
-
-            if (mPlayer.destroyAmuletEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 7)
-                    target.AddBuff(BuffID.OnFire, 4 * 60);
-            }
-            if (mPlayer.greaterDestroyEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
-                    target.AddBuff(BuffID.CursedInferno, 6 * 60);
-            }
-            if (mPlayer.awakenedAmuletEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 8 * 60);
-            }
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
-        }*/
-
-        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
-        {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)     //Unlike in ModifyHitNPC, this one doesn't actually change if it's a crit or not, just detects
-            {
-                crit = true;
-            }
-            int standType = (int)Projectile.ai[0];
-            int standTier = (int)Projectile.ai[1];
-
-            if (standType == GoldExperience)
-            {
-                if (standTier == 3f)
-                {
-                    target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
-                }
-                if (standTier == 4f)
-                {
-                    target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
-                }
-            }
-
-            if (standType == GoldExperienceRequiem)
-            {
-                target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
-                if (mPlayer.backToZeroActive)
-                    target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
-            }
-
-            if (standType == StickyFingers)
-            {
-                target.AddBuff(ModContent.BuffType<Zipped>(), (int)standTier * 60);
-            }
-
-            if (standType == TheHand)
-            {
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
-            }
-
-            if (standType == GratefulDead)
-            {
-                target.AddBuff(ModContent.BuffType<Aging>(), (1 + (int)standTier) * 60);
-            }
-
-            if (standType == Whitesnake)
-            {
-                if (Main.rand.NextFloat(0, 101) >= 94)
-                {
-                    target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
-                }
-            }
-
-            if (standType == Cream)
-            {
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 60 * mPlayer.creamTier);
-            }
-
-            if (mPlayer.destroyAmuletEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 7)
-                    target.AddBuff(BuffID.OnFire, 4 * 60);
-            }
-            if (mPlayer.greaterDestroyEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
-                    target.AddBuff(BuffID.CursedInferno, 6 * 60);
-            }
-            if (mPlayer.awakenedAmuletEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 20)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 8 * 60);
-            }
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
-        }
-
-        private bool playedSound = false;
 
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            standType = (int)Projectile.ai[0];
-            standTier = (int)Projectile.ai[1];
+            standType = mPlayer.standFistsType;
+            standTier = mPlayer.standTier;
             if (!playedSound && mPlayer.towerOfGrayTier == 0)
             {
                 SoundEngine.PlaySound(SoundID.Item1);
@@ -426,103 +104,8 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            for (int p = 0; p < Main.maxPlayers; p++)      //temporary "solution" (ñ) Proos <3
-            {
-                Player otherPlayer = Main.player[p];
-                if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]))
-                {
-                    if ((Projectile.Hitbox.Intersects(otherPlayer.Hitbox)) && !onlyOnce)
-                    {
-                        if (standType == GoldExperience)
-                        {
-                            if (standTier == 3f)
-                            {
-                                otherPlayer.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
-                            }
-                            if (standTier == 4f)
-                            {
-                                otherPlayer.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
-                            }
-                        }
-
-                        if (standType == GoldExperienceRequiem)
-                        {
-                            otherPlayer.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
-                            if (mPlayer.backToZeroActive)
-                            {
-                                otherPlayer.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
-                            }
-                        }
-
-                        if (standType == StickyFingers)
-                        {
-                            otherPlayer.AddBuff(ModContent.BuffType<Zipped>(), (int)standTier * 60);
-                        }
-
-                        if (standType == TheHand)
-                        {
-                            otherPlayer.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
-                        }
-
-                        if (standType == GratefulDead)
-                        {
-                            otherPlayer.AddBuff(ModContent.BuffType<Aging>(), (1 + (int)standTier) * 60);
-                        }
-
-                        if (standType == Whitesnake)
-                        {
-                            if (Main.rand.NextFloat(0, 101) >= 94)
-                            {
-                                otherPlayer.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
-                            }
-                        }
-
-                        if (standType == CrazyDiamond && player.HasBuff(ModContent.BuffType<BlindRage>()) && !otherPlayer.HasBuff(ModContent.BuffType<YoAngelo>()))
-                        {
-                            otherPlayer.AddBuff(ModContent.BuffType<Restoration>(), 60);
-                            otherPlayer.GetModPlayer<MyPlayer>().crazyDiamondStonePunch += 1;
-                        }
-
-                        if (standType == Cream)
-                        {
-                            otherPlayer.AddBuff(ModContent.BuffType<MissingOrgans>(), (int)standTier * 60);
-                        }
-
-                        if (mPlayer.destroyAmuletEquipped && !mPlayer.crazyDiamondRestorationMode)
-                        {
-                            if (Main.rand.NextFloat(1, 100 + 1) <= 7)
-                            {
-                                otherPlayer.AddBuff(BuffID.OnFire, 4 * 60);
-                            }
-                        }
-                        if (mPlayer.greaterDestroyEquipped && !mPlayer.crazyDiamondRestorationMode)
-                        {
-                            if (Main.rand.NextFloat(1, 100 + 1) <= 20)
-                            {
-                                otherPlayer.AddBuff(BuffID.CursedInferno, 6 * 60);
-                            }
-                        }
-                        if (mPlayer.awakenedAmuletEquipped && !mPlayer.crazyDiamondRestorationMode)
-                        {
-                            if (Main.rand.NextFloat(1, 100 + 1) <= 20)
-                            {
-                                otherPlayer.AddBuff(ModContent.BuffType<Infected>(), 8 * 60);
-                            }
-                        }
-                        if (mPlayer.crackedPearlEquipped && !mPlayer.crazyDiamondRestorationMode)
-                        {
-                            if (Main.rand.NextFloat(1, 100 + 1) <= 40)
-                            {
-                                otherPlayer.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-                            }
-                        }
-                        onlyOnce = true;
-                    }
-                }
-            }
             if (mPlayer.crazyDiamondRestorationMode && !mPlayer.standAutoMode)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch);
                 if (mPlayer.standTier > 1 && mPlayer.crazyDiamondTileDestruction >= 60)
                 {
                     int detectLeftX = (int)(Projectile.position.X / 16f) - 1;
@@ -630,19 +213,290 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            if (player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (standType == TowerOfGray)
+                Projectile.Hitbox = new Rectangle(Projectile.Hitbox.X, Projectile.Hitbox.Y, (int)(Projectile.Hitbox.Width * 1.1f), (int)(Projectile.Hitbox.Height * 1.1f));
+        }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
+                crit = true;
+            if (JoJoStands.SoundsLoaded)
+                mPlayer.standHitTime += 2;
+
+            if (standType == Echoes)
             {
-                Projectile.ArmorPenetration = 100;
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 1);
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 169);
+                if (mPlayer.echoesTier == 3)
+                {
+                    if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
+                    {
+                        if (crit)
+                            mPlayer.echoesACT3Evolve += damage*2;
+                        if (!crit)
+                            mPlayer.echoesACT3Evolve += damage;
+                    }
+                }
+                if (mPlayer.echoesTier == 2)
+                {
+                    if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
+                    {
+                        if (crit)
+                            mPlayer.echoesACT2Evolve += damage * 2;
+                        if (!crit)
+                            mPlayer.echoesACT2Evolve += damage;
+                    }
+                }
+                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.echoesACT == 3)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
+                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
+                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
+                    SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                }
+                if (mPlayer.echoesACT == 1)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
+                    int maxDamage = 48;
+                    int soundIntensivity = 2;
+                    if (mPlayer.echoesTier == 3)
+                    {
+                        maxDamage = 72;
+                        soundIntensivity = 4;
+                    }
+                    if (mPlayer.echoesTier == 4)
+                    {
+                        maxDamage = 108;
+                        soundIntensivity = 8;
+                    }
+                    if (!target.boss)
+                        soundIntensivity *= 2;
+                    target.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = maxDamage;
+                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
+                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += soundIntensivity;
+                    SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensivity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                }
             }
+
+            if (standType == GoldExperience)
+            {
+                if (standTier == 3)
+                    target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
+                if (standTier == 4)
+                    target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
+            }
+
+            if (standType == GoldExperienceRequiem)
+            {
+                target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
+                if (mPlayer.backToZeroActive)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().affectedbyBtz = true;
+                    target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
+                }
+            }
+
+            if (standType == StickyFingers)
+            {
+                target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
+                target.AddBuff(ModContent.BuffType<Zipped>(), (2 * (int)standTier) * 60);
+            }
+
+            if (standType == KillerQueen)
+            {
+                if (standTier == 1)
+                    KillerQueenStandT1.savedTarget = target;
+                if (standTier == 2)
+                    KillerQueenStandT2.savedTarget = target;
+                if (standTier == 3)
+                    KillerQueenStandT3.savedTarget = target;
+                if (standTier == 4)
+                    KillerQueenStandFinal.savedTarget = target;
+            }
+
+            if (standType == KingCrimson)
+            {
+                JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
+                damage = (int)(damage * jojoNPC.kingCrimsonDonutMultiplier);
+                jojoNPC.kingCrimsonDonutMultiplier += 0.06f;
+
+                if (player.HasBuff(ModContent.BuffType<PowerfulStrike>()))
+                {
+                    damage *= 6;
+                    knockback *= 3f;
+                    jojoNPC.kingCrimsonDonutMultiplier += 0.24f;
+                    player.ClearBuff(ModContent.BuffType<PowerfulStrike>());
+                }
+            }
+
+            if (standType == TheHand)
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (4 + (int)standTier) * 60);
+
             if (standType == TowerOfGray)
             {
-                Projectile.Hitbox = new Rectangle(Projectile.Hitbox.X, Projectile.Hitbox.Y, (int)(Projectile.Hitbox.Width * 1.1f), (int)(Projectile.Hitbox.Height * 1.1f));
-                Projectile.penetrate = 2;
-                Projectile.ArmorPenetration = 10 * mPlayer.towerOfGrayTier;
+                if (mPlayer.towerOfGrayDamageMult != 1f)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
+                    SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 13, 0, 0, 0, 0, 0);
+                }
+            }
+
+            if (standType == GratefulDead)
+            {
+                target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
+                SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 8, player.whoAmI, 0, 0, 0, 0);
+                target.AddBuff(ModContent.BuffType<Aging>(), (7 + ((int)standTier * 2)) * 60);
+            }
+
+            if (standType == Whitesnake)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 94)
+                    target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
+            }
+
+            if (standType == SilverChariot)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 75)
+                {
+                    target.AddBuff(BuffID.Bleeding, (5 * (int)standTier) * 60);
+                    player.GetArmorPenetration(DamageClass.Generic) += 5 * (int)standTier;
+                }
+            }
+
+            if (standType == CrazyDiamond && player.HasBuff(ModContent.BuffType<BlindRage>()) && !target.HasBuff(ModContent.BuffType<YoAngelo>()))
+            {
+                target.AddBuff(ModContent.BuffType<Restoration>(), 60);
+                target.GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
+                SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 12, 0, 0, 0, 0, 0);
+            }
+
+            if (standType == Cream)
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 2*(int)standTier * 60);
+
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+            }
+
+            if (!target.boss && standType != TowerOfGray)
+            {
+                target.velocity.X *= 0.2f;
+                SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 0, 0, 0, 0, 0, 0);
             }
         }
+
+        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer mTarget = target.GetModPlayer<MyPlayer>();
+            if (standType == Echoes)
+            {
+                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.echoesACT == 3)
+                {
+                    mTarget.echoesDamageBoost = mPlayer.standDamageBoosts;
+                    if (mTarget.echoesFreeze <= 15)
+                        mTarget.echoesFreeze += 30;
+                    SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 1, 0, 0, mPlayer.standDamageBoosts, 0f);
+                }
+                if (mPlayer.echoesACT == 1)
+                {
+                    mTarget.echoesDamageBoost = mPlayer.standDamageBoosts;
+                    int maxDamage = 48;
+                    int soundIntensivity = 2;
+                    if (mPlayer.echoesTier == 3)
+                    {
+                        maxDamage = 72;
+                        soundIntensivity = 4;
+                    }
+                    if (mPlayer.echoesTier == 4)
+                    {
+                        maxDamage = 108;
+                        soundIntensivity = 8;
+                    }
+                    target.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
+                    mTarget.echoesSoundIntensivityMax = maxDamage;
+                    if (mTarget.echoesSoundIntensivity < mTarget.echoesSoundIntensivityMax)
+                        mTarget.echoesSoundIntensivity += soundIntensivity;
+                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<Tinnitus>(), 600);
+                    SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 2, maxDamage, soundIntensivity, mPlayer.standDamageBoosts, 0f);
+                }
+            }
+
+            if (standType == GoldExperience)
+            {
+                if (standTier == 3)
+                {
+                    target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
+                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<LifePunch>(), 4 * 60);
+                }
+                if (standTier == 4)
+                {
+                    target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
+                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<LifePunch>(), 6 * 60);
+                }
+            }
+
+            if (standType == GoldExperienceRequiem)
+            {
+                target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
+                SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<LifePunch>(), 8 * 60);
+                if (mPlayer.backToZeroActive)
+                {
+                    target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
+                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<AffectedByBtZ>(), 2);
+                }
+            }
+
+            if (standType == StickyFingers)
+            {
+                target.AddBuff(ModContent.BuffType<Zipped>(), (1 + (int)standTier) * 60);
+                SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<Zipped>(), (1 + (int)standTier) * 60);
+            }
+
+            if (standType == TheHand)
+            {
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (1 + (int)standTier) * 60);
+                SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<MissingOrgans>(), (1 + (int)standTier) * 60);
+            }
+
+            if (standType == GratefulDead)
+            {
+                target.AddBuff(ModContent.BuffType<Aging>(), (1 + (int)standTier) * 60);
+                SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<Aging>(), (1 + (int)standTier) * 60);
+            }
+
+            if (standType == Whitesnake)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 94)
+                {
+                    target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
+                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, BuffID.Confused, (2 + (int)standTier) * 60);
+                }
+            }
+
+            if (standType == Cream)
+            {
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (1 + (int)standTier) * 60);
+                SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<MissingOrgans>(), (1 + (int)standTier) * 60);
+            }
+
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
+                {
+                    target.AddBuff(ModContent.BuffType<Infected>(), 5 * 60);
+                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<Infected>(), 5 * 60);
+                }
+            }
+        }
+
         public override bool? CanHitNPC(NPC target)
         {
             Player player = Main.player[Projectile.owner];

@@ -11,7 +11,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
     public class StarOnTheTreeStand : StandClass
     {
         public override int PunchDamage => 106;
-        public override int PunchTime => 6;
+        public override int PunchTime => 8;
         public override int AltDamage => 84;
         public override int HalfStandHeight => 37;
         public override int FistWhoAmI => 0;

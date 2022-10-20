@@ -40,6 +40,7 @@ namespace JoJoStands
         public static List<int> timestopImmune = new List<int>();
         public static List<int> timestopOverrideStands = new List<int>();
         public static List<int> standTier1List = new List<int>();
+        public static List<int> standProjectileList = new List<int>();
         public static List<int> christmasStands = new List<int>();
         public static List<char> testStandPassword = new List<char>();      //  :) Have *fuuuuuuun!*
 
@@ -58,6 +59,28 @@ namespace JoJoStands
             SexPistolsUI.sexPistolsUITexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/SexPistolsUI", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBarBar", AssetRequestMode.ImmediateLoad);
+
+            standProjectileList.Add(ProjectileType<BombBubble>());
+            standProjectileList.Add(ProjectileType<ControllableNail>());
+            standProjectileList.Add(ProjectileType<CrossfireHurricaneAnkh>());
+            standProjectileList.Add(ProjectileType<Emerald>());
+            standProjectileList.Add(ProjectileType<ExplosiveSpin>());
+            standProjectileList.Add(ProjectileType<FireAnkh>());
+            standProjectileList.Add(ProjectileType<Fists>());
+            standProjectileList.Add(ProjectileType<HermitPurpleGrab>());
+            standProjectileList.Add(ProjectileType<HermitPurpleWhip>());
+            standProjectileList.Add(ProjectileType<HighVelocityBubble>());
+            standProjectileList.Add(ProjectileType<KnifeProjectile>());
+            standProjectileList.Add(ProjectileType<MeltYourHeart>());
+            standProjectileList.Add(ProjectileType<MeltYourHeartDrip>());
+            standProjectileList.Add(ProjectileType<Nail>());
+            standProjectileList.Add(ProjectileType<NailSlasher>());
+            standProjectileList.Add(ProjectileType<PlunderBubble>());
+            standProjectileList.Add(ProjectileType<StandBullet>());
+            standProjectileList.Add(ProjectileType<StarFinger>());
+            standProjectileList.Add(ProjectileType<TinyBubble>());
+            standProjectileList.Add(ProjectileType<Projectiles.PlayerStands.Cream.Void>());
+            standProjectileList.Add(ProjectileType<Projectiles.PlayerStands.Cream.DashVoid>());
 
             standTier1List.Add(ItemType<AerosmithT1>());
             standTier1List.Add(ItemType<GoldExperienceT1>());

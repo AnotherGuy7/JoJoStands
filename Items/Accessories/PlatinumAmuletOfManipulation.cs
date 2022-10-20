@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Accessories
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Amulet of Manipulation");
-            Tooltip.SetDefault("20% Stand Ability cooldown reduction\nMakes melee stands inflict Cursed Flames on enemies.");
+            Tooltip.SetDefault("20% Stand Ability cooldown reduction\n10 increased Stand armor penetration");
             SacrificeTotal = 1;
         }
 
@@ -29,8 +29,9 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standCooldownReduction += 0.2f;
-            player.GetModPlayer<MyPlayer>().greaterDestroyEquipped = true;
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.standCooldownReduction += 0.2f;
+            mPlayer.standArmorPenetration += 10;
         }
 
         public override bool CanEquipAccessory(Player player, int slot, bool modded)

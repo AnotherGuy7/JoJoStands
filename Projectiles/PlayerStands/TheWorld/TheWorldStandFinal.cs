@@ -15,7 +15,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
     {
         public override int PunchDamage => 82;
         public override int AltDamage => 65;
-        public override int PunchTime => 8;
+        public override int PunchTime => 10;
         public override int HalfStandHeight => 44;
         public override int FistWhoAmI => 1;
         public override int TierNumber => 4;

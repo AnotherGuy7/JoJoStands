@@ -4,7 +4,7 @@ using Terraria.ID;
 
 namespace JoJoStands.DataStructures
 {
-    public struct DestroyedTileData          //crazy diamond some new stuff
+    public struct DestroyedTileData         
     {
         public ushort tileType { get; set; }
         public Vector2 tilePosition { get; set; }

@@ -8,7 +8,7 @@ namespace JoJoStands.Items
 {
     public class TuskAct3 : StandItemClass
     {
-        public override int standSpeed => 35;
+        public override int standSpeed => 180;
         public override int standType => 2;
         public override int standTier => 3;
 

@@ -12,7 +12,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 8));
-            Tooltip.SetDefault("An amulet that perfectly represents and enchances the form of the soul.\n30% increased Stand attack damage\n2 increased Stand Speed\n20% Stand Ability cooldown reduction\n30% increased Stand crit chance\nMakes melee stands inflict Infected on enemies.\nIncreased defense while the Stand is out");
+            Tooltip.SetDefault("An amulet that perfectly represents and enchances the form of the soul.\n2 increased Stand Speed\n10% increased Stand dodge chance\n20% Stand Ability cooldown reduction\n10% increased Stand crit chance\n10 increased Stand armor penetration\nIncreased defense while the Stand is out");
             SacrificeTotal = 1;
         }
 
@@ -29,13 +29,12 @@ namespace JoJoStands.Items.Accessories
         public override void UpdateEquip(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.standDamageBoosts += 0.3f;
             mPlayer.standSpeedBoosts += 2;
+            mPlayer.standDodgeBoosts += 10f;
             mPlayer.standCooldownReduction += 0.2f;
-            mPlayer.standCritChangeBoosts += 30f;
-            mPlayer.awakenedAmuletEquipped = true;
-            if (mPlayer.standOut)
-                player.statDefense += 12;
+            mPlayer.standCritChangeBoosts += 10f;
+            mPlayer.standArmorPenetration += 10;
+            mPlayer.standAccessoryDefense += 12;
         }
 
         public override void AddRecipes()

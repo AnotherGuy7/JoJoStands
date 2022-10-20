@@ -1,7 +1,4 @@
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -23,7 +20,6 @@ namespace JoJoStands.Projectiles
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.friendly = true;
-
         }
 
 
@@ -35,10 +31,7 @@ namespace JoJoStands.Projectiles
             {
                 int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, Alpha: 100, Scale: 0.6f);
                 Main.dust[dustIndex].velocity *= 1.4f;
-            }
-           
-
-           
+            }    
         }
     }
 }

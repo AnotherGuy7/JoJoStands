@@ -93,6 +93,10 @@ namespace JoJoStands
         [Label("Hamon Bar Y Position")]
         public int HamonBarPositionY;
 
+        [DefaultValue(90)]
+        [Label("Ability Wheel X Position")]
+        public int AbilityWheelXPos;
+
         [DefaultValue(50)]
         [Label("Ability Wheel Y Position")]
         public int AbilityWheelYPos;
@@ -133,6 +137,7 @@ namespace JoJoStands
             MyPlayer.RespawnWithStandOut = RespawnWithStandOut;
             MyPlayer.AbilityWheelDescriptions = AbilityWheelDescriptions;
             UI.AbilityWheel.VAlign = AbilityWheelYPos / 100f;
+            UI.AbilityWheel.HAlign = AbilityWheelXPos / 100f;
             if (HamonBarSize >= 4)
             {
                 Main.NewText("You can only choose numbers between 0-3!");

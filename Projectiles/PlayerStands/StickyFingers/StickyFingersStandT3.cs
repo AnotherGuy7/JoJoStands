@@ -13,7 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
     {
         public override int PunchDamage => 60;
         public override int AltDamage => 52;
-        public override int PunchTime => 10;
+        public override int PunchTime => 12;
         public override int HalfStandHeight => 39;
         public override int FistWhoAmI => 4;
         public override int TierNumber => 3;

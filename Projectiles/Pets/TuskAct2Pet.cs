@@ -33,11 +33,18 @@ namespace JoJoStands.Projectiles.Pets
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.poseSoundName = PoseSoundName;
+            mPlayer.standType = 2;
             if (mPlayer.tuskActNumber == 2)
             {
                 Projectile.timeLeft = 2;
             }
-
+            if (Projectile.owner == Main.myPlayer && Main.mouseRight)
+            {
+                if (Main.MouseWorld.X > player.position.X)
+                    player.direction = 1;
+                if (Main.MouseWorld.X < player.position.X)
+                    player.direction = -1;
+            }
             float maximumDistance = 4f;
             Vector2 playerDirection = new Vector2(player.direction * 30f, -20f);
             Vector2 frontOfPlayer = player.MountedCenter + playerDirection;
@@ -94,6 +101,9 @@ namespace JoJoStands.Projectiles.Pets
                     Projectile.rotation *= 0.96f;
                 }
             }
+
+            if (!mPlayer.standOut)
+                Projectile.Kill();
 
             Projectile.frameCounter++;
             if (Projectile.frameCounter >= 10)

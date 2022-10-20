@@ -61,7 +61,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.phantomHoodShortEquipped = true;
-            mPlayer.standCritChangeBoosts += 10f;
+            mPlayer.standDamageBoosts += 0.18f;
             mPlayer.standSpeedBoosts += 1;
 
             if (mPlayer.standType == 0)

@@ -119,10 +119,17 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(0, 101) <= 50)
             {
                 target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = Projectile.owner;
                 target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
+            }
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
             }
         }
 

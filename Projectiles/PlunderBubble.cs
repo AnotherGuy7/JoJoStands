@@ -88,12 +88,6 @@ namespace JoJoStands.Projectiles
                 if (Main.rand.NextBool(3) && plunderType == Plunder_Viral)
                     target.AddBuff(ModContent.BuffType<Infected>(), 280);
             }
-
-            if (mPlayer.awakenedAmuletEquipped)
-            {
-                if (Main.rand.NextFloat(0, 101) >= 80)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 60 * 9);
-            }
             if (mPlayer.crackedPearlEquipped)
             {
                 if (Main.rand.NextFloat(0, 101) >= 60)

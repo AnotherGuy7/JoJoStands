@@ -9,6 +9,7 @@ using JoJoStands.Items.Tiles;
 using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs.Enemies;
 using JoJoStands.NPCs.TownNPCs;
+using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -25,42 +26,6 @@ namespace JoJoStands.NPCs
 {
     public class JoJoGlobalNPC : GlobalNPC
     {
-        private bool resetEffects = false;
-        private bool savedTileCollide = false;
-
-        private int CDsavedAIstyle = 0; // i'm sorry, i know there's too much here, but without it, everything breaks (c) Proos <3
-        private float CDsavedKnockbackRes = 0;
-        private int fallDamage = 0;
-        private int oldPositionY = (int)Vector2.Zero.Y;
-        private bool onlyOnce = false;
-        private SoundStyle? CDsavedHitSound = SoundID.PlayerHit;
-
-        public bool crazyDiamondFullHealth = false;
-        public int crazyDiamondHeal = 0;
-        public int CDstonePunch = 0;
-
-        public int towerOfGrayImmunityFrames = 0;
-
-        private int echoesDamageTimer1 = 30; //3 Freeze
-        private bool echoesCrit1 = false;
-        private int echoesDamageTimer2 = 60; //ACT 1 sounds
-        private bool echoesCrit2 = false;
-
-        public int echoesDebuffOwner = -1;
-
-        public int echoesFreeze = 0;
-        public int echoesSoundIntensivity = 2;
-        public int echoesSoundIntensivityMax = 48;
-
-        public float echoesCrit = 5f;
-        public float echoesDamageBoost = 1f;
-        public float theLockCrit = 5f;
-        public float theLockDamageBoost = 1f;
-
-        public bool echoesBoing = false;
-        public bool echoesKaboom = false;
-
-        private Vector2 echoesFallingPoint = Vector2.Zero;
 
         public bool frozenInTime = false;
         public bool affectedbyBtz = false;
@@ -88,8 +53,9 @@ namespace JoJoStands.NPCs
         public int lockRegenCounter = 0;
         public bool forceDeath = false;
         public int btzPositionIndex = 0;
-        public bool taggedForDeathLoop = false;
-        public bool spawnedByDeathLoop = false;
+        public int taggedForDeathLoop = 0;
+        public int spawnedByDeathLoop = 0;
+        public int deathLoopOwner = -1;
         public int deathTimer = 0;
         public int zombieHightlightTimer = 0;
         public int bindingEmeraldDurationTimer = 0;
@@ -101,10 +67,44 @@ namespace JoJoStands.NPCs
         public Vector2[] BtZPositions = new Vector2[400];
         public ForesightSaveData[] foresightData = new ForesightSaveData[120];
 
+        public int crazyDiamondHeal = 0;
+        public int CDstonePunch = 0;
+        public int echoesDebuffOwner = -1;
+        public int echoesFreeze = 0;
+        public int echoesSoundIntensivity = 2;
+        public int echoesSoundIntensivityMax = 48;
+        public int towerOfGrayImmunityFrames = 0;
+
+        public float echoesCrit = 5f;
+        public float echoesDamageBoost = 1f;
+        public float theLockCrit = 5f;
+        public float theLockDamageBoost = 1f;
+
+        public bool crazyDiamondFullHealth = false;
+        public bool echoesBoing = false;
+        public bool echoesKaboom = false;
+
+        private int CDsavedAIstyle = 0;
+        private int echoesDamageTimer1 = 30; //3 Freeze
+        private int echoesDamageTimer2 = 60; //ACT 1 sounds
+        private int fallDamage = 0;
+        private int oldPositionY = (int)Vector2.Zero.Y;
         private int offsetPostDraw = 0;
         private int timerPostDraw = 0;
         private int theLockVisualOffset = 0;
         private int theLockVisualTimer = 0;
+        private int resetCooldown = 0;
+
+        private bool echoesCrit1 = false; //3 Freeze
+        private bool echoesCrit2 = false; //ACT 1 sounds
+        private bool onlyOnce = false;
+        private bool resetEffects = false;
+        private bool savedTileCollide = false;
+
+        private float CDsavedKnockbackRes = 0;
+
+        private SoundStyle? CDsavedHitSound = SoundID.PlayerHit;
+        private Vector2 echoesFallingPoint = Vector2.Zero;
 
         public override bool InstancePerEntity
         {
@@ -136,6 +136,10 @@ namespace JoJoStands.NPCs
             globalLoot.Add(ItemDropRule.ByCondition(new WillToEscapeCondition(), ModContent.ItemType<WillToEscape>(), 14));
 
             globalLoot.Add(ItemDropRule.ByCondition(new SoulOfTimeCondition(), ModContent.ItemType<SoulofTime>(), 14));
+
+            globalLoot.Add(ItemDropRule.ByCondition(new HerbalTeaBagCondition(), ModContent.ItemType<HerbalTeaBag>(), 25));
+
+            globalLoot.Add(ItemDropRule.ByCondition(new TheFirstNapkinCondition(), ModContent.ItemType<TheFirstNapkin>(), 25));
 
 
             /*IItemDropRule sunDropletRule = new LeadingConditionRule(new SunDropletCondition());
@@ -184,13 +188,16 @@ namespace JoJoStands.NPCs
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
             if (npc.type == NPCID.WallofFlesh)
-            {
                 npcLoot.Add(ItemDropRule.OneFromOptions(1, ModContent.ItemType<StandEmblem>(), ModContent.ItemType<HamonEmblem>()));
-            }
             if (npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC)
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Hand>(), 25));
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ArrowEarring>(), 25));
             }
+            if (npc.type == NPCID.BigMimicCrimson)
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<VampiricBangle>(), 4));
+            if (npc.type == NPCID.BigMimicCorruption)
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SiliconLifeformCarapace>(), 4));
         }
 
         public override void GetChat(NPC npc, ref string chat)
@@ -285,10 +292,37 @@ namespace JoJoStands.NPCs
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
             echoesBoing = false;
+            if (taggedForDeathLoop > 0)
+            {
+                taggedForDeathLoop--;
+                if (deathLoopOwner != -1)
+                {
+                    if (!Main.player[deathLoopOwner].active || Main.player[deathLoopOwner].dead)
+                    {
+                        Main.player[deathLoopOwner].ClearBuff(ModContent.BuffType<DeathLoop>());
+                        taggedForDeathLoop = 0;
+                        deathLoopOwner = -1;
+                    }    
+                }
+            }
+            if (taggedForDeathLoop == 0)
+            {
+                if (deathLoopOwner != -1)
+                {
+                    Main.player[deathLoopOwner].ClearBuff(ModContent.BuffType<DeathLoop>());
+                    deathLoopOwner = -1;
+                }
+            }
             if (!player.timeskipActive && !player.timestopActive && !player.backToZeroActive)
             {
-                if (npc.aiStyle != 101510150 && !npc.HasBuff(ModContent.BuffType<YoAngelo>()) && echoesFreeze == 0)
+                if (npc.aiStyle == 101510150 || npc.HasBuff(ModContent.BuffType<YoAngelo>()) || echoesFreeze != 0)
+                    resetCooldown = 4;
+                if (npc.aiStyle != 101510150 && !npc.HasBuff(ModContent.BuffType<YoAngelo>()) && echoesFreeze == 0) //reset some effect with npc ai and tile collision
                 {
+                    if (resetCooldown > 0)
+                        resetCooldown--;
+                    if (resetCooldown == 0)
+                        savedTileCollide = npc.noTileCollide;
                     if (resetEffects)
                     {
                         resetEffects = false;
@@ -297,63 +331,12 @@ namespace JoJoStands.NPCs
                         oldPositionY = (int)Vector2.Zero.Y;
                         fallDamage = 0;
                     }
-                    savedTileCollide = npc.noTileCollide;
-                }
-                if (echoesKaboom)
-                {
-                    if (npc.velocity.Y < 0)
-                        echoesFallingPoint = npc.Bottom;
-                    fallDamage = (int)npc.Center.Y - (int)echoesFallingPoint.Y;
-                    if (npc.collideY && fallDamage > 1)
-                    {
-                        echoesKaboom = false;
-                        npc.StrikeNPC(((int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f)) + npc.defense / 4), 0f, 0, true, true, true);
-                    }
-                }
-                if (echoesFreeze > 0)
-                {
-                    if (echoesDamageTimer1 > 0)
-                        echoesDamageTimer1--;
-                    int defence = 0;
-                    if (echoesCrit1)
-                        defence = 4;
-                    else
-                        defence = 2;
-                    if (oldPositionY == (int)Vector2.Zero.Y)
-                        oldPositionY = (int)npc.Center.Y;
-                    fallDamage = (int)npc.Center.Y - oldPositionY;
-                    if (!onlyOnce && npc.collideY && fallDamage > 50)
-                    {
-                        onlyOnce = true;
-                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f) + npc.defense / defence), 0f, 0, echoesCrit1);
-                    }
-                    if (echoesDamageTimer1 == 0 && npc.collideY)
-                    {
-                        echoesDamageTimer1 = 30;
-                        echoesCrit1 = Main.rand.NextFloat(1, 100 + 1) <= echoesCrit;
-
-                        int freezeDamage = (int)(136 * echoesDamageBoost);
-                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + npc.defense / defence, 0f, 0, echoesCrit1);
-                    }
-
-                    echoesFreeze--;
-                    if (npc.boss)
-                        npc.velocity.X *= 0.66f;
-                    if (!npc.boss)
-                        npc.velocity.X *= 0.1f;
-                    npc.noTileCollide = false;
-                    npc.velocity = new Vector2(npc.velocity.X, npc.position.Y - 100f);
-                    npc.velocity.Normalize();
-                    if (!npc.noTileCollide)
-                        npc.velocity.Y *= 12f;
-                    if (echoesFreeze <= 2)
-                    {
-                        resetEffects = true;
-                        echoesFreeze = 0;
-                    }
                 }
 
-                if (npc.HasBuff(ModContent.BuffType<Tinnitus>()))
+                if (towerOfGrayImmunityFrames > 0)
+                    towerOfGrayImmunityFrames--;
+
+                if (npc.HasBuff(ModContent.BuffType<Tinnitus>())) //echoes act 1 stuff
                 {
                     if (echoesSoundIntensivity > echoesSoundIntensivityMax)
                         echoesSoundIntensivity = echoesSoundIntensivityMax;
@@ -409,13 +392,66 @@ namespace JoJoStands.NPCs
                     }
                 }
 
+                if (echoesKaboom) //echoes act 2 stuff
+                {
+                    if (npc.velocity.Y < 0)
+                        echoesFallingPoint = npc.Bottom;
+                    fallDamage = (int)npc.Center.Y - (int)echoesFallingPoint.Y;
+                    if (npc.collideY && fallDamage > 1)
+                    {
+                        echoesKaboom = false;
+                        npc.StrikeNPC(((int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f)) + npc.defense / 4), 0f, 0, true, true, true);
+                    }
+                }
+
+                if (echoesFreeze > 0) //echoes act 3 stuff
+                {
+                    if (echoesDamageTimer1 > 0)
+                        echoesDamageTimer1--;
+                    int defence = 0;
+                    if (echoesCrit1)
+                        defence = 4;
+                    else
+                        defence = 2;
+                    if (oldPositionY == (int)Vector2.Zero.Y)
+                        oldPositionY = (int)npc.Center.Y;
+                    fallDamage = (int)npc.Center.Y - oldPositionY;
+                    if (!onlyOnce && npc.collideY && fallDamage > 50)
+                    {
+                        onlyOnce = true;
+                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f) + npc.defense / defence), 0f, 0, echoesCrit1);
+                    }
+                    if (echoesDamageTimer1 == 0 && npc.collideY)
+                    {
+                        echoesDamageTimer1 = 30;
+                        echoesCrit1 = Main.rand.NextFloat(1, 100 + 1) <= echoesCrit;
+
+                        int freezeDamage = (int)(136 * echoesDamageBoost);
+                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + npc.defense / defence, 0f, 0, echoesCrit1);
+                    }
+
+                    echoesFreeze--;
+                    if (npc.boss)
+                        npc.velocity.X *= 0.66f;
+                    if (!npc.boss)
+                        npc.velocity.X *= 0.1f;
+                    npc.noTileCollide = false;
+                    npc.velocity = new Vector2(npc.velocity.X, npc.position.Y - 100f);
+                    npc.velocity.Normalize();
+                    if (!npc.noTileCollide)
+                        npc.velocity.Y *= 12f;
+                    if (echoesFreeze <= 2)
+                    {
+                        resetEffects = true;
+                        echoesFreeze = 0;
+                    }
+                }
+
                 if (echoesFreeze == 0)
                     echoesDamageTimer1 = 30;
                 if (!npc.HasBuff(ModContent.BuffType<Tinnitus>()))
                     echoesDamageTimer2 = 60;
 
-                if (towerOfGrayImmunityFrames > 0)
-                    towerOfGrayImmunityFrames--;
 
                 if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))       //crazy diamond stuff
                 {
@@ -666,20 +702,17 @@ namespace JoJoStands.NPCs
                     Main.dust[dustIndex].noGravity = true;
                 }
             }
-            if (spawnedByDeathLoop)
+            if (spawnedByDeathLoop > 0)
             {
                 deathTimer++;
-                if ((deathTimer >= 30 && !player.deathLoopNPCIsBoss) || (deathTimer >= 60 && player.deathLoopNPCIsBoss))
+                if ((deathTimer >= 30 && !npc.boss) || (deathTimer >= 60 && npc.boss))
                 {
                     if (npc.immortal || npc.hide)
-                    {
                         npc.StrikeNPCNoInteraction(999999999, 0f, 1, noEffect: true);
-                    }
                     if (!npc.immortal)
-                    {
                         npc.StrikeNPCNoInteraction(npc.lifeMax + 10, 0f, 1, noEffect: true);
-                    }
                     deathTimer = 0;
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/GEDeathLoop"), npc.Center);
                 }
             }
             if (npc.HasBuff(ModContent.BuffType<Locked>()))
@@ -750,24 +783,25 @@ namespace JoJoStands.NPCs
 
         public override void OnKill(NPC npc)
         {
-            if (taggedForDeathLoop)     //This is client side, run ONLY for the person who tagged the enemy
+            if (taggedForDeathLoop > 0 && spawnedByDeathLoop == 0)     
             {
-                Player player = Main.player[Main.myPlayer];
-                MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-                if (npc.boss && mPlayer.deathLoopActive && mPlayer.deathLoopNPCType == 0)
+                Player player = Main.player[deathLoopOwner];
+                if (npc.boss && deathLoopOwner == player.whoAmI)
                 {
-                    mPlayer.deathLoopNPCType = npc.type;
-                    mPlayer.deathLoopPosition = npc.position;
-                    mPlayer.deathLoopNPCIsBoss = true;
+                    int spawnedNPC = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.position.X, (int)npc.position.Y, npc.type);
+                    Main.npc[spawnedNPC].GetGlobalNPC<JoJoGlobalNPC>().spawnedByDeathLoop = 3;
                 }
-                if (!npc.boss && mPlayer.deathLoopActive && mPlayer.deathLoopNPCType == 0 && !npc.friendly && npc.lifeMax > 5)
+                if (!npc.boss && deathLoopOwner == player.whoAmI)
                 {
-                    mPlayer.deathLoopNPCType = npc.type;
-                    mPlayer.deathLoopPosition = npc.position;
-                    mPlayer.deathLoopNPCIsBoss = false;
+                    int spawnedNPC = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.position.X, (int)npc.position.Y, npc.type);
+                    Main.npc[spawnedNPC].GetGlobalNPC<JoJoGlobalNPC>().spawnedByDeathLoop = 10;
                 }
             }
-
+            if (spawnedByDeathLoop > 1)
+            {
+                int spawnedNPC = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.position.X, (int)npc.position.Y, npc.type);
+                Main.npc[spawnedNPC].GetGlobalNPC<JoJoGlobalNPC>().spawnedByDeathLoop = npc.GetGlobalNPC<JoJoGlobalNPC>().spawnedByDeathLoop - 1;
+            }
             if (vampireUserLastHitIndex != -1)
             {
                 Player player = Main.player[vampireUserLastHitIndex];
@@ -834,7 +868,7 @@ namespace JoJoStands.NPCs
             if (npc.HasBuff(ModContent.BuffType<Lacerated>()) && Main.player[Main.myPlayer].GetModPlayer<VampirePlayer>().anyMaskForm)
                 drawColor = Color.OrangeRed;
 
-            if (taggedForDeathLoop)
+            if (taggedForDeathLoop > 0)
                 drawColor = Color.Purple;
 
             if (highlightedByTheHandMarker)

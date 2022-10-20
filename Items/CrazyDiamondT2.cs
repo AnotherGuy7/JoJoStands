@@ -7,7 +7,7 @@ namespace JoJoStands.Items
 {
     public class CrazyDiamondT2 : StandItemClass
     {
-        public override int standSpeed => 9;
+        public override int standSpeed => 11;
         public override int standType => 1;
         public override string standProjectileName => "CrazyDiamond";
         public override int standTier => 2;

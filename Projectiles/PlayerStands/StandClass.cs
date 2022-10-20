@@ -136,7 +136,6 @@ namespace JoJoStands.Projectiles.PlayerStands
         //private int rangeIndicatorSize = 0;
         //private int secondaryRangeIndicatorSize = 0;
 
-
         /// <summary>
         /// Starts a timestop that lasts x amount of seconds.
         /// </summary>
@@ -746,6 +745,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             newPunchDamage = (int)(PunchDamage * mPlayer.standDamageBoosts);
             newProjectileDamage = (int)(ProjectileDamage * mPlayer.standDamageBoosts);
             playerHasAbilityCooldown = player.HasBuff(ModContent.BuffType<AbilityCooldown>());
+            mPlayer.standFistsType = FistWhoAmI;
+            mPlayer.standTier = TierNumber;
             mPlayer.poseSoundName = PoseSoundName;
             if (newPunchTime <= 2)
                 newPunchTime = 2;

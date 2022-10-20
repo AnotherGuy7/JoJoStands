@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Accessories
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Amulet of Adapting");
-            Tooltip.SetDefault("2 increased Stand attack speed\n30% increased Stand crit chance");
+            Tooltip.SetDefault("10% increased Stand dodge chance\n10% increased Stand crit chance");
             SacrificeTotal = 1;
         }
 
@@ -29,8 +29,8 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 2;
-            player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 30f;
+            player.GetModPlayer<MyPlayer>().standDodgeBoosts += 10f;
+            player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 10f;
         }
 
         public override bool CanEquipAccessory(Player player, int slot, bool modded)

@@ -34,6 +34,7 @@ namespace JoJoStands.Projectiles.Pets
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.poseSoundName = PoseSoundName;
+            mPlayer.standType = 2;
             if (mPlayer.tuskActNumber == 1)
                 Projectile.timeLeft = 2;
 
@@ -47,8 +48,17 @@ namespace JoJoStands.Projectiles.Pets
                     Projectile.frame = 0;
                 }
             }
-            Projectile.direction = Projectile.spriteDirection = player.direction;
 
+            if (Projectile.owner == Main.myPlayer && Main.mouseRight)
+            {
+                if (Main.MouseWorld.X > player.position.X)
+                    player.direction = 1;
+                if (Main.MouseWorld.X < player.position.X)
+                    player.direction = -1;
+            }
+
+            if (!mPlayer.standOut)
+                Projectile.Kill();
 
             float maximumDistance = 4f;
             Vector2 playerDirectionDistance = new Vector2(player.direction * 30f, -20f);
@@ -75,7 +85,7 @@ namespace JoJoStands.Projectiles.Pets
             }
             if (Projectile.velocity.Length() > 6f)
             {
-                float estimatedRotation = Projectile.velocity.X * 0.08f + Projectile.velocity.Y * (float)Projectile.spriteDirection * 0.02f;
+                float estimatedRotation = Projectile.velocity.X * 0.08f + Projectile.velocity.Y * (float)Projectile.direction * 0.02f;
                 if (Math.Abs(Projectile.rotation - estimatedRotation) >= 3.14159274f)       //Pi?
                 {
                     if (estimatedRotation < Projectile.rotation)
@@ -106,6 +116,7 @@ namespace JoJoStands.Projectiles.Pets
                 }
             }
             Projectile.netUpdate = true;
+            Projectile.direction = Projectile.spriteDirection = player.direction;
         }
 
         public override bool PreDraw(ref Color drawColor)

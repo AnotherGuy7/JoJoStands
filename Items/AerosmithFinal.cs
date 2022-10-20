@@ -8,7 +8,7 @@ namespace JoJoStands.Items
     public class AerosmithFinal : StandItemClass
     {
         public override int standType => 2;
-        public override int standSpeed => 6;
+        public override int standSpeed => 8;
         public override string standProjectileName => "Aerosmith";
         public override int standTier => 4;
 

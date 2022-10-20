@@ -74,13 +74,13 @@ namespace JoJoStands.Projectiles
                 if (Main.rand.Next(0, 1 + 1) == 0 && Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 0)
                 {
                     if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 4)
-                        DustTrail(DustID.RedTorch, false);
+                        DustTrail(DustID.RedTorch);
                     if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 3)
-                        DustTrail(DustID.IceTorch, false);
+                        DustTrail(DustID.IceTorch);
                     if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 2)
-                        DustTrail(DustID.BlueTorch, false);
+                        DustTrail(DustID.BlueTorch);
                     if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 1)
-                        DustTrail(DustID.PinkTorch, false);
+                        DustTrail(DustID.PinkTorch);
                 }
             }
             if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 1)
@@ -110,7 +110,11 @@ namespace JoJoStands.Projectiles
                                 int damage2 = (int)Main.rand.NextFloat((int)(damage1 * mPlayer.standDamageBoosts * 0.85f), (int)(damage1 * mPlayer.standDamageBoosts * 1.15f)) + npc.defense / defence;
                                 npc.StrikeNPC(damage2, 0f, 0, crit);
                                 npc.AddBuff(BuffID.OnFire, 600);
-
+                                if (mPlayer.crackedPearlEquipped)
+                                {
+                                    if (Main.rand.NextFloat(0, 101) >= 60)
+                                        npc.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+                                }
                                 if (mPlayer.echoesTier == 3)
                                 {
                                     if (npc.type == NPCID.Golem || npc.type == NPCID.GolemFistLeft || npc.type == NPCID.GolemFistRight || npc.type == NPCID.GolemHead)
@@ -137,6 +141,11 @@ namespace JoJoStands.Projectiles
                                         if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier == 4)
                                             players.Hurt(PlayerDeathReason.ByCustomReason(players.name + " could no longer live."), (int)Main.rand.NextFloat((int)(34 * mPlayer.standDamageBoosts * 0.85f), (int)(34 * mPlayer.standDamageBoosts * 1.15f)) + players.statDefense, 0, true, false, false);
                                         players.AddBuff(BuffID.OnFire, 300);
+                                        if (mPlayer.crackedPearlEquipped)
+                                        {
+                                            if (Main.rand.NextFloat(0, 101) >= 60)
+                                                players.AddBuff(ModContent.BuffType<Infected>(), 5 * 60);
+                                        }
                                     }
                                 }
                             }
@@ -294,11 +303,10 @@ namespace JoJoStands.Projectiles
                 Projectile.Kill();
         }
 
-        private void DustTrail(int DustID, bool light)
+        private void DustTrail(int DustID)
         {
             int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID);
             Main.dust[dustIndex].noGravity = true;
-            Main.dust[dustIndex].noLight = light;
             Main.dust[dustIndex].fadeIn = 2f;
         }
         private void DustSpawn(int DustID)
@@ -311,7 +319,6 @@ namespace JoJoStands.Projectiles
 
                 int dustIndex = Dust.NewDust(dustPosition, 1, 1, DustID);
                 Main.dust[dustIndex].noGravity = true;
-                Main.dust[dustIndex].noLight = true;
                 Main.dust[dustIndex].fadeIn = 2f;
             }
         }

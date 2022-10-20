@@ -13,7 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
     {
         public override int PunchDamage => 74;
         public override int AltDamage => 365;
-        public override int PunchTime => 9;
+        public override int PunchTime => 11;
         public override int HalfStandHeight => 37;
         public override int FistWhoAmI => 5;
         public override int TierNumber => 4;

@@ -29,8 +29,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            if (player.GetModPlayer<MyPlayer>().standOut)
-                player.statDefense += 12;
+            player.GetModPlayer<MyPlayer>().standAccessoryDefense += 12;
         }
 
         public override bool CanEquipAccessory(Player player, int slot, bool modded)

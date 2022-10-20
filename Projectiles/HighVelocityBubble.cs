@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.Buffs.Debuffs;
 
 namespace JoJoStands.Projectiles
 {
@@ -78,11 +79,13 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
             damage += target.defense / 2;
-
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+            }
         }
     }
 }

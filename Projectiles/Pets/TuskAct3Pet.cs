@@ -26,6 +26,7 @@ namespace JoJoStands.Projectiles.Pets
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.poseSoundName = PoseSoundName;
+            mPlayer.standType = 2;
             if (mPlayer.tuskActNumber == 3)
                 Projectile.timeLeft = 2;
 
@@ -35,6 +36,9 @@ namespace JoJoStands.Projectiles.Pets
             Projectile.Center = Vector2.Lerp(Projectile.Center, behindPlayer, 0.2f);
             Projectile.velocity *= 0.8f;
             Projectile.spriteDirection = Projectile.direction = player.direction;
+
+            if (!mPlayer.standOut)
+                Projectile.Kill();
 
             Projectile.frameCounter++;
             if (Projectile.frameCounter >= 10)

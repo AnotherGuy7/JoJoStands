@@ -43,7 +43,15 @@ namespace JoJoStands.Items
             if (standType != 0)
             {
                 TooltipLine tooltipAddition = new TooltipLine(Mod, "Speed", speedType + speed);
+                TooltipLine tooltipAddition2 = new TooltipLine(Mod, "Dodge", (int)mPlayer.standDodgeBoosts + "% dodge chance");
                 tooltips.Add(tooltipAddition);
+                tooltips.Add(tooltipAddition2);
+            }
+            if (standProjectileName == "Cream")
+            {
+                TooltipLine tooltipAdditionCream = new TooltipLine(Mod, "Warning", "Warning! Cream's abilities are extremely destructive to the area around!");
+                tooltipAdditionCream.OverrideColor = Microsoft.Xna.Framework.Color.Red;
+                tooltips.Add(tooltipAdditionCream);
             }
         }
 

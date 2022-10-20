@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using JoJoStands.NPCs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Networking;
 using Terraria.DataStructures;
 
 namespace JoJoStands.Projectiles.PlayerStands.Echoes
@@ -14,7 +15,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
     public class EchoesStandFinal : StandClass
     {
         public override int PunchDamage => 68;
-        public override int PunchTime => 8;
+        public override int PunchTime => 10;
         public override int HalfStandHeight => 28;
         public override int FistWhoAmI => 15;
         public override int TierNumber => 4;
@@ -27,7 +28,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private int onlyOneTarget = 0;
         private int targetPlayer = -1;
         private int targetNPC = -1;
-        private int crutch = 90;
 
         private float x1 = 0f;
 
@@ -146,34 +146,24 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 if (targetNPC != -1)
                 {
                     NPC npc = Main.npc[targetNPC];
-                    crutch--;
-                    if (crutch <= 0)
-                    {
-                        onlyOneTarget = 0;
-                        crutch = 90;
-                    }
+                    npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
+                    npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
                     if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
-                    {
-                        npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
-                        npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
                         npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
-                    }
+                    SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, targetNPC, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                    onlyOneTarget = 0;
                 }
-                if (targetPlayer != -1)
+                if (targetPlayer != -1 && onlyOneTarget != 0)
                 {
                     Player otherPlayer = Main.player[targetPlayer];
                     MyPlayer mOtherPlayer = otherPlayer.GetModPlayer<MyPlayer>();
-                    crutch--;
-                    if (crutch <= 0)
-                    {
-                        onlyOneTarget = 0;
-                        crutch = 90;
-                    }
                     if (mOtherPlayer.echoesFreeze <= 15)
                     {
                         mOtherPlayer.echoesDamageBoost = mPlayer.standDamageBoosts;
                         mOtherPlayer.echoesFreeze += 30;
+                        SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, otherPlayer.whoAmI, 1, 0, 0, mPlayer.standDamageBoosts, 0f);
                     }
+                    onlyOneTarget = 0;
                 }
             }
 
@@ -183,45 +173,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 targetNPC = -1;
             }
 
-            if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>())) //bassboosted punches v2 (3freeze barrage)
-            {
-                for (int f = 0; f < Main.maxProjectiles; f++) 
-                {
-                    Projectile proj = Main.projectile[f];
-                    if (proj.type == ModContent.ProjectileType<Fists>() && proj.owner == player.whoAmI)
-                    {
-                        for (int n = 0; n < Main.maxNPCs; n++)
-                        {
-                            NPC npc = Main.npc[n];
-                            if (npc.active && !npc.hide && !npc.immortal && !npc.friendly && npc.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
-                            {
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                                if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
-                                    npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
-                                proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists = true;
-                            }
-                        }
-                        if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
-                        {
-                            for (int p = 0; p < Main.maxPlayers; p++)
-                            {
-                                {
-                                    Player otherPlayer = Main.player[p];
-                                    MyPlayer mOtherPlayer = otherPlayer.GetModPlayer<MyPlayer>();
-                                    if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && otherPlayer.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
-                                    {
-                                        mOtherPlayer.echoesDamageBoost = mPlayer.standDamageBoosts;
-                                        if (mOtherPlayer.echoesFreeze <= 15)
-                                            mOtherPlayer.echoesFreeze += 30;
-                                        proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists = true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             if (mPlayer.standAutoMode && !returnToPlayer)
             {
                 BasicPunchAI();
@@ -324,7 +275,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             writer.Write(onlyOneTarget);
             writer.Write(targetNPC);
             writer.Write(targetPlayer);
-            writer.Write(crutch);
 
             writer.Write(threeFreeze);
             writer.Write(returnToPlayer);
@@ -338,7 +288,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             onlyOneTarget = reader.ReadInt32();
             targetNPC = reader.ReadInt32();
             targetPlayer = reader.ReadInt32();
-            crutch = reader.ReadInt32();
 
             threeFreeze = reader.ReadBoolean();
             returnToPlayer = reader.ReadBoolean();

@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
     public class GoldExperienceStandFinal : StandClass
     {
         public override int PunchDamage => 98;
-        public override int PunchTime => 9;
+        public override int PunchTime => 11;
         public override int HalfStandHeight => 35;
         public override int FistWhoAmI => 2;
         public override int TierNumber => 4;
@@ -35,6 +35,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 

@@ -34,14 +34,7 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
-            {
                 crit = true;
-            }
-            if (mPlayer.awakenedAmuletEquipped)
-            {
-                if (Main.rand.NextFloat(0, 101) >= 80)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 60 * 9);
-            }
             if (mPlayer.crackedPearlEquipped)
             {
                 if (Main.rand.NextFloat(0, 101) >= 60)

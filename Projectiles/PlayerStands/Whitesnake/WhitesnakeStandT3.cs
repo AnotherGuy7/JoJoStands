@@ -1,4 +1,5 @@
 ﻿using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -14,7 +15,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
     {
         public override int PunchDamage => 69;
         public override int AltDamage => 63;
-        public override int PunchTime => 12;
+        public override int PunchTime => 14;
         public override int HalfStandHeight => 44;
         public override int FistWhoAmI => 9;
         public override int TierNumber => 3;
@@ -177,6 +178,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     if (Projectile.frame == 4)      //this is the frame where the disc has just been stolen
                     {
                         otherPlayer.AddBuff(ModContent.BuffType<Stolen>(), 30 * 60);
+                        SyncCall.SyncOtherPlayerDebuff(player.whoAmI, otherPlayer.whoAmI, ModContent.BuffType<Stolen>(), 30 * 60);
                     }
                     if (Projectile.frame == 6)      //anim ended
                     {

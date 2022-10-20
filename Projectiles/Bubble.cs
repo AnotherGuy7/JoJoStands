@@ -1,4 +1,5 @@
 using JoJoStands.Projectiles.PlayerStands.KillerQueenBTD;
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -60,6 +61,11 @@ namespace JoJoStands.Projectiles
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
                 crit = true;
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+            }
             damage = 0;
         }
 

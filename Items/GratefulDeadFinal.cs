@@ -8,7 +8,7 @@ namespace JoJoStands.Items
 {
     public class GratefulDeadFinal : StandItemClass
     {
-        public override int standSpeed => 10;
+        public override int standSpeed => 12;
         public override int standType => 1;
         public override string standProjectileName => "GratefulDead";
         public override int standTier => 4;

@@ -38,11 +38,13 @@ namespace JoJoStands.Projectiles
                 {
                     player.channel = true;
                     mPlayer.tuskShootCooldown += 35 - mPlayer.standSpeedBoosts;
-                    SoundEngine.PlaySound(SoundID.Item67);
+                    SoundStyle shootSound = SoundID.Item67;
+                    shootSound.Volume = 0.33f;
+                    SoundEngine.PlaySound(shootSound);
                     Vector2 shootVelocity = Main.MouseWorld - Projectile.Center;
                     shootVelocity.Normalize();
                     shootVelocity *= 4f;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + shootVelocity, shootVelocity, ModContent.ProjectileType<ControllableNail>(), (int)(122 * mPlayer.standDamageBoosts) + ((22 + mPlayer.equippedTuskAct - 3) * mPlayer.equippedTuskAct - 3), 6f, player.whoAmI);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + shootVelocity, shootVelocity, ModContent.ProjectileType<ControllableNail>(), (int)(128 * mPlayer.standDamageBoosts) + ((22 + mPlayer.equippedTuskAct - 3) * mPlayer.equippedTuskAct - 3), 6f, player.whoAmI);
                 }
                 if (Main.mouseRight || mPlayer.tuskActNumber != 3)
                 {

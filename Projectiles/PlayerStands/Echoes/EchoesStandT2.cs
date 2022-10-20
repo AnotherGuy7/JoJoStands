@@ -9,6 +9,7 @@ using JoJoStands.Gores.Echoes;
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.PlayerBuffs;
+using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 
@@ -17,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
     public class EchoesStandT2 : StandClass
     {
         public override int PunchDamage => 4;
-        public override int PunchTime => 16;
+        public override int PunchTime => 18;
         public override int HalfStandHeight => 30;
         public override int FistWhoAmI => 15;
         public override int TierNumber => 2;
@@ -31,7 +32,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private int targetNPC = -1;
         private int targetPlayer = -1;
         private int rightClickCooldown = 0;
-        private int crutch = 90;
 
         private float remoteRange = 1200f;
 
@@ -146,6 +146,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                     {
                                         onlyOneTarget += 1;
                                         targetNPC = npc.whoAmI;
+                                        SoundEngine.PlaySound(SoundID.Item4, npc.Center);
                                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                                     }
                                 }
@@ -187,7 +188,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 {
                     if (targetNPC != -1)
                     {
-                        SoundEngine.PlaySound(SoundID.Item4, Main.npc[targetNPC].Center);
                         if (!Main.npc[targetNPC].townNPC)
                         {
                             Main.npc[targetNPC].AddBuff(ModContent.BuffType<SMACK>(), 900);
@@ -201,18 +201,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         }
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                     }
-                    if (targetPlayer != -1)
+                    if (targetPlayer != -1 && onlyOneTarget != 0)
                     {
-                        crutch--;
-                        if (crutch <= 0)
-                        {
-                            onlyOneTarget = 0;
-                            crutch = 90;
-                        }
                         if (Main.player[targetPlayer].hostile && player.hostile && player.InOpposingTeam(Main.player[targetPlayer]))
+                        {
                             Main.player[targetPlayer].AddBuff(ModContent.BuffType<SMACK>(), 360);
+                            SyncCall.SyncOtherPlayerDebuff(player.whoAmI, targetPlayer, ModContent.BuffType<SMACK>(), 360);
+                            onlyOneTarget = 0;
+                        }
                         if (!Main.player[targetPlayer].hostile || !player.hostile || Main.player[targetPlayer].hostile && player.hostile && !player.InOpposingTeam(Main.player[targetPlayer]))
+                        {
                             Main.player[targetPlayer].AddBuff(ModContent.BuffType<BelieveInMe>(), 720);
+                            SyncCall.SyncOtherPlayerDebuff(player.whoAmI, targetPlayer, ModContent.BuffType<BelieveInMe>(), 720);
+                            onlyOneTarget = 0;
+                        }
                     }
                 }
 
@@ -312,73 +314,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     LimitDistance(remoteRange);
                 }
             }
-            for (int f = 0; f < Main.maxProjectiles; f++) //bassboosted punches
-            {
-                Projectile proj = Main.projectile[f];
-                if (proj.type == ModContent.ProjectileType<Fists>() && proj.owner == player.whoAmI)
-                {
-                    for (int n = 0; n < Main.maxNPCs; n++)
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && !npc.hide && !npc.immortal && !npc.friendly && npc.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
-                        {
-                            npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
-                            npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                            int maxDamage = 48;
-                            int soundIntensivity = 2;
-                            if (mPlayer.echoesTier == 3)
-                            {
-                                maxDamage = 72;
-                                soundIntensivity = 4;
-                            }
-                            if (mPlayer.echoesTier == 4)
-                            {
-                                maxDamage = 108;
-                                soundIntensivity = 8;
-                            }
-                            if (!npc.boss)
-                                soundIntensivity *= 2;
-                            npc.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
-                            npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
-                            npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = maxDamage;
-                            if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += soundIntensivity;
-                            proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists = true;
-                        }
-                    }
-                    if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
-                    {
-                        for (int p = 0; p < Main.maxPlayers; p++)
-                        {
-                            {
-                                Player otherPlayer = Main.player[p];
-                                MyPlayer mOtherPlayer = otherPlayer.GetModPlayer<MyPlayer>();
-                                if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && otherPlayer.Hitbox.Intersects(proj.Hitbox) && !proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists)
-                                {
-                                    mOtherPlayer.echoesDamageBoost = mPlayer.standDamageBoosts;
-                                    int maxDamage = 48;
-                                    int soundIntensivity = 2;
-                                    if (mPlayer.echoesTier == 3)
-                                    {
-                                        maxDamage = 72;
-                                        soundIntensivity = 4;
-                                    }
-                                    if (mPlayer.echoesTier == 4)
-                                    {
-                                        maxDamage = 108;
-                                        soundIntensivity = 8;
-                                    }
-                                    otherPlayer.AddBuff(ModContent.BuffType<Tinnitus>(), 360);
-                                    mOtherPlayer.echoesSoundIntensivityMax = maxDamage;
-                                    if (mOtherPlayer.echoesSoundIntensivity < mOtherPlayer.echoesSoundIntensivityMax)
-                                        mOtherPlayer.echoesSoundIntensivity += soundIntensivity;
-                                    proj.GetGlobalProjectile<JoJoGlobalProjectile>().onlyOnceforFists = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             if (mPlayer.standAutoMode && !returnToPlayer) //automode
             {
                 remoteMode = false;
@@ -467,7 +402,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             writer.Write(targetNPC);
             writer.Write(targetPlayer);
             writer.Write(rightClickCooldown);
-            writer.Write(crutch);
 
             writer.Write(remoteRange);
 
@@ -483,7 +417,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             targetNPC = reader.ReadInt32();
             targetPlayer = reader.ReadInt32();
             rightClickCooldown = reader.ReadInt32();
-            crutch = reader.ReadInt32();
 
             remoteRange = reader.ReadSingle();
 

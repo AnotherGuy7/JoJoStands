@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
     {
         public override float MaxDistance => 98f;
         public override int PunchDamage => 138;
-        public override int PunchTime => 9;
+        public override int PunchTime => 11;
         public override int HalfStandHeight => 37;
         public override int FistWhoAmI => 3;
         public override int TierNumber => 5;
@@ -91,15 +91,15 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                             if (npc.active && !npc.townNPC && npc.lifeMax > 5 && Vector2.Distance(Main.MouseWorld, npc.Center) <= npc.Size.Length())
                             {
                                 targetSuccess = true;
-                                mPlayer.deathLoopNPCWhoAmI = npc.whoAmI;
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().taggedForDeathLoop = true;
-                                SyncCall.SyncDeathLoopInfo(player.whoAmI, (byte)npc.whoAmI, npc.type);
+                                player.AddBuff(ModContent.BuffType<DeathLoop>(), 2);
+                                mPlayer.deathLoopTarget = npc.whoAmI;
+                                npc.GetGlobalNPC<JoJoGlobalNPC>().taggedForDeathLoop = 600;
+                                npc.GetGlobalNPC<JoJoGlobalNPC>().deathLoopOwner = player.whoAmI;
+                                SyncCall.SyncDeathLoopInfo(player.whoAmI, npc.whoAmI);
                             }
                         }
 
-                        if (targetSuccess)
-                            player.AddBuff(ModContent.BuffType<DeathLoop>(), 30 * 60);
-                        else
+                        if (!targetSuccess)
                         {
                             shootCount += 15;
                             Main.NewText("Right-Click the enemy to target");

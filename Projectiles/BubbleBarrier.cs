@@ -1,9 +1,4 @@
-using JoJoStands.Projectiles.PlayerStands.KillerQueenBTD;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -26,6 +21,6 @@ namespace JoJoStands.Projectiles
             Projectile ownerProj = Main.projectile[(int)Projectile.ai[1]];
             Projectile.Center = player.Center;
         }
-    } 
-        }
+    }
+}
    

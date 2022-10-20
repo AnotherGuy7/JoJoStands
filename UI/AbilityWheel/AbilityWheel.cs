@@ -16,6 +16,7 @@ namespace JoJoStands.UI
     {
         public static MyPlayer mPlayer;
         public static float VAlign = 0.5f;
+        public static float HAlign = 0.9f;
 
         public virtual string centerTexturePath { get; }
         public virtual string[] abilityNames { get; }
@@ -52,11 +53,10 @@ namespace JoJoStands.UI
 
             Append(abilityWheel);
         }*/
-
         public override void OnInitialize()
         {
             abilityWheel = new UIPanel();
-            abilityWheel.HAlign = 0.98f;
+            abilityWheel.HAlign = HAlign;
             abilityWheel.VAlign = VAlign;
             abilityWheel.Width.Set(120f, 0f);
             abilityWheel.Height.Set(120f, 0f);
@@ -156,6 +156,8 @@ namespace JoJoStands.UI
 
         public override void Update(GameTime gameTime)
         {
+            abilityWheel.HAlign = HAlign;
+            abilityWheel.VAlign = VAlign;
             if (inputTimer > 0)
                 inputTimer--;
             if (alphaTimer > 0)

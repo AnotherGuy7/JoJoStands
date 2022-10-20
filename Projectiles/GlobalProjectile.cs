@@ -1,5 +1,8 @@
+using JoJoStands.Buffs.AccessoryBuff;
 using JoJoStands.Buffs.EffectBuff;
+using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items;
+using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -7,6 +10,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 
 namespace JoJoStands.Projectiles
 {
@@ -25,6 +29,8 @@ namespace JoJoStands.Projectiles
         public bool autoModeSexPistols = false;
         public bool kickedBySexPistols = false;
         public bool kickedByStarPlatinum = false;
+        public bool bulletsCenturyBoy = false;
+        public bool standProjectile = false;
         public float timestopFreezeProgress = 0f;
         public int timestopStartTimeLeft = 0;
         public Vector2 preSkipVel = Vector2.Zero;
@@ -47,6 +53,32 @@ namespace JoJoStands.Projectiles
             get { return true; }
         }
 
+        public override void OnSpawn(Projectile projectile, IEntitySource source)
+        {
+            Player player = Main.player[projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (projectile.DamageType.CountsAsClass<RangedDamageClass>() && mPlayer.centuryBoyActive)
+                    bulletsCenturyBoy = true;
+            for (int i = 0; i < JoJoStands.standProjectileList.Count - 1; i++)
+            {
+                if (JoJoStands.standProjectileList[i] == projectile.type || kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
+                {
+                    projectile.ArmorPenetration += mPlayer.standArmorPenetration + 10 * mPlayer.towerOfGrayTier;
+                    if (mPlayer.standType == 2 && mPlayer.herbalTeaBag && mPlayer.herbalTeaBagCount > 0 && projectile.type != ModContent.ProjectileType<Fists>() && projectile.type != ModContent.ProjectileType<NailSlasher>())
+                    {
+                        projectile.ArmorPenetration += 10;
+                        projectile.damage += 10;
+                        projectile.damage += (int)(projectile.damage * 0.1f);
+                        projectile.penetrate += 1;
+                        mPlayer.herbalTeaBagCount -= 1;
+                    }
+                    if (mPlayer.herbalTeaBagCooldown > 0)
+                        mPlayer.herbalTeaBagCooldown -= 15;
+                }
+                if (JoJoStands.standProjectileList[i] == projectile.type)
+                    standProjectile = true;
+            }
+        }
         public override bool PreAI(Projectile Projectile)
         {
             Player player = Main.player[Projectile.owner];
@@ -235,15 +267,61 @@ namespace JoJoStands.Projectiles
 
         public override void ModifyHitNPC(Projectile Projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            if (kickedBySexPistols)
-                damage = (int)(damage * 1.05f);
-            if (kickedByStarPlatinum)
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (player.HasBuff(ModContent.BuffType<CenturyBoyBuff>()) && Projectile.DamageType.CountsAsClass<SummonDamageClass>())
+                damage = damage / 2;
+            if (kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
             {
-                MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
                 if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
                     crit = true;
+                damage = (int)(damage * 1.05f * mPlayer.standDamageBoosts);
+                if (mPlayer.crackedPearlEquipped)
+                {
+                    if (Main.rand.NextFloat(0, 101) >= 60)
+                        target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+                }
             }
+            if (standProjectile || kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
+            {
+                if (player.HasBuff(ModContent.BuffType<BlindRage>()))
+                    Projectile.ArmorPenetration = target.defense;
+                if (mPlayer.standTarget != target.whoAmI)
+                    mPlayer.fightingSpiritEmblemStack = 0;
+                if (mPlayer.standTarget != target.whoAmI)
+                    mPlayer.standTarget = target.whoAmI;
+                if (mPlayer.fightingSpiritEmblem && mPlayer.fightingSpiritEmblemStack < 31)
+                    mPlayer.fightingSpiritEmblemStack += 1;
+                if (mPlayer.manifestedWillEmblem && crit)
+                    damage = (int)(damage * 1.5f);
+                if (mPlayer.theFirstNapkin && Main.rand.NextFloat(0, 101) <= 5 && player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.buffTime[mPlayer.theFirstNapkinReduction] > 60)
+                    player.buffTime[mPlayer.theFirstNapkinReduction] -= 60;
 
+                for (int n = 0; n < Main.maxNPCs; n++)
+                {
+                    NPC npc = Main.npc[n];
+                    if (npc.active && !npc.hide && !npc.immortal && !npc.friendly)
+                    {
+                        if (Projectile.Distance(npc.Center) <= 150f && npc.whoAmI != target.whoAmI && mPlayer.arrowEarring)
+                        {
+                            float arrowEarringDamage = 0.1f;
+                            if (mPlayer.arrowEarringCooldown == 0)
+                                arrowEarringDamage = 0.2f;
+                            bool critCheck = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
+                            int defence = 0;
+                            if (critCheck)
+                                defence = 4;
+                            else
+                                defence = 2;
+                            int damage2 = (int)Main.rand.NextFloat((int)(damage * arrowEarringDamage * 0.85f), (int)(damage * arrowEarringDamage * 1.15f)) + npc.defense / defence;
+                            npc.StrikeNPC(damage2, 0, 0, critCheck);
+                            SyncCall.SyncArrowEarringInfo(player.whoAmI, npc.whoAmI, damage2, critCheck);
+                        }
+                        if (mPlayer.vampiricBangle && player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                            mPlayer.vampiricBangleHeal += damage;
+                    }
+                }
+            }
         }
 
         public override bool ShouldUpdatePosition(Projectile Projectile)        //thanks, HellGoesOn for telling me this hook even existed

@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Accessories
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Amulet of Serving");
-            Tooltip.SetDefault("30% increased Stand attack damage\nIncreased defense while the Stand is out");
+            Tooltip.SetDefault("2 increased Stand Speed\nIncreased defense while the Stand is out");
             SacrificeTotal = 1;
         }
 
@@ -29,11 +29,8 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.3f;
-            if (player.GetModPlayer<MyPlayer>().standOut)
-            {
-                player.statDefense += 12;
-            }
+            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 2;
+            player.GetModPlayer<MyPlayer>().standAccessoryDefense += 12;
         }
 
         public override bool CanEquipAccessory(Player player, int slot, bool modded)

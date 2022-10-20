@@ -37,7 +37,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
         }
 
         public override int ProjectileDamage => 24;
-        public override int ShootTime => 9;
+        public override int ShootTime => 11;
         public override int FistWhoAmI => 13;
         public override int TierNumber => 2;
         public override StandAttackType StandType => StandAttackType.Ranged;
@@ -84,7 +84,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (Vector2.Distance(player.Center, Main.MouseWorld) < range && mouseControlled || !mouseControlled || Vector2.Distance(player.Center, Projectile.Center) <= range * 0.9f && mouseControlled)
+            if (Vector2.Distance(player.Center, Main.MouseWorld) <= range * 0.9f && mouseControlled || !mouseControlled || Vector2.Distance(player.Center, Projectile.Center) <= range * 0.9f && mouseControlled)
             {
                 if (Projectile.velocity.X > 0.5f)
                     Projectile.spriteDirection = 1;
@@ -127,7 +127,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             if (emote > 0)
                 emote--;
 
-            Projectile.rotation = Projectile.velocity.X * 0.05f;
+            if (Vector2.Distance(player.Center, Projectile.Center) <= range * 0.9f)
+                Projectile.rotation = Projectile.velocity.X * 0.05f;
             Projectile.tileCollide = true;
 
             NPC target = FindNearestTarget(range);

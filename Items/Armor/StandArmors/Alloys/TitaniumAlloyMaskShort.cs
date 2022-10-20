@@ -30,8 +30,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "Become immune after striking an enemy";
-            player.GetModPlayer<MyPlayer>().wearingTitaniumMask = true;
+            player.setBonus = "Attacking generates a defensive barrier of titanium shards";
+            player.onHitTitaniumStorm = true;
         }
 
         public override void UpdateEquip(Player player)

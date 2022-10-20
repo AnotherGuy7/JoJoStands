@@ -61,7 +61,6 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-
             SoundEngine.PlaySound(SoundID.Item62);
         }
     }

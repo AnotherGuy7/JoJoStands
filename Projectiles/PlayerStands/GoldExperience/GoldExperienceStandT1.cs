@@ -11,7 +11,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
     public class GoldExperienceStandT1 : StandClass
     {
         public override int PunchDamage => 16;
-        public override int PunchTime => 12;
+        public override int PunchTime => 14;
         public override int HalfStandHeight => 35;
         public override int FistWhoAmI => 2;
         public override int TierNumber => 1;

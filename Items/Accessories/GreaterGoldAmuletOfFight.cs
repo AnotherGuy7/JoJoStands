@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Accessories
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
             DisplayName.SetDefault("Greater Amulet of Fight");
-            Tooltip.SetDefault("20% increased Stand attack damage");
+            Tooltip.SetDefault("2 increased Stand Speed");
             SacrificeTotal = 1;
         }
         public override void SetDefaults()
@@ -28,7 +28,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.2f;
+            player.GetModPlayer<MyPlayer>().standSpeedBoosts += 2;
         }
 
         public override bool CanEquipAccessory(Player player, int slot, bool modded)

@@ -57,7 +57,6 @@ namespace JoJoStands
         public static bool testStandUnlocked = false;
 
         public int goldenSpinCounter = 0;
-        public int shadowDodgeCooldownTimer = 0;        //does Vanilla not have one of these?
         public int aerosmithRadarFrameCounter = 0;
         public int poseDuration = 300;
         public int tuskActNumber = 0;
@@ -73,7 +72,11 @@ namespace JoJoStands
         public float standDamageBoosts = 1;
         public float standRangeBoosts = 0f;
         public float standCritChangeBoosts = 0f;
+        public float standDodgeBoosts = 5f;
+        public int standDodgeGuarantee = 1;
         public int standSpeedBoosts = 0;
+        public int standAccessoryDefense = 0;
+        public int standArmorPenetration = 0;
         public float standCooldownReduction = 0f;
         public int standType = 0;           //0 = no type; 1 = Melee; 2 = Ranged;
         public int standTier = 0;
@@ -103,6 +106,9 @@ namespace JoJoStands
         public int menacingFrames = 0;
         public int slowDancerSprintTime = 0;
         public int kingCrimsonAbilityCooldownTime = 0;
+        public int deathLoopTarget = -1;
+
+        public int globalCooldown = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -111,9 +117,6 @@ namespace JoJoStands
         public bool standOut = false;
         public bool standAutoMode = false;
         public bool standRemoteMode = false;
-        public bool destroyAmuletEquipped = false;
-        public bool greaterDestroyEquipped = false;
-        public bool awakenedAmuletEquipped = false;
         public bool chlorositeShortEqquipped = false;
         public bool crystalArmorSetEquipped = false;
         public bool crackedPearlEquipped = false;
@@ -150,17 +153,12 @@ namespace JoJoStands
         public bool hotbarLocked = false;
         public bool playerJustHit = false;
         public bool collideY = false;
-        public int deathLoopNPCType = 0;
-        public Vector2 deathLoopPosition;
-        public int deathLoopNPCWhoAmI = -1;
-        public bool deathLoopNPCIsBoss = false;
 
         public bool timestopActive;
         public bool timestopOwner;
         public bool timeskipPreEffect;
         public bool timeskipActive;
         public bool backToZeroActive;
-        public bool deathLoopActive;
         public bool epitaphForesightActive;
         public bool standAccessory = false;
         public bool bitesTheDustActive = false;
@@ -197,46 +195,62 @@ namespace JoJoStands
         private bool changingSexPistolsPositions = false;
 
         public List<DestroyedTileData> crazyDiamondDestroyedTileData = new List<DestroyedTileData>();
-        public bool crazyDiamondRestorationMode = false;
-        public int crazyDiamondMessageCooldown = 0;
-        public int crazyDiamondStonePunch = 0;
-        public int crazyDiamondTileDestruction = 0;
-        public int oldMaxHP = 0;
-        public int improperRestorationstack = 1;
-        public int maxHP = 0;
-        public int globalCooldown = 0;
-
-        public int towerOfGrayTier = 0;
-        public float towerOfGrayDamageMult = 1f;
 
         public int echoesTier = 0;
         public int echoesACT = 0;
-
         public int echoesFreeze = 0;
         public int echoesSoundIntensivity = 2;
         public int echoesSoundIntensivityMax = 48;
         public int echoesKaboom3 = 0;
         public int echoesTailTip = -1;
-
         public int echoesACT2Evolve = 0;
         public int echoesACT3Evolve = 0;
-
         public float echoesDamageBoost = 1f;
-
-        private int echoesDamageTimer1 = 60; //3 Freeze
-        private int echoesDamageTimer2 = 120; //ACT 1 sounds
-
         public bool echoesBoing = false;
         public bool echoesBoing2 = false;
         public bool echoesKaboom = false;
         public bool echoesKaboom2 = false;
 
+        public bool crazyDiamondRestorationMode = false;
+        public int crazyDiamondMessageCooldown = 0;
+        public int crazyDiamondStonePunch = 0;
+        public int crazyDiamondTileDestruction = 0;
+
+        public int oldMaxHP = 0;
+        public int maxHP = 0;
+        public int improperRestorationstack = 1;
+
+        public int towerOfGrayTier = 0;
+        public float towerOfGrayDamageMult = 1f;
+
+        public int standTarget = -1;
+
+        public bool siliconLifeformCarapace = false;
+        public bool manifestedWillEmblem = false;
+        public bool fightingSpiritEmblem = false;
+        public int fightingSpiritEmblemStack = 0;
+        public bool arrowEarring = false;
+        public bool vampiricBangle = false;
+        public int vampiricBangleHeal = 0;
+        public int arrowEarringCooldown = 0;
+        public bool theFirstNapkin = false;
+        public int theFirstNapkinReduction = 0;
+        public int theFirstNapkinCooldown = 0;
+        public bool herbalTeaBag = false;
+        public int herbalTeaBagCount = 10;
+        public int herbalTeaBagCooldown = 0;
+        public bool centuryBoyActive = false;
+
         private int echoesBoingUpd = 0;
+        private int echoesDamageTimer1 = 60; //3 Freeze
+        private int echoesDamageTimer2 = 120; //ACT 1 sounds
 
         private int offsetPostDraw = 0;
         private int timerPostDraw = 0;
-
         private int remoteDodge = 0;
+
+        public int standFistsType = 0;
+
 
         public void ItemBreak(Item item)
         {
@@ -321,11 +335,8 @@ namespace JoJoStands
             standRemoteMode = false;
             wearingEpitaph = false;
             timestopOwner = false;
-            destroyAmuletEquipped = false;
-            greaterDestroyEquipped = false;
             crystalArmorSetEquipped = false;
             wearingTitaniumMask = false;
-            awakenedAmuletEquipped = false;
             heartHeadbandEquipped = false;
             phantomHoodLongEquipped = false;
             phantomHoodNeutralEquipped = false;
@@ -346,10 +357,20 @@ namespace JoJoStands
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
             standSpeedBoosts = 0;
+            standAccessoryDefense = 0;
+            standArmorPenetration = 0;
             standCritChangeBoosts = 5f;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
+            standDodgeBoosts = 5f;
 
             towerOfGrayDamageMult = 1f;
 
+            siliconLifeformCarapace = false;
+            manifestedWillEmblem = false;
+            fightingSpiritEmblem = false;
+            arrowEarring = false;
+            vampiricBangle = false;
+            theFirstNapkin = false;
+            herbalTeaBag = false;
             collideY = false;
         }
 
@@ -413,10 +434,6 @@ namespace JoJoStands
                         if (mPlayer.backToZeroActive && !otherPlayer.HasBuff(ModContent.BuffType<BacktoZero>()))
                         {
                             otherModPlayer.backToZeroActive = false;
-                        }
-                        if (otherModPlayer.deathLoopActive && !otherPlayer.HasBuff(ModContent.BuffType<DeathLoop>()))
-                        {
-                            otherModPlayer.deathLoopActive = false;
                         }
                     }
                 }
@@ -759,151 +776,64 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
+            if (standOut)
             {
-                if (standRemoteMode)
-                    remoteDodge = 2;
-                if (!standRemoteMode && remoteDodge > 0)
-                    remoteDodge--;
-                if (echoesKaboom)
-                {
-                    Player.noFallDmg = false;
-                    if (!echoesKaboom2)
-                    {
-                        Player.fallStart -= 100;
-                        echoesKaboom2 = true;
-                        echoesKaboom3 = 4;
-                    }
-                }
-                if (echoesBoing2)
-                    Player.noFallDmg = true;
-                if (collideY || Player.velocity.Y == 0f)
-                    echoesBoingUpd++;
-                if (echoesBoingUpd >= 4)
-                {
-                    echoesBoingUpd = 0;
-                    echoesBoing2 = false;
-                    echoesBoing = false;
-                    echoesKaboom = false;
-                    echoesKaboom2 = false;
-                }
-
-                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT3>()) //echoes stuff (i'll move it later (c) Proos <3)
-                    echoesTier = 4;
-
-                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT2>())
-                    echoesTier = 3;
-
-                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT1>())
-                    echoesTier = 2;
-
-                if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT0>())
-                    echoesTier = 1;
-
-                if (StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT0>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT1>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT2>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT3>())
-                    echoesTier = 0;
-
-                if (echoesFreeze > 0)
-                {
-                    if (Player.velocity.Y != 0f)
-                        Player.velocity.Y += 12f;
-                    Player.noFallDmg = false;
-                    Player.velocity.X *= 0.66f;
-                    if (collideY)
-                    {
-                        if (echoesDamageTimer1 > 0)
-                            echoesDamageTimer1--;
-                        if (echoesDamageTimer1 == 0)
-                        {
-                            echoesDamageTimer1 = 60;
-                            int freezeDamage = (int)(136 * echoesDamageBoost) / 2;
-                            Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + Player.statDefense, 0, true, false, false);
-                        }
-                    }
-                    echoesFreeze--;
-                }
-
-                if (Player.HasBuff(ModContent.BuffType<Tinnitus>()))
-                {
-                    if (echoesSoundIntensivity > echoesSoundIntensivityMax)
-                        echoesSoundIntensivity = echoesSoundIntensivityMax;
-                    if (echoesDamageTimer2 > 0)
-                        echoesDamageTimer2--;
-                    if (echoesDamageTimer2 == 0)
-                    {
-                        echoesDamageTimer2 = 120;
-                        SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
-                        float volume = 0.6f;
-                        int soundDamage = (int)(echoesSoundIntensivity * echoesDamageBoost) / 2;
-                        if (Player.HasBuff(ModContent.BuffType<SMACK>()))
-                        {
-                            volume *= 4;
-                            soundDamage *= 2;
-                        }
-                        punchSound.Volume = volume;
-                        punchSound.Pitch = 0f;
-                        punchSound.PitchVariance = 0.2f;
-                        SoundEngine.PlaySound(punchSound, Player.Center);
-                        Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + Player.statDefense, 0, true, false, false);
-                        if (Main.rand.NextFloat(1, 100) <= 15)
-                            Player.AddBuff(BuffID.Confused, 180);
-                    }
-                }
-                if (echoesFreeze == 0)
-                    echoesDamageTimer1 = 60;
-                if (!Player.HasBuff(ModContent.BuffType<Tinnitus>()))
-                    echoesDamageTimer2 = 120;
+                if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
+                    centuryBoyActive = true;
             }
+            if (StandSlot.SlotItem.type != ModContent.ItemType<CenturyBoyT1>() && StandSlot.SlotItem.type != ModContent.ItemType<CenturyBoyT2>() && standOut)
+                centuryBoyActive = false;
+            if (deathLoopTarget != -1)
             {
-                if (!Player.HasBuff(ModContent.BuffType<ImproperRestoration>()) && oldMaxHP > 0) //crazy diamond stuff (i'll move it later (c) Proos <3)
+                if (!Main.npc[deathLoopTarget].active)
                 {
-                    Player.statLifeMax = oldMaxHP;
-                    oldMaxHP = 0;
-                    improperRestorationstack = 1;
-                    maxHP = 0;
+                    Player.ClearBuff(ModContent.BuffType<DeathLoop>());
+                    Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), 3600);
+                    deathLoopTarget = -1;
                 }
-
-                if (!standOut)
-                {
-                    crazyDiamondRestorationMode = false;
-                    crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
-                    crazyDiamondMessageCooldown = 0;
-                    crazyDiamondDestroyedTileData.Clear();
-
-                    towerOfGrayTier = 0;
-
-                    echoesTier = 0;
-                    echoesACT = 0;
-                }
-
-                if (crazyDiamondMessageCooldown > 0)
-                    crazyDiamondMessageCooldown--;
-
-                if (Player == Main.player[Main.myPlayer])
-                {
-                    if (Main.mouseLeft && !standAutoMode)
-                    {
-                        if (crazyDiamondTileDestruction < 60)
-                            crazyDiamondTileDestruction++;
-                    }
-                    else
-                        crazyDiamondTileDestruction = 0;
-                }
-
-                if (globalCooldown > 0)
-                    globalCooldown--;
-
-                if (crazyDiamondStonePunch > 2)
-                    Player.AddBuff(ModContent.BuffType<YoAngelo>(), 180);
-                if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
-                    crazyDiamondStonePunch = 0;
             }
-
+            if (deathLoopTarget == -1)
+                Player.ClearBuff(ModContent.BuffType<DeathLoop>());
+            if (herbalTeaBagCount < 10)
+            {
+                herbalTeaBagCooldown++;
+                if (herbalTeaBagCooldown >= 60)
+                {
+                    herbalTeaBagCooldown = 0;
+                    herbalTeaBagCount += 1;
+                }
+            }
+            if (theFirstNapkin && theFirstNapkinCooldown == 0 && Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+            {
+                Player.ClearBuff(ModContent.BuffType<AbilityCooldown>());
+                theFirstNapkinCooldown = 10800;
+                SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
+            }
+            if (theFirstNapkinCooldown > 0)
+                theFirstNapkinCooldown--;
+            if (!vampiricBangle)
+                vampiricBangleHeal = 0;
+            if (vampiricBangleHeal > 120)
+            {
+                Player.Heal(3);
+                vampiricBangleHeal = 0;
+            }
+            if (arrowEarringCooldown > 0)
+                arrowEarringCooldown--;
+            if (!fightingSpiritEmblem)
+                fightingSpiritEmblemStack = 0;
+            if (Player.HasBuff(ModContent.BuffType<Dodge>()))
+                standDodgeGuarantee = 1;
+            if (standRemoteMode)
+                remoteDodge = 2;
+            if (!standRemoteMode && remoteDodge > 0)
+                remoteDodge--;
+            if (globalCooldown > 0)
+                globalCooldown--;
             if (standKeyPressTimer > 0)
                 standKeyPressTimer--;
             if (revertTimer > 0)
                 revertTimer--;
-            if (shadowDodgeCooldownTimer > 0)
-                shadowDodgeCooldownTimer--;
 
             UpdateShaderStates();
             if (standRemoteMode && standName == "Aerosmith")
@@ -981,6 +911,140 @@ namespace JoJoStands
                     goldenSpinCounter = 300;
                     achievedInfiniteSpin = true;
                 }
+            }
+
+            if (!Player.HasBuff(ModContent.BuffType<ImproperRestoration>()) && oldMaxHP > 0) //crazy diamond stuff 
+            {
+                Player.statLifeMax = oldMaxHP;
+                oldMaxHP = 0;
+                improperRestorationstack = 1;
+                maxHP = 0;
+            }
+
+            if (!standOut)
+            {
+                crazyDiamondRestorationMode = false;
+                crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
+                crazyDiamondMessageCooldown = 0;
+                crazyDiamondDestroyedTileData.Clear();
+
+                towerOfGrayTier = 0;
+
+                echoesTier = 0;
+                echoesACT = 0;
+            }
+
+            if (crazyDiamondMessageCooldown > 0)
+                crazyDiamondMessageCooldown--;
+
+            if (Player == Main.player[Main.myPlayer])
+            {
+                if (Main.mouseLeft && !standAutoMode)
+                {
+                    if (crazyDiamondTileDestruction < 60)
+                        crazyDiamondTileDestruction++;
+                }
+                else
+                    crazyDiamondTileDestruction = 0;
+            }
+
+            if (crazyDiamondStonePunch > 2)
+                Player.AddBuff(ModContent.BuffType<YoAngelo>(), 180);
+            if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
+                crazyDiamondStonePunch = 0;
+
+            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT3>()) //echoes stuff 
+                echoesTier = 4;
+
+            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT2>())
+                echoesTier = 3;
+
+            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT1>())
+                echoesTier = 2;
+
+            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT0>())
+                echoesTier = 1;
+
+            if (StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT0>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT1>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT2>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT3>())
+                echoesTier = 0;
+
+            if (echoesFreeze == 0)
+                echoesDamageTimer1 = 60;
+            if (!Player.HasBuff(ModContent.BuffType<Tinnitus>()))
+                echoesDamageTimer2 = 120;
+
+            if (Player.HasBuff(ModContent.BuffType<Tinnitus>())) //echoes act 1 stuff
+            {
+                if (echoesSoundIntensivity > echoesSoundIntensivityMax)
+                    echoesSoundIntensivity = echoesSoundIntensivityMax;
+                if (echoesDamageTimer2 > 0)
+                    echoesDamageTimer2--;
+                if (echoesDamageTimer2 == 0)
+                {
+                    echoesDamageTimer2 = 120;
+                    SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
+                    float volume = 0.6f;
+                    int soundDamage = (int)(echoesSoundIntensivity * echoesDamageBoost) / 2;
+                    if (Player.HasBuff(ModContent.BuffType<SMACK>()))
+                    {
+                        volume *= 4;
+                        soundDamage *= 2;
+                    }
+                    punchSound.Volume = volume;
+                    punchSound.Pitch = 0f;
+                    punchSound.PitchVariance = 0.2f;
+                    SoundEngine.PlaySound(punchSound, Player.Center);
+                    Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + Player.statDefense, 0, true, false, false);
+                    if (Main.rand.NextFloat(1, 100) <= 15)
+                        Player.AddBuff(BuffID.Confused, 180);
+                }
+            }
+
+            if (echoesKaboom) //echoes act 2 stuff 
+            {
+                Player.noFallDmg = false;
+                if (!echoesKaboom2)
+                {
+                    Player.fallStart -= 100;
+                    echoesKaboom2 = true;
+                    echoesKaboom3 = 4;
+                }
+            }
+
+            if (echoesBoing2)
+                Player.noFallDmg = true;
+
+            if (collideY || Player.velocity.Y == 0f)
+                echoesBoingUpd++;
+
+            if (echoesBoingUpd >= 4)
+            {
+                echoesBoingUpd = 0;
+                echoesBoing2 = false;
+                echoesBoing = false;
+                echoesKaboom = false;
+                echoesKaboom2 = false;
+            }
+
+
+            if (echoesFreeze > 0) // echoes act 3 stuff
+            {
+                if (Player.velocity.Y != 0f)
+                    Player.velocity.Y += 12f;
+                Player.noFallDmg = false;
+                Player.velocity.X *= 0.66f;
+                if (collideY)
+                {
+                    if (echoesDamageTimer1 > 0)
+                        echoesDamageTimer1--;
+                    if (echoesDamageTimer1 == 0)
+                    {
+                        echoesDamageTimer1 = 60;
+                        int freezeDamage = (int)(136 * echoesDamageBoost) / 2;
+                        Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + Player.statDefense, 0, true, false, false);
+                    }
+                }
+                echoesFreeze--;
             }
 
             if (sexPistolsTier != 0)        //Sex Pistols stuff
@@ -1094,8 +1158,14 @@ namespace JoJoStands
                 {
                     if (Main.mouseLeft && canStandBasicAttack && tuskShootCooldown <= 0)
                     {
+                        if (Main.MouseWorld.X > Player.position.X)
+                            Player.direction = 1;
+                        if (Main.MouseWorld.X < Player.position.X)
+                            Player.direction = -1;
                         tuskShootCooldown += 35 - standSpeedBoosts;
-                        SoundEngine.PlaySound(SoundID.Item67);
+                        SoundStyle shootSound = SoundID.Item67;
+                        shootSound.Volume = 0.33f;
+                        SoundEngine.PlaySound(shootSound);
                         Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
                         shootVelocity *= 12f;       //multiply the angle by the speed to get the effect
@@ -1104,7 +1174,7 @@ namespace JoJoStands
                     if (Main.mouseRight && !Player.channel && tuskShootCooldown <= 0)
                     {
                         tuskShootCooldown = 5;
-                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<NailSlasher>(), (int)(28 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 5f, Player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<NailSlasher>(), (int)(28 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 0f, Player.whoAmI);
                     }
                     if (Player.ownedProjectileCounts[ModContent.ProjectileType<NailSlasher>()] > 0)
                         tuskShootCooldown = 2;
@@ -1113,9 +1183,15 @@ namespace JoJoStands
                 {
                     if (Main.mouseLeft && canStandBasicAttack && !Player.channel && tuskShootCooldown <= 0)
                     {
+                        if (Main.MouseWorld.X > Player.position.X)
+                            Player.direction = 1;
+                        if (Main.MouseWorld.X < Player.position.X)
+                            Player.direction = -1;
                         Player.channel = true;
                         tuskShootCooldown += 35 - standSpeedBoosts;
-                        SoundEngine.PlaySound(SoundID.Item67);
+                        SoundStyle shootSound = SoundID.Item67;
+                        shootSound.Volume = 0.33f;
+                        SoundEngine.PlaySound(shootSound);
                         Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
@@ -1124,7 +1200,7 @@ namespace JoJoStands
                     if (Main.mouseRight && !Player.channel && tuskShootCooldown <= 0)
                     {
                         tuskShootCooldown = 5;
-                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<NailSlasher>(), (int)(53 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 7f, Player.whoAmI);
+                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<NailSlasher>(), (int)(53 * standDamageBoosts) + ((24 + equippedTuskAct - 1) * equippedTuskAct - 1), 0f, Player.whoAmI);
                     }
                     if (Player.ownedProjectileCounts[ModContent.ProjectileType<NailSlasher>()] > 0)
                         tuskShootCooldown = 2;
@@ -1133,9 +1209,15 @@ namespace JoJoStands
                 {
                     if (Main.mouseLeft && canStandBasicAttack && !Player.channel && tuskShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>()] <= 0)
                     {
+                        if (Main.MouseWorld.X > Player.position.X)
+                            Player.direction = 1;
+                        if (Main.MouseWorld.X < Player.position.X)
+                            Player.direction = -1;
                         Player.channel = true;
                         tuskShootCooldown += 35 - standSpeedBoosts;
-                        SoundEngine.PlaySound(SoundID.Item67);
+                        SoundStyle shootSound = SoundID.Item67;
+                        shootSound.Volume = 0.33f;
+                        SoundEngine.PlaySound(shootSound);
                         Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
@@ -1166,6 +1248,10 @@ namespace JoJoStands
                     {
                         if (Main.mouseLeft && canStandBasicAttack && !Player.channel && tuskShootCooldown <= 0)
                         {
+                            if (Main.MouseWorld.X > Player.position.X)
+                                Player.direction = 1;
+                            if (Main.MouseWorld.X < Player.position.X)
+                                Player.direction = -1;
                             Player.channel = true;
                             tuskShootCooldown += 15 - standSpeedBoosts;
                             SoundEngine.PlaySound(SoundID.Item67);
@@ -1591,10 +1677,24 @@ namespace JoJoStands
             }
         }
 
-        public override void PreUpdateMovement()
+        public override void UpdateLifeRegen()
         {
-            if (timestopActive && !Player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
-                Player.velocity = Vector2.Zero;
+            if (siliconLifeformCarapace)
+            {
+                if (Player.lifeRegen > 0)
+                    Player.lifeRegen = 0;
+                Player.lifeRegenTime = 0;
+                if (vampiricBangle)
+                    Player.lifeRegen -= 8;
+                if (!vampiricBangle)
+                    Player.lifeRegen -= 4;
+            }
+        }
+
+        public override void NaturalLifeRegen(ref float regen)
+        {
+            if (siliconLifeformCarapace)
+                regen = 0f;
         }
 
         public override void PostUpdateMiscEffects()
@@ -1602,8 +1702,32 @@ namespace JoJoStands
             if (usedEctoPearl)
                 standRangeBoosts += 64f;
 
-            if (standOut)
+            standDefenseToAdd = 4 + (2 * standTier);
+
+            if (standType == 2)
+            {
+                standDefenseToAdd /= 2;
+                standAccessoryDefense /= 2;
+            }
+
+            if (crazyDiamondRestorationMode)
+            {
+                standDamageBoosts = 1f;
+                standSpeedBoosts = 0;
+            }
+
+            if (siliconLifeformCarapace)
+            {
+                standAccessoryDefense *= 2;
+                standDefenseToAdd *= 2;
+                standDodgeBoosts *= 2;
+            }
+
+            if (standOut && !standAutoMode)
+            {
                 Player.statDefense += standDefenseToAdd;
+                Player.statDefense += standAccessoryDefense;
+            }
 
             if (StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT2>())
                 Player.endurance = 0.7f;
@@ -1642,10 +1766,7 @@ namespace JoJoStands
 
             standOut = true;
             standTier = standItem.standTier;
-            standDefenseToAdd = 4 + (2 * standItem.standTier);
             standName = standItem.standProjectileName;
-            if (standItem.standType == 2)
-                standDefenseToAdd /= 2;
 
             if (!standItem.ManualStandSpawning(Player))
             {
@@ -1673,10 +1794,6 @@ namespace JoJoStands
             {
                 Player.AddBuff(ModContent.BuffType<FrozeninTime>(), 2);
             }
-            if (deathLoopActive)       //if someone has deathloop turned on and you don't turn it on for you
-            {
-                Player.AddBuff(ModContent.BuffType<DeathLoop>(), 2);
-            }
             if (epitaphForesightActive && !Player.HasBuff(ModContent.BuffType<ForesightBuff>()) && !Player.HasBuff(ModContent.BuffType<ForeseenDebuff>()))
             {
                 Player.AddBuff(ModContent.BuffType<ForeseenDebuff>(), 2);
@@ -1699,24 +1816,6 @@ namespace JoJoStands
             return timeToReturn;
         }
 
-        public override void OnHitNPC(Item Item, NPC target, int damage, float knockback, bool crit)        //already only runs for melee weapons
-        {
-            if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
-            {
-                Player.AddBuff(BuffID.ShadowDodge, 30 * 60);
-                shadowDodgeCooldownTimer += 90 * 60;
-            }
-        }
-
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
-        {
-            if (wearingTitaniumMask && shadowDodgeCooldownTimer <= 0)
-            {
-                Player.AddBuff(BuffID.ShadowDodge, 30 * 60);
-                shadowDodgeCooldownTimer += 90 * 60;
-            }
-        }
-
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
         {
             if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
@@ -1727,6 +1826,8 @@ namespace JoJoStands
                 damage = (int)(damage * 0.8f);
             if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
                 damage = (int)(damage * 0.1f);
+            if (vampiricBangle && Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                damage = (int)(damage * 1.25f);
             if (Player.HasBuff<LockActiveBuff>() && npc.HasBuff<Locked>())
             {
                 if (npc.boss)
@@ -1762,6 +1863,8 @@ namespace JoJoStands
                 damage = (int)(damage * 0.8f);
             if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
                 damage = (int)(damage * 0.1f);
+            if (vampiricBangle && Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                damage = (int)(damage * 1.25f);
         }
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
@@ -1815,6 +1918,10 @@ namespace JoJoStands
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
                 Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
             }
+            if (!Player.HasBuff<Dodge>() && !standAutoMode && standOut)
+                standDodgeGuarantee += 1;
+            if (!Player.shadowDodge)
+                arrowEarringCooldown = 300;
             playerJustHit = true;
             playerJustHitTime = 2;
         }
@@ -1830,8 +1937,11 @@ namespace JoJoStands
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
                 Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
             }
+            if (!Player.HasBuff<Dodge>() && !standAutoMode && standOut)
+                standDodgeGuarantee += 1;
+            if (!Player.shadowDodge)
+                arrowEarringCooldown = 300;
         }
-
         public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
         {
             if (StandPvPMode && Main.netMode != NetmodeID.SinglePlayer && target.GetModPlayer<MyPlayer>().standOut)
@@ -1865,10 +1975,13 @@ namespace JoJoStands
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
         {
-            if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0 || !Player.HasBuff(ModContent.BuffType<Dodge>()) && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0)
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0 || !Player.HasBuff(ModContent.BuffType<Dodge>()) && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && !standAutoMode && standOut || !standAutoMode && standOut && Player.shadowDodge)
             {
-                if (!Player.HasBuff(ModContent.BuffType<Dodge>()) && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0)
-                    Player.AddBuff(ModContent.BuffType<Dodge>(), 60);
+                if (!Player.HasBuff(ModContent.BuffType<Dodge>()))
+                {
+                    if (Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && !standAutoMode && standOut)
+                        Player.AddBuff(ModContent.BuffType<Dodge>(), 60);
+                }
                 return false;
             }
             return true;

@@ -42,6 +42,7 @@ namespace JoJoStands.Items
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             mPlayer.sexPistolsTier = standTier;
+            mPlayer.standType = 2;
             mPlayer.poseSoundName = "SexPistolsIsDesignedToKill";
             for (int i = 0; i < 6; i++)
             {

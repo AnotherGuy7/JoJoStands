@@ -25,8 +25,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            MyPlayer Mplayer = player.GetModPlayer<MyPlayer>();
-            Mplayer.standDamageBoosts += 0.15f;
+            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.15f;
         }
     }
 }

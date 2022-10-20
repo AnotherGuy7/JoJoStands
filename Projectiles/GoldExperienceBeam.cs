@@ -1,4 +1,5 @@
 using JoJoStands.Projectiles.Minions;
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -30,6 +31,19 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation();
+        }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+                crit = true;
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+            }
         }
     }
 }

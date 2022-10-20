@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.Buffs.Debuffs;
 using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
@@ -62,8 +63,14 @@ namespace JoJoStands.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.Next(0, 101) < 50f)
                 target.AddBuff(BuffID.OnFire, 300);
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+            }
         }
     }
 }

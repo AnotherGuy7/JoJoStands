@@ -31,7 +31,7 @@ namespace JoJoStands.Items
         public override bool ManualStandSpawning(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.standType = 1;
+            mPlayer.standType = 2;
             mPlayer.standName = "CenturyBoy";
             mPlayer.showingCBLayer = true;
             mPlayer.standAccessory = true;

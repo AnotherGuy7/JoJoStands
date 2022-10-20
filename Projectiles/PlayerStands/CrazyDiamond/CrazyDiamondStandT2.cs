@@ -10,7 +10,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
     public class CrazyDiamondStandT2 : StandClass
     {
         public override int PunchDamage => 52;
-        public override int PunchTime => 9;
+        public override int PunchTime => 11;
         public override int AltDamage => 81;
         public override int HalfStandHeight => 51;
         public override int FistWhoAmI => 12;

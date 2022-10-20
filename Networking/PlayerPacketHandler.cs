@@ -19,6 +19,10 @@ namespace JoJoStands.Networking
         public const byte DyeItem = 5;
         public const byte SexPistolPosition = 6;
         public const byte DeathLoopInfo = 7;
+        public const byte ArrowEarringInfo = 8;
+        public const byte FistsEffectNPCInfo = 9;
+        public const byte OtherPlayerDebuffInfo = 10;
+        public const byte OtherPlayerExtraEffect = 11;
         //public const byte Sounds = 6;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
@@ -53,6 +57,18 @@ namespace JoJoStands.Networking
                     break;
                 case DeathLoopInfo:
                     ReceiveDeathLoopInfo(reader, fromWho);
+                    break;
+                case ArrowEarringInfo:
+                    ReceiveArrowEarringInfo(reader, fromWho);
+                    break;
+                case FistsEffectNPCInfo:
+                    ReceiveFistsEffectNPCInfo(reader, fromWho);
+                    break;
+                case OtherPlayerDebuffInfo:
+                    ReceiveOtherPlayerDebuff(reader, fromWho);
+                    break;
+                case OtherPlayerExtraEffect:
+                    ReceiveOtherPlayerExtraEffect(reader, fromWho);
                     break;
             }
         }
@@ -230,25 +246,163 @@ namespace JoJoStands.Networking
                 SendSexPistolPosition(-1, fromWho, whoAmI, index, new Vector2(posX, posY));
         }
 
-        public void SendDeathLoopInfo(int toWho, int fromWho, byte whoAmI, byte targetWhoAmI, int targetNPCType)
+        public void SendDeathLoopInfo(int toWho, int fromWho, byte whoAmI, int targetWhoAmI)
         {
             ModPacket packet = GetPacket(DeathLoopInfo, fromWho);
             packet.Write(whoAmI);
             packet.Write(targetWhoAmI);
-            packet.Write(targetNPCType);
             packet.Send(toWho, fromWho);
         }
 
         public void ReceiveDeathLoopInfo(BinaryReader reader, int fromWho)
         {
             byte whoAmI = reader.ReadByte();
-            byte targetWhoAmI = reader.ReadByte();
-            int targetNPCType = reader.ReadInt32();
+            int targetWhoAmI = reader.ReadByte();
 
-            Main.player[fromWho].GetModPlayer<MyPlayer>().deathLoopNPCWhoAmI = targetWhoAmI;
-            Main.player[fromWho].GetModPlayer<MyPlayer>().deathLoopNPCType = targetNPCType;
+            Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().taggedForDeathLoop = 600;
+            Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().deathLoopOwner = fromWho;
             if (Main.netMode == NetmodeID.Server)
-                SendDeathLoopInfo(-1, fromWho, whoAmI, targetWhoAmI, targetNPCType);
+                SendDeathLoopInfo(-1, fromWho, whoAmI, targetWhoAmI);
+        }
+
+        public void SendArrowEarringInfo(int toWho, int fromWho, byte whoAmI, int targetNPCwhoAmI, int damage, bool crit)
+        {
+            ModPacket packet = GetPacket(ArrowEarringInfo, fromWho);
+            packet.Write(whoAmI);
+            packet.Write(targetNPCwhoAmI);
+            packet.Write(damage);
+            packet.Write(crit);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ReceiveArrowEarringInfo(BinaryReader reader, int fromWho)
+        {
+            byte whoAmI = reader.ReadByte();
+            int targetNPCwhoAmI = reader.ReadInt32();
+            int damage = reader.ReadInt32();
+            bool crit = reader.ReadBoolean();
+
+            Main.npc[targetNPCwhoAmI].StrikeNPC(damage, 0, 0, crit);
+            if (Main.netMode == NetmodeID.Server)
+                SendArrowEarringInfo(-1, fromWho, whoAmI, targetNPCwhoAmI, damage, crit);
+        }
+
+        public void SendFistsEffectNPCInfo(int toWho, int fromWho, byte whoAmI, int targetNPCwhoAmI, int fistWhoAmI, int stat1, int stat2, int stat3, float stat4, float stat5)
+        {
+            ModPacket packet = GetPacket(FistsEffectNPCInfo, fromWho);
+            packet.Write(whoAmI);
+            packet.Write(targetNPCwhoAmI);
+            packet.Write(fistWhoAmI);
+            packet.Write(stat1);
+            packet.Write(stat2);
+            packet.Write(stat3);
+            packet.Write(stat4);
+            packet.Write(stat5);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ReceiveFistsEffectNPCInfo(BinaryReader reader, int fromWho)
+        {
+            byte whoAmI = reader.ReadByte();
+            int targetNPCwhoAmI = reader.ReadInt32();
+            int fistWhoAmI = reader.ReadInt32();
+            int stat1 = reader.ReadInt32();
+            int stat2 = reader.ReadInt32();
+            int stat3 = reader.ReadInt32();
+            float stat4 = reader.ReadSingle();
+            float stat5 = reader.ReadSingle();
+
+            if (fistWhoAmI == 0)
+                Main.npc[targetNPCwhoAmI].velocity.X *= 0.2f;
+            if (fistWhoAmI == 3)
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().affectedbyBtz = true;
+            if (fistWhoAmI == 4)
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = stat1;
+            if (fistWhoAmI == 8)
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = stat1;
+            if (fistWhoAmI == 12)
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
+            if (fistWhoAmI == 13)
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
+            if (fistWhoAmI == 15 && stat1 == 3)
+            {
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = stat4;
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = stat5;
+                if (Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
+                    Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
+            }
+            if (fistWhoAmI == 15 && stat1 == 1)
+            {
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = stat4;
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = stat5;
+                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = stat2;
+                if (Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
+                    Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += stat3;
+            }
+            if (Main.netMode == NetmodeID.Server)
+                SendFistsEffectNPCInfo(-1, fromWho, whoAmI, targetNPCwhoAmI, fistWhoAmI, stat1, stat2, stat3, stat4, stat5);
+        }
+
+        public void SendOtherPlayerDebuff(int toWho, int fromWho, byte whoAmI, int targetPlayerWhoAmI, int debuffType, int debuffTime)
+        {
+            ModPacket packet = GetPacket(OtherPlayerDebuffInfo, fromWho);
+            packet.Write(whoAmI);
+            packet.Write(targetPlayerWhoAmI);
+            packet.Write(debuffType);
+            packet.Write(debuffTime);
+            packet.Send(toWho, fromWho);
+        }
+        public void ReceiveOtherPlayerDebuff(BinaryReader reader, int fromWho)
+        {
+            byte whoAmI = reader.ReadByte();
+            int targetPlayerWhoAmI = reader.ReadInt32();
+            int debuffType = reader.ReadInt32();
+            int debuffTime = reader.ReadInt32();
+
+            Main.player[targetPlayerWhoAmI].AddBuff(debuffType, debuffTime);
+            if (Main.netMode == NetmodeID.Server)
+                SendOtherPlayerDebuff(-1, fromWho, whoAmI, targetPlayerWhoAmI, debuffType, debuffTime);
+        }
+
+        public void SendOtherPlayerExtraEffect(int toWho, int fromWho, byte whoAmI, int targetPlayerWhoAmI, int effectType, int int1, int int2, float float1, float float2)
+        {
+            ModPacket packet = GetPacket(OtherPlayerExtraEffect, fromWho);
+            packet.Write(whoAmI);
+            packet.Write(targetPlayerWhoAmI);
+            packet.Write(effectType);
+            packet.Write(int1);
+            packet.Write(int2);
+            packet.Write(float1);
+            packet.Write(float2);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ReceiveOtherPlayerExtraEffect(BinaryReader reader, int fromWho)
+        {
+            byte whoAmI = reader.ReadByte();
+            int targetPlayerWhoAmI = reader.ReadInt32();
+            int effectType = reader.ReadInt32();
+            int int1 = reader.ReadInt32();
+            int int2 = reader.ReadInt32();
+            float float1 = reader.ReadSingle();
+            float float2 = reader.ReadSingle();
+
+            if (effectType == 1) //echoes 3freeze
+            {
+                Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesDamageBoost = float1;
+                if (Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesFreeze <= 15)
+                    Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesFreeze += 30;
+            }
+            if (effectType == 2) //echoes act 1 debuff
+            {
+                Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesDamageBoost = float1;
+                Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivityMax = int1;
+                if (Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivity < Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivityMax)
+                    Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivity += int2;
+            }
+
+            if (Main.netMode == NetmodeID.Server)
+                SendOtherPlayerExtraEffect(-1, fromWho, whoAmI, targetPlayerWhoAmI, effectType, int1, int2, float1, float2);
         }
     }
 }

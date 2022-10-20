@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using JoJoStands.Buffs.Debuffs;
 using static Terraria.ModLoader.ModContent;
  
 namespace JoJoStands.Projectiles
@@ -43,10 +44,7 @@ namespace JoJoStands.Projectiles
                     {
                         Projectile.direction = 1;
                         if (Projectile.Center.X < player.Center.X)
-                        {
                             Projectile.direction = -1;
-                        }
-                        player.ChangeDir(Projectile.direction);
                         Projectile.netUpdate = true;
                     }
                     Projectile.Center = pos;
@@ -68,6 +66,17 @@ namespace JoJoStands.Projectiles
 
             int dustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 202, Projectile.velocity.X * -0.3f, Projectile.velocity.Y * -0.3f);
             Main.dust[dustIndex].noGravity = true;
+        }
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+                crit = true;
+            if (mPlayer.crackedPearlEquipped)
+            {
+                if (Main.rand.NextFloat(0, 101) >= 60)
+                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+            }
         }
     }
 }
