@@ -9,7 +9,7 @@ namespace JoJoStands.Items
 {
     public class StoneFreeFinal : StandItemClass
     {
-        public override int standSpeed => 11;
+        public override int standSpeed => 10;
         public override int standType => 1;
         public override string standProjectileName => "StoneFree";
         public override int standTier => 4;

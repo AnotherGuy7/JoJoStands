@@ -14,7 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
     {
         public override int PunchDamage => 124;
         public override float PunchKnockback => 4f;
-        public override int PunchTime => 24;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
+        public override int PunchTime => 22;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
         public override int HalfStandHeight => 32;
         public override int FistWhoAmI => 6;
         public override int StandOffset => 0;

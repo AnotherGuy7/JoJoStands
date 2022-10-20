@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
     public class EchoesStandT3 : StandClass
     {
         public override int PunchDamage => 44;
-        public override int PunchTime => 14;
+        public override int PunchTime => 12;
         public override int HalfStandHeight => 26;
         public override int FistWhoAmI => 15;
         public override int TierNumber => 3;

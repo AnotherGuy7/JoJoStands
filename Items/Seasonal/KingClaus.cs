@@ -7,7 +7,7 @@ namespace JoJoStands.Items.Seasonal
 {
     public class KingClaus : StandItemClass
     {
-        public override int standSpeed => 22;
+        public override int standSpeed => 20;
         public override int standType => 1;
         public override int standTier => 4;
 

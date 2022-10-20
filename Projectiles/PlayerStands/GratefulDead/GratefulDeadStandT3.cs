@@ -14,7 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override float ProjectileSpeed => 16f;
         public override float MaxDistance => 98f;
         public override int PunchDamage => 67;
-        public override int PunchTime => 13;
+        public override int PunchTime => 12;
         public override int HalfStandHeight => 34;
         public override int FistWhoAmI => 8;
         public override int TierNumber => 1;

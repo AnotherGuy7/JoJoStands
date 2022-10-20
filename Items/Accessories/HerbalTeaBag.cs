@@ -9,7 +9,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Herbal Tea Bag");
-            Tooltip.SetDefault("wip");
+            Tooltip.SetDefault("Next 10 ranged stand attacks will be buffed\nRecover one attack per second while at rest");
             SacrificeTotal = 1;
         }
 

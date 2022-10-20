@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
     {
         public override int PunchDamage => 68;
         public override float PunchKnockback => 9f;
-        public override int PunchTime => 28;
+        public override int PunchTime => 26;
         public override int HalfStandHeight => 36;
         public override int FistWhoAmI => 11;
         public override int TierNumber => 2;

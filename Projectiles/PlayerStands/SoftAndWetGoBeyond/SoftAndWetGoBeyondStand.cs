@@ -13,7 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
     public class SoftAndWetGoBeyondStand : StandClass
     {
         public override int PunchDamage => 109;
-        public override int PunchTime => 10;
+        public override int PunchTime => 9;
         public override int HalfStandHeight => 38;
         public override int AltDamage => 320;
         public override int StandOffset => 54;

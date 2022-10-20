@@ -9,7 +9,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The First Napkin");
-            Tooltip.SetDefault("10% of damage aganist an enemy is transmitted to nearby creatures\nTransmitted damage is doubled if user not damaged for a long time");
+            Tooltip.SetDefault("5% chance to reduce Ability Cooldown when attacking an enemy\nOnce every three minutes completely removes Ability Cooldown");
             SacrificeTotal = 1;
         }
 

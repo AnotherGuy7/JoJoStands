@@ -12,7 +12,7 @@ namespace JoJoStands.Items
         {
             get { return Mod.Name + "/Items/CreamT1"; }
         }
-        public override int standSpeed => 28;
+        public override int standSpeed => 26;
         public override int standType => 1;
         public override string standProjectileName => "Cream";
         public override int standTier => 2;

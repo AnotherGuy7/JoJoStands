@@ -13,7 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
     {
         public override int PunchDamage => 38;
         public override int AltDamage => 25;
-        public override int PunchTime => 15;
+        public override int PunchTime => 13;
         public override int HalfStandHeight => 32;
         public override int FistWhoAmI => 9;
         public override int TierNumber => 2;
