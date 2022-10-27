@@ -133,6 +133,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         private Vector2 rangeIndicatorSize;
         private Vector2 secondaryRangeIndicatorSize;
         private int netUpdateTimer = 0;
+        public float mouseX = 0f;
+        public float mouseY = 0f;
         //private int rangeIndicatorSize = 0;
         //private int secondaryRangeIndicatorSize = 0;
 
@@ -248,21 +250,24 @@ namespace JoJoStands.Projectiles.PlayerStands
             HandleDrawOffsets();
             idleFrames = false;
             attackFrames = true;
-            float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
+            float rotaY = mouseY - Projectile.Center.Y;
             Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-            velocityAddition = Main.MouseWorld - Projectile.position;
+            velocityAddition = new Vector2(mouseX, mouseY) - Projectile.position;
             velocityAddition.Normalize();
             velocityAddition *= movementSpeed;
 
-            Projectile.spriteDirection = 1;
-            Projectile.direction = 1;
-            if (Main.MouseWorld.X < Projectile.position.X)
+            if (mouseX < Projectile.position.X)
             {
                 Projectile.spriteDirection = -1;
                 Projectile.direction = -1;
             }
+            if (mouseX > Projectile.position.X)
+            {
+                Projectile.spriteDirection = 1;
+                Projectile.direction = 1;
+            }
 
-            mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+            mouseDistance = Vector2.Distance(new Vector2(mouseX, mouseY), Projectile.Center);
             if (mouseDistance > 40f)
                 Projectile.velocity = player.velocity + velocityAddition;
             if (mouseDistance <= 40f)
@@ -272,7 +277,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (shootCount <= 0)
             {
                 shootCount += newPunchTime;
-                Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                Vector2 shootVel = new Vector2(mouseX, mouseY) - Projectile.Center;
                 if (shootVel == Vector2.Zero)
                     shootVel = new Vector2(0f, 1f);
 
@@ -745,6 +750,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             newPunchDamage = (int)(PunchDamage * mPlayer.standDamageBoosts);
             newProjectileDamage = (int)(ProjectileDamage * mPlayer.standDamageBoosts);
             playerHasAbilityCooldown = player.HasBuff(ModContent.BuffType<AbilityCooldown>());
+            if (Projectile.owner == Main.myPlayer)
+            {
+                mouseX = Main.MouseWorld.X;
+                mouseY = Main.MouseWorld.Y;
+            }
             mPlayer.standFistsType = FistWhoAmI;
             mPlayer.standTier = TierNumber;
             mPlayer.poseSoundName = PoseSoundName;
@@ -907,6 +917,12 @@ namespace JoJoStands.Projectiles.PlayerStands
             writer.Write(idleFrames);
             writer.Write(attackFrames);
             writer.Write(secondaryAbilityFrames);
+            writer.Write(playerHasAbilityCooldown);
+            writer.Write(shootCount);
+            writer.Write(Projectile.spriteDirection);
+            writer.Write(Projectile.rotation);
+            writer.Write(mouseX);
+            writer.Write(mouseY);
             SendExtraStates(writer);
         }
 
@@ -915,6 +931,12 @@ namespace JoJoStands.Projectiles.PlayerStands
             idleFrames = reader.ReadBoolean();
             attackFrames = reader.ReadBoolean();
             secondaryAbilityFrames = reader.ReadBoolean();
+            playerHasAbilityCooldown = reader.ReadBoolean();
+            shootCount = reader.ReadInt32();
+            Projectile.spriteDirection = reader.ReadInt32();
+            Projectile.rotation = reader.ReadSingle();
+            mouseX = reader.ReadSingle();
+            mouseY = reader.ReadSingle();
             ReceiveExtraStates(reader);
         }
 

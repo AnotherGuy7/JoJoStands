@@ -35,10 +35,11 @@ namespace JoJoStands.Projectiles
         public int timestopStartTimeLeft = 0;
         public Vector2 preSkipVel = Vector2.Zero;
 
-        public bool onlyOnceforFists = false;
         public int echoesTailTipType = 0; // 1 - boing, 2 - kaboom, 3 - wooosh, 4 - sizzle
         public int echoesTailTipTier = 0;
-        public int echoesTailTipStage = 0; 
+        public int echoesTailTipStage = 0;
+
+        public bool exceptionForSCParry = false;
 
         public struct ForesightData
         {
@@ -59,6 +60,8 @@ namespace JoJoStands.Projectiles
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (projectile.DamageType.CountsAsClass<RangedDamageClass>() && mPlayer.centuryBoyActive)
                     bulletsCenturyBoy = true;
+            if (projectile.type == ModContent.ProjectileType<Fists>() || projectile.type == ModContent.ProjectileType<PlayerStands.Cream.Void>() || projectile.type == ModContent.ProjectileType<PlayerStands.Cream.DashVoid>() || projectile.type == ModContent.ProjectileType<StarFinger>() || projectile.type == ModContent.ProjectileType<HermitPurpleGrab>() || projectile.type == ModContent.ProjectileType<HermitPurpleHook>() || projectile.type == ModContent.ProjectileType<RedBind>() || projectile.type == ModContent.ProjectileType<BindingEmeraldString>() || projectile.type == ModContent.ProjectileType<StickyFingersFistExtended>() || projectile.type == ModContent.ProjectileType<StoneFreeBindString>() || projectile.type == ModContent.ProjectileType<PhantomMarker>())
+                exceptionForSCParry = true;
             for (int i = 0; i < JoJoStands.standProjectileList.Count - 1; i++)
             {
                 if (JoJoStands.standProjectileList[i] == projectile.type || kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
@@ -282,6 +285,8 @@ namespace JoJoStands.Projectiles
                         target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
                 }
             }
+            if (Projectile.type == ModContent.ProjectileType<Fists>() && mPlayer.standFistsType != 13 && mPlayer.familyPhoto && mPlayer.familyPhotoEffect < 30 && !mPlayer.standAutoMode)
+                mPlayer.familyPhotoEffect += 30;
             if (standProjectile || kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
             {
                 if (player.HasBuff(ModContent.BuffType<BlindRage>()))
@@ -293,7 +298,7 @@ namespace JoJoStands.Projectiles
                 if (mPlayer.fightingSpiritEmblem && mPlayer.fightingSpiritEmblemStack < 31)
                     mPlayer.fightingSpiritEmblemStack += 1;
                 if (mPlayer.manifestedWillEmblem && crit)
-                    damage = (int)(damage * 1.5f);
+                    damage = (int)(damage * 1.25f);
                 if (mPlayer.theFirstNapkin && Main.rand.NextFloat(0, 101) <= 5 && player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.buffTime[mPlayer.theFirstNapkinReduction] > 60)
                     player.buffTime[mPlayer.theFirstNapkinReduction] -= 60;
 
@@ -317,8 +322,8 @@ namespace JoJoStands.Projectiles
                             npc.StrikeNPC(damage2, 0, 0, critCheck);
                             SyncCall.SyncArrowEarringInfo(player.whoAmI, npc.whoAmI, damage2, critCheck);
                         }
-                        if (mPlayer.vampiricBangle && player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
-                            mPlayer.vampiricBangleHeal += damage;
+                        if (mPlayer.vampiricBangle)
+                            player.Heal((int)(Main.rand.NextFloat(1, 6)));
                     }
                 }
             }

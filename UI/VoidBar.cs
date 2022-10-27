@@ -17,10 +17,13 @@ namespace JoJoStands.UI
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
-            MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
             voidText.SetText("Void: " + mPlayer.voidCounter);
+
+            if (mPlayer.creamTier == 0)
+                Visible = false;
+
+            base.Update(gameTime);
         }
 
         public override void OnInitialize()

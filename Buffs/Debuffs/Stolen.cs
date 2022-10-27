@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.NPCs;
 
 namespace JoJoStands.Buffs.Debuffs
 {
@@ -22,9 +23,17 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.velocity.X = 0f;
-            npc.lifeRegen = -6;
-            npc.lifeRegenExpectedLossPerSecond = 6;
+            if (!npc.boss)
+                npc.velocity.X = 0f;
+            int damage = (int)(npc.lifeMax * 0.015f);
+            if (npc.GetGlobalNPC<JoJoGlobalNPC>().whitesnakeDISCImmune > 1)
+                damage /= npc.GetGlobalNPC<JoJoGlobalNPC>().whitesnakeDISCImmune;
+            if (damage < (int)(npc.lifeMax * 0.0015f))
+                damage = (int)(npc.lifeMax * 0.0015f);
+            if (damage < 10)
+                damage = 10;
+            npc.lifeRegen = -damage;
+            npc.lifeRegenExpectedLossPerSecond = damage;
         }
     }
 }

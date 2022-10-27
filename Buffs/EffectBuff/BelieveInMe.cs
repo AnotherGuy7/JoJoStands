@@ -17,6 +17,7 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             player.noKnockback = true;
             player.longInvince = true;
+            player.endurance += 0.1f;
             player.moveSpeed *= 1.25f;
             if (player.HasBuff(ModContent.BuffType<SMACK>()))
                 player.ClearBuff(ModContent.BuffType<SMACK>());

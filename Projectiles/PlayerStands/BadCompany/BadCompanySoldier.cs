@@ -61,22 +61,22 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 if (Projectile.ai[0] == 1f)
                 {
-                    projectileDamage = ((int)(9 * mPlayer.standDamageBoosts));
+                    projectileDamage = 9;
                     shootTime = 90;
                 }
                 else if (Projectile.ai[0] == 2f)
                 {
-                    projectileDamage = ((int)(18 * mPlayer.standDamageBoosts));
+                    projectileDamage = 18;
                     shootTime = 80;
                 }
                 else if (Projectile.ai[0] == 3f)
                 {
-                    projectileDamage = ((int)(31 * mPlayer.standDamageBoosts));
+                    projectileDamage = 31;
                     shootTime = 70;
                 }
                 else if (Projectile.ai[0] == 4f)
                 {
-                    projectileDamage = ((int)(40 * mPlayer.standDamageBoosts));
+                    projectileDamage = 40;
                     shootTime = 60;
                 }
                 shootTime += Main.rand.Next(0, 15 + 1);
@@ -151,7 +151,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
                             Main.projectile[proj].netUpdate = true;
                         }
                     }
@@ -190,7 +190,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -199,7 +199,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     MovementAI();
                 }
             }
-
+            if (!mPlayer.standOut)
+                Projectile.Kill();
             Projectile.tileCollide = !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
             if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height))
             {

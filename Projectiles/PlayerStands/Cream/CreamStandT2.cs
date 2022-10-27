@@ -50,8 +50,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
                     Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
 
-                    Projectile.direction = 1;
-                    if (Main.MouseWorld.X < Projectile.position.X)
+                    if (mouseX > Projectile.position.X)
+                        Projectile.direction = 1;
+                    if (mouseX < Projectile.position.X)
                         Projectile.direction = -1;
 
                     Projectile.spriteDirection = Projectile.direction;

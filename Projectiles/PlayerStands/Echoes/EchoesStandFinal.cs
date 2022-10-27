@@ -29,8 +29,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private int targetPlayer = -1;
         private int targetNPC = -1;
 
-        private float x1 = 0f;
-
         private bool threeFreeze = false;
         private bool returnToPlayer = false;
         private bool changeACT = false;
@@ -58,17 +56,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             mPlayer.echoesACT = ACT;
             Rectangle rectangle = Rectangle.Empty;
 
-            if (Projectile.owner == Main.myPlayer)
-            {
-                rectangle = new Rectangle((int)(Main.MouseWorld.X-10), (int)(Main.MouseWorld.Y-10), 20, 20);
-                x1 = Main.MouseWorld.X;
-            }
-
             if (threeFreeze)
             {
-                if (x1 > player.position.X)
+                if (mouseX > player.position.X)
                     player.direction = 1;
-                if (x1 < player.position.X)
+                if (mouseX < player.position.X)
                     player.direction = -1;
             }
             if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
@@ -150,7 +142,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
                     if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
                         npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
-                    SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, targetNPC, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, targetNPC, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
                     onlyOneTarget = 0;
                 }
                 if (targetPlayer != -1 && onlyOneTarget != 0)
@@ -278,8 +270,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             writer.Write(threeFreeze);
             writer.Write(returnToPlayer);
-
-            writer.Write(x1);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
@@ -291,8 +281,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             threeFreeze = reader.ReadBoolean();
             returnToPlayer = reader.ReadBoolean();
-
-            x1 = reader.ReadSingle();
         }
     }
 }

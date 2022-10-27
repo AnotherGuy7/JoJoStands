@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Audio;
+using System.IO;
+using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 {
@@ -37,6 +40,15 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 Projectile.timeLeft = 2;
 
             mPlayer.silverChariotShirtless = Shirtless;
+
+            if (secondaryAbilityFrames || parryFrames)
+            {
+                if (mouseX > player.position.X)
+                    player.direction = 1;
+                if (mouseX < player.position.X)
+                    player.direction = -1;
+            }
+
             if (!mPlayer.standAutoMode)
             {
                 if (Main.mouseLeft && !secondaryAbilityFrames && Projectile.owner == Main.myPlayer)
@@ -51,7 +63,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         attackFrames = false;
                     }
                 }
-                if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !attackFrames && Projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && !attackFrames && Projectile.owner == Main.myPlayer)
                 {
                     HandleDrawOffsets();
                     idleFrames = false;
@@ -64,35 +76,41 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         Projectile otherProj = Main.projectile[p];
                         if (otherProj.active)
                         {
-                            if (parryRectangle.Intersects(otherProj.Hitbox) && otherProj.type != Projectile.type && !otherProj.friendly)
+                            if (parryRectangle.Intersects(otherProj.Hitbox) && otherProj.type != Projectile.type && !otherProj.friendly && !otherProj.GetGlobalProjectile<JoJoGlobalProjectile>().exceptionForSCParry)
                             {
                                 parryFrames = true;
                                 secondaryAbilityFrames = false;
                                 otherProj.owner = Projectile.owner;
+                                otherProj.damage += (int)(otherProj.damage * mPlayer.standDamageBoosts) - otherProj.damage;
                                 otherProj.damage *= 2;
                                 otherProj.velocity *= -1;
                                 otherProj.hostile = false;
                                 otherProj.friendly = true;
-                                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(6));
+                                SyncCall.SyncStandEffectInfo(player.whoAmI, otherProj.whoAmI, 10, 1);
                             }
                         }
                     }
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
                         NPC npc = Main.npc[n];
-                        if (npc.active)
+                        if (npc.active && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                         {
                             if (!npc.townNPC && !npc.friendly && !npc.immortal && !npc.hide && parryRectangle.Intersects(npc.Hitbox))
                             {
-                                npc.StrikeNPC(npc.damage * 2, 6f, player.direction);
+                                int damage = (int)(npc.damage * 2 * mPlayer.standDamageBoosts);
+                                npc.StrikeNPC(damage, 6f, player.direction);
+                                SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 10, 2, damage, player.direction);
                                 secondaryAbilityFrames = false;
                                 parryFrames = true;
+                                SoundStyle npcHit4 = SoundID.NPCHit4;
+                                npcHit4.Pitch = Main.rand.Next(4, 6 + 1) / 10f;
+                                SoundEngine.PlaySound(npcHit4, Projectile.Center);
                                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(6));
                             }
                         }
                     }
                 }
-                if (!Main.mouseRight && Projectile.owner == Main.myPlayer || secondaryAbilityFrames && player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
                     secondaryAbilityFrames = false;
                 }
@@ -236,7 +254,16 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     AnimateStand(animationName, 1, 10, true);
                 }
             }
-
+        }
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(parryFrames);
+            writer.Write(Shirtless);
+        }
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            parryFrames = reader.ReadBoolean();
+            Shirtless = reader.ReadBoolean();
         }
     }
 }

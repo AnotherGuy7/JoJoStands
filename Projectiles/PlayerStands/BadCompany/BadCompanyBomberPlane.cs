@@ -59,10 +59,11 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (bombDropTimer >= bombDropTime && bombsDropped < 3)
             {
                 bombsDropped++;
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<BadCompanyBomb>(), 0, 3f, Projectile.owner, bombDamage * (float)mPlayer.standDamageBoosts);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<BadCompanyBomb>(), (int)(bombDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner, (int)(bombDamage * mPlayer.standDamageBoosts));
                 bombDropTimer = 0;
             }
-
+            if (!mPlayer.standOut)
+                Projectile.Kill();
             if (Projectile.velocity.X <= 0)
                 Projectile.spriteDirection = Projectile.direction = -1;
             else

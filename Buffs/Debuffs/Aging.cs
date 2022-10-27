@@ -28,7 +28,7 @@ namespace JoJoStands.Buffs.Debuffs
                 player.lifeRegen = 0;
 
             player.lifeRegenTime = 120;
-            player.lifeRegen -= 4 * damageMultiplication;
+            player.lifeRegen -= 8 * damageMultiplication;
             player.moveSpeed *= 0.94f;
             player.GetDamage(DamageClass.Generic) *= 0.75f;
             player.GetDamage(DamageClass.Generic) *= 0.5f;
@@ -36,7 +36,7 @@ namespace JoJoStands.Buffs.Debuffs
 
             if (player.ZoneSnow || player.ZoneSkyHeight)
                 damageMultiplication = 0;
-            if (player.ZoneUndergroundDesert)
+            else
                 damageMultiplication = 1;
             if (player.ZoneDesert)
                 damageMultiplication = 2;
@@ -52,7 +52,7 @@ namespace JoJoStands.Buffs.Debuffs
 
             if (player.ZoneSnow || player.ZoneSkyHeight)
                 damageMultiplication = 0;
-            if (player.ZoneUndergroundDesert)
+            else
                 damageMultiplication = 1;
             if (player.ZoneDesert)
                 damageMultiplication = 2;
@@ -62,21 +62,12 @@ namespace JoJoStands.Buffs.Debuffs
             if (Math.Abs(npc.velocity.X) > savedVelocityX)
                 npc.velocity.X *= 0.9f;
 
-            if (npc.boss)
-            {
-                npc.lifeRegen = -2 * damageMultiplication;
-                if (!oneTimeEffectsApplied)
-                {
-                    npc.damage -= 15;
-                    oneTimeEffectsApplied = true;
-                }
-                return;
-            }
-
-            npc.lifeRegen = (-12 * mPlayer.standTier) * damageMultiplication;
+            int extraDamage = (int)(npc.life * 0.001f * mPlayer.standTier * damageMultiplication);
+            npc.lifeRegen = (-36 * mPlayer.standTier) * damageMultiplication - extraDamage;
             if (!oneTimeEffectsApplied)
             {
-                npc.defense = (int)(npc.defense * (1f - (0.2f * mPlayer.standTier)));
+                npc.defense = (int)(npc.defense * (1f - 0.2f * mPlayer.standTier));
+                npc.damage = (int)((npc.damage * (1f-0.1f * mPlayer.standTier)) - 10);
                 oneTimeEffectsApplied = true;
             }
         }

@@ -56,17 +56,17 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 if (Projectile.ai[0] == 2f)
                 {
-                    projectileDamage = ((int)(76 * mPlayer.standDamageBoosts));
+                    projectileDamage = 76;
                     shootTime = 200;
                 }
                 else if (Projectile.ai[0] == 3f)
                 {
-                    projectileDamage = ((int)(125 * mPlayer.standDamageBoosts));
+                    projectileDamage = 125;
                     shootTime = 160;
                 }
                 else if (Projectile.ai[0] == 4f)
                 {
-                    projectileDamage = ((int)(187 * mPlayer.standDamageBoosts));
+                    projectileDamage = 187;
                     shootTime = 120;
                 }
                 speedRandom = Main.rand.NextFloat(-0.03f, 0.03f);
@@ -97,7 +97,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), 1, 1f, Projectile.owner, projectileDamage);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 1f, Projectile.owner, (int)(projectileDamage * mPlayer.standDamageBoosts));
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -137,11 +137,13 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         shootVel.Y -= Projectile.Distance(target.position) / 110f;
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), 1, 1f, Projectile.owner, projectileDamage);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 1f, Projectile.owner, (int)(projectileDamage * mPlayer.standDamageBoosts));
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
             }
+            if (!mPlayer.standOut)
+                Projectile.Kill();
             Projectile.tileCollide = !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
             if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height))
             {

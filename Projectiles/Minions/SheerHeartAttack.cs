@@ -7,6 +7,8 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.Networking;
+
 
 namespace JoJoStands.Projectiles.Minions
 {
@@ -157,8 +159,11 @@ namespace JoJoStands.Projectiles.Minions
                         int hitDirection = -1;
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
-
+                        int critMultiplayer = 0;
+                        if (crit)
+                            critMultiplayer = 1;
                         npc.StrikeNPC(bombDamage, 7f, hitDirection, crit);
+                        SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 5, critMultiplayer, bombDamage, hitDirection);
                     }
                 }
             }
@@ -178,6 +183,7 @@ namespace JoJoStands.Projectiles.Minions
                         hitDirection = 1;
 
                     otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " had too high a heat signurature."), bombDamage, hitDirection);
+                    SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, otherPlayer.whoAmI, 3, bombDamage, hitDirection, 0f, 0f);
                 }
             }
             SoundEngine.PlaySound(SoundID.Item62);

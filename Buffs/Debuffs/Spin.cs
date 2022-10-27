@@ -8,6 +8,7 @@ namespace JoJoStands.Buffs.Debuffs
     public class Spin : ModBuff
     {
         public static int directionCounter = 0;
+        private int correctHP = 0;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spin");
@@ -27,6 +28,13 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
+            if (correctHP == 0)
+                correctHP = npc.life;
+            if (npc.boss && correctHP - npc.life >= npc.lifeMax / 4 && correctHP != 0)
+            {
+                npc.DelBuff(buffIndex);
+                correctHP = 0;
+            }
             directionCounter++;
             if (directionCounter >= 5)
             {

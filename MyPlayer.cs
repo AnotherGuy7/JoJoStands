@@ -231,7 +231,6 @@ namespace JoJoStands
         public int fightingSpiritEmblemStack = 0;
         public bool arrowEarring = false;
         public bool vampiricBangle = false;
-        public int vampiricBangleHeal = 0;
         public int arrowEarringCooldown = 0;
         public bool theFirstNapkin = false;
         public int theFirstNapkinReduction = 0;
@@ -239,7 +238,19 @@ namespace JoJoStands
         public bool herbalTeaBag = false;
         public int herbalTeaBagCount = 10;
         public int herbalTeaBagCooldown = 0;
+        public bool zippedHand = false;
+        public bool zippedHandDeath = false;
+        public bool familyPhoto = false;
+        public int familyPhotoEffect = 0;
+        public bool soothingSpiritDisc = false;
+        public int soothingSpiritDiscAttackNumber = 0;
+        public bool underbossPhone = false;
+        public bool sealedPokerDeck = false;
+        public bool requiem = false;
+        public bool overHeaven = false; // haha (C) Proos :)
         public bool centuryBoyActive = false;
+
+        private bool notDeadYet = false;
 
         private int echoesBoingUpd = 0;
         private int echoesDamageTimer1 = 60; //3 Freeze
@@ -250,7 +261,6 @@ namespace JoJoStands
         private int remoteDodge = 0;
 
         public int standFistsType = 0;
-
 
         public void ItemBreak(Item item)
         {
@@ -371,6 +381,12 @@ namespace JoJoStands
             vampiricBangle = false;
             theFirstNapkin = false;
             herbalTeaBag = false;
+            zippedHand = false;
+            familyPhoto = false;
+            soothingSpiritDisc = false;
+            underbossPhone = false;
+            sealedPokerDeck = false;
+            requiem = false;
             collideY = false;
         }
 
@@ -776,6 +792,20 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
+            if (familyPhotoEffect > 0)
+                familyPhotoEffect--;
+            if (!revived && Player.HasItem(ModContent.ItemType<PokerChip>()) || zippedHand && !zippedHandDeath)
+                notDeadYet = true;
+            else
+                notDeadYet = false;
+            if (zippedHandDeath)
+            {
+                if (!Player.HasBuff(ModContent.BuffType<SwanSong>()))
+                {
+                    Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), Player.statLifeMax, 0, false);
+                    zippedHandDeath = false;
+                }
+            }
             if (standOut)
             {
                 if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
@@ -811,13 +841,6 @@ namespace JoJoStands
             }
             if (theFirstNapkinCooldown > 0)
                 theFirstNapkinCooldown--;
-            if (!vampiricBangle)
-                vampiricBangleHeal = 0;
-            if (vampiricBangleHeal > 120)
-            {
-                Player.Heal(3);
-                vampiricBangleHeal = 0;
-            }
             if (arrowEarringCooldown > 0)
                 arrowEarringCooldown--;
             if (!fightingSpiritEmblem)
@@ -1270,7 +1293,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 16f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<InfiniteSpinNail>(), 512, 0f, Player.whoAmI);
-                            Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10));
+                            Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(30));
                         }
                     }
                 }
@@ -1449,10 +1472,6 @@ namespace JoJoStands
                     voidCounter = 0;
                 }
             }
-            else
-            {
-                VoidBar.Visible = false;
-            }
 
             if (badCompanyTier != 0)
             {
@@ -1513,17 +1532,20 @@ namespace JoJoStands
                 }
                 if (recalculateArmy)
                 {
-                    if (amountOfSoldiers < badCompanySoldiers * troopMult)     //Adding troops
+                    if (standOut)
                     {
-                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Player.velocity, ModContent.ProjectileType<BadCompanySoldier>(), 0, 0f, Player.whoAmI, badCompanyTier);
-                    }
-                    if (amountOfTanks < badCompanyTanks)
-                    {
-                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Player.velocity, ModContent.ProjectileType<BadCompanyTank>(), 0, 0f, Player.whoAmI, badCompanyTier);
-                    }
-                    if (amountOfChoppers < badCompanyChoppers)
-                    {
-                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Player.velocity, ModContent.ProjectileType<BadCompanyChopper>(), 0, 0f, Player.whoAmI, badCompanyTier);
+                        if (amountOfSoldiers < badCompanySoldiers * troopMult)     //Adding troops
+                        {
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Player.velocity, ModContent.ProjectileType<BadCompanySoldier>(), 0, 0f, Player.whoAmI, badCompanyTier);
+                        }
+                        if (amountOfTanks < badCompanyTanks)
+                        {
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Player.velocity, ModContent.ProjectileType<BadCompanyTank>(), 0, 0f, Player.whoAmI, badCompanyTier);
+                        }
+                        if (amountOfChoppers < badCompanyChoppers)
+                        {
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Player.velocity, ModContent.ProjectileType<BadCompanyChopper>(), 0, 0f, Player.whoAmI, badCompanyTier);
+                        }
                     }
 
                     //Removing troops
@@ -1679,21 +1701,21 @@ namespace JoJoStands
 
         public override void UpdateLifeRegen()
         {
-            if (siliconLifeformCarapace)
+            if (siliconLifeformCarapace && standOut)
             {
                 if (Player.lifeRegen > 0)
                     Player.lifeRegen = 0;
                 Player.lifeRegenTime = 0;
                 if (vampiricBangle)
-                    Player.lifeRegen -= 8;
+                    Player.lifeRegen -= 9;
                 if (!vampiricBangle)
-                    Player.lifeRegen -= 4;
+                    Player.lifeRegen -= 3;
             }
         }
 
         public override void NaturalLifeRegen(ref float regen)
         {
-            if (siliconLifeformCarapace)
+            if (siliconLifeformCarapace && standOut)
                 regen = 0f;
         }
 
@@ -1719,8 +1741,7 @@ namespace JoJoStands
             if (siliconLifeformCarapace)
             {
                 standAccessoryDefense *= 2;
-                standDefenseToAdd *= 2;
-                standDodgeBoosts *= 2;
+                standDefenseToAdd *= 2; 
             }
 
             if (standOut && !standAutoMode)
@@ -1827,7 +1848,9 @@ namespace JoJoStands
             if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
                 damage = (int)(damage * 0.1f);
             if (vampiricBangle && Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
-                damage = (int)(damage * 1.25f);
+                damage = (int)(damage * 1.33f);
+            if (familyPhotoEffect > 0)
+                damage = (int)(damage * 0.66f);
             if (Player.HasBuff<LockActiveBuff>() && npc.HasBuff<Locked>())
             {
                 if (npc.boss)
@@ -1863,8 +1886,10 @@ namespace JoJoStands
                 damage = (int)(damage * 0.8f);
             if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
                 damage = (int)(damage * 0.1f);
-            if (vampiricBangle && Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
-                damage = (int)(damage * 1.25f);
+            if (vampiricBangle)
+                damage = (int)(damage * 1.33f);
+            if (familyPhotoEffect > 0)
+                damage = (int)(damage * 0.66f);
         }
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
@@ -1975,7 +2000,7 @@ namespace JoJoStands
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
         {
-            if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0 || !Player.HasBuff(ModContent.BuffType<Dodge>()) && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && !standAutoMode && standOut || !standAutoMode && standOut && Player.shadowDodge)
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0 || !Player.HasBuff(ModContent.BuffType<Dodge>()) && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && !standAutoMode && standOut || !standAutoMode && standOut && Player.shadowDodge || Player.HasBuff(ModContent.BuffType<SwanSong>()))
             {
                 if (!Player.HasBuff(ModContent.BuffType<Dodge>()))
                 {
@@ -1989,7 +2014,7 @@ namespace JoJoStands
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)       //that 1 last frame before you completely die
         {
-            if (Player.whoAmI == Main.myPlayer)
+            if (Player.whoAmI == Main.myPlayer && !notDeadYet)
             {
                 if (DeathSoundID == DeathSoundType.Roundabout)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/ToBeContinued"));
@@ -2011,7 +2036,6 @@ namespace JoJoStands
                 receivedArrowShard = false;
                 piercedTimer = 36000;
             }
-
             if (!revived && Player.HasItem(ModContent.ItemType<PokerChip>()))
             {
                 revived = true;
@@ -2019,6 +2043,15 @@ namespace JoJoStands
                 Player.ConsumeItem(ModContent.ItemType<PokerChip>(), true);
                 Main.NewText("The chip has given you new life!");
                 return false;
+            }
+            if (zippedHand && !zippedHandDeath)
+            {
+                if (!Player.HasItem(ModContent.ItemType<PokerChip>()) || revived)
+                {
+                    Player.AddBuff(ModContent.BuffType<SwanSong>(), 420);
+                    Main.NewText("You have not finished yet...");
+                    return false;
+                }
             }
             if (backToZeroActive)
             {

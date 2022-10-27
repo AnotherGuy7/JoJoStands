@@ -49,13 +49,13 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             {
                 if (Projectile.ai[0] == 3f)
                 {
-                    projectileDamage = ((int)(49 * mPlayer.standDamageBoosts));
+                    projectileDamage = 49;
                     shootTime = 12;
                     chopperInaccuracy = 25;
                 }
                 else if (Projectile.ai[0] == 4f)
                 {
-                    projectileDamage = ((int)(62 * mPlayer.standDamageBoosts));
+                    projectileDamage = 62;
                     shootTime = 7;
                     chopperInaccuracy = 15;
                 }
@@ -89,7 +89,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
@@ -128,11 +128,13 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), projectileDamage, 3f, Projectile.owner);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
                         Main.projectile[proj].netUpdate = true;
                     }
                 }
             }
+            if (!mPlayer.standOut)
+                Projectile.Kill();
             Projectile.tileCollide = !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
         }
 

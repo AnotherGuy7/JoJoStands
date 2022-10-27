@@ -10,7 +10,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Silicon Lifeform Carapace");
-            Tooltip.SetDefault("100% increased stand dodge and defence bonuses\nLife is slowly drains");
+            Tooltip.SetDefault("25% increased Stand dodge chance\n100% increased stand defence bonus\nLife is slowly drains");
             SacrificeTotal = 1;
         }
 
@@ -26,6 +26,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            player.GetModPlayer<MyPlayer>().standDodgeBoosts += 25f;
             player.GetModPlayer<MyPlayer>().siliconLifeformCarapace = true;
         }
     }

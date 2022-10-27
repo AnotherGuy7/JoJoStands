@@ -49,6 +49,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 Projectile.timeLeft = 2;
 
             remoteControlFrames = remoteControlled;
+
+            if (armFrame == 1)
+                Lighting.AddLight(Projectile.position, 0);
+
             if (!mPlayer.standAutoMode && !remoteControlled)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
@@ -70,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     if (Projectile.frame >= 4)
                     {
                         shootCount += 120;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                        Vector2 shootVel = new Vector2(mouseX, mouseY) - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
@@ -107,9 +111,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
-
+                if (mouseX > Projectile.position.X)
+                    Projectile.spriteDirection = 1;
+                if (mouseX < Projectile.position.X)
+                    Projectile.spriteDirection = -1;
                 floatTimer += 0.06f;
-                armRotation = (Main.MouseWorld - Projectile.Center).ToRotation();
+                armRotation = (new Vector2(mouseX, mouseY) - Projectile.Center).ToRotation();
                 armPosition = Projectile.Center + new Vector2(0f, -4f);
                 if (Projectile.spriteDirection == -1)
                     armPosition += new Vector2(2f, -8f);
@@ -139,17 +146,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
-                    Vector2 moveVelocity = Main.MouseWorld - Projectile.Center;
+                    Vector2 moveVelocity = new Vector2(mouseX, mouseY) - Projectile.Center;
                     moveVelocity.Normalize();
                     Projectile.velocity.X = moveVelocity.X * 4f;
                     if (aboveTile)
                         Projectile.velocity.Y += moveVelocity.Y * 2f;
-
-                    Projectile.direction = 1;
-                    if (Main.MouseWorld.X < Projectile.Center.X)
-                        Projectile.direction = -1;
-
-                    Projectile.spriteDirection = Projectile.direction;
 
                     if (Vector2.Distance(Projectile.Center, player.Center) >= RemoteControlMaxDistance)
                     {
@@ -169,14 +170,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     shootCount += 5;
                     canShootAgain = false;
                     Projectile.direction = 1;
-                    if (Main.MouseWorld.X < Projectile.Center.X)
+                    if (mouseX < Projectile.Center.X)
                     {
                         Projectile.direction = -1;
                     }
                     Projectile.spriteDirection = Projectile.direction;
 
                     Vector2 bulletSpawnPosition = armPosition + new Vector2(0f, -4f);
-                    Vector2 shootVel = Main.MouseWorld - armPosition;
+                    Vector2 shootVel = new Vector2(mouseX, mouseY) - armPosition;
                     shootVel.Normalize();
                     shootVel *= 12f;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
@@ -230,11 +231,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(remoteControlled);
+            writer.Write(gunRevealFrames);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             remoteControlled = reader.ReadBoolean();
+            gunRevealFrames = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

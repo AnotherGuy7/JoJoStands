@@ -5,6 +5,7 @@ using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using static Humanizer.In;
 
 namespace JoJoStands.Networking
@@ -20,7 +21,7 @@ namespace JoJoStands.Networking
         public const byte SexPistolPosition = 6;
         public const byte DeathLoopInfo = 7;
         public const byte ArrowEarringInfo = 8;
-        public const byte FistsEffectNPCInfo = 9;
+        public const byte StandEffectInfo = 9;
         public const byte OtherPlayerDebuffInfo = 10;
         public const byte OtherPlayerExtraEffect = 11;
         //public const byte Sounds = 6;
@@ -61,8 +62,8 @@ namespace JoJoStands.Networking
                 case ArrowEarringInfo:
                     ReceiveArrowEarringInfo(reader, fromWho);
                     break;
-                case FistsEffectNPCInfo:
-                    ReceiveFistsEffectNPCInfo(reader, fromWho);
+                case StandEffectInfo:
+                    ReceiveStandEffectInfo(reader, fromWho);
                     break;
                 case OtherPlayerDebuffInfo:
                     ReceiveOtherPlayerDebuff(reader, fromWho);
@@ -287,11 +288,11 @@ namespace JoJoStands.Networking
                 SendArrowEarringInfo(-1, fromWho, whoAmI, targetNPCwhoAmI, damage, crit);
         }
 
-        public void SendFistsEffectNPCInfo(int toWho, int fromWho, byte whoAmI, int targetNPCwhoAmI, int fistWhoAmI, int stat1, int stat2, int stat3, float stat4, float stat5)
+        public void SendStandEffectInfo(int toWho, int fromWho, byte whoAmI, int targetWhoAmI, int fistWhoAmI, int stat1 = 0, int stat2 = 0, int stat3 = 0, float stat4 = 0f, float stat5 = 0f)
         {
-            ModPacket packet = GetPacket(FistsEffectNPCInfo, fromWho);
+            ModPacket packet = GetPacket(StandEffectInfo, fromWho);
             packet.Write(whoAmI);
-            packet.Write(targetNPCwhoAmI);
+            packet.Write(targetWhoAmI);
             packet.Write(fistWhoAmI);
             packet.Write(stat1);
             packet.Write(stat2);
@@ -301,10 +302,10 @@ namespace JoJoStands.Networking
             packet.Send(toWho, fromWho);
         }
 
-        public void ReceiveFistsEffectNPCInfo(BinaryReader reader, int fromWho)
+        public void ReceiveStandEffectInfo(BinaryReader reader, int fromWho)
         {
             byte whoAmI = reader.ReadByte();
-            int targetNPCwhoAmI = reader.ReadInt32();
+            int targetWhoAmI = reader.ReadInt32();
             int fistWhoAmI = reader.ReadInt32();
             int stat1 = reader.ReadInt32();
             int stat2 = reader.ReadInt32();
@@ -313,34 +314,55 @@ namespace JoJoStands.Networking
             float stat5 = reader.ReadSingle();
 
             if (fistWhoAmI == 0)
-                Main.npc[targetNPCwhoAmI].velocity.X *= 0.2f;
+                Main.npc[targetWhoAmI].velocity.X *= 0.2f;
             if (fistWhoAmI == 3)
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().affectedbyBtz = true;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().affectedbyBtz = true;
             if (fistWhoAmI == 4)
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = stat1;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = stat1;
+            if (fistWhoAmI == 5)
+            {
+                bool crit = false;
+                if (stat1 != 0)
+                    crit = true;
+                Main.npc[targetWhoAmI].StrikeNPC(stat2, 7f, stat3, crit);
+            }
+            if (fistWhoAmI == 6 && stat1 == 1)
+            {
+                Main.projectile[targetWhoAmI].penetrate -= 1;
+                if (Main.projectile[targetWhoAmI].penetrate <= 0)
+                    Main.projectile[targetWhoAmI].Kill();
+            }
+            if (fistWhoAmI == 6 && stat1 == 2)
+                Main.npc[targetWhoAmI].StrikeNPC(stat2, stat4, stat3);
             if (fistWhoAmI == 8)
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = stat1;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = stat1;
+            if (fistWhoAmI == 9)
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().whitesnakeDISCImmune += 1;
+            if (fistWhoAmI == 10 && stat1 == 1)
+                Main.projectile[targetWhoAmI].velocity *= -1;
+            if (fistWhoAmI == 10 && stat1 == 2)
+                Main.npc[targetWhoAmI].StrikeNPC(stat2, 6f, stat3);
             if (fistWhoAmI == 12)
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
             if (fistWhoAmI == 13)
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
             if (fistWhoAmI == 15 && stat1 == 3)
             {
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = stat4;
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = stat5;
-                if (Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
-                    Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = stat4;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = stat5;
+                if (Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
+                    Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
             }
             if (fistWhoAmI == 15 && stat1 == 1)
             {
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = stat4;
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = stat5;
-                Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = stat2;
-                if (Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
-                    Main.npc[targetNPCwhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += stat3;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = stat4;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = stat5;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = stat2;
+                if (Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
+                    Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += stat3;
             }
             if (Main.netMode == NetmodeID.Server)
-                SendFistsEffectNPCInfo(-1, fromWho, whoAmI, targetNPCwhoAmI, fistWhoAmI, stat1, stat2, stat3, stat4, stat5);
+                SendStandEffectInfo(-1, fromWho, whoAmI, targetWhoAmI, fistWhoAmI, stat1, stat2, stat3, stat4, stat5);
         }
 
         public void SendOtherPlayerDebuff(int toWho, int fromWho, byte whoAmI, int targetPlayerWhoAmI, int debuffType, int debuffTime)
@@ -400,6 +422,8 @@ namespace JoJoStands.Networking
                 if (Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivity < Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivityMax)
                     Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivity += int2;
             }
+            if (effectType == 3) //SHA explosion
+                Main.player[targetPlayerWhoAmI].Hurt(PlayerDeathReason.ByCustomReason(Main.player[targetPlayerWhoAmI].name + " had too high a heat signurature."), int1, int2);
 
             if (Main.netMode == NetmodeID.Server)
                 SendOtherPlayerExtraEffect(-1, fromWho, whoAmI, targetPlayerWhoAmI, effectType, int1, int2, float1, float2);

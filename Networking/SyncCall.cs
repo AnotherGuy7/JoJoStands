@@ -52,10 +52,10 @@ namespace JoJoStands.Networking
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 ModNetHandler.playerSync.SendArrowEarringInfo(256, whoAmI, (byte)whoAmI, targetNPCwhoAmI, damage, crit);
         }
-        public static void SyncFistsEffectNPCInfo(int whoAmI, int targetNPCwhoAmI, int fistWhoAmI, int stat1, int stat2, int stat3, float stat4, float stat5)
+        public static void SyncStandEffectInfo(int whoAmI, int targetWhoAmI, int fistWhoAmI, int stat1 = 0, int stat2 = 0, int stat3 = 0, float stat4 = 0f, float stat5 = 0f)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModNetHandler.playerSync.SendFistsEffectNPCInfo(256, whoAmI, (byte)whoAmI, targetNPCwhoAmI, fistWhoAmI, stat1, stat2, stat3, stat4, stat5);
+                ModNetHandler.playerSync.SendStandEffectInfo(256, whoAmI, (byte)whoAmI, targetWhoAmI, fistWhoAmI, stat1, stat2, stat3, stat4, stat5);
         }
         public static void SyncOtherPlayerDebuff(int whoAmI, int targetPlayerWhoAmI, int debuffType, int debuffTime)
         {

@@ -59,7 +59,7 @@ namespace JoJoStands.Projectiles
                         {
                             hitDirection = 1;
                         }
-                        npc.StrikeNPC((int)Projectile.ai[0], 7f, hitDirection, crit);
+                        npc.StrikeNPC(Projectile.damage, 7f, hitDirection, crit);
                     }
                 }
             }

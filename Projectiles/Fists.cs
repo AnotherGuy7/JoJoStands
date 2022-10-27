@@ -254,23 +254,23 @@ namespace JoJoStands.Projectiles
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
                     if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
                         target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
-                    SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
                 }
                 if (mPlayer.echoesACT == 1)
                 {
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                    int maxDamage = 48;
+                    int maxDamage = 36;
                     int soundIntensivity = 2;
                     if (mPlayer.echoesTier == 3)
                     {
-                        maxDamage = 72;
+                        maxDamage = 49;
                         soundIntensivity = 4;
                     }
                     if (mPlayer.echoesTier == 4)
                     {
-                        maxDamage = 108;
-                        soundIntensivity = 8;
+                        maxDamage = 74;
+                        soundIntensivity = 6;
                     }
                     if (!target.boss)
                         soundIntensivity *= 2;
@@ -279,7 +279,7 @@ namespace JoJoStands.Projectiles
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = maxDamage;
                     if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
                         target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += soundIntensivity;
-                    SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensivity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensivity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
                 }
             }
 
@@ -342,14 +342,14 @@ namespace JoJoStands.Projectiles
                 if (mPlayer.towerOfGrayDamageMult != 1f)
                 {
                     target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
-                    SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 13, 0, 0, 0, 0, 0);
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 13);
                 }
             }
 
             if (standType == GratefulDead)
             {
                 target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
-                SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 8, player.whoAmI, 0, 0, 0, 0);
+                SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 8, player.whoAmI);
                 target.AddBuff(ModContent.BuffType<Aging>(), (7 + ((int)standTier * 2)) * 60);
             }
 
@@ -364,7 +364,7 @@ namespace JoJoStands.Projectiles
                 if (Main.rand.NextFloat(0, 101) >= 75)
                 {
                     target.AddBuff(BuffID.Bleeding, (5 * (int)standTier) * 60);
-                    player.GetArmorPenetration(DamageClass.Generic) += 5 * (int)standTier;
+                    Projectile.ArmorPenetration += 5 * (int)standTier;
                 }
             }
 
@@ -372,7 +372,7 @@ namespace JoJoStands.Projectiles
             {
                 target.AddBuff(ModContent.BuffType<Restoration>(), 60);
                 target.GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
-                SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 12, 0, 0, 0, 0, 0);
+                SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 12);
             }
 
             if (standType == Cream)
@@ -387,7 +387,7 @@ namespace JoJoStands.Projectiles
             if (!target.boss && standType != TowerOfGray)
             {
                 target.velocity.X *= 0.2f;
-                SyncCall.SyncFistsEffectNPCInfo(player.whoAmI, target.whoAmI, 0, 0, 0, 0, 0, 0);
+                SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 0);
             }
         }
 

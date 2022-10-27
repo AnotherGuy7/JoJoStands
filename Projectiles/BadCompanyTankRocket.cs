@@ -65,7 +65,7 @@ namespace JoJoStands.Projectiles
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
 
-                        npc.StrikeNPC((int)(Projectile.ai[0] * mPlayer.standDamageBoosts), 8f, hitDirection, crit);
+                        npc.StrikeNPC(Projectile.damage, 8f, hitDirection, crit);
                     }
                 }
             }

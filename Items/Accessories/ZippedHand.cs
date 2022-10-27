@@ -4,12 +4,12 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
-    public class VampiricBangle : ModItem
+    public class ZippedHand : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Vampiric Bangle");
-            Tooltip.SetDefault("Stand lifesteal\n33% increased damage to user");
+            DisplayName.SetDefault("Zipped Hand");
+            Tooltip.SetDefault("Gives some time after death\nUndead has increased damage and critical hit chance");
             SacrificeTotal = 1;
         }
 
@@ -25,7 +25,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().vampiricBangle = true;
+            player.GetModPlayer<MyPlayer>().zippedHand = true;
         }
     }
 }

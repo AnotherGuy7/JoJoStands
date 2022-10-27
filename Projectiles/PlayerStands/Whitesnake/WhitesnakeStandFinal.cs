@@ -1,4 +1,5 @@
 ﻿using JoJoStands.Buffs.Debuffs;
+using JoJoStands.NPCs;
 using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,6 +32,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
         private bool stealFrames = false;
         private bool waitingForEnemyFrames = false;
+        private int waitingForEnemyFramesButInt = 0;
         private bool remoteControlled = false;
         private bool gunRevealFrames = false;
         private bool remoteControlFrames = false;
@@ -40,7 +42,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         private bool canShootAgain = false;
         private Vector2 armPosition;
         private int sleepingGasTimer = 0;
-        private Vector2 sleepingGasFormPosition;
+        private float sleepingGasFormPositionX;
+        private float sleepingGasFormPositionY;
 
         public override void AI()
         {
@@ -56,6 +59,21 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 Projectile.timeLeft = 2;
 
             remoteControlFrames = remoteControlled;
+
+            if (!waitingForEnemyFrames && waitingForEnemyFramesButInt > 0)
+                waitingForEnemyFramesButInt--;
+
+            if (waitingForEnemyFramesButInt > 0)
+            {
+                if (mouseX > Projectile.position.X)
+                    Projectile.spriteDirection = 1;
+                if (mouseX < Projectile.position.X)
+                    Projectile.spriteDirection = -1;
+            }
+
+            if (armFrame == 1)
+                Lighting.AddLight(Projectile.position, 0);
+
             if (!mPlayer.standAutoMode && !remoteControlled)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames && !stealFrames)
@@ -78,7 +96,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     if (Projectile.frame >= 4)
                     {
                         shootCount += 120;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                        Vector2 shootVel = new Vector2(mouseX, mouseY) - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
 
@@ -90,20 +108,21 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         Projectile.netUpdate = true;
                     }
                 }
-                if (!attackFrames && !stealFrames && !waitingForEnemyFrames && !gunRevealFrames)
+                if (!attackFrames && !stealFrames && !waitingForEnemyFrames && !gunRevealFrames && waitingForEnemyFramesButInt == 0)
                 {
                     if (!secondaryAbilityFrames)
                         StayBehind();
                     else
                         GoInFront();
                 }
-                if (SpecialKeyCurrent() && Projectile.owner == Main.myPlayer && shootCount <= 0 && !stealFrames)
+                if (SpecialKeyCurrent() && shootCount <= 0 && !stealFrames)
                 {
-                    Projectile.velocity = Main.MouseWorld - Projectile.position;
+                    waitingForEnemyFramesButInt = 10;
+                    Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.position;
                     Projectile.velocity.Normalize();
                     Projectile.velocity *= 5f;
-
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+                    Projectile.netUpdate = true;
+                    float mouseDistance = Vector2.Distance(new Vector2(mouseX, mouseY), Projectile.Center);
                     if (mouseDistance > 40f)
                     {
                         Projectile.velocity = player.velocity + Projectile.velocity;
@@ -118,7 +137,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         NPC npc = Main.npc[n];
                         if (npc.active)
                         {
-                            if (Projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
+                            if (Projectile.Distance(npc.Center) <= 30f && !npc.immortal && !npc.hide)
                             {
                                 Projectile.ai[0] = npc.whoAmI;
                                 stealFrames = true;
@@ -152,6 +171,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     if (Projectile.frame == 4)
                     {
                         npc.AddBuff(ModContent.BuffType<Stolen>(), 30 * 60);
+                        npc.GetGlobalNPC<JoJoGlobalNPC>().whitesnakeDISCImmune += 1;
+                        SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 9);
+                        Projectile.frame += 1;
                     }
                     if (Projectile.frame == 6)
                     {
@@ -193,7 +215,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     }
                     LimitDistance();
                 }
-                if (!SpecialKeyCurrent() && ((stealFrames || waitingForEnemyFrames) || Projectile.ai[1] != -1f))
+                if (!SpecialKeyCurrent() && stealFrames || !SpecialKeyCurrent() && waitingForEnemyFrames || Projectile.ai[1] != -1f)
                 {
                     stealFrames = false;
                     waitingForEnemyFrames = false;
@@ -204,7 +226,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
                 if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0 && !gunRevealFrames && !stealFrames)
                 {
-                    shootCount += 15;
                     attackFrames = false;
                     idleFrames = false;
                     secondaryAbilityFrames = false;
@@ -220,9 +241,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
-
+                if (mouseX > Projectile.position.X)
+                    Projectile.spriteDirection = 1;
+                if (mouseX < Projectile.position.X)
+                    Projectile.spriteDirection = -1;
                 floatTimer += 0.06f;
-                armRotation = (Main.MouseWorld - Projectile.Center).ToRotation();
+                armRotation = (new Vector2(mouseX,mouseY) - Projectile.Center).ToRotation();
                 armPosition = Projectile.Center + new Vector2(0f, -4f);
                 if (Projectile.spriteDirection == -1)
                     armPosition += new Vector2(2f, -8f);
@@ -254,17 +278,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
-                    Vector2 moveVelocity = Main.MouseWorld - Projectile.Center;
+                    Vector2 moveVelocity = new Vector2(mouseX, mouseY) - Projectile.Center;
                     moveVelocity.Normalize();
                     Projectile.velocity.X = moveVelocity.X * 5f;
                     if (aboveTile)
                         Projectile.velocity.Y += moveVelocity.Y * 2f;
-
-                    Projectile.direction = 1;
-                    if (Main.MouseWorld.X < Projectile.Center.X)
-                        Projectile.direction = -1;
-
-                    Projectile.spriteDirection = Projectile.direction;
 
                     if (Vector2.Distance(Projectile.Center, player.Center) >= RemoteControlMaxDistance)
                     {
@@ -281,15 +299,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 }
                 if (Main.mouseRight && canShootAgain && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
-                    shootCount += 5;
+                    shootCount += 15;
                     canShootAgain = false;
                     Projectile.direction = 1;
-                    if (Main.MouseWorld.X < Projectile.Center.X)
+                    if (mouseX < Projectile.Center.X)
                         Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
 
                     Vector2 bulletSpawnPosition = armPosition + new Vector2(0f, -4f);
-                    Vector2 shootVel = Main.MouseWorld - armPosition;
+                    Vector2 shootVel = new Vector2(mouseX, mouseY) - armPosition;
                     shootVel.Normalize();
                     shootVel *= 12f;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
@@ -305,7 +323,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 if (SpecialKeyPressedNoCooldown())
                 {
                     sleepingGasTimer = 30 * 60;
-                    sleepingGasFormPosition = Projectile.Center;
+                    sleepingGasFormPositionX = Projectile.Center.X;
+                    sleepingGasFormPositionY = Projectile.Center.Y;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(45));
                 }
 
@@ -326,8 +345,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 sleepingGasTimer--;
                 for (int i = 0; i < Main.rand.Next(1, 5); i++)
                 {
-                    Vector2 dustPosition = sleepingGasFormPosition + new Vector2(Main.rand.NextFloat(-SleepingGasEffectRadius, SleepingGasEffectRadius), Main.rand.NextFloat(-SleepingGasEffectRadius, SleepingGasEffectRadius));
-                    if (Vector2.Distance(sleepingGasFormPosition, dustPosition) > SleepingGasEffectRadius)
+                    Vector2 dustPosition = new Vector2(sleepingGasFormPositionX, sleepingGasFormPositionY) + new Vector2(Main.rand.NextFloat(-SleepingGasEffectRadius, SleepingGasEffectRadius), Main.rand.NextFloat(-SleepingGasEffectRadius, SleepingGasEffectRadius));
+                    if (Vector2.Distance(new Vector2(sleepingGasFormPositionX, sleepingGasFormPositionY), dustPosition) > SleepingGasEffectRadius)
                         continue;
 
                     int dustIndex = Dust.NewDust(dustPosition, 1, 1, DustID.WhiteTorch, Scale: 1.6f);
@@ -339,7 +358,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC npc = Main.npc[n];
-                    if (npc.active && npc.Distance(sleepingGasFormPosition) <= SleepingGasEffectRadius)
+                    if (npc.active && npc.Distance(new Vector2(sleepingGasFormPositionX, sleepingGasFormPositionY)) <= SleepingGasEffectRadius)
                     {
                         float slowBonus = 0.2f;
                         if (npc.boss)
@@ -358,7 +377,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         if (otherPlayer.whoAmI == player.whoAmI)
                             continue;
 
-                        if (otherPlayer.active && otherPlayer.team != player.team && otherPlayer.Distance(sleepingGasFormPosition) <= SleepingGasEffectRadius)
+                        if (otherPlayer.active && otherPlayer.team != player.team && otherPlayer.Distance(new Vector2(sleepingGasFormPositionX, sleepingGasFormPositionY)) <= SleepingGasEffectRadius)
                             otherPlayer.velocity.X *= 0.2f;
                     }
                 }
@@ -374,7 +393,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     armTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Salad/Whitesnake_Arm");
                 else
                     armTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Whitesnake/Whitesnake_Arm");
-
                 Vector2 armOrigin = new Vector2(4f, 12f);
                 int armFrameHeight = 16;
                 Rectangle armSourceRect = new Rectangle(0, armFrame * armFrameHeight, 56, armFrameHeight);
@@ -391,13 +409,29 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(stealFrames);
+            writer.Write(waitingForEnemyFrames);
             writer.Write(remoteControlled);
+            writer.Write(gunRevealFrames);
+
+            writer.Write(waitingForEnemyFramesButInt);
+            writer.Write(sleepingGasTimer);
+
+            writer.Write(sleepingGasFormPositionX);
+            writer.Write(sleepingGasFormPositionY);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             stealFrames = reader.ReadBoolean();
+            waitingForEnemyFrames = reader.ReadBoolean();
             remoteControlled = reader.ReadBoolean();
+            gunRevealFrames = reader.ReadBoolean();
+
+            waitingForEnemyFramesButInt = reader.ReadInt32();
+            sleepingGasTimer = reader.ReadInt32();
+
+            sleepingGasFormPositionX = reader.ReadSingle();
+            sleepingGasFormPositionY = reader.ReadSingle();
         }
 
         public override void SelectAnimation()

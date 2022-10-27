@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int PunchTime => 12;
         public override int HalfStandHeight => 34;
         public override int FistWhoAmI => 8;
-        public override int TierNumber => 1;
+        public override int TierNumber => 3;
         public override int StandOffset => 32;
         public override StandAttackType StandType => StandAttackType.Melee;
         public override string PoseSoundName => "OnceWeDecideToKillItsDone";

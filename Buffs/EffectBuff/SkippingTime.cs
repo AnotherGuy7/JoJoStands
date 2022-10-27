@@ -98,6 +98,8 @@ namespace JoJoStands.Buffs.EffectBuff
                     ModNetHandler.effectSync.SendTimeskip(256, player.whoAmI, false, player.whoAmI);
                 }
                 PreTimeSkip.userIndex = -1;
+                setToTrue = false;
+                sendFalse = false;
             }
         }
     }

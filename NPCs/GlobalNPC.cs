@@ -21,6 +21,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace JoJoStands.NPCs
 {
@@ -84,6 +85,8 @@ namespace JoJoStands.NPCs
         public bool echoesBoing = false;
         public bool echoesKaboom = false;
 
+        public int whitesnakeDISCImmune = 0;
+
         private int CDsavedAIstyle = 0;
         private int echoesDamageTimer1 = 30; //3 Freeze
         private int echoesDamageTimer2 = 60; //ACT 1 sounds
@@ -106,6 +109,8 @@ namespace JoJoStands.NPCs
         private SoundStyle? CDsavedHitSound = SoundID.PlayerHit;
         private Vector2 echoesFallingPoint = Vector2.Zero;
 
+        private int npcWhoAmI = 0;
+
         public override bool InstancePerEntity
         {
             get { return true; }
@@ -121,25 +126,30 @@ namespace JoJoStands.NPCs
 
         public override void ModifyGlobalLoot(GlobalLoot globalLoot)
         {
-            globalLoot.Add(ItemDropRule.ByCondition(new SunDropletCondition(), ModContent.ItemType<SunDroplet>(), 10, 1, 3));
+            if (!Main.npc[npcWhoAmI].SpawnedFromStatue)
+            {
+                globalLoot.Add(ItemDropRule.ByCondition(new SunDropletCondition(), ModContent.ItemType<SunDroplet>(), 10, 1, 3));
 
-            globalLoot.Add(ItemDropRule.ByCondition(new WillToFightCondition(), ModContent.ItemType<WillToFight>(), 14));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToFightCondition(), ModContent.ItemType<WillToFight>(), 14));
 
-            globalLoot.Add(ItemDropRule.ByCondition(new WillToProtectCondition(), ModContent.ItemType<WillToProtect>(), 14));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToProtectCondition(), ModContent.ItemType<WillToProtect>(), 14));
 
-            globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<WillToChange>(), 14));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<WillToChange>(), 14));
 
-            globalLoot.Add(ItemDropRule.ByCondition(new WillToControlCondition(), ModContent.ItemType<WillToControl>(), 14));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToControlCondition(), ModContent.ItemType<WillToControl>(), 14));
 
-            globalLoot.Add(ItemDropRule.ByCondition(new WillToDestroyCondition(), ModContent.ItemType<WillToDestroy>(), 14));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToDestroyCondition(), ModContent.ItemType<WillToDestroy>(), 14));
 
-            globalLoot.Add(ItemDropRule.ByCondition(new WillToEscapeCondition(), ModContent.ItemType<WillToEscape>(), 14));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToEscapeCondition(), ModContent.ItemType<WillToEscape>(), 14));
 
-            globalLoot.Add(ItemDropRule.ByCondition(new SoulOfTimeCondition(), ModContent.ItemType<SoulofTime>(), 14));
+                globalLoot.Add(ItemDropRule.ByCondition(new SoulOfTimeCondition(), ModContent.ItemType<SoulofTime>(), 14));
 
-            globalLoot.Add(ItemDropRule.ByCondition(new HerbalTeaBagCondition(), ModContent.ItemType<HerbalTeaBag>(), 25));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToEscapeCondition(), ModContent.ItemType<ZippedHand>(), 28));
 
-            globalLoot.Add(ItemDropRule.ByCondition(new TheFirstNapkinCondition(), ModContent.ItemType<TheFirstNapkin>(), 25));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<HerbalTeaBag>(), 28));
+
+                globalLoot.Add(ItemDropRule.ByCondition(new TheFirstNapkinCondition(), ModContent.ItemType<TheFirstNapkin>(), 28));
+            }
 
 
             /*IItemDropRule sunDropletRule = new LeadingConditionRule(new SunDropletCondition());
@@ -187,17 +197,22 @@ namespace JoJoStands.NPCs
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
-            if (npc.type == NPCID.WallofFlesh)
-                npcLoot.Add(ItemDropRule.OneFromOptions(1, ModContent.ItemType<StandEmblem>(), ModContent.ItemType<HamonEmblem>()));
-            if (npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC)
+            if (!npc.SpawnedFromStatue)
             {
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Hand>(), 25));
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ArrowEarring>(), 25));
+                if (npc.type == NPCID.WallofFlesh)
+                    npcLoot.Add(ItemDropRule.OneFromOptions(1, ModContent.ItemType<StandEmblem>(), ModContent.ItemType<HamonEmblem>()));
+                if (npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC)
+                {
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Hand>(), 25));
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ArrowEarring>(), 30));
+                }
+                if (npc.type == ModContent.NPCType<MarineBiologist>())
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FamilyPhoto>(), 1));
+                if (npc.type == NPCID.BigMimicCrimson)
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<VampiricBangle>(), 4));
+                if (npc.type == NPCID.BigMimicCorruption)
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SiliconLifeformCarapace>(), 4));
             }
-            if (npc.type == NPCID.BigMimicCrimson)
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<VampiricBangle>(), 4));
-            if (npc.type == NPCID.BigMimicCorruption)
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SiliconLifeformCarapace>(), 4));
         }
 
         public override void GetChat(NPC npc, ref string chat)
@@ -287,7 +302,10 @@ namespace JoJoStands.NPCs
             }
         }
 
-
+        public override void OnSpawn(NPC npc, IEntitySource source)
+        {
+            npcWhoAmI = npc.whoAmI;
+        }
         public override bool PreAI(NPC npc)
         {
             MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
@@ -774,7 +792,7 @@ namespace JoJoStands.NPCs
                     npc.velocity.Y += 0.3f;
                 return false;
             }
-            if (npc.HasBuff(ModContent.BuffType<Stolen>()))
+            if (npc.HasBuff(ModContent.BuffType<Stolen>()) && !npc.boss)
                 return false;
             if (grabbedByHermitPurple)
                 return false;

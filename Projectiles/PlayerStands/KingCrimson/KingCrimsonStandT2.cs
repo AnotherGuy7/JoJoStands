@@ -1,11 +1,13 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
+using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using System.IO;
 
 namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 {
@@ -24,6 +26,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
         private int timeskipStartDelay = 0;
         private int blockSearchTimer = 0;
+        private int block = 0;
         private bool preparingTimeskip = false;
 
         public override void AI()
@@ -37,6 +40,19 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
+
+            if (secondaryAbilityFrames)
+            {
+                GoInFront();
+                idleFrames = false;
+                attackFrames = false;
+            }
+
+            if (block > 0)
+                secondaryAbilityFrames = true;
+
+            if (block == 0)
+                secondaryAbilityFrames = false;
 
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && timeskipStartDelay <= 0)
             {
@@ -74,20 +90,21 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     idleFrames = false;
                     Projectile.netUpdate = true;
 
-                    float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
+                    float rotaY = mouseY - Projectile.Center.Y;
                     Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
 
-                    Projectile.direction = 1;
-                    if (Main.MouseWorld.X < Projectile.position.X)
+                    if (mouseX > Projectile.position.X)
+                        Projectile.direction = 1;
+                    if (mouseX < Projectile.position.X)
                         Projectile.direction = -1;
 
                     Projectile.spriteDirection = Projectile.direction;
 
-                    Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
+                    Vector2 velocityAddition = new Vector2(mouseX, mouseY) - Projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f + mPlayer.standTier;
 
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+                    float mouseDistance = Vector2.Distance(new Vector2(mouseX, mouseY), Projectile.Center);
                     if (mouseDistance > 40f)
                     {
                         Projectile.velocity = player.velocity + velocityAddition;
@@ -99,7 +116,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     if (shootCount <= 0 && (Projectile.frame == 0 || Projectile.frame == 4))
                     {
                         shootCount += newPunchTime / 2;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                        Vector2 shootVel = new Vector2(mouseX, mouseY) - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
 
@@ -118,10 +135,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && !playerHasAbilityCooldown && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 {
-                    GoInFront();
-                    idleFrames = false;
-                    attackFrames = false;
-                    secondaryAbilityFrames = true;
+                    block = 10;
 
                     if (blockSearchTimer > 0)
                     {
@@ -147,6 +161,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 otherProj.penetrate -= 1;
                                 if (otherProj.penetrate <= 0)
                                     otherProj.Kill();
+                                SyncCall.SyncStandEffectInfo(player.whoAmI, otherProj.whoAmI, 6, 1);
 
                                 secondaryAbilityFrames = false;
 
@@ -182,7 +197,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             }
                             player.position += repositionOffset;
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
-                            npc.StrikeNPC(newPunchDamage * 2, PunchKnockback * 1.5f, Projectile.direction);
+                            int damage = newPunchDamage * 2;
+                            npc.StrikeNPC(damage, PunchKnockback * 1.5f, Projectile.direction);
+                            SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 6, 2, damage, player.direction, PunchKnockback * 1.5f);
                             SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
 
                             for (int i = 0; i < 20; i++)
@@ -195,7 +212,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 }
                 else
                 {
-                    secondaryAbilityFrames = false;
+                    if (block > 0)
+                        block--;
                 }
                 if (!attackFrames && !secondaryAbilityFrames)
                 {
@@ -256,6 +274,15 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             {
                 AnimateStand(animationName, 1, 2, true);
             }
+        }
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(block);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            block = reader.ReadInt32();
         }
     }
 }
