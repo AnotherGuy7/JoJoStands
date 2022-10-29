@@ -15,7 +15,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Aerosmith (Tier 1)");
-            Tooltip.SetDefault("Left-click to move and right-click to shoot bullets at the enemies!\nThe farther the stand is from you, the less damage it does.\nUsed in Stand Slot");
+            Tooltip.SetDefault("Left-click to move and right-click to shoot bullets at the enemies!\n\nSpecial: Remote Control\nThe farther the stand is from you, the less damage it does.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

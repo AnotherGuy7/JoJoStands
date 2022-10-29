@@ -777,9 +777,6 @@ namespace JoJoStands
         {
             if (standRemoteMode || Player.HasBuff(ModContent.BuffType<CenturyBoyBuff>()) || stickyFingersAmbushMode || creamVoidMode || creamExposedMode)
             {
-                if (standName.Contains("Aerosmith"))
-                    return;
-
                 Player.controlUp = false;
                 Player.controlDown = false;
                 Player.controlLeft = false;
