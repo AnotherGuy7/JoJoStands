@@ -20,8 +20,8 @@ namespace JoJoStands.Items.Accessories
             Item.width = 30;
             Item.height = 30;
             Item.accessory = true;
-            Item.rare = ItemRarityID.LightRed;
-            Item.value = Item.buyPrice(gold: 2);
+            Item.rare = ItemRarityID.LightPurple;
+            Item.value = Item.buyPrice(gold: 5);
             Item.maxStack = 1;
         }
 
