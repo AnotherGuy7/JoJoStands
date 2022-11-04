@@ -13,6 +13,11 @@ namespace JoJoStands.UI
 
         public override void Update(GameTime gameTime)
         {
+            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+
+            if (mPlayer.sexPistolsTier == 0 || !mPlayer.standAutoMode)
+                Visible = false;
+
             base.Update(gameTime);
         }
 

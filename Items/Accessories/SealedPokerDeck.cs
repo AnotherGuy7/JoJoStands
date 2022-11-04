@@ -5,12 +5,12 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
-    public class SoothingSpiritDisc : ModItem
+    public class SealedPokerDeck : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Soothing Spirit Disc");
-            Tooltip.SetDefault("Stand attack grants Holy Protection");
+            DisplayName.SetDefault("Sealed Poker Deck");
+            Tooltip.SetDefault("Attack gets stronger every 5 seconds\nThis attack is a guaranteed crit");
             SacrificeTotal = 1;
         }
 
@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().soothingSpiritDisc = true;
+            player.GetModPlayer<MyPlayer>().sealedPokerDeck = true;
         }
     }
 }

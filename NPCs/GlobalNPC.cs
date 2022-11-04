@@ -148,7 +148,11 @@ namespace JoJoStands.NPCs
 
                 globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<HerbalTeaBag>(), 28));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new TheFirstNapkinCondition(), ModContent.ItemType<TheFirstNapkin>(), 28));
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsHardmodeDungeonCondition(), ModContent.ItemType<TheFirstNapkin>(), 28));
+
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCorruptionCondition(), ModContent.ItemType<SealedPokerDeck>(), 28));
+
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCrimsonCondition(), ModContent.ItemType<UnderbossPhone>(), 28));
             }
 
 
@@ -212,6 +216,8 @@ namespace JoJoStands.NPCs
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<VampiricBangle>(), 4));
                 if (npc.type == NPCID.BigMimicCorruption)
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SiliconLifeformCarapace>(), 4));
+                if (npc.type == NPCID.BigMimicHallow)
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SoothingSpiritDisc>(), 4));
             }
         }
 

@@ -5,12 +5,12 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
-    public class SoothingSpiritDisc : ModItem
+    public class UnderbossPhone : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Soothing Spirit Disc");
-            Tooltip.SetDefault("Stand attack grants Holy Protection");
+            DisplayName.SetDefault("Underboss Phone");
+            Tooltip.SetDefault("Every fifth hit is a little stronger\nThis attack completely ignores defense");
             SacrificeTotal = 1;
         }
 
@@ -26,7 +26,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().soothingSpiritDisc = true;
+            player.GetModPlayer<MyPlayer>().underbossPhone = true;
         }
     }
 }

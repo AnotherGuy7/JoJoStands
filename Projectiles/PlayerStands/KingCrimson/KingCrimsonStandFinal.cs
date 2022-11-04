@@ -56,7 +56,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             if (block == 0)
                 secondaryAbilityFrames = false;
 
-            if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && timeskipStartDelay <= 0)
+            if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && timeskipStartDelay <= 0 && mPlayer.kingCrimsonBuffIndex == -1)
             {
                 if (!JoJoStands.SoundsLoaded)
                     timeskipStartDelay = 80;
@@ -68,6 +68,14 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     timeskipStartDelay = 0;
                 }
                 preparingTimeskip = true;
+            }
+            if (SpecialKeyPressedNoCooldown() && mPlayer.kingCrimsonBuffIndex != -1)
+            {
+                if (player.buffTime[mPlayer.kingCrimsonBuffIndex] > 10)
+                {
+                    player.buffTime[mPlayer.kingCrimsonBuffIndex] = 10;
+                    mPlayer.kingCrimsonBuffIndex = -1;
+                }
             }
             if (preparingTimeskip)
             {

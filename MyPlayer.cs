@@ -243,10 +243,12 @@ namespace JoJoStands
         public bool familyPhoto = false;
         public int familyPhotoEffect = 0;
         public bool soothingSpiritDisc = false;
-        public int soothingSpiritDiscAttackNumber = 0;
+        public int soothingSpiritDiscCooldown = 0;
         public bool underbossPhone = false;
+        public int underbossPhoneCount = 0;
         public bool sealedPokerDeck = false;
-        public bool requiem = false;
+        public int sealedPokerDeckCooldown = 0;
+        public bool requiemArrow = false;
         public bool overHeaven = false; // haha (C) Proos :)
         public bool centuryBoyActive = false;
 
@@ -261,6 +263,7 @@ namespace JoJoStands
         private int remoteDodge = 0;
 
         public int standFistsType = 0;
+        public int kingCrimsonBuffIndex = -1;
 
         public void ItemBreak(Item item)
         {
@@ -386,7 +389,8 @@ namespace JoJoStands
             soothingSpiritDisc = false;
             underbossPhone = false;
             sealedPokerDeck = false;
-            requiem = false;
+            requiemArrow = false;
+            overHeaven = false;
             collideY = false;
         }
 
@@ -789,6 +793,15 @@ namespace JoJoStands
 
         public override void PreUpdate()
         {
+            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            if (!Player.HasBuff(ModContent.BuffType<SkippingTime>()))
+                kingCrimsonBuffIndex = -1;
+            if (overHeaven && standOut && tuskActNumber != 0 && StandSlot.SlotItem.type == ModContent.ItemType<TuskAct4>())
+                goldenSpinCounter = 300;
+            if (soothingSpiritDiscCooldown > 0)
+                soothingSpiritDiscCooldown--;
+            if (sealedPokerDeckCooldown > 0)
+                sealedPokerDeckCooldown--;
             if (familyPhotoEffect > 0)
                 familyPhotoEffect--;
             if (!revived && Player.HasItem(ModContent.ItemType<PokerChip>()) || zippedHand && !zippedHandDeath)
@@ -815,7 +828,7 @@ namespace JoJoStands
                 if (!Main.npc[deathLoopTarget].active)
                 {
                     Player.ClearBuff(ModContent.BuffType<DeathLoop>());
-                    Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), 3600);
+                    Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), 1800);
                     deathLoopTarget = -1;
                 }
             }
@@ -895,7 +908,8 @@ namespace JoJoStands
 
             if (goldenSpinCounter > 0)          //golden spin stuff
             {
-                spinSubtractionTimer++;
+                if (!overHeaven)
+                    spinSubtractionTimer++;
                 if (spinSubtractionTimer >= 90 && Player.mount.Type == ModContent.MountType<SlowDancerMount>())
                 {
                     spinSubtractionTimer = 0;
@@ -1069,6 +1083,8 @@ namespace JoJoStands
 
             if (sexPistolsTier != 0)        //Sex Pistols stuff
             {
+                if (standAutoMode)
+                    SexPistolsUI.Visible = true;
                 if (!standAutoMode)
                 {
                     bool specialPressed = false;
@@ -1121,11 +1137,6 @@ namespace JoJoStands
                         }
                     }
                 }
-                SexPistolsUI.Visible = standAutoMode;
-            }
-            else
-            {
-                SexPistolsUI.Visible = false;
             }
 
             if (equippedTuskAct != 0 && Player.whoAmI == Main.myPlayer)     //Tusk stuff

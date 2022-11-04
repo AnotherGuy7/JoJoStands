@@ -11,7 +11,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Manifested Will Emblem");
-            Tooltip.SetDefault("15% increased stand damage\n25% increased stand crit damage");
+            Tooltip.SetDefault("15% increased stand damage\n50% increased stand crit damage");
             SacrificeTotal = 1;
         }
 

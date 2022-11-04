@@ -3,7 +3,7 @@ using Terraria.GameContent.ItemDropRules;
 
 namespace JoJoStands.DropConditions
 {
-    public class TheFirstNapkinCondition : IItemDropRuleCondition
+    public class JoJoStandsHardmodeDungeonCondition : IItemDropRuleCondition
     {
         public string GetConditionDescription()
         {

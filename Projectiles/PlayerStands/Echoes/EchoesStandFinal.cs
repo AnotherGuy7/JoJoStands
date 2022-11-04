@@ -116,13 +116,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 }
                 if (SpecialKeyPressed() && Projectile.owner == Main.myPlayer) //3freeze barrgage activation
                 {
-                    int secretReference = 0;
-                    if (MyPlayer.SecretReferences)
-                        secretReference = 3;
-                    if (Main.rand.NextFloat(1, 100) <= secretReference)
-                        Main.NewText("My God... ACT 3  is such a downgrade. The ability to just pin someone to the ground and swear... I added this ability just to use the special bind! (C) Prooooooos21", Color.Magenta);
-                    else
-                        Main.NewText("Okay, master! Let's kill da ho! Beeetch!", Color.LightGreen);
+                    Main.NewText("Okay, master! Let's kill da ho! Beeetch!", Color.LightGreen);
                     player.AddBuff(ModContent.BuffType<ThreeFreezeBarrage>(), 600);
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));

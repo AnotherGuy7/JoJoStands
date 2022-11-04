@@ -24,6 +24,8 @@ namespace JoJoStands.Buffs.EffectBuff
         public override void Update(Player player, ref int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (player.buffTime[buffIndex] > 10)
+                mPlayer.kingCrimsonBuffIndex = buffIndex;
             if (player.HasBuff(ModContent.BuffType<SkippingTime>()) && !mPlayer.forceShutDownEffect)
             {
                 player.shadowDodge = true;
@@ -65,6 +67,7 @@ namespace JoJoStands.Buffs.EffectBuff
             }
             else
             {
+                mPlayer.kingCrimsonBuffIndex = -1;
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     Main.npc[n].AddBuff(ModContent.BuffType<TimeSkipConfusion>(), 120);

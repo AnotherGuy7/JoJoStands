@@ -58,7 +58,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (projectile.DamageType.CountsAsClass<RangedDamageClass>() && mPlayer.centuryBoyActive)
+            if (projectile.DamageType.CountsAsClass<RangedDamageClass>() && mPlayer.centuryBoyActive && !projectile.arrow)
                     bulletsCenturyBoy = true;
             if (projectile.type == ModContent.ProjectileType<Fists>() || projectile.type == ModContent.ProjectileType<PlayerStands.Cream.Void>() || projectile.type == ModContent.ProjectileType<PlayerStands.Cream.DashVoid>() || projectile.type == ModContent.ProjectileType<StarFinger>() || projectile.type == ModContent.ProjectileType<HermitPurpleGrab>() || projectile.type == ModContent.ProjectileType<HermitPurpleHook>() || projectile.type == ModContent.ProjectileType<RedBind>() || projectile.type == ModContent.ProjectileType<BindingEmeraldString>() || projectile.type == ModContent.ProjectileType<StickyFingersFistExtended>() || projectile.type == ModContent.ProjectileType<StoneFreeBindString>() || projectile.type == ModContent.ProjectileType<PhantomMarker>())
                 exceptionForSCParry = true;
@@ -213,7 +213,7 @@ namespace JoJoStands.Projectiles
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC possibleTarget = Main.npc[n];
-                    if (possibleTarget.active && possibleTarget.lifeMax > 5 && !possibleTarget.immortal && !possibleTarget.townNPC && !possibleTarget.hide && Projectile.Distance(possibleTarget.Center) <= 48f)
+                    if (possibleTarget.active && possibleTarget.lifeMax > 5 && !possibleTarget.immortal && !possibleTarget.townNPC && !possibleTarget.hide && Projectile.Distance(possibleTarget.Center) <= 72f)
                     {
                         kickedBySexPistols = true;
                         autoModeSexPistols = false;
@@ -272,6 +272,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
             if (player.HasBuff(ModContent.BuffType<CenturyBoyBuff>()) && Projectile.DamageType.CountsAsClass<SummonDamageClass>())
                 damage = damage / 2;
             if (kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
@@ -289,6 +290,16 @@ namespace JoJoStands.Projectiles
                 mPlayer.familyPhotoEffect += 30;
             if (standProjectile || kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
             {
+                mPlayer.underbossPhoneCount += 1;
+                if (mPlayer.underbossPhoneCount > 4)
+                {
+                    if (mPlayer.underbossPhone)
+                    {
+                        Projectile.ArmorPenetration = target.defense;
+                        damage = (int)(damage * 1.1f + 10);
+                    }
+                    mPlayer.underbossPhoneCount = 0;
+                }
                 if (player.HasBuff(ModContent.BuffType<BlindRage>()))
                     Projectile.ArmorPenetration = target.defense;
                 if (mPlayer.standTarget != target.whoAmI)
@@ -298,7 +309,23 @@ namespace JoJoStands.Projectiles
                 if (mPlayer.fightingSpiritEmblem && mPlayer.fightingSpiritEmblemStack < 31)
                     mPlayer.fightingSpiritEmblemStack += 1;
                 if (mPlayer.manifestedWillEmblem && crit)
-                    damage = (int)(damage * 1.25f);
+                    damage = (int)(damage * 1.5f);
+                if (mPlayer.soothingSpiritDisc)
+                {
+                    if (Main.rand.NextFloat(0, 101) <= 10 && mPlayer.soothingSpiritDiscCooldown > 60)
+                        mPlayer.soothingSpiritDiscCooldown -= 60;
+                    if (player.shadowDodgeTimer <= 0)
+                    {
+                        player.AddBuff(BuffID.ShadowDodge, 1800);
+                        mPlayer.soothingSpiritDiscCooldown += 4500;
+                    }
+                }
+                if (mPlayer.sealedPokerDeck && mPlayer.sealedPokerDeckCooldown == 0)
+                {
+                    crit = true;
+                    mPlayer.sealedPokerDeckCooldown = 180;
+                    damage = (int)(damage * 1.25f + 25);
+                }
                 if (mPlayer.theFirstNapkin && Main.rand.NextFloat(0, 101) <= 5 && player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.buffTime[mPlayer.theFirstNapkinReduction] > 60)
                     player.buffTime[mPlayer.theFirstNapkinReduction] -= 60;
 
