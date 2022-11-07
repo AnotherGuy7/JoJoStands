@@ -1301,7 +1301,7 @@ namespace JoJoStands
                             shootVelocity.Normalize();
                             shootVelocity *= 16f;
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<InfiniteSpinNail>(), 512, 0f, Player.whoAmI);
-                            Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(30));
+                            Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(15));
                         }
                     }
                 }

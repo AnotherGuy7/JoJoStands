@@ -30,7 +30,7 @@ namespace JoJoStands.Buffs.Debuffs
         {
             if (correctHP == 0)
                 correctHP = npc.life;
-            if (npc.boss && correctHP - npc.life >= npc.lifeMax / 4 && correctHP != 0)
+            if (npc.boss && correctHP - npc.life >= npc.lifeMax / 3 && correctHP != 0)
             {
                 npc.DelBuff(buffIndex);
                 correctHP = 0;
