@@ -145,7 +145,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-
+            if (mPlayer.overHeaven)
+                seconds *= 2;
             mPlayer.timestopActive = true;
             mPlayer.timestopEffectDurationTimer = 60;
             if (JoJoStands.JoJoStandsSounds == null)
