@@ -1,10 +1,10 @@
 using Microsoft.Xna.Framework;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.IO;
-using Terraria.DataStructures;
 
 namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 {
@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
     {
         public override string Texture
         {
-            get { return Mod.Name + "/Projectiles/PlayerStands/Aerosmith/AerosmithStandT1"; }
+            get { return Mod.Name + "/Projectiles/PlayerStands/Aerosmith/Aerosmith"; }
         }
 
         public override void SetStaticDefaults()
