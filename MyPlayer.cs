@@ -276,23 +276,28 @@ namespace JoJoStands
                     {
                         if (item.type != ItemID.IronBar && item.type != ItemID.LeadBar)
                         {
+                            SoundEngine.PlaySound(SoundID.Grab);
                             howManyRecipesHere.Add(Main.recipe[r]);
                             for (int i = 0; i < Main.recipe[r].createItem.stack; i++)
                                 Player.ConsumeItem(item.type);
                             Uncraft(howManyRecipesHere[0]);
-                            globalCooldown = 30;
+                            globalCooldown = 5;
                             break;
                         }
                         if (item.type == ItemID.IronBar)
                         {
+                            SoundEngine.PlaySound(SoundID.Grab);
                             Player.ConsumeItem(item.type);
                             Player.QuickSpawnItem(Player.InheritSource(Player), ItemID.IronOre, 3);
+                            globalCooldown = 5;
                             break;
                         }
                         if (item.type == ItemID.LeadBar)
                         {
+                            SoundEngine.PlaySound(SoundID.Grab);
                             Player.ConsumeItem(item.type);
                             Player.QuickSpawnItem(Player.InheritSource(Player), ItemID.LeadOre, 3);
+                            globalCooldown = 5;
                             break;
                         }
                     }

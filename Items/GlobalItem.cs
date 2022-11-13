@@ -164,7 +164,7 @@ namespace JoJoStands.Items
                     if (ItemSelect == Item)
                     {
                         mPlayer.ItemBreak(Item);
-                        generalPurposeTimer = 30;
+                        generalPurposeTimer = 5;
                         break;
                     }
                 }

@@ -144,15 +144,15 @@ namespace JoJoStands.NPCs
 
                 globalLoot.Add(ItemDropRule.ByCondition(new SoulOfTimeCondition(), ModContent.ItemType<SoulofTime>(), 14));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new WillToEscapeCondition(), ModContent.ItemType<ZippedHand>(), 28));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToEscapeCondition(), ModContent.ItemType<ZippedHand>(), 40));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<HerbalTeaBag>(), 28));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<HerbalTeaBag>(), 40));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsHardmodeDungeonCondition(), ModContent.ItemType<TheFirstNapkin>(), 28));
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsHardmodeDungeonCondition(), ModContent.ItemType<TheFirstNapkin>(), 40));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCorruptionCondition(), ModContent.ItemType<SealedPokerDeck>(), 28));
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCorruptionCondition(), ModContent.ItemType<SealedPokerDeck>(), 40));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCrimsonCondition(), ModContent.ItemType<UnderbossPhone>(), 28));
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCrimsonCondition(), ModContent.ItemType<UnderbossPhone>(), 40));
             }
 
 
@@ -208,7 +208,7 @@ namespace JoJoStands.NPCs
                 if (npc.type == NPCID.Zombie || npc.type == NPCID.GoblinArcher || npc.type == NPCID.GoblinPeon || npc.type == NPCID.GoblinScout || npc.type == NPCID.GoblinSorcerer || npc.type == NPCID.GoblinSummoner || npc.type == NPCID.GoblinThief || npc.type == NPCID.GoblinTinkerer || npc.type == NPCID.GoblinWarrior || npc.townNPC)
                 {
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Hand>(), 25));
-                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ArrowEarring>(), 30));
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ArrowEarring>(), 40));
                 }
                 if (npc.type == ModContent.NPCType<MarineBiologist>())
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FamilyPhoto>(), 1));

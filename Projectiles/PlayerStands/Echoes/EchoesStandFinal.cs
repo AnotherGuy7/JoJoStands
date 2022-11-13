@@ -54,7 +54,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Projectile.timeLeft = 2;
 
             mPlayer.echoesACT = ACT;
+
             Rectangle rectangle = Rectangle.Empty;
+            if (Projectile.owner == player.whoAmI)
+                rectangle = new Rectangle((int)(Main.MouseWorld.X - 10), (int)(Main.MouseWorld.Y - 10), 20, 20);
 
             if (threeFreeze)
             {
