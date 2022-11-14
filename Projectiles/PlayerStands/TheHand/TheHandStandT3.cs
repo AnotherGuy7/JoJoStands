@@ -45,6 +45,15 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            float overHeavenDamageBoost = 1f;
+            if (mPlayer.overHeaven)
+                overHeavenDamageBoost = 2f;
+
+            Rectangle rectangle = Rectangle.Empty;
+            if (Projectile.owner == player.whoAmI)
+                rectangle = new Rectangle((int)(Main.MouseWorld.X - 10), (int)(Main.MouseWorld.Y - 10), 20, 20);
+
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -116,11 +125,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
                         Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
 
-                        Projectile.direction = 1;
-                        if (Main.MouseWorld.X < Projectile.position.X)
-                            Projectile.direction = -1;
-
-                        Projectile.spriteDirection = Projectile.direction;
+                        if (mouseX > player.position.X)
+                            player.direction = 1;
+                        if (mouseX < player.position.X)
+                            player.direction = -1;
 
                         Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
                         velocityAddition.Normalize();
@@ -138,7 +146,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
 
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2), PunchKnockback, Projectile.owner, FistWhoAmI);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2 * overHeavenDamageBoost), PunchKnockback, Projectile.owner, FistWhoAmI);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                             SoundStyle theHandScrapeSound = new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR");
@@ -171,9 +179,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             if (!npc.active)
                                 continue;
 
-                            Vector2 npcSize = npc.Size * 1.5f;
-                            Vector2 npcPos = npc.position - (npcSize / 2f);
-                            if (Collision.CheckAABBvLineCollision(npcPos, npcSize, Projectile.Center, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
+                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(npc.Center, Projectile.Center) <= 250f && !npc.immortal && !npc.hide && !npc.townNPC)
                                 npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().highlightedByTheHandMarker = true;
                         }
                     }
@@ -189,9 +195,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                                 if (!npc.active)
                                     continue;
 
-                                Vector2 npcSize = npc.Size * 1.5f;
-                                Vector2 npcPos = npc.position - (npcSize / 2f);
-                                if (Collision.CheckAABBvLineCollision(npcPos, npcSize, Projectile.Center, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
+                                if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(npc.Center, Projectile.Center) <= 250f && !npc.immortal && !npc.hide && !npc.townNPC)
                                 {
                                     Vector2 difference = player.position - npc.position;
                                     npc.position = player.Center + (-difference / 2f);
@@ -220,11 +224,15 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                                 if (!npc.active)
                                     continue;
 
-                                Vector2 npcSize = npc.Size * 1.5f;
-                                Vector2 npcPos = npc.position - (npcSize / 2f);
-                                if (Collision.CheckAABBvLineCollision(npcPos, npcSize, Projectile.Center, Main.MouseWorld) && !npc.immortal && !npc.hide && !npc.townNPC)
+                                if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(npc.Center, Projectile.Center) <= 250f && !npc.immortal && !npc.hide && !npc.townNPC)
                                 {
-                                    npc.StrikeNPC(145 * (specialScrapeTimer / 30), 0f, player.direction);     //damage goes up at a rate of 145dmg/(1/2 s)
+                                    bool crit = false;
+                                    float manifestedWillEmblemDamageBoost = 1f;
+                                    if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
+                                        crit = true;
+                                    if (mPlayer.manifestedWillEmblem && crit)
+                                        manifestedWillEmblemDamageBoost = 1.5f;
+                                    npc.StrikeNPC((int)(145 * (specialScrapeTimer / 30) * mPlayer.standDamageBoosts * manifestedWillEmblemDamageBoost * overHeavenDamageBoost), 0f, player.direction, crit);     //damage goes up at a rate of 145dmg/(1/2 s)
                                     npc.AddBuff(ModContent.BuffType<MissingOrgans>(), 10 * 60);
                                 }
                             }
@@ -235,7 +243,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                                 {
                                     if (otherPlayer.team != player.team && otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), Projectile.Center, Main.MouseWorld))
                                     {
-                                        otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " was scraped out of existence by " + player.name + "."), 60 * (specialScrapeTimer / 60), 1);
+                                        otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " was scraped out of existence by " + player.name + "."), (int)(60 * (specialScrapeTimer / 60) * mPlayer.standDamageBoosts), 1);
                                         otherPlayer.AddBuff(ModContent.BuffType<MissingOrgans>(), 10 * 60);
                                     }
                                 }

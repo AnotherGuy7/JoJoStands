@@ -186,29 +186,32 @@ namespace JoJoStands.Projectiles
                     Player otherPlayer = Main.player[p];
                     int heal = (int)(Projectile.damage * 0.2f);
                     int lifeLeft = otherPlayer.statLifeMax - otherPlayer.statLife;
-                    if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI)
+                    if (otherPlayer.active)
                     {
-                        if ((Projectile.Hitbox.Intersects(otherPlayer.Hitbox)) && !onlyOnce)
+                        if (otherPlayer.whoAmI != player.whoAmI && !mPlayer.overHeaven || mPlayer.overHeaven)
                         {
-                            SoundEngine.PlaySound(SoundID.NPCHit1, otherPlayer.Center);
-                            if (lifeLeft > 0 && !otherPlayer.HasBuff(ModContent.BuffType<MissingOrgans>()))
+                            if ((Projectile.Hitbox.Intersects(otherPlayer.Hitbox)) && !onlyOnce)
                             {
-                                if (heal > 20)
-                                    heal = 20;
-                                heal = (int)Main.rand.NextFloat((int)(heal * 0.85f), (int)(heal * 1.15f));
-                                if (heal > lifeLeft)
-                                    heal = lifeLeft;
-                                otherPlayer.Heal(heal);
-                                if (Main.rand.NextFloat(1, 100) <= 5)
+                                SoundEngine.PlaySound(SoundID.NPCHit1, otherPlayer.Center);
+                                if (lifeLeft > 0 && !otherPlayer.HasBuff(ModContent.BuffType<MissingOrgans>()))
                                 {
-                                    if (otherPlayer.HasBuff(BuffID.Lifeforce))
-                                        otherPlayer.ClearBuff(BuffID.Lifeforce);
-                                    if (!otherPlayer.HasBuff(BuffID.Lifeforce) && otherPlayer.statLifeMax > 100)
-                                        otherPlayer.AddBuff(ModContent.BuffType<ImproperRestoration>(), 2);
+                                    if (heal > 20)
+                                        heal = 20;
+                                    heal = (int)Main.rand.NextFloat((int)(heal * 0.85f), (int)(heal * 1.15f));
+                                    if (heal > lifeLeft)
+                                        heal = lifeLeft;
+                                    otherPlayer.Heal(heal);
+                                    if (Main.rand.NextFloat(1, 100) <= 5)
+                                    {
+                                        if (otherPlayer.HasBuff(BuffID.Lifeforce))
+                                            otherPlayer.ClearBuff(BuffID.Lifeforce);
+                                        if (!otherPlayer.HasBuff(BuffID.Lifeforce) && otherPlayer.statLifeMax > 100)
+                                            otherPlayer.AddBuff(ModContent.BuffType<ImproperRestoration>(), 2);
+                                    }
                                 }
+                                otherPlayer.AddBuff(ModContent.BuffType<Restoration>(), 60);
+                                onlyOnce = true;
                             }
-                            otherPlayer.AddBuff(ModContent.BuffType<Restoration>(), 60);
-                            onlyOnce = true;
                         }
                     }
                 }

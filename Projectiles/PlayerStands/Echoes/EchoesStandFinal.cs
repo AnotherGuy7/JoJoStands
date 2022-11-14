@@ -94,10 +94,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         NPC npc = Main.npc[n];
                         if (npc.active && !npc.hide && !npc.immortal)
                         {
-                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, npc.Center) <= 200f && npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15 && onlyOneTarget < 1)
+                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, npc.Center) <= 250f && npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15 && onlyOneTarget < 1)
                             {
                                 onlyOneTarget += 1;
                                 targetNPC = npc.whoAmI;
+
                             }
                         }
                     }
@@ -108,7 +109,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                             Player otherPlayer = Main.player[p];
                             if (otherPlayer.active && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && onlyOneTarget < 1)
                             {
-                                if (otherPlayer.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 200f && otherPlayer.whoAmI != player.whoAmI)
+                                if (otherPlayer.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 250f && otherPlayer.whoAmI != player.whoAmI)
                                 {
                                     onlyOneTarget += 1;
                                     targetPlayer = otherPlayer.whoAmI;
@@ -135,6 +136,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 if (targetNPC != -1)
                 {
                     NPC npc = Main.npc[targetNPC];
+                    npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreezeTarget = true;
                     npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
                     npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
                     if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)

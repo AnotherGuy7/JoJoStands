@@ -1438,6 +1438,9 @@ namespace JoJoStands
             if (creamTier != 0)        //Cream stuff
             {
                 VoidBar.Visible = true;
+                int overheavenMod = 1;
+                if (mPlayer.overHeaven)
+                    overheavenMod = 2;
                 if (creamTier == 1)
                 {
                     voidCounterMax = 4;
@@ -1450,7 +1453,7 @@ namespace JoJoStands
                 {
                     if (!creamVoidMode && !creamExposedMode && !creamDash)
                     {
-                        voidTimer += 1;
+                        voidTimer += 1 * overheavenMod;
                         if (voidTimer >= 120)
                         {
                             voidCounter++;
@@ -1459,7 +1462,7 @@ namespace JoJoStands
                     }
                     if (!creamVoidMode && creamExposedMode)
                     {
-                        voidTimer += 1;
+                        voidTimer += 1 * overheavenMod;
                         if (voidTimer >= 150 - ((creamTier - 1) * 30))
                         {
                             voidCounter++;
@@ -1472,7 +1475,7 @@ namespace JoJoStands
                     if (creamVoidMode)
                     {
                         voidTimer += 1;
-                        if (voidTimer >= 60)
+                        if (voidTimer >= 60 * overheavenMod)
                         {
                             voidCounter--;
                             voidTimer = 0;

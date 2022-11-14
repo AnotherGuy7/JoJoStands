@@ -37,6 +37,15 @@ namespace JoJoStands.Items.Accessories
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
             string effect = "None";
 
+            if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CrazyDiamondT1>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CrazyDiamondT2>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CrazyDiamondT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CrazyDiamondFinal>())
+                effect = "Healing abilities works on owner!";
+
+            if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<TheHandT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<TheHandFinal>())
+                effect = "Increased damage of scrape abilities!";
+
+            if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CreamT1>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CreamT2>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CreamT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CreamFinal>())
+                effect = "Void Gauge regenerates faster and lasts longer!";
+
             if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<StarPlatinumFinal>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<StarOnTheTree>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<TheWorldFinal>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<TheWorldT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<TheWorldT2>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<KingCrimsonFinal>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<KingCrimsonT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<KingCrimsonT2>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<KingClaus>())
                 effect = "Increased duration of time related abilites!";
 

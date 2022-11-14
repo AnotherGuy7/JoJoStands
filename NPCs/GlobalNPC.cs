@@ -42,6 +42,7 @@ namespace JoJoStands.NPCs
         public bool stunnedByBindingEmerald = false;
         public bool removeZombieHighlightOnHit = false;
         public bool highlightedByTheHandMarker = false;
+        public bool echoesFreezeTarget = false;
         public bool boundByStrings = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
@@ -895,11 +896,19 @@ namespace JoJoStands.NPCs
             if (taggedForDeathLoop > 0)
                 drawColor = Color.Purple;
 
+            if (echoesFreezeTarget)
+            {
+                if (echoesFreeze == 0)
+                    echoesFreezeTarget = false;
+                drawColor = Color.LightGreen;
+            }
+
             if (highlightedByTheHandMarker)
             {
                 highlightedByTheHandMarker = false;
                 drawColor = Color.LightBlue;
             }
+
             if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
                 drawColor = Color.Gray;
         }
