@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,8 +15,8 @@ namespace JoJoStands.Items.Accessories
 
         public override void SetDefaults()
         {
-            Item.width = 30;
-            Item.height = 30;
+            Item.width = 26;
+            Item.height = 26;
             Item.accessory = true;
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.buyPrice(gold: 1);
