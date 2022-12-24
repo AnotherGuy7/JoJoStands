@@ -170,6 +170,13 @@ namespace JoJoStands
             _globalMouseTextPanel = null;
         }
 
+        public override void OnWorldUnload()
+        {
+            GoldExperienceAbilityWheel.CloseAbilityWheel();
+            GoldExperienceRequiemAbilityWheel.CloseAbilityWheel();
+            StoneFreeAbilityWheel.CloseAbilityWheel();
+        }
+
         public override void PostDrawInterface(SpriteBatch spriteBatch)
         {
             MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();

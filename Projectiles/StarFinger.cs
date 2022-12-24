@@ -31,7 +31,9 @@ namespace JoJoStands.Projectiles
             //Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);     //aiStyle 13 without the types
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/StarFinger"));
+                SoundStyle starFinger = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/StarFinger");
+                starFinger.Volume = MyPlayer.ModSoundsVolume;
+                SoundEngine.PlaySound(starFinger, Projectile.Center);
                 playedSound = true;
             }
             ownerProj = Main.projectile[(int)Projectile.ai[0]];
