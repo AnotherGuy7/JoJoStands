@@ -1,5 +1,6 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -7,10 +8,11 @@ namespace JoJoStands.Items
 {
     public class StarPlatinumT1 : StandItemClass
     {
-        public override int standSpeed => 11;
-        public override int standType => 1;
-        public override string standProjectileName => "StarPlatinum";
-        public override int standTier => 1;
+        public override int StandSpeed => 11;
+        public override int StandType => 1;
+        public override string StandProjectileName => "StarPlatinum";
+        public override int StandTier => 1;
+        public override Color StandTierDisplayColor => Color.LightPink;
 
         public override void SetStaticDefaults()
         {

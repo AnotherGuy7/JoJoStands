@@ -15,7 +15,7 @@ namespace JoJoStands.Items
             get { return Mod.Name + "/Items/SexPistolsT1"; }
         }
 
-        public override int standTier => 4;
+        public override int StandTier => 4;
 
         public override void SetStaticDefaults()
         {
@@ -40,7 +40,7 @@ namespace JoJoStands.Items
         public override bool ManualStandSpawning(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.sexPistolsTier = standTier;
+            mPlayer.sexPistolsTier = StandTier;
             mPlayer.standType = 2;
             mPlayer.poseSoundName = "SexPistolsIsDesignedToKill";
             for (int i = 0; i < 6; i++)

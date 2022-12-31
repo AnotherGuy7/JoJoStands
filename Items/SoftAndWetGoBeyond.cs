@@ -9,10 +9,10 @@ namespace JoJoStands.Items
 {
     public class SoftAndWetGoBeyond : StandItemClass
     {
-        public override int standSpeed => 9;
-        public override int standType => 1;
-        public override string standProjectileName => "SoftAndWet";
-        public override int standTier => 5;
+        public override int StandSpeed => 9;
+        public override int StandType => 1;
+        public override string StandProjectileName => "SoftAndWet";
+        public override int StandTier => 5;
 
         public override string Texture
         {

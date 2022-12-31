@@ -14,7 +14,7 @@ namespace JoJoStands.Items
             get { return Mod.Name + "/Items/LockT1"; }
         }
 
-        public override int standTier => 3;
+        public override int StandTier => 3;
 
         public override void SetStaticDefaults()
         {

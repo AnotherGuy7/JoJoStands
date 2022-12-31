@@ -16,7 +16,7 @@ namespace JoJoStands.Items
             Tooltip.SetDefault("Use a gun and have Sex Pistols kick the bullet!\nIncreases bullet damages by 5% and adds one penetration point.\nSpecial: Configure all Sex Pistols's placement!\nUsed in Stand Slot");
         }
 
-        public override int standTier => 1;
+        public override int StandTier => 1;
         //In Manual Mode: You set 6 points that Sex Pistols will go to (in relation to the player) and whenever a bullet gets in that Sex Pistols's range, it gets kicked and redirected toward the nearest enemy. 
         //In Auto Mode: The Sex Pistols automatically kick the bullet whenever a new bullet is created.
 
@@ -38,7 +38,7 @@ namespace JoJoStands.Items
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            mPlayer.sexPistolsTier = standTier;
+            mPlayer.sexPistolsTier = StandTier;
             mPlayer.standType = 2;
             mPlayer.poseSoundName = "SexPistolsIsDesignedToKill";
             for (int i = 0; i < 6; i++)

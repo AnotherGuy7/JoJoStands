@@ -7,10 +7,10 @@ namespace JoJoStands.Items
 {
     public class EchoesACT1 : StandItemClass
     {
-        public override int standSpeed => 16;
-        public override int standType => 1;
-        public override string standProjectileName => "Echoes";
-        public override int standTier => 2;
+        public override int StandSpeed => 16;
+        public override int StandType => 1;
+        public override string StandProjectileName => "Echoes";
+        public override int StandTier => 2;
 
         public override void SetStaticDefaults()
         {

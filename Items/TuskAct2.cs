@@ -8,9 +8,9 @@ namespace JoJoStands.Items
 {
     public class TuskAct2 : StandItemClass
     {
-        public override int standSpeed => 35;
-        public override int standType => 2;
-        public override int standTier => 2;
+        public override int StandSpeed => 35;
+        public override int StandType => 2;
+        public override int StandTier => 2;
 
         public override void SetStaticDefaults()
         {
@@ -38,8 +38,8 @@ namespace JoJoStands.Items
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             mPlayer.standType = 2;
-            mPlayer.equippedTuskAct = standTier;
-            mPlayer.tuskActNumber = standTier;
+            mPlayer.equippedTuskAct = StandTier;
+            mPlayer.tuskActNumber = StandTier;
             return true;
         }
 

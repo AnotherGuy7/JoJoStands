@@ -1802,14 +1802,14 @@ namespace JoJoStands
             StandItemClass standItem = inputItem.ModItem as StandItemClass;
 
             standOut = true;
-            standTier = standItem.standTier;
-            standName = standItem.standProjectileName;
+            standTier = standItem.StandTier;
+            standName = standItem.StandProjectileName;
 
             if (!standItem.ManualStandSpawning(Player))
             {
-                string standClassName = standItem.standProjectileName + "StandT" + standItem.standTier;
+                string standClassName = standItem.StandProjectileName + "StandT" + standItem.StandTier;
                 if (standClassName.Contains("T4"))
-                    standClassName = standItem.standProjectileName + "StandFinal";
+                    standClassName = standItem.StandProjectileName + "StandFinal";
 
                 int standProjectileType = Mod.Find<ModProjectile>(standClassName).Type;
                 Projectile.NewProjectile(inputItem.GetSource_FromThis(), Player.position, Player.velocity, standProjectileType, 0, 0f, Main.myPlayer);

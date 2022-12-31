@@ -7,10 +7,10 @@ namespace JoJoStands.Items
 {
     public class KingCrimsonT2 : StandItemClass
     {
-        public override int standSpeed => 24;
-        public override int standType => 1;
-        public override string standProjectileName => "KingCrimson";
-        public override int standTier => 2;
+        public override int StandSpeed => 24;
+        public override int StandType => 1;
+        public override string StandProjectileName => "KingCrimson";
+        public override int StandTier => 2;
 
         public override string Texture
         {

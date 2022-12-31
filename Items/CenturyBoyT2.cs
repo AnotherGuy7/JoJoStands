@@ -13,7 +13,7 @@ namespace JoJoStands.Items
             get { return Mod.Name + "/Items/CenturyBoyT1"; }
         }
 
-        public override int standTier => 2;
+        public override int StandTier => 2;
 
         public override void SetStaticDefaults()
         {

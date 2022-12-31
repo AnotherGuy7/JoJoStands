@@ -50,6 +50,7 @@ namespace JoJoStands
             SoundsLoaded = ModLoader.TryGetMod("JoJoStandsSounds", out JoJoStandsSounds);
             FanStandsLoaded = ModLoader.TryGetMod("JoJoFanStands", out JoJoFanStands);
 
+            StandItemClass.standTierNumerals = (Texture2D)Request<Texture2D>("JoJoStands/Extras/StandTierNumerals", AssetRequestMode.ImmediateLoad);
             HamonBar.hamonBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/HamonBar", AssetRequestMode.ImmediateLoad);
             ToBeContinued.TBCArrowTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/TBCArrow", AssetRequestMode.ImmediateLoad);
             BulletCounter.bulletCounterTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/BulletCounter", AssetRequestMode.ImmediateLoad);
@@ -179,6 +180,7 @@ namespace JoJoStands
             FanStandsLoaded = false;
             JoJoStandsSounds = null;
             ToBeContinued.TBCArrowTexture = null;
+            StandItemClass.standTierNumerals = null;
             HamonBar.hamonBarTexture = null;
             BulletCounter.bulletCounterTexture = null;
             AerosmithRadar.aerosmithRadarTexture = null;

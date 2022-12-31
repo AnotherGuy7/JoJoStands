@@ -7,9 +7,9 @@ namespace JoJoStands.Items.Seasonal
 {
     public class StarOnTheTree : StandItemClass
     {
-        public override int standSpeed => 8;
-        public override int standType => 1;
-        public override int standTier => 4;
+        public override int StandSpeed => 8;
+        public override int StandType => 1;
+        public override int StandTier => 4;
 
         public override void SetStaticDefaults()
         {

@@ -8,10 +8,10 @@ namespace JoJoStands.Items
 {
     public class TowerOfGrayT1 : StandItemClass
     {
-        public override int standSpeed => 12;
-        public override int standType => 2;
-        public override string standProjectileName => "TowerOfGray";
-        public override int standTier => 1;
+        public override int StandSpeed => 12;
+        public override int StandType => 2;
+        public override string StandProjectileName => "TowerOfGray";
+        public override int StandTier => 1;
 
         public override void SetStaticDefaults()
         {
@@ -32,7 +32,7 @@ namespace JoJoStands.Items
 
         public override bool ManualStandSpawning(Player player)
         {
-            player.GetModPlayer<MyPlayer>().towerOfGrayTier = standTier;
+            player.GetModPlayer<MyPlayer>().towerOfGrayTier = StandTier;
             return false;
         }
 

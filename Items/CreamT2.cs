@@ -12,10 +12,10 @@ namespace JoJoStands.Items
         {
             get { return Mod.Name + "/Items/CreamT1"; }
         }
-        public override int standSpeed => 26;
-        public override int standType => 1;
-        public override string standProjectileName => "Cream";
-        public override int standTier => 2;
+        public override int StandSpeed => 26;
+        public override int StandType => 1;
+        public override string StandProjectileName => "Cream";
+        public override int StandTier => 2;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cream (Tier 2)");
@@ -33,7 +33,7 @@ namespace JoJoStands.Items
         }
         public override bool ManualStandSpawning(Player player)
         {
-            player.GetModPlayer<MyPlayer>().creamTier = standTier;
+            player.GetModPlayer<MyPlayer>().creamTier = StandTier;
             return false;
         }
         public override void AddRecipes()

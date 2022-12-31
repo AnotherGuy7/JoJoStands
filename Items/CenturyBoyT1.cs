@@ -15,7 +15,7 @@ namespace JoJoStands.Items
             Tooltip.SetDefault("Use the special ability key to make yourself immune to damage, but unable to move or use items.\nUsed in Stand Slot.");
         }
 
-        public override int standTier => 1;
+        public override int StandTier => 1;
 
         public override void SetDefaults()
         {

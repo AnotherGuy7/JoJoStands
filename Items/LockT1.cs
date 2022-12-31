@@ -15,7 +15,7 @@ namespace JoJoStands.Items
             Tooltip.SetDefault("Make people that harm you overwhelmed with Guilt!");
         }
 
-        public override int standTier => 1;
+        public override int StandTier => 1;
 
         public override void SetDefaults()
         {

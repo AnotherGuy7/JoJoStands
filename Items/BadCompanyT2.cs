@@ -8,10 +8,10 @@ namespace JoJoStands.Items
 {
     public class BadCompanyT2 : StandItemClass
     {
-        public override int standSpeed => 80;
-        public override int standType => 2;
-        public override string standProjectileName => "BadCompany";
-        public override int standTier => 2;
+        public override int StandSpeed => 80;
+        public override int StandType => 2;
+        public override string StandProjectileName => "BadCompany";
+        public override int StandTier => 2;
 
         public override string Texture
         {
@@ -39,8 +39,8 @@ namespace JoJoStands.Items
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            mPlayer.badCompanyTier = standTier;
-            mPlayer.maxBadCompanyUnits = 6 * standTier;
+            mPlayer.badCompanyTier = StandTier;
+            mPlayer.maxBadCompanyUnits = 6 * StandTier;
             return true;
         }
 

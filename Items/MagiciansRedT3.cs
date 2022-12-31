@@ -7,10 +7,10 @@ namespace JoJoStands.Items
 {
     public class MagiciansRedT3 : StandItemClass
     {
-        public override int standSpeed => 16;
-        public override int standType => 2;
-        public override string standProjectileName => "MagiciansRed";
-        public override int standTier => 3;
+        public override int StandSpeed => 16;
+        public override int StandType => 2;
+        public override string StandProjectileName => "MagiciansRed";
+        public override int StandTier => 3;
 
         public override string Texture
         {

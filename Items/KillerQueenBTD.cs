@@ -13,9 +13,9 @@ namespace JoJoStands.Items
     {
         public static bool taggedAnything = false;
 
-        public override int standSpeed => 30;
-        public override int standType => 2;
-        public override int standTier => 5;
+        public override int StandSpeed => 30;
+        public override int StandType => 2;
+        public override int StandTier => 5;
 
         public override string Texture
         {

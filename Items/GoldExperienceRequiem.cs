@@ -10,10 +10,10 @@ namespace JoJoStands.Items
 {
     public class GoldExperienceRequiem : StandItemClass
     {
-        public override int standSpeed => 11;
-        public override int standType => 1;
-        public override string standProjectileName => "GoldExperience";
-        public override int standTier => 5;
+        public override int StandSpeed => 11;
+        public override int StandType => 1;
+        public override string StandProjectileName => "GoldExperience";
+        public override int StandTier => 5;
 
         public override void SetStaticDefaults()
         {
