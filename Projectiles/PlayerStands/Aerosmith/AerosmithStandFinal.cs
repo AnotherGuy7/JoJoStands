@@ -46,6 +46,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         private int frameMultUpdate = 0;
         private int leftMouse = 0;
         private int rightMouse = 0;
+        private int accelerationTimer = 0;
+        private const int AccelerationTime = 1 * 60;
+        private const float MaxFlightSpeed = 10f;
 
         public override void OnSpawn(IEntitySource source)
         {
@@ -66,6 +69,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
+            if (accelerationTimer > 0)
+                accelerationTimer--;
 
             mPlayer.aerosmithWhoAmI = Projectile.whoAmI;
             mPlayer.standRemoteMode = remoteMode;
@@ -103,18 +108,23 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     float mouseDistance = Vector2.Distance(new Vector2(mouseX, mouseY), Projectile.Center);
 
                     Projectile.spriteDirection = Projectile.direction;
+                    accelerationTimer += 2;
+                    if (accelerationTimer >= AccelerationTime)
+                        accelerationTimer = AccelerationTime;
 
                     if (mouseDistance > 40f)
                     {
                         Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.Center;
                         Projectile.velocity.Normalize();
-                        Projectile.velocity *= 10f + player.moveSpeed;
+                        Projectile.velocity *= MaxFlightSpeed + player.moveSpeed;
+                        Projectile.velocity *= accelerationTimer / (float)AccelerationTime;
                     }
                     else
                     {
                         Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.Center;
                         Projectile.velocity.Normalize();
-                        Projectile.velocity *= (mouseDistance * (10f + player.moveSpeed)) / 40f;
+                        Projectile.velocity *= (mouseDistance * (MaxFlightSpeed + player.moveSpeed)) / 40f;
+                        Projectile.velocity *= accelerationTimer / (float)AccelerationTime;
                     }
                     Projectile.netUpdate = true;
                 }
@@ -125,6 +135,19 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     {
                         Projectile.velocity *= 0.95f;
                         Projectile.netUpdate = true;
+                    }
+                }
+                if (remoteMode && Projectile.velocity.X >= 8f)
+                {
+                    int amountOfCloudDusts = Main.rand.Next(1, 3 + 1);
+                    for (int i = 0; i < amountOfCloudDusts; i++)
+                    {
+                        float speedScale = Main.rand.Next(-24, -16 + 1) / 10f;
+                        speedScale *= 4f;
+                        float dustScale = Main.rand.Next(8, 12 + 1) / 10f;
+                        int dustIndex = Dust.NewDust(Projectile.Center - (Main.ScreenSize.ToVector2() / 2f) + new Vector2(12 * 16f * Projectile.direction, 0f), Main.screenWidth, Main.screenHeight, DustID.Cloud, Projectile.velocity.X * speedScale, Scale: dustScale);
+                        Main.dust[dustIndex].noGravity = true;
+
                     }
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer)

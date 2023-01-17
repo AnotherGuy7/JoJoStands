@@ -24,6 +24,7 @@ namespace JoJoStands
         public const string GratefulDeadGasEffect = "GasEffect";
         public const string VoidBarGradient = "JoJoStandsVoidGradient";
         public const string BattlePaletteSwitchEffect = "ColorChangeEffect";
+        public const string MultiColorStaticEffect = "MultiColorStaticEffect";
 
 
         public static void ActivateShader(string shaderName)
@@ -56,8 +57,11 @@ namespace JoJoStands
             Filters.Scene[shaderName].GetShader().UseProgress(useProgress);
         }
 
+        public static MiscShaderData GetShaderInstance(string shaderName) => GameShaders.Misc[shaderName];
+
         public static void LoadShaders()
         {
+            //Screen shaders
             Ref<Effect> timestopShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/TimestopEffect", AssetRequestMode.ImmediateLoad));      // The path to the compiled shader file.
             Filters.Scene[TimestopEffect] = new Filter(new ScreenShaderData(timestopShader, "TimestopEffectShader"), EffectPriority.VeryHigh);
             Filters.Scene[TimestopEffect].Load();
@@ -76,8 +80,12 @@ namespace JoJoStands
             Ref<Effect> colorChangeShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/ColorChangeEffect", AssetRequestMode.ImmediateLoad));
             Filters.Scene[BattlePaletteSwitchEffect] = new Filter(new ScreenShaderData(colorChangeShader, "ColorChangeEffect"), EffectPriority.VeryHigh);
             Filters.Scene[BattlePaletteSwitchEffect].Load();
+
+            //Texture shaders
             Ref<Effect> voidGradientShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/VoidBarGradient", AssetRequestMode.ImmediateLoad));
             GameShaders.Misc[VoidBarGradient] = new MiscShaderData(voidGradientShader, "VoidBarGradient");
+            Ref<Effect> multiColorStaticEffect = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/MultiColorStaticEffect", AssetRequestMode.ImmediateLoad));
+            GameShaders.Misc[MultiColorStaticEffect] = new MiscShaderData(multiColorStaticEffect, "MultiColorStaticEffect");
 
             Effect timeskipShaderEffect = (Effect)Request<Effect>("JoJoStands/Effects/TimeSkipEffectShader", AssetRequestMode.ImmediateLoad);
             Ref<Effect> timeskipShader = new Ref<Effect>(timeskipShaderEffect);      // The path to the compiled shader file.

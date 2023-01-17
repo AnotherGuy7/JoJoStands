@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using System.Runtime.InteropServices;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -15,7 +17,13 @@ namespace JoJoStands.UI
         public DragableUIPanel aerosmithRadarUI;
         public UIImage centerDot;
         public static bool Visible;
-        public static Texture2D aerosmithRadarTexture;
+        public static Texture2D aerosmithRadarBorderTexture;
+        public static Texture2D aerosmithRadarCrosshairTexture;
+        public static Texture2D aerosmithRadarBackgroundTexture;
+        public static Texture2D aerosmithRadarBlipTexture;
+        private const int AerosmithBlipTextureSize = 6;
+
+        private readonly Color DarkGreen = new Color(27, 76, 32);
 
         public override void Update(GameTime gameTime)
         {
@@ -32,19 +40,18 @@ namespace JoJoStands.UI
             aerosmithRadarUI.BackgroundColor = new Color(0, 0, 0, 0);
             aerosmithRadarUI.BorderColor = new Color(0, 0, 0, 0);
 
-            centerDot = new UIImage(ModContent.Request<Texture2D>("JoJoStands/UI/GreenDot", AssetRequestMode.ImmediateLoad));
+            centerDot = new UIImage(aerosmithRadarBlipTexture);
             centerDot.Left.Set(58f, 0f);
             centerDot.Top.Set(62f, 0f);
-            centerDot.Width.Set(10f, 0f);
-            centerDot.Height.Set(10f, 0f);
+            centerDot.Width.Set(6f, 0f);
+            centerDot.Height.Set(6f, 0f);
+            centerDot.Color = Color.LightGreen;
             aerosmithRadarUI.Append(centerDot);
 
             Append(aerosmithRadarUI);
             base.OnInitialize();
         }
 
-        private Texture2D redDotTexture;
-        private Texture2D orangeDotTexture;
         private AerosmithRadarPoint[] dataPoints;
 
         private struct AerosmithRadarPoint
@@ -57,14 +64,23 @@ namespace JoJoStands.UI
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (redDotTexture == null)
-                redDotTexture = ModContent.Request<Texture2D>("JoJoStands/UI/RedDot").Value;
-            if (orangeDotTexture == null)
-                orangeDotTexture = ModContent.Request<Texture2D>("JoJoStands/UI/OrangeDot").Value;
             if (dataPoints == null)
                 dataPoints = new AerosmithRadarPoint[Main.maxNPCs];
 
-            spriteBatch.Draw(aerosmithRadarTexture, aerosmithRadarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 1, aerosmithRadarTexture.Width, aerosmithRadarTexture.Height), new Color(255f, 255f, 255f, 255f));
+            float scaleInverse = 1f - (Main.UIScale - 1f);
+            Rectangle clippingRect = aerosmithRadarUI.GetClippingRectangle(spriteBatch);
+            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
+            Rectangle mainUIdestinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
+
+            //return;
+            MiscShaderData staticShader = JoJoStandsShaders.GetShaderInstance(JoJoStandsShaders.MultiColorStaticEffect);
+            staticShader.UseOpacity(Main.rand.Next(0, 1000 + 1) / 1000f);
+            staticShader.UseColor(DarkGreen);
+            staticShader.UseSecondaryColor(Color.Black);
+           
+            UITools.DrawUIWithShader(spriteBatch, staticShader, aerosmithRadarBackgroundTexture, mainUIdestinationRect);
+
+            spriteBatch.Draw(aerosmithRadarCrosshairTexture, mainUIdestinationRect, Color.White);
 
             Vector2 aerosmithCenter = Main.projectile[mPlayer.aerosmithWhoAmI].Center;
             for (int n = 0; n < Main.maxNPCs; n++)
@@ -72,26 +88,24 @@ namespace JoJoStands.UI
                 NPC target = Main.npc[n];
                 if (target.active && target.lifeMax > 5 && !target.townNPC && !target.immortal)
                 {
-                    float xDistance = aerosmithCenter.X - target.Center.X;
-                    float yDistance = aerosmithCenter.Y - target.Center.Y;
-                    float xMaxDetectionDistance = Main.screenWidth + 120f;
-                    float yMaxDetectionDistance = Main.screenHeight + 120f;
+                    Vector2 enemyDistance = target.Center - aerosmithCenter;
+                    Vector2 maxDetectionDistance = new Vector2((Main.screenWidth / Main.GameZoomTarget), (Main.screenHeight / Main.GameZoomTarget)) / (Main.GameZoomTarget);
 
-                    if (xDistance < xMaxDetectionDistance && yDistance < yMaxDetectionDistance && xDistance > -xMaxDetectionDistance && yDistance > -yMaxDetectionDistance)
+                    if (Math.Abs(enemyDistance.X) < maxDetectionDistance.X && Math.Abs(enemyDistance.Y) < maxDetectionDistance.Y)
                     {
                         AerosmithRadarPoint aerosmithRadarPoint = dataPoints[n];
-                        dataPoints[n].timer++;
-                        if (dataPoints[n].timer >= 360)
-                            dataPoints[n].timer = 0;
+                        aerosmithRadarPoint.timer++;
+                        if (aerosmithRadarPoint.timer >= 360)
+                            aerosmithRadarPoint.timer = 0;
 
-                        dataPoints[n].alpha = 0.5f + (Math.Abs((float)Math.Sin(dataPoints[n].timer / 6f)) * 0.5f);
+                        aerosmithRadarPoint.alpha = 0.5f + (Math.Abs((float)Math.Sin(aerosmithRadarPoint.timer / 6f)) * 0.5f);
                         dataPoints[n] = aerosmithRadarPoint;
 
-                        if (xDistance < 675f && xDistance > -675f && yDistance < 675f && yDistance > -675f)
-                        {
-                            Rectangle destinationRect = new Rectangle((int)(centerDot.Left.Pixels + 13f + (-xDistance / 18f)) + (int)aerosmithRadarUI.Left.Pixels, (int)(centerDot.Top.Pixels + 13f + (-yDistance / 18f)) + (int)aerosmithRadarUI.Top.Pixels, 10, 10);
-                            spriteBatch.Draw(redDotTexture, destinationRect, null, Color.White * dataPoints[n].alpha);
-                        }
+                        int dotPosX = clippingRect.X + (int)centerDot.Left.Pixels + (int)((enemyDistance.X / maxDetectionDistance.X) * ((aerosmithRadarBorderTexture.Width - (4 * 6)) * scaleInverse));
+                        int dotPosY = clippingRect.Y + (int)centerDot.Top.Pixels + (int)((enemyDistance.Y / maxDetectionDistance.Y) * ((aerosmithRadarBorderTexture.Height - (3 * 6)) * scaleInverse)) + 2;
+                        Point transformedDotPosition = Vector2.Transform(new Vector2(dotPosX, dotPosY), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
+                        Rectangle destinationRect = new Rectangle(transformedDotPosition.X + 3, transformedDotPosition.Y + 3, (int)(AerosmithBlipTextureSize * scaleInverse), (int)(AerosmithBlipTextureSize * scaleInverse));      //The +3 is because of the origin of the texture.
+                        spriteBatch.Draw(aerosmithRadarBlipTexture, destinationRect, Color.Red * dataPoints[n].alpha);
                     }
                 }
             }
@@ -105,30 +119,30 @@ namespace JoJoStands.UI
                     Player detectedPlayer = Main.player[p];
                     if (detectedPlayer.active && detectedPlayer.team != player.team)
                     {
-                        float xDistance = aerosmithCenter.X - detectedPlayer.Center.X;
-                        float yDistance = aerosmithCenter.Y - detectedPlayer.Center.Y;
-                        float xMaxDetectionDistance = Main.screenWidth + 120f;
-                        float yMaxDetectionDistance = Main.screenHeight + 120f;
+                        Vector2 playerDistance = detectedPlayer.Center - aerosmithCenter;
+                        Vector2 maxDetectionDistance = new Vector2((Main.screenWidth / Main.GameZoomTarget), (Main.screenHeight / Main.GameZoomTarget)) / (Main.GameZoomTarget);
 
-                        if (detectedPlayer.active && xDistance < xMaxDetectionDistance && yDistance < yMaxDetectionDistance && xDistance > -xMaxDetectionDistance && yDistance > -yMaxDetectionDistance)
+                        if (Math.Abs(playerDistance.X) < maxDetectionDistance.X && Math.Abs(playerDistance.Y) < maxDetectionDistance.Y)
                         {
                             AerosmithRadarPoint aerosmithRadarPoint = dataPoints[p];
-                            dataPoints[p].timer++;
-                            if (dataPoints[p].timer >= 360)
-                                dataPoints[p].timer = 0;
+                            aerosmithRadarPoint.timer++;
+                            if (aerosmithRadarPoint.timer >= 360)
+                                aerosmithRadarPoint.timer = 0;
 
-                            dataPoints[p].alpha = 0.5f + (Math.Abs((float)Math.Sin(dataPoints[p].timer / 6f)) * 0.5f);
+                            aerosmithRadarPoint.alpha = 0.5f + (Math.Abs((float)Math.Sin(aerosmithRadarPoint.timer / 6f)) * 0.5f);
                             dataPoints[p] = aerosmithRadarPoint;
 
-                            if (xDistance < 675f && xDistance > -675f && yDistance < 675f && yDistance > -675f)
-                            {
-                                Rectangle destinationRect = new Rectangle((int)(centerDot.Left.Pixels + 13f + (-xDistance / 18f)) + (int)aerosmithRadarUI.Left.Pixels, (int)(centerDot.Top.Pixels + 13f + (-yDistance / 18f)) + (int)aerosmithRadarUI.Top.Pixels, 10, 10);
-                                spriteBatch.Draw(orangeDotTexture, destinationRect, null, Color.White * dataPoints[p].alpha);
-                            }
+                            int dotPosX = clippingRect.X + (int)centerDot.Left.Pixels + (int)((playerDistance.X / maxDetectionDistance.X) * ((aerosmithRadarBorderTexture.Width - (4 * 6)) * scaleInverse));
+                            int dotPosY = clippingRect.Y + (int)centerDot.Top.Pixels + (int)((playerDistance.Y / maxDetectionDistance.Y) * ((aerosmithRadarBorderTexture.Height - (3 * 6)) * scaleInverse)) + 2;
+                            Point transformedDotPosition = Vector2.Transform(new Vector2(dotPosX, dotPosY), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
+                            Rectangle destinationRect = new Rectangle(transformedDotPosition.X + 3, transformedDotPosition.Y + 3, (int)(AerosmithBlipTextureSize * scaleInverse), (int)(AerosmithBlipTextureSize * scaleInverse));      //The +3 is because of the origin of the texture.
+                            spriteBatch.Draw(aerosmithRadarBlipTexture, destinationRect, Color.Orange * dataPoints[p].alpha);
                         }
                     }
                 }
             }
+
+            spriteBatch.Draw(aerosmithRadarBorderTexture, mainUIdestinationRect, Color.White);
         }
     }
 }

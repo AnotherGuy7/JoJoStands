@@ -213,10 +213,25 @@ namespace JoJoStands.Projectiles
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC possibleTarget = Main.npc[n];
-                    if (possibleTarget.active && possibleTarget.lifeMax > 5 && !possibleTarget.immortal && !possibleTarget.townNPC && !possibleTarget.hide && Projectile.Distance(possibleTarget.Center) <= 72f)
+                    if (possibleTarget.active && possibleTarget.lifeMax > 5 && !possibleTarget.immortal && !possibleTarget.townNPC && !possibleTarget.hide && Projectile.Distance(possibleTarget.Center) <= (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standTier + 2) * 16f)
                     {
                         kickedBySexPistols = true;
                         autoModeSexPistols = false;
+
+                        int amountOfKickDusts = 15;
+                        for (int i = 0; i < amountOfKickDusts; i++)
+                        {
+                            float rotation = MathHelper.ToRadians(((360 / 15) * i) - 90f);        //60 since it's the max amount of dusts that is supposed to circle it
+                            Vector2 dustPosition = Projectile.Center + (rotation.ToRotationVector2() * 4f);
+                            int dustIndex = Dust.NewDust(dustPosition, 1, 1, DustID.IchorTorch);
+                            Main.dust[dustIndex].noGravity = true;
+                            Main.dust[dustIndex].noLight = true;
+                            Vector2 velocity = Projectile.Center + ((rotation + 0.01f).ToRotationVector2() * 4f) - dustPosition;
+                            velocity.Normalize();
+                            velocity *= 1.6f;
+                            Main.dust[dustIndex].velocity = velocity;
+                            Main.dust[dustIndex].scale = 1f;
+                        }
 
                         Vector2 redirectionVelocity = possibleTarget.Center - Projectile.Center;
                         redirectionVelocity.Normalize();
@@ -229,7 +244,7 @@ namespace JoJoStands.Projectiles
             }
 
             if (kickedBySexPistols)
-                Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.TreasureSparkle, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
+                Dust.NewDust(Projectile.Center + Projectile.velocity, Projectile.width, Projectile.height, DustID.TreasureSparkle, Projectile.velocity.X * -0.3f, Projectile.velocity.Y * -0.3f);
 
             return true;
         }

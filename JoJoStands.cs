@@ -54,7 +54,10 @@ namespace JoJoStands
             HamonBar.hamonBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/HamonBar", AssetRequestMode.ImmediateLoad);
             ToBeContinued.TBCArrowTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/TBCArrow", AssetRequestMode.ImmediateLoad);
             BulletCounter.bulletCounterTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/BulletCounter", AssetRequestMode.ImmediateLoad);
-            AerosmithRadar.aerosmithRadarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/AerosmithRadar", AssetRequestMode.ImmediateLoad);
+            AerosmithRadar.aerosmithRadarBackgroundTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/AerosmithRadar_Background", AssetRequestMode.ImmediateLoad);
+            AerosmithRadar.aerosmithRadarCrosshairTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/AerosmithRadar_Crosshair", AssetRequestMode.ImmediateLoad);
+            AerosmithRadar.aerosmithRadarBorderTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/AerosmithRadar_Border", AssetRequestMode.ImmediateLoad);
+            AerosmithRadar.aerosmithRadarBlipTexture = (Texture2D)Request<Texture2D>("JoJoStands/Extras/AerosmithRadar_Blip", AssetRequestMode.ImmediateLoad);
             GoldenSpinMeter.goldenRectangleTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/GoldenSpinMeter", AssetRequestMode.ImmediateLoad);
             GoldenSpinMeter.goldenRectangleSpinLineTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/GoldenSpinMeterLine", AssetRequestMode.ImmediateLoad);
             SexPistolsUI.sexPistolsUITexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/SexPistolsUI", AssetRequestMode.ImmediateLoad);
@@ -183,7 +186,7 @@ namespace JoJoStands
             StandItemClass.standTierNumerals = null;
             HamonBar.hamonBarTexture = null;
             BulletCounter.bulletCounterTexture = null;
-            AerosmithRadar.aerosmithRadarTexture = null;
+            AerosmithRadar.aerosmithRadarBorderTexture = null;
             GoldenSpinMeter.goldenRectangleTexture = null;
             GoldenSpinMeter.goldenRectangleSpinLineTexture = null;
             SexPistolsUI.sexPistolsUITexture = null;

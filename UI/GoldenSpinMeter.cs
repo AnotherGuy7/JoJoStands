@@ -8,11 +8,13 @@ namespace JoJoStands.UI
 {
     public class GoldenSpinMeter : UIState
     {
-        public DragableUIPanel GSpinMeter;
+        public DragableUIPanel spinMeter;
         public static bool Visible;
         public UIText spinAmountText;
         public static Texture2D goldenRectangleTexture;
         public static Texture2D goldenRectangleSpinLineTexture;
+
+        private Rectangle animRect;
 
         public override void Update(GameTime gameTime)
         {
@@ -26,22 +28,24 @@ namespace JoJoStands.UI
 
         public override void OnInitialize()
         {
-            GSpinMeter = new DragableUIPanel();
-            GSpinMeter.HAlign = 0.9f;
-            GSpinMeter.VAlign = 0.9f;
-            GSpinMeter.Width.Set(140f, 0f);
-            GSpinMeter.Height.Set(96f, 0f);
-            GSpinMeter.BackgroundColor = new Color(0, 0, 0, 0);
-            GSpinMeter.BorderColor = new Color(0, 0, 0, 0);
+            spinMeter = new DragableUIPanel();
+            spinMeter.HAlign = 0.9f;
+            spinMeter.VAlign = 0.9f;
+            spinMeter.Width.Set(140f, 0f);
+            spinMeter.Height.Set(96f, 0f);
+            spinMeter.BackgroundColor = new Color(0, 0, 0, 0);
+            spinMeter.BorderColor = new Color(0, 0, 0, 0);
 
             spinAmountText = new UIText("");
             spinAmountText.HAlign = 0.5f;
             spinAmountText.VAlign = 1.4f;
             spinAmountText.Width.Set(22f, 0f);
             spinAmountText.Height.Set(22f, 0f);
-            GSpinMeter.Append(spinAmountText);
+            spinMeter.Append(spinAmountText);
 
-            Append(GSpinMeter);
+            Append(spinMeter);
+            int frameHeight = goldenRectangleTexture.Height / 12;      //12 frames in that sheet, both sheets are the same height
+            animRect = new Rectangle(0, 0, goldenRectangleTexture.Width, frameHeight);
             base.OnInitialize();
         }
 
@@ -49,11 +53,15 @@ namespace JoJoStands.UI
         {
             Player player = Main.LocalPlayer;
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            float frame = (mPlayer.goldenSpinCounter / 300f) * 12f;
-            int frameHeight = goldenRectangleTexture.Height / 12;      //12 frames in that sheet, both sheets are the same height
+            int frame = (mPlayer.goldenSpinCounter / 300) * 12;
+            animRect.Y = (frame - 1) * animRect.Height;
 
-            spriteBatch.Draw(goldenRectangleTexture, GSpinMeter.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * (int)(frame - 1), goldenRectangleTexture.Width, frameHeight), Color.Yellow);
-            spriteBatch.Draw(goldenRectangleSpinLineTexture, GSpinMeter.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * (int)(frame - 1), goldenRectangleSpinLineTexture.Width, frameHeight), Color.Yellow);
+            float scaleInverse = 1f - (Main.UIScale - 1f);
+            Rectangle clippingRect = spinMeter.GetClippingRectangle(spriteBatch);
+            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
+            Rectangle mainUIdestinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
+            spriteBatch.Draw(goldenRectangleTexture, mainUIdestinationRect, animRect, Color.Wheat);
+            spriteBatch.Draw(goldenRectangleSpinLineTexture, mainUIdestinationRect, animRect, Color.Wheat);
         }
     }
 }

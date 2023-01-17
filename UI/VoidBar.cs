@@ -51,21 +51,12 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            float normalizedVoidCounter = 1f - ((float)mPlayer.voidCounter / (float)mPlayer.voidCounterMax);
             spriteBatch.Draw(VoidBarTexture, voidBarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 0, VoidBarTexture.Width, VoidBarTexture.Height), Color.White);
-
-            //---------- This shows how to apply shaders to UI elements. In this case it was supposed to be a gradient but it looked worse than a monotone bar either way ----------
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.UIScaleMatrix);
-
-            MiscShaderData voidGradientShader = GameShaders.Misc["JoJoStandsVoidGradient"];
+            float normalizedVoidCounter = 1f - ((float)mPlayer.voidCounter / (float)mPlayer.voidCounterMax);
+            MiscShaderData voidGradientShader = JoJoStandsShaders.GetShaderInstance(JoJoStandsShaders.VoidBarGradient);
             voidGradientShader.UseOpacity(normalizedVoidCounter);
 
-            voidGradientShader.Apply(null);
-            spriteBatch.Draw(VoidBarBarTexture, voidBarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 0, VoidBarTexture.Width, VoidBarTexture.Height), Color.White);
-
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
+            UITools.DrawUIWithShader(spriteBatch, voidGradientShader, VoidBarBarTexture, voidBarUI.GetClippingRectangle(spriteBatch));
         }
 
         /*private void PreDrawVoidCounterGradient(MyPlayer mPlayer, SpriteBatch spriteBatch)

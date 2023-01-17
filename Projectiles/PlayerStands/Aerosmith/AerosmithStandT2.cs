@@ -48,6 +48,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         private int frameMultUpdate = 0;
         private int leftMouse = 0;
         private int rightMouse = 0;
+        private int accelerationTimer = 0;
+        private const int AccelerationTime = 2 * 60;
+        private const float MaxFlightSpeed = 8f;
+
         public override void OnSpawn(IEntitySource source)
         {
             Player player = Main.player[Projectile.owner];
@@ -67,6 +71,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
+            if (accelerationTimer > 0)
+                accelerationTimer--;
 
             mPlayer.aerosmithWhoAmI = Projectile.whoAmI;
             mPlayer.standRemoteMode = remoteMode;
@@ -110,18 +116,23 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     float mouseDistance = Vector2.Distance(new Vector2(mouseX, mouseY), Projectile.Center);
 
                     Projectile.spriteDirection = Projectile.direction;
+                    accelerationTimer += 2;
+                    if (accelerationTimer >= AccelerationTime)
+                        accelerationTimer = AccelerationTime;
 
                     if (mouseDistance > 40f)
                     {
                         Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.Center;
                         Projectile.velocity.Normalize();
-                        Projectile.velocity *= 8f + player.moveSpeed;
+                        Projectile.velocity *= MaxFlightSpeed + player.moveSpeed;
+                        Projectile.velocity *= accelerationTimer / (float)AccelerationTime;
                     }
                     else
                     {
                         Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.Center;
                         Projectile.velocity.Normalize();
-                        Projectile.velocity *= (mouseDistance * (8f + player.moveSpeed)) / 40f;
+                        Projectile.velocity *= (mouseDistance * (MaxFlightSpeed + player.moveSpeed)) / 40f;
+                        Projectile.velocity *= accelerationTimer / (float)AccelerationTime;
                     }
                     Projectile.netUpdate = true;
                 }

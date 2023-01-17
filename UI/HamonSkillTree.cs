@@ -303,7 +303,11 @@ namespace JoJoStands.UI
 
         protected override void DrawSelf(SpriteBatch spriteBatch)       //from ExampleMod's ExampleUI
         {
-            spriteBatch.Draw(skillTreeTextures[currentShownPage - 1], HamonSkillTreePanel.GetClippingRectangle(spriteBatch), Color.White);
+            float scaleInverse = 1f - (Main.UIScale - 1f);
+            Rectangle clippingRect = HamonSkillTreePanel.GetClippingRectangle(spriteBatch);
+            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
+            Rectangle mainUIdestinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
+            spriteBatch.Draw(skillTreeTextures[currentShownPage - 1], mainUIdestinationRect, Color.White);
         }
 
         private void InitializeButtons(int page)

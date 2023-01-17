@@ -1,5 +1,6 @@
 ﻿using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -20,7 +21,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
 
         private const float BaseKickRadius = 24f;
         private const int BaseKickCooldownTime = 120;
-        private const int MaxAmountOfDusts = 20;
+        private const int MaxAmountOfDusts = 40;
 
         private int kickRestTimer = 0;
         private float kickRadius = 0f;
@@ -52,6 +53,11 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                     int dustIndex = Dust.NewDust(dustPosition, 1, 1, DustID.IchorTorch);
                     Main.dust[dustIndex].noGravity = true;
                     Main.dust[dustIndex].noLight = true;
+                    Vector2 velocity = Projectile.Center + ((rotation + 0.01f).ToRotationVector2() * kickRadius) - dustPosition;
+                    velocity.Normalize();
+                    velocity *= 2.2f;
+                    Main.dust[dustIndex].velocity = velocity;
+                    Main.dust[dustIndex].scale = 1f;
                 }
 
                 if (kickRestTimer > 0)
@@ -84,6 +90,21 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
 
                             if (!player.HasBuff(ModContent.BuffType<BulletKickFrenzy>()))
                                 kickRestTimer += kickCooldownTime;
+
+                            int amountOfKickDusts = 15;
+                            for (int i = 0; i < amountOfKickDusts; i++)
+                            {
+                                float rotation = MathHelper.ToRadians(((360 / 15) * i) - 90f);        //60 since it's the max amount of dusts that is supposed to circle it
+                                Vector2 dustPosition = otherProjectile.Center + (rotation.ToRotationVector2() * 4f);
+                                int dustIndex = Dust.NewDust(dustPosition, 1, 1, DustID.IchorTorch);
+                                Main.dust[dustIndex].noGravity = true;
+                                Main.dust[dustIndex].noLight = true;
+                                Vector2 velocity = otherProjectile.Center + ((rotation + 0.01f).ToRotationVector2() * 4f) - dustPosition;
+                                velocity.Normalize();
+                                velocity *= 1.6f;
+                                Main.dust[dustIndex].velocity = velocity;
+                                Main.dust[dustIndex].scale = 1f;
+                            }
 
                             Vector2 redirectionVelocity = target.Center - otherProjectile.Center;
                             redirectionVelocity.Normalize();

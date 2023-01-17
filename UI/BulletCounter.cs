@@ -11,10 +11,7 @@ namespace JoJoStands.UI
         public static bool Visible;
         public static Texture2D bulletCounterTexture;
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-        }
+        private Rectangle animRect;
 
         public override void OnInitialize()
         {
@@ -27,6 +24,9 @@ namespace JoJoStands.UI
             bulletCountUI.BorderColor = new Color(0, 0, 0, 0);
 
             Append(bulletCountUI);
+            int frameHeight = bulletCounterTexture.Height / 7;
+            animRect = new Rectangle(0, 0, bulletCounterTexture.Width, frameHeight);
+
             base.OnInitialize();
         }
 
@@ -35,8 +35,13 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             int frame = mPlayer.revolverBulletsShot;
-            int frameHeight = bulletCounterTexture.Height / 7;
-            spriteBatch.Draw(bulletCounterTexture, bulletCountUI.GetClippingRectangle(spriteBatch), new Rectangle(0, frameHeight * frame, bulletCounterTexture.Width, frameHeight), new Color(255f, 255f, 255f, 255f));
+            animRect.Y = frame;
+
+            float scaleInverse = 1f - (Main.UIScale - 1f);
+            Rectangle clippingRect = bulletCountUI.GetClippingRectangle(spriteBatch);
+            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
+            Rectangle mainUIdestinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
+            spriteBatch.Draw(bulletCounterTexture, mainUIdestinationRect, animRect, Color.White);
         }
     }
 }

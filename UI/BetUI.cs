@@ -903,10 +903,5 @@ namespace JoJoStands.UI
                 playArea.Append(rollResult3);
             }
         }
-
-        protected override void DrawSelf(SpriteBatch spriteBatch)       //from ExampleMod's ExampleUI
-        {
-            base.DrawSelf(spriteBatch);
-        }
     }
 }
