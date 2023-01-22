@@ -1,9 +1,8 @@
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class SpaceFreeze : ModBuff
+    public class SpaceFreeze : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -13,7 +12,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.lifeRegen > 0)
                 player.lifeRegen = 0;

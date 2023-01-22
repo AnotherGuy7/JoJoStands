@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 }
             }
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !secondaryAbilityFrames && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 {
@@ -227,7 +227,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     StayBehind();
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

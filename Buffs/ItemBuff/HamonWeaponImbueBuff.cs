@@ -1,9 +1,8 @@
 ﻿using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class HamonWeaponImbueBuff : ModBuff
+    public class HamonWeaponImbueBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {

@@ -1,11 +1,10 @@
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class ArtificialSoul : ModBuff
+    public class ArtificialSoul : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,14 +14,10 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.debuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void OnBuffEnd(Player player)
         {
-            if (player.buffTime[buffIndex] <= 2)
-            {
-                player.KillMe(PlayerDeathReason.ByCustomReason(player.name + "'s artificial soul has left them."), player.statLife + 1, player.direction);
-                player.GetModPlayer<MyPlayer>().revived = false;
-                player.ClearBuff(Type);
-            }
+            player.KillMe(PlayerDeathReason.ByCustomReason(player.name + "'s artificial soul has left them."), player.statLife + 1, player.direction);
+            player.GetModPlayer<MyPlayer>().revived = false;
         }
     }
 }

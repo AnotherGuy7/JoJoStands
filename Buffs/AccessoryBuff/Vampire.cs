@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.AccessoryBuff
 {
-    public class Vampire : ModBuff
+    public class Vampire : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -19,7 +19,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.moveSpeed *= 1.5f;
@@ -36,7 +36,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
                 player.ClearBuff(ModContent.BuffType<Zombie>());
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             Vector3 lightLevel = Lighting.GetColor((int)npc.Center.X / 16, (int)npc.Center.Y / 16).ToVector3();
             if (lightLevel.Length() > 1.3f && Main.dayTime && Main.tile[(int)npc.Center.X / 16, (int)npc.Center.Y / 16].WallType == 0)

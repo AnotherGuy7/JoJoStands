@@ -29,7 +29,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -45,7 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                     StayBehind();
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

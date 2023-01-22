@@ -1,9 +1,8 @@
 ﻿using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Infected : ModBuff
+    public class Infected : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -12,7 +11,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.debuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.lifeRegen > 0)
                 player.lifeRegen = 0;
@@ -26,7 +25,7 @@ namespace JoJoStands.Buffs.Debuffs
             }
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             npc.lifeRegen = -12;
             if (Main.rand.Next(0, 2 + 1) == 0)

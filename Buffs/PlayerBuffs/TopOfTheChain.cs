@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.PlayerBuffs
 {
-    public class TopOfTheChain : ModBuff
+    public class TopOfTheChain : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -13,7 +13,7 @@ namespace JoJoStands.Buffs.PlayerBuffs
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.moveSpeed *= 1.08f + (3f * (vPlayer.GetSkillLevel(player, VampirePlayer.TopOfTheChain) - 1));

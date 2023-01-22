@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class SkippingTime : ModBuff
+    public class SkippingTime : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -21,11 +21,12 @@ namespace JoJoStands.Buffs.EffectBuff
         private bool setToTrue = false;
         private bool sendFalse = false;
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (player.buffTime[buffIndex] > 10)
                 mPlayer.kingCrimsonBuffIndex = buffIndex;
+
             if (player.HasBuff(ModContent.BuffType<SkippingTime>()) && !mPlayer.forceShutDownEffect)
             {
                 player.shadowDodge = true;
@@ -59,9 +60,8 @@ namespace JoJoStands.Buffs.EffectBuff
                 if (!setToTrue)
                 {
                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
                         ModNetHandler.effectSync.SendTimeskip(256, player.whoAmI, true, player.whoAmI);
-                    }
+
                     setToTrue = true;
                 }
             }

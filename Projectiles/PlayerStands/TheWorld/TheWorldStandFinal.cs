@@ -79,7 +79,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (mPlayer.timestopActive && !mPlayer.timestopOwner)
                 return;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
                 {
@@ -205,7 +205,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(15));
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 PunchAndShootAI(ModContent.ProjectileType<KnifeProjectile>(), ModContent.ItemType<Knife>(), true);
             }

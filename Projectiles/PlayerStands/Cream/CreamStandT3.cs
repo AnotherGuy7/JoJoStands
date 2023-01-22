@@ -41,7 +41,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 Projectile.timeLeft = 2;
 
 
-            if (!mPlayer.standAutoMode && !mPlayer.creamDash)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !mPlayer.creamDash)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
                 {
@@ -251,7 +251,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     }
                 }
             }
-            if (mPlayer.standAutoMode && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
             {
                 BasicPunchAI();
             }
@@ -348,7 +348,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void StandKillEffects()
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             mPlayer.creamDash = false;

@@ -84,8 +84,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             mPlayer.towerOfGrayTier = standTier;
-            mPlayer.standRemoteMode = remoteMode;
-
+            if (remoteMode)
+                mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -143,12 +143,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
             if (!Main.mouseLeft && !dash && special == -1 && Projectile.owner == Main.myPlayer)
                 mouseControlled = false;
-            if (mPlayer.standAutoMode && target == null || !mPlayer.standAutoMode && !mouseControlled && !remoteMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && target == null || mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !mouseControlled && !remoteMode)
                 stinger = false;
 
             if (!returnToPlayer && !returnToRange) // basic stand control
             {
-                if (!mPlayer.standAutoMode)
+                if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
                 {
                     if (Main.mouseLeft && !dash && special == -1 && Projectile.owner == Main.myPlayer)
                     {
@@ -269,7 +269,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                     }
                 }
 
-                if (mPlayer.standAutoMode && !dash && special == -1) // automode attack ai (only half of original damage)  
+                if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !dash && special == -1) // automode attack ai (only half of original damage)  
                 {
                     remoteMode = false;
                     if (target != null)
@@ -313,7 +313,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                     }
                     if (!remoteMode)
                     {
-                        if (!mouseControlled && !mPlayer.standAutoMode && Projectile.owner == Main.myPlayer || mPlayer.standAutoMode && target == null && Projectile.owner == Main.myPlayer) // Idle AI
+                        if (!mouseControlled && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && Projectile.owner == Main.myPlayer || mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && target == null && Projectile.owner == Main.myPlayer) // Idle AI
                         {
                             if (Projectile.Distance(player.Center) >= 100f)
                             {

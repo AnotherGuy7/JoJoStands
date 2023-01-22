@@ -58,7 +58,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.standRemoteMode && (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithFinal>()))
+            if (drawPlayer.active && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote && (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithT3>() || mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<AerosmithFinal>()))
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/AerosmithRadar").Value;
                 int drawX = (int)(drawInfo.Position.X + 3f + drawPlayer.width / 2f);

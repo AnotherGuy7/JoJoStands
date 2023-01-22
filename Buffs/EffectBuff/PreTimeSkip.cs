@@ -5,10 +5,10 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class PreTimeSkip : ModBuff
+    public class PreTimeSkip : JoJoBuff
     {
         public static int userIndex = -1;
-        public static Vector2[] playerVelocity = new Vector2[Main.maxPlayers];
+        public static Vector2[] playerVelocity;
 
         public override void SetStaticDefaults()
         {
@@ -18,7 +18,12 @@ namespace JoJoStands.Buffs.EffectBuff
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void OnApply(Player player)
+        {
+            playerVelocity = new Vector2[Main.maxPlayers];
+        }
+
+        public override void UpdateBuffOnPlayer(Player player)
         {
             userIndex = player.whoAmI;
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -42,24 +47,23 @@ namespace JoJoStands.Buffs.EffectBuff
                         otherPlayer.controlUp = false;
                     }
                 }
-                player.GetModPlayer<MyPlayer>().timeskipPreEffect = true;
+                mPlayer.timeskipPreEffect = true;
             }
             else
             {
                 int timeSkipDuration = 0;
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<KingCrimsonStandT2>()] == 1)
+                if (mPlayer.standTier == 2)
                     timeSkipDuration = 180;
-                else if (player.ownedProjectileCounts[ModContent.ProjectileType<KingCrimsonStandT3>()] == 1)
+                else if (mPlayer.standTier == 3)
                     timeSkipDuration = 300;
-                else if (player.ownedProjectileCounts[ModContent.ProjectileType<KingCrimsonStandFinal>()] == 1)
+                else if (mPlayer.standTier == 4)
                     timeSkipDuration = 600;
-                else if (player.ownedProjectileCounts[ModContent.ProjectileType<KingClausStand>()] == 1)
-                    timeSkipDuration = 600;
+
                 if (mPlayer.overHeaven)
                     timeSkipDuration *= 2;
-                if (timeSkipDuration != 0)
+                if (timeSkipDuration != 0 && !mPlayer.forceShutDownEffect)
                     player.AddBuff(ModContent.BuffType<SkippingTime>(), timeSkipDuration);
-                player.GetModPlayer<MyPlayer>().timeskipPreEffect = false;
+                mPlayer.timeskipPreEffect = false;
             }
         }
     }

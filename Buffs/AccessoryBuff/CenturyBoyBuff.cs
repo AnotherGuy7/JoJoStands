@@ -1,7 +1,6 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -10,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.AccessoryBuff
 {
-    public class CenturyBoyBuff : ModBuff
+    public class CenturyBoyBuff : JoJoBuff
     {
         private int limitTimer = 36000;       //like 10 minutes
         private int breathSave = 0;
@@ -22,7 +21,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             player.shadowDodge = true;

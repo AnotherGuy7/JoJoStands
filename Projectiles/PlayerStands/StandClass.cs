@@ -33,7 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             Projectile.shouldFallThrough = true;
         }
 
-        public override string Texture => Mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
+        public override string Texture => Mod.Name + "/Extras/EmptyTexture";
         /// <summary>
         /// How fast the projectile the Stand shoots goes. Usually at 16f.
         /// </summary>
@@ -89,6 +89,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// Whether or not the Stand will use the projectile.alpha field while being drawn. False by default.
         /// </summary>
         public virtual bool UseProjectileAlpha { get; } = false;
+        public virtual bool CanUseRangeIndicators { get; } = true;
         public virtual bool CanUseSaladDye { get; } = false;
 
         public static int StandNetworkUpdateTime = 90;
@@ -771,7 +772,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (mPlayer.standType != (int)StandType)
                 mPlayer.standType = (int)StandType;
 
-            if (MyPlayer.RangeIndicators && newMaxDistance > 0)
+            if (MyPlayer.RangeIndicators && CanUseRangeIndicators && newMaxDistance > 0)
             {
                 if (Math.Abs((int)rangeIndicatorSize.X - (int)newMaxDistance) > 1)     //Comparing via subtraction to have a minimum error count of 1
                     standRangeIndicatorTexture = GenerateRangeIndicatorTexture((int)newMaxDistance);
@@ -860,7 +861,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         private void DrawRangeIndicators()
         {
             Player player = Main.player[Projectile.owner];
-            if (!MyPlayer.RangeIndicators || Main.netMode == NetmodeID.Server || rangeIndicatorSize == Vector2.Zero)
+            if (!MyPlayer.RangeIndicators || Main.netMode == NetmodeID.Server || !CanUseRangeIndicators || rangeIndicatorSize == Vector2.Zero)
                 return;
 
             //Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/RangeIndicator>().Value;        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
@@ -906,11 +907,19 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        /// <summary>
+        /// A method that gets called along with Kill(). Useful for extra things that have to happen without having to manually reset stand type to 0 and other variables.
+        /// </summary>
+        public virtual void StandKillEffects()
+        { }
+
+
         public override void Kill(int timeLeft)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             mPlayer.standType = 0;
             mPlayer.poseSoundName = "";
+            StandKillEffects();
         }
 
         public override void SendExtraAI(BinaryWriter writer)

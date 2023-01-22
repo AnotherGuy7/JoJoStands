@@ -46,7 +46,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 35, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
             Projectile.scale = ((50 - player.ownedProjectileCounts[ModContent.ProjectileType<EmeraldStringPointConnector>()]) * 2f) / 100f;
 
-            if (!mPlayer.standAutoMode && !remoteControlled)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !remoteControlled)
             {
                 if (Main.mouseLeft && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
@@ -114,9 +114,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     remoteControlled = true;
                 }
             }
-            if (!mPlayer.standAutoMode && remoteControlled)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && remoteControlled)
             {
-                mPlayer.standRemoteMode = true;
+                mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
@@ -212,7 +212,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     remoteControlled = false;
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 StayBehind();
 

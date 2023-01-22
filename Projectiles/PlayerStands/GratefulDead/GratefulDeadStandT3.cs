@@ -78,7 +78,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 player.AddBuff(ModContent.BuffType<Aging>(), 2);
             }
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryFrames && !grabFrames)
                 {
@@ -159,7 +159,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 else
                     Main.NewText("Gas Spread: Off");
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

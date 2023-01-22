@@ -2,13 +2,12 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Networking;
 using Terraria;
 using Terraria.Audio;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class TheWorldBuff : ModBuff
+    public class TheWorldBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -20,7 +19,7 @@ namespace JoJoStands.Buffs.EffectBuff
 
         private bool otherTimestopsActive = false;
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.timestopOwner = true;

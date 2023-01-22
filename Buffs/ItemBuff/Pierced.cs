@@ -1,10 +1,9 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class Pierced : ModBuff
+    public class Pierced : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +13,7 @@ namespace JoJoStands.Buffs.ItemBuff
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (player.whoAmI != Main.myPlayer)

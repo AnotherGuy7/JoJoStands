@@ -13,7 +13,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sex Pistols (Tier 1)");
-            Tooltip.SetDefault("Use a gun and have Sex Pistols kick the bullet!\nIncreases bullet damages by 5% and adds one penetration point.\nSpecial: Configure all Sex Pistols's placement!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Use a gun and have Sex Pistols kick the bullet!\nIncreases bullet damages by 5% and adds one penetration point.\nSpecial: Configure all Sex Pistols's placement!\nAuto Mode: Bullets that go near enemies will automatically be re-adjusted toward the enemy!\nUsed in Stand Slot");
         }
 
         public override int StandTier => 1;

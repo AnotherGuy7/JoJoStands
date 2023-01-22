@@ -93,7 +93,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             if (player.HasBuff(ModContent.BuffType<SkippingTime>()) && player.HasBuff(ModContent.BuffType<ForesightBuff>()))
                 mPlayer.kingCrimsonAbilityCooldownTime = 45;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !secondaryAbilityFrames && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 {
@@ -240,7 +240,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         ModNetHandler.effectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

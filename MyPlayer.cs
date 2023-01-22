@@ -107,6 +107,7 @@ namespace JoJoStands
         public int slowDancerSprintTime = 0;
         public int kingCrimsonAbilityCooldownTime = 0;
         public int deathLoopTarget = -1;
+        public StandControlStyle standControlStyle;
 
         public int globalCooldown = 0;
 
@@ -115,8 +116,6 @@ namespace JoJoStands
         public bool achievedInfiniteSpin = false;
         public bool revived = false;
         public bool standOut = false;
-        public bool standAutoMode = false;
-        public bool standRemoteMode = false;
         public bool chlorositeShortEqquipped = false;
         public bool crystalArmorSetEquipped = false;
         public bool crackedPearlEquipped = false;
@@ -322,6 +321,13 @@ namespace JoJoStands
             MostHealth
         }
 
+        public enum StandControlStyle
+        {
+            Manual,
+            Auto,
+            Remote
+        }
+
         public enum ColorChangeStyle
         {
             None,
@@ -350,7 +356,6 @@ namespace JoJoStands
 
         public override void ResetEffects()
         {
-            standRemoteMode = false;
             wearingEpitaph = false;
             timestopOwner = false;
             crystalArmorSetEquipped = false;
@@ -470,7 +475,7 @@ namespace JoJoStands
 
         public override void ModifyScreenPosition()     //used HERO's Mods FlyCam as a reference for this
         {
-            if (standRemoteMode)
+            if (standControlStyle == StandControlStyle.Remote)
                 Main.screenPosition = standRemoteModeCameraPosition;
 
             if (creamVoidMode || creamExposedMode)
@@ -479,19 +484,17 @@ namespace JoJoStands
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (JoJoStands.StandAutoModeHotKey.JustPressed && !standAutoMode && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (JoJoStands.StandAutoModeHotKey.JustPressed && standControlStyle == StandControlStyle.Manual && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Auto");
-                standAutoMode = true;
-                SyncCall.SyncAutoMode(Player.whoAmI, true);
+                SyncCall.SyncControlStyle(Player.whoAmI, standControlStyle);
             }
-            if (JoJoStands.StandAutoModeHotKey.JustPressed && standAutoMode && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (JoJoStands.StandAutoModeHotKey.JustPressed && standControlStyle == StandControlStyle.Auto && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 standKeyPressTimer += 30;
                 Main.NewText("Stand Control: Manual");
-                standAutoMode = false;
-                SyncCall.SyncAutoMode(Player.whoAmI, false);
+                SyncCall.SyncControlStyle(Player.whoAmI, standControlStyle);
             }
             if (JoJoStands.PoseHotKey.JustPressed && !posing && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
@@ -588,7 +591,6 @@ namespace JoJoStands
             {
                 standOut = false;
                 standAccessory = false;
-                standRemoteMode = false;
                 ableToOverrideTimestop = false;
                 poseSoundName = "";
                 standName = "";
@@ -784,7 +786,7 @@ namespace JoJoStands
 
         public override void SetControls()
         {
-            if (standRemoteMode || Player.HasBuff(ModContent.BuffType<CenturyBoyBuff>()) || stickyFingersAmbushMode || creamVoidMode || creamExposedMode)
+            if (standControlStyle == StandControlStyle.Remote || Player.HasBuff(ModContent.BuffType<CenturyBoyBuff>()) || stickyFingersAmbushMode || creamVoidMode || creamExposedMode)
             {
                 Player.controlUp = false;
                 Player.controlDown = false;
@@ -862,9 +864,9 @@ namespace JoJoStands
                 fightingSpiritEmblemStack = 0;
             if (Player.HasBuff(ModContent.BuffType<Dodge>()))
                 standDodgeGuarantee = 1;
-            if (standRemoteMode)
+            if (standControlStyle == StandControlStyle.Remote)
                 remoteDodge = 2;
-            if (!standRemoteMode && remoteDodge > 0)
+            if (standControlStyle == StandControlStyle.Remote && remoteDodge > 0)
                 remoteDodge--;
             if (globalCooldown > 0)
                 globalCooldown--;
@@ -874,7 +876,7 @@ namespace JoJoStands
                 revertTimer--;
 
             UpdateShaderStates();
-            if (standRemoteMode && standName == "Aerosmith")
+            if (standControlStyle == StandControlStyle.Remote && standName == "Aerosmith")
                 AerosmithRadar.Visible = StandSlot.SlotItem.type == ModContent.ItemType<AerosmithT3>() || StandSlot.SlotItem.type == ModContent.ItemType<AerosmithFinal>();
             else
                 AerosmithRadar.Visible = false;
@@ -902,7 +904,7 @@ namespace JoJoStands
                 Main.windSpeedCurrent = 0f;
             if (PlayerInput.Triggers.Current.SmartSelect || Player.dead)
                 canStandBasicAttack = false;
-            if (hotbarLocked && standOut && !standAutoMode)
+            if (hotbarLocked && standOut && standControlStyle == StandControlStyle.Manual)
                 Player.selectedItem = 0;
             if (playerJustHitTime > 0)
             {
@@ -978,7 +980,7 @@ namespace JoJoStands
 
             if (Player == Main.player[Main.myPlayer])
             {
-                if (Main.mouseLeft && !standAutoMode)
+                if (Main.mouseLeft && standControlStyle == StandControlStyle.Manual)
                 {
                     if (crazyDiamondTileDestruction < 60)
                         crazyDiamondTileDestruction++;
@@ -1088,9 +1090,9 @@ namespace JoJoStands
 
             if (sexPistolsTier != 0)        //Sex Pistols stuff
             {
-                if (standAutoMode)
+                if (standControlStyle == StandControlStyle.Auto)
                     SexPistolsUI.Visible = true;
-                if (!standAutoMode)
+                if (standControlStyle == StandControlStyle.Manual)
                 {
                     bool specialPressed = false;
                     if (!Main.dedServ)
@@ -1280,7 +1282,7 @@ namespace JoJoStands
                 }
                 if (tuskActNumber == 4)
                 {
-                    if (standAutoMode)
+                    if (standControlStyle == StandControlStyle.Auto)
                     {
                         if (Main.mouseLeft && canStandBasicAttack && !Player.channel && tuskShootCooldown <= 0)
                         {
@@ -1341,7 +1343,7 @@ namespace JoJoStands
                     hermitPurpleShootCooldown--;
                 }
 
-                if (!standAutoMode)
+                if (standControlStyle == StandControlStyle.Manual)
                 {
                     if (hermitPurpleTier == 1)
                     {
@@ -1633,7 +1635,7 @@ namespace JoJoStands
                 standRespawnQueued = false;
                 SyncCall.SyncStandOut(Player.whoAmI, standOut);
             }
-            if (hotbarLocked && standOut && !standAutoMode)
+            if (hotbarLocked && standOut && standControlStyle == StandControlStyle.Manual)
                 Player.selectedItem = 0;
         }
 
@@ -1760,7 +1762,7 @@ namespace JoJoStands
                 standDefenseToAdd *= 2; 
             }
 
-            if (standOut && !standAutoMode)
+            if (standOut && standControlStyle == StandControlStyle.Manual)
             {
                 Player.statDefense += standDefenseToAdd;
                 Player.statDefense += standAccessoryDefense;
@@ -1959,7 +1961,7 @@ namespace JoJoStands
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
                 Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
             }
-            if (!Player.HasBuff<Dodge>() && !standAutoMode && standOut)
+            if (!Player.HasBuff<Dodge>() && standControlStyle == StandControlStyle.Manual && standOut)
                 standDodgeGuarantee += 1;
             if (!Player.shadowDodge)
                 arrowEarringCooldown = 300;
@@ -1978,7 +1980,7 @@ namespace JoJoStands
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
                 Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
             }
-            if (!Player.HasBuff<Dodge>() && !standAutoMode && standOut)
+            if (!Player.HasBuff<Dodge>() && standControlStyle == StandControlStyle.Manual && standOut)
                 standDodgeGuarantee += 1;
             if (!Player.shadowDodge)
                 arrowEarringCooldown = 300;
@@ -2016,11 +2018,11 @@ namespace JoJoStands
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
         {
-            if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0 || !Player.HasBuff(ModContent.BuffType<Dodge>()) && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && !standAutoMode && standOut || !standAutoMode && standOut && Player.shadowDodge || Player.HasBuff(ModContent.BuffType<SwanSong>()))
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0 || !Player.HasBuff(ModContent.BuffType<Dodge>()) && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && standControlStyle == StandControlStyle.Manual && standOut || standControlStyle == StandControlStyle.Manual && standOut && Player.shadowDodge || Player.HasBuff(ModContent.BuffType<SwanSong>()))
             {
                 if (!Player.HasBuff(ModContent.BuffType<Dodge>()))
                 {
-                    if (Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && !standAutoMode && standOut)
+                    if (Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && standControlStyle == StandControlStyle.Manual && standOut)
                         Player.AddBuff(ModContent.BuffType<Dodge>(), 60);
                 }
                 return false;
@@ -2087,7 +2089,6 @@ namespace JoJoStands
         {
             standOut = false;
             standAccessory = false;
-            standRemoteMode = false;
             ableToOverrideTimestop = false;
             poseSoundName = "";
             standName = "";

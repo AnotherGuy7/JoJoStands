@@ -1,11 +1,9 @@
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
-using JoJoStands.Buffs.Debuffs;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class DeathLoop : ModBuff
+    public class DeathLoop : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +12,7 @@ namespace JoJoStands.Buffs.EffectBuff
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
             BuffID.Sets.TimeLeftDoesNotDecrease[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
-            Main.debuff[Type] = true;    
+            Main.debuff[Type] = true;
         }
     }
 }

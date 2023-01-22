@@ -1,10 +1,9 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class RedBindDebuff : ModBuff
+    public class RedBindDebuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,13 +14,13 @@ namespace JoJoStands.Buffs.Debuffs
             Main.debuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.velocity /= 1.5f;
             player.statDefense -= 15;
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             npc.velocity.X = 0f;
             npc.AddBuff(BuffID.OnFire, 2);

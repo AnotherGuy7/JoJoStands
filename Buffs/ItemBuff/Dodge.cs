@@ -1,12 +1,12 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class Dodge : ModBuff
+    public class Dodge : JoJoBuff
     {
-        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Invisibility; } }
+        public override string Texture => "Terraria/Images/Buff_" + BuffID.Invisibility;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Dodged!");
@@ -14,7 +14,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.shadowDodge = true;
             player.shadowDodgeCount = -100f;

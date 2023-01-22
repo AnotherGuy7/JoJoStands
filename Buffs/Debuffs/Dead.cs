@@ -1,12 +1,11 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Dead : ModBuff
+    public class Dead : JoJoBuff
     {
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             if (npc.lifeRegen > 0)
                 npc.lifeRegen = 0;

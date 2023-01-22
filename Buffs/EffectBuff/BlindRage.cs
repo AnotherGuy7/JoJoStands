@@ -1,13 +1,14 @@
 using JoJoStands.Buffs.Debuffs;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class BlindRage : ModBuff
+    public class BlindRage : JoJoBuff
     {
-        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Rage; } }
+        public override string Texture => "Terraria/Images/Buff_" + BuffID.Rage;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blind Rage");
@@ -16,13 +17,14 @@ namespace JoJoStands.Buffs.EffectBuff
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (player.HasBuff(Type))
-                mPlayer.standDamageBoosts += 0.5f;
-            else
-                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
+            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.5f;
+        }
+
+        public override void OnBuffEnd(Player player)
+        {
+            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), player.GetModPlayer<MyPlayer>().AbilityCooldownTime(30));
         }
     }
 }

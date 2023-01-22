@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.AccessoryBuff
 {
-    public class ViralCrystalBuff : ModBuff
+    public class ViralCrystalBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +14,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<ViralCrystal>()] == 0)
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<ViralCrystal>(), 0, 0f, player.whoAmI);

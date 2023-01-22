@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class RapidAging : ModBuff
+    public class RapidAging : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -14,10 +14,9 @@ namespace JoJoStands.Buffs.Debuffs
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        private bool oneTimeEffectsApplied = false;
         private float savedVelocityX = -1f;
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.lifeRegen > 0)
                 player.lifeRegen = 0;
@@ -30,26 +29,17 @@ namespace JoJoStands.Buffs.Debuffs
             player.statDefense = (int)(player.statDefense * 0.8f);
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void OnApply(NPC npc)
         {
-            /*Player player = Main.player[npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().standDebuffEffectOwner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();*/
-            if (savedVelocityX == -1f)
-                savedVelocityX = Math.Abs(npc.velocity.X) / 2f;
+            savedVelocityX = Math.Abs(npc.velocity.X) / 2f;
+            npc.defense = (int)(npc.defense * 0.2f);
+        }
 
-            if (!oneTimeEffectsApplied)
-            {
-                npc.defense = (int)(npc.defense * 0.2f);
-                oneTimeEffectsApplied = true;
-            }
-
+        public override void UpdateBuffOnNPC(NPC npc)
+        {
             npc.lifeRegen = -npc.lifeMax / 16;
             if (Math.Abs(npc.velocity.X) > savedVelocityX)
                 npc.velocity.X *= 0.8f;
-            /*if (mPlayer.standTier == 3)
-                npc.lifeRegen = -350;
-            if (mPlayer.standTier == 4)
-                npc.lifeRegen = -500;*/
         }
     }
 }

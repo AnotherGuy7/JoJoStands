@@ -1,12 +1,10 @@
 using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
-using System;
 using System.IO;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
-using static Humanizer.In;
 
 namespace JoJoStands.Networking
 {
@@ -14,7 +12,7 @@ namespace JoJoStands.Networking
     {
         public const byte PoseMode = 0;
         public const byte StandOut = 1;     //needed because some stands don't spawn without it
-        public const byte StandAutoMode = 2;
+        public const byte StandControlStyle = 2;
         public const byte CBLayer = 3;
         public const byte Yoshihiro = 4;
         public const byte DyeItem = 5;
@@ -41,8 +39,8 @@ namespace JoJoStands.Networking
                 case StandOut:
                     ReceiveStandOut(reader, fromWho);
                     break;
-                case StandAutoMode:
-                    ReceiveStandAutoMode(reader, fromWho);
+                case StandControlStyle:
+                    ReceiveStandControlStyle(reader, fromWho);
                     break;
                 case CBLayer:
                     ReceiveCBLayer(reader, fromWho);
@@ -120,25 +118,25 @@ namespace JoJoStands.Networking
             }
         }
 
-        public void SendStandAutoMode(int toWho, int fromWho, bool autoModeValue, byte whoAmI)
+        public void SendStandControlStyle(int toWho, int fromWho, MyPlayer.StandControlStyle standControlStyle, byte whoAmI)
         {
-            ModPacket packet = GetPacket(StandAutoMode, fromWho);
-            packet.Write(autoModeValue);
+            ModPacket packet = GetPacket(StandControlStyle, fromWho);
+            packet.Write((byte)standControlStyle);
             packet.Write(whoAmI);
             packet.Send(toWho, fromWho);
         }
 
-        public void ReceiveStandAutoMode(BinaryReader reader, int fromWho)
+        public void ReceiveStandControlStyle(BinaryReader reader, int fromWho)
         {
-            bool autoModeVal = reader.ReadBoolean();
+            byte standControlStyle = reader.ReadByte();
             byte whoAmI = reader.ReadByte();
             if (Main.netMode != NetmodeID.Server)
             {
-                Main.player[whoAmI].GetModPlayer<MyPlayer>().standAutoMode = autoModeVal;
+                Main.player[whoAmI].GetModPlayer<MyPlayer>().standControlStyle = (MyPlayer.StandControlStyle)standControlStyle;
             }
             else
             {
-                SendStandAutoMode(-1, fromWho, autoModeVal, whoAmI);
+                SendStandControlStyle(-1, fromWho, (MyPlayer.StandControlStyle)standControlStyle, whoAmI);
             }
         }
 

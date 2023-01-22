@@ -1,10 +1,9 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class AbilityCooldown : ModBuff
+    public class AbilityCooldown : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +13,8 @@ namespace JoJoStands.Buffs.Debuffs
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
-        public override void Update(Player player, ref int buffIndex)
+
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.theFirstNapkinReduction = buffIndex;

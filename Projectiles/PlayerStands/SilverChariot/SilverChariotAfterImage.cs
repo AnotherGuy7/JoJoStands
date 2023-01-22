@@ -64,7 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     player.direction = -1;
             }
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer && !secondaryAbilityFrames)
                 {

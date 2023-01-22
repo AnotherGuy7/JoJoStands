@@ -2,12 +2,10 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Zipped : ModBuff
+    public class Zipped : JoJoBuff
     {
         private Vector2 savedVelocity = Vector2.Zero;
 
@@ -20,7 +18,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.persistentBuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.lifeRegenTime = 0;
             if (player.lifeRegen > 0)
@@ -30,26 +28,24 @@ namespace JoJoStands.Buffs.Debuffs
                 Dust.NewDust(player.position, player.width, player.height, DustID.Blood);
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void OnApply(NPC npc)
+        {
+            savedVelocity = npc.velocity * 0.5f;
+        }
+
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             MyPlayer mPlayer = Main.player[npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().standDebuffEffectOwner].GetModPlayer<MyPlayer>();
-            if (savedVelocity == Vector2.Zero)
-                savedVelocity = npc.velocity * 0.5f;
-
             if (npc.lifeRegen > 0)
                 npc.lifeRegen = 0;
 
             Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Blood, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f, 0, Scale: 2f);
             npc.lifeRegenExpectedLossPerSecond = 10 * mPlayer.standTier;
             npc.lifeRegen -= 20 * mPlayer.standTier;
-
-            if (npc.noGravity)
-            {
-                if (Math.Abs(npc.velocity.Y) > savedVelocity.Y)
-                    npc.velocity.Y *= 0.9f;
-            }
             if (Math.Abs(npc.velocity.X) > savedVelocity.X)
                 npc.velocity.X *= 0.9f;
+            if (npc.noGravity && Math.Abs(npc.velocity.Y) > savedVelocity.Y)
+                npc.velocity.Y *= 0.9f;
         }
     }
 }

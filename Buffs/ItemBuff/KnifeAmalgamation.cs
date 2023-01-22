@@ -1,9 +1,8 @@
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class KnifeAmalgamation : ModBuff
+    public class KnifeAmalgamation : JoJoBuff
     {
         public override void SetStaticDefaults()
         {

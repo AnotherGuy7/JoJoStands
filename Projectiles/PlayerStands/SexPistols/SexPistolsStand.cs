@@ -40,7 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
             kickRadius = (BaseKickRadius * mPlayer.sexPistolsTier) + mPlayer.standRangeBoosts / 2f;
             kickCooldownTime = BaseKickCooldownTime - (15 * mPlayer.sexPistolsTier) - (2 * mPlayer.standSpeedBoosts);
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 Projectile.position = player.Center + mPlayer.sexPistolsOffsets[(int)Projectile.ai[0] - 1];
 
@@ -121,7 +121,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                 }
             }
 
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 int direction = 1;
                 int ySubtraction = 0;

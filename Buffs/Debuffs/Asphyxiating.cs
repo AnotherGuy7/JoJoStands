@@ -1,12 +1,10 @@
-using JoJoStands.NPCs;
 using System;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Asphyxiating : ModBuff
+    public class Asphyxiating : JoJoBuff
     {
         private float savedVelocityX = -1f;
 
@@ -18,7 +16,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.pvpBuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.lifeRegen > 0)
                 player.lifeRegen = 0;
@@ -29,11 +27,13 @@ namespace JoJoStands.Buffs.Debuffs
             Dust.NewDust(player.position, player.width, player.height, DustID.Cloud, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void OnApply(NPC npc)
         {
-            MyPlayer mPlayer = Main.player[npc.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner].GetModPlayer<MyPlayer>();
-            if (savedVelocityX == -1f)
-                savedVelocityX = Math.Abs(npc.velocity.X) / 2f;
+            savedVelocityX = Math.Abs(npc.velocity.X) / 2f;
+        }
+
+        public override void UpdateBuffOnNPC(NPC npc)
+        {
             if (npc.lifeRegen > 0)
                 npc.lifeRegen = 0;
 

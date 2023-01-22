@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class ForeseenDebuff : ModBuff
+    public class ForeseenDebuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -14,13 +14,13 @@ namespace JoJoStands.Buffs.EffectBuff
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public Vector2[] savePositions = new Vector2[50];
-        public int savePositionsIndex = -1;
-        public int savePositionsMaxIndex = -1;
-        public int saveTimer = 0;
-        public bool foresightWoreOff = false;
+        private Vector2[] savePositions = new Vector2[50];
+        private int savePositionsIndex = -1;
+        private int savePositionsMaxIndex = -1;
+        private int saveTimer = 0;
+        private bool foresightWoreOff = false;
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             player.AddBuff(Type, 2);

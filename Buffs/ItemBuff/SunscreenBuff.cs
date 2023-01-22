@@ -1,11 +1,10 @@
 using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class SunscreenBuff : ModBuff
+    public class SunscreenBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,7 +14,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.debuff[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             vPlayer.sunburnRegenTimeMultiplier += 3f;       //About 180 regen time

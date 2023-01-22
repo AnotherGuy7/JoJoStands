@@ -50,7 +50,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             if (mPlayer.timestopActive)
                 return;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
                 {
@@ -156,7 +156,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     }
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

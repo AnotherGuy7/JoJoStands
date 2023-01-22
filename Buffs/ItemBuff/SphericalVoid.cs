@@ -1,11 +1,9 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using TerraUI;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class SphericalVoid : ModBuff
+    public class SphericalVoid : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -16,7 +14,7 @@ namespace JoJoStands.Buffs.ItemBuff
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.shadowDodge = true;
             player.shadowDodgeCount = -100f;

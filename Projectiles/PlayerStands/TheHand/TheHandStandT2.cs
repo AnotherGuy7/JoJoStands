@@ -44,7 +44,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility && !scrapeFrames)
                 {
@@ -116,7 +116,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         GoInFront();
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

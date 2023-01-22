@@ -1,9 +1,8 @@
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class SurpriseAttack : ModBuff
+    public class SurpriseAttack : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -11,7 +10,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Description.SetDefault("You have the upper edge and you know just how to prove it.");
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standDamageBoosts += 0.15f;

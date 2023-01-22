@@ -15,7 +15,7 @@ namespace JoJoStands.UI
         {
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
 
-            if (mPlayer.sexPistolsTier == 0 || !mPlayer.standAutoMode)
+            if (mPlayer.sexPistolsTier == 0 || mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
                 Visible = false;
 
             base.Update(gameTime);

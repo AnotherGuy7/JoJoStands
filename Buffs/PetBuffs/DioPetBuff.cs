@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.PetBuffs
 {
-    public class DioPetBuff : ModBuff
+    public class DioPetBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -13,7 +13,7 @@ namespace JoJoStands.Buffs.PetBuffs
             Main.buffNoTimeDisplay[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<DioPet>()] != 0)
                 player.buffTime[buffIndex] = 2;

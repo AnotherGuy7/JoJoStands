@@ -43,7 +43,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<PlunderBubble>()] != 0;
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
@@ -174,7 +174,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                     }
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

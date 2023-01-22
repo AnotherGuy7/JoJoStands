@@ -1,10 +1,9 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Lacerated : ModBuff
+    public class Lacerated : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,7 +14,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.persistentBuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.lifeRegen > 0)
                 player.lifeRegen = 0;
@@ -27,7 +26,7 @@ namespace JoJoStands.Buffs.Debuffs
                 Dust.NewDust(player.position, player.width, player.height, DustID.Blood);
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             if (npc.lifeRegen > 0)
                 npc.lifeRegen = 0;
@@ -37,11 +36,12 @@ namespace JoJoStands.Buffs.Debuffs
 
             int lifeLossPerSecond = npc.lifeMax / 56;
             if (Main.hardMode)
+            {
                 if (lifeLossPerSecond >= 51)
                     lifeLossPerSecond = 51;
-                else
-                if (lifeLossPerSecond >= 16)
+                else if (lifeLossPerSecond >= 16)
                     lifeLossPerSecond = 16;
+            }
             if (npc.boss)
                 lifeLossPerSecond /= 2;
 

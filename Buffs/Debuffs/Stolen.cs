@@ -1,11 +1,10 @@
+using JoJoStands.NPCs;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using JoJoStands.NPCs;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Stolen : ModBuff
+    public class Stolen : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -16,12 +15,12 @@ namespace JoJoStands.Buffs.Debuffs
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.GetModPlayer<MyPlayer>().standOut = false;
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             if (!npc.boss)
                 npc.velocity.X = 0f;

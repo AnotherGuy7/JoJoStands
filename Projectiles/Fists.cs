@@ -16,10 +16,7 @@ namespace JoJoStands.Projectiles
 {
     public class Fists : ModProjectile
     {
-        public override string Texture
-        {
-            get { return Mod.Name + "/Projectiles/Fists"; }
-        }
+        public override string Texture => Mod.Name + "/Extras/EmptyTexture";
 
         public const byte StarPlatinum = 0;
         public const byte TheWorld = 1;
@@ -104,7 +101,7 @@ namespace JoJoStands.Projectiles
                     }
                 }
             }
-            if (mPlayer.crazyDiamondRestorationMode && !mPlayer.standAutoMode)
+            if (mPlayer.crazyDiamondRestorationMode && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (mPlayer.standTier > 1 && mPlayer.crazyDiamondTileDestruction >= 60)
                 {

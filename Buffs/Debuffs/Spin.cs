@@ -5,10 +5,11 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Spin : ModBuff
+    public class Spin : JoJoBuff
     {
-        public static int directionCounter = 0;
         private int correctHP = 0;
+        private int directionCounter = 0;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spin");
@@ -18,7 +19,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.persistentBuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.direction *= -1;
             player.lifeRegen = -60;
@@ -26,15 +27,19 @@ namespace JoJoStands.Buffs.Debuffs
             player.buffTime[buffIndex] = 2;
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void OnApply(NPC npc)
         {
-            if (correctHP == 0)
-                correctHP = npc.life;
+            correctHP = npc.life;
+        }
+
+        public override void UpdateBuffOnNPC(NPC npc)
+        {
             if (npc.boss && correctHP - npc.life >= npc.lifeMax / 3 && correctHP != 0)
             {
                 npc.DelBuff(buffIndex);
                 correctHP = 0;
             }
+
             directionCounter++;
             if (directionCounter >= 5)
             {

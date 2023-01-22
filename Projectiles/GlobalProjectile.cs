@@ -301,7 +301,7 @@ namespace JoJoStands.Projectiles
                         target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
                 }
             }
-            if (Projectile.type == ModContent.ProjectileType<Fists>() && mPlayer.standFistsType != 13 && mPlayer.familyPhoto && mPlayer.familyPhotoEffect < 30 && !mPlayer.standAutoMode)
+            if (Projectile.type == ModContent.ProjectileType<Fists>() && mPlayer.standFistsType != 13 && mPlayer.familyPhoto && mPlayer.familyPhotoEffect < 30 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
                 mPlayer.familyPhotoEffect += 30;
             if (standProjectile || kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
             {

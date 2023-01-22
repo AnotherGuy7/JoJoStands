@@ -1,12 +1,12 @@
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class ImproperRestoration : ModBuff
+    public class ImproperRestoration : JoJoBuff
     {
-        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Horrified; } }
+        public override string Texture => "Terraria/Images/Buff_" + BuffID.Horrified;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Improper Restoration");
@@ -15,7 +15,8 @@ namespace JoJoStands.Buffs.Debuffs
             Main.debuff[Type] = true;
             Main.persistentBuff[Type] = true;
         }
-        public override void Update(Player player, ref int buffIndex)
+
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             player.buffTime[buffIndex] = 2;
@@ -29,6 +30,7 @@ namespace JoJoStands.Buffs.Debuffs
             if (mPlayer.maxHP > 0 && mPlayer.maxHP < 100)
                 mPlayer.maxHP = 100;
         }
+
         public override bool ReApply(Player player, int time, int buffIndex)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

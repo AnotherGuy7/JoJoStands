@@ -53,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             if (mPlayer.timestopActive && !mPlayer.timestopOwner)
                 return;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
                 {
@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                     rippleEffectTimer = 0;
                 }*/
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

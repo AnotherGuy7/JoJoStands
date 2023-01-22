@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class BacktoZero : ModBuff
+    public class BacktoZero : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,12 +15,12 @@ namespace JoJoStands.Buffs.EffectBuff
             Description.SetDefault("Enemies that hurt you never touched you at all...");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
-        public bool sentTrue = false;
-        public bool sendFalse = false;
+        private bool sendFalse = false;
 
-        public override void Update(Player player, ref int buffIndex)       //it should only affect the user with this buff on
+        public override void UpdateBuffOnPlayer(Player player)       //it should only affect the user with this buff on
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (player.HasBuff(Type) && !mPlayer.forceShutDownEffect)
@@ -38,9 +38,9 @@ namespace JoJoStands.Buffs.EffectBuff
                 }
                 else
                 {
-                    for (int i = 0; i < Main.maxPlayers; i++)
+                    for (int p = 0; p < Main.maxPlayers; p++)
                     {
-                        Player otherPlayers = Main.player[i];
+                        Player otherPlayers = Main.player[p];
                         if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
                             sendFalse = !otherPlayers.HasBuff(Type);
 

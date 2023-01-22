@@ -1,11 +1,10 @@
 using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class UltraSunscreenBuff : ModBuff
+    public class UltraSunscreenBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,10 +14,9 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.debuff[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            vPlayer.noSunBurning = true;
+            player.GetModPlayer<VampirePlayer>().noSunBurning = true;
         }
     }
 }

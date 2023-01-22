@@ -56,7 +56,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
             if (goldenRectangleEffectTimer > 0)
                 goldenRectangleEffectTimer -= 2;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -73,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 }
             }
 
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 NPC target = FindNearestTarget(9f * 16f);
                 if (target != null)

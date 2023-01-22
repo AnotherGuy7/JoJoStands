@@ -1,9 +1,8 @@
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.PlayerBuffs
 {
-    public class StrongWill : ModBuff
+    public class StrongWill : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -12,7 +11,7 @@ namespace JoJoStands.Buffs.PlayerBuffs
             Main.buffNoTimeDisplay[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.1f;
         }

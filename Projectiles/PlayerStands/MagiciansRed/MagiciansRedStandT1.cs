@@ -38,7 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             else
                 GoInFront();
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -73,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     }
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 NPC target = FindNearestTarget(350f);
                 if (target != null)

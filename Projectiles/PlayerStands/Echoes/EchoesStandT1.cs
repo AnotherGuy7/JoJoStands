@@ -106,7 +106,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void StandKillEffects()
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

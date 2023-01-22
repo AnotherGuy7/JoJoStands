@@ -1,11 +1,10 @@
 using JoJoStands.Mounts;
 using Terraria;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class RoadRollerBuff : ModBuff
+    public class RoadRollerBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,7 +14,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.buffNoSave[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.mount.SetMount(MountType<RoadRollerMount>(), player);
             player.buffTime[buffIndex] = 10;

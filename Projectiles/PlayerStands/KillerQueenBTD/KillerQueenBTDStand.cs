@@ -252,7 +252,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             }
 
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f)
                 {
@@ -265,7 +265,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
                     attackFrames = true;
                     Projectile.netUpdate = true;
-                    if (Projectile.frame == 4 && !mPlayer.standAutoMode)
+                    if (Projectile.frame == 4 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
                     {
                         if (shootCount <= 0)
                         {
@@ -312,7 +312,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     }
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 NPC target = FindNearestTarget(350f);
                 if (target != null)

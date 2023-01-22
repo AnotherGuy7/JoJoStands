@@ -1,9 +1,8 @@
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class BarrierBuff : ModBuff
+    public class BarrierBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -11,7 +10,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Description.SetDefault("A protective bubble surrounds you. Increases defense, makes you immune to debuffs, and allows you to glide around!");
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             player.gravity = player.gravity *= 0.8f;
@@ -20,9 +19,7 @@ namespace JoJoStands.Buffs.ItemBuff
             for (int i = 0; i < Main.maxBuffTypes; i++)
             {
                 if (Main.debuff[i])
-                {
                     player.buffImmune[i] = true;
-                }
             }
         }
     }

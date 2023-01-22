@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class LifePunch : ModBuff
+    public class LifePunch : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,9 +15,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.debuff[Type] = true;
         }
 
-        private bool appliedChange = false;
-
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.velocity.X *= 0.5f;
             player.statDefense -= 5;
@@ -28,16 +26,16 @@ namespace JoJoStands.Buffs.Debuffs
             }
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void OnApply(NPC npc)
+        {
+            npc.defense -= 5;
+        }
+
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             if (Math.Abs(npc.velocity.X) > 0.5f)
                 npc.velocity.X *= 0.7f;
 
-            if (!appliedChange)
-            {
-                npc.defense -= 5;
-                appliedChange = true;
-            }
             if (Main.rand.Next(0, 2 + 1) == 0)
             {
                 int dustIndex = Dust.NewDust(npc.position, npc.width, npc.height, 111);

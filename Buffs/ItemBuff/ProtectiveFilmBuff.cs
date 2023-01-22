@@ -1,10 +1,9 @@
 using JoJoStands.Items.Vampire;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class ProtectiveFilmBuff : ModBuff
+    public class ProtectiveFilmBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -13,7 +12,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.buffNoTimeDisplay[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             vPlayer.sunburnRegenTimeMultiplier += 1.8f;

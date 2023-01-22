@@ -60,7 +60,7 @@ namespace JoJoStands.Items.Hamon
                 numberOfPunches = 0;
 
             ChargeHamon();
-            if (mPlayer.standOut && !mPlayer.standAutoMode)
+            if (mPlayer.standOut && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
                 return;
 
             hamonPlayer.usingItemThatIgnoresEnemyDamage = true;

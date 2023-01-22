@@ -1,11 +1,10 @@
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class FinalPush : ModBuff
+    public class FinalPush : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,7 +14,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.debuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.statLifeMax2 = (int)(player.statLifeMax * 0.3f);
             if (player.buffTime[buffIndex] <= 2)

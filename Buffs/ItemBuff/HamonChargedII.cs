@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class HamonChargedII : ModBuff
+    public class HamonChargedII : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -13,7 +13,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             hPlayer.hamonDamageBoosts += 0.07f;

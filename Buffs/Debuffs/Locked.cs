@@ -1,9 +1,8 @@
 ﻿using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Locked : ModBuff
+    public class Locked : JoJoBuff
     {
         public override void SetStaticDefaults()
         {

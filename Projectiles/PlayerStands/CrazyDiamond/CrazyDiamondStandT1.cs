@@ -28,7 +28,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 Projectile.timeLeft = 2;
 
             mPlayer.crazyDiamondRestorationMode = restrationMode;
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -52,7 +52,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             }
             if (restrationMode)
                 Lighting.AddLight(Projectile.position, 11);
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
                 BasicPunchAI();
             if (player.teleporting)
                 Projectile.position = player.position;

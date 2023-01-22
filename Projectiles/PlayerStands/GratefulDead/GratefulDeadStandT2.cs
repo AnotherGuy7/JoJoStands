@@ -38,7 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryFrames && !grabFrames)
                 {
@@ -109,7 +109,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     Projectile.netUpdate = true;
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

@@ -1,8 +1,6 @@
-using Terraria.ModLoader;
-
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class BadCompanyActiveBuff : ModBuff
+    public class BadCompanyActiveBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {

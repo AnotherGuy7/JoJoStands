@@ -1,9 +1,8 @@
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class Weave : ModBuff
+    public class Weave : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -12,7 +11,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.GetModPlayer<MyPlayer>().stoneFreeWeaveAbilityActive)
                 player.buffTime[buffIndex] = 2;

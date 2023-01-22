@@ -1,8 +1,6 @@
-using Terraria.ModLoader;
-
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class Reinforcements : ModBuff
+    public class Reinforcements : JoJoBuff
     {
         public override void SetStaticDefaults()
         {

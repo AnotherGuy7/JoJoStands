@@ -1,14 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
-using Terraria.ID;
 using Terraria;
-using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class YoAngelo : ModBuff
+    public class YoAngelo : JoJoBuff
     {
 
-        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Stoned; } }
+        public override string Texture => "Terraria/Images/Buff_" + BuffID.Stoned;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Yo, Angelo");
@@ -16,7 +16,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.debuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             Dust.NewDust(player.position + player.velocity, player.width, player.height, DustID.Stone, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
             player.moveSpeed = 0;
@@ -41,7 +41,8 @@ namespace JoJoStands.Buffs.Debuffs
             player.controlTorch = false;
             player.preventAllItemPickups = true;
         }
-        public override void Update(NPC npc, ref int buffIndex)
+
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Stone, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f);
             npc.velocity = new Vector2(Vector2.Zero.X, npc.position.Y - 100f);

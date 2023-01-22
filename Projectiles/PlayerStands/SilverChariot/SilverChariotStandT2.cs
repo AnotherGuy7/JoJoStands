@@ -42,7 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 if (mouseX < player.position.X)
                     player.direction = -1;
             }
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && !secondaryAbilityFrames && Projectile.owner == Main.myPlayer)
                 {
@@ -114,7 +114,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         GoInFront();
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

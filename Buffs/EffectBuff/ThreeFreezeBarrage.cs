@@ -1,12 +1,12 @@
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class ThreeFreezeBarrage : ModBuff
+    public class ThreeFreezeBarrage : JoJoBuff
     {
-        public override string Texture { get { return "Terraria/Images/Buff_" + BuffID.Rage; } }
+        public override string Texture => "Terraria/Images/Buff_" + BuffID.Rage;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("3 Freeze Barrage");

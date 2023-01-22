@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class ForesightBuff : ModBuff
+    public class ForesightBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,9 +15,9 @@ namespace JoJoStands.Buffs.EffectBuff
             Main.debuff[Type] = true;       //so that it can't be canceled
         }
 
-        public bool sendFalse = false;
+        private bool sendFalse = false;
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!player.HasBuff(Type) || mPlayer.forceShutDownEffect)
@@ -29,17 +29,14 @@ namespace JoJoStands.Buffs.EffectBuff
                 }
                 else
                 {
-                    for (int i = 0; i < Main.maxPlayers; i++)
+                    for (int p = 0; p < Main.maxPlayers; p++)
                     {
-                        Player otherPlayers = Main.player[i];
+                        Player otherPlayers = Main.player[p];
                         if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
-                        {
                             sendFalse = !otherPlayers.HasBuff(Type);
-                        }
+
                         if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
-                        {
                             sendFalse = true;
-                        }
                     }
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)

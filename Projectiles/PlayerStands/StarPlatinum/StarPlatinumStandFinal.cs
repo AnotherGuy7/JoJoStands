@@ -62,7 +62,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             if (mPlayer.timestopActive && !mPlayer.timestopOwner)
                 return;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] != 0;
 
@@ -131,7 +131,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     }
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 PunchAndShootAI(ModContent.ProjectileType<StarFinger>(), shootMax: 1);
             }

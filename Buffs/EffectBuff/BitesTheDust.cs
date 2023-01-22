@@ -1,9 +1,8 @@
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
-    public class BitesTheDust : ModBuff
+    public class BitesTheDust : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -13,9 +12,9 @@ namespace JoJoStands.Buffs.EffectBuff
             Main.debuff[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
-            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            /*MyPlayer mPlayer = GetDebuffOwnerModPlayer(npc);
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int i = 0; i < Main.maxPlayers; i++)       //first, get rid of all effect owners
@@ -66,7 +65,7 @@ namespace JoJoStands.Buffs.EffectBuff
                 player.ClearBuff(Type);
 
             }*/
-            /*MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            /*MyPlayer mPlayer = GetDebuffOwnerModPlayer(npc);
             mPlayer.bitesTheDustActive = true;
             if (!player.HasBuff(Type))
             {

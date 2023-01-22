@@ -51,7 +51,7 @@ namespace JoJoStands.Items
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.sexPistolsTier != 0 && (item.shoot == 10 || item.useAmmo == AmmoID.Bullet) && mPlayer.sexPistolsLeft > 0 && mPlayer.standAutoMode)
+            if (mPlayer.sexPistolsTier != 0 && (item.shoot == 10 || item.useAmmo == AmmoID.Bullet) && mPlayer.sexPistolsLeft > 0 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 mPlayer.sexPistolsLeft -= 1;
                 int projectileIndex = Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
@@ -64,7 +64,7 @@ namespace JoJoStands.Items
         public override bool AltFunctionUse(Item Item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.standOut && !mPlayer.standAutoMode && !mPlayer.standAccessory)
+            if (mPlayer.standOut && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !mPlayer.standAccessory)
                 return false;
 
             return false;
@@ -73,7 +73,7 @@ namespace JoJoStands.Items
         public override bool CanUseItem(Item Item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.standOut && !mPlayer.standAutoMode && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory)
+            if (mPlayer.standOut && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory)
             {
                 if (PlayerInput.Triggers.Current.SmartSelect)
                     return true;
@@ -156,7 +156,7 @@ namespace JoJoStands.Items
                     }
                 }
             }
-            if (Main.mouseRight && !mPlayer.standAutoMode && mPlayer.crazyDiamondRestorationMode && mPlayer.crazyDiamondDestroyedTileData.Count == 0 && generalPurposeTimer == 0)
+            if (Main.mouseRight && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && mPlayer.crazyDiamondRestorationMode && mPlayer.crazyDiamondDestroyedTileData.Count == 0 && generalPurposeTimer == 0)
             {
                 for (int i = 0; i < 54; i++)
                 {

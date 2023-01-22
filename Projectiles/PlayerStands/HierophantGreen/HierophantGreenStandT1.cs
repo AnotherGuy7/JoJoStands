@@ -35,7 +35,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 35, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
 
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -80,7 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 else
                     GoInFront();
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 StayBehind();
 

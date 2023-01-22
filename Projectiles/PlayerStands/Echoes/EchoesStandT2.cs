@@ -69,7 +69,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            mPlayer.standRemoteMode = remoteMode;
+            if (remoteMode)
+                mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
             mPlayer.echoesACT = ACT;
 
             mouseControlled = false;
@@ -84,7 +85,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (mPlayer.usedEctoPearl && remoteRange == 1200f)
                 remoteRange *= 1.5f;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (!remoteMode)
                 {
@@ -314,7 +315,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     LimitDistance(remoteRange);
                 }
             }
-            if (mPlayer.standAutoMode && !returnToPlayer) //automode
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer) //automode
             {
                 remoteMode = false;
                 BasicPunchAI();
@@ -425,7 +426,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             returnToPlayer = reader.ReadBoolean();
         }
 
-        public override void Kill(int timeLeft)
+        public override void StandKillEffects()
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

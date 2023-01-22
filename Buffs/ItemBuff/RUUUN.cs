@@ -1,9 +1,8 @@
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class RUUUN : ModBuff
+    public class RUUUN : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -12,7 +11,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.moveSpeed *= 2f;
         }

@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class BulletKickFrenzy : ModBuff
+    public class BulletKickFrenzy : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -16,7 +16,7 @@ namespace JoJoStands.Buffs.ItemBuff
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             player.buffTime[buffIndex] -= 6;
             if (player.buffTime[buffIndex] <= 2)

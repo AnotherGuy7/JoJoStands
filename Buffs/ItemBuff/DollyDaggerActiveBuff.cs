@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class DollyDaggerActiveBuff : ModBuff
+    public class DollyDaggerActiveBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -13,7 +13,7 @@ namespace JoJoStands.Buffs.ItemBuff
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standAccessory)     //rather than having to check the Stand Slot for any 4 items

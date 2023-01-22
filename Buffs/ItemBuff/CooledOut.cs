@@ -1,9 +1,8 @@
 ﻿using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class CooledOut : ModBuff
+    public class CooledOut : JoJoBuff
     {
         public override void SetStaticDefaults()
         {

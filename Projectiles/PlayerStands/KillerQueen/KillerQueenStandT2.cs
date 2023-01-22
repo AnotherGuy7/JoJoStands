@@ -43,7 +43,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -138,7 +138,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     secondaryAbilityFrames = false;
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 NPC target = FindNearestTarget(MaxDistance * 1.5f);
                 if (!attackFrames)

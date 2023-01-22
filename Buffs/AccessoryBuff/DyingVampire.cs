@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.AccessoryBuff
 {
-    public class DyingVampire : ModBuff
+    public class DyingVampire : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -19,7 +19,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
         private int SRSETimer = 0;
         private bool buried = false;
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (!buried && WorldGen.SolidTile((int)player.position.X / 16, ((int)player.position.Y / 16) + 4))
@@ -59,9 +59,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
                 {
                     Vector2 shootVel = Main.MouseWorld - player.Center;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= 12f;
                     int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center.X, player.Center.Y - 20f, shootVel.X, shootVel.Y, ModContent.ProjectileType<SpaceRipperStingyEyes>(), 82, 4f, Main.myPlayer, 1f);

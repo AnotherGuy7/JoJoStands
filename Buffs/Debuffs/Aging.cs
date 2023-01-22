@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Aging : ModBuff
+    public class Aging : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -19,7 +19,7 @@ namespace JoJoStands.Buffs.Debuffs
         private int damageMultiplication = 1;
         private float savedVelocityX = -1f;
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.HasBuff(ModContent.BuffType<CooledOut>()))
                 return;
@@ -43,12 +43,16 @@ namespace JoJoStands.Buffs.Debuffs
             if (player.ZoneUnderworldHeight)
                 damageMultiplication = 3;
         }
-        public override void Update(NPC npc, ref int buffIndex)
+
+        public override void OnApply(NPC npc)
         {
-            Player player = Main.player[npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().standDebuffEffectOwner];
+            savedVelocityX = Math.Abs(npc.velocity.X) / GetDebuffOwnerModPlayer(npc).standTier;
+        }
+
+        public override void UpdateBuffOnNPC(NPC npc)
+        {
+            Player player = GetDebuffOwner(npc);
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (savedVelocityX == -1)
-                savedVelocityX = Math.Abs(npc.velocity.X) / mPlayer.standTier;
 
             if (player.ZoneSnow || player.ZoneSkyHeight)
                 damageMultiplication = 0;
@@ -67,7 +71,7 @@ namespace JoJoStands.Buffs.Debuffs
             if (!oneTimeEffectsApplied)
             {
                 npc.defense = (int)(npc.defense * (1f - 0.2f * mPlayer.standTier));
-                npc.damage = (int)((npc.damage * (1f-0.1f * mPlayer.standTier)) - 10);
+                npc.damage = (int)((npc.damage * (1f - 0.1f * mPlayer.standTier)) - 10);
                 oneTimeEffectsApplied = true;
             }
         }

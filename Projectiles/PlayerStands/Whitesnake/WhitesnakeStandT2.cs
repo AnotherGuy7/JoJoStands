@@ -53,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             if (armFrame == 1)
                 Lighting.AddLight(Projectile.position, 0);
 
-            if (!mPlayer.standAutoMode && !remoteControlled)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !remoteControlled)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
                 {
@@ -105,9 +105,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     gunRevealFrames = true;
                 }
             }
-            if (!mPlayer.standAutoMode && remoteControlled)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && remoteControlled)
             {
-                mPlayer.standRemoteMode = true;
+                mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
@@ -197,7 +197,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     remoteControlled = false;
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

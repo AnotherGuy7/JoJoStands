@@ -3,12 +3,14 @@ using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Items.Seasonal;
 using JoJoStands.Networking;
 using JoJoStands.Projectiles;
+using JoJoStands.Projectiles.PlayerStands.Aerosmith;
 using JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem;
 using JoJoStands.Projectiles.PlayerStands.StarPlatinum;
 using JoJoStands.Projectiles.PlayerStands.TestStand;
 using JoJoStands.Projectiles.PlayerStands.TheWorld;
 using JoJoStands.Projectiles.PlayerStands.Tusk;
 using JoJoStands.UI;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
@@ -63,6 +65,8 @@ namespace JoJoStands
             SexPistolsUI.sexPistolsUITexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/SexPistolsUI", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBarBar", AssetRequestMode.ImmediateLoad);
+
+            AerosmithStandFinal.AerosmithWhirrSoundEffect = (SoundEffect)Request<SoundEffect>("JoJoStands/Sounds/GameSounds/AerosmithWhirr", AssetRequestMode.ImmediateLoad);
 
             standProjectileList.Add(ProjectileType<BombBubble>());
             standProjectileList.Add(ProjectileType<ControllableNail>());

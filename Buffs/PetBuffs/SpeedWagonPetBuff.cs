@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.PetBuffs
 {
-    public class SpeedWagonPetBuff : ModBuff
+    public class SpeedWagonPetBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -13,12 +13,10 @@ namespace JoJoStands.Buffs.PetBuffs
             Main.buffNoTimeDisplay[Type] = false;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<SpeedWagonPet>()] != 0)
-            {
                 player.buffTime[buffIndex] = 2;
-            }
         }
     }
 }

@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.AccessoryBuff
 {
-    public class AjaVampire : ModBuff
+    public class AjaVampire : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -16,7 +16,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             Main.persistentBuff[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.moveSpeed *= 2f;

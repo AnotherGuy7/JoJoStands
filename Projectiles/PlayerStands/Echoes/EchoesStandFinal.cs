@@ -70,7 +70,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 threeFreeze = false;
 
 
-            if (!mPlayer.standAutoMode && !returnToPlayer)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !returnToPlayer)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !threeFreeze && !mPlayer.posing)
                 {
@@ -164,7 +164,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 targetNPC = -1;
             }
 
-            if (mPlayer.standAutoMode && !returnToPlayer)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer)
             {
                 BasicPunchAI();
             }
@@ -196,7 +196,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Projectile.position = player.position;
         }
 
-        public override void Kill(int timeLeft)
+        public override void StandKillEffects()
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

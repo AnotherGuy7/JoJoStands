@@ -89,7 +89,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 }
             }
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 MovementAI();
                 if (Projectile.ai[0] == 0f)     //Here because it's different for Auto Mode
@@ -157,7 +157,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     }
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 NPC target = FindNearestTarget(17f * 16f);
                 if (target != null)

@@ -58,7 +58,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             Projectile.direction = (Projectile.spriteDirection = player.direction);*/
 
 
-            if (!mPlayer.standAutoMode && !remoteControlled)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !remoteControlled)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -120,9 +120,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     remoteControlled = true;
                 }
             }
-            if (!mPlayer.standAutoMode && remoteControlled)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && remoteControlled)
             {
-                mPlayer.standRemoteMode = true;
+                mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
@@ -219,7 +219,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     remoteControlled = false;
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 StayBehind();
 

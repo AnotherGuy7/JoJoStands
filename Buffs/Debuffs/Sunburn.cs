@@ -1,10 +1,9 @@
 using JoJoStands.Items.Vampire;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class Sunburn : ModBuff
+    public class Sunburn : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +13,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.buffNoTimeDisplay[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (player.lifeRegen > 0)
@@ -28,7 +27,7 @@ namespace JoJoStands.Buffs.Debuffs
                 Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             if (npc.lifeRegen > 0)
                 npc.lifeRegen = 0;

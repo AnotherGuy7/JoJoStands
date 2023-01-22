@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.AccessoryBuff
 {
-    public class ViralBeetleBuff : ModBuff
+    public class ViralBeetleBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -16,7 +16,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
 
         private int beetleSpawnTimer = 0;
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void UpdateBuffOnPlayer(Player player)
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<ViralBeetleProjectile>()] < 3)
             {

@@ -44,7 +44,7 @@ namespace JoJoStands.Items.Vampire
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            if (player.whoAmI != Main.myPlayer || !vPlayer.zombie || (mPlayer.standOut && !mPlayer.standAutoMode))
+            if (player.whoAmI != Main.myPlayer || !vPlayer.zombie || (mPlayer.standOut && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual))
                 return;
 
             if (useCool > 0)

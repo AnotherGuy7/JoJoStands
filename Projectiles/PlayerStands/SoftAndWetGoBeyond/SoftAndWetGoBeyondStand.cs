@@ -36,7 +36,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                 Projectile.timeLeft = 2;
 
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
                 {
@@ -114,7 +114,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, playerFollow, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }

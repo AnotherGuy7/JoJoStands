@@ -43,7 +43,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -142,7 +142,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X + 10f * Projectile.direction, Projectile.position.Y, 0f, 0f, ModContent.ProjectileType<SheerHeartAttack>(), 1, 0f, Projectile.owner, 0f);
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 NPC target = FindNearestTarget(newMaxDistance * 1.5f);
                 if (!attackFrames)

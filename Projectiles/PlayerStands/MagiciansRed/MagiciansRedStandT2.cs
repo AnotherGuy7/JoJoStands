@@ -41,7 +41,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 GoInFront();
 
             bool redBindActive = secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<RedBind>()] != 0;
-            if (!mPlayer.standAutoMode)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !redBindActive)
                 {
@@ -97,7 +97,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     Projectile.netUpdate = true;
                 }
             }
-            if (mPlayer.standAutoMode)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 NPC target = FindNearestTarget(350f);
                 if (target != null)

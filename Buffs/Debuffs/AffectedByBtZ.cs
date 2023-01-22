@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.Debuffs
 {
-    public class AffectedByBtZ : ModBuff
+    public class AffectedByBtZ : JoJoBuff
     {
         public override void SetStaticDefaults()
         {
@@ -15,19 +15,15 @@ namespace JoJoStands.Buffs.Debuffs
         }
 
         private Vector2 zeroPosition;
-        private bool savedZeroPos = false;
 
-        public override void Update(Player player, ref int buffIndex)
+        public override void OnApply(Player player)
         {
-            if (!savedZeroPos)
-            {
-                zeroPosition = player.position;
-                savedZeroPos = true;
-            }
-            else
-            {
-                player.position = zeroPosition;
-            }
+            zeroPosition = player.position;
+        }
+
+        public override void UpdateBuffOnPlayer(Player player)
+        {
+            player.position = zeroPosition;
             if (player.GetModPlayer<MyPlayer>().backToZeroActive)
                 player.buffTime[buffIndex] = 2;
 
@@ -52,7 +48,7 @@ namespace JoJoStands.Buffs.Debuffs
             Main.dust[newDust].velocity = Vector2.Zero;
         }
 
-        public override void Update(NPC npc, ref int buffIndex)
+        public override void UpdateBuffOnNPC(NPC npc)
         {
             int newDust = Dust.NewDust(npc.position, npc.width, npc.height, 220);
             Main.dust[newDust].noGravity = true;

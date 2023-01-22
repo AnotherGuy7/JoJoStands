@@ -75,7 +75,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 Projectile.Center = new Vector2(player.Center.X, player.Center.Y);
             }
 
-            if (!mPlayer.standAutoMode && !blindRage)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !blindRage)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !flickFrames && !healingFrames && onlyOneTarget == 0)
                 {
@@ -418,7 +418,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 messageCooldown2--;
             if (restore)
                 Lighting.AddLight(Projectile.position, 11);
-            if (mPlayer.standAutoMode && onlyOneTarget == 0)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && onlyOneTarget == 0)
             {
                 returnToOwner = false;
                 healingFrames = false;

@@ -5,7 +5,7 @@ namespace JoJoStands.Projectiles
 {
     public class StoneFreeStringPoint : ModProjectile
     {
-        public override string Texture => Mod.Name + "/Projectiles/PlayerStands/StandPlaceholder";
+        public override string Texture => Mod.Name + "/Extras/EmptyTexture";
 
         public override void SetDefaults()
         {
