@@ -307,7 +307,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 {
                     shootCount += newShootTime;
                     Projectile.frame = 2;
-                    frameMultUpdate = 2;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AerosmithBomb>(), 0, 3f, Projectile.owner, 568 * (float)mPlayer.standDamageBoosts);
                     Main.projectile[proj].netUpdate = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
