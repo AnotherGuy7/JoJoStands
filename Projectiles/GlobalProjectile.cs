@@ -329,7 +329,7 @@ namespace JoJoStands.Projectiles
                 {
                     if (Main.rand.NextFloat(0, 101) <= 10 && mPlayer.soothingSpiritDiscCooldown > 60)
                         mPlayer.soothingSpiritDiscCooldown -= 60;
-                    if (player.shadowDodgeTimer <= 0)
+                    if (mPlayer.soothingSpiritDiscCooldown <= 0)
                     {
                         player.AddBuff(BuffID.ShadowDodge, 1800);
                         mPlayer.soothingSpiritDiscCooldown += 4500;
