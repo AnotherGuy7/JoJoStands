@@ -9,8 +9,8 @@ namespace JoJoStands.Projectiles
 {
     public class PhantomMarker : ModProjectile
     {
-        private float ExplosionChainDistance = 10 * 16f;
-        private float ExplosionSoundDistance = 14 * 16f;
+        private const float ExplosionChainDistance = 16 * 16f;
+        private const float ExplosionSoundDistance = 20 * 16f;
 
         public override void SetDefaults()
         {
@@ -35,13 +35,14 @@ namespace JoJoStands.Projectiles
                     Projectile.timeLeft = 2;
                 }
                 if (target.life < 0)
-                {
                     Projectile.Kill();
-                }
+
                 Lighting.AddLight(Projectile.Center, 1.73f / 1.5f, 2.24f / 1.5f, 2.30f / 1.5f);
                 if (Main.rand.Next(1, 5) == 1)
                     Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BlueTorch)].noGravity = true;
             }
+            else
+                Projectile.Kill();
         }
 
         public override void Kill(int timeLeft)
@@ -56,7 +57,7 @@ namespace JoJoStands.Projectiles
                 {
                     if (npc.Distance(Projectile.position) <= ExplosionChainDistance && npc.lifeMax > 5 && !npc.friendly && !npc.immortal && !npc.hide)
                     {
-                        npc.StrikeNPC(78, 5f, Projectile.direction);
+                        npc.StrikeNPC(135, 5f, Projectile.direction);
                         for (int d = 0; d < 40; d++)
                         {
                             Vector2 dustPosition = Vector2.Lerp(Main.npc[(int)Projectile.ai[0]].Center, npc.Center, d * (1 / 40f));
@@ -79,10 +80,6 @@ namespace JoJoStands.Projectiles
             volume = Math.Clamp(volume, 0f, 1f);
             explosionSFX.Volume = volume;
             SoundEngine.PlaySound(explosionSFX, Projectile.Center);
-            /*Vector2 positionDifference = Main.player[Projectile.owner].position - Projectile.Center;
-            float pan = -(positionDifference.X / Math.Abs(positionDifference.X)) * volume;
-            explosionSFX.Pan = pan;
-            explosionSFX.*/
         }
     }
 }

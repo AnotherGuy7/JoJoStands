@@ -8,8 +8,6 @@ namespace JoJoStands.Items
 {
     public class StandItemClass : ModItem
     {
-        public override string Texture => Mod.Name + "/Extras/EmptyTexture";
-
         /// <summary>
         /// The stand's tier.
         /// </summary>

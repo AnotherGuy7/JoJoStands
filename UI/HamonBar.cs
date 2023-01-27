@@ -49,8 +49,8 @@ namespace JoJoStands.UI
 
             hamonBar.Width.Set(70f + (70 * sizeMode), 0f);
             hamonBar.Height.Set(48f + (48 * sizeMode), 0f);
-            hamonDisplay.Left.Set(5f + (30 * sizeMode), 0f);
-            hamonDisplay.Top.Set(30f + (40 * sizeMode), 0f);
+            hamonDisplay.Left.Set(5f + (30 * sizeMode) * (1f - (Main.UIScale - 1f)), 0f);
+            hamonDisplay.Top.Set(30f + (40 * sizeMode) * (1f - (Main.UIScale - 1f)), 0f);
 
             hamonDisplay.SetText(hamonPlayer.amountOfHamon + "/" + hamonPlayer.maxHamon);
             if (changedInConfig)

@@ -80,8 +80,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 accelerationTimer--;
 
             mPlayer.aerosmithWhoAmI = Projectile.whoAmI;
-            if (remoteMode)
-                mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
             newProjectileDamage = (int)(newProjectileDamage * MathHelper.Clamp(1f - (Projectile.Distance(player.Center) / (350f * 16f)), 0.5f, 1f));
 
             fallingFromSpace = Projectile.position.Y < (Main.worldSurface * 0.35) * 16f;
@@ -299,15 +297,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 {
                     remoteMode = !remoteMode;
                     if (remoteMode)
+                    {
                         Main.NewText("Remote Mode: Active");
+                        mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
+                    }
                     else
+                    {
                         Main.NewText("Remote Mode: Disabled");
+                        mPlayer.standControlStyle = MyPlayer.StandControlStyle.Manual;
+                    }
                 }
                 if (SecondSpecialKeyPressedNoCooldown() && !bombless)
                 {
                     shootCount += newShootTime;
                     Projectile.frame = 2;
-                    frameMultUpdate = 2;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AerosmithBomb>(), 0, 3f, Projectile.owner, 568 * (float)mPlayer.standDamageBoosts);
                     Main.projectile[proj].netUpdate = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
@@ -317,61 +320,63 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             {
                 remoteMode = false;
                 Projectile.rotation = (Projectile.velocity * Projectile.direction).ToRotation();
-                NPC target = FindNearestTarget(350f);
+                NPC target = FindNearestTarget(28f * 16f);
                 if (target == null)
                 {
-                    if (Projectile.Distance(player.Center) < 60f)
+                    if (Projectile.Distance(player.Center) < 12 * 16f)
                     {
-                        if (Projectile.position.X >= player.position.X + 50f || WorldGen.SolidTile((int)(Projectile.position.X / 16) - 3, (int)(Projectile.position.Y / 16f) + 1))
+                        if (Projectile.Center.X >= player.Center.X + (10 * 16f) || WorldGen.SolidTile((int)(Projectile.Center.X / 16) + 2, (int)(Projectile.Center.Y / 16f) + 1))
                         {
-                            Projectile.velocity.X = -2f;
+                            Projectile.velocity.X = -2.4f;
                             Projectile.spriteDirection = Projectile.direction = -1;
                             Projectile.netUpdate = true;
                         }
-                        if (Projectile.position.X < player.position.X - 50f || WorldGen.SolidTile((int)(Projectile.position.X / 16) + 3, (int)(Projectile.position.Y / 16f) + 1))
+                        if (Projectile.Center.X <= player.Center.X - (10 * 16f) || WorldGen.SolidTile((int)(Projectile.Center.X / 16) - 2, (int)(Projectile.Center.Y / 16f) + 1))
                         {
-                            Projectile.velocity.X = 2f;
+                            Projectile.velocity.X = 2.4f;
                             Projectile.spriteDirection = Projectile.direction = 1;
                             Projectile.netUpdate = true;
                         }
-                        if (Projectile.position.Y > player.position.Y + 2f)
-                        {
-                            Projectile.velocity.Y = -2f;
-                        }
-                        if (Projectile.position.Y < player.position.Y - 2f)
-                        {
-                            Projectile.velocity.Y = 2f;
-                        }
-                        if (Projectile.position.Y < player.position.Y + 2f && Projectile.position.Y > player.position.Y - 2f)
+                        if (Math.Abs(Projectile.velocity.X) > 2.4f)
+                            Projectile.velocity.X *= 0.95f;
+
+                        if (Projectile.Center.Y > player.Center.Y - AerosmithHoverHeightOffset - 16 - 4 && Projectile.Center.Y < player.Center.Y - AerosmithHoverHeightOffset - 16 + 4)
                         {
                             Projectile.velocity.Y = 0f;
                             Projectile.netUpdate = true;
                         }
+                        else
+                        {
+                            Vector2 velocity = (player.Center + new Vector2(0f, -AerosmithHoverHeightOffset - 16)) - Projectile.Center;
+                            velocity.Normalize();
+                            velocity.Y *= 6f;
+                            Projectile.velocity.Y = velocity.Y * ((Vector2.Distance(player.Center + new Vector2(0f, -AerosmithHoverHeightOffset - 16), Projectile.Center)) / (12 * 16f));
+                        }
                     }
-                    if (Projectile.Distance(player.Center) > 80f)
+                    else if (Projectile.Distance(player.Center) > 16 * 16f)
                     {
                         Projectile.tileCollide = false;
                         Projectile.velocity = player.Center - Projectile.Center;
                         Projectile.velocity.Normalize();
-                        Projectile.velocity *= 9f + player.moveSpeed;
+                        Projectile.velocity *= MaxFlightSpeed + player.moveSpeed;
                         Projectile.netUpdate = true;
                     }
-                    if (Projectile.Distance(player.Center) >= 60f && Projectile.Distance(player.Center) <= 80f)
+                    else
                     {
                         Projectile.tileCollide = false;
                         Projectile.velocity = player.Center - Projectile.Center;
                         Projectile.velocity.Normalize();
-                        Projectile.velocity *= ((Projectile.Distance(player.Center) - 55f) * (9f + player.moveSpeed)) / 20;
+                        Projectile.velocity *= player.moveSpeed + 6f;
                         Projectile.netUpdate = true;
                     }
                 }
                 if (target != null)
                 {
-                    if (Projectile.Distance(target.Center) > 45f)
+                    if (Projectile.Distance(target.Center) > 3 * 16f)
                     {
                         Projectile.velocity = target.position - Projectile.Center;
                         Projectile.velocity.Normalize();
-                        Projectile.velocity *= 8f;
+                        Projectile.velocity *= MaxFlightSpeed;
 
                         Projectile.direction = 1;
                         if (Projectile.velocity.X < 0f)
@@ -379,12 +384,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         Projectile.spriteDirection = Projectile.direction;
                         Projectile.netUpdate = true;
                     }
-                    if (shootCount <= 0)
+
+                    if (Projectile.Distance(target.Center) <= 24 * 16f)
                     {
-                        if (Main.myPlayer == Projectile.owner)
+                        Projectile.velocity *= 0.86f;
+                        if (shootCount <= 0 && Main.myPlayer == Projectile.owner)
                         {
                             shootCount += newShootTime;
-                            SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                             Vector2 shootVel = target.Center - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
@@ -393,6 +399,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                             shootVel *= ProjectileSpeed;
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                             Main.projectile[proj].netUpdate = true;
+                            SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                         }
                     }
                 }

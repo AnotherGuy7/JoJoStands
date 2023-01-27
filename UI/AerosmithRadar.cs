@@ -1,13 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
-using System.Runtime.InteropServices;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace JoJoStands.UI
@@ -27,6 +24,11 @@ namespace JoJoStands.UI
 
         public override void Update(GameTime gameTime)
         {
+            centerDot.HAlign = 0.5f * (1f / Main.UIScale);
+
+            centerDot.VAlign = 0.5f * (1f / Main.UIScale);
+            centerDot.VAlign += (1 * 8) / 150f;
+            centerDot.ImageScale = 4f;
             base.Update(gameTime);
         }
 
@@ -41,10 +43,11 @@ namespace JoJoStands.UI
             aerosmithRadarUI.BorderColor = new Color(0, 0, 0, 0);
 
             centerDot = new UIImage(aerosmithRadarBlipTexture);
-            centerDot.Left.Set(58f, 0f);
-            centerDot.Top.Set(62f, 0f);
+            centerDot.HAlign = 0.5f;
+            centerDot.VAlign = 0.5f;
             centerDot.Width.Set(6f, 0f);
             centerDot.Height.Set(6f, 0f);
+            centerDot.ImageScale = 4f;
             centerDot.Color = Color.LightGreen;
             aerosmithRadarUI.Append(centerDot);
 
@@ -77,7 +80,7 @@ namespace JoJoStands.UI
             staticShader.UseOpacity(Main.rand.Next(0, 1000 + 1) / 1000f);
             staticShader.UseColor(DarkGreen);
             staticShader.UseSecondaryColor(Color.Black);
-           
+
             UITools.DrawUIWithShader(spriteBatch, staticShader, aerosmithRadarBackgroundTexture, mainUIdestinationRect);
 
             spriteBatch.Draw(aerosmithRadarCrosshairTexture, mainUIdestinationRect, Color.White);

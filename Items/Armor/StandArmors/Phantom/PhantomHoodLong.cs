@@ -1,5 +1,6 @@
 ﻿using JoJoStands.NPCs;
 using JoJoStands.Projectiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -33,24 +34,34 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "Spirits around you are marked and upon death they violently explode.";
+            player.setBonus = "Enemies around you are marked periodically.\nMarked enemies violently explode upon death and damage surrounding enemies!";
 
             //Giving NPCs the markers
             detectionTimer++;
-            if (detectionTimer >= 360)
+            if (detectionTimer >= 10 * 60 && player.whoAmI == Main.myPlayer)
             {
-                for (int n = 0; n < Main.maxNPCs; n++)
+                if (player.whoAmI == Main.myPlayer)
                 {
-                    NPC npc = Main.npc[n];
-                    if (npc.active)
+                    for (int n = 0; n < Main.maxNPCs; n++)
                     {
-                        JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>();
-                        if (npc.lifeMax > 5 && !npc.friendly && !jojoNPC.taggedWithPhantomMarker)
+                        NPC npc = Main.npc[n];
+                        if (npc.active)
                         {
-                            Projectile.NewProjectile(player.GetSource_FromThis(), npc.position, npc.velocity, ModContent.ProjectileType<PhantomMarker>(), 0, 0f, Main.myPlayer, npc.whoAmI);
-                            jojoNPC.taggedWithPhantomMarker = true;
+                            JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>();
+                            if (Main.rand.Next(1, 100 + 1) <= 30 && npc.lifeMax > 5 && !npc.friendly && !jojoNPC.taggedWithPhantomMarker)
+                            {
+                                int projectile = Projectile.NewProjectile(player.GetSource_FromThis(), npc.position, npc.velocity, ModContent.ProjectileType<PhantomMarker>(), 0, 0f, Main.myPlayer, npc.whoAmI);
+                                Main.projectile[projectile].netUpdate = true;
+                                jojoNPC.taggedWithPhantomMarker = true;
+                            }
                         }
                     }
+                }
+                for (int d = 0; d < 15; d++)
+                {
+                    int dustIndex = Dust.NewDust(player.position + new Vector2(0f, player.height / 2f), player.width, player.height / 2, DustID.Electric, Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-1f, 1f));
+                    Main.dust[dustIndex].noGravity = true;
+                    Main.dust[dustIndex].noLight = true;
                 }
                 detectionTimer = 0;
             }

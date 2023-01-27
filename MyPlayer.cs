@@ -487,12 +487,14 @@ namespace JoJoStands
             if (JoJoStands.StandAutoModeHotKey.JustPressed && standControlStyle == StandControlStyle.Manual && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 standKeyPressTimer += 30;
+                standControlStyle = StandControlStyle.Auto;
                 Main.NewText("Stand Control: Auto");
                 SyncCall.SyncControlStyle(Player.whoAmI, standControlStyle);
             }
             if (JoJoStands.StandAutoModeHotKey.JustPressed && standControlStyle == StandControlStyle.Auto && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 standKeyPressTimer += 30;
+                standControlStyle = StandControlStyle.Manual;
                 Main.NewText("Stand Control: Manual");
                 SyncCall.SyncControlStyle(Player.whoAmI, standControlStyle);
             }
