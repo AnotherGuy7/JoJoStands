@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
@@ -28,9 +27,12 @@ namespace JoJoStands.Projectiles
             if (Projectile.ai[0] == 0f)
             {
                 if (Projectile.Distance(Main.player[Projectile.owner].Center) >= MaxUnconnectedDistance)
-                {
                     Projectile.Kill();
-                }
+            }
+            else
+            {
+                if (!Main.projectile[(int)Projectile.ai[1]].active)
+                    Projectile.Kill();
             }
         }
 

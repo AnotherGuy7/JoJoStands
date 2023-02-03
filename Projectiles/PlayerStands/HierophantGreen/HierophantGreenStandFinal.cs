@@ -14,19 +14,22 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int ProjectileDamage => 72;
         public override int HalfStandHeight => 30;
         public override int StandOffset => 0;
+        public override int TierNumber => 4;
         public override StandAttackType StandType => StandAttackType.Ranged;
         public override string PoseSoundName => "ItsTheVictorWhoHasJustice";
         public override string SpawnSoundName => "Hierophant Green";
         public override bool CanUseSaladDye => true;
 
         private bool spawningField = false;
-        private int numberSpawned = 0;
+        private int amountOfLinksCreated = 0;
         private bool pointShot = false;
         private bool remoteControlled = false;
         private bool linkShotForSpecial = false;
         private Vector2 formPosition = Vector2.Zero;
 
         private const float MaxRemoteModeDistance = 50f * 16f;
+        private const float EmeraldSplashRadius = 24f * 16f;
+        private const float AmountOfEmeraldSplashLinks = 50;
 
         public override void AI()
         {
@@ -38,13 +41,19 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            Lighting.AddLight((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
-            Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Lava, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
-            Projectile.scale = ((50 - player.ownedProjectileCounts[ModContent.ProjectileType<EmeraldStringPointConnector>()]) * 2f) / 100f;
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !remoteControlled)
+            Lighting.AddLight((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
+            Projectile.scale = ((50 - player.ownedProjectileCounts[ModContent.ProjectileType<EmeraldStringPointConnector>()]) * 2f) / 100f;
+            if (Main._rand.Next(1, 3 + 1) == 1)
+            {
+                int index = Dust.NewDust(Projectile.position - new Vector2(0f, HalfStandHeight), Projectile.width, HalfStandHeight * 2, DustID.GreenTorch);
+                Main.dust[index].noGravity = true;
+                Main.dust[index].velocity *= 0.2f;
+            }
+
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
@@ -55,13 +64,12 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     attackFrames = true;
                     if (shootCount <= 0)
                     {
-                        SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                         shootCount += newShootTime;
+                        int direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
                         float numberProjectiles = 6;
@@ -74,7 +82,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 3f, player.whoAmI);
                             Main.projectile[proj].netUpdate = true;
                         }
+                        SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                         Projectile.netUpdate = true;
+                        if (player.velocity.X == 0f)
+                            player.ChangeDir(direction);
                     }
                 }
                 if (!Main.mouseLeft && Projectile.owner == Main.myPlayer)        //The reason it's not an else is because it would count the owner part too
@@ -95,7 +106,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     shootVel *= ProjectileSpeed;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BindingEmeraldString>(), newProjectileDamage / 2, 0f, Projectile.owner, 30);
                     Main.projectile[proj].netUpdate = true;
-                    SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item21.WithPitchOffset(0.6f), Projectile.position);
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
                 }
 
@@ -110,9 +121,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     shootCount += 30;
                     remoteControlled = true;
+                    mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
                 }
             }
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && remoteControlled)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
             {
                 mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
@@ -201,6 +213,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     shootCount += 30;
                     remoteControlled = false;
+                    mPlayer.standControlStyle = MyPlayer.StandControlStyle.Manual;
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
@@ -253,31 +266,47 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
             if (spawningField && Projectile.owner == Main.myPlayer)
             {
-                float randomRadius = Main.rand.NextFloat(-20f, 21f);
-                Vector2 offset = formPosition + (randomRadius.ToRotationVector2() * 288f);     //33 tiles
+                float randomAngle = MathHelper.ToRadians(Main.rand.Next(0, 360 + 1));
+                Vector2 pointPosition = formPosition + (randomAngle.ToRotationVector2() * EmeraldSplashRadius);
 
-                if (numberSpawned < 100 && shootCount <= 0 && !linkShotForSpecial)        //50 tendrils, the number spawned limit /2 is the wanted amount
+                if (amountOfLinksCreated < AmountOfEmeraldSplashLinks && shootCount <= 0)
                 {
-                    shootCount += 2;
-                    numberSpawned += 1;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), offset, Vector2.Zero, ModContent.ProjectileType<EmeraldStringPoint>(), 0, 2f, player.whoAmI);
-                    Main.projectile[proj].netUpdate = true;
-                    Main.projectile[proj].tileCollide = false;
-                    linkShotForSpecial = true;
+                    if (!linkShotForSpecial)        //50 tendrils, the number spawned limit /2 is the wanted amount
+                    {
+                        shootCount += 2;
+                        linkShotForSpecial = true;
+                        int emeraldIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), pointPosition, Vector2.Zero, ModContent.ProjectileType<EmeraldStringPoint>(), 0, 2f, player.whoAmI);
+                        Main.projectile[emeraldIndex].netUpdate = true;
+                        Main.projectile[emeraldIndex].tileCollide = false;
+                        int amountOfDusts = Main._rand.Next(1, 4 + 1);
+                        for (int i = 0; i < amountOfDusts; i++)
+                        {
+                            int dustIndex = Dust.NewDust(pointPosition, 18, 18, DustID.GreenTorch);
+                            Main.dust[dustIndex].noGravity = true;
+                            Main.dust[dustIndex].velocity = Vector2.Zero;
+                        }
+                    }
+                    else
+                    {
+                        shootCount += 2;
+                        amountOfLinksCreated += 1;
+                        linkShotForSpecial = false;
+                        int emeraldIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), pointPosition, Vector2.Zero, ModContent.ProjectileType<EmeraldStringPointConnector>(), 0, 2f, player.whoAmI, 24);
+                        Main.projectile[emeraldIndex].netUpdate = true;
+                        Main.projectile[emeraldIndex].tileCollide = false;
+                        int amountOfDusts = Main._rand.Next(1, 4 + 1);
+                        for (int i = 0; i < amountOfDusts; i++)
+                        {
+                            int dustIndex = Dust.NewDust(pointPosition, 18, 18, DustID.GreenTorch);
+                            Main.dust[dustIndex].noGravity = true;
+                            Main.dust[dustIndex].velocity = Vector2.Zero;
+                        }
+                    }
                 }
-                if (numberSpawned < 100 && shootCount <= 0 && linkShotForSpecial)
+                if (amountOfLinksCreated >= AmountOfEmeraldSplashLinks)
                 {
-                    shootCount += 2;
-                    numberSpawned += 1;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), offset, Vector2.Zero, ModContent.ProjectileType<EmeraldStringPointConnector>(), 0, 2f, player.whoAmI, 40f);
-                    Main.projectile[proj].netUpdate = true;
-                    Main.projectile[proj].tileCollide = false;
-                    linkShotForSpecial = false;
-                }
-                if (numberSpawned >= 100f)
-                {
-                    numberSpawned = 0;
                     spawningField = false;
+                    amountOfLinksCreated = 0;
                     formPosition = Vector2.Zero;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 }

@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -39,6 +40,19 @@ namespace JoJoStands.Projectiles
             {
                 if (Main.rand.NextFloat(0, 101) >= 60)
                     target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
+            }
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                float circlePos = i;
+                Vector2 spawnPos = Projectile.Center + (circlePos.ToRotationVector2() * 8f);
+                Vector2 velocity = spawnPos - Projectile.Center;
+                velocity.Normalize();
+                Dust dustIndex = Dust.NewDustPerfect(spawnPos, DustID.GreenTorch, velocity * 0.8f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
+                dustIndex.noGravity = true;
             }
         }
     }

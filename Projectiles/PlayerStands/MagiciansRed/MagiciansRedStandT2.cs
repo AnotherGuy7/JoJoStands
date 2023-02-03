@@ -16,11 +16,12 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override int ShootTime => 18;
         public override int HalfStandHeight => 35;
         public override int StandOffset => 0;
+        public override int TierNumber => 2;
         public override string PoseSoundName => "ThePowerToWieldFlameAtWill";
         public override string SpawnSoundName => "Magicians Red";
 
-        private int chanceToDebuff = 35;
-        private int debuffDuration = 360;
+        private int ChanceToDebuff = 35;
+        private int DebuffDuration = 6 * 60;
 
         public override void AI()
         {
@@ -63,7 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
                         Main.projectile[proj].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
@@ -91,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                     shootVel.Normalize();
                     shootVel *= 16f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RedBind>(), newProjectileDamage, 3f, Projectile.owner, Projectile.whoAmI, debuffDuration - 60);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RedBind>(), newProjectileDamage, 3f, Projectile.owner, Projectile.whoAmI, DebuffDuration - 60);
                     Main.projectile[proj].netUpdate = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(20));
                     Projectile.netUpdate = true;
@@ -124,7 +125,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                         }

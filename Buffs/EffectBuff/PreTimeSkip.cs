@@ -1,6 +1,6 @@
-using JoJoStands.Projectiles.PlayerStands.KingCrimson;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.EffectBuff
@@ -16,6 +16,7 @@ namespace JoJoStands.Buffs.EffectBuff
             Description.SetDefault("Time is skipping");
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void OnApply(Player player)

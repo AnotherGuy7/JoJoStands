@@ -475,10 +475,10 @@ namespace JoJoStands
 
         public override void ModifyScreenPosition()     //used HERO's Mods FlyCam as a reference for this
         {
-            if (standControlStyle == StandControlStyle.Remote)
+            if (standOut && standControlStyle == StandControlStyle.Remote)
                 Main.screenPosition = standRemoteModeCameraPosition;
 
-            if (creamVoidMode || creamExposedMode)
+            if (standOut && (creamVoidMode || creamExposedMode))
                 Main.screenPosition = VoidCamPosition;
         }
 
@@ -511,6 +511,8 @@ namespace JoJoStands
             if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Stolen>()) && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
             {
                 SpawnStand();
+                if (standControlStyle == StandControlStyle.Remote)
+                    standControlStyle = StandControlStyle.Manual;
                 standKeyPressTimer += 30;
                 SyncCall.SyncStandOut(Player.whoAmI, standOut);
             }

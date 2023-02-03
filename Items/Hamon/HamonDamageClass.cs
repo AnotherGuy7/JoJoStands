@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -51,7 +52,9 @@ namespace JoJoStands.Items.Hamon
                 player.velocity.X /= 3f;
                 hamonPlayer.hamonIncreaseCounter = 0;
                 hamonPlayer.chargingHamon = true;
-                Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
+                int dustIndex = Dust.NewDust(player.position - (Vector2.One * 2), player.width + 4, player.height + 4, 169, Scale: Main._rand.Next(80, 120 + 1) / 100f);
+                Main.dust[dustIndex].noGravity = true;
+                Main.dust[dustIndex].velocity = new Vector2(0f, Main._rand.Next(-6, -2) / 10f);
                 if (hamonPlayer.learnedHamonSkills[HamonPlayer.PoisonCancellation])
                 {
                     for (int b = 0; b < player.buffType.Length; b++)

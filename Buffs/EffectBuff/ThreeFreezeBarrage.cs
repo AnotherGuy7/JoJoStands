@@ -12,7 +12,7 @@ namespace JoJoStands.Buffs.EffectBuff
             DisplayName.SetDefault("3 Freeze Barrage");
             Description.SetDefault("Each of your punches is much harder than it might seem!");
             Main.debuff[Type] = true;
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
     }
 }

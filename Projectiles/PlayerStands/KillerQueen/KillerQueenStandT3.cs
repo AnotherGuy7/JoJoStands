@@ -104,6 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                         shootCount += 20;
                         if (touchedNPC)
                         {
+                            touchedNPC = false;
                             for (int n = 0; n < Main.maxNPCs; n++)
                             {
                                 NPC npc = Main.npc[n];
@@ -112,7 +113,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                     JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>();
                                     if (jojoNPC.taggedByKillerQueen)
                                     {
-                                        touchedNPC = false;
                                         int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(AltDamage * mPlayer.standDamageBoosts), npc.whoAmI);
                                         Main.projectile[projectile].timeLeft = 2;
                                         Main.projectile[projectile].netUpdate = true;
@@ -199,14 +199,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             shootCount += newPunchTime;
                             Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             if (Projectile.direction == 1)
-                            {
                                 shootVel *= ProjectileSpeed;
-                            }
                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), 3f, Projectile.owner, FistWhoAmI, TierNumber);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;

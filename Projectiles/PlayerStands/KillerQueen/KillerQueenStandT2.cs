@@ -104,6 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                         shootCount += 20;
                         if (touchedNPC)
                         {
+                            touchedNPC = false;
                             for (int n = 0; n < Main.maxNPCs; n++)
                             {
                                 NPC npc = Main.npc[n];
@@ -112,7 +113,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                     JoJoGlobalNPC jojoNPC = npc.GetGlobalNPC<JoJoGlobalNPC>();
                                     if (jojoNPC.taggedByKillerQueen)
                                     {
-                                        touchedNPC = false;
                                         int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), npc.position, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(AltDamage * mPlayer.standDamageBoosts), npc.whoAmI);
                                         Main.projectile[projectile].timeLeft = 2;
                                         Main.projectile[projectile].netUpdate = true;

@@ -14,7 +14,7 @@ namespace JoJoStands.Buffs.EffectBuff
             DisplayName.SetDefault("The World");
             Description.SetDefault("Time... has been stopped!");
             Main.debuff[Type] = true;
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         private bool otherTimestopsActive = false;

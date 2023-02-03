@@ -1,6 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
@@ -15,6 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int ProjectileDamage => 32;
         public override int HalfStandHeight => 30;
         public override int StandOffset => 0;
+        public override int TierNumber => 2;
         public override StandAttackType StandType => StandAttackType.Ranged;
         public override string PoseSoundName => "ItsTheVictorWhoHasJustice";
         public override string SpawnSoundName => "Hierophant Green";
@@ -39,26 +39,15 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 Projectile.timeLeft = 2;
 
             Lighting.AddLight((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
-            Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 35, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
             Projectile.scale = ((50 - player.ownedProjectileCounts[ModContent.ProjectileType<EmeraldStringPointConnector>()]) * 2f) / 100f;
-
-            /*if (!remoteControlled)
-            Vector2 playerCenter = player.Center;
-            if (!attackFrames)
+            if (Main._rand.Next(1, 5 + 1) == 1)
             {
-                playerCenter.X -= (float)((15 + player.width / 2) * player.direction);
+                int index = Dust.NewDust(Projectile.position - new Vector2(0f, HalfStandHeight), Projectile.width, HalfStandHeight * 2, DustID.GreenTorch);
+                Main.dust[index].noGravity = true;
+                Main.dust[index].velocity *= 0.2f;
             }
-            if (attackFrames)
-            {
-                playerCenter.X -= (float)((15 + player.width / 2) * (player.direction * -1));
-            }
-            playerCenter.Y -= 5f;
-            Projectile.Center = Vector2.Lerp(Projectile.Center, playerCenter, 0.2f);
-            Projectile.velocity *= 0.8f;
-            Projectile.direction = (Projectile.spriteDirection = player.direction);*/
 
-
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !remoteControlled)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
@@ -71,11 +60,11 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
+                        int direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
 
@@ -90,6 +79,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         }
                         SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                         Projectile.netUpdate = true;
+                        if (player.velocity.X == 0f)
+                            player.ChangeDir(direction);
                     }
                 }
                 if (!Main.mouseLeft && player.whoAmI == Main.myPlayer)        //The reason it's not an else is because it would count the owner part too
@@ -118,9 +109,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     shootCount += 30;
                     remoteControlled = true;
+                    mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
                 }
             }
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && remoteControlled)
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
             {
                 mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
@@ -135,9 +127,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
                     Projectile.direction = 1;
                     if (Main.MouseWorld.X < Projectile.Center.X)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.netUpdate = true;
                     Projectile.spriteDirection = Projectile.direction;
                     LimitDistance(MaxRemoteModeDistance);
@@ -157,9 +147,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
                         Projectile.direction = 1;
                         if (Main.MouseWorld.X < Projectile.Center.X)
-                        {
                             Projectile.direction = -1;
-                        }
                         Projectile.spriteDirection = Projectile.direction;
 
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
@@ -202,9 +190,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     shootCount += 15;
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     if (shootVel == Vector2.Zero)
-                    {
                         shootVel = new Vector2(0f, 1f);
-                    }
+
                     shootVel.Normalize();
                     shootVel *= ProjectileSpeed;
                     int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, connectorType, 0, 3f, player.whoAmI);
@@ -217,6 +204,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     shootCount += 30;
                     remoteControlled = false;
+                    mPlayer.standControlStyle = MyPlayer.StandControlStyle.Manual;
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)

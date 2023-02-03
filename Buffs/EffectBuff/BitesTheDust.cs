@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.ID;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
@@ -8,8 +9,9 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             DisplayName.SetDefault("Bites The Dust");
             Description.SetDefault("The ultimate weapon against failure.");
-            Main.buffNoTimeDisplay[Type] = false;
-            Main.debuff[Type] = false;
+            Main.buffNoTimeDisplay[Type] = true;
+            Main.debuff[Type] = true;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void UpdateBuffOnPlayer(Player player)

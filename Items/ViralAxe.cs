@@ -11,7 +11,7 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An axe that seems to bind to the user.\nSpawns living infected wood sharpnels upon chopping a tree.");
+            Tooltip.SetDefault("An axe that seems to bind to the user.\nSpawns living infected wood shrapnel upon chopping a tree.");
             SacrificeTotal = 1;
         }
 

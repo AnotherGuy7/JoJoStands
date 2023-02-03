@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -13,6 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override int ProjectileDamage => 12;
         public override int HalfStandHeight => 30;
         public override int StandOffset => 0;
+        public override int TierNumber => 1;
         public override StandAttackType StandType => StandAttackType.Ranged;
         public override string PoseSoundName => "ItsTheVictorWhoHasJustice";
         public override string SpawnSoundName => "Hierophant Green";
@@ -32,8 +32,12 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Projectile.timeLeft = 2;
 
             Lighting.AddLight((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f), 0.6f, 0.9f, 0.3f);
-            Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 35, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
-
+            if (Main._rand.Next(1, 6 + 1) == 1)
+            {
+                int index = Dust.NewDust(Projectile.position - new Vector2(0f, HalfStandHeight), Projectile.width, HalfStandHeight * 2, DustID.GreenTorch);
+                Main.dust[index].noGravity = true;
+                Main.dust[index].velocity *= 0.2f;
+            }
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
@@ -47,6 +51,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
+                        int direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
@@ -65,6 +70,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                         SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                         Projectile.netUpdate = true;
+                        if (player.velocity.X == 0f)
+                            player.ChangeDir(direction);
                     }
                 }
                 else
@@ -91,9 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     idleFrames = false;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.spriteDirection = Projectile.direction;
                     if (shootCount <= 0)
                     {

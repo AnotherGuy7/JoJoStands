@@ -16,6 +16,7 @@ namespace JoJoStands.Buffs.EffectBuff
             DisplayName.SetDefault("Skipping Time");
             Description.SetDefault("Time is skipping");
             Main.debuff[Type] = true;       //so that it can't be canceled
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         private bool setToTrue = false;

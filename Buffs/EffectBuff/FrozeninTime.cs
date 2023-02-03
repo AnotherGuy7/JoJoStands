@@ -12,6 +12,7 @@ namespace JoJoStands.Buffs.EffectBuff
             Description.SetDefault("You have been stopped along with time");
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void UpdateBuffOnPlayer(Player player)

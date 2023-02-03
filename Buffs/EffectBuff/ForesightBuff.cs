@@ -13,6 +13,7 @@ namespace JoJoStands.Buffs.EffectBuff
             DisplayName.SetDefault("Foresight");
             Description.SetDefault("You are staring into the future...");
             Main.debuff[Type] = true;       //so that it can't be canceled
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         private bool sendFalse = false;

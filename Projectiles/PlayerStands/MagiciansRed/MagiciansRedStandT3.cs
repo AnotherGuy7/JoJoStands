@@ -16,11 +16,12 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override int ShootTime => 16;
         public override int HalfStandHeight => 35;
         public override int StandOffset => 0;
+        public override int TierNumber => 3;
         public override string PoseSoundName => "ThePowerToWieldFlameAtWill";
         public override string SpawnSoundName => "Magicians Red";
 
-        private int chanceToDebuff = 50;
-        private int debuffDuration = 420;
+        private int ChanceToDebuff = 50;
+        private int DebuffDuration = 7 * 60;
 
         public override void AI()
         {
@@ -63,7 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
                         Main.projectile[proj].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
@@ -91,19 +92,20 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                     shootVel.Normalize();
                     shootVel *= 16f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RedBind>(), newProjectileDamage, 3f, Projectile.owner, Projectile.whoAmI, debuffDuration - 60);
+                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RedBind>(), newProjectileDamage, 3f, Projectile.owner, Projectile.whoAmI, DebuffDuration - 60);
                     Main.projectile[proj].netUpdate = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(15));
                     Projectile.netUpdate = true;
                 }
                 if (SpecialKeyPressed())
                 {
-                    for (int p = 1; p <= 50; p++)
+                    for (int p = 0; p < 12; p++)
                     {
-                        float radius = p * 5;
-                        Vector2 offset = player.Center + (radius.ToRotationVector2() * 48f);
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), offset.X, offset.Y, 0f, 0f, ModContent.ProjectileType<CrossfireHurricaneAnkh>(), newProjectileDamage, 5f, Projectile.owner, 48f, radius);
+                        float angle = MathHelper.ToRadians((360f / 12f) * p);
+                        Vector2 position = player.Center + (angle.ToRotationVector2() * 48f);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position - new Vector2(26f, 25f), Vector2.Zero, ModContent.ProjectileType<CrossfireHurricaneAnkh>(), newProjectileDamage, 4f, Projectile.owner, 12f * 16f, angle);
                         Main.projectile[proj].netUpdate = true;
+                        Main.projectile[proj].timeLeft += 10 * p;
                         Projectile.netUpdate = true;
                     }
                     if (JoJoStands.SoundsLoaded)
@@ -138,12 +140,11 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                             shootCount += newShootTime;
                             Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                         }

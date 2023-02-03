@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace JoJoStands.Buffs.EffectBuff
 {
@@ -12,6 +12,7 @@ namespace JoJoStands.Buffs.EffectBuff
             Description.SetDefault("Your actions have already been seen...");
             Main.debuff[Type] = true;       //so that it can't be canceled
             Main.buffNoTimeDisplay[Type] = true;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         private Vector2[] savePositions = new Vector2[50];

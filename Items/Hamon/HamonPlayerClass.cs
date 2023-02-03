@@ -47,6 +47,7 @@ namespace JoJoStands.Items.Hamon
         public int sunTagHeldTimer = 0;
         public int sunShacklesHeldTimer = 0;
         public int hamonStage = 0;
+        public int hamonAuraStandTimer = 0;
 
         public bool passiveRegen = false;
         public bool chargingHamon = false;

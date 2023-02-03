@@ -22,6 +22,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using JoJoStands.Projectiles;
 
 namespace JoJoStands.NPCs
 {
@@ -44,6 +45,7 @@ namespace JoJoStands.NPCs
         public bool highlightedByTheHandMarker = false;
         public bool echoesFreezeTarget = false;
         public bool boundByStrings = false;
+        public bool hitByCrossfireHurricane = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -61,6 +63,7 @@ namespace JoJoStands.NPCs
         public int deathTimer = 0;
         public int zombieHightlightTimer = 0;
         public int bindingEmeraldDurationTimer = 0;
+        public int crossfireHurricaneEffectTimer = 0;
         public float kingCrimsonDonutMultiplier = 1f;
         public int vampireUserLastHitIndex = -1;        //An index of the vampiric player who last hit the enemy
         public int standDebuffEffectOwner = 0;
@@ -804,6 +807,31 @@ namespace JoJoStands.NPCs
             if (grabbedByHermitPurple)
                 return false;
             return true;
+        }
+
+        public override void PostAI(NPC npc)
+        {
+            if (hitByCrossfireHurricane)
+            {
+                crossfireHurricaneEffectTimer--;
+                if (crossfireHurricaneEffectTimer % 15 == 0)
+                {
+                    float angle = Main._rand.Next(0, 360);
+                    Vector2 randomPosition = npc.Center + (angle.ToRotationVector2() * (npc.Size.Length() * 2f));
+                    Vector2 velocity = npc.Center - randomPosition;
+                    velocity.Normalize();
+                    velocity *= 4f;
+
+                    int proj = Projectile.NewProjectile(npc.GetSource_FromThis(), randomPosition, velocity, ModContent.ProjectileType<FireAnkh>(), 60 + (24 * (3 - Main.player[standDebuffEffectOwner].GetModPlayer<MyPlayer>().standTier)), 0f, standDebuffEffectOwner, 40, 5 * 60);
+                    Main.projectile[proj].tileCollide = false;
+                    Main.projectile[proj].netUpdate = true;
+                    Main.projectile[proj].penetrate = -1;
+                    Main.projectile[proj].timeLeft = (int)((npc.Size.Length() * 4f) / 4f);
+                    Main.projectile[proj].scale = 0.6f;
+                }
+                if (crossfireHurricaneEffectTimer <= 0)
+                    hitByCrossfireHurricane = false;
+            }
         }
 
         public override void OnKill(NPC npc)

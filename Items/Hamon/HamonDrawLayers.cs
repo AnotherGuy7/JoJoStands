@@ -18,6 +18,15 @@ namespace JoJoStands.Items.Hamon
             Player drawPlayer = drawInfo.drawPlayer;
             HamonPlayer hamonPlayer = drawPlayer.GetModPlayer<HamonPlayer>();
             SpriteEffects effects = SpriteEffects.None;
+            if (drawPlayer.velocity != Vector2.Zero)
+            {
+                hamonPlayer.hamonAuraStandTimer = 60;
+            }
+            else
+            {
+                if (hamonPlayer.hamonAuraStandTimer > 0)
+                    hamonPlayer.hamonAuraStandTimer--;
+            }
             if (HamonPlayer.HamonEffects && drawPlayer.active && !drawPlayer.dead && hamonPlayer.amountOfHamon >= hamonPlayer.maxHamon / 3 && drawPlayer.velocity == Vector2.Zero)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HamonChargeI").Value;
@@ -35,6 +44,7 @@ namespace JoJoStands.Items.Hamon
                 }
                 int frameHeight = texture.Height / 7;
 
+                float alpha = 1f - (hamonPlayer.hamonAuraStandTimer / 60f);
                 hamonPlayer.hamonLayerFrameCounter++;
                 if (hamonPlayer.hamonLayerFrameCounter >= 6)
                 {
@@ -44,7 +54,7 @@ namespace JoJoStands.Items.Hamon
                         hamonPlayer.hamonLayerFrame = 0;
                 }
 
-                DrawData drawData = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameHeight * hamonPlayer.hamonLayerFrame, texture.Width, frameHeight), Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f)), 0f, new Vector2(texture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
+                DrawData drawData = new DrawData(texture, new Vector2(drawX, drawY), new Rectangle(0, frameHeight * hamonPlayer.hamonLayerFrame, texture.Width, frameHeight), Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f)) * alpha, 0f, new Vector2(texture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }

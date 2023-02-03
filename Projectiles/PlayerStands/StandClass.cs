@@ -919,6 +919,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             mPlayer.standType = 0;
             mPlayer.poseSoundName = "";
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
+                mPlayer.standControlStyle = MyPlayer.StandControlStyle.Manual;
             StandKillEffects();
         }
 

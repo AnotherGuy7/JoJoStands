@@ -65,7 +65,7 @@ namespace JoJoStands.Projectiles
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
                 crit = true;
-            if (Main.rand.Next(0, 101) < Projectile.ai[0])
+            if (Main.rand.Next(0, 101) <= Projectile.ai[0])
                 target.AddBuff(BuffID.OnFire, (int)Projectile.ai[1]);
             if (mPlayer.crackedPearlEquipped)
             {

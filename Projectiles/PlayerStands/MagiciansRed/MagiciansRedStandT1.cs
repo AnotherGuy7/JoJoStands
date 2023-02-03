@@ -14,11 +14,12 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override int ShootTime => 20;
         public override int HalfStandHeight => 35;
         public override int StandOffset => 0;
+        public override int TierNumber => 1;
         public override string PoseSoundName => "ThePowerToWieldFlameAtWill";
         public override string SpawnSoundName => "Magicians Red";
 
-        private int chanceToDebuff = 25;
-        private int debuffDuration = 300;
+        private int ChanceToDebuff = 25;
+        private int DebuffDuration = 5 * 60;
 
         public override void AI()
         {
@@ -59,7 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
                         Main.projectile[proj].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
@@ -101,7 +102,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, chanceToDebuff, debuffDuration);
+                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
                             Main.projectile[proj].netUpdate = true;
                             Projectile.netUpdate = true;
                         }
