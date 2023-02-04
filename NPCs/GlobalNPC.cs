@@ -46,6 +46,7 @@ namespace JoJoStands.NPCs
         public bool echoesFreezeTarget = false;
         public bool boundByStrings = false;
         public bool hitByCrossfireHurricane = false;
+        public bool taggedByCrazyDiamondRestoration = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -73,7 +74,7 @@ namespace JoJoStands.NPCs
         public ForesightSaveData[] foresightData = new ForesightSaveData[120];
 
         public int crazyDiamondHeal = 0;
-        public int CDstonePunch = 0;
+        public int crazyDiamondPunchCount = 0;
         public int echoesDebuffOwner = -1;
         public int echoesFreeze = 0;
         public int echoesSoundIntensivity = 2;
@@ -343,9 +344,9 @@ namespace JoJoStands.NPCs
             }
             if (!player.timeskipActive && !player.timestopActive && !player.backToZeroActive)
             {
-                if (npc.aiStyle == 101510150 || npc.HasBuff(ModContent.BuffType<YoAngelo>()) || echoesFreeze != 0)
+                if (npc.aiStyle == 101510150 || npc.HasBuff(ModContent.BuffType<ImproperRestoration>()) || echoesFreeze != 0)
                     resetCooldown = 4;
-                if (npc.aiStyle != 101510150 && !npc.HasBuff(ModContent.BuffType<YoAngelo>()) && echoesFreeze == 0) //reset some effect with npc ai and tile collision
+                if (npc.aiStyle != 101510150 && !npc.HasBuff(ModContent.BuffType<ImproperRestoration>()) && echoesFreeze == 0) //reset some effect with npc ai and tile collision
                 {
                     if (resetCooldown > 0)
                         resetCooldown--;
@@ -370,11 +371,7 @@ namespace JoJoStands.NPCs
                         echoesSoundIntensivity = echoesSoundIntensivityMax;
                     if (echoesDamageTimer2 > 0)
                         echoesDamageTimer2--;
-                    int defence = 0;
-                    if (echoesCrit2)
-                        defence = 4;
-                    else
-                        defence = 2;
+                    int defence = echoesCrit2 ? 4 : 2;
                     if (echoesDamageTimer2 == 0)
                     {
                         echoesDamageTimer2 = 60;
@@ -481,9 +478,9 @@ namespace JoJoStands.NPCs
                     echoesDamageTimer2 = 60;
 
 
-                if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))       //crazy diamond stuff
+                if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))       //crazy diamond stuff
                 {
-                    CDstonePunch = 0;
+                    crazyDiamondPunchCount = 0;
                     if (npc.aiStyle != -101510150)
                     {
                         CDsavedAIstyle = npc.aiStyle;
@@ -503,11 +500,8 @@ namespace JoJoStands.NPCs
                         npc.StrikeNPCNoInteraction((fallDamage - 200 + npc.defense / 4) * 2, 0f, 0, true, true, true);
                     }
                 }
-                if (!npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+                else
                 {
-                    if (CDstonePunch >= 7)
-                        npc.AddBuff(ModContent.BuffType<YoAngelo>(), 360);
-
                     if (npc.aiStyle == -101510150)
                     {
                         npc.aiStyle = CDsavedAIstyle;
@@ -937,7 +931,7 @@ namespace JoJoStands.NPCs
                 drawColor = Color.LightBlue;
             }
 
-            if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+            if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 drawColor = Color.Gray;
         }
 
@@ -1145,7 +1139,7 @@ namespace JoJoStands.NPCs
         }
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+            if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 damage = (int)(damage * 0.1f);
             if (npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
                 damage = (int)(damage * 0.5f);
@@ -1153,7 +1147,7 @@ namespace JoJoStands.NPCs
 
         public override void ModifyHitByItem(NPC npc, Player player, Item item, ref int damage, ref float knockback, ref bool crit)
         {
-            if (npc.HasBuff(ModContent.BuffType<YoAngelo>()))
+            if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 damage = (int)(damage * 0.1f);
             if (npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
                 damage = (int)(damage * 0.5f);

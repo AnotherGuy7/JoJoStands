@@ -427,19 +427,19 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (standSlotItemType == ModContent.ItemType<CrazyDiamondT1>())
                 {
-                    Main.npcChatText = "Is that- so it is... That is Crazy Diamond, the stand of a kid with a good heart, and a strange do... Just do not tell him I said that. Like many Stands, Crazy Diamond packs quite the punch, but do not let that fool you. Beneath its tough exterior, it harbors a kind ability. You can restore anything you touch, healing wounds, and even reverting things into their original parts. You can do a lot of good with this Stand.";
+                    Main.npcChatText = "Is that- so it is... That is Crazy Diamond, the stand of a kid with a good heart, and a strange do... Just do not tell him I said that. Like many Stands, Crazy Diamond packs quite the punch, but do not let that fool you. Beneath its tough exterior, it harbors a kind ability. You can restore anything you touch, heal wounds, and even revert things into their original parts. Stands like these have the power to do a lot of good.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<CrazyDiamondT2>())
                 {
-                    Main.npcChatText = "This brings back memories. You should now be able to flick bullets using immense power of Crazy Diamond. You are a real deadeye. With this additional strength, you should be able to break through just about anything, just remember to restore anything of value. This Stand is not capable of bringing things back from the dead.";
+                    Main.npcChatText = "This brings back memories. You should now be able to flick bullets using Crazy Diamond's immense power. It may not be a real ability, but you should be able to break through just about anything with a nice bullet. As for your restoration ability, remember you can restore anything of value. Keep in mind however that this Stand isn't capable of bringing things back from the dead.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<CrazyDiamondT3>())
                 {
-                    Main.npcChatText = "Good grief... It looks like angry ticks of that punk have found their way into Crazy Diamond. I will refrain from mentioning anything about your hair, just to be safe. You are now capable of flying into an uncontrollable rage, causing Crazy Diamond to start attacking things without prejudice. You will even start fusing people into stone, at this point. I have seen it done before. In other news, your restoration should be a lot more potent now, capable of bringing back anyone from the brink of defeat.";
+                    Main.npcChatText = "Good grief... It looks like the angry ticks of that punk are simply rooted into Crazy Diamond. To be safe, I'll refrain from mentioning anything about your hair. You are now capable of breaking into an uncontrollable rage, allowing Crazy Diamond to enter a state of anger and empowerment at the cost of speed. Using restoration mode in such a state is bound to be a mess. In other news, your restoration should be a lot more potent now, capable of bringing back anyone from the brink of defeat.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<CrazyDiamondFinal>())
                 {
-                    Main.npcChatText = "Well, it looks like you have gotten the hang of Crazy Diamond. It is gotten much stronger too. I can not help but feel just a bit nostalgic. All I ask is that you use this ability to protect those who need it, and punish those who threaten them. You will need a golden heart to use Crazy Diamond to its fullest potential. Do you have what it takes?";
+                    Main.npcChatText = "Well, it looks like you've gotten the hang of Crazy Diamond. It has gotten much stronger too. You and your Stand sure do remind me of my time in Morioh. All I ask is that you use this ability to protect those who need it, and punish those who threaten them. A golden heart is needed to use Crazy Diamond to its fullest potential. I'm sure you have what it takes.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<TowerOfGrayT1>())
                 {

@@ -52,20 +52,19 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 shootCount--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (rightClickCooldown > 0)
-                rightClickCooldown--;
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
+            if (rightClickCooldown > 0)
+                rightClickCooldown--;
 
             Rectangle rectangle = Rectangle.Empty;
-
             if (Projectile.owner == player.whoAmI)
                 rectangle = new Rectangle((int)(Main.MouseWorld.X - 10), (int)(Main.MouseWorld.Y - 10), 20, 20);
 
             mPlayer.crazyDiamondRestorationMode = restore;
-            if (player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (player.HasBuff(ModContent.BuffType<Rampage>()))
                 blindRage = true;
-            if (!player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (!player.HasBuff(ModContent.BuffType<Rampage>()))
                 blindRage = false;
 
             if (blindRage) 
@@ -169,7 +168,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     }
                     if (SecondSpecialKeyPressed() && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer) 
                     {
-                        player.AddBuff(ModContent.BuffType<BlindRage>(), 600);
+                        player.AddBuff(ModContent.BuffType<Rampage>(), 600);
                         EmoteBubble.NewBubble(1, new WorldUIAnchor(player), 600);
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound")); 
                     }
@@ -178,7 +177,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 {
                     if (Main.mouseRight && rightClickCooldown == 0 && mPlayer.crazyDiamondDestroyedTileData.Count > 0 && Projectile.owner == Main.myPlayer)
                     {
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/RestoreSound"));
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/CrazyDiamondRestore"));
                         rightClickCooldown += 180;
                     }
                     if (rightClickCooldown == 10)

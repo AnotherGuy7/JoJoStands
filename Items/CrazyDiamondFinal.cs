@@ -20,7 +20,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Crazy Diamond (Final Tier)");
-            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate and right-click to flick a bullet!\nSpecial: Switch to Restoration Mode\nSecond Special: Unleash a Blind Rage on your enemies!\nLeft-click in Restoration Mode to perform a restorative punch or cause temporary damage to public property!\nRight-Click in Restoration Mode to repair your damage to the world or to uncraft the item you hold!\nSecond Special in Restoration Mode: Choose any creature nearby and heal it completely!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate and right-click to flick a bullet!\nSpecial: Switch to Restoration Mode\nSecond Special: Enter an unstoppable rage!\nLeft-click in Restoration Mode to perform a restorative barrage\nRight-Click in Restoration Mode to repair recent world damage or to uncraft the item you hold!\nSecond Special in Restoration Mode: Choose any creature nearby and heal it completely!\nPunching tiles while in Resotration Mode breaks the tiles.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

@@ -315,7 +315,7 @@ namespace JoJoStands.Projectiles
                     }
                     mPlayer.underbossPhoneCount = 0;
                 }
-                if (player.HasBuff(ModContent.BuffType<BlindRage>()))
+                if (player.HasBuff(ModContent.BuffType<Rampage>()))
                     Projectile.ArmorPenetration = target.defense;
                 if (mPlayer.standTarget != target.whoAmI)
                     mPlayer.fightingSpiritEmblemStack = 0;

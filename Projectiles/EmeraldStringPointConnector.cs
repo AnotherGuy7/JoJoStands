@@ -19,7 +19,7 @@ namespace JoJoStands.Projectiles
             Projectile.width = 18;
             Projectile.height = 18;
             Projectile.aiStyle = 0;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 16 * 60;
             Projectile.friendly = true;     //Either a string or an attack that comes from all sides of the screen to the middle
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
@@ -85,7 +85,7 @@ namespace JoJoStands.Projectiles
                             float numberProjectiles = 6;
                             for (int i = 0; i < numberProjectiles; i++)
                             {
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position.X + (Main.screenWidth / 2) * npc.direction, npc.position.Y + Main.rand.NextFloat(-10f, 11f), (10f * -npc.direction) - Main.rand.NextFloat(0f, 3f), 0f, ModContent.ProjectileType<Emerald>(), 56 + (int)Projectile.ai[0], 4f, Projectile.owner);
+                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position.X + (Main.screenWidth / 2) * npc.direction, npc.position.Y + Main.rand.NextFloat(-10f, 11f), (16f * -npc.direction) - Main.rand.NextFloat(0f, 3f), 0f, ModContent.ProjectileType<Emerald>(), 56 + (int)Projectile.ai[0], 4f, Projectile.owner);
                                 Main.projectile[proj].netUpdate = true;
                                 Main.projectile[proj].tileCollide = false;
                             }
@@ -106,7 +106,7 @@ namespace JoJoStands.Projectiles
                                 float numberProjectiles = 6;
                                 for (int i = 0; i < numberProjectiles; i++)
                                 {
-                                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position.X + (Main.screenWidth / 2) * otherPlayer.direction, otherPlayer.position.Y + Main.rand.NextFloat(-10f, 11f), (10f * -otherPlayer.direction) - Main.rand.NextFloat(0f, 3f), 0f, ModContent.ProjectileType<Emerald>(), 56 + (int)Projectile.ai[0], 4f, Projectile.owner);
+                                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position.X + (Main.screenWidth / 2) * otherPlayer.direction, otherPlayer.position.Y + Main.rand.NextFloat(-10f, 11f), (16f * -otherPlayer.direction) - Main.rand.NextFloat(0f, 3f), 0f, ModContent.ProjectileType<Emerald>(), 56 + (int)Projectile.ai[0], 4f, Projectile.owner);
                                     Main.projectile[proj].netUpdate = true;
                                     Main.projectile[proj].tileCollide = false;
                                 }

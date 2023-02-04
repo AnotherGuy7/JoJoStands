@@ -1,6 +1,8 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.DataStructures;
+using JoJoStands.Networking;
 using JoJoStands.NPCs;
 using JoJoStands.Projectiles.PlayerStands.KillerQueen;
 using Microsoft.Xna.Framework;
@@ -8,9 +10,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.DataStructures;
-using System.IO;
-using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles
 {
@@ -123,17 +122,25 @@ namespace JoJoStands.Projectiles
                     {
                         for (int detectedTileY = detectUpY; detectedTileY < detectDownY; detectedTileY++)
                         {
-                            Vector2 tile = new Vector2(detectedTileX, detectedTileY);
-                            Tile tile2 = Main.tile[detectedTileX, detectedTileY];
-                            var checkTile = new DestroyedTileData(tile2.TileType, new Vector2(detectedTileX, detectedTileY), tile2.Slope, tile2.IsHalfBlock, tile2.TileFrameY, tile2.TileFrameX, tile2.TileFrameNumber);
-                            if (tile2.TileType != TileID.LihzahrdBrick && tile2.TileType != TileID.LihzahrdAltar && tile2.HasTile && Main.tileSolid[tile2.TileType] && !Main.tileSand[tile2.TileType] && !Main.tileSolidTop[tile2.TileType])
+                            Tile targetTile = Main.tile[detectedTileX, detectedTileY];
+                            DestroyedTileData checkTile = new DestroyedTileData(targetTile.TileType, new Vector2(detectedTileX, detectedTileY), targetTile.Slope, targetTile.IsHalfBlock, targetTile.TileFrameY, targetTile.TileFrameX, targetTile.TileFrameNumber);
+                            if (targetTile.TileType != TileID.LihzahrdBrick && targetTile.TileType != TileID.LihzahrdAltar && targetTile.HasTile && Main.tileSolid[targetTile.TileType] && !Main.tileSand[targetTile.TileType] && !Main.tileSolidTop[targetTile.TileType])
                             {
-                                if (!tile2.HasActuator || tile2.HasActuator && !tile2.IsActuated)
+                                if (!targetTile.HasActuator || targetTile.HasActuator && !targetTile.IsActuated)
                                 {
                                     if (mPlayer.crazyDiamondDestroyedTileData.Count < 100 * standTier)
                                     {
                                         mPlayer.crazyDiamondDestroyedTileData.Add(checkTile);
                                         mPlayer.crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Destroy);
+                                        for (int i = 0; i < 15; i++)
+                                        {
+                                            float circlePos = i;
+                                            Vector2 spawnPos = Projectile.Center + (circlePos.ToRotationVector2() * 8f);
+                                            Vector2 velocity = spawnPos - Projectile.Center;
+                                            velocity.Normalize();
+                                            Dust dustIndex = Dust.NewDustPerfect(spawnPos, DustID.IchorTorch, velocity * 0.8f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
+                                            dustIndex.noGravity = true;
+                                        }
                                     }
                                     if (mPlayer.crazyDiamondDestroyedTileData.Count == 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0)
                                     {
@@ -142,7 +149,7 @@ namespace JoJoStands.Projectiles
                                     }
                                 }
                             }
-                            if (mPlayer.crazyDiamondDestroyedTileData.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0 && tile2.TileType == TileID.LihzahrdBrick)
+                            if (mPlayer.crazyDiamondDestroyedTileData.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0 && targetTile.TileType == TileID.LihzahrdBrick)
                             {
                                 Main.NewText("Tile is Unbreakable");
                                 mPlayer.crazyDiamondMessageCooldown += 180;
@@ -150,7 +157,7 @@ namespace JoJoStands.Projectiles
                         }
                     }
                 }
-                for (int n = 0; n < Main.maxNPCs; n++)
+                /*for (int n = 0; n < Main.maxNPCs; n++)
                 {
                     NPC npc = Main.npc[n];
                     int heal = (int)(Projectile.damage * 0.2f);
@@ -177,7 +184,7 @@ namespace JoJoStands.Projectiles
                             onlyOnce = true;
                         }
                     }
-                }
+                }*/
                 for (int p = 0; p < Main.maxPlayers; p++)
                 {
                     Player otherPlayer = Main.player[p];
@@ -225,63 +232,6 @@ namespace JoJoStands.Projectiles
                 crit = true;
             if (JoJoStands.SoundsLoaded)
                 mPlayer.standHitTime += 2;
-
-            if (standType == Echoes)
-            {
-                if (mPlayer.echoesTier == 3)
-                {
-                    if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
-                    {
-                        if (crit)
-                            mPlayer.echoesACT3Evolve += damage*2;
-                        if (!crit)
-                            mPlayer.echoesACT3Evolve += damage;
-                    }
-                }
-                if (mPlayer.echoesTier == 2)
-                {
-                    if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
-                    {
-                        if (crit)
-                            mPlayer.echoesACT2Evolve += damage * 2;
-                        if (!crit)
-                            mPlayer.echoesACT2Evolve += damage;
-                    }
-                }
-                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.echoesACT == 3)
-                {
-                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
-                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
-                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
-                }
-                if (mPlayer.echoesACT == 1)
-                {
-                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
-                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                    int maxDamage = 36;
-                    int soundIntensivity = 2;
-                    if (mPlayer.echoesTier == 3)
-                    {
-                        maxDamage = 49;
-                        soundIntensivity = 4;
-                    }
-                    if (mPlayer.echoesTier == 4)
-                    {
-                        maxDamage = 74;
-                        soundIntensivity = 6;
-                    }
-                    if (!target.boss)
-                        soundIntensivity *= 2;
-                    target.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
-                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
-                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = maxDamage;
-                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += soundIntensivity;
-                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensivity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
-                }
-            }
 
             if (standType == GoldExperience)
             {
@@ -368,11 +318,23 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (standType == CrazyDiamond && player.HasBuff(ModContent.BuffType<BlindRage>()) && !target.HasBuff(ModContent.BuffType<YoAngelo>()))
+            if (standType == CrazyDiamond && !target.HasBuff(ModContent.BuffType<ImproperRestoration>()))
             {
                 target.AddBuff(ModContent.BuffType<Restoration>(), 60);
-                target.GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
+                target.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondPunchCount += 1;
+                target.GetGlobalNPC<JoJoGlobalNPC>().taggedByCrazyDiamondRestoration = true;
+                target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
                 SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 12);
+
+                for (int i = 0; i < 15; i++)
+                {
+                    float circlePos = i;
+                    Vector2 spawnPos = Projectile.Center + (circlePos.ToRotationVector2() * 8f);
+                    Vector2 velocity = spawnPos - Projectile.Center;
+                    velocity.Normalize();
+                    Dust dustIndex = Dust.NewDustPerfect(spawnPos, DustID.IchorTorch, velocity * 0.8f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
+                    dustIndex.noGravity = true;
+                }
             }
 
             if (standType == Cream)
@@ -389,6 +351,63 @@ namespace JoJoStands.Projectiles
                 target.velocity.X *= 0.2f;
                 SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 0);
             }
+
+            if (standType == Echoes)
+            {
+                if (mPlayer.echoesTier == 3)
+                {
+                    if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
+                    {
+                        if (crit)
+                            mPlayer.echoesACT3Evolve += damage * 2;
+                        if (!crit)
+                            mPlayer.echoesACT3Evolve += damage;
+                    }
+                }
+                if (mPlayer.echoesTier == 2)
+                {
+                    if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
+                    {
+                        if (crit)
+                            mPlayer.echoesACT2Evolve += damage * 2;
+                        if (!crit)
+                            mPlayer.echoesACT2Evolve += damage;
+                    }
+                }
+                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.echoesACT == 3)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
+                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
+                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                }
+                if (mPlayer.echoesACT == 1)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
+                    int maxDamage = 36;
+                    int soundIntensivity = 2;
+                    if (mPlayer.echoesTier == 3)
+                    {
+                        maxDamage = 49;
+                        soundIntensivity = 4;
+                    }
+                    if (mPlayer.echoesTier == 4)
+                    {
+                        maxDamage = 74;
+                        soundIntensivity = 6;
+                    }
+                    if (!target.boss)
+                        soundIntensivity *= 2;
+                    target.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = maxDamage;
+                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
+                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += soundIntensivity;
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensivity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                }
+            }
         }
 
         public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
@@ -396,38 +415,6 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             MyPlayer mTarget = target.GetModPlayer<MyPlayer>();
-            if (standType == Echoes)
-            {
-                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.echoesACT == 3)
-                {
-                    mTarget.echoesDamageBoost = mPlayer.standDamageBoosts;
-                    if (mTarget.echoesFreeze <= 15)
-                        mTarget.echoesFreeze += 30;
-                    SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 1, 0, 0, mPlayer.standDamageBoosts, 0f);
-                }
-                if (mPlayer.echoesACT == 1)
-                {
-                    mTarget.echoesDamageBoost = mPlayer.standDamageBoosts;
-                    int maxDamage = 48;
-                    int soundIntensivity = 2;
-                    if (mPlayer.echoesTier == 3)
-                    {
-                        maxDamage = 72;
-                        soundIntensivity = 4;
-                    }
-                    if (mPlayer.echoesTier == 4)
-                    {
-                        maxDamage = 108;
-                        soundIntensivity = 8;
-                    }
-                    target.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
-                    mTarget.echoesSoundIntensivityMax = maxDamage;
-                    if (mTarget.echoesSoundIntensivity < mTarget.echoesSoundIntensivityMax)
-                        mTarget.echoesSoundIntensivity += soundIntensivity;
-                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<Tinnitus>(), 600);
-                    SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 2, maxDamage, soundIntensivity, mPlayer.standDamageBoosts, 0f);
-                }
-            }
 
             if (standType == GoldExperience)
             {
@@ -487,6 +474,39 @@ namespace JoJoStands.Projectiles
                 SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<MissingOrgans>(), (1 + (int)standTier) * 60);
             }
 
+            if (standType == Echoes)
+            {
+                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.echoesACT == 3)
+                {
+                    mTarget.echoesDamageBoost = mPlayer.standDamageBoosts;
+                    if (mTarget.echoesFreeze <= 15)
+                        mTarget.echoesFreeze += 30;
+                    SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 1, 0, 0, mPlayer.standDamageBoosts, 0f);
+                }
+                if (mPlayer.echoesACT == 1)
+                {
+                    mTarget.echoesDamageBoost = mPlayer.standDamageBoosts;
+                    int maxDamage = 48;
+                    int soundIntensivity = 2;
+                    if (mPlayer.echoesTier == 3)
+                    {
+                        maxDamage = 72;
+                        soundIntensivity = 4;
+                    }
+                    if (mPlayer.echoesTier == 4)
+                    {
+                        maxDamage = 108;
+                        soundIntensivity = 8;
+                    }
+                    target.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
+                    mTarget.echoesSoundIntensivityMax = maxDamage;
+                    if (mTarget.echoesSoundIntensivity < mTarget.echoesSoundIntensivityMax)
+                        mTarget.echoesSoundIntensivity += soundIntensivity;
+                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<Tinnitus>(), 600);
+                    SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 2, maxDamage, soundIntensivity, mPlayer.standDamageBoosts, 0f);
+                }
+            }
+
             if (mPlayer.crackedPearlEquipped)
             {
                 if (Main.rand.NextFloat(1, 100 + 1) <= 40)
@@ -501,19 +521,17 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.crazyDiamondRestorationMode || target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames != 0)
+            if (target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames != 0)
                 return false;
             else
                 return null;
         }
+
         public override bool CanHitPvp(Player target)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.crazyDiamondRestorationMode)
-                return false;
-            else
-                return true;
+            return true;
         }
     }
 }

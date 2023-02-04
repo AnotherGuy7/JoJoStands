@@ -1,3 +1,4 @@
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
@@ -5,41 +6,48 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class ImproperRestoration : JoJoBuff
     {
-        public override string Texture => "Terraria/Images/Buff_" + BuffID.Horrified;
+
+        public override string Texture => "Terraria/Images/Buff_" + BuffID.Stoned;
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Improper Restoration");
-            Description.SetDefault("You are ugly! Max health reduced. Unable to increase maximum health. You need to see a REAL doctor.");
-            Main.buffNoTimeDisplay[Type] = true;
+            Description.SetDefault("Things didn't go as planned while healing.");
             Main.debuff[Type] = true;
-            Main.persistentBuff[Type] = true;
         }
 
         public override void UpdateBuffOnPlayer(Player player)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            player.buffTime[buffIndex] = 2;
-            if (mPlayer.maxHP == 0)
-            {
-                mPlayer.oldMaxHP = player.statLifeMax;
-                mPlayer.maxHP = player.statLifeMax - 20;
-            }
-            if (mPlayer.maxHP != 0)
-                player.statLifeMax = mPlayer.maxHP;
-            if (mPlayer.maxHP > 0 && mPlayer.maxHP < 100)
-                mPlayer.maxHP = 100;
+            Dust.NewDust(player.position + player.velocity, player.width, player.height, DustID.Stone, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
+            player.moveSpeed = 0;
+            player.stoned = true;
+            player.noFallDmg = false;
+            player.slowFall = false;
+            player.noKnockback = true;
+            player.controlUseItem = false;
+            player.controlUseTile = false;
+            player.controlLeft = false;
+            player.controlRight = false;
+            player.controlUp = false;
+            player.controlDown = false;
+            player.controlJump = false;
+            player.controlQuickHeal = false;
+            player.controlQuickMana = false;
+            player.controlHook = false;
+            player.controlThrow = false;
+            player.controlMount = false;
+            player.gravControl = false;
+            player.gravControl2 = false;
+            player.controlTorch = false;
+            player.preventAllItemPickups = true;
         }
 
-        public override bool ReApply(Player player, int time, int buffIndex)
+        public override void UpdateBuffOnNPC(NPC npc)
         {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.maxHP > 100)
-            {
-                mPlayer.maxHP -= 20;
-                mPlayer.improperRestorationstack += 1;
-            }
-            return true;
+            Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Stone, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f);
+            npc.velocity = new Vector2(0f, 1f);
+            if (!npc.noTileCollide)
+                npc.velocity.Y *= 12f;
         }
     }
 }

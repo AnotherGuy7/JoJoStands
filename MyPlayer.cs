@@ -215,10 +215,6 @@ namespace JoJoStands
         public int crazyDiamondStonePunch = 0;
         public int crazyDiamondTileDestruction = 0;
 
-        public int oldMaxHP = 0;
-        public int maxHP = 0;
-        public int improperRestorationstack = 1;
-
         public int towerOfGrayTier = 0;
         public float towerOfGrayDamageMult = 1f;
 
@@ -484,21 +480,21 @@ namespace JoJoStands
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (JoJoStands.StandAutoModeHotKey.JustPressed && standControlStyle == StandControlStyle.Manual && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (JoJoStands.StandAutoModeHotKey.JustPressed && standControlStyle == StandControlStyle.Manual && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Rampage>()))
             {
                 standKeyPressTimer += 30;
                 standControlStyle = StandControlStyle.Auto;
                 Main.NewText("Stand Control: Auto");
                 SyncCall.SyncControlStyle(Player.whoAmI, standControlStyle);
             }
-            if (JoJoStands.StandAutoModeHotKey.JustPressed && standControlStyle == StandControlStyle.Auto && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (JoJoStands.StandAutoModeHotKey.JustPressed && standControlStyle == StandControlStyle.Auto && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Rampage>()))
             {
                 standKeyPressTimer += 30;
                 standControlStyle = StandControlStyle.Manual;
                 Main.NewText("Stand Control: Manual");
                 SyncCall.SyncControlStyle(Player.whoAmI, standControlStyle);
             }
-            if (JoJoStands.PoseHotKey.JustPressed && !posing && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (JoJoStands.PoseHotKey.JustPressed && !posing && !Player.HasBuff(ModContent.BuffType<Rampage>()))
             {
                 if (Sounds)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
@@ -508,7 +504,7 @@ namespace JoJoStands
             if (standChangingLocked)
                 return;
 
-            if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Stolen>()) && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (JoJoStands.StandOutHotKey.JustPressed && !standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Stolen>()) && !Player.HasBuff(ModContent.BuffType<Rampage>()))
             {
                 SpawnStand();
                 if (standControlStyle == StandControlStyle.Remote)
@@ -591,7 +587,7 @@ namespace JoJoStands
                     }
                 }
             }
-            if (JoJoStands.StandOutHotKey.JustPressed && standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<BlindRage>()))
+            if (JoJoStands.StandOutHotKey.JustPressed && standOut && standKeyPressTimer <= 0 && !Player.HasBuff(ModContent.BuffType<Rampage>()))
             {
                 standOut = false;
                 standAccessory = false;
@@ -666,9 +662,6 @@ namespace JoJoStands
             tag.Add("receivedArrowShard", receivedArrowShard);
             tag.Add("piercedTimer", piercedTimer);
             tag.Add("abilityWheelTipDisplayed", abilityWheelTipDisplayed);
-            tag.Add("oldMaxHP", oldMaxHP);
-            tag.Add("improperRestorationstack", improperRestorationstack);
-            tag.Add("maxHP", maxHP);
         }
 
         public override void LoadData(TagCompound tag)
@@ -680,9 +673,6 @@ namespace JoJoStands
             receivedArrowShard = tag.GetBool("receivedArrowShard");
             piercedTimer = tag.GetInt("piercedTimer");
             abilityWheelTipDisplayed = tag.GetBool("abilityWheelTipDisplayed");
-            oldMaxHP = tag.GetInt("oldMaxHP");
-            improperRestorationstack = tag.GetInt("improperRestorationstack");
-            maxHP = tag.GetInt("maxHP");
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -958,14 +948,6 @@ namespace JoJoStands
                 }
             }
 
-            if (!Player.HasBuff(ModContent.BuffType<ImproperRestoration>()) && oldMaxHP > 0) //crazy diamond stuff 
-            {
-                Player.statLifeMax = oldMaxHP;
-                oldMaxHP = 0;
-                improperRestorationstack = 1;
-                maxHP = 0;
-            }
-
             if (!standOut)
             {
                 crazyDiamondRestorationMode = false;
@@ -994,8 +976,8 @@ namespace JoJoStands
             }
 
             if (crazyDiamondStonePunch > 2)
-                Player.AddBuff(ModContent.BuffType<YoAngelo>(), 180);
-            if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
+                Player.AddBuff(ModContent.BuffType<ImproperRestoration>(), 180);
+            if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 crazyDiamondStonePunch = 0;
 
             if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT3>()) //echoes stuff 
@@ -1867,7 +1849,7 @@ namespace JoJoStands
                 damage = (int)(damage * 0.93f);
             if (Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
                 damage = (int)(damage * 0.8f);
-            if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
+            if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 damage = (int)(damage * 0.1f);
             if (vampiricBangle && Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 damage = (int)(damage * 1.33f);
@@ -1906,7 +1888,7 @@ namespace JoJoStands
                 damage *= 2;
             if (stoneFreeWeaveAbilityActive || Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
                 damage = (int)(damage * 0.8f);
-            if (Player.HasBuff(ModContent.BuffType<YoAngelo>()))
+            if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 damage = (int)(damage * 0.1f);
             if (vampiricBangle)
                 damage = (int)(damage * 1.33f);
@@ -2142,8 +2124,6 @@ namespace JoJoStands
         }
         public override void ModifyNursePrice(NPC nurse, int health, bool removeDebuffs, ref int price)
         {
-            if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                price = price + 10000 * improperRestorationstack;
             if (nurse.HasBuff(ModContent.BuffType<BelieveInMe>()))
                 price -= (int)(price * 0.2f);
         }

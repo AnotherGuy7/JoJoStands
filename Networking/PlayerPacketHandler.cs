@@ -341,7 +341,7 @@ namespace JoJoStands.Networking
             if (fistWhoAmI == 10 && stat1 == 2)
                 Main.npc[targetWhoAmI].StrikeNPC(stat2, 6f, stat3);
             if (fistWhoAmI == 12)
-                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().CDstonePunch += 1;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondPunchCount += 1;
             if (fistWhoAmI == 13)
                 Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
             if (fistWhoAmI == 15 && stat1 == 3)

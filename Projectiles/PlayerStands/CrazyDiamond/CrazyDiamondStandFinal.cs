@@ -29,14 +29,17 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         private bool healingFramesRepeatTimerOnlyOnce = false;
         private bool returnToOwner = false;
         private bool offsetDirection = false;
-        private bool restore = false;
+        private bool restorationMode = false;
+        private bool restoringObjects = false;
+        private bool restoredEnemies = false;
 
         private int healingFramesRepeatTimer = 0;
         private int onlyOneTarget = 0;
         private int healingTargetNPC = -1;
         private int healingTargetPlayer = -1;
-        private int rightClickCooldown = 0;
+        private int restorationEffectStartTimer = 0;
         private int heal = 0;
+        private int tileRestorationTimer = 0;
 
         private bool selectEntity = false;
         private bool selectEntity2 = false;
@@ -52,30 +55,27 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 shootCount--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (rightClickCooldown > 0)
-                rightClickCooldown--;
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
+            if (tileRestorationTimer > 0)
+                tileRestorationTimer--;
+            if (restorationEffectStartTimer > 0)
+                restorationEffectStartTimer--;
 
             Rectangle rectangle = Rectangle.Empty;
-
             if (Projectile.owner == player.whoAmI)
                 rectangle = new Rectangle((int)(Main.MouseWorld.X - 10), (int)(Main.MouseWorld.Y - 10), 20, 20);
 
-            mPlayer.crazyDiamondRestorationMode = restore;
-            if (player.HasBuff(ModContent.BuffType<BlindRage>()))
-                blindRage = true;
-            if(!player.HasBuff(ModContent.BuffType<BlindRage>()))
-                blindRage = false;
-
-            if (blindRage) 
+            mPlayer.crazyDiamondRestorationMode = restorationMode;
+            if (blindRage)
             {
-                Punch();
-                player.direction = Projectile.spriteDirection;
-                Projectile.Center = new Vector2(player.Center.X, player.Center.Y);
+                newMaxDistance *= 0.5f;
+                player.AddBuff(ModContent.BuffType<Rampage>(), 2);
             }
+            if (restorationMode)
+                newPunchDamage = (int)(newPunchDamage * 0.5f);
 
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !blindRage)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !flickFrames && !healingFrames && onlyOneTarget == 0)
                 {
@@ -92,8 +92,8 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     StayBehindWithAbility();
                 if (SpecialKeyPressedNoCooldown() && !healingFrames && !flickFrames && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer)
                 {
-                    restore = !restore;
-                    if (restore)
+                    restorationMode = !restorationMode;
+                    if (restorationMode)
                         Main.NewText("Restoration Mode: Active");
                     else
                         Main.NewText("Restoration Mode: Disabled");
@@ -132,7 +132,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         }
                     }
                 }
-                if (!restore)
+                if (!restorationMode)
                 {
                     if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer && !healingFrames && onlyOneTarget == 0)
                     {
@@ -169,24 +169,87 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     }
                     if (SecondSpecialKeyPressed() && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer) 
                     {
-                        player.AddBuff(ModContent.BuffType<BlindRage>(), 600);
-                        EmoteBubble.NewBubble(1, new WorldUIAnchor(player), 600);
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound")); 
+                        blindRage = !blindRage;
+                        if (blindRage)
+                        {
+                            player.AddBuff(ModContent.BuffType<Rampage>(), 2);
+                            EmoteBubble.NewBubble(1, new WorldUIAnchor(player), 5 * 60);
+                            SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
+                        }
                     }
                 }
-                if (restore)
+                if (restorationMode)
                 {
-                    if (Main.mouseRight && rightClickCooldown == 0 && mPlayer.crazyDiamondDestroyedTileData.Count > 0 && Projectile.owner == Main.myPlayer)
+                    int amountOfDusts = Main.rand.Next(1, 4 + 1);
+                    for (int i = 0; i < amountOfDusts; i++)
                     {
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/RestoreSound"));
-                        rightClickCooldown += 180;
+                        int index = Dust.NewDust(Projectile.position - new Vector2(0f, HalfStandHeight), Projectile.width, HalfStandHeight * 2, DustID.IchorTorch, Scale: Main.rand.Next(8, 12) / 10f);
+                        Main.dust[index].noGravity = true;
+                        Main.dust[index].velocity = new Vector2(Main.rand.Next(-2, 2 + 1) / 10f, Main.rand.Next(-5, -2 + 1) / 10f);
                     }
-                    if (rightClickCooldown == 10)
+                    if (Main.mouseRight && restorationEffectStartTimer <= 0 && !playerHasAbilityCooldown && Projectile.owner == Main.myPlayer)
                     {
-                        rightClickCooldown -= 1;
-                        mPlayer.crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
-                        mPlayer.crazyDiamondMessageCooldown = 0;
-                        mPlayer.crazyDiamondDestroyedTileData.Clear();
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/CrazyDiamondRestore"));
+                        restorationEffectStartTimer += 180;
+                        restoringObjects = true;
+                        restoredEnemies = false;
+                    }
+                    if (restoringObjects && restorationEffectStartTimer > 0)
+                    {
+                        for (int n = 0; n < Main.maxNPCs; n++)
+                        {
+                            NPC npc = Main.npc[n];
+                            if (npc.active && !npc.hide && !npc.immortal && npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByCrazyDiamondRestoration && npc.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondPunchCount >= 7)
+                            {
+                                int amountOfNPCDusts = Main.rand.Next(1, 4 + 1);
+                                for (int i = 0; i < amountOfNPCDusts; i++)
+                                {
+                                    int index = Dust.NewDust(npc.position, npc.width, npc.height, DustID.IchorTorch, Scale: Main.rand.Next(8, 12) / 10f);
+                                    Main.dust[index].noGravity = true;
+                                    Main.dust[index].velocity = new Vector2(Main.rand.Next(-2, 2 + 1) / 10f, Main.rand.Next(-5, -2 + 1) / 10f);
+                                }
+                            }
+                        }
+                    }
+                    if (restoringObjects && restorationEffectStartTimer <= 0)
+                    {
+                        if (!restoredEnemies)
+                        {
+                            restoredEnemies = true;
+                            for (int n = 0; n < Main.maxNPCs; n++)
+                            {
+                                NPC npc = Main.npc[n];
+                                if (npc.active && !npc.hide && !npc.immortal && npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByCrazyDiamondRestoration && npc.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondPunchCount >= 7)
+                                {
+                                    npc.defense = (int)(npc.defense * 0.9f);
+                                    npc.lifeMax = (int)(npc.lifeMax * 0.8f);
+                                    npc.life = npc.lifeMax;
+                                    if (blindRage)
+                                        npc.AddBuff(ModContent.BuffType<ImproperRestoration>(), 8 * 60);
+                                }
+                            }
+                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(20));
+                        }
+
+                        if (tileRestorationTimer <= 0)
+                        {
+                            if (mPlayer.crazyDiamondDestroyedTileData.Count <= 0)
+                                restoringObjects = false;
+                            else
+                            {
+                                tileRestorationTimer += 1;
+                                mPlayer.crazyDiamondMessageCooldown = 0;
+                                DestroyedTileData.Restore(mPlayer.crazyDiamondDestroyedTileData[mPlayer.crazyDiamondDestroyedTileData.Count - 1]);
+                                mPlayer.crazyDiamondDestroyedTileData.RemoveAt(mPlayer.crazyDiamondDestroyedTileData.Count - 1);
+                            }
+                        }
+
+                        int startingIndex = (int)MathHelper.Clamp(mPlayer.crazyDiamondDestroyedTileData.Count - 20, 0, mPlayer.crazyDiamondDestroyedTileData.Count);
+                        for (int i = startingIndex; i < mPlayer.crazyDiamondDestroyedTileData.Count; i++)
+                        {
+                            int index = Dust.NewDust(mPlayer.crazyDiamondDestroyedTileData[i].tilePosition * 16f, 16, 16, DustID.IchorTorch, Scale: Main.rand.Next(8, 12) / 10f);
+                            Main.dust[index].noGravity = true;
+                        }
                     }
                     if (SecondSpecialKeyPressed() && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer)
                     {
@@ -416,7 +479,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 messageCooldown--;
             if (messageCooldown2 > 0)
                 messageCooldown2--;
-            if (restore)
+            if (restorationMode)
                 Lighting.AddLight(Projectile.position, 11);
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && onlyOneTarget == 0)
             {
@@ -512,7 +575,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             string pathAddition = "";
-            if (restore)
+            if (restorationMode)
                 pathAddition = "Restoration_";
 
             if (Main.netMode != NetmodeID.Server)
@@ -545,11 +608,11 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             writer.Write(flickFrames);
             writer.Write(blindRage);
             writer.Write(returnToOwner);
-            writer.Write(restore);
+            writer.Write(restorationMode);
             writer.Write(onlyOneTarget);
             writer.Write(healingTargetNPC);
             writer.Write(healingTargetPlayer);
-            writer.Write(rightClickCooldown);
+            writer.Write(restorationEffectStartTimer);
             writer.Write(healingFramesRepeatTimer);
         }
 
@@ -559,11 +622,11 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             flickFrames = reader.ReadBoolean();
             blindRage = reader.ReadBoolean();
             returnToOwner = reader.ReadBoolean();
-            restore = reader.ReadBoolean();
+            restorationMode = reader.ReadBoolean();
             onlyOneTarget = reader.ReadInt32();
             healingTargetNPC = reader.ReadInt32();
             healingTargetPlayer = reader.ReadInt32();
-            rightClickCooldown = reader.ReadInt32();
+            restorationEffectStartTimer = reader.ReadInt32();
             healingFramesRepeatTimer = reader.ReadInt32();
         }
     }
