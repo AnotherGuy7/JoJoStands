@@ -1,6 +1,7 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
 using JoJoStands.UI;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,6 +14,7 @@ namespace JoJoStands.Items
         public override int StandType => 1;
         public override string StandProjectileName => "GoldExperience";
         public override int StandTier => 4;
+        public override Color StandTierDisplayColor => Color.Orange;
 
         public override void SetStaticDefaults()
         {

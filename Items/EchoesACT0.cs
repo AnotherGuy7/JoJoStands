@@ -1,5 +1,6 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,11 +13,12 @@ namespace JoJoStands.Items
         public override string StandProjectileName => "Echoes";
         public override int StandTier => 1;
         public override int StandTierDisplayOffset => -1;
+        public override Color StandTierDisplayColor => Color.LightGreen;
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 0)");
-            Tooltip.SetDefault("Left-click to... throw? \nOnly Strong Will can help you!");
+            Tooltip.SetDefault("Left-click to... throw? \nOnly for those with the strongest of wills.");
         }
 
         public override void SetDefaults()

@@ -1,5 +1,6 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,6 +12,8 @@ namespace JoJoStands.Items
         public override int StandType => 2;
         public override string StandProjectileName => "MagiciansRed";
         public override int StandTier => 4;
+        public static readonly Color MagiciansRedTierColor = new Color(255, 207, 40);
+        public override Color StandTierDisplayColor => MagiciansRedTierColor;
 
         public override string Texture
         {

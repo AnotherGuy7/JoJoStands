@@ -10,6 +10,8 @@ namespace JoJoStands.Items
 {
     public class DollyDaggerT1 : StandItemClass
     {
+        public override int StandTierDisplayOffset => 1;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Dolly Dagger (Tier 1)");

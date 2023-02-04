@@ -1,5 +1,6 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,6 +12,8 @@ namespace JoJoStands.Items
         public override int StandSpeed => 12;
         public override int StandType => 2;
         public override int StandTier => 4;
+        public static readonly Color TuskTierColor = new Color(255, 143, 214);
+        public override Color StandTierDisplayColor => TuskTierColor;
 
         public override void SetStaticDefaults()
         {

@@ -194,7 +194,7 @@ namespace JoJoStands.Projectiles
                     {
                         if (otherPlayer.whoAmI != player.whoAmI && !mPlayer.overHeaven || mPlayer.overHeaven)
                         {
-                            if ((Projectile.Hitbox.Intersects(otherPlayer.Hitbox)) && !onlyOnce)
+                            if (Projectile.Hitbox.Intersects(otherPlayer.Hitbox) && !onlyOnce)
                             {
                                 SoundEngine.PlaySound(SoundID.NPCHit1, otherPlayer.Center);
                                 if (lifeLeft > 0 && !otherPlayer.HasBuff(ModContent.BuffType<MissingOrgans>()))
@@ -318,7 +318,7 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (standType == CrazyDiamond && !target.HasBuff(ModContent.BuffType<ImproperRestoration>()))
+            if (standType == CrazyDiamond && mPlayer.crazyDiamondRestorationMode && !target.HasBuff(ModContent.BuffType<ImproperRestoration>()))
             {
                 target.AddBuff(ModContent.BuffType<Restoration>(), 60);
                 target.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondPunchCount += 1;
@@ -326,10 +326,11 @@ namespace JoJoStands.Projectiles
                 target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
                 SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 12);
 
+                Vector2 randomOffset = new Vector2(Main.rand.Next(-12, 12 + 1), Main.rand.Next(-12, 12 + 1));
                 for (int i = 0; i < 15; i++)
                 {
                     float circlePos = i;
-                    Vector2 spawnPos = Projectile.Center + (circlePos.ToRotationVector2() * 8f);
+                    Vector2 spawnPos = Projectile.Center + (circlePos.ToRotationVector2() * 8f) + randomOffset;
                     Vector2 velocity = spawnPos - Projectile.Center;
                     velocity.Normalize();
                     Dust dustIndex = Dust.NewDustPerfect(spawnPos, DustID.IchorTorch, velocity * 0.8f, Scale: Main.rand.NextFloat(0.8f, 2.2f));

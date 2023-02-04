@@ -1,5 +1,6 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -13,6 +14,7 @@ namespace JoJoStands.Items
         public override int StandType => 1;
         public override string StandProjectileName => "KillerQueen";
         public override int StandTier => 4;
+        public override Color StandTierDisplayColor => Color.LightPink;
 
         public override string Texture
         {

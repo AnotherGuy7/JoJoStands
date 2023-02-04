@@ -1,6 +1,7 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,6 +14,7 @@ namespace JoJoStands.Items
         public override int StandType => 1;
         public override string StandProjectileName => "SoftAndWet";
         public override int StandTier => 5;
+        public override Color StandTierDisplayColor => Color.LightBlue;
 
         public override string Texture
         {

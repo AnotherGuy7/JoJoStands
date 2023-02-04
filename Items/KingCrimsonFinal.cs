@@ -1,5 +1,6 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,6 +12,8 @@ namespace JoJoStands.Items
         public override int StandType => 1;
         public override string StandProjectileName => "KingCrimson";
         public override int StandTier => 4;
+        public static readonly Color KingCrimsonTierColor = new Color(254, 142, 152);
+        public override Color StandTierDisplayColor => KingCrimsonTierColor;
 
         public override string Texture
         {

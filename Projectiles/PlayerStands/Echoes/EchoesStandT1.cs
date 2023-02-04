@@ -1,15 +1,13 @@
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.PlayerBuffs;
+using JoJoStands.Gores.Echoes;
+using JoJoStands.Items;
+using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using JoJoStands.NPCs;
-using JoJoStands.Items;
-using JoJoStands.Gores.Echoes;
-using JoJoStands.Buffs.Debuffs;
-using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.PlayerBuffs;
-using Microsoft.Xna.Framework;
 
 namespace JoJoStands.Projectiles.PlayerStands.Echoes
 {
@@ -31,6 +29,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         private float ability = 0f;
         private float add = 0f;
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 26;
+            Projectile.height = 34;
+        }
 
 
         public override void AI()
@@ -87,7 +91,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Projectile.alpha = 0;
                 Projectile.penetrate = 2;
                 Projectile.damage = newPunchDamage;
-                Projectile.rotation = Projectile.velocity.ToRotation() + ability + (add*5/100*Projectile.direction);
+                Projectile.rotation = Projectile.velocity.ToRotation() + ability + (add * (5 / 100) * Projectile.direction);
                 Projectile.velocity.Y += 0.33f;
                 Projectile.netUpdate = true;
             }
@@ -123,19 +127,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             }
         }
 
-        public override bool? CanHitNPC(NPC target)
-        {
-            if (lowPriceThreeFreeze)
-                return null;
-            return false;
-        }
+        public override bool? CanHitNPC(NPC target) => lowPriceThreeFreeze ? null : false;
 
-        public override bool CanHitPvp(Player target)
-        {
-            if (lowPriceThreeFreeze)
-                return true;
-            return false;
-        }
+        public override bool CanHitPvp(Player target) => lowPriceThreeFreeze ? true : false;
 
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
@@ -160,7 +154,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             damage /= 2;
-            if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
+            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
         }
 
@@ -168,9 +162,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
+            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Player player = Main.player[Projectile.owner];
@@ -178,7 +173,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             {
                 if (!target.boss)
                 {
-                    if (Main.rand.NextFloat(1, 100 + 1) <= 25)
+                    if (Main.rand.Next(1, 100 + 1) <= 25)
                     {
                         evolve = true;
                         Projectile.Kill();

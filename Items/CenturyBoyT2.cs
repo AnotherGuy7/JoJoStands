@@ -1,5 +1,6 @@
 using JoJoStands.Networking;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,6 +15,7 @@ namespace JoJoStands.Items
         }
 
         public override int StandTier => 2;
+        public override Color StandTierDisplayColor => Color.Cyan;
 
         public override void SetStaticDefaults()
         {

@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -51,7 +52,17 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 }
             }
             if (restrationMode)
+            {
+                int amountOfDusts = Main.rand.Next(0, 2 + 1);
+                for (int i = 0; i < amountOfDusts; i++)
+                {
+                    int index = Dust.NewDust(Projectile.position - new Vector2(0f, HalfStandHeight), Projectile.width, HalfStandHeight * 2, DustID.IchorTorch, Scale: Main.rand.Next(8, 12) / 10f);
+                    Main.dust[index].noGravity = true;
+                    Main.dust[index].velocity = new Vector2(Main.rand.Next(-2, 2 + 1) / 10f, Main.rand.Next(-5, -2 + 1) / 10f);
+                }
+
                 Lighting.AddLight(Projectile.position, 11);
+            }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
                 BasicPunchAI();
             if (player.teleporting)

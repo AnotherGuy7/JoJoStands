@@ -17,6 +17,8 @@ namespace JoJoStands.Items
             get { return Mod.Name + "/Items/DollyDaggerT1"; }
         }
 
+        public override int StandTierDisplayOffset => 2;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Dolly Dagger (Tier 2)");

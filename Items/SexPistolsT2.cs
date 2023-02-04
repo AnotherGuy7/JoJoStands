@@ -16,6 +16,7 @@ namespace JoJoStands.Items
         }
 
         public override int StandTier => 2;
+        public override Color StandTierDisplayColor => SexPistolsFinal.SexPistolsTierColor;
 
         public override void SetStaticDefaults()
         {

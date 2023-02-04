@@ -1,5 +1,6 @@
 ﻿using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,6 +12,8 @@ namespace JoJoStands.Items
         public override int StandType => 1;
         public override string StandProjectileName => "TheHand";
         public override int StandTier => 4;
+        public static readonly Color TheHandTierColor = new Color(185, 200, 209);
+        public override Color StandTierDisplayColor => TheHandTierColor;
 
         public override string Texture
         {

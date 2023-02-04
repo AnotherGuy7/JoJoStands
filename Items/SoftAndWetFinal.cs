@@ -3,6 +3,7 @@ using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
 
 namespace JoJoStands.Items
 {
@@ -12,6 +13,7 @@ namespace JoJoStands.Items
         public override int StandType => 1;
         public override string StandProjectileName => "SoftAndWet";
         public override int StandTier => 4;
+        public override Color StandTierDisplayColor => Color.LightBlue;
 
         public override string Texture
         {

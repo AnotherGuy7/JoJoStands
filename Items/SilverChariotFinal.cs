@@ -1,6 +1,6 @@
 ﻿using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
-using JoJoStands;
+using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,6 +12,7 @@ namespace JoJoStands.Items
         public override int StandType => 1;
         public override string StandProjectileName => "SilverChariot";
         public override int StandTier => 4;
+        public override Color StandTierDisplayColor => Color.LightGray;
 
         public override string Texture
         {

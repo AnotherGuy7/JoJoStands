@@ -1,5 +1,6 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,11 +13,14 @@ namespace JoJoStands.Items
         public override int StandType => 1;
         public override string StandProjectileName => "Cream";
         public override int StandTier => 1;
+        public override Color StandTierDisplayColor => Color.MediumPurple;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cream (Tier 1)");
             Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash!\nUsed in Stand Slot");
         }
+
         public override void SetDefaults()
         {
             Item.damage = 35;

@@ -1,4 +1,6 @@
-﻿using JoJoStands.UI;
+﻿using JoJoStands.Items;
+using JoJoStands.Items.Dyes;
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -185,6 +187,21 @@ namespace JoJoStands
 
         public override void UpdateUI(GameTime gameTime)
         {
+            //Stand Slot update
+            MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            if (!mPlayer.timestopActive && !mPlayer.standChangingLocked)
+            {
+                if (Main.mouseItem.IsAir || Main.mouseItem.ModItem is StandItemClass)
+                    mPlayer.StandSlot.Update();
+
+                if (Main.mouseItem.IsAir || Main.mouseItem.dye != 0 || Main.mouseItem.ModItem is StandDye)
+                {
+                    mPlayer.StandDyeSlot.Update();
+                    if (Main.mouseItem.ModItem is StandDye)
+                        (Main.mouseItem.ModItem as StandDye).OnEquipDye(Main.LocalPlayer);
+                }
+            }
+
             if (HamonBar.visible)
                 _hamonbarInterface.Update(gameTime);
 

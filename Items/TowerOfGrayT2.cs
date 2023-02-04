@@ -3,6 +3,7 @@ using JoJoStands.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using Microsoft.Xna.Framework;
 
 namespace JoJoStands.Items
 {
@@ -12,6 +13,7 @@ namespace JoJoStands.Items
         public override int StandType => 2;
         public override string StandProjectileName => "TowerOfGray";
         public override int StandTier => 2;
+        public override Color StandTierDisplayColor => Color.RosyBrown;
 
         public override string Texture
         {

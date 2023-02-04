@@ -1,5 +1,6 @@
 ﻿using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,6 +13,7 @@ namespace JoJoStands.Items
         public override int StandType => 1;
         public override string StandProjectileName => "GratefulDead";
         public override int StandTier => 3;
+        public override Color StandTierDisplayColor => GratefulDeadFinal.GratefulDeadTierColor;
 
         public override string Texture
         {

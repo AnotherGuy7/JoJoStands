@@ -690,21 +690,14 @@ namespace JoJoStands
                 StandDyeSlot.Position = new Vector2(slotPosX - 60f, slotPosY);
 
                 StandSlot.Draw(spriteBatch);
+                if (StandSlot.SlotItem != null && StandSlot.SlotItem.ModItem != null)
+                {
+                    Rectangle slotFrame = new Rectangle(slotPosX, slotPosY, (int)StandSlot.Size.X, (int)StandSlot.Size.Y);
+                    StandSlot.SlotItem.ModItem.PostDrawInInventory(spriteBatch, StandSlot.Position + (StandSlot.Size / 4f), slotFrame, Color.White, StandSlot.SlotItem.color, Vector2.Zero, Main.inventoryScale);
+                }
                 StandDyeSlot.Draw(spriteBatch);
 
                 Main.inventoryScale = origScale;
-
-                if (!timestopActive && !standChangingLocked)        //so that it's not interactable during a timestop, cause switching stands during a timestop is... not good
-                {
-                    if (Main.mouseItem.IsAir || Main.mouseItem.ModItem is StandItemClass)
-                        StandSlot.Update();
-                    if (Main.mouseItem.IsAir || Main.mouseItem.dye != 0 || Main.mouseItem.ModItem is StandDye)
-                    {
-                        StandDyeSlot.Update();
-                        if (Main.mouseItem.ModItem is StandDye)
-                            (Main.mouseItem.ModItem as StandDye).OnEquipDye(Player);
-                    }
-                }
             }
             /*if (timeskipActive)
             {

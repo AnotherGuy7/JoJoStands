@@ -1,5 +1,6 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
+using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -11,6 +12,8 @@ namespace JoJoStands.Items
         public override int StandSpeed => 8;
         public override string StandProjectileName => "Aerosmith";
         public override int StandTier => 4;
+        public static readonly Color AerosmithTierColor = new Color(248, 112, 104);
+        public override Color StandTierDisplayColor => AerosmithTierColor;
 
         public override string Texture
         {
