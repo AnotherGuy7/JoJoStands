@@ -219,7 +219,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         float dustScale = Main.rand.Next(8, 12 + 1) / 10f;
                         int dustIndex = Dust.NewDust(Projectile.Center + new Vector2(16 * Projectile.direction, -8), 32, 16, DustID.Cloud, Projectile.velocity.X * speedScale, 0f, Alpha: 80, Scale: dustScale);
                         Main.dust[dustIndex].noGravity = true;
-
                     }
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer)

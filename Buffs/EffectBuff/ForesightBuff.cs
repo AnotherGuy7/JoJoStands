@@ -43,7 +43,7 @@ namespace JoJoStands.Buffs.EffectBuff
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)
                 {
                     mPlayer.epitaphForesightActive = false;
-                    ModNetHandler.effectSync.SendForesight(256, player.whoAmI, false, player.whoAmI);
+                    ModNetHandler.EffectSync.SendForesight(256, player.whoAmI, false, player.whoAmI);
                 }
             }
         }

@@ -6,9 +6,11 @@ namespace JoJoStands.Networking
 	{
 		public const byte Effect = 0;
 		public const byte Player = 1;
+		public const byte World = 2;
 
-		public static EffectPacketHandler effectSync = new EffectPacketHandler(Effect);
-		public static PlayerPacketHandler playerSync = new PlayerPacketHandler(Player);
+		public static readonly EffectPacketHandler EffectSync = new EffectPacketHandler(Effect);
+		public static readonly PlayerPacketHandler PlayerSync = new PlayerPacketHandler(Player);
+		public static readonly WorldPacketHandler WorldSync = new WorldPacketHandler(World);
 
 		public static void HandlePacket(BinaryReader reader, int fromWho)
 		{
@@ -16,10 +18,13 @@ namespace JoJoStands.Networking
 			switch (messageType)
 			{
 				case Effect:
-					effectSync.HandlePacket(reader, fromWho);
+					EffectSync.HandlePacket(reader, fromWho);
 					break;
 				case Player:
-					playerSync.HandlePacket(reader, fromWho);
+					PlayerSync.HandlePacket(reader, fromWho);
+					break;
+				case World:
+					WorldSync.HandlePacket(reader, fromWho);
 					break;
 			}
 		}

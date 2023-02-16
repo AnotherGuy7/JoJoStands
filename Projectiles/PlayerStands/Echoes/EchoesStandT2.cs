@@ -54,6 +54,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 returnToPlayer = true;
             idleFrames = true;
         }
+
         public override void AI()
         {
             SelectAnimation();
@@ -71,7 +72,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             if (remoteMode)
                 mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
-            mPlayer.echoesACT = ACT;
+            mPlayer.currentEchoesAct = ACT;
 
             mouseControlled = false;
 
@@ -185,7 +186,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         StayBehind();
                 }
 
-                if (onlyOneTarget > 0) //right-click ability effect
+                if (onlyOneTarget > 0)      //right-click ability effect
                 {
                     if (targetNPC != -1)
                     {
@@ -444,8 +445,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             {
                 player.maxMinions += 1;
                 mPlayer.echoesACT2Evolve = 0;
-                mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesACT2>();
-                mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesACT2>());
+                mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesAct2>();
+                mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesAct2>());
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandT3>(), 0, 0f, Main.myPlayer, remoteModeOnSpawn);
                 Main.NewText("Oh? Echoes is evolving!");
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT1_Gore_1>(), 1f);

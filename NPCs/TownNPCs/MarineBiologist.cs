@@ -457,22 +457,22 @@ namespace JoJoStands.NPCs.TownNPCs
                 {
                     Main.npcChatText = "It seems you have reached this bug potential. It is piercing tongue is a weapon one would be a fool to ignore. Now, if that is all, I will be on my way. I would like to keep my distance from that thing.";
                 }
-                else if (standSlotItemType == ModContent.ItemType<EchoesACT0>())
+                else if (standSlotItemType == ModContent.ItemType<EchoesAct0>())
                 {
                     Main.npcChatText = "Hmmm? Is that an egg? Wait, I have seen this before... Could it be? Yes, this is Echoes! Or, at least, it will be.  If you are looking to get more out of this Stand, you are going to have to grow alongside it. You will need a Strong Will to evolve, and a whole lot of bravery to bring an egg into battle.";
                 }
-                else if (standSlotItemType == ModContent.ItemType<EchoesACT1>())
+                else if (standSlotItemType == ModContent.ItemType<EchoesAct1>())
                 {
                     Main.npcChatText = "I am surprised you made it this far. It seems I underestimated your willpower. This is Echoes Act 1. While it may be weak, it is ability is where it is true strength lies. You should be able to generate sound effects on those you touch. This can either debilitate an enemy, or reassure a friend. Whatever you do, just be sure to make some noise. If you are looking to grow your abilities further, I would recommend taking Act 1 into a dangerous fight. Maybe try those creepy mechanical eyes I have seen floating around.";
                 }
-                else if (standSlotItemType == ModContent.ItemType<EchoesACT2>())
+                else if (standSlotItemType == ModContent.ItemType<EchoesAct2>())
                 {
                     if (guide != -1)
                         Main.npcChatText = "You survived. Good. Now things are getting interesting. Echoes Act 2 is able to take those sounds effects of yours and make them do some real damage. Using the tip of it is tail, you will be able to place these sound effects wherever you want. You should be able to take better control of the battlefield. However, if you are looking to push your capabilities even further, you will need to face your greatest challenge yet. " + Main.npc[guide].GivenName + " has been telling me about this bizarre temple underneath the jungle. Try checking that out.";
                     if (guide == -1)
                         Main.npcChatText = "You survived. Good. Now things are getting interesting. Echoes Act 2 is able to take those sounds effects of yours and make them do some real damage. Using the tip of it is tail, you will be able to place these sound effects wherever you want. You should be able to take better control of the battlefield. However, if you are looking to push your capabilities even further, you will need to face your greatest challenge yet...";
                 }
-                else if (standSlotItemType == ModContent.ItemType<EchoesACT3>())
+                else if (standSlotItemType == ModContent.ItemType<EchoesAct3>())
                 {
                     Main.npcChatText = "You have grown. This is Echoes Act 3, it is final form! In exchange for it is range, Echoes is much more powerful. You should also have the ability to use Three Freeze! This makes one target extremely heavy, keeping them in place. It is a reliable ability. Your hard work has paid off. Hopefully I can rely on you whenever the time comes.";
                 }

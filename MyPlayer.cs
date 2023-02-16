@@ -196,10 +196,10 @@ namespace JoJoStands
         public List<DestroyedTileData> crazyDiamondDestroyedTileData = new List<DestroyedTileData>();
 
         public int echoesTier = 0;
-        public int echoesACT = 0;
+        public int currentEchoesAct = 0;
         public int echoesFreeze = 0;
-        public int echoesSoundIntensivity = 2;
-        public int echoesSoundIntensivityMax = 48;
+        public int echoesSoundIntensity = 2;
+        public int echoesSoundIntensityMax = 48;
         public int echoesKaboom3 = 0;
         public int echoesTailTip = -1;
         public int echoesACT2Evolve = 0;
@@ -251,7 +251,7 @@ namespace JoJoStands
 
         private int echoesBoingUpd = 0;
         private int echoesDamageTimer1 = 60; //3 Freeze
-        private int echoesDamageTimer2 = 120; //ACT 1 sounds
+        public int echoesSmackDamageTimer = 120; //ACT 1 sounds
 
         private int offsetPostDraw = 0;
         private int timerPostDraw = 0;
@@ -697,6 +697,20 @@ namespace JoJoStands
                 }
                 StandDyeSlot.Draw(spriteBatch);
 
+                MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+                if (!mPlayer.timestopActive && !mPlayer.standChangingLocked)
+                {
+                    if (Main.mouseItem.IsAir || Main.mouseItem.ModItem is StandItemClass)
+                        mPlayer.StandSlot.Update();
+
+                    if (Main.mouseItem.IsAir || Main.mouseItem.dye != 0 || Main.mouseItem.ModItem is StandDye)
+                    {
+                        mPlayer.StandDyeSlot.Update();
+                        if (Main.mouseItem.ModItem is StandDye)
+                            (Main.mouseItem.ModItem as StandDye).OnEquipDye(Main.LocalPlayer);
+                    }
+                }
+
                 Main.inventoryScale = origScale;
             }
             /*if (timeskipActive)
@@ -951,7 +965,7 @@ namespace JoJoStands
                 towerOfGrayTier = 0;
 
                 echoesTier = 0;
-                echoesACT = 0;
+                currentEchoesAct = 0;
             }
 
             if (crazyDiamondMessageCooldown > 0)
@@ -973,52 +987,22 @@ namespace JoJoStands
             if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 crazyDiamondStonePunch = 0;
 
-            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT3>()) //echoes stuff 
+            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesAct3>()) //echoes stuff 
                 echoesTier = 4;
 
-            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT2>())
+            else if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesAct2>())
                 echoesTier = 3;
 
-            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT1>())
+            else if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesAct1>())
                 echoesTier = 2;
 
-            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesACT0>())
+            else if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesAct0>())
                 echoesTier = 1;
-
-            if (StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT0>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT1>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT2>() && StandSlot.SlotItem.type != ModContent.ItemType<EchoesACT3>())
+            else
                 echoesTier = 0;
 
             if (echoesFreeze == 0)
                 echoesDamageTimer1 = 60;
-            if (!Player.HasBuff(ModContent.BuffType<Tinnitus>()))
-                echoesDamageTimer2 = 120;
-
-            if (Player.HasBuff(ModContent.BuffType<Tinnitus>())) //echoes act 1 stuff
-            {
-                if (echoesSoundIntensivity > echoesSoundIntensivityMax)
-                    echoesSoundIntensivity = echoesSoundIntensivityMax;
-                if (echoesDamageTimer2 > 0)
-                    echoesDamageTimer2--;
-                if (echoesDamageTimer2 == 0)
-                {
-                    echoesDamageTimer2 = 120;
-                    SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
-                    float volume = 0.6f;
-                    int soundDamage = (int)(echoesSoundIntensivity * echoesDamageBoost) / 2;
-                    if (Player.HasBuff(ModContent.BuffType<SMACK>()))
-                    {
-                        volume *= 4;
-                        soundDamage *= 2;
-                    }
-                    punchSound.Volume = volume;
-                    punchSound.Pitch = 0f;
-                    punchSound.PitchVariance = 0.2f;
-                    SoundEngine.PlaySound(punchSound, Player.Center);
-                    Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + Player.statDefense, 0, true, false, false);
-                    if (Main.rand.NextFloat(1, 100) <= 15)
-                        Player.AddBuff(BuffID.Confused, 180);
-                }
-            }
 
             if (echoesKaboom) //echoes act 2 stuff 
             {
@@ -2086,7 +2070,7 @@ namespace JoJoStands
             towerOfGrayTier = 0;
 
             echoesTier = 0;
-            echoesACT = 0;
+            currentEchoesAct = 0;
 
             creamTier = 0;
             voidCounter = 0;

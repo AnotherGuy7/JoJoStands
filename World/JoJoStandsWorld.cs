@@ -1,5 +1,6 @@
 using JoJoStands.DataStructures;
 using JoJoStands.Items;
+using JoJoStands.Networking;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using System;
@@ -17,32 +18,60 @@ namespace JoJoStands
         private bool viralMeteoriteDropped = false;
         private bool vampiricNightQueued = false;
         private bool checkedForVampiricEvent = false;
+        private bool vampiricNightComplete = false;
         private int vampiricNightStartTimer = 0;
+        private int viralMeteoriteIntroductionTimer = 0;
 
+        public static bool VisitedViralMeteorite = false;
+        public static bool ViralMeteoriteIntroduced = false;
         public static bool VampiricNight = false;
+        public static Point ViralMeteoriteCenter;
         public static int viralMeteoriteTiles = 0;
 
-        private static readonly Color WorldEventTextColor = new Color(50, 255, 130);
+        private const string Tag_MeteorDropped = "meteorDropped";
+        private const string Tag_VampiricNight = "vampiricNight";
+        private const string Tag_VampiricNightComplete = "vampiricNightComplete";
+        private const string Tag_ViralMeteoriteCenterX = "viralMeteoriteCenterX";
+        private const string Tag_ViralMeteoriteCenterY= "viralMeteoriteCenterY";
+        private const string Tag_ViralMeteoriteVisited = "viralMeteoriteVisited";
+        private const string Tag_ViralMeteoriteIntroZoneVisited = "viralMeteoriteIntroduced";
+        public static readonly Color WorldEventTextColor = new Color(50, 255, 130);
 
         public override void OnWorldLoad()
         {
             viralMeteoriteDropped = false;
             vampiricNightQueued = false;
-            viralMeteoriteTiles = 0;
+            checkedForVampiricEvent = false;
+            vampiricNightComplete = false;
+            vampiricNightStartTimer = 0;
+            viralMeteoriteIntroductionTimer = 0;
 
+            VisitedViralMeteorite = false;
+            ViralMeteoriteIntroduced = false;
             VampiricNight = false;
+            ViralMeteoriteCenter = Point.Zero;
+            viralMeteoriteTiles = 0;
         }
 
         public override void SaveWorldData(TagCompound tag)
         {
-            tag.Add("meteorDropped", viralMeteoriteDropped);
-            tag.Add("vampiricNight", VampiricNight);
+            tag.Add(Tag_MeteorDropped, viralMeteoriteDropped);
+            tag.Add(Tag_VampiricNight, VampiricNight);
+            tag.Add(Tag_VampiricNightComplete, vampiricNightComplete);
+            tag.Add(Tag_ViralMeteoriteCenterX, ViralMeteoriteCenter.X);
+            tag.Add(Tag_ViralMeteoriteCenterY, ViralMeteoriteCenter.Y);
+            tag.Add(Tag_ViralMeteoriteVisited, VisitedViralMeteorite);
+            tag.Add(Tag_ViralMeteoriteIntroZoneVisited, ViralMeteoriteIntroduced);
         }
 
         public override void LoadWorldData(TagCompound tag)
         {
-            viralMeteoriteDropped = tag.GetBool("meteorDropped");
-            VampiricNight = tag.GetBool("vampiricNight");
+            viralMeteoriteDropped = tag.GetBool(Tag_MeteorDropped);
+            VampiricNight = tag.GetBool(Tag_VampiricNight);
+            vampiricNightComplete = tag.GetBool(Tag_VampiricNightComplete);
+            ViralMeteoriteCenter = new Point(tag.GetInt(Tag_ViralMeteoriteCenterX), tag.GetInt(Tag_ViralMeteoriteCenterY));
+            VisitedViralMeteorite = tag.GetBool(Tag_ViralMeteoriteVisited);
+            ViralMeteoriteIntroduced = tag.GetBool(Tag_ViralMeteoriteIntroZoneVisited);
         }
 
         public override void PreUpdateWorld()
@@ -53,16 +82,42 @@ namespace JoJoStands
                 viralMeteoriteDropped = true;
             }
 
+            if (viralMeteoriteDropped && !VisitedViralMeteorite)
+            {
+                if (Math.Abs(ViralMeteoriteCenter.X - Main.player[Main.myPlayer].Center.X) <= 290 * 16)
+                {
+                    JoJoStandsShaders.ActivateShader(JoJoStandsShaders.ViralMeteoriteEffect);
+                    if (viralMeteoriteIntroductionTimer < 5 * 60)
+                        viralMeteoriteIntroductionTimer++;
+
+                    JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.ViralMeteoriteEffect, 0.6f * (viralMeteoriteIntroductionTimer / (5f * 60f)));
+                    if (!ViralMeteoriteIntroduced)
+                    {
+                        ViralMeteoriteIntroduced = true;
+                        Main.NewText("A faint spiritual connection can be sensed nearby.", WorldEventTextColor);
+                    }
+                }
+                else
+                {
+                    viralMeteoriteIntroductionTimer = 0;
+                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.ViralMeteoriteEffect);
+                }
+            }
+
+            if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer != 0)      //Below this, the code only updates for the owner.
+                return;
+
             if (!Main.dayTime)
             {
-                if (!checkedForVampiricEvent && NPC.downedBoss1 && !VampiricNight)
+                if (!checkedForVampiricEvent && !vampiricNightComplete && NPC.downedBoss1 && !VampiricNight)
                 {
-                    if (Main.rand.Next(0, 12 + 1) == 0)
+                    checkedForVampiricEvent = true;
+                    if (Main.rand.Next(1, 100 + 1) <= 9)
                     {
                         vampiricNightQueued = true;
                         Main.NewText("You feel the dirt under you rumbling slightly...", WorldEventTextColor);
+                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("You feel the dirt under you rumbling slightly...", new object[0]), WorldEventTextColor);
                     }
-                    checkedForVampiricEvent = true;
                 }
                 if (vampiricNightQueued)
                 {
@@ -73,6 +128,8 @@ namespace JoJoStands
                         vampiricNightQueued = false;
                         vampiricNightStartTimer = 0;
                         Main.NewText("Dio's Minions have arrived!", WorldEventTextColor);
+                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Dio's Minions have arrived!", new object[0]), WorldEventTextColor);
+                        SyncCall.SyncVampiricNight(Main.myPlayer, VampiricNight);
                     }
                 }
             }
@@ -81,8 +138,8 @@ namespace JoJoStands
                 checkedForVampiricEvent = false;
                 if (VampiricNight)
                 {
-                    Main.NewText("The zombies have been pushed back... For now...", WorldEventTextColor);
                     VampiricNight = false;
+                    Main.NewText("The zombies have been pushed back!", WorldEventTextColor);
                 }
             }
         }
@@ -97,9 +154,9 @@ namespace JoJoStands
                 {
                     for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)     //40 is the max amount of items a chest can hold
                     {
-                        if (chest.item[inventoryIndex].type == 0)
+                        if (chest.item[inventoryIndex].type == ItemID.None)
                         {
-                            if (Main.rand.NextFloat(0f, 101f) < 40f)
+                            if (Main.rand.Next(0, 100 + 1) <= 40)
                                 chest.item[inventoryIndex].SetDefaults(itemsToPlaceInIceChests[0]);
                             break;
                         }
@@ -117,9 +174,8 @@ namespace JoJoStands
         {
             bool droppedMeteorite = true;
             if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
                 return;
-            }
+
             for (int i = 0; i < Main.maxPlayers; i++)
             {
                 if (Main.player[i].active)
@@ -129,96 +185,86 @@ namespace JoJoStands
                 }
             }
 
-            int num = 0;
-            float num2 = (float)(Main.maxTilesX / 4200);
-            int num3 = (int)(400f * num2);
-            for (int XCoord = 5; XCoord < Main.maxTilesX - 5; XCoord++)
+            int iterations = 0;
+            int chosenMeteoriteDepth = (int)(400f * (float)(Main.maxTilesX / 4200));
+            for (int xCoord = 5; xCoord < Main.maxTilesX - 5; xCoord++)
             {
-                int YCoord = 5;
-                while ((double)YCoord < Main.worldSurface)
+                int yCoord = 5;
+                while ((double)yCoord < Main.worldSurface)
                 {
-                    if (Main.tile[XCoord, YCoord].HasTile && Main.tile[XCoord, YCoord].TileType == ModContent.TileType<ViralMeteoriteTile>())
+                    if (Main.tile[xCoord, yCoord].HasTile && Main.tile[xCoord, yCoord].TileType == ModContent.TileType<ViralMeteoriteTile>())
                     {
-                        num++;
-                        if (num > num3)
-                        {
+                        iterations++;
+                        if (iterations > chosenMeteoriteDepth)
                             return;
-                        }
                     }
-                    YCoord++;
+                    yCoord++;
                 }
             }
+
             float lowestTCoordinate = 600f;
             while (!droppedMeteorite)
             {
                 float spawnAreaDistance = (float)Main.maxTilesX * 0.08f;        //Section of the world that's considered "spawn area"
-                int XCoord = Main.rand.Next(150, Main.maxTilesX - 150);
-                while ((float)XCoord > (float)Main.spawnTileX - spawnAreaDistance && (float)XCoord < (float)Main.spawnTileX + spawnAreaDistance)        //When the chosen coordinate isn't near spawn
+                int xCoord = Main.rand.Next(150, Main.maxTilesX - 150);
+                while ((float)xCoord > (float)Main.spawnTileX - spawnAreaDistance && (float)xCoord < (float)Main.spawnTileX + spawnAreaDistance)        //When the chosen coordinate isn't near spawn
                 {
-                    XCoord = Main.rand.Next(150, Main.maxTilesX - 150);
+                    xCoord = Main.rand.Next(150, Main.maxTilesX - 150);
                 }
-                int YCoord = (int)(Main.worldSurface * 0.3);
-                while (YCoord < Main.maxTilesY)
+
+                int yCoord = (int)(Main.worldSurface * 0.3);
+                while (yCoord < Main.maxTilesY)
                 {
-                    if (Main.tile[XCoord, YCoord].HasTile && Main.tileSolid[(int)Main.tile[XCoord, YCoord].TileType])
+                    if (Main.tile[xCoord, yCoord].HasTile && Main.tileSolid[(int)Main.tile[xCoord, yCoord].TileType])
                     {
-                        int YLevel = 0;
+                        int yLevel = 0;
                         int meteoriteArea = 15;        //Size of the meteor as a radius
-                        for (int i = XCoord - meteoriteArea; i < XCoord + meteoriteArea; i++)
+                        for (int x = xCoord - meteoriteArea; x < xCoord + meteoriteArea; x++)
                         {
-                            for (int j = YCoord - meteoriteArea; j < YCoord + meteoriteArea; j++)
+                            for (int y = yCoord - meteoriteArea; y < yCoord + meteoriteArea; y++)
                             {
-                                if (WorldGen.SolidTile(i, j))
+                                if (WorldGen.SolidTile(x, y))
                                 {
-                                    YLevel++;
-                                    if (Main.tile[i, j].TileType == TileID.Cloud || Main.tile[i, j].TileType == TileID.Sunplate)
-                                    {
-                                        YLevel -= 100;
-                                    }
+                                    yLevel++;
+                                    if (Main.tile[x, y].TileType == TileID.Cloud || Main.tile[x, y].TileType == TileID.Sunplate)
+                                        yLevel -= 100;
                                 }
-                                else if (Main.tile[i, j].LiquidAmount > 0)
+                                else if (Main.tile[x, y].LiquidAmount > 0)
                                 {
-                                    YLevel--;
+                                    yLevel--;
                                 }
                             }
                         }
-                        if ((float)YLevel < lowestTCoordinate)
+                        if ((float)yLevel < lowestTCoordinate)
                         {
                             lowestTCoordinate -= 0.5f;
                             break;
                         }
-                        droppedMeteorite = GenereateViralMeteorite(XCoord, YCoord);
+                        droppedMeteorite = GenereateViralMeteorite(xCoord, yCoord);
                         if (droppedMeteorite)
-                        {
                             break;
-                        }
+
                         break;
                     }
                     else
                     {
-                        YCoord++;
+                        yCoord++;
                     }
                 }
                 if (lowestTCoordinate < 100f)
-                {
                     return;
-                }
             }
         }
 
-        public static bool GenereateViralMeteorite(int i, int j)     //from WorldGen.cs, line 2303
+        public static bool GenereateViralMeteorite(int x, int y)     //from WorldGen.cs, line 2303
         {
             int worldBoundaries = 50;
-            if (i < worldBoundaries || i > Main.maxTilesX - worldBoundaries)
-            {
+            if (x < worldBoundaries || x > Main.maxTilesX - worldBoundaries || y < worldBoundaries || y > Main.maxTilesY - worldBoundaries)
                 return false;
-            }
-            if (j < worldBoundaries || j > Main.maxTilesY - worldBoundaries)
-            {
-                return false;
-            }
-            int meteoriteArea = 35;         //The amount of space the VM will take up
-            Rectangle meteoriteRect = new Rectangle((i - meteoriteArea) * 16, (j - meteoriteArea) * 16, meteoriteArea * 2 * 16, meteoriteArea * 2 * 16);
+
+            //Checks to make sure the meteorite can generate in this area
+            int meteoriteArea = 35;         //The max amount of space the VM can take up
+            Rectangle meteoriteRect = new Rectangle((x - meteoriteArea) * 16, (y - meteoriteArea) * 16, meteoriteArea * 2 * 16, meteoriteArea * 2 * 16);
             for (int p = 0; p < Main.maxPlayers; p++)
             {
                 Player player = Main.player[p];
@@ -226,9 +272,7 @@ namespace JoJoStands
                 {
                     Rectangle playerArea = new Rectangle((int)(player.position.X + (float)(player.width / 2) - (float)(NPC.sWidth / 2) - (float)NPC.safeRangeX), (int)(player.position.Y + (float)(player.height / 2) - (float)(NPC.sHeight / 2) - (float)NPC.safeRangeY), NPC.sWidth + NPC.safeRangeX * 2, NPC.sHeight + NPC.safeRangeY * 2);
                     if (meteoriteRect.Intersects(playerArea))
-                    {
                         return false;
-                    }
                 }
             }
             for (int n = 0; n < Main.maxNPCs; n++)
@@ -238,32 +282,29 @@ namespace JoJoStands
                 {
                     Rectangle npcArea = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);         //How much space that NPC is taking up and where
                     if (meteoriteRect.Intersects(npcArea))
-                    {
                         return false;
-                    }
                 }
             }
-            for (int xCoord = i - meteoriteArea; xCoord < i + meteoriteArea; xCoord++)
+            for (int xCoord = x - meteoriteArea; xCoord < x + meteoriteArea; xCoord++)
             {
-                for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
+                for (int yCoord = y - meteoriteArea; yCoord < y + meteoriteArea; yCoord++)
                 {
                     if (Main.tile[xCoord, yCoord].HasTile && TileID.Sets.BasicChest[(int)Main.tile[xCoord, yCoord].TileType])
-                    {
                         return false;
-                    }
                 }
             }
+
             meteoriteArea = WorldGen.genRand.Next(17, 23);
-            for (int xCoord = i - meteoriteArea; xCoord < i + meteoriteArea; xCoord++)
+            for (int xCoord = x - meteoriteArea; xCoord < x + meteoriteArea; xCoord++)
             {
-                for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
+                for (int yCoord = y - meteoriteArea; yCoord < y + meteoriteArea; yCoord++)
                 {
-                    if (yCoord > j + Main.rand.Next(-2, 3) - 5)     //Deciding random Y placement
+                    if (yCoord > y + Main.rand.Next(-2, 3) - 5)     //Deciding random Y placement
                     {
-                        float tilePlacementX = (float)Math.Abs(i - xCoord);
-                        float tilePlacementY = (float)Math.Abs(j - yCoord);
-                        float num6 = (float)Math.Sqrt((double)(tilePlacementX * tilePlacementX + tilePlacementY * tilePlacementY));
-                        if ((double)num6 < (double)meteoriteArea * 0.9 + (double)Main.rand.Next(-4, 5))
+                        int centerDisplacementX = Math.Abs(x - xCoord);
+                        int centerDisplacementY = Math.Abs(y - yCoord);
+                        float tileDistance = (float)Math.Sqrt((double)(centerDisplacementX * centerDisplacementX + centerDisplacementY * centerDisplacementY));
+                        if ((double)tileDistance < (double)meteoriteArea * 0.9 + (double)Main.rand.Next(-4, 4 + 1))
                         {
                             if (!Main.tileSolid[(int)Main.tile[xCoord, yCoord].TileType])
                                 Main.tile[xCoord, yCoord].ClearTile();
@@ -274,69 +315,63 @@ namespace JoJoStands
                 }
             }
             meteoriteArea = WorldGen.genRand.Next(8, 14);
-            for (int xCoord = i - meteoriteArea; xCoord < i + meteoriteArea; xCoord++)
+            for (int xCoord = x - meteoriteArea; xCoord < x + meteoriteArea; xCoord++)
             {
-                for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
+                for (int yCoord = y - meteoriteArea; yCoord < y + meteoriteArea; yCoord++)
                 {
-                    if (yCoord > j + Main.rand.Next(-2, 3) - 4)
+                    if (yCoord > y + Main.rand.Next(-2, 3) - 4)
                     {
-                        float num9 = (float)Math.Abs(i - xCoord);
-                        float num10 = (float)Math.Abs(j - yCoord);
-                        float num11 = (float)Math.Sqrt((double)(num9 * num9 + num10 * num10));
-                        if ((double)num11 < (double)meteoriteArea * 0.8 + (double)Main.rand.Next(-3, 4))
-                        {
+                        int centerDisplacementX = Math.Abs(x - xCoord);
+                        int centerDisplacementY = Math.Abs(y - yCoord);
+                        float tileDistance = (float)Math.Sqrt((double)(centerDisplacementX * centerDisplacementX + centerDisplacementY * centerDisplacementY));
+                        if ((double)tileDistance < (double)meteoriteArea * 0.8 + (double)Main.rand.Next(-3, 4))
                             Main.tile[xCoord, yCoord].ClearTile();
-                        }
                     }
                 }
             }
             meteoriteArea = WorldGen.genRand.Next(25, 35);
-            for (int xCoord = i - meteoriteArea; xCoord < i + meteoriteArea; xCoord++)
+            for (int xCoord = x - meteoriteArea; xCoord < x + meteoriteArea; xCoord++)
             {
-                for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
+                for (int yCoord = y - meteoriteArea; yCoord < y + meteoriteArea; yCoord++)
                 {
-                    float tilePlacementX = (float)Math.Abs(i - xCoord);
-                    float tilePlacementY = (float)Math.Abs(j - yCoord);
-                    float num16 = (float)Math.Sqrt((double)(tilePlacementX * tilePlacementX + tilePlacementY * tilePlacementY));
-                    if ((double)num16 < (double)meteoriteArea * 0.7)
+                    int centerDisplacementX = Math.Abs(x - xCoord);
+                    int centerDisplacementY = Math.Abs(y - yCoord);
+                    float tileDistance = (float)Math.Sqrt((double)(centerDisplacementX * centerDisplacementX + centerDisplacementY * centerDisplacementY));
+                    if ((double)tileDistance < (double)meteoriteArea * 0.7)
                     {
                         if (Main.tile[xCoord, yCoord].TileType == TileID.Trees || Main.tile[xCoord, yCoord].TileType == TileID.CorruptThorns || Main.tile[xCoord, yCoord].TileType == TileID.CrimsonThorns)
-                        {
                             WorldGen.KillTile(xCoord, yCoord, false, false, false);
-                        }
+
                         Main.tile[xCoord, yCoord].LiquidAmount = 0;
                     }
                     if (Main.tile[xCoord, yCoord].TileType == ModContent.TileType<ViralMeteoriteTile>())
                     {
                         if (!WorldGen.SolidTile(xCoord - 1, yCoord) && !WorldGen.SolidTile(xCoord + 1, yCoord) && !WorldGen.SolidTile(xCoord, yCoord - 1) && !WorldGen.SolidTile(xCoord, yCoord + 1))
-                        {
                             Main.tile[xCoord, yCoord].ClearTile();
-                        }
+
                         else if ((Main.tile[xCoord, yCoord].IsHalfBlock || Main.tile[xCoord - 1, yCoord].TopSlope) && !WorldGen.SolidTile(xCoord, yCoord + 1))
-                        {
                             Main.tile[xCoord, yCoord].ClearTile();
-                        }
                     }
                     WorldGen.SquareTileFrame(xCoord, yCoord, true);
                     WorldGen.SquareWallFrame(xCoord, yCoord, true);
                 }
             }
+
             meteoriteArea = WorldGen.genRand.Next(23, 32);
-            for (int xCoord = i - meteoriteArea; xCoord < i + meteoriteArea; xCoord++)
+            for (int xCoord = x - meteoriteArea; xCoord < x + meteoriteArea; xCoord++)
             {
-                for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
+                for (int yCoord = y - meteoriteArea; yCoord < y + meteoriteArea; yCoord++)
                 {
-                    if (yCoord > j + WorldGen.genRand.Next(-3, 4) - 3 && Main.tile[xCoord, yCoord].HasTile && Main.rand.NextBool(10))
+                    if (yCoord > y + WorldGen.genRand.Next(-3, 4) - 3 && Main.tile[xCoord, yCoord].HasTile && Main.rand.NextBool(10))
                     {
-                        float tilePlacementX = (float)Math.Abs(i - xCoord);
-                        float tilePlacementY = (float)Math.Abs(j - yCoord);
-                        float num21 = (float)Math.Sqrt((double)(tilePlacementX * tilePlacementX + tilePlacementY * tilePlacementY));
-                        if ((double)num21 < (double)meteoriteArea * 0.8)
+                        int centerDisplacementX = Math.Abs(x - xCoord);
+                        int centerDisplacementY = Math.Abs(y - yCoord);
+                        float tileDistance = (float)Math.Sqrt((double)(centerDisplacementX * centerDisplacementX + centerDisplacementY * centerDisplacementY));
+                        if ((double)tileDistance < (double)meteoriteArea * 0.8)
                         {
                             if (Main.tile[xCoord, yCoord].TileType == TileID.Trees || Main.tile[xCoord, yCoord].TileType == TileID.CorruptThorns || Main.tile[xCoord, yCoord].TileType == TileID.CrimsonThorns)
-                            {
                                 WorldGen.KillTile(xCoord, yCoord, false, false, false);
-                            }
+
                             Main.tile[xCoord, yCoord].TileType = (ushort)ModContent.TileType<ViralMeteoriteTile>();
                             WorldGen.SquareTileFrame(xCoord, yCoord, true);
                         }
@@ -344,27 +379,27 @@ namespace JoJoStands
                 }
             }
             meteoriteArea = WorldGen.genRand.Next(30, 38);
-            for (int xCoord = i - meteoriteArea; xCoord < i + meteoriteArea; xCoord++)
+            for (int xCoord = x - meteoriteArea; xCoord < x + meteoriteArea; xCoord++)
             {
-                for (int yCoord = j - meteoriteArea; yCoord < j + meteoriteArea; yCoord++)
+                for (int yCoord = y - meteoriteArea; yCoord < y + meteoriteArea; yCoord++)
                 {
-                    if (yCoord > j + WorldGen.genRand.Next(-2, 3) && Main.tile[xCoord, yCoord].HasTile && Main.rand.NextBool(20))
+                    if (yCoord > y + WorldGen.genRand.Next(-2, 3) && Main.tile[xCoord, yCoord].HasTile && Main.rand.NextBool(20))
                     {
-                        float tilePlacementX = (float)Math.Abs(i - xCoord);
-                        float tilePlacementY = (float)Math.Abs(j - yCoord);
-                        float num26 = (float)Math.Sqrt((double)(tilePlacementX * tilePlacementX + tilePlacementY * tilePlacementY));
-                        if ((double)num26 < (double)meteoriteArea * 0.85)
+                        int centerDisplacementX = Math.Abs(x - xCoord);
+                        int centerDisplacementY = Math.Abs(y - yCoord);
+                        float tileDistance = (float)Math.Sqrt((double)(centerDisplacementX * centerDisplacementX + centerDisplacementY * centerDisplacementY));
+                        if ((double)tileDistance < (double)meteoriteArea * 0.85)
                         {
                             if (Main.tile[xCoord, yCoord].TileType == TileID.Trees || Main.tile[xCoord, yCoord].TileType == TileID.CorruptThorns || Main.tile[xCoord, yCoord].TileType == TileID.CrimsonThorns)
-                            {
                                 WorldGen.KillTile(xCoord, yCoord, false, false, false);
-                            }
+
                             Main.tile[xCoord, yCoord].TileType = (ushort)ModContent.TileType<ViralMeteoriteTile>();
                             WorldGen.SquareTileFrame(xCoord, yCoord, true);
                         }
                     }
                 }
             }
+
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
                 Main.NewText("A dangerous virus now inhabits " + Main.worldName + "... Perhaps Jotaro the Marine Biologist may know something about it.", WorldEventTextColor);
@@ -375,9 +410,10 @@ namespace JoJoStands
             }
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                NetMessage.SendTileSquare(-1, i, j, 40, TileChangeType.None);
+                NetMessage.SendTileSquare(-1, x, y, 40, TileChangeType.None);
             }
             Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().awaitingViralMeteoriteTip = true;
+            ViralMeteoriteCenter = new Point(x * 16, y * 16);
             return true;
         }
 

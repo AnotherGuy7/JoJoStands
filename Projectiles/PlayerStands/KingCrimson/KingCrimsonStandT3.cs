@@ -234,7 +234,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     mPlayer.epitaphForesightActive = true;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        ModNetHandler.effectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
+                        ModNetHandler.EffectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
                     }
                 }
             }

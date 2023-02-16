@@ -47,7 +47,7 @@ namespace JoJoStands.Buffs.EffectBuff
                     if (Main.netMode == NetmodeID.MultiplayerClient && !otherTimestopsActive)
                     {
                         mPlayer.timestopActive = false;
-                        ModNetHandler.effectSync.SendTimestop(256, player.whoAmI, false, player.whoAmI);
+                        ModNetHandler.EffectSync.SendTimestop(256, player.whoAmI, false, player.whoAmI);
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_stop"));
                     }
                 }

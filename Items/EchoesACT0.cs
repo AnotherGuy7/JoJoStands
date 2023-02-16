@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class EchoesACT0 : StandItemClass
+    public class EchoesAct0 : StandItemClass
     {
         public override int StandSpeed => 2;
         public override int StandType => 1;
@@ -14,11 +14,15 @@ namespace JoJoStands.Items
         public override int StandTier => 1;
         public override int StandTierDisplayOffset => -1;
         public override Color StandTierDisplayColor => Color.LightGreen;
+        public override string Texture
+        {
+            get { return Mod.Name + "/Items/EchoesAct0"; }
+        }
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 0)");
-            Tooltip.SetDefault("Left-click to... throw? \nOnly for those with the strongest of wills.");
+            Tooltip.SetDefault("Left-click to... throw?\nOnly for those with the strongest of wills.");
         }
 
         public override void SetDefaults()

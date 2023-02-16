@@ -61,7 +61,7 @@ namespace JoJoStands.Buffs.EffectBuff
                 if (!setToTrue)
                 {
                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                        ModNetHandler.effectSync.SendTimeskip(256, player.whoAmI, true, player.whoAmI);
+                        ModNetHandler.EffectSync.SendTimeskip(256, player.whoAmI, true, player.whoAmI);
 
                     setToTrue = true;
                 }
@@ -99,7 +99,7 @@ namespace JoJoStands.Buffs.EffectBuff
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)
                 {
                     mPlayer.timeskipActive = false;
-                    ModNetHandler.effectSync.SendTimeskip(256, player.whoAmI, false, player.whoAmI);
+                    ModNetHandler.EffectSync.SendTimeskip(256, player.whoAmI, false, player.whoAmI);
                 }
                 PreTimeSkip.userIndex = -1;
                 setToTrue = false;

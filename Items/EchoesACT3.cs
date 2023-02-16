@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class EchoesACT3 : StandItemClass
+    public class EchoesAct3 : StandItemClass
     {
         public override int StandSpeed => 10;
         public override int StandType => 1;
@@ -18,7 +18,11 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 3)");
-            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate! \nRight-click: Three Freeze! Pin any enemy to the ground! Pinned enemy takes damage! \nSpecial: Three Freeze Barrage! Normal attack inflict Three Freeze effect for a short time! \nSecond Special: Switch to previous acts!");
+            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate!" +
+                "\nRight-click: Three Freeze! Pin any enemy to the ground!" +
+                "\nSpecial: Three Freeze Barrage! Normal attacks inflict Three Freeze for a short time!" +
+                "\nSecond Special: Switch to previous acts!" +
+                "\nEnemies pinned by Three Freeze take damage over time.");
         }
 
         public override void SetDefaults()
@@ -35,7 +39,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<EchoesACT2>())
+                .AddIngredient(ModContent.ItemType<EchoesAct2>())
                 .AddIngredient(ItemID.Ectoplasm, 8)
                 .AddIngredient(ItemID.EncumberingStone)
                 .AddIngredient(ItemID.Emerald, 7)

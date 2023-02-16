@@ -14,7 +14,7 @@ namespace JoJoStands.Gores.Echoes
     {
         public override string Texture
         {
-            get { return Mod.Name + "/Items/EchoesACT0"; }
+            get { return Mod.Name + "/Items/EchoesAct0"; }
         }
     }
 

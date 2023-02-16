@@ -32,12 +32,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private bool threeFreeze = false;
         private bool returnToPlayer = false;
         private bool changeACT = false;
+
         public override void OnSpawn(IEntitySource source)
         {
             if (Projectile.ai[0] == 2f)
                 returnToPlayer = true;
             idleFrames = true;
         }
+
         public override void AI()
         {
             SelectAnimation();
@@ -53,7 +55,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            mPlayer.echoesACT = ACT;
+            mPlayer.currentEchoesAct = ACT;
 
             Rectangle rectangle = Rectangle.Empty;
             if (Projectile.owner == player.whoAmI)
@@ -94,11 +96,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         NPC npc = Main.npc[n];
                         if (npc.active && !npc.hide && !npc.immortal)
                         {
-                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, npc.Center) <= 250f && npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15 && onlyOneTarget < 1)
+                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, npc.Center) <= 250f && npc.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15 && onlyOneTarget < 1)
                             {
                                 onlyOneTarget += 1;
                                 targetNPC = npc.whoAmI;
-
                             }
                         }
                     }
@@ -118,12 +119,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         }
                     }
                 }
-                if (SpecialKeyPressed() && Projectile.owner == Main.myPlayer) //3freeze barrgage activation
+                if (SpecialKeyPressed() && Projectile.owner == Main.myPlayer)       //3freeze barrgage activation
                 {
-                    Main.NewText("Okay, master! Let's kill da ho! Beeetch!", Color.LightGreen);
-                    player.AddBuff(ModContent.BuffType<ThreeFreezeBarrage>(), 600);
+                    player.AddBuff(ModContent.BuffType<ThreeFreezeBarrage>(), 10 * 60);
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
                 }
                 if (SecondSpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer && changeActCooldown == 0 && mPlayer.echoesTier > 3)
                 {
@@ -131,7 +130,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     Projectile.Kill();
                 }
             }
-            if (onlyOneTarget > 0) //3freeze
+            if (onlyOneTarget > 0)      //3freeze
             {
                 if (targetNPC != -1)
                 {
@@ -139,8 +138,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreezeTarget = true;
                     npc.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
                     npc.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                    if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
-                        npc.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
+                    if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15)
+                        npc.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer += 30;
                     SyncCall.SyncStandEffectInfo(player.whoAmI, targetNPC, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
                     onlyOneTarget = 0;
                 }

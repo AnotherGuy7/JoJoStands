@@ -155,7 +155,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             player.AddBuff(ModContent.BuffType<TheWorldBuff>(), seconds * 60, true);
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModNetHandler.effectSync.SendTimestop(256, player.whoAmI, true, player.whoAmI);
+                ModNetHandler.EffectSync.SendTimestop(256, player.whoAmI, true, player.whoAmI);
         }
 
         /// <summary>
@@ -638,7 +638,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         }
 
         /// <summary>
-        /// Call this method to play the punch sounds.
+        /// Call this method to play the punch sounds if this Stand has one. PunchSoundName must be initialized for this method to have any effect!
         /// </summary>
         public void PlayPunchSound()
         {
@@ -646,9 +646,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 return;
 
             if (PunchSoundName != "" && punchingSoundInstance == null)
-            {
                 InitializeSounds();
-            }
+
             if (PunchSoundName != "")
             {
                 if (beginningSoundInstance != null)

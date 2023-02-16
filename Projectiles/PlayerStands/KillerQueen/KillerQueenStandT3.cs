@@ -22,6 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override string SpawnSoundName => "Killer Queen";
         public override bool CanUseSaladDye => true;
         public override StandAttackType StandType => StandAttackType.Melee;
+        private readonly SoundStyle kqClickSound = new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick");
 
         private Vector2 savedPosition = Vector2.Zero;
         private bool touchedNPC = false;
@@ -81,7 +82,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                         touchedNPC = true;
                                         foundNPCTarget = true;
                                         npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByKillerQueen = true;
-                                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick"));
+                                        SoundEngine.PlaySound(kqClickSound);
                                         break;
                                     }
                                 }
@@ -94,7 +95,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                     shootCount += 20;
                                     touchedTile = true;
                                     savedPosition = Main.MouseWorld;
-                                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick"));
+                                    SoundEngine.PlaySound(kqClickSound);
                                 }
                             }
                         }
@@ -167,7 +168,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
                     explosionTimer++;
                     if (explosionTimer == 5)
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick"));
+                        SoundEngine.PlaySound(kqClickSound);
 
                     if (explosionTimer >= 90)
                     {

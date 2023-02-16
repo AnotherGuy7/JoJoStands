@@ -8,6 +8,10 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
+using System.Collections.Generic;
+using System;
+using Terraria.Audio;
+using ReLogic.Utilities;
 
 namespace JoJoStands.Projectiles
 {
@@ -17,10 +21,33 @@ namespace JoJoStands.Projectiles
 
         private int off = 1800;
 
-        private int offsetDraw = 0;
-        private int timerDraw = 0;
-
         private int damageTimer = 0;
+        private int boingFrame = 0;
+        private int boingFrameCounter = 0;
+        private int kaboomFrame = 0;
+        private int kaboomFrameCounter = 0;
+        private int visualSoundEffectSpawnTimer = 0;
+        private int visualEffectTimer = 0;          //For some reason updating timers in loops is extremely slow.
+        private SlotId soundSlotID;
+        private ActiveSound activeSound;
+
+        public const int Effect_Boing = 1;
+        public const int Effect_Kabooom = 2;
+        public const int Effect_Wooosh = 3;
+        public const int Effect_Sizzle = 4;
+
+        public const float BoingEffectDistance = 9f * 16f;
+        public const float KabooomEffectDistance = 8f * 16f;
+        public const float WoooshEffectDistance = 15f * 16f;
+        public const float SizzleEffectDistance = 10f * 16f;
+        private readonly Vector2 BoingOrigin = new Vector2(31, 22);
+        private readonly Vector2 KaboomOrigin = new Vector2(25, 13);
+        private readonly SoundStyle boingSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Echoes_Boing") { Volume = 0.1f, PitchVariance = 1f };
+        private readonly SoundStyle boing2Sound = new SoundStyle("JoJoStands/Sounds/GameSounds/Echoes_Boing2") { Volume = 0.7f };
+        private readonly SoundStyle woooshSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Echoes_Wooosh") { Volume = 0.7f };
+        private readonly SoundStyle sizzleSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Echoes_Sizzle") { Volume = 0.9f };
+
+        private List<VisualSoundEffect> visualEffects = new List<VisualSoundEffect>();
 
         public override void SetDefaults()
         {
@@ -33,15 +60,27 @@ namespace JoJoStands.Projectiles
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
         }
+
+        public struct VisualSoundEffect
+        {
+            public int duration;
+            public int lifeStart;
+            public Vector2 position;
+            public int extraInfo1;
+            public int extraInfo2;
+        }
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 2;
         }
+
         public override void OnSpawn(IEntitySource source)
         {
             if (Projectile.owner == Main.myPlayer)
                 targetPosition = Main.MouseWorld;
         }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -62,7 +101,27 @@ namespace JoJoStands.Projectiles
             Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.frame = 1;
 
-            if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 0)
+            boingFrameCounter++;
+            if (boingFrameCounter >= 6)
+            {
+                boingFrame += 1;
+                boingFrameCounter = 0;
+                if (boingFrame >= 4)
+                    boingFrame = 0;
+            }
+
+            kaboomFrameCounter++;
+            if (kaboomFrameCounter >= 4)
+            {
+                kaboomFrame += 1;
+                kaboomFrameCounter = 0;
+                if (kaboomFrame >= 5)
+                    kaboomFrame = 0;
+            }
+
+            visualEffectTimer++;
+            int echoesTailTipStage = Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage;
+            if (echoesTailTipStage == 0)
             {
                 if (Vector2.Distance(Projectile.Center, targetPosition) <= 10f)
                 {
@@ -73,35 +132,288 @@ namespace JoJoStands.Projectiles
 
                 if (Main.rand.Next(0, 1 + 1) == 0 && Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 0)
                 {
-                    if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 4)
-                        DustTrail(DustID.RedTorch);
-                    if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 3)
-                        DustTrail(DustID.IceTorch);
-                    if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 2)
-                        DustTrail(DustID.BlueTorch);
-                    if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 1)
+                    int echoesTailTipType = Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType;
+                    if (echoesTailTipType == Effect_Boing)
                         DustTrail(DustID.PinkTorch);
+                    else if (echoesTailTipType == Effect_Kabooom)
+                        DustTrail(DustID.PurpleTorch);
+                    else if (echoesTailTipType == Effect_Wooosh)
+                        DustTrail(DustID.IceTorch);
+                    else if (echoesTailTipType == Effect_Sizzle)
+                        DustTrail(DustID.RedTorch);
                 }
             }
-            if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 1)
+            else if (echoesTailTipStage == 1)
             {
                 Projectile.frame = 0;
-                if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 4)
+                int echoesTailTipType = Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType;
+                if (echoesTailTipType == Effect_Boing)
                 {
-                    DustSpawn(DustID.RedTorch);
+                    DustSpawn(DustID.PinkTorch, BoingEffectDistance);
+
+                    visualSoundEffectSpawnTimer++;
+                    if (visualSoundEffectSpawnTimer >= 120)
+                    {
+                        visualSoundEffectSpawnTimer = 0;
+                        Vector2 spawnPosition = Projectile.Center + new Vector2(Main.rand.NextFloat(-BoingEffectDistance, BoingEffectDistance + 1), Main.rand.NextFloat(-BoingEffectDistance, BoingEffectDistance + 1));
+                        if (Vector2.Distance(Projectile.Center, spawnPosition) <= BoingEffectDistance)
+                        {
+                            VisualSoundEffect boingEffect = new VisualSoundEffect
+                            {
+                                lifeStart = visualEffectTimer,
+                                duration = Main.rand.Next(80, 120 + 1),
+                                position = spawnPosition,
+                                extraInfo1 = Main.rand.Next(0, 3 + 1),
+                                extraInfo2 = Main.rand.Next(0, 360)
+                            };
+                            visualEffects.Add(boingEffect);
+                            SoundEngine.PlaySound(boingSound);
+                        }
+                    }
+
+                    for (int n = 0; n < Main.maxNPCs; n++)
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && !npc.hide && !npc.immortal && Vector2.Distance(Projectile.Center, npc.Center) <= BoingEffectDistance && !npc.noTileCollide)
+                        {
+                            if ((npc.velocity.Y > 1f || npc.velocity.Y < -1f) && npc.collideY)
+                            {
+                                npc.velocity = npc.position - new Vector2(npc.position.X, npc.position.Y - 100f);
+                                npc.velocity.Normalize();
+                                npc.velocity.Y *= -16f;
+                                npc.netUpdate = true;
+                                SoundEngine.PlaySound(boing2Sound);
+                            }
+                        }
+                    }
+                    if (player.active && Vector2.Distance(Projectile.Center, player.Center) <= BoingEffectDistance)
+                    {
+                        if (player.velocity.Y > 1f || player.velocity.Y < -1f)
+                            mPlayer.echoesBoing = true;
+                        if (mPlayer.echoesBoing && mPlayer.collideY)
+                        {
+                            mPlayer.echoesBoing2 = true;
+                            player.velocity = player.position - new Vector2(player.position.X, player.position.Y - 100f);
+                            player.velocity.Normalize();
+                            player.velocity.Y *= -24f;
+                            SoundEngine.PlaySound(boing2Sound);
+                        }
+                    }
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        for (int p = 0; p < Main.maxPlayers; p++)
+                        {
+                            Player players = Main.player[p];
+                            MyPlayer mPlayers = players.GetModPlayer<MyPlayer>();
+                            players.noFallDmg = true;
+                            if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= BoingEffectDistance)
+                            {
+                                if (players.velocity.Y > 1f || players.velocity.Y < -1f)
+                                    mPlayers.echoesBoing = true;
+                                if (mPlayers.echoesBoing && mPlayers.collideY)
+                                {
+                                    mPlayers.echoesBoing2 = true;
+                                    players.velocity = players.position - new Vector2(players.position.X, players.position.Y - 100f);
+                                    players.velocity.Normalize();
+                                    players.velocity.Y *= -24f;
+                                    SoundEngine.PlaySound(boing2Sound);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (echoesTailTipType == Effect_Kabooom)
+                {
+                    DustSpawn(DustID.PurpleTorch, KabooomEffectDistance);
+
+                    visualSoundEffectSpawnTimer++;
+                    if (visualSoundEffectSpawnTimer >= 45)
+                    {
+                        visualSoundEffectSpawnTimer = 0;
+                        Vector2 spawnPosition = Projectile.Center + new Vector2(Main.rand.NextFloat(-KabooomEffectDistance, KabooomEffectDistance + 1), Main.rand.NextFloat(-KabooomEffectDistance, KabooomEffectDistance + 1));
+                        if (Vector2.Distance(Projectile.Center, spawnPosition) <= KabooomEffectDistance)
+                        {
+                            VisualSoundEffect kaboomEffect = new VisualSoundEffect
+                            {
+                                lifeStart = visualEffectTimer,
+                                duration = Main.rand.Next(40, 80 + 1),
+                                position = spawnPosition
+                            };
+                            visualEffects.Add(kaboomEffect);
+                            SoundEngine.PlaySound(SoundID.Item62, spawnPosition);
+
+                            for (int i = 0; i < 35; i++)
+                            {
+                                float angle = (360f / 35f) * i;
+                                Vector2 dustPosition = spawnPosition + (angle.ToRotationVector2() * 8f);
+                                Vector2 dustVelocity = dustPosition - spawnPosition;
+                                dustVelocity.Normalize();
+                                dustVelocity *= 9f;
+                                int dustIndex = Dust.NewDust(dustPosition, 1, 1, DustID.PurpleTorch, dustVelocity.X, dustVelocity.Y, Scale: 2.5f);
+                                Main.dust[dustIndex].noGravity = true;
+                            }
+                        }
+                    }
+
+                    for (int n = 0; n < Main.maxNPCs; n++)
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && !npc.hide && !npc.immortal && Vector2.Distance(Projectile.Center, npc.Center) <= KabooomEffectDistance && !npc.noTileCollide)
+                        {
+                            if (npc.collideY && !npc.GetGlobalNPC<JoJoGlobalNPC>().echoesKaboom)
+                            {
+                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesKaboom = true;
+                                npc.velocity = npc.position - new Vector2(npc.position.X, npc.position.Y - 100f);
+                                npc.velocity.Normalize();
+                                npc.velocity.Y *= -16f;
+                                npc.netUpdate = true;
+                            }
+                        }
+                    }
+                    if (player.active && Vector2.Distance(Projectile.Center, player.Center) <= KabooomEffectDistance)
+                    {
+                        if (mPlayer.collideY)
+                        {
+                            if (mPlayer.echoesKaboom3 > 0)
+                                mPlayer.echoesKaboom3--;
+                            if (mPlayer.echoesKaboom3 == 0)
+                            {
+                                mPlayer.echoesKaboom = true;
+                                player.velocity = player.position - new Vector2(player.position.X, player.position.Y - 100f);
+                                player.velocity.Normalize();
+                                player.velocity.Y *= -24f;
+                            }
+                        }
+                    }
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        for (int p = 0; p < Main.maxPlayers; p++)
+                        {
+                            Player players = Main.player[p];
+                            MyPlayer mPlayers = players.GetModPlayer<MyPlayer>();
+                            if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= KabooomEffectDistance)
+                            {
+                                if (mPlayers.collideY)
+                                {
+                                    if (mPlayers.echoesKaboom3 > 0)
+                                        mPlayers.echoesKaboom3--;
+                                    if (mPlayers.echoesKaboom3 == 0)
+                                    {
+                                        mPlayers.echoesKaboom = true;
+                                        players.velocity = players.position - new Vector2(players.position.X, players.position.Y - 100f);
+                                        players.velocity.Normalize();
+                                        players.velocity.Y *= -24f;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (echoesTailTipType == Effect_Wooosh)
+                {
+                    DustSpawn(DustID.IceTorch, WoooshEffectDistance);
+                    if (!SoundEngine.TryGetActiveSound(soundSlotID, out activeSound))
+                    {
+                        soundSlotID = SoundEngine.PlaySound(woooshSound);
+                    }
+                    else
+                    {
+                        if (!activeSound.IsPlaying)
+                            soundSlotID = SoundEngine.PlaySound(woooshSound);
+                    }
+
+                    visualSoundEffectSpawnTimer++;
+                    if (visualSoundEffectSpawnTimer >= 45)
+                    {
+                        visualSoundEffectSpawnTimer = 0;
+                        Vector2 spawnPosition = Projectile.Center + new Vector2(Main.rand.NextFloat(-WoooshEffectDistance, WoooshEffectDistance + 1), Main.rand.NextFloat(-WoooshEffectDistance, WoooshEffectDistance + 1));
+                        if (Vector2.Distance(Projectile.Center, spawnPosition) <= WoooshEffectDistance)
+                        {
+                            VisualSoundEffect woooshEffect = new VisualSoundEffect
+                            {
+                                lifeStart = visualEffectTimer,
+                                duration = Main.rand.Next(120, 180 + 1),
+                                position = spawnPosition,
+                                extraInfo1 = Main.rand.Next(0, 1 + 1) == 1 ? -1 : 1,
+                                extraInfo2 = Main.rand.Next(-16, 16 + 1)
+                            };
+                            visualEffects.Add(woooshEffect);
+                        }
+                    }
+
+                    for (int n = 0; n < Main.maxNPCs; n++)
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && !npc.hide && !npc.immortal && !npc.townNPC && Vector2.Distance(Projectile.Center, npc.Center) <= WoooshEffectDistance)
+                            npc.AddBuff(ModContent.BuffType<WhooshDebuff>(), 600);
+                    }
+                    if (player.active && Vector2.Distance(Projectile.Center, player.Center) <= WoooshEffectDistance)
+                        player.AddBuff(ModContent.BuffType<Whoosh>(), 600);
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        for (int p = 0; p < Main.maxPlayers; p++)
+                        {
+                            Player players = Main.player[p];
+                            if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= WoooshEffectDistance)
+                            {
+                                if (players.hostile && player.hostile && player.InOpposingTeam(players))
+                                    players.AddBuff(ModContent.BuffType<WhooshDebuff>(), 300);
+                                if (!players.hostile || !player.hostile || players.hostile && player.hostile && !player.InOpposingTeam(players))
+                                    players.AddBuff(ModContent.BuffType<Whoosh>(), 600);
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < visualEffects.Count; i++)
+                    {
+                        VisualSoundEffect woooshEffect = visualEffects[i];
+                        woooshEffect.position.X += woooshEffect.extraInfo1 * (woooshEffect.extraInfo2 / 10f);
+
+                        if (visualEffectTimer - woooshEffect.lifeStart >= woooshEffect.duration)
+                            visualEffects.Remove(woooshEffect);
+                        else
+                            visualEffects[i] = woooshEffect;
+                    }
+                }
+                else if (echoesTailTipType == Effect_Sizzle)
+                {
+                    DustSpawn(DustID.RedTorch, SizzleEffectDistance);
+                    if (!SoundEngine.TryGetActiveSound(soundSlotID, out activeSound))
+                    {
+                        soundSlotID = SoundEngine.PlaySound(sizzleSound);
+                    }
+                    else
+                    {
+                        if (!activeSound.IsPlaying)
+                            soundSlotID = SoundEngine.PlaySound(sizzleSound);
+                    }
+
+                    visualSoundEffectSpawnTimer++;
+                    if (visualSoundEffectSpawnTimer >= 40)
+                    {
+                        visualSoundEffectSpawnTimer = 0;
+                        Vector2 spawnPosition = Projectile.Center + new Vector2(Main.rand.NextFloat(-SizzleEffectDistance, SizzleEffectDistance + 1), Main.rand.NextFloat(-SizzleEffectDistance, SizzleEffectDistance + 1));
+                        if (Vector2.Distance(Projectile.Center, spawnPosition) <= SizzleEffectDistance)
+                        {
+                            VisualSoundEffect sizzleEffect = new VisualSoundEffect
+                            {
+                                lifeStart = visualEffectTimer,
+                                duration = Main.rand.Next(60, 120 + 1),
+                                position = spawnPosition
+                            };
+                            visualEffects.Add(sizzleEffect);
+                        }
+                    }
+
                     if (damageTimer == 0)
                     {
                         for (int n = 0; n < Main.maxNPCs; n++)
                         {
                             NPC npc = Main.npc[n];
-                            if (npc.active && !npc.hide && !npc.immortal && !npc.townNPC && Vector2.Distance(Projectile.Center, npc.Center) <= 120f)
+                            if (npc.active && !npc.hide && !npc.immortal && !npc.townNPC && Vector2.Distance(Projectile.Center, npc.Center) <= SizzleEffectDistance)
                             {
                                 bool crit = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
-                                int defence = 2;
-                                if (crit)
-                                    defence = 4;
-                                else
-                                    defence = 2;
+                                int defence = crit ? 4 : 2;
                                 int damage1 = 0;
                                 if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier == 3)
                                     damage1 = 44;
@@ -132,7 +444,7 @@ namespace JoJoStands.Projectiles
                             for (int p = 0; p < Main.maxPlayers; p++)
                             {
                                 Player players = Main.player[p];
-                                if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= 120f)
+                                if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= SizzleEffectDistance)
                                 {
                                     if (players.hostile && player.hostile && player.InOpposingTeam(players))
                                     {
@@ -150,147 +462,22 @@ namespace JoJoStands.Projectiles
                                 }
                             }
                         }
+
+                        for (int i = 0; i < visualEffects.Count; i++)
+                        {
+                            VisualSoundEffect sizzleEffect = visualEffects[i];
+                            sizzleEffect.position.Y -= 0.46f;
+
+                            if (visualEffectTimer - sizzleEffect.lifeStart >= sizzleEffect.duration)
+                                visualEffects.Remove(sizzleEffect);
+                            else
+                                visualEffects[i] = sizzleEffect;
+                        }
                         damageTimer = 10;
                     }
                 }
-                if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 3)
-                {
-                    DustSpawn(DustID.IceTorch);
-                    for (int n = 0; n < Main.maxNPCs; n++)
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && !npc.hide && !npc.immortal && !npc.townNPC && Vector2.Distance(Projectile.Center, npc.Center) <= 120f)
-                            npc.AddBuff(ModContent.BuffType<WhooshDebuff>(), 600);
-                    }
-                    if (player.active && Vector2.Distance(Projectile.Center, player.Center) <= 120f)
-                        player.AddBuff(ModContent.BuffType<Whoosh>(), 600);
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        for (int p = 0; p < Main.maxPlayers; p++)
-                        {
-                            Player players = Main.player[p];
-                            if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= 120f)
-                            {
-                                if (players.hostile && player.hostile && player.InOpposingTeam(players))
-                                    players.AddBuff(ModContent.BuffType<WhooshDebuff>(), 300);
-                                if (!players.hostile || !player.hostile || players.hostile && player.hostile && !player.InOpposingTeam(players))
-                                    players.AddBuff(ModContent.BuffType<Whoosh>(), 600);
-                            }
-                        }
-                    }
-                }
-                if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 2)
-                {
-                    DustSpawn(DustID.BlueTorch);
-                    for (int n = 0; n < Main.maxNPCs; n++)
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && !npc.hide && !npc.immortal && Vector2.Distance(Projectile.Center, npc.Center) <= 120f && !npc.noTileCollide)
-                        {
-                            if (npc.collideY && !npc.GetGlobalNPC<JoJoGlobalNPC>().echoesKaboom)
-                            {
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesKaboom = true;
-                                npc.velocity = npc.position - new Vector2(npc.position.X, npc.position.Y - 100f);
-                                npc.velocity.Normalize();
-                                npc.velocity.Y *= -16f;
-                                npc.netUpdate = true;
-                            }
-                        }
-                    }
-                    if (player.active && Vector2.Distance(Projectile.Center, player.Center) <= 120f)
-                    {
-                        if (mPlayer.collideY)
-                        {
-                            if (mPlayer.echoesKaboom3 > 0)
-                                mPlayer.echoesKaboom3--;
-                            if (mPlayer.echoesKaboom3 == 0)
-                            {
-                                mPlayer.echoesKaboom = true;
-                                player.velocity = player.position - new Vector2(player.position.X, player.position.Y - 100f);
-                                player.velocity.Normalize();
-                                player.velocity.Y *= -24f;
-                            }
-                        }
-                    }
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        for (int p = 0; p < Main.maxPlayers; p++)
-                        {
-                            Player players = Main.player[p];
-                            MyPlayer mPlayers = players.GetModPlayer<MyPlayer>();
-                            if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= 120f)
-                            {
-                                if (mPlayers.collideY)
-                                {
-                                    if (mPlayers.echoesKaboom3 > 0)
-                                        mPlayers.echoesKaboom3--;
-                                    if (mPlayers.echoesKaboom3 == 0)
-                                    {
-                                        mPlayers.echoesKaboom = true;
-                                        players.velocity = players.position - new Vector2(players.position.X, players.position.Y - 100f);
-                                        players.velocity.Normalize();
-                                        players.velocity.Y *= -24f;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 1)
-                {
-                    DustSpawn(DustID.PinkTorch);
-                    for (int n = 0; n < Main.maxNPCs; n++)
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && !npc.hide && !npc.immortal && Vector2.Distance(Projectile.Center, npc.Center) <= 120f && !npc.noTileCollide)
-                        {
-                            if (npc.velocity.Y > 1f || npc.velocity.Y < -1f)
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().echoesBoing = true;
-                            if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesBoing && npc.collideY)
-                            {
-                                npc.velocity = npc.position - new Vector2(npc.position.X, npc.position.Y - 100f);
-                                npc.velocity.Normalize();
-                                npc.velocity.Y *= -16f;
-                                npc.netUpdate = true;
-                            }
-                        }
-                    }
-                    if (player.active && Vector2.Distance(Projectile.Center, player.Center) <= 120f)
-                    {
-                        if (player.velocity.Y > 1f || player.velocity.Y < -1f)
-                            mPlayer.echoesBoing = true;
-                        if (mPlayer.echoesBoing && mPlayer.collideY)
-                        {
-                            mPlayer.echoesBoing2 = true;
-                            player.velocity = player.position - new Vector2(player.position.X, player.position.Y - 100f);
-                            player.velocity.Normalize();
-                            player.velocity.Y *= -24f;
-                        }
-                    }
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        for (int p = 0; p < Main.maxPlayers; p++)
-                        {
-                            Player players = Main.player[p];
-                            MyPlayer mPlayers = players.GetModPlayer<MyPlayer>();
-                            players.noFallDmg = true;
-                            if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= 120f)
-                            {
-                                if (players.velocity.Y > 1f || players.velocity.Y < -1f)
-                                    mPlayers.echoesBoing = true;
-                                if (mPlayers.echoesBoing && mPlayers.collideY)
-                                {
-                                    mPlayers.echoesBoing2 = true;
-                                    players.velocity = players.position - new Vector2(players.position.X, players.position.Y - 100f);
-                                    players.velocity.Normalize();
-                                    players.velocity.Y *= -24f;
-                                }
-                            }
-                        }
-                    }
-                }
             }
-            if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 2)
+            else if (echoesTailTipStage == 2)
             {
                 Projectile.tileCollide = true;
                 Projectile.frame = 1;
@@ -298,9 +485,27 @@ namespace JoJoStands.Projectiles
                 Projectile.velocity.Normalize();
                 Projectile.velocity.Y *= 9f;
                 Projectile.netUpdate = true;
+
+                if (SoundEngine.TryGetActiveSound(soundSlotID, out activeSound))
+                    activeSound.Stop();
             }
             if (player.dead || player.ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] >= 2)
                 Projectile.Kill();
+        }
+
+        private void DustSpawn(int dustID, float effectDistance)
+        {
+            int amountOfDust = Main.rand.Next(1, 5);
+            for (int d = 0; d < amountOfDust; d++)
+            {
+                Vector2 dustPosition = Projectile.Center + new Vector2(Main.rand.NextFloat(-effectDistance, effectDistance + 1), Main.rand.NextFloat(-effectDistance, effectDistance + 1));
+                if (Vector2.Distance(Projectile.Center, dustPosition) > effectDistance)
+                    continue;
+
+                int dustIndex = Dust.NewDust(dustPosition, 1, 1, dustID);
+                Main.dust[dustIndex].noGravity = true;
+                Main.dust[dustIndex].fadeIn = 2f;
+            }
         }
 
         private void DustTrail(int DustID)
@@ -308,19 +513,6 @@ namespace JoJoStands.Projectiles
             int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID);
             Main.dust[dustIndex].noGravity = true;
             Main.dust[dustIndex].fadeIn = 2f;
-        }
-        private void DustSpawn(int DustID)
-        {
-            for (int i = 0; i < Main.rand.Next(1, 5); i++)
-            {
-                Vector2 dustPosition = Projectile.Center + new Vector2(Main.rand.NextFloat(-120f, 120f), Main.rand.NextFloat(-120f, 120f));
-                if (Vector2.Distance(Projectile.Center, dustPosition) > 120f)
-                    continue;
-
-                int dustIndex = Dust.NewDust(dustPosition, 1, 1, DustID);
-                Main.dust[dustIndex].noGravity = true;
-                Main.dust[dustIndex].fadeIn = 2f;
-            }
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -341,98 +533,91 @@ namespace JoJoStands.Projectiles
         {
             if (Projectile.frame == 0)
             {
-                if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 4)
+                if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == Effect_Boing)
                 {
-                    if (timerDraw == 0)
-                        timerDraw = 25;
-                    if (timerDraw == 25)
-                        offsetDraw = 46;
-                    if (timerDraw == 20)
-                        offsetDraw = 92;
-                    if (timerDraw == 15)
-                        offsetDraw = 138;
-                    if (timerDraw == 10)
-                        offsetDraw = 184;
-                    if (timerDraw == 5)
-                        offsetDraw = 0;
-                    if (timerDraw > 0)
-                        timerDraw--;
-                    Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/Sizzle").Value;
-                    Main.spriteBatch.Draw(texture, Projectile.Center + new Vector2(0, 90) - Main.screenPosition, new Rectangle(0, offsetDraw, 68, 46), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+                    for (int i = 0; i < visualEffects.Count; i++)
+                    {
+                        VisualSoundEffect boingEffect = visualEffects[i];
+                        if (visualEffectTimer - boingEffect.lifeStart >= boingEffect.duration)
+                        {
+                            visualEffects.Remove(boingEffect);
+                            i--;
+                            continue;
+                        }
+
+                        float alpha = (float)Math.Sin(((visualEffectTimer - boingEffect.lifeStart) / (float)boingEffect.duration) * Math.PI);
+                        float scale = boingEffect.duration / 100f;
+
+                        Texture2D boingTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Echoes_BOING").Value;
+                        int frame = (boingFrame + boingEffect.extraInfo1) % 4;
+                        Rectangle sourceRect = new Rectangle(0, frame * 44, 62, 44);
+
+                        Main.spriteBatch.Draw(boingTexture, boingEffect.position - Main.screenPosition + new Vector2(0f, (float)Math.Sin(MathHelper.ToRadians(visualEffectTimer * 8) + boingEffect.extraInfo2)), sourceRect, Color.White * alpha, 0f, BoingOrigin, scale, SpriteEffects.None, 0);
+                    }
                 }
-                if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 3)
+                else if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == Effect_Kabooom)
                 {
-                    if (timerDraw == 0)
-                        timerDraw = 15;
-                    if (timerDraw == 15)
-                        offsetDraw = 46;
-                    if (timerDraw == 10)
-                        offsetDraw = 92;
-                    if (timerDraw == 5)
-                        offsetDraw = 0;
-                    if (timerDraw > 0)
-                        timerDraw--;
-                    Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/WOOOSH").Value;
-                    Main.spriteBatch.Draw(texture, Projectile.Center + new Vector2(0, 50) - Main.screenPosition, new Rectangle(0, offsetDraw, 60, 46), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+                    for (int i = 0; i < visualEffects.Count; i++)
+                    {
+                        VisualSoundEffect kaboomEffect = visualEffects[i];
+                        if (visualEffectTimer - kaboomEffect.lifeStart >= kaboomEffect.duration)
+                        {
+                            visualEffects.Remove(kaboomEffect);
+                            i--;
+                            continue;
+                        }
+
+                        float alpha = 1f - ((visualEffectTimer - kaboomEffect.lifeStart) / (float)kaboomEffect.duration);
+                        float scale = 1f - ((visualEffectTimer - kaboomEffect.lifeStart) / (float)kaboomEffect.duration);
+                        scale *= 1.4f;
+
+                        int range = (int)(5f * alpha);
+                        Vector2 positionOffset = new Vector2(Main.rand.Next(-range, range + 1), Main.rand.Next(-range, range + 1));
+                        Texture2D kaboomTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Echoes_Kaboom").Value;
+                        int frame = (visualEffectTimer / 5) % 5;
+                        Rectangle sourceRect = new Rectangle(0, frame * 26, 50, 26);
+
+                        Main.spriteBatch.Draw(kaboomTexture, kaboomEffect.position + positionOffset - Main.screenPosition, sourceRect, Color.White * alpha, 0f, KaboomOrigin, scale, SpriteEffects.None, 0);
+                    }
                 }
-                if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 2)
+                else if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == Effect_Wooosh)
                 {
-                    if (timerDraw == 0)
-                        timerDraw = 40;
-                    if (timerDraw == 40)
-                        offsetDraw = 46;
-                    if (timerDraw == 35)
-                        offsetDraw = 92;
-                    if (timerDraw == 30)
-                        offsetDraw = 138;
-                    if (timerDraw == 25)
-                        offsetDraw = 184;
-                    if (timerDraw == 20)
-                        offsetDraw = 230;
-                    if (timerDraw == 15)
-                        offsetDraw = 276;
-                    if (timerDraw == 10)
-                        offsetDraw = 322;
-                    if (timerDraw == 5)
-                        offsetDraw = 0;
-                    if (timerDraw > 0)
-                        timerDraw--;
-                    Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/Kaboom").Value;
-                    Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0, 160), new Rectangle(0, offsetDraw, 54, 46), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+                    for (int i = 0; i < visualEffects.Count; i++)
+                    {
+                        VisualSoundEffect woooshEffect = visualEffects[i];
+                        if (visualEffectTimer - woooshEffect.lifeStart >= woooshEffect.duration)
+                        {
+                            visualEffects.Remove(woooshEffect);
+                            i--;
+                            continue;
+                        }
+
+                        float alpha = (float)Math.Sin(((visualEffectTimer - woooshEffect.lifeStart) / (float)woooshEffect.duration) * Math.PI);
+                        float scale = woooshEffect.duration / 140f;
+
+                        Texture2D woooshTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Echoes_Wooosh").Value;
+                        Main.spriteBatch.Draw(woooshTexture, woooshEffect.position - Main.screenPosition, null, Color.White * alpha, 0f, woooshTexture.Size() / 2f, scale, SpriteEffects.None, 0);
+                    }
                 }
-                if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == 1)
+                else if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType == Effect_Sizzle)
                 {
-                    if (timerDraw == 0)
-                        timerDraw = 20;
-                    if (timerDraw == 20)
-                        offsetDraw = 60;
-                    if (timerDraw == 15)
-                        offsetDraw = 120;
-                    if (timerDraw == 10)
-                        offsetDraw = 180;
-                    if (timerDraw == 5)
-                        offsetDraw = 0;
-                    if (timerDraw > 0)
-                        timerDraw--;
-                    Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/BOING").Value;
-                    Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0, 90), new Rectangle(0, offsetDraw, 86, 60), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+                    for (int i = 0; i < visualEffects.Count; i++)
+                    {
+                        VisualSoundEffect sizzleEffect = visualEffects[i];
+                        float alpha = (float)Math.Sin(((visualEffectTimer - sizzleEffect.lifeStart) / (float)sizzleEffect.duration) * Math.PI);
+                        float scale = sizzleEffect.duration / 90f;
+
+                        Texture2D sizzleTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Echoes_Sizzle").Value;
+                        Main.spriteBatch.Draw(sizzleTexture, sizzleEffect.position - Main.screenPosition, null, Color.White * alpha, 0f, sizzleTexture.Size() / 2f, scale, SpriteEffects.None, 0);
+                    }
                 }
             }
         }
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            return false;
-        }
 
-        public override bool CanHitPvp(Player target)
-        {
-            return false;
-        }
+        public override bool OnTileCollide(Vector2 oldVelocity) => false;
 
-        public override bool? CanHitNPC(NPC target)
-        {
-            return false;
-        }
+        public override bool CanHitPvp(Player target) => false;
+        public override bool? CanHitNPC(NPC target) => false;
 
         public override void Kill(int timeLeft)
         {

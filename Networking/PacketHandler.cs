@@ -1,6 +1,5 @@
 using System.IO;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Networking
 {
@@ -15,15 +14,11 @@ namespace JoJoStands.Networking
             HandlerType = handlerType;
         }
 
-        protected ModPacket GetPacket(byte packetType, int fromWho)
+        protected ModPacket CreatePacket(byte packetType)
         {
             ModPacket packet = JoJoStands.Instance.GetPacket();
             packet.Write(HandlerType);
             packet.Write(packetType);
-            /*if (Main.netMode == NetmodeID.Server)
-			{
-				packet.Write((byte)fromWho);
-			}*/
             return packet;
         }
     }

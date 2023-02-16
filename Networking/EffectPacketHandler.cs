@@ -1,6 +1,5 @@
 using System.IO;
 using Terraria;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,7 +8,7 @@ namespace JoJoStands.Networking
     public class EffectPacketHandler : PacketHandler
     {
         public const byte Timestop = 0;
-        public const byte Timestop2 = 1;
+        public const byte TimestopValidation = 1;
         public const byte Timeskip = 2;
         public const byte Timeskip2 = 3;
         public const byte BacktoZero = 4;
@@ -18,8 +17,7 @@ namespace JoJoStands.Networking
         public const byte Foresight2 = 7;
 
         public EffectPacketHandler(byte handlerType) : base(handlerType)
-        {
-        }
+        { }
 
         public override void HandlePacket(BinaryReader reader, int fromWho)
         {
@@ -29,7 +27,7 @@ namespace JoJoStands.Networking
                 case Timestop:
                     ReceiveTimestop(reader, fromWho);
                     break;
-                case Timestop2:
+                case TimestopValidation:
                     ReceiveTimestopFromAffected(reader, fromWho);
                     break;
                 case Timeskip:
@@ -55,7 +53,7 @@ namespace JoJoStands.Networking
 
         public void SendTimestop(int toWho, int fromWho, bool timestopValue, int timestopOwner)         //OR packet.Write(Main.player[fromWho].GetModPlayer<MyPlayer>().TheWorldEffect);  if you want to simplify using the method
         {
-            ModPacket packet = GetPacket(Timestop, fromWho);
+            ModPacket packet = CreatePacket(Timestop);
             packet.Write(timestopValue);
             packet.Write(timestopOwner);
             packet.Send(toWho, fromWho);
@@ -63,7 +61,7 @@ namespace JoJoStands.Networking
 
         public void SendTimestopBackToOwner(int toWho, int fromWho, bool timestopValue, int affectedPlayer)
         {
-            ModPacket packet = GetPacket(Timestop2, fromWho);
+            ModPacket packet = CreatePacket(TimestopValidation);
             packet.Write(timestopValue);
             packet.Write(affectedPlayer);
             packet.Send(toWho, fromWho);
@@ -121,7 +119,7 @@ namespace JoJoStands.Networking
 
         public void SendTimeskip(int toWho, int fromWho, bool timeskipValue, int timeskipOwner)
         {
-            ModPacket packet = GetPacket(Timeskip, fromWho);
+            ModPacket packet = CreatePacket(Timeskip);
             packet.Write(timeskipValue);
             packet.Write(timeskipOwner);
             packet.Send(toWho, fromWho);
@@ -129,7 +127,7 @@ namespace JoJoStands.Networking
 
         public void SendTimeskipBackToOwner(int toWho, int fromWho, bool timeskipValue, int affectedPlayer)
         {
-            ModPacket packet = GetPacket(Timeskip2, fromWho);
+            ModPacket packet = CreatePacket(Timeskip2);
             packet.Write(timeskipValue);
             packet.Write(affectedPlayer);
             packet.Send(toWho, fromWho);
@@ -170,7 +168,7 @@ namespace JoJoStands.Networking
 
         public void SendBTZ(int toWho, int fromWho, bool BTZValue, int BTZOwner)
         {
-            ModPacket packet = GetPacket(BacktoZero, fromWho);
+            ModPacket packet = CreatePacket(BacktoZero);
             packet.Write(BTZValue);
             packet.Write(BTZOwner);
             packet.Send(toWho, fromWho);
@@ -178,7 +176,7 @@ namespace JoJoStands.Networking
 
         public void SendBTZBackToOwner(int toWho, int fromWho, bool BTZValue, int affectedPlayer)
         {
-            ModPacket packet = GetPacket(BacktoZero2, fromWho);
+            ModPacket packet = CreatePacket(BacktoZero2);
             packet.Write(BTZValue);
             packet.Write(affectedPlayer);
             packet.Send(toWho, fromWho);
@@ -218,7 +216,7 @@ namespace JoJoStands.Networking
 
         public void SendForesight(int toWho, int fromWho, bool foresightValue, int foresightOwner)
         {
-            ModPacket packet = GetPacket(Foresight, fromWho);
+            ModPacket packet = CreatePacket(Foresight);
             packet.Write(foresightValue);
             packet.Write(foresightOwner);
             packet.Send(toWho, fromWho);
@@ -226,7 +224,7 @@ namespace JoJoStands.Networking
 
         public void SendForesightBackToOwner(int toWho, int fromWho, bool foresightValue, int affectedPlayer)
         {
-            ModPacket packet = GetPacket(Foresight2, fromWho);
+            ModPacket packet = CreatePacket(Foresight2);
             packet.Write(foresightValue);
             packet.Write(affectedPlayer);
             packet.Send(toWho, fromWho);

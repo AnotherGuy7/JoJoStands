@@ -25,6 +25,7 @@ namespace JoJoStands
         public const string VoidBarGradient = "JoJoStandsVoidGradient";
         public const string BattlePaletteSwitchEffect = "ColorChangeEffect";
         public const string MultiColorStaticEffect = "MultiColorStaticEffect";
+        public const string ViralMeteoriteEffect = "ViralMeteoriteEffect";
 
 
         public static void ActivateShader(string shaderName)
@@ -80,6 +81,9 @@ namespace JoJoStands
             Ref<Effect> colorChangeShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/ColorChangeEffect", AssetRequestMode.ImmediateLoad));
             Filters.Scene[BattlePaletteSwitchEffect] = new Filter(new ScreenShaderData(colorChangeShader, "ColorChangeEffect"), EffectPriority.VeryHigh);
             Filters.Scene[BattlePaletteSwitchEffect].Load();
+            Ref<Effect> viralMeteoriteShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/ViralMeteoriteEffect", AssetRequestMode.ImmediateLoad));
+            Filters.Scene[ViralMeteoriteEffect] = new Filter(new ScreenShaderData(viralMeteoriteShader, "ViralMeteoriteEffect"), EffectPriority.VeryHigh);
+            Filters.Scene[ViralMeteoriteEffect].Load();
 
             //Texture shaders
             Ref<Effect> voidGradientShader = new Ref<Effect>((Effect)Request<Effect>("JoJoStands/Effects/VoidBarGradient", AssetRequestMode.ImmediateLoad));

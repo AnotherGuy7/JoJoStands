@@ -375,38 +375,33 @@ namespace JoJoStands.Projectiles
                             mPlayer.echoesACT2Evolve += damage;
                     }
                 }
-                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.echoesACT == 3)
+                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.currentEchoesAct == 3)
                 {
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
+                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15)
+                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer += 30;
                     SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
                 }
-                if (mPlayer.echoesACT == 1)
+                if (mPlayer.currentEchoesAct == 1)
                 {
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
                     int maxDamage = 36;
-                    int soundIntensivity = 2;
-                    if (mPlayer.echoesTier == 3)
-                    {
-                        maxDamage = 49;
-                        soundIntensivity = 4;
-                    }
+                    int soundIntensity = 2 + (2 * (mPlayer.echoesTier - 2));
                     if (mPlayer.echoesTier == 4)
-                    {
                         maxDamage = 74;
-                        soundIntensivity = 6;
-                    }
+                    else if (mPlayer.echoesTier == 3)
+                        maxDamage = 49;
                     if (!target.boss)
-                        soundIntensivity *= 2;
-                    target.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
+                        soundIntensity *= 2;
+
+                    target.AddBuff(ModContent.BuffType<SMACK>(), 10 * 60);
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
-                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = maxDamage;
-                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += soundIntensivity;
-                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensivity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundMaxIntensity = maxDamage;
+                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensity < target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundMaxIntensity)
+                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensity += soundIntensity;
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
                 }
             }
         }
@@ -477,34 +472,29 @@ namespace JoJoStands.Projectiles
 
             if (standType == Echoes)
             {
-                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.echoesACT == 3)
+                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.currentEchoesAct == 3)
                 {
                     mTarget.echoesDamageBoost = mPlayer.standDamageBoosts;
                     if (mTarget.echoesFreeze <= 15)
                         mTarget.echoesFreeze += 30;
                     SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 1, 0, 0, mPlayer.standDamageBoosts, 0f);
                 }
-                if (mPlayer.echoesACT == 1)
+                if (mPlayer.currentEchoesAct == 1)
                 {
                     mTarget.echoesDamageBoost = mPlayer.standDamageBoosts;
                     int maxDamage = 48;
-                    int soundIntensivity = 2;
-                    if (mPlayer.echoesTier == 3)
-                    {
-                        maxDamage = 72;
-                        soundIntensivity = 4;
-                    }
+                    int soundIntensity = 2 + (2 * (mPlayer.echoesTier - 2));
                     if (mPlayer.echoesTier == 4)
-                    {
                         maxDamage = 108;
-                        soundIntensivity = 8;
-                    }
-                    target.AddBuff(ModContent.BuffType<Tinnitus>(), 600);
-                    mTarget.echoesSoundIntensivityMax = maxDamage;
-                    if (mTarget.echoesSoundIntensivity < mTarget.echoesSoundIntensivityMax)
-                        mTarget.echoesSoundIntensivity += soundIntensivity;
-                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<Tinnitus>(), 600);
-                    SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 2, maxDamage, soundIntensivity, mPlayer.standDamageBoosts, 0f);
+                    else if (mPlayer.echoesTier == 3)
+                        maxDamage = 72;
+
+                    target.AddBuff(ModContent.BuffType<SMACK>(), 10 * 60);
+                    mTarget.echoesSoundIntensityMax = maxDamage;
+                    if (mTarget.echoesSoundIntensity < mTarget.echoesSoundIntensityMax)
+                        mTarget.echoesSoundIntensity += soundIntensity;
+                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<SMACK>(), 10 * 60);
+                    SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 2, maxDamage, soundIntensity, mPlayer.standDamageBoosts, 0f);
                 }
             }
 

@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class EchoesACT1 : StandItemClass
+    public class EchoesAct1 : StandItemClass
     {
         public override int StandSpeed => 16;
         public override int StandType => 1;
@@ -18,7 +18,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 1)");
-            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate! \nRight-click: Place sound mark at entity! \nSpecial: Remote Control \nPassive: Normal attack inflict debuff that get stronger with each hit! Sound mark increases damage of debuff!");
+            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate!\nRight-click: Tag an entity with a sound!\nSpecial: Remote Control\nPassive: Attacking enemies applies SMACK to them, dealing damage over time.");
         }
 
         public override void SetDefaults()
@@ -35,7 +35,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<EchoesACT0>())
+                .AddIngredient(ModContent.ItemType<EchoesAct0>())
                 .AddIngredient(ItemID.HellstoneBar, 18)
                 .AddIngredient(ItemID.Gel, 36)
                 .AddIngredient(ItemID.Emerald)

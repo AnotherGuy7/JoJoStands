@@ -51,7 +51,7 @@ namespace JoJoStands.Buffs.EffectBuff
                 if (Main.netMode == NetmodeID.MultiplayerClient && sendFalse)
                 {
                     mPlayer.backToZeroActive = false;
-                    ModNetHandler.effectSync.SendBTZ(256, player.whoAmI, false, player.whoAmI);
+                    ModNetHandler.EffectSync.SendBTZ(256, player.whoAmI, false, player.whoAmI);
                 }
                 if (Main.netMode != NetmodeID.Server)
                 {

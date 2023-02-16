@@ -188,7 +188,7 @@ namespace JoJoStands
         public override void UpdateUI(GameTime gameTime)
         {
             //Stand Slot update
-            MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            /*MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             if (!mPlayer.timestopActive && !mPlayer.standChangingLocked)
             {
                 if (Main.mouseItem.IsAir || Main.mouseItem.ModItem is StandItemClass)
@@ -200,7 +200,7 @@ namespace JoJoStands
                     if (Main.mouseItem.ModItem is StandDye)
                         (Main.mouseItem.ModItem as StandDye).OnEquipDye(Main.LocalPlayer);
                 }
-            }
+            }/*/
 
             if (HamonBar.visible)
                 _hamonbarInterface.Update(gameTime);

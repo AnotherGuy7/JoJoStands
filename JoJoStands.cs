@@ -115,7 +115,7 @@ namespace JoJoStands
             standTier1List.Add(ItemType<CrazyDiamondT1>());
             standTier1List.Add(ItemType<TowerOfGrayT1>());
             standTier1List.Add(ItemType<SoftAndWetT1>());
-            standTier1List.Add(ItemType<EchoesACT0>());
+            standTier1List.Add(ItemType<EchoesAct0>());
 
             timestopImmune.Add(ProjectileType<TheWorldStandT2>());     //only the timestop capable stands as people shouldn't switch anyway
             timestopImmune.Add(ProjectileType<TheWorldStandT3>());

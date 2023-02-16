@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class EchoesACT2 : StandItemClass
+    public class EchoesAct2 : StandItemClass
     {
         public override int StandSpeed => 12;
         public override int StandType => 1;
@@ -18,7 +18,7 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 2)");
-            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate! \nRight-click: Sound effect selection! \nHold right-click: Create the chosen sound effect at the mouse point! \nSpecial: Remote Control \nSecond Special: Switch to previous act!");
+            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate! \nRight-click: Scroll through Sound Effects!\nHold right-click: Create an aura with the chosen Sound Effect!\nSpecial: Remote Control\nSecond Special: Switch to previous act!");
         }
 
         public override void SetDefaults()
@@ -35,7 +35,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<EchoesACT1>())
+                .AddIngredient(ModContent.ItemType<EchoesAct1>())
                 .AddIngredient(ItemID.HallowedBar, 12)
                 .AddIngredient(ItemID.MusicBox)
                 .AddIngredient(ItemID.Emerald, 2)

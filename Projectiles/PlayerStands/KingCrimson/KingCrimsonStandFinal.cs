@@ -237,7 +237,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     mPlayer.epitaphForesightActive = true;
                     mPlayer.kingCrimsonAbilityCooldownTime = 30;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                        ModNetHandler.effectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
+                        ModNetHandler.EffectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)

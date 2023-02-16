@@ -21,7 +21,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override string Texture
         {
-            get { return Mod.Name + "/Items/EchoesACT0"; }
+            get { return Mod.Name + "/Items/EchoesAct0"; }
         }
 
         private bool lowPriceThreeFreeze = false;
@@ -117,8 +117,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (evolve)
             {
                 player.maxMinions += 1;
-                mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesACT1>();
-                mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesACT1>());
+                mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesAct1>();
+                mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesAct1>());
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_1>(), 1f);
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_2>(), 1f);
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);

@@ -25,8 +25,7 @@ namespace JoJoStands.Networking
         //public const byte Sounds = 6;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
-        {
-        }
+        { }
 
         public override void HandlePacket(BinaryReader reader, int fromWho)     //decides what happens when a packet is received, it looks for the byte sent with the packet and uses the proper method
         {
@@ -74,7 +73,7 @@ namespace JoJoStands.Networking
 
         public void SendPoseMode(int toWho, int fromWho, bool poseModeValue, byte whoAmI)        //send the packet whenever its called to
         {
-            ModPacket packet = GetPacket(PoseMode, fromWho);
+            ModPacket packet = CreatePacket(PoseMode);
             packet.Write(poseModeValue);
             packet.Write(whoAmI);
             packet.Send(toWho, fromWho);
@@ -96,7 +95,7 @@ namespace JoJoStands.Networking
 
         public void SendStandOut(int toWho, int fromWho, bool standOutValue, byte whoAmI)
         {
-            ModPacket packet = GetPacket(StandOut, fromWho);
+            ModPacket packet = CreatePacket(StandOut);
             packet.Write(standOutValue);
             packet.Write(whoAmI);
             packet.Send(toWho, fromWho);
@@ -120,7 +119,7 @@ namespace JoJoStands.Networking
 
         public void SendStandControlStyle(int toWho, int fromWho, MyPlayer.StandControlStyle standControlStyle, byte whoAmI)
         {
-            ModPacket packet = GetPacket(StandControlStyle, fromWho);
+            ModPacket packet = CreatePacket(StandControlStyle);
             packet.Write((byte)standControlStyle);
             packet.Write(whoAmI);
             packet.Send(toWho, fromWho);
@@ -142,7 +141,7 @@ namespace JoJoStands.Networking
 
         public void SendCBLayer(int toWho, int fromWho, bool visibility, byte whoAmI)
         {
-            ModPacket packet = GetPacket(CBLayer, fromWho);
+            ModPacket packet = CreatePacket(CBLayer);
             packet.Write(visibility);
             packet.Write(whoAmI);
             packet.Send(toWho, fromWho);
@@ -164,7 +163,7 @@ namespace JoJoStands.Networking
 
         /*public void SendYoshihiroToSpawn(int toWho, int fromWho, int NPCType, Vector2 position)
 		{
-			ModPacket packet = GetPacket(Yoshihiro, fromWho);
+			ModPacket packet = CreatePacket(Yoshihiro, fromWho);
 			packet.Write(NPCType);
 			packet.WriteVector2(position);
 			packet.Send(toWho, fromWho);
@@ -184,7 +183,7 @@ namespace JoJoStands.Networking
 
         public void SendDyeItem(int toWho, int fromWho, int dyeItemType, byte whoAmI)
         {
-            ModPacket packet = GetPacket(DyeItem, fromWho);
+            ModPacket packet = CreatePacket(DyeItem);
             packet.Write(dyeItemType);
             packet.Write(whoAmI);
             packet.Send(toWho, fromWho);
@@ -202,7 +201,7 @@ namespace JoJoStands.Networking
 
         /*public void SendSoundInstance(int toWho, int fromWho, string soundName, Vector2 pos, int travelDist = 10, SoundState state = SoundState.Paused)
 		{
-			ModPacket packet = GetPacket(Sounds, fromWho);
+			ModPacket packet = CreatePacket(Sounds, fromWho);
 			packet.Write(soundName);
 			packet.WriteVector2(pos);
 			packet.Write(travelDist);
@@ -225,7 +224,7 @@ namespace JoJoStands.Networking
 
         public void SendSexPistolPosition(int toWho, int fromWho, byte whoAmI, byte index, Vector2 pos)
         {
-            ModPacket packet = GetPacket(DyeItem, fromWho);
+            ModPacket packet = CreatePacket(DyeItem);
             packet.Write(whoAmI);
             packet.Write(index);
             packet.Write((int)pos.X);
@@ -247,7 +246,7 @@ namespace JoJoStands.Networking
 
         public void SendDeathLoopInfo(int toWho, int fromWho, byte whoAmI, int targetWhoAmI)
         {
-            ModPacket packet = GetPacket(DeathLoopInfo, fromWho);
+            ModPacket packet = CreatePacket(DeathLoopInfo);
             packet.Write(whoAmI);
             packet.Write(targetWhoAmI);
             packet.Send(toWho, fromWho);
@@ -266,7 +265,7 @@ namespace JoJoStands.Networking
 
         public void SendArrowEarringInfo(int toWho, int fromWho, byte whoAmI, int targetNPCwhoAmI, int damage, bool crit)
         {
-            ModPacket packet = GetPacket(ArrowEarringInfo, fromWho);
+            ModPacket packet = CreatePacket(ArrowEarringInfo);
             packet.Write(whoAmI);
             packet.Write(targetNPCwhoAmI);
             packet.Write(damage);
@@ -288,7 +287,7 @@ namespace JoJoStands.Networking
 
         public void SendStandEffectInfo(int toWho, int fromWho, byte whoAmI, int targetWhoAmI, int fistWhoAmI, int stat1 = 0, int stat2 = 0, int stat3 = 0, float stat4 = 0f, float stat5 = 0f)
         {
-            ModPacket packet = GetPacket(StandEffectInfo, fromWho);
+            ModPacket packet = CreatePacket(StandEffectInfo);
             packet.Write(whoAmI);
             packet.Write(targetWhoAmI);
             packet.Write(fistWhoAmI);
@@ -348,16 +347,16 @@ namespace JoJoStands.Networking
             {
                 Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = stat4;
                 Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = stat5;
-                if (Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze <= 15)
-                    Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesFreeze += 30;
+                if (Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15)
+                    Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer += 30;
             }
             if (fistWhoAmI == 15 && stat1 == 1)
             {
                 Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = stat4;
                 Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = stat5;
-                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax = stat2;
-                if (Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity < Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivityMax)
-                    Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensivity += stat3;
+                Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundMaxIntensity = stat2;
+                if (Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensity < Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundMaxIntensity)
+                    Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensity += stat3;
             }
             if (Main.netMode == NetmodeID.Server)
                 SendStandEffectInfo(-1, fromWho, whoAmI, targetWhoAmI, fistWhoAmI, stat1, stat2, stat3, stat4, stat5);
@@ -365,13 +364,14 @@ namespace JoJoStands.Networking
 
         public void SendOtherPlayerDebuff(int toWho, int fromWho, byte whoAmI, int targetPlayerWhoAmI, int debuffType, int debuffTime)
         {
-            ModPacket packet = GetPacket(OtherPlayerDebuffInfo, fromWho);
+            ModPacket packet = CreatePacket(OtherPlayerDebuffInfo);
             packet.Write(whoAmI);
             packet.Write(targetPlayerWhoAmI);
             packet.Write(debuffType);
             packet.Write(debuffTime);
             packet.Send(toWho, fromWho);
         }
+
         public void ReceiveOtherPlayerDebuff(BinaryReader reader, int fromWho)
         {
             byte whoAmI = reader.ReadByte();
@@ -386,7 +386,7 @@ namespace JoJoStands.Networking
 
         public void SendOtherPlayerExtraEffect(int toWho, int fromWho, byte whoAmI, int targetPlayerWhoAmI, int effectType, int int1, int int2, float float1, float float2)
         {
-            ModPacket packet = GetPacket(OtherPlayerExtraEffect, fromWho);
+            ModPacket packet = CreatePacket(OtherPlayerExtraEffect);
             packet.Write(whoAmI);
             packet.Write(targetPlayerWhoAmI);
             packet.Write(effectType);
@@ -416,9 +416,9 @@ namespace JoJoStands.Networking
             if (effectType == 2) //echoes act 1 debuff
             {
                 Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesDamageBoost = float1;
-                Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivityMax = int1;
-                if (Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivity < Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivityMax)
-                    Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensivity += int2;
+                Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensityMax = int1;
+                if (Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensity < Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensityMax)
+                    Main.player[targetPlayerWhoAmI].GetModPlayer<MyPlayer>().echoesSoundIntensity += int2;
             }
             if (effectType == 3) //SHA explosion
                 Main.player[targetPlayerWhoAmI].Hurt(PlayerDeathReason.ByCustomReason(Main.player[targetPlayerWhoAmI].name + " had too high a heat signurature."), int1, int2);

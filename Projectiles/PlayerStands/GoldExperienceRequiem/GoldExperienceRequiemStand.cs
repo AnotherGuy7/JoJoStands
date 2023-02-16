@@ -45,7 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 player.AddBuff(ModContent.BuffType<BacktoZero>(), 1200);
                 mPlayer.backToZeroActive = true;
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.effectSync.SendBTZ(256, player.whoAmI, true, player.whoAmI);
+                    ModNetHandler.EffectSync.SendBTZ(256, player.whoAmI, true, player.whoAmI);
             }
             if (mPlayer.timestopActive)
                 return;
