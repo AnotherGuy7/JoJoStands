@@ -108,6 +108,7 @@ namespace JoJoStands
         public int kingCrimsonAbilityCooldownTime = 0;
         public int deathLoopTarget = -1;
         public StandControlStyle standControlStyle;
+        public int softAndWetBubbleRotation;
 
         public int globalCooldown = 0;
 
@@ -1886,8 +1887,8 @@ namespace JoJoStands
                 for (int i = 0; i < numberProjectiles; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(shootVel.X, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                    int proj = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, perturbedSpeed, ModContent.ProjectileType<CrystalShard>(), 15, 2f, Player.whoAmI);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, perturbedSpeed, ModContent.ProjectileType<CrystalShard>(), 15, 2f, Player.whoAmI);
+                    Main.projectile[projIndex].netUpdate = true;
                 }
             }
             if (hermitPurpleTier >= 2)

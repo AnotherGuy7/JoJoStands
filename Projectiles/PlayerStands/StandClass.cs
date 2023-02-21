@@ -140,46 +140,17 @@ namespace JoJoStands.Projectiles.PlayerStands
         //private int secondaryRangeIndicatorSize = 0;
 
         /// <summary>
-        /// Starts a timestop that lasts x amount of seconds.
-        /// </summary>
-        public void Timestop(int seconds)
-        {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.overHeaven)
-                seconds *= 2;
-            mPlayer.timestopActive = true;
-            mPlayer.timestopEffectDurationTimer = 60;
-            if (!JoJoStands.SoundsLoaded)
-                SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_start"));
-
-            player.AddBuff(ModContent.BuffType<TheWorldBuff>(), seconds * 60, true);
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModNetHandler.EffectSync.SendTimestop(256, player.whoAmI, true, player.whoAmI);
-        }
-
-        /// <summary>
         /// Checks if the Special bind has just been pressed and there is no cooldown.
         /// </summary>
+        /// <param name="cooldownCheck">Whether or not to check if the player has a cooldown.</param>
         /// <returns>True if the bind has just been pressed and the player has no ability cooldown on them. Returns false otherwise.</returns>
-        public bool SpecialKeyPressed()     //checks for if this isn't the server, if the key is pressed, and if the player has no cooldown (is the owner check even needed?)
+        public bool SpecialKeyPressed(bool cooldownCheck = true)     //checks for if this isn't the server, if the key is pressed, and if the player has no cooldown (is the owner check even needed?)
         {
             bool specialPressed = false;
             if (!Main.dedServ)      //if it's the clinet, as hotkeys don't exist on the server
                 specialPressed = JoJoStands.SpecialHotKey.JustPressed;
-            return specialPressed && !Main.player[Projectile.owner].HasBuff(ModContent.BuffType<AbilityCooldown>()) && Projectile.owner == Main.myPlayer;
-        }
-
-        /// <summary>
-        /// Checks if the Special bind has just been pressed.
-        /// </summary>
-        /// <returns>True if the bind has just been pressed. Returns false otherwise.</returns>
-        public bool SpecialKeyPressedNoCooldown()
-        {
-            bool specialPressed = false;
-            if (!Main.dedServ)
-                specialPressed = JoJoStands.SpecialHotKey.JustPressed;
-            return specialPressed && Projectile.owner == Main.myPlayer;
+            bool noCooldown = cooldownCheck ? !Main.player[Projectile.owner].HasBuff(ModContent.BuffType<AbilityCooldown>()) : true;
+            return specialPressed && noCooldown && Projectile.owner == Main.myPlayer;
         }
 
         /// <summary>
@@ -197,25 +168,15 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <summary>
         /// Checks if the Second Special bind has just been pressed and the player has no Ability Cooldown.
         /// </summary>
+        /// <param name="cooldownCheck">Whether or not to check if the player has a cooldown.</param>
         /// <returns>True if the Second Special bind has just been pressed and the player has no Ability Cooldown. False if otherwise.</returns>
-        public bool SecondSpecialKeyPressed()     //checks for if this isn't the server, if the key is pressed, and if the player has no cooldown (is the owner check even needed?)
+        public bool SecondSpecialKeyPressed(bool cooldownCheck = true)     //checks for if this isn't the server, if the key is pressed, and if the player has no cooldown (is the owner check even needed?)
         {
             bool specialPressed = false;
             if (!Main.dedServ)      //if it's the clinet, as hotkeys don't exist on the server
                 specialPressed = JoJoStands.SecondSpecialHotKey.JustPressed;
-            return specialPressed && !Main.player[Projectile.owner].HasBuff(ModContent.BuffType<AbilityCooldown>()) && Projectile.owner == Main.myPlayer;
-        }
-
-        /// <summary>
-        /// Checks if the Second Special bind has just been pressed.
-        /// </summary>
-        /// <returns>True if the Second Special bind has just been pressed. False if otherwise.</returns>
-        public bool SecondSpecialKeyPressedNoCooldown()
-        {
-            bool specialPressed = false;
-            if (!Main.dedServ)
-                specialPressed = JoJoStands.SecondSpecialHotKey.JustPressed;
-            return specialPressed && Projectile.owner == Main.myPlayer;
+            bool noCooldown = cooldownCheck ? !Main.player[Projectile.owner].HasBuff(ModContent.BuffType<AbilityCooldown>()) : true;
+            return specialPressed && noCooldown && Projectile.owner == Main.myPlayer;
         }
 
         /// <summary>
@@ -228,6 +189,25 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SecondSpecialHotKey.Current;
             return specialPressed && Projectile.owner == Main.myPlayer;
+        }
+
+        /// <summary>
+        /// Starts a timestop that lasts x amount of seconds.
+        /// </summary>
+        public void Timestop(int seconds)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.overHeaven)
+                seconds *= 2;
+            mPlayer.timestopActive = true;
+            mPlayer.timestopEffectDurationTimer = 60;
+            if (!JoJoStands.SoundsLoaded)
+                SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_start"));
+
+            player.AddBuff(ModContent.BuffType<TheWorldBuff>(), seconds * 60, true);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                ModNetHandler.EffectSync.SendTimestop(256, player.whoAmI, true, player.whoAmI);
         }
 
         /// <summary>
@@ -254,7 +234,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             attackFrames = true;
             float rotaY = mouseY - Projectile.Center.Y;
             Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-            velocityAddition = new Vector2(mouseX, mouseY) - Projectile.position;
+            velocityAddition = Main.MouseWorld - Projectile.position;
             velocityAddition.Normalize();
             velocityAddition *= movementSpeed;
 
@@ -269,25 +249,25 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Projectile.direction = 1;
             }
 
-            mouseDistance = Vector2.Distance(new Vector2(mouseX, mouseY), Projectile.Center);
+            mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
             if (mouseDistance > 40f)
                 Projectile.velocity = player.velocity + velocityAddition;
-            if (mouseDistance <= 40f)
+            else
                 Projectile.velocity = Vector2.Zero;
 
             PlayPunchSound();
             if (shootCount <= 0)
             {
                 shootCount += newPunchTime;
-                Vector2 shootVel = new Vector2(mouseX, mouseY) - Projectile.Center;
+                Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                 if (shootVel == Vector2.Zero)
                     shootVel = new Vector2(0f, 1f);
 
                 shootVel.Normalize();
                 shootVel *= ProjectileSpeed;
-                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
-                Main.projectile[proj].timeLeft = (int)(Main.projectile[proj].timeLeft * punchLifeTimeMultiplier);
-                Main.projectile[proj].netUpdate = true;
+                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
+                Main.projectile[projIndex].timeLeft = (int)(Main.projectile[projIndex].timeLeft * punchLifeTimeMultiplier);
+                Main.projectile[projIndex].netUpdate = true;
             }
             LimitDistance();
             Projectile.netUpdate = true;
@@ -410,8 +390,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                         {
                             shootVel *= ProjectileSpeed;
                         }
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
+                        Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
                 }
@@ -500,8 +480,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 shootVel *= ProjectileSpeed;
                             }
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
+                            Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                         }
                     }
@@ -548,8 +528,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                                 {
                                     shootVel.Y -= Projectile.Distance(target.position) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
                                 }
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X + 5f, Projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
-                                Main.projectile[proj].netUpdate = true;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X + 5f, Projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
+                                Main.projectile[projIndex].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }
                             if (itemToConsumeType != -1)

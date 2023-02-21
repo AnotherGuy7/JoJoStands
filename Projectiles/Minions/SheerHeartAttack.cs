@@ -43,7 +43,7 @@ namespace JoJoStands.Projectiles.Minions
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if (SpecialKeyPressedNoCooldown())
+            if (SpecialKeyPressed(false))
             {
                 Projectile.position = player.position;
                 Projectile.netUpdate = true;
@@ -117,7 +117,7 @@ namespace JoJoStands.Projectiles.Minions
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             int bombDamage = (int)(350 * mPlayer.standDamageBoosts);
             if (Projectile.ai[0] == 1f)

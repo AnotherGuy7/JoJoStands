@@ -16,14 +16,11 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
         public override int PunchDamage => 38;
         public override int PunchTime => 12;
         public override int HalfStandHeight => 38;
-        public override int AltDamage => ((int)(TierNumber * 15));
+        public override int AltDamage => TierNumber * 15;
         public override int StandOffset => 54;
         public override int FistWhoAmI => 0;
         public override int TierNumber => 2;
-
         public override StandAttackType StandType => StandAttackType.Melee;
-
-        public bool bubbleBarrier = false;
 
         public override void AI()
         {
@@ -51,9 +48,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                         attackFrames = false;
                 }
                 if (!attackFrames)
-                {
                     StayBehindWithAbility();
-                }
+
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
                     GoInFront();
@@ -61,23 +57,22 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                     {
                         shootCount += 48;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        SoundEngine.PlaySound(SoundID.SplashWeak);
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
+
                         shootVel.Normalize();
                         shootVel *= 3f;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
-                        shootCount += 1;
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
+                        Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
+                        SoundEngine.PlaySound(SoundID.SplashWeak);
                     }
                 }
                 if (SecondSpecialKeyPressed() && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
                 {
-                    player.AddBuff(ModContent.BuffType<BarrierBuff>(), 600);
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(22));
-                    Vector2 playerFollow = Vector2.Zero;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, playerFollow, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
+                    player.AddBuff(ModContent.BuffType<BubbleBarrierBuff>(), 10 * 60);
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(40));
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)

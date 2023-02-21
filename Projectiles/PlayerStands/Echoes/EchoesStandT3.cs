@@ -114,10 +114,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         shootVel = new Vector2(0f, 1f);
                     shootVel.Normalize();
                     shootVel *= 8f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<EchoesTailTip>(), (int)(AltDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
-                    Main.projectile[proj].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier = mPlayer.echoesTier;
-                    Main.projectile[proj].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType = echoesTailTipType;
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<EchoesTailTip>(), (int)(AltDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
+                    Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier = mPlayer.echoesTier;
+                    Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType = echoesTailTipType;
+                    Main.projectile[projIndex].netUpdate = true;
                     Projectile.netUpdate = true;
                 }
                 if (!attackFrames && !returnToPlayer && !returnTail)
@@ -145,7 +145,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                 }
 
-                if (SpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer && !returnToPlayer && !returnTail && tailUseTimer == 0) //remote mode
+                if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && !returnToPlayer && !returnTail && tailUseTimer == 0) //remote mode
                 {
                     remoteMode = !remoteMode;
                     if (remoteMode)
@@ -160,7 +160,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                 }
 
-                if (SecondSpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer && changeActCooldown == 0 && mPlayer.echoesTier > 2 && !evolve)
+                if (SecondSpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && changeActCooldown == 0 && mPlayer.echoesTier > 2 && !evolve)
                 {
                     changeACT = true;
                     Projectile.Kill();
@@ -201,8 +201,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
+                        Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
                 }
@@ -229,7 +229,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                 }
 
-                if (SpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer && !returnToPlayer && !returnTail && tailUseTimer == 0) //remote mode
+                if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && !returnToPlayer && !returnTail && tailUseTimer == 0) //remote mode
                 {
                     remoteMode = !remoteMode;
                     if (remoteMode)

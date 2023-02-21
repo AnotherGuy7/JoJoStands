@@ -47,8 +47,8 @@ namespace JoJoStands.Items
                     shootCooldown += Item.useTime;
                     for (int p = 0; p < Main.rand.Next(3, 7); p++)
                     {
-                        int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.position, new Vector2(Main.rand.NextFloat(-3f, 3f), Main.rand.NextFloat(-3f, 3f)), ModContent.ProjectileType<ViralWoodSharpnel>(), 23, 4f, player.whoAmI);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(player.GetSource_FromThis(), player.position, new Vector2(Main.rand.NextFloat(-3f, 3f), Main.rand.NextFloat(-3f, 3f)), ModContent.ProjectileType<ViralWoodSharpnel>(), 23, 4f, player.whoAmI);
+                        Main.projectile[projIndex].netUpdate = true;
                     }
                 }
             }

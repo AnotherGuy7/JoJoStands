@@ -71,8 +71,8 @@ namespace JoJoStands.Items.Vampire
                 Vector2 shootVel = Main.MouseWorld - player.Center;
                 shootVel.Normalize();
                 shootVel *= 12f;
-                int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<VampiricVeinGrab>(), (int)(Item.damage * 1.2f), 0f, player.whoAmI);
-                Main.projectile[proj].netUpdate = true;
+                int projIndex = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<VampiricVeinGrab>(), (int)(Item.damage * 1.2f), 0f, player.whoAmI);
+                Main.projectile[projIndex].netUpdate = true;
                 SoundStyle item17 = new SoundStyle("Terraria/Sounds/Item_17");
                 item17.Pitch = -0.6f;
                 SoundEngine.PlaySound(item17, player.Center);
@@ -97,8 +97,8 @@ namespace JoJoStands.Items.Vampire
                 for (int i = 0; i < numberProjectiles; i++)
                 {
                     Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1)));
-                    int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, perturbedSpeed, ModContent.ProjectileType<PressurizedBlood>(), Item.damage * 5, 9f, player.whoAmI);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, perturbedSpeed, ModContent.ProjectileType<PressurizedBlood>(), Item.damage * 5, 9f, player.whoAmI);
+                    Main.projectile[projIndex].netUpdate = true;
                 }
                 player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " overstepped their boundaries as a Zombie."), 32, player.direction);
             }

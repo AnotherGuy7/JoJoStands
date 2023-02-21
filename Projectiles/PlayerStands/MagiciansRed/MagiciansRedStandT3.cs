@@ -64,8 +64,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
+                        Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
                 }
@@ -92,8 +92,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                     shootVel.Normalize();
                     shootVel *= 16f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RedBind>(), newProjectileDamage, 3f, Projectile.owner, Projectile.whoAmI, DebuffDuration - 60);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RedBind>(), newProjectileDamage, 3f, Projectile.owner, Projectile.whoAmI, DebuffDuration - 60);
+                    Main.projectile[projIndex].netUpdate = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(15));
                     Projectile.netUpdate = true;
                 }
@@ -103,9 +103,9 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     {
                         float angle = MathHelper.ToRadians((360f / 12f) * p);
                         Vector2 position = player.Center + (angle.ToRotationVector2() * 48f);
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position - new Vector2(26f, 25f), Vector2.Zero, ModContent.ProjectileType<CrossfireHurricaneAnkh>(), newProjectileDamage, 4f, Projectile.owner, 12f * 16f, angle);
-                        Main.projectile[proj].netUpdate = true;
-                        Main.projectile[proj].timeLeft += 10 * p;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position - new Vector2(26f, 25f), Vector2.Zero, ModContent.ProjectileType<CrossfireHurricaneAnkh>(), newProjectileDamage, 4f, Projectile.owner, 12f * 16f, angle);
+                        Main.projectile[projIndex].netUpdate = true;
+                        Main.projectile[projIndex].timeLeft += 10 * p;
                         Projectile.netUpdate = true;
                     }
                     if (JoJoStands.SoundsLoaded)
@@ -144,8 +144,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
+                            Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                         }
                     }

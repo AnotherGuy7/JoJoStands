@@ -63,8 +63,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
 
                     shootVel.Normalize();
                     shootVel *= 12f;
-                    int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center.X, player.Center.Y - 20f, shootVel.X, shootVel.Y, ModContent.ProjectileType<SpaceRipperStingyEyes>(), 82, 4f, Main.myPlayer, 1f);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center.X, player.Center.Y - 20f, shootVel.X, shootVel.Y, ModContent.ProjectileType<SpaceRipperStingyEyes>(), 82, 4f, Main.myPlayer, 1f);
+                    Main.projectile[projIndex].netUpdate = true;
                     SRSETimer = 0;
                 }
             }

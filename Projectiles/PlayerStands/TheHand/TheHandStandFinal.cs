@@ -60,7 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (SpecialKeyPressedNoCooldown())
+                if (SpecialKeyPressed(false))
                 {
                     scrapeMode = !scrapeMode;
                     if (scrapeMode)
@@ -147,8 +147,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
 
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2.5f * overHeavenDamageBoost), PunchKnockback, Projectile.owner, FistWhoAmI);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2.5f * overHeavenDamageBoost), PunchKnockback, Projectile.owner, FistWhoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                             SoundStyle theHandScrapeSound = new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR");
                             theHandScrapeSound.Pitch = Main.rand.NextFloat(0, 0.8f + 1f);

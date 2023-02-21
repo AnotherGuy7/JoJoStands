@@ -55,7 +55,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (SpecialKeyPressedNoCooldown())
+                    if (SpecialKeyPressed(false))
                     {
                         if (!GoldExperienceAbilityWheel.Visible)
                             GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 3);
@@ -67,8 +67,8 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                     bool mouseOnPlatform = TileID.Sets.Platforms[Main.tile[(int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f)].TileType];
                     if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && mPlayer.chosenAbility == 0)
                     {
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<GEFrog>(), 1, 0f, Projectile.owner, TierNumber, TierNumber - 1f);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<GEFrog>(), 1, 0f, Projectile.owner, TierNumber, TierNumber - 1f);
+                        Main.projectile[projIndex].netUpdate = true;
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(6));
                     }
                     if (Main.mouseRight && (Collision.SolidCollision(Main.MouseWorld, 1, 1) || mouseOnPlatform) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && mouseDistance < MaxDistance && mPlayer.chosenAbility == 1)

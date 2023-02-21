@@ -84,8 +84,8 @@ namespace JoJoStands.Items.Vampire
                 Vector2 shootVel = Main.MouseWorld - player.Center;
                 shootVel.Normalize();
                 shootVel *= 10f;
-                int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<ExtendedZombieGrab>(), Item.damage, 0f, player.whoAmI);
-                Main.projectile[proj].netUpdate = true;
+                int projIndex = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, shootVel, ModContent.ProjectileType<ExtendedZombieGrab>(), Item.damage, 0f, player.whoAmI);
+                Main.projectile[projIndex].netUpdate = true;
             }
 
             bool specialPressed = false;
@@ -109,8 +109,8 @@ namespace JoJoStands.Items.Vampire
                     float randomSpeedOffset = (100f + Main.rand.NextFloat(-15f, 15f + 1f)) / 100f;
                     Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1)));
                     perturbedSpeed *= randomSpeedOffset;
-                    int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, perturbedSpeed, ModContent.ProjectileType<AcidicBile>(), (int)(Item.damage * 1.5f), 2f, player.whoAmI);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, perturbedSpeed, ModContent.ProjectileType<AcidicBile>(), (int)(Item.damage * 1.5f), 2f, player.whoAmI);
+                    Main.projectile[projIndex].netUpdate = true;
                 }
                 player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " overstepped their boundaries as a Zombie."), 14, player.direction);
             }

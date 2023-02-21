@@ -123,7 +123,7 @@ namespace JoJoStands.Projectiles
                         for (int detectedTileY = detectUpY; detectedTileY < detectDownY; detectedTileY++)
                         {
                             Tile targetTile = Main.tile[detectedTileX, detectedTileY];
-                            DestroyedTileData checkTile = new DestroyedTileData(targetTile.TileType, new Vector2(detectedTileX, detectedTileY), targetTile.Slope, targetTile.IsHalfBlock, targetTile.TileFrameY, targetTile.TileFrameX, targetTile.TileFrameNumber);
+                            DestroyedTileData checkTile = new DestroyedTileData(targetTile.TileType, new Vector2(detectedTileX, detectedTileY), targetTile.Slope, targetTile.IsHalfBlock, targetTile.TileFrameY, targetTile.TileFrameX, targetTile.TileFrameNumber, targetTile.TileColor, targetTile.WallColor);
                             if (targetTile.TileType != TileID.LihzahrdBrick && targetTile.TileType != TileID.LihzahrdAltar && targetTile.HasTile && Main.tileSolid[targetTile.TileType] && !Main.tileSand[targetTile.TileType] && !Main.tileSolidTop[targetTile.TileType])
                             {
                                 if (!targetTile.HasActuator || targetTile.HasActuator && !targetTile.IsActuated)
@@ -305,13 +305,13 @@ namespace JoJoStands.Projectiles
 
             if (standType == Whitesnake)
             {
-                if (Main.rand.NextFloat(0, 101) >= 94)
+                if (Main.rand.Next(1, 100 + 1) >= 94)
                     target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
             }
 
             if (standType == SilverChariot)
             {
-                if (Main.rand.NextFloat(0, 101) >= 75)
+                if (Main.rand.Next(1, 100 + 1) >= 75)
                 {
                     target.AddBuff(BuffID.Bleeding, (5 * (int)standTier) * 60);
                     Projectile.ArmorPenetration += 5 * (int)standTier;
@@ -457,7 +457,7 @@ namespace JoJoStands.Projectiles
 
             if (standType == Whitesnake)
             {
-                if (Main.rand.NextFloat(0, 101) >= 94)
+                if (Main.rand.Next(1, 100 + 1) >= 94)
                 {
                     target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
                     SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, BuffID.Confused, (2 + (int)standTier) * 60);

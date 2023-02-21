@@ -364,8 +364,8 @@ namespace JoJoStands.NPCs.Enemies
                 for (int i = 0; i < numberKnives; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(normalizedShootVelocity.X, normalizedShootVelocity.Y).RotatedBy(MathHelper.Lerp(-rotationk, rotationk, i / (numberKnives - 1))) * .2f;
-                    int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, ModContent.ProjectileType<JackKnife>(), 6 * expertboost, 2f);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, ModContent.ProjectileType<JackKnife>(), 6 * expertboost, 2f);
+                    Main.projectile[projIndex].netUpdate = true;
                     NPC.netUpdate = true;
                 }
             }
@@ -377,8 +377,8 @@ namespace JoJoStands.NPCs.Enemies
                 for (int i = 0; i < numberKnives; i++)
                 {
                     Vector2 perturbedSpeed = new Vector2(normalizedShootVelocity.X, normalizedShootVelocity.Y).RotatedBy(MathHelper.Lerp(-rotationk, rotationk, i / (numberKnives - 1))) * .2f;
-                    int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, ModContent.ProjectileType<JackKnife>(), 6 * expertboost, 2f);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, perturbedSpeed.X, perturbedSpeed.Y, ModContent.ProjectileType<JackKnife>(), 6 * expertboost, 2f);
+                    Main.projectile[projIndex].netUpdate = true;
                     NPC.netUpdate = true;
                 }
             }

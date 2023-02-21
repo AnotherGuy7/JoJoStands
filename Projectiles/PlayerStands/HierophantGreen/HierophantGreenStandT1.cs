@@ -65,8 +65,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                         {
                             Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
                             perturbedSpeed *= randomSpeedOffset;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 2f, player.whoAmI);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 2f, player.whoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
                         }
                         SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                         Projectile.netUpdate = true;
@@ -120,8 +120,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                             {
                                 Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
                                 perturbedSpeed *= randomSpeedOffset;
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), (int)((ProjectileDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, player.whoAmI);
-                                Main.projectile[proj].netUpdate = true;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), (int)((ProjectileDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, player.whoAmI);
+                                Main.projectile[projIndex].netUpdate = true;
                             }
                             Projectile.netUpdate = true;
                         }

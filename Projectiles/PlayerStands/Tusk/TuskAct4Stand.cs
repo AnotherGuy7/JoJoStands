@@ -103,9 +103,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner);
-                            Main.projectile[proj].netUpdate = true;
-                            Main.projectile[proj].timeLeft = 3;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner);
+                            Main.projectile[projIndex].netUpdate = true;
+                            Main.projectile[projIndex].timeLeft = 3;
                             Projectile.netUpdate = true;
                         }
                     }

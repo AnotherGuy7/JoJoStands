@@ -58,8 +58,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
                     shootVel.Normalize();
                     shootVel *= ProjectileSpeed;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);
+                    Main.projectile[projIndex].netUpdate = true;
                     Projectile.netUpdate = true;
                 }
             }

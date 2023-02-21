@@ -87,8 +87,8 @@ namespace JoJoStands.NPCs.Enemies
 
                 shootVel.Normalize();
                 shootVel *= 10f;
-                int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X + (4f * NPC.direction), NPC.Center.Y - 5f, shootVel.X, shootVel.Y, ModContent.ProjectileType<MinerLightning>(), NPC.damage, 2f);
-                Main.projectile[proj].netUpdate = true;
+                int projIndex = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X + (4f * NPC.direction), NPC.Center.Y - 5f, shootVel.X, shootVel.Y, ModContent.ProjectileType<MinerLightning>(), NPC.damage, 2f);
+                Main.projectile[projIndex].netUpdate = true;
                 NPC.netUpdate = true;
             }
             if (target.position.X > NPC.position.X)

@@ -92,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     StayBehind();
                 if (flickFrames)
                     StayBehindWithAbility();
-                if (SpecialKeyPressedNoCooldown() && !healingFrames && !flickFrames && !restorationTargetSelected && Projectile.owner == Main.myPlayer)
+                if (SpecialKeyPressed(false) && !healingFrames && !flickFrames && !restorationTargetSelected && Projectile.owner == Main.myPlayer)
                 {
                     restorationMode = !restorationMode;
                     if (restorationMode)
@@ -132,9 +132,9 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             shootVel.Normalize();
                             shootVel *= 12f;
 
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(0, 18f), shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
-                            Main.projectile[proj].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - new Vector2(0, 18f), shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
+                            Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
+                            Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                             SoundStyle item41 = SoundID.Item41;
                             item41.Pitch = 2.8f;
@@ -288,7 +288,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         int startingIndex = (int)MathHelper.Clamp(mPlayer.crazyDiamondDestroyedTileData.Count - 20, 0, mPlayer.crazyDiamondDestroyedTileData.Count);
                         for (int i = startingIndex; i < mPlayer.crazyDiamondDestroyedTileData.Count; i++)
                         {
-                            int index = Dust.NewDust(mPlayer.crazyDiamondDestroyedTileData[i].tilePosition * 16f, 16, 16, DustID.IchorTorch, Scale: Main.rand.Next(8, 12) / 10f);
+                            int index = Dust.NewDust(mPlayer.crazyDiamondDestroyedTileData[i].TilePosition * 16f, 16, 16, DustID.IchorTorch, Scale: Main.rand.Next(8, 12) / 10f);
                             Main.dust[index].noGravity = true;
                         }
                     }

@@ -130,8 +130,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         {
                             Vector2 shootPosition = Projectile.position + new Vector2(5f, -3f);
                             Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-knivesSpread, knivesSpread, i / (numberOfKnives - 1))) * 0.2f;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
                             player.ConsumeItem(ModContent.ItemType<Knife>());
                             Projectile.netUpdate = true;
                         }

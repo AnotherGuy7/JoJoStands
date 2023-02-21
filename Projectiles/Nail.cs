@@ -32,11 +32,11 @@ namespace JoJoStands.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             if (mPlayer.crackedPearlEquipped)
             {
-                if (Main.rand.NextFloat(0, 101) >= 60)
+                if (Main.rand.Next(1, 100 + 1) >= 60)
                     target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
             }
         }

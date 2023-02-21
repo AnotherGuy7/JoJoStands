@@ -134,8 +134,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         {
                             for (int i = 0; i < AfterImagesLimit; i++)
                             {
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<SilverChariotAfterImage>(), 0, 0f, Projectile.owner, i, AfterImagesLimit);
-                                Main.projectile[proj].netUpdate = true;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<SilverChariotAfterImage>(), 0, 0f, Projectile.owner, i, AfterImagesLimit);
+                                Main.projectile[projIndex].netUpdate = true;
                                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
                             }
                         }

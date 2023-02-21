@@ -78,8 +78,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
+                        Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
                     LimitDistance();

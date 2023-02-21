@@ -108,9 +108,9 @@ namespace JoJoStands.Projectiles.NPCStands
                 }
                 shootVel.Normalize();
                 shootVel *= shootSpeed;
-                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Disc>(), 40, 4f);
-                Main.projectile[proj].npcProj = true;
-                Main.projectile[proj].netUpdate = true;
+                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Disc>(), 40, 4f);
+                Main.projectile[projIndex].npcProj = true;
+                Main.projectile[projIndex].netUpdate = true;
                 Projectile.netUpdate = true;
             }
         }

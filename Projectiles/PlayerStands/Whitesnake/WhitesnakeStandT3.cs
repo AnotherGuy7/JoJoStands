@@ -96,15 +96,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     if (Projectile.frame >= 4)
                     {
                         shootCount += 120;
-                        Vector2 shootVel = new Vector2(mouseX, mouseY) - Projectile.Center;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= 8f;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<MeltYourHeart>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<MeltYourHeart>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
+                        Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
                         secondaryAbilityFrames = false;
                     }
@@ -119,12 +119,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 if (SpecialKeyCurrent() && shootCount <= 0 && !stealFrames)
                 {
                     waitingForEnemyFramesButInt = 10;
-                    Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.position;
+                    Projectile.velocity = Main.MouseWorld - Projectile.position;
                     Projectile.velocity.Normalize();
                     Projectile.velocity *= 5f;
                     Projectile.netUpdate = true;
 
-                    float mouseDistance = Vector2.Distance(new Vector2(mouseX, mouseY), Projectile.Center);
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
                     {
                         Projectile.velocity = player.velocity + Projectile.velocity;
@@ -226,7 +226,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     shootCount += 30;
                 }
 
-                if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0 && !gunRevealFrames && !stealFrames)
+                if (SecondSpecialKeyPressed(false) && shootCount <= 0 && !gunRevealFrames && !stealFrames)
                 {
                     attackFrames = false;
                     idleFrames = false;
@@ -248,7 +248,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 if (mouseX < Projectile.position.X)
                     Projectile.spriteDirection = -1;
                 floatTimer += 0.06f;
-                armRotation = (new Vector2(mouseX, mouseY) - Projectile.Center).ToRotation();
+                armRotation = (Main.MouseWorld - Projectile.Center).ToRotation();
                 armPosition = Projectile.Center + new Vector2(0f, -4f);
                 if (Projectile.spriteDirection == -1)
                     armPosition += new Vector2(2f, -8f);
@@ -280,7 +280,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
-                    Vector2 moveVelocity = new Vector2(mouseX, mouseY) - Projectile.Center;
+                    Vector2 moveVelocity = Main.MouseWorld - Projectile.Center;
                     moveVelocity.Normalize();
                     Projectile.velocity.X = moveVelocity.X * 4.5f;
                     if (aboveTile)
@@ -309,11 +309,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     Projectile.spriteDirection = Projectile.direction;
 
                     Vector2 bulletSpawnPosition = armPosition + new Vector2(0f, -4f);
-                    Vector2 shootVel = new Vector2(mouseX, mouseY) - armPosition;
+                    Vector2 shootVel = Main.MouseWorld - armPosition;
                     shootVel.Normalize();
                     shootVel *= 12f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
+                    Main.projectile[projIndex].netUpdate = true;
                     Projectile.netUpdate = true;
                     Projectile.velocity -= shootVel * 0.02f;
                     SoundEngine.PlaySound(SoundID.Item41, Projectile.Center);
@@ -322,7 +322,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 {
                     canShootAgain = true;
                 }
-                if (SpecialKeyPressedNoCooldown())
+                if (SpecialKeyPressed(false))
                 {
                     sleepingGasTimer = 30 * 60;
                     sleepingGasFormPositionX = Projectile.Center.X;
@@ -330,7 +330,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(60));
                 }
 
-                if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
+                if (SecondSpecialKeyPressed(false) && shootCount <= 0)
                 {
                     shootCount += 30;
                     remoteControlled = false;

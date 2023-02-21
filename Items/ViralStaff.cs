@@ -43,8 +43,8 @@ namespace JoJoStands.Items
             for (int i = 0; i < numberProjectiles; i++)
             {
                 Vector2 perturbedSpeed = new Vector2(velocity.X + Main.rand.NextFloat(-6f, 6f), velocity.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, perturbedSpeed, ModContent.ProjectileType<ViralStaffProjectile>(), damage, knockback, player.whoAmI);
-                Main.projectile[proj].netUpdate = true;
+                int projIndex = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, perturbedSpeed, ModContent.ProjectileType<ViralStaffProjectile>(), damage, knockback, player.whoAmI);
+                Main.projectile[projIndex].netUpdate = true;
             }
             return false;
         }

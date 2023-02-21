@@ -139,7 +139,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                     }
                 }
 
-                if (SecondSpecialKeyPressedNoCooldown())
+                if (SecondSpecialKeyPressed(false))
                 {
                     if (!StoneFreeAbilityWheel.Visible)
                         StoneFreeAbilityWheel.OpenAbilityWheel(mPlayer, 5);

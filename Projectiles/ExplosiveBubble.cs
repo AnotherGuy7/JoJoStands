@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
 {
-    public class Bubble : ModProjectile
+    public class ExplosiveBubble : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -23,7 +23,6 @@ namespace JoJoStands.Projectiles
         }
 
         private const float ExplosionRadius = 6f * 16f;
-        private bool manuallyTriggered = false;
         private bool crit = false;
 
         public override void AI()
@@ -34,7 +33,6 @@ namespace JoJoStands.Projectiles
             if (Main.mouseRight && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 1f && player.ownedProjectileCounts[ModContent.ProjectileType<KillerQueenBTDStand>()] == 1 && ownerProj.ai[0] == 1f)
             {
                 Projectile.damage *= 2;
-                manuallyTriggered = true;
                 Projectile.Kill();
             }
 
@@ -59,11 +57,11 @@ namespace JoJoStands.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             if (mPlayer.crackedPearlEquipped)
             {
-                if (Main.rand.NextFloat(0, 101) >= 60)
+                if (Main.rand.Next(1, 100 + 1) >= 60)
                     target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
             }
             damage = 0;
@@ -72,7 +70,7 @@ namespace JoJoStands.Projectiles
         public override void Kill(int timeLeft)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             for (int i = 0; i < 30; i++)
             {

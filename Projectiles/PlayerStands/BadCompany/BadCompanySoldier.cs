@@ -151,8 +151,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
+                            Main.projectile[projIndex].netUpdate = true;
                         }
                     }
                 }
@@ -190,8 +190,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
+                        Main.projectile[projIndex].netUpdate = true;
                     }
                 }
                 else
@@ -217,8 +217,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 {
                     shootCount += mPlayer.poseDuration + 1;
                     SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0f, -ProjectileSpeed), ProjectileID.Bullet, 1, 0f, Projectile.owner);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(0f, -ProjectileSpeed), ProjectileID.Bullet, 1, 0f, Projectile.owner);
+                    Main.projectile[projIndex].netUpdate = true;
                 }
             }
         }

@@ -88,10 +88,10 @@ namespace JoJoStands.Projectiles.Minions
                         }
                         shootVel.Normalize();
                         shootVel *= 2f;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<AirBubble>(), 104, 1f, Projectile.owner);
-                        Main.projectile[proj].hostile = false;
-                        Main.projectile[proj].friendly = true;
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<AirBubble>(), 104, 1f, Projectile.owner);
+                        Main.projectile[projIndex].hostile = false;
+                        Main.projectile[projIndex].friendly = true;
+                        Main.projectile[projIndex].netUpdate = true;
                         canShoot = false;
                     }
                 }

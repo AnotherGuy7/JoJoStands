@@ -72,8 +72,8 @@ namespace JoJoStands.NPCs.Enemies
                     }
                     shootVel.Normalize();
                     shootVel *= 2f;
-                    int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, shootVel.X, shootVel.Y, ModContent.ProjectileType<AirBubble>(), NPC.damage, 1f);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, shootVel.X, shootVel.Y, ModContent.ProjectileType<AirBubble>(), NPC.damage, 1f);
+                    Main.projectile[projIndex].netUpdate = true;
                     NPC.ai[2] = 2f;
 
                 }

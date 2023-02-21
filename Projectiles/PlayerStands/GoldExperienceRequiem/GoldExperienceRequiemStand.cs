@@ -127,7 +127,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                     }
                 }
 
-                if (SecondSpecialKeyPressedNoCooldown())
+                if (SecondSpecialKeyPressed(false))
                 {
                     if (!GoldExperienceRequiemAbilityWheel.Visible)
                         GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 5);
@@ -149,8 +149,8 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
                         shootVel.Normalize();
                         shootVel *= 12f;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<GoldExperienceBeam>(), newPunchDamage + 11, 6f, Projectile.owner);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<GoldExperienceBeam>(), newPunchDamage + 11, 6f, Projectile.owner);
+                        Main.projectile[projIndex].netUpdate = true;
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(3));
                         secondaryAbilityFrames = false;
                     }

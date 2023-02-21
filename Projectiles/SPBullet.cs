@@ -126,7 +126,7 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts + 20f)
+            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts + 20f)
             {
                 crit = true;
             }

@@ -85,9 +85,9 @@ namespace JoJoStands.Projectiles
                             float numberProjectiles = 6;
                             for (int i = 0; i < numberProjectiles; i++)
                             {
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position.X + (Main.screenWidth / 2) * npc.direction, npc.position.Y + Main.rand.NextFloat(-10f, 11f), (16f * -npc.direction) - Main.rand.NextFloat(0f, 3f), 0f, ModContent.ProjectileType<Emerald>(), 56 + (int)Projectile.ai[0], 4f, Projectile.owner);
-                                Main.projectile[proj].netUpdate = true;
-                                Main.projectile[proj].tileCollide = false;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position.X + (Main.screenWidth / 2) * npc.direction, npc.position.Y + Main.rand.NextFloat(-10f, 11f), (16f * -npc.direction) - Main.rand.NextFloat(0f, 3f), 0f, ModContent.ProjectileType<Emerald>(), 56 + (int)Projectile.ai[0], 4f, Projectile.owner);
+                                Main.projectile[projIndex].netUpdate = true;
+                                Main.projectile[projIndex].tileCollide = false;
                             }
                             linkedProjectile.Kill();
                             Projectile.Kill();
@@ -106,9 +106,9 @@ namespace JoJoStands.Projectiles
                                 float numberProjectiles = 6;
                                 for (int i = 0; i < numberProjectiles; i++)
                                 {
-                                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position.X + (Main.screenWidth / 2) * otherPlayer.direction, otherPlayer.position.Y + Main.rand.NextFloat(-10f, 11f), (16f * -otherPlayer.direction) - Main.rand.NextFloat(0f, 3f), 0f, ModContent.ProjectileType<Emerald>(), 56 + (int)Projectile.ai[0], 4f, Projectile.owner);
-                                    Main.projectile[proj].netUpdate = true;
-                                    Main.projectile[proj].tileCollide = false;
+                                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.position.X + (Main.screenWidth / 2) * otherPlayer.direction, otherPlayer.position.Y + Main.rand.NextFloat(-10f, 11f), (16f * -otherPlayer.direction) - Main.rand.NextFloat(0f, 3f), 0f, ModContent.ProjectileType<Emerald>(), 56 + (int)Projectile.ai[0], 4f, Projectile.owner);
+                                    Main.projectile[projIndex].netUpdate = true;
+                                    Main.projectile[projIndex].tileCollide = false;
                                 }
                                 linkedProjectile.Kill();
                                 Projectile.Kill();

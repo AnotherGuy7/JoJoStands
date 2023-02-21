@@ -2,7 +2,7 @@ using Terraria;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
-    public class BarrierBuff : JoJoBuff
+    public class BubbleBarrierBuff : JoJoBuff
     {
         public override void SetStaticDefaults()
         {

@@ -37,7 +37,8 @@ namespace JoJoStands.Buffs.Debuffs
             if (npc.lifeRegen > 0)
                 npc.lifeRegen = 0;
 
-            Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Cloud, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f);
+            int dustIndex = Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Cloud, npc.velocity.X * -0.5f, npc.velocity.Y * -0.5f);
+            Main.dust[dustIndex].noGravity = true;
             npc.lifeRegenExpectedLossPerSecond = 20;
             npc.lifeRegen -= 40;
             if (Math.Abs(npc.velocity.X) > savedVelocityX)

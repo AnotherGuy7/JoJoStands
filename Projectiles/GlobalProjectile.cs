@@ -292,12 +292,12 @@ namespace JoJoStands.Projectiles
                 damage = damage / 2;
             if (kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
             {
-                if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+                if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                     crit = true;
                 damage = (int)(damage * 1.05f * mPlayer.standDamageBoosts);
                 if (mPlayer.crackedPearlEquipped)
                 {
-                    if (Main.rand.NextFloat(0, 101) >= 60)
+                    if (Main.rand.Next(1, 100 + 1) >= 60)
                         target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
                 }
             }
@@ -327,7 +327,7 @@ namespace JoJoStands.Projectiles
                     damage = (int)(damage * 1.5f);
                 if (mPlayer.soothingSpiritDisc)
                 {
-                    if (Main.rand.NextFloat(0, 101) <= 10 && mPlayer.soothingSpiritDiscCooldown > 60)
+                    if (Main.rand.Next(1, 100 + 1) <= 10 && mPlayer.soothingSpiritDiscCooldown > 60)
                         mPlayer.soothingSpiritDiscCooldown -= 60;
                     if (mPlayer.soothingSpiritDiscCooldown <= 0)
                     {
@@ -341,7 +341,7 @@ namespace JoJoStands.Projectiles
                     mPlayer.sealedPokerDeckCooldown = 180;
                     damage = (int)(damage * 1.25f + 25);
                 }
-                if (mPlayer.theFirstNapkin && Main.rand.NextFloat(0, 101) <= 5 && player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.buffTime[mPlayer.theFirstNapkinReduction] > 60)
+                if (mPlayer.theFirstNapkin && Main.rand.Next(1, 100 + 1) <= 5 && player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.buffTime[mPlayer.theFirstNapkinReduction] > 60)
                     player.buffTime[mPlayer.theFirstNapkinReduction] -= 60;
 
                 for (int n = 0; n < Main.maxNPCs; n++)

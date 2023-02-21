@@ -36,8 +36,8 @@ namespace JoJoStands.Items.Accessories
         {
             if (player.altFunctionUse == 2)
             {
-                int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<ViralPearlProjectile>(), 0, 0f, player.whoAmI);
-                Main.projectile[proj].netUpdate = true;
+                int projIndex = Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<ViralPearlProjectile>(), 0, 0f, player.whoAmI);
+                Main.projectile[projIndex].netUpdate = true;
                 Item.TurnToAir();
             }
             else

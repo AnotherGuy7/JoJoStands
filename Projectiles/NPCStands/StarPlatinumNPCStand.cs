@@ -126,9 +126,9 @@ namespace JoJoStands.Projectiles.NPCStands
 
                     shootVel.Normalize();
                     shootVel *= shootSpeed;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<NPCStandFists>(), MarineBiologist.standDamage, 1f, Main.myPlayer, 0, 0);
-                    Main.projectile[proj].npcProj = true;
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<NPCStandFists>(), MarineBiologist.standDamage, 1f, Main.myPlayer, 0, 0);
+                    Main.projectile[projIndex].npcProj = true;
+                    Main.projectile[projIndex].netUpdate = true;
                     Projectile.netUpdate = true;
                 }
             }

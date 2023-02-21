@@ -424,7 +424,7 @@ namespace JoJoStands.Projectiles
                                 npc.AddBuff(BuffID.OnFire, 600);
                                 if (mPlayer.crackedPearlEquipped)
                                 {
-                                    if (Main.rand.NextFloat(0, 101) >= 60)
+                                    if (Main.rand.Next(1, 100 + 1) >= 60)
                                         npc.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
                                 }
                                 if (mPlayer.echoesTier == 3)
@@ -455,7 +455,7 @@ namespace JoJoStands.Projectiles
                                         players.AddBuff(BuffID.OnFire, 300);
                                         if (mPlayer.crackedPearlEquipped)
                                         {
-                                            if (Main.rand.NextFloat(0, 101) >= 60)
+                                            if (Main.rand.Next(1, 100 + 1) >= 60)
                                                 players.AddBuff(ModContent.BuffType<Infected>(), 5 * 60);
                                         }
                                     }

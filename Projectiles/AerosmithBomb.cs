@@ -44,7 +44,7 @@ namespace JoJoStands.Projectiles
                 Main.dust[dustIndex].velocity *= 3f;
             }
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             for (int n = 0; n < Main.maxNPCs; n++)
             {

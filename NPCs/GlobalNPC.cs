@@ -750,12 +750,12 @@ namespace JoJoStands.NPCs
                     velocity.Normalize();
                     velocity *= 4f;
 
-                    int proj = Projectile.NewProjectile(npc.GetSource_FromThis(), randomPosition, velocity, ModContent.ProjectileType<FireAnkh>(), 60 + (24 * (3 - Main.player[standDebuffEffectOwner].GetModPlayer<MyPlayer>().standTier)), 0f, standDebuffEffectOwner, 40, 5 * 60);
-                    Main.projectile[proj].tileCollide = false;
-                    Main.projectile[proj].netUpdate = true;
-                    Main.projectile[proj].penetrate = -1;
-                    Main.projectile[proj].timeLeft = (int)((npc.Size.Length() * 4f) / 4f);
-                    Main.projectile[proj].scale = 0.6f;
+                    int projIndex = Projectile.NewProjectile(npc.GetSource_FromThis(), randomPosition, velocity, ModContent.ProjectileType<FireAnkh>(), 60 + (24 * (3 - Main.player[standDebuffEffectOwner].GetModPlayer<MyPlayer>().standTier)), 0f, standDebuffEffectOwner, 40, 5 * 60);
+                    Main.projectile[projIndex].tileCollide = false;
+                    Main.projectile[projIndex].netUpdate = true;
+                    Main.projectile[projIndex].penetrate = -1;
+                    Main.projectile[projIndex].timeLeft = (int)((npc.Size.Length() * 4f) / 4f);
+                    Main.projectile[projIndex].scale = 0.6f;
                 }
                 if (crossfireHurricaneEffectTimer <= 0)
                     hitByCrossfireHurricane = false;

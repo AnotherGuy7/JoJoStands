@@ -246,7 +246,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 if (rightClickCooldown > 0)
                     rightClickCooldown--;
 
-                if (SpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer && !returnToPlayer) //remote mode
+                if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && !returnToPlayer) //remote mode
                 {
                     remoteMode = !remoteMode;
                     if (remoteMode)
@@ -255,7 +255,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         Main.NewText("Remote Mode: Disabled");
                 }
 
-                if (SecondSpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer && mPlayer.echoesTier > 2 && changeActCooldown == 0)
+                if (SecondSpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && mPlayer.echoesTier > 2 && changeActCooldown == 0)
                 {
                     changeACT = true;
                     Projectile.Kill();
@@ -300,8 +300,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                             }
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
+                            Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                         }
                     }

@@ -1,4 +1,3 @@
-using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Items.CraftingMaterials;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,7 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
         public override int PunchDamage => 16;
         public override int PunchTime => 13;
         public override int HalfStandHeight => 38;
-        public override int AltDamage => ((int)(TierNumber * 15));
+        public override int AltDamage => TierNumber * 15;
         public override int StandOffset => 54;
         public override int FistWhoAmI => 0;
         public override int TierNumber => 1;
@@ -46,9 +45,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                         attackFrames = false;
                 }
                 if (!attackFrames)
-                {
                     StayBehindWithAbility();
-                }
+
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
                     GoInFront();
@@ -56,16 +54,15 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                     {
                         shootCount += 60;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        SoundEngine.PlaySound(SoundID.SplashWeak);
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
                         shootVel *= 3f;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
-                        shootCount += 1;
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
+                        Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
+                        SoundEngine.PlaySound(SoundID.SplashWeak);
                     }
                 }
             }
@@ -80,12 +77,16 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
             Player player = Main.player[Projectile.owner];
             if (player.HeldItem.type == ItemID.Torch)
                 return PlunderBubble.Plunder_Fire;
+
             if (player.HeldItem.type == ItemID.IchorTorch)
                 return PlunderBubble.Plunder_Ichor;
+
             if (player.HeldItem.type == ItemID.CursedTorch)
                 return PlunderBubble.Plunder_Cursed;
+
             if (player.HeldItem.type == ItemID.IceTorch)
                 return PlunderBubble.Plunder_Ice;
+
             if (player.HeldItem.type == ModContent.ItemType<ViralPowder>())
                 return PlunderBubble.Plunder_Viral;
 

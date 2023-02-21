@@ -1,4 +1,5 @@
-﻿using JoJoStands.Items;
+﻿using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -47,6 +48,7 @@ namespace JoJoStands
             }
         }
     }
+
     public class AerosmithRadarCameraLayer : PlayerDrawLayer
     {
         public override Position GetDefaultPosition()
@@ -449,6 +451,33 @@ namespace JoJoStands
                 DrawData drawData = new DrawData(texture, drawPosition, drawPlayer.bodyFrame, drawColor * alpha, drawPlayer.bodyRotation, /*drawInfo.bodyOrigin*/ drawInfo.rotationOrigin, 1f, drawInfo.playerEffect, 0);
                 //data.shader = drawInfo.bodyArmorShader;
                 drawInfo.DrawDataCache.Add(drawData);
+            }
+        }
+    }
+
+    public class SoftAndWetBubbleLayer : PlayerDrawLayer
+    {
+        public override Position GetDefaultPosition()
+        {
+            return new AfterParent(PlayerDrawLayers.FaceAcc);
+        }
+
+        private readonly Vector2 BubbleBarrierOrigin = new Vector2(30);
+
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.standOut && drawPlayer.HasBuff<BubbleBarrierBuff>())
+            {
+                Texture2D bubbleTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/BubbleBarrier").Value;
+                Texture2D bubbleOveralyTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/BubbleBarrier_Overlay").Value;
+                Color drawColor = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
+
+                DrawData drawData = new DrawData(bubbleTexture, drawPlayer.Center.ToPoint().ToVector2() - Main.screenPosition, null, drawColor, 0f, BubbleBarrierOrigin, 1f, SpriteEffects.None, 0);
+                drawInfo.DrawDataCache.Add(drawData);
+                DrawData overlayData = new DrawData(bubbleOveralyTexture, drawPlayer.Center.ToPoint().ToVector2() - Main.screenPosition, null, drawColor * 0.5f, MathHelper.ToRadians(mPlayer.softAndWetBubbleRotation), BubbleBarrierOrigin, 1f, SpriteEffects.None, 0);
+                drawInfo.DrawDataCache.Add(overlayData);
             }
         }
     }

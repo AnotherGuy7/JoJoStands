@@ -97,8 +97,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         }
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 1f, Projectile.owner, (int)(projectileDamage * mPlayer.standDamageBoosts));
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 1f, Projectile.owner, (int)(projectileDamage * mPlayer.standDamageBoosts));
+                        Main.projectile[projIndex].netUpdate = true;
                     }
                 }
             }
@@ -137,8 +137,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         shootVel.Y -= Projectile.Distance(target.position) / 110f;
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 1f, Projectile.owner, (int)(projectileDamage * mPlayer.standDamageBoosts));
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 1f, Projectile.owner, (int)(projectileDamage * mPlayer.standDamageBoosts));
+                        Main.projectile[projIndex].netUpdate = true;
                     }
                 }
             }

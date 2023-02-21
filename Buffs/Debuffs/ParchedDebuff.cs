@@ -26,7 +26,8 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void UpdateBuffOnNPC(NPC npc)
         {
-            Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Wet, npc.velocity.X);
+            int dustIndex = Dust.NewDust(npc.position + npc.velocity, npc.width, npc.height, DustID.Wet, npc.velocity.X);
+            Main.dust[dustIndex].noGravity = true;
         }
     }
 }

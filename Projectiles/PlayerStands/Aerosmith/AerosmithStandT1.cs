@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 Projectile.velocity.Y += 0.3f;
                 Projectile.netUpdate = true;
             }
-            Vector2 rota = Projectile.Center - new Vector2(mouseX, mouseY);
+            Vector2 rota = Projectile.Center - Main.MouseWorld;
             Projectile.rotation = (-rota * Projectile.direction).ToRotation();
             Projectile.tileCollide = true;
 
@@ -174,7 +174,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 {
                     leftMouse = 10;
 
-                    float mouseDistance = Vector2.Distance(new Vector2(mouseX, mouseY), Projectile.Center);
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
 
                     Projectile.spriteDirection = Projectile.direction;
                     accelerationTimer += 2;
@@ -183,14 +183,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
                     if (mouseDistance > 40f)
                     {
-                        Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.Center;
+                        Projectile.velocity = Main.MouseWorld - Projectile.Center;
                         Projectile.velocity.Normalize();
                         Projectile.velocity *= MaxFlightSpeed + player.moveSpeed;
                         Projectile.velocity *= accelerationTimer / (float)AccelerationTime;
                     }
                     else
                     {
-                        Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.Center;
+                        Projectile.velocity = Main.MouseWorld - Projectile.Center;
                         Projectile.velocity.Normalize();
                         Projectile.velocity *= (mouseDistance * (MaxFlightSpeed + player.moveSpeed)) / 40f;
                         Projectile.velocity *= accelerationTimer / (float)AccelerationTime;
@@ -217,14 +217,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
-                        Vector2 shootVel = new Vector2(mouseX, mouseY) - Projectile.Center;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
                         shootVel *= 32f;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
+                        Main.projectile[projIndex].netUpdate = true;
                         SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                     }
                 }
@@ -277,7 +277,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         Projectile.netUpdate = true;
                     }
                 }
-                if (SpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer)
+                if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer)
                 {
                     remoteMode = !remoteMode;
                     if (remoteMode)
@@ -373,8 +373,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
+                            Main.projectile[projIndex].netUpdate = true;
                             SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                         }
                     }

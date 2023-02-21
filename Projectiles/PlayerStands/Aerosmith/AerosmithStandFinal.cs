@@ -82,7 +82,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             mPlayer.aerosmithWhoAmI = Projectile.whoAmI;
             newProjectileDamage = (int)(newProjectileDamage * MathHelper.Clamp(1f - (Projectile.Distance(player.Center) / (350f * 16f)), 0.5f, 1f));
 
-            Vector2 rota = Projectile.Center - new Vector2(mouseX, mouseY);
+            Vector2 rota = Projectile.Center - Main.MouseWorld;
             Projectile.rotation = (-rota * Projectile.direction).ToRotation();
             bombless = player.HasBuff(ModContent.BuffType<AbilityCooldown>());
             Projectile.tileCollide = true;      //this is here becaues in AutoMode when Aerosmith goes out too far, it changes to false
@@ -171,7 +171,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 {
                     leftMouse = 10;
 
-                    float mouseDistance = Vector2.Distance(new Vector2(mouseX, mouseY), Projectile.Center);
+                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
 
                     Projectile.spriteDirection = Projectile.direction;
                     accelerationTimer += 2;
@@ -180,14 +180,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
                     if (mouseDistance > 40f)
                     {
-                        Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.Center;
+                        Projectile.velocity = Main.MouseWorld - Projectile.Center;
                         Projectile.velocity.Normalize();
                         Projectile.velocity *= MaxFlightSpeed + player.moveSpeed;
                         Projectile.velocity *= accelerationTimer / (float)AccelerationTime;
                     }
                     else
                     {
-                        Projectile.velocity = new Vector2(mouseX, mouseY) - Projectile.Center;
+                        Projectile.velocity = Main.MouseWorld - Projectile.Center;
                         Projectile.velocity.Normalize();
                         Projectile.velocity *= (mouseDistance * (MaxFlightSpeed + player.moveSpeed)) / 40f;
                         Projectile.velocity *= accelerationTimer / (float)AccelerationTime;
@@ -234,14 +234,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
-                        Vector2 shootVel = new Vector2(mouseX, mouseY) - Projectile.Center;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
                         shootVel *= 32f;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
+                        Main.projectile[projIndex].netUpdate = true;
                         SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                     }
                 }
@@ -294,7 +294,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         Projectile.netUpdate = true;
                     }
                 }
-                if (SpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer)
+                if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer)
                 {
                     remoteMode = !remoteMode;
                     if (remoteMode)
@@ -308,12 +308,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         mPlayer.standControlStyle = MyPlayer.StandControlStyle.Manual;
                     }
                 }
-                if (SecondSpecialKeyPressedNoCooldown() && !bombless)
+                if (SecondSpecialKeyPressed(false) && !bombless)
                 {
                     shootCount += newShootTime;
                     Projectile.frame = 2;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AerosmithBomb>(), 0, 3f, Projectile.owner, 568 * (float)mPlayer.standDamageBoosts);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AerosmithBomb>(), 0, 3f, Projectile.owner, 568 * (float)mPlayer.standDamageBoosts);
+                    Main.projectile[projIndex].netUpdate = true;
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
                 }
             }
@@ -399,8 +399,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
+                            Main.projectile[projIndex].netUpdate = true;
                             SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                         }
                     }

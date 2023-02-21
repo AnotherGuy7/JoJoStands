@@ -124,7 +124,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     player.AddBuff(ModContent.BuffType<ThreeFreezeBarrage>(), 10 * 60);
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 }
-                if (SecondSpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer && changeActCooldown == 0 && mPlayer.echoesTier > 3)
+                if (SecondSpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && changeActCooldown == 0 && mPlayer.echoesTier > 3)
                 {
                     changeACT = true;
                     Projectile.Kill();

@@ -80,8 +80,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         {
                             Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
                             perturbedSpeed *= randomSpeedOffset;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 3f, player.whoAmI);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 3f, player.whoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
                         }
                         SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                         Projectile.netUpdate = true;
@@ -105,8 +105,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                     shootVel.Normalize();
                     shootVel *= ProjectileSpeed;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BindingEmeraldString>(), newProjectileDamage / 2, 0f, Projectile.owner, 25);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BindingEmeraldString>(), newProjectileDamage / 2, 0f, Projectile.owner, 25);
+                    Main.projectile[projIndex].netUpdate = true;
                     SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
                 }
@@ -118,7 +118,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     if (JoJoStands.SoundsLoaded)
                         SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EmeraldSplash"), Projectile.Center);
                 }
-                if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
+                if (SecondSpecialKeyPressed(false) && shootCount <= 0)
                 {
                     shootCount += 30;
                     remoteControlled = true;
@@ -176,8 +176,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         {
                             Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
                             perturbedSpeed *= randomSpeedOffset;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 3f, player.whoAmI);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 3f, player.whoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
                         }
                         SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                         Projectile.netUpdate = true;
@@ -205,13 +205,13 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
                     shootVel.Normalize();
                     shootVel *= ProjectileSpeed;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, connectorType, 0, 3f, player.whoAmI);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, connectorType, 0, 3f, player.whoAmI);
+                    Main.projectile[projIndex].netUpdate = true;
                     SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                     Projectile.netUpdate = true;
                 }
 
-                if (SecondSpecialKeyPressedNoCooldown() && shootCount <= 0)
+                if (SecondSpecialKeyPressed(false) && shootCount <= 0)
                 {
                     shootCount += 30;
                     remoteControlled = false;
@@ -252,8 +252,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                             {
                                 Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
                                 perturbedSpeed *= randomSpeedOffset;
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), (int)((ProjectileDamage * mPlayer.standDamageBoosts) * 0.9f), 3f, player.whoAmI);
-                                Main.projectile[proj].netUpdate = true;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), (int)((ProjectileDamage * mPlayer.standDamageBoosts) * 0.9f), 3f, player.whoAmI);
+                                Main.projectile[projIndex].netUpdate = true;
                             }
                             Projectile.netUpdate = true;
                         }

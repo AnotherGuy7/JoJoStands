@@ -1,4 +1,6 @@
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -14,12 +16,31 @@ namespace JoJoStands.Projectiles
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
+            Projectile.alpha = 255;
         }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Projectile ownerProj = Main.projectile[(int)Projectile.ai[1]];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Projectile.Center = player.Center;
+
+            mPlayer.softAndWetBubbleRotation += 1;
+            if (player.velocity.X != 0f)
+                mPlayer.softAndWetBubbleRotation += (int)player.velocity.X * 2;
+
+            for (int p = 0; p < Main.maxProjectiles; p++)
+            {
+                Projectile otherProj = Main.projectile[p];
+                if (otherProj.active && otherProj.hostile && otherProj.Hitbox.Intersects(Projectile.Hitbox))
+                {
+                    otherProj.owner = Projectile.owner;
+                    otherProj.hostile = false;
+                    otherProj.friendly = true;
+                    otherProj.velocity *= -1f;
+                    SoundEngine.PlaySound(SoundID.SplashWeak);
+                }
+            }
         }
     }
 }

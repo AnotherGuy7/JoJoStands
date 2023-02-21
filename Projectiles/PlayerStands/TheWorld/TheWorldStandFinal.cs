@@ -128,8 +128,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         {
                             Vector2 shootPosition = Projectile.position + new Vector2(5f, -3f);
                             Vector2 perturbedSpeed = new Vector2(shootVel.X, shootVel.Y).RotatedBy(MathHelper.Lerp(-knivesAngleSpread, knivesAngleSpread, i / (numberOfKnives - 1))) * .2f;
-                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
-                            Main.projectile[proj].netUpdate = true;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
                             player.ConsumeItem(ModContent.ItemType<Knife>());
                             Projectile.netUpdate = true;
                         }
@@ -151,8 +151,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
                     shootVel.Normalize();
                     shootVel *= ProjectileSpeed + 4f;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RoadRoller>(), 512, 12f, player.whoAmI);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<RoadRoller>(), 512, 12f, player.whoAmI);
+                    Main.projectile[projIndex].netUpdate = true;
                     Projectile.netUpdate = true;
                 }
                 if (SecondSpecialKeyPressed() && player.HasItem(ModContent.ItemType<Knife>()) && player.CountItem(ModContent.ItemType<Knife>()) >= 75 && Projectile.owner == Main.myPlayer)

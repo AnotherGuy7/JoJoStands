@@ -19,7 +19,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
         public override int StandOffset => 54;
         public override int FistWhoAmI => 0;
         public override int TierNumber => 5;
-        public override StandAttackType StandType => StandAttackType.Ranged;
+        public override StandAttackType StandType => StandAttackType.Melee;
         private int highVelocityBubbleChargeUpTimer = 0;
 
         public override void AI()
@@ -108,7 +108,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                 }
                 if (SecondSpecialKeyPressed() && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
                 {
-                    player.AddBuff(ModContent.BuffType<BarrierBuff>(), 600);
+                    player.AddBuff(ModContent.BuffType<BubbleBarrierBuff>(), 600);
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(22));
                     Vector2 playerFollow = Vector2.Zero;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, playerFollow, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);

@@ -184,8 +184,8 @@ namespace JoJoStands.NPCs.Enemies
                     }
                     float rotation = MathHelper.ToRadians(rotationInRadians);
                     Vector2 newSpeed = new Vector2(shootVel.X, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, 1) * 1f);
-                    int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, newSpeed, ModContent.ProjectileType<AcidVenomFlask>(), 21 * expertDamageMultiplier, 1f);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, newSpeed, ModContent.ProjectileType<AcidVenomFlask>(), 21 * expertDamageMultiplier, 1f);
+                    Main.projectile[projIndex].netUpdate = true;
                     NPC.netUpdate = true;
                 }
                 if (poisonThrowTimer >= 90)

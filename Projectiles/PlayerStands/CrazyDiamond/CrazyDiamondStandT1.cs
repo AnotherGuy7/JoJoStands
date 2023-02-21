@@ -42,7 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 }
                 if (!attackFrames)
                     StayBehind();
-                if (SpecialKeyPressedNoCooldown())
+                if (SpecialKeyPressed(false))
                 {
                     restrationMode = !restrationMode;
                     if (restrationMode)

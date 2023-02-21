@@ -58,7 +58,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 }
                 preparingTimeskip = true;
             }
-            if (SpecialKeyPressedNoCooldown() && mPlayer.kingCrimsonBuffIndex != -1)
+            if (SpecialKeyPressed(false) && mPlayer.kingCrimsonBuffIndex != -1)
             {
                 if (player.buffTime[mPlayer.kingCrimsonBuffIndex] > 10)
                 {
@@ -124,8 +124,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         }
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
+                        Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
                     LimitDistance();

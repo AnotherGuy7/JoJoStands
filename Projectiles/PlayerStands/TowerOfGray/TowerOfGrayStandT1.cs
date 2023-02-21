@@ -169,7 +169,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                         LimitDistance(range - remote);
                     }
 
-                    if (SpecialKeyPressedNoCooldown() && Projectile.owner == Main.myPlayer)
+                    if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer)
                     {
                         remoteMode = !remoteMode;
                         if (remoteMode)
@@ -206,8 +206,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
                                 shootVel.Normalize();
                                 shootVel *= 0f;
-                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * 0.5f), 3f, Projectile.owner, FistWhoAmI, TierNumber);
-                                Main.projectile[proj].netUpdate = true;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * 0.5f), 3f, Projectile.owner, FistWhoAmI, TierNumber);
+                                Main.projectile[projIndex].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }
                         }
@@ -337,8 +337,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             }
             shootVel.Normalize();
             shootVel *= 0f;
-            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * mPlayer.towerOfGrayDamageMult), 3f, Projectile.owner, FistWhoAmI, TierNumber);
-            Main.projectile[proj].netUpdate = true;
+            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * mPlayer.towerOfGrayDamageMult), 3f, Projectile.owner, FistWhoAmI, TierNumber);
+            Main.projectile[projIndex].netUpdate = true;
             Projectile.netUpdate = true;
         }
 

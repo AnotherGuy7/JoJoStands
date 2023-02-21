@@ -89,8 +89,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersFistExtended>(), (int)(AltDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
-                        Main.projectile[proj].netUpdate = true;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersFistExtended>(), (int)(AltDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
+                        Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
                     else
@@ -151,8 +151,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
                     shootVel.Normalize();
                     shootVel *= ProjectileSpeed * 3;
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersTraversalZipper>(), 0, 0f, Projectile.owner, 0f);
-                    Main.projectile[proj].netUpdate = true;
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersTraversalZipper>(), 0, 0f, Projectile.owner, 0f);
+                    Main.projectile[projIndex].netUpdate = true;
                     Projectile.netUpdate = true;
                     if (player.HasBuff<ZipperDodge>())
                         player.ClearBuff(ModContent.BuffType<ZipperDodge>());

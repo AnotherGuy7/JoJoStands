@@ -59,7 +59,7 @@ namespace JoJoStands.Projectiles
             for (int n = 0; n < Main.maxNPCs; n++)
             {
                 MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-                if (Main.rand.NextFloat(0, 101) <= mPlayer.standCritChangeBoosts)
+                if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                     crit = true;
                 NPC npc = Main.npc[n];
                 if (npc.active)
