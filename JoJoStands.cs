@@ -4,6 +4,7 @@ using JoJoStands.Items.Seasonal;
 using JoJoStands.Networking;
 using JoJoStands.Projectiles;
 using JoJoStands.Projectiles.PlayerStands.Aerosmith;
+using JoJoStands.Projectiles.PlayerStands.Cream;
 using JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem;
 using JoJoStands.Projectiles.PlayerStands.StarPlatinum;
 using JoJoStands.Projectiles.PlayerStands.TestStand;
@@ -39,11 +40,11 @@ namespace JoJoStands
         public static ModKeybind StandAutoModeHotKey;
         public static ModKeybind PoseHotKey;
 
-        public static List<int> timestopImmune = new List<int>();
-        public static List<int> timestopOverrideStands = new List<int>();
-        public static List<int> standTier1List = new List<int>();
-        public static List<int> standProjectileList = new List<int>();
-        public static List<int> christmasStands = new List<int>();
+        public static List<int> timestopImmune;
+        public static List<int> timestopOverrideStands;
+        public static List<int> standTier1List;
+        public static List<int> standProjectileList;
+        public static List<int> christmasStands;
         public static List<char> testStandPassword = new List<char>();      //  :) Have *fuuuuuuun!*
 
         public override void Load()
@@ -68,83 +69,96 @@ namespace JoJoStands
 
             AerosmithStandFinal.AerosmithWhirrSoundEffect = (SoundEffect)Request<SoundEffect>("JoJoStands/Sounds/GameSounds/AerosmithWhirr", AssetRequestMode.ImmediateLoad);
 
-            standProjectileList.Add(ProjectileType<BombBubble>());
-            standProjectileList.Add(ProjectileType<ControllableNail>());
-            standProjectileList.Add(ProjectileType<CrossfireHurricaneAnkh>());
-            standProjectileList.Add(ProjectileType<Emerald>());
-            standProjectileList.Add(ProjectileType<ExplosiveSpin>());
-            standProjectileList.Add(ProjectileType<FireAnkh>());
-            standProjectileList.Add(ProjectileType<Fists>());
-            standProjectileList.Add(ProjectileType<HermitPurpleGrab>());
-            standProjectileList.Add(ProjectileType<HermitPurpleWhip>());
-            standProjectileList.Add(ProjectileType<HighVelocityBubble>());
-            standProjectileList.Add(ProjectileType<KnifeProjectile>());
-            standProjectileList.Add(ProjectileType<MeltYourHeart>());
-            standProjectileList.Add(ProjectileType<MeltYourHeartDrip>());
-            standProjectileList.Add(ProjectileType<Nail>());
-            standProjectileList.Add(ProjectileType<NailSlasher>());
-            standProjectileList.Add(ProjectileType<PlunderBubble>());
-            standProjectileList.Add(ProjectileType<StandBullet>());
-            standProjectileList.Add(ProjectileType<StarFinger>());
-            standProjectileList.Add(ProjectileType<TinyBubble>());
-            standProjectileList.Add(ProjectileType<Projectiles.PlayerStands.Cream.Void>());
-            standProjectileList.Add(ProjectileType<Projectiles.PlayerStands.Cream.DashVoid>());
+            standProjectileList = new List<int>
+            {
+                ProjectileType<BombBubble>(),
+                ProjectileType<ControllableNail>(),
+                ProjectileType<CrossfireHurricaneAnkh>(),
+                ProjectileType<Emerald>(),
+                ProjectileType<ExplosiveSpin>(),
+                ProjectileType<FireAnkh>(),
+                ProjectileType<Fists>(),
+                ProjectileType<HermitPurpleGrab>(),
+                ProjectileType<HermitPurpleWhip>(),
+                ProjectileType<HighVelocityBubble>(),
+                ProjectileType<KnifeProjectile>(),
+                ProjectileType<MeltYourHeart>(),
+                ProjectileType<MeltYourHeartDrip>(),
+                ProjectileType<Nail>(),
+                ProjectileType<NailSlasher>(),
+                ProjectileType<PlunderBubble>(),
+                ProjectileType<StandBullet>(),
+                ProjectileType<StarFinger>(),
+                ProjectileType<TinyBubble>(),
+                ProjectileType<Projectiles.PlayerStands.Cream.Void>(),
+                ProjectileType<DashVoid>()
+            };
 
-            standTier1List.Add(ItemType<AerosmithT1>());
-            standTier1List.Add(ItemType<GoldExperienceT1>());
-            standTier1List.Add(ItemType<HierophantGreenT1>());
-            standTier1List.Add(ItemType<KillerQueenT1>());
-            standTier1List.Add(ItemType<KingCrimsonT1>());
-            standTier1List.Add(ItemType<MagiciansRedT1>());
-            standTier1List.Add(ItemType<SexPistolsT1>());
-            standTier1List.Add(ItemType<StarPlatinumT1>());
-            standTier1List.Add(ItemType<StickyFingersT1>());
-            standTier1List.Add(ItemType<TheWorldT1>());
-            standTier1List.Add(ItemType<TuskAct1>());
-            standTier1List.Add(ItemType<LockT1>());
-            standTier1List.Add(ItemType<GratefulDeadT1>());
-            standTier1List.Add(ItemType<TheHandT1>());
-            standTier1List.Add(ItemType<WhitesnakeT1>());
-            standTier1List.Add(ItemType<DollyDaggerT1>());
-            standTier1List.Add(ItemType<CenturyBoyT1>());
-            standTier1List.Add(ItemType<SilverChariotT1>());
-            standTier1List.Add(ItemType<HermitPurpleT1>());
-            standTier1List.Add(ItemType<BadCompanyT1>());
-            standTier1List.Add(ItemType<CreamT1>());
-            standTier1List.Add(ItemType<StoneFreeT1>());
-            standTier1List.Add(ItemType<CrazyDiamondT1>());
-            standTier1List.Add(ItemType<TowerOfGrayT1>());
-            standTier1List.Add(ItemType<SoftAndWetT1>());
-            standTier1List.Add(ItemType<EchoesAct0>());
+            standTier1List = new List<int>
+            {
+                ItemType<AerosmithT1>(),
+                ItemType<GoldExperienceT1>(),
+                ItemType<HierophantGreenT1>(),
+                ItemType<KillerQueenT1>(),
+                ItemType<KingCrimsonT1>(),
+                ItemType<MagiciansRedT1>(),
+                ItemType<SexPistolsT1>(),
+                ItemType<StarPlatinumT1>(),
+                ItemType<StickyFingersT1>(),
+                ItemType<TheWorldT1>(),
+                ItemType<TuskAct1>(),
+                ItemType<LockT1>(),
+                ItemType<GratefulDeadT1>(),
+                ItemType<TheHandT1>(),
+                ItemType<WhitesnakeT1>(),
+                ItemType<DollyDaggerT1>(),
+                ItemType<CenturyBoyT1>(),
+                ItemType<SilverChariotT1>(),
+                ItemType<HermitPurpleT1>(),
+                ItemType<BadCompanyT1>(),
+                ItemType<CreamT1>(),
+                ItemType<StoneFreeT1>(),
+                ItemType<CrazyDiamondT1>(),
+                ItemType<TowerOfGrayT1>(),
+                ItemType<SoftAndWetT1>(),
+                ItemType<EchoesAct0>()
+            };
 
-            timestopImmune.Add(ProjectileType<TheWorldStandT2>());     //only the timestop capable stands as people shouldn't switch anyway
-            timestopImmune.Add(ProjectileType<TheWorldStandT3>());
-            timestopImmune.Add(ProjectileType<TheWorldStandFinal>());
-            timestopImmune.Add(ProjectileType<StarPlatinumStandFinal>());
-            //MyPlayer.stopImmune.Add(ProjectileType("StickyFingersFistExtended>());
-            timestopImmune.Add(ProjectileType<RoadRoller>());
-            timestopImmune.Add(ProjectileType<Fists>());
-            timestopImmune.Add(ProjectileType<HamonPunches>());
-            timestopImmune.Add(ProjectileType<GoldExperienceRequiemStand>());
-            timestopImmune.Add(ProjectileType<TuskAct4Stand>());
-            timestopImmune.Add(ProjectileType<TestStandStand>());
-            timestopImmune.Add(ProjectileType<StarOnTheTreeStand>());
+            timestopImmune = new List<int>()
+            {
+                ProjectileType<TheWorldStandT2>(),     //only the timestop capable stands as people shouldn't switch anyway
+                ProjectileType<TheWorldStandT3>(),
+                ProjectileType<TheWorldStandFinal>(),
+                ProjectileType<StarPlatinumStandFinal>(),
+                ProjectileType<RoadRoller>(),
+                ProjectileType<Fists>(),
+                ProjectileType<HamonPunches>(),
+                ProjectileType<GoldExperienceRequiemStand>(),
+                ProjectileType<TuskAct4Stand>(),
+                ProjectileType<TestStandStand>(),
+                ProjectileType<StarOnTheTreeStand>(),
+                ProjectileType<HighVelocityBubble>()
+            };
 
-            timestopOverrideStands.Add(ItemType<TheWorldT2>());
-            timestopOverrideStands.Add(ItemType<TheWorldT3>());
-            timestopOverrideStands.Add(ItemType<TheWorldFinal>());
-            timestopOverrideStands.Add(ItemType<StarPlatinumFinal>());
-            timestopOverrideStands.Add(ItemType<GoldExperienceRequiem>());
-            timestopOverrideStands.Add(ItemType<TuskAct4>());
-            timestopOverrideStands.Add(ItemType<TestStand>());
-            timestopOverrideStands.Add(ItemType<StarOnTheTree>());
+            timestopOverrideStands = new List<int>
+            {
+                ItemType<TheWorldT2>(),
+                ItemType<TheWorldT3>(),
+                ItemType<TheWorldFinal>(),
+                ItemType<StarPlatinumFinal>(),
+                ItemType<GoldExperienceRequiem>(),
+                ItemType<TuskAct4>(),
+                ItemType<TestStand>(),
+                ItemType<StarOnTheTree>()
+            };
 
-
-            christmasStands.Add(ItemType<StarOnTheTree>());
-            christmasStands.Add(ItemType<KingClaus>());
+            christmasStands = new List<int>()
+            {
+                ItemType<StarOnTheTree>(),
+                ItemType<KingClaus>()
+            };
 
             testStandPassword.Add(Convert.ToChar(84));
-
 
             //Where we register the hotkeys
             SpecialHotKey = KeybindLoader.RegisterKeybind(Instance, "Special Ability", Keys.F);
@@ -155,16 +169,15 @@ namespace JoJoStands
 
 
             if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
-            {
                 JoJoStandsShaders.LoadShaders();
-            }
         }
 
         public override void Close()
         {
-            standTier1List.Clear();
             timestopImmune.Clear();
             timestopOverrideStands.Clear();
+            standTier1List.Clear();
+            standProjectileList.Clear();
             christmasStands.Clear();
             testStandPassword.Clear();
 

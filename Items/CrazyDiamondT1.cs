@@ -21,8 +21,7 @@ namespace JoJoStands.Items
             Tooltip.SetDefault(
                 "Left-click to punch enemies at a really fast rate!" +
                 "\nSpecial: Switch to Restoration Mode" +
-                "\nLeft-click in Restoration Mode to perform a restorative barrage" +
-                "\nPunching tiles while in Resotration Mode breaks the tiles." +
+                "\nLeft-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state." +
                 "\nUsed in Stand Slot");
         }
 

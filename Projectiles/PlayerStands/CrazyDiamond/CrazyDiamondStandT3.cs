@@ -77,7 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 }
             }
 
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !blindRage)
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !flickFrames && !healingFrames && !restorationTargetSelected)
                 {

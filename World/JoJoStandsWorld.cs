@@ -115,8 +115,7 @@ namespace JoJoStands
                     if (Main.rand.Next(1, 100 + 1) <= 9)
                     {
                         vampiricNightQueued = true;
-                        Main.NewText("You feel the dirt under you rumbling slightly...", WorldEventTextColor);
-                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("You feel the dirt under you rumbling slightly...", new object[0]), WorldEventTextColor);
+                        SyncCall.DisplayText("You feel the dirt under you rumbling slightly...", WorldEventTextColor);
                     }
                 }
                 if (vampiricNightQueued)
@@ -127,8 +126,7 @@ namespace JoJoStands
                         VampiricNight = true;
                         vampiricNightQueued = false;
                         vampiricNightStartTimer = 0;
-                        Main.NewText("Dio's Minions have arrived!", WorldEventTextColor);
-                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Dio's Minions have arrived!", new object[0]), WorldEventTextColor);
+                        SyncCall.DisplayText("Dio's Minions have arrived!", WorldEventTextColor);
                         SyncCall.SyncVampiricNight(Main.myPlayer, VampiricNight);
                     }
                 }
@@ -399,19 +397,9 @@ namespace JoJoStands
                     }
                 }
             }
-
-            if (Main.netMode == NetmodeID.SinglePlayer)
-            {
-                Main.NewText("A dangerous virus now inhabits " + Main.worldName + "... Perhaps Jotaro the Marine Biologist may know something about it.", WorldEventTextColor);
-            }
-            else if (Main.netMode == NetmodeID.Server)
-            {
-                ChatHelper.BroadcastChatMessage(NetworkText.FromKey("A dangerous virus now inhabits " + Main.worldName + "... Perhaps Jotaro the Marine Biologist may know something about it.", new object[0]), WorldEventTextColor, -1);
-            }
+            SyncCall.DisplayText("A dangerous virus now inhabits " + Main.worldName + "... Perhaps Jotaro the Marine Biologist may know something about it.", WorldEventTextColor);
             if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
                 NetMessage.SendTileSquare(-1, x, y, 40, TileChangeType.None);
-            }
             Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().awaitingViralMeteoriteTip = true;
             ViralMeteoriteCenter = new Point(x * 16, y * 16);
             return true;

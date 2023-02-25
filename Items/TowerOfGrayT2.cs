@@ -36,11 +36,6 @@ namespace JoJoStands.Items
             Item.noUseGraphic = true;
             Item.rare = ItemRarityID.LightPurple;
         }
-        public override bool ManualStandSpawning(Player player)
-        {
-            player.GetModPlayer<MyPlayer>().towerOfGrayTier = StandTier;
-            return false;
-        }
 
         public override void AddRecipes()
         {

@@ -40,7 +40,7 @@ namespace JoJoStands.Items
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standType = 1;
-            mPlayer.hermitPurpleTier = StandTier;
+            mPlayer.standName = "HermitPurple";
             return true;
         }
 

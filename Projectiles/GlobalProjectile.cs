@@ -66,7 +66,11 @@ namespace JoJoStands.Projectiles
             {
                 if (JoJoStands.standProjectileList[i] == projectile.type || kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
                 {
-                    projectile.ArmorPenetration += mPlayer.standArmorPenetration + 10 * mPlayer.towerOfGrayTier;
+                    if (mPlayer.standName == "TowerOfGray")
+                        projectile.ArmorPenetration += mPlayer.standArmorPenetration + 10 * mPlayer.standTier;
+                    else
+                        projectile.ArmorPenetration += mPlayer.standArmorPenetration + 10;
+
                     if (mPlayer.standType == 2 && mPlayer.herbalTeaBag && mPlayer.herbalTeaBagCount > 0 && projectile.type != ModContent.ProjectileType<Fists>() && projectile.type != ModContent.ProjectileType<NailSlasher>())
                     {
                         projectile.ArmorPenetration += 10;
@@ -82,6 +86,7 @@ namespace JoJoStands.Projectiles
                     standProjectile = true;
             }
         }
+
         public override bool PreAI(Projectile Projectile)
         {
             Player player = Main.player[Projectile.owner];

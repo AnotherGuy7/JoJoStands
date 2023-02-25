@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override int HalfStandHeight => 37;
         public override int FistWhoAmI => 5;
         public override int TierNumber => 4;
-        public override float MaxAltDistance => 262f;     //about 10 tiles
+        public override float MaxAltDistance => 16 * 16;     //about 10 tiles
         public override string PoseSoundName => "IWouldntLose";
         public override string SpawnSoundName => "Killer Queen";
         public override bool CanUseSaladDye => true;

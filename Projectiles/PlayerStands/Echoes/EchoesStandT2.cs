@@ -78,112 +78,172 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             Projectile.tileCollide = true;
 
-            Rectangle rectangle = Rectangle.Empty;
-
+            Rectangle mouseRect = Rectangle.Empty;
             if (Projectile.owner == player.whoAmI)
-                rectangle = new Rectangle((int)(Main.MouseWorld.X - 10), (int)(Main.MouseWorld.Y - 10), 20, 20);
+                mouseRect = new Rectangle((int)(Main.MouseWorld.X - 10), (int)(Main.MouseWorld.Y - 10), 20, 20);
 
             if (mPlayer.usedEctoPearl && remoteRange == 1200f)
                 remoteRange *= 1.5f;
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (!remoteMode)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing && !returnToPlayer)
                 {
-                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing && !returnToPlayer)
+                    Punch();
+                }
+                else
+                {
+                    if (player.whoAmI == Main.myPlayer)
+                        attackFrames = false;
+                }
+                bool message = false; //select target message
+                bool message2 = false; //target too far message
+                if (Projectile.owner == player.whoAmI)
+                {
+                    for (int n = 0; n < Main.maxNPCs; n++)
                     {
-                        Punch();
-                    }
-                    else
-                    {
-                        if (player.whoAmI == Main.myPlayer)
-                            attackFrames = false;
-                    }
-                    bool message = false; //select target message
-                    bool message2 = false; //target too far message
-                    if (Projectile.owner == player.whoAmI)
-                    {
-                        for (int n = 0; n < Main.maxNPCs; n++)
+                        NPC npc = Main.npc[n];
+                        if (npc.active && !npc.hide && !npc.immortal)
                         {
-                            NPC npc = Main.npc[n];
-                            if (npc.active && !npc.hide && !npc.immortal)
+                            if (npc.Hitbox.Intersects(mouseRect))
                             {
-                                if (npc.Hitbox.Intersects(rectangle))
+                                message = true;
+                                if (Vector2.Distance(Projectile.Center, npc.Center) <= 200f)
+                                    message2 = true;
+                            }
+                        }
+                    }
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        for (int p = 0; p < Main.maxPlayers; p++)
+                        {
+                            Player otherPlayer = Main.player[p];
+                            if (otherPlayer.active)
+                            {
+                                if (otherPlayer.Hitbox.Intersects(mouseRect))
                                 {
                                     message = true;
-                                    if (Vector2.Distance(Projectile.Center, npc.Center) <= 200f)
+                                    if (Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 200f)
                                         message2 = true;
                                 }
                             }
                         }
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                    }
+                }
+                if (Main.mouseRight && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && rightClickCooldown == 0 && !returnToPlayer) //right-click ability activation
+                {
+                    for (int n = 0; n < Main.maxNPCs; n++)
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && !npc.hide && !npc.immortal)
                         {
-                            for (int p = 0; p < Main.maxPlayers; p++)
+                            if (npc.Hitbox.Intersects(mouseRect))
                             {
-                                Player otherPlayer = Main.player[p];
-                                if (otherPlayer.active)
+                                if (Vector2.Distance(Projectile.Center, npc.Center) > 200f && messageCooldown2 == 0 && !message2)
+                                    selectEntity2 = true;
+                                if (Vector2.Distance(Projectile.Center, npc.Center) <= 200f && onlyOneTarget < 1)
                                 {
-                                    if (otherPlayer.Hitbox.Intersects(rectangle))
-                                    {
-                                        message = true;
-                                        if (Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 200f)
-                                            message2 = true;
-                                    }
+                                    onlyOneTarget += 1;
+                                    targetNPC = npc.whoAmI;
+                                    SoundEngine.PlaySound(SoundID.Item4, npc.Center);
+                                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                                 }
                             }
+                            if (!npc.Hitbox.Intersects(mouseRect) && messageCooldown == 0 && !message)
+                                selectEntity = true;
                         }
                     }
-                    if (Main.mouseRight && onlyOneTarget == 0 && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && rightClickCooldown == 0 && !returnToPlayer) //right-click ability activation
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        for (int n = 0; n < Main.maxNPCs; n++)
+                        for (int p = 0; p < Main.maxPlayers; p++)
                         {
-                            NPC npc = Main.npc[n];
-                            if (npc.active && !npc.hide && !npc.immortal)
+                            Player otherPlayer = Main.player[p];
+                            if (otherPlayer.active)
                             {
-                                if (npc.Hitbox.Intersects(rectangle))
+                                if (otherPlayer.Hitbox.Intersects(mouseRect))
                                 {
-                                    if (Vector2.Distance(Projectile.Center, npc.Center) > 200f && messageCooldown2 == 0 && !message2)
+                                    if (Vector2.Distance(Projectile.Center, otherPlayer.Center) > 200f && messageCooldown2 == 0 && !message2)
                                         selectEntity2 = true;
-                                    if (Vector2.Distance(Projectile.Center, npc.Center) <= 200f && onlyOneTarget < 1)
+                                    if (Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 200f && onlyOneTarget < 1 && otherPlayer.whoAmI != player.whoAmI)
                                     {
                                         onlyOneTarget += 1;
-                                        targetNPC = npc.whoAmI;
-                                        SoundEngine.PlaySound(SoundID.Item4, npc.Center);
+                                        targetPlayer = otherPlayer.whoAmI;
+                                        SoundEngine.PlaySound(SoundID.Item4, otherPlayer.Center);
                                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                                     }
                                 }
-                                if (!npc.Hitbox.Intersects(rectangle) && messageCooldown == 0 && !message)
+                                if (!otherPlayer.Hitbox.Intersects(mouseRect) && messageCooldown == 0 && !message)
                                     selectEntity = true;
                             }
                         }
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                        {
-                            for (int p = 0; p < Main.maxPlayers; p++)
-                            {
-                                Player otherPlayer = Main.player[p];
-                                if (otherPlayer.active)
-                                {
-                                    if (otherPlayer.Hitbox.Intersects(rectangle))
-                                    {
-                                        if (Vector2.Distance(Projectile.Center, otherPlayer.Center) > 200f && messageCooldown2 == 0 && !message2)
-                                            selectEntity2 = true;
-                                        if (Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 200f && onlyOneTarget < 1 && otherPlayer.whoAmI != player.whoAmI)
-                                        {
-                                            onlyOneTarget += 1;
-                                            targetPlayer = otherPlayer.whoAmI;
-                                            SoundEngine.PlaySound(SoundID.Item4, otherPlayer.Center);
-                                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
-                                        }
-                                    }
-                                    if (!otherPlayer.Hitbox.Intersects(rectangle) && messageCooldown == 0 && !message)
-                                        selectEntity = true;
-                                }
-                            }
-                        }
-                        rightClickCooldown += 90;
                     }
-                    if (!attackFrames && !returnToPlayer)
-                        StayBehind();
+                    rightClickCooldown += 90;
+                }
+                if (!attackFrames && !returnToPlayer)
+                    StayBehind();
+
+
+                if (Vector2.Distance(player.Center, Projectile.Center) <= remoteRange * 0.9f)
+                {
+                    if (returnToPlayer)
+                    {
+                        if (Projectile.velocity.X > 0)
+                            Projectile.spriteDirection = 1;
+                        if (Projectile.velocity.X < 0)
+                            Projectile.spriteDirection = -1;
+                    }
+                }
+            }
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer) //automode
+            {
+                remoteMode = false;
+                BasicPunchAI();
+            }
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
+            {
+                if (!returnToPlayer)
+                {
+                    float distance = Vector2.Distance(Projectile.Center, Main.MouseWorld);
+                    float halfScreenWidth = (float)Main.screenWidth / 2f;
+                    float halfScreenHeight = (float)Main.screenHeight / 2f;
+                    mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
+                    Projectile.rotation = Projectile.velocity.X * 0.05f;
+                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing)
+                    {
+                        if (distance > 25f)
+                            MovementAI(Main.MouseWorld, 8f + player.moveSpeed);
+                        if (distance <= 25f)
+                            MovementAI(Main.MouseWorld, (distance * (8f + player.moveSpeed)) / 25);
+                        mouseControlled = true;
+                    }
+                    if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing)
+                    {
+                        attackFrames = true;
+                        PlayPunchSound();
+                        if (shootCount <= 0)
+                        {
+                            shootCount += newPunchTime;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                            {
+                                shootVel = new Vector2(0f, 1f);
+                            }
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                        }
+                    }
+                    if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
+                    {
+                        attackFrames = false;
+                        idleFrames = true;
+                    }
+                    if (!mouseControlled)
+                        MovementAI(Projectile.Center + new Vector2(100f * Projectile.spriteDirection, 0f), 0f);
+
+                    LimitDistance(remoteRange);
                 }
 
                 if (onlyOneTarget > 0)      //right-click ability effect
@@ -271,55 +331,84 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                             Projectile.spriteDirection = -1;
                     }
                 }
-                if (remoteMode && !returnToPlayer)
+            }
+
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual || mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
+            {
+                if (onlyOneTarget > 0)      //right-click ability effect
                 {
-                    float distance = Vector2.Distance(Projectile.Center, Main.MouseWorld);
-                    float halfScreenWidth = (float)Main.screenWidth / 2f;
-                    float halfScreenHeight = (float)Main.screenHeight / 2f;
-                    mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
-                    Projectile.rotation = Projectile.velocity.X * 0.05f;
-                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing)
+                    if (targetNPC != -1)
                     {
-                        if (distance > 25f)
-                            MovementAI(Main.MouseWorld, 8f + player.moveSpeed);
-                        if (distance <= 25f)
-                            MovementAI(Main.MouseWorld, (distance * (8f + player.moveSpeed)) / 25);
-                        mouseControlled = true;
-                    }
-                    if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing)
-                    {
-                        attackFrames = true;
-                        PlayPunchSound();
-                        if (shootCount <= 0)
+                        if (!Main.npc[targetNPC].townNPC)
                         {
-                            shootCount += newPunchTime;
-                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                            if (shootVel == Vector2.Zero)
-                            {
-                                shootVel = new Vector2(0f, 1f);
-                            }
-                            shootVel.Normalize();
-                            shootVel *= ProjectileSpeed;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
-                            Main.projectile[projIndex].netUpdate = true;
-                            Projectile.netUpdate = true;
+                            Main.npc[targetNPC].AddBuff(ModContent.BuffType<SMACK>(), 900);
+                            Main.npc[targetNPC].GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
+                            onlyOneTarget = 0;
+                        }
+                        else
+                        {
+                            Main.npc[targetNPC].AddBuff(ModContent.BuffType<BelieveInMe>(), 1800);
+                            onlyOneTarget = 0;
+                        }
+                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
+                    }
+                    if (targetPlayer != -1 && onlyOneTarget != 0)
+                    {
+                        if (Main.player[targetPlayer].hostile && player.hostile && player.InOpposingTeam(Main.player[targetPlayer]))
+                        {
+                            Main.player[targetPlayer].AddBuff(ModContent.BuffType<SMACK>(), 360);
+                            SyncCall.SyncOtherPlayerDebuff(player.whoAmI, targetPlayer, ModContent.BuffType<SMACK>(), 360);
+                            onlyOneTarget = 0;
+                        }
+                        if (!Main.player[targetPlayer].hostile || !player.hostile || Main.player[targetPlayer].hostile && player.hostile && !player.InOpposingTeam(Main.player[targetPlayer]))
+                        {
+                            Main.player[targetPlayer].AddBuff(ModContent.BuffType<BelieveInMe>(), 720);
+                            SyncCall.SyncOtherPlayerDebuff(player.whoAmI, targetPlayer, ModContent.BuffType<BelieveInMe>(), 720);
+                            onlyOneTarget = 0;
                         }
                     }
-                    if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
-                    {
-                        attackFrames = false;
-                        idleFrames = true;
-                    }
-                    if (!mouseControlled)
-                        MovementAI(Projectile.Center + new Vector2(100f * Projectile.spriteDirection, 0f), 0f);
-
-                    LimitDistance(remoteRange);
                 }
-            }
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer) //automode
-            {
-                remoteMode = false;
-                BasicPunchAI();
+
+                if (onlyOneTarget == 0)
+                {
+                    targetPlayer = -1;
+                    targetNPC = -1;
+                }
+
+                if (selectEntity2)
+                {
+                    Main.NewText("Target too far");
+                    selectEntity2 = false;
+                    messageCooldown2 += 90;
+                }
+                if (selectEntity)
+                {
+                    Main.NewText("Select target with mouse");
+                    selectEntity = false;
+                    messageCooldown += 90;
+                }
+                if (messageCooldown > 0)
+                    messageCooldown--;
+                if (messageCooldown2 > 0)
+                    messageCooldown2--;
+
+                if (rightClickCooldown > 0)
+                    rightClickCooldown--;
+
+                if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && !returnToPlayer) //remote mode
+                {
+                    remoteMode = !remoteMode;
+                    if (remoteMode)
+                        Main.NewText("Remote Mode: Active");
+                    else
+                        Main.NewText("Remote Mode: Disabled");
+                }
+
+                if (SecondSpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && mPlayer.echoesTier > 2 && changeActCooldown == 0)
+                {
+                    changeACT = true;
+                    Projectile.Kill();
+                }
             }
 
             if (Projectile.Distance(player.Center) >= newMaxDistance + 10f && !returnToPlayer && !remoteMode) //if suddenly stand is too far

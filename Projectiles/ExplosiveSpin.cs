@@ -15,41 +15,40 @@ namespace JoJoStands.Projectiles
         {
             Main.projFrames[Projectile.type] = 8;
         }
+
         public override void SetDefaults()
         {
-            Projectile.width = 20;
-            Projectile.height = 20;
+            Projectile.width = 18;
+            Projectile.height = 18;
             Projectile.aiStyle = 0;
-            Projectile.timeLeft = 800;
+            Projectile.timeLeft = 15 * 60;
             Projectile.friendly = true;
             Projectile.penetrate = 10;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
         }
+
         private const float ExplosionRadius = 3f * 8f;
-        private bool crit = false;
+        private const float MaxDetectionRadius = 25 * 16;
+        private const float ProjectileDetectionSpeed = 5f;
+
         public override void AI()
         {
             Projectile.frameCounter++;
-            if (Projectile.frameCounter > 12)
+            if (Projectile.frameCounter >= 4)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame++;
+                if (Projectile.frame >= Main.projFrames[Projectile.type])
+                    Projectile.frame = 0;
             }
-            if (Projectile.frame >= 8)
-            {
-                Projectile.frame = 0;
-            }
-            float maxDetectRadius = 400f;
-            float projSpeed = 5f;
-            NPC closestNPC = FindClosestNPC(maxDetectRadius);
+
+            NPC closestNPC = FindClosestNPC(MaxDetectionRadius);
             if (closestNPC == null)
                 return;
 
-            Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * projSpeed;
+            Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * ProjectileDetectionSpeed;
             Projectile.rotation = Projectile.velocity.ToRotation();
-
-
         }
 
 
@@ -63,8 +62,11 @@ namespace JoJoStands.Projectiles
                 Main.dust[dustIndex].velocity *= 1.4f;
                 SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode);
             }
+
+            bool crit = false;
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
+
             for (int n = 0; n < Main.maxNPCs; n++)
             {
                 NPC npc = Main.npc[n];
@@ -81,6 +83,7 @@ namespace JoJoStands.Projectiles
                 }
             }
         }
+
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             Player player = Main.player[Projectile.owner];
@@ -94,6 +97,7 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
             }
         }
+
         public NPC FindClosestNPC(float maxDetectDistance)
         {
             NPC closestNPC = null;
@@ -101,9 +105,9 @@ namespace JoJoStands.Projectiles
 
             float sqrMaxDetectDistance = maxDetectDistance * maxDetectDistance;
             // Loop through all NPCs(max always 200)
-            for (int k = 0; k < Main.maxNPCs; k++)
+            for (int n = 0; n < Main.maxNPCs; n++)
             {
-                NPC target = Main.npc[k];
+                NPC target = Main.npc[n];
                 // Check if NPC able to be targeted.
                 if (target.CanBeChasedBy())
                 {

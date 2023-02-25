@@ -24,11 +24,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             get { return Mod.Name + "/Items/EchoesAct0"; }
         }
 
-        private bool lowPriceThreeFreeze = false;
+        private bool thrown = false;
         private bool evolve = false;
 
         private float ability = 0f;
-        private float add = 0f;
+        private float rotationAdd = 0f;
 
         public override void SetDefaults()
         {
@@ -48,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!lowPriceThreeFreeze)
+            if (!thrown)
             {
                 if (!player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
@@ -65,7 +65,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         Projectile.velocity.Normalize();
                         Projectile.velocity *= 12f;
                         Projectile.netUpdate = true;
-                        lowPriceThreeFreeze = true;
+                        thrown = true;
                     }
                     Lighting.AddLight(Projectile.position, 21);
                 }
@@ -85,13 +85,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Projectile.netUpdate = true;
 
             }
-            if (lowPriceThreeFreeze)
+            else
             {
-                add++;
+                rotationAdd++;
                 Projectile.alpha = 0;
                 Projectile.penetrate = 2;
                 Projectile.damage = newPunchDamage;
-                Projectile.rotation = Projectile.velocity.ToRotation() + ability + (add * (5 / 100) * Projectile.direction);
+                Projectile.rotation = Projectile.velocity.ToRotation() + ability + (rotationAdd * (5 / 100) * Projectile.direction);
                 Projectile.velocity.Y += 0.33f;
                 Projectile.netUpdate = true;
             }
@@ -99,11 +99,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (lowPriceThreeFreeze)
+            if (thrown)
             {
                 Projectile.alpha = 255;
-                lowPriceThreeFreeze = false;
-                add = 0f;
+                thrown = false;
+                rotationAdd = 0f;
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_3>(), 1f);
                 SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
             }
@@ -127,9 +127,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             }
         }
 
-        public override bool? CanHitNPC(NPC target) => lowPriceThreeFreeze ? null : false;
+        public override bool? CanHitNPC(NPC target) => thrown ? null : false;
 
-        public override bool CanHitPvp(Player target) => lowPriceThreeFreeze ? true : false;
+        public override bool CanHitPvp(Player target) => thrown ? true : false;
 
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
@@ -141,9 +141,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             }
             if (!player.HasBuff(ModContent.BuffType<StrongWill>()))
             {
+                thrown = false;
                 Projectile.alpha = 255;
-                add = 0f;
-                lowPriceThreeFreeze = false;
+                rotationAdd = 0f;
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_3>(), 1f);
                 SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
             }
@@ -181,23 +181,23 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     else
                     {
                         Projectile.alpha = 255;
-                        add = 0f;
-                        lowPriceThreeFreeze = false;
+                        rotationAdd = 0f;
+                        thrown = false;
                         Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_3>(), 1f);
                         SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
                     }
                 }
-                if (target.boss)
+                else
                 {
                     evolve = true;
                     Projectile.Kill();
                 }
             }
-            if (!player.HasBuff(ModContent.BuffType<StrongWill>()))
+            else
             {
+                thrown = false;
                 Projectile.alpha = 255;
-                add = 0f;
-                lowPriceThreeFreeze = false;
+                rotationAdd = 0f;
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_3>(), 1f);
                 SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
             }
@@ -205,12 +205,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override void SendExtraStates(BinaryWriter writer)
         {
-            writer.Write(lowPriceThreeFreeze);
+            writer.Write(thrown);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
-            lowPriceThreeFreeze = reader.ReadBoolean();
+            thrown = reader.ReadBoolean();
         }
     }
 }

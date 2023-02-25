@@ -30,7 +30,7 @@ namespace JoJoStands.Projectiles
         public const byte SilverChariot = 10;
         public const byte Cream = 11;
         public const byte CrazyDiamond = 12;
-        public const byte TowerOfGray = 13; //"fist"
+        public const byte TowerOfGray = 13;     //"fist"
         public const byte SoftAndWet = 14;
         public const byte Echoes = 15;
 
@@ -57,7 +57,7 @@ namespace JoJoStands.Projectiles
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             standType = mPlayer.standFistsType;
             standTier = mPlayer.standTier;
-            if (!playedSound && mPlayer.towerOfGrayTier == 0)
+            if (!playedSound && mPlayer.standName != "TowerOfGray")
             {
                 SoundEngine.PlaySound(SoundID.Item1);
                 playedSound = true;
@@ -511,7 +511,6 @@ namespace JoJoStands.Projectiles
         public override bool? CanHitNPC(NPC target)
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames != 0)
                 return false;
             else
@@ -521,7 +520,6 @@ namespace JoJoStands.Projectiles
         public override bool CanHitPvp(Player target)
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             return true;
         }
     }

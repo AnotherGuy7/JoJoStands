@@ -54,7 +54,7 @@ namespace JoJoStands
         public static DeathSoundType DeathSoundID;
         public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
         public static StandSearchType standSearchType = StandSearchType.Bosses;
-        public static bool testStandUnlocked = false;
+        public static bool TestStandUnlocked = false;
 
         public int goldenSpinCounter = 0;
         public int aerosmithRadarFrameCounter = 0;
@@ -81,7 +81,6 @@ namespace JoJoStands
         public int standType = 0;           //0 = no type; 1 = Melee; 2 = Ranged;
         public int standTier = 0;
         public int piercedTimer = 36000;
-        public int hermitPurpleTier = 0;
         public int hermitPurpleShootCooldown = 0;
         public int hermitPurpleSpecialFrameCounter = 0;
         public int hermitPurpleHamonBurstLeft = 0;
@@ -216,7 +215,6 @@ namespace JoJoStands
         public int crazyDiamondStonePunch = 0;
         public int crazyDiamondTileDestruction = 0;
 
-        public int towerOfGrayTier = 0;
         public float towerOfGrayDamageMult = 1f;
 
         public int standTarget = -1;
@@ -300,10 +298,12 @@ namespace JoJoStands
                 }
             }
         }
+
         public void Uncraft(Recipe recipe)
         {
             recipe.requiredItem.ForEach(Uncraft2);
         }
+
         public void Uncraft2(Item item)
         {
             Player.QuickSpawnItem(Player.InheritSource(Player), item.type, item.stack);
@@ -599,7 +599,6 @@ namespace JoJoStands
                 standTier = 0;
                 standDefenseToAdd = 0;
                 sexPistolsTier = 0;
-                hermitPurpleTier = 0;
                 stoneFreeWeaveAbilityActive = false;
                 hotbarLocked = false;
 
@@ -607,8 +606,6 @@ namespace JoJoStands
                 crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
                 crazyDiamondMessageCooldown = 0;
                 crazyDiamondDestroyedTileData.Clear();
-
-                towerOfGrayTier = 0;
 
                 creamTier = 0;
                 voidCounter = 0;
@@ -963,8 +960,6 @@ namespace JoJoStands
                 crazyDiamondMessageCooldown = 0;
                 crazyDiamondDestroyedTileData.Clear();
 
-                towerOfGrayTier = 0;
-
                 echoesTier = 0;
                 currentEchoesAct = 0;
             }
@@ -1281,21 +1276,21 @@ namespace JoJoStands
                     tuskShootCooldown = 30;
                 }
             }
-            if (hermitPurpleTier != 0 && Player.whoAmI == Main.myPlayer)
+            if (standName == "HermitPurple" && standTier != 0 && Player.whoAmI == Main.myPlayer)
             {
                 bool specialJustPressed = false;
                 if (!Main.dedServ)
                     specialJustPressed = JoJoStands.SpecialHotKey.JustPressed;
 
                 HamonPlayer hPlayer = Player.GetModPlayer<HamonPlayer>();
-                if (specialJustPressed && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && hermitPurpleTier > 2 && hPlayer.amountOfHamon > 40)
+                if (specialJustPressed && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && standTier > 2 && hPlayer.amountOfHamon > 40)
                 {
-                    if (hermitPurpleTier == 3)
+                    if (standTier == 3)
                     {
                         hermitPurpleHamonBurstLeft = 3;
                         Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(30));
                     }
-                    if (hermitPurpleTier == 4)
+                    if (standTier == 4)
                     {
                         hermitPurpleHamonBurstLeft = 5;
                         Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(20));
@@ -1309,7 +1304,7 @@ namespace JoJoStands
 
                 if (standControlStyle == StandControlStyle.Manual)
                 {
-                    if (hermitPurpleTier == 1)
+                    if (standTier == 1)
                     {
                         if (Main.mouseLeft && canStandBasicAttack && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
@@ -1323,7 +1318,7 @@ namespace JoJoStands
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
                     }
-                    if (hermitPurpleTier == 2)
+                    if (standTier == 2)
                     {
                         if (Main.mouseLeft && canStandBasicAttack && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
@@ -1348,7 +1343,7 @@ namespace JoJoStands
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
                     }
-                    if (hermitPurpleTier == 3)
+                    if (standTier == 3)
                     {
                         if (Main.mouseLeft && canStandBasicAttack && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
@@ -1370,7 +1365,7 @@ namespace JoJoStands
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(149 * standDamageBoosts), 0f, Player.whoAmI);
                         }
                     }
-                    if (hermitPurpleTier == 4)
+                    if (standTier == 4)
                     {
                         if (Main.mouseLeft && canStandBasicAttack && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
@@ -1891,13 +1886,13 @@ namespace JoJoStands
                     Main.projectile[projIndex].netUpdate = true;
                 }
             }
-            if (hermitPurpleTier >= 2)
+            if (standName == "HermitPurple" && standTier >= 2)
             {
-                int reflectedDamage = (int)(npc.damage * (0.05f * hermitPurpleTier));
-                npc.StrikeNPC(reflectedDamage, 3f * hermitPurpleTier, npc.direction);
+                int reflectedDamage = (int)(npc.damage * (0.05f * standTier));
+                npc.StrikeNPC(reflectedDamage, 3f * standTier, npc.direction);
                 if (hPlayer.amountOfHamon >= 30)
                 {
-                    npc.AddBuff(ModContent.BuffType<Sunburn>(), ((hPlayer.amountOfHamon / 30) * hermitPurpleTier) * 60);
+                    npc.AddBuff(ModContent.BuffType<Sunburn>(), ((hPlayer.amountOfHamon / 30) * standTier) * 60);
                     hPlayer.amountOfHamon -= 2;
                 }
             }
@@ -1905,7 +1900,7 @@ namespace JoJoStands
             {
                 int reflectedDamage = npc.damage * 4;       //This is becaues npc damage is pretty weak against the NPC itself
                 npc.StrikeNPC(reflectedDamage, 14f, npc.direction);
-                npc.AddBuff(ModContent.BuffType<Sunburn>(), (10 * (hermitPurpleTier - 2)) * 60);
+                npc.AddBuff(ModContent.BuffType<Sunburn>(), (10 * (standTier - 2)) * 60);
 
                 for (int i = 0; i < 60; i++)
                 {
@@ -2060,15 +2055,12 @@ namespace JoJoStands
             standTier = 0;
             standDefenseToAdd = 0;
             sexPistolsTier = 0;
-            hermitPurpleTier = 0;
             stoneFreeWeaveAbilityActive = false;
 
             crazyDiamondRestorationMode = false;
             crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
             crazyDiamondMessageCooldown = 0;
             crazyDiamondDestroyedTileData.Clear();
-
-            towerOfGrayTier = 0;
 
             echoesTier = 0;
             currentEchoesAct = 0;

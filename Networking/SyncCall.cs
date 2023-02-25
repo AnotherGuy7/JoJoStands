@@ -1,13 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Runtime.InteropServices;
-using System;
 using Terraria;
+using Terraria.Chat;
 using Terraria.ID;
+using Terraria.Localization;
 
 namespace JoJoStands.Networking
 {
     public class SyncCall
     {
+        public static void DisplayText(string text)
+        {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                Main.NewText(text, Color.White);
+            else if (Main.netMode == NetmodeID.Server)
+                ChatHelper.BroadcastChatMessage(NetworkText.FromKey(text, new object[0]), Color.White, -1);
+        }
+
+        public static void DisplayText(string text, Color color)
+        {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                Main.NewText(text, color);
+            else if (Main.netMode == NetmodeID.Server)
+                ChatHelper.BroadcastChatMessage(NetworkText.FromKey(text, new object[0]), color, -1);
+        }
+
         public static void SyncControlStyle(int whoAmI, MyPlayer.StandControlStyle standControlStyle)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)

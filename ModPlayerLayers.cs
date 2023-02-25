@@ -135,19 +135,14 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.hermitPurpleTier != 0)
+            if (drawPlayer.active && mPlayer.standName == "HermitPurple" && mPlayer.standTier != 0)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HermitPurple_Arms").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - 1f);
                 Vector2 drawPos = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 20f + (int)drawPlayer.gfxOffY + 4) - Main.screenPosition;
                 SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
-                {
-                    drawX += 2;
                     effects = SpriteEffects.FlipHorizontally;
-                }
-                if (drawPlayer.direction == 1)
-                    effects = SpriteEffects.None;
 
                 Color color = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
                 if (mPlayer.hermitPurpleHamonBurstLeft > 0)        //No increment here because it's already incrememnted in the Body layer
@@ -176,19 +171,14 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.hermitPurpleTier > 1)
+            if (drawPlayer.active && mPlayer.standName == "HermitPurple" && mPlayer.standTier > 1)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/HermitPurple_Body").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f - 1f);
                 Vector2 drawPos = new Vector2(drawX, (int)drawPlayer.Center.Y + drawPlayer.HeightOffsetHitboxCenter - 20f + (int)drawPlayer.gfxOffY + 4) - Main.screenPosition;
                 SpriteEffects effects = SpriteEffects.None;
                 if (drawPlayer.direction == -1)
-                {
-                    drawX += 2;
                     effects = SpriteEffects.FlipHorizontally;
-                }
-                if (drawPlayer.direction == 1)
-                    effects = SpriteEffects.None;
 
                 Color color = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
                 if (mPlayer.hermitPurpleHamonBurstLeft > 0)
@@ -279,7 +269,6 @@ namespace JoJoStands
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = ModLoader.GetMod("JoJoStands");
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
             if (drawPlayer.active && mPlayer.phantomHoodLongEquipped && drawPlayer.head == EquipLoader.GetEquipSlot(JoJoStands.Instance, "PhantomHoodLong", EquipType.Head))
             {

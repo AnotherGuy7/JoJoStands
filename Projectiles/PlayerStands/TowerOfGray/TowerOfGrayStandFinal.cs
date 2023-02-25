@@ -68,7 +68,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
         private Vector2 dashPoint = Vector2.Zero;
         private Vector2 projPos = Vector2.Zero;
-        private Vector2 rangeIndicatorSize;
 
         private List<int> specialTargets = new List<int>();
 
@@ -83,7 +82,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            mPlayer.towerOfGrayTier = standTier;
             if (remoteMode)
                 mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
             if (mPlayer.standOut)
@@ -97,13 +95,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                     Projectile.spriteDirection = -1;
             }
 
-            if (mPlayer.usedEctoPearl && noRemoteRange == 400f)
-                noRemoteRange *= 1.5f;
-            if (mPlayer.usedEctoPearl && remoteRange == 1200f)
-                remoteRange *= 1.5f;
+            if (mPlayer.usedEctoPearl)
+            {
+                if (noRemoteRange == 400f)
+                    noRemoteRange *= 1.5f;
+                if (remoteRange == 1200f)
+                    remoteRange *= 1.5f;
+            }
 
-            if (!remoteMode)
-                range = noRemoteRange;
             if (remoteMode)
             {
                 if (emote == 0)
@@ -125,6 +124,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                 if (!mouseControlled)
                     MovementAI(Projectile.Center + new Vector2(100f * Projectile.spriteDirection, 0f), 0f);
             }
+            else
+                range = noRemoteRange;
 
             if (!dash && !returnToPlayer && !returnToRange && special == -1)
                 Array.Clear(Projectile.oldPos, 0, Projectile.oldPos.Length);

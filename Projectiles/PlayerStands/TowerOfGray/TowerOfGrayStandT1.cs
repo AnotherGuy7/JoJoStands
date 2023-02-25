@@ -75,7 +75,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            mPlayer.towerOfGrayTier = standTier;
             if (remoteMode)
                 mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
             if (mPlayer.standOut)
