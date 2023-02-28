@@ -1,0 +1,1453 @@
+﻿Mods: {
+	JoJoStands: {
+		#This is what displays during all of an NPC's happiness levels. Note that the localization key for these should always be TownNPCMood.*NPCName*.*Mood* or else it won't display properly.
+		TownNPCMood: {
+		
+			Gambler: {
+				Content: Жизнь здесь гораздо спокойнее, чем тогда в Египте.
+				NoHome: Может иногда я и обманываю, но я никогда не обману, если мне дадут где остаться!
+				LoveSpace: Мне нравится, что у меня есть много места для моих карт, а ещё лучше - для моих наград.
+				FarFromHome: Здесь не с кем играть, учитывая как далеко я от дома.
+				DislikeCrowded: Рядом со мной слишком много людей, чтобы я смог незаметно сжульничать.
+				HateCrowded: Здесь чересчур много любопытных глаз, ждущих, когда я сделаю ход... 
+				LikeBiome: "{BiomeName} выглядит как место где происходит много азартных игр."
+				LoveBiome: "Места вроде {BiomeName} напоминают мне о моей жизни перед тем днем."
+				DislikeBiome: "{BiomeName} имеет свои особенности...Но они не по душе азартному игроку!"
+				HateBiome: "Я ненавижу жить в {BiomeName}. Лучше заново пережить определенную ставку, чем оставаться здесь."
+				LikeNPC: "{NPCName} действительно знает как играть!"
+				LoveNPC: "{NPCName} умеет обманывать также хорошо как и я! Играть с {NPCName}, все равно что играть с самим собой!"
+				DislikeNPC: "{NPCName} подозревает меня в чем-то и мне это не нравится."
+				HateNPC: "Я НЕ разрешу {NPCName} играть со мной. Он довольно проницателен в высоких ставках. Выгони его отсюда!"
+			}
+			HamonMaster: {
+				Content: 
+				NoHome: 
+				LoveSpace: 
+				FarFromHome: 
+				DislikeCrowded: 
+				HateCrowded: 
+				LikeBiome: ""
+				LoveBiome: ""
+				DislikeBiome: "" 
+				HateBiome: ""
+				LikeNPC: ""
+				LoveNPC: ""
+				DislikeNPC: "" 
+				HateNPC: ""
+			}
+			MarineBiologist: {
+				Content: Это место напоминает мне Морио, со всей этой суетой.
+				NoHome: Пока я разбираюсь с некоторыми делами, которые ты не поймешь, мне бы не помешало место для ночлега.
+				LoveSpace: Наконец-то. Никто и ничего не отвлекает меня от работы.
+				FarFromHome: Похоже я зашел слишком далеко. Ну и ну...Не показал бы ты мне направление до ближайшего здания?
+				DislikeCrowded: Огромное количество людей вызывает у меня подозрения. Возможно, среди них есть пользователи стендов.
+				HateCrowded: Слишком опасно оставаться здесь с такой кучей людей. Если на меня нападёт какой-нибудь пользователь стенда, я не уверен что смогу свести потери к минимуму.
+				LikeBiome: "{BiomeName} имеет парочку интересных мест, на которые мне бы хотелось посмотреть."
+				LoveBiome: "{BiomeName}, похоже, обладает богатой морской жизни. Пока я здесь, мне бы хотелось её исследовать."
+				DislikeBiome: "Обычно я не выбираю где оставаться, но {BiomeName} имеет много недостатков."
+				HateBiome: "Ну и ну, {BiomeName} напоминает мне о Египте и путешествии, через которое мы прошли чтобы убить Дио. Я это ненавижу."
+				LikeNPC: "Похоже, что {NPCName} знает парочку вещей о морской жизни."
+				LoveNPC: "{NPCName} выглядит как хороший партнёр для фонда Спидвагона."
+				DislikeNPC: "{NPCName} действует мне на нервы."
+				HateNPC: "{NPCName} испускает недобрую ауру, я чувствую опасность."
+			}
+			Priest: {
+				Content: По сравнению с тюрьмой, это место не такое уж и плохое.
+				NoHome: Если приведешь меня к какому-нибудь дому, судьба улыбнётся и хорошенько заплатит тебе за твою доброту.
+				LoveSpace: Веришь ли ты в то, что та самая Гравитация привела меня к столь просторной деревне? Я верю.
+				FarFromHome: Не нужно говорить мне, где мой дом. Сама судьба мне подскажет.
+				DislikeCrowded: Здесь собирается довольно много людей, разве не?
+				HateCrowded: Такая толпа людей обязательно принесет свою долю грехов. Мы должны отделиться от неё, чтобы не попасть под неё.
+				LikeBiome: "{BiomeName} - место с достойными качествами."
+				LoveBiome: "Божья воля благословила меня домом в {BiomeName}! Дио бы понравилось здесь оставаться!"
+				DislikeBiome: "Мне не нравится {BiomeName}, но если это место, где я должен жить, то я верю что меня привела сюда определенная Гравитация по особой причине."
+				HateBiome: "{BiomeName} не то место, куда меня должна была принести Гравитация. Это должно быть какое-то испытание, которое я должен пройти."
+				LikeNPC: "{NPCName} последователь судьбы. Как-минимум из-за этого его можно уважать."
+				LoveNPC: "Похоже, Гравитация позволила мне встретиться с {NPCName}."
+				DislikeNPC: "Судьба {NPCName} не выглядит хорошей." 
+				HateNPC: "2, 3, 5, 7, 11...Ой, я не заметил тебя. Я случайно услышал, как {NPCName} пренебрегает силой Гравитации, и чуть не вышел из себя."	
+			}
+		}
+		   		DamageClassName: {
+    				VampireDamageClass: вампирский
+				}		
+		NPCName: {
+		Gambler: Картежник
+		HamonMaster: Мастер Хамона
+    	MarineBiologist: Морской Биолог
+		Priest: Священник
+		
+		JackTheRipper: Джек Потрошитель
+		MatureStrayCat: Развитый Stray Cat
+		ViralMiner: Добытчик
+		WangChan: Ванг Чан
+		Yoshihiro: Йошихиро
+		Yuya: Юя Фунгами
+		ZombieRat: Зомби крыса
+		BaldZombie: Лысый зомби
+		ChimeraBird: Птица химера
+		Doobie: Тупица
+		DoobiesChimeraSnake: Змея химера
+		DoobiesSnake: Змея
+		GladiatorZombie: Зомби гладиатор
+				
+		}
+		
+		BuffName: {
+		AjaVampire: Совершенная форма жизни
+		DyingVampire: Умирающий вампир
+		Vampire: Вампир
+		ViralBeetleBuff: Зараженный жук
+		ViralCrystalBuff: Зараженный кристалл
+		Zombie: Зомби
+		AbilityCooldown: Откат способности
+		Tinnitus: Мелкий
+		AffectedByBtZ: Ноль
+		Aging: Старение
+		Asphyxiating: Удушение
+		ImproperRestoration: Неправильная реставрация
+		Infected: Заражен
+		Lacerated: Растерзан
+		LifePunch: Удар жизни
+		Locked: Заперт
+		MissingOrgans: Пропажа органов
+		ParchedDebuff: Пересох
+		RapidAging: Очень быстрое старение
+		RedBindDebuff: Красная Веревка
+		Zipped: Растегнут
+		Spin: Вращение
+		SpaceFreeze: Космос
+		Stolen: Украден
+		Sunburn: Горение
+		TimeSkipConfusion: Время было стёрто?
+		WhooshDebuff: ВУУУШ!
+		YoAngelo: Йо, Анджело
+		ForeseenDebuff: Предвиден
+		ForesightBuff: Предвидение
+		FrozeninTime: Остановлен
+		PreTimeSkip: Стирание времени
+		Restoration: Реставрация
+		SkippingTime: Стирание времени
+		ThreeFreezeBarrage: Поток Three Freeze
+		Whoosh: ВУУУШ!
+		BacktoZero: Возвращение к нулю
+		BelieveInMe: Верь в меня!
+		BlindRage: Слепая ярость
+		DeathLoop: Цикл смертей
+		LockActiveBuff: Замок
+		ArtificialSoul: Искуственная душа
+		BarrierBuff: Пузыратый барьер
+		BulletKickFrenzy: Безумные пинки пуль
+		CooledOut: Охлаждение
+		Dodge: Увернулись!
+		Exposing: Раскрыт
+		FinalPush: Последний рывок!
+		HamonChargedI: Заряд Хамона 1
+		HamonChargedII: Заряд Хамона 2
+		HamonWeaponImbueBuff: Заряд оружия Хамоном
+		Intangible: Неосязаемый!
+		KnifeAmalgamation: Ножное смешивание
+		UltraSunscreenBuff: Усиленное солнцезащитное покрытие
+		Weave: Переплет
+		ZipperDodge: Уворот молнии
+		Pierced: Пронзан!
+		PowerfulStrike: Сильный удар
+		ProtectiveFilmBuff: Защитная пленка
+		Reinforcements: Подкрепление
+		RoadRollerBuff: Асфальтоукладчик
+		RUUUN: БЕГИТЕ
+		SphericalVoid: Сферическая пустота
+		SunscreenBuff: Солнцезащитное покрытие
+		SurpriseAttack: Внезапная атака
+		SwanSong: Лебединая песня
+		ZeppeliPetBuff: Питомец Зеппели
+		DioPetBuff: Питомец Дио
+		JonathanPetBuff: Питомец Джонатан
+		SpeedWagonPetBuff: Питомец Спидвагон
+		CoordinatedEyes: Координация глаз
+		MentalFortitude: Психическая стойкость
+		QuickThinking: Сообразительность
+		SharpMind: Острый ум
+		StrongWill: Сильная воля
+		TopOfTheChain: Вершина цепи
+		}
+		
+		BuffDescription: {
+		AjaVampire: Теперь вы бессмертное, совершенное существо!
+		CenturyBoyBuff: Вы защищены!
+		DyingVampire: Остаётся только ваша голова.
+		Vampire: Вы теперь вампир...избегайте солнца!
+		ViralBeetleBuff: Потусторонний вирус, покорённый вами, проявил себя и теперь защищает вас!
+		ViralCrystallBuff: Мистический серебрянно-золотой кристалл присматривает за вами.
+		Zombie: Теперь вы зомби!
+		AbilityCooldown: Вы больше не можете использовать способности стендов.
+		Tinnitus: Удар был слаб, а вот звук...
+		AffectedByBtZ: Вы застряли в нуле.
+		Aging: Ваши колени дрожат, вы чувствуете себя слабым и уставшим.
+		Asphyxiating: Воздух из ваших легких был выкачан!
+		ImproperRestoration: Вы уродливы! Макс.Здоровье снижено и не может быть повышено. Пора навестить настоящего доктора!
+		Infected: Какой-то потусторонний вирус распространяется по вашему телу.
+		Lacerated: Вы были глубоко ранены!
+		LifePunch: Ваши чувства ускорены и ваше тело не успевает за ними.
+		Locked: Ваше чувство вины усиливается, и это больно...
+		MissingOrgans: Некоторые части вашего тела стерты!
+		ParchedDebuff: Вы были бы не против выпить.
+		RapidAging: Вы чувствуете, как вся ваша жизненная энергия покидает ваше тело...
+		RedBindDebuff: Вы связаны огнём!
+		SMACK: Это просто невыносимо! Звуки в вашей голове становятся громче.
+		Zipped: На вашем теле поставлена молния, кровь вытекает быстро.
+		Spin: Вы бесконечно вращаетесь...нет шанса на выживание.
+		SpaceFreeze: Вы взлетели слишком высоко и теперь останетесь в космосе до конца вечности. Счастливо!
+		Stolen: Диск с вашим стендом был украден!
+		Sunburn: Вы сгораете под солнечным светом!
+		TimeSkipConfusion: То что вы сейчас увидели были вы из будущего.
+		WhooshDebuff: Вы идёте против ветра. Скорость передвижения снижена.
+		YoAngelo: Вы являетесь исторической достопримечательностью!
+		ForeseenDebuff: Ваши действия уже были увидены.
+		ForesightBuff: Вы смотрите в будущее...
+		FrozeninTime: Вы были заморожены вместе со временем.
+		PreTimeSkip: Время стирается!
+		Restoration: Ваши раны заживают прямо у вас на глазах!
+		SkippingTime: Время стирается.
+		TheWorldBuff: Время остановлено!
+		ThreeFreezeBarrage: Каждый ваш удар в разы тяжелее, чем может показаться!
+		Whoosh: Попутный ветер увеличивает вашу скорость!
+		BacktoZero: Враги, навредившие вам, никогда и не касались вас вовсе.
+		BelieveInMe: Вы готовы стоять до конца ради столь надежного парня.
+		BitesTheDust: Великое оружие против ошибок...
+		BlindRage: Ярость наполняет вас! Вы наносите больше урона и запечатываете врага в камень. Уничтожьте того, кто оскорбил вашу тупую прическу! Ой...
+		DeathLoop: Нацеленный враг пройдет через бесконечные смерти при его убийстве.
+		LockActiveBuff: Причинившие вам вред враги почувствуют тяжесть своей вины.
+		ArtificialSoul: Вам была выдана искуственная душа.
+		BadCompanyActiveBuff: Целая армия ждет ваших указаний.
+		BarrierBuff: Защитный барьер окружает вас. Повышенная защита, сопротивление к дебаффам и возможность скользить.
+		BulletKickFrenzy: Sex Pistols готовы пнуть любое количество пуль!
+		CooledOut: Температура вашего тела понижена.
+		Dodge: Это было близко!
+		DollyDaggerActiveBuff: При получении урона его часть передаётся врагу.
+		Exposing: Вы более уязвимы к вражеским атакам, но быстрее восстанавливаете Пустоту.
+		FinalPush: Те, кто попытается выбить вас, будут встречены неустанной борьбой.
+		HamonChargedI: Огромное количество Хамона внутри вас увеличивает ваши физические характеристики.
+		HamonChargedII: Огромное количество Хамона внутри вас увеличивает ваши физические характеристики.
+		HamonWeaponImbueBuff: Вы заряжаете своё оружие Хамоном.
+		Intangible: Вы можете проходить сквозь блоки в течение 2-х минут.
+		KnifeAmalgamation: Вы воткнули в себя десятки ножей.
+		UltraSunscreenBuff: Солнечный свет не может даже коснуться вас!
+		Weave: Переплетенные нити создают сильный словно метал лист...и вы окутаны им!
+		ZipperDodge: Вы предсказываете движения врага и растегиваете свое тело для уворота.
+		Pierced: Вы были пронзаны осколком стрелы!
+		PowerfulStrike: Следующая атака наносит в 6 раз больше урона!
+		ProtectiveFilmBuff: Грязь и земля вокруг вас немного защищают вас от солнца
+		Reinforcements: Подкрепление прибыло!
+		RoadRollerBuff: Уничтожитель миров, способный сглаживать мир. ROAD ROLLER DA!
+		RUUUN: Секретная Техника Джостаров. Нечего стыдиться.
+		SlowDancerBuff: Быстрая лошадь, способная генерировать энергию Спина.
+		SphericalVoid: Почти все, что проходит сквозь эту сферу, стерто в ничего!
+		SunscreenBuff: 98% УФ-лучей блокируются!
+		SurpriseAttack: Вы имеете преимущество и знаете как доказать это.
+		SwanSong: С вами ещё не покончено...
+		ZeppeliPetBuff: Он уйдет, если вы прольете вино.
+		DioPetBuff: Он ненавидит вас!
+		JonathanPetBuff: Он верит в вас!
+		SpeedWagonPetBuff: Он голосует за вас.
+		CoordinatedEyes: Ваши глаза лучше фокусируются, и ваш стенд может отходить дальше (+1 Дистанция)
+		MentalFortitude:
+'''
+Ваша воля неразрушима!
+Защита увеличена на 3.
+'''
+		QuickThinking: 
+'''
+Вы гораздо быстрее понимаете, что и как нужно делать.
+Скорость Стенда увеличена на 1.
+'''
+		SharpMind: Ваши рефлексы отточены, и поэтому Шанс Крит. Удара для Стенда увеличен на 10%
+		StrongWill:
+'''
+Вы чувствуете, словно вы и ваш Стенд способны на всё!
++10% Урон Стенда.
+'''
+		TopOfTheChain:
+'''
+Вы зверь, которого боятся больше всего и никто не займет это место.
+Увеличенные характеристики до конца боя.	
+'''
+		}
+		
+	ItemName:{
+	GoldAmuletOfDestroy: Амулет уничтожения
+	AjaStone: Красный камень Эйша
+	ArrowEarring: Серьга со стрелой
+	AwakenedAmulet: Пробужденный амулет
+	BlackUmbrella: Черный зонт
+	BloodiedMonocle: Окровавленный монокль
+	CrackedPearl: Разбившаяся жемчужина
+	DiosScarf: Шарф Дио
+	DoobiesSkull: Череп тупицы
+	Epitaph: Эпитафия
+	FamilyPhoto: Семейное фото
+	FightingSpiritEmblem: Эмблема боевого духа
+	GoldAmuletOfAdapting: Амулет адаптации
+	GoldAmuletOfChange: Амулет изменения
+	GoldAmuletOfControl: Амулет контроля
+	GreaterPlatinumAmuletOfEscape: Улучшенный Амулет побега
+	GoldAmuletOfEscape: Амулет побега
+	GoldAmuletOfFight: Амулет битвы
+	GoldAmuletOfManipulation: Амулет манипуляции
+	GoldAmuletOfProtect: Амулет защиты
+	GoldAmuletOfServing: Амулет служения
+	GreaterGoldAmuletOfChange: Улучшенный Амулет изменения
+	GreaterGoldAmuletOfControl: Улучшенный Амулет контроля
+	GreaterGoldAmuletOfDestroy: Улучшенный Амулет уничтожения
+	GreaterGoldAmuletOfEscape: Улучшенный Амулет побега
+	GreaterGoldAmuletOfFight: Улучшенный Амулет битвы
+	GreaterGoldAmuletOfProtect: Улучшенный Амулет защиты
+	
+	PlatinumAmuletOfAdapting: Амулет адаптации
+	PlatinumAmuletOfChange: Амулет изменения
+	PlatinumAmuletOfControl: Амулет контроля
+	GreaterPlatinumAmuletOfEscape: Улучшенный Амулет побега
+	PlatinumAmuletOfEscape: Амулет побега
+	PlatinumAmuletOfFight: Амулет битвы
+	PlatinumAmuletOfDestroy: Амулет уничтожения
+	PlatinumAmuletOfManipulation: Амулет манипуляции
+	PlatinumAmuletOfProtect: Амулет защиты
+	PlatinumAmuletOfServing: Амулет служения
+	GreaterPlatinumAmuletOfChange: Улучшенный Амулет изменения
+	GreaterPlatinumAmuletOfControl: Улучшенный Амулет контроля
+	GreaterPlatinumAmuletOfDestroy: Улучшенный Амулет уничтожения
+	GreaterPlatinumAmuletOfEscape: Улучшенный Амулет побега
+	GreaterPlatinumAmuletOfFight: Улучшенный Амулет битвы
+	GreaterPlatinumAmuletOfProtect: Улучшенный Амулет защиты
+	
+	HamonEmblem: Эмблема хамона
+	HeartHeadband: Повязка с сердцем
+	HerbalTeaBag: Пакетик с травяным чаем
+	IcedCup: Вода со льдом
+	ManifestedWillEmblem: Эмблема Воплощенной воли
+	MoonEmblem: Лунная эмблема
+	ZippedHand: Растегнутая рука
+	SealedPokerDeck: Запечатанная колода покера
+	SiliconLifeformCarapace: Силикованый формочный панцирь
+	SoothingSpiritDisc: Духовный диск
+	StandEmblem: Эмблема стенда
+	TheFirstNapkin: Первая салфетка
+	UnderbossPhone: Телефон второго босса
+	VampiricBangle: Вампирский клубок
+	ViralPearlRing: Зараженное жемчужное кольцо
+	
+	StandDye: Краситель стендов
+	SaladDye: Краситель Salad
+	
+	ChilliHotPepper: Горячий чилийский перец
+	ViralChickenLeg: Ножка зараженной курицы
+	ViralCupcake: Зараженный тортик
+	ViralHamburger: Зараженный бургер
+	ViralPunch: Зараженный коктель
+	ViralSteak: Зараженный стейк
+	
+	WillToEscape: Воля к побегу
+	WillToChange: Воля к изменению
+	WillToControl: Воля к контролю
+	WillToDestroy: Воля к уничтожению
+	WillToProtect: Воля к защите
+	WillToFight: Воля к борьбе
+	CaringLifeforce: Заботящаяся жизненная энергия
+	DeterminedLifeforce: Решительная жизненная энергия
+	RighteousLifeforce: Праведная жизненная энергия
+	TaintedLifeforce: Испорченная жизненная энергия
+	SoulofTime: Душа времени
+	ChlorositeBar: Хлорозитовый слиток
+	Hand: Рука
+	SunDroplet: Солнечная капля
+	ViralMeteoriteBar: Слиток зараженного метеорита
+	ViralPearl: Зараженная жемчужина
+	ViralPowder: Зараженный порошок
+	IWouldntLose: 'Я не проиграю'
+	BloodForTheKing: 'Кровь для короля'
+	OfficersRegret: 'Отказ офицера'
+	QuietLife: 'Мирная жизнь'
+	ShotintheDark: 'Выстрел в темноте'
+	RemixTable: Микстурный стол
+	TarotTable: Стол Таро
+	ViralBrick: Зараженный кирпич
+	ViralMeteorite: Зараженный метеорит
+	ViralMusicBox: Зараженная музыкальная шкатулка
+	ViralToilet: Зараженный унитаз
+	GingerbreadArrow: Стрела-печенье
+	ArcheologyJournal: Журнал археологии
+	OrnateGlassofWine: Стакан вина
+	TatteredLetter: Потертое письмо
+	WoodenCane: Деревянное письмо
+	ChainedClaw: Цепной коготь
+	ChainedKunai: Цепной кунаи
+	Clackers: Стальные шары
+	Hamon: Хамон
+	HamonCola: Хамонизированная кола
+	HamonizedFirework: Хамонизированный фейрверк
+	HamonizedWaterBalloon: Хамонизированный водяной шар
+	HamonTequila: Хамонизированная текила
+	HamonVino: Хамонизированное вино
+	MetallicNunchucks: Металлические нунчаки
+	SilkGloves: Шелковые перчатки
+	SoapyGlove: Мыльная перчатка
+	ThreadedGloves: Перчатки с резьбой
+	
+	MoorburnChestplate: Горящий нагрудник
+	MoorburnGreaves: Горящие поножи
+	MoorburnHeadband: Горящая повязка
+	HamonTrainingArmor: Броня для тренировки хамона
+	HamonTrainingHelmet: Шляпа для тренировки хамона
+	HamonTrainingLeggings: Поножи для тренировки хамона
+	
+	DIOPants: Штаны Дио
+	AvdolHair: Волосы Абдула
+	AvdolPants: Штаны Абдула
+	AvdolShirt: Роба Абдула
+	BucciaratiHair: Волосы Буччелати
+	BucciaratiPants: Штаны Буччелати
+	BucciaratiShirt: Костюм Буччелати
+	DarkCape: Темная накидка
+	DarkTopHat: Темный цилиндр
+	DiavoloHair: Волосы Дьяволо
+	DiavoloNet: Сети Дьяволо
+	DiavoloPants: Штаны Дьяволо
+	DIOJacket: Куртка Дио
+	DIOHair: Волосы Дио
+	KakyoinCoat: Пиджак Какёина
+	DoppioHair: Волосы Доппио
+	DoppioPants: Штаны Доппио
+	DoppioShirt: Куртка Доппио
+	GiornoHair: Волосы Джорно
+	GiornoPants: Штаны Джорно
+	GiornoShirt: Куртка Джорно
+	JohnnyHat: Бандана Джонни
+	JohnnyPants: Штаны Джонни
+	JohnnyShirt: Куртка Джонни
+	JonathanPants: Штаны Джонатана
+	JonathanTop: Рубашка Джонатана
+	Jotaro200000YenPants: Штаны Джотаро за 200к йен
+	JotaroCap: Кепка Джотаро
+	JotaroCoat: Пальто Джотаро
+	MistaHat: Шляпа Мисты
+	KakyoinHair: Волосы Какёина
+	KakyoinPants: Штаны Какёина
+	KiraHair: Волосы Киры
+	KiraPants: Штаны Киры
+	KiraShirt: Рубашка Киры
+	KoichiHair: Волосы Коичи
+	KoichiPants: Штаны Коичи
+	KoichiShirt: Рубашка Коичи
+	KosakuHair: Волосы Косаку
+	KosakuPants: Штаны Косаку
+	KosakuShirt: Рубашка Косаку
+	MagentMagentCoat: Куртка Мадженты
+	MagentMagentHair: Волосы Мадженты
+	MagentMagentPants: Штаны Мадженты
+	ProsciuttoShirt: Братский костюм
+	MistaPants: Штаны Мисты
+	MistaShirt: Кофта Мисты
+	NaranciaHair: Волосы Наранчи
+	NaranciaPants: Штаны Наранчи
+	NaranciaShirt: Жилет Наранчи
+	OkuyasuHair: Волосы Окуясу
+	OkuyasuPants: Штаны Окуясу
+	OkuyasuShirt: Форма Окуясу
+	OldJosephHat: Шляпа старика
+	OldJosephPants: Штаны старика
+	OldJosephShirt: Рубашка старика
+	PolnareffHair: Волосы Польнареффа
+	ProsciuttoHair: Братский парик
+	ProsciuttoPants: Братские штаны
+	TamamiShirt: Напыщенная рубашка
+	TamamiHair: Напыщенные волосы
+	TamamiPants: Напыщенные штаны
+	
+	ZombieAbilities: Способности зомби
+	EntrailAbilities: Способности внутренностей
+	UltraSunscreen: Усиленное солнцезащитное покрытие
+	KnifeWielder: Ножные способности зомби
+	Sunscreen: Солнцезащитное покрытие
+	VampireAbilities: Способности вампира
+	WitheringAbilities: Увядающие способности
+	
+	StoneMask: Каменная маска
+	AjaStoneMask: Каменная маска Эйша
+	WoodenMask: Деревянная маска
+	VisceralChestplate: Висцеральный нагрудник
+	VisceralGreaves: Висцеральные поножи
+	VisceralHelmet: Висцеральный шлем
+	RustedGladiatorHelmet: Ржавый шлем гладиатора
+	RustedGladiatorBoots: Ржавые ботинки гладиатора
+	RustedGladiatorChestplate: Ржавый нагрудник гладиатора
+	IronSlopShorts: Железные глиняные шорты
+	IronSlopChestplate: Железная глиняный нагрудник
+	IronSlopHelmet: Железный глиняный шлем
+	DefiledMask: Оскверненная маска
+	DefiledChestplate: Оскверненный нагрудник
+	DefiledGreaves: Оскверненные поножи
+	AstroRemainsSkull: Череп из астрономических остатков
+	AstroRemainsChestplate: Нагрудник из астрономических остатков
+	AstroRemainsGreaves: Поножи из астрономических остатков
+	AdamantiteAlloyHelmetNeutral: Шлем из адамантитового сплава (Нейтральный)
+	AdamantiteAlloyHelmetLong: Шлем из адамантитового сплава (Дальний)
+	AdamantiteAlloyHelmetShort: Шлем из адамантитового сплава (Ближний)
+	TitaniumAlloyMaskNeutral: Шлем из титанового сплава (Нейтральный)
+	TitaniumAlloyMaskLong: Шлем из титанового сплава (Дальний)
+	TitaniumAlloyMaskShort: Шлем из титанового сплава (Ближний)
+	BootlegCosplayHat: Шляпа голённого косплея
+	BootlegCosplayCoat: Куртка голённого косплея
+	BootlegCosplayPants: Штаны голённого косплея
+	ChlorositeHelmetShort: Хлорозитовый шлем (Ближний)
+	ChlorositeHelmetNeutral: Хлорозитовый шлем (Нейтральный)
+	ChlorositeHelmetLong: Хлорозитовый шлем (Дальний)
+	ChlorositeChestplate: Хлорозитовый нагрудник
+	ChlorositeLeggings: Хлорозитовые поножи
+	CrystalHelmetLong: Кристальный шлем (Дальний)
+	CrystalHelmetNeutral: Кристальный шлем (Нейтральный)
+	CrystalHelmetShort: Кристальный шлем (Ближний)
+	CrystalChestplate: Кристальный нагрудник
+	CrystalLeggings: Кристальные поножи
+	PhantomHoodShort: Фантомный капюшон (Ближний)
+	PhantomHoodNeutral: Фантомный капюшон (Нейтральный)
+	PhantomHoodLong: Фантомный капюшон (Дальний)
+	PhantomChestplate: Фантомный нагрудник
+	PhantomLeggings: Фантомные поножи
+	RequiemGreaves: Реквием поножи
+	RequiemChestplate: Реквием нагрудник
+	RequiemCrownLong: Реквием корона (Дальний)
+	RequiemCrownShort: Реквием корона (Ближний)
+	RequiemCrownNeutral: Реквием корона (Нейтральный)
+	ViralArmorTabi: Зараженное Таби
+	ViralArmorHelmetMelee: Зараженный шлем (Ближний)
+	ViralArmorHelmetNeutral: Зараженный шлем(Нейтральный)
+	ViralArmorHelmetRanged: Зараженный шлем(Дальний)
+	ViralArmorKaruta: Зараженная Карута
+	
+	RustyRevolver: Ржавый револьер
+	AntiVampireSerum: Анти-вампирская сыворотка
+	ArrowShard: Осколок стрелы
+	DioDagger: Клинок Дио
+	EctoPearl: Экто-жемчужина
+	IceCubes: Ледяные кубики
+	Knife: Охотничий нож
+	LuckPluck: Меч старого гладиатора
+	ModifiedPurpleRevolver: Модифицированный револьер
+	PackoCards: Пачка карт
+	PokerChip: Покерная фишка
+	PurpleRevolver: Револьер
+	RequiemArrow: Стрела Реквием
+	RoadRollerKeys: Ключи от асфальтоукладчика
+	ViralHammer: Зараженный молот
+	ViralShortsword: Зараженный клинок
+	ViralPickaxe: Зараженная кирка
+	ViralStaff: Зараженный посох
+	ViralYoYo: Зараженное Йо-Йо
+	SlowDancersSaddle: Седло Slow Dancer
+	StandArrow: Стрела стенда
+	SteelBalls: Стальные шары
+	ViralAxe: Зараженный топор
+	ViralBow: Зараженный лук
+	ViralBroadsword: Зараженный меч
+	
+	
+	AerosmithT1: Aerosmith (Ур.1)
+	AerosmithT2: Aerosmith (Ур.2)
+	AerosmithT3: Aerosmith (Ур.3)
+	AerosmithFinal: Aerosmith (Ур.4)
+	BadCompanyT1: Bad Company (Ур.1)
+	BadCompanyT2: Bad Company (Ур.2)
+	BadCompanyT3: Bad Company (Ур.3)
+	BadCompanyFinal: Bad Company (Ур.4)
+	CenturyBoyT1: Century Boy (Ур.1)
+	CenturyBoyT2: Century Boy (Ур.2)
+	CrazyDiamondT1: Crazy Diamond (Ур.1)
+	CrazyDiamondT2: Crazy Diamond (Ур.2)
+	CrazyDiamondT3: Crazy Diamond (Ур.3)
+	CrazyDiamondFinal: Crazy Diamond (Ур.4)
+	CreamFinal: Cream (Ур.4)
+	CreamT3: Cream (Ур.3)
+	CreamT2: Cream (Ур.2)
+	CreamT1: Cream (Ур.1)
+	DollyDaggerT1: Dolly Dagger (Ур.1)
+	DollyDaggerT2: Dolly Dagger (Ур.2)
+	EchoesACT3: Echoes (Акт 3)
+	EchoesACT2: Echoes (Акт 2)
+	EchoesACT1: Echoes (Акт 1)
+	EchoesACT0: Echoes (Акт...0)
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	}
+	
+	ItemTooltip:{
+	GoldAmuletOfDestroy: Увеличено пробивание брони для стендов на 5
+	PlatinumAmuletOfDestroy: Увеличено пробивание брони для стендов на 5
+	AjaStone: Носите этот камень для хождения по воде, увеличения регенерации и Макс. Хамона!
+	ArrowEarring:
+'''
+10% урона от врага передаётся ближайшим существам
+Переданный урон удваивается если пользователь долго не получал урона
+
+'''
+	AwakenedAmulet: 
+'''
+Амулет, идеально отражающий и улучшающий форму души
+Скорость стендов увеличена на 2
+10% Шанс уворота для стендов
+20% Уменьшение длительности отката для способностей
+10% Шанс крит. удара для стендов 
+Увеличено пробивание брони для стендов на 10
+Увеличенная защита при выпущенном стенде
+'''
+	BlackUmbrella: Полезен для блокировки солнечного света. Можно носить в слоте для шлемов
+	BloodiedMonocle: Пока вы зомби, подмечены все враги чья кровь не выпита
+	CrackedPearl:  
+'''
+Жемчужина, разбившаяся во время его извлечения из кольца. 
+Через неё постоянно просачивается вирус.
+Пока надет: Удары Стендов по врагам может заразить их этим вирусом
+'''
+	DiosScarf:
+'''	
+Шарф, прошедший через кучу боев, предательств и убийств...
++15% Сопротивление к урону против нежити
+'''
+	DoobiesSkull: При получении урона призывает зомби-змей
+	Epitaph: Ношение этого заставляет использовать лягушку в качестве телефона
+	FamilyPhoto: Увеличивает сопротивление к урону при успешных ближних атаках стенда
+	FightingSpiritEmblem: 
+'''
+15% Урона стендов
+До 45% Урона стендов при атаках на одну и ту же цель
+'''
+	GoldAmuletOfAdapting:
+'''
+10% Шанс уворота для стендов
+10% Шанс крит. удара для стендов
+'''
+	GoldAmuletOfChange: 5% Шанс крит. удара для стендов
+	GoldAmuletOfControl: 5% Уменьшение длительности отката для способностей
+	GreaterPlatinumAmuletOfEscape: 10% Шанс уворота для стендов
+	GoldAmuletOfEscape: 5% Шанс уворота для стендов
+	GoldAmuletOfFight: Скорость стендов увеличена на 1
+	GoldAmuletOfManipulation:
+'''
+20% Уменьшение длительности отката для способностей
+Увеличено пробивание брони для стендов на 10
+'''
+	GoldAmuletOfProtect: Увеличенная защита при выпущенном стенде
+	GoldAmuletOfServing: 
+'''
+Скорость стендов увеличена на 2
+Увеличенная защита при выпущенном стенде
+'''
+	GreaterGoldAmuletOfChange: 10% Шанс уворота для стендов
+	GreaterGoldAmuletOfControl: 10% Уменьшение длительности отката для способностей
+	GreaterGoldAmuletOfDestroy: Увеличено пробивание брони для стендов на 10
+	GreaterGoldAmuletOfEscape: 10% Шанс уворота для стендов
+	GreaterGoldAmuletOfFight: Скорость стендов увеличена на 2
+	GreaterGoldAmuletOfProtect: Увеличенная защита при выпущенном стенде
+	
+	PlatinumAmuletOfAdapting:
+'''
+10% Шанс уворота для стендов
+10% Шанс крит. удара для стендов
+'''
+	PlatinumAmuletOfChange: 5% Шанс крит. удара для стендов
+	PlatinumAmuletOfControl: 5% Уменьшение длительности отката для способностей
+	GreaterPlatinumAmuletOfEscape: 10% Шанс уворота для стендов
+	PlatinumAmuletOfEscape: 5% Шанс уворота для стендов
+	PlatinumAmuletOfFight: Скорость стендов увеличена на 1
+	PlatinumAmuletOfManipulation:
+'''
+20% Уменьшение длительности отката для способностей
+Увеличено пробивание брони для стендов на 10
+'''
+	PlatinumAmuletOfProtect: Увеличенная защита при выпущенном стенде
+	PlatinumAmuletOfServing: 
+'''
+Скорость стендов увеличена на 2
+Увеличенная защита при выпущенном стенде
+'''
+	GreaterPlatinumAmuletOfChange: 10% Шанс уворота для стендов
+	GreaterPlatinumAmuletOfControl: 10% Уменьшение длительности отката для способностей
+	GreaterPlatinumAmuletOfDestroy: Увеличено пробивание брони для стендов на 10
+	GreaterPlatinumAmuletOfEscape: 10% Шанс уворота для стендов
+	GreaterPlatinumAmuletOfFight: Скорость стендов увеличена на 2
+	GreaterPlatinumAmuletOfProtect: Увеличенная защита при выпущенном стенде
+	
+	HamonEmblem: 15% Урон хамона
+	HeartHeadband: 
+'''
+Повязка воистину преданного воина
+Пока надет: пока Cream находится в режиме пустоты, он будет отпрыгивать от блоков, а не уничтожать их.
+Уменьшен урон стендов на 8%
+'''
+	HerbalTeaBag: 
+'''
+Следующие 10 дальних атак стендов будут усилены. 
+Во время отдыха восстанавливается по одной атаке в секунду
+'''
+	IcedCup: Вода со льдом, позволяет оставаться увлажненным и холодным
+	ManifestedWillEmblem: 
+'''
+15% Урона стендов
+50% Шанс Крит. удара для стендов
+'''
+	MoonEmblem: 15% урона зомби
+	ZippedHand:
+'''
+После смерти ненадолго даёт вам второй шанс
+В это время повышен урон и шанс крит. удара
+'''
+	SealedPokerDeck:
+'''
+Каждые 5 секунд атака усилена
+Эта атака имеет гарантированный крит. удар
+'''
+	SiliconLifeformCarapace:
+'''
+25% Шанс уворота для стендов
+Удвоен бонус защиты от стендов
+Медленно поглощает жизнь
+'''
+	SoothingSpiritDisc: Атака стенда дает Святое Уклонение
+	StandEmblem: 15% Урон стендов
+	TheFirstNapkin:
+'''
+5% шанс уменьшить откат способностей во время атаки
+Раз в три минуты откат полностью убран
+'''
+	UnderbossPhone: Каждый пятый удар немного усилен, а также полностью игнорирует защиту
+	VampiricBangle:
+'''
+Кража жизни при атаках стендов
+Получаемый урон повышен на 1/3 (33%)
+'''
+	ViralPearlRing: ПКМ для извлечь жемчужину. Будьте осторожны!
+	ChilliHotPepper: 
+'''
+Стенд, поглощающий электричество, чтобы стать сильнее и быстрее, был пойман и раздроблен в пыль. 
+Из этой пыли и сделан этот перец.
+'''
+	ViralChickenLeg: 
+'''
+Сухая, панированная (куриная?) ножка. После съедения вы чувсвуете себя лучше.
+Увеличивает скорость стенда и защиту игрока на 3 минуты.
+'''
+	ViralCupcake: 
+'''
+Хорошо сделанный тортик на небольшой тарелочке. 
+Увеличивает урон и шанс крит. удара для стендов на 2 минуты.
+'''
+	ViralHamburger: 
+'''
+Старый добрый бургер, посыпанный зараженной пылью.
+Увеличивает урон, шанс крит. удара и скорость стенда, а также защиту игрока на 5 минуты.
+'''
+	ViralPunch: 
+'''
+Золотой, бодрящий напиток, каким-то образом улучшающий психические способности.
+Увеличивает урон и скорость стендов на 2 минуты.
+'''
+	ViralSteak:
+'''
+Теплый, сочный стейк средней прожарки.
+Увеличивает дальность и урон стендов на 3 минуты.
+'''
+	WillToEscape: Физический взгляд на мир, мимолетный и расплывчатый.
+	WillToChange: Физический взгляд на мир, постоянно трансформирующийся.
+	WillToControl: Физический взгляд на мир, тяжкий и властный.
+	WillToDestroy: Физический взгляд на мир, разрушительный и неустойчивый.
+	WillToProtect: Физический взгляд на мир, защитный и заботный.
+	WillToFight: Физический взгляд на мир, агрессивный и яростный.
+	CaringLifeforce: Дух кого-то, чьё единственное желание - помогать.
+	DeterminedLifeforce: Душа кого-то, кто всегда решителен.
+	RighteousLifeforce: Сила того, кто делает все правильно.
+	TaintedLifeforce: Аура кого-то безжалостно злого.
+	SoulofTime: Кажется, эта штука замедляет все вокруг вас.
+	ChlorositeBar: Богатство природы, искаженное потусторонним вирусом.
+	Hand: Рука, за которую определенный индивид готов убивать.
+	SunDroplet: 
+'''
+Теплая капля...Она как-то реагирует на вас.
+ПКМ при наличии 20 штук даст вам очко навыка для хамона.
+Используется для крафта оружий из хамона
+'''
+	ViralMeteoriteBar: Вы чувствуете, как ваша душа взаимодействует с этим металом.
+	ViralPearl: Блестящая красная жемчужина, сильно реагирующая на ваш стенд.
+	ViralPowder: Зараженный метеорит, превращенный в пыль. Довольно вкусный!
+	RemixTable: Стол диджея, смешанный с метеоритовым вирусом. Позволяет создавать и улучшать стенды.
+	TarotTable: Стол, способный дать больше силы пользователям стенда, если они этого желают.
+	ViralBrick: Золотой кирпич, живой к тому же.
+	ViralMeteorite: Скопление потусторонненго вируса.
+	ViralMusicBox: Шкатулка с записанной музыкой.
+	ViralToilet: Этот унитаз - живое существо.
+	GingerbreadArrow: Съешьте эту стрелу, чтобы получить новогодний стенд.
+	KingClaus:
+'''
+Уничтожьте врагов мощным ударом и удерживайте ПКМ, чтобы блокировать врагов и изменить положение после удара!
+Последовательные удары наносят больше урона.
+Special: Вырежьте 10 секунд времени.
+Second Special: Используйте Эпитафию на 9 секунд.
+Используется в слотах для стендов
+'''
+	StarOnTheTree:
+'''
+ЛКМ для быстрых ударов кулаками и ПКМ для щелчка пули.
+Если в инвентаре нет пуль, будет использован Star Finger.
+Special: Остановка времени на 4 секунды.
+Используется в слотах для стендов
+'''
+	ArcheologyJournal:
+'''
+Журнал с информацией о каменной маске.
+Призывает миниатюрного Джонатана Джостара.
+'''
+	OrnateGlassofWine:
+'''
+Стакан вина, который никогда не прольётся.
+Призывает миниатюрного Уилльяма Цеппели.
+'''
+	TatteredLetter:
+'''
+Старое, измятое письмо.
+Призывает миниатюрного Дио Брандо.
+'''
+	WoodenCane:
+'''
+Трость самого крутого чувака...да.
+Призывает миниатюрного Спидвагона.
+'''
+	ChainedClaw: Позволяет хватать врагов и заряжать внутри них хамон. Использует 5 хамона.
+	ChainedKunai: Кунай, заряженный хамоном.
+	Clackers: Смертельное оружие, если они заряжены хамоном. Использует 5 хамона.
+	Hamon: 
+'''
+Бейте врагов силой, циркулирующей внутри вас.
+Опыт растёт с каждой победой...
+Special: Дыхание хамона.
+'''
+	HamonCola: Выпейте эту колу для усиления или стрельните ею во врагов.
+	HamonizedFirework: Подожгите этот заряженный хамоном фейрверк и сожгите своих врагов. Использует 7 хамона.
+	HamonizedWaterBalloon: Можно бросить этот шарик в качестве ловушки. Использует 4 хамона.
+	HamonTequila: Выпейте эту текилу для усиления или стрельните ею во врагов.
+	HamonVino: Выпейте это вино для усиления или стрельните им во врагов.
+	MetallicNunchucks: Взмахните этими нунчаками для нанесения тяжелых ударов по врагам.
+	SilkGloves: ЛКМ для ударов по врагам и ПКМ для захвата врагов и заряда хамона внутри них.
+	SoapyGlove:
+'''
+Выстреливает управляемыми пузырями.
+Опыт растёт с каждой победой...
+Использует 3 хамона.
+'''
+	ThreadedGloves: ЛКМ для ударов по врагам и ПКМ для захвата врагов и заряда хамона внутри них.
+	MoorburnChestplate:
+'''
+Тяжелый нагрудник, заряженный солнечной энергией.
+Увеличивает скорость регенерации хамона на 6%
+'''
+	MoorburnGreaves:
+'''
+Поножи, которые когда-то были материалом зла.
+Увеличивает высоту прыжка
+'''
+	MoorburnHeadband:
+'''
+Повязка, очищенная хамоном.
+Увеличивает урон хамона на 12%
+'''
+	HamonTrainingArmor:
+'''
+Вы чувствуете усиление ваших легких.
+Увеличивает урон хамона на 10%
+'''
+	HamonTrainingHelmet:
+'''
+Удобная шляпа, придаеющая вашей голове ясный вид.
+Увеличивает урон хамона на 5%
+'''
+	HamonTrainingLeggings:
+'''
+Вы чувствуете легкий прилив в своих ногах.
+Увеличивает скорость передвижения
+Увеличивает урон хамона на 5%
+'''
+	DIOPants: Штаны Дио
+	AchtungBaby: Achtung Baby
+	AvdolHair: Волосы Абдула
+	AvdolPants: Штаны Абдула
+	AvdolShirt: Роба Абдула
+	BucciaratiHair: Волосы Буччелати
+	BucciaratiPants: Штаны Буччелати
+	BucciaratiShirt: Костюм Буччелати
+	DarkCape: Темная накидка
+	DarkTopHat: Темный цилиндр
+	DiavoloHair: Волосы Дьяволо
+	DiavoloNet: Сети Дьяволо
+	DiavoloPants: Штаны Дьяволо
+	DIOJacket: Куртка Дио
+	DIOHair: Волосы Дио
+	KakyoinCoat: Пиджак Какёина
+	DoppioHair: Волосы Доппио
+	DoppioPants: Штаны Доппио
+	DoppioShirt: Куртка Доппио
+	GiornoHair: Волосы Джорно
+	GiornoPants: Штаны Джорно
+	GiornoShirt: Куртка Джорно
+	JohnnyHat: Бандана Джонни
+	JohnnyPants: Штаны Джонни
+	JohnnyShirt: Куртка Джонни
+	JonathanPants: Штаны Джонатана
+	JonathanTop: Рубашка Джонатана
+	Jotaro200000YenPants: Штаны Джотаро за 200к йен
+	JotaroCap: Кепка Джотаро
+	JotaroCoat: Пальто Джотаро
+	MistaHat: Шляпа Мисты
+	KakyoinHair: Волосы Какёина
+	KakyoinPants: Штаны Какёина
+	KiraHair: Волосы Киры
+	KiraPants: Штаны Киры
+	KiraShirt: Рубашка Киры
+	KoichiHair: Волосы Коичи
+	KoichiPants: Штаны Коичи
+	KoichiShirt: Рубашка Коичи
+	KosakuHair: Волосы Косаку
+	KosakuPants: Штаны Косаку
+	KosakuShirt: Рубашка Косаку
+	MagentMagentCoat: Куртка Мадженты
+	MagentMagentHair: Волосы Мадженты
+	MagentMagentPants: Штаны Мадженты
+	ProsciuttoShirt: Братский костюм
+	MistaPants: Штаны Мисты
+	MistaShirt: Кофта Мисты
+	NaranciaHair: Волосы Наранчи
+	NaranciaPants: Штаны Наранчи
+	NaranciaShirt: Жилет Наранчи
+	OkuyasuHair: Волосы Окуясу
+	OkuyasuPants: Штаны Окуясу
+	OkuyasuShirt: Форма Окуясу
+	OldJosephHat: Шляпа старика
+	OldJosephPants: Штаны старика
+	OldJosephShirt: Рубашка старика
+	PolnareffHair: Волосы Польнареффа
+	ProsciuttoHair: Братский парик
+	ProsciuttoPants: Братские штаны
+	TamamiShirt: Напыщенная рубашка
+	TamamiHair: Напыщенные волосы
+	TamamiPants: Напыщенные штаны
+	
+	ZombieAbilities: ЛКМ для броска на врагов. Удерживайте ЛКМ для заряда броска и усиления его.
+	EntrailAbilities:
+'''
+ЛКМ для стрельбы острыми венами во врагов. ПКМ для запутывания врагов венами.
+Special: В обмен на небольшое кол-во здоровья, выстрельните потоком крови под высоким давлением в сторону курсора.
+Накладывает дебафф 'Растерзан' на врагов.
+'''
+	UltraSunscreen: Имеет SPF 247.
+	KnifeWielder: 
+'''
+ЛКМ для броска на врагов и ПКМ, чтобы вонзить в себя ножи.
+Special: Выстрельните всеми ножами внутри вас наружу!
+Требуется 16 или больше ножей. 
+Для Special'a требуется бафф 'Ножное смешивание'
+'''
+	Sunscreen: Для всех горячих деньков, потраченных вами на прогулки.
+	VampireAbilities: 
+'''
+ЛМК для броска и удерживайте ПКМ для захвата врага и высасывания его крови.
+Special: Переключайте способности, используемые на ПКМ.
+'''
+	WitheringAbilities: 
+'''
+Удерживайте ЛКМ для заряда удара. ПКМ для расширения руки, захвата врагов и давки их на месте.
+Special: Бросьте кислую желчь! Враги, пораженные желчью, будут отмечены на 45 секунд.
+'''
+	
+	StoneMask: Старинная археологическая находка. При надевании, вы получаете сверчеловеческие способности, но сгораете на солнце.
+	AjaStoneMask: Маска теперь совмещена с камнем и кажется, что она излучает огромную силу.
+	WoodenMask:
+'''
+Деревянная маска, основанная на гораздо более грозной маске. 
+При надевании, вы получаете сверчеловеческие способности, но сгораете на солнце.
+ПКМ при использовании для открытия Дерева Навыков Зомби
+Важно: Очки навыков приобретаются при убийстве разных типов врагов несколько раз.
+'''	
+	VisceralChestplate:
+'''
+Нагрудник, украшенный острыми костями и кажущейся живой плотью.
++12% Вампирское отбрасывание.
+При получении урона есть 12% шанс нанести дебафф Растерзан по врагу.
+Удары по врагам с этим дебаффом удваивают высасываемую кровь.
+'''
+	VisceralGreaves: 
+'''
+Поножи, которые, кажется, идеально имитируют движения ваших мышц. 
+Увеличивает скорость прыжка.
+'''
+	VisceralHelmet:
+'''
+Шлем, сделанный из конечностей ваших жертв.
++8% Вампирский урон.
+'''
+	RustedGladiatorHelmet: 
+'''	
+Шлем, носящие только лучшие из воинов. 
++5% Вампирский урон.
+'''
+	RustedGladiatorBoots:
+'''
+Сапоги, растоптавшие жизни многих.
++5% Вампирское отбрасывание.
+'''
+	RustedGladiatorChestplate:
+'''
+Доспехи, покрытые шрамами от ожесточенных боев на протяжении веков.
++4% Бонус к краже жизни.
+'''
+	IronSlopShorts: Боевые шорты, сделанные из железа? Позволяет вам почувствовать легкий ветерок.
+	IronSlopChestplate: Нагрудник, покрытый пятнами, похожими на глину.
+	IronSlopHelmet: Неряшливо сделанный железный (?) шлем. Повсюду грязный.
+	DefiledMask:
+'''
+Маска, созданная из гнилых останков ваших жертв.
++8% Вампирский урон.
+'''
+	DefiledChestplate:
+'''
+Нагрудник, обернутый жалами искажения, идеально подходит для удержания врагов на расстоянии.
++12% Вампирское отбрасывание.
+Даёт бафф шипов при надевании.
+'''
+	DefiledGreaves:
+'''
+Темные поножи, созданные из пугающей жизни...
+Увеличивает скорость прыжка.
+'''
+	AstroRemainsSkull: Олений череп, на вид удивительно прочный
+	AstroRemainsChestplate:
+'''
+Нагрудник, следующий очертаниям вашего скелета.
+Созданная из костей ваших врагов и руды, путешествующей через вселенную.
++12% Вампирский урон.
+'''
+	AstroRemainsGreaves:
+'''
+Поножи, видавшие глубины темницы и просторы вселенной.
++10% Скорость передвижения при использовании вампирских предметов.
+'''
+
+
+	AdamantiteAlloyHelmetNeutral:
+'''
+Шлем, сплавленный с вирусным метеоритом.
+Бонусы зависят от типа стенда.
+'''
+	AdamantiteAlloyHelmetLong:
+'''
+Шлем, сплавленный с вирусным метеоритом.
++12% Шанс крит. удара для стендов, +18% урон стендов.
+'''
+	AdamantiteAlloyHelmetShort:
+'''
+Шлем, сплавленный с вирусным метеоритом.
++8% Шанс крит. удара для стендов, +12% урон стендов.
+'''
+	TitaniumAlloyMaskNeutral:
+'''
+Маска, сплавленная с вирусным метеоритом.
+Бонусы зависят от типа стенда.
+'''
+	TitaniumAlloyMaskLong:
+'''
+Маска, сплавленная с вирусным метеоритом.
++10% Шанс крит. удара для стендов, +15% урон стендов.
+'''
+	TitaniumAlloyMaskShort:
+'''
+Маска, сплавленная с вирусным метеоритом.
++3 скорость стендов, +10% урон стендов.
+'''
+	BootlegCosplayHat:
+'''
+Шляпа, которая может сливаться с вашими волосами.
++4% Шанс крит. удара для стендов.
+'''
+	BootlegCosplayCoat:
+'''
+Куртка длиной в робу, но все ещё считается за куртку.
++1 скорость стендов.
+'''
+	BootlegCosplayPants:
+'''
+Штаны, дающие вам ощущение, будто вы другой человек. Увы, они не стоят 100к йен...
++4% Шанс крит. удара для стендов.
+'''
+	ChlorositeHelmetShort:
+'''
+Шлем, созданный из хлорофита, влитый с потусторонним вирусом.
++15% урон стендов.
+'''
+	ChlorositeHelmetNeutral: Шлем, созданный из хлорофита, влитый с потусторонним вирусом.
+	ChlorositeHelmetLong:
+'''
+Шлем, созданный из хлорофита, влитый с потусторонним вирусом.
++15% урон стендов.
+'''
+	ChlorositeChestplate:
+'''
+Нагрудник, созданный из хлорофита, влитый с потусторонним вирусом.
++7% Шанс крит.удара для стендов.
++6% урон стендов.
+'''
+	ChlorositeLeggings:
+'''
+Пара поножей, созданный из хлорофита, влитый с потусторонним вирусом.
++8% скорость передвижения.
++9% Шанс крит.удара для стендов.
+'''
+
+	CrystalHelmetLong:
+'''
+Шлем, созданный для усиления силы воли.
++8% урон стендов.
+'''
+	CrystalHelmetNeutral:
+'''
+Шлем, созданный для усиления силы воли.
+Бонусы зависят от типа стенда.
+'''
+	CrystalHelmetShort:
+'''
+Шлем, созданный для усиления силы воли.
++2 скорость стендов.
+'''
+	CrystalChestplate:
+'''
+Блестящий нагрудник, использующий криссталы для обострения вашей души.
++10% Шанс крит.удара для стендов.
+'''
+	CrystalLeggings:
+'''
+Поножи, созданные из криссталов.
++12% скорость передвижения.
+'''
+
+	PhantomHoodShort:
+'''
+Шлем, созданный из эктоплазмы, влитой с потусторонним вирусом.
++18% урон стендов.
++1 скорость стендов.
+'''
+	PhantomHoodNeutral: Шлем, созданный из эктоплазмы, влитой с потусторонним вирусом.
+	PhantomHoodLong:
+'''
+Шлем, созданный из эктоплазмы, влитой с потусторонним вирусом.
++18% урон стендов.
++15% Шанс крит.удара для стендов.
+'''
+	PhantomChestplate:
+'''
+Яркий нагрудник, созданный из адаптируемого вируса и эктоплазмы.
++8% Шанс крит.удара для стендов.
++1 скорость стендов.
+Получаемый урон снижен на 12%.
+'''
+	PhantomLeggings:
+'''
+Пара поножей, созданные из эктоплазмы и мощного вируса.
++10% скорость передвижения.
++5% Шанс крит.удара для стендов.
+'''
+
+	RequiemGreaves:
+'''
+Поножи из величайшего метала, да ещё и усиленного вирусным метеоритом.
++14% скорость передвижения.
++8% Шанс крит.удара для стендов.
+'''
+	RequiemChestplate:
+'''
+Нагрудник из величайшего метала, да ещё и усиленного вирусным метеоритом.
++10% Шанс крит.удара для стендов.
++3 скорость стендов.
+Получаемый урон снижен на 5%.
+'''
+	RequiemCrownLong:
+'''
+Корона, созданная из сильнейших материалов, представленных на космосом.
++22% урон стендов.
++18% Шанс крит.удара для стендов.
++1 скорость стендов.
+'''
+	RequiemCrownShort:
+'''
+Корона, созданная из сильнейших материалов, представленных на космосом.
++25% урон стендов.
++3 блока радиус.
+Получаемый урон снижен на 10%.
+Небольшое восстановление жизни.
+'''
+	RequiemCrownNeutral: Корона, созданная из сильнейших материалов, представленных на космосом.
+	ViralArmorTabi:
+'''
+Пара легких ботинок из удивительно гибкого метеора, питаемый странным вирусом.
++4% Шанс крит.удара для стендов.
+'''
+	ViralArmorHelmetMelee:
+'''
+Шлем, созданный из далекого сплава, в стиле далекого снаряжения (?).
++1 скорость стендов.
+'''
+	ViralArmorHelmetNeutral:
+'''
+Шлем, созданный из метеора, питаемый странным вирусом.
+Похоже, шлем превращается в зависимости от вашей души...
+Бонусы зависят от типа стенда.
+'''
+	ViralArmorHelmetRanged:
+'''
+Шлем, созданный из метеора, питаемый странным вирусом.
++5% урон стендов.
+'''
+	ViralArmorKaruta:
+'''
+Костюм, созданный из мистического метеоритового сплава, питаемый странным вирусом.
++4% Шанс крит.удара для стендов.
+'''
+	RustyRevolver: Антикварный револьер, потрепанный временем. Все ещё работает.
+	AntiVampireSerum: Сыворотка с хмаоном, созданная чтобы лечить тех, кто пал под силу маски.
+	ArrowShard: Проткните себя этим, чтобы медленно сформировать стенд.
+	DioDagger: ПКМ чтобы пронзить себя и привлечь внимание зомби.
+	EctoPearl:
+'''
+Жемчужина, наследующая заключенные души из темницы.
+Навсегда увеличивает дальность стендов на 0.5 блоков.
+'''
+	IceCubes: Их размер идеален для потребления.
+	Knife: Острый нож, лучше всего предназначенный для метания.
+	LuckPluck: Меч старого гладиатора
+	ModifiedPurpleRevolver: Револьер, стреляющий сильнее чем раньше. Кнопка Special для перезарядки.
+	PackoCards: Любимая пачка карт Дарби. Кидайтесь ею во врагов!
+	PokerChip: Эта фишка хранит внутри себя душу...
+	PurpleRevolver: Восстановленный револьер, полностью рабочий. Кнопка Special для перезарядки.
+	RequiemArrow: Эта стрела максимизирует потенциал некоторых стендов...
+	RoadRollerKeys: Ключи от асфальтоукладчика.
+	ViralHammer: Бьет с громадной силой. При использовании ранит ближайших врагов.
+	ViralShortsword: Дает вам силу и скорость, чтобы умчаться.
+	ViralPickaxe: Золотая кирка, постепенно увеличивает скорость копания.
+	ViralStaff: Золотой, проработанный посох. Стреляет преследующими сферами.
+	ViralYoYo: Шипастое йо-йо для пореза и заражения врагов. Наносит дебафф Заражен при ударе.
+	SlowDancersSaddle: Синее седло гоночной лошади.
+	StandArrow: Пронзите себя этим, чтобы с шансом 55% получить стенд.
+	SteelBalls: Эти стальные шары проходят от поколения к поколению. Использует 5 хамона.
+	ViralAxe: Похоже, этот топор привязывается к пользователю.
+	ViralBow: Лук, заражающий все свои стрелы.
+	ViralBroadsword: Блестящий меч, дающий вам силу размахивать им без особых усилий.
+	
+	
+	AerosmithT1:
+'''
+ЛКМ для передвижения и ПКМ для стрельбы.
+Special: Удаленное управление.
+Чем дальше Aerosmith от вас, тем меньше урона он наносит.
+Используйте в слоте стендов
+'''
+	AerosmithT2:
+'''
+ЛКМ для передвижения и ПКМ для стрельбы.
+Special: Удаленное управление.
+Second Special: Сбросьте бомбу на своих врагов.
+Чем дальше Aerosmith от вас, тем меньше урона он наносит.
+Используйте в слоте стендов
+'''
+	AerosmithT3:
+'''
+ЛКМ для передвижения и ПКМ для стрельбы.
+Special: Удаленное управление.
+Second Special: Сбросьте бомбу на своих врагов.
+Пассивно: Радар углерода.
+Чем дальше Aerosmith от вас, тем меньше урона он наносит.
+Используйте в слоте стендов
+'''
+	AerosmithFinal:
+'''
+ЛКМ для передвижения и ПКМ для стрельбы.
+Special: Удаленное управление.
+Second Special: Сбросьте бомбу на своих врагов.
+Пассивно: Радар углерода.
+Чем дальше Aerosmith от вас, тем меньше урона он наносит.
+Используйте в слоте стендов
+'''
+	BadCompanyT1:
+'''
+ЛКМ для стрельбы в направлении курсора и ПКМ для выбора армии.
+Используйте в слоте стендов
+'''
+	BadCompanyT2:
+'''
+ЛКМ для стрельбы в направлении курсора и ПКМ для выбора армии.
+Используйте в слоте стендов
+'''
+	BadCompanyT3:
+'''
+ЛКМ для стрельбы в направлении курсора и ПКМ для выбора армии.
+Special: Закажите воздушную бомбардировку и вызовите подкрепление!
+Используйте в слоте стендов
+'''
+	BadCompanyFinal:
+'''
+ЛКМ для стрельбы в направлении курсора и ПКМ для выбора армии.
+Special: Закажите воздушную бомбардировку и вызовите подкрепление!
+Используйте в слоте стендов
+'''
+	CenturyBoyT1:
+'''
+Удерживайте кнопку Special для неуязвимости, но невозможности двигаться или использовать предметы.
+Используйте в слоте стендов
+'''
+	CenturyBoyT2:
+'''
+Удерживайте кнопку Special для неуязвимости, но невозможности двигаться или использовать предметы.
+ПКМ + Special: Установите взрыв (требуется Динамит)
+Используйте в слоте стендов
+'''
+	CrazyDiamondT1:
+'''
+ЛКМ для быстрых ударов кулаками.
+Special: Переключение в режим реставрации.
+ЛКМ в режиме реставрации для восстановительного удара и ПКМ для разбора удерживаемого предмета.
+Используйте в слоте стендов
+'''
+	CrazyDiamondT2:
+'''
+ЛКМ для быстрых ударов кулаками и ПКМ для щелчка пули.
+Special: Переключение в режим реставрации.
+ЛКМ в режиме реставрации для восстановительного удара.
+или нанесения временного ущерба общественному имуществу!
+ПКМ для восстановления нанесенного миру урона или разбора удерживаемого предмета.
+Используйте в слоте стендов
+'''
+	CrazyDiamondT3:
+'''
+ЛКМ для быстрых ударов кулаками и ПКМ для щелчка пули.
+Special: Переключение в режим реставрации.
+Second Special: Слепая ярость.
+ЛКМ в режиме реставрации для восстановительного удара.
+или нанесения временного ущерба общественному имуществу!
+ПКМ для восстановления нанесенного миру урона или разбора удерживаемого предмета.
+Second Special в режиме реставрации: Полностью вылечите любое ближайшее существо.
+Используйте в слоте стендов
+'''
+	CrazyDiamondFinal:
+'''
+ЛКМ для быстрых ударов кулаками и ПКМ для щелчка пули.
+Special: Переключение в режим реставрации.
+Second Special: Слепая ярость.
+ЛКМ в режиме реставрации для восстановительного удара.
+или нанесения временного ущерба общественному имуществу!
+ПКМ для восстановления нанесенного миру урона или разбора удерживаемого предмета.
+Second Special в режиме реставрации: Полностью вылечите любое ближайшее существо.
+Используйте в слоте стендов
+'''
+	CreamFinal:
+'''
+Разрубите врага мощным ударом. ПКМ для траты 4 единиц Пустоты для рывка.
+Special: Полностью станьте шаром пустоты и поглощайте все на своем пути!
+Second Special: Обернитесь в пустоту.
+Используйте в слоте стендов
+'''
+	CreamT3:
+'''
+Разрубите врага мощным ударом. ПКМ для траты 4 единиц Пустоты для рывка.
+Special: Полностью станьте шаром пустоты и поглощайте все на своем пути!
+Second Special: Обернитесь в пустоту.
+Используйте в слоте стендов
+'''
+	CreamT2:
+'''
+Разрубите врага мощным ударом. ПКМ для траты 4 единиц Пустоты для рывка.
+Special: Полностью станьте шаром пустоты и поглощайте все на своем пути!
+Используйте в слоте стендов
+'''
+	CreamT1:
+'''
+Разрубите врага мощным ударом. ПКМ для траты 4 единиц Пустоты для рывка.
+Используйте в слоте стендов
+'''
+	DollyDaggerT1:
+'''
+В качестве предмета: ЛКМ, чтобы пронзить врагом этим клинком.
+В качестве стенда: Получаемый урон снижен на 35%.
+'''
+	DollyDaggerT2:
+'''
+В качестве предмета: ЛКМ, чтобы пронзить врагом этим клинком. 
+ПКМ для пронзания себя и отражения урона ближайшему врагу.
+В качестве стенда: Получаемый урон снижен на 70%.
+'''
+	EchoesACT3:
+'''
+ЛКМ для быстрых ударов кулаками.
+ПКМ: Three Freeze. Прижмите любого врага к земле. Прижатый враг получает урон.
+Special: Шквал Three Freeze! обычная атака накладывает эффект Three Freeze на короткий период времени.
+Second Special: Переключение на прошлые акты!
+'''
+	EchoesACT2:
+'''
+ЛКМ для быстрых ударов кулаками.
+ПКМ: Выбор звукового эффекта.
+Удерживание ПКМ: Создание этого звука в позиции курсора.
+Special: Удаленное управление.
+Second Special: Переключение на прошлые акты!
+'''
+	EchoesACT1:
+'''
+ЛКМ для быстрых ударов кулаками.
+ПКМ: Оставьте знак на сущности.
+Special: Удаленное управление. 
+Пассивно: Обычная атака накладывает дебафф, становящийся сильнее при каждом ударе. Знак увеличивает урон дебаффа.
+'''
+	EchoesACT0:
+'''
+ЛКМ для...метания?
+Только сила воли поможет вам.
+'''
+	
+	
+	
+	}
+	
+	MapObject:{
+	BloodForTheKingTile: 'Кровь для короля'
+	IWouldntLoseTile: 'Я не проиграю'
+	OfficersRegretTile: 'Отказ офицера'
+	QuietLifeTile: 'Спокойная жизнь'
+	RemixTableTile: Микстурный стол
+	ShotintheDarkTile: 'Выстрел в темноте'
+	TarotTableTile: Стол Таро
+	ViralBrickTile: Зараженный кирпич
+	ViralMeteoriteTile: Зараженный метеорит
+	ViralMusicBoxTile: Зараженная музыкальная шкатулка
+	ViralToiletTile: Зараженный унитаз
+	}
+	
+	ProjectileName: {
+	
+	
+	}
+	
+	}
+}
