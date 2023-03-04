@@ -142,14 +142,17 @@ namespace JoJoStands.Projectiles
                                             dustIndex.noGravity = true;
                                         }
                                     }
-                                    if (mPlayer.crazyDiamondDestroyedTileData.Count == 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0)
+                                    else
                                     {
-                                        Main.NewText("Stop destroyng public property! Now restore it!");
-                                        mPlayer.crazyDiamondMessageCooldown += 180;
+                                        if (mPlayer.crazyDiamondMessageCooldown <= 0)
+                                        {
+                                            Main.NewText("Tile destruction limit reached!");
+                                            mPlayer.crazyDiamondMessageCooldown += 180;
+                                        }
                                     }
                                 }
                             }
-                            if (mPlayer.crazyDiamondDestroyedTileData.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown == 0 && targetTile.TileType == TileID.LihzahrdBrick)
+                            if (mPlayer.crazyDiamondDestroyedTileData.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown <= 0 && targetTile.TileType == TileID.LihzahrdBrick)
                             {
                                 Main.NewText("Tile is Unbreakable");
                                 mPlayer.crazyDiamondMessageCooldown += 180;

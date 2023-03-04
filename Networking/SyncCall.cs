@@ -36,16 +36,25 @@ namespace JoJoStands.Networking
                 ModNetHandler.PlayerSync.SendPoseMode(256, (byte)whoAmI, poseState, (byte)whoAmI);
         }
 
-        public static void SyncStandOut(int whoAmI, bool standOut)
+        public static void SyncStandOut(int whoAmI, bool standOut, string standName, int standTier)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModNetHandler.PlayerSync.SendStandOut(256, whoAmI, standOut, (byte)whoAmI);      //we send it to 256 cause it's the server
+                ModNetHandler.PlayerSync.SendStandOut(256, whoAmI, standOut, standName, (byte)standTier, (byte)whoAmI);      //we send it to 256 cause it's the server
         }
 
-        public static void SyncCenturyBoyState(int whoAmI, bool visible)
+        public static void SyncBTD(int whoAmI, bool btdValue)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModNetHandler.PlayerSync.SendCBLayer(256, whoAmI, visible, (byte)whoAmI);
+            {
+                ModNetHandler.EffectSync.SendBTD(256, whoAmI, btdValue, (byte)whoAmI);      //we send it to 256 cause it's the server
+
+                for (int p = 0; p < Main.maxPlayers; p++)       //Check to see if this implimentation improves multiplayer effect reliability
+                {
+                    Player otherPlayer = Main.player[p];
+                    if (otherPlayer.active)
+                        otherPlayer.GetModPlayer<MyPlayer>().bitesTheDustActive = btdValue;
+                }
+            }
         }
 
         public static void SyncCurrentDyeItem(int whoAmI, int dyeType)

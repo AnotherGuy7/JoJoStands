@@ -117,7 +117,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             return;
                         }
 
-                        HandleDrawOffsets();
                         attackFrames = false;
                         idleFrames = false;
                         scrapeBarrageFrames = true;

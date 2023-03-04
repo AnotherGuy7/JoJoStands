@@ -22,7 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override int HalfStandHeight => 36;
         public override int FistWhoAmI => 11;
         public override int TierNumber => 1;
-        public override int StandOffset => 0;
+        public override Vector2 StandOffset => Vector2.Zero;
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private Vector2 velocityAddition;
@@ -48,7 +48,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
                 {
-                    HandleDrawOffsets();
                     attackFrames = true;
                     idleFrames = false;
                     Projectile.netUpdate = true;

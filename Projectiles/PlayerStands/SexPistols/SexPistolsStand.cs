@@ -1,6 +1,5 @@
 ﻿using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -22,6 +21,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
         private const float BaseKickRadius = 24f;
         private const int BaseKickCooldownTime = 120;
         private const int MaxAmountOfDusts = 40;
+        private readonly SoundStyle TinkSound = new SoundStyle(SoundID.Tink.SoundPath)
+        {
+            Pitch = 5f
+        };
 
         private int kickRestTimer = 0;
         private float kickRadius = 0f;
@@ -39,7 +42,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
 
             kickRadius = (BaseKickRadius * mPlayer.sexPistolsTier) + mPlayer.standRangeBoosts / 2f;
             kickCooldownTime = BaseKickCooldownTime - (15 * mPlayer.sexPistolsTier) - (2 * mPlayer.standSpeedBoosts);
-
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 Projectile.position = player.Center + mPlayer.sexPistolsOffsets[(int)Projectile.ai[0] - 1];
@@ -112,15 +114,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                             otherProjectile.velocity = redirectionVelocity;
                             otherProjectile.penetrate += 1 + (mPlayer.sexPistolsTier / 2);
                             otherProjectile.GetGlobalProjectile<JoJoGlobalProjectile>().kickedBySexPistols = true;
-                            SoundStyle tinkSound = SoundID.Tink;
-                            tinkSound.Pitch = 5f;
-                            SoundEngine.PlaySound(tinkSound, otherProjectile.Center);
+                            otherProjectile.netUpdate = true;
+                            SoundEngine.PlaySound(TinkSound, otherProjectile.Center);
                             break;
                         }
                     }
                 }
             }
-
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 int direction = 1;

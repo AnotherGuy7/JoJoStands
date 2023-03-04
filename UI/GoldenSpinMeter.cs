@@ -54,6 +54,9 @@ namespace JoJoStands.UI
             Player player = Main.LocalPlayer;
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             int frame = (mPlayer.goldenSpinCounter / 300) * 12;
+            if (frame >= 12)
+                frame = 11;
+
             animRect.Y = (frame - 1) * animRect.Height;
 
             float scaleInverse = 1f - (Main.UIScale - 1f);

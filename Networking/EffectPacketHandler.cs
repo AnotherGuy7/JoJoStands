@@ -15,6 +15,7 @@ namespace JoJoStands.Networking
         public const byte BacktoZero2 = 5;
         public const byte Foresight = 6;
         public const byte Foresight2 = 7;
+        public const byte BitesTheDust = 8;
 
         public EffectPacketHandler(byte handlerType) : base(handlerType)
         { }
@@ -47,6 +48,9 @@ namespace JoJoStands.Networking
                     break;
                 case Foresight2:
                     ReceiveForesightFromAffected(reader, fromWho);
+                    break;
+                case BitesTheDust:
+                    ReceiveBTD(reader, fromWho);
                     break;
             }
         }
@@ -114,9 +118,6 @@ namespace JoJoStands.Networking
             }
         }
 
-
-
-
         public void SendTimeskip(int toWho, int fromWho, bool timeskipValue, int timeskipOwner)
         {
             ModPacket packet = CreatePacket(Timeskip);
@@ -162,9 +163,6 @@ namespace JoJoStands.Networking
                 SendTimeskipBackToOwner(-1, fromWho, timeskipValue, affectedPlayer);
             }
         }
-
-
-
 
         public void SendBTZ(int toWho, int fromWho, bool BTZValue, int BTZOwner)
         {
@@ -212,8 +210,6 @@ namespace JoJoStands.Networking
             }
         }
 
-
-
         public void SendForesight(int toWho, int fromWho, bool foresightValue, int foresightOwner)
         {
             ModPacket packet = CreatePacket(Foresight);
@@ -257,6 +253,33 @@ namespace JoJoStands.Networking
             else
             {
                 SendForesightBackToOwner(-1, fromWho, foresightValue, affectedPlayer);
+            }
+        }
+
+        public void SendBTD(int toWho, int fromWho, bool btdValue, byte btdOwner)
+        {
+            ModPacket packet = CreatePacket(BitesTheDust);
+            packet.Write(btdValue);
+            packet.Write(btdOwner);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ReceiveBTD(BinaryReader reader, int fromWho)
+        {
+            bool btdValue = reader.ReadBoolean();
+            byte btdOwner = reader.ReadByte();
+            if (Main.netMode != NetmodeID.Server)
+            {
+                for (int p = 0; p < Main.maxPlayers; p++)
+                {
+                    Player otherPlayer = Main.player[p];
+                    if (otherPlayer.active)
+                        otherPlayer.GetModPlayer<MyPlayer>().bitesTheDustActive = btdValue;
+                }
+            }
+            else
+            {
+                SendBTD(-1, fromWho, btdValue, btdOwner);
             }
         }
     }

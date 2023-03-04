@@ -97,7 +97,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
             if (Projectile.velocity.X > 0.5f)
                 Projectile.spriteDirection = 1;
-            if (Projectile.velocity.X < -0.5f)
+            else if (Projectile.velocity.X < -0.5f)
                 Projectile.spriteDirection = -1;
 
             if (leftMouse > 0)
@@ -421,15 +421,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             {
                 Projectile.frame += 1;
                 Projectile.frameCounter = 0;
-                if (!bombless)
-                {
-                    if (Projectile.frame >= 4)
-                        Projectile.frame = 2;
-                }
-                else
+                if (bombless)
                 {
                     if (Projectile.frame >= 2)
                         Projectile.frame = 0;
+                }
+                else
+                {
+                    if (Projectile.frame >= 4)
+                        Projectile.frame = 2;
                 }
             }
         }

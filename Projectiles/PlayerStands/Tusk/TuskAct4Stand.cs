@@ -20,7 +20,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
         public override int FistWhoAmI => 0;
         public override int TierNumber => 4;
         public override StandAttackType StandType => StandAttackType.Ranged;
-        public override int StandOffset => 20;
+        public override Vector2 StandOffset => new Vector2(10, 0);
 
         private int goldenRectangleEffectTimer = 256;
         private bool playedSpawnCry = false;

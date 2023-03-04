@@ -15,10 +15,11 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         public override int ProjectileDamage => 48;
         public override int ShootTime => 18;
         public override int HalfStandHeight => 35;
-        public override int StandOffset => 0;
+        public override Vector2 StandOffset => Vector2.Zero;
         public override int TierNumber => 2;
         public override string PoseSoundName => "ThePowerToWieldFlameAtWill";
         public override string SpawnSoundName => "Magicians Red";
+        public override bool CanUseRangeIndicators => false;
 
         private int ChanceToDebuff = 35;
         private int DebuffDuration = 6 * 60;

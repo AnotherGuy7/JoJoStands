@@ -13,15 +13,13 @@ namespace JoJoStands.Networking
         public const byte PoseMode = 0;
         public const byte StandOut = 1;     //needed because some stands don't spawn without it
         public const byte StandControlStyle = 2;
-        public const byte CBLayer = 3;
-        public const byte Yoshihiro = 4;
-        public const byte DyeItem = 5;
-        public const byte SexPistolPosition = 6;
-        public const byte DeathLoopInfo = 7;
-        public const byte ArrowEarringInfo = 8;
-        public const byte StandEffectInfo = 9;
-        public const byte OtherPlayerDebuffInfo = 10;
-        public const byte OtherPlayerExtraEffect = 11;
+        public const byte DyeItem = 4;
+        public const byte SexPistolPosition = 5;
+        public const byte DeathLoopInfo = 6;
+        public const byte ArrowEarringInfo = 7;
+        public const byte StandEffectInfo = 8;
+        public const byte OtherPlayerDebuffInfo = 9;
+        public const byte OtherPlayerExtraEffect = 10;
         //public const byte Sounds = 6;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
@@ -41,15 +39,9 @@ namespace JoJoStands.Networking
                 case StandControlStyle:
                     ReceiveStandControlStyle(reader, fromWho);
                     break;
-                case CBLayer:
-                    ReceiveCBLayer(reader, fromWho);
-                    break;
                 case SexPistolPosition:
                     ReceiveSexPistolPosition(reader, fromWho);
                     break;
-                /*case Yoshihiro:
-					ReceiveYoshihiroSpawn(reader, fromWho);
-					break;*/
                 case DyeItem:
                     ReceiveDyeItem(reader, fromWho);
                     break;
@@ -93,10 +85,12 @@ namespace JoJoStands.Networking
             }
         }
 
-        public void SendStandOut(int toWho, int fromWho, bool standOutValue, byte whoAmI)
+        public void SendStandOut(int toWho, int fromWho, bool standOutValue, string standName, byte standTier, byte whoAmI)
         {
             ModPacket packet = CreatePacket(StandOut);
             packet.Write(standOutValue);
+            packet.Write(standName);
+            packet.Write(standTier);
             packet.Write(whoAmI);
             packet.Send(toWho, fromWho);
         }
@@ -104,16 +98,26 @@ namespace JoJoStands.Networking
         public void ReceiveStandOut(BinaryReader reader, int fromWho)
         {
             bool standOutVal = reader.ReadBoolean();
+            string standName = reader.ReadString();
+            byte standTier = reader.ReadByte();
             byte whoAmI = reader.ReadByte();
             if (Main.netMode != NetmodeID.Server)
             {
-                Main.player[whoAmI].GetModPlayer<MyPlayer>().standOut = standOutVal;
                 if (!standOutVal)
+                {
                     Main.player[whoAmI].GetModPlayer<MyPlayer>().standTier = 0;
+                    Main.player[whoAmI].GetModPlayer<MyPlayer>().standName = "";
+                }
+                else
+                {
+                    Main.player[whoAmI].GetModPlayer<MyPlayer>().standTier = standTier;
+                    Main.player[whoAmI].GetModPlayer<MyPlayer>().standName = standName;
+                }
+                Main.player[whoAmI].GetModPlayer<MyPlayer>().standOut = standOutVal;
             }
             else
             {
-                SendStandOut(-1, fromWho, standOutVal, whoAmI);
+                SendStandOut(-1, fromWho, standOutVal, standName, standTier, whoAmI);
             }
         }
 
@@ -138,48 +142,6 @@ namespace JoJoStands.Networking
                 SendStandControlStyle(-1, fromWho, (MyPlayer.StandControlStyle)standControlStyle, whoAmI);
             }
         }
-
-        public void SendCBLayer(int toWho, int fromWho, bool visibility, byte whoAmI)
-        {
-            ModPacket packet = CreatePacket(CBLayer);
-            packet.Write(visibility);
-            packet.Write(whoAmI);
-            packet.Send(toWho, fromWho);
-        }
-
-        public void ReceiveCBLayer(BinaryReader reader, int fromWho)
-        {
-            bool visibiltyValue = reader.ReadBoolean();
-            byte whoAmI = reader.ReadByte();
-            if (Main.netMode != NetmodeID.Server)
-            {
-                Main.player[whoAmI].GetModPlayer<MyPlayer>().showingCBLayer = visibiltyValue;
-            }
-            else
-            {
-                SendCBLayer(-1, fromWho, visibiltyValue, whoAmI);
-            }
-        }
-
-        /*public void SendYoshihiroToSpawn(int toWho, int fromWho, int NPCType, Vector2 position)
-		{
-			ModPacket packet = CreatePacket(Yoshihiro, fromWho);
-			packet.Write(NPCType);
-			packet.WriteVector2(position);
-			packet.Send(toWho, fromWho);
-		}
-
-		public void ReceiveYoshihiroSpawn(BinaryReader reader, int fromWho)
-		{
-			int type = reader.ReadInt32();
-			Vector2 pos = reader.ReadVector2();
-			if (Main.netMode == NetmodeID.Server)
-			{
-				if (!NPC.AnyNPCs(type))
-					NPC.NewNPC((int)pos.X, (int)pos.Y, type);
-				SendYoshihiroToSpawn(-1, fromWho, type, pos);
-			}
-		}*/
 
         public void SendDyeItem(int toWho, int fromWho, int dyeItemType, byte whoAmI)
         {

@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
         public override int PunchTime => 9;
         public override int HalfStandHeight => 38;
         public override int AltDamage => 320;
-        public override int StandOffset => 54;
+        public override Vector2 StandOffset => new Vector2(27, 0);
         public override int FistWhoAmI => 0;
         public override int TierNumber => 5;
         public override StandAttackType StandType => StandAttackType.Melee;

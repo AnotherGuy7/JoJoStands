@@ -1,4 +1,3 @@
-using JoJoStands.Networking;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -15,6 +14,7 @@ namespace JoJoStands.Items
         }
 
         public override int StandTier => 2;
+        public override string StandProjectileName => "CenturyBoy";
         public override Color StandTierDisplayColor => Color.Cyan;
 
         public override void SetStaticDefaults()
@@ -35,9 +35,7 @@ namespace JoJoStands.Items
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standType = 2;
             mPlayer.standName = "CenturyBoy";
-            mPlayer.showingCBLayer = true;
             mPlayer.standAccessory = true;
-            SyncCall.SyncCenturyBoyState(player.whoAmI, true);
 
             return true;
         }

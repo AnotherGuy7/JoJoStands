@@ -77,8 +77,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <summary>
         /// The Stand's X offset while drawn. This value is halved, so multiply by 2 if trying to apply a direct and known constant offset.
         /// </summary>
-        public virtual int StandOffset { get; } = 60;            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
-        public virtual int standYOffset { get; } = 0;
+        public virtual Vector2 StandOffset { get; } = new Vector2(15, 0);            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
+        public virtual Vector2 ManualIdleHoverOffset { get; } = Vector2.Zero;
         public virtual int TierNumber { get; }
         public virtual float PunchKnockback { get; } = 3f;
         public virtual string PunchSoundName { get; } = "";
@@ -229,7 +229,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
 
             movementSpeed += mPlayer.standTier;
-            HandleDrawOffsets();
             idleFrames = false;
             attackFrames = true;
             float rotaY = mouseY - Projectile.Center.Y;
@@ -281,14 +280,13 @@ namespace JoJoStands.Projectiles.PlayerStands
             Player player = Main.player[Projectile.owner];
             idleFrames = true;
             attackFrames = false;
-            Vector2 areaBehindPlayer = player.Center;
-            areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
-            areaBehindPlayer.Y -= -35f + HalfStandHeight + standYOffset;
-            Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
+            Vector2 position = player.Center;
+            position.X -= (12 + ManualIdleHoverOffset.X + player.width / 2) * player.direction;
+            position.Y -= -35f + HalfStandHeight - ManualIdleHoverOffset.Y;
+            Projectile.Center = Vector2.Lerp(Projectile.Center, position, 0.2f);
             Projectile.velocity *= 0.8f;
-            Projectile.direction = Projectile.spriteDirection = player.direction;
+            Projectile.spriteDirection = Projectile.direction = player.direction;
             Projectile.rotation = 0;
-            HandleDrawOffsets();
             LimitDistance();
             StopSounds();
         }
@@ -303,17 +301,14 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             idleFrames = true;
             attackFrames = false;
-            Vector2 areaBehindPlayer = player.Center;
-            areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
-            areaBehindPlayer.Y -= -35f + HalfStandHeight + standYOffset;
-            Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
+            Vector2 position = player.Center;
+            position.X -= (12 + ManualIdleHoverOffset.X + player.width / 2) * player.direction;
+            position.Y -= -35f + HalfStandHeight - ManualIdleHoverOffset.Y;
+            Projectile.Center = Vector2.Lerp(Projectile.Center, position, 0.2f);
             Projectile.velocity *= 0.8f;
             if (!secondaryAbilityFrames)
-            {
-                Projectile.direction = Projectile.spriteDirection = player.direction;
-            }
+                Projectile.spriteDirection = Projectile.direction = player.direction;
             Projectile.rotation = 0;
-            HandleDrawOffsets();
             LimitDistance();
             StopSounds();
         }
@@ -329,15 +324,14 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (forcedDirection != 0)
                 direction = forcedDirection;
 
-            Vector2 areaBehindPlayer = player.Center;
+            Vector2 position = player.Center;
             float offsetX = 50f;
-            areaBehindPlayer.X += (float)((12 + offsetX + player.width / 2) * direction);
-            areaBehindPlayer.Y -= -35f + HalfStandHeight;
-            Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
+            position.X += (12 + offsetX + ManualIdleHoverOffset.X + player.width / 2) * direction;
+            position.Y -= -35f + HalfStandHeight - ManualIdleHoverOffset.Y;
+            Projectile.Center = Vector2.Lerp(Projectile.Center, position, 0.2f);
             Projectile.velocity *= 0.8f;
-            Projectile.direction = (Projectile.spriteDirection = direction);
+            Projectile.spriteDirection = Projectile.direction = player.direction;
             Projectile.rotation = 0;
-            HandleDrawOffsets();
             LimitDistance();
         }
 
@@ -350,17 +344,18 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
 
-            HandleDrawOffsets();
             if (!attackFrames)
             {
-                Vector2 vector131 = player.Center;
-                vector131.X -= (float)((12 + player.width / 2) * player.direction);
+                Vector2 position = player.Center;
+                position.X -= (float)((12 + player.width / 2) * player.direction);
                 Projectile.direction = (Projectile.spriteDirection = player.direction);
-                vector131.Y -= -35f + HalfStandHeight +standYOffset;
-                Projectile.Center = Vector2.Lerp(Projectile.Center, vector131, 0.2f);
+                position.Y -= -35f + HalfStandHeight;
+                position += ManualIdleHoverOffset;
+                Projectile.Center = Vector2.Lerp(Projectile.Center, position, 0.2f);
                 Projectile.velocity *= 0.8f;
                 Projectile.rotation = 0;
             }
+
             float detectionDist = newMaxDistance * 1.2f;
             NPC target = FindNearestTarget(detectionDist);
             if (target != null)
@@ -370,9 +365,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
                 Projectile.direction = 1;
                 if (target.position.X - Projectile.Center.X <= 0f)
-                {
                     Projectile.direction = -1;
-                }
                 Projectile.spriteDirection = Projectile.direction;
 
                 Vector2 velocity = target.position - Projectile.position;
@@ -387,9 +380,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                         Vector2 shootVel = target.position - Projectile.Center;
                         shootVel.Normalize();
                         if (Projectile.direction == 1)
-                        {
                             shootVel *= ProjectileSpeed;
-                        }
+
                         int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
                         Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
@@ -418,7 +410,6 @@ namespace JoJoStands.Projectiles.PlayerStands
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            HandleDrawOffsets();
             float rangedDetectionDist = newMaxDistance * 3f;        //Distance for ranged attacks to work
             float punchDetectionDist = newMaxDistance * 1.5f;       //Distance for melee attacks to work
             float maxDetectionDist = newMaxDistance * 3.1f;
@@ -456,9 +447,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0f)
-                    {
-                        Projectile.spriteDirection = Projectile.direction = -1;
-                    }
+                        Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
 
                     Vector2 velocity = target.position - Projectile.position;
@@ -708,14 +697,6 @@ namespace JoJoStands.Projectiles.PlayerStands
         }
 
         /// <summary>
-        /// Adjusts the draw offsets of the Stand based on its Projectile.spriteDirection field.
-        /// </summary>
-        public void HandleDrawOffsets()     //this method kind of lost its usage when we found a better way to do offsets but whatever; Future AG: No it did not.
-        {
-            DrawOffsetX = StandOffset * Projectile.spriteDirection;
-        }
-
-        /// <summary>
         /// Updates all client-side stand info.
         /// Updates newPunchTime, newShootTime, newMaxDistance, newAltMaxDistance, newPunchDamage, newProjectileDamage, and mPlayer.standType.
         /// </summary>
@@ -825,7 +806,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (standTexture != null && Main.netMode != NetmodeID.Server)
             {
                 int frameHeight = standTexture.Height / Main.projFrames[Projectile.whoAmI];
-                Vector2 drawPosition = Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f);
+                Vector2 drawOffset = StandOffset;
+                drawOffset.X *= Projectile.spriteDirection;
+                Vector2 drawPosition = Projectile.Center - Main.screenPosition + drawOffset;
                 Rectangle animRect = new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight);
                 Vector2 standOrigin = new Vector2(standTexture.Width / 2f, frameHeight / 2f);
                 Main.EntitySpriteDraw(standTexture, drawPosition, animRect, drawColor, Projectile.rotation, standOrigin, 1f, effects, 0);

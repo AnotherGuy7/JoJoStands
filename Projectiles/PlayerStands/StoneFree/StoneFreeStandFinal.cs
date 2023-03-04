@@ -2,6 +2,7 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -121,7 +122,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                 if (SpecialKeyPressed())
                 {
                     if (mPlayer.chosenAbility == ExtendedBarrageAbility && !mPlayer.stoneFreeWeaveAbilityActive)
+                    {
                         extendedBarrage = !extendedBarrage;
+                        Projectile.netUpdate = true;
+                    }
                     else if (mPlayer.chosenAbility == Bind && !mPlayer.stoneFreeWeaveAbilityActive)
                     {
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
@@ -136,6 +140,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         mPlayer.stoneFreeWeaveAbilityActive = !mPlayer.stoneFreeWeaveAbilityActive;
                         if (mPlayer.stoneFreeWeaveAbilityActive)
                             player.AddBuff(ModContent.BuffType<Buffs.ItemBuff.Weave>(), 2);
+                        Projectile.netUpdate = true;
                     }
                 }
 
@@ -158,8 +163,21 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             }
         }
 
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(extendedBarrage);
+            writer.Write(Main.player[Projectile.owner].GetModPlayer<MyPlayer>().stoneFreeWeaveAbilityActive);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            extendedBarrage = reader.ReadBoolean();
+            Main.player[Projectile.owner].GetModPlayer<MyPlayer>().stoneFreeWeaveAbilityActive = reader.ReadBoolean();
+        }
+
         public override bool PreKill(int timeLeft)
         {
+            Main.player[Projectile.owner].GetModPlayer<MyPlayer>().stoneFreeWeaveAbilityActive = false;
             StoneFreeAbilityWheel.CloseAbilityWheel();
             return true;
         }

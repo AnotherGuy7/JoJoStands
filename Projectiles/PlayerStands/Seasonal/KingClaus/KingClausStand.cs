@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override int HalfStandHeight => 32;
         public override int FistWhoAmI => 6;
         public override int TierNumber => 4;
-        public override int StandOffset => 0;
+        public override Vector2 StandOffset => Vector2.Zero;
         public override string PoseSoundName => "AllThatRemainsAreTheResults";
         public override StandAttackType StandType => StandAttackType.Melee;
 
@@ -86,7 +86,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 {
-                    HandleDrawOffsets();
                     attackFrames = true;
                     idleFrames = false;
                     Projectile.netUpdate = true;

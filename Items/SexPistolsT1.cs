@@ -17,6 +17,7 @@ namespace JoJoStands.Items
         }
 
         public override int StandTier => 1;
+        public override string StandProjectileName => "SexPistols";
         public override Color StandTierDisplayColor => SexPistolsFinal.SexPistolsTierColor;
         //In Manual Mode: You set 6 points that Sex Pistols will go to (in relation to the player) and whenever a bullet gets in that Sex Pistols's range, it gets kicked and redirected toward the nearest enemy. 
         //In Auto Mode: The Sex Pistols automatically kick the bullet whenever a new bullet is created.

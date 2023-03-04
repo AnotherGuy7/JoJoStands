@@ -136,7 +136,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         idleFrames = true;
                         Projectile.spriteDirection = Projectile.direction = player.direction;
                     }
-                    HandleDrawOffsets();
                 }
             }
             else

@@ -53,13 +53,12 @@ float4 PixelShaderFunction(float2 UV : TEXCOORD0) : COLOR0
     //float4 backSpaceCol = lerp(darkPurple / 2.0, mediumPink / 2.0, backSpaceLerpValue);
     float4 backSpaceCol = darkPurple / (4 - (1.3 * (sin((uScreenPosition.y / uScreenPosition.y) + uTime)))); //Why does abs() fail to compile???
     
-    float2 backStarsUV = UV + float2((uTime / 76.0) + (uScreenPosition.x / (uScreenResolution.x * 3)), 0.025 * sin(UV.x + uTime / 4.8));
-    backStarsUV += sin(UV.x * (uTime / 42.6));
+    float2 backStarsUV = UV + float2((uTime / 86.0) + (uScreenPosition.x / (uScreenResolution.x * 9.5)), 0.078 * sin(UV.x + (uTime / 4.8)));
     float backStarsAlpha = sin(uTime / 14.0);
     float4 backStarsCol = float4(tex2D(frontStarsImage, backStarsUV * 24.0).rgb, 0.8);
-
+    backStarsCol.rgb *= abs((0.5 * cos(40.0 * backStarsUV.x + uTime)) + 0.7);
     
-    float2 frontStarsUV = UV + float2((uTime / 46.0) + (uScreenPosition.x / (uScreenResolution.x * 2)), 0.076 * cos(UV.x + (uTime / 2.5)));
+    float2 frontStarsUV = UV + float2((uTime / 56.0) + (uScreenPosition.x / (uScreenResolution.x * 2)), 0.0076 * cos(12.0 * UV.x + uTime));
     float frontStarsAlpha = sin(uTime / 6.0);        //For some really odd reason I could NOT use this expression directly
     float4 frontStarsCol = float4(tex2D(frontStarsImage, frontStarsUV * 16.0).rgb, 0.0);
 
@@ -83,44 +82,3 @@ technique Technique1
         PixelShader = compile ps_2_0 PixelShaderFunction();
     }
 }
-
-/*
-Description file detected: 7
-* ColorChangeEffect.fx
-* GreenEffect.fx
-* Greyscale.fx
-* RedEffect.fx
-* TimeSkipEffectShader.fx
-* TimestopEffect.fx
-* VoidBarGradient.fx
-
-Start loading description file: ColorChangeEffect.fx ..Done!
-Start compiling font..Done!
-Start compiling font content file: ColorChangeEffect.xnb ..Done!
-
-Start loading description file: GreenEffect.fx ..Done!
-Start compiling font..Done!
-Start compiling font content file: GreenEffect.xnb ..Done!
-
-Start loading description file: Greyscale.fx ..Done!
-Start compiling font..Done!
-Start compiling font content file: Greyscale.xnb ..Done!
-
-Start loading description file: RedEffect.fx ..Done!
-Start compiling font..Done!
-Start compiling font content file: RedEffect.xnb ..Done!
-
-Start loading description file: TimeSkipEffectShader.fx ..Done!
-Start compiling font.
-Unhandled Exception: Microsoft.Xna.Framework.Content.Pipeline.InvalidContentException: Errors compiling C:\Users\AnotherGuy\Documents\My Games\Terraria\ModLoader\Mod Sources\JoJoStands\Effects\TimeSkipEffectShader.fx:
-(69,23): ID3DXEffectCompiler::CompileEffect: There was an error compiling expression
-ID3DXEffectCompiler: Compilation failed
-   at Microsoft.Xna.Framework.Content.Pipeline.Processors.EffectProcessor.DoSomethingAwesomeWithErrorsAndWarnings(Boolean success, String errorsAndWarnings, EffectContent input, ContentProcessorContext context)
-   at Microsoft.Xna.Framework.Content.Pipeline.Processors.EffectProcessor.Process(EffectContent input, ContentProcessorContext context)
-   at DynamicFontGenerator.Generator.CompileEffects()
-   at DynamicFontGenerator.Generator.Initialize()
-   at Microsoft.Xna.Framework.Game.RunGame(Boolean useBlockingRun)
-   at Microsoft.Xna.Framework.Game.Run()
-   at DynamicFontGenerator.Generator.Main()
-
-*/

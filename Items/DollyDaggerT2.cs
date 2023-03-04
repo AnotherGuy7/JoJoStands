@@ -18,6 +18,7 @@ namespace JoJoStands.Items
         }
 
         public override int StandTierDisplayOffset => 2;
+        public override string StandProjectileName => "DollyDagger";
 
         public override void SetStaticDefaults()
         {

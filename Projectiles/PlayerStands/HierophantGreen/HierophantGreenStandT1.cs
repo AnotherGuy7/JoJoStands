@@ -11,12 +11,13 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override int ShootTime => 40;
         public override int ProjectileDamage => 12;
         public override int HalfStandHeight => 30;
-        public override int StandOffset => 0;
+        public override Vector2 StandOffset => Vector2.Zero;
         public override int TierNumber => 1;
         public override StandAttackType StandType => StandAttackType.Ranged;
         public override string PoseSoundName => "ItsTheVictorWhoHasJustice";
         public override string SpawnSoundName => "Hierophant Green";
         public override bool CanUseSaladDye => true;
+        public override bool CanUseRangeIndicators => false;
 
         public override void AI()
         {

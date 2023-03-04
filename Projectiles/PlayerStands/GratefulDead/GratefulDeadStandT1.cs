@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -15,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int HalfStandHeight => 34;
         public override int FistWhoAmI => 8;
         public override int TierNumber => 1;
-        public override int StandOffset => 32;
+        public override Vector2 StandOffset => new Vector2(17, 0);
         public override StandAttackType StandType => StandAttackType.Melee;
         public override string PoseSoundName => "OnceWeDecideToKillItsDone";
         public override string SpawnSoundName => "The Grateful Dead";

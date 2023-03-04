@@ -19,17 +19,17 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override int FistWhoAmI => 15;
         public override int TierNumber => 3;
         public override float MaxDistance => 148f;      //1.5x the normal range cause Koichi is really reliable guy (C) Proos <3
-        public override int StandOffset => 20;
-        public override int standYOffset => 30;
+        public override Vector2 StandOffset => new Vector2(10, 0);
+        public override Vector2 ManualIdleHoverOffset => new Vector2(0, -30);
         public override StandAttackType StandType => StandAttackType.Melee;
 
-        private int ACT = 2;
-        private int changeActCooldown = 20;
+        private const int ActNumber = 2;
+        private const float ManualRange = 25 * 16;
+        private const float RemoteRange = 75 * 16;
+
         private int tailUseTimer = 0;
         private int holdSpecial = 0;
         private int echoesTailTipType = 1;
-
-        private float remoteRange = 1200f;
 
         public const int Effect_Boing = 1;
         public const int Effect_Kabooom = 2;
@@ -63,8 +63,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 tailUseTimer--;
             if (shootCount > 0)
                 shootCount--;
-            if (changeActCooldown > 0)
-                changeActCooldown--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
@@ -72,14 +70,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Projectile.timeLeft = 2;
             if (remoteMode)
                 mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
-            mPlayer.currentEchoesAct = ACT;
+            mPlayer.currentEchoesAct = ActNumber;
 
             mouseControlled = false;
-
             Projectile.tileCollide = true;
-
-            if (mPlayer.usedEctoPearl && remoteRange == 1200f)
-                remoteRange *= 1.5f;
+            float controlRange = ManualRange;
+            if (remoteMode)
+                controlRange = RemoteRange;
+            if (mPlayer.usedEctoPearl)
+                controlRange *= 1.5f;
+            controlRange += mPlayer.standRangeBoosts;
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
@@ -92,17 +92,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] == 0 && !returnToPlayer && tailUseTimer == 0 && !returnTail && shootCount <= 0) //right-click ability 
-                    holdSpecial++;
-                if (!Main.mouseRight && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] == 0 && !returnToPlayer && tailUseTimer == 0 && !returnTail && holdSpecial > 0 && holdSpecial < 60 && shootCount <= 0)
+                if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] == 0 && !returnToPlayer && tailUseTimer == 0 && !returnTail && shootCount <= 0)
                 {
-                    holdSpecial = 0;
-                    shootCount = 30;
-                    echoesTailTipType++;
-                    if (echoesTailTipType >= 5)
-                        echoesTailTipType = 1;
+                    if (Main.mouseRight) //right-click ability 
+                        holdSpecial++;
+                    else if (Projectile.owner == Main.myPlayer && holdSpecial > 0 && holdSpecial < 60)
+                    {
+                        holdSpecial = 0;
+                        shootCount = 30;
+                        echoesTailTipType++;
+                        if (echoesTailTipType >= 5)
+                            echoesTailTipType = 1;
+                        Main.NewText(EffectNames[echoesTailTipType - 1], EffectColors[echoesTailTipType - 1]);
 
-                    Main.NewText(EffectNames[echoesTailTipType - 1], EffectColors[echoesTailTipType - 1]);
+                    }
                 }
                 if (holdSpecial >= 60)
                 {
@@ -160,17 +163,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                 }
 
-                if (SecondSpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && changeActCooldown == 0 && mPlayer.echoesTier > 2 && !evolve)
+                if (SecondSpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && mPlayer.echoesTier > 2 && !evolve)
                 {
                     changeACT = true;
                     Projectile.Kill();
                 }
-            }
-            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer && !returnTail)        //Automode
-            {
-                holdSpecial = 0;
-                remoteMode = false;
-                BasicPunchAI();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote && !returnToPlayer && !returnTail)
             {
@@ -251,10 +248,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 if (!mouseControlled)
                     MovementAI(Projectile.Center + new Vector2(100f * Projectile.spriteDirection, 0f), 0f);
 
-                LimitDistance(remoteRange);
+                LimitDistance(controlRange);
+            }
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer && !returnTail)        //Automode
+            {
+                holdSpecial = 0;
+                remoteMode = false;
+                BasicPunchAI();
             }
 
-            if (Vector2.Distance(player.Center, Projectile.Center) <= remoteRange * 0.9f)
+            if (Vector2.Distance(player.Center, Projectile.Center) <= controlRange * 0.9f)
             {
                 if (remoteMode || returnToPlayer || returnTail)
                 {
@@ -357,7 +360,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override void PlayAnimation(string animationName)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             string pathAddition = "";
             if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] > 0)
                 pathAddition = "Tailless_";
@@ -383,26 +385,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         }
         public override void SendExtraStates(BinaryWriter writer)
         {
-            writer.Write(ACT);
             writer.Write(tailUseTimer);
-
-            writer.Write(remoteRange);
-
             writer.Write(remoteMode);
-            writer.Write(mouseControlled);
             writer.Write(returnToPlayer);
             writer.Write(returnTail);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
-            ACT = reader.ReadInt32();
             tailUseTimer = reader.ReadInt32();
-
-            remoteRange = reader.ReadSingle();
-
             remoteMode = reader.ReadBoolean();
-            mouseControlled = reader.ReadBoolean();
             returnToPlayer = reader.ReadBoolean();
             returnTail = reader.ReadBoolean();
         }

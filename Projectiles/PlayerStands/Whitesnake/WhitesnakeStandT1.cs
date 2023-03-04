@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 {
@@ -13,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override int FistWhoAmI => 9;
         public override int TierNumber => 1;
         public override StandAttackType StandType => StandAttackType.Melee;
-        public override int StandOffset => 22;
+        public override Vector2 StandOffset => new Vector2(11, 0);
         public override float MaxDistance => 148f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
         public override string PoseSoundName => "YouWereTwoSecondsTooLate";
         public override string SpawnSoundName => "Whitesnake";

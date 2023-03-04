@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override int PunchTime => 22;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
         public override int HalfStandHeight => 32;
         public override int FistWhoAmI => 6;
-        public override int StandOffset => 0;
+        public override Vector2 StandOffset => Vector2.Zero;
         public override string PoseSoundName => "AllThatRemainsAreTheResults";
         public override string SpawnSoundName => "King Crimson";
         public override StandAttackType StandType => StandAttackType.Melee;
@@ -94,7 +94,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !secondaryAbilityFrames && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 {
-                    HandleDrawOffsets();
                     attackFrames = true;
                     idleFrames = false;
                     Projectile.netUpdate = true;

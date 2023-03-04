@@ -23,7 +23,10 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tower of Gray (Tier 2)");
-            Tooltip.SetDefault("Pierce your enemies with a sharp stinger and tear through them with right-click! \nSpecial: Remote Control \nPassive: Attack ignores 20 enemy defence \nUsed in Stand Slot");
+            Tooltip.SetDefault("Pierce your enemies with a sharp stinger and tear through them with right-click!" +
+                "\nSpecial: Remote Control" +
+                "\nPassive: Attack ignores 20 enemy defence" +
+                "\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -41,9 +44,9 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<TowerOfGrayT1>())
-                .AddIngredient(ItemID.HellstoneBar, 18)
-                .AddIngredient(ItemID.BeeWax, 15)
-                .AddIngredient(ItemID.Stinger, 15)
+                .AddIngredient(ItemID.HellstoneBar, 12)
+                .AddIngredient(ItemID.Bone, 14)
+                .AddIngredient(ItemID.Stinger, 5)
                 .AddIngredient(ModContent.ItemType<WillToDestroy>(), 2)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();

@@ -39,6 +39,7 @@ namespace JoJoStands.Projectiles.Minions
         }
 
         private bool crit = false;
+        private int netUpdateTimer = 0;
 
         public override void AI()
         {
@@ -49,9 +50,7 @@ namespace JoJoStands.Projectiles.Minions
                 Projectile.netUpdate = true;
             }
             if (Projectile.velocity.Y < 6f)
-            {
                 Projectile.velocity.Y += 0.3f;
-            }
 
             if (npcTarget == null)
             {
@@ -65,6 +64,7 @@ namespace JoJoStands.Projectiles.Minions
                     {
                         npcTarget = npc;
                         targettedEnemy[npc.whoAmI] = true;
+                        Projectile.netUpdate = true;
                         break;
                     }
                 }
@@ -82,14 +82,9 @@ namespace JoJoStands.Projectiles.Minions
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Kocchiwomiro"));
                     saidKocchiwomiro = true;
                 }
-                if (npcTarget.position.X > Projectile.position.X)
-                {
-                    Projectile.direction = 1;
-                }
+                Projectile.direction = 1;
                 if (npcTarget.position.X <= Projectile.position.X)
-                {
                     Projectile.direction = -1;
-                }
 
                 if (!npcTarget.noGravity)
                 {
@@ -110,6 +105,13 @@ namespace JoJoStands.Projectiles.Minions
                     Projectile.rotation = velocity.ToRotation();
                     Projectile.velocity = velocity * 3f;
                 }
+            }
+
+            netUpdateTimer++;
+            if (netUpdateTimer >= 60)
+            {
+                netUpdateTimer = 0;
+                Projectile.netUpdate = true;
             }
         }
 

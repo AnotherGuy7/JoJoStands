@@ -65,7 +65,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
                 if (Main.mouseRight && !attackFrames && Projectile.owner == Main.myPlayer)
                 {
-                    HandleDrawOffsets();
                     idleFrames = false;
                     attackFrames = false;
                     secondaryAbilityFrames = true;

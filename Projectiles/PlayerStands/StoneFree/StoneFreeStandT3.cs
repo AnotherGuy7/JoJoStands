@@ -2,6 +2,7 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -119,8 +120,11 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 
                 if (SpecialKeyPressed())
                 {
-                    if (mPlayer.chosenAbility == ExtendedBarrageAbility)
+                    if (mPlayer.chosenAbility == ExtendedBarrageAbility && !mPlayer.stoneFreeWeaveAbilityActive)
+                    {
                         extendedBarrage = !extendedBarrage;
+                        Projectile.netUpdate = true;
+                    }
                     else if (mPlayer.chosenAbility == Bind)
                     {
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
@@ -148,6 +152,16 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             {
                 BasicPunchAI();
             }
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(extendedBarrage);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            extendedBarrage = reader.ReadBoolean();
         }
 
         public override bool PreKill(int timeLeft)

@@ -11,7 +11,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Titanium Alloy Mask (Neutral)");
-            Tooltip.SetDefault("A mask fused with Viral Meteorite to empower the user.\nStand stat buffs change depending on stand type.");
+            Tooltip.SetDefault("A mask fused with Viral Meteorite to empower the user.\nNote: This helmet makes a set when paired with the rest of the default Titanium set.\nStand stat buffs change depending on stand type.");
             SacrificeTotal = 1;
         }
 

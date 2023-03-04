@@ -164,7 +164,6 @@ namespace JoJoStands
         public bool posing = false;
         public bool canRevertFromKQBTD = false;
         public bool canRevertFromGoBeyond = false;
-        public bool showingCBLayer = false;     //this is a bool that's needed to sync so that the Century Boy layer shows up for other clients in Multiplayer
 
         private int standKeyPressTimer = 0;
         private int spinSubtractionTimer = 0;
@@ -181,7 +180,6 @@ namespace JoJoStands
         public Vector2 VoidCamPosition;
         public Vector2 standRemoteModeCameraPosition;
         public Vector2[] sexPistolsOffsets = new Vector2[6];
-        public Texture2D timeskipNPCMask;
 
         public string standName = "";
         public string poseSoundName = "";       //This is for JoJoStandsSounds
@@ -511,7 +509,7 @@ namespace JoJoStands
                 if (standControlStyle == StandControlStyle.Remote)
                     standControlStyle = StandControlStyle.Manual;
                 standKeyPressTimer += 30;
-                SyncCall.SyncStandOut(Player.whoAmI, standOut);
+                SyncCall.SyncStandOut(Player.whoAmI, standOut, standName, standTier);
             }
             if (JoJoStands.SpecialHotKey.Current && standAccessory)
             {
@@ -628,13 +626,8 @@ namespace JoJoStands
                     equippedTuskAct = 0;
                     tuskActNumber = 0;
                 }
-                if (showingCBLayer)
-                {
-                    showingCBLayer = false;
-                    SyncCall.SyncCenturyBoyState(Player.whoAmI, false);
-                }
                 standKeyPressTimer += 30;
-                SyncCall.SyncStandOut(Player.whoAmI, false);
+                SyncCall.SyncStandOut(Player.whoAmI, false, "", 0);
             }
         }
 
@@ -941,9 +934,9 @@ namespace JoJoStands
                             tuskActNumber = 4;
                             forceChangedTusk = true;
                         }
-                        if (goldenSpinCounter <= 1)     //would reset anyway if the Player isn't holding Tusk, cause it resets whenever you hold the Item again
-                            forceChangedTusk = false;
                     }
+                    if (goldenSpinCounter <= 1)     //would reset anyway if the Player isn't holding Tusk, cause it resets whenever you hold the Item again
+                        forceChangedTusk = false;
                 }
 
                 if (goldenSpinCounter >= 300)
@@ -1592,7 +1585,7 @@ namespace JoJoStands
             {
                 SpawnStand();
                 standRespawnQueued = false;
-                SyncCall.SyncStandOut(Player.whoAmI, standOut);
+                SyncCall.SyncStandOut(Player.whoAmI, standOut, standName, standTier);
             }
             if (hotbarLocked && standOut && standControlStyle == StandControlStyle.Manual)
                 Player.selectedItem = 0;
@@ -1600,7 +1593,7 @@ namespace JoJoStands
 
         private void UpdateShaderStates()
         {
-            if (!Main.dedServ)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside
+            if (!Main.dedServ && Player.whoAmI == Main.myPlayer)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside
             {
                 if (TimestopEffects && timestopEffectDurationTimer > 0)
                 {

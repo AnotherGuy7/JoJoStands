@@ -9,8 +9,9 @@ namespace JoJoStands.Items
 {
     public class TestStand : StandItemClass
     {
-        public override int StandSpeed => 12;
         public override int StandType => 1;
+        public override string StandProjectileName => "TestStand";
+        public override int StandSpeed => 12;
 
         public override void SetStaticDefaults()
         {
@@ -67,7 +68,7 @@ namespace JoJoStands.Items
             {
                 Main.NewText("You are not worthy.", Color.Red);
                 player.GetModPlayer<MyPlayer>().standOut = false;
-                SyncCall.SyncStandOut(player.whoAmI, false);
+                SyncCall.SyncStandOut(player.whoAmI, false, "", 0);
             }
             return true;
         }

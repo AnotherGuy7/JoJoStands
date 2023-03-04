@@ -13,12 +13,13 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         public override int ShootTime => 15;
         public override int ProjectileDamage => 72;
         public override int HalfStandHeight => 30;
-        public override int StandOffset => 0;
+        public override Vector2 StandOffset => Vector2.Zero;
         public override int TierNumber => 4;
         public override StandAttackType StandType => StandAttackType.Ranged;
         public override string PoseSoundName => "ItsTheVictorWhoHasJustice";
         public override string SpawnSoundName => "Hierophant Green";
         public override bool CanUseSaladDye => true;
+        public override bool CanUseRangeIndicators => false;
 
         private bool spawningField = false;
         private int amountOfLinksCreated = 0;
@@ -55,11 +56,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && mPlayer.canStandBasicAttack && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
-                    if (!mPlayer.canStandBasicAttack)
-                        return;
-
                     idleFrames = false;
                     attackFrames = true;
                     if (shootCount <= 0)
@@ -148,7 +146,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     Projectile.velocity *= 0.78f;
                     Projectile.netUpdate = true;
                 }
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && mPlayer.canStandBasicAttack && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
                     attackFrames = true;
                     idleFrames = false;

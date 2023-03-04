@@ -1,7 +1,9 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
+using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
@@ -16,10 +18,21 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override int ShootTime => 30;
         public override int HalfStandHeight => 37;
         public override StandAttackType StandType => StandAttackType.Ranged;
-        public override int StandOffset => -10;
+        public override Vector2 StandOffset => new Vector2(-5, 0);
         public override string PoseSoundName => "IWouldntLose";
         public override string SpawnSoundName => "Killer Queen";
         //public override bool CanUseSaladDye => true;
+        public override bool CanUseRangeIndicators => false;
+        private static readonly SoundStyle BtdWarpSoundEffect = new SoundStyle("JoJoStands/Sounds/GameSounds/BiteTheDustEffect")
+        {
+            Volume = MyPlayer.ModSoundsVolume
+        };
+        private static readonly SoundStyle BtdSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/BiteTheDust")
+        {
+            Volume = MyPlayer.ModSoundsVolume
+        };
+        private readonly SoundStyle kqClickSound = new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick");
+
 
         private int btdStartDelay = 0;
         private int bubbleDamage = 684;      //not using projectileDamage cause this one changes
@@ -31,27 +44,29 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         private int amountOfSavedData = 0;
         private int currentRewindTime = 0;
         private int totalRewindTime = 0;
-        private Vector2[] btdPlayerPositions;       //Positions of KQ:BTD's owner.
-        private Vector2[] btdPlayerVelocities;
+        private List<Vector2> btdPlayerPositions;       //Positions of KQ:BTD's owner.
+        private List<Vector2> btdPlayerVelocities;
         private bool bitesTheDustActive;
         private bool bitesTheDustActivated;
-        private PlayerData savedPlayerData;
+        private PlayerData[] savedPlayerDatas;
         private WorldData savedWorldData;
         private bool saveDataCreated = false;       //For use with all clients that aren't 
 
         public struct PlayerData
         {
+            public bool active;
             public Vector2 playerBTDPos;
             public Item[] playerBTDInventory;
             public int playerBTDHealth;
             public int playerDirection;
             public int[] buffTypes;
             public int[] buffTimes;
+            public byte whoAmI;
         }
 
         public struct WorldData
         {
-            public int worldTime;
+            public double worldTime;
             public NPCData[] npcData;
         }
 
@@ -79,14 +94,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (Main.dayTime)
-            {
-                bubbleDamage = 684;
-            }
-            if (!Main.dayTime)
-            {
-                bubbleDamage = 456;
-            }
+            bubbleDamage = Main.dayTime ? 684 : 456;
             DrawOriginOffsetY = -HalfStandHeight;
             int newBubbleDamage = (int)(bubbleDamage * mPlayer.standDamageBoosts);
 
@@ -98,38 +106,80 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             bitesTheDustActive = player.HasBuff(ModContent.BuffType<BitesTheDust>());
             if (!bitesTheDustActive && saveDataCreated)
                 saveDataCreated = false;
+            if (Main.netMode != NetmodeID.SinglePlayer && Projectile.owner != Main.myPlayer)
+            {
+                Player otherPlayer = Main.player[Main.myPlayer];
+                if (otherPlayer.GetModPlayer<MyPlayer>().bitesTheDustActive && !bitesTheDustActivated)
+                {
+                    bitesTheDustActivated = true;
+                    totalRewindTime = CalculateRewindTime();
+                    SoundEngine.PlaySound(BtdSound, Projectile.Center);
+                    Main.NewText("G");
+                }
+            }
 
             if ((SpecialKeyPressed() && !bitesTheDustActive) || (bitesTheDustActive && !saveDataCreated && !playerHasAbilityCooldown))
             {
                 btdPositionIndex = 0;
                 amountOfSavedData = 0;
-                btdPlayerPositions = new Vector2[500];
-                btdPlayerVelocities = new Vector2[500];
-                btdPlayerPositions[0] = player.position;
-                btdPlayerVelocities[0] = player.velocity;
+                btdPlayerPositions = new List<Vector2>() { player.position };
+                btdPlayerVelocities = new List<Vector2>() { player.velocity };
+                savedPlayerDatas = new PlayerData[Main.maxPlayers];
                 currentRewindTime = 0;
                 btdRevertTime = 35;
 
-                savedPlayerData = new PlayerData();
-                savedPlayerData.playerBTDHealth = player.statLife;
-                savedPlayerData.playerBTDInventory = player.inventory.Clone() as Item[];
-                savedPlayerData.playerBTDPos = player.position;
-                savedPlayerData.playerDirection = player.direction;
-
-                int amountOfBuffs = player.CountBuffs();
-                savedPlayerData.buffTypes = new int[amountOfBuffs];
-                savedPlayerData.buffTimes = new int[amountOfBuffs];
-                for (int i = 0; i < amountOfBuffs; i++)
+                if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    savedPlayerData.buffTypes[i] = player.buffType[i];
-                    savedPlayerData.buffTimes[i] = player.buffTime[i];
+                    savedPlayerDatas[0] = new PlayerData();
+                    savedPlayerDatas[0].playerBTDHealth = player.statLife;
+                    savedPlayerDatas[0].playerBTDInventory = player.inventory.Clone() as Item[];
+                    savedPlayerDatas[0].playerBTDPos = player.position;
+                    savedPlayerDatas[0].playerDirection = player.direction;
+
+                    int amountOfBuffs = player.CountBuffs();
+                    savedPlayerDatas[0].buffTypes = new int[amountOfBuffs];
+                    savedPlayerDatas[0].buffTimes = new int[amountOfBuffs];
+                    for (int i = 0; i < amountOfBuffs; i++)
+                    {
+                        savedPlayerDatas[0].buffTypes[i] = player.buffType[i];
+                        savedPlayerDatas[0].buffTimes[i] = player.buffTime[i];
+                    }
+                }
+                else
+                {
+                    int activeIndex = 0;
+                    for (int p = 0; p < Main.maxPlayers; p++)
+                    {
+                        Player otherPlayer = Main.player[p];
+                        if (otherPlayer.active)
+                        {
+                            savedPlayerDatas[activeIndex].active = true;
+                            savedPlayerDatas[activeIndex] = new PlayerData();
+                            savedPlayerDatas[activeIndex].playerBTDHealth = otherPlayer.statLife;
+                            if (p == Main.myPlayer)
+                                savedPlayerDatas[activeIndex].playerBTDInventory = otherPlayer.inventory.Clone() as Item[];
+                            savedPlayerDatas[activeIndex].playerBTDPos = otherPlayer.position;
+                            savedPlayerDatas[activeIndex].playerDirection = otherPlayer.direction;
+
+                            int amountOfBuffs = otherPlayer.CountBuffs();
+                            savedPlayerDatas[activeIndex].buffTypes = new int[amountOfBuffs];
+                            savedPlayerDatas[activeIndex].buffTimes = new int[amountOfBuffs];
+                            for (int i = 0; i < amountOfBuffs; i++)
+                            {
+                                savedPlayerDatas[activeIndex].buffTypes[i] = otherPlayer.buffType[i];
+                                savedPlayerDatas[activeIndex].buffTimes[i] = otherPlayer.buffTime[i];
+                            }
+                            savedPlayerDatas[activeIndex].whoAmI = (byte)p;
+                            activeIndex++;
+                        }
+                    }
                 }
 
                 player.AddBuff(ModContent.BuffType<BitesTheDust>(), 5 * 60 * 60);      //So it doesn't save
                 mPlayer.standChangingLocked = true;
 
                 savedWorldData = new WorldData();
-                savedWorldData.worldTime = (int)Main.time;
+                savedWorldData.worldTime = Main.time;
                 savedWorldData.npcData = new NPCData[Main.maxNPCs];
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
@@ -148,6 +198,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 }
                 Projectile.netUpdate = true;
                 saveDataCreated = true;
+                Main.NewText("Data Reset");
             }
 
             if (SpecialKeyPressed() && bitesTheDustActive && btdStartDelay <= 0)
@@ -156,7 +207,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BiteTheDustEffect"));
+                    SoundEngine.PlaySound(BtdWarpSoundEffect);
+                    SyncCall.SyncBTD(player.whoAmI, true);
                 }
                 else
                     btdStartDelay = 205;
@@ -169,25 +221,30 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
-                    SoundStyle btdSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/BiteTheDust");
-                    btdSound.Volume = MyPlayer.ModSoundsVolume;
-                    SoundEngine.PlaySound(btdSound, Projectile.Center);
+                    SoundEngine.PlaySound(BtdSound, Projectile.Center);
+                    SyncCall.SyncBTD(player.whoAmI, true);
                     Projectile.netUpdate = true;
                 }
             }
-            if (bitesTheDustActive && !bitesTheDustActivated)       //Records
+            if (bitesTheDustActive && !bitesTheDustActivated && saveDataCreated)       //Records
             {
-                if (!saveDataCreated)
-                    return;
-
                 btdPositionSaveTimer++;
                 if (btdPositionSaveTimer >= 30)
                 {
                     btdPositionSaveTimer = 0;
                     btdPositionIndex++;
-                    btdPlayerPositions[btdPositionIndex] = player.position;
-                    btdPlayerVelocities[btdPositionIndex] = -player.velocity;
+                    if (Main.netMode == NetmodeID.SinglePlayer)
+                    {
+                        btdPlayerPositions.Add(player.position);
+                        btdPlayerVelocities.Add(-player.velocity);
+                    }
+                    else
+                    {
+                        btdPlayerPositions.Add(Main.player[Main.myPlayer].position);
+                        btdPlayerVelocities.Add(-Main.player[Main.myPlayer].velocity);
+                    }
                     amountOfSavedData++;
+                    Main.NewText(btdPositionIndex);
                 }
             }
             if (bitesTheDustActivated)      //Actual activation
@@ -196,6 +253,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 currentRewindTime++;
                 mPlayer.bitesTheDustActive = true;
                 mPlayer.biteTheDustEffectProgress = (float)currentRewindTime / (float)totalRewindTime;
+                if (Main.netMode == NetmodeID.MultiplayerClient && Projectile.owner != Main.myPlayer)
+                    Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().biteTheDustEffectProgress = (float)currentRewindTime / (float)totalRewindTime;
+                Main.time = MathHelper.Lerp((float)Main.time, (float)savedWorldData.worldTime, mPlayer.biteTheDustEffectProgress);
+                //Main.NewText(mPlayer.biteTheDustEffectProgress);
                 if (btdRevertTimer >= btdRevertTime)
                 {
                     btdRevertTime = (int)(btdRevertTime * 0.8f);
@@ -203,30 +264,83 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         btdRevertTime = 2;
 
                     btdRevertTimer = 0;
-                    player.position = btdPlayerPositions[btdPositionIndex];
-                    player.velocity = btdPlayerVelocities[btdPositionIndex];
+                    if (Main.netMode == NetmodeID.SinglePlayer)
+                    {
+                        player.position = btdPlayerPositions[btdPositionIndex];
+                        player.velocity = btdPlayerVelocities[btdPositionIndex];
+                    }
+                    else
+                    {
+                        if (btdPlayerPositions != null && btdPositionIndex < btdPlayerPositions.Count)
+                        {
+                            Main.player[Main.myPlayer].position = btdPlayerPositions[btdPositionIndex];
+                            Main.player[Main.myPlayer].velocity = btdPlayerVelocities[btdPositionIndex];
+                        }
+                    }
                     btdPositionIndex--;
+                    Main.NewText(btdPositionIndex);
                     if (btdPositionIndex <= 0)
                     {
                         bitesTheDustActivated = false;
                         mPlayer.bitesTheDustActive = false;
-                        player.statLife = savedPlayerData.playerBTDHealth;
-                        player.position = savedPlayerData.playerBTDPos;
-                        player.inventory = savedPlayerData.playerBTDInventory;
-                        player.ChangeDir(savedPlayerData.playerDirection);
-                        player.ClearBuff(ModContent.BuffType<BitesTheDust>());
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(120));
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick"));
-
-                        for (int i = 0; i < savedPlayerData.buffTypes.Length; i++)
-                        {
-                            player.buffType[i] = savedPlayerData.buffTypes[i];
-                            player.buffTime[i] = savedPlayerData.buffTimes[i];
-                        }
                         mPlayer.biteTheDustEffectProgress = 0f;
                         mPlayer.standChangingLocked = false;
+                        Main.NewText("End");
+                        if (Main.netMode == NetmodeID.SinglePlayer)
+                        {
+                            player.statLife = savedPlayerDatas[0].playerBTDHealth;
+                            player.position = savedPlayerDatas[0].playerBTDPos;
+                            player.velocity = Vector2.Zero;
+                            player.inventory = savedPlayerDatas[0].playerBTDInventory;
+                            player.ChangeDir(savedPlayerDatas[0].playerDirection);
+                            player.ClearBuff(ModContent.BuffType<BitesTheDust>());
+                            for (int i = 0; i < savedPlayerDatas[0].buffTypes.Length; i++)
+                            {
+                                player.buffType[i] = savedPlayerDatas[0].buffTypes[i];
+                                player.buffTime[i] = savedPlayerDatas[0].buffTimes[i];
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < savedPlayerDatas.Length; i++)
+                            {
+                                if (!savedPlayerDatas[i].active)
+                                    continue;
+
+                                Player otherPlayer = Main.player[savedPlayerDatas[i].whoAmI];
+                                if (otherPlayer.active)
+                                {
+                                    otherPlayer.statLife = savedPlayerDatas[i].playerBTDHealth;
+                                    otherPlayer.position = savedPlayerDatas[i].playerBTDPos;
+                                    otherPlayer.velocity = Vector2.Zero;
+                                    if (savedPlayerDatas[i].whoAmI == Main.myPlayer)
+                                        otherPlayer.inventory = savedPlayerDatas[i].playerBTDInventory;
+                                    otherPlayer.ChangeDir(savedPlayerDatas[i].playerDirection);
+                                    otherPlayer.ClearBuff(ModContent.BuffType<BitesTheDust>());
+
+                                    for (int b = 0; b < savedPlayerDatas[i].buffTypes.Length; b++)
+                                    {
+                                        otherPlayer.buffType[b] = savedPlayerDatas[i].buffTypes[b];
+                                        otherPlayer.buffTime[b] = savedPlayerDatas[i].buffTimes[b];
+                                    }
+                                }
+                            }
+                        }
 
                         Main.time = savedWorldData.worldTime;
+                        SoundEngine.PlaySound(kqClickSound);
+                        if (Projectile.owner == Main.myPlayer)
+                        {
+                            SyncCall.SyncBTD(player.whoAmI, false);
+                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(120));
+                        }
+                        if (Main.netMode != NetmodeID.SinglePlayer && Projectile.owner != Main.myPlayer)
+                        {
+                            Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().bitesTheDustActive = false;
+                            Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().biteTheDustEffectProgress = 0f;
+                            JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.BiteTheDustEffect, false);
+                            JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BiteTheDustEffect, 0f);
+                        }
                         /*for (int i = 0; i < Main.maxNPCs; i++)
                         {
                             NPCData savedData = savedWorldData.npcData[i];
@@ -282,9 +396,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         }
                     }
                     if (Projectile.frame >= 5)
-                    {
                         Projectile.frame = 0;
-                    }
                 }
                 else if (!secondaryAbilityFrames)
                 {
@@ -298,7 +410,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     secondaryAbilityFrames = true;
                     Projectile.ai[0] = 1f;      //to detonate all bombos
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick"));
+                    SoundEngine.PlaySound(kqClickSound);
                     shootCount += 45;
                 }
                 if (secondaryAbilityFrames && Projectile.ai[0] == 1f)
@@ -321,9 +433,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     idleFrames = false;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
-                    {
                         Projectile.direction = -1;
-                    }
                     Projectile.spriteDirection = Projectile.direction;
 
                     if (attackFrames && Projectile.frame == 4 && shootCount <= 0)
@@ -333,9 +443,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             shootCount += newShootTime;
                             Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
                             int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<ExplosiveBubble>(), newBubbleDamage, 6f, Projectile.owner, 0f, Projectile.whoAmI);

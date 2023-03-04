@@ -19,19 +19,19 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override int HalfStandHeight => 28;
         public override int FistWhoAmI => 15;
         public override int TierNumber => 4;
-        public override int StandOffset => 20;
-        public override int standYOffset => 10;
+        public override Vector2 StandOffset => new Vector2(10, 0);
+        public override Vector2 ManualIdleHoverOffset => new Vector2(0, -10);
         public override StandAttackType StandType => StandAttackType.Melee;
 
-        private int ACT = 3;
+        private const int ActNumber = 3;
         private int changeActCooldown = 20;
-        private int onlyOneTarget = 0;
         private int targetPlayer = -1;
         private int targetNPC = -1;
 
         private bool threeFreeze = false;
         private bool returnToPlayer = false;
         private bool changeACT = false;
+        private bool targetFound = false;
 
         public override void OnSpawn(IEntitySource source)
         {
@@ -55,8 +55,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            mPlayer.currentEchoesAct = ACT;
-
+            mPlayer.currentEchoesAct = ActNumber;
             Rectangle rectangle = Rectangle.Empty;
             if (Projectile.owner == player.whoAmI)
                 rectangle = new Rectangle((int)(Main.MouseWorld.X - 10), (int)(Main.MouseWorld.Y - 10), 20, 20);
@@ -96,10 +95,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         NPC npc = Main.npc[n];
                         if (npc.active && !npc.hide && !npc.immortal)
                         {
-                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, npc.Center) <= 250f && npc.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15 && onlyOneTarget < 1)
+                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, npc.Center) <= 250f && npc.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15 && !targetFound)
                             {
-                                onlyOneTarget += 1;
+                                targetFound = true;
                                 targetNPC = npc.whoAmI;
+                                break;
                             }
                         }
                     }
@@ -108,12 +108,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         for (int p = 0; p < Main.maxPlayers; p++)
                         {
                             Player otherPlayer = Main.player[p];
-                            if (otherPlayer.active && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && onlyOneTarget < 1)
+                            if (otherPlayer.active && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && !targetFound)
                             {
                                 if (otherPlayer.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 250f && otherPlayer.whoAmI != player.whoAmI)
                                 {
-                                    onlyOneTarget += 1;
+                                    targetFound = true;
                                     targetPlayer = otherPlayer.whoAmI;
+                                    break;
                                 }
                             }
                         }
@@ -130,8 +131,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     Projectile.Kill();
                 }
             }
-            if (onlyOneTarget > 0)      //3freeze
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer)
             {
+                BasicPunchAI();
+            }
+
+            if (targetFound)      //3freeze
+            {
+                targetFound = false;
                 if (targetNPC != -1)
                 {
                     NPC npc = Main.npc[targetNPC];
@@ -141,9 +148,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15)
                         npc.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer += 30;
                     SyncCall.SyncStandEffectInfo(player.whoAmI, targetNPC, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
-                    onlyOneTarget = 0;
                 }
-                if (targetPlayer != -1 && onlyOneTarget != 0)
+                else if (targetPlayer != -1)
                 {
                     Player otherPlayer = Main.player[targetPlayer];
                     MyPlayer mOtherPlayer = otherPlayer.GetModPlayer<MyPlayer>();
@@ -153,20 +159,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         mOtherPlayer.echoesFreeze += 30;
                         SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, otherPlayer.whoAmI, 1, 0, 0, mPlayer.standDamageBoosts, 0f);
                     }
-                    onlyOneTarget = 0;
                 }
-            }
-
-            if (onlyOneTarget == 0)
-            {
                 targetPlayer = -1;
                 targetNPC = -1;
             }
 
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer)
-            {
-                BasicPunchAI();
-            }
             if (Projectile.Distance(player.Center) >= newMaxDistance + 10f && !returnToPlayer) //if suddenly stand is too far
                 returnToPlayer = true;
             if (Projectile.Distance(player.Center) <= 20f)
@@ -198,7 +195,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override void StandKillEffects()
         {
             Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             float remoteModeOnSpawn = 0f;
             if (Projectile.Distance(player.Center) >= newMaxDistance + 10f)
                 remoteModeOnSpawn = 2f;
@@ -237,8 +233,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override void PlayAnimation(string animationName)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-
             if (Main.netMode != NetmodeID.Server)
                 standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "/EchoesACT3_" + animationName);
 
@@ -261,8 +255,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         }
         public override void SendExtraStates(BinaryWriter writer)
         {
-            writer.Write(ACT);
-            writer.Write(onlyOneTarget);
             writer.Write(targetNPC);
             writer.Write(targetPlayer);
 
@@ -272,10 +264,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
-            ACT = reader.ReadInt32();
-            onlyOneTarget = reader.ReadInt32();
             targetNPC = reader.ReadInt32();
             targetPlayer = reader.ReadInt32();
+            if (targetNPC != -1 || targetPlayer != -1)
+                targetFound = true;
+            else
+                targetFound = false;
 
             threeFreeze = reader.ReadBoolean();
             returnToPlayer = reader.ReadBoolean();

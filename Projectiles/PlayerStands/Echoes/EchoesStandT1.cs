@@ -18,6 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override int FistWhoAmI => 15;
         public override int TierNumber => 1;
         public override StandAttackType StandType => StandAttackType.Melee;
+        public override bool CanUseRangeIndicators => false;
 
         public override string Texture
         {

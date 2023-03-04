@@ -208,7 +208,7 @@ namespace JoJoStands
         {
             Player drawPlayer = drawInfo.drawPlayer;
             MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
-            if (drawPlayer.active && mPlayer.showingCBLayer)
+            if (drawPlayer.active && mPlayer.standOut && mPlayer.standName == "CenturyBoy")
             {
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/CB").Value;
                 int drawX = (int)(drawInfo.Position.X + drawPlayer.width / 2f);

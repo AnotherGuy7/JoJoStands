@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -84,7 +85,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                     }
                 }
                 if (SpecialKeyPressed())
+                {
                     extendedBarrage = !extendedBarrage;
+                    Projectile.netUpdate = true;
+                }
                 if (!attackFrames)
                     StayBehind();
             }
@@ -92,6 +96,16 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             {
                 BasicPunchAI();
             }
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(extendedBarrage);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            extendedBarrage = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

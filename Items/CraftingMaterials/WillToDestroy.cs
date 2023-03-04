@@ -19,7 +19,7 @@ namespace JoJoStands.Items.CraftingMaterials
 
         public override void SetDefaults()
         {
-            Item.width = 26;
+            Item.width = 36;
             Item.height = 38;
             Item.maxStack = 99;
             Item.rare = ItemRarityID.Green;

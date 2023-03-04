@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override int HalfStandHeight => 36;
         public override int FistWhoAmI => 11;
         public override int TierNumber => 3;
-        public override int StandOffset => 0;
+        public override Vector2 StandOffset => Vector2.Zero;
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private Vector2 velocityAddition;
@@ -45,7 +45,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
                 {
-                    HandleDrawOffsets();
                     attackFrames = true;
                     idleFrames = false;
                     Projectile.netUpdate = true;
@@ -219,11 +218,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             if (mPlayer.creamExposedToVoid || mPlayer.creamVoidMode || mPlayer.creamExposedMode)
             {
-                HandleDrawOffsets();
-                Vector2 vector131 = player.Center;
-                vector131.X += (float)((player.width / 2) * player.direction);
-                vector131.Y -= -35 + HalfStandHeight;
-                Projectile.Center = Vector2.Lerp(Projectile.Center, vector131, 1f);
+                Vector2 position = player.Center;
+                position.X += (float)((player.width / 2) * player.direction);
+                position.Y -= -35 + HalfStandHeight;
+                Projectile.Center = Vector2.Lerp(Projectile.Center, position, 1f);
                 Projectile.velocity *= 0.5f;
                 Projectile.direction = (Projectile.spriteDirection = player.direction);
                 Projectile.rotation = 0;

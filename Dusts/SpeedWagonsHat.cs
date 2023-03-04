@@ -6,7 +6,6 @@ namespace JoJoStands.Dusts
 {
     public class SpeedWagonsHat : ModDust
     {
-
         public override void OnSpawn(Dust dust)
         {
             dust.noGravity = true;

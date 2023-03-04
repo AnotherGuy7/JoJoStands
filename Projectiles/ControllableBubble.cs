@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles
                 velocity *= BubbleAcceleration[tierIndex];
                 if (Math.Abs(Projectile.velocity.X - velocity.X) > MaxBubbleSpeed[tierIndex])
                     velocity.X = (Math.Abs(velocity.X) / velocity.X) * 0.02f;
-                if (Math.Abs(Projectile.velocity.X - velocity.X) > MaxBubbleSpeed[tierIndex])
+                if (Math.Abs(Projectile.velocity.Y - velocity.Y) > MaxBubbleSpeed[tierIndex])
                     velocity.Y = (Math.Abs(velocity.Y) / velocity.Y) * 0.02f;
 
                 Projectile.velocity += velocity;
