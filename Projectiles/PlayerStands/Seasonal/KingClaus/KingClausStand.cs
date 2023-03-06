@@ -21,6 +21,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override Vector2 StandOffset => Vector2.Zero;
         public override string PoseSoundName => "AllThatRemainsAreTheResults";
         public override StandAttackType StandType => StandAttackType.Melee;
+        private readonly SoundStyle timeskipSound = new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip");
 
         private Vector2 velocityAddition;
         private int timeskipStartDelay = 0;
@@ -72,8 +73,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (timeskipStartDelay >= 80)
                 {
                     shootCount += 15;
-                    player.AddBuff(ModContent.BuffType<PreTimeSkip>(), 10);
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
+                    player.AddBuff(ModContent.BuffType<SkippingTime>(), 10 * 60);
+                    SoundEngine.PlaySound(timeskipSound);
+                    SyncCall.SyncTimeskip(player.whoAmI, true);
                     timeskipStartDelay = 0;
                     preparingTimeskip = false;
                     mPlayer.kingCrimsonAbilityCooldownTime = 30;
@@ -222,12 +224,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 }
                 if (SecondSpecialKeyPressed() && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 {
-                    player.AddBuff(ModContent.BuffType<ForesightBuff>(), 540);
                     mPlayer.epitaphForesightActive = true;
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        ModNetHandler.EffectSync.SendForesight(256, player.whoAmI, true, player.whoAmI);
-                    }
+                    SyncCall.SyncForesight(player.whoAmI, true);
+                    player.AddBuff(ModContent.BuffType<ForesightBuff>(), 9 * 60);
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)

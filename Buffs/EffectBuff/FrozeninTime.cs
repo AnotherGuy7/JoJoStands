@@ -33,11 +33,16 @@ namespace JoJoStands.Buffs.EffectBuff
             player.maxRunSpeed = 0;
             player.moveSpeed = 0;
             player.mount._frameCounter = 2;
+            for (int b = 0; b < player.buffTime.Length; b++)
+            {
+                if (player.buffType[b] != Type)
+                    player.buffTime[b]++;
+            }
             if (JoJoStands.timestopOverrideStands.Contains(mPlayer.StandSlot.SlotItem.type))
                 mPlayer.ableToOverrideTimestop = true;
         }
 
-        public override void OnApply(Player player)
+        public override void OnBuffEnd(Player player)
         {
             player.GetModPlayer<MyPlayer>().ableToOverrideTimestop = false;
             if (Main.netMode != NetmodeID.Server)

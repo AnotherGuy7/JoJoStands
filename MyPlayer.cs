@@ -155,7 +155,6 @@ namespace JoJoStands
 
         public bool timestopActive;
         public bool timestopOwner;
-        public bool timeskipPreEffect;
         public bool timeskipActive;
         public bool backToZeroActive;
         public bool epitaphForesightActive;
@@ -437,15 +436,15 @@ namespace JoJoStands
         public override void PlayerDisconnect(Player player)        //runs for everyone that hasn't left
         {
             MyPlayer mPlayer = Player.GetModPlayer<MyPlayer>();
-            MyPlayer mPlayer2 = player.GetModPlayer<MyPlayer>();
+            MyPlayer otherMPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 for (int p = 0; p < Main.maxPlayers; p++)
                 {
                     Player otherPlayer = Main.player[p];
-                    MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>();
                     if (otherPlayer.active)
                     {
+                        MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>();
                         if (mPlayer.timestopActive && !otherPlayer.HasBuff(ModContent.BuffType<TheWorldBuff>()))       //if everyone has the effect and no one has the owner buff, turn it off
                         {
                             Main.NewText("The user has left, and time has begun to move once more...");
@@ -463,9 +462,9 @@ namespace JoJoStands
                     }
                 }
             }
-            mPlayer2.crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
-            mPlayer2.crazyDiamondMessageCooldown = 0;
-            mPlayer2.crazyDiamondDestroyedTileData.Clear();
+            otherMPlayer.crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
+            otherMPlayer.crazyDiamondMessageCooldown = 0;
+            otherMPlayer.crazyDiamondDestroyedTileData.Clear();
         }
 
         public override void ModifyScreenPosition()     //used HERO's Mods FlyCam as a reference for this
@@ -894,6 +893,19 @@ namespace JoJoStands
 
             if (timestopActive)
                 Main.windSpeedCurrent = 0f;
+            if (backToZeroActive)
+            {
+                timestopActive = false;
+                timeskipActive = false;
+                epitaphForesightActive = false;
+
+                if (Player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+                    Player.ClearBuff(ModContent.BuffType<TheWorldBuff>());
+                if (Player.HasBuff(ModContent.BuffType<SkippingTime>()))
+                    Player.ClearBuff(ModContent.BuffType<SkippingTime>());
+                if (Player.HasBuff(ModContent.BuffType<ForesightBuff>()))
+                    Player.ClearBuff(ModContent.BuffType<ForesightBuff>());
+            }
             if (PlayerInput.Triggers.Current.SmartSelect || Player.dead)
                 canStandBasicAttack = false;
             if (hotbarLocked && standOut && standControlStyle == StandControlStyle.Manual)
@@ -1613,20 +1625,7 @@ namespace JoJoStands
                     JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopGreyscaleEffect);
                     JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopEffect);
                     JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.EpitaphRedEffect);
-                    JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.BtZGreenEffect);
                     JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestkipEffect);
-
-                    if (Player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
-                        Player.ClearBuff(ModContent.BuffType<TheWorldBuff>());
-                    if (Player.HasBuff(ModContent.BuffType<SkippingTime>()))
-                        Player.ClearBuff(ModContent.BuffType<SkippingTime>());
-                    if (Player.HasBuff(ModContent.BuffType<ForesightBuff>()))
-                        Player.ClearBuff(ModContent.BuffType<ForesightBuff>());
-
-                    timestopActive = false;     //second, get rid of the effects from everyone
-                    timeskipActive = false;
-                    timeskipPreEffect = false;
-                    epitaphForesightActive = false;
                 }
                 JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.BtZGreenEffect, backToZeroActive);
                 JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.EpitaphRedEffect, epitaphForesightActive);

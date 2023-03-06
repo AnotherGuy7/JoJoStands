@@ -43,7 +43,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         private int messageCooldown = 0;
 
-        public override void OnSpawn(IEntitySource source)
+        public override void ExtraSpawnEffects()
         {
             if (Projectile.ai[0] == 1f)
                 remoteMode = true;

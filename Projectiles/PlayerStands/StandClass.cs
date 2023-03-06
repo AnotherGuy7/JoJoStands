@@ -1,5 +1,6 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
+using JoJoStands.Dusts;
 using JoJoStands.Networking;
 using JoJoStands.Projectiles.PlayerStands.Echoes;
 using Microsoft.Xna.Framework;
@@ -10,6 +11,7 @@ using System;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
@@ -206,8 +208,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_start"));
 
             player.AddBuff(ModContent.BuffType<TheWorldBuff>(), seconds * 60, true);
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModNetHandler.EffectSync.SendTimestop(256, player.whoAmI, true, player.whoAmI);
+            SyncCall.SyncTimestop(player.whoAmI, true);
         }
 
         /// <summary>
@@ -695,6 +696,25 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (Projectile.netUpdate)       //It's put here because we don't want to sync this all the time. Only whenever this method is called (Idles).
                 SyncSounds();
         }
+
+        public override sealed void OnSpawn(IEntitySource source)
+        {
+            ExtraSpawnEffects();
+
+            int amountOfParticles = Main.rand.Next(4, 11);
+            int[] dustTypes = new int[3] { ModContent.DustType<StandSummonParticles>(), ModContent.DustType<StandSummonShine1>(), ModContent.DustType<StandSummonShine2>() };
+            for (int i = 0; i < amountOfParticles; i++)
+            {
+                int dustType = dustTypes[Main.rand.Next(0, 3)];
+                Dust.NewDust(Projectile.position, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
+            }
+        }
+
+        /// <summary>
+        /// Gets called when the Stand is spawned.
+        /// </summary>
+        public virtual void ExtraSpawnEffects()
+        { }
 
         /// <summary>
         /// Updates all client-side stand info.

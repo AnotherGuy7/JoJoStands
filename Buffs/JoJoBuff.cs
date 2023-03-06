@@ -5,6 +5,8 @@ namespace JoJoStands.Buffs
 {
     public class JoJoBuff : ModBuff
     {
+        public virtual bool ClearOnDeath { get; } = false;
+
         /// <summary>
         /// Gets called when this buff is applied to a player.
         /// </summary>
@@ -30,9 +32,24 @@ namespace JoJoStands.Buffs
             UpdateBuffOnPlayer(player);
             if (!player.HasBuff(Type))
                 OnBuffEnd(player);
+            if (ClearOnDeath && player.dead)
+            {
+                player.ClearBuff(player.buffType[buffIndex]);
+                OnBuffEnd(player);
+            }
         }
 
         public virtual void UpdateBuffOnPlayer(Player player)
+        { }
+
+        public override sealed bool RightClick(int buffIndex)
+        {
+            OnBuffRightClick(Main.player[Main.myPlayer], buffIndex);
+            OnBuffEnd(Main.player[Main.myPlayer]);      //We pass in the Main.myPlayer because the buff can only be right-clicked by that player.
+            return true;
+        }
+
+        public virtual void OnBuffRightClick(Player player, int buffIndex)
         { }
 
         public Player GetDebuffOwner(NPC npc) => Main.player[npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().standDebuffEffectOwner];

@@ -1,3 +1,4 @@
+using JoJoStands.NPCs;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -7,15 +8,11 @@ namespace JoJoStands.Networking
 {
     public class EffectPacketHandler : PacketHandler
     {
-        public const byte Timestop = 0;
-        public const byte TimestopValidation = 1;
-        public const byte Timeskip = 2;
-        public const byte Timeskip2 = 3;
-        public const byte BacktoZero = 4;
-        public const byte BacktoZero2 = 5;
-        public const byte Foresight = 6;
-        public const byte Foresight2 = 7;
-        public const byte BitesTheDust = 8;
+        public const byte TimestopSync = 0;
+        public const byte TimeskipSync = 1;
+        public const byte BacktoZeroSync = 2;
+        public const byte ForesightSync = 3;
+        public const byte BitesTheDustSync = 4;
 
         public EffectPacketHandler(byte handlerType) : base(handlerType)
         { }
@@ -25,249 +22,157 @@ namespace JoJoStands.Networking
             byte messageType = reader.ReadByte();
             switch (messageType)
             {
-                case Timestop:
+                case TimestopSync:
                     ReceiveTimestop(reader, fromWho);
                     break;
-                case TimestopValidation:
-                    ReceiveTimestopFromAffected(reader, fromWho);
-                    break;
-                case Timeskip:
+                case TimeskipSync:
                     ReceiveTimeskip(reader, fromWho);
                     break;
-                case Timeskip2:
-                    ReceiveTimeskipFromAffected(reader, fromWho);
+                case BacktoZeroSync:
+                    ReceiveBackToZero(reader, fromWho);
                     break;
-                case BacktoZero:
-                    ReceiveBTZ(reader, fromWho);
-                    break;
-                case BacktoZero2:
-                    ReceiveBTZpFromAffected(reader, fromWho);
-                    break;
-                case Foresight:
+                case ForesightSync:
                     ReceiveForesight(reader, fromWho);
                     break;
-                case Foresight2:
-                    ReceiveForesightFromAffected(reader, fromWho);
-                    break;
-                case BitesTheDust:
+                case BitesTheDustSync:
                     ReceiveBTD(reader, fromWho);
                     break;
             }
         }
 
-        public void SendTimestop(int toWho, int fromWho, bool timestopValue, int timestopOwner)         //OR packet.Write(Main.player[fromWho].GetModPlayer<MyPlayer>().TheWorldEffect);  if you want to simplify using the method
+        /// <summary>
+        /// Sends a packet with information on the timestop's state and who owns it.
+        /// </summary>
+        /// <param name="toWho">Who to send the packet to. It's best to leave this as 256. (The server)</param>
+        /// <param name="fromWho"></param>
+        /// <param name="timestopValue"></param>
+        /// <param name="timestopOwner">The owner of the timestop. Leave as -1 if there is no owner.</param>
+        public void SendTimestop(int toWho, int fromWho, bool timestopValue, short timestopOwner = -1)         //OR packet.Write(Main.player[fromWho].GetModPlayer<MyPlayer>().TheWorldEffect);  if you want to simplify using the method
         {
-            ModPacket packet = CreatePacket(Timestop);
+            ModPacket packet = CreatePacket(TimestopSync);
             packet.Write(timestopValue);
             packet.Write(timestopOwner);
-            packet.Send(toWho, fromWho);
-        }
-
-        public void SendTimestopBackToOwner(int toWho, int fromWho, bool timestopValue, int affectedPlayer)
-        {
-            ModPacket packet = CreatePacket(TimestopValidation);
-            packet.Write(timestopValue);
-            packet.Write(affectedPlayer);
             packet.Send(toWho, fromWho);
         }
 
         public void ReceiveTimestop(BinaryReader reader, int fromWho)
         {
             bool timestopValue = reader.ReadBoolean();
-            int timestopOwner = reader.ReadInt32();
+            short timestopOwner = reader.ReadInt16();
             if (Main.netMode != NetmodeID.Server)
             {
-                Main.player[timestopOwner].GetModPlayer<MyPlayer>().timestopActive = timestopValue;
-                Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timestopActive = timestopValue;
-                if (timestopValue)
+                for (int p = 0; p < Main.maxPlayers; p++)
                 {
-                    Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timestopEffectDurationTimer = 60;
+                    Player otherPlayer = Main.player[p];
+                    if (otherPlayer.active)
+                    {
+                        otherPlayer.GetModPlayer<MyPlayer>().timestopActive = timestopValue;
+                        if (p == timestopOwner)
+                            otherPlayer.GetModPlayer<MyPlayer>().timestopOwner = true;
+                        if (!timestopValue && otherPlayer.GetModPlayer<MyPlayer>().timestopOwner)
+                            otherPlayer.GetModPlayer<MyPlayer>().timestopOwner = false;
+
+                    }
                 }
-                else
-                {
-                    Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timestopEffectDurationTimer = 60;
-                    //JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.TimestopGreyscaleEffect);
-                }
-                SendTimestopBackToOwner(timestopOwner, Main.myPlayer, timestopValue, Main.myPlayer);
+                Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timestopEffectDurationTimer = 60;
             }
             else
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                for (int n = 0; n < Main.maxNPCs; n++)
                 {
-                    NPC npc = Main.npc[i];
+                    NPC npc = Main.npc[n];
                     if (npc.active)
-                    {
-                        npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().frozenInTime = timestopValue;
-                    }
+                        npc.GetGlobalNPC<JoJoGlobalNPC>().frozenInTime = timestopValue;
                 }
                 SendTimestop(-1, fromWho, timestopValue, timestopOwner);
             }
         }
 
-        public void ReceiveTimestopFromAffected(BinaryReader reader, int fromWho)
+        public void SendTimeskip(int toWho, int fromWho, bool timeskipValue)
         {
-            bool timestopValue = reader.ReadBoolean();
-            int affectedPlayer = reader.ReadInt32();
-            if (Main.netMode != NetmodeID.Server)
-            {
-                Main.player[affectedPlayer].GetModPlayer<MyPlayer>().timestopActive = timestopValue;
-            }
-            else
-            {
-                SendTimestopBackToOwner(-1, fromWho, timestopValue, affectedPlayer);
-            }
-        }
-
-        public void SendTimeskip(int toWho, int fromWho, bool timeskipValue, int timeskipOwner)
-        {
-            ModPacket packet = CreatePacket(Timeskip);
+            ModPacket packet = CreatePacket(TimeskipSync);
             packet.Write(timeskipValue);
-            packet.Write(timeskipOwner);
-            packet.Send(toWho, fromWho);
-        }
-
-        public void SendTimeskipBackToOwner(int toWho, int fromWho, bool timeskipValue, int affectedPlayer)
-        {
-            ModPacket packet = CreatePacket(Timeskip2);
-            packet.Write(timeskipValue);
-            packet.Write(affectedPlayer);
             packet.Send(toWho, fromWho);
         }
 
         public void ReceiveTimeskip(BinaryReader reader, int fromWho)
         {
             bool timeskipValue = reader.ReadBoolean();
-            int timeskipOwner = reader.ReadInt32();
             if (Main.netMode != NetmodeID.Server)
             {
-                Main.player[timeskipOwner].GetModPlayer<MyPlayer>().timeskipActive = timeskipValue;
-                Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().timeskipActive = timeskipValue;
-                SendTimeskipBackToOwner(timeskipOwner, Main.myPlayer, timeskipValue, Main.myPlayer);
+                for (int p = 0; p < Main.maxPlayers; p++)
+                {
+                    Player otherPlayer = Main.player[p];
+                    if (otherPlayer.active)
+                        otherPlayer.GetModPlayer<MyPlayer>().timeskipActive = timeskipValue;
+                }
             }
             else
             {
-                SendTimeskip(-1, fromWho, timeskipValue, timeskipOwner);
+                SendTimeskip(-1, fromWho, timeskipValue);
             }
         }
 
-        public void ReceiveTimeskipFromAffected(BinaryReader reader, int fromWho)
+        public void SendBackToZero(int toWho, int fromWho, bool backToZeroValue)
         {
-            bool timeskipValue = reader.ReadBoolean();
-            int affectedPlayer = reader.ReadInt32();
-            if (Main.netMode != NetmodeID.Server)
-            {
-                Main.player[affectedPlayer].GetModPlayer<MyPlayer>().timeskipActive = timeskipValue;
-            }
-            else
-            {
-                SendTimeskipBackToOwner(-1, fromWho, timeskipValue, affectedPlayer);
-            }
-        }
-
-        public void SendBTZ(int toWho, int fromWho, bool BTZValue, int BTZOwner)
-        {
-            ModPacket packet = CreatePacket(BacktoZero);
-            packet.Write(BTZValue);
-            packet.Write(BTZOwner);
+            ModPacket packet = CreatePacket(BacktoZeroSync);
+            packet.Write(backToZeroValue);
             packet.Send(toWho, fromWho);
         }
 
-        public void SendBTZBackToOwner(int toWho, int fromWho, bool BTZValue, int affectedPlayer)
+        public void ReceiveBackToZero(BinaryReader reader, int fromWho)
         {
-            ModPacket packet = CreatePacket(BacktoZero2);
-            packet.Write(BTZValue);
-            packet.Write(affectedPlayer);
-            packet.Send(toWho, fromWho);
-        }
-
-        public void ReceiveBTZ(BinaryReader reader, int fromWho)
-        {
-            bool BTZValue = reader.ReadBoolean();
-            int BTZOwner = reader.ReadInt32();
+            bool backToZeroValue = reader.ReadBoolean();
             if (Main.netMode != NetmodeID.Server)
             {
-                Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().backToZeroActive = BTZValue;
-                Main.player[BTZOwner].GetModPlayer<MyPlayer>().backToZeroActive = BTZValue;
-                SendBTZBackToOwner(BTZOwner, Main.myPlayer, BTZValue, Main.myPlayer);
+                for (int p = 0; p < Main.maxPlayers; p++)
+                {
+                    Player otherPlayer = Main.player[p];
+                    if (otherPlayer.active)
+                        otherPlayer.GetModPlayer<MyPlayer>().backToZeroActive = backToZeroValue;
+                }
             }
             else
             {
-                SendBTZ(-1, fromWho, BTZValue, BTZOwner);
+                SendBackToZero(-1, fromWho, backToZeroValue);
             }
         }
 
-        public void ReceiveBTZpFromAffected(BinaryReader reader, int fromWho)
+        public void SendForesight(int toWho, int fromWho, bool foresightValue)
         {
-            bool BTZValue = reader.ReadBoolean();
-            int affectedPlayer = reader.ReadInt32();
-            if (Main.netMode != NetmodeID.Server)
-            {
-                Main.player[affectedPlayer].GetModPlayer<MyPlayer>().backToZeroActive = BTZValue;
-            }
-            else
-            {
-                SendBTZBackToOwner(-1, fromWho, BTZValue, affectedPlayer);
-            }
-        }
-
-        public void SendForesight(int toWho, int fromWho, bool foresightValue, int foresightOwner)
-        {
-            ModPacket packet = CreatePacket(Foresight);
+            ModPacket packet = CreatePacket(ForesightSync);
             packet.Write(foresightValue);
-            packet.Write(foresightOwner);
-            packet.Send(toWho, fromWho);
-        }
-
-        public void SendForesightBackToOwner(int toWho, int fromWho, bool foresightValue, int affectedPlayer)
-        {
-            ModPacket packet = CreatePacket(Foresight2);
-            packet.Write(foresightValue);
-            packet.Write(affectedPlayer);
             packet.Send(toWho, fromWho);
         }
 
         public void ReceiveForesight(BinaryReader reader, int fromWho)
         {
             bool foresightValue = reader.ReadBoolean();
-            int foresightOwner = reader.ReadInt32();
             if (Main.netMode != NetmodeID.Server)
             {
-                Main.player[foresightOwner].GetModPlayer<MyPlayer>().epitaphForesightActive = foresightValue;
-                Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().epitaphForesightActive = foresightValue;
-                SendForesightBackToOwner(foresightOwner, Main.myPlayer, foresightValue, Main.myPlayer);
+                for (int p = 0; p < Main.maxPlayers; p++)
+                {
+                    Player otherPlayer = Main.player[p];
+                    if (otherPlayer.active)
+                        otherPlayer.GetModPlayer<MyPlayer>().epitaphForesightActive = foresightValue;
+                }
             }
             else
             {
-                SendForesight(-1, fromWho, foresightValue, foresightOwner);
+                SendForesight(-1, fromWho, foresightValue);
             }
         }
 
-        public void ReceiveForesightFromAffected(BinaryReader reader, int fromWho)
+        public void SendBitesTheDust(int toWho, int fromWho, bool btdValue)
         {
-            bool foresightValue = reader.ReadBoolean();
-            int affectedPlayer = reader.ReadInt32();
-            if (Main.netMode != NetmodeID.Server)
-            {
-                Main.player[affectedPlayer].GetModPlayer<MyPlayer>().epitaphForesightActive = foresightValue;
-            }
-            else
-            {
-                SendForesightBackToOwner(-1, fromWho, foresightValue, affectedPlayer);
-            }
-        }
-
-        public void SendBTD(int toWho, int fromWho, bool btdValue, byte btdOwner)
-        {
-            ModPacket packet = CreatePacket(BitesTheDust);
+            ModPacket packet = CreatePacket(BitesTheDustSync);
             packet.Write(btdValue);
-            packet.Write(btdOwner);
             packet.Send(toWho, fromWho);
         }
 
         public void ReceiveBTD(BinaryReader reader, int fromWho)
         {
             bool btdValue = reader.ReadBoolean();
-            byte btdOwner = reader.ReadByte();
             if (Main.netMode != NetmodeID.Server)
             {
                 for (int p = 0; p < Main.maxPlayers; p++)
@@ -279,7 +184,7 @@ namespace JoJoStands.Networking
             }
             else
             {
-                SendBTD(-1, fromWho, btdValue, btdOwner);
+                SendBitesTheDust(-1, fromWho, btdValue);
             }
         }
     }

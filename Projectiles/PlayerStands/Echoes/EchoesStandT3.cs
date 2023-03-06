@@ -45,7 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private bool changeACT = false;
         private bool evolve = false;
 
-        public override void OnSpawn(IEntitySource source)
+        public override void ExtraSpawnEffects()
         {
             if (Projectile.ai[0] == 1f)
                 remoteMode = true;

@@ -3,11 +3,11 @@ using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.IO;
 
 namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 {
@@ -23,6 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override string PoseSoundName => "AllThatRemainsAreTheResults";
         public override string SpawnSoundName => "King Crimson";
         public override StandAttackType StandType => StandAttackType.Melee;
+        private readonly SoundStyle timeskipSound = new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip");
 
         private int timeskipStartDelay = 0;
         private int blockSearchTimer = 0;
@@ -80,8 +81,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 timeskipStartDelay++;
                 if (timeskipStartDelay >= 80)
                 {
-                    player.AddBuff(ModContent.BuffType<PreTimeSkip>(), 10);
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
+                    mPlayer.timeskipActive = true;
+                    player.AddBuff(ModContent.BuffType<SkippingTime>(), 3 * 60);
+                    SyncCall.SyncTimeskip(player.whoAmI, true);
+                    SoundEngine.PlaySound(timeskipSound);
                     timeskipStartDelay = 0;
                     preparingTimeskip = false;
                     mPlayer.kingCrimsonAbilityCooldownTime = 30;

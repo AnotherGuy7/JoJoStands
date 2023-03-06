@@ -42,10 +42,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<BacktoZero>()))
             {
-                player.AddBuff(ModContent.BuffType<BacktoZero>(), 1200);
                 mPlayer.backToZeroActive = true;
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    ModNetHandler.EffectSync.SendBTZ(256, player.whoAmI, true, player.whoAmI);
+                SyncCall.SyncBackToZero(player.whoAmI, true);
+                player.AddBuff(ModContent.BuffType<BacktoZero>(), 20 * 60);
             }
             if (mPlayer.timestopActive)
                 return;

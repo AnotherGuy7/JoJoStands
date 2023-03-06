@@ -17,7 +17,7 @@ namespace JoJoStands.Buffs.EffectBuff
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
-        private bool otherTimestopsActive = false;
+        private readonly SoundStyle timestopStopSound = new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_stop");
 
         public override void UpdateBuffOnPlayer(Player player)
         {
@@ -26,10 +26,11 @@ namespace JoJoStands.Buffs.EffectBuff
             mPlayer.ableToOverrideTimestop = true;
             if (!player.HasBuff(Type) || mPlayer.forceShutDownEffect)
             {
+                bool otherTimestopsActive = false;
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     mPlayer.timestopActive = false;
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_stop"));
+                    SoundEngine.PlaySound(timestopStopSound);
                 }
                 else
                 {
@@ -37,18 +38,19 @@ namespace JoJoStands.Buffs.EffectBuff
                     for (int p = 0; p < Main.maxPlayers; p++)
                     {
                         Player otherPlayer = Main.player[p];
-                        if (otherPlayer.active && p != Main.myPlayer && otherPlayer.HasBuff(Type))
+                        if (otherPlayer.active && p != player.whoAmI && otherPlayer.HasBuff(Type))
                         {
                             otherTimestopsActive = true;
-                            break;
+                            if (otherTimestopsActive)
+                                break;
                         }
                     }
 
                     if (Main.netMode == NetmodeID.MultiplayerClient && !otherTimestopsActive)
                     {
                         mPlayer.timestopActive = false;
-                        ModNetHandler.EffectSync.SendTimestop(256, player.whoAmI, false, player.whoAmI);
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_stop"));
+                        SyncCall.SyncTimestop(player.whoAmI, false);
+                        SoundEngine.PlaySound(timestopStopSound);
                     }
                 }
 

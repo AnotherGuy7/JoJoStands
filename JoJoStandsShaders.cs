@@ -42,6 +42,9 @@ namespace JoJoStands
 
         public static void ChangeShaderActiveState(string shaderName, bool active)
         {
+            if (ShaderActive(shaderName) == active)
+                return;
+
             if (active)
                 ActivateShader(shaderName);
             else

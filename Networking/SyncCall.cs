@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.EffectBuff;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Chat;
 using Terraria.ID;
@@ -42,13 +44,106 @@ namespace JoJoStands.Networking
                 ModNetHandler.PlayerSync.SendStandOut(256, whoAmI, standOut, standName, (byte)standTier, (byte)whoAmI);      //we send it to 256 cause it's the server
         }
 
-        public static void SyncBTD(int whoAmI, bool btdValue)
+        public static void SyncTimestop(int whoAmI, bool timestopValue)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                ModNetHandler.EffectSync.SendBTD(256, whoAmI, btdValue, (byte)whoAmI);      //we send it to 256 cause it's the server
+                if (timestopValue)
+                {
+                    for (int p = 0; p < Main.maxPlayers; p++)
+                    {
+                        Player otherPlayer = Main.player[p];
+                        if (otherPlayer.active)
+                        {
+                            otherPlayer.GetModPlayer<MyPlayer>().timestopActive = timestopValue;
+                            otherPlayer.GetModPlayer<MyPlayer>().timestopOwner = otherPlayer.HasBuff<TheWorldBuff>();
+                        }
+                    }
+                    ModNetHandler.EffectSync.SendTimestop(256, whoAmI, timestopValue, (short)whoAmI);
+                }
+                else
+                {
+                    bool otherTimestopsActive = false;
+                    for (int p = 0; p < Main.maxPlayers; p++)
+                    {
+                        if (p == whoAmI)
+                            continue;
 
-                for (int p = 0; p < Main.maxPlayers; p++)       //Check to see if this implimentation improves multiplayer effect reliability
+                        Player otherPlayer = Main.player[p];
+                        if (otherPlayer.active && otherPlayer.HasBuff<TheWorldBuff>() && otherPlayer.GetModPlayer<MyPlayer>().timestopOwner)
+                        {
+                            otherTimestopsActive = true;
+                            break;
+                        }
+                    }
+
+                    if (!otherTimestopsActive)
+                    {
+                        for (int p = 0; p < Main.maxPlayers; p++)
+                        {
+                            Player otherPlayer = Main.player[p];
+                            if (otherPlayer.active)
+                            {
+                                otherPlayer.GetModPlayer<MyPlayer>().timestopActive = timestopValue;
+                                otherPlayer.GetModPlayer<MyPlayer>().timestopOwner = false;
+                            }
+                        }
+                        ModNetHandler.EffectSync.SendTimestop(256, whoAmI, false);
+                    }
+                    else
+                        ModNetHandler.EffectSync.SendTimestop(256, whoAmI, true, (short)whoAmI);
+                }
+            }
+        }
+
+        public static void SyncTimeskip(int whoAmI, bool timeskipValue)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                ModNetHandler.EffectSync.SendTimeskip(256, whoAmI, timeskipValue);
+                for (int p = 0; p < Main.maxPlayers; p++)
+                {
+                    Player otherPlayer = Main.player[p];
+                    if (otherPlayer.active)
+                        otherPlayer.GetModPlayer<MyPlayer>().timeskipActive = timeskipValue;
+                }
+            }
+        }
+
+        public static void SyncBackToZero(int whoAmI, bool backtoZeroValue)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                ModNetHandler.EffectSync.SendBackToZero(256, whoAmI, backtoZeroValue);
+                for (int p = 0; p < Main.maxPlayers; p++)
+                {
+                    Player otherPlayer = Main.player[p];
+                    if (otherPlayer.active)
+                        otherPlayer.GetModPlayer<MyPlayer>().backToZeroActive = backtoZeroValue;
+                }
+            }
+        }
+
+        public static void SyncForesight(int whoAmI, bool foresightValue)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                ModNetHandler.EffectSync.SendForesight(256, whoAmI, foresightValue);
+                for (int p = 0; p < Main.maxPlayers; p++)
+                {
+                    Player otherPlayer = Main.player[p];
+                    if (otherPlayer.active)
+                        otherPlayer.GetModPlayer<MyPlayer>().epitaphForesightActive = foresightValue;
+                }
+            }
+        }
+
+        public static void SyncBitesTheDust(int whoAmI, bool btdValue)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                ModNetHandler.EffectSync.SendBitesTheDust(256, whoAmI, btdValue);      //we send it to 256 cause it's the server
+                for (int p = 0; p < Main.maxPlayers; p++)
                 {
                     Player otherPlayer = Main.player[p];
                     if (otherPlayer.active)

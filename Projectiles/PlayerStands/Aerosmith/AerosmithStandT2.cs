@@ -59,7 +59,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         private const float AerosmithHoverHeightOffset = 3.5f * 16f;
 
 
-        public override void OnSpawn(IEntitySource source)
+        public override void ExtraSpawnEffects()
         {
             aerosmithWhirrSound = AerosmithStandFinal.AerosmithWhirrSoundEffect.CreateInstance();
         }

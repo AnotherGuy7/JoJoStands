@@ -58,7 +58,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         public static SoundEffect AerosmithWhirrSoundEffect;
 
 
-        public override void OnSpawn(IEntitySource source)
+        public override void ExtraSpawnEffects()
         {
             aerosmithWhirrSound = AerosmithWhirrSoundEffect.CreateInstance();
         }

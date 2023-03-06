@@ -53,7 +53,7 @@ namespace JoJoStands.NPCs
         public int btZSaveTimer = 0;
         public int btzTotalRewindTime = 0;
         public int btzTotalRewindTimer = 0;
-        public int aiStyleSave = 0;
+        public int timeskipAIStyle = 0;
         public int lifeRegenIncrement = 0;
         public int lockRegenCounter = 0;
         public bool forceDeath = false;
@@ -315,7 +315,7 @@ namespace JoJoStands.NPCs
 
         public override bool PreAI(NPC npc)
         {
-            MyPlayer player = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
             if (taggedForDeathLoop > 0)
             {
                 taggedForDeathLoop--;
@@ -337,7 +337,7 @@ namespace JoJoStands.NPCs
                     deathLoopOwner = -1;
                 }
             }
-            if (!player.timeskipActive && !player.timestopActive && !player.backToZeroActive)
+            if (!mPlayer.timeskipActive && !mPlayer.timestopActive && !mPlayer.backToZeroActive)
             {
                 if (npc.aiStyle == 101510150 || npc.HasBuff(ModContent.BuffType<ImproperRestoration>()) || echoesThreeFreezeTimer != 0)
                     resetCooldown = 4;
@@ -449,7 +449,7 @@ namespace JoJoStands.NPCs
             if (zombieHightlightTimer > 0)
                 zombieHightlightTimer--;
 
-            if (player.timestopActive || frozenInTime)
+            if (mPlayer.timestopActive || frozenInTime)
             {
                 if (npc.velocity != Vector2.Zero)
                 {
@@ -464,7 +464,7 @@ namespace JoJoStands.NPCs
                 npc.netUpdate = true;
                 return false;
             }
-            if (player.backToZeroActive)
+            if (mPlayer.backToZeroActive)
             {
                 if (!affectedbyBtz)
                 {
@@ -516,56 +516,65 @@ namespace JoJoStands.NPCs
                 btzTotalRewindTimer = 0;
                 affectedbyBtz = false;
             }
-            if (player.timeskipPreEffect)
+            if (!mPlayer.timeskipActive)
             {
-                aiStyleSave = 0;
+                timeskipAIStyle = 0;
                 playerPositionOnSkip = Vector2.Zero;
             }
-            if (player.timeskipActive && !npc.townNPC && !npc.friendly && !npc.boss && !npc.immortal)
+            if (mPlayer.timeskipActive && !npc.townNPC && !npc.friendly && !npc.boss && !npc.immortal)
             {
                 if (playerPositionOnSkip == Vector2.Zero)
                 {
-                    playerPositionOnSkip = Main.player[PreTimeSkip.userIndex].position;
+                    int earliestTime = 10 * 60;
+                    int chosenPlayerIndex = 0;
+                    if (Main.netMode == NetmodeID.SinglePlayer)
+                    {
+                        playerPositionOnSkip = Main.player[Main.myPlayer].position;
+                    }
+                    else
+                    {
+                        for (int p = 0; p < Main.maxPlayers; p++)
+                        {
+                            Player otherPlayer = Main.player[p];
+                            if (otherPlayer.HasBuff<SkippingTime>() && otherPlayer.buffTime[otherPlayer.FindBuffIndex(ModContent.BuffType<SkippingTime>())] <= earliestTime)
+                            {
+                                earliestTime = otherPlayer.buffTime[otherPlayer.FindBuffIndex(ModContent.BuffType<SkippingTime>())];
+                                chosenPlayerIndex = p;
+                            }
+                        }
+                    }
+                    playerPositionOnSkip = Main.player[chosenPlayerIndex].position;
                 }
-                if (aiStyleSave == 0 && npc.aiStyle != 0)
+                if (timeskipAIStyle == 0 && npc.aiStyle != 0)
                 {
-                    aiStyleSave = npc.aiStyle;
+                    timeskipAIStyle = npc.aiStyle;
                     npc.aiStyle = 0;
                 }
                 if (npc.aiStyle == 0)
                 {
                     npc.velocity /= 2;
-                    if (npc.direction == -1)
-                    {
-                        npc.spriteDirection = 1;
-                    }
-                    if (npc.direction == 1)
-                    {
-                        npc.spriteDirection = -1;
-                    }
-                    if (playerPositionOnSkip.X > npc.position.X)
-                    {
-                        npc.velocity.X = 1f;
-                        npc.direction = 1;
-                    }
-                    if (playerPositionOnSkip.X < npc.position.X)
-                    {
-                        npc.velocity.X = -1f;
-                        npc.direction = -1;
-                    }
+                    npc.spriteDirection = -npc.direction;
                     if (npc.noGravity)
                     {
-                        if (playerPositionOnSkip.Y > npc.position.Y)
-                        {
-                            npc.velocity.X = -1f;
-                        }
-                        if (playerPositionOnSkip.Y < npc.position.Y)
+                        Vector2 velocity = npc.Center - playerPositionOnSkip;
+                        velocity.Normalize();
+                        npc.velocity = velocity;
+                        npc.direction = 1;
+                        if (velocity.X < 0f)
+                            npc.direction = -1;
+                    }
+                    else
+                    {
+                        if (playerPositionOnSkip.X > npc.position.X)
                         {
                             npc.velocity.X = 1f;
+                            npc.direction = 1;
                         }
-                    }
-                    if (!npc.noGravity)
-                    {
+                        if (playerPositionOnSkip.X < npc.position.X)
+                        {
+                            npc.velocity.X = -1f;
+                            npc.direction = -1;
+                        }
                         int tilesInFront = (int)((npc.Center.X + (float)(15 * npc.direction)) / 16f);
                         int tilesUnder = (int)((npc.position.Y + (float)npc.height - 16f) / 16f);
                         if (WorldGen.SolidTile((int)(npc.Center.X / 16f) + npc.direction, (int)(npc.Center.Y / 16f)) && !Collision.SolidTilesVersatile(tilesInFront - npc.direction * 2, tilesInFront - npc.direction, tilesUnder - 5, tilesUnder - 1) && !Collision.SolidTiles(tilesInFront, tilesInFront, tilesUnder - 5, tilesUnder - 3) && npc.ai[1] == 0f)
@@ -577,17 +586,17 @@ namespace JoJoStands.NPCs
                 }
                 return false;
             }
-            if (player.timeskipActive && npc.boss)
+            if (mPlayer.timeskipActive && npc.boss)
             {
                 npc.defense /= 2;
             }
-            if (!player.timeskipActive && npc.aiStyle == 0)
+            if (!mPlayer.timeskipActive && npc.aiStyle == 0)
             {
                 playerPositionOnSkip = Vector2.Zero;
-                npc.aiStyle = aiStyleSave;
-                aiStyleSave = 0;
+                npc.aiStyle = timeskipAIStyle;
+                timeskipAIStyle = 0;
             }
-            if (player.epitaphForesightActive && !npc.immortal)
+            if (mPlayer.epitaphForesightActive && !npc.immortal)
             {
                 applyingForesightPositions = true;
                 if (foresightSaveTimer > 0)
@@ -610,7 +619,7 @@ namespace JoJoStands.NPCs
                     }
                 }
             }
-            if (!player.epitaphForesightActive && applyingForesightPositions)
+            if (!mPlayer.epitaphForesightActive && applyingForesightPositions)
             {
                 if (!foresightResetIndex)
                 {

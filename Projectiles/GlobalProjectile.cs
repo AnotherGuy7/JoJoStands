@@ -150,10 +150,13 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (mPlayer.timeskipPreEffect)     //saves it, this is for projectiles like minions, controllable projectiles, etc.
-                preSkipVel = Projectile.velocity;
             if (mPlayer.timeskipActive)        //deploys it
+            {
+                if (preSkipVel == Vector2.Zero)
+                    preSkipVel = Projectile.velocity;
+
                 Projectile.velocity = preSkipVel;
+            }
             else
                 preSkipVel = Vector2.Zero;
 

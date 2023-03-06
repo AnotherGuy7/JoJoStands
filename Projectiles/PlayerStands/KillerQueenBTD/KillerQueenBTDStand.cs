@@ -106,15 +106,15 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             bitesTheDustActive = player.HasBuff(ModContent.BuffType<BitesTheDust>());
             if (!bitesTheDustActive && saveDataCreated)
                 saveDataCreated = false;
-            if (Main.netMode != NetmodeID.SinglePlayer && Projectile.owner != Main.myPlayer)
+            if (Main.netMode != NetmodeID.SinglePlayer && Main.myPlayer != Projectile.owner)
             {
                 Player otherPlayer = Main.player[Main.myPlayer];
                 if (otherPlayer.GetModPlayer<MyPlayer>().bitesTheDustActive && !bitesTheDustActivated)
                 {
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
-                    SoundEngine.PlaySound(BtdSound, Projectile.Center);
-                    Main.NewText("G");
+                    if (JoJoStands.SoundsLoaded)
+                        SoundEngine.PlaySound(BtdSound, Projectile.Center);
                 }
             }
 
@@ -126,6 +126,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 btdPlayerVelocities = new List<Vector2>() { player.velocity };
                 savedPlayerDatas = new PlayerData[Main.maxPlayers];
                 currentRewindTime = 0;
+                totalRewindTime = 0;
                 btdRevertTime = 35;
 
                 if (Main.netMode == NetmodeID.SinglePlayer)
@@ -198,7 +199,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 }
                 Projectile.netUpdate = true;
                 saveDataCreated = true;
-                Main.NewText("Data Reset");
             }
 
             if (SpecialKeyPressed() && bitesTheDustActive && btdStartDelay <= 0)
@@ -208,7 +208,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
                     SoundEngine.PlaySound(BtdWarpSoundEffect);
-                    SyncCall.SyncBTD(player.whoAmI, true);
+                    SyncCall.SyncBitesTheDust(player.whoAmI, true);
                 }
                 else
                     btdStartDelay = 205;
@@ -222,7 +222,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();
                     SoundEngine.PlaySound(BtdSound, Projectile.Center);
-                    SyncCall.SyncBTD(player.whoAmI, true);
+                    SyncCall.SyncBitesTheDust(player.whoAmI, true);
                     Projectile.netUpdate = true;
                 }
             }
@@ -244,11 +244,17 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         btdPlayerVelocities.Add(-Main.player[Main.myPlayer].velocity);
                     }
                     amountOfSavedData++;
-                    Main.NewText(btdPositionIndex);
                 }
             }
             if (bitesTheDustActivated)      //Actual activation
             {
+                if (totalRewindTime == 0 && Main.myPlayer != Projectile.owner)
+                {
+                    totalRewindTime = CalculateRewindTime();
+                    if (JoJoStands.SoundsLoaded)
+                        SoundEngine.PlaySound(BtdSound, Projectile.Center);
+                }
+
                 btdRevertTimer++;
                 currentRewindTime++;
                 mPlayer.bitesTheDustActive = true;
@@ -256,7 +262,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 if (Main.netMode == NetmodeID.MultiplayerClient && Projectile.owner != Main.myPlayer)
                     Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().biteTheDustEffectProgress = (float)currentRewindTime / (float)totalRewindTime;
                 Main.time = MathHelper.Lerp((float)Main.time, (float)savedWorldData.worldTime, mPlayer.biteTheDustEffectProgress);
-                //Main.NewText(mPlayer.biteTheDustEffectProgress);
                 if (btdRevertTimer >= btdRevertTime)
                 {
                     btdRevertTime = (int)(btdRevertTime * 0.8f);
@@ -278,14 +283,12 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         }
                     }
                     btdPositionIndex--;
-                    Main.NewText(btdPositionIndex);
                     if (btdPositionIndex <= 0)
                     {
                         bitesTheDustActivated = false;
                         mPlayer.bitesTheDustActive = false;
                         mPlayer.biteTheDustEffectProgress = 0f;
                         mPlayer.standChangingLocked = false;
-                        Main.NewText("End");
                         if (Main.netMode == NetmodeID.SinglePlayer)
                         {
                             player.statLife = savedPlayerDatas[0].playerBTDHealth;
@@ -293,7 +296,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             player.velocity = Vector2.Zero;
                             player.inventory = savedPlayerDatas[0].playerBTDInventory;
                             player.ChangeDir(savedPlayerDatas[0].playerDirection);
-                            player.ClearBuff(ModContent.BuffType<BitesTheDust>());
                             for (int i = 0; i < savedPlayerDatas[0].buffTypes.Length; i++)
                             {
                                 player.buffType[i] = savedPlayerDatas[0].buffTypes[i];
@@ -328,10 +330,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         }
 
                         Main.time = savedWorldData.worldTime;
+                        player.ClearBuff(ModContent.BuffType<BitesTheDust>());
                         SoundEngine.PlaySound(kqClickSound);
                         if (Projectile.owner == Main.myPlayer)
                         {
-                            SyncCall.SyncBTD(player.whoAmI, false);
+                            SyncCall.SyncBitesTheDust(player.whoAmI, false);
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(120));
                         }
                         if (Main.netMode != NetmodeID.SinglePlayer && Projectile.owner != Main.myPlayer)
