@@ -45,7 +45,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
         {
             CreateRecipe()
                 .AddIngredient(ItemID.AdamantiteBar, 10)
-                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 15)
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 12)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }

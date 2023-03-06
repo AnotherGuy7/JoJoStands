@@ -136,6 +136,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         private Vector2 rangeIndicatorSize;
         private Vector2 secondaryRangeIndicatorSize;
         private int netUpdateTimer = 0;
+        private int summonParticleTimer = 15;
         public float mouseX = 0f;
         public float mouseY = 0f;
         //private int rangeIndicatorSize = 0;
@@ -327,7 +328,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             Vector2 position = player.Center;
             float offsetX = 50f;
-            position.X += (12 + offsetX + ManualIdleHoverOffset.X + player.width / 2) * direction;
+            position.X += (12 + offsetX - ManualIdleHoverOffset.X + player.width / 2) * direction;
             position.Y -= -35f + HalfStandHeight - ManualIdleHoverOffset.Y;
             Projectile.Center = Vector2.Lerp(Projectile.Center, position, 0.2f);
             Projectile.velocity *= 0.8f;
@@ -699,15 +700,8 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override sealed void OnSpawn(IEntitySource source)
         {
+            summonParticleTimer = Main.rand.Next(6, 10 + 1);
             ExtraSpawnEffects();
-
-            int amountOfParticles = Main.rand.Next(4, 11);
-            int[] dustTypes = new int[3] { ModContent.DustType<StandSummonParticles>(), ModContent.DustType<StandSummonShine1>(), ModContent.DustType<StandSummonShine2>() };
-            for (int i = 0; i < amountOfParticles; i++)
-            {
-                int dustType = dustTypes[Main.rand.Next(0, 3)];
-                Dust.NewDust(Projectile.position, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
-            }
         }
 
         /// <summary>
@@ -751,6 +745,20 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             if (mPlayer.standType != (int)StandType)
                 mPlayer.standType = (int)StandType;
+
+            if (summonParticleTimer > 0)
+            {
+                summonParticleTimer--;
+                int amountOfParticles = Main.rand.Next(1, 2);
+                int[] dustTypes = new int[3] { ModContent.DustType<StandSummonParticles>(), ModContent.DustType<StandSummonShine1>(), ModContent.DustType<StandSummonShine2>() };
+                Vector2 dustSpawnOffset = StandOffset;
+                dustSpawnOffset.X *= Projectile.spriteDirection;
+                for (int i = 0; i < amountOfParticles; i++)
+                {
+                    int dustType = dustTypes[Main.rand.Next(0, 3)];
+                    Dust.NewDust(Projectile.position - new Vector2(Projectile.width, HalfStandHeight) + dustSpawnOffset, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
+                }
+            }
 
             if (MyPlayer.RangeIndicators && CanUseRangeIndicators && newMaxDistance > 0)
             {

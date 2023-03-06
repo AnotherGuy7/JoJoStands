@@ -32,11 +32,20 @@ namespace JoJoStands.Dusts
         {
             int frameCounter = (int)dust.customData;
             frameCounter++;
-            if (frameCounter >= 8)
+            if (frameCounter >= 3)
             {
                 dust.frame.Y += FrameHeight;
+                frameCounter = 0;
                 if (dust.frame.Y / FrameHeight >= 3)
-                    dust.active = false;
+                {
+                    if (Main.rand.Next(0, 3 + 1) == 0)
+                    {
+                        dust.position += new Vector2(Main.rand.Next(-16, 16 + 1), Main.rand.Next(-16, 16 + 1));
+                        dust.frame.Y = 0;
+                    }
+                    else
+                        dust.active = false;
+                }
             }
             dust.customData = frameCounter;
             return false;
@@ -59,11 +68,20 @@ namespace JoJoStands.Dusts
         {
             int frameCounter = (int)dust.customData;
             frameCounter++;
-            if (frameCounter >= 8)
+            if (frameCounter >= 3)
             {
                 dust.frame.Y += FrameSize;
+                frameCounter = 0;
                 if (dust.frame.Y / FrameSize >= 3)
-                    dust.active = false;
+                {
+                    if (Main.rand.Next(0, 2 + 1) == 0)
+                    {
+                        dust.position += new Vector2(Main.rand.Next(-4, 4 + 1), Main.rand.Next(-4, 4 + 1));
+                        dust.frame.Y = 0;
+                    }
+                    else
+                        dust.active = false;
+                }
             }
             dust.customData = frameCounter;
             return false;

@@ -9,7 +9,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Family Photo");
-            Tooltip.SetDefault("Increases damage resistance from a successful stand melee attack");
+            Tooltip.SetDefault("Successful Stand Melee Attacks reduce damage taken.");
             SacrificeTotal = 1;
         }
 
@@ -25,7 +25,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().familyPhoto = true;
+            player.GetModPlayer<MyPlayer>().familyPhotoEquipped = true;
         }
     }
 }

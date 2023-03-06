@@ -9,7 +9,8 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Arrow Earring");
-            Tooltip.SetDefault("10% of damage aganist an enemy is transmitted to nearby creatures\nTransmitted damage is doubled if user not damaged for a long time");
+            Tooltip.SetDefault("When attacking enemies with Stand Attacks, 10% of damage against enemies is transmitted to nearby enemies." +
+                "\nTransmitted damage is doubled if user not damaged for a long time.");
             SacrificeTotal = 1;
         }
 
@@ -25,7 +26,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().arrowEarring = true;
+            player.GetModPlayer<MyPlayer>().arrowEarringEquipped = true;
         }
     }
 }

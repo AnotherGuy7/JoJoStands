@@ -10,7 +10,7 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Swan Song");
-            Description.SetDefault("You have not finished yet...");
+            Description.SetDefault("You're not dead just yet...");
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
             Main.debuff[Type] = true;
         }

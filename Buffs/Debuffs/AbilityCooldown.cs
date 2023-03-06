@@ -13,11 +13,5 @@ namespace JoJoStands.Buffs.Debuffs
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
-
-        public override void UpdateBuffOnPlayer(Player player)
-        {
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.theFirstNapkinReduction = buffIndex;
-        }
     }
 }

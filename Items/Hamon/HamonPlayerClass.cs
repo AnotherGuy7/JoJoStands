@@ -269,10 +269,7 @@ namespace JoJoStands.Items.Hamon
             if (chargingHamon)
             {
                 if (learnedHamonSkills.ContainsKey(BreathingRegenSkill) && learnedHamonSkills[BreathingRegenSkill])
-                {
                     regen *= 1.2f + (0.2f * hamonSkillLevels[BreathingRegenSkill]);
-                    //Main.NewText("Works");
-                }
             }
         }
 

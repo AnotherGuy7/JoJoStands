@@ -31,7 +31,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 25)
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 15)
                 .AddTile(TileID.Anvils)
                 .Register();
         }

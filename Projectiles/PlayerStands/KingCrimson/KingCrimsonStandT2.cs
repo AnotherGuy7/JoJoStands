@@ -115,13 +115,10 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
-                    {
                         Projectile.velocity = player.velocity + velocityAddition;
-                    }
-                    if (mouseDistance <= 40f)
-                    {
+                    else
                         Projectile.velocity = Vector2.Zero;
-                    }
+
                     if (shootCount <= 0 && (Projectile.frame == 0 || Projectile.frame == 4))
                     {
                         shootCount += newPunchTime / 2;
@@ -181,7 +178,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 }
                                 player.position += repositionOffset;
                                 player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
-                                SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
+                                SoundEngine.PlaySound(timeskipSound);
                                 for (int i = 0; i < 20; i++)
                                 {
                                     Dust.NewDust(player.position, player.width, player.height, 114);
@@ -199,22 +196,24 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                                 Dust.NewDust(player.position, player.width, player.height, 114);
                             }
 
-                            Vector2 repositionOffset = new Vector2(5f * 16f * -player.direction, 0f);
-                            while (WorldGen.SolidTile((int)(player.Center.X + repositionOffset.X) / 16, (int)(player.Center.Y + repositionOffset.Y) / 16))
+                            Vector2 repositionPosition = npc.position + new Vector2(3f * 16f * -npc.direction, 0f);
+                            while (WorldGen.SolidTile((int)(player.Center.X + repositionPosition.X) / 16, (int)(player.Center.Y + repositionPosition.Y) / 16))
                             {
-                                repositionOffset.Y -= 16f;
+                                repositionPosition.Y -= 16f;
                             }
-                            player.position += repositionOffset;
+                            player.position = repositionPosition;
+                            player.ChangeDir(npc.direction);
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
                             int damage = newPunchDamage * 2;
-                            npc.StrikeNPC(damage, PunchKnockback * 1.5f, Projectile.direction);
-                            SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 6, 2, damage, player.direction, PunchKnockback * 1.5f);
-                            SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
+                            npc.StrikeNPC(damage, PunchKnockback * 2f, npc.direction);
+                            SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 6, 2, damage, player.direction, PunchKnockback * 2f);
+                            SoundEngine.PlaySound(timeskipSound);
 
                             for (int i = 0; i < 20; i++)
                             {
                                 Dust.NewDust(player.position, player.width, player.height, 114);
                             }
+                            break;
                         }
                     }
                     blockSearchTimer += 5;

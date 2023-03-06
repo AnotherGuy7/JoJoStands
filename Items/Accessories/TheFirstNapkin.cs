@@ -9,7 +9,8 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The First Napkin");
-            Tooltip.SetDefault("5% chance to reduce Ability Cooldown when attacking an enemy\nOnce every three minutes completely removes Ability Cooldown");
+            Tooltip.SetDefault("Every kill reduces the Stand Ability Cooldown by 1s." +
+                "\nReduces Ability Cooldown times by 8%.");
             SacrificeTotal = 1;
         }
 
@@ -25,7 +26,8 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().theFirstNapkin = true;
+            player.GetModPlayer<MyPlayer>().firstNapkinEquipped = true;
+            player.GetModPlayer<MyPlayer>().standCooldownReduction += 0.08f;
         }
     }
 }

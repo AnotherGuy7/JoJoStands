@@ -6,6 +6,8 @@ namespace JoJoStands.Items.Accessories
 {
     public class HerbalTeaBag : ModItem
     {
+        private int dustSpawnTimer = 0;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Herbal Tea Bag");
@@ -25,7 +27,18 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            dustSpawnTimer++;
             player.GetModPlayer<MyPlayer>().herbalTeaBag = true;
+            if (dustSpawnTimer >= 60)
+            {
+                dustSpawnTimer = 0;
+                for (int i = 0; i < player.GetModPlayer<MyPlayer>().herbalTeaBagCount; i++)
+                {
+                    int dustIndex = Dust.NewDust(player.position, player.width, player.head, DustID.DungeonBlue);
+                    Main.dust[dustIndex].noGravity = true;
+                    Main.dust[dustIndex].noLight = true;
+                }
+            }
         }
     }
 }

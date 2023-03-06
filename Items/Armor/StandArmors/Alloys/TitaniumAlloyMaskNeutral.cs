@@ -43,8 +43,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.TitaniumBar, 11)
-                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 18)
+                .AddIngredient(ItemID.TitaniumBar, 10)
+                .AddIngredient(ModContent.ItemType<ViralMeteoriteBar>(), 12)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }

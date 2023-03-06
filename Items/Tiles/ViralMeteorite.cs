@@ -10,7 +10,7 @@ namespace JoJoStands.Items.Tiles
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Viral Meteorite");
-            Tooltip.SetDefault("A concentrated cluster of a foreign virus...");
+            Tooltip.SetDefault("A concentrated cluster of a foreign virus...\nPlace near Meteorite to spread the Viral Meteorite.");
             SacrificeTotal = 100;
         }
 
@@ -18,8 +18,8 @@ namespace JoJoStands.Items.Tiles
         {
             Item.width = 16;
             Item.height = 16;
-            Item.useTime = 5;
-            Item.useAnimation = 5;
+            Item.useTime = 15;
+            Item.useAnimation = 15;
             Item.maxStack = 999;
             Item.useTurn = true;
             Item.autoReuse = true;

@@ -1,3 +1,4 @@
+using JoJoStands.Items.CraftingMaterials;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,14 +10,14 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Zipped Hand");
-            Tooltip.SetDefault("Gives some time after death\nUndead has increased damage and critical hit chance");
+            Tooltip.SetDefault("Allows you to make a last stand before death.\nDuring the last stand phase, damage and critial strike chances are doubled.");
             SacrificeTotal = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 30;
-            Item.height = 30;
+            Item.width = 18;
+            Item.height = 28;
             Item.accessory = true;
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.buyPrice(gold: 1);
@@ -25,7 +26,17 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().zippedHand = true;
+            player.GetModPlayer<MyPlayer>().zippedHandEquipped = true;
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddRecipeGroup("JoJoStandsGold-TierBar", 3)
+                .AddIngredient(ModContent.ItemType<Hand>())
+                .AddIngredient(ItemID.SoulofMight, 4)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

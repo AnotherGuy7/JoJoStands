@@ -144,8 +144,6 @@ namespace JoJoStands.NPCs
 
                 globalLoot.Add(ItemDropRule.ByCondition(new SoulOfTimeCondition(), ModContent.ItemType<SoulofTime>(), 14));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new WillToEscapeCondition(), ModContent.ItemType<ZippedHand>(), 40));
-
                 globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<HerbalTeaBag>(), 40));
 
                 globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsHardmodeDungeonCondition(), ModContent.ItemType<TheFirstNapkin>(), 40));

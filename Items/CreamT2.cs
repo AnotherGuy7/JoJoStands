@@ -47,7 +47,15 @@ namespace JoJoStands.Items
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<CreamT1>())
                 .AddIngredient(ItemID.HellstoneBar, 6)
-                .AddIngredient(ItemID.Bone, 20)
+                .AddIngredient(ItemID.ShadowScale, 4)
+                .AddIngredient(ModContent.ItemType<WillToDestroy>(), 2)
+                .AddTile(ModContent.TileType<RemixTableTile>())
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<CreamT1>())
+                .AddIngredient(ItemID.HellstoneBar, 6)
+                .AddIngredient(ItemID.TissueSample, 4)
                 .AddIngredient(ModContent.ItemType<WillToDestroy>(), 2)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();

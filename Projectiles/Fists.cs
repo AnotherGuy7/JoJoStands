@@ -407,6 +407,13 @@ namespace JoJoStands.Projectiles
                     SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
                 }
             }
+
+            if (mPlayer.standFistsType != TowerOfGray && mPlayer.familyPhotoEquipped && mPlayer.familyPhotoEffect < 30 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
+            {
+                mPlayer.familyPhotoEffect += 30;
+                if (mPlayer.familyPhotoEffect >= 30)
+                    mPlayer.familyPhotoEffect = 30;
+            }
         }
 
         public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)

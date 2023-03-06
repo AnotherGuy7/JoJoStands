@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,7 +9,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Soothing Spirit Disc");
-            Tooltip.SetDefault("Stand attack grants Holy Protection");
+            Tooltip.SetDefault("Stand Damage is increased by 2% for every enemy around you.");
             SacrificeTotal = 1;
         }
 
@@ -26,7 +25,13 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().soothingSpiritDisc = true;
+            MyPlayer myPlayer = player.GetModPlayer<MyPlayer>();
+            for (int n = 0; n < Main.maxNPCs; n++)
+            {
+                NPC npc = Main.npc[n];
+                if (npc.active && npc.lifeMax > 5 && !npc.townNPC && !npc.friendly && !npc.SpawnedFromStatue && npc.Distance(player.Center) <= 48 * 16)
+                    myPlayer.standDamageBoosts += 0.02f;
+            }
         }
     }
 }

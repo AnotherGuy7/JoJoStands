@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,7 +9,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Underboss Phone");
-            Tooltip.SetDefault("Every fifth hit is a little stronger\nThis attack completely ignores defense");
+            Tooltip.SetDefault("Every fifth hit on enemies with Stand Attacks deal more damage.\nAttacks affected by this accessory ignore defense.");
             SacrificeTotal = 1;
         }
 
@@ -26,7 +25,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().underbossPhone = true;
+            player.GetModPlayer<MyPlayer>().underbossPhoneEquipped = true;
         }
     }
 }

@@ -18,8 +18,8 @@ namespace JoJoStands.Items.Tiles
             Item.height = 32;
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.useAnimation = 10;
-            Item.useTime = 10;
+            Item.useAnimation = 15;
+            Item.useTime = 15;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
             Item.value = Item.buyPrice(silver: 30);

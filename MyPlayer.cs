@@ -220,24 +220,20 @@ namespace JoJoStands
         public bool manifestedWillEmblem = false;
         public bool fightingSpiritEmblem = false;
         public int fightingSpiritEmblemStack = 0;
-        public bool arrowEarring = false;
+        public bool arrowEarringEquipped = false;
         public bool vampiricBangle = false;
         public int arrowEarringCooldown = 0;
-        public bool theFirstNapkin = false;
-        public int theFirstNapkinReduction = 0;
-        public int theFirstNapkinCooldown = 0;
+        public bool firstNapkinEquipped = false;
         public bool herbalTeaBag = false;
         public int herbalTeaBagCount = 10;
         public int herbalTeaBagCooldown = 0;
-        public bool zippedHand = false;
+        public bool zippedHandEquipped = false;
         public bool zippedHandDeath = false;
-        public bool familyPhoto = false;
+        public bool familyPhotoEquipped = false;
         public int familyPhotoEffect = 0;
-        public bool soothingSpiritDisc = false;
-        public int soothingSpiritDiscCooldown = 0;
-        public bool underbossPhone = false;
+        public bool underbossPhoneEquipped = false;
         public int underbossPhoneCount = 0;
-        public bool sealedPokerDeck = false;
+        public bool sealedPokerDeckEquipped = false;
         public int sealedPokerDeckCooldown = 0;
         public bool requiemArrow = false;
         public bool overHeaven = false; // haha (C) Proos :)
@@ -384,15 +380,14 @@ namespace JoJoStands
             siliconLifeformCarapace = false;
             manifestedWillEmblem = false;
             fightingSpiritEmblem = false;
-            arrowEarring = false;
+            arrowEarringEquipped = false;
             vampiricBangle = false;
-            theFirstNapkin = false;
+            firstNapkinEquipped = false;
             herbalTeaBag = false;
-            zippedHand = false;
-            familyPhoto = false;
-            soothingSpiritDisc = false;
-            underbossPhone = false;
-            sealedPokerDeck = false;
+            zippedHandEquipped = false;
+            familyPhotoEquipped = false;
+            underbossPhoneEquipped = false;
+            sealedPokerDeckEquipped = false;
             requiemArrow = false;
             overHeaven = false;
             collideY = false;
@@ -796,13 +791,11 @@ namespace JoJoStands
                 kingCrimsonBuffIndex = -1;
             if (overHeaven && standOut && tuskActNumber != 0 && StandSlot.SlotItem.type == ModContent.ItemType<TuskAct4>())
                 goldenSpinCounter = 300;
-            if (soothingSpiritDiscCooldown > 0)
-                soothingSpiritDiscCooldown--;
             if (sealedPokerDeckCooldown > 0)
                 sealedPokerDeckCooldown--;
             if (familyPhotoEffect > 0)
                 familyPhotoEffect--;
-            if (!revived && Player.HasItem(ModContent.ItemType<PokerChip>()) || zippedHand && !zippedHandDeath)
+            if (!revived && Player.HasItem(ModContent.ItemType<PokerChip>()) || zippedHandEquipped && !zippedHandDeath)
                 notDeadYet = true;
             else
                 notDeadYet = false;
@@ -841,14 +834,6 @@ namespace JoJoStands
                     herbalTeaBagCount += 1;
                 }
             }
-            if (theFirstNapkin && theFirstNapkinCooldown == 0 && Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
-            {
-                Player.ClearBuff(ModContent.BuffType<AbilityCooldown>());
-                theFirstNapkinCooldown = 10800;
-                SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
-            }
-            if (theFirstNapkinCooldown > 0)
-                theFirstNapkinCooldown--;
             if (arrowEarringCooldown > 0)
                 arrowEarringCooldown--;
             if (!fightingSpiritEmblem)
@@ -1677,7 +1662,7 @@ namespace JoJoStands
                 Player.lifeRegenTime = 0;
                 if (vampiricBangle)
                     Player.lifeRegen -= 9;
-                if (!vampiricBangle)
+                else
                     Player.lifeRegen -= 3;
             }
         }
@@ -1701,16 +1686,16 @@ namespace JoJoStands
                 standAccessoryDefense /= 2;
             }
 
+            if (siliconLifeformCarapace)
+            {
+                standAccessoryDefense *= 2;
+                standDefenseToAdd *= 2;
+            }
+
             if (crazyDiamondRestorationMode)
             {
                 standDamageBoosts = 1f;
                 standSpeedBoosts = 0;
-            }
-
-            if (siliconLifeformCarapace)
-            {
-                standAccessoryDefense *= 2;
-                standDefenseToAdd *= 2; 
             }
 
             if (standOut && standControlStyle == StandControlStyle.Manual)
@@ -2013,12 +1998,13 @@ namespace JoJoStands
                 Main.NewText("The chip has given you new life!");
                 return false;
             }
-            if (zippedHand && !zippedHandDeath)
+            if (zippedHandEquipped && !zippedHandDeath)
             {
                 if (!Player.HasItem(ModContent.ItemType<PokerChip>()) || revived)
                 {
-                    Player.AddBuff(ModContent.BuffType<SwanSong>(), 420);
-                    Main.NewText("You have not finished yet...");
+                    Player.AddBuff(ModContent.BuffType<SwanSong>(), 7 * 60);
+                    Player.statLife = 100;
+                    Player.HealEffect(100);
                     return false;
                 }
             }

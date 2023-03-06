@@ -309,19 +309,17 @@ namespace JoJoStands.Projectiles
                         target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
                 }
             }
-            if (Projectile.type == ModContent.ProjectileType<Fists>() && mPlayer.standFistsType != 13 && mPlayer.familyPhoto && mPlayer.familyPhotoEffect < 30 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
-                mPlayer.familyPhotoEffect += 30;
             if (standProjectile || kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
             {
-                mPlayer.underbossPhoneCount += 1;
-                if (mPlayer.underbossPhoneCount > 4)
+                if (mPlayer.underbossPhoneEquipped)
                 {
-                    if (mPlayer.underbossPhone)
+                    mPlayer.underbossPhoneCount += 1;
+                    if (mPlayer.underbossPhoneCount >= 5)
                     {
                         Projectile.ArmorPenetration = target.defense;
                         damage = (int)(damage * 1.1f + 10);
+                        mPlayer.underbossPhoneCount = 0;
                     }
-                    mPlayer.underbossPhoneCount = 0;
                 }
                 if (player.HasBuff(ModContent.BuffType<Rampage>()))
                     Projectile.ArmorPenetration = target.defense;
@@ -333,47 +331,36 @@ namespace JoJoStands.Projectiles
                     mPlayer.fightingSpiritEmblemStack += 1;
                 if (mPlayer.manifestedWillEmblem && crit)
                     damage = (int)(damage * 1.5f);
-                if (mPlayer.soothingSpiritDisc)
-                {
-                    if (Main.rand.Next(1, 100 + 1) <= 10 && mPlayer.soothingSpiritDiscCooldown > 60)
-                        mPlayer.soothingSpiritDiscCooldown -= 60;
-                    if (mPlayer.soothingSpiritDiscCooldown <= 0)
-                    {
-                        player.AddBuff(BuffID.ShadowDodge, 1800);
-                        mPlayer.soothingSpiritDiscCooldown += 4500;
-                    }
-                }
-                if (mPlayer.sealedPokerDeck && mPlayer.sealedPokerDeckCooldown == 0)
+                if (mPlayer.sealedPokerDeckEquipped && mPlayer.sealedPokerDeckCooldown <= 0)
                 {
                     crit = true;
-                    mPlayer.sealedPokerDeckCooldown = 180;
-                    damage = (int)(damage * 1.25f + 25);
+                    damage = (int)(damage * 1.25f) + 20;
+                    mPlayer.sealedPokerDeckCooldown += 5 * 60;
                 }
-                if (mPlayer.theFirstNapkin && Main.rand.Next(1, 100 + 1) <= 5 && player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.buffTime[mPlayer.theFirstNapkinReduction] > 60)
-                    player.buffTime[mPlayer.theFirstNapkinReduction] -= 60;
+                if (mPlayer.firstNapkinEquipped && target.life - damage <= 0 && !target.SpawnedFromStatue && player.HasBuff<AbilityCooldown>() && player.buffTime[player.FindBuffIndex(ModContent.BuffType<AbilityCooldown>())] > 60)
+                    player.buffTime[player.FindBuffIndex(ModContent.BuffType<AbilityCooldown>())] -= 60;
 
-                for (int n = 0; n < Main.maxNPCs; n++)
+                if (mPlayer.arrowEarringEquipped)
                 {
-                    NPC npc = Main.npc[n];
-                    if (npc.active && !npc.hide && !npc.immortal && !npc.friendly)
+                    for (int n = 0; n < Main.maxNPCs; n++)
                     {
-                        if (Projectile.Distance(npc.Center) <= 150f && npc.whoAmI != target.whoAmI && mPlayer.arrowEarring)
+                        NPC npc = Main.npc[n];
+                        if (npc.active && !npc.hide && !npc.immortal && !npc.friendly)
                         {
-                            float arrowEarringDamage = 0.1f;
-                            if (mPlayer.arrowEarringCooldown == 0)
-                                arrowEarringDamage = 0.2f;
-                            bool critCheck = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
-                            int defence = 0;
-                            if (critCheck)
-                                defence = 4;
-                            else
-                                defence = 2;
-                            int damage2 = (int)Main.rand.NextFloat((int)(damage * arrowEarringDamage * 0.85f), (int)(damage * arrowEarringDamage * 1.15f)) + npc.defense / defence;
-                            npc.StrikeNPC(damage2, 0, 0, critCheck);
-                            SyncCall.SyncArrowEarringInfo(player.whoAmI, npc.whoAmI, damage2, critCheck);
+                            if (Projectile.Distance(npc.Center) <= 10 * 16 && npc.whoAmI != target.whoAmI)
+                            {
+                                float arrowEarringDamage = 0.1f;
+                                if (mPlayer.arrowEarringCooldown == 0)
+                                    arrowEarringDamage = 0.2f;
+                                bool critCheck = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
+                                int defense = critCheck ? 4 : 2;
+                                int transferDamage = (int)Main.rand.NextFloat((int)(damage * arrowEarringDamage * 0.85f), (int)(damage * arrowEarringDamage * 1.15f)) + npc.defense / defense;
+                                npc.StrikeNPC(transferDamage, 0f, 0, critCheck);
+                                SyncCall.SyncArrowEarringInfo(player.whoAmI, npc.whoAmI, transferDamage, critCheck);
+                            }
+                            if (mPlayer.vampiricBangle)
+                                player.Heal((int)(Main.rand.NextFloat(1, 6)));
                         }
-                        if (mPlayer.vampiricBangle)
-                            player.Heal((int)(Main.rand.NextFloat(1, 6)));
                     }
                 }
             }

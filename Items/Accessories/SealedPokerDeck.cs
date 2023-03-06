@@ -9,7 +9,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sealed Poker Deck");
-            Tooltip.SetDefault("Attack gets stronger every 5 seconds\nThis attack is a guaranteed crit");
+            Tooltip.SetDefault("Every 5 seconds, Stand Attacks deal 25% more damage.\nStand Attacks affected by this accessory are guaranteed critical strikes.");
             SacrificeTotal = 1;
         }
 
@@ -25,7 +25,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().sealedPokerDeck = true;
+            player.GetModPlayer<MyPlayer>().sealedPokerDeckEquipped = true;
         }
     }
 }
