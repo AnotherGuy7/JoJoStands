@@ -47,6 +47,7 @@ namespace JoJoStands.NPCs
         public bool boundByStrings = false;
         public bool hitByCrossfireHurricane = false;
         public bool taggedByCrazyDiamondRestoration = false;
+        public bool targetedBySoftAndWet = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -68,6 +69,8 @@ namespace JoJoStands.NPCs
         public float kingCrimsonDonutMultiplier = 1f;
         public int vampireUserLastHitIndex = -1;        //An index of the vampiric player who last hit the enemy
         public int standDebuffEffectOwner = 0;
+        public int lockFrameCounter;
+        public int lockFrame;
         public Vector2 playerPositionOnSkip = Vector2.Zero;
         public Vector2 preTimestopVelocity = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
@@ -95,8 +98,6 @@ namespace JoJoStands.NPCs
         public int echoesSmackDamageTimer = 60; //ACT 1 sounds
         private int fallDamage = 0;
         private int fallDamageStart = (int)Vector2.Zero.Y;
-        private int theLockVisualOffset = 0;
-        private int theLockVisualTimer = 0;
         private int resetCooldown = 0;
 
         public bool echoesSmackCritChance = false; //ACT 1 sounds
@@ -221,7 +222,7 @@ namespace JoJoStands.NPCs
 
         public override void GetChat(NPC npc, ref string chat)
         {
-            if (MyPlayer.SecretReferences)
+            if (JoJoStands.SecretReferences)
             {
                 if (npc.type == ModContent.NPCType<MarineBiologist>() && Main.rand.Next(0, 101) <= 3)      //Placement contributor reference
                 {
@@ -678,26 +679,6 @@ namespace JoJoStands.NPCs
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/GEDeathLoop"), npc.Center);
                 }
             }
-            if (npc.HasBuff(ModContent.BuffType<Locked>()))
-            {
-                npc.lifeRegen = -4;
-                npc.velocity *= 0.95f;
-                lockRegenCounter++;
-                npc.defense = (int)(npc.defense * 0.95);
-                if (lockRegenCounter >= 60)    //increases lifeRegen damage every second
-                {
-                    bool lockCrit = Main.rand.NextFloat(1, 100 + 1) <= theLockCrit;
-                    int defence = 2;
-                    if (lockCrit)
-                        defence = 4;
-                    int lockDamage = 2;
-                    if (!npc.boss)
-                        lockDamage = 4;
-                    lockRegenCounter = 0;
-                    lifeRegenIncrement += lockDamage;
-                    npc.StrikeNPC((int)(lifeRegenIncrement*theLockDamageBoost)+npc.defense/defence, 0f, 0, lockCrit);
-                }
-            }
 
             if (npc.HasBuff(ModContent.BuffType<RedBindDebuff>()))
             {
@@ -891,6 +872,9 @@ namespace JoJoStands.NPCs
                 drawColor = Color.LightBlue;
             }
 
+            if (targetedBySoftAndWet)
+                drawColor = Color.Cyan;
+
             if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 drawColor = Color.Gray;
         }
@@ -932,43 +916,32 @@ namespace JoJoStands.NPCs
 
             if (npc.HasBuff(ModContent.BuffType<Locked>()))
             {
-                float offset = 1.25f;
                 SpriteEffects effects = SpriteEffects.None;
-                if (npc.spriteDirection == 1)
-                    effects = SpriteEffects.None;
                 if (npc.spriteDirection == -1)
                     effects = SpriteEffects.FlipHorizontally;
 
-                if (effects == SpriteEffects.None)
-                    offset = 6f;
-
-                if (theLockVisualOffset < 9)
+                if (lockFrame < 3)
                 {
-                    if (theLockVisualTimer < 10)
-                        theLockVisualTimer++;
-                    if (theLockVisualTimer == 10)
+                    lockFrameCounter++;
+                    if (lockFrameCounter >= 5)
                     {
-                        theLockVisualTimer = 0;
-                        theLockVisualOffset += 1;
+                        lockFrameCounter = 0;
+                        lockFrame++;
                     }
                 }
+
                 float newHeight = npc.height / 22;
-                float newWidht = npc.width / 22;
-                float scale = (newHeight*0.75f) + (newWidht*0.25f);
-                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/TheLock").Value;
-                spriteBatch.Draw(texture, npc.Center - Main.screenPosition, new Rectangle(0, theLockVisualOffset*22, 22, 22), drawColor, npc.rotation, new Vector2(texture.Width/offset, texture.Height / 18f), scale, effects, 0);
-            }
-            if (!npc.HasBuff(ModContent.BuffType<Locked>()))
-            {
-                theLockVisualTimer = 0;
-                theLockVisualOffset = 0;
+                float newWidth = npc.width / 22;
+                float scale = (newHeight * 0.75f) + (newWidth * 0.25f);
+                Texture2D theLockOverlay = ModContent.Request<Texture2D>("JoJoStands/Extras/TheLock_Overlay").Value;
+                Rectangle animRect = new Rectangle(0, lockFrame * 22, 22, 22);
+                spriteBatch.Draw(theLockOverlay, npc.Center - Main.screenPosition, animRect, drawColor, npc.rotation, new Vector2(11, 11), scale, effects, 0);
             }
         }
 
         public override void OnHitPlayer(NPC npc, Player target, int damage, bool crit)
         {
             MyPlayer mPlayer = target.GetModPlayer<MyPlayer>();
-            int standSlotType = mPlayer.StandSlot.SlotItem.type;
             if (target.HasBuff(ModContent.BuffType<BacktoZero>()))     //only affects the ones with the buff, everyone's bool should turn on and save positions normally
             {
                 npc.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
@@ -995,42 +968,12 @@ namespace JoJoStands.NPCs
                 if (npc.boss)
                 {
                     lockRegenCounter += 4;
-                    if (standSlotType == ModContent.ItemType<LockT1>())
-                    {
-                        npc.AddBuff(ModContent.BuffType<Locked>(), 3 * 60);
-                    }
-                    if (standSlotType == ModContent.ItemType<LockT2>())
-                    {
-                        npc.AddBuff(ModContent.BuffType<Locked>(), 6 * 60);
-                    }
-                    if (standSlotType == ModContent.ItemType<LockT3>())
-                    {
-                        npc.AddBuff(ModContent.BuffType<Locked>(), 9 * 60);
-                    }
-                    if (standSlotType == ModContent.ItemType<LockFinal>())
-                    {
-                        npc.AddBuff(ModContent.BuffType<Locked>(), 12 * 60);
-                    }
+                    npc.AddBuff(ModContent.BuffType<Locked>(), (3 * mPlayer.standTier) * 60);
                 }
                 else
                 {
                     lockRegenCounter += 8;
-                    if (standSlotType == ModContent.ItemType<LockT1>())
-                    {
-                        npc.AddBuff(ModContent.BuffType<Locked>(), 5 * 60);
-                    }
-                    if (standSlotType == ModContent.ItemType<LockT2>())
-                    {
-                        npc.AddBuff(ModContent.BuffType<Locked>(), 10 * 60);
-                    }
-                    if (standSlotType == ModContent.ItemType<LockT3>())
-                    {
-                        npc.AddBuff(ModContent.BuffType<Locked>(), 15 * 60);
-                    }
-                    if (standSlotType == ModContent.ItemType<LockFinal>())
-                    {
-                        npc.AddBuff(ModContent.BuffType<Locked>(), 20 * 60);
-                    }
+                    npc.AddBuff(ModContent.BuffType<Locked>(), (5 * mPlayer.standTier) * 60);
                 }
             }
             if (removeZombieHighlightOnHit)

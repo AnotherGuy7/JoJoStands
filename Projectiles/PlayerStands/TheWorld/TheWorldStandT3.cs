@@ -49,7 +49,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 else
                 {
                     SoundStyle zawarudo = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/TheWorld");
-                    zawarudo.Volume = MyPlayer.ModSoundsVolume;
+                    zawarudo.Volume = JoJoStands.ModSoundsVolume;
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
                 }

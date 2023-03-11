@@ -55,8 +55,8 @@ namespace JoJoStands.UI
             hamonDisplay.SetText(hamonPlayer.amountOfHamon + "/" + hamonPlayer.maxHamon);
             if (changedInConfig)
             {
-                hamonBar.Left.Set(MyPlayer.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
-                hamonBar.Top.Set(MyPlayer.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
+                hamonBar.Left.Set(JoJoStands.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
+                hamonBar.Top.Set(JoJoStands.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
                 changedInConfig = false;
             }
 
@@ -67,8 +67,8 @@ namespace JoJoStands.UI
         public override void OnInitialize()
         {
             hamonBar = new DragableUIPanel();
-            hamonBar.Left.Set(MyPlayer.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
-            hamonBar.Top.Set(MyPlayer.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
+            hamonBar.Left.Set(JoJoStands.HamonBarPositionX * (Main.screenWidth * 0.01f), 0f);
+            hamonBar.Top.Set(JoJoStands.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
             hamonBar.Width.Set(140f, 0f);
             hamonBar.Height.Set(96f, 0f);
             hamonBar.BackgroundColor = new Color(0, 0, 0, 0);       //make it invisible so that the image is there itself

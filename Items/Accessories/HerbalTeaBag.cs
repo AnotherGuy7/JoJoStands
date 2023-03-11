@@ -29,12 +29,12 @@ namespace JoJoStands.Items.Accessories
         {
             dustSpawnTimer++;
             player.GetModPlayer<MyPlayer>().herbalTeaBag = true;
-            if (dustSpawnTimer >= 60)
+            if (dustSpawnTimer >= 2)
             {
                 dustSpawnTimer = 0;
                 for (int i = 0; i < player.GetModPlayer<MyPlayer>().herbalTeaBagCount; i++)
                 {
-                    int dustIndex = Dust.NewDust(player.position, player.width, player.head, DustID.DungeonBlue);
+                    int dustIndex = Dust.NewDust(player.position, player.width, player.height, DustID.IceTorch);
                     Main.dust[dustIndex].noGravity = true;
                     Main.dust[dustIndex].noLight = true;
                 }

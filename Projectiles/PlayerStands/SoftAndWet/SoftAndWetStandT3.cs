@@ -68,7 +68,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                         shootVel.Normalize();
                         shootVel *= 3f;
                         Vector2 bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(0, 18 + 1) * Projectile.direction, -Main.rand.Next(0, HalfStandHeight - 2 + 1));
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, shootVel, ModContent.ProjectileType<TinyBubble>(), 35, 2f, Projectile.owner, Projectile.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, shootVel, ModContent.ProjectileType<TinyBubble>(), 21, 2f, Projectile.owner, Projectile.whoAmI);
                     }
                 }
                 else
@@ -119,27 +119,30 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                     if (bubbleSpawnTimer >= 60)
                     {
                         bubbleSpawnTimer = 0;
-                        Vector2 bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(-(int)BubbleSpawnRadius, (int)BubbleSpawnRadius), Main.rand.Next(-(int)BubbleSpawnRadius, (int)BubbleSpawnRadius));
-                        if (Vector2.Distance(bubbleSpawnPosition, player.Center) > BubbleSpawnRadius)
-                            bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(-(int)BubbleSpawnRadius, (int)BubbleSpawnRadius) / 2, Main.rand.Next(-(int)BubbleSpawnRadius, (int)BubbleSpawnRadius) / 2);
-
-                        Point bubbleSpawnPoint = (bubbleSpawnPosition / 16f).ToPoint();
-                        bubbleSpawnPoint.X = Math.Clamp(bubbleSpawnPoint.X, 0, Main.maxTilesX - 1);
-                        bubbleSpawnPoint.Y = Math.Clamp(bubbleSpawnPoint.Y, 0, Main.maxTilesY - 1);
-                        if (Main.tile[bubbleSpawnPoint.X, bubbleSpawnPoint.Y].HasTile)
+                        if (Projectile.owner == Main.myPlayer)
                         {
-                            int attempts = 0;
-                            while (Main.tile[bubbleSpawnPoint.X, bubbleSpawnPoint.Y].HasTile && attempts < 5)
-                            {
-                                attempts++;
-                                bubbleSpawnPoint.Y -= 2;
-                                bubbleSpawnPosition.Y -= 2 * 16;
-                            }
-                        }
+                            Vector2 bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(-(int)BubbleSpawnRadius, (int)BubbleSpawnRadius), Main.rand.Next(-(int)BubbleSpawnRadius, (int)BubbleSpawnRadius));
+                            if (Vector2.Distance(bubbleSpawnPosition, player.Center) > BubbleSpawnRadius)
+                                bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(-(int)BubbleSpawnRadius, (int)BubbleSpawnRadius) / 2, Main.rand.Next(-(int)BubbleSpawnRadius, (int)BubbleSpawnRadius) / 2);
 
-                        Vector2 bubbleVelocity = new Vector2(0f, -Main.rand.Next(12, 24) / 10f);
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, bubbleVelocity, ModContent.ProjectileType<ControllableBubble>(), (int)((AltDamage + 24) * mPlayer.standDamageBoosts), 2f, Projectile.owner);
-                        Main.projectile[projIndex].netUpdate = true;
+                            Point bubbleSpawnPoint = (bubbleSpawnPosition / 16f).ToPoint();
+                            bubbleSpawnPoint.X = Math.Clamp(bubbleSpawnPoint.X, 0, Main.maxTilesX - 1);
+                            bubbleSpawnPoint.Y = Math.Clamp(bubbleSpawnPoint.Y, 0, Main.maxTilesY - 1);
+                            if (Main.tile[bubbleSpawnPoint.X, bubbleSpawnPoint.Y].HasTile)
+                            {
+                                int attempts = 0;
+                                while (Main.tile[bubbleSpawnPoint.X, bubbleSpawnPoint.Y].HasTile && attempts < 5)
+                                {
+                                    attempts++;
+                                    bubbleSpawnPoint.Y -= 2;
+                                    bubbleSpawnPosition.Y -= 2 * 16;
+                                }
+                            }
+
+                            Vector2 bubbleVelocity = new Vector2(0f, -Main.rand.Next(12, 24) / 10f);
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, bubbleVelocity, ModContent.ProjectileType<ControllableBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts * 0.9f), 2f, Projectile.owner);
+                            Main.projectile[projIndex].netUpdate = true;
+                        }
                         SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound);
                     }
                 }

@@ -25,11 +25,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         public override bool CanUseRangeIndicators => false;
         private static readonly SoundStyle BtdWarpSoundEffect = new SoundStyle("JoJoStands/Sounds/GameSounds/BiteTheDustEffect")
         {
-            Volume = MyPlayer.ModSoundsVolume
+            Volume = JoJoStands.ModSoundsVolume
         };
         private static readonly SoundStyle BtdSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/BiteTheDust")
         {
-            Volume = MyPlayer.ModSoundsVolume
+            Volume = JoJoStands.ModSoundsVolume
         };
         private readonly SoundStyle kqClickSound = new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick");
 

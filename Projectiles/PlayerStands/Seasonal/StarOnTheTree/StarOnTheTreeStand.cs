@@ -51,7 +51,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 else
                 {
                     SoundStyle zawarudo = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/StarPlatinumTheWorld");
-                    zawarudo.Volume = MyPlayer.ModSoundsVolume;
+                    zawarudo.Volume = JoJoStands.ModSoundsVolume;
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
                 }

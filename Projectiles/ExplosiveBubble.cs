@@ -36,7 +36,7 @@ namespace JoJoStands.Projectiles
                 Projectile.Kill();
             }
 
-            if (MyPlayer.AutomaticActivations)
+            if (JoJoStands.AutomaticActivations)
             {
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {

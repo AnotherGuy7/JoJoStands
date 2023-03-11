@@ -64,7 +64,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 else
                 {
                     SoundStyle kingCrimson = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/KingCrimson");
-                    kingCrimson.Volume = MyPlayer.ModSoundsVolume;
+                    kingCrimson.Volume = JoJoStands.ModSoundsVolume;
                     SoundEngine.PlaySound(kingCrimson, Projectile.position);
                     timeskipStartDelay = 0;
                 }
@@ -146,7 +146,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && !playerHasAbilityCooldown && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                 {
                     block = 10;
-
                     if (blockSearchTimer > 0)
                     {
                         blockSearchTimer--;
@@ -221,6 +220,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         }
                     }
                     blockSearchTimer += 5;
+                    Projectile.netUpdate = true;
                 }
                 else
                 {

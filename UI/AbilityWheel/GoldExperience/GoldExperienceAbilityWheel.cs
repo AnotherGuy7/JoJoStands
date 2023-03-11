@@ -24,7 +24,7 @@ namespace JoJoStands.UI
         public override string[] abilityTextureNames => new string[AmountOfAbilities]
 {
             "Frog",
-            "Tree",
+            "Tree_Resprite",
             "Butterfly",
             "LimbRecreation"
         };

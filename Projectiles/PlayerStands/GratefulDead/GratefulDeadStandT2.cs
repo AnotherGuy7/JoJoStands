@@ -40,7 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryFrames && !grabFrames)
+                if (Main.mouseRight && !grabFrames && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
                     Punch();
                 }
@@ -61,50 +61,53 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
-                    {
                         Projectile.velocity = player.velocity + Projectile.velocity;
-                    }
-                    if (mouseDistance <= 40f)
-                    {
+                    else
                         Projectile.velocity = Vector2.Zero;
-                    }
+                    Projectile.direction = 1;
+                    if (mouseX < Projectile.Center.X)
+                        Projectile.direction = -1;
+                    Projectile.spriteDirection = Projectile.direction;
+
                     secondaryFrames = true;
+                    Rectangle grabRect = new Rectangle((int)Projectile.Center.X + (40 * Projectile.direction), (int)Projectile.Center.Y - HalfStandHeight, 40, HalfStandHeight * 2);
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
                         NPC npc = Main.npc[n];
                         if (npc.active)
                         {
-                            if (Projectile.Distance(npc.Center) <= 30f && !npc.boss && !npc.immortal && !npc.hide)
+                            if (grabRect.Intersects(npc.Hitbox) && !npc.boss && !npc.immortal && !npc.hide)
                             {
-                                Projectile.ai[0] = npc.whoAmI;
                                 grabFrames = true;
+                                Projectile.ai[0] = npc.whoAmI;
+                                break;
                             }
                         }
                     }
                     LimitDistance();
                 }
-                if (grabFrames && Projectile.ai[0] != -1f)
+                if (Main.mouseRight && grabFrames && Projectile.ai[0] != -1f && Projectile.owner == Main.myPlayer)
                 {
                     Projectile.velocity = Vector2.Zero;
                     NPC npc = Main.npc[(int)Projectile.ai[0]];
                     npc.direction = -Projectile.direction;
-                    npc.position = Projectile.position + new Vector2(5f * Projectile.direction, -2f - npc.height / 3f);
+                    npc.position = Projectile.position + new Vector2(5f * Projectile.direction, -(2f * npc.height) / 3f);
                     npc.velocity = Vector2.Zero;
                     npc.AddBuff(ModContent.BuffType<RapidAging>(), 2);
-                    if (!npc.active)
+                    if (!npc.active || Vector2.Distance(player.Center, Projectile.Center) > newMaxDistance * 1.5f)
                     {
+                        shootCount += 30;
                         grabFrames = false;
                         Projectile.ai[0] = -1f;
-                        shootCount += 30;
                     }
                     Projectile.netUpdate = true;
                     LimitDistance();
                 }
-                if (!Main.mouseRight && (grabFrames || secondaryFrames))
+                if (!Main.mouseRight && (grabFrames || secondaryFrames) && Projectile.owner == Main.myPlayer)
                 {
+                    shootCount += 30;
                     grabFrames = false;
                     Projectile.ai[0] = -1f;
-                    shootCount += 30;
                     secondaryFrames = false;
                     Projectile.netUpdate = true;
                 }

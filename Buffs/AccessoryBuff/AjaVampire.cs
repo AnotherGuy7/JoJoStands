@@ -32,7 +32,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.GetDamage(DamageClass.Generic) *= 2f;
             player.GetAttackSpeed(DamageClass.Generic) *= 2f;
 
-            if (player.ZoneSkyHeight && MyPlayer.SecretReferences)
+            if (player.ZoneSkyHeight && JoJoStands.SecretReferences)
                 player.AddBuff(ModContent.BuffType<SpaceFreeze>(), 2, true);
 
             if (player.HasBuff(ModContent.BuffType<Vampire>()))

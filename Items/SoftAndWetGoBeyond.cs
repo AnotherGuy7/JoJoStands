@@ -24,7 +24,14 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Soft and Wet (Go Beyond!)");
-            Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a non-existent bubble!\nSpecial: Explosive Spin!");
+            Tooltip.SetDefault("Punch enemies at a fast rate and hold right-click to create a non-existent bubble!" +
+                "\nSpecial: Select a target to track with bubbles" +
+                "\nSecond Special: Bubble Barrier!" +
+                "\nPassive: Bubble Gneeration & Bubble Offensive" +
+                "\nBubble Generation allows Soft & Wet to generate bubbles while barraging." +
+                "\nBubble Offensive creates bubbles around Soft & Wet that can be manipulated." +
+                "\nWhile tracking an enemy with bubbles, bubbles formed by Bubble Offensive will explode on contact with that enemy." +
+                "\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

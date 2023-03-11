@@ -58,18 +58,18 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.whoAmI == Main.myPlayer)
                 {
                     secondaryAbilityFrames = true;
-                    if (chargeTimer < 150f)
-                    {
+                    Projectile.netUpdate = true;
+                    if (chargeTimer < 150)
                         chargeTimer++;
-                    }
                 }
                 if (!Main.mouseRight && chargeTimer != 0 && Projectile.owner == Main.myPlayer)
                 {
                     scrapeFrames = true;
+                    Projectile.netUpdate = true;
                 }
-                if (!Main.mouseRight && chargeTimer != 0 && Projectile.owner == Main.myPlayer && scrapeFrames && Projectile.frame == 1)
+                if (!Main.mouseRight && chargeTimer != 0 && scrapeFrames && Projectile.frame == 1 && Projectile.owner == Main.myPlayer)
                 {
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR"));
+                    SoundEngine.PlaySound(TheHandStandFinal.ScrapeSoundEffect);
                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                     distanceToTeleport.Normalize();
                     /*distanceToTeleport *= 98f * (chargeTimer / 60f);
@@ -125,7 +125,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override bool PreDrawExtras()
         {
             Player player = Main.player[Projectile.owner];
-            if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && MyPlayer.RangeIndicators && chargeTimer != 0)
+            if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && JoJoStands.RangeIndicators && chargeTimer != 0)
             {
                 Texture2D positionIndicator = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/PositionIndicator");
                 Vector2 distanceToTeleport = Vector2.Zero;
@@ -133,7 +133,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     distanceToTeleport = Main.MouseWorld - player.position;
                 distanceToTeleport.Normalize();
                 distanceToTeleport *= 98f * (chargeTimer / 60f);
-                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * MyPlayer.RangeIndicatorAlpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * JoJoStands.RangeIndicatorAlpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             if (scrapeFrames)
             {

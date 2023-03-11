@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
 using System;
+using System.Collections.Generic;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -17,6 +17,8 @@ namespace JoJoStands.UI
         public static MyPlayer mPlayer;
         public static float VAlign = 0.5f;
         public static float HAlign = 0.9f;
+        private readonly int WheelFadeTime = 4 * 60;
+        private readonly int WheelFadeDivider = 3 * 60;
 
         public virtual string centerTexturePath { get; }
         public virtual string[] abilityNames { get; }
@@ -30,6 +32,20 @@ namespace JoJoStands.UI
         public virtual int amountOfAbilities { get; }
         public virtual string buttonTexturePath { get; }
 
+        private readonly Dictionary<int, Keys[]> NumberToKeysDict = new Dictionary<int, Keys[]>
+        {
+            { 0, new Keys[2] { Keys.D1, Keys.NumPad1 } },
+            { 1, new Keys[2] { Keys.D2, Keys.NumPad2 } },
+            { 2, new Keys[2] { Keys.D3, Keys.NumPad3 } },
+            { 3, new Keys[2] { Keys.D4, Keys.NumPad4 } },
+            { 4, new Keys[2] { Keys.D5, Keys.NumPad5 } },
+            { 5, new Keys[2] { Keys.D6, Keys.NumPad6 } },
+            { 6, new Keys[2] { Keys.D7, Keys.NumPad7 } },
+            { 7, new Keys[2] { Keys.D8, Keys.NumPad8 } },
+            { 8, new Keys[2] { Keys.D9, Keys.NumPad9 } },
+            { 9, new Keys[2] { Keys.D0, Keys.NumPad0 } }
+        };
+
         public UIPanel abilityWheel;
         public AdjustableButton wheelCenter;
         public AdjustableButton[] abilityButtons;
@@ -41,7 +57,7 @@ namespace JoJoStands.UI
         private int inputTimer = 0;
         private int previousScrollValue = 0;
         private bool abilityChanged = false;
-        private int alphaTimer = 0;
+        private int alphaTimer = 5 * 60;
 
         /*public override void OnInitialize()
         {
@@ -121,13 +137,14 @@ namespace JoJoStands.UI
                 }
                 abilityChanged = true;
                 abilityNameText.SetText(abilityNames[mPlayer.chosenAbility]);
+                alphaTimer = WheelFadeTime;
 
                 for (int i = 0; i < abilitiesShown; i++)
                 {
                     AdjustableButton button = abilityButtons[i];
-                    button.drawColor = Color.White;
+                    button.drawColor = Color.Gray;
                     if (i == mPlayer.chosenAbility)
-                        button.drawColor = Color.Yellow;
+                        button.drawColor = Color.White;
                 }
             }
         }
@@ -179,7 +196,7 @@ namespace JoJoStands.UI
                 }
             }
 
-            if (MyPlayer.AbilityWheelDescriptions)
+            if (JoJoStands.AbilityWheelDescriptions)
             {
                 bool mouseHoveringOverButton = false;
                 for (int i = 0; i < abilitiesShown; i++)
@@ -200,52 +217,30 @@ namespace JoJoStands.UI
             {
                 bool keyPressed = false;
                 KeyboardState keyboardState = Keyboard.GetState();
-
-                if (abilitiesShown >= 1 && (keyboardState.IsKeyDown(Keys.D1) || keyboardState.IsKeyDown(Keys.NumPad1)))
+                for (int i = 0; i < abilitiesShown; i++)
                 {
-                    keyPressed = true;
-                    mPlayer.chosenAbility = 0;
-                }
-                if (abilitiesShown >= 2 && (keyboardState.IsKeyDown(Keys.D2) || keyboardState.IsKeyDown(Keys.NumPad2)))
-                {
-                    keyPressed = true;
-                    mPlayer.chosenAbility = 1;
-                }
-                if (abilitiesShown >= 3 && (keyboardState.IsKeyDown(Keys.D3) || keyboardState.IsKeyDown(Keys.NumPad3)))
-                {
-                    keyPressed = true;
-                    mPlayer.chosenAbility = 2;
-                }
-                if (abilitiesShown >= 4 && (keyboardState.IsKeyDown(Keys.D4) || keyboardState.IsKeyDown(Keys.NumPad4)))
-                {
-                    keyPressed = true;
-                    mPlayer.chosenAbility = 3;
-                }
-                if (abilitiesShown >= 5 && (keyboardState.IsKeyDown(Keys.D5) || keyboardState.IsKeyDown(Keys.NumPad5)))
-                {
-                    keyPressed = true;
-                    mPlayer.chosenAbility = 4;
-                }
-                if (abilitiesShown >= 6 && (keyboardState.IsKeyDown(Keys.D6) || keyboardState.IsKeyDown(Keys.NumPad6)))
-                {
-                    keyPressed = true;
-                    mPlayer.chosenAbility = 5;
+                    keyPressed = keyboardState.IsKeyDown(NumberToKeysDict[i][0]) || keyboardState.IsKeyDown(NumberToKeysDict[i][1]);
+                    if (keyPressed)
+                    {
+                        mPlayer.chosenAbility = i;
+                        break;
+                    }
                 }
 
                 if (keyPressed)
                 {
                     inputTimer += 3;
 
-                    alphaTimer = 5 * 60;
+                    alphaTimer = WheelFadeTime;
                     abilityChanged = true;
                     abilityNameText.SetText(abilityNames[mPlayer.chosenAbility]);
 
                     for (int i = 0; i < abilitiesShown; i++)
                     {
                         AdjustableButton button = abilityButtons[i];
-                        button.drawColor = Color.White;
+                        button.drawColor = Color.Gray;
                         if (i == mPlayer.chosenAbility)
-                            button.drawColor = Color.Yellow;
+                            button.drawColor = Color.White;
                     }
                 }
             }
@@ -255,15 +250,9 @@ namespace JoJoStands.UI
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            float alpha = 0.4f;
+            float alpha = MathHelper.Clamp(0.6f * (alphaTimer / (float)WheelFadeDivider), 0f, 0.6f) + 0.4f;
             if (Vector2.Distance(wheelCenterPosition + wheelCenter.buttonPosition, Main.MouseScreen) <= 60)
                 alpha = 1f;
-
-            if (alphaTimer > 0)
-            {
-                alpha = 1f;
-                alphaTimer--;
-            }
 
             for (int i = 0; i < abilitiesShown; i++)
             {

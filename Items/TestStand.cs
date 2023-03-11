@@ -60,7 +60,7 @@ namespace JoJoStands.Items
 
         public override bool ManualStandSpawning(Player player)
         {
-            if (MyPlayer.TestStandUnlocked)
+            if (JoJoStands.TestStandUnlocked)
             {
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.position, player.velocity, ModContent.ProjectileType<TestStandStand>(), 0, 0f, Main.myPlayer);
             }

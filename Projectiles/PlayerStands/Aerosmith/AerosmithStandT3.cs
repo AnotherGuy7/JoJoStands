@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -23,7 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             Main.projFrames[Projectile.type] = 4;
         }
 
-        public override void SetDefaults()
+        public override void ExtraSetDefaults()
         {
             Projectile.netImportant = true;
             Projectile.width = 40;
@@ -33,7 +32,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             Projectile.netImportant = true;
             Projectile.minionSlots = 1;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 0;
+            Projectile.timeLeft = 5;
             Projectile.ignoreWater = true;
         }
 
@@ -50,8 +49,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         private bool bombless = false;
         private bool fallingFromSpace = false;
         private bool remoteMode = false;
-        private int leftMouse = 0;
-        private int rightMouse = 0;
+        private int leftClickCooldown = 0;
         private int accelerationTimer = 0;
         private SoundEffectInstance aerosmithWhirrSound;
         private const int AccelerationTime = (int)(1.5f * 60);
@@ -90,8 +88,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 Projectile.velocity.Y += 0.3f;
                 Projectile.netUpdate = true;
             }
-            Vector2 rota = Projectile.Center - Main.MouseWorld;
-            Projectile.rotation = (-rota * Projectile.direction).ToRotation();
+            if (Projectile.owner == Main.myPlayer)
+            {
+                Vector2 rota = Projectile.Center - Main.MouseWorld;
+                Projectile.rotation = (-rota * Projectile.direction).ToRotation();
+            }
             bombless = player.HasBuff(ModContent.BuffType<AbilityCooldown>());
             Projectile.tileCollide = true;
 
@@ -100,10 +101,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             else if (Projectile.velocity.X < -0.5f)
                 Projectile.spriteDirection = -1;
 
-            if (leftMouse > 0)
-                leftMouse--;
-            if (rightMouse > 0)
-                rightMouse--;
+            if (leftClickCooldown > 0)
+                leftClickCooldown--;
 
             if (remoteMode)
             {
@@ -114,20 +113,25 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             }
             if (Projectile.owner != Main.myPlayer)
             {
-                float playerDistance = Vector2.Distance(Main.player[Main.myPlayer].Center, Projectile.Center);
-                if (playerDistance <= WhirrSoundDistance && !SoundEngine.AreSoundsPaused)
-                {
-                    aerosmithWhirrSound.Volume = (1f - Math.Clamp((playerDistance * 1.4f) / WhirrSoundDistance, 0f, 1f)) * 0.6f;
-                    aerosmithWhirrSound.Volume *= Projectile.velocity.Length() / MaxFlightSpeed;
-                    aerosmithWhirrSound.Volume *= Main.soundVolume;
-                    aerosmithWhirrSound.Pitch = Math.Clamp((Main.player[Main.myPlayer].Center.X - Projectile.Center.X) / WhirrSoundDistance, -1f, 1f);
-                    if (aerosmithWhirrSound.State != SoundState.Playing)
-                        aerosmithWhirrSound.Play();
-                }
+                if (aerosmithWhirrSound == null)
+                    aerosmithWhirrSound = AerosmithStandFinal.AerosmithWhirrSoundEffect.CreateInstance();
                 else
                 {
-                    if (aerosmithWhirrSound.State != SoundState.Stopped)
-                        aerosmithWhirrSound.Stop();
+                    float playerDistance = Vector2.Distance(Main.player[Main.myPlayer].Center, Projectile.Center);
+                    if (playerDistance <= WhirrSoundDistance && !SoundEngine.AreSoundsPaused)
+                    {
+                        aerosmithWhirrSound.Volume = (1f - Math.Clamp((playerDistance * 1.4f) / WhirrSoundDistance, 0f, 1f)) * 0.6f;
+                        aerosmithWhirrSound.Volume *= Projectile.velocity.Length() / MaxFlightSpeed;
+                        aerosmithWhirrSound.Volume *= Main.soundVolume;
+                        aerosmithWhirrSound.Pitch = Math.Clamp((Main.player[Main.myPlayer].Center.X - Projectile.Center.X) / WhirrSoundDistance, -1f, 1f);
+                        if (aerosmithWhirrSound.State != SoundState.Playing)
+                            aerosmithWhirrSound.Play();
+                    }
+                    else
+                    {
+                        if (aerosmithWhirrSound.State != SoundState.Stopped)
+                            aerosmithWhirrSound.Stop();
+                    }
                 }
             }
             else
@@ -175,10 +179,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
-                    leftMouse = 10;
-
+                    leftClickCooldown = 10;
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-
                     Projectile.spriteDirection = Projectile.direction;
                     accelerationTimer += 2;
                     if (accelerationTimer >= AccelerationTime)
@@ -224,28 +226,41 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer)
                 {
-                    rightMouse = 10;
-
                     if (mouseX > Projectile.Center.X)
                         Projectile.spriteDirection = 1;
-                    if (mouseX < Projectile.Center.X)
+                    else
                         Projectile.spriteDirection = -1;
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= 32f;
                         int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), newProjectileDamage, 3f, Projectile.owner);
                         Main.projectile[projIndex].netUpdate = true;
                         SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
+                        int amountOfShootDusts = Main.rand.Next(1, 2 + 1);
+                        for (int i = 0; i < amountOfShootDusts; i++)
+                        {
+                            float dustScale = Main.rand.Next(8, 12 + 1) / 10f;
+                            if (Main.rand.Next(0, 1 + 1) == 0)
+                            {
+                                int dustIndex = Dust.NewDust(Projectile.Center - Vector2.One * 3f, 2, 2, DustID.Torch, Scale: dustScale);
+                                Main.dust[dustIndex].velocity = shootVel * 1.1f * (Main.rand.Next(8, 12 + 1) / 10f);
+                                Main.dust[dustIndex].noGravity = true;
+                            }
+                            else
+                            {
+                                int dustIndex = Dust.NewDust(Projectile.Center - Vector2.One * 3f, 2, 2, DustID.Smoke, shootVel.X * 0.5f, shootVel.Y * 0.5f, Scale: dustScale);
+                                Main.dust[dustIndex].noGravity = true;
+                            }
+                        }
                     }
                 }
-                if (!remoteMode && leftMouse == 0)
+                if (!remoteMode && leftClickCooldown == 0)
                 {
                     if (Projectile.Distance(player.Center) < 12 * 16f)
                     {
@@ -294,7 +309,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         Projectile.netUpdate = true;
                     }
                 }
-                if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer)
+                if (SpecialKeyPressed(false))
                 {
                     remoteMode = !remoteMode;
                     if (remoteMode)
@@ -371,7 +386,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         Projectile.netUpdate = true;
                     }
                 }
-                if (target != null)
+                else
                 {
                     if (Projectile.Distance(target.Center) > 3 * 16f)
                     {
@@ -416,16 +431,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         {
             writer.Write(bombless);
             writer.Write(remoteMode);
-            writer.Write(leftMouse);
-            writer.Write(rightMouse);
+            writer.Write((byte)leftClickCooldown);
+            writer.Write((short)(Projectile.velocity.X * 100));
+            writer.Write((short)(Projectile.velocity.Y * 100));
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             bombless = reader.ReadBoolean();
             remoteMode = reader.ReadBoolean();
-            leftMouse = reader.ReadInt32();
-            rightMouse = reader.ReadInt32();
+            leftClickCooldown = reader.ReadByte();
+            Projectile.velocity.X = reader.ReadInt16() / 100f;
+            Projectile.velocity.Y = reader.ReadInt16() / 100f;
         }
 
         public void SelectFrame()

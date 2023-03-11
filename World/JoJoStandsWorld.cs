@@ -137,6 +137,7 @@ namespace JoJoStands
                 if (VampiricNight)
                 {
                     VampiricNight = false;
+                    vampiricNightComplete = true;
                     Main.NewText("The zombies have been pushed back!", WorldEventTextColor);
                 }
             }

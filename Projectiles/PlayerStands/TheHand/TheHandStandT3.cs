@@ -87,15 +87,19 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && Projectile.owner == Main.myPlayer)
                     {
                         secondaryAbilityFrames = true;
-                        if (chargeTimer < 150f)
+                        Projectile.netUpdate = true;
+                        if (chargeTimer < 150)
                             chargeTimer++;
                     }
                     if (!Main.mouseRight && chargeTimer != 0 && Projectile.owner == Main.myPlayer)
+                    {
                         scrapeFrames = true;
+                        Projectile.netUpdate = true;
+                    }
 
                     if (!Main.mouseRight && chargeTimer != 0 && scrapeFrames && Projectile.frame == 1 && Projectile.owner == Main.myPlayer)
                     {
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR"));
+                        SoundEngine.PlaySound(TheHandStandFinal.ScrapeSoundEffect);
                         Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                         distanceToTeleport.Normalize();
                         distanceToTeleport *= chargeTimer / 45f;
@@ -148,9 +152,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2 * overHeavenDamageBoost), PunchKnockback, Projectile.owner, FistWhoAmI);
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
-                            SoundStyle theHandScrapeSound = new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR");
+                            SoundStyle theHandScrapeSound = TheHandStandFinal.ScrapeSoundEffect;
                             theHandScrapeSound.Pitch = Main.rand.NextFloat(0, 0.8f + 1f);
-                            theHandScrapeSound.Volume = MyPlayer.ModSoundsVolume;
+                            theHandScrapeSound.Volume = JoJoStands.ModSoundsVolume;
                             SoundEngine.PlaySound(theHandScrapeSound, Projectile.Center);
                         }
                         LimitDistance();
@@ -187,7 +191,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         scrapeFrames = true;
                         if (specialScrapeTimer <= 60)
                         {
-                            SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR"));
+                            SoundEngine.PlaySound(TheHandStandFinal.ScrapeSoundEffect);
                             for (int i = 0; i < Main.maxNPCs; i++)
                             {
                                 NPC npc = Main.npc[i];
@@ -216,7 +220,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         }
                         if (specialScrapeTimer > 60)
                         {
-                            SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR"));
+                            SoundEngine.PlaySound(TheHandStandFinal.ScrapeSoundEffect);
                             for (int i = 0; i < Main.maxNPCs; i++)
                             {
                                 NPC npc = Main.npc[i];
@@ -270,7 +274,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && MyPlayer.RangeIndicators && chargeTimer != 0)
+            if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && JoJoStands.RangeIndicators && chargeTimer != 0)
             {
                 Texture2D positionIndicator = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/PositionIndicator");
                 Vector2 distanceToTeleport = Vector2.Zero;
@@ -278,7 +282,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                     distanceToTeleport = Main.MouseWorld - player.position;
                 distanceToTeleport.Normalize();
                 distanceToTeleport *= (98f + mPlayer.standRangeBoosts) * (chargeTimer / 45f);
-                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * MyPlayer.RangeIndicatorAlpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(positionIndicator, (player.Center + distanceToTeleport) - Main.screenPosition, null, Color.White * JoJoStands.RangeIndicatorAlpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
             }
             if (scrapeFrames)
             {
@@ -303,12 +307,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         {
             writer.Write(scrapeFrames);
             writer.Write(scrapeBarrageFrames);
+            writer.Write(scrapeMode);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             scrapeFrames = reader.ReadBoolean();
             scrapeBarrageFrames = reader.ReadBoolean();
+            scrapeMode = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()

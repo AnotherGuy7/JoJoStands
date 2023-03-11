@@ -32,7 +32,7 @@ namespace JoJoStands.Projectiles
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
                 SoundStyle starFinger = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/StarFinger");
-                starFinger.Volume = MyPlayer.ModSoundsVolume;
+                starFinger.Volume = JoJoStands.ModSoundsVolume;
                 SoundEngine.PlaySound(starFinger, Projectile.Center);
                 playedSound = true;
             }

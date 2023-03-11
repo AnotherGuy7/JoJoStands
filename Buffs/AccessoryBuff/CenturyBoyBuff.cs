@@ -37,7 +37,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.controlRight = false;
             player.controlUseTile = false;
             player.maxRunSpeed = 0f;
-            if (MyPlayer.SecretReferences)
+            if (JoJoStands.SecretReferences)
             {
                 limitTimer--;
                 if (player.wet)

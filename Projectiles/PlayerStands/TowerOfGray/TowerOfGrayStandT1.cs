@@ -1,11 +1,11 @@
 using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI;
+using Terraria.ModLoader;
 
 
 namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
@@ -22,7 +22,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             Main.projFrames[Projectile.type] = 4;
         }
 
-        public override void SetDefaults()
+        public override void ExtraSetDefaults()
         {
             Projectile.netImportant = true;
             Projectile.width = 34;

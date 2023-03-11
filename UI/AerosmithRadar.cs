@@ -28,7 +28,7 @@ namespace JoJoStands.UI
 
             centerDot.VAlign = 0.5f * (1f / Main.UIScale);
             centerDot.VAlign += (1 * 8) / 150f;
-            centerDot.ImageScale = 4f;
+            centerDot.ImageScale = 4f * (1f / Main.UIScale);
             base.Update(gameTime);
         }
 
@@ -112,7 +112,7 @@ namespace JoJoStands.UI
                     }
                 }
             }
-            if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
+            if (JoJoStands.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int p = 0; p < Main.maxPlayers; p++)
                 {

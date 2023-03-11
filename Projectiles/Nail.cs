@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles
             Projectile.width = 10;
             Projectile.height = 12;
             Projectile.aiStyle = 0;
-            Projectile.timeLeft = 300;
+            Projectile.timeLeft = 5 * 60;
             Projectile.penetrate = 1;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
@@ -34,6 +34,7 @@ namespace JoJoStands.Projectiles
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
+
             if (mPlayer.crackedPearlEquipped)
             {
                 if (Main.rand.Next(1, 100 + 1) >= 60)

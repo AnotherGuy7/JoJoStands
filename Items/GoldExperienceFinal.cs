@@ -19,7 +19,10 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Gold Experience (Final Tier)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use abilities! \nSpecial: Switches the abilities used for right-click!\nUsed in Stand Slot");
+            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use abilities!" +
+                "\nSpecial: Opens/Hides the Ability Wheel" +
+                "\nPassive: Barraging enemies may inflict them with Life Punch" +
+                "\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

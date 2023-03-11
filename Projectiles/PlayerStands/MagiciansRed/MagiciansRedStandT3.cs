@@ -84,7 +84,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     if (JoJoStands.SoundsLoaded)
                     {
                         SoundStyle redBind = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RedBind");
-                        redBind.Volume = MyPlayer.ModSoundsVolume;
+                        redBind.Volume = JoJoStands.ModSoundsVolume;
                         SoundEngine.PlaySound(redBind, Projectile.position);
                     }
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
@@ -112,7 +112,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     if (JoJoStands.SoundsLoaded)
                     {
                         SoundStyle crossFireHurricane = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/CrossfireHurricaneSpecial");
-                        crossFireHurricane.Volume = MyPlayer.ModSoundsVolume;
+                        crossFireHurricane.Volume = JoJoStands.ModSoundsVolume;
                         SoundEngine.PlaySound(crossFireHurricane, Projectile.position);
                     }
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));

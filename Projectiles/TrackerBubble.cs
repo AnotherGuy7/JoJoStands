@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
 {
-    public class ControllableBubble : ModProjectile
+    public class TrackerBubble : ModProjectile
     {
         public override string Texture => Mod.Name + "/Projectiles/PlunderBubble";
 
@@ -26,7 +26,7 @@ namespace JoJoStands.Projectiles
             Projectile.alpha = 254;
         }
 
-        private int explosionTimer = 0;
+        private bool explosiveBubble = false;
         private const float ExplosionRadius = 6f * 16f;
         private readonly SoundStyle PopSound = new SoundStyle(SoundID.SplashWeak.SoundPath)
         {
@@ -44,48 +44,75 @@ namespace JoJoStands.Projectiles
             { DustID.IceTorch, PlunderBubble.Plunder_Ice },
         };
 
-        private readonly float[] BubbleAcceleration = new float[2] { 0.09f, 0.12f };
-        private readonly float[] MaxBubbleSpeed = new float[2] { 2.1f, 3.4f };
+        private readonly float BubbleAcceleration = 0.15f;
+        private readonly float MaxBubbleSpeed = 5.2f;
 
 
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            int tierIndex = (mPlayer.standTier - 4) + 1;
             if (Projectile.alpha > 0)
                 Projectile.alpha -= 2;
-            if (explosionTimer > 0)
-            {
-                explosionTimer--;
-                if (explosionTimer <= 0)
-                    Projectile.Kill();
-            }
             if (!mPlayer.standOut)
             {
                 Projectile.Kill();
                 return;
             }
 
-            if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+            if (Projectile.owner == Main.myPlayer)
             {
-                Vector2 velocity = Main.MouseWorld - Projectile.Center;
-                velocity.Normalize();
-                velocity *= BubbleAcceleration[tierIndex];
-                if (Math.Abs(Projectile.velocity.X - velocity.X) > MaxBubbleSpeed[tierIndex])
-                    velocity.X = (Math.Abs(velocity.X) / velocity.X) * 0.02f;
-                if (Math.Abs(Projectile.velocity.Y - velocity.Y) > MaxBubbleSpeed[tierIndex])
-                    velocity.Y = (Math.Abs(velocity.Y) / velocity.Y) * 0.02f;
+                if (Main.mouseLeft)
+                {
+                    explosiveBubble = false;
+                    Vector2 velocity = Main.MouseWorld - Projectile.Center;
+                    velocity.Normalize();
+                    velocity *= BubbleAcceleration;
+                    if (Math.Abs(Projectile.velocity.X - velocity.X) > MaxBubbleSpeed)
+                        velocity.X = (Math.Abs(velocity.X) / velocity.X) * 0.02f;
+                    if (Math.Abs(Projectile.velocity.Y - velocity.Y) > MaxBubbleSpeed)
+                        velocity.Y = (Math.Abs(velocity.Y) / velocity.Y) * 0.02f;
 
-                Projectile.velocity += velocity;
-                if (Projectile.velocity.Length() >= MaxBubbleSpeed[tierIndex])
-                    Projectile.velocity *= 0.98f;
+                    Projectile.velocity += velocity;
+                    if (Projectile.velocity.Length() >= MaxBubbleSpeed)
+                        Projectile.velocity *= 0.98f;
+                }
+                else
+                {
 
+                    if (Projectile.ai[1] != -1)
+                    {
+                        NPC npc = Main.npc[(int)Projectile.ai[1]];
+                        if (npc == null || !npc.active)
+                        {
+                            Projectile.ai[1] = -1;
+                            explosiveBubble = false;
+                        }
+                        else
+                        {
+                            explosiveBubble = true;
+                            Vector2 velocity = Main.npc[(int)Projectile.ai[1]].Center - Projectile.Center;
+                            velocity.Normalize();
+                            velocity *= BubbleAcceleration;
+                            if (Math.Abs(Projectile.velocity.X - velocity.X) > MaxBubbleSpeed)
+                                velocity.X = (Math.Abs(velocity.X) / velocity.X) * 0.02f;
+                            if (Math.Abs(Projectile.velocity.Y - velocity.Y) > MaxBubbleSpeed)
+                                velocity.Y = (Math.Abs(velocity.Y) / velocity.Y) * 0.02f;
+
+                            Projectile.velocity += velocity;
+                            if (Projectile.velocity.Length() >= MaxBubbleSpeed)
+                                Projectile.velocity *= 0.98f;
+
+                            if (npc.active && npc.lifeMax > 5 && !npc.friendly && !npc.hide && !npc.immortal && npc.Distance(Projectile.Center) <= ExplosionRadius / 3f)
+                                Projectile.Kill();
+                        }
+                    }
+                    else
+                    {
+                        Projectile.velocity *= 0.98f;
+                    }
+                }
                 Projectile.netUpdate = true;
-            }
-            else
-            {
-                Projectile.velocity *= 0.98f;
             }
 
             for (int d = 0; d < Main.maxDust; d++)
@@ -96,13 +123,6 @@ namespace JoJoStands.Projectiles
                     Projectile.ai[0] = PlunderInteractionTypes[(short)dust.type];
                     break;
                 }
-            }
-
-            if (Main.mouseRight && !player.HasBuff<AbilityCooldown>() && Projectile.owner == Main.myPlayer)
-            {
-                Projectile.ai[1] = 1f;
-                explosionTimer = Main.rand.Next(1, 25 + 1);
-                Projectile.netUpdate = true;
             }
 
             if (Main.rand.NextBool(2))
@@ -119,16 +139,6 @@ namespace JoJoStands.Projectiles
                     Main.dust[dustIndex].noGravity = true;
                 }
             }
-        }
-
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write((byte)explosionTimer);
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            explosionTimer = reader.ReadByte();
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -178,7 +188,7 @@ namespace JoJoStands.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            if (Projectile.ai[1] == 0f)
+            if (!explosiveBubble)
             {
                 Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Cloud, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
                 for (int i = 0; i < 15; i++)
@@ -224,7 +234,7 @@ namespace JoJoStands.Projectiles
                             if (npc.position.X - Projectile.position.X > 0)
                                 hitDirection = 1;
 
-                            npc.StrikeNPC(Projectile.damage * 2, 9f, hitDirection, crit);
+                            npc.StrikeNPC((int)(Projectile.damage * 1.7f), 9f, hitDirection, crit);
                         }
                     }
                 }

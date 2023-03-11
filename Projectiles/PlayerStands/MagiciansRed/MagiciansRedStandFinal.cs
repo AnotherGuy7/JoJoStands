@@ -85,7 +85,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     if (JoJoStands.SoundsLoaded)
                     {
                         SoundStyle redBind = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RedBind");
-                        redBind.Volume = MyPlayer.ModSoundsVolume;
+                        redBind.Volume = JoJoStands.ModSoundsVolume;
                         SoundEngine.PlaySound(redBind, Projectile.position);
                     }
 
@@ -114,7 +114,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     if (JoJoStands.SoundsLoaded)
                     {
                         SoundStyle crossFireHurricane = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/CrossfireHurricaneSpecial");
-                        crossFireHurricane.Volume = MyPlayer.ModSoundsVolume;
+                        crossFireHurricane.Volume = JoJoStands.ModSoundsVolume;
                         SoundEngine.PlaySound(crossFireHurricane, Projectile.Center);
                     }
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(45));

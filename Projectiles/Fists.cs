@@ -63,7 +63,7 @@ namespace JoJoStands.Projectiles
                 playedSound = true;
             }
 
-            if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
+            if (JoJoStands.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
             {
                 for (int p = 0; p < Main.maxProjectiles; p++)
                 {
@@ -74,7 +74,7 @@ namespace JoJoStands.Projectiles
                         {
                             int dust = Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f);
                             Main.dust[dust].noGravity = true;
-                            if (MyPlayer.Sounds && Main.netMode != NetmodeID.Server)
+                            if (JoJoStands.Sounds && Main.netMode != NetmodeID.Server)
                             {
                                 SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
                                 punchSound.Volume = 0.6f;
@@ -88,7 +88,7 @@ namespace JoJoStands.Projectiles
                             otherProj.owner = Projectile.owner;
                             otherProj.velocity = Projectile.velocity * 0.8f;
                             SoundEngine.PlaySound(SoundID.Tink, Projectile.Center);
-                            if (MyPlayer.Sounds && Main.netMode != NetmodeID.Server)
+                            if (JoJoStands.Sounds && Main.netMode != NetmodeID.Server)
                             {
                                 SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
                                 punchSound.Volume = 0.5f;
@@ -240,7 +240,7 @@ namespace JoJoStands.Projectiles
             {
                 if (standTier == 3)
                     target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
-                if (standTier == 4)
+                else if (standTier == 4)
                     target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
             }
 

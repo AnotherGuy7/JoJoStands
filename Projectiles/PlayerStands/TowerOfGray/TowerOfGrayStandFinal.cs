@@ -1,14 +1,13 @@
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using System.Collections.Generic;
-using System;
-using System.IO;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
 using JoJoStands.Buffs.Debuffs;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI;
-using System.Security.Policy;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 {
@@ -24,7 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             Main.projFrames[Projectile.type] = 4;
         }
 
-        public override void SetDefaults()
+        public override void ExtraSetDefaults()
         {
             Projectile.netImportant = true;
             Projectile.width = 34;
@@ -180,7 +179,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                                         Projectile.velocity *= 0.92f;
                                 }
                             }
-                            if (Vector2.Distance(player.Center, Projectile.Center) >  controlRange * 0.9f && Vector2.Distance(player.Center, Main.MouseWorld) > controlRange * 0.9f)
+                            if (Vector2.Distance(player.Center, Projectile.Center) > controlRange * 0.9f && Vector2.Distance(player.Center, Main.MouseWorld) > controlRange * 0.9f)
                             {
                                 Projectile.velocity *= 0f;
                                 Projectile.netUpdate = true;

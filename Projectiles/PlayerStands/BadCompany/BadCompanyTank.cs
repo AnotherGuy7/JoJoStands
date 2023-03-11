@@ -1,3 +1,5 @@
+using JoJoStands.Dusts;
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -5,7 +7,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.UI;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
@@ -28,9 +29,9 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         public int updateTimer = 0;
 
         private bool setStats = false;
-        private new int projectileDamage = 0;
-        private new float shootSpeed = 12f;
-        private new int shootTime = 0;
+        private int projectileDamage = 0;
+        private float shootSpeed = 12f;
+        private int shootTime = 0;
         private float speedRandom = 0f;
 
         public override void AI()
@@ -72,8 +73,17 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 speedRandom = Main.rand.NextFloat(-0.03f, 0.03f);
                 setStats = true;
 
+                int amountOfParticles = Main.rand.Next(1, 2);
+                int[] dustTypes = new int[3] { ModContent.DustType<StandSummonParticles>(), ModContent.DustType<StandSummonShine1>(), ModContent.DustType<StandSummonShine2>() };
+                Vector2 dustSpawnOffset = StandOffset;
+                dustSpawnOffset.X *= Projectile.spriteDirection;
+                for (int i = 0; i < amountOfParticles; i++)
+                {
+                    int dustType = dustTypes[Main.rand.Next(0, 3)];
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
+                }
                 for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
             }
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
@@ -92,9 +102,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
                         int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 1f, Projectile.owner, (int)(projectileDamage * mPlayer.standDamageBoosts));

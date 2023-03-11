@@ -43,7 +43,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 if (JoJoStands.SoundsLoaded && !playedSpawnCry)
                 {
                     SoundStyle sound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Chumimiiin", SoundType.Sound);
-                    sound.Volume = MyPlayer.ModSoundsVolume;
+                    sound.Volume = JoJoStands.ModSoundsVolume;
                     SoundEngine.PlaySound(sound, Projectile.Center);
                     playedSpawnCry = true;
                 }

@@ -373,7 +373,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                             npc.velocity.Y *= 0.5f - slowBonus;
                     }
                 }
-                if (MyPlayer.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
+                if (JoJoStands.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer)
                 {
                     for (int p = 0; p < Main.maxPlayers; p++)
                     {

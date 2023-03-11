@@ -1,3 +1,4 @@
+using JoJoStands.Items.Hamon;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -21,8 +22,8 @@ namespace JoJoStands.Projectiles
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Items.Hamon.HamonPlayer hamonPlayer = player.GetModPlayer<Items.Hamon.HamonPlayer>();
-            if (Projectile.timeLeft == 790)
+            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+            if (Projectile.timeLeft <= 790)
                 Projectile.velocity *= 0;
 
             if (hamonPlayer.amountOfHamon >= 1)

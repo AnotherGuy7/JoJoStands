@@ -218,7 +218,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 }
             }
 
-            if (touchedTile && MyPlayer.AutomaticActivations)
+            if (touchedTile && JoJoStands.AutomaticActivations)
             {
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {

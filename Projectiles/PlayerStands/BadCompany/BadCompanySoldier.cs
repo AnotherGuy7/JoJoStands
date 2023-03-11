@@ -1,3 +1,5 @@
+using JoJoStands.Dusts;
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -5,7 +7,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.UI;
 
 namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 {
@@ -83,10 +84,17 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 speedRandom = Main.rand.NextFloat(-0.03f, 0.03f);
                 setStats = true;
 
-                for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+                int amountOfParticles = Main.rand.Next(1, 2);
+                int[] dustTypes = new int[3] { ModContent.DustType<StandSummonParticles>(), ModContent.DustType<StandSummonShine1>(), ModContent.DustType<StandSummonShine2>() };
+                Vector2 dustSpawnOffset = StandOffset;
+                dustSpawnOffset.X *= Projectile.spriteDirection;
+                for (int i = 0; i < amountOfParticles; i++)
                 {
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+                    int dustType = dustTypes[Main.rand.Next(0, 3)];
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
                 }
+                for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
             }
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
@@ -95,13 +103,9 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 if (Projectile.ai[0] == 0f)     //Here because it's different for Auto Mode
                 {
                     if (Main.MouseWorld.Y > Projectile.position.Y + centerDistance)
-                    {
                         PlayAnimation("AimDown");
-                    }
                     else if (Main.MouseWorld.Y < Projectile.position.Y - centerDistance)
-                    {
                         PlayAnimation("AimUp");
-                    }
                 }
                 if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer && !BadCompanyUnitsUI.Visible)
                 {

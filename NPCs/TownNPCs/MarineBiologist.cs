@@ -17,8 +17,6 @@ namespace JoJoStands.NPCs.TownNPCs
         public static bool UserIsAlive = false;
         public static int standDamage = 0;
 
-        private int guide = -1;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 25;
@@ -77,16 +75,6 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             Player player = Main.LocalPlayer;
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            for (int n = 0; n < Main.maxNPCs; n++)
-            {
-                NPC npc = Main.npc[n];
-                if (npc.type == NPCID.Guide)
-                {
-                    guide = npc.whoAmI;
-                    if (!npc.active)
-                        guide = -1;
-                }
-            }
             if (firstButton)
             {
                 if (mPlayer.awaitingViralMeteoriteTip)
@@ -101,13 +89,17 @@ namespace JoJoStands.NPCs.TownNPCs
                 {
                     Main.npcChatText = "I haven't heard much about it, but that old man tells me that Hamon is a versatile use of sun-like energy. From what he's told me, it can increase your physical capabilities and be used defensively or offensively, healing being one of its most useful uses. If that's all true, it's no wonder that man has lived this long.";
                 }
-                else if (standSlotItemType == ModContent.ItemType<StarPlatinumT1>() || standSlotItemType == ModContent.ItemType<StarPlatinumT2>())
+                else if (standSlotItemType == ModContent.ItemType<StarPlatinumT1>())
                 {
-                    Main.npcChatText = "You trying to mock me by asking about my own stand? What a pain... Well, I guess I'd be the one to know the most about it. I'll tell you what I can. \nGood grief, you've only just awoken Star Platinum? I expected better of a copycat like yourself. In its first or second tier, Star Platinum is nothing but a glorified pair of floating fists, but things get a bit more interesting as you reach its third and fourth tier.";
+                    Main.npcChatText = "You trying to mock me by asking about my own stand? What a pain... Well, I guess I'd be the one to know the most about it. I'll tell you what I can.\nGood grief, you've only just awoken Star Platinum? I expected better of a copycat like yourself. In its first or second tier, Star Platinum is nothing but a glorified pair of floating fists, but things get a bit more interesting as you reach its third and fourth tier.";
+                }
+                else if (standSlotItemType == ModContent.ItemType<StarPlatinumT2>())
+                {
+                    Main.npcChatText = "Now in its second tier, Star Platinum has the ability to use Star Finger, a medium-range attack that you can use to attack from a distance. I've personally rarely used this move, but it can be useful in certain situations.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<StarPlatinumT3>())
                 {
-                    Main.npcChatText = "At its third tier, Star Platinum gains the ability of Star Finger, a medium range attack that you can use to attack from a distance. I've personally rarely used this move, but it's useful.";
+                    Main.npcChatText = "Your Star Platinum just keeps getting stronger and stronger. An alternative to the Star Finger you learned not long ago could be flicking bullets. Star Platinum can launch a bullet with a simple flick at a speed faster than that of a gun. It ended up being a more reliable ability when I used it.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<StarPlatinumFinal>())
                 {
@@ -193,13 +185,21 @@ namespace JoJoStands.NPCs.TownNPCs
                 {
                     Main.npcChatText = "Tusk Act 4 has found the power of the Infinite Spin, and can cause enemies to... infinitely spin. Along with that, Act 4 can now manifest into a stronger form than the other three acts, allowing it to punch enemies. The catch is that you have to gain rotational energy using Slow Dancer though... But congratulations on obtaining such a power. I'm sure it was a long and roundabout path.";
                 }
-                else if (standSlotItemType == ModContent.ItemType<StickyFingersT1>() || standSlotItemType == ModContent.ItemType<StickyFingersT2>())
+                else if (standSlotItemType == ModContent.ItemType<StickyFingersT1>())
                 {
                     Main.npcChatText = "While zippers may seem like quite the mundane ability to have, Sticky Fingers is a stand that lets you use them to their absolute maximum potential. Figure out how to use the zippers, and your enemies will be saying Arrivederci, very quickly. \nAt first, Sticky Fingers isn't the most powerful of Stands though it does allow you to unzip your enemies as it punches. Keep it going, don't let your resolve waver, and power up further.";
                 }
-                else if (standSlotItemType == ModContent.ItemType<StickyFingersT3>() || standSlotItemType == ModContent.ItemType<StickyFingersFinal>())
+                else if (standSlotItemType == ModContent.ItemType<StickyFingersT2>())
                 {
-                    Main.npcChatText = "Now, you can unzip your own arms to throw out an extended reach punch. Think of it as a flail, because your fists do have mass, remember. Ah, you can also now throw a zipper in the direction of this thing called a 'cursor' is and zip 30 tiles in that direction";
+                    Main.npcChatText = "If you haven't already noticed the versatility of your Stand, you will soon. You can now unzip your own arms to punch targets outside of your Stand Range. On top of that, you can also hide inside of tiles to sneak up on enemies. This is only the beginning for your abilities, keep getting stronger and you'll find many more uses for your zippers.";
+                }
+                else if (standSlotItemType == ModContent.ItemType<StickyFingersT3>())
+                {
+                    Main.npcChatText = "Would you look at that, you can place zippers on yourself. Funny how you could use your ability on yourself while others like Josuke can't. In any case, that ability will come in handy if you ever want to dodge an incoming attack. Another thing you might have already noticed is you can zip through the ground at high speeds. That'll sure help you traverse.";
+                }
+                else if (standSlotItemType == ModContent.ItemType<StickyFingersFinal>())
+                {
+                    Main.npcChatText = "Sticky Fingers sure became a Stand no one would want to mess with. You can attack from far, hide in tiles, unzip yourself to dodge attacks, and even move around through tiles. If a Stand User with that Stand were to have faced off against us back in Egypt, we could've been in some serious trouble.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<SexPistolsT1>())
                 {
@@ -343,7 +343,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (standSlotItemType == ModContent.ItemType<CreamT1>())
                 {
-                    Main.npcChatText = "That Stand makes me... nervous, and I cannot tell you why. Anyways, uh, Cream can harness the void and erase things, almost like that blockhead friend of Josuke's.\nJust like the rest, Cream cannot do very much at this stage. It can throw a mean chop though, and it can cause enemies to lose their organs. Literally.";
+                    Main.npcChatText = "That Stand makes me... nervous, and I cannot tell you why. Anyways, uh, Cream can harness the void and erase things, almost like that blockhead friend of Josuke's.\nJust like the rest, Cream cannot do very much at this stage. It can throw a mean chop though, and it can cause enemies to lose their organs. Literally. It can also dash toward enemies in its Void form.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<CreamT2>())
                 {
@@ -423,7 +423,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (standSlotItemType == ModContent.ItemType<SoftAndWetGoBeyond>())
                 {
-                    Main.npcChatText = "Good grief, you really did go beyond your normal capabilities. I've seen this type of explosive power before, back in Morioh, but it's changed. Evolved. It 'goes beyond' nature.\nYour bubbles are not 'just' bubbles. They're actually a thin line spinning at incredible speeds. If this line reaches a vanishing point, there's no telling what your bubbles can achieve. They could transcend logic, itself. How terrifying...";
+                    Main.npcChatText = "Good grief, you really did go beyond your normal capabilities. I've seen this type of explosive power before, back in Morioh, but it's changed. Evolved. It 'goes beyond' nature.\nYour bubbles are not 'just' bubbles. They're actually a thin line spinning at incredible speeds. If this line reaches a vanishing point, there's no telling what your bubbles can achieve. They could transcend logic, itself. How terrifying... Not only that, you can control when they explode, which would be useful for you and deadly for the target.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<CrazyDiamondT1>())
                 {
@@ -443,38 +443,35 @@ namespace JoJoStands.NPCs.TownNPCs
                 }
                 else if (standSlotItemType == ModContent.ItemType<TowerOfGrayT1>())
                 {
-                    Main.npcChatText = "Ugh... I thought I would never have to see that nasty bug again. This is one of the first Stands DIO sent after me and my friends. You will have to forgive my disgust. Anyways, Tower of Gray is capable of traveling far distances, all while attacking with its piercing tongue. Do with that what you will.";
+                    Main.npcChatText = "Ugh... I thought I would never have to see that nasty bug again. This is one of the first Stands we encountered on our way to Egypt. You will have to forgive my disgust. Anyway, Tower of Gray is capable of traveling far distances, all while attacking with its piercing tongue. Do with that what you will.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<TowerOfGrayT2>())
                 {
-                    Main.npcChatText = "The bug gotten stronger... good grief. It can now move at crazy speeds, even my Star Platinum has trouble keeping up with it. Tower of Gray should now be able to tear through enemies like a bullet. It is useful, if not a bit gruesome.";
+                    Main.npcChatText = "The bug has gotten stronger... good grief. It can now move at crazy speeds, even my Star Platinum has trouble keeping up with it. Tower of Gray should now be able to tear through enemies like a bullet. Its useful, if not a bit gruesome.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<TowerOfGrayT3>())
                 {
-                    Main.npcChatText = "The old man who possessed that Stand had some sick tendencies. He enjoyed taking the tongues out of his victims, using the insane precision for dastardly pleasures. I still shudder at the thought of that night. Anyways, Tower of Gray is capable of tearing out the tongues of a whole lot of people at once, like an unfortunate shish-kabob... Just do not get any ideas, okay?";
+                    Main.npcChatText = "The old man who possessed that Stand had some sick tendencies. He enjoyed taking the tongues out of his victims, using the insane precision for dastardly pleasures. I still shudder at the thought of that night. Anyway, Tower of Gray is capable of tearing out the tongues of a whole lot of people at once, like an unfortunate shish-kabob... Just do not get any ideas, okay?";
                 }
                 else if (standSlotItemType == ModContent.ItemType<TowerOfGrayFinal>())
                 {
-                    Main.npcChatText = "It seems you have reached this bug potential. It is piercing tongue is a weapon one would be a fool to ignore. Now, if that is all, I will be on my way. I would like to keep my distance from that thing.";
+                    Main.npcChatText = "It seems you have reached your Stand's highest potential. It's piercing tongue is a weapon one would be a fool to ignore. Now, if that is all, I will be on my way. I would like to keep my distance from that thing.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<EchoesAct0>())
                 {
-                    Main.npcChatText = "Hmmm? Is that an egg? Wait, I have seen this before... Could it be? Yes, this is Echoes! Or, at least, it will be.  If you are looking to get more out of this Stand, you are going to have to grow alongside it. You will need a Strong Will to evolve, and a whole lot of bravery to bring an egg into battle.";
+                    Main.npcChatText = "Hmmm? Is that an egg? Wait, I have seen this before... Could it be? Yes, this is Echoes! Or, at least, it will be. If you are looking to get more out of this Stand, you are going to have to grow alongside it. You will need a Strong Will to evolve, and a whole lot of bravery to bring an egg into battle.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<EchoesAct1>())
                 {
-                    Main.npcChatText = "I am surprised you made it this far. It seems I underestimated your willpower. This is Echoes Act 1. While it may be weak, it is ability is where it is true strength lies. You should be able to generate sound effects on those you touch. This can either debilitate an enemy, or reassure a friend. Whatever you do, just be sure to make some noise. If you are looking to grow your abilities further, I would recommend taking Act 1 into a dangerous fight. Maybe try those creepy mechanical eyes I have seen floating around.";
+                    Main.npcChatText = "I'm surprised you've made it this far. It seems I underestimated your willpower. This is Echoes Act 1. While it may be weak, Echoes' ability is where it's true strength lies. You should be able to generate sound effects on those you touch. This can either debilitate an enemy, or reassure a friend. Whatever you do, just be sure to make some noise. If you are looking to grow your abilities further, I would recommend taking Act 1 into a dangerous fight. Maybe try those creepy mechanical eyes I have seen floating around.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<EchoesAct2>())
                 {
-                    if (guide != -1)
-                        Main.npcChatText = "You survived. Good. Now things are getting interesting. Echoes Act 2 is able to take those sounds effects of yours and make them do some real damage. Using the tip of it is tail, you will be able to place these sound effects wherever you want. You should be able to take better control of the battlefield. However, if you are looking to push your capabilities even further, you will need to face your greatest challenge yet. " + Main.npc[guide].GivenName + " has been telling me about this bizarre temple underneath the jungle. Try checking that out.";
-                    if (guide == -1)
-                        Main.npcChatText = "You survived. Good. Now things are getting interesting. Echoes Act 2 is able to take those sounds effects of yours and make them do some real damage. Using the tip of it is tail, you will be able to place these sound effects wherever you want. You should be able to take better control of the battlefield. However, if you are looking to push your capabilities even further, you will need to face your greatest challenge yet...";
+                    Main.npcChatText = "You survived. Good. Now things are getting interesting. Echoes Act 2 is able to take those sounds effects of yours and make them do some real damage. Using the tip of it is tail, you will be able to place these sound effects wherever you want. You should be able to take better control of the battlefield. However, if you are looking to push your capabilities even further, you will need to face your greatest challenge yet. Others are telling me about this bizarre temple underneath the jungle. Try checking that out.";
                 }
                 else if (standSlotItemType == ModContent.ItemType<EchoesAct3>())
                 {
-                    Main.npcChatText = "You have grown. This is Echoes Act 3, it is final form! In exchange for it is range, Echoes is much more powerful. You should also have the ability to use Three Freeze! This makes one target extremely heavy, keeping them in place. It is a reliable ability. Your hard work has paid off. Hopefully I can rely on you whenever the time comes.";
+                    Main.npcChatText = "You have grown. This is Echoes Act 3, it's final form! You'll find that this form heavily exchanges range for power. You should now have the ability to use Three Freeze! This makes a single target extremely heavy, keeping them in place. It is a reliable ability. Your hard work has paid off. If the time ever comes, I hope I can rely on you.";
                 }
 
                 if (mPlayer.StandSlot.SlotItem.IsAir)

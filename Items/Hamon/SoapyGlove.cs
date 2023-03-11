@@ -15,7 +15,10 @@ namespace JoJoStands.Items.Hamon
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Soapy Glove");
-            Tooltip.SetDefault("Shoot controllable bubbles! \nExperience goes up after each conquer... \nRight-click requires more than 3 hamon\nSpecial: Hamon Breathing");
+            Tooltip.SetDefault("Shoot controllable bubbles! \nExperience goes up after each conquer..." +
+                "\nRight-click requires more than 3 hamon" +
+                "\nSpecial: Hamon Breathing" +
+                "\nNote: Being below 15% health allows you to use Blood Bubbles");
             SacrificeTotal = 1;
         }
 
@@ -80,7 +83,7 @@ namespace JoJoStands.Items.Hamon
             }
             if (player.altFunctionUse != 2 && hamonPlayer.amountOfHamon > 1)
             {
-                if (player.statLife <= (player.statLifeMax * 0.05f))
+                if (player.statLife <= player.statLifeMax * 0.15f)
                 {
                     damage += 24;
                     type = ModContent.ProjectileType<HamonBloodBubble>();

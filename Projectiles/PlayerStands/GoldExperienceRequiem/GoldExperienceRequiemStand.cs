@@ -75,42 +75,46 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, player.Center);
                     bool mouseOnPlatform = TileID.Sets.Platforms[Main.tile[(int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f)].TileType];
-                    if (Main.mouseRight && (Collision.SolidCollision(Main.MouseWorld, 1, 1) || mouseOnPlatform) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && mPlayer.chosenAbility == 1)
+                    if (Main.mouseRight)
                     {
-                        int yPos = (((int)Main.MouseWorld.Y / 16) - 3) * 16;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld.X, yPos, 0f, 0f, ModContent.ProjectileType<GETree>(), 1, 0f, Projectile.owner, TierNumber);
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(12));
-                    }
-                    if (Main.mouseRight && mPlayer.chosenAbility == 2 && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<DeathLoop>()) && mouseDistance < MaxDistance)
-                    {
-                        bool targetSuccess = false;
-                        for (int n = 0; n < Main.maxNPCs; n++)
+                        if (mPlayer.chosenAbility == 1 && (Collision.SolidCollision(Main.MouseWorld, 1, 1) || mouseOnPlatform) && !Collision.SolidCollision(Main.MouseWorld - new Vector2(0f, 16f), 1, 1) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                         {
-                            NPC npc = Main.npc[n];
-                            if (npc.active && !npc.townNPC && npc.lifeMax > 5 && Vector2.Distance(Main.MouseWorld, npc.Center) <= npc.Size.Length())
+                            int yPos = (((int)Main.MouseWorld.Y / 16) - 3) * 16;
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld.X, yPos, 0f, 0f, ModContent.ProjectileType<GETree>(), 1, 0f, Projectile.owner, TierNumber);
+                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(12));
+                        }
+                        else if (mPlayer.chosenAbility == 2 && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && !player.HasBuff(ModContent.BuffType<DeathLoop>()) && mouseDistance < MaxDistance)
+                        {
+                            bool targetSuccess = false;
+                            for (int n = 0; n < Main.maxNPCs; n++)
                             {
-                                targetSuccess = true;
-                                player.AddBuff(ModContent.BuffType<DeathLoop>(), 2);
-                                mPlayer.deathLoopTarget = npc.whoAmI;
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().taggedForDeathLoop = 600;
-                                npc.GetGlobalNPC<JoJoGlobalNPC>().deathLoopOwner = player.whoAmI;
-                                SyncCall.SyncDeathLoopInfo(player.whoAmI, npc.whoAmI);
+                                NPC npc = Main.npc[n];
+                                if (npc.active && !npc.townNPC && npc.lifeMax > 5 && Vector2.Distance(Main.MouseWorld, npc.Center) <= npc.Size.Length())
+                                {
+                                    targetSuccess = true;
+                                    player.AddBuff(ModContent.BuffType<DeathLoop>(), 2);
+                                    mPlayer.deathLoopTarget = npc.whoAmI;
+                                    npc.GetGlobalNPC<JoJoGlobalNPC>().taggedForDeathLoop = 600;
+                                    npc.GetGlobalNPC<JoJoGlobalNPC>().deathLoopOwner = player.whoAmI;
+                                    SyncCall.SyncDeathLoopInfo(player.whoAmI, npc.whoAmI);
+                                    break;
+                                }
+                            }
+
+                            if (!targetSuccess)
+                            {
+                                shootCount += 15;
+                                Main.NewText("Right-Click the enemy to target");
                             }
                         }
-
-                        if (!targetSuccess)
+                        else if (mPlayer.chosenAbility == 3 && player.velocity == Vector2.Zero)
                         {
-                            shootCount += 15;
-                            Main.NewText("Right-Click the enemy to target");
-                        }
-                    }
-                    if (Main.mouseRight && player.velocity == Vector2.Zero && mPlayer.chosenAbility == 3)
-                    {
-                        regencounter++;
-                        if (Main.rand.Next(0, 2 + 1) == 0)
-                        {
-                            int dustIndex = Dust.NewDust(player.position, player.width, player.height, DustID.IchorTorch, SpeedY: Main.rand.NextFloat(-1.1f, -0.6f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
-                            Main.dust[dustIndex].noGravity = true;
+                            regencounter++;
+                            if (Main.rand.Next(0, 2 + 1) == 0)
+                            {
+                                int dustIndex = Dust.NewDust(player.position, player.width, player.height, DustID.IchorTorch, SpeedY: Main.rand.NextFloat(-1.1f, -0.6f + 1f), Scale: Main.rand.NextFloat(1.1f, 2.4f + 1f));
+                                Main.dust[dustIndex].noGravity = true;
+                            }
                         }
                     }
                     else

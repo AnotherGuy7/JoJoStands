@@ -42,7 +42,7 @@ namespace JoJoStands
                     StandClass.StandNetworkUpdateTime = 2;
                     break;
             }
-            MyPlayer.StandPvPMode = PvPMode;
+            JoJoStands.StandPvPMode = PvPMode;
         }
     }
 }

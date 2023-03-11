@@ -22,6 +22,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using static JoJoStands.MyPlayer;
 using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands
@@ -46,6 +47,48 @@ namespace JoJoStands
         public static List<int> standProjectileList;
         public static List<int> christmasStands;
         public static List<char> testStandPassword = new List<char>();      //  :) Have *fuuuuuuun!*
+
+        public static float RangeIndicatorAlpha;
+        public static bool Sounds = true;
+        public static bool TimestopEffects = false;
+        public static bool RangeIndicators = false;
+        public static bool AutomaticActivations = false;
+        public static bool SecretReferences = false;
+        public static int StandSlotPositionX;
+        public static int StandSlotPositionY;
+        public static float HamonBarPositionX;
+        public static float HamonBarPositionY;
+        public static float ModSoundsVolume;
+        public static bool ColorChangeEffects = false;
+        public static bool TimeskipEffects = false;
+        public static bool BiteTheDustEffects = false;
+        public static bool RespawnWithStandOut = true;
+        public static bool StandPvPMode = false;
+        public static bool AbilityWheelDescriptions = true;
+        public static DeathSoundType DeathSoundID;
+        public static ColorChangeStyleEnum ColorChangeStyle = ColorChangeStyleEnum.None;
+        public static StandSearchTypeEnum StandSearchTypeEnum = StandSearchTypeEnum.Bosses;
+        public static bool TestStandUnlocked = false;
+
+        public enum ColorChangeStyleEnum
+        {
+            None,
+            NormalToLightGreen,
+            NormalToBlue,
+            NormalToPurple,
+            NormalToRed,
+            NormalToDarkBlue
+        }
+
+        public enum DeathSoundType
+        {
+            None,
+            Roundabout,
+            Caesar,
+            KonoMeAmareriMaroreriMerareMaro,
+            LastTrainHome,
+            KingCrimsonNoNorioKu,
+        }
 
         public override void Load()
         {
@@ -75,7 +118,6 @@ namespace JoJoStands
                 ProjectileType<ControllableNail>(),
                 ProjectileType<CrossfireHurricaneAnkh>(),
                 ProjectileType<Emerald>(),
-                ProjectileType<ExplosiveSpin>(),
                 ProjectileType<FireAnkh>(),
                 ProjectileType<Fists>(),
                 ProjectileType<HermitPurpleGrab>(),
@@ -91,7 +133,7 @@ namespace JoJoStands
                 ProjectileType<StarFinger>(),
                 ProjectileType<TinyBubble>(),
                 ProjectileType<Projectiles.PlayerStands.Cream.Void>(),
-                ProjectileType<DashVoid>()
+                ProjectileType<DashVoid>(),
             };
 
             standTier1List = new List<int>
@@ -209,6 +251,7 @@ namespace JoJoStands
             SexPistolsUI.sexPistolsUITexture = null;
             VoidBar.VoidBarTexture = null;
             VoidBar.VoidBarBarTexture = null;
+            AerosmithStandFinal.AerosmithWhirrSoundEffect = null;
             Instance = null;
         }
 

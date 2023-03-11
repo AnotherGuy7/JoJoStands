@@ -44,9 +44,7 @@ namespace JoJoStands.Projectiles.Pets
                 Projectile.frame += 1;
                 Projectile.frameCounter = 0;
                 if (Projectile.frame >= 4)
-                {
                     Projectile.frame = 0;
-                }
             }
 
             if (Projectile.owner == Main.myPlayer && Main.mouseRight)
@@ -69,51 +67,37 @@ namespace JoJoStands.Projectiles.Pets
 
             Vector2 projectileDirection = frontOfPlayer - Projectile.Center;
             if (playerBackDistance < maximumDistance)
-            {
                 Projectile.velocity *= 0.25f;
-            }
+
             if (projectileDirection != Vector2.Zero)
             {
                 if (projectileDirection.Length() < maximumDistance * 0.5f)
-                {
                     Projectile.velocity = projectileDirection;
-                }
                 else
-                {
                     Projectile.velocity = projectileDirection * 0.1f;
-                }
             }
             if (Projectile.velocity.Length() > 6f)
             {
                 float estimatedRotation = Projectile.velocity.X * 0.08f + Projectile.velocity.Y * (float)Projectile.direction * 0.02f;
-                if (Math.Abs(Projectile.rotation - estimatedRotation) >= 3.14159274f)       //Pi?
+                if (Math.Abs(Projectile.rotation - estimatedRotation) >= (float)Math.PI)
                 {
                     if (estimatedRotation < Projectile.rotation)
-                    {
-                        Projectile.rotation -= 6.28318548f;     //Pi * 2?
-                    }
+                        Projectile.rotation -= (float)Math.Tau;
                     else
-                    {
-                        Projectile.rotation += 6.28318548f;
-                    }
+                        Projectile.rotation += (float)Math.Tau;
                 }
                 float num8 = 12f;
                 Projectile.rotation = (Projectile.rotation * (num8 - 1f) + estimatedRotation) / num8;
             }
             else
             {
-                if (Projectile.rotation > 3.14159274f)
-                {
-                    Projectile.rotation -= 6.28318548f;
-                }
+                if (Projectile.rotation > (float)Math.PI)
+                    Projectile.rotation -= (float)Math.Tau;
+
                 if (Projectile.rotation > -0.005f && Projectile.rotation < 0.005f)
-                {
                     Projectile.rotation = 0f;
-                }
                 else
-                {
                     Projectile.rotation *= 0.96f;
-                }
             }
             Projectile.netUpdate = true;
             Projectile.direction = Projectile.spriteDirection = player.direction;

@@ -92,7 +92,6 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
         public override void PlayAnimation(string animationName)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             string pathAddition = "";
             if (restrationMode)
                 pathAddition = "Restoration_";

@@ -31,7 +31,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private float ability = 0f;
         private float rotationAdd = 0f;
 
-        public override void SetDefaults()
+        public override void ExtraSetDefaults()
         {
             Projectile.width = 26;
             Projectile.height = 34;

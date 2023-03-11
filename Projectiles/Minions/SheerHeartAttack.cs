@@ -1,4 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Networking;
 using JoJoStands.Projectiles.PlayerStands;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,7 +8,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.Networking;
 
 
 namespace JoJoStands.Projectiles.Minions

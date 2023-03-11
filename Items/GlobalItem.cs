@@ -175,7 +175,7 @@ namespace JoJoStands.Items
                 if (!vPlayer.zombie && !vPlayer.vampire)
                     return;
 
-                if (!MyPlayer.AutomaticActivations)
+                if (!JoJoStands.AutomaticActivations)
                 {
                     if (Item.stack >= 5 && Main.mouseRight && generalPurposeTimer <= 0 && player.whoAmI == Main.myPlayer && vPlayer.HasSkill(player, VampirePlayer.ProtectiveFilm))
                     {

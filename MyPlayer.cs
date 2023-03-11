@@ -34,28 +34,6 @@ namespace JoJoStands
 {
     public class MyPlayer : ModPlayer
     {
-        public static float RangeIndicatorAlpha;
-        public static bool Sounds = true;
-        public static bool TimestopEffects = false;
-        public static bool RangeIndicators = false;
-        public static bool AutomaticActivations = false;
-        public static bool SecretReferences = false;
-        public static int StandSlotPositionX;
-        public static int StandSlotPositionY;
-        public static float HamonBarPositionX;
-        public static float HamonBarPositionY;
-        public static float ModSoundsVolume;
-        public static bool ColorChangeEffects = false;
-        public static bool TimeskipEffects = false;
-        public static bool BiteTheDustEffects = false;
-        public static bool RespawnWithStandOut = true;
-        public static bool StandPvPMode = false;
-        public static bool AbilityWheelDescriptions = true;
-        public static DeathSoundType DeathSoundID;
-        public static ColorChangeStyle colorChangeStyle = ColorChangeStyle.None;
-        public static StandSearchType standSearchType = StandSearchType.Bosses;
-        public static bool TestStandUnlocked = false;
-
         public int goldenSpinCounter = 0;
         public int aerosmithRadarFrameCounter = 0;
         public int poseDuration = 300;
@@ -252,6 +230,28 @@ namespace JoJoStands
         public int standFistsType = 0;
         public int kingCrimsonBuffIndex = -1;
 
+        public enum StandSearchTypeEnum
+        {
+            Bosses,
+            Closest,
+            Farthest,
+            LeastHealth,
+            MostHealth
+        }
+
+        public enum StandControlStyle
+        {
+            Manual,
+            Auto,
+            Remote
+        }
+
+        public enum StandTextureDye
+        {
+            None,
+            Salad
+        }
+
         public void ItemBreak(Item item)
         {
             if (globalCooldown == 0)
@@ -300,48 +300,6 @@ namespace JoJoStands
         public void Uncraft2(Item item)
         {
             Player.QuickSpawnItem(Player.InheritSource(Player), item.type, item.stack);
-        }
-
-        public enum StandSearchType
-        {
-            Bosses,
-            Closest,
-            Farthest,
-            LeastHealth,
-            MostHealth
-        }
-
-        public enum StandControlStyle
-        {
-            Manual,
-            Auto,
-            Remote
-        }
-
-        public enum ColorChangeStyle
-        {
-            None,
-            NormalToLightGreen,
-            NormalToBlue,
-            NormalToPurple,
-            NormalToRed,
-            NormalToDarkBlue
-        }
-
-        public enum DeathSoundType
-        {
-            None,
-            Roundabout,
-            Caesar,
-            KonoMeAmareriMaroreriMerareMaro,
-            LastTrainHome,
-            KingCrimsonNoNorioKu,
-        }
-
-        public enum StandTextureDye
-        {
-            None,
-            Salad
         }
 
         public override void ResetEffects()
@@ -489,7 +447,7 @@ namespace JoJoStands
             }
             if (JoJoStands.PoseHotKey.JustPressed && !posing && !Player.HasBuff(ModContent.BuffType<Rampage>()))
             {
-                if (Sounds)
+                if (JoJoStands.Sounds)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
                 posing = true;
                 SyncCall.SyncPoseState(Player.whoAmI, true);
@@ -668,8 +626,8 @@ namespace JoJoStands
 
                 Main.inventoryScale = 0.85f;
 
-                int slotPosX = StandSlotPositionX * (Main.screenWidth / 100);
-                int slotPosY = StandSlotPositionY * (Main.screenHeight / 100);
+                int slotPosX = JoJoStands.StandSlotPositionX * (Main.screenWidth / 100);
+                int slotPosY = JoJoStands.StandSlotPositionY * (Main.screenHeight / 100);
 
                 StandSlot.Position = new Vector2(slotPosX, slotPosY);
                 StandDyeSlot.Position = new Vector2(slotPosX - 60f, slotPosY);
@@ -860,7 +818,7 @@ namespace JoJoStands
             if (posing)
             {
                 poseDuration--;
-                if ((poseDuration <= 0 || Player.velocity != Vector2.Zero) && !Main.mouseLeft && !Main.mouseRight)
+                if (poseDuration <= 0 || Player.velocity != Vector2.Zero || Main.mouseLeft || Main.mouseRight)
                 {
                     menacingFrames = 0;
                     if (poseDuration <= 0)
@@ -1147,7 +1105,7 @@ namespace JoJoStands
                     {
                         if (Main.MouseWorld.X > Player.position.X)
                             Player.direction = 1;
-                        if (Main.MouseWorld.X < Player.position.X)
+                        else
                             Player.direction = -1;
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundStyle shootSound = SoundID.Item67;
@@ -1166,13 +1124,13 @@ namespace JoJoStands
                     if (Player.ownedProjectileCounts[ModContent.ProjectileType<NailSlasher>()] > 0)
                         tuskShootCooldown = 2;
                 }
-                if (tuskActNumber == 2)
+                else if (tuskActNumber == 2)
                 {
                     if (Main.mouseLeft && canStandBasicAttack && !Player.channel && tuskShootCooldown <= 0)
                     {
                         if (Main.MouseWorld.X > Player.position.X)
                             Player.direction = 1;
-                        if (Main.MouseWorld.X < Player.position.X)
+                        else
                             Player.direction = -1;
                         Player.channel = true;
                         tuskShootCooldown += 35 - standSpeedBoosts;
@@ -1192,7 +1150,7 @@ namespace JoJoStands
                     if (Player.ownedProjectileCounts[ModContent.ProjectileType<NailSlasher>()] > 0)
                         tuskShootCooldown = 2;
                 }
-                if (tuskActNumber == 3)
+                else if (tuskActNumber == 3)
                 {
                     if (Main.mouseLeft && canStandBasicAttack && !Player.channel && tuskShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>()] <= 0)
                     {
@@ -1229,7 +1187,7 @@ namespace JoJoStands
                         Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<WormholeNail>(), 124, 8f, Player.whoAmI);
                     }
                 }
-                if (tuskActNumber == 4)
+                else if (tuskActNumber == 4)
                 {
                     if (standControlStyle == StandControlStyle.Auto)
                     {
@@ -1237,7 +1195,7 @@ namespace JoJoStands
                         {
                             if (Main.MouseWorld.X > Player.position.X)
                                 Player.direction = 1;
-                            if (Main.MouseWorld.X < Player.position.X)
+                            else
                                 Player.direction = -1;
                             Player.channel = true;
                             tuskShootCooldown += 15 - standSpeedBoosts;
@@ -1262,9 +1220,7 @@ namespace JoJoStands
                     }
                 }
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0)
-                {
                     tuskShootCooldown = 30;
-                }
             }
             if (standName == "HermitPurple" && standTier != 0 && Player.whoAmI == Main.myPlayer)
             {
@@ -1578,7 +1534,7 @@ namespace JoJoStands
 
         public override void PostUpdate()
         {
-            if (Player.whoAmI == Main.myPlayer && RespawnWithStandOut && standRespawnQueued && !Player.dead)
+            if (Player.whoAmI == Main.myPlayer && JoJoStands.RespawnWithStandOut && standRespawnQueued && !Player.dead)
             {
                 SpawnStand();
                 standRespawnQueued = false;
@@ -1592,7 +1548,7 @@ namespace JoJoStands
         {
             if (!Main.dedServ && Player.whoAmI == Main.myPlayer)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside
             {
-                if (TimestopEffects && timestopEffectDurationTimer > 0)
+                if (JoJoStands.TimestopEffects && timestopEffectDurationTimer > 0)
                 {
                     timestopEffectDurationTimer--;
                     JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.TimestopEffect, timestopEffectDurationTimer >= 15 && !JoJoStandsShaders.ShaderActive(JoJoStandsShaders.TimestopGreyscaleEffect));
@@ -1615,13 +1571,13 @@ namespace JoJoStands
                 JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.BtZGreenEffect, backToZeroActive);
                 JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.EpitaphRedEffect, epitaphForesightActive);
 
-                if (BiteTheDustEffects)
+                if (JoJoStands.BiteTheDustEffects)
                 {
                     JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.BiteTheDustEffect, bitesTheDustActive);
                     JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BiteTheDustEffect, biteTheDustEffectProgress);
                 }
 
-                if (TimeskipEffects)
+                if (JoJoStands.TimeskipEffects)
                 {
                     if (timeskipActive && timeSkipEffectTransitionTimer < 40)
                     {
@@ -1639,16 +1595,16 @@ namespace JoJoStands
                 }
                 JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.GratefulDeadGasEffect, gratefulDeadGasActive);
 
-                if (ColorChangeEffects)
+                if (JoJoStands.ColorChangeEffects)
                 {
                     if (JoJoStandsWorld.VampiricNight && !JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect))
                     {
                         Filters.Scene.Activate(JoJoStandsShaders.BattlePaletteSwitchEffect);
-                        JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BattlePaletteSwitchEffect, (int)ColorChangeStyle.NormalToLightGreen);
+                        JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BattlePaletteSwitchEffect, (int)JoJoStands.ColorChangeStyleEnum.NormalToLightGreen);
                     }
                 }
 
-                if (!JoJoStandsWorld.VampiricNight && JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) || (JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) && !ColorChangeEffects))
+                if (!JoJoStandsWorld.VampiricNight && JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) || (JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) && !JoJoStands.ColorChangeEffects))
                     Filters.Scene[JoJoStandsShaders.BattlePaletteSwitchEffect].Deactivate();
             }
         }
@@ -1923,7 +1879,7 @@ namespace JoJoStands
         }
         public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
         {
-            if (StandPvPMode && Main.netMode != NetmodeID.SinglePlayer && target.GetModPlayer<MyPlayer>().standOut)
+            if (JoJoStands.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer && target.GetModPlayer<MyPlayer>().standOut)
                 damage /= 2;
         }
 
@@ -1970,18 +1926,18 @@ namespace JoJoStands
         {
             if (Player.whoAmI == Main.myPlayer && !notDeadYet)
             {
-                if (DeathSoundID == DeathSoundType.Roundabout)
+                if (JoJoStands.DeathSoundID == JoJoStands.DeathSoundType.Roundabout)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/ToBeContinued"));
-                else if (DeathSoundID == DeathSoundType.Caesar)
+                else if (JoJoStands.DeathSoundID == JoJoStands.DeathSoundType.Caesar)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/Caesar"));
-                else if (DeathSoundID == DeathSoundType.KonoMeAmareriMaroreriMerareMaro)
+                else if (JoJoStands.DeathSoundID == JoJoStands.DeathSoundType.KonoMeAmareriMaroreriMerareMaro)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/GangTortureDance"));
-                else if (DeathSoundID == DeathSoundType.LastTrainHome)
+                else if (JoJoStands.DeathSoundID == JoJoStands.DeathSoundType.LastTrainHome)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/LastTrainHome"));
-                else if (DeathSoundID == DeathSoundType.KingCrimsonNoNorioKu)
+                else if (JoJoStands.DeathSoundID == JoJoStands.DeathSoundType.KingCrimsonNoNorioKu)
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/Deathsounds/KingCrimsonSpeech"));
 
-                if (DeathSoundID != DeathSoundType.Roundabout)
+                if (JoJoStands.DeathSoundID != JoJoStands.DeathSoundType.Roundabout)
                     ToBeContinued.Visible = true;
             }
 
@@ -2051,7 +2007,7 @@ namespace JoJoStands
             creamDash = false;
             creamFrame = 0;
 
-            if (Player.whoAmI == Main.myPlayer && DeathSoundID == DeathSoundType.Roundabout)
+            if (Player.whoAmI == Main.myPlayer && JoJoStands.DeathSoundID == JoJoStands.DeathSoundType.Roundabout)
             {
                 tbcCounter++;
                 if (tbcCounter >= 270)

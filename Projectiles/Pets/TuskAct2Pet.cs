@@ -35,9 +35,8 @@ namespace JoJoStands.Projectiles.Pets
             mPlayer.poseSoundName = PoseSoundName;
             mPlayer.standType = 2;
             if (mPlayer.tuskActNumber == 2)
-            {
                 Projectile.timeLeft = 2;
-            }
+
             if (Projectile.owner == Main.myPlayer && Main.mouseRight)
             {
                 if (Main.MouseWorld.X > player.position.X)
@@ -50,9 +49,8 @@ namespace JoJoStands.Projectiles.Pets
             Vector2 frontOfPlayer = player.MountedCenter + playerDirection;
             float distanceToPlayerFront = Vector2.Distance(Projectile.Center, frontOfPlayer);
             if (distanceToPlayerFront > 1000f)
-            {
                 Projectile.Center = player.Center + playerDirection;
-            }
+
             Vector2 velocityDirection = frontOfPlayer - Projectile.Center;
             if (distanceToPlayerFront < maximumDistance)
             {
@@ -61,37 +59,27 @@ namespace JoJoStands.Projectiles.Pets
             if (velocityDirection != Vector2.Zero)
             {
                 if (velocityDirection.Length() < maximumDistance * 0.5f)
-                {
                     Projectile.velocity = velocityDirection;
-                }
                 else
-                {
                     Projectile.velocity = velocityDirection * 0.1f;
-                }
             }
             if (Projectile.velocity.Length() > 6f)
             {
                 float estimatedRotation = Projectile.velocity.X * 0.08f + Projectile.velocity.Y * (float)Projectile.spriteDirection * 0.02f;
-                if (Math.Abs(Projectile.rotation - estimatedRotation) >= 3.14159274f)
+                if (Math.Abs(Projectile.rotation - estimatedRotation) >= (float)Math.PI)
                 {
                     if (estimatedRotation < Projectile.rotation)
-                    {
-                        Projectile.rotation -= 6.28318548f;
-                    }
+                        Projectile.rotation -= (float)Math.Tau;
                     else
-                    {
-                        Projectile.rotation += 6.28318548f;
-                    }
+                        Projectile.rotation += (float)Math.Tau;
                 }
                 float num8 = 12f;
                 Projectile.rotation = (Projectile.rotation * (num8 - 1f) + estimatedRotation) / num8;
             }
             else
             {
-                if (Projectile.rotation > 3.14159274f)
-                {
-                    Projectile.rotation -= 6.28318548f;
-                }
+                if (Projectile.rotation > (float)Math.PI)
+                    Projectile.rotation -= (float)Math.Tau;
                 if (Projectile.rotation > -0.005f && Projectile.rotation < 0.005f)
                 {
                     Projectile.rotation = 0f;
@@ -111,9 +99,7 @@ namespace JoJoStands.Projectiles.Pets
                 Projectile.frame += 1;
                 Projectile.frameCounter = 0;
                 if (Projectile.frame >= 4)
-                {
                     Projectile.frame = 0;
-                }
             }
             Projectile.netUpdate = true;
             Projectile.direction = Projectile.spriteDirection = player.direction;

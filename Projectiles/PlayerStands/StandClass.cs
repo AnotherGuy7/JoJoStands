@@ -2,7 +2,6 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Dusts;
 using JoJoStands.Networking;
-using JoJoStands.Projectiles.PlayerStands.Echoes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -34,6 +33,12 @@ namespace JoJoStands.Projectiles.PlayerStands
             Projectile.ignoreWater = true;
             Projectile.shouldFallThrough = true;
         }
+
+        /// <summary>
+        /// Gets called when SetDefaults is called.
+        /// </summary>
+        public virtual void ExtraSetDefaults()
+        { }
 
         public override string Texture => Mod.Name + "/Extras/EmptyTexture";
         /// <summary>
@@ -479,7 +484,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
                 else if (Main.rand.Next(0, 101) <= 1 && targetDist > punchDetectionDist)
                 {
-                    if (itemToConsumeType != -1 && MyPlayer.AutomaticActivations && player.HasItem(itemToConsumeType))
+                    if (itemToConsumeType != -1 && JoJoStands.AutomaticActivations && player.HasItem(itemToConsumeType))
                     {
                         secondaryAbility = true;
                     }
@@ -597,14 +602,14 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (sound != null)
                 {
                     beginningSoundInstance = sound.CreateInstance();
-                    beginningSoundInstance.Volume = MyPlayer.ModSoundsVolume;
+                    beginningSoundInstance.Volume = JoJoStands.ModSoundsVolume;
                 }
             }
             if (punchingSoundInstance == null)
             {
                 SoundEffect sound = ModContent.Request<SoundEffect>("JoJoStandsSounds/Sounds/BattleCries/" + PunchSoundName, AssetRequestMode.ImmediateLoad).Value;
                 punchingSoundInstance = sound.CreateInstance();
-                punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
+                punchingSoundInstance.Volume = JoJoStands.ModSoundsVolume;
             }
         }
 
@@ -626,7 +631,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     if (!playedBeginning)
                     {
                         //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                        beginningSoundInstance.Volume = MyPlayer.ModSoundsVolume;
+                        beginningSoundInstance.Volume = JoJoStands.ModSoundsVolume;
                         beginningSoundInstance.Play();                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
                         SoundInstanceGarbageCollector.Track(beginningSoundInstance);
                         playedBeginning = true;
@@ -634,7 +639,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
                     {
                         //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                        punchingSoundInstance.Volume = MyPlayer.ModSoundsVolume;
+                        punchingSoundInstance.Volume = JoJoStands.ModSoundsVolume;
                         punchingSoundInstance.Play();
                         SoundInstanceGarbageCollector.Track(punchingSoundInstance);
                         SyncSounds();
@@ -756,11 +761,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                 for (int i = 0; i < amountOfParticles; i++)
                 {
                     int dustType = dustTypes[Main.rand.Next(0, 3)];
-                    Dust.NewDust(Projectile.position - new Vector2(Projectile.width, HalfStandHeight) + dustSpawnOffset, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
+                    Dust.NewDust(Projectile.position - new Vector2(Projectile.width * Projectile.spriteDirection, HalfStandHeight) + dustSpawnOffset, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
                 }
             }
 
-            if (MyPlayer.RangeIndicators && CanUseRangeIndicators && newMaxDistance > 0)
+            if (JoJoStands.RangeIndicators && CanUseRangeIndicators && newMaxDistance > 0)
             {
                 if (Math.Abs((int)rangeIndicatorSize.X - (int)newMaxDistance) > 1)     //Comparing via subtraction to have a minimum error count of 1
                     standRangeIndicatorTexture = GenerateRangeIndicatorTexture((int)newMaxDistance);
@@ -773,7 +778,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (SpawnSoundName != "" && !playedSpawnSound)
                 {
                     SoundStyle spawnSound = new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/" + SpawnSoundName);
-                    spawnSound.Volume = MyPlayer.ModSoundsVolume;
+                    spawnSound.Volume = JoJoStands.ModSoundsVolume;
                     SoundEngine.PlaySound(spawnSound, Projectile.position);
                     playedSpawnSound = true;
                 }
@@ -845,19 +850,19 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         /// <summary>
         /// Draws the Stands range indicators.
-        /// Only draws if the MyPlayer.RangeIndicators field is set to true.
+        /// Only draws if the JoJoStands.RangeIndicators field is set to true.
         /// </summary>
         /// <param name="spriteBatch"></param>
         private void DrawRangeIndicators()
         {
             Player player = Main.player[Projectile.owner];
-            if (!MyPlayer.RangeIndicators || Main.netMode == NetmodeID.Server || !CanUseRangeIndicators || rangeIndicatorSize == Vector2.Zero)
+            if (!JoJoStands.RangeIndicators || Main.netMode == NetmodeID.Server || !CanUseRangeIndicators || rangeIndicatorSize == Vector2.Zero)
                 return;
 
             //Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/RangeIndicator>().Value;        //the initial tile amount the indicator covers is 20 tiles, 320 pixels, border is included in the measurements
             Vector2 rangeIndicatorDrawPosition = player.Center - Main.screenPosition;
             Vector2 rangeIndicatorOrigin = rangeIndicatorSize / 2f;
-            float rangeIndicatorAlpha = MyPlayer.RangeIndicatorAlpha;
+            float rangeIndicatorAlpha = JoJoStands.RangeIndicatorAlpha;
 
             if (MaxDistance > 0f)
                 Main.EntitySpriteDraw(standRangeIndicatorTexture, rangeIndicatorDrawPosition, null, Color.White * rangeIndicatorAlpha, 0f, rangeIndicatorOrigin, 2f, SpriteEffects.None, 0);
@@ -1009,7 +1014,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         /// <summary>
         /// Find the closest NPC to the player.
-        /// Criteria for the search is set by the MyPlayer.standSearchType field.
+        /// Criteria for the search is set by the JoJoStands.standSearchType field.
         /// </summary>
         /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
         /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
@@ -1017,9 +1022,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             NPC target = null;
             Player player = Main.player[Projectile.owner];
-            switch (MyPlayer.standSearchType)
+            switch (JoJoStands.StandSearchTypeEnum)
             {
-                case MyPlayer.StandSearchType.Bosses:
+                case MyPlayer.StandSearchTypeEnum.Bosses:
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {
                         NPC npc = Main.npc[n];
@@ -1041,7 +1046,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
-                case MyPlayer.StandSearchType.Closest:
+                case MyPlayer.StandSearchTypeEnum.Closest:
                     float closestDistance = maxDetectionRange;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {
@@ -1057,7 +1062,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
-                case MyPlayer.StandSearchType.Farthest:
+                case MyPlayer.StandSearchTypeEnum.Farthest:
                     float farthestDistance = 0f;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {
@@ -1073,7 +1078,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
-                case MyPlayer.StandSearchType.LeastHealth:
+                case MyPlayer.StandSearchTypeEnum.LeastHealth:
                     int leasthealth = int.MaxValue;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {
@@ -1089,7 +1094,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
-                case MyPlayer.StandSearchType.MostHealth:
+                case MyPlayer.StandSearchTypeEnum.MostHealth:
                     int mosthealth = 0;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {
@@ -1115,13 +1120,13 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <param name="searchType">The search type criteria to search with</param>
         /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
         /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
-        public NPC FindNearestTarget(MyPlayer.StandSearchType searchType, float maxDetectionRange)
+        public NPC FindNearestTarget(MyPlayer.StandSearchTypeEnum searchType, float maxDetectionRange)
         {
             NPC target = null;
             Player player = Main.player[Projectile.owner];
             switch (searchType)
             {
-                case MyPlayer.StandSearchType.Bosses:
+                case MyPlayer.StandSearchTypeEnum.Bosses:
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {
                         NPC npc = Main.npc[n];
@@ -1143,7 +1148,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
-                case MyPlayer.StandSearchType.Closest:
+                case MyPlayer.StandSearchTypeEnum.Closest:
                     float closestDistance = maxDetectionRange;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {
@@ -1159,7 +1164,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
-                case MyPlayer.StandSearchType.Farthest:
+                case MyPlayer.StandSearchTypeEnum.Farthest:
                     float farthestDistance = 0f;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {
@@ -1175,7 +1180,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
-                case MyPlayer.StandSearchType.LeastHealth:
+                case MyPlayer.StandSearchTypeEnum.LeastHealth:
                     int leasthealth = int.MaxValue;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {
@@ -1191,7 +1196,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
-                case MyPlayer.StandSearchType.MostHealth:
+                case MyPlayer.StandSearchTypeEnum.MostHealth:
                     int mosthealth = 0;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
                     {

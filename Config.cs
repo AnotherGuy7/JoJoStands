@@ -1,7 +1,9 @@
 using JoJoStands.Items.Hamon;
+using JoJoStands.UI;
 using System.ComponentModel;
 using Terraria;
 using Terraria.ModLoader.Config;
+using static JoJoStands.JoJoStands;
 using static JoJoStands.MyPlayer;
 
 namespace JoJoStands
@@ -106,38 +108,38 @@ namespace JoJoStands
         [Tooltip("Volume of barrage sounds")]
         public int soundVolume;
 
-        [DefaultValue(StandSearchType.Bosses)]
+        [DefaultValue(StandSearchTypeEnum.Bosses)]
         [Label("Stand Auto Mode Targetting Preference")]
         [Tooltip("Select the type of enemy your Stand should prioritize first when in Auto Mode!")]
-        public StandSearchType StandSearchType;
+        public StandSearchTypeEnum StandSearchTypeEnum;
 
 
 
         public override void OnChanged()        //couldn't use Player player = Main.LocalPlayer cause it wasn't set to an instance of an object
         {
-            MyPlayer.RangeIndicatorAlpha = (float)RangeIndicatorVisibility / 100f;
-            MyPlayer.DeathSoundID = deathSound;
-            MyPlayer.Sounds = Sounds;
-            MyPlayer.TimestopEffects = TimestopEffects;
-            MyPlayer.RangeIndicators = RangeIndicators;
-            MyPlayer.AutomaticActivations = AutomaticActivations;
-            MyPlayer.StandSlotPositionX = StandSlotPositionX;
-            MyPlayer.StandSlotPositionY = StandSlotPositionY;
-            MyPlayer.HamonBarPositionX = HamonBarPositionX;
-            MyPlayer.HamonBarPositionY = HamonBarPositionY;
-            MyPlayer.SecretReferences = SecretReferences;
-            MyPlayer.ModSoundsVolume = soundVolume / 100f;
+            JoJoStands.RangeIndicatorAlpha = (float)RangeIndicatorVisibility / 100f;
+            JoJoStands.DeathSoundID = deathSound;
+            JoJoStands.Sounds = Sounds;
+            JoJoStands.TimestopEffects = TimestopEffects;
+            JoJoStands.RangeIndicators = RangeIndicators;
+            JoJoStands.AutomaticActivations = AutomaticActivations;
+            JoJoStands.StandSlotPositionX = StandSlotPositionX;
+            JoJoStands.StandSlotPositionY = StandSlotPositionY;
+            JoJoStands.HamonBarPositionX = HamonBarPositionX;
+            JoJoStands.HamonBarPositionY = HamonBarPositionY;
+            JoJoStands.SecretReferences = SecretReferences;
+            JoJoStands.ModSoundsVolume = soundVolume / 100f;
             HamonPlayer.HamonEffects = HamonEffects;
-            UI.HamonBar.changedInConfig = true;
-            UI.HamonBar.sizeMode = HamonBarSize;
-            MyPlayer.ColorChangeEffects = ColorChangeEffects;
-            MyPlayer.standSearchType = StandSearchType;
-            MyPlayer.TimeskipEffects = TimeskipEffects;
-            MyPlayer.BiteTheDustEffects = BitetheDustEffects;
-            MyPlayer.RespawnWithStandOut = RespawnWithStandOut;
-            MyPlayer.AbilityWheelDescriptions = AbilityWheelDescriptions;
-            UI.AbilityWheel.VAlign = AbilityWheelYPos / 100f;
-            UI.AbilityWheel.HAlign = AbilityWheelXPos / 100f;
+            HamonBar.changedInConfig = true;
+            HamonBar.sizeMode = HamonBarSize;
+            JoJoStands.ColorChangeEffects = ColorChangeEffects;
+            JoJoStands.StandSearchTypeEnum = StandSearchTypeEnum;
+            JoJoStands.TimeskipEffects = TimeskipEffects;
+            JoJoStands.BiteTheDustEffects = BitetheDustEffects;
+            JoJoStands.RespawnWithStandOut = RespawnWithStandOut;
+            JoJoStands.AbilityWheelDescriptions = AbilityWheelDescriptions;
+            AbilityWheel.VAlign = AbilityWheelYPos / 100f;
+            AbilityWheel.HAlign = AbilityWheelXPos / 100f;
             if (HamonBarSize >= 4)
             {
                 Main.NewText("You can only choose numbers between 0-3!");
@@ -147,12 +149,10 @@ namespace JoJoStands
             {
                 Main.NewText("You can only choose numbers between 0-3!");
                 HamonBarSize = 0;
-                UI.HamonBar.visible = false;
+                HamonBar.visible = false;
             }
             if (HamonBarSize != 0)
-            {
-                UI.HamonBar.visible = true;
-            }
+                HamonBar.visible = true;
         }
     }
 }

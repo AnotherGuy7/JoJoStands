@@ -1,11 +1,11 @@
 ﻿using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Networking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.IO;
-using JoJoStands.Networking;
 
 namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 {

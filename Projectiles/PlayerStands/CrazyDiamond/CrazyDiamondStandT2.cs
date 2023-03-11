@@ -112,7 +112,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         }
                     }
                 }
-                if (restorationMode)
+                else
                 {
                     int amountOfDusts = Main.rand.Next(0, 2 + 1);
                     for (int i = 0; i < amountOfDusts; i++)
@@ -123,7 +123,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                     }
                     Lighting.AddLight(Projectile.position, TorchID.Ichor);
 
-                    if (Main.mouseRight && mPlayer.crazyDiamondDestroyedTileData.Count > 0 && Projectile.owner == Main.myPlayer)
+                    if (Main.mouseRight && restorationEffectStartTimer <= 0 && mPlayer.crazyDiamondDestroyedTileData.Count > 0 && !playerHasAbilityCooldown && Projectile.owner == Main.myPlayer)
                     {
                         SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/CrazyDiamondRestore"));
                         restorationEffectStartTimer += 180;
@@ -235,7 +235,6 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
         public override void PlayAnimation(string animationName)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             string pathAddition = "";
             if (restorationMode)
                 pathAddition = "Restoration_";

@@ -2,7 +2,6 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Items;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
@@ -49,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 else
                 {
                     SoundStyle zawarudo = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/TheWorld");
-                    zawarudo.Volume = MyPlayer.ModSoundsVolume;
+                    zawarudo.Volume = JoJoStands.ModSoundsVolume;
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
                 }
@@ -140,7 +139,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     if (JoJoStands.SoundsLoaded)
                     {
                         SoundStyle roadRollerDa = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RoadRollerDa");
-                        roadRollerDa.Volume = MyPlayer.ModSoundsVolume;
+                        roadRollerDa.Volume = JoJoStands.ModSoundsVolume;
                         SoundEngine.PlaySound(roadRollerDa);
                     }
 

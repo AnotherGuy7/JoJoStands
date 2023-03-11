@@ -21,9 +21,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override string PoseSoundName => "OnceWeDecideToKillItsDone";
         public override string SpawnSoundName => "The Grateful Dead";
 
-        private bool grabFrames = false;
-        private bool secondaryFrames = false;
-
         public override void AI()
         {
             SelectAnimation();
@@ -39,7 +36,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !grabFrames)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
                 {
                     Punch();
                 }
@@ -48,10 +45,8 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     if (player.whoAmI == Main.myPlayer)
                         attackFrames = false;
                 }
-                if (!attackFrames && !secondaryFrames)
-                {
+                if (!attackFrames)
                     StayBehind();
-                }
 
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
@@ -59,16 +54,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 BasicPunchAI();
             }
         }
-        public override void SendExtraStates(BinaryWriter writer)
-        {
-            writer.Write(grabFrames);
-        }
-
-        public override void ReceiveExtraStates(BinaryReader reader)
-        {
-            grabFrames = reader.ReadBoolean();
-        }
-
 
         public override void SelectAnimation()
         {

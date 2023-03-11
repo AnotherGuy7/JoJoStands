@@ -540,7 +540,7 @@ namespace JoJoStands.Items.Vampire
                 Player.ClearBuff(ModContent.BuffType<DyingVampire>());
                 dyingVampire = false;
             }
-            if (MyPlayer.SecretReferences && Player.ZoneSkyHeight && perfectBeing)
+            if (JoJoStands.SecretReferences && Player.ZoneSkyHeight && perfectBeing)
             {
                 int karsText = Main.rand.Next(0, 3);
                 if (karsText == 0)

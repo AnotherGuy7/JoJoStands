@@ -43,7 +43,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
                     if (mouseX > Projectile.position.X)
                         Projectile.direction = 1;
-                    if (mouseX < Projectile.position.X)
+                    else
                         Projectile.direction = -1;
 
                     Projectile.spriteDirection = Projectile.direction;
@@ -54,13 +54,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
-                    {
                         Projectile.velocity = player.velocity + velocityAddition;
-                    }
-                    if (mouseDistance <= 40f)
-                    {
+                    else
                         Projectile.velocity = Vector2.Zero;
-                    }
                     if (shootCount <= 0 && (Projectile.frame == 0 || Projectile.frame == 4))
                     {
                         shootCount += newPunchTime / 2;
