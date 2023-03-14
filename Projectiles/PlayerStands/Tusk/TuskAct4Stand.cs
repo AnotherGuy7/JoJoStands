@@ -9,8 +9,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
 {
     public class TuskAct4Stand : StandClass
     {
-        public override string PoseSoundName => "ItsBeenARoundaboutPath";
         public override string PunchSoundName => "Tusk_Ora";
+        public override string PoseSoundName => "TuskAct4";
+        public override string SpawnSoundName => "Tusk Act 4";
         public override bool CanUseSaladDye => true;
 
         public override float MaxDistance => 98f;

@@ -21,6 +21,9 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
         public override Vector2 StandOffset => new Vector2(27, 0);
         public override int FistWhoAmI => 0;
         public override int TierNumber => 3;
+        public override string PunchSoundName => "SoftAndWet_Ora";
+        public override string PoseSoundName => "SoftAndWet";
+        public override string SpawnSoundName => "Soft and Wet";
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private bool bubbleMode = false;

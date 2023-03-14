@@ -3,6 +3,7 @@ using JoJoStands.Projectiles.PlayerStands.SexPistols;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -47,6 +48,8 @@ namespace JoJoStands.Items
             {
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<SexPistolsStand>(), 0, 0f, Main.myPlayer, i + 1);
             }
+            if (JoJoStands.SoundsLoaded)
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Sex Pistols").WithVolumeScale(JoJoStands.ModSoundsVolume));
             return true;
         }
 

@@ -1,6 +1,7 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -41,6 +42,8 @@ namespace JoJoStands.Items
 
             mPlayer.badCompanyTier = StandTier;
             mPlayer.maxBadCompanyUnits = 6 * StandTier;
+            if (JoJoStands.SoundsLoaded)
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Bad Company").WithVolumeScale(JoJoStands.ModSoundsVolume));
             return true;
         }
 

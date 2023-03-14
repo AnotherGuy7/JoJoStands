@@ -16,6 +16,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override int HalfStandHeight => 36;
         public override int FistWhoAmI => 11;
         public override int TierNumber => 4;
+        public override string PoseSoundName => "Cream";
+        public override string SpawnSoundName => "Cream";
         public override Vector2 StandOffset => Vector2.Zero;
         public override StandAttackType StandType => StandAttackType.Melee;
 

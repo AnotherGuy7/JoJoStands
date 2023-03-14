@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (Main.mouseRight && !player.HasBuff<AbilityCooldown>() && Projectile.owner == Main.myPlayer)
+            if (Main.mouseRight && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !player.HasBuff<AbilityCooldown>() && Projectile.owner == Main.myPlayer)
             {
                 Projectile.ai[1] = 1f;
                 explosionTimer = Main.rand.Next(1, 25 + 1);

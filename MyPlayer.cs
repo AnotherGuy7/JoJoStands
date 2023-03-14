@@ -451,7 +451,7 @@ namespace JoJoStands
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
                 posing = true;
                 SyncCall.SyncPoseState(Player.whoAmI, true);
-            }
+            }       
             if (standChangingLocked)
                 return;
 
@@ -1032,6 +1032,13 @@ namespace JoJoStands
                             amountOfSexPistolsPlaced++;
                             if (amountOfSexPistolsPlaced >= 6)
                                 amountOfSexPistolsPlaced = 0;
+                            if (JoJoStands.SoundsLoaded)
+                            {
+                                int soundNumber = amountOfSexPistolsPlaced;
+                                if (soundNumber >= 4)
+                                    soundNumber += 1;
+                                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/SexPistols_" + soundNumber));
+                            }
                             SyncCall.SyncSexPistolPosition(Player.whoAmI, amountOfSexPistolsPlaced, sexPistolsOffsets[amountOfSexPistolsPlaced]);
                         }
                     }

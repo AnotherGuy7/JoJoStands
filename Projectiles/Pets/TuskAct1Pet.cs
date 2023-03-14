@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.Pets
@@ -11,6 +12,7 @@ namespace JoJoStands.Projectiles.Pets
     {
         public override string Texture => Mod.Name + "/Projectiles/Pets/TuskAct1Pet";
         public override string PoseSoundName => "ItsBeenARoundaboutPath";
+        public override string SpawnSoundName => "Tusk Act 1";
 
         public override void SetStaticDefaults()
         {
@@ -29,6 +31,8 @@ namespace JoJoStands.Projectiles.Pets
             Projectile.manualDirectionChange = true;
         }
 
+        private bool playedSpawnSound = false;
+
         public override void AI()       //I unfortunately had to copy the DD2Pet AI style cause framecounter was made to stay at 5 on it...
         {
             Player player = Main.player[Projectile.owner];
@@ -37,6 +41,14 @@ namespace JoJoStands.Projectiles.Pets
             mPlayer.standType = 2;
             if (mPlayer.tuskActNumber == 1)
                 Projectile.timeLeft = 2;
+
+            if (JoJoStands.SoundsLoaded && !playedSpawnSound)
+            {
+                playedSpawnSound = true;
+                SoundStyle spawnSound = new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/" + SpawnSoundName);
+                spawnSound.Volume = JoJoStands.ModSoundsVolume;
+                SoundEngine.PlaySound(spawnSound, Projectile.position);
+            }
 
             Projectile.frameCounter++;
             if (Projectile.frameCounter >= 10)

@@ -13,6 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override int HalfStandHeight => 37;
         public override int FistWhoAmI => 10;
         public override int TierNumber => 1;
+        public override string PoseSoundName => "SilverChariot";
         public override string SpawnSoundName => "Silver Chariot";
         public override StandAttackType StandType => StandAttackType.Melee;
 

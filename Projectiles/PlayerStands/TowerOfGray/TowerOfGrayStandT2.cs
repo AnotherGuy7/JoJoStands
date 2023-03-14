@@ -1,12 +1,12 @@
+using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.GameContent;
-using JoJoStands.Buffs.Debuffs;
 using Terraria.GameContent.UI;
+using Terraria.ModLoader;
 
 
 namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
@@ -40,6 +40,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
         public override int ShootTime => 11;
         public override int FistWhoAmI => 13;
         public override int TierNumber => 2;
+        public override string PoseSoundName => "TowerOfGray";
+        public override string SpawnSoundName => "Tower of Gray";
         public override StandAttackType StandType => StandAttackType.Ranged;
 
         private float controlRange = 250f;

@@ -2,6 +2,7 @@ using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -36,6 +37,9 @@ namespace JoJoStands.Items
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standType = 1;
             mPlayer.standName = "HermitPurple";
+            mPlayer.poseSoundName = "HermitPurple";
+            if (JoJoStands.SoundsLoaded)
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Hermit Purple").WithVolumeScale(JoJoStands.ModSoundsVolume));
             return true;
         }
 

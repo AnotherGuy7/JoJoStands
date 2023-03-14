@@ -203,7 +203,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
             if (SpecialKeyPressed() && bitesTheDustActive && btdStartDelay <= 0)
             {
-                if (!JoJoStands.SoundsLoaded)
+                if (!JoJoStands.SoundsLoaded || !JoJoStands.SoundsModAbilityVoicelines)
                 {
                     bitesTheDustActivated = true;
                     totalRewindTime = CalculateRewindTime();

@@ -43,7 +43,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopStartDelay <= 0)
             {
-                if (JoJoStands.JoJoStandsSounds == null)
+                if (!JoJoStands.SoundsLoaded || !JoJoStands.SoundsModAbilityVoicelines)
                     timestopStartDelay = 120;
                 else
                 {

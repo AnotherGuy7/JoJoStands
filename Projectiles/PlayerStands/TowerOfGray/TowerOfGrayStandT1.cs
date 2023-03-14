@@ -39,6 +39,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
         public override int ShootTime => 12;
         public override int FistWhoAmI => 13;
         public override int TierNumber => 1;
+        public override string PoseSoundName => "TowerOfGray";
+        public override string SpawnSoundName => "Tower of Gray";
         public override StandAttackType StandType => StandAttackType.Ranged;
         public override bool CanUseRangeIndicators => false;
 

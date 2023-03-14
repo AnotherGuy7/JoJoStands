@@ -57,7 +57,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && timeskipStartDelay <= 0 && mPlayer.kingCrimsonBuffIndex == -1)
             {
-                if (!JoJoStands.SoundsLoaded)
+                if (!JoJoStands.SoundsLoaded || !JoJoStands.SoundsModAbilityVoicelines)
                     timeskipStartDelay = 80;
                 else
                 {

@@ -10,18 +10,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 {
     public class CreamStandT1 : StandClass
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projPet[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 11;
-        }
-
         public override int PunchDamage => 35;
         public override float PunchKnockback => 8f;
         public override int PunchTime => 28;
         public override int HalfStandHeight => 36;
         public override int FistWhoAmI => 11;
         public override int TierNumber => 1;
+        public override string PoseSoundName => "Cream";
+        public override string SpawnSoundName => "Cream";
         public override Vector2 StandOffset => Vector2.Zero;
         public override StandAttackType StandType => StandAttackType.Melee;
 

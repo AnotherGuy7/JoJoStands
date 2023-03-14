@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,6 +17,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override int HalfStandHeight => 26;
         public override int FistWhoAmI => 15;
         public override int TierNumber => 3;
+        public override string PoseSoundName => "EchoesAct2";
+        public override string SpawnSoundName => "Echoes Act 2";
         public override float MaxDistance => 148f;      //1.5x the normal range cause Koichi is really reliable guy (C) Proos <3
         public override Vector2 StandOffset => new Vector2(10, 0);
         public override Vector2 ManualIdleHoverOffset => new Vector2(0, -30);

@@ -1,14 +1,13 @@
+using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.EffectBuff;
+using JoJoStands.Networking;
+using JoJoStands.NPCs;
+using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Microsoft.Xna.Framework;
-using JoJoStands.NPCs;
-using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.Debuffs;
-using JoJoStands.Networking;
-using Terraria.DataStructures;
 
 namespace JoJoStands.Projectiles.PlayerStands.Echoes
 {
@@ -19,6 +18,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override int HalfStandHeight => 28;
         public override int FistWhoAmI => 15;
         public override int TierNumber => 4;
+        public override string PoseSoundName => "EchoesAct3";
+        public override string SpawnSoundName => "Echoes Act 3";
         public override Vector2 StandOffset => new Vector2(10, 0);
         public override Vector2 ManualIdleHoverOffset => new Vector2(0, -10);
         public override StandAttackType StandType => StandAttackType.Melee;
@@ -32,6 +33,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private bool returnToPlayer = false;
         private bool changeACT = false;
         private bool targetFound = false;
+        private bool playedThreeFreezeSound = false;
 
         public override void ExtraSpawnEffects()
         {
@@ -64,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             {
                 if (mouseX > player.position.X)
                     player.direction = 1;
-                if (mouseX < player.position.X)
+                else
                     player.direction = -1;
             }
             if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
@@ -86,10 +88,17 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     StayBehind();
                 if (threeFreeze)
                     GoInFront();
+                else
+                    playedThreeFreezeSound = false;
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing && !attackFrames) //3freeze activation
                 {
                     Projectile.frame = 0;
                     threeFreeze = true;
+                    if (JoJoStands.SoundsLoaded && !playedThreeFreezeSound)
+                    {
+                        playedThreeFreezeSound = true;
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                    }
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
                         NPC npc = Main.npc[n];
@@ -99,6 +108,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                             {
                                 targetFound = true;
                                 targetNPC = npc.whoAmI;
+                                if (JoJoStands.SoundsLoaded)
+                                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze_Thud").WithVolumeScale(JoJoStands.ModSoundsVolume));
                                 break;
                             }
                         }
@@ -114,6 +125,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                 {
                                     targetFound = true;
                                     targetPlayer = otherPlayer.whoAmI;
+                                    if (JoJoStands.SoundsLoaded)
+                                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze_Thud").WithVolumeScale(JoJoStands.ModSoundsVolume));
                                     break;
                                 }
                             }

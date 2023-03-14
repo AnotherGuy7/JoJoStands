@@ -3,13 +3,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 
 namespace JoJoStands.Projectiles.Pets
 {
     public class TuskAct2Pet : StandClass
     {
         public override string Texture => Mod.Name + "/Projectiles/Pets/TuskAct2Pet";
-        public override string PoseSoundName => "ItsBeenARoundaboutPath";
+        public override string PoseSoundName => "TuskAct2";
+        public override string SpawnSoundName => "Tusk Act 2";
 
         public override void SetStaticDefaults()
         {
@@ -28,6 +30,8 @@ namespace JoJoStands.Projectiles.Pets
             Projectile.manualDirectionChange = true;
         }
 
+        private bool playedSpawnSound = false;
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -36,6 +40,14 @@ namespace JoJoStands.Projectiles.Pets
             mPlayer.standType = 2;
             if (mPlayer.tuskActNumber == 2)
                 Projectile.timeLeft = 2;
+
+            if (JoJoStands.SoundsLoaded && !playedSpawnSound)
+            {
+                playedSpawnSound = true;
+                SoundStyle spawnSound = new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/" + SpawnSoundName);
+                spawnSound.Volume = JoJoStands.ModSoundsVolume;
+                SoundEngine.PlaySound(spawnSound, Projectile.position);
+            }
 
             if (Projectile.owner == Main.myPlayer && Main.mouseRight)
             {

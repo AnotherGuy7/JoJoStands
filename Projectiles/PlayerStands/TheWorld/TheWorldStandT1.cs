@@ -1,7 +1,5 @@
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 {

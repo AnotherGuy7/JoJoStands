@@ -23,7 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override Vector2 StandOffset => new Vector2(28, 0);
         public override string PunchSoundName => "GER_Muda";
         public override string PoseSoundName => "ThisIsRequiem";
-        public override string SpawnSoundName => "Gold Experience";
+        public override string SpawnSoundName => "Gold Experience Requiem";
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private int regencounter = 0;

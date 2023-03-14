@@ -65,6 +65,7 @@ namespace JoJoStands
         public static bool RespawnWithStandOut = true;
         public static bool StandPvPMode = false;
         public static bool AbilityWheelDescriptions = true;
+        public static bool SoundsModAbilityVoicelines = true;
         public static DeathSoundType DeathSoundID;
         public static ColorChangeStyleEnum ColorChangeStyle = ColorChangeStyleEnum.None;
         public static StandSearchTypeEnum StandSearchTypeEnum = StandSearchTypeEnum.Bosses;

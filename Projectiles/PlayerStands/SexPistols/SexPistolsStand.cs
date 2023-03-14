@@ -116,6 +116,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                             otherProjectile.GetGlobalProjectile<JoJoGlobalProjectile>().kickedBySexPistols = true;
                             otherProjectile.netUpdate = true;
                             SoundEngine.PlaySound(TinkSound, otherProjectile.Center);
+                            if (JoJoStands.SoundsLoaded)
+                                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/SexPistolsCheer_" + Main.rand.Next(1, 3 + 1)));
                             break;
                         }
                     }
