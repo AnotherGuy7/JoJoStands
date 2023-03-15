@@ -1,9 +1,7 @@
 using JoJoStands.Buffs.AccessoryBuff;
 using JoJoStands.Items.CraftingMaterials;
-using JoJoStands.Items.Vampire;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -38,22 +36,9 @@ namespace JoJoStands.Items
 
         public override void OnConsumeItem(Player player)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-            if (vPlayer.zombie || vPlayer.vampire)
-                player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " will to return to humanity was rejectd by his vampiric antics."), player.statLife / 2, player.direction);      //Tried to make a spin on that "Reject humanity" meme
-
-            vPlayer.zombie = false;
-            vPlayer.vampire = false;
-            vPlayer.perfectBeing = false;
-            vPlayer.anyMaskForm = false;
             SoundEngine.PlaySound(SoundID.Item3, player.Center);
-            //SoundEngine.PlaySound(2, player.Center, 3);
-
-
-            if (player.HasBuff(ModContent.BuffType<Buffs.AccessoryBuff.Vampire>()))
-                player.ClearBuff(ModContent.BuffType<Buffs.AccessoryBuff.Vampire>());
-            if (player.HasBuff(ModContent.BuffType<Zombie>()))
-                player.ClearBuff(ModContent.BuffType<Zombie>());
+            if (player.HasBuff(ModContent.BuffType<Vampire>()))
+                player.ClearBuff(ModContent.BuffType<Vampire>());
             if (player.HasBuff(ModContent.BuffType<AjaVampire>()))
                 player.ClearBuff(ModContent.BuffType<AjaVampire>());
         }

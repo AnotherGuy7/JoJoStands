@@ -1,5 +1,4 @@
 using JoJoStands.Buffs.Debuffs;
-using JoJoStands.Items.Vampire;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -21,19 +20,14 @@ namespace JoJoStands.Buffs.AccessoryBuff
 
         public override void UpdateBuffOnPlayer(Player player)
         {
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.moveSpeed *= 1.5f;
             player.noFallDmg = true;
             player.jumpBoost = true;
             player.manaRegen += 4;
             player.statDefense = (int)(player.statDefense / 0.75);
-            vPlayer.vampire = true;
-            vPlayer.anyMaskForm = true;
             player.buffTime[buffIndex] = 2;
             player.GetDamage(DamageClass.Generic) *= 1.5f;
             player.GetAttackSpeed(DamageClass.Generic) *= 1.5f;
-            if (player.HasBuff(ModContent.BuffType<Zombie>()))
-                player.ClearBuff(ModContent.BuffType<Zombie>());
         }
 
         public override void UpdateBuffOnNPC(NPC npc)

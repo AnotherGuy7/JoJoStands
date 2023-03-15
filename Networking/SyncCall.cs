@@ -193,11 +193,5 @@ namespace JoJoStands.Networking
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 ModNetHandler.PlayerSync.SendOtherPlayerExtraEffect(256, whoAmI, (byte)whoAmI, targetPlayerWhoAmI, effectType, int1, int2, float1, float2);
         }
-
-        public static void SyncVampiricNight(int whoAmI, bool active)
-        {
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModNetHandler.WorldSync.SendVampiricNight(256, whoAmI, active);
-        }
     }
 }

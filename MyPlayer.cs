@@ -1590,18 +1590,6 @@ namespace JoJoStands
                     }
                 }
                 JoJoStandsShaders.ChangeShaderActiveState(JoJoStandsShaders.GratefulDeadGasEffect, gratefulDeadGasActive);
-
-                if (JoJoStands.ColorChangeEffects)
-                {
-                    if (JoJoStandsWorld.VampiricNight && !JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect))
-                    {
-                        Filters.Scene.Activate(JoJoStandsShaders.BattlePaletteSwitchEffect);
-                        JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BattlePaletteSwitchEffect, (int)JoJoStands.ColorChangeStyleEnum.NormalToLightGreen);
-                    }
-                }
-
-                if (!JoJoStandsWorld.VampiricNight && JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) || (JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) && !JoJoStands.ColorChangeEffects))
-                    Filters.Scene[JoJoStandsShaders.BattlePaletteSwitchEffect].Deactivate();
             }
         }
 

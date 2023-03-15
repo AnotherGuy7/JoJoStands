@@ -1,4 +1,3 @@
-using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -27,11 +26,6 @@ namespace JoJoStands.Projectiles
                 int newDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 28);
                 Main.dust[newDust].noGravity = true;
             }
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.AddBuff(ModContent.BuffType<Lacerated>(), 15 * 60);
         }
     }
 }

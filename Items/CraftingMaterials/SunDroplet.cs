@@ -13,7 +13,8 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A warm droplet... It seems to react to you.\nRight-click while holding more than 20 to gain a Hamon SKill Point.\nUsed for creating Hamon weapons.");
+            Tooltip.SetDefault("A warm droplet... It seems to react to you." +
+                "\nUsed for creating Hamon weapons.");
             SacrificeTotal = 20;
         }
 
@@ -26,7 +27,6 @@ namespace JoJoStands.Items.CraftingMaterials
             Item.value = Item.buyPrice(copper: 20);
         }
 
-        private int clickTimer = 0;
         private int glowmaskTimer = 0;
         private float glowmaskAlpha = 0f;
 
@@ -46,26 +46,6 @@ namespace JoJoStands.Items.CraftingMaterials
         {
             Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Items/CraftingMaterials/" + Name).Value;
             Main.EntitySpriteDraw(texture, Item.Center - Main.screenPosition, null, Color.White * glowmaskAlpha, rotation, new Vector2(Item.width / 2f, Item.height / 2f), scale, SpriteEffects.None, 0);
-        }
-
-        public override void HoldItem(Player player)
-        {
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
-            if (clickTimer > 0)
-                clickTimer--;
-
-            if (player.whoAmI == Main.myPlayer)
-            {
-                if (Main.mouseRight && Item.stack > 20 && clickTimer <= 0)
-                {
-                    hPlayer.skillPointsAvailable += 1;
-                    Item.stack -= 20;
-                    clickTimer = 60;
-                    SoundStyle item1 = new SoundStyle("Terraria/Sounds/Item_1");
-                    item1.Pitch = -0.8f;
-                    SoundEngine.PlaySound(item1, player.Center);
-                }
-            }
         }
     }
 }

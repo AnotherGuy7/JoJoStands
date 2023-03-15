@@ -6,23 +6,20 @@ using JoJoStands.Items;
 using JoJoStands.Items.Accessories;
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Items.Tiles;
-using JoJoStands.Items.Vampire;
-using JoJoStands.NPCs.Enemies;
 using JoJoStands.NPCs.TownNPCs;
-using JoJoStands.Networking;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using JoJoStands.Projectiles;
 
 namespace JoJoStands.NPCs
 {
@@ -63,11 +60,9 @@ namespace JoJoStands.NPCs
         public int spawnedByDeathLoop = 0;
         public int deathLoopOwner = -1;
         public int deathTimer = 0;
-        public int zombieHightlightTimer = 0;
         public int bindingEmeraldDurationTimer = 0;
         public int crossfireHurricaneEffectTimer = 0;
         public float kingCrimsonDonutMultiplier = 1f;
-        public int vampireUserLastHitIndex = -1;        //An index of the vampiric player who last hit the enemy
         public int standDebuffEffectOwner = 0;
         public int lockFrameCounter;
         public int lockFrame;
@@ -268,11 +263,6 @@ namespace JoJoStands.NPCs
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
             Player player = Main.player[Main.myPlayer];
-            if (type == NPCID.Merchant)
-            {
-                shop.item[nextSlot].SetDefaults(ModContent.ItemType<Sunscreen>());
-                nextSlot++;
-            }
             if (type == NPCID.TravellingMerchant && ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss))
             {
                 shop.item[nextSlot].SetDefaults(ModContent.ItemType<ViralPearlRing>());
@@ -325,7 +315,7 @@ namespace JoJoStands.NPCs
                         Main.player[deathLoopOwner].ClearBuff(ModContent.BuffType<DeathLoop>());
                         taggedForDeathLoop = 0;
                         deathLoopOwner = -1;
-                    }    
+                    }
                 }
             }
             if (taggedForDeathLoop == 0)
@@ -444,9 +434,6 @@ namespace JoJoStands.NPCs
                     }
                 }
             }
-
-            if (zombieHightlightTimer > 0)
-                zombieHightlightTimer--;
 
             if (mPlayer.timestopActive || frozenInTime)
             {
@@ -752,7 +739,7 @@ namespace JoJoStands.NPCs
 
         public override void OnKill(NPC npc)
         {
-            if (taggedForDeathLoop > 0 && spawnedByDeathLoop == 0)     
+            if (taggedForDeathLoop > 0 && spawnedByDeathLoop == 0)
             {
                 Player player = Main.player[deathLoopOwner];
                 if (npc.boss && deathLoopOwner == player.whoAmI)
@@ -770,20 +757,6 @@ namespace JoJoStands.NPCs
             {
                 int spawnedNPC = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.position.X, (int)npc.position.Y, npc.type);
                 Main.npc[spawnedNPC].GetGlobalNPC<JoJoGlobalNPC>().spawnedByDeathLoop = npc.GetGlobalNPC<JoJoGlobalNPC>().spawnedByDeathLoop - 1;
-            }
-            if (vampireUserLastHitIndex != -1)
-            {
-                Player player = Main.player[vampireUserLastHitIndex];
-                VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
-                vPlayer.enemyTypesKilled[npc.type] += 1;
-                if ((!npc.boss && vPlayer.enemyTypesKilled[npc.type] == 10) || (npc.boss && vPlayer.enemyTypesKilled[npc.type] == 0))
-                {
-                    vPlayer.vampireSkillPointsAvailable += 1;
-                    vPlayer.totalVampireSkillPointsEarned += 1;
-                    Main.NewText("You have obtained another Vampiric Skill Point!");
-                    if (vPlayer.totalVampireSkillPointsEarned % 5 == 0)
-                        vPlayer.vampiricLevel += 1;
-                }
             }
         }
 
@@ -849,12 +822,6 @@ namespace JoJoStands.NPCs
         {
             if (sunTagged)
                 drawColor = Color.Yellow;
-
-            if (zombieHightlightTimer > 0)
-                drawColor = Color.Orange;
-
-            if (npc.HasBuff(ModContent.BuffType<Lacerated>()) && Main.player[Main.myPlayer].GetModPlayer<VampirePlayer>().anyMaskForm)
-                drawColor = Color.OrangeRed;
 
             if (taggedForDeathLoop > 0)
                 drawColor = Color.Purple;
@@ -957,10 +924,6 @@ namespace JoJoStands.NPCs
             {
                 npc.StrikeNPC((int)(npc.damage * 0.7f), 6f, -npc.direction);
             }
-            if (target.GetModPlayer<VampirePlayer>().vampire)
-            {
-                npc.AddBuff(BuffID.Frostburn, 240);
-            }
             if (target.HasBuff(ModContent.BuffType<LockActiveBuff>()))
             {
                 theLockCrit = mPlayer.standCritChangeBoosts;
@@ -976,8 +939,6 @@ namespace JoJoStands.NPCs
                     npc.AddBuff(ModContent.BuffType<Locked>(), (5 * mPlayer.standTier) * 60);
                 }
             }
-            if (removeZombieHighlightOnHit)
-                zombieHightlightTimer = 0;
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)
@@ -994,20 +955,6 @@ namespace JoJoStands.NPCs
             }
         }
 
-        public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
-        {
-            if (JoJoStandsWorld.VampiricNight)
-            {
-                pool.Clear();
-                pool.Add(NPCID.Zombie, SpawnCondition.OverworldNightMonster.Chance);
-                pool.Add(ModContent.NPCType<GladiatorZombie>(), 0.09f);
-                pool.Add(ModContent.NPCType<BaldZombie>(), 0.09f);
-                pool.Add(ModContent.NPCType<ChimeraBird>(), 0.09f);
-                pool.Add(ModContent.NPCType<Doobie>(), 0.02f);
-                pool.Add(ModContent.NPCType<WangChan>(), 0.02f);
-                pool.Add(ModContent.NPCType<JackTheRipper>(), 0.02f);
-            }
-        }
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
