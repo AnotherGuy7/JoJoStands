@@ -1,6 +1,4 @@
-﻿using JoJoStands.Items;
-using JoJoStands.Items.Dyes;
-using JoJoStands.UI;
+﻿using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;

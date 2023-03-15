@@ -5,9 +5,7 @@ using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
-using Terraria.Chat;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -32,7 +30,7 @@ namespace JoJoStands
         private const string Tag_VampiricNight = "vampiricNight";
         private const string Tag_VampiricNightComplete = "vampiricNightComplete";
         private const string Tag_ViralMeteoriteCenterX = "viralMeteoriteCenterX";
-        private const string Tag_ViralMeteoriteCenterY= "viralMeteoriteCenterY";
+        private const string Tag_ViralMeteoriteCenterY = "viralMeteoriteCenterY";
         private const string Tag_ViralMeteoriteVisited = "viralMeteoriteVisited";
         private const string Tag_ViralMeteoriteIntroZoneVisited = "viralMeteoriteIntroduced";
         public static readonly Color WorldEventTextColor = new Color(50, 255, 130);

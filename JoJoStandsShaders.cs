@@ -30,12 +30,18 @@ namespace JoJoStands
 
         public static void ActivateShader(string shaderName)
         {
+            if (Main.dedServ)
+                return;
+
             if (!Filters.Scene[shaderName].IsActive())
                 Filters.Scene.Activate(shaderName);
         }
 
         public static void DeactivateShader(string shaderName)
         {
+            if (Main.dedServ)
+                return;
+
             if (Filters.Scene[shaderName].IsActive())
                 Filters.Scene[shaderName].Deactivate();
         }
@@ -53,11 +59,17 @@ namespace JoJoStands
 
         public static bool ShaderActive(string shaderName)
         {
+            if (Main.dedServ)
+                return false;
+
             return Filters.Scene[shaderName].IsActive();
         }
 
         public static void ChangeShaderUseProgress(string shaderName, float useProgress)
         {
+            if (Main.dedServ)
+                return;
+
             Filters.Scene[shaderName].GetShader().UseProgress(useProgress);
         }
 

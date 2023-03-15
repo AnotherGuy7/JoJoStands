@@ -210,7 +210,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 seconds *= 2;
             mPlayer.timestopActive = true;
             mPlayer.timestopEffectDurationTimer = 60;
-            if (!JoJoStands.SoundsLoaded)
+            if (!JoJoStands.SoundsLoaded || (JoJoStands.SoundsLoaded && !JoJoStands.SoundsModAbilityVoicelines))
                 SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/timestop_start"));
 
             player.AddBuff(ModContent.BuffType<TheWorldBuff>(), seconds * 60, true);
