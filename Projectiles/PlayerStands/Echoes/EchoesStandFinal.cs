@@ -25,15 +25,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private const int ActNumber = 3;
-        private int changeActCooldown = 20;
         private int targetPlayer = -1;
         private int targetNPC = -1;
+        private int actChangeCooldown = 30;
 
         private bool threeFreeze = false;
         private bool returnToPlayer = false;
         private bool changeACT = false;
-        private bool targetFound = false;
         private bool playedThreeFreezeSound = false;
+        private bool playedThreeFreezeThudSound = false;
+        private bool threeFreezeTargetFound = false;
 
         public override void ExtraSpawnEffects()
         {
@@ -49,8 +50,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             UpdateStandSync();
             if (shootCount > 0)
                 shootCount--;
-            if (changeActCooldown > 0)
-                changeActCooldown--;
+            if (actChangeCooldown > 0)
+                actChangeCooldown--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
@@ -72,7 +73,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
                 threeFreeze = false;
 
-
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !returnToPlayer)
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !threeFreeze && !mPlayer.posing)
@@ -89,56 +89,65 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 if (threeFreeze)
                     GoInFront();
                 else
+                {
                     playedThreeFreezeSound = false;
+                    playedThreeFreezeThudSound = false;
+                }
+
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing && !attackFrames) //3freeze activation
                 {
-                    Projectile.frame = 0;
                     threeFreeze = true;
-                    if (JoJoStands.SoundsLoaded && !playedThreeFreezeSound)
-                    {
-                        playedThreeFreezeSound = true;
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze").WithVolumeScale(JoJoStands.ModSoundsVolume));
-                    }
+                    Projectile.frame = 0;
+                    bool enemyAffectedByThreeFreeze = false;
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
                         NPC npc = Main.npc[n];
                         if (npc.active && !npc.hide && !npc.immortal)
                         {
-                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, npc.Center) <= 250f && npc.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15 && !targetFound)
+                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, npc.Center) <= 250f)
                             {
-                                targetFound = true;
-                                targetNPC = npc.whoAmI;
-                                if (JoJoStands.SoundsLoaded)
-                                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze_Thud").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                                enemyAffectedByThreeFreeze = true;
+                                if (npc.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15)
+                                {
+                                    threeFreezeTargetFound = true;
+                                    targetNPC = npc.whoAmI;
+                                }
                                 break;
                             }
                         }
                     }
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    if (Main.netMode == NetmodeID.MultiplayerClient && !enemyAffectedByThreeFreeze)
                     {
                         for (int p = 0; p < Main.maxPlayers; p++)
                         {
                             Player otherPlayer = Main.player[p];
-                            if (otherPlayer.active && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]) && !targetFound)
+                            if (otherPlayer.active && otherPlayer.hostile && player.hostile && player.InOpposingTeam(Main.player[otherPlayer.whoAmI]))
                             {
                                 if (otherPlayer.Hitbox.Intersects(rectangle) && Vector2.Distance(Projectile.Center, otherPlayer.Center) <= 250f && otherPlayer.whoAmI != player.whoAmI)
                                 {
-                                    targetFound = true;
+                                    threeFreezeTargetFound = true;
                                     targetPlayer = otherPlayer.whoAmI;
-                                    if (JoJoStands.SoundsLoaded)
-                                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze_Thud").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                                    enemyAffectedByThreeFreeze = true;
                                     break;
                                 }
                             }
                         }
                     }
+                    if (JoJoStands.SoundsLoaded && !playedThreeFreezeSound)
+                    {
+                        playedThreeFreezeSound = true;
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                    }
+                    if (JoJoStands.SoundsLoaded && !playedThreeFreezeThudSound && enemyAffectedByThreeFreeze)
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze_Thud").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                    playedThreeFreezeThudSound = enemyAffectedByThreeFreeze;
                 }
                 if (SpecialKeyPressed() && Projectile.owner == Main.myPlayer)       //3freeze barrgage activation
                 {
                     player.AddBuff(ModContent.BuffType<ThreeFreezeBarrage>(), 10 * 60);
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 }
-                if (SecondSpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && changeActCooldown == 0 && mPlayer.echoesTier > 3)
+                if (SecondSpecialKeyPressed(false) && actChangeCooldown <= 0 && Projectile.owner == Main.myPlayer)
                 {
                     changeACT = true;
                     Projectile.Kill();
@@ -149,9 +158,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 BasicPunchAI();
             }
 
-            if (targetFound)      //3freeze
+            if (threeFreezeTargetFound)      //3freeze
             {
-                targetFound = false;
+                threeFreezeTargetFound = false;
                 if (targetNPC != -1)
                 {
                     NPC npc = Main.npc[targetNPC];
@@ -279,10 +288,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         {
             targetNPC = reader.ReadInt32();
             targetPlayer = reader.ReadInt32();
-            if (targetNPC != -1 || targetPlayer != -1)
-                targetFound = true;
-            else
-                targetFound = false;
+            threeFreezeTargetFound = targetNPC != -1 || targetPlayer != -1 ? true : false;
 
             threeFreeze = reader.ReadBoolean();
             returnToPlayer = reader.ReadBoolean();

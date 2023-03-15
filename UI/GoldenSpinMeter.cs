@@ -53,11 +53,12 @@ namespace JoJoStands.UI
         {
             Player player = Main.LocalPlayer;
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            int frame = (int)((mPlayer.goldenSpinCounter / 300f) * 12);
+            int frame = (int)(mPlayer.goldenSpinCounter / 300f) * 12;
+            frame += 1;
             if (frame >= 12)
                 frame = 11;
 
-            animRect.Y = (frame - 1) * animRect.Height;
+            animRect.Y = frame * animRect.Height;
 
             float scaleInverse = 1f - (Main.UIScale - 1f);
             Rectangle clippingRect = spinMeter.GetClippingRectangle(spriteBatch);

@@ -9,7 +9,8 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Vampiric Bangle");
-            Tooltip.SetDefault("Stand lifesteal\n33% increased damage to user");
+            Tooltip.SetDefault("Allows Stand Attacks to perform life steal." +
+                "\n33% increased damage to user!");
             SacrificeTotal = 1;
         }
 
@@ -25,7 +26,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().vampiricBangle = true;
+            player.GetModPlayer<MyPlayer>().vampiricBangleEquipped = true;
         }
     }
 }

@@ -9,7 +9,8 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sealed Poker Deck");
-            Tooltip.SetDefault("Every 5 seconds, Stand Attacks deal 25% more damage.\nStand Attacks affected by this accessory are guaranteed critical strikes.");
+            Tooltip.SetDefault("Every 5 seconds, Stand Attacks deal 25% more damage." +
+                "\nStand Attacks affected by this accessory are guaranteed critical strikes.");
             SacrificeTotal = 1;
         }
 

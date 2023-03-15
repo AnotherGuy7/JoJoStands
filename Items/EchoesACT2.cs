@@ -1,6 +1,7 @@
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,7 +19,11 @@ namespace JoJoStands.Items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Echoes (ACT 2)");
-            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate! \nRight-click: Scroll through Sound Effects!\nHold right-click: Create an aura with the chosen Sound Effect!\nSpecial: Remote Control\nSecond Special: Switch to previous act!");
+            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate!" +
+                "\nRight-click: Scroll through Sound Effects!" +
+                "\nHold right-click: Create an aura with the chosen Sound Effect!" +
+                "\nSpecial: Remote Control" +
+                "\nSecond Special: Switch to previous acts!");
         }
 
         public override void SetDefaults()
@@ -30,6 +35,12 @@ namespace JoJoStands.Items
             Item.value = 0;
             Item.noUseGraphic = true;
             Item.rare = ItemRarityID.LightPurple;
+        }
+
+        public override bool ManualStandSpawning(Player player)
+        {
+            player.GetModPlayer<MyPlayer>().echoesTier = 3;
+            return false;
         }
 
         public override void AddRecipes()

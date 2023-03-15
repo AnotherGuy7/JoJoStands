@@ -86,8 +86,9 @@ namespace JoJoStands
         public int deathLoopTarget = -1;
         public StandControlStyle standControlStyle;
         public int softAndWetBubbleRotation;
+        public int standDesummonTimer = 0;
 
-        public int globalCooldown = 0;
+        public int crazyDiamonUncraftCooldown = 0;
 
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
@@ -157,6 +158,7 @@ namespace JoJoStands
         public Vector2 VoidCamPosition;
         public Vector2 standRemoteModeCameraPosition;
         public Vector2[] sexPistolsOffsets = new Vector2[6];
+        public DrawData standDesummonTextureData;
 
         public string standName = "";
         public string poseSoundName = "";       //This is for JoJoStandsSounds
@@ -177,8 +179,8 @@ namespace JoJoStands
         public int echoesSoundIntensityMax = 48;
         public int echoesKaboom3 = 0;
         public int echoesTailTip = -1;
-        public int echoesACT2Evolve = 0;
-        public int echoesACT3Evolve = 0;
+        public int echoesACT2EvolutionProgress = 0;
+        public int echoesACT3EvolutionProgress = 0;
         public float echoesDamageBoost = 1f;
         public bool echoesBoing = false;
         public bool echoesBoing2 = false;
@@ -199,7 +201,7 @@ namespace JoJoStands
         public bool fightingSpiritEmblem = false;
         public int fightingSpiritEmblemStack = 0;
         public bool arrowEarringEquipped = false;
-        public bool vampiricBangle = false;
+        public bool vampiricBangleEquipped = false;
         public int arrowEarringCooldown = 0;
         public bool firstNapkinEquipped = false;
         public bool herbalTeaBag = false;
@@ -208,7 +210,7 @@ namespace JoJoStands
         public bool zippedHandEquipped = false;
         public bool zippedHandDeath = false;
         public bool familyPhotoEquipped = false;
-        public int familyPhotoEffect = 0;
+        public int familyPhotoEffectTimer = 0;
         public bool underbossPhoneEquipped = false;
         public int underbossPhoneCount = 0;
         public bool sealedPokerDeckEquipped = false;
@@ -254,7 +256,7 @@ namespace JoJoStands
 
         public void ItemBreak(Item item)
         {
-            if (globalCooldown == 0)
+            if (crazyDiamonUncraftCooldown <= 0)
             {
                 List<Recipe> howManyRecipesHere = new List<Recipe>();
                 for (int r = 0; r < Main.recipe.Length; r++)
@@ -268,7 +270,7 @@ namespace JoJoStands
                             for (int i = 0; i < Main.recipe[r].createItem.stack; i++)
                                 Player.ConsumeItem(item.type);
                             Uncraft(howManyRecipesHere[0]);
-                            globalCooldown = 5;
+                            crazyDiamonUncraftCooldown = 5;
                             break;
                         }
                         if (item.type == ItemID.IronBar)
@@ -276,7 +278,7 @@ namespace JoJoStands
                             SoundEngine.PlaySound(SoundID.Grab);
                             Player.ConsumeItem(item.type);
                             Player.QuickSpawnItem(Player.InheritSource(Player), ItemID.IronOre, 3);
-                            globalCooldown = 5;
+                            crazyDiamonUncraftCooldown = 5;
                             break;
                         }
                         if (item.type == ItemID.LeadBar)
@@ -284,7 +286,7 @@ namespace JoJoStands
                             SoundEngine.PlaySound(SoundID.Grab);
                             Player.ConsumeItem(item.type);
                             Player.QuickSpawnItem(Player.InheritSource(Player), ItemID.LeadOre, 3);
-                            globalCooldown = 5;
+                            crazyDiamonUncraftCooldown = 5;
                             break;
                         }
                     }
@@ -294,10 +296,10 @@ namespace JoJoStands
 
         public void Uncraft(Recipe recipe)
         {
-            recipe.requiredItem.ForEach(Uncraft2);
+            recipe.requiredItem.ForEach(Uncraft);
         }
 
-        public void Uncraft2(Item item)
+        public void Uncraft(Item item)
         {
             Player.QuickSpawnItem(Player.InheritSource(Player), item.type, item.stack);
         }
@@ -339,7 +341,7 @@ namespace JoJoStands
             manifestedWillEmblem = false;
             fightingSpiritEmblem = false;
             arrowEarringEquipped = false;
-            vampiricBangle = false;
+            vampiricBangleEquipped = false;
             firstNapkinEquipped = false;
             herbalTeaBag = false;
             zippedHandEquipped = false;
@@ -356,17 +358,12 @@ namespace JoJoStands
         {
             int type = StandSlot.SlotItem.type;
             if (type == ModContent.ItemType<TuskAct3>() || type == ModContent.ItemType<TuskAct4>())
-            {
                 tuskActNumber = 3;
-            }
             else if (type == ModContent.ItemType<TuskAct2>())
-            {
                 tuskActNumber = 2;
-            }
             else if (type == ModContent.ItemType<TuskAct1>())
-            {
                 tuskActNumber = 1;
-            }
+
             for (int i = 0; i < sexPistolsOffsets.Length; i++)
             {
                 sexPistolsOffsets[i] = new Vector2(Main.rand.NextFloat(-40f, 40f + 1f), Main.rand.NextFloat(-40f, 40f + 1f));
@@ -566,7 +563,6 @@ namespace JoJoStands
                 creamFrame = 0;
 
                 echoesTier = 0;
-
                 badCompanyTier = 0;
 
                 stickyFingersAmbushMode = false;
@@ -685,6 +681,12 @@ namespace JoJoStands
 
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
+            if (standDesummonTimer > 0 && standDesummonTextureData.texture != null)
+            {
+                Vector2 drawPosition = Vector2.Lerp(Player.Center - Main.screenPosition, standDesummonTextureData.position, (standDesummonTimer / 15f));
+                Main.spriteBatch.Draw(standDesummonTextureData.texture, drawPosition, standDesummonTextureData.sourceRect, Color.White * (standDesummonTimer / 15f),
+                    standDesummonTextureData.rotation, standDesummonTextureData.origin, standDesummonTextureData.scale, standDesummonTextureData.effect, 0f);
+            }
             if (Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
             {
                 if (timerPostDraw == 0)
@@ -751,8 +753,8 @@ namespace JoJoStands
                 goldenSpinCounter = 300;
             if (sealedPokerDeckCooldown > 0)
                 sealedPokerDeckCooldown--;
-            if (familyPhotoEffect > 0)
-                familyPhotoEffect--;
+            if (familyPhotoEffectTimer > 0)
+                familyPhotoEffectTimer--;
             if (!revived && Player.HasItem(ModContent.ItemType<PokerChip>()) || zippedHandEquipped && !zippedHandDeath)
                 notDeadYet = true;
             else
@@ -802,10 +804,12 @@ namespace JoJoStands
                 remoteDodge = 2;
             if (standControlStyle == StandControlStyle.Remote && remoteDodge > 0)
                 remoteDodge--;
-            if (globalCooldown > 0)
-                globalCooldown--;
+            if (crazyDiamonUncraftCooldown > 0)
+                crazyDiamonUncraftCooldown--;
             if (standKeyPressTimer > 0)
                 standKeyPressTimer--;
+            if (standDesummonTimer > 0)
+                standDesummonTimer--;
             if (revertTimer > 0)
                 revertTimer--;
 
@@ -931,23 +935,6 @@ namespace JoJoStands
             if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 crazyDiamondStonePunch = 0;
 
-            if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesAct3>()) //echoes stuff 
-                echoesTier = 4;
-
-            else if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesAct2>())
-                echoesTier = 3;
-
-            else if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesAct1>())
-                echoesTier = 2;
-
-            else if (StandSlot.SlotItem.type == ModContent.ItemType<EchoesAct0>())
-                echoesTier = 1;
-            else
-                echoesTier = 0;
-
-            if (echoesFreeze == 0)
-                echoesDamageTimer1 = 60;
-
             if (echoesKaboom) //echoes act 2 stuff 
             {
                 Player.noFallDmg = false;
@@ -994,6 +981,8 @@ namespace JoJoStands
                 }
                 echoesFreeze--;
             }
+            else
+                echoesDamageTimer1 = 60;
 
             if (sexPistolsTier != 0)        //Sex Pistols stuff
             {
@@ -1618,15 +1607,19 @@ namespace JoJoStands
 
         public override void UpdateLifeRegen()
         {
-            if (siliconLifeformCarapace && standOut)
+            if (standOut)
             {
-                if (Player.lifeRegen > 0)
-                    Player.lifeRegen = 0;
-                Player.lifeRegenTime = 0;
-                if (vampiricBangle)
-                    Player.lifeRegen -= 9;
-                else
-                    Player.lifeRegen -= 3;
+                if (siliconLifeformCarapace)
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+
+                    if (vampiricBangleEquipped)
+                        Player.lifeRegen -= 9;
+                    else
+                        Player.lifeRegen -= 3;
+                }
             }
         }
 
@@ -1764,9 +1757,9 @@ namespace JoJoStands
                 damage = (int)(damage * 0.8f);
             if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 damage = (int)(damage * 0.1f);
-            if (vampiricBangle && Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+            if (vampiricBangleEquipped)
                 damage = (int)(damage * 1.33f);
-            if (familyPhotoEffect > 0)
+            if (familyPhotoEffectTimer > 0)
                 damage = (int)(damage * 0.66f);
             if (Player.HasBuff<LockActiveBuff>() && npc.HasBuff<Locked>())
             {
@@ -1803,9 +1796,9 @@ namespace JoJoStands
                 damage = (int)(damage * 0.8f);
             if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 damage = (int)(damage * 0.1f);
-            if (vampiricBangle)
+            if (vampiricBangleEquipped)
                 damage = (int)(damage * 1.33f);
-            if (familyPhotoEffect > 0)
+            if (familyPhotoEffectTimer > 0)
                 damage = (int)(damage * 0.66f);
         }
 

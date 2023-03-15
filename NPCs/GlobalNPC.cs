@@ -149,7 +149,7 @@ namespace JoJoStands.NPCs
 
                 globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsHardmodeDungeonCondition(), ModContent.ItemType<TheFirstNapkin>(), 40));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCorruptionCondition(), ModContent.ItemType<SealedPokerDeck>(), 40));
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCorruptionCondition(), ModContent.ItemType<SealedPokerDeck>(), 40));      //These two are world-alternates
 
                 globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCrimsonCondition(), ModContent.ItemType<UnderbossPhone>(), 40));
             }
@@ -863,7 +863,7 @@ namespace JoJoStands.NPCs
             {
                 if (echoesThreeFreezeTimer == 0)
                     echoesFreezeTarget = false;
-                drawColor = Color.LightGreen;
+                drawColor = Color.Lerp(Color.White, Color.LightGreen, MathHelper.Clamp(echoesThreeFreezeTimer / 15f, 0f, 1f));
             }
 
             if (highlightedByTheHandMarker)

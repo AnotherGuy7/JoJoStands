@@ -838,7 +838,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             if (standTexture != null && Main.netMode != NetmodeID.Server)
             {
-                int frameHeight = standTexture.Height / Main.projFrames[Projectile.whoAmI];
+                int frameHeight = standTexture.Height / Main.projFrames[Projectile.type];
                 Vector2 drawOffset = StandOffset;
                 drawOffset.X *= Projectile.spriteDirection;
                 Vector2 drawPosition = Projectile.Center - Main.screenPosition + drawOffset;
@@ -916,7 +916,40 @@ namespace JoJoStands.Projectiles.PlayerStands
             mPlayer.poseSoundName = "";
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
                 mPlayer.standControlStyle = MyPlayer.StandControlStyle.Manual;
+
+            mPlayer.standDesummonTimer = 15;
+            if (Main.netMode != NetmodeID.Server)
+                mPlayer.standDesummonTextureData = BuildStandDesummonDrawData();
+
+            int amountOfParticles = Main.rand.Next(2, 5 + 1);
+            int[] dustTypes = new int[3] { ModContent.DustType<StandSummonParticles>(), ModContent.DustType<StandSummonShine1>(), ModContent.DustType<StandSummonShine2>() };
+            Vector2 dustSpawnOffset = StandOffset;
+            dustSpawnOffset.X *= Projectile.spriteDirection;
+            for (int i = 0; i < amountOfParticles; i++)
+            {
+                int dustType = dustTypes[Main.rand.Next(0, 3)];
+                Dust.NewDust(Projectile.position - new Vector2(Projectile.width * Projectile.spriteDirection, HalfStandHeight) + dustSpawnOffset, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
+            }
+
             StandKillEffects();
+        }
+
+        public virtual DrawData BuildStandDesummonDrawData()
+        {
+            if (standTexture == null)
+                return new DrawData();
+
+            int frameHeight = standTexture.Height / Main.projFrames[Projectile.type];
+            Vector2 drawOffset = StandOffset;
+            drawOffset.X *= Projectile.spriteDirection;
+            Vector2 drawPosition = Projectile.Center - Main.screenPosition + drawOffset;
+            Rectangle animRect = new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight);
+            Vector2 standOrigin = new Vector2(standTexture.Width / 2f, frameHeight / 2f);
+            SpriteEffects effects = SpriteEffects.None;
+            if (Projectile.spriteDirection == -1)
+                effects = SpriteEffects.FlipHorizontally;
+
+            return new DrawData(standTexture, drawPosition, animRect, Color.White, Projectile.rotation, standOrigin, 1f, effects, 0);
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -1260,7 +1293,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loop)
         {
             Projectile.frameCounter++;
-            Main.projFrames[Projectile.whoAmI] = frameAmount;
+            Main.projFrames[Projectile.type] = frameAmount;
             if (Projectile.frameCounter >= frameCounterLimit)
             {
                 Projectile.frame += 1;
@@ -1292,7 +1325,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loopCertainFrames, int loopFrameStart, int loopFrameEnd)
         {
             Projectile.frameCounter++;
-            Main.projFrames[Projectile.whoAmI] = frameAmount;
+            Main.projFrames[Projectile.type] = frameAmount;
             if (Projectile.frameCounter >= frameCounterLimit)
             {
                 Projectile.frame += 1;

@@ -1,9 +1,11 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -429,6 +431,22 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                 if (Projectile.frame >= 2)
                     Projectile.frame = 0;
             }
+        }
+
+        public override DrawData BuildStandDesummonDrawData()
+        {
+            standTexture = (Texture2D)ModContent.Request<Texture2D>(Texture, ReLogic.Content.AssetRequestMode.ImmediateLoad);
+            int frameHeight = standTexture.Height / Main.projFrames[Projectile.type];
+            Vector2 drawOffset = StandOffset;
+            drawOffset.X *= Projectile.spriteDirection;
+            Vector2 drawPosition = Projectile.Center - Main.screenPosition + drawOffset;
+            Rectangle animRect = new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight);
+            Vector2 standOrigin = new Vector2(standTexture.Width / 2f, frameHeight / 2f);
+            SpriteEffects effects = SpriteEffects.None;
+            if (Projectile.spriteDirection == -1)
+                effects = SpriteEffects.FlipHorizontally;
+
+            return new DrawData(standTexture, drawPosition, animRect, Color.White, Projectile.rotation, standOrigin, 1f, effects, 0);
         }
     }
 }

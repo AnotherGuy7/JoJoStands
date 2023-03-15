@@ -9,7 +9,8 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Underboss Phone");
-            Tooltip.SetDefault("Every fifth hit on enemies with Stand Attacks deal more damage.\nAttacks affected by this accessory ignore defense.");
+            Tooltip.SetDefault("Every fifth hit on enemies with Stand Attacks deal more damage." +
+                "\nAttacks affected by this accessory ignore defense.");
             SacrificeTotal = 1;
         }
 

@@ -324,10 +324,13 @@ namespace JoJoStands.Projectiles
                 if (player.HasBuff(ModContent.BuffType<Rampage>()))
                     Projectile.ArmorPenetration = target.defense;
                 if (mPlayer.standTarget != target.whoAmI)
-                    mPlayer.fightingSpiritEmblemStack = 0;
-                if (mPlayer.standTarget != target.whoAmI)
+                {
+                    mPlayer.fightingSpiritEmblemStack -= 6;
+                    if (mPlayer.fightingSpiritEmblemStack < 0)
+                        mPlayer.fightingSpiritEmblemStack = 0;
                     mPlayer.standTarget = target.whoAmI;
-                if (mPlayer.fightingSpiritEmblem && mPlayer.fightingSpiritEmblemStack < 31)
+                }
+                if (mPlayer.fightingSpiritEmblem && mPlayer.fightingSpiritEmblemStack <= 30)
                     mPlayer.fightingSpiritEmblemStack += 1;
                 if (mPlayer.manifestedWillEmblem && crit)
                     damage = (int)(damage * 1.5f);
@@ -358,11 +361,11 @@ namespace JoJoStands.Projectiles
                                 npc.StrikeNPC(transferDamage, 0f, 0, critCheck);
                                 SyncCall.SyncArrowEarringInfo(player.whoAmI, npc.whoAmI, transferDamage, critCheck);
                             }
-                            if (mPlayer.vampiricBangle)
-                                player.Heal((int)(Main.rand.NextFloat(1, 6)));
                         }
                     }
                 }
+                if (mPlayer.vampiricBangleEquipped)
+                    player.Heal(Main.rand.Next(1, 5 + 1));
             }
         }
 

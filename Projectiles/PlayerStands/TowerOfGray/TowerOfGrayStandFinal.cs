@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
@@ -550,6 +551,20 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
                         Projectile.frame = 2;
                 }
             }
+        }
+
+        public override DrawData BuildStandDesummonDrawData()
+        {
+            standTexture = (Texture2D)ModContent.Request<Texture2D>(Texture, ReLogic.Content.AssetRequestMode.ImmediateLoad);
+            int frameHeight = standTexture.Height / Main.projFrames[Projectile.type];
+            Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+            Rectangle animRect = new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight);
+            Vector2 standOrigin = new Vector2(standTexture.Width / 2f, frameHeight / 2f);
+            SpriteEffects effects = SpriteEffects.None;
+            if (Projectile.spriteDirection == -1)
+                effects = SpriteEffects.FlipHorizontally;
+
+            return new DrawData(standTexture, drawPosition, animRect, Color.White, Projectile.rotation, standOrigin, 1f, effects, 0);
         }
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)

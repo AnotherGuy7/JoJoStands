@@ -11,7 +11,9 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Fighting Spirit Emblem");
-            Tooltip.SetDefault("15% increased stand damage\nUp to 45% increased stand damage with attacks on same target");
+            Tooltip.SetDefault("15% increased stand damage." +
+                "\nDamage to the same target increases Stand Damage by 1% up to 30%." +
+                "\nHitting another enemy reduces this counter by 6%. ");
             SacrificeTotal = 1;
         }
 
@@ -27,7 +29,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.15f + 0.01f * player.GetModPlayer<MyPlayer>().fightingSpiritEmblemStack;
+            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.15f + (0.01f * player.GetModPlayer<MyPlayer>().fightingSpiritEmblemStack);
             player.GetModPlayer<MyPlayer>().fightingSpiritEmblem = true;
         }
 

@@ -363,19 +363,19 @@ namespace JoJoStands.Projectiles
                     if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
                     {
                         if (crit)
-                            mPlayer.echoesACT3Evolve += damage * 2;
+                            mPlayer.echoesACT3EvolutionProgress += damage * 2;
                         if (!crit)
-                            mPlayer.echoesACT3Evolve += damage;
+                            mPlayer.echoesACT3EvolutionProgress += damage;
                     }
                 }
-                if (mPlayer.echoesTier == 2)
+                else if (mPlayer.echoesTier == 2)
                 {
                     if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
                     {
                         if (crit)
-                            mPlayer.echoesACT2Evolve += damage * 2;
+                            mPlayer.echoesACT2EvolutionProgress += damage * 2;
                         if (!crit)
-                            mPlayer.echoesACT2Evolve += damage;
+                            mPlayer.echoesACT2EvolutionProgress += damage;
                     }
                 }
                 if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.currentEchoesAct == 3)
@@ -408,11 +408,11 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (mPlayer.standFistsType != TowerOfGray && mPlayer.familyPhotoEquipped && mPlayer.familyPhotoEffect < 30 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
+            if (mPlayer.standFistsType != TowerOfGray && mPlayer.familyPhotoEquipped && mPlayer.familyPhotoEffectTimer < 30 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                mPlayer.familyPhotoEffect += 30;
-                if (mPlayer.familyPhotoEffect >= 30)
-                    mPlayer.familyPhotoEffect = 30;
+                mPlayer.familyPhotoEffectTimer += 30;
+                if (mPlayer.familyPhotoEffectTimer >= 30)
+                    mPlayer.familyPhotoEffectTimer = 30;
             }
         }
 

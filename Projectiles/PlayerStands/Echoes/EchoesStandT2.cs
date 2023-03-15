@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -25,7 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override string PoseSoundName => "EchoesAct1";
         public override string SpawnSoundName => "Echoes Act 1";
         public override Vector2 StandOffset => new Vector2(-8, 0);
-        public override Vector2 ManualIdleHoverOffset => new Vector2(44, -40);
+        public override Vector2 ManualIdleHoverOffset => new Vector2(-28, -40);
         public override float MaxDistance => 148f;      //1.5x the normal range cause Koichi is really reliable guy (C) Proos <3
         public override StandAttackType StandType => StandAttackType.Melee;
         private const float ManualRange = 40 * 16;
@@ -35,6 +34,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private int targetNPC = -1;
         private int targetPlayer = -1;
         private int rightClickCooldown = 0;
+        private int actChangeCooldown = 30;
 
         private bool remoteMode = false;
         private bool mouseControlled = false;
@@ -65,6 +65,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 messageCooldown--;
             if (rightClickCooldown > 0)
                 rightClickCooldown--;
+            if (actChangeCooldown > 0)
+                actChangeCooldown--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (mPlayer.standOut)
@@ -258,7 +260,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     targetNPC = -1;
                 }
 
-                if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && !returnToPlayer) //remote mode
+                if (SpecialKeyPressed(false) && !returnToPlayer && Projectile.owner == Main.myPlayer) //remote mode
                 {
                     remoteMode = !remoteMode;
                     if (remoteMode)
@@ -273,7 +275,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                 }
 
-                if (SecondSpecialKeyPressed(false) && Projectile.owner == Main.myPlayer && mPlayer.echoesTier > 2)
+                if (SecondSpecialKeyPressed(false) && mPlayer.echoesTier >= 3 && actChangeCooldown <= 0 && Projectile.owner == Main.myPlayer)
                 {
                     changeACT = true;
                     Projectile.Kill();
@@ -301,7 +303,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Projectile.tileCollide = false;
                 MovementAI(player.Center, 8f + player.moveSpeed * 2);
             }
-            if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && Main.hardMode && mPlayer.echoesACT2Evolve >= 10000)
+            if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && Main.hardMode && mPlayer.echoesACT2EvolutionProgress >= 10000)
             {
                 evolve = true;
                 Projectile.Kill();
@@ -409,7 +411,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (evolve)
             {
                 player.maxMinions += 1;
-                mPlayer.echoesACT2Evolve = 0;
+                mPlayer.echoesACT2EvolutionProgress = 0;
                 mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesAct2>();
                 mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesAct2>());
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandT3>(), 0, 0f, Main.myPlayer, remoteModeOnSpawn);
