@@ -9,8 +9,8 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A black umbrella... Useful for blocking off the sunlight!\nCan also be worn as a hat!");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A black umbrella... Useful for blocking off the sunlight!\nCan also be worn as a hat!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

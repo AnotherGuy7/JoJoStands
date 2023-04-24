@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Cooled Out");
-            Description.SetDefault("You lowered your body temperature.");
+            // DisplayName.SetDefault("Cooled Out");
+            // Description.SetDefault("You lowered your body temperature.");
             Main.buffNoTimeDisplay[Type] = false;
         }
     }

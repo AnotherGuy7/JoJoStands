@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Final Push");
-            Description.SetDefault("Those attempting to knock you of your place will be met with a tireless fight.");
+            // DisplayName.SetDefault("Final Push");
+            // Description.SetDefault("Those attempting to knock you of your place will be met with a tireless fight.");
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
             Main.debuff[Type] = true;
         }

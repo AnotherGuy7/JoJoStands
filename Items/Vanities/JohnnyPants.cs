@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jockey's Pants");
-            Tooltip.SetDefault("A pair of sky blue pants, adorned with stars. There's almost no damage.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Jockey's Pants");
+            // Tooltip.SetDefault("A pair of sky blue pants, adorned with stars. There's almost no damage.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

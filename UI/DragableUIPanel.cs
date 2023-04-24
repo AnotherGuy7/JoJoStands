@@ -16,15 +16,15 @@ namespace JoJoStands.UI
         private Vector2 offset;
         public bool dragging;
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
             DragStart(evt);
         }
 
-        public override void MouseUp(UIMouseEvent evt)
+        public override void LeftMouseUp(UIMouseEvent evt)
         {
-            base.MouseUp(evt);
+            base.LeftMouseUp(evt);
             DragEnd(evt);
         }
 
@@ -54,6 +54,12 @@ namespace JoJoStands.UI
             // Checking ContainsPoint and then setting mouseInterface to true is very common. This causes clicks on this UIElement to not cause the player to use current items. 
             if (ContainsPoint(Main.MouseScreen))
                 Main.LocalPlayer.mouseInterface = true;
+
+            if (HAlign != 0f || VAlign != 0f)
+            {
+                Left.Set(Main.screenWidth * HAlign, 0f);
+                Top.Set(Main.screenHeight * VAlign, 0f);
+            }
 
             Rectangle parentSpace = Parent.GetDimensions().ToRectangle();
             if (dragging)

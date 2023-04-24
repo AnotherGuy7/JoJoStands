@@ -11,8 +11,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Zombie");
-            Description.SetDefault("You are now a zombie!");
+            // DisplayName.SetDefault("Zombie");
+            // Description.SetDefault("You are now a zombie!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;
@@ -25,7 +25,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.moveSpeed *= 1.2f;
             player.jumpBoost = true;
             player.manaRegen += 2;
-            player.statDefense = (int)(player.statDefense / 0.75);
+            player.statDefense *= 1.25f;
             vPlayer.zombie = true;
             vPlayer.anyMaskForm = true;
             player.buffTime[buffIndex] = 2;

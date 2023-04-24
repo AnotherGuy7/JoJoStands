@@ -11,8 +11,8 @@ namespace JoJoStands.Items.PetItems
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An old, wooden cane that Was used by the coolest guy ever.\nSummons a Mini Robert E.O. Speedwagon");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("An old, wooden cane that Was used by the coolest guy ever.\nSummons a Mini Robert E.O. Speedwagon");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

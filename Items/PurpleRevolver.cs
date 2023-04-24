@@ -14,8 +14,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Purple Revolver");
-            Tooltip.SetDefault("A restored six-shooter, in full working order. Press the special key to reload.");
+            // DisplayName.SetDefault("Purple Revolver");
+            // Tooltip.SetDefault("A restored six-shooter, in full working order. Press the special key to reload.");
         }
 
         public override void SetDefaults()

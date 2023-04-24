@@ -124,19 +124,19 @@ namespace JoJoStands.UI
             hamonSkillTreeUpArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonTreeUpArrow", AssetRequestMode.ImmediateLoad));
             SetElementSize(hamonSkillTreeUpArrow, new Vector2(32f, 32f));
             SetElementPosition(hamonSkillTreeUpArrow, new Vector2(10f, 10f));
-            hamonSkillTreeUpArrow.OnClick += OnClickHamonSkillTreeUpArrow;
+            hamonSkillTreeUpArrow.OnLeftClick += OnClickHamonSkillTreeUpArrow;
             HamonSkillTreePanel.Append(hamonSkillTreeUpArrow);
 
             hamonSkillTreeDownArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonTreeDownArrow", AssetRequestMode.ImmediateLoad));
             SetElementSize(hamonSkillTreeDownArrow, new Vector2(32f, 32f));
             SetElementPosition(hamonSkillTreeDownArrow, new Vector2(10f, 46f));
-            hamonSkillTreeDownArrow.OnClick += OnClickHamonSkillTreeDownArrow;
+            hamonSkillTreeDownArrow.OnLeftClick += OnClickHamonSkillTreeDownArrow;
             HamonSkillTreePanel.Append(hamonSkillTreeDownArrow);
 
             hamonSkillTreeXButton = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonTreeXButton", AssetRequestMode.ImmediateLoad));
             SetElementSize(hamonSkillTreeXButton, new Vector2(32f, 32f));
             SetElementPosition(hamonSkillTreeXButton, new Vector2(360f, 6f));
-            hamonSkillTreeXButton.OnClick += OnClickHamonSkillTreeXButton;
+            hamonSkillTreeXButton.OnLeftClick += OnClickHamonSkillTreeXButton;
             HamonSkillTreePanel.Append(hamonSkillTreeXButton);
 
             skillTreeTextures[0] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/HamonSkillTree_Page1", AssetRequestMode.ImmediateLoad);
@@ -148,8 +148,8 @@ namespace JoJoStands.UI
             {
                 hamonSkillIcons[b] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/Extras/HamonIcon_Empty", AssetRequestMode.ImmediateLoad), Vector2.Zero, new Vector2(30f, 30f), Color.White, true);
                 SetElementSize(hamonSkillIcons[b], new Vector2(30f, 30f));
-                hamonSkillIcons[b].OnClick += OnClickAnyIcon;        //This ties *all* of the buttons to the same method
-                hamonSkillIcons[b].OnDoubleClick += OnDoubleClickAnyIcon;
+                hamonSkillIcons[b].OnLeftClick += OnClickAnyIcon;        //This ties *all* of the buttons to the same method
+                hamonSkillIcons[b].OnLeftDoubleClick += OnDoubleClickAnyIcon;
                 hamonSkillIcons[b].owner = HamonSkillTreePanel;
                 HamonSkillTreePanel.Append(hamonSkillIcons[b]);
             }
@@ -171,9 +171,7 @@ namespace JoJoStands.UI
             {
                 currentShownPage++;
                 if (currentShownPage > MaxUIPages)
-                {
                     currentShownPage = MaxUIPages;
-                }
             }
             else
             {
@@ -187,9 +185,8 @@ namespace JoJoStands.UI
             currentShownPage--;
             SoundEngine.PlaySound(SoundID.MenuTick);
             if (currentShownPage <= 0)
-            {
                 currentShownPage = 1;
-            }
+
             InitializeButtons(currentShownPage);
         }
 
@@ -303,11 +300,7 @@ namespace JoJoStands.UI
 
         protected override void DrawSelf(SpriteBatch spriteBatch)       //from ExampleMod's ExampleUI
         {
-            float scaleInverse = 1f - (Main.UIScale - 1f);
-            Rectangle clippingRect = HamonSkillTreePanel.GetClippingRectangle(spriteBatch);
-            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
-            Rectangle mainUIdestinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
-            spriteBatch.Draw(skillTreeTextures[currentShownPage - 1], mainUIdestinationRect, Color.White);
+            spriteBatch.Draw(skillTreeTextures[currentShownPage - 1], UITools.ReformatRectangle(HamonSkillTreePanel.GetClippingRectangle(spriteBatch)), Color.White);
         }
 
         private void InitializeButtons(int page)

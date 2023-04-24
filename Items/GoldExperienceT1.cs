@@ -21,9 +21,9 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Gold Experience (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a frog!" +
-                "\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Gold Experience (Tier 1)");
+            /* Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a frog!" +
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

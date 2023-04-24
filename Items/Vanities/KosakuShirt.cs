@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kira's (Kosaku) Shirt");
-            Tooltip.SetDefault("A nice jacket, complete with custom tie.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Kira's (Kosaku) Shirt");
+            // Tooltip.SetDefault("A nice jacket, complete with custom tie.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

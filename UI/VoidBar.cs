@@ -14,6 +14,7 @@ namespace JoJoStands.UI
         public static Texture2D VoidBarTexture;
         public static Texture2D VoidBarBarTexture;
         private UIText voidText;
+        private float currentFillValue = 0f;
 
         public override void Update(GameTime gameTime)
         {
@@ -29,8 +30,8 @@ namespace JoJoStands.UI
         public override void OnInitialize()
         {
             voidBarUI = new DragableUIPanel();
-            voidBarUI.HAlign = 0.9f;
-            voidBarUI.VAlign = 0.9f;
+            voidBarUI.Left.Set(Main.screenWidth * 0.9f, 0f);
+            voidBarUI.Top.Set(Main.screenHeight * 0.9f, 0f);
             voidBarUI.Width.Set(66f * 1.5f, 0f);
             voidBarUI.Height.Set(60f * 1.5f, 0f);
             voidBarUI.BackgroundColor = new Color(0, 0, 0, 0);
@@ -44,6 +45,7 @@ namespace JoJoStands.UI
             voidBarUI.Append(voidText);
 
             Append(voidBarUI);
+            base.OnInitialize();
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -51,12 +53,14 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            spriteBatch.Draw(VoidBarTexture, voidBarUI.GetClippingRectangle(spriteBatch), new Rectangle(0, 0, VoidBarTexture.Width, VoidBarTexture.Height), Color.White);
+            Rectangle mainUIDestinationRect = UITools.ReformatRectangle(voidBarUI.GetClippingRectangle(spriteBatch));
+            spriteBatch.Draw(VoidBarTexture, mainUIDestinationRect, new Rectangle(0, 0, VoidBarTexture.Width, VoidBarTexture.Height), Color.White);
             float normalizedVoidCounter = 1f - ((float)mPlayer.voidCounter / (float)mPlayer.voidCounterMax);
+            currentFillValue = MathHelper.Lerp(currentFillValue, normalizedVoidCounter, 0.21f);
             MiscShaderData voidGradientShader = JoJoStandsShaders.GetShaderInstance(JoJoStandsShaders.VoidBarGradient);
-            voidGradientShader.UseOpacity(normalizedVoidCounter);
+            voidGradientShader.UseOpacity(currentFillValue);
 
-            UITools.DrawUIWithShader(spriteBatch, voidGradientShader, VoidBarBarTexture, voidBarUI.GetClippingRectangle(spriteBatch));
+            UITools.DrawUIWithShader(spriteBatch, voidGradientShader, VoidBarBarTexture, mainUIDestinationRect);
         }
 
         /*private void PreDrawVoidCounterGradient(MyPlayer mPlayer, SpriteBatch spriteBatch)

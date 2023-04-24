@@ -9,8 +9,8 @@ namespace JoJoStands.Items.Armor.VampirismArmors.IronSlop
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A chestplate filled with spots that look like clay.");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A chestplate filled with spots that look like clay.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

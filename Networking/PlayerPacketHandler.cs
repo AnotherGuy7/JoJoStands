@@ -282,7 +282,7 @@ namespace JoJoStands.Networking
             {
                 bool crit = false;
                 if (stat1 != 0)
-                    crit = true;
+                    modifiers.SetCrit();
                 Main.npc[targetWhoAmI].StrikeNPC(stat2, 7f, stat3, crit);
             }
             if (fistWhoAmI == 6 && stat1 == 1)

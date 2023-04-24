@@ -8,9 +8,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Cracked Pearl");
-            Tooltip.SetDefault("A pearl that cracked during the removal process from the ring. It seems to leak a peculiar virus constantly.\nWhen worn: Punching enemies with Stands can infect enemies with the virus.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Cracked Pearl");
+            // Tooltip.SetDefault("A pearl that cracked during the removal process from the ring. It seems to leak a peculiar virus constantly.\nWhen worn: Punching enemies with Stands can infect enemies with the virus.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -19,11 +19,11 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Gold Experience (Requiem)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use the chosen abilities!" +
+            // DisplayName.SetDefault("Gold Experience (Requiem)");
+            /* Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use the chosen abilities!" +
                 "\nSpecial: Use Back to Zero to nullify the actions of all enemies who touch you!" +
                 "\nSecond Special: Opens/Hides the Ability Wheel" +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

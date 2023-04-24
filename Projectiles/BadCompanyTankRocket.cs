@@ -53,7 +53,7 @@ namespace JoJoStands.Projectiles
                 Main.dust[dustIndex].velocity *= 3f;
             }
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
             for (int n = 0; n < Main.maxNPCs; n++)
             {
                 NPC npc = Main.npc[n];

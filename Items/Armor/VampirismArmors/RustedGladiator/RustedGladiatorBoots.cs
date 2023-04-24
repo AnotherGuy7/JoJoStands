@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Boots that have trampled over the lives of many.\n+5% Vampiric Knockback");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("Boots that have trampled over the lives of many.\n+5% Vampiric Knockback");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

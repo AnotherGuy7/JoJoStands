@@ -12,9 +12,9 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Greater Amulet of Protect");
-            Tooltip.SetDefault("Increased defense while the Stand is out");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Greater Amulet of Protect");
+            // Tooltip.SetDefault("Increased defense while the Stand is out\nOnly boosts defense while in Manual Mode.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

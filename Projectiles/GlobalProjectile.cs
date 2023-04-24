@@ -282,16 +282,16 @@ namespace JoJoStands.Projectiles
             return true;
         }
 
-        public override void ModifyHitPlayer(Projectile Projectile, Player target, ref int damage, ref bool crit)
+        public override void ModifyHitPlayer(Projectile projectile, Player target, ref Player.HurtModifiers modifiers)
         {
             MyPlayer mPlayer = target.GetModPlayer<MyPlayer>();
             if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT1>())
-                damage = (int)(damage * 0.35f);
+                modifiers.FinalDamage *= 0.35f);
             if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT2>())
-                damage = (int)(damage * 0.7f);
+                modifiers.FinalDamage *= 0.7f);
         }
 
-        public override void ModifyHitNPC(Projectile Projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -301,8 +301,8 @@ namespace JoJoStands.Projectiles
             if (kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
             {
                 if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                    crit = true;
-                damage = (int)(damage * 1.05f * mPlayer.standDamageBoosts);
+                    modifiers.SetCrit();
+                modifiers.FinalDamage *= 1.05f * mPlayer.standDamageBoosts);
                 if (mPlayer.crackedPearlEquipped)
                 {
                     if (Main.rand.Next(1, 100 + 1) >= 60)
@@ -317,7 +317,7 @@ namespace JoJoStands.Projectiles
                     if (mPlayer.underbossPhoneCount >= 5)
                     {
                         Projectile.ArmorPenetration = target.defense;
-                        damage = (int)(damage * 1.1f + 10);
+                        modifiers.FinalDamage *= 1.1f + 10);
                         mPlayer.underbossPhoneCount = 0;
                     }
                 }
@@ -333,11 +333,11 @@ namespace JoJoStands.Projectiles
                 if (mPlayer.fightingSpiritEmblem && mPlayer.fightingSpiritEmblemStack <= 30)
                     mPlayer.fightingSpiritEmblemStack += 1;
                 if (mPlayer.manifestedWillEmblem && crit)
-                    damage = (int)(damage * 1.5f);
+                    modifiers.FinalDamage *= 1.5f);
                 if (mPlayer.sealedPokerDeckEquipped && mPlayer.sealedPokerDeckCooldown <= 0)
                 {
-                    crit = true;
-                    damage = (int)(damage * 1.25f) + 20;
+                    modifiers.SetCrit();
+                    modifiers.FinalDamage *= 1.25f) + 20;
                     mPlayer.sealedPokerDeckCooldown += 5 * 60;
                 }
                 if (mPlayer.firstNapkinEquipped && target.life - damage <= 0 && !target.SpawnedFromStatue && player.HasBuff<AbilityCooldown>() && player.buffTime[player.FindBuffIndex(ModContent.BuffType<AbilityCooldown>())] > 60)

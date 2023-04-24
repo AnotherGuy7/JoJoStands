@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jonathan Top");
-            Tooltip.SetDefault("A blue shirt with shoulderpads to protect its wearer from any harm that comes their way.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Jonathan Top");
+            // Tooltip.SetDefault("A blue shirt with shoulderpads to protect its wearer from any harm that comes their way.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

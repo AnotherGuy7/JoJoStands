@@ -63,16 +63,19 @@ namespace JoJoStands.Projectiles.Minions
             return true;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             hitcooldown += 60;
             target.AddBuff(BuffID.Poisoned, 300);
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            hitcooldown += 60;
-            target.AddBuff(BuffID.Poisoned, 300);
+            if (info.PvP)
+            {
+                hitcooldown += 60;
+                target.AddBuff(BuffID.Poisoned, 5 * 60);
+            }
         }
 
         public override void Kill(int timeLeft)

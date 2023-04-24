@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.Debuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Space Freeze!");
-            Description.SetDefault("You went too high and are now going to stay in space for the rest of eternity... Have a good time!");
+            // DisplayName.SetDefault("Space Freeze!");
+            // Description.SetDefault("You went too high and are now going to stay in space for the rest of eternity... Have a good time!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

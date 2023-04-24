@@ -7,8 +7,8 @@ namespace JoJoStands.Buffs.Debuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Lacerated");
-            Description.SetDefault("You have been wounded deeply.");
+            // DisplayName.SetDefault("Lacerated");
+            // Description.SetDefault("You have been wounded deeply.");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;

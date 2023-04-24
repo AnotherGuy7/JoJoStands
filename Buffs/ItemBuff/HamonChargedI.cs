@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamon Charged I");
-            Description.SetDefault("The large amount of Hamon in you is increasing your physical abilities.");
+            // DisplayName.SetDefault("Hamon Charged I");
+            // Description.SetDefault("The large amount of Hamon in you is increasing your physical abilities.");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.PlayerBuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Top of the Chain");
-            Description.SetDefault("You are the beast to be feared the most, and no one will take that spot.\nIncreased stats for the duration of the battle.");
+            // DisplayName.SetDefault("Top of the Chain");
+            // Description.SetDefault("You are the beast to be feared the most, and no one will take that spot.\nIncreased stats for the duration of the battle.");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

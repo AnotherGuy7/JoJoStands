@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stone Free (Tier 2)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click two tiles to create a string trap!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Stone Free (Tier 2)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate and right-click two tiles to create a string trap!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

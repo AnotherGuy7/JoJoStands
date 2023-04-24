@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sailor Shirt");
-            Tooltip.SetDefault("A shirt tailored for a unique body.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Sailor Shirt");
+            // Tooltip.SetDefault("A shirt tailored for a unique body.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

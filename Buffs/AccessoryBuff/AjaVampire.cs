@@ -9,8 +9,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Aja Vampire");
-            Description.SetDefault("You are now an immortal, ultimate being!");
+            // DisplayName.SetDefault("Aja Vampire");
+            // Description.SetDefault("You are now an immortal, ultimate being!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;

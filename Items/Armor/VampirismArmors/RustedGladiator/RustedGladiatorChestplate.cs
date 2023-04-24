@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A chestplate scarred by its intense fights throughout the ages.\n+4% Life Steal gains");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A chestplate scarred by its intense fights throughout the ages.\n+4% Life Steal gains");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

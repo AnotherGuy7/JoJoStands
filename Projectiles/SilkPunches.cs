@@ -85,7 +85,7 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Main.rand.Next(0, 2) == 0)
                 target.AddBuff(ModContent.BuffType<Sunburn>(), 12 * 60);

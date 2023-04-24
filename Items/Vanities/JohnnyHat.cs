@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jockey's Bandana");
-            Tooltip.SetDefault("A sky blue bandana, adorned with stars. There is a horseshoe in the center.");
+            // DisplayName.SetDefault("Jockey's Bandana");
+            // Tooltip.SetDefault("A sky blue bandana, adorned with stars. There is a horseshoe in the center.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

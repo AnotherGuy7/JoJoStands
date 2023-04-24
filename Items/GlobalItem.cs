@@ -156,7 +156,7 @@ namespace JoJoStands.Items
                     }
                 }
             }
-            if (Main.mouseRight && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && mPlayer.crazyDiamondRestorationMode && mPlayer.crazyDiamondDestroyedTileData.Count == 0 && generalPurposeTimer == 0)
+            if (Main.mouseRight && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && mPlayer.crazyDiamondRestorationMode && mPlayer.crazyDiamondDestroyedTileData.Count == 0 && generalPurposeTimer <= 0)
             {
                 for (int i = 0; i < 54; i++)
                 {
@@ -164,7 +164,7 @@ namespace JoJoStands.Items
                     if (ItemSelect == Item)
                     {
                         mPlayer.ItemBreak(Item);
-                        generalPurposeTimer = 5;
+                        generalPurposeTimer += 30;
                         break;
                     }
                 }

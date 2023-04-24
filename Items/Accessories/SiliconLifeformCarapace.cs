@@ -9,11 +9,11 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Silicon Lifeform Carapace");
-            Tooltip.SetDefault("25% increased Stand dodge chance." +
+            // DisplayName.SetDefault("Silicon Lifeform Carapace");
+            /* Tooltip.SetDefault("25% increased Stand dodge chance." +
                 "\n100% increased stand defence bonus" +
-                "\nHealth is slowly drained");
-            SacrificeTotal = 1;
+                "\nHealth is slowly drained"); */
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

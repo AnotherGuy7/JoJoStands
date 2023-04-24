@@ -24,10 +24,12 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
+using Terraria.WorldBuilding;
 using TerraUI.Objects;
 
 namespace JoJoStands
@@ -225,8 +227,8 @@ namespace JoJoStands
         private int echoesDamageTimer1 = 60; //3 Freeze
         public int echoesSmackDamageTimer = 120; //ACT 1 sounds
 
-        private int offsetPostDraw = 0;
-        private int timerPostDraw = 0;
+        private int echoesEffectFrame = 0;
+        private int echoesEffectFrameCounter = 0;
         private int remoteDodge = 0;
 
         public int standFistsType = 0;
@@ -259,21 +261,47 @@ namespace JoJoStands
             if (crazyDiamonUncraftCooldown <= 0)
             {
                 List<Recipe> howManyRecipesHere = new List<Recipe>();
-                for (int r = 0; r < Main.recipe.Length; r++)
+                for (int r1 = 0; r1 < Main.recipe.Length; r1++)
                 {
-                    if (Main.recipe[r] != null && Main.recipe[r].createItem.type == item.type && item.stack >= Main.recipe[r].createItem.stack)
+                    if (Main.recipe[r1] != null && Main.recipe[r1].createItem.type == item.type && item.stack >= Main.recipe[r1].createItem.stack)
                     {
+                        bool skipRecipe = false;
+                        int[] requireItemTypes = new int[Main.recipe[r1].requiredItem.Count];
+                        for (int i = 0; i < Main.recipe[r1].requiredItem.Count; i++)     //Checks to see if there's a cyclical crafting cycle here
+                        {
+                            requireItemTypes[i] = Main.recipe[r1].requiredItem[i].type;
+                        }
+                        for (int i = 0; i < requireItemTypes.Length; i++)
+                        {
+                            for (int r2 = 0; r2 < Main.recipe.Length; r2++)
+                            {
+                                if (Main.recipe[r2] != null && Main.recipe[r2].createItem.type == requireItemTypes[i])
+                                {
+                                    for (int j = 0; j < Main.recipe[r2].requiredItem.Count; j++)
+                                    {
+                                        if (Main.recipe[r2].requiredItem[j].type == item.type)
+                                        {
+                                            skipRecipe = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (skipRecipe)
+                            continue;
+
                         if (item.type != ItemID.IronBar && item.type != ItemID.LeadBar)
                         {
                             SoundEngine.PlaySound(SoundID.Grab);
-                            howManyRecipesHere.Add(Main.recipe[r]);
-                            for (int i = 0; i < Main.recipe[r].createItem.stack; i++)
+                            howManyRecipesHere.Add(Main.recipe[r1]);
+                            for (int i = 0; i < Main.recipe[r1].createItem.stack; i++)
                                 Player.ConsumeItem(item.type);
                             Uncraft(howManyRecipesHere[0]);
                             crazyDiamonUncraftCooldown = 5;
                             break;
                         }
-                        if (item.type == ItemID.IronBar)
+                        else if (item.type == ItemID.IronBar)
                         {
                             SoundEngine.PlaySound(SoundID.Grab);
                             Player.ConsumeItem(item.type);
@@ -281,7 +309,7 @@ namespace JoJoStands
                             crazyDiamonUncraftCooldown = 5;
                             break;
                         }
-                        if (item.type == ItemID.LeadBar)
+                        else if (item.type == ItemID.LeadBar)
                         {
                             SoundEngine.PlaySound(SoundID.Grab);
                             Player.ConsumeItem(item.type);
@@ -294,12 +322,12 @@ namespace JoJoStands
             }
         }
 
-        public void Uncraft(Recipe recipe)
+        private void Uncraft(Recipe recipe)
         {
-            recipe.requiredItem.ForEach(Uncraft);
+            recipe.requiredItem.ForEach(SpawnRecipeComponent);
         }
 
-        public void Uncraft(Item item)
+        private void SpawnRecipeComponent(Item item)
         {
             Player.QuickSpawnItem(Player.InheritSource(Player), item.type, item.stack);
         }
@@ -354,7 +382,7 @@ namespace JoJoStands
         }
 
 
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld()
         {
             int type = StandSlot.SlotItem.type;
             if (type == ModContent.ItemType<TuskAct3>() || type == ModContent.ItemType<TuskAct4>())
@@ -373,7 +401,7 @@ namespace JoJoStands
             tbcCounter = 0;
         }
 
-        public override void OnRespawn(Player player)
+        public override void OnRespawn()
         {
             forceShutDownEffect = false;
             if (Player.whoAmI == Main.myPlayer)
@@ -383,10 +411,10 @@ namespace JoJoStands
             }
         }
 
-        public override void PlayerDisconnect(Player player)        //runs for everyone that hasn't left
+        public override void PlayerDisconnect()        //runs for everyone that hasn't left
         {
             MyPlayer mPlayer = Player.GetModPlayer<MyPlayer>();
-            MyPlayer otherMPlayer = player.GetModPlayer<MyPlayer>();
+            MyPlayer otherMPlayer = Player.GetModPlayer<MyPlayer>();
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 for (int p = 0; p < Main.maxPlayers; p++)
@@ -683,35 +711,40 @@ namespace JoJoStands
         {
             if (standDesummonTimer > 0 && standDesummonTextureData.texture != null)
             {
+                if (StandDyeSlot.SlotItem.dye != 0)
+                {
+                    ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(StandDyeSlot.SlotItem.type);
+                    shader.Apply(null);     //has to be on top of whatever it's applying to (I spent hours and hours trying to find a solution and the only problem was that this was under it)
+                }
+
                 Vector2 drawPosition = Vector2.Lerp(Player.Center - Main.screenPosition, standDesummonTextureData.position, (standDesummonTimer / 15f));
                 Main.spriteBatch.Draw(standDesummonTextureData.texture, drawPosition, standDesummonTextureData.sourceRect, Color.White * (standDesummonTimer / 15f),
                     standDesummonTextureData.rotation, standDesummonTextureData.origin, standDesummonTextureData.scale, standDesummonTextureData.effect, 0f);
             }
-            if (Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
+            if (Player.HasBuff(ModContent.BuffType<BelieveInMe>()) || Player.HasBuff(ModContent.BuffType<SMACK>()))
             {
-                if (timerPostDraw == 0)
-                    timerPostDraw = 10;
-                if (timerPostDraw == 10)
-                    offsetPostDraw = 32;
-                if (timerPostDraw == 5)
-                    offsetPostDraw = 0;
-                if (timerPostDraw > 0)
-                    timerPostDraw--;
-                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/BelieveInMe").Value;
-                Main.spriteBatch.Draw(texture, new Vector2(Player.Center.X, Player.Center.Y - Player.height / 2) - Main.screenPosition, new Rectangle(0, offsetPostDraw, 54, 32), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
-            }
-            if (Player.HasBuff(ModContent.BuffType<SMACK>()))
-            {
-                if (timerPostDraw == 0)
-                    timerPostDraw = 10;
-                if (timerPostDraw == 10)
-                    offsetPostDraw = 30;
-                if (timerPostDraw == 5)
-                    offsetPostDraw = 0;
-                if (timerPostDraw > 0)
-                    timerPostDraw--;
-                Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/SMACK").Value;
-                Main.spriteBatch.Draw(texture, new Vector2(Player.Center.X, Player.Center.Y - Player.height / 2) - Main.screenPosition, new Rectangle(0, offsetPostDraw, 56, 30), Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
+                echoesEffectFrameCounter++;
+                if (echoesEffectFrameCounter >= 5)
+                {
+                    echoesEffectFrame++;
+                    echoesEffectFrameCounter = 0;
+                    if (echoesEffectFrame >= 2)
+                        echoesEffectFrame = 0;
+                }
+
+                Texture2D texture = null;
+                Rectangle animRect = Rectangle.Empty;
+                if (Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
+                {
+                    texture = ModContent.Request<Texture2D>("JoJoStands/Extras/Echoes_BelieveInMe").Value;
+                    animRect = new Rectangle(0, echoesEffectFrame * 32, 54, 32);
+                }
+                else if (Player.HasBuff(ModContent.BuffType<SMACK>()))
+                {
+                    texture = ModContent.Request<Texture2D>("JoJoStands/Extras/Echoes_SMACK").Value;
+                    animRect = new Rectangle(0, echoesEffectFrame * 30, 56, 30);
+                }
+                Main.spriteBatch.Draw(texture, Player.Center - new Vector2(0f, Player.height / 2) - Main.screenPosition, animRect, Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
             }
         }
 
@@ -976,7 +1009,7 @@ namespace JoJoStands
                     {
                         echoesDamageTimer1 = 60;
                         int freezeDamage = (int)(136 * echoesDamageBoost) / 2;
-                        Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + Player.statDefense, 0, true, false, false);
+                        Player.Hurt(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + Player.statDefense, 0, true);
                     }
                 }
                 echoesFreeze--;
@@ -1747,62 +1780,44 @@ namespace JoJoStands
             return timeToReturn;
         }
 
-        public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
+        public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
         {
             if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
-                damage *= 2;
+                modifiers.FinalDamage *= 2;
             if (stoneFreeWeaveAbilityActive)
-                damage = (int)(damage * 0.93f);
+                modifiers.FinalDamage *= 0.93f;
             if (Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
-                damage = (int)(damage * 0.8f);
+                modifiers.FinalDamage *= 0.8f;
             if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                damage = (int)(damage * 0.1f);
+                modifiers.FinalDamage *= 0.1f;
             if (vampiricBangleEquipped)
-                damage = (int)(damage * 1.33f);
+                modifiers.FinalDamage *= 1.33f;
             if (familyPhotoEffectTimer > 0)
-                damage = (int)(damage * 0.66f);
+                modifiers.FinalDamage *= 0.66f;
             if (Player.HasBuff<LockActiveBuff>() && npc.HasBuff<Locked>())
             {
                 if (npc.boss)
-                {
-                    if (StandSlot.SlotItem.type == ModContent.ItemType<LockT1>())
-                        damage = (int)(damage * 0.95f);
-                    if (StandSlot.SlotItem.type == ModContent.ItemType<LockT2>())
-                        damage = (int)(damage * 0.9f);
-                    if (StandSlot.SlotItem.type == ModContent.ItemType<LockT3>())
-                        damage = (int)(damage * 0.85f);
-                    if (StandSlot.SlotItem.type == ModContent.ItemType<LockFinal>())
-                        damage = (int)(damage * 0.80f);
-                }
-                if (!npc.boss)
-                {
-                    if (StandSlot.SlotItem.type == ModContent.ItemType<LockT1>())
-                        damage = (int)(damage * 0.9f);
-                    if (StandSlot.SlotItem.type == ModContent.ItemType<LockT2>())
-                        damage = (int)(damage * 0.8f);
-                    if (StandSlot.SlotItem.type == ModContent.ItemType<LockT3>())
-                        damage = (int)(damage * 0.7f);
-                    if (StandSlot.SlotItem.type == ModContent.ItemType<LockFinal>())
-                        damage = (int)(damage * 0.6f);
-                }
+                    modifiers.FinalDamage *= 1f - (standTier * 0.05f);
+                else
+                    modifiers.FinalDamage *= 1f - (standTier * 0.1f);
             }
         }
 
-        public override void ModifyHitByProjectile(Projectile proj, ref int damage, ref bool crit)
+        public override void ModifyHitByProjectile(Projectile proj, ref Player.HurtModifiers modifiers)
         {
             if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
-                damage *= 2;
+                modifiers.FinalDamage *= 2;
             if (stoneFreeWeaveAbilityActive || Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
-                damage = (int)(damage * 0.8f);
+                modifiers.FinalDamage *= 0.8f;
             if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                damage = (int)(damage * 0.1f);
+                modifiers.FinalDamage *= 0.1f;
             if (vampiricBangleEquipped)
-                damage = (int)(damage * 1.33f);
+                modifiers.FinalDamage *= 1.33f;
             if (familyPhotoEffectTimer > 0)
-                damage = (int)(damage * 0.66f);
+                modifiers.FinalDamage *= 0.66f;
         }
 
-        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
         {
             HamonPlayer hPlayer = Player.GetModPlayer<HamonPlayer>();
             if (crystalArmorSetEquipped)
@@ -1822,7 +1837,13 @@ namespace JoJoStands
             if (standName == "HermitPurple" && standTier >= 2)
             {
                 int reflectedDamage = (int)(npc.damage * (0.05f * standTier));
-                npc.StrikeNPC(reflectedDamage, 3f * standTier, npc.direction);
+                NPC.HitInfo npcHitInfo = new NPC.HitInfo()
+                {
+                    Damage = reflectedDamage,
+                    Knockback = 3f * standTier,
+                    HitDirection = npc.direction
+                };
+                npc.StrikeNPC(npcHitInfo);
                 if (hPlayer.amountOfHamon >= 30)
                 {
                     npc.AddBuff(ModContent.BuffType<Sunburn>(), ((hPlayer.amountOfHamon / 30) * standTier) * 60);
@@ -1832,7 +1853,13 @@ namespace JoJoStands
             if (hermitPurpleHamonBurstLeft > 0)
             {
                 int reflectedDamage = npc.damage * 4;       //This is becaues npc damage is pretty weak against the NPC itself
-                npc.StrikeNPC(reflectedDamage, 14f, npc.direction);
+                NPC.HitInfo npcHitInfo = new NPC.HitInfo()
+                {
+                    Damage = reflectedDamage,
+                    Knockback = 14f,
+                    HitDirection = npc.direction
+                };
+                npc.StrikeNPC(npcHitInfo);
                 npc.AddBuff(ModContent.BuffType<Sunburn>(), (10 * (standTier - 2)) * 60);
 
                 for (int i = 0; i < 60; i++)
@@ -1861,7 +1888,7 @@ namespace JoJoStands
             playerJustHitTime = 2;
         }
 
-        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
+        public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)
         {
             playerJustHit = true;
             playerJustHitTime = 2;
@@ -1877,49 +1904,28 @@ namespace JoJoStands
             if (!Player.shadowDodge)
                 arrowEarringCooldown = 300;
         }
-        public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
-        {
-            if (JoJoStands.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer && target.GetModPlayer<MyPlayer>().standOut)
-                damage /= 2;
-        }
 
-        /*public override bool CustomBiomesMatch(Player other)
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
-            MyPlayer modOther = other.GetModPlayer<MyPlayer>());
-            return ZoneViralMeteorite == modOther.ZoneViralMeteorite;
-        }
-
-        public override void CopyCustomBiomesTo(Player other)
-        {
-            MyPlayer modOther = other.GetModPlayer<MyPlayer>());
-            modOther.ZoneViralMeteorite = ZoneViralMeteorite;
-        }
-
-        public override void SendCustomBiomes(BinaryWriter writer)
-        {
-            BitsByte flags = new BitsByte();        //written this way cause there may be more than 1 biome
-            flags[0] = ZoneViralMeteorite;
-            writer.Write(flags);
-        }
-
-        public override void ReceiveCustomBiomes(BinaryReader reader)
-        {
-            BitsByte flags = reader.ReadByte();
-            ZoneViralMeteorite = flags[0];
-        }*/
-
-        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
-        {
-            if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0 || !Player.HasBuff(ModContent.BuffType<Dodge>()) && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && standControlStyle == StandControlStyle.Manual && standOut || standControlStyle == StandControlStyle.Manual && standOut && Player.shadowDodge || Player.HasBuff(ModContent.BuffType<SwanSong>()))
+            if (modifiers.PvP)
             {
-                if (!Player.HasBuff(ModContent.BuffType<Dodge>()))
-                {
-                    if (Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0 || Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && standControlStyle == StandControlStyle.Manual && standOut)
-                        Player.AddBuff(ModContent.BuffType<Dodge>(), 60);
-                }
-                return false;
+                if (JoJoStands.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer && standOut)
+                    modifiers.FinalDamage *= 0.5f;
             }
-            return true;
+        }
+
+        public override bool ImmuneTo(PlayerDeathReason damageSource, int cooldownCounter, bool dodgeable)
+        {
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0 && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0)
+                return true;
+            if (Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && standControlStyle == StandControlStyle.Manual && standOut)
+                return true;
+            if (standControlStyle == StandControlStyle.Manual && standOut && Player.shadowDodge)
+                return true;
+            if (Player.HasBuff(ModContent.BuffType<SwanSong>()))
+                return true;
+
+            return base.ImmuneTo(damageSource, cooldownCounter, dodgeable);
         }
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)       //that 1 last frame before you completely die

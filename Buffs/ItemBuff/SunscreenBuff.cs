@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sunscreen");
-            Description.SetDefault("98% of those harmful UV rays are being blocked away!");
+            // DisplayName.SetDefault("Sunscreen");
+            // Description.SetDefault("98% of those harmful UV rays are being blocked away!");
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
             Main.debuff[Type] = false;
         }

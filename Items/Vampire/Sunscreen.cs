@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vampire
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sunscreen");
-            Tooltip.SetDefault("For all the hot days you spend wandering.");
-            SacrificeTotal = 10;
+            // DisplayName.SetDefault("Sunscreen");
+            // Tooltip.SetDefault("For all the hot days you spend wandering.");
+            Item.ResearchUnlockCount = 10;
         }
 
         public override void SetDefaults()

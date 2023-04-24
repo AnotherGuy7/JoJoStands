@@ -22,11 +22,11 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Tower of Gray (Tier 2)");
-            Tooltip.SetDefault("Pierce your enemies with a sharp stinger and tear through them with right-click!" +
+            // DisplayName.SetDefault("Tower of Gray (Tier 2)");
+            /* Tooltip.SetDefault("Pierce your enemies with a sharp stinger and tear through them with right-click!" +
                 "\nSpecial: Remote Control" +
                 "\nPassive: Attack ignores 20 enemy defence" +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

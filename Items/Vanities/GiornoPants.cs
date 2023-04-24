@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mafioso Pants");
-            Tooltip.SetDefault("A surprisingly normal pair of pants, pink in color.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Mafioso Pants");
+            // Tooltip.SetDefault("A surprisingly normal pair of pants, pink in color.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

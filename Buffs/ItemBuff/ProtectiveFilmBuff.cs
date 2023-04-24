@@ -7,8 +7,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Protective Film");
-            Description.SetDefault("The mud and dirt all over you offers some protection against the sunlight!");
+            // DisplayName.SetDefault("Protective Film");
+            // Description.SetDefault("The mud and dirt all over you offers some protection against the sunlight!");
             Main.buffNoTimeDisplay[Type] = false;
         }
 

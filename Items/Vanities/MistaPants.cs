@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mista's Pants");
-            Tooltip.SetDefault("A tacky pair of red pants with black boots. Your fashion sense is odd.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Mista's Pants");
+            // Tooltip.SetDefault("A tacky pair of red pants with black boots. Your fashion sense is odd.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

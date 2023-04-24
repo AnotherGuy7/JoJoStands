@@ -8,10 +8,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Old Man's Hat");
-            Tooltip.SetDefault("A western hat. Comes with a beard!");
+            // DisplayName.SetDefault("Old Man's Hat");
+            // Tooltip.SetDefault("A western hat. Comes with a beard!");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

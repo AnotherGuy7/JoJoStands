@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crystal Leggings");
-            Tooltip.SetDefault("Leggings made out of crystal.\n12% movement speed");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Crystal Leggings");
+            // Tooltip.SetDefault("Leggings made out of crystal.\n12% movement speed");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

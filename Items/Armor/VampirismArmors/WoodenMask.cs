@@ -12,7 +12,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An wooden mask based off of a much more menacing mask. When worn, you gain superhuman abilities, but you burn in the sunlight.\nRight-click while holding the mask to open the Zombie Skill Tree.\nNote: Skill Points are obtained by killing new types of enemies multiple times.");
+            // Tooltip.SetDefault("An wooden mask based off of a much more menacing mask. When worn, you gain superhuman abilities, but you burn in the sunlight.\nRight-click while holding the mask to open the Zombie Skill Tree.\nNote: Skill Points are obtained by killing new types of enemies multiple times.");
         }
 
         public override void SetDefaults()

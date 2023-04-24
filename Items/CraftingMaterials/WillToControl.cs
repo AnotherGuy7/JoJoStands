@@ -11,10 +11,10 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Will to Control");
-            Tooltip.SetDefault("A physical outlook upon the world, heavy and overbearing.");
+            // DisplayName.SetDefault("Will to Control");
+            // Tooltip.SetDefault("A physical outlook upon the world, heavy and overbearing.");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(7, 14));
-            SacrificeTotal = 25;
+            Item.ResearchUnlockCount = 25;
         }
 
         public override void SetDefaults()

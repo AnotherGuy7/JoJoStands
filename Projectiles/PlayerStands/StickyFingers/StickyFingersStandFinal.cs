@@ -110,7 +110,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     player.immuneTime = 2;
                     player.shadowDodge = true;
                     player.shadowDodgeCount = -100f;
-                    for (int i = 0; i < Main.maxNPCTypes; i++)
+                    for (int i = 0; i < NPCID.Count; i++)
                         player.npcTypeNoAggro[i] = true;
 
                     mPlayer.hideAllPlayerLayers = true;
@@ -120,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                         zipperAmbush = false;
                         player.immune = true;
                         player.immuneTime = 15;
-                        for (int i = 0; i < Main.maxNPCTypes; i++)
+                        for (int i = 0; i < NPCID.Count; i++)
                             player.npcTypeNoAggro[i] = false;
 
                         Vector2 ambushVelocity = savedAmbushPosition - player.position;

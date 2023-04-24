@@ -11,9 +11,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Chlorosite Helmet (Neutral)");
-            Tooltip.SetDefault("A helmet that is made with Chlorophyte infused with an otherworldly virus.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Chlorosite Helmet (Neutral)");
+            // Tooltip.SetDefault("A helmet that is made with Chlorophyte infused with an otherworldly virus.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

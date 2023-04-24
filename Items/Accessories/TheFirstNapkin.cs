@@ -8,10 +8,10 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("The First Napkin");
-            Tooltip.SetDefault("Every kill reduces the Stand Ability Cooldown by 1s." +
-                "\nReduces Ability Cooldown times by 8%.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("The First Napkin");
+            /* Tooltip.SetDefault("Every kill reduces the Stand Ability Cooldown by 1s." +
+                "\nReduces Ability Cooldown times by 8%."); */
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

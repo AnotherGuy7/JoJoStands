@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Defiled
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A mask created with the rotten chunks of your victims.\n+8% Vampiric Damage");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A mask created with the rotten chunks of your victims.\n+8% Vampiric Damage");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

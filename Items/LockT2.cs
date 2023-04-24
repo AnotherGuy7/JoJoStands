@@ -20,8 +20,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("The Lock (Tier 2)");
-            Tooltip.SetDefault("Make people that harm you overwhelmed with Guilt!");
+            // DisplayName.SetDefault("The Lock (Tier 2)");
+            // Tooltip.SetDefault("Make people that harm you overwhelmed with Guilt!");
         }
 
         public override void SetDefaults()

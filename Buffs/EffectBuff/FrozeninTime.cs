@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.EffectBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Frozen in Time");
-            Description.SetDefault("You have been stopped along with time");
+            // DisplayName.SetDefault("Frozen in Time");
+            // Description.SetDefault("You have been stopped along with time");
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

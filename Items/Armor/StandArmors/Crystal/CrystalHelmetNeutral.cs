@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crystal Helmet (Neutral)");
-            Tooltip.SetDefault("A helmet made to empower the force of the wills\nStand stat buffs change depending on stand type.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Crystal Helmet (Neutral)");
+            // Tooltip.SetDefault("A helmet made to empower the force of the wills\nStand stat buffs change depending on stand type.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

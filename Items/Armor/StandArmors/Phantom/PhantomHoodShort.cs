@@ -14,8 +14,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Phantom Hood (Short-Ranged)");
-            Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.\n+18% Stand Damage\n+1 Stand Speed");
+            // DisplayName.SetDefault("Phantom Hood (Short-Ranged)");
+            // Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.\n+18% Stand Damage\n+1 Stand Speed");
         }
 
         public override void SetDefaults()

@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Zipped Hand");
-            Tooltip.SetDefault("Allows you to make a last stand before death.\nDuring the last stand phase, damage and critial strike chances are doubled.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Zipped Hand");
+            // Tooltip.SetDefault("Allows you to make a last stand before death.\nDuring the last stand phase, damage and critial strike chances are doubled.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

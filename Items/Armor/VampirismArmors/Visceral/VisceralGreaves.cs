@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Visceral
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Greaves that seem to perfectly emulate your muscle movements.\nIncreases jump speed");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("Greaves that seem to perfectly emulate your muscle movements.\nIncreases jump speed");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

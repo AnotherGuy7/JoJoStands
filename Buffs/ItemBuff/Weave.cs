@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Weave");
-            Description.SetDefault("These strings create a sheet as strong as metal when woven together... and you're wrapped in it!");
+            // DisplayName.SetDefault("Weave");
+            // Description.SetDefault("These strings create a sheet as strong as metal when woven together... and you're wrapped in it!");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

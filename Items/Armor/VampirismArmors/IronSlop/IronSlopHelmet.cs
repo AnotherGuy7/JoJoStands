@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Armor.VampirismArmors.IronSlop
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A scrappily crafted iron(?) helmet. It's dirty with mud everywhere.");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A scrappily crafted iron(?) helmet. It's dirty with mud everywhere.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

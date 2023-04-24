@@ -9,8 +9,8 @@ namespace JoJoStands.Buffs.EffectBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Rampage");
-            Description.SetDefault("What happened, did someone make fun of your hair? You're filled with rage!\nDamage is doubled and punch speed is increased, but range and movement speed is halved!");
+            // DisplayName.SetDefault("Rampage");
+            // Description.SetDefault("What happened, did someone make fun of your hair? You're filled with rage!\nDamage is doubled and punch speed is increased, but range and movement speed is halved!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

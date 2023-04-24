@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Magicians Red (Tier 2)");
-            Tooltip.SetDefault("Shoot flaming ankhs at the enemies and right-click to bind an enemy!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Magicians Red (Tier 2)");
+            // Tooltip.SetDefault("Shoot flaming ankhs at the enemies and right-click to bind an enemy!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

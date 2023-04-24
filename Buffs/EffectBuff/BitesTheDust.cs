@@ -7,8 +7,8 @@ namespace JoJoStands.Buffs.EffectBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bites The Dust");
-            Description.SetDefault("The ultimate weapon against failure.");
+            // DisplayName.SetDefault("Bites The Dust");
+            // Description.SetDefault("The ultimate weapon against failure.");
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Pearl Ring");
-            Tooltip.SetDefault("Right Click to remove the Pearl. Be careful not to break it!");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Viral Pearl Ring");
+            // Tooltip.SetDefault("Right Click to remove the Pearl. Be careful not to break it!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

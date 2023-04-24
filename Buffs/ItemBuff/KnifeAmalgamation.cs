@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Knife Amalgamation");
-            Description.SetDefault("You have inserted dozens of knives into yourself!");
+            // DisplayName.SetDefault("Knife Amalgamation");
+            // Description.SetDefault("You have inserted dozens of knives into yourself!");
             Main.buffNoTimeDisplay[Type] = false;
         }
     }

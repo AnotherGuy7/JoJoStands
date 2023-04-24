@@ -139,7 +139,7 @@ namespace JoJoStands.Projectiles.Minions
             SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.position);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.GetGlobalNPC<JoJoGlobalNPC>().taggedByButterfly = true;
         }

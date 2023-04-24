@@ -16,8 +16,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Soft and Wet (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a Plunder Bubble!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Soft and Wet (Tier 1)");
+            // Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a Plunder Bubble!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

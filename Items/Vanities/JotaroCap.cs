@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jotaro's Cap");
-            Tooltip.SetDefault("Is it hat or hair? Yare Yare Daze...");
+            // DisplayName.SetDefault("Jotaro's Cap");
+            // Tooltip.SetDefault("Is it hat or hair? Yare Yare Daze...");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

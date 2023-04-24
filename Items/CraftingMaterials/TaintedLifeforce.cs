@@ -13,9 +13,9 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(8, 4));
-            DisplayName.SetDefault("Tainted Lifeforce");
-            Tooltip.SetDefault("The aura of someone remorselessly wicked");
-            SacrificeTotal = 3;
+            // DisplayName.SetDefault("Tainted Lifeforce");
+            // Tooltip.SetDefault("The aura of someone remorselessly wicked");
+            Item.ResearchUnlockCount = 3;
         }
 
         public override void SetDefaults()

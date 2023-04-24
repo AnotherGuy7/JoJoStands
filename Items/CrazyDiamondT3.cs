@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crazy Diamond (Tier 3)");
-            Tooltip.SetDefault(
+            // DisplayName.SetDefault("Crazy Diamond (Tier 3)");
+            /* Tooltip.SetDefault(
                 "Left-click to punch enemies at a really fast rate and right-click to flick a bullet!" +
                 "\nSpecial: Switch to Restoration Mode" +
                 "\nSecond Special: Enter an unstoppable rage!" +
@@ -31,7 +31,7 @@ namespace JoJoStands.Items
                 "\nRight-clicking elsewhere will restore the states of all other impacted objects." +
                 "\nPunching tiles while in Resotration Mode breaks the tiles." +
                 "\nWhile in a Rampage, restorations will become improper, turning restored enemies to stone." +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

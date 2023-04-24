@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An already warm, juicy, and medium-rare steak.\nBoosts Stand Range and Stand Damage for 3m.");
-            SacrificeTotal = 5;
+            // Tooltip.SetDefault("An already warm, juicy, and medium-rare steak.\nBoosts Stand Range and Stand Damage for 3m.");
+            Item.ResearchUnlockCount = 5;
         }
 
         public override void SetDefaults()

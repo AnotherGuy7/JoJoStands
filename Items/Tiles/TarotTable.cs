@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Tiles
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Tarot Table");
-            Tooltip.SetDefault("A table that reacts to Stand Users, granting them greater power as they wish it.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Tarot Table");
+            // Tooltip.SetDefault("A table that reacts to Stand Users, granting them greater power as they wish it.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -111,7 +111,7 @@ namespace JoJoStands.NPCs.Enemies
             }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             NPC.ai[0] = 1f;
             if (NPC.life < NPC.lifeMax)
@@ -130,7 +130,7 @@ namespace JoJoStands.NPCs.Enemies
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit)
         {
             if (NPC.life < NPC.lifeMax)
             {

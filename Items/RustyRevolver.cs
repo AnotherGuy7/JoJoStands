@@ -13,8 +13,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Rusty Revolver");
-            Tooltip.SetDefault("An antique revolver, rusted by time. It still functions.");
+            // DisplayName.SetDefault("Rusty Revolver");
+            // Tooltip.SetDefault("An antique revolver, rusted by time. It still functions.");
         }
 
         public override void SetDefaults()

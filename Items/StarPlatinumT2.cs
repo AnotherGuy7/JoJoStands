@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Star Platinum (Tier 2)");
-            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate and right-click to use Star Finger!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Star Platinum (Tier 2)");
+            // Tooltip.SetDefault("Left-click to punch enemies at a really fast rate and right-click to use Star Finger!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

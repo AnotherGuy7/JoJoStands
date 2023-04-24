@@ -11,10 +11,10 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Will to Protect");
-            Tooltip.SetDefault("A physical outlook upon the world, defensive and caring.");
+            // DisplayName.SetDefault("Will to Protect");
+            // Tooltip.SetDefault("A physical outlook upon the world, defensive and caring.");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(7, 15));
-            SacrificeTotal = 25;
+            Item.ResearchUnlockCount = 25;
         }
 
         public override void SetDefaults()

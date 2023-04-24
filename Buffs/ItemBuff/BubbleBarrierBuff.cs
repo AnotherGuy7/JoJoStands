@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bubble Barrier");
-            Description.SetDefault("A protective bubble surrounds you. Increases defense, makes you immune to debuffs, and allows you to glide around!");
+            // DisplayName.SetDefault("Bubble Barrier");
+            // Description.SetDefault("A protective bubble surrounds you. Increases defense, makes you immune to debuffs, and allows you to glide around!");
         }
 
         public override void UpdateBuffOnPlayer(Player player)

@@ -120,7 +120,7 @@ namespace JoJoStands.Projectiles.Minions
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
             int bombDamage = (int)(350 * mPlayer.standDamageBoosts);
             if (Projectile.ai[0] == 1f)
                 bombDamage = (int)(724 * mPlayer.standDamageBoosts);
@@ -205,7 +205,7 @@ namespace JoJoStands.Projectiles.Minions
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.immune[Projectile.owner] = 0;
             Explode();

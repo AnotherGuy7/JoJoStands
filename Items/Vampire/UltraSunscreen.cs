@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vampire
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Ultra Sunscreen");
-            Tooltip.SetDefault("Has an SPF of 247!");
-            SacrificeTotal = 5;
+            // DisplayName.SetDefault("Ultra Sunscreen");
+            // Tooltip.SetDefault("Has an SPF of 247!");
+            Item.ResearchUnlockCount = 5;
         }
 
         public override void SetDefaults()

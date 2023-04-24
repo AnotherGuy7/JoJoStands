@@ -227,12 +227,13 @@ namespace JoJoStands.Projectiles
                 Projectile.Hitbox = new Rectangle(Projectile.Hitbox.X, Projectile.Hitbox.Y, (int)(Projectile.Hitbox.Width * 1.1f), (int)(Projectile.Hitbox.Height * 1.1f));
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+            bool crit = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
+            if (crit)
+                modifiers.SetCrit();
             if (JoJoStands.SoundsLoaded)
                 mPlayer.standHitTime += 2;
 
@@ -275,13 +276,13 @@ namespace JoJoStands.Projectiles
             if (standType == KingCrimson)
             {
                 JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
-                damage = (int)(damage * jojoNPC.kingCrimsonDonutMultiplier);
+                modifiers.FinalDamage *= jojoNPC.kingCrimsonDonutMultiplier;
                 jojoNPC.kingCrimsonDonutMultiplier += 0.06f;
 
                 if (player.HasBuff(ModContent.BuffType<PowerfulStrike>()))
                 {
-                    damage *= 6;
-                    knockback *= 3f;
+                    modifiers.FinalDamage *= 6;
+                    modifiers.Knockback *= 3f;
                     jojoNPC.kingCrimsonDonutMultiplier += 0.24f;
                     player.ClearBuff(ModContent.BuffType<PowerfulStrike>());
                 }
@@ -362,22 +363,19 @@ namespace JoJoStands.Projectiles
                 {
                     if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
                     {
-                        if (crit)
-                            mPlayer.echoesACT3EvolutionProgress += damage * 2;
-                        if (!crit)
-                            mPlayer.echoesACT3EvolutionProgress += damage;
+                        int progressAdd = crit ? Projectile.damage * 2 : Projectile.damage;
+                        mPlayer.echoesACT3EvolutionProgress += progressAdd;
                     }
                 }
                 else if (mPlayer.echoesTier == 2)
                 {
                     if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
                     {
-                        if (crit)
-                            mPlayer.echoesACT2EvolutionProgress += damage * 2;
-                        if (!crit)
-                            mPlayer.echoesACT2EvolutionProgress += damage;
+                        int progressAdd = crit ? Projectile.damage * 2 : Projectile.damage;
+                        mPlayer.echoesACT3EvolutionProgress += progressAdd;
                     }
                 }
+
                 if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.currentEchoesAct == 3)
                 {
                     target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
@@ -416,11 +414,13 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             MyPlayer mTarget = target.GetModPlayer<MyPlayer>();
+            if (!modifiers.PvP)
+                return;
 
             if (standType == GoldExperience)
             {
@@ -520,7 +520,6 @@ namespace JoJoStands.Projectiles
 
         public override bool? CanHitNPC(NPC target)
         {
-            Player player = Main.player[Projectile.owner];
             if (target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames != 0)
                 return false;
             else
@@ -529,7 +528,6 @@ namespace JoJoStands.Projectiles
 
         public override bool CanHitPvp(Player target)
         {
-            Player player = Main.player[Projectile.owner];
             return true;
         }
     }

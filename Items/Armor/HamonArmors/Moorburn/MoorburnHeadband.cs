@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.HamonArmors.Moorburn
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Moorburn Headband");
-            Tooltip.SetDefault("A headband purified by Hamon.\nIncreases Hamon Damage by 12%");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Moorburn Headband");
+            // Tooltip.SetDefault("A headband purified by Hamon.\nIncreases Hamon Damage by 12%");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -11,9 +11,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Epitaph");
-            Tooltip.SetDefault("Wearing this makes you want to use a frog as a phone");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Epitaph");
+            // Tooltip.SetDefault("Wearing this makes you want to use a frog as a phone");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sailor Trousers");
-            Tooltip.SetDefault("Complete with a pair of 7,980 yen sneakers!");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Sailor Trousers");
+            // Tooltip.SetDefault("Complete with a pair of 7,980 yen sneakers!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

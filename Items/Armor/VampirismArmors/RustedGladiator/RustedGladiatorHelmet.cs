@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Armor.VampirismArmors.RustedGladiator
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A helmet worn by only the best of warriors.\n+5% Vampiric Damaage");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A helmet worn by only the best of warriors.\n+5% Vampiric Damaage");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

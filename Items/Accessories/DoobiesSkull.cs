@@ -8,9 +8,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Doobies Skull");
-            Tooltip.SetDefault("Summons vampiric snakes when hit");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Doobies Skull");
+            // Tooltip.SetDefault("Summons vampiric snakes when hit");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

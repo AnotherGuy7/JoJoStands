@@ -12,9 +12,9 @@ namespace JoJoStands.Items.Hamon
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Clacker Balls");
-            Tooltip.SetDefault("These clackers are now deadly weapons while infused with Hamon.\nRight-click requires more than 5 hamon\nSpecial: Hamon Breathing");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Clacker Balls");
+            // Tooltip.SetDefault("These clackers are now deadly weapons while infused with Hamon.\nRight-click requires more than 5 hamon\nSpecial: Hamon Breathing");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SafeSetDefaults()
@@ -45,7 +45,7 @@ namespace JoJoStands.Items.Hamon
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 5)
             {
-                damage = (int)(damage * 1.5f);
+                modifiers.FinalDamage *= 1.5f);
                 velocity *= 1.25f;
                 type = ModContent.ProjectileType<ChargedClackerProjectile>();
                 hamonPlayer.amountOfHamon -= 5;

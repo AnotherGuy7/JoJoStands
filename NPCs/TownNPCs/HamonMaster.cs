@@ -60,7 +60,7 @@ namespace JoJoStands.NPCs.TownNPCs
             });
         }
 
-        public override bool CanTownNPCSpawn(int numTownNPCs, int money)
+        public override bool CanTownNPCSpawn(int numTownNPCs)/* tModPorter Suggestion: Copy the implementation of NPC.SpawnAllowed_Merchant in vanilla if you to count money, and be sure to set a flag when unlocked, so you don't count every tick. */
         {
             return true;
         }
@@ -79,7 +79,7 @@ namespace JoJoStands.NPCs.TownNPCs
             button = "Learn Skills";
         }
 
-        public override void OnChatButtonClicked(bool firstButton, ref bool openShop)
+        public override void OnChatButtonClicked(bool firstButton, ref string shopName)
         {
             Player player = Main.LocalPlayer;
             HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();

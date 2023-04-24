@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A well-made cupcake on a tiny plate, all with a tiny viral structure on top!\nBoosts Stand Damage and Stand Crit Chances for 2m.");
-            SacrificeTotal = 5;
+            // Tooltip.SetDefault("A well-made cupcake on a tiny plate, all with a tiny viral structure on top!\nBoosts Stand Damage and Stand Crit Chances for 2m.");
+            Item.ResearchUnlockCount = 5;
         }
 
         public override void SetDefaults()

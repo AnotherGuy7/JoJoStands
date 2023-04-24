@@ -9,8 +9,8 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A hammer that, when wielded, hits with tremendous force.\nHurts enemies near the player when used.");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A hammer that, when wielded, hits with tremendous force.\nHurts enemies near the player when used.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

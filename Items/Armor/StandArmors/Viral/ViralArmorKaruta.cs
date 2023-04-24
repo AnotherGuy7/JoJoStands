@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Karuta");
-            Tooltip.SetDefault("A suit of armor made from a mysterious meteoric alloy, powered up by a strange virus.\nProvides a 4% Stand Crit Chance boost");
+            // DisplayName.SetDefault("Viral Karuta");
+            // Tooltip.SetDefault("A suit of armor made from a mysterious meteoric alloy, powered up by a strange virus.\nProvides a 4% Stand Crit Chance boost");
         }
 
         public override void SetDefaults()

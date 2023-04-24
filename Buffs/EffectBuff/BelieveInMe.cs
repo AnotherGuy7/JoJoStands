@@ -11,8 +11,8 @@ namespace JoJoStands.Buffs.EffectBuff
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Believe in me!");
-            Description.SetDefault("You are ready to stand for such a reliable guy to the end!");
+            // DisplayName.SetDefault("Believe in me!");
+            // Description.SetDefault("You are ready to stand for such a reliable guy to the end!");
         }
 
         public override void UpdateBuffOnPlayer(Player player)

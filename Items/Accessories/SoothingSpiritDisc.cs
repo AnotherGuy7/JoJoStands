@@ -8,9 +8,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Soothing Spirit Disc");
-            Tooltip.SetDefault("Stand Damage is increased by 2% for every enemy around you.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Soothing Spirit Disc");
+            // Tooltip.SetDefault("Stand Damage is increased by 2% for every enemy around you.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

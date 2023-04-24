@@ -51,7 +51,7 @@ namespace JoJoStands.Projectiles
             return true;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (target.HasBuff(ModContent.BuffType<Vampire>()))
             {
@@ -68,7 +68,7 @@ namespace JoJoStands.Projectiles
             target.AddBuff(BuffID.Venom, 180);
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(BuffID.Venom, 180);
         }

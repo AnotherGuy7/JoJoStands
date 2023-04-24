@@ -892,7 +892,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     sentDyePacket = true;
                 }
             }
-            if (mPlayer.StandDyeSlot.SlotItem.dye == 0)
+            else
             {
                 if (sentDyePacket)
                 {

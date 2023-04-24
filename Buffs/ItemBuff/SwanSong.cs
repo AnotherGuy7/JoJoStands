@@ -5,12 +5,10 @@ namespace JoJoStands.Buffs.ItemBuff
 {
     public class SwanSong : JoJoBuff
     {
-        public override string Texture => "Terraria/Images/Buff_" + BuffID.Rage;
-
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Swan Song");
-            Description.SetDefault("You're not dead just yet...");
+            // DisplayName.SetDefault("Swan Song");
+            // Description.SetDefault("You're not dead just yet...");
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
             Main.debuff[Type] = true;
         }

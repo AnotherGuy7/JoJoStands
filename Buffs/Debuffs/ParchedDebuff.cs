@@ -7,8 +7,8 @@ namespace JoJoStands.Buffs.Debuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Parched!");
-            Description.SetDefault("You could really use a drink right now...");
+            // DisplayName.SetDefault("Parched!");
+            // Description.SetDefault("You could really use a drink right now...");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

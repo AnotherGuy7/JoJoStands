@@ -8,9 +8,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A top hat worn most during the 1800's.");
+            // Tooltip.SetDefault("A top hat worn most during the 1800's.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

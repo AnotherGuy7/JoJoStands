@@ -79,7 +79,7 @@ namespace JoJoStands.Items.Vampire
             ResetVariables();
         }
 
-        public override void OnEnterWorld(Player Player)
+        public override void OnEnterWorld()
         {
             if (learnedZombieSkills.Count != ExpectedAmountOfZombieSkills)
                 RebuildZombieAbilitiesDictionaries();
@@ -147,7 +147,7 @@ namespace JoJoStands.Items.Vampire
             }
         }
 
-        public override void OnHitNPC(Item Item, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Item, consider using OnHitNPC instead */
         {
             if (anyMaskForm && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
@@ -155,18 +155,18 @@ namespace JoJoStands.Items.Vampire
             }
         }
 
-        public override void ModifyHitNPC(Item Item, NPC target, ref int damage, ref float knockback, ref bool crit)
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Item, consider using ModifyHitNPC instead */
         {
             JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
             bool itemIsVampireItem = Item.ModItem is VampireDamageClass;
             if (!Main.dayTime && target.life == target.lifeMax && (Item.DamageType == DamageClass.Melee || itemIsVampireItem) && jojoNPC.zombieHightlightTimer > 0)
             {
-                damage = (int)(damage * 1.2f);
+                modifiers.FinalDamage *= 1.2f);
                 knockback *= 1.2f + (0.2f * GetSkillLevel(UndeadPerception));
             }
         }
 
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Projectile, consider using OnHitNPC instead */
         {
             if (anyMaskForm && proj.type == ModContent.ProjectileType<Fists>() && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
@@ -442,7 +442,7 @@ namespace JoJoStands.Items.Vampire
             return true;
         }
 
-        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
         {
             enemyToIgnoreDamageFromIndex = -1;
 
@@ -462,14 +462,14 @@ namespace JoJoStands.Items.Vampire
             }
         }
 
-        public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
+        public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
         {
             bool itemIsVampireItem = Player.HeldItem.ModItem is VampireDamageClass;
             if (wearingDiosScarf)
             {
                 if (npc.TypeName.Contains("Zombie") || npc.TypeName.Contains("Undead") || npc.TypeName.Contains("Skeleton") || npc.type == NPCID.Zombie)
                 {
-                    damage = (int)(damage * 0.85f);
+                    modifiers.FinalDamage *= 0.85f);
                 }
             }
 
@@ -493,11 +493,11 @@ namespace JoJoStands.Items.Vampire
             {
                 float multiplier = 1f;
                 multiplier += MathHelper.Clamp(enemyTypesKilled[npc.type] / 1000f, 0f, 0.16f + (0.02f * (GetSkillLevel(ExperiencedBeast - 1))));
-                damage = (int)(damage * multiplier);
+                modifiers.FinalDamage *= multiplier);
             }
         }
 
-        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
+        public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)
         {
             if (doobiesskullEquipped && Player.ownedProjectileCounts[ModContent.ProjectileType<ChimeraSnake>()] < 3)
             {

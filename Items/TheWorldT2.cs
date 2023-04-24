@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("The World (Tier 2)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate! \nSpecial: Stop time for 2 seconds!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("The World (Tier 2)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate! \nSpecial: Stop time for 2 seconds!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

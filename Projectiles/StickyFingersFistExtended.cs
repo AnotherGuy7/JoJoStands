@@ -109,15 +109,15 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -133,10 +133,13 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            if (Main.rand.Next(0, 101) <= 50)
-                target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
+            if (info.PvP)
+            {
+                if (Main.rand.Next(1, 100 + 1) <= 50)
+                    target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
+            }
         }
 
         private Texture2D stickyFingersZipperPart;

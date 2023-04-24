@@ -16,8 +16,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("20th Century Boy");
-            Description.SetDefault("You are being protected!");
+            // DisplayName.SetDefault("20th Century Boy");
+            // Description.SetDefault("You are being protected!");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

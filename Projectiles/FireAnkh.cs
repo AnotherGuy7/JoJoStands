@@ -59,12 +59,12 @@ namespace JoJoStands.Projectiles
             Main.dust[dustIndex].velocity *= 1.4f;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
             if (Main.rand.Next(0, 101) <= Projectile.ai[0])
                 target.AddBuff(BuffID.OnFire, (int)Projectile.ai[1]);
             if (mPlayer.crackedPearlEquipped)

@@ -17,8 +17,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Tusk (ACT 1)");
-            Tooltip.SetDefault("Left-click to shoot nails at enemies and right-click to spin your nails in front of you to use as a melee weapon!");
+            // DisplayName.SetDefault("Tusk (ACT 1)");
+            // Tooltip.SetDefault("Left-click to shoot nails at enemies and right-click to spin your nails in front of you to use as a melee weapon!");
         }
 
         public override void SetDefaults()

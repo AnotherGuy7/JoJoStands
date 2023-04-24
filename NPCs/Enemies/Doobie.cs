@@ -142,7 +142,7 @@ namespace JoJoStands.NPCs.Enemies
             }
         }
 
-        public override void OnHitByItem(Player player, Item Item, int damage, float knockback, bool crit)
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
             if (waiting)
             {
@@ -171,7 +171,7 @@ namespace JoJoStands.NPCs.Enemies
                 }
             }
         }
-        public override void OnHitByProjectile(Projectile Projectile, int damage, float knockback, bool crit)
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
             if (waiting)
             {
@@ -198,7 +198,7 @@ namespace JoJoStands.NPCs.Enemies
                 }
             }
         }
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             if (runCounter > 0)
             {
@@ -218,7 +218,7 @@ namespace JoJoStands.NPCs.Enemies
                 lastdirection = NPC.direction;
             }
         }
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit)
         {
             if (runCounter > 0)
             {

@@ -232,7 +232,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                                     bool crit = false;
                                     float manifestedWillEmblemDamageBoost = 1f;
                                     if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                                        crit = true;
+                                        modifiers.SetCrit();
                                     if (mPlayer.manifestedWillEmblem && crit)
                                         manifestedWillEmblemDamageBoost = 1.5f;
                                     npc.StrikeNPC((int)(145 * (specialScrapeTimer / 30) * mPlayer.standDamageBoosts * manifestedWillEmblemDamageBoost * overHeavenDamageBoost), 0f, player.direction, crit);     //damage goes up at a rate of 145dmg/(1/2 s)

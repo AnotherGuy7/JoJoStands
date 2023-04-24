@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.PetBuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Zeppeli Pet");
-            Description.SetDefault("He says he will leave if you spill the wine.");
+            // DisplayName.SetDefault("Zeppeli Pet");
+            // Description.SetDefault("He says he will leave if you spill the wine.");
             Main.buffNoTimeDisplay[Type] = false;
         }
 

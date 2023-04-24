@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Requiem Crown (Long-Ranged)");
-            Tooltip.SetDefault("A crown made from the finest materials space has offered so far.\n+18% Stand Crit Chance\n+22% Stand Damage\n+1 Stand Speed");
+            // DisplayName.SetDefault("Requiem Crown (Long-Ranged)");
+            // Tooltip.SetDefault("A crown made from the finest materials space has offered so far.\n+18% Stand Crit Chance\n+22% Stand Damage\n+1 Stand Speed");
         }
 
         public override void SetDefaults()

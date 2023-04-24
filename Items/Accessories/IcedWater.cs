@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Iced Water");
-            Tooltip.SetDefault("Water with ice in it, perfect to stay hydrated and cool.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Iced Water");
+            // Tooltip.SetDefault("Water with ice in it, perfect to stay hydrated and cool.");
+            Item.ResearchUnlockCount = 1;
         }
         public override void SetDefaults()
         {

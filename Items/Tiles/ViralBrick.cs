@@ -9,7 +9,7 @@ namespace JoJoStands.Items.Tiles
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A gold brick. Though it's alive!");
+            // Tooltip.SetDefault("A gold brick. Though it's alive!");
         }
 
         public override void SetDefaults()

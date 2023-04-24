@@ -19,8 +19,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Modified Revolver");
-            Tooltip.SetDefault("A revolver packing more of a punch than before. Press the special key to reload.");
+            // DisplayName.SetDefault("Modified Revolver");
+            // Tooltip.SetDefault("A revolver packing more of a punch than before. Press the special key to reload.");
         }
 
         public override void SetDefaults()

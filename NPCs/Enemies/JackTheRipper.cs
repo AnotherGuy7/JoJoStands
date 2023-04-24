@@ -324,7 +324,7 @@ namespace JoJoStands.NPCs.Enemies
             }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             if (NPC.life < NPC.lifeMax && !currentlyHidden)
             {
@@ -338,7 +338,7 @@ namespace JoJoStands.NPCs.Enemies
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit)
         {
             Player player = Main.player[NPC.target];
             if (target.townNPC && NPC.life > NPC.lifeMax / 2 && !currentlyHidden && !alreadyHidOnce && NPC.Distance(player.Center) >= 400f)

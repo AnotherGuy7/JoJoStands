@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.EffectBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Foreseen");
-            Description.SetDefault("Your actions have already been seen...");
+            // DisplayName.SetDefault("Foreseen");
+            // Description.SetDefault("Your actions have already been seen...");
             Main.debuff[Type] = true;       //so that it can't be canceled
             Main.buffNoTimeDisplay[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

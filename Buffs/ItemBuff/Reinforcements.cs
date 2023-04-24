@@ -4,8 +4,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Reinforcements");
-            Description.SetDefault("Reinforcements have arrived!");
+            // DisplayName.SetDefault("Reinforcements");
+            // Description.SetDefault("Reinforcements have arrived!");
         }
     }
 }

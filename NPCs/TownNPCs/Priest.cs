@@ -68,7 +68,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             return true;
         }
 
-        public override bool CanTownNPCSpawn(int numTownNPCs, int money)        //Whether or not the conditions have been met for this town NPC to be able to move into town.
+        public override bool CanTownNPCSpawn(int numTownNPCs)/* tModPorter Suggestion: Copy the implementation of NPC.SpawnAllowed_Merchant in vanilla if you to count money, and be sure to set a flag when unlocked, so you don't count every tick. */        //Whether or not the conditions have been met for this town NPC to be able to move into town.
         {
             return Main.hardMode;
         }
@@ -86,18 +86,26 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
         {
             button = "Buy Stands";      //this defines the buy button name
         }
-        public override void OnChatButtonClicked(bool firstButton, ref bool openShop)       //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
+        public override void OnChatButtonClicked(bool firstButton, ref string shopName)       //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
         {
             if (firstButton)
                 openShop = true;        //so when you click on buy button opens the shop
         }
 
-        public override void SetupShop(Chest shop, ref int nextSlot)        //Allows you to add items to this town NPC's shop. Add an Item by setting the defaults of shop.Item[nextSlot] then incrementing nextSlot.
+        public override void ModifyActiveShop(string shopName, Item[] items)        //Allows you to add items to this town NPC's shop. Add an Item by setting the defaults of shop.Item[nextSlot] then incrementing nextSlot.
         {
-            for (int i = 0; i < JoJoStands.standTier1List.Count; i++)       //auto builds the list of items, also sets their price to 1 platinum without affecting original items
+            for (int i = 0; i < items.Length; i++)
             {
-                shop.item[i].SetDefaults(JoJoStands.standTier1List[i]);
-                shop.item[i].value = Item.buyPrice(0, 50, 0, 0);
+                items[i].value = Item.buyPrice(0, 50, 0, 0);
+            }
+        }
+
+        public override void AddShops()
+        {
+            NPCShop npcShop = new NPCShop(Type);
+            for (int i = 0; i < JoJoStands.standTier1List.Count; i++)       //auto builds the list of items, also sets their price to 50 gold without affecting original items
+            {
+                npcShop.Add(JoJoStands.standTier1List[i]);
             }
         }
 
@@ -137,7 +145,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)       //Allows you to determine the Projectile type of this town NPC's attack, and how long it takes for the Projectile to actually appear
         {
-            if (!Projectiles.NPCStands.WhitesnakeNPCStand.whitesnakeActive)
+            if (!WhitesnakeNPCStand.whitesnakeActive)
             {
                 projType = ModContent.ProjectileType<WhitesnakeNPCStand>();
                 attackDelay = 1;

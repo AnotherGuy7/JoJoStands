@@ -40,7 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseRight && !grabFrames && shootCount <= 0 && Projectile.owner == Main.myPlayer)
+                if (Main.mouseLeft && !grabFrames && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
                     Punch();
                 }

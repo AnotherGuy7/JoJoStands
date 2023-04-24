@@ -14,8 +14,8 @@ namespace JoJoStands.Buffs.EffectBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Skipping Time");
-            Description.SetDefault("Time is skipping");
+            // DisplayName.SetDefault("Skipping Time");
+            // Description.SetDefault("Time is skipping");
             Main.debuff[Type] = true;       //so that it can't be canceled
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }

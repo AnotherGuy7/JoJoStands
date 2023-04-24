@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace JoJoStands.Projectiles
 {
@@ -13,6 +14,12 @@ namespace JoJoStands.Projectiles
         private bool landed = false;
         private bool[] hitNPCInTimestop = new bool[Main.maxNPCs];
         private bool[] hitPlayerInTimestop = new bool[Main.maxPlayers];
+        private readonly SoundStyle PunchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land")
+        {
+            Volume = 0.6f,
+            Pitch = 0f,
+            PitchVariance = 0.2f
+        };
 
         public override void SetDefaults()
         {
@@ -47,16 +54,12 @@ namespace JoJoStands.Projectiles
                     if (Projectile.Hitbox.Intersects(otherProj.Hitbox) && mPlayer.timestopActive)
                     {
                         velocityAdd += otherProj.velocity / 75f;
-                        if (damageMult <= 4f)
-                            damageMult += otherProj.damage / 50;
+                        if (damageMult <= 5f)
+                            damageMult += otherProj.damage / 50f;
 
                         int dust = Dust.NewDust(otherProj.position, otherProj.width, otherProj.height, DustID.Torch);
                         Main.dust[dust].noGravity = true;
-                        SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
-                        punchSound.Volume = 0.6f;
-                        punchSound.Pitch = 0f;
-                        punchSound.PitchVariance = 0.2f;
-                        SoundEngine.PlaySound(punchSound, Projectile.Center);
+                        SoundEngine.PlaySound(PunchSound, Projectile.Center);
                         otherProj.Kill();
                     }
                 }
@@ -78,32 +81,39 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override bool? CanHitNPC(NPC target)
+        {
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().timestopActive)
+                return !hitNPCInTimestop[target.whoAmI];
+
+            return true;
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (!hitNPCInTimestop[target.whoAmI])
             {
                 if (target.boss)
-                    damage *= 3;
+                    modifiers.FinalDamage *= 3;
 
                 hitNPCInTimestop[target.whoAmI] = true;
             }
-            else
-            {
-                if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().timestopActive)
-                    damage = 0;
-            }
         }
 
-        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
+        public override bool CanHitPlayer(Player target)
         {
-            if (!hitPlayerInTimestop[target.whoAmI])
+            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().timestopActive)
+                return !hitPlayerInTimestop[target.whoAmI];
+
+            return true;
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            if (info.PvP)
             {
-                hitPlayerInTimestop[target.whoAmI] = true;
-            }
-            else
-            {
-                if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().timestopActive)
-                    damage = 0;
+                if (!hitPlayerInTimestop[target.whoAmI])
+                    hitPlayerInTimestop[target.whoAmI] = true;
             }
         }
 

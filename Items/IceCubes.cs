@@ -9,9 +9,9 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Ice Cubes");
-            Tooltip.SetDefault("Ice cubes that are in perfect size for eating.");
-            SacrificeTotal = 10;
+            // DisplayName.SetDefault("Ice Cubes");
+            // Tooltip.SetDefault("Ice cubes that are in perfect size for eating.");
+            Item.ResearchUnlockCount = 10;
         }
 
         public override void SetDefaults()

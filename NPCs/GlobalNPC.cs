@@ -265,7 +265,7 @@ namespace JoJoStands.NPCs
             }
         }
 
-        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        public override void ModifyActiveShop(NPC npc, string shopName, Item[] items)
         {
             Player player = Main.player[Main.myPlayer];
             if (type == NPCID.Merchant)
@@ -939,7 +939,7 @@ namespace JoJoStands.NPCs
             }
         }
 
-        public override void OnHitPlayer(NPC npc, Player target, int damage, bool crit)
+        public override void OnHitPlayer(NPC npc, Player target, Player.HurtInfo hurtInfo)
         {
             MyPlayer mPlayer = target.GetModPlayer<MyPlayer>();
             if (target.HasBuff(ModContent.BuffType<BacktoZero>()))     //only affects the ones with the buff, everyone's bool should turn on and save positions normally
@@ -1008,20 +1008,20 @@ namespace JoJoStands.NPCs
                 pool.Add(ModContent.NPCType<JackTheRipper>(), 0.02f);
             }
         }
-        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                damage = (int)(damage * 0.1f);
+                modifiers.FinalDamage *= 0.1f);
             if (npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
-                damage = (int)(damage * 0.5f);
+                modifiers.FinalDamage *= 0.5f);
         }
 
-        public override void ModifyHitByItem(NPC npc, Player player, Item item, ref int damage, ref float knockback, ref bool crit)
+        public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers)
         {
             if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                damage = (int)(damage * 0.1f);
+                modifiers.FinalDamage *= 0.1f);
             if (npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
-                damage = (int)(damage * 0.5f);
+                modifiers.FinalDamage *= 0.5f);
         }
     }
 }

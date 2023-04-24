@@ -7,8 +7,8 @@ namespace JoJoStands.Buffs.EffectBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Death Loop");
-            Description.SetDefault("The targetted enemy will go through endless deaths upon death...");
+            // DisplayName.SetDefault("Death Loop");
+            // Description.SetDefault("The targetted enemy will go through endless deaths upon death...");
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
             BuffID.Sets.TimeLeftDoesNotDecrease[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;

@@ -9,8 +9,8 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Koichi's Shirt");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Koichi's Shirt");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

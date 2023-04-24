@@ -8,10 +8,10 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Arrow Earring");
-            Tooltip.SetDefault("When attacking enemies with Stand Attacks, 10% of damage against enemies is transmitted to nearby enemies." +
-                "\nTransmitted damage is doubled if user not damaged for a long time.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Arrow Earring");
+            /* Tooltip.SetDefault("When attacking enemies with Stand Attacks, 10% of damage against enemies is transmitted to nearby enemies." +
+                "\nTransmitted damage is doubled if user not damaged for a long time."); */
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

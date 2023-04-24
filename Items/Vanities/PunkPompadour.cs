@@ -8,10 +8,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Punk Pompadour");
-            Tooltip.SetDefault("Be careful what you say about this do...");
+            // DisplayName.SetDefault("Punk Pompadour");
+            // Tooltip.SetDefault("Be careful what you say about this do...");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

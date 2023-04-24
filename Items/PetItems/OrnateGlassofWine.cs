@@ -11,8 +11,8 @@ namespace JoJoStands.Items.PetItems
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A glass of wine that never spills.\nSummons a Mini Will A. Zeppeli");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A glass of wine that never spills.\nSummons a Mini Will A. Zeppeli");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Titanium Alloy Mask (Long-Ranged)");
-            Tooltip.SetDefault("A mask fused with Viral Meteorite to empower the user.\n10% Stand Crit Chance\n15% Stand Damage");
+            // DisplayName.SetDefault("Titanium Alloy Mask (Long-Ranged)");
+            // Tooltip.SetDefault("A mask fused with Viral Meteorite to empower the user.\n10% Stand Crit Chance\n15% Stand Damage");
         }
 
         public override void SetDefaults()

@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("DIO's Hair");
-            Tooltip.SetDefault("Hair fit for the 'Ruler of Humanity', with a headband.");
+            // DisplayName.SetDefault("DIO's Hair");
+            // Tooltip.SetDefault("Hair fit for the 'Ruler of Humanity', with a headband.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

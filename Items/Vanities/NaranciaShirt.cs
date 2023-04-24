@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Narancia's Vest");
-            Tooltip.SetDefault("A dark, slim-fitting vest with a collar and straps. Perfect for flexing your arms like a runway.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Narancia's Vest");
+            // Tooltip.SetDefault("A dark, slim-fitting vest with a collar and straps. Perfect for flexing your arms like a runway.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

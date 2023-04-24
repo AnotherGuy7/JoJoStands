@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.PetBuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Dio Pet");
-            Description.SetDefault("He abhors you.");
+            // DisplayName.SetDefault("Dio Pet");
+            // Description.SetDefault("He abhors you.");
             Main.buffNoTimeDisplay[Type] = false;
         }
 

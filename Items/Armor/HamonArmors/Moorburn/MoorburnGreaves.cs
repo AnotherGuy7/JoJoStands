@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.HamonArmors.Moorburn
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Moorburn Greaves");
-            Tooltip.SetDefault("Greaves that were once the craft of a material evil.\nIncreases jump height");
+            // DisplayName.SetDefault("Moorburn Greaves");
+            // Tooltip.SetDefault("Greaves that were once the craft of a material evil.\nIncreases jump height");
         }
 
         public override void SetDefaults()

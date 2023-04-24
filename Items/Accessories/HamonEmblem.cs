@@ -8,9 +8,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamon Emblem");
-            Tooltip.SetDefault("15% increased hamon damage");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Hamon Emblem");
+            // Tooltip.SetDefault("15% increased hamon damage");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

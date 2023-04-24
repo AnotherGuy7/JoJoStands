@@ -15,8 +15,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Test Stand");
-            Tooltip.SetDefault("A faceless stand with unknown abilities...");
+            // DisplayName.SetDefault("Test Stand");
+            // Tooltip.SetDefault("A faceless stand with unknown abilities...");
         }
 
         public override void SetDefaults()

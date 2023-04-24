@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Intangible!");
-            Description.SetDefault("Zip through blocks for 2 minutes!");
+            // DisplayName.SetDefault("Intangible!");
+            // Description.SetDefault("Zip through blocks for 2 minutes!");
         }
 
         public override void UpdateBuffOnPlayer(Player player)

@@ -11,9 +11,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Phantom Greaves");
-            Tooltip.SetDefault("A couple of greaves that is made with ectoplasm and a strong virus.\n+10% Movement Speed\n+5% Stand Crit Chance");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Phantom Greaves");
+            // Tooltip.SetDefault("A couple of greaves that is made with ectoplasm and a strong virus.\n+10% Movement Speed\n+5% Stand Crit Chance");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

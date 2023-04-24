@@ -9,8 +9,8 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jonathan Pants");
-            Tooltip.SetDefault("The pair of pants that started a generation of fighters.");
+            // DisplayName.SetDefault("Jonathan Pants");
+            // Tooltip.SetDefault("The pair of pants that started a generation of fighters.");
         }
 
         public override void SetDefaults()

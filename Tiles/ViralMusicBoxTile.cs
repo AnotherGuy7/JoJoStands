@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -22,8 +23,8 @@ namespace JoJoStands.Tiles
             TileObjectData.addTile(Type);
             DustType = DustID.Lead;
 
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Viral Music Box");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Viral Music Box");
             AddMapEntry(Color.Silver, name);
         }
 

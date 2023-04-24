@@ -89,11 +89,11 @@ namespace JoJoStands.Items.Hamon
             }
         }
 
-        public override void ModifyHitPvp(Player player, Player target, ref int damage, ref bool crit)
+        public override void ModifyHitPvp(Player player, Player target, ref Player.HurtModifiers modifiers)
         {
             if (target.HasBuff(ModContent.BuffType<Buffs.AccessoryBuff.Vampire>()))
             {
-                damage = (int)(damage * 1.3f);
+                modifiers.FinalDamage *= 1.3f);
                 target.AddBuff(ModContent.BuffType<Sunburn>(), 90);
             }
         }
@@ -152,11 +152,11 @@ namespace JoJoStands.Items.Hamon
             }
         }
 
-        public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
+        public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
             HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (hPlayer.learnedHamonSkills[HamonPlayer.SunTag] && target.GetGlobalNPC<JoJoGlobalNPC>().sunTagged)
-                damage = (int)(damage * 1.15f);
+                modifiers.FinalDamage *= 1.15f);
         }
 
         public override void ModifyWeaponKnockback(Player player, ref StatModifier knockback)

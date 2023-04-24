@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Doppio's Pants");
-            Tooltip.SetDefault("A pair of stylish purple pants, popular in Italy and fit for a boss's most trusted employee.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Doppio's Pants");
+            // Tooltip.SetDefault("A pair of stylish purple pants, popular in Italy and fit for a boss's most trusted employee.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

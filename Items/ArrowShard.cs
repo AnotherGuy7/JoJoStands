@@ -10,8 +10,8 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Stab yourself with this to slowly manifest a stand!");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("Stab yourself with this to slowly manifest a stand!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

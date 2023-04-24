@@ -106,7 +106,7 @@ namespace JoJoStands.Items.Hamon
             ajaStoneEquipped = false;
         }
 
-        public override void OnEnterWorld(Player Player)
+        public override void OnEnterWorld()
         {
             if (learnedHamonSkills.Count != ExpectedAmountOfHamonSkills)
                 RebuildHamonAbilitiesDictionaries();
@@ -625,7 +625,7 @@ namespace JoJoStands.Items.Hamon
                 Main.NewText("Rebuilt Hamon Skills Dictionaries.", Color.Yellow);
         }
 
-        public override void OnHitNPC(Item Item, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Item, consider using OnHitNPC instead */
         {
             if (Player.HasBuff(ModContent.BuffType<HamonWeaponImbueBuff>()))
             {
@@ -633,16 +633,16 @@ namespace JoJoStands.Items.Hamon
             }
         }
 
-        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
         {
             enemyToIgnoreDamageFromIndex = -1;
         }
 
-        public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
+        public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
         {
             if (defensiveHamonAuraActive)
             {
-                damage = (int)(damage * 0.95f);
+                modifiers.FinalDamage *= 0.95f);
                 amountOfHamon -= 3;
 
                 if (Main.rand.Next(0, 7) == 0)
@@ -654,7 +654,7 @@ namespace JoJoStands.Items.Hamon
             {
                 if (npc.GetGlobalNPC<JoJoGlobalNPC>().sunShackled)
                 {
-                    damage = (int)(damage * 0.85f);
+                    modifiers.FinalDamage *= 0.85f);
                 }
             }
         }

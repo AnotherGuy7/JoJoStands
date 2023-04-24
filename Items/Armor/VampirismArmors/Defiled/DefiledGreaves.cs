@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.VampirismArmors.Defiled
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Dark greaves constructed of feared life.\nIncreases jump speed");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("Dark greaves constructed of feared life.\nIncreases jump speed");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

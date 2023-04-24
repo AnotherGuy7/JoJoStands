@@ -11,8 +11,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Vampire");
-            Description.SetDefault("You are now a vampire... Stay away from the sun!");
+            // DisplayName.SetDefault("Vampire");
+            // Description.SetDefault("You are now a vampire... Stay away from the sun!");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;
@@ -26,7 +26,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.noFallDmg = true;
             player.jumpBoost = true;
             player.manaRegen += 4;
-            player.statDefense = (int)(player.statDefense / 0.75);
+            player.statDefense *= 1.25f;
             vPlayer.vampire = true;
             vPlayer.anyMaskForm = true;
             player.buffTime[buffIndex] = 2;

@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Helmet (Long-Range)");
-            Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus.\nStand Damage Increase: +5%");
+            // DisplayName.SetDefault("Viral Helmet (Long-Range)");
+            // Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus.\nStand Damage Increase: +5%");
         }
 
         public override void SetDefaults()

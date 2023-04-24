@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Dolly Dagger");
-            Description.SetDefault("When hit, a certain percentage of damage is reflected back to the enemy.");
+            // DisplayName.SetDefault("Dolly Dagger");
+            // Description.SetDefault("When hit, a certain percentage of damage is reflected back to the enemy.");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

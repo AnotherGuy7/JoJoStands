@@ -13,9 +13,9 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Anti-Vampirism Serum");
-            Tooltip.SetDefault("A serum infused with Hamon made to cure those who have fallen to the power of the masks.");
-            SacrificeTotal = 2;
+            // DisplayName.SetDefault("Anti-Vampirism Serum");
+            // Tooltip.SetDefault("A serum infused with Hamon made to cure those who have fallen to the power of the masks.");
+            Item.ResearchUnlockCount = 2;
         }
 
         public override void SetDefaults()

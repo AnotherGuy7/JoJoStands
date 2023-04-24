@@ -26,7 +26,7 @@ namespace JoJoStands.Projectiles
             Projectile.ignoreWater = true;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             target.AddBuff(BuffID.Confused, 120);
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);

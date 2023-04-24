@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Helmet (Short-Range)");
-            Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Speed Increase: -1");
+            // DisplayName.SetDefault("Viral Helmet (Short-Range)");
+            // Tooltip.SetDefault("A helmet created from a far-off alloy, in the style of a far-off equipment.\nStand Speed Increase: -1");
         }
 
         public override void SetDefaults()

@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Ultra Sunscreen");
-            Description.SetDefault("The sunglight can't even touch you!");
+            // DisplayName.SetDefault("Ultra Sunscreen");
+            // Description.SetDefault("The sunglight can't even touch you!");
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
             Main.debuff[Type] = false;
         }

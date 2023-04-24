@@ -16,8 +16,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Tusk (ACT 3)");
-            Tooltip.SetDefault("Hold left-click to shoot and control a spinning nail and right-click to shoot a slow wormhole to shoot out of!\nSpecial: Create a wormhole to travel in!\nSecond Special: Switch to previous acts!");
+            // DisplayName.SetDefault("Tusk (ACT 3)");
+            // Tooltip.SetDefault("Hold left-click to shoot and control a spinning nail and right-click to shoot a slow wormhole to shoot out of!\nSpecial: Create a wormhole to travel in!\nSecond Special: Switch to previous acts!");
         }
 
         public override void SetDefaults()

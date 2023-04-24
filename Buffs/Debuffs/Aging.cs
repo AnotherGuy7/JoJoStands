@@ -9,8 +9,8 @@ namespace JoJoStands.Buffs.Debuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Aging");
-            Description.SetDefault("Your knees are shaking, you feel powerless and tired.");
+            // DisplayName.SetDefault("Aging");
+            // Description.SetDefault("Your knees are shaking, you feel powerless and tired.");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }

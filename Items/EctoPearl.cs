@@ -8,9 +8,9 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Ecto Pearl");
-            Tooltip.SetDefault("A otherworldly pearl that has been inherited by a trapped soul from the dungeon.\nPermanently incrases stand range radius by 0.5 tiles");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Ecto Pearl");
+            // Tooltip.SetDefault("A otherworldly pearl that has been inherited by a trapped soul from the dungeon.\nPermanently incrases stand range radius by 0.5 tiles");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

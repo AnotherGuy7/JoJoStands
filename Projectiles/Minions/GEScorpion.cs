@@ -139,7 +139,7 @@ namespace JoJoStands.Projectiles.Minions
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (damage <= 75)
             {

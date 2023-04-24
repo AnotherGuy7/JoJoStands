@@ -12,9 +12,9 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Fight");
-            Tooltip.SetDefault("1 increased Stand Speed");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Amulet of Fight");
+            // Tooltip.SetDefault("1 increased Stand Speed");
+            Item.ResearchUnlockCount = 1;
         }
         public override void SetDefaults()
         {

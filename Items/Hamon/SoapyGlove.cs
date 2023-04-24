@@ -14,12 +14,13 @@ namespace JoJoStands.Items.Hamon
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Soapy Glove");
-            Tooltip.SetDefault("Shoot controllable bubbles! \nExperience goes up after each conquer..." +
+            // DisplayName.SetDefault("Soapy Glove");
+            /* Tooltip.SetDefault("Shoot controllable bubbles!" +
+                "\nExperience goes up after each conquer..." +
                 "\nRight-click requires more than 3 hamon" +
                 "\nSpecial: Hamon Breathing" +
-                "\nNote: Being below 15% health allows you to use Blood Bubbles");
-            SacrificeTotal = 1;
+                "\nNote: Being below 15% health allows you to use Blood Bubbles"); */
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SafeSetDefaults()
@@ -27,8 +28,8 @@ namespace JoJoStands.Items.Hamon
             Item.damage = 9;
             Item.width = 30;
             Item.height = 30;        //hitbox's width and height when the Item is in the world
-            Item.useTime = 24;
-            Item.useAnimation = 24;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.Thrust;
             Item.maxStack = 1;
             Item.knockBack = 1f;
@@ -48,11 +49,10 @@ namespace JoJoStands.Items.Hamon
         public override bool CanUseItem(Player player)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-
-            if (player.altFunctionUse == 2 && player.ownedProjectileCounts[ModContent.ProjectileType<CutterHamonBubble>()] <= 0 && hamonPlayer.amountOfHamon < 3)
+            if (player.altFunctionUse != 2 && hamonPlayer.amountOfHamon < 1)
                 return false;
 
-            if (player.altFunctionUse != 2 && hamonPlayer.amountOfHamon < 1)
+            if (player.altFunctionUse == 2 && (player.ownedProjectileCounts[ModContent.ProjectileType<CutterHamonBubble>()] > 0 || hamonPlayer.amountOfHamon < 3))
                 return false;
 
             if (player.altFunctionUse == 2)
@@ -61,7 +61,7 @@ namespace JoJoStands.Items.Hamon
                 Item.knockBack = 8f;
                 Item.shoot = ModContent.ProjectileType<CutterHamonBubble>();
             }
-            if (player.altFunctionUse != 2)
+            else if (player.altFunctionUse != 2)
             {
                 Item.damage = 9;
                 Item.knockBack = 1f;
@@ -73,11 +73,14 @@ namespace JoJoStands.Items.Hamon
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 3)
+            if (player.altFunctionUse == 2 && player.ownedProjectileCounts[ModContent.ProjectileType<CutterHamonBubble>()] <= 0 && hamonPlayer.amountOfHamon >= 3)
             {
                 damage += 6;
                 type = ModContent.ProjectileType<CutterHamonBubble>();
                 knockback = 8f;
+                velocity.Normalize();
+                velocity *= 9f;
+                hamonPlayer.amountOfHamon -= 2;
                 Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
                 return false;
             }
@@ -99,7 +102,7 @@ namespace JoJoStands.Items.Hamon
                     return false;
                 }
             }
-            return true;
+            return false;
         }
 
         public override void HoldItem(Player player)

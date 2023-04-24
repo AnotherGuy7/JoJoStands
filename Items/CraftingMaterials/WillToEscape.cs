@@ -11,10 +11,10 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Will to Escape");
-            Tooltip.SetDefault("A physical outlook upon the world, fleeting and vague.");
+            // DisplayName.SetDefault("Will to Escape");
+            // Tooltip.SetDefault("A physical outlook upon the world, fleeting and vague.");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(7, 15));
-            SacrificeTotal = 25;
+            Item.ResearchUnlockCount = 25;
         }
 
         public override void SetDefaults()

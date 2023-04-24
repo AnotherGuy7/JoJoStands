@@ -42,11 +42,7 @@ namespace JoJoStands.UI
             int frame = 6 - mPlayer.sexPistolsLeft;
             int frameHeight = sexPistolsUITexture.Height / 7;
 
-            float scaleInverse = 1f - (Main.UIScale - 1f);
-            Rectangle clippingRect = sexPistolsUI.GetClippingRectangle(spriteBatch);
-            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
-            Rectangle mainUIdestinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
-            spriteBatch.Draw(sexPistolsUITexture, mainUIdestinationRect, new Rectangle(0, frameHeight * frame, sexPistolsUITexture.Width, frameHeight), Color.White);
+            spriteBatch.Draw(sexPistolsUITexture, UITools.ReformatRectangle(sexPistolsUI.GetClippingRectangle(spriteBatch)), new Rectangle(0, frameHeight * frame, sexPistolsUITexture.Width, frameHeight), Color.White);
         }
     }
 }

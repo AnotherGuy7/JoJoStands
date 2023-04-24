@@ -1,6 +1,7 @@
 using JoJoStands.Items.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -23,8 +24,8 @@ namespace JoJoStands.Tiles
                 18
             };
             TileObjectData.addTile(Type);
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Blood for the King");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Blood for the King");
             AddMapEntry(new Color(120, 85, 60), name);
         }
 

@@ -10,9 +10,9 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Luck and Pluck");
-            Tooltip.SetDefault("The sword of an old gladiator.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Luck and Pluck");
+            // Tooltip.SetDefault("The sword of an old gladiator.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

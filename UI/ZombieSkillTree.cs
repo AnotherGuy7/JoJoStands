@@ -104,19 +104,19 @@ namespace JoJoStands.UI
             zombieSkillTreeLeftArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireSkillTreeLeftArrow", AssetRequestMode.ImmediateLoad));
             SetElementSize(zombieSkillTreeLeftArrow, new Vector2(32f, 32f));
             SetElementPosition(zombieSkillTreeLeftArrow, new Vector2(10f, 10f));
-            zombieSkillTreeLeftArrow.OnClick += OnClickZombieSkillTreeUpArrow;
+            zombieSkillTreeLeftArrow.OnLeftClick += OnClickZombieSkillTreeUpArrow;
             ZombieSkillTreePanel.Append(zombieSkillTreeLeftArrow);
 
             zombieSkillTreeRightArrow = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireSkillTreeRightArrow", AssetRequestMode.ImmediateLoad));
             SetElementSize(zombieSkillTreeRightArrow, new Vector2(32f, 32f));
             SetElementPosition(zombieSkillTreeRightArrow, new Vector2(46f, 10f));
-            zombieSkillTreeRightArrow.OnClick += OnClickZombieSkillTreeDownArrow;
+            zombieSkillTreeRightArrow.OnLeftClick += OnClickZombieSkillTreeDownArrow;
             ZombieSkillTreePanel.Append(zombieSkillTreeRightArrow);
 
             zombieSkillTreeXButton = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireSkillTreeXButton", AssetRequestMode.ImmediateLoad));
             SetElementSize(zombieSkillTreeXButton, new Vector2(32f, 32f));
             SetElementPosition(zombieSkillTreeXButton, new Vector2(364f, 7f));
-            zombieSkillTreeXButton.OnClick += OnClickZombieSkillTreeXButton;
+            zombieSkillTreeXButton.OnLeftClick += OnClickZombieSkillTreeXButton;
             ZombieSkillTreePanel.Append(zombieSkillTreeXButton);
 
             skillTreeTextures[0] = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/UI/ZombieSkillTree_Page1", AssetRequestMode.ImmediateLoad);
@@ -128,8 +128,8 @@ namespace JoJoStands.UI
             {
                 zombieSkillIcons[b] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/Extras/VampireIcon_Empty", AssetRequestMode.ImmediateLoad), Vector2.Zero, new Vector2(30f, 30f), Color.White, true);
                 SetElementSize(zombieSkillIcons[b], new Vector2(30f, 30f));
-                zombieSkillIcons[b].OnClick += OnClickAnyIcon;        //This ties *all* of the buttons to the same method
-                zombieSkillIcons[b].OnDoubleClick += OnDoubleClickAnyIcon;
+                zombieSkillIcons[b].OnLeftClick += OnClickAnyIcon;        //This ties *all* of the buttons to the same method
+                zombieSkillIcons[b].OnLeftDoubleClick += OnDoubleClickAnyIcon;
                 zombieSkillIcons[b].owner = ZombieSkillTreePanel;
                 ZombieSkillTreePanel.Append(zombieSkillIcons[b]);
             }
@@ -278,11 +278,7 @@ namespace JoJoStands.UI
 
         protected override void DrawSelf(SpriteBatch spriteBatch)       //from ExampleMod's ExampleUI
         {
-            float scaleInverse = 1f - (Main.UIScale - 1f);
-            Rectangle clippingRect = ZombieSkillTreePanel.GetClippingRectangle(spriteBatch);
-            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
-            Rectangle mainUIdestinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
-            spriteBatch.Draw(skillTreeTextures[currentShownPage - 1], mainUIdestinationRect, Color.White);
+            spriteBatch.Draw(skillTreeTextures[currentShownPage - 1], UITools.ReformatRectangle(ZombieSkillTreePanel.GetClippingRectangle(spriteBatch)), Color.White);
         }
 
         private void InitializeButtons(int page)

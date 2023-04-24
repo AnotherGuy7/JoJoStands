@@ -131,13 +131,13 @@ namespace JoJoStands.Projectiles
             explosionTimer = reader.ReadByte();
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             int plunderType = (int)Projectile.ai[0];
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
 
             if (plunderType == PlunderBubble.Plunder_None && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
             {
@@ -169,7 +169,7 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Player player = Main.player[Projectile.owner];
             if (Main.rand.NextBool(10) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
@@ -211,7 +211,7 @@ namespace JoJoStands.Projectiles
                 bool crit = false;
                 MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
                 if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                    crit = true;
+                    modifiers.SetCrit();
 
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {

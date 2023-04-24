@@ -345,7 +345,7 @@ namespace JoJoStands.Projectiles
                     {
                         NPC npc = Main.npc[n];
                         if (npc.active && !npc.hide && !npc.immortal && !npc.townNPC && Vector2.Distance(Projectile.Center, npc.Center) <= WoooshEffectDistance)
-                            npc.AddBuff(ModContent.BuffType<WhooshDebuff>(), 600);
+                            npc.AddBuff(ModContent.BuffType<WoooshDebuff>(), 600);
                     }
                     if (player.active && Vector2.Distance(Projectile.Center, player.Center) <= WoooshEffectDistance)
                         player.AddBuff(ModContent.BuffType<Whoosh>(), 600);
@@ -357,7 +357,7 @@ namespace JoJoStands.Projectiles
                             if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= WoooshEffectDistance)
                             {
                                 if (players.hostile && player.hostile && player.InOpposingTeam(players))
-                                    players.AddBuff(ModContent.BuffType<WhooshDebuff>(), 300);
+                                    players.AddBuff(ModContent.BuffType<WoooshDebuff>(), 300);
                                 if (!players.hostile || !player.hostile || players.hostile && player.hostile && !player.InOpposingTeam(players))
                                     players.AddBuff(ModContent.BuffType<Whoosh>(), 600);
                             }

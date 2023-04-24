@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Chlorosite Greaves");
-            Tooltip.SetDefault("A couple of greaves that is made with Chlorophyte infused with an otherworldly virus.\n8% movement speed\n9% Stand Crit Chance");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Chlorosite Greaves");
+            // Tooltip.SetDefault("A couple of greaves that is made with Chlorophyte infused with an otherworldly virus.\n8% movement speed\n9% Stand Crit Chance");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

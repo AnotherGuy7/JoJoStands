@@ -16,8 +16,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Whitesnake (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Whitesnake (Tier 1)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

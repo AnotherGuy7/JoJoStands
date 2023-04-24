@@ -12,8 +12,8 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 8));
-            Tooltip.SetDefault("An amulet that perfectly represents and enchances the form of the soul.\n2 increased Stand Speed\n10% increased Stand dodge chance\n20% Stand Ability cooldown reduction\n10% increased Stand crit chance\n10 increased Stand armor penetration\nIncreased defense while the Stand is out");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("An amulet that perfectly represents and enchances the form of the soul.\n2 increased Stand Speed\n10% increased Stand dodge chance\n20% Stand Ability cooldown reduction\n10% increased Stand crit chance\n10 increased Stand armor penetration\nIncreased defense while the Stand is out");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

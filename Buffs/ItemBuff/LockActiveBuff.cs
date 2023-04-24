@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Lock");
-            Description.SetDefault("Enemies that hit you will feel the weight of their guilt.");
+            // DisplayName.SetDefault("Lock");
+            // Description.SetDefault("Enemies that hit you will feel the weight of their guilt.");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Moon Emblem");
-            Tooltip.SetDefault("15% increased vampiric damage");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Moon Emblem");
+            // Tooltip.SetDefault("15% increased vampiric damage");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

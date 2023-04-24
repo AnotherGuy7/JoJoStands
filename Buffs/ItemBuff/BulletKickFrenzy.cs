@@ -9,8 +9,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bullet Kick Frenzy");
-            Description.SetDefault("The Sex Pistols are ready to kick any amount of bullets!");
+            // DisplayName.SetDefault("Bullet Kick Frenzy");
+            // Description.SetDefault("The Sex Pistols are ready to kick any amount of bullets!");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;

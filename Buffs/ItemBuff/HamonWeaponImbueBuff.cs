@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamon Weapon Imbue");
-            Description.SetDefault("You're injecting Hamon into your weapons.");
+            // DisplayName.SetDefault("Hamon Weapon Imbue");
+            // Description.SetDefault("You're injecting Hamon into your weapons.");
             Main.buffNoTimeDisplay[Type] = false;
         }
     }

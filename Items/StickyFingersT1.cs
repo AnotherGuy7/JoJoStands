@@ -16,8 +16,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sticky Fingers (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and zip them open!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Sticky Fingers (Tier 1)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate and zip them open!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

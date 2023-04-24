@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Requiem Chestplate");
-            Tooltip.SetDefault("A chestplate made with the finest alloy of Luminite and Viral Meteorite.\n+10% Stand Crit Chance\n+3 Stand Speed\n5% Incoming Damage Reduction");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Requiem Chestplate");
+            // Tooltip.SetDefault("A chestplate made with the finest alloy of Luminite and Viral Meteorite.\n+10% Stand Crit Chance\n+3 Stand Speed\n5% Incoming Damage Reduction");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

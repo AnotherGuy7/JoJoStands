@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.HamonArmors.Training
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamon Training Vest");
-            Tooltip.SetDefault("You can feel your lungs becoming mightier...\nIncreases Hamon Damage by 10%");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Hamon Training Vest");
+            // Tooltip.SetDefault("You can feel your lungs becoming mightier...\nIncreases Hamon Damage by 10%");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

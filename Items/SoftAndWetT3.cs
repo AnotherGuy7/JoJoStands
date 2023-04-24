@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Soft and Wet (Tier 3)");
-            Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a Plunder Bubble!" +
+            // DisplayName.SetDefault("Soft and Wet (Tier 3)");
+            /* Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a Plunder Bubble!" +
                 "\nSpecial: Bubble Offensive" +
                 "\nSecond Special: Bubble Barrier!" +
                 "\nPassive: Bubble Generation" +
@@ -30,7 +30,7 @@ namespace JoJoStands.Items
                 "\nBubbles in Bubble Offensive mode can be detonated." +
                 "\nBubbles in Bubble Offensive can plunder debuff effects from enemies and tiles." +
                 "\nBubble Generation allows Soft & Wet to generate bubbles while barraging." +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

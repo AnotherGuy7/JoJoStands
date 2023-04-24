@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.PlayerBuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Coordinated Eyes");
-            Description.SetDefault("Your eyes are able to focus on everything, thus, your stand can now go even farther. (+1 Tile Range Radius)");
+            // DisplayName.SetDefault("Coordinated Eyes");
+            // Description.SetDefault("Your eyes are able to focus on everything, thus, your stand can now go even farther. (+1 Tile Range Radius)");
             Main.buffNoTimeDisplay[Type] = false;
         }
 

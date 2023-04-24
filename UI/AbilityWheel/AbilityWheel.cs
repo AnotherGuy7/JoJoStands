@@ -93,7 +93,7 @@ namespace JoJoStands.UI
             {
                 abilityButtons[i] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelPiece"), wheelCenter.buttonCenter + (IndexToRadianPosition(i, 6) * wheelSpace), new Vector2(38f), Color.White, 1f, 1f);
                 abilityButtons[i].SetOverlayImage((Texture2D)ModContent.Request<Texture2D>(buttonTexturePath + abilityTextureNames[i], AssetRequestMode.ImmediateLoad), 0.15f);
-                abilityButtons[i].OnClick += ClickedAbility;
+                abilityButtons[i].OnLeftClick += ClickedAbility;
                 abilityButtons[i].OnScrollWheel += MouseScroll;
                 //abilityButtons[i].owner = abilityWheel;
                 abilityWheel.Append(abilityButtons[i]);

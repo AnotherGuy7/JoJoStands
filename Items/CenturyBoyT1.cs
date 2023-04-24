@@ -15,8 +15,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("20th Century Boy (Tier 1)");
-            Tooltip.SetDefault("Use the special ability key to make yourself immune to damage, but unable to move or use items.\nUsed in Stand Slot.");
+            // DisplayName.SetDefault("20th Century Boy (Tier 1)");
+            // Tooltip.SetDefault("Use the special ability key to make yourself immune to damage, but unable to move or use items.\nUsed in Stand Slot.");
         }
 
         public override void SetDefaults()

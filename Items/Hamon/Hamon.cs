@@ -13,8 +13,8 @@ namespace JoJoStands.Items.Hamon
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamon");
-            Tooltip.SetDefault("Punch enemies with the power that circulates in you. \nExperience goes up after each conquer...\nSpecial: Hamon Breathing");
+            // DisplayName.SetDefault("Hamon");
+            // Tooltip.SetDefault("Punch enemies with the power that circulates in you. \nExperience goes up after each conquer...\nSpecial: Hamon Breathing");
         }
 
         public override void SafeSetDefaults()

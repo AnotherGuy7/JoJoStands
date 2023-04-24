@@ -8,9 +8,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Family Photo");
-            Tooltip.SetDefault("Successful Stand Melee Attacks reduce damage taken.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Family Photo");
+            // Tooltip.SetDefault("Successful Stand Melee Attacks reduce damage taken.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

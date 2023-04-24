@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("RUUUN!");
-            Description.SetDefault("The Secret Joestar Technique- there's no shame!");
+            // DisplayName.SetDefault("RUUUN!");
+            // Description.SetDefault("The Secret Joestar Technique- there's no shame!");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

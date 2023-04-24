@@ -17,8 +17,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Grateful Dead (Tier 1)");
-            Tooltip.SetDefault("Punch enemies and make them age!\nMore effective on hot biomes.\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Grateful Dead (Tier 1)");
+            // Tooltip.SetDefault("Punch enemies and make them age!\nMore effective on hot biomes.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

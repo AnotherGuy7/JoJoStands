@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Requiem Crown (Short-Ranged)");
-            Tooltip.SetDefault("A crown made from the finest materials space has offered so far.\n+25% Stand Damage\n+3 tiles radius\n+10% Incoming Damage Reduction\nMinor Life Regen boost");
+            // DisplayName.SetDefault("Requiem Crown (Short-Ranged)");
+            // Tooltip.SetDefault("A crown made from the finest materials space has offered so far.\n+25% Stand Damage\n+3 tiles radius\n+10% Incoming Damage Reduction\nMinor Life Regen boost");
         }
 
         public override void SetDefaults()

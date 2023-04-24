@@ -7,8 +7,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Spherical Void");
-            Description.SetDefault("Almost anything that passes through this sphere is disintegrated into nothingness!");
+            // DisplayName.SetDefault("Spherical Void");
+            // Description.SetDefault("Almost anything that passes through this sphere is disintegrated into nothingness!");
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;

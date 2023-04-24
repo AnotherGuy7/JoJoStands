@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Dio's Scarf");
-            Tooltip.SetDefault("A scarf that's been through many fights, betrayals, and murders...\nGrants 15% Damage Resistance to undead enemies.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Dio's Scarf");
+            // Tooltip.SetDefault("A scarf that's been through many fights, betrayals, and murders...\nGrants 15% Damage Resistance to undead enemies.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

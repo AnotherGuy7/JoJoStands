@@ -8,9 +8,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stand Emblem");
-            Tooltip.SetDefault("15% increased stand damage");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Stand Emblem");
+            // Tooltip.SetDefault("15% increased stand damage");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

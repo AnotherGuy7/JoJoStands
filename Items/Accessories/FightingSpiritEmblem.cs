@@ -10,11 +10,11 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Fighting Spirit Emblem");
-            Tooltip.SetDefault("15% increased stand damage." +
+            // DisplayName.SetDefault("Fighting Spirit Emblem");
+            /* Tooltip.SetDefault("15% increased stand damage." +
                 "\nDamage to the same target increases Stand Damage by 1% up to 30%." +
-                "\nHitting another enemy reduces this counter by 6%. ");
-            SacrificeTotal = 1;
+                "\nHitting another enemy reduces this counter by 6%. "); */
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

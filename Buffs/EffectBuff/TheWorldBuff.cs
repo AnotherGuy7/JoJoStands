@@ -11,8 +11,8 @@ namespace JoJoStands.Buffs.EffectBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("The World");
-            Description.SetDefault("Time... has been stopped!");
+            // DisplayName.SetDefault("The World");
+            // Description.SetDefault("Time... has been stopped!");
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }

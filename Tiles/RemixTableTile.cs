@@ -2,6 +2,7 @@ using JoJoStands.Items.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -20,8 +21,8 @@ namespace JoJoStands.Tiles
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.addTile(Type);
 
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Remix Table");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Remix Table");
             AddMapEntry(Color.Black, name);
         }
 

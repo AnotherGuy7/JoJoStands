@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Diavolo's Net");
-            Tooltip.SetDefault("Large red robes, accessorized with a golden necklace.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Diavolo's Net");
+            // Tooltip.SetDefault("Large red robes, accessorized with a golden necklace.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Zipper Dodge");
-            Description.SetDefault("You predict the movements of your enemies and zip away at yourself to dodge!");
+            // DisplayName.SetDefault("Zipper Dodge");
+            // Description.SetDefault("You predict the movements of your enemies and zip away at yourself to dodge!");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

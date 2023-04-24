@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Brotherly Suit");
-            Tooltip.SetDefault("A navy suit with white stripes.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Brotherly Suit");
+            // Tooltip.SetDefault("A navy suit with white stripes.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

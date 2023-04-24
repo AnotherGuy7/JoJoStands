@@ -167,7 +167,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                 }
 
-                if (SecondSpecialKeyPressed(false) && mPlayer.echoesTier >= 4 && actChangeCooldown <= 0 && !evolve && Projectile.owner == Main.myPlayer)
+                if (SecondSpecialKeyPressed(false) && mPlayer.echoesTier >= 3 && actChangeCooldown <= 0 && !evolve && Projectile.owner == Main.myPlayer)
                 {
                     changeACT = true;
                     Projectile.Kill();

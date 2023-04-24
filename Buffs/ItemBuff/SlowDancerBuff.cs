@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Slow Dancer");
-            Description.SetDefault("A fast horse capable of generating large amounts of spin energy.");
+            // DisplayName.SetDefault("Slow Dancer");
+            // Description.SetDefault("A fast horse capable of generating large amounts of spin energy.");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
         }

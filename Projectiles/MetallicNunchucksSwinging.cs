@@ -76,13 +76,13 @@ namespace JoJoStands.Projectiles
             Main.dust[dustIndex].noGravity = true;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = (int)(damage * 0.4f);
+            modifiers.FinalDamage *= 0.4f);
             knockback *= 0.4f;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
             HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();

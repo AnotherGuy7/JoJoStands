@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Powerful Strike");
-            Description.SetDefault("Your next attack deals 6x more damage.");
+            // DisplayName.SetDefault("Powerful Strike");
+            // Description.SetDefault("Your next attack deals 6x more damage.");
             Main.persistentBuff[Type] = true;
         }
 

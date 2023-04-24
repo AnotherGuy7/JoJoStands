@@ -22,8 +22,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("King Crimson (Final Tier)");
-            Tooltip.SetDefault("Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!\nSpecial: Skip 10 seconds of time!\nSecond Special: Use Epitaph for 9 seconds!\nPassive: Consecutive Donuts deal greater damage.\nUsed in Stand Slot");
+            // DisplayName.SetDefault("King Crimson (Final Tier)");
+            // Tooltip.SetDefault("Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!\nSpecial: Skip 10 seconds of time!\nSecond Special: Use Epitaph for 9 seconds!\nPassive: Consecutive Donuts deal greater damage.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

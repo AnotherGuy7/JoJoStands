@@ -8,9 +8,9 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hand");
-            Tooltip.SetDefault("A hand that a certain individual would kill for.");
-            SacrificeTotal = 3;
+            // DisplayName.SetDefault("Hand");
+            // Tooltip.SetDefault("A hand that a certain individual would kill for.");
+            Item.ResearchUnlockCount = 3;
         }
 
         public override void SetDefaults()

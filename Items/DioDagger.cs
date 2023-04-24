@@ -11,9 +11,9 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Dio's Dagger");
-            Tooltip.SetDefault("Right-click to stab yourself with this dagger and attract the attention of the zombies.");
-            SacrificeTotal = 3;
+            // DisplayName.SetDefault("Dio's Dagger");
+            // Tooltip.SetDefault("Right-click to stab yourself with this dagger and attract the attention of the zombies.");
+            Item.ResearchUnlockCount = 3;
         }
 
         public override void SetDefaults()

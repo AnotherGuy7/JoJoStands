@@ -12,9 +12,9 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A gold and well designed staff.\nShoots enemy chasing orbs.");
+            // Tooltip.SetDefault("A gold and well designed staff.\nShoots enemy chasing orbs.");
             Item.staff[Item.type] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

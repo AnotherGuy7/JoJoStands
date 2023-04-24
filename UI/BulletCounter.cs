@@ -37,11 +37,7 @@ namespace JoJoStands.UI
             int frame = mPlayer.revolverBulletsShot;
             animRect.Y = frame;
 
-            float scaleInverse = 1f - (Main.UIScale - 1f);
-            Rectangle clippingRect = bulletCountUI.GetClippingRectangle(spriteBatch);
-            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
-            Rectangle mainUIdestinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
-            spriteBatch.Draw(bulletCounterTexture, mainUIdestinationRect, animRect, Color.White);
+            spriteBatch.Draw(bulletCounterTexture, UITools.ReformatRectangle(bulletCountUI.GetClippingRectangle(spriteBatch)), animRect, Color.White);
         }
     }
 }

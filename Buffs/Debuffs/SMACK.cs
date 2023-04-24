@@ -10,12 +10,10 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class SMACK : JoJoBuff
     {
-        public override string Texture => "Terraria/Images/Buff_" + BuffID.Horrified;
-
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("SMACK!");
-            Description.SetDefault("It's just unbearable! The sounds in your head is getting louder!");
+            // DisplayName.SetDefault("SMACK!");
+            // Description.SetDefault("It's just unbearable! The sounds in your head are getting louder!");
             Main.debuff[Type] = true;
         }
 

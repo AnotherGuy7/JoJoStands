@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.HamonArmors.Training
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamon Training Leggings");
-            Tooltip.SetDefault("You can feel a light rush in your legs...\nIncreases Hamon Damage by 5%\nIncreases movement speed");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Hamon Training Leggings");
+            // Tooltip.SetDefault("You can feel a light rush in your legs...\nIncreases Hamon Damage by 5%\nIncreases movement speed");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

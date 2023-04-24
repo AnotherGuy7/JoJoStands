@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Overheaven Arrow Shard");
-            Tooltip.SetDefault("Has unique effects on some Stands.\nAccessory's Effect also works in Vanity Slots");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Overheaven Arrow Shard");
+            // Tooltip.SetDefault("Has unique effects on some Stands.\nAccessory's Effect also works in Vanity Slots");
+            Item.ResearchUnlockCount = 1;
         }
         public override void SetDefaults()
         {

@@ -17,8 +17,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Cream (Tier 1)");
-            Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Cream (Tier 1)");
+            // Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

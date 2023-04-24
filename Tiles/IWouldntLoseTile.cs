@@ -2,6 +2,7 @@ using JoJoStands.Items.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -26,8 +27,8 @@ namespace JoJoStands.Tiles
             TileObjectData.addTile(Type);
             TileID.Sets.DisableSmartCursor[Type] = true;
 
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("I Wouldn't Lose");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("I Wouldn't Lose");
             AddMapEntry(new Color(120, 85, 60), name);
         }
 

@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Polnareff's Hair");
-            Tooltip.SetDefault("Wear this to feel like a masterful swordsman.");
+            // DisplayName.SetDefault("Polnareff's Hair");
+            // Tooltip.SetDefault("Wear this to feel like a masterful swordsman.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()
