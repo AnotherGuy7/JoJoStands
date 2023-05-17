@@ -45,14 +45,13 @@ namespace JoJoStands.Items.Hamon
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
             if (player.altFunctionUse == 2 && hamonPlayer.amountOfHamon >= 5)
             {
-                modifiers.FinalDamage *= 1.5f);
+                damage = (int)(damage * 1.5f);
                 velocity *= 1.25f;
                 type = ModContent.ProjectileType<ChargedClackerProjectile>();
                 hamonPlayer.amountOfHamon -= 5;
                 Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
                 return false;
             }
-
             return true;
         }
 

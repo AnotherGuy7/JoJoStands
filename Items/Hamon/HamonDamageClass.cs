@@ -93,7 +93,7 @@ namespace JoJoStands.Items.Hamon
         {
             if (target.HasBuff(ModContent.BuffType<Buffs.AccessoryBuff.Vampire>()))
             {
-                modifiers.FinalDamage *= 1.3f);
+                modifiers.FinalDamage *= 1.3f;
                 target.AddBuff(ModContent.BuffType<Sunburn>(), 90);
             }
         }
@@ -156,7 +156,7 @@ namespace JoJoStands.Items.Hamon
         {
             HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
             if (hPlayer.learnedHamonSkills[HamonPlayer.SunTag] && target.GetGlobalNPC<JoJoGlobalNPC>().sunTagged)
-                modifiers.FinalDamage *= 1.15f);
+                modifiers.FinalDamage *= 1.15f;
         }
 
         public override void ModifyWeaponKnockback(Player player, ref StatModifier knockback)

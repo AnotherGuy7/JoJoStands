@@ -366,8 +366,8 @@ namespace JoJoStands.Items.Hamon
                 {
                     leafGliderGenerationTimer = 0;
                 }
-                /*int targetCoordX = (int)(Player.position.X / 16f);
-                int targetCoordY = (int)(Player.position.X / 16f);
+                /*int targetCoordX = (int)(Player.position.X / 16f;
+                int targetCoordY = (int)(Player.position.X / 16f;
                 if (TileLoader.IsSapling(Main.tile[targetCoordX, targetCoordY].type))
                 {
                     Dust.NewDust(Player.position, 5, 5, 169);
@@ -642,7 +642,7 @@ namespace JoJoStands.Items.Hamon
         {
             if (defensiveHamonAuraActive)
             {
-                modifiers.FinalDamage *= 0.95f);
+                modifiers.FinalDamage *= 0.95f;
                 amountOfHamon -= 3;
 
                 if (Main.rand.Next(0, 7) == 0)
@@ -654,7 +654,7 @@ namespace JoJoStands.Items.Hamon
             {
                 if (npc.GetGlobalNPC<JoJoGlobalNPC>().sunShackled)
                 {
-                    modifiers.FinalDamage *= 0.85f);
+                    modifiers.FinalDamage *= 0.85f;
                 }
             }
         }

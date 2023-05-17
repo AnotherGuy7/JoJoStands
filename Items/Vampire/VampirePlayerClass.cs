@@ -147,30 +147,30 @@ namespace JoJoStands.Items.Vampire
             }
         }
 
-        public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Item, consider using OnHitNPC instead */
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (anyMaskForm && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
-                StealHealthFrom(target, damage);
+                StealHealthFrom(target, damageDone);
             }
         }
 
-        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Item, consider using ModifyHitNPC instead */
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
             JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
-            bool itemIsVampireItem = Item.ModItem is VampireDamageClass;
-            if (!Main.dayTime && target.life == target.lifeMax && (Item.DamageType == DamageClass.Melee || itemIsVampireItem) && jojoNPC.zombieHightlightTimer > 0)
+            bool itemIsVampireItem = item.ModItem is VampireDamageClass;
+            if (!Main.dayTime && target.life == target.lifeMax && (item.DamageType == DamageClass.Melee || itemIsVampireItem) && jojoNPC.zombieHightlightTimer > 0)
             {
-                modifiers.FinalDamage *= 1.2f);
-                knockback *= 1.2f + (0.2f * GetSkillLevel(UndeadPerception));
+                modifiers.FinalDamage *= 1.2f;
+                modifiers.Knockback *= 1.2f + (0.2f * GetSkillLevel(UndeadPerception));
             }
         }
 
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)/* tModPorter If you don't need the Projectile, consider using OnHitNPC instead */
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (anyMaskForm && proj.type == ModContent.ProjectileType<Fists>() && target.lifeMax > 5 && !target.friendly && !target.dontTakeDamage && !target.immortal)
             {
-                StealHealthFrom(target, damage);
+                StealHealthFrom(target, damageDone);
             }
         }
 
@@ -342,7 +342,15 @@ namespace JoJoStands.Items.Vampire
                     Player.HealEffect(calculatedLifeSteal, true);
                 }
                 if (strikeNPC)
-                    target.StrikeNPC(newDamage, knockback, Player.direction);
+                {
+                    NPC.HitInfo hitInfo = new NPC.HitInfo()
+                    {
+                        Damage = newDamage,
+                        Knockback = knockback,
+                        HitDirection = Player.direction
+                    }
+                    target.StrikeNPC(hitInfo);
+                }
 
                 if (lifeStealPercentLoss < 0.97f)
                 {
