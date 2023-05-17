@@ -179,8 +179,8 @@ namespace JoJoStands
         public int echoesSoundIntensityMax = 48;
         public int echoesKaboom3 = 0;
         public int echoesTailTip = -1;
-        public int echoesACT2EvolutionProgress = 0;
-        public int echoesACT3EvolutionProgress = 0;
+        public int EchoesAct2EvolutionProgress = 0;
+        public int EchoesAct3EvolutionProgress = 0;
         public float echoesDamageBoost = 1f;
         public bool echoesBoing = false;
         public bool echoesBoing2 = false;

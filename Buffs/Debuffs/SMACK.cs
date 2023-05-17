@@ -90,16 +90,16 @@ namespace JoJoStands.Buffs.Debuffs
                     if (npc.type == NPCID.Golem || npc.type == NPCID.GolemFistLeft || npc.type == NPCID.GolemFistRight || npc.type == NPCID.GolemHead)
                     {
                         if (jojoNPC.echoesSmackCritChance)
-                            modOwnerDebuff.echoesACT3EvolutionProgress += soundDamage2 * 2;
+                            modOwnerDebuff.EchoesAct3EvolutionProgress += soundDamage2 * 2;
                         if (!jojoNPC.echoesSmackCritChance)
-                            modOwnerDebuff.echoesACT3EvolutionProgress += soundDamage2;
+                            modOwnerDebuff.EchoesAct3EvolutionProgress += soundDamage2;
                     }
                     if (npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer)
                     {
                         if (jojoNPC.echoesSmackCritChance)
-                            modOwnerDebuff.echoesACT2EvolutionProgress += soundDamage2 * 2;
+                            modOwnerDebuff.EchoesAct2EvolutionProgress += soundDamage2 * 2;
                         if (!jojoNPC.echoesSmackCritChance)
-                            modOwnerDebuff.echoesACT2EvolutionProgress += soundDamage2;
+                            modOwnerDebuff.EchoesAct2EvolutionProgress += soundDamage2;
                     }
                 }
             }

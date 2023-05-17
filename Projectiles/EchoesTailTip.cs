@@ -432,9 +432,9 @@ namespace JoJoStands.Projectiles
                                     if (npc.type == NPCID.Golem || npc.type == NPCID.GolemFistLeft || npc.type == NPCID.GolemFistRight || npc.type == NPCID.GolemHead)
                                     {
                                         if (crit)
-                                            mPlayer.echoesACT3EvolutionProgress += damage2 * 2;
+                                            mPlayer.EchoesAct3EvolutionProgress += damage2 * 2;
                                         else
-                                            mPlayer.echoesACT3EvolutionProgress += damage2;
+                                            mPlayer.EchoesAct3EvolutionProgress += damage2;
                                     }
                                 }
                             }

@@ -256,7 +256,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "/EchoesACT3_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "/EchoesAct3_" + animationName);
 
             if (animationName == "Idle")
             {

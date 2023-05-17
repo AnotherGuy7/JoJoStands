@@ -363,9 +363,9 @@ namespace JoJoStands.Projectiles
                     if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
                     {
                         if (crit)
-                            mPlayer.echoesACT3EvolutionProgress += damage * 2;
+                            mPlayer.EchoesAct3EvolutionProgress += damage * 2;
                         if (!crit)
-                            mPlayer.echoesACT3EvolutionProgress += damage;
+                            mPlayer.EchoesAct3EvolutionProgress += damage;
                     }
                 }
                 else if (mPlayer.echoesTier == 2)
@@ -373,9 +373,9 @@ namespace JoJoStands.Projectiles
                     if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
                     {
                         if (crit)
-                            mPlayer.echoesACT2EvolutionProgress += damage * 2;
+                            mPlayer.EchoesAct2EvolutionProgress += damage * 2;
                         if (!crit)
-                            mPlayer.echoesACT2EvolutionProgress += damage;
+                            mPlayer.EchoesAct2EvolutionProgress += damage;
                     }
                 }
                 if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.currentEchoesAct == 3)

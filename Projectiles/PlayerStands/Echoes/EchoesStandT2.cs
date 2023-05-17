@@ -303,7 +303,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Projectile.tileCollide = false;
                 MovementAI(player.Center, 8f + player.moveSpeed * 2);
             }
-            if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && Main.hardMode && mPlayer.echoesACT2EvolutionProgress >= 10000)
+            if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && Main.hardMode && mPlayer.EchoesAct2EvolutionProgress >= 10000)
             {
                 evolve = true;
                 Projectile.Kill();
@@ -353,7 +353,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
 
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "/EchoesACT1_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "/EchoesAct1_" + animationName);
 
             if (animationName == "Idle")
             {
@@ -411,7 +411,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (evolve)
             {
                 player.maxMinions += 1;
-                mPlayer.echoesACT2EvolutionProgress = 0;
+                mPlayer.EchoesAct2EvolutionProgress = 0;
                 mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesAct2>();
                 mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesAct2>());
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandT3>(), 0, 0f, Main.myPlayer, remoteModeOnSpawn);
