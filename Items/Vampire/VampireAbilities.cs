@@ -162,7 +162,13 @@ namespace JoJoStands.Items.Vampire
                             int suckAmount = (int)(heldNPC.lifeMax * 0.12f);
                             player.HealEffect(suckAmount);
                             player.statLife += suckAmount;
-                            heldNPC.StrikeNPC(suckAmount, 0f, player.direction);
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = suckAmount,
+                                Knockback = 0f,
+                                HitDirection = player.direction
+                            };
+                            heldNPC.StrikeNPC(hitInfo);
                             SoundStyle item3 = new SoundStyle("Terraria/Sounds/Item_3");
                             item3.Pitch = 0.2f;
                             SoundEngine.PlaySound(item3, player.Center);
@@ -258,8 +264,9 @@ namespace JoJoStands.Items.Vampire
 
         public override void AddRecipes()
         {
+            Condition condition = new Condition("Mods.JoJoStands.Conditions.VampireAbilitiesCondition", () => !Main.gameMenu && Main.LocalPlayer.GetModPlayer<VampirePlayer>().vampire);
             CreateRecipe()
-                .AddCondition(NetworkText.FromLiteral("VampireRequirement"), r => !Main.gameMenu && Main.LocalPlayer.GetModPlayer<VampirePlayer>().vampire)
+                .AddCondition(condition)
                 .Register();
         }
     }

@@ -81,7 +81,12 @@ namespace JoJoStands.Projectiles
                 {
                     strangleTimer = 0;
                     int strangleDamage = (int)(((30f * 16f) - (ownerProj.Distance(heldNPC.Center))) / (30f * 16f)) * 64;
-                    heldNPC.StrikeNPC(strangleDamage, 0f, -heldNPC.direction);
+                    NPC.HitInfo hitInfo = new NPC.HitInfo()
+                    {
+                        Damage = strangleDamage,
+                        HitDirection = -heldNPC.direction
+                    };
+                    heldNPC.StrikeNPC(hitInfo);
                 }
             }
 

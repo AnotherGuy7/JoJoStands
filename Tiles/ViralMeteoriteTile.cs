@@ -20,7 +20,6 @@ namespace JoJoStands.Tiles
 
             HitSound = SoundID.Tink;
             DustType = DustID.Silver;
-            ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = ModContent.ItemType<ViralMeteorite>();
             MineResist = 3f;
             MinPick = 65;
 

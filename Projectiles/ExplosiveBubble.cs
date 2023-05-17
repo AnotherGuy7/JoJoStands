@@ -64,14 +64,15 @@ namespace JoJoStands.Projectiles
                 if (Main.rand.Next(1, 100 + 1) >= 60)
                     target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
             }
-            damage = 0;
+            modifiers.FinalDamage *= 0;
         }
 
         public override void Kill(int timeLeft)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            bool crit = false;
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                modifiers.SetCrit();
+                crit = true;
             for (int i = 0; i < 30; i++)
             {
                 int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, Alpha: 100, Scale: 1.5f);
@@ -108,7 +109,14 @@ namespace JoJoStands.Projectiles
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
 
-                        npc.StrikeNPC(Projectile.damage, 7f, hitDirection, crit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = Projectile.damage,
+                            Knockback = 7f,
+                            HitDirection = hitDirection,
+                            Crit = crit
+                        };
+                        npc.StrikeNPC(hitInfo);
                     }
                 }
             }

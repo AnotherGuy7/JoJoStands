@@ -89,7 +89,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)       //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
         {
             if (firstButton)
-                openShop = true;        //so when you click on buy button opens the shop
+                shopName = "Shop";
         }
 
         public override void ModifyActiveShop(string shopName, Item[] items)        //Allows you to add items to this town NPC's shop. Add an Item by setting the defaults of shop.Item[nextSlot] then incrementing nextSlot.

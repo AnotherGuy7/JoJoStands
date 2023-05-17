@@ -205,7 +205,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             player.ChangeDir(npc.direction);
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(10));
                             int damage = newPunchDamage * 2;
-                            npc.StrikeNPC(damage, PunchKnockback * 2f, npc.direction);
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = damage,
+                                Knockback = PunchKnockback * 2f,
+                                HitDirection = npc.direction
+                            };
+                            npc.StrikeNPC(hitInfo);
                             SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 6, 2, damage, player.direction, PunchKnockback * 2f);
                             SoundEngine.PlaySound(timeskipSound);
 

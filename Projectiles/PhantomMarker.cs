@@ -57,7 +57,13 @@ namespace JoJoStands.Projectiles
                 {
                     if (npc.Distance(Projectile.Center) <= ExplosionChainDistance && npc.lifeMax > 5 && !npc.friendly && !npc.immortal && !npc.hide)
                     {
-                        npc.StrikeNPC(135, 5f, Projectile.direction);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = 135,
+                            Knockback = 5f,
+                            HitDirection = Projectile.direction
+                        };
+                        npc.StrikeNPC(hitInfo);
                         for (int d = 0; d < 40; d++)
                         {
                             Vector2 dustPosition = Vector2.Lerp(Main.npc[(int)Projectile.ai[0]].Center, npc.Center, d * (1 / 40f));

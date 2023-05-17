@@ -119,8 +119,9 @@ namespace JoJoStands.Projectiles.Minions
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            bool crit = false;
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                modifiers.SetCrit();
+                crit = true;
             int bombDamage = (int)(350 * mPlayer.standDamageBoosts);
             if (Projectile.ai[0] == 1f)
                 bombDamage = (int)(724 * mPlayer.standDamageBoosts);
@@ -164,7 +165,14 @@ namespace JoJoStands.Projectiles.Minions
                         int critMultiplayer = 0;
                         if (crit)
                             critMultiplayer = 1;
-                        npc.StrikeNPC(bombDamage, 7f, hitDirection, crit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = bombDamage,
+                            Knockback = 7f,
+                            HitDirection = hitDirection,
+                            Crit = crit
+                        };
+                        npc.StrikeNPC(hitInfo);
                         SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 5, critMultiplayer, bombDamage, hitDirection);
                     }
                 }

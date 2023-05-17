@@ -98,7 +98,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                             if (!npc.townNPC && !npc.friendly && !npc.immortal && !npc.hide && parryRectangle.Intersects(npc.Hitbox))
                             {
                                 int damage = (int)(npc.damage * 2 * mPlayer.standDamageBoosts);
-                                npc.StrikeNPC(damage, 6f, player.direction);
+                                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                                {
+                                    Damage = damage,
+                                    Knockback = 6f,
+                                    HitDirection = player.direction
+                                };
+                                npc.StrikeNPC(hitInfo);
                                 SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 10, 2, damage, player.direction);
                                 secondaryAbilityFrames = false;
                                 parryFrames = true;

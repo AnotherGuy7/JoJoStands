@@ -81,7 +81,7 @@ namespace JoJoStands.Projectiles
         {
             if (Projectile.alpha == 255)
             {
-                damage = 0;
+                modifiers.FinalDamage.Base = 0;
             }
             else
             {

@@ -3,6 +3,7 @@ using JoJoStands.Items.Tiles;
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.Bestiary;
@@ -68,10 +69,10 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override List<string> SetNPCNameList()
         {
-            List<string> possibleNames = new List<string>();
-
-            possibleNames.Add("D'Arby");
-
+            List<string> possibleNames = new List<string>
+            {
+                "D'Arby"
+            };
             return possibleNames;
         }
 
@@ -85,7 +86,7 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             if (firstButton)
             {
-                openShop = true;
+                shopName = "Shop";
             }
             else
             {
@@ -93,19 +94,19 @@ namespace JoJoStands.NPCs.TownNPCs
             }
         }
 
-        public override void ModifyActiveShop(string shopName, Item[] items)
-        {
-            shop.item[nextSlot].SetDefaults(ModContent.ItemType<PackoCards>());
-            nextSlot++;
-            shop.item[nextSlot].SetDefaults(ModContent.ItemType<PokerChip>());
-            nextSlot++;
-            shop.item[nextSlot].SetDefaults(ModContent.ItemType<TarotTable>());
-            nextSlot++;
-        }
-
         public override void AddShops()
         {
-            base.AddShops();
+            NPCShop npcShop = new NPCShop(Type);
+            int[] itemTypes = new int[3]
+            {
+                ModContent.ItemType<PackoCards>(),
+                ModContent.ItemType<PokerChip>(),
+                ModContent.ItemType<TarotTable>()
+            };
+            for (int i = 0; i < itemTypes.Length; i++)       //auto builds the list of items, also sets their price to 50 gold without affecting original items
+            {
+                npcShop.Add(itemTypes[i]);
+            }
         }
 
         public override string GetChat()
@@ -135,10 +136,11 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             cooldown = 1;
         }
+
         public override void DrawTownAttackGun(ref Texture2D item, ref Rectangle itemFrame, ref float scale, ref int horizontalHoldoutOffset)/* tModPorter Note: closeness is now horizontalHoldoutOffset, use 'horizontalHoldoutOffset = Main.DrawPlayerItemPos(1f, itemtype) - originalClosenessValue' to adjust to the change. See docs for how to use hook with an item type. */
         {
             scale = 1f;
-            closeness = 15;
+            horizontalHoldoutOffset = (int)Main.DrawPlayerItemPos(1f, ModContent.ItemType<PackoCards>()).Y - 15;
         }
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)

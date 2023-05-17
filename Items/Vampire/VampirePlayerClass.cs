@@ -348,7 +348,7 @@ namespace JoJoStands.Items.Vampire
                         Damage = newDamage,
                         Knockback = knockback,
                         HitDirection = Player.direction
-                    }
+                    };
                     target.StrikeNPC(hitInfo);
                 }
 
@@ -456,7 +456,13 @@ namespace JoJoStands.Items.Vampire
 
             if (Player.HasBuff(ModContent.BuffType<KnifeAmalgamation>()))
             {
-                npc.StrikeNPC(29, 2f, -npc.direction);
+                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                {
+                    Damage = 29,
+                    Knockback = 2f,
+                    HitDirection = -npc.direction
+                };
+                npc.StrikeNPC(hitInfo);
             }
             if (wearingVisceralChestplate && Main.rand.Next(0, 100 + 1) <= 12)
             {
@@ -477,14 +483,13 @@ namespace JoJoStands.Items.Vampire
             {
                 if (npc.TypeName.Contains("Zombie") || npc.TypeName.Contains("Undead") || npc.TypeName.Contains("Skeleton") || npc.type == NPCID.Zombie)
                 {
-                    modifiers.FinalDamage *= 0.85f);
+                    modifiers.FinalDamage *= 0.85f;
                 }
             }
 
             if (wearingAstroRemainsSet && Main.rand.Next(0, 101) <= 20 && itemIsVampireItem)
             {
-                damage = 0;
-                crit = false;
+                modifiers.FinalDamage *= 0;
                 Player.velocity.X = 6f * -Player.direction;
                 Player.immuneTime += 40;
                 Player.immune = true;
@@ -492,7 +497,7 @@ namespace JoJoStands.Items.Vampire
 
             if (HasSkill(EvasiveInstincts) && Main.rand.Next(0, 101) <= 9 + (3 * GetSkillLevel(EvasiveInstincts)))
             {
-                damage = 0;
+                modifiers.FinalDamage *= 0;
                 Player.immune = true;
                 Player.immuneTime = 20;
             }
@@ -501,7 +506,7 @@ namespace JoJoStands.Items.Vampire
             {
                 float multiplier = 1f;
                 multiplier += MathHelper.Clamp(enemyTypesKilled[npc.type] / 1000f, 0f, 0.16f + (0.02f * (GetSkillLevel(ExperiencedBeast - 1))));
-                modifiers.FinalDamage *= multiplier);
+                modifiers.FinalDamage *= multiplier;
             }
         }
 

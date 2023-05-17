@@ -203,7 +203,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             }
                             player.position += repositionOffset;
                             player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(4));
-                            npc.StrikeNPC(newPunchDamage * 2, PunchKnockback * 1.5f, Projectile.direction);
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = newPunchDamage * 2,
+                                Knockback = PunchKnockback * 1.5f,
+                                HitDirection = Projectile.direction
+                            };
+                            npc.StrikeNPC(hitInfo);
                             SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/TimeSkip"));
 
                             for (int i = 0; i < 20; i++)

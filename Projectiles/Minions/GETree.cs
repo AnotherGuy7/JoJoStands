@@ -112,8 +112,8 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = target.damage;
-            knockback = Math.Abs(target.velocity.X);      //they're just gonna have to go back as fast as they were going
+            modifiers.FinalDamage.Base = target.damage;
+            modifiers.Knockback.Base = Math.Abs(target.velocity.X);      //they're just gonna have to go back as fast as they were going
         }
     }
 }

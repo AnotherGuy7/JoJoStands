@@ -1,3 +1,4 @@
+using Humanizer;
 using JoJoStands.Dusts;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
@@ -134,7 +135,13 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         if (stabCooldownTimer <= 0)
                         {
                             PlayAnimation("Stab");
-                            targetNPC.StrikeNPC((int)(projectileDamage * 1.5f), 1.2f, Projectile.damage);
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = (int)(projectileDamage * 1.5f),
+                                Knockback = 1.2f,
+                                HitDirection = (int)(Math.Abs(velocity.X) / -velocity.X)
+                            };
+                            targetNPC.StrikeNPC(hitInfo);
                             stabCooldownTimer += 45 + Main.rand.Next(1, 6 + 1);
                         }
                     }

@@ -170,13 +170,12 @@ namespace JoJoStands.Projectiles.Minions
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (damage <= maxReflection)
+            if (modifiers.FinalDamage.Base <= maxReflection)
+                modifiers.FinalDamage.Base = target.damage - Main.rand.Next(0, 3);
+
+            if (modifiers.FinalDamage.Base > maxReflection)
             {
-                damage = target.damage - Main.rand.Next(0, 3);
-            }
-            if (damage > maxReflection)
-            {
-                damage = maxReflection;
+                modifiers.FinalDamage.Base = maxReflection;
                 Projectile.Kill();
             }
         }

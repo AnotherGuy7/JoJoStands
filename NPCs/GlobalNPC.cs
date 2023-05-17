@@ -268,36 +268,57 @@ namespace JoJoStands.NPCs
         public override void ModifyActiveShop(NPC npc, string shopName, Item[] items)
         {
             Player player = Main.player[Main.myPlayer];
-            if (type == NPCID.Merchant)
+            if (npc.type == NPCID.Merchant)
             {
-                shop.item[nextSlot].SetDefaults(ModContent.ItemType<Sunscreen>());
-                nextSlot++;
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (items[i].IsAir)
+                    {
+                        items[i].SetDefaults(ModContent.ItemType<Sunscreen>());
+                        break;
+                    }
+                }
             }
-            if (type == NPCID.TravellingMerchant && ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss))
+            if (npc.type == NPCID.TravellingMerchant && ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss))
             {
-                shop.item[nextSlot].SetDefaults(ModContent.ItemType<ViralPearlRing>());
-                nextSlot++;
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (items[i].IsAir)
+                    {
+                        items[i].SetDefaults(ModContent.ItemType<ViralPearlRing>());
+                        break;
+                    }
+                }
             }
-            if (type == NPCID.Painter)
+            if (npc.type == NPCID.Painter)
             {
-                shop.item[nextSlot].SetDefaults(ModContent.ItemType<IWouldntLose>());
-                nextSlot++;
-                shop.item[nextSlot].SetDefaults(ModContent.ItemType<OfficersRegret>());
-                nextSlot++;
-                shop.item[nextSlot].SetDefaults(ModContent.ItemType<QuietLife>());
-                nextSlot++;
-                shop.item[nextSlot].SetDefaults(ModContent.ItemType<ShotintheDark>());
-                nextSlot++;
-                shop.item[nextSlot].SetDefaults(ModContent.ItemType<BloodForTheKing>());
-                nextSlot++;
+                int additionIndex = 0;
+                int[] painterShopAdditions = new int[5]
+                {
+                    ModContent.ItemType<IWouldntLose>(),
+                    ModContent.ItemType<OfficersRegret>(),
+                    ModContent.ItemType<QuietLife>(),
+                    ModContent.ItemType<ShotintheDark>(),
+                    ModContent.ItemType<BloodForTheKing>()
+                };
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (items[i].IsAir)
+                    {
+                        items[i].SetDefaults(painterShopAdditions[additionIndex]);
+                        additionIndex += 1;
+                        if (additionIndex >= painterShopAdditions.Length)
+                            break;
+                    }
+                }
             }
             for (int n = 0; n < Main.maxNPCs; n++)
             {
-                NPC npc = Main.npc[n];
-                if (npc.type == type && npc.HasBuff(ModContent.BuffType<BelieveInMe>()) && npc.active && player.talkNPC == npc.whoAmI)
+                NPC otherNPC = Main.npc[n];
+                if (otherNPC.type == npc.type && otherNPC.HasBuff(ModContent.BuffType<BelieveInMe>()) && otherNPC.active && player.talkNPC == otherNPC.whoAmI)
                 {
-                    for (int i = 0; i < shop.item.Length; i++)
-                        shop.item[i].value -= (int)(shop.item[i].value * 0.2f);
+                    for (int i = 0; i < items.Length; i++)
+                        items[i].value -= (int)(items[i].value * 0.2f);
                     for (int i = 0; i < 54; i++)
                     {
                         Item ItemSelect = player.inventory[i];
@@ -367,7 +388,13 @@ namespace JoJoStands.NPCs
                     if (npc.collideY && fallDamage > 1)
                     {
                         echoesKaboom = false;
-                        npc.StrikeNPC(((int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f)) + npc.defense / 4), 0f, 0, true, true, true);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = ((int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f)) + npc.defense / 4),
+                            Knockback = 0f,
+                            HitDirection = npc.direction
+                        };
+                        npc.StrikeNPC(hitInfo, noPlayerInteraction: true);
                     }
                 }
 
@@ -385,13 +412,25 @@ namespace JoJoStands.NPCs
                     if (!onlyOnce && npc.collideY && fallDamage > 50)
                     {
                         onlyOnce = true;
-                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f) + npc.defense / defence), 0f, 0, echoesThreeFreezeCrit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = (int)Main.rand.NextFloat((int)(fallDamage * 0.85f), (int)(fallDamage * 1.15f) + npc.defense / defence),
+                            Knockback = 0f,
+                            HitDirection = npc.direction
+                        };
+                        npc.StrikeNPC(hitInfo);
                     }
                     if (echoesThreeFreezeDamageTimer <= 0 && npc.collideY)
                     {
                         echoesThreeFreezeDamageTimer = 30;
                         int freezeDamage = (int)(136 * echoesDamageBoost);
-                        npc.StrikeNPC((int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + npc.defense / defence, 0f, 0, echoesThreeFreezeCrit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = (int)Main.rand.NextFloat((int)(freezeDamage * 0.85f), (int)(freezeDamage * 1.15f)) + npc.defense / defence,
+                            Knockback = 0f,
+                            HitDirection = npc.direction
+                        };
+                        npc.StrikeNPC(hitInfo);
                     }
 
                     if (npc.boss)
@@ -430,7 +469,13 @@ namespace JoJoStands.NPCs
                     if (!onlyOnce && npc.collideY && fallDamage > 200)
                     {
                         onlyOnce = true;
-                        npc.StrikeNPCNoInteraction((fallDamage - 200 + npc.defense / 4) * 2, 0f, 0, true, true, true);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = (fallDamage - 200 + npc.defense / 4) * 2,
+                            Knockback = 0f,
+                            HitDirection = 0
+                        };
+                        npc.StrikeNPC(hitInfo, noPlayerInteraction: true);
                     }
                 }
                 else
@@ -671,11 +716,8 @@ namespace JoJoStands.NPCs
                 deathTimer++;
                 if ((deathTimer >= 30 && !npc.boss) || (deathTimer >= 60 && npc.boss))
                 {
-                    if (npc.immortal || npc.hide)
-                        npc.StrikeNPCNoInteraction(999999999, 0f, 1, noEffect: true);
-                    if (!npc.immortal)
-                        npc.StrikeNPCNoInteraction(npc.lifeMax + 10, 0f, 1, noEffect: true);
                     deathTimer = 0;
+                    npc.StrikeInstantKill();
                     SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/GEDeathLoop"), npc.Center);
                 }
             }
@@ -945,17 +987,35 @@ namespace JoJoStands.NPCs
             if (target.HasBuff(ModContent.BuffType<BacktoZero>()))     //only affects the ones with the buff, everyone's bool should turn on and save positions normally
             {
                 npc.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
-                npc.StrikeNPC(damage, npc.knockBackResist, -npc.direction);
+                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                {
+                    Damage = hurtInfo.Damage,
+                    Knockback = hurtInfo.Knockback,
+                    HitDirection = -npc.direction
+                };
+                npc.StrikeNPC(hitInfo);
                 btzTotalRewindTime = 5 * btzPositionIndex;
                 btzTotalRewindTimer = 5 * btzPositionIndex;
             }
             if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT1>())
             {
-                npc.StrikeNPC((int)(npc.damage * 0.35f), 4f, -npc.direction);       //Dolly dagger is reflecting 35% of damage here, 70% in tier 2
+                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                {
+                    Damage = (int)(hurtInfo.Damage * 0.35f),
+                    Knockback = 4f,
+                    HitDirection = -npc.direction
+                };
+                npc.StrikeNPC(hitInfo);       //Dolly dagger is reflecting 35% of damage here, 70% in tier 2
             }
-            if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT2>())
+            else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT2>())
             {
-                npc.StrikeNPC((int)(npc.damage * 0.7f), 6f, -npc.direction);
+                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                {
+                    Damage = (int)(npc.damage * 0.7f),
+                    Knockback = 6f,
+                    HitDirection = -npc.direction
+                };
+                npc.StrikeNPC(hitInfo);
             }
             if (target.GetModPlayer<VampirePlayer>().vampire)
             {
@@ -1011,17 +1071,17 @@ namespace JoJoStands.NPCs
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                modifiers.FinalDamage *= 0.1f);
+                modifiers.FinalDamage *= 0.1f;
             if (npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
-                modifiers.FinalDamage *= 0.5f);
+                modifiers.FinalDamage *= 0.5f;
         }
 
         public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers)
         {
             if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                modifiers.FinalDamage *= 0.1f);
+                modifiers.FinalDamage *= 0.1f;
             if (npc.HasBuff(ModContent.BuffType<BelieveInMe>()))
-                modifiers.FinalDamage *= 0.5f);
+                modifiers.FinalDamage *= 0.5f;
         }
     }
 }

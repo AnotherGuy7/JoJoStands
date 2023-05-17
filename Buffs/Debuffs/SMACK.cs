@@ -37,7 +37,7 @@ namespace JoJoStands.Buffs.Debuffs
                 punchSound.Pitch = 0f;
                 punchSound.PitchVariance = 0.2f;
                 SoundEngine.PlaySound(punchSound, player.Center);
-                player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + player.statDefense, 0, true, false, false);
+                player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " could no longer live."), (int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + player.statDefense, 0, true);
                 if (Main.rand.NextFloat(1, 100) <= 15)
                     player.AddBuff(BuffID.Confused, 180);
             }
@@ -75,7 +75,12 @@ namespace JoJoStands.Buffs.Debuffs
                 SoundEngine.PlaySound(punchSound, npc.Center);
                 jojoNPC.echoesSmackCritChance = Main.rand.NextFloat(1, 100 + 1) <= jojoNPC.echoesCrit;
                 int soundDamage2 = (int)Main.rand.NextFloat((int)(soundDamage * 0.85f), (int)(soundDamage * 1.15f)) + npc.defense / defence;
-                npc.StrikeNPC(soundDamage2, 0f, 0, jojoNPC.echoesSmackCritChance);
+                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                {
+                    Damage = soundDamage2,
+                    Crit = jojoNPC.echoesSmackCritChance
+                };
+                npc.StrikeNPC(hitInfo);
                 if (Main.rand.NextFloat(1, 100) <= 15 && !npc.boss)
                     npc.AddBuff(BuffID.Confused, 300);
 

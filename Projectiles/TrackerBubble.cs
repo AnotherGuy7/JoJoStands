@@ -221,7 +221,7 @@ namespace JoJoStands.Projectiles
                 bool crit = false;
                 MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
                 if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                    modifiers.SetCrit();
+                    crit = true;
 
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
@@ -234,7 +234,14 @@ namespace JoJoStands.Projectiles
                             if (npc.position.X - Projectile.position.X > 0)
                                 hitDirection = 1;
 
-                            npc.StrikeNPC((int)(Projectile.damage * 1.7f), 9f, hitDirection, crit);
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = (int)(Projectile.damage * 1.7f),
+                                Knockback = 9f,
+                                HitDirection = hitDirection,
+                                Crit = crit
+                            };
+                            npc.StrikeNPC(hitInfo);
                         }
                     }
                 }

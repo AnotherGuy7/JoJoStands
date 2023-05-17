@@ -67,10 +67,10 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override List<string> SetNPCNameList()
         {
-            List<string> possibleNames = new List<string>();
-
-            possibleNames.Add("Zeppeli");
-
+            List<string> possibleNames = new List<string>
+            {
+                "Zeppeli"
+            };
             return possibleNames;
         }
 

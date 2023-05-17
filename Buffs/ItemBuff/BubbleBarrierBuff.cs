@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
 {
@@ -14,9 +15,9 @@ namespace JoJoStands.Buffs.ItemBuff
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             player.gravity = player.gravity *= 0.8f;
-            player.statDefense = 5 * mPlayer.standTier;
+            player.statDefense += 5 * mPlayer.standTier;
             player.noFallDmg = true;
-            for (int i = 0; i < Main.maxBuffTypes; i++)
+            for (int i = 0; i < BuffLoader.BuffCount; i++)
             {
                 if (Main.debuff[i])
                     player.buffImmune[i] = true;

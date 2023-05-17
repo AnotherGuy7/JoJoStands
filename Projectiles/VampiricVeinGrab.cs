@@ -116,9 +116,7 @@ namespace JoJoStands.Projectiles
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (alreadyGrabbedNPC && grabbedNPC != null)
-            {
-                damage = 0;
-            }
+                modifiers.FinalDamage *= 0;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

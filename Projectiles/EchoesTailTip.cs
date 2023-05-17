@@ -420,7 +420,14 @@ namespace JoJoStands.Projectiles
                                 if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier == 4)
                                     damage1 = 68;
                                 int damage2 = (int)Main.rand.NextFloat((int)(damage1 * mPlayer.standDamageBoosts * 0.85f), (int)(damage1 * mPlayer.standDamageBoosts * 1.15f)) + npc.defense / defence;
-                                npc.StrikeNPC(damage2, 0f, 0, crit);
+                                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                                {
+                                    Damage = damage2,
+                                    Knockback = 0f,
+                                    HitDirection = 0,
+                                    Crit = crit
+                                };
+                                npc.StrikeNPC(hitInfo);
                                 npc.AddBuff(BuffID.OnFire, 600);
                                 if (mPlayer.crackedPearlEquipped)
                                 {
@@ -449,9 +456,9 @@ namespace JoJoStands.Projectiles
                                     if (players.hostile && player.hostile && player.InOpposingTeam(players))
                                     {
                                         if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier == 3)
-                                            players.Hurt(PlayerDeathReason.ByCustomReason(players.name + " could no longer live."), (int)Main.rand.NextFloat((int)(22 * mPlayer.standDamageBoosts * 0.85f), (int)(22 * mPlayer.standDamageBoosts * 1.15f)) + players.statDefense, 0, true, false, false);
+                                            players.Hurt(PlayerDeathReason.ByCustomReason(players.name + " could no longer live."), (int)Main.rand.NextFloat((int)(22 * mPlayer.standDamageBoosts * 0.85f), (int)(22 * mPlayer.standDamageBoosts * 1.15f)) + players.statDefense, 0, true);
                                         if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier == 4)
-                                            players.Hurt(PlayerDeathReason.ByCustomReason(players.name + " could no longer live."), (int)Main.rand.NextFloat((int)(34 * mPlayer.standDamageBoosts * 0.85f), (int)(34 * mPlayer.standDamageBoosts * 1.15f)) + players.statDefense, 0, true, false, false);
+                                            players.Hurt(PlayerDeathReason.ByCustomReason(players.name + " could no longer live."), (int)Main.rand.NextFloat((int)(34 * mPlayer.standDamageBoosts * 0.85f), (int)(34 * mPlayer.standDamageBoosts * 1.15f)) + players.statDefense, 0, true);
                                         players.AddBuff(BuffID.OnFire, 300);
                                         if (mPlayer.crackedPearlEquipped)
                                         {

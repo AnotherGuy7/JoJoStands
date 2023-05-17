@@ -43,9 +43,10 @@ namespace JoJoStands.Projectiles
                 dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Alpha: 100, Scale: 1.5f);
                 Main.dust[dustIndex].velocity *= 3f;
             }
+            bool crit = false;
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                modifiers.SetCrit();
+                crit = true;
             for (int n = 0; n < Main.maxNPCs; n++)
             {
                 NPC npc = Main.npc[n];
@@ -57,7 +58,14 @@ namespace JoJoStands.Projectiles
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
 
-                        npc.StrikeNPC((int)Projectile.ai[0], 8f, hitDirection, crit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = (int)Projectile.ai[0],
+                            Knockback = 8f,
+                            HitDirection = hitDirection,
+                            Crit = crit
+                        };
+                        npc.StrikeNPC(hitInfo);
                     }
                 }
             }

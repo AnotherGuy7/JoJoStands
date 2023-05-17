@@ -26,7 +26,7 @@ namespace JoJoStands.Buffs.Debuffs
             player.moveSpeed *= 0.8f;
             player.GetDamage(DamageClass.Generic) *= 0.75f;
             player.GetAttackSpeed(DamageClass.Generic) *= 0.5f;
-            player.statDefense = (int)(player.statDefense * 0.8f);
+            player.statDefense *= 0.8f;
         }
 
         public override void OnApply(NPC npc)

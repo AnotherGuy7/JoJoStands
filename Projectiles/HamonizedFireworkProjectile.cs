@@ -59,7 +59,13 @@ namespace JoJoStands.Projectiles
                     float npcDistance = Vector2.Distance(npc.Center, Projectile.Center);
                     if (npcDistance < 50f && !npc.immortal && !npc.hide && !npc.friendly)
                     {
-                        npc.StrikeNPC(Projectile.damage, Projectile.knockBack * 5f, Projectile.direction);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = Projectile.damage,
+                            Knockback = Projectile.knockBack * 5f,
+                            HitDirection = Projectile.direction
+                        };
+                        npc.StrikeNPC(hitInfo);
                         npc.AddBuff(ModContent.BuffType<Sunburn>(), 15 * 60);
                     }
                 }

@@ -210,7 +210,7 @@ namespace JoJoStands.NPCs.Enemies
             }
             if (NPC.life < NPC.lifeMax)
             {
-                int lifeStealAmount = damage / 2;
+                int lifeStealAmount = hurtInfo.Damage / 2;
                 NPC.life += lifeStealAmount;
             }
             if (lastdirection == 0)
@@ -230,7 +230,7 @@ namespace JoJoStands.NPCs.Enemies
             }
             if (NPC.life < NPC.lifeMax)
             {
-                int lifeStealAmount = damage / 2;
+                int lifeStealAmount = hit.Damage / 2;
                 NPC.life += lifeStealAmount;
             }
         }

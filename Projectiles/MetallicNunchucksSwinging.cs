@@ -78,8 +78,8 @@ namespace JoJoStands.Projectiles
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            modifiers.FinalDamage *= 0.4f);
-            knockback *= 0.4f;
+            modifiers.FinalDamage *= 0.4f;
+            modifiers.Knockback *= 0.4f;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

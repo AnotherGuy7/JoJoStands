@@ -135,7 +135,7 @@ namespace JoJoStands.Projectiles
         {
             if (alreadyGrabbedNPC && heldNPC != null)
             {
-                damage = 0;
+                modifiers.FinalDamage.Base = 0;
             }
         }
 

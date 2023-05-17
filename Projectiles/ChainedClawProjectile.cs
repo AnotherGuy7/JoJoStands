@@ -67,7 +67,13 @@ namespace JoJoStands.Projectiles
                 heldNPCTimer++;
                 if (hPlayer.amountOfHamon >= 5 && heldNPCTimer >= 80)
                 {
-                    grabbedNPC.StrikeNPC(Projectile.damage, 0f, Projectile.direction);
+                    NPC.HitInfo hitInfo = new NPC.HitInfo()
+                    {
+                        Damage = Projectile.damage,
+                        Knockback = 0f,
+                        HitDirection = Projectile.direction
+                    };
+                    grabbedNPC.StrikeNPC(hitInfo);
                     grabbedNPC.AddBuff(ModContent.BuffType<Sunburn>(), 5 * 60);
                     hPlayer.amountOfHamon -= 5;
                     heldNPCTimer = 0;
@@ -125,9 +131,7 @@ namespace JoJoStands.Projectiles
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (alreadyGrabbedNPC && grabbedNPC != null)
-            {
-                damage = 0;
-            }
+                modifiers.FinalDamage *= 0;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

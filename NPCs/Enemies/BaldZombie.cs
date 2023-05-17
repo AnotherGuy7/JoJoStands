@@ -114,13 +114,11 @@ namespace JoJoStands.NPCs.Enemies
             NPC.ai[0] = 1f;
             if (NPC.life < NPC.lifeMax)
             {
-                int lifeStealAmount = damage / 4;
+                int lifeStealAmount = hurtInfo.Damage / 4;
                 NPC.life += lifeStealAmount;
             }
             if (NPC.life > NPC.lifeMax)
-            {
                 NPC.life = NPC.lifeMax;
-            }
 
             if (Main.rand.Next(0, 101) <= 14)
             {
@@ -132,7 +130,7 @@ namespace JoJoStands.NPCs.Enemies
         {
             if (NPC.life < NPC.lifeMax)
             {
-                int lifeStealAmount = damage / 4;
+                int lifeStealAmount = hit.Damage / 4;
                 NPC.life += lifeStealAmount;
             }
             if (NPC.life > NPC.lifeMax)

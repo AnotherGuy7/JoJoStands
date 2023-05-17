@@ -242,7 +242,12 @@ namespace JoJoStands.Networking
             int damage = reader.ReadInt32();
             bool crit = reader.ReadBoolean();
 
-            Main.npc[targetNPCwhoAmI].StrikeNPC(damage, 0, 0, crit);
+            NPC.HitInfo hitInfo = new NPC.HitInfo()
+            {
+                Damage = damage,
+                Crit = crit
+            };
+            Main.npc[targetNPCwhoAmI].StrikeNPC(hitInfo);
             if (Main.netMode == NetmodeID.Server)
                 SendArrowEarringInfo(-1, fromWho, whoAmI, targetNPCwhoAmI, damage, crit);
         }
@@ -282,8 +287,15 @@ namespace JoJoStands.Networking
             {
                 bool crit = false;
                 if (stat1 != 0)
-                    modifiers.SetCrit();
-                Main.npc[targetWhoAmI].StrikeNPC(stat2, 7f, stat3, crit);
+                    crit = true;
+                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                {
+                    Damage = stat2,
+                    Knockback = 7f,
+                    HitDirection = stat3,
+                    Crit = crit
+                };
+                Main.npc[targetWhoAmI].StrikeNPC(hitInfo);
             }
             if (fistWhoAmI == 6 && stat1 == 1)
             {
@@ -292,7 +304,15 @@ namespace JoJoStands.Networking
                     Main.projectile[targetWhoAmI].Kill();
             }
             if (fistWhoAmI == 6 && stat1 == 2)
-                Main.npc[targetWhoAmI].StrikeNPC(stat2, stat4, stat3);
+            {
+                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                {
+                    Damage = stat2,
+                    Knockback = stat4,
+                    HitDirection = stat3
+                };
+                Main.npc[targetWhoAmI].StrikeNPC(hitInfo);
+            }
             if (fistWhoAmI == 8)
                 Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = stat1;
             if (fistWhoAmI == 9)
@@ -300,7 +320,15 @@ namespace JoJoStands.Networking
             if (fistWhoAmI == 10 && stat1 == 1)
                 Main.projectile[targetWhoAmI].velocity *= -1;
             if (fistWhoAmI == 10 && stat1 == 2)
-                Main.npc[targetWhoAmI].StrikeNPC(stat2, 6f, stat3);
+            {
+                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                {
+                    Damage = stat2,
+                    Knockback = 6f,
+                    HitDirection = stat3
+                };
+                Main.npc[targetWhoAmI].StrikeNPC(hitInfo);
+            }
             if (fistWhoAmI == 12)
                 Main.npc[targetWhoAmI].GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondPunchCount += 1;
             if (fistWhoAmI == 13)

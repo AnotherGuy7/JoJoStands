@@ -58,7 +58,7 @@ namespace JoJoStands.Projectiles
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             player.velocity.X *= 0.5f;
 
-            vPlayer.StealHealthFrom(target, damage);
+            vPlayer.StealHealthFrom(target, damageDone);
             target.GetGlobalNPC<JoJoGlobalNPC>().vampireUserLastHitIndex = player.whoAmI;
             if (vPlayer.HasSkill(player, VampirePlayer.SavageInstincts))
                 if (Main.rand.Next(0, 100) <= vPlayer.lacerationChance)

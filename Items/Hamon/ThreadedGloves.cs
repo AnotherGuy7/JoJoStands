@@ -145,7 +145,13 @@ namespace JoJoStands.Items.Hamon
                     if (heldEnemyTimer >= 60)
                     {
                         hamonPlayer.amountOfHamon -= 5;
-                        heldNPC.StrikeNPC(Item.damage, 0f, player.direction);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = Item.damage,
+                            Knockback = 0f,
+                            HitDirection = player.direction
+                        };
+                        heldNPC.StrikeNPC(hitInfo);
                         heldNPC.AddBuff(ModContent.BuffType<Sunburn>(), 5 * 60);
                         SoundStyle item3 = SoundID.Item3;
                         item3.Pitch = -0.8f;

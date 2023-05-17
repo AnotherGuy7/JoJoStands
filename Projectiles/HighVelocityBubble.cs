@@ -76,7 +76,7 @@ namespace JoJoStands.Projectiles
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 modifiers.SetCrit();
-            damage += target.defense / 2;
+            modifiers.FinalDamage += target.defense / 2;
             if (mPlayer.crackedPearlEquipped)
             {
                 if (Main.rand.Next(1, 100 + 1) >= 60)
@@ -120,7 +120,14 @@ namespace JoJoStands.Projectiles
                 if (npc.active && npc.lifeMax > 5 && !npc.friendly && !npc.hide && !npc.immortal && npc.Distance(Projectile.Center) <= ExplosionRadius)
                 {
                     int hitDirection = npc.position.X - Projectile.position.X > 0 ? 1 : -1;
-                    npc.StrikeNPC((int)(650 * mPlayer.standDamageBoosts), 0f, hitDirection, crit);
+                    NPC.HitInfo hitInfo = new NPC.HitInfo()
+                    {
+                        Damage = (int)(650 * mPlayer.standDamageBoosts),
+                        Knockback = 0f,
+                        HitDirection = hitDirection,
+                        Crit = crit
+                    };
+                    npc.StrikeNPC(hitInfo);
                 }
             }
             SoundEngine.PlaySound(SoundID.Item62);

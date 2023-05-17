@@ -85,8 +85,9 @@ namespace JoJoStands.Items.Vampire
 
         public override void AddRecipes()
         {
+            Condition condition = new Condition("Mods.JoJoStands.Conditions.KnifeWielderCondition", () => !Main.gameMenu && Main.LocalPlayer.GetModPlayer<VampirePlayer>().zombie && Main.LocalPlayer.GetModPlayer<VampirePlayer>().HasSkill(Main.LocalPlayer, VampirePlayer.KnifeWielder));
             CreateRecipe()
-                .AddCondition(NetworkText.FromLiteral("ZombieRequirement"), r => !Main.gameMenu && Main.LocalPlayer.GetModPlayer<VampirePlayer>().zombie && Main.LocalPlayer.GetModPlayer<VampirePlayer>().HasSkill(Main.LocalPlayer, VampirePlayer.KnifeWielder))
+                .AddCondition(condition)
                 .Register();
         }
     }
