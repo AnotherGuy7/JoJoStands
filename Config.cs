@@ -142,8 +142,7 @@ namespace JoJoStands
             JoJoStands.RespawnWithStandOut = RespawnWithStandOut;
             JoJoStands.AbilityWheelDescriptions = AbilityWheelDescriptions;
             JoJoStands.SoundsModAbilityVoicelines = abilityVoicelines;
-            AbilityWheel.VAlign = AbilityWheelYPos / 100f;
-            AbilityWheel.HAlign = AbilityWheelXPos / 100f;
+            AbilityWheel.VerticalAlignmentPercentage = AbilityWheelYPos / 100f;
             if (HamonBarSize >= 4)
             {
                 Main.NewText("You can only choose numbers between 0-3!");

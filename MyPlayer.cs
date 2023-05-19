@@ -49,11 +49,26 @@ namespace JoJoStands
         public int sexPistolsRecoveryTimer = 0;
         public int aerosmithWhoAmI = 0;
         public int revertTimer = 0;     //for all requiems that can change forms back to previous forms
+        /// <summary>
+        /// Boosts Stand Damage. Stand damage is multiplied by this value.
+        /// </summary>
         public float standDamageBoosts = 1;
+        /// <summary>
+        /// Boosts Stand Range. Stand Range is added on to by this value.
+        /// </summary>
         public float standRangeBoosts = 0f;
+        /// <summary>
+        /// Boosts Stand Crit chanches. Stand Crit Chances are added on to by this value.
+        /// </summary>
         public float standCritChangeBoosts = 0f;
+        /// <summary>
+        /// Boosts Stand Dodge Changes. Stand Dodge Changes are added on to by this value.
+        /// </summary>
         public float standDodgeBoosts = 5f;
         public int standDodgeGuarantee = 1;
+        /// <summary>
+        /// Boosts Stand Attack Speeds. Stand Speeds are reduced by this value. Lower is better.
+        /// </summary>
         public int standSpeedBoosts = 0;
         public int standAccessoryDefense = 0;
         public int standArmorPenetration = 0;
@@ -134,6 +149,7 @@ namespace JoJoStands
         public bool playerJustHit = false;
         public bool collideY = false;
 
+        public bool immuneToTimestopEffects = false;
         public bool timestopActive;
         public bool timestopOwner;
         public bool timeskipActive;

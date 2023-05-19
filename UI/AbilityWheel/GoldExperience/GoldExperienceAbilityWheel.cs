@@ -57,7 +57,7 @@ namespace JoJoStands.UI
                 if (i > wheel.abilitiesShown - 1)
                     wheel.abilityButtons[i].invisible = true;
             }
-            wheel.wheelCenterPosition = new Vector2(Main.screenWidth * wheel.abilityWheel.HAlign, Main.screenHeight * wheel.abilityWheel.VAlign);
+            wheel.wheelCenterPosition = new Vector2(Main.screenWidth - (wheel.AbilityWheelSize.X / 2f), Main.screenHeight * VerticalAlignmentPercentage);
             wheel.abilityNameText.SetText(wheel.abilityNames[0]);
             wheel.abilityNameText.Left.Pixels = wheel.wheelCenterPosition.X + wheel.wheelCenter.buttonPosition.X;
             wheel.abilityNameText.Top.Pixels = wheel.wheelCenterPosition.Y + wheel.wheelCenter.buttonPosition.Y + 60f;

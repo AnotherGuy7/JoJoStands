@@ -820,7 +820,13 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Main.spriteBatch.End();     //ending the spriteBatch that started in PreDraw
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            PostDrawExtras();
         }
+
+        /// <summary>
+        /// Allows you to draw things in front of this projectile. Use Main.EntitySpriteDraw() for drawing using this method.
+        /// </summary>
+        public virtual void PostDrawExtras() { }
 
         public SpriteEffects effects = SpriteEffects.None;
 

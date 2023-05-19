@@ -18,6 +18,9 @@ namespace JoJoStands.Buffs.EffectBuff
         public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.immuneToTimestopEffects)
+                return;
+
             player.controlUseItem = false;
             player.dashType = 0;
             player.bodyVelocity = Vector2.Zero;

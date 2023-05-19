@@ -72,7 +72,6 @@ namespace JoJoStands.NPCs
         public int lockFrameCounter;
         public int lockFrame;
         public Vector2 playerPositionOnSkip = Vector2.Zero;
-        public Vector2 preTimestopVelocity = Vector2.Zero;
         public Vector2[] BtZPositions = new Vector2[400];
         public ForesightSaveData[] foresightData = new ForesightSaveData[120];
 
@@ -495,16 +494,10 @@ namespace JoJoStands.NPCs
 
             if (mPlayer.timestopActive || frozenInTime)
             {
-                if (npc.velocity != Vector2.Zero)
-                {
-                    preTimestopVelocity = npc.velocity;
-                }
                 npc.velocity = Vector2.Zero;
                 npc.frameCounter = 1;
                 if (!npc.noGravity)
-                {
                     npc.velocity.Y -= 0.3f;     //the default gravity value, so that if enemies have gravity enabled, this velocity counters that gravity
-                }
                 npc.netUpdate = true;
                 return false;
             }
