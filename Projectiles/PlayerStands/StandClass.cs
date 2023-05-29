@@ -98,6 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual bool UseProjectileAlpha { get; } = false;
         public virtual bool CanUseRangeIndicators { get; } = true;
         public virtual bool CanUseSaladDye { get; } = false;
+        public virtual bool CanUsePart4Dye { get; } = false;
 
         public static int StandNetworkUpdateTime = 90;
 
@@ -106,6 +107,16 @@ namespace JoJoStands.Projectiles.PlayerStands
             None,
             Melee,
             Ranged
+        }
+
+        public enum AnimationState
+        {
+            None,
+            Idle,
+            Attack,
+            Secondary,
+            Special,
+            Pose
         }
 
         public struct AnimationData
@@ -144,6 +155,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         private int summonParticleTimer = 15;
         public float mouseX = 0f;
         public float mouseY = 0f;
+        public AnimationState currentAnimationState;
+        public AnimationState oldAnimationState;
         //private int rangeIndicatorSize = 0;
         //private int secondaryRangeIndicatorSize = 0;
 
@@ -157,8 +170,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             bool specialPressed = false;
             if (!Main.dedServ)      //if it's the clinet, as hotkeys don't exist on the server
                 specialPressed = JoJoStands.SpecialHotKey.JustPressed;
-            bool noCooldown = cooldownCheck ? !Main.player[Projectile.owner].HasBuff(ModContent.BuffType<AbilityCooldown>()) : true;
-            return specialPressed && noCooldown && Projectile.owner == Main.myPlayer;
+            bool hasCooldown = cooldownCheck ? Main.player[Projectile.owner].HasBuff(ModContent.BuffType<AbilityCooldown>()) : false;
+            return specialPressed && !hasCooldown && Projectile.owner == Main.myPlayer;
         }
 
         /// <summary>
@@ -183,8 +196,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             bool specialPressed = false;
             if (!Main.dedServ)      //if it's the clinet, as hotkeys don't exist on the server
                 specialPressed = JoJoStands.SecondSpecialHotKey.JustPressed;
-            bool noCooldown = cooldownCheck ? !Main.player[Projectile.owner].HasBuff(ModContent.BuffType<AbilityCooldown>()) : true;
-            return specialPressed && noCooldown && Projectile.owner == Main.myPlayer;
+            bool hasCooldown = cooldownCheck ? Main.player[Projectile.owner].HasBuff(ModContent.BuffType<AbilityCooldown>()) : false;
+            return specialPressed && !hasCooldown && Projectile.owner == Main.myPlayer;
         }
 
         /// <summary>
@@ -1263,9 +1276,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 if (mPlayer.currentTextureDye == MyPlayer.StandTextureDye.Salad && CanUseSaladDye)
                     newTexturePath += mPlayer.dyePathAddition;
+                if (mPlayer.currentTextureDye == MyPlayer.StandTextureDye.Part4 && CanUsePart4Dye)
+                    newTexturePath += mPlayer.dyePathAddition;
             }
 
-            newTexturePath += standAnimationName;
+            newTexturePath += "/" + standAnimationName;
             return (Texture2D)ModContent.Request<Texture2D>(newTexturePath);
         }
 

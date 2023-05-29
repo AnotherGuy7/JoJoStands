@@ -555,6 +555,12 @@ namespace JoJoStands.NPCs
             }
             if (!mPlayer.timeskipActive)
             {
+                if (npc.aiStyle == 0)
+                {
+                    npc.aiStyle = timeskipAIStyle;
+                    npc.netUpdate = true;
+                }
+
                 timeskipAIStyle = 0;
                 playerPositionOnSkip = Vector2.Zero;
             }
@@ -562,14 +568,14 @@ namespace JoJoStands.NPCs
             {
                 if (playerPositionOnSkip == Vector2.Zero)
                 {
-                    int earliestTime = 10 * 60;
-                    int chosenPlayerIndex = 0;
                     if (Main.netMode == NetmodeID.SinglePlayer)
                     {
                         playerPositionOnSkip = Main.player[Main.myPlayer].position;
                     }
                     else
                     {
+                        int chosenPlayerIndex = 0;
+                        int earliestTime = 10 * 60;
                         for (int p = 0; p < Main.maxPlayers; p++)
                         {
                             Player otherPlayer = Main.player[p];
@@ -579,9 +585,10 @@ namespace JoJoStands.NPCs
                                 chosenPlayerIndex = p;
                             }
                         }
+                        playerPositionOnSkip = Main.player[chosenPlayerIndex].position;
                     }
-                    playerPositionOnSkip = Main.player[chosenPlayerIndex].position;
                 }
+
                 if (timeskipAIStyle == 0 && npc.aiStyle != 0)
                 {
                     timeskipAIStyle = npc.aiStyle;
@@ -589,7 +596,6 @@ namespace JoJoStands.NPCs
                 }
                 if (npc.aiStyle == 0)
                 {
-                    npc.velocity /= 2;
                     npc.spriteDirection = -npc.direction;
                     if (npc.noGravity)
                     {
@@ -622,16 +628,6 @@ namespace JoJoStands.NPCs
                     }
                 }
                 return false;
-            }
-            if (mPlayer.timeskipActive && npc.boss)
-            {
-                npc.defense /= 2;
-            }
-            if (!mPlayer.timeskipActive && npc.aiStyle == 0)
-            {
-                playerPositionOnSkip = Vector2.Zero;
-                npc.aiStyle = timeskipAIStyle;
-                timeskipAIStyle = 0;
             }
             if (mPlayer.epitaphForesightActive && !npc.immortal)
             {
@@ -1031,6 +1027,13 @@ namespace JoJoStands.NPCs
             }
             if (removeZombieHighlightOnHit)
                 zombieHightlightTimer = 0;
+        }
+
+        public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
+        {
+            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            if (mPlayer.timeskipActive && Main.player[Main.myPlayer].HasBuff<SkippingTime>())
+                modifiers.FinalDamage *= 2;
         }
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)

@@ -19,6 +19,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override string PunchSoundName => "Ora";
         public override string PoseSoundName => "YareYareDaze";
         public override string SpawnSoundName => "Star Platinum";
+        public override bool CanUsePart4Dye => true;
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private int timestopStartDelay = 0;
@@ -221,7 +222,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/StarPlatinum", "StarPlatinum_" + animationName);
 
             if (animationName == "Idle")
             {

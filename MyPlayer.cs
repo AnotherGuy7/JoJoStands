@@ -269,7 +269,8 @@ namespace JoJoStands
         public enum StandTextureDye
         {
             None,
-            Salad
+            Salad,
+            Part4
         }
 
         public void ItemBreak(Item item)
@@ -415,6 +416,8 @@ namespace JoJoStands
             forceShutDownEffect = false;
             ToBeContinued.Visible = false;
             tbcCounter = 0;
+            if (StandDyeSlot.SlotItem.ModItem is StandDye)
+                (StandDyeSlot.SlotItem.ModItem as StandDye).OnEquipDye(Main.LocalPlayer);
         }
 
         public override void OnRespawn()

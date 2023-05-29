@@ -279,7 +279,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/KillerQueen", "/KillerQueen_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/KillerQueen", "KillerQueen_" + animationName);
 
             if (animationName == "Idle")
             {

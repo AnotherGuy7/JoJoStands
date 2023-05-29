@@ -1,7 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.ItemBuff;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
@@ -17,12 +15,22 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private int timestopPoseTimer = 0;
+        private bool attacking = false;
 
         /*ripple effect info
         private int rippleCount = 3;
         private int rippleSize = 5;
         private int rippleSpeed = 15;
         private float distortStrength = 100f;*/
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            Secondary,
+            Special,
+            Pose
+        }
 
         public override void AI()
         {
@@ -45,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             {
                 timestopPoseTimer--;
                 idleFrames = false;
-                attackFrames = false;
+                attacking = false;
                 Projectile.frame = 6;
                 Main.mouseLeft = false;
                 Main.mouseRight = false;
@@ -62,13 +70,18 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                    {
+                        attacking = false;
+                        currentAnimationState = StandClass.AnimationState.Attack;
+                    }
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
                     StayBehind();
+                    currentAnimationState = StandClass.AnimationState.Idle;
                 }
-                /*if (rippleEffectTimer <= 0)
+                /*i
+                }f (rippleEffectTimer <= 0)
                 {
                     Filters.Scene["Shockwave"].Deactivate();
                     rippleEffectTimer = 0;
@@ -82,15 +95,20 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
             }
-            if (idleFrames)
+
+            if (currentAnimationState == StandClass.AnimationState.Idle)
             {
-                attackFrames = false;
                 PlayAnimation("Idle");
+            }
+            else if (currentAnimationState == StandClass.AnimationState.Attack)
+            {
+                PlayAnimation("Attack");
             }
         }
 

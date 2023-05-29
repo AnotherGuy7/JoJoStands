@@ -503,7 +503,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Whitesnake", "/Whitesnake_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Whitesnake", "Whitesnake_" + animationName);
 
             if (animationName == "Idle")
             {

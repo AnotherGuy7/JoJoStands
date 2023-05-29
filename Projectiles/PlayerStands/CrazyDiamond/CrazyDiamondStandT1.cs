@@ -100,7 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 pathAddition = "Restoration_";
 
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/CrazyDiamond", "/CrazyDiamond_" + pathAddition + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/CrazyDiamond", "CrazyDiamond_" + pathAddition + animationName);
 
             if (animationName == "Idle")
             {

@@ -236,11 +236,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 {
                     StayBehind();
                 }
-                if (SecondSpecialKeyPressed() && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && !preparingTimeskip && Projectile.owner == Main.myPlayer)
+                if (SecondSpecialKeyPressed() && shootCount <= 0 && !player.HasBuff(ModContent.BuffType<ForesightBuff>()) && !player.HasBuff(ModContent.BuffType<SkippingTime>()) && !preparingTimeskip)
                 {
                     mPlayer.epitaphForesightActive = true;
                     SyncCall.SyncForesight(player.whoAmI, true);
-                    player.AddBuff(ModContent.BuffType<ForesightBuff>(), 240);
+                    player.AddBuff(ModContent.BuffType<ForesightBuff>(), 4 * 60);
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)

@@ -368,7 +368,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] > 0)
                 pathAddition = "Tailless_";
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "/EchoesACT2_" + pathAddition + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "EchoesACT2_" + pathAddition + animationName);
 
             if (animationName == "Idle")
             {

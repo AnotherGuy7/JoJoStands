@@ -353,7 +353,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
 
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "/EchoesACT1_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "EchoesACT1_" + animationName);
 
             if (animationName == "Idle")
             {

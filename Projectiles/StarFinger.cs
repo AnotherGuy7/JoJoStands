@@ -124,6 +124,7 @@ namespace JoJoStands.Projectiles
         }
 
         private Vector2 offset;
+        private readonly Vector2 FingerOrigin = new Vector2(3);
         private Texture2D starFingerPartTexture;
 
         public override bool PreDraw(ref Color lightColor)
@@ -140,18 +141,32 @@ namespace JoJoStands.Projectiles
                 offset = new Vector2(-31f, -2f);
             }
             if (Main.netMode != NetmodeID.Server)
-                starFingerPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFingerPart").Value;
+            {
+                if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().currentTextureDye == MyPlayer.StandTextureDye.Part4)
+                    starFingerPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFingerPart_P4").Value;
+                else
+                    starFingerPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFingerPart").Value;
+            }
+
 
             Vector2 linkCenter = ownerProj.Center + offset;
-            Vector2 center = Projectile.Center;
+            Vector2 normalizedVelocity = Projectile.velocity;
+            normalizedVelocity.Normalize();
+            Vector2 center = Projectile.Center + normalizedVelocity;
             float rotation = (linkCenter - center).ToRotation();
 
-            for (float k = 0; k <= 1; k += 1 / (Vector2.Distance(center, linkCenter) / starFingerPartTexture.Width))     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
+            float increment = 1 / (Vector2.Distance(center, linkCenter) / starFingerPartTexture.Width);
+            for (float k = increment; k <= 1; k += increment)     //basically, getting the amount of space between the 2 points, dividing it by the textures width, then making it a fraction, so saying you 'each takes 1/x space, make x of them to fill it up to 1'
             {
                 Vector2 pos = Vector2.Lerp(center, linkCenter, k) - Main.screenPosition;       //getting the distance and making points by 'k', then bringing it into view
                 Main.EntitySpriteDraw(starFingerPartTexture, pos, new Rectangle(0, 0, starFingerPartTexture.Width, starFingerPartTexture.Height), lightColor, rotation, new Vector2(starFingerPartTexture.Width * 0.5f, starFingerPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0);
             }
-            return true;
+
+            Texture2D projectileTexture = Main.player[Projectile.owner].GetModPlayer<MyPlayer>().currentTextureDye == MyPlayer.StandTextureDye.Part4
+                ? ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFinger_P4").Value : ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFinger").Value;
+
+            Main.EntitySpriteDraw(projectileTexture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, FingerOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            return false;
         }
     }
 }

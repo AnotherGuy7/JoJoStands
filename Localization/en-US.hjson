@@ -1527,12 +1527,25 @@ Mods: {
 
 			SaladDye: {
 				DisplayName: Salad Dye
-				Tooltip: ""
+				Tooltip:
+					'''
+					Applies different sprites to certain Stands.
+					Stands affected by this dye are:
+					The World, Killer Queen, Hierophant Green,
+					Tusk Act 4 and Whitesnake. 
+					Used in the Stand Dye Slot.
+					'''
 			}
 
 			StandDye: {
 				DisplayName: Stand Dye
-				Tooltip: ""
+				Tooltip:
+					'''
+					Applies different sprites to certain Stands.
+					Stands affected by this dye are:
+					Star Platinum.
+					Used in the Stand Dye Slot.
+					'''
 			}
 
 			EchoesAct0: {
@@ -3388,6 +3401,11 @@ Mods: {
 				DisplayName: Zombie Abilities
 				Tooltip: ""
 			}
+
+			Part4Dye: {
+				DisplayName: Part4 Dye
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -3397,9 +3415,72 @@ Mods: {
 			ViralMiner.DisplayName: Viral Miner
 			Yoshihiro.DisplayName: Yoshihiro
 			Yuya.DisplayName: Yuya
-			Gambler.DisplayName: Gambler
-			MarineBiologist.DisplayName: Marine Biologist
-			Priest.DisplayName: Priest
+
+			Gambler: {
+				DisplayName: Gambler
+
+				TownNPCMood: {
+					Content: "{$Mods.JoJoStands.TownNPCMood.Gambler.Content}"
+					NoHome: "{$Mods.JoJoStands.TownNPCMood.Gambler.NoHome}"
+					FarFromHome: "{$Mods.JoJoStands.TownNPCMood.Gambler.FarFromHome}"
+					LoveSpace: "{$Mods.JoJoStands.TownNPCMood.Gambler.LoveSpace}"
+					DislikeCrowded: "{$Mods.JoJoStands.TownNPCMood.Gambler.DislikeCrowded}"
+					HateCrowded: "{$Mods.JoJoStands.TownNPCMood.Gambler.HateCrowded}"
+					LoveBiome: "{$Mods.JoJoStands.TownNPCMood.Gambler.LoveBiome}"
+					DislikeBiome: "{$Mods.JoJoStands.TownNPCMood.Gambler.DislikeBiome}"
+					HateBiome: "{$Mods.JoJoStands.TownNPCMood.Gambler.HateBiome}"
+					LikeNPC: "{$Mods.JoJoStands.TownNPCMood.Gambler.LikeNPC}"
+					DislikeNPC: "{$Mods.JoJoStands.TownNPCMood.Gambler.DislikeNPC}"
+					HateNPC: "{$Mods.JoJoStands.TownNPCMood.Gambler.HateNPC}"
+					LikeNPC_Princess: I like {NPCName}.
+					Princess_LovesNPC: I like {NPCName}.
+				}
+			}
+
+			MarineBiologist: {
+				DisplayName: Marine Biologist
+
+				TownNPCMood: {
+					Content: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.Content}"
+					NoHome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.NoHome}"
+					FarFromHome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.FarFromHome}"
+					LoveSpace: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.LoveSpace}"
+					DislikeCrowded: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.DislikeCrowded}"
+					HateCrowded: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.HateCrowded}"
+					LoveBiome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.LoveBiome}"
+					LikeBiome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.LikeBiome}"
+					DislikeBiome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.DislikeBiome}"
+					HateBiome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.HateBiome}"
+					LikeNPC: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.LikeNPC}"
+					DislikeNPC: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.DislikeNPC}"
+					HateNPC: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.HateNPC}"
+					LikeNPC_Princess: I like {NPCName}.
+					Princess_LovesNPC: I like {NPCName}.
+				}
+			}
+
+			Priest: {
+				DisplayName: Priest
+
+				TownNPCMood: {
+					Content: "{$Mods.JoJoStands.TownNPCMood.Priest.Content}"
+					NoHome: "{$Mods.JoJoStands.TownNPCMood.Priest.NoHome}"
+					FarFromHome: "{$Mods.JoJoStands.TownNPCMood.Priest.FarFromHome}"
+					LoveSpace: "{$Mods.JoJoStands.TownNPCMood.Priest.LoveSpace}"
+					DislikeCrowded: "{$Mods.JoJoStands.TownNPCMood.Priest.DislikeCrowded}"
+					HateCrowded: "{$Mods.JoJoStands.TownNPCMood.Priest.HateCrowded}"
+					LoveBiome: "{$Mods.JoJoStands.TownNPCMood.Priest.LoveBiome}"
+					LikeBiome: "{$Mods.JoJoStands.TownNPCMood.Priest.LikeBiome}"
+					DislikeBiome: "{$Mods.JoJoStands.TownNPCMood.Priest.DislikeBiome}"
+					HateBiome: "{$Mods.JoJoStands.TownNPCMood.Priest.HateBiome}"
+					LikeNPC: "{$Mods.JoJoStands.TownNPCMood.Priest.LikeNPC}"
+					DislikeNPC: "{$Mods.JoJoStands.TownNPCMood.Priest.DislikeNPC}"
+					HateNPC: "{$Mods.JoJoStands.TownNPCMood.Priest.HateNPC}"
+					LikeNPC_Princess: I like {NPCName}.
+					Princess_LovesNPC: I like {NPCName}.
+				}
+			}
+
 			BaldZombie.DisplayName: Bald Zombie
 			ChimeraBird.DisplayName: Chimera Bird
 			Doobie.DisplayName: Doobie
@@ -3409,7 +3490,27 @@ Mods: {
 			JackTheRipper.DisplayName: Jack The Ripper
 			WangChan.DisplayName: Wang Chan
 			ZombieRat.DisplayName: Zombie Rat
-			HamonMaster.DisplayName: Hamon Master
+
+			HamonMaster: {
+				DisplayName: Hamon Master
+
+				TownNPCMood: {
+					Content: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.Content}"
+					NoHome: I hate not having a home.
+					FarFromHome: I am too far from home.
+					LoveSpace: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LoveSpace}"
+					DislikeCrowded: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.DislikeCrowded}"
+					HateCrowded: I hate how crowded I am.
+					LoveBiome: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LoveBiome}"
+					LikeBiome: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LikeBiome}"
+					HateBiome: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.HateBiome}"
+					LikeNPC: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LikeNPC}"
+					DislikeNPC: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.DislikeNPC}"
+					HateNPC: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.HateNPC}"
+					LikeNPC_Princess: I like {NPCName}.
+					Princess_LovesNPC: I like {NPCName}.
+				}
+			}
 		}
 
 		Projectiles: {
@@ -3621,7 +3722,12 @@ Mods: {
 			ZeppeliHamonPunches.DisplayName: Zeppeli Hamon Punches
 		}
 
-		Biomes.ViralMeteoriteBiome.DisplayName: Viral Meteorite Biome
+		Biomes: {
+			ViralMeteoriteBiome: {
+				DisplayName: Viral Meteorite Biome
+				TownNPCDialogueName: the Viral Meteorite Biome
+			}
+		}
 
 		Tiles: {
 			BloodForTheKingTile.MapEntry: Blood for the King
@@ -3649,6 +3755,172 @@ Mods: {
 			VampireAbilitiesCondition: Mods.JoJoStands.Conditions.VampireAbilitiesCondition
 			WitheringAbilitiesCondition: Mods.JoJoStands.Conditions.WitheringAbilitiesCondition
 			ZombieAbilitiesCondition: Mods.JoJoStands.Conditions.ZombieAbilitiesCondition
+		}
+
+		Configs: {
+			CustomizableOptions: {
+				DisplayName: Customizable Options
+
+				deathSound: {
+					Label: Death Sound Options
+					Tooltip: Allows you to choose which deathsound to use
+				}
+
+				Sounds: {
+					Label: Sounds
+					Tooltip: Determines whether or not you want to hear custom sounds or vanilla sounds.
+				}
+
+				AutomaticActivations: {
+					Label: Automatic Usages
+					Tooltip: Determines whether or not you want abilities to automatically activate, such as Killer Queen's bomb and The World's (Auto Mode) Knives
+				}
+
+				RespawnWithStandOut: {
+					Label: Respawn With Stand Out
+					Tooltip: Determiens whether or not you want to always respawn with your Stand out.
+				}
+
+				AbilityWheelDescriptions: {
+					Label: Ability Wheel Ability Tooltips
+					Tooltip: Whether or not you want ability descriptions to pop up whenever you hover over an ability in the Ability Wheel.
+				}
+
+				HamonEffects: {
+					Label: Hamon Effects
+					Tooltip: Determines whether or not you want to see Hamon effects.
+				}
+
+				RangeIndicators: {
+					Label: Range Indicators
+					Tooltip: Determines whether or not you want to see the range indicators for stands that need them.
+				}
+
+				TimestopEffects: {
+					Label: Timestop Effects
+					Tooltip: Determines whether or not you want to see the timestop effects.
+				}
+
+				TimeskipEffects: {
+					Label: Timeskip Effects
+					Tooltip: Determines whether or not you want to see the timeskip effects.
+				}
+
+				BitetheDustEffects: {
+					Label: Bite the Dust Effects
+					Tooltip: Determines whether or not you want to see the bite the dust effects.
+				}
+
+				ColorChangeEffects: {
+					Label: Color Change Effects
+					Tooltip: Determiens whether or not you want to see the world color changes.
+				}
+
+				SecretReferences: {
+					Label: Hidden References
+					Tooltip: Whether or not you want to see hidden references. (Some of these references can cause you to die!)
+				}
+
+				RangeIndicatorVisibility: {
+					Label: Range Indicator Visibility
+					Tooltip: Allows you to choose how transparent the Range Indicator is.
+				}
+
+				StandSlotPositionX: {
+					Label: Stand Slot X Position
+					Tooltip: ""
+				}
+
+				StandSlotPositionY: {
+					Label: Stand Slot Y Position
+					Tooltip: ""
+				}
+
+				HamonBarSize: {
+					Label: Hamon Bar Size
+					Tooltip: ""
+				}
+
+				HamonBarPositionX: {
+					Label: Hamon Bar X Position
+					Tooltip: ""
+				}
+
+				HamonBarPositionY: {
+					Label: Hamon Bar Y Position
+					Tooltip: ""
+				}
+
+				AbilityWheelXPos: {
+					Label: Ability Wheel X Position
+					Tooltip: ""
+				}
+
+				AbilityWheelYPos: {
+					Label: Ability Wheel Y Position
+					Tooltip: ""
+				}
+
+				soundVolume: {
+					Label: Sound Volume
+					Tooltip: Volume of barrage sounds
+				}
+
+				StandSearchTypeEnum: {
+					Label: Stand Auto Mode Targetting Preference
+					Tooltip: Select the type of enemy your Stand should prioritize first when in Auto Mode!
+				}
+
+				abilityVoicelines: {
+					Label: Sounds Mod Ability Voicelines
+					Tooltip: Whether or not you want to hear ability voicelines. These voicelines cause a delay in the activation of abilities! (Only works with the Sounds Mod!)
+				}
+			}
+
+			DeathSoundType: {
+				Tooltip: ""
+				None.Label: None
+				Roundabout.Label: Roundabout
+				Caesar.Label: Caesar
+				KonoMeAmareriMaroreriMerareMaro.Label: Kono Me Amareri Maroreri Merare Maro
+				LastTrainHome.Label: Last Train Home
+				KingCrimsonNoNorioKu.Label: King Crimson No Norio Ku
+			}
+
+			StandSearchTypeEnum: {
+				Tooltip: ""
+				Bosses.Label: Bosses
+				Closest.Label: Closest
+				Farthest.Label: Farthest
+				LeastHealth.Label: Least Health
+				MostHealth.Label: Most Health
+			}
+
+			CustomizableServerOptions: {
+				DisplayName: Customizable Server Options
+
+				standSyncFrequency: {
+					Label: Stand Sync Frequency
+					Tooltip: Throttles how often the Stand is synced. Can have negative effects on network stability on higher frequencies.
+				}
+
+				PvPMode: {
+					Label: Pv P Mode
+					Tooltip:
+						'''
+						Determines whether or not to enable PvP interactions and damage calculations.
+						Useful for increasing the length of Stand fights and enabling
+						'''
+				}
+			}
+
+			StandSyncFrequency: {
+				Tooltip: ""
+				Sparingly.Label: Sparingly
+				SemiFrequently.Label: Semi Frequently
+				Frequently.Label: Frequently
+				Always.Label: Always
+			}
 		}
 	}
 }

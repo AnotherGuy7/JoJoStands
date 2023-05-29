@@ -16,7 +16,6 @@ namespace JoJoStands.Buffs.EffectBuff
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
-
         public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -32,15 +31,15 @@ namespace JoJoStands.Buffs.EffectBuff
                     bool otherForesightsActive = false;
                     for (int p = 0; p < Main.maxPlayers; p++)
                     {
-                        Player otherPlayers = Main.player[p];
-                        if (otherPlayers.active && otherPlayers.whoAmI != player.whoAmI)
+                        Player otherPlayer = Main.player[p];
+                        if (otherPlayer.active && otherPlayer.whoAmI != player.whoAmI)
                         {
-                            otherForesightsActive = otherPlayers.HasBuff(Type);
+                            otherForesightsActive = otherPlayer.HasBuff(Type);
                             if (otherForesightsActive)
                                 break;
                         }
 
-                        if (player.active && !otherPlayers.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
+                        if (player.active && !otherPlayer.active)       //for those people who just like playing in multiplayer worlds by themselves... (why does this happen)
                             otherForesightsActive = false;
                     }
                     if (Main.netMode == NetmodeID.MultiplayerClient && !otherForesightsActive)

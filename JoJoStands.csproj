@@ -7,6 +7,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>latest</LangVersion>
     <Platforms>AnyCPU;ARM64</Platforms>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />

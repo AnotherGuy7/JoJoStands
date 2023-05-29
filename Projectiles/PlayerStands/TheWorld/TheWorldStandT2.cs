@@ -146,7 +146,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/TheWorld", "/TheWorld_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/TheWorld", "TheWorld_" + animationName);
 
             if (animationName == "Idle")
             {
