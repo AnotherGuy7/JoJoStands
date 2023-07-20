@@ -22,6 +22,8 @@ namespace JoJoStands.Items
         private float normalFallSpeed = 0f;
         private bool gravitySaved = false;
 
+        public readonly int[] CrazyDiamondUncraftRarities = new int[4] { ItemRarityID.Green, ItemRarityID.Orange, ItemRarityID.LightPurple, 99 };
+
         public override GlobalItem Clone(Item item, Item itemClone)
         {
             return base.Clone(item, itemClone);
@@ -163,7 +165,8 @@ namespace JoJoStands.Items
                     Item ItemSelect = player.inventory[i];
                     if (ItemSelect == Item)
                     {
-                        mPlayer.ItemBreak(Item);
+                        int currentTier = (int)MathHelper.Clamp(mPlayer.standTier - 1, 0, 3);       //Just to prevent any odd crashes
+                        mPlayer.ItemBreak(Item, CrazyDiamondUncraftRarities[currentTier]);
                         generalPurposeTimer += 30;
                         break;
                     }

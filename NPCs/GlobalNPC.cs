@@ -593,6 +593,7 @@ namespace JoJoStands.NPCs
                 {
                     timeskipAIStyle = npc.aiStyle;
                     npc.aiStyle = 0;
+                    npc.netUpdate = true;
                 }
                 if (npc.aiStyle == 0)
                 {

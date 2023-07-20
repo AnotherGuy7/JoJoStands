@@ -48,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     timestopStartDelay = 120;
                 else
                 {
-                    SoundStyle zawarudo = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/TheWorld");
+                    SoundStyle zawarudo = TheWorldStandFinal.TheWorldTimestopSound;
                     zawarudo.Volume = JoJoStands.ModSoundsVolume;
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
@@ -67,9 +67,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (timestopPoseTimer > 0)
             {
                 timestopPoseTimer--;
-                idleFrames = false;
-                attackFrames = false;
-                secondaryAbilityFrames = false;
+                secondaryAbility = false;
                 abilityPose = true;
                 Main.mouseLeft = false;
                 Main.mouseRight = false;
@@ -81,18 +79,18 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility)
                 {
                     Punch();
                 }
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
-                    if (!secondaryAbilityFrames)
+                    if (!secondaryAbility)
                     {
                         StayBehind();
                         Projectile.direction = Projectile.spriteDirection = player.direction;
@@ -102,18 +100,16 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                         GoInFront();
                         Projectile.direction = 1;
                         if (Main.MouseWorld.X < Projectile.position.X)
-                        {
                             Projectile.direction = -1;
-                        }
+
                         Projectile.spriteDirection = Projectile.direction;
-                        secondaryAbilityFrames = false;
+                        secondaryAbility = false;
                     }
                 }
                 if (Main.mouseRight && player.HasItem(ModContent.ItemType<Knife>()) && Projectile.owner == Main.myPlayer)
                 {
-                    idleFrames = false;
-                    attackFrames = false;
-                    secondaryAbilityFrames = true;
+                    secondaryAbility = true;
+                    currentAnimationState = AnimationState.SecondaryAbility;
                     if (shootCount <= 0 && Projectile.frame == 1)
                     {
                         shootCount += 26;
@@ -191,6 +187,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             {
                 PunchAndShootAI(ModContent.ProjectileType<KnifeProjectile>(), ModContent.ItemType<Knife>(), true);
             }
+            if (abilityPose)
+                currentAnimationState = AnimationState.Special;
         }
 
         public override void SendExtraStates(BinaryWriter writer)       //since this is overriden you have to sync the normal stuff
@@ -205,36 +203,24 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
-            }
-            if (abilityPose)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                secondaryAbilityFrames = false;
-                PlayAnimation("AbilityPose");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                secondaryAbilityFrames = false;
+            else if (currentAnimationState == AnimationState.Special)
+                PlayAnimation("AbiliyPose");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -250,22 +236,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 else
                     AnimateStand(animationName, 2, 30, true);
             }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 2, 24, true);
-            }
-            if (animationName == "AbilityPose")
-            {
+            else if (animationName == "AbilityPose")
                 AnimateStand(animationName, 1, 10, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
     }
 }

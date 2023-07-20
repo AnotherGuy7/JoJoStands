@@ -52,8 +52,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             {
                 if (Main.mouseLeft && mPlayer.canStandBasicAttack && Projectile.owner == Main.myPlayer)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
+                    currentAnimationState = AnimationState.Attack;
                     Projectile.netUpdate = true;
                     if (shootCount <= 0)
                     {
@@ -82,11 +81,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     }
                 }
                 if (!Main.mouseLeft && player.whoAmI == Main.myPlayer)        //The reason it's not an else is because it would count the owner part too
-                {
-                    idleFrames = true;
-                    attackFrames = false;
-                }
-                if (!attackFrames)
+                    currentAnimationState = AnimationState.Idle;
+
+                if (!attacking)
                     StayBehind();
                 else
                     GoInFront();
@@ -137,8 +134,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 }
                 if (Main.mouseRight && mPlayer.canStandBasicAttack && Projectile.scale >= 0.5f && Projectile.owner == Main.myPlayer)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
+                    currentAnimationState = AnimationState.Attack;
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
@@ -174,8 +170,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     if (Projectile.owner == Main.myPlayer)
                     {
-                        attackFrames = false;
-                        idleFrames = true;
+                        currentAnimationState = AnimationState.Idle;
+                        currentAnimationState = AnimationState.Idle;
                     }
                 }
                 if (SpecialKeyPressed() && shootCount <= 0 && Projectile.scale >= 0.5f)
@@ -212,8 +208,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 NPC target = FindNearestTarget(350f);
                 if (target != null)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
+                    currentAnimationState = AnimationState.Attack;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
                     {
@@ -250,8 +245,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 }
                 else
                 {
-                    idleFrames = true;
-                    attackFrames = false;
+                    currentAnimationState = AnimationState.Idle;
                 }
                 LimitDistance(MaxRemoteModeDistance);
             }
@@ -270,22 +264,20 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -294,17 +286,11 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/HierophantGreen", "HierophantGreen_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 3, 20, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 3, 15, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 2, 15, true);
-            }
         }
     }
 }

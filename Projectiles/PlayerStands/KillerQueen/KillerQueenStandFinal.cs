@@ -54,17 +54,15 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
                     StayBehind();
                 }
                 if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
                     shootCount += 10;
-                    attackFrames = false;
-                    idleFrames = false;
                     float mouseToPlayerDistance = Vector2.Distance(Main.MouseWorld, player.Center);
 
                     if (!touchedNPC && !touchedTile)
@@ -127,17 +125,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                         if (touchedTile)
                         {
                             touchedTile = false;
-                            secondaryAbilityFrames = true;
+                            currentAnimationState = AnimationState.SecondaryAbility;
                             int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), savedPosition, Vector2.Zero, ModContent.ProjectileType<KillerQueenBomb>(), 0, 9f, player.whoAmI, (int)(AltDamage * mPlayer.standDamageBoosts));
                             Main.projectile[projectile].timeLeft = 2;
                             Main.projectile[projectile].netUpdate = true;
                             savedPosition = Vector2.Zero;
                         }
                     }
-                }
-                else
-                {
-                    secondaryAbilityFrames = false;
                 }
                 if (SpecialKeyPressed() && player.ownedProjectileCounts[ModContent.ProjectileType<SheerHeartAttack>()] == 0)
                 {
@@ -147,7 +141,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 NPC target = FindNearestTarget(newMaxDistance * 1.5f);
-                if (!attackFrames)
+                if (!attacking)
                 {
                     StayBehind();
                 }
@@ -163,9 +157,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 }
                 if (savedTarget != null && touchedTargetDistance > newMaxDistance + 8f)       //if the target leaves and the bomb won't damage you, detonate the enemy
                 {
-                    secondaryAbilityFrames = true;
-                    attackFrames = false;
-                    idleFrames = false;
+                    currentAnimationState = AnimationState.SecondaryAbility;
                     explosionTimer++;
                     if (explosionTimer == 5)
                         SoundEngine.PlaySound(kqClickSound);
@@ -181,9 +173,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 }
                 if (target != null)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
-
+                    currentAnimationState = AnimationState.Attack;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
                         Projectile.direction = -1;
@@ -213,10 +203,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                     }
                 }
                 else
-                {
-                    idleFrames = true;
-                    attackFrames = false;
-                }
+                    currentAnimationState = AnimationState.Idle;
             }
 
             if (touchedTile && JoJoStands.AutomaticActivations)
@@ -249,30 +236,22 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
-                if (Projectile.frame >= 4)      //cause it should only click once
-                    secondaryAbilityFrames = false;
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -281,21 +260,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/KillerQueen", "KillerQueen_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 20, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 6, 18, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 2, true);
-            }
         }
     }
 }

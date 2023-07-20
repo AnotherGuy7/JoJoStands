@@ -114,7 +114,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             None,
             Idle,
             Attack,
-            Secondary,
+            SecondaryAbility,
             Special,
             Pose
         }
@@ -122,13 +122,18 @@ namespace JoJoStands.Projectiles.PlayerStands
         public struct AnimationData
         {
             public int frames;
+            public string textureName;
             public int frameCounterLimit;
             public bool loopedAnimation;
+            public int loopStartFrame;
+            public int loopEndFrame;
+
+            public void UpdateFrameCounterLimit(int newLimit)
+            {
+
+            }
         }
 
-        public bool idleFrames = false;       //Much easier to sync animations this way rather than syncing everything about it
-        public bool attackFrames = false;
-        public bool secondaryAbilityFrames = false;
         public int newPunchTime = 0;       //so we don't have to type newPunchTime all the time
         public int newShootTime = 0;
         public float newMaxDistance = 0f;
@@ -141,8 +146,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public Texture2D secondaryStandRangeIndicatorTexture;
 
         public int shootCount = 0;
-        private Vector2 velocityAddition;
-        private float mouseDistance;
+        public bool attacking = false;
         public bool secondaryAbility = false;
         private bool playedBeginning = false;
         private bool playedSpawnSound = false;
@@ -243,33 +247,21 @@ namespace JoJoStands.Projectiles.PlayerStands
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!mPlayer.canStandBasicAttack)
             {
-                idleFrames = true;
-                attackFrames = false;
+                currentAnimationState = AnimationState.Idle;
                 return;
             }
 
-            movementSpeed += mPlayer.standTier;
-            idleFrames = false;
-            attackFrames = true;
+            attacking = true;
+            currentAnimationState = AnimationState.Attack;
             float rotaY = mouseY - Projectile.Center.Y;
             Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-            velocityAddition = Main.MouseWorld - Projectile.position;
+            Vector2 velocityAddition = Main.MouseWorld - Projectile.Center;
             velocityAddition.Normalize();
-            velocityAddition *= movementSpeed;
+            velocityAddition *= movementSpeed + mPlayer.standTier;
 
-            if (mouseX < Projectile.position.X)
-            {
-                Projectile.spriteDirection = -1;
-                Projectile.direction = -1;
-            }
-            if (mouseX > Projectile.position.X)
-            {
-                Projectile.spriteDirection = 1;
-                Projectile.direction = 1;
-            }
-
-            mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-            if (mouseDistance > 40f)
+            Projectile.spriteDirection = Projectile.direction = mouseX > Projectile.Center.X ? 1 : -1;
+            float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+            if (mouseDistance > 2.5f * 16f)
                 Projectile.velocity = player.velocity + velocityAddition;
             else
                 Projectile.velocity = Vector2.Zero;
@@ -298,8 +290,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void StayBehind()
         {
             Player player = Main.player[Projectile.owner];
-            idleFrames = true;
-            attackFrames = false;
+            currentAnimationState = AnimationState.Idle;
             Vector2 position = player.Center;
             position.X -= (12 + ManualIdleHoverOffset.X + player.width / 2) * player.direction;
             position.Y -= -35f + HalfStandHeight - ManualIdleHoverOffset.Y;
@@ -319,14 +310,13 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
 
-            idleFrames = true;
-            attackFrames = false;
+            currentAnimationState = AnimationState.Idle;
             Vector2 position = player.Center;
             position.X -= (12 + ManualIdleHoverOffset.X + player.width / 2) * player.direction;
             position.Y -= -35f + HalfStandHeight - ManualIdleHoverOffset.Y;
             Projectile.Center = Vector2.Lerp(Projectile.Center, position, 0.2f);
             Projectile.velocity *= 0.8f;
-            if (!secondaryAbilityFrames)
+            if (!secondaryAbility)
                 Projectile.spriteDirection = Projectile.direction = player.direction;
             Projectile.rotation = 0;
             LimitDistance();
@@ -364,7 +354,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
 
-            if (!attackFrames)
+            if (!attacking)
             {
                 Vector2 position = player.Center;
                 position.X -= (float)((12 + player.width / 2) * player.direction);
@@ -380,15 +370,13 @@ namespace JoJoStands.Projectiles.PlayerStands
             NPC target = FindNearestTarget(detectionDist);
             if (target != null)
             {
-                attackFrames = true;
-                idleFrames = false;
-
+                currentAnimationState = AnimationState.Attack;
                 Projectile.direction = 1;
                 if (target.position.X - Projectile.Center.X <= 0f)
                     Projectile.direction = -1;
                 Projectile.spriteDirection = Projectile.direction;
 
-                Vector2 velocity = target.position - Projectile.position;
+                Vector2 velocity = target.position - Projectile.Center;
                 velocity.Normalize();
                 Projectile.velocity = velocity * 4f;
                 if (shootCount <= 0)
@@ -410,8 +398,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             else
             {
-                idleFrames = true;
-                attackFrames = false;
+                currentAnimationState = AnimationState.Idle;
             }
             LimitDistance();
         }
@@ -441,8 +428,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (targetDist > punchDetectionDist || secondaryAbility || target == null)
             {
                 Vector2 areaBehindPlayer = player.Center;
-                idleFrames = true;
-                attackFrames = false;
+                currentAnimationState = AnimationState.Idle;
                 if (secondaryAbility)
                 {
                     areaBehindPlayer.X += (float)((12 + player.width / 2) * player.direction);
@@ -461,16 +447,13 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 if (targetDist < punchDetectionDist && !secondaryAbility)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
-                    secondaryAbilityFrames = false;
-
+                    currentAnimationState = AnimationState.Attack;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0f)
                         Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
 
-                    Vector2 velocity = target.position - Projectile.position;
+                    Vector2 velocity = target.position - Projectile.Center;
                     velocity.Normalize();
                     Projectile.velocity = velocity * 4f;
                     if (shootCount <= 0)
@@ -509,9 +492,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
                 if (secondaryAbility)
                 {
-                    attackFrames = false;
-                    idleFrames = false;
-                    secondaryAbilityFrames = true;
+                    currentAnimationState = AnimationState.SecondaryAbility;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0f)
                     {
@@ -537,7 +518,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                                 {
                                     shootVel.Y -= Projectile.Distance(target.position) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
                                 }
-                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X + 5f, Projectile.position.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X + 5f, Projectile.Center.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
                                 Main.projectile[projIndex].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }
@@ -550,8 +531,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     if ((!gravityAccounting && player.ownedProjectileCounts[projToShoot] == 0) || targetDist > rangedDetectionDist)     //!gravityAccounting and 0 of that Projectile cause it's usually no gravity projectiles that are just 1 shot (star finger, zipper punch), while things like knives have gravity (meant to be thrown in succession)
                     {
                         secondaryAbility = false;
-                        secondaryAbilityFrames = false;
-                        idleFrames = true;
+                        currentAnimationState = AnimationState.Idle;
                     }
                 }
             }
@@ -774,7 +754,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 for (int i = 0; i < amountOfParticles; i++)
                 {
                     int dustType = dustTypes[Main.rand.Next(0, 3)];
-                    Dust.NewDust(Projectile.position - new Vector2(Projectile.width * Projectile.spriteDirection, HalfStandHeight) + dustSpawnOffset, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
+                    Dust.NewDust(Projectile.Center - new Vector2(Projectile.width * Projectile.spriteDirection, HalfStandHeight) + dustSpawnOffset, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
                 }
             }
 
@@ -792,7 +772,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 {
                     SoundStyle spawnSound = new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/" + SpawnSoundName);
                     spawnSound.Volume = JoJoStands.ModSoundsVolume;
-                    SoundEngine.PlaySound(spawnSound, Projectile.position);
+                    SoundEngine.PlaySound(spawnSound, Projectile.Center);
                     playedSpawnSound = true;
                 }
             }
@@ -947,7 +927,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             for (int i = 0; i < amountOfParticles; i++)
             {
                 int dustType = dustTypes[Main.rand.Next(0, 3)];
-                Dust.NewDust(Projectile.position - new Vector2(Projectile.width * Projectile.spriteDirection, HalfStandHeight) + dustSpawnOffset, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
+                Dust.NewDust(Projectile.Center - new Vector2(Projectile.width * Projectile.spriteDirection, HalfStandHeight) + dustSpawnOffset, Projectile.width, HalfStandHeight * 2, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
             }
 
             StandKillEffects();
@@ -973,9 +953,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void SendExtraAI(BinaryWriter writer)
         {
-            writer.Write(idleFrames);
-            writer.Write(attackFrames);
-            writer.Write(secondaryAbilityFrames);
+            writer.Write((byte)currentAnimationState);
             writer.Write(playerHasAbilityCooldown);
             writer.Write(shootCount);
             writer.Write(Projectile.spriteDirection);
@@ -987,9 +965,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
-            idleFrames = reader.ReadBoolean();
-            attackFrames = reader.ReadBoolean();
-            secondaryAbilityFrames = reader.ReadBoolean();
+            currentAnimationState = (AnimationState)reader.ReadByte();
             playerHasAbilityCooldown = reader.ReadBoolean();
             shootCount = reader.ReadInt32();
             Projectile.spriteDirection = reader.ReadInt32();
@@ -1083,7 +1059,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 if (npc.boss)       //is gonna try to detect bosses over anything
                                 {
@@ -1106,7 +1082,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < closestDistance && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance < closestDistance && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 closestDistance = distance;
@@ -1122,7 +1098,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance > farthestDistance && distance < maxDetectionRange && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance > farthestDistance && distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 farthestDistance = distance;
@@ -1138,7 +1114,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && npc.life < leasthealth && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance < maxDetectionRange && npc.life < leasthealth && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 leasthealth = npc.life;
@@ -1154,7 +1130,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 mosthealth = npc.life;
@@ -1185,7 +1161,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 if (npc.boss)       //is gonna try to detect bosses over anything
                                 {
@@ -1208,7 +1184,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < closestDistance && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance < closestDistance && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 closestDistance = distance;
@@ -1224,7 +1200,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance > farthestDistance && distance < maxDetectionRange && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance > farthestDistance && distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 farthestDistance = distance;
@@ -1240,7 +1216,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && npc.life < leasthealth && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance < maxDetectionRange && npc.life < leasthealth && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 leasthealth = npc.life;
@@ -1256,7 +1232,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         if (npc.active && npc.CanBeChasedBy(this, false))
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 mosthealth = npc.life;
@@ -1355,9 +1331,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (loopCertainFrames)
             {
                 if (Projectile.frame >= loopFrameEnd)
-                {
                     Projectile.frame = loopFrameStart;
-                }
             }
         }
     }

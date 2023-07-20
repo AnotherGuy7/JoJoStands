@@ -54,7 +54,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     timestopStartDelay = 120;
                 else
                 {
-                    SoundStyle zawarudo = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/TheWorld");
+                    SoundStyle zawarudo = TheWorldStandFinal.TheWorldTimestopSound;
                     zawarudo.Volume = JoJoStands.ModSoundsVolume;
                     SoundEngine.PlaySound(zawarudo, Projectile.position);
                     timestopStartDelay = 1;
@@ -73,8 +73,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (timestopPoseTimer > 0)
             {
                 timestopPoseTimer--;
-                idleFrames = false;
-                attackFrames = false;
                 abilityPose = true;
                 Main.mouseLeft = false;
                 Main.mouseRight = false;
@@ -93,9 +91,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
                     StayBehind();
                 }
@@ -104,6 +102,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             {
                 BasicPunchAI();
             }
+            if (abilityPose)
+                currentAnimationState = AnimationState.Special;
         }
 
         public override void SendExtraStates(BinaryWriter writer)
@@ -118,28 +118,22 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (abilityPose)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("AbilityPose");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Special)
+                PlayAnimation("AbiliyPose");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -155,18 +149,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 else
                     AnimateStand(animationName, 2, 30, true);
             }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "AbilityPose")
-            {
+            else if (animationName == "AbilityPose")
                 AnimateStand(animationName, 1, 10, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
     }
 }

@@ -53,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 remoteMode = true;
             if (Projectile.ai[0] == 2f)
                 returnToPlayer = true;
-            idleFrames = true;
+            currentAnimationState = AnimationState.Idle;
         }
 
         public override void AI()
@@ -69,7 +69,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 actChangeCooldown--;
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
             if (remoteMode)
@@ -78,9 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             mouseControlled = false;
             Projectile.tileCollide = true;
-            float controlRange = ManualRange;
-            if (remoteMode)
-                controlRange = RemoteRange;
+            float controlRange = remoteMode ? RemoteRange : ManualRange;
             if (mPlayer.usedEctoPearl)
                 controlRange *= 1.5f;
             controlRange += mPlayer.standRangeBoosts;
@@ -94,7 +91,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
                 if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] == 0 && !returnToPlayer && tailUseTimer == 0 && !returnTail && shootCount <= 0)
                 {
@@ -127,27 +124,32 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     Main.projectile[projIndex].netUpdate = true;
                     Projectile.netUpdate = true;
                 }
-                if (!attackFrames && !returnToPlayer && !returnTail)
+                if (!attacking && !returnToPlayer && !returnTail)
                     StayBehind();
 
                 if (mPlayer.echoesTailTip != -1 && tailUseTimer == 0)
                 {
                     if (Main.mouseRight && Projectile.owner == Main.myPlayer && !remoteMode && !returnToPlayer && !returnTail)
                     {
-                        if (Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage != 2)
+                        int echoesTailTipStage = Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage;
+                        if (echoesTailTipStage != 2)
                         {
                             shootCount = 30;
                             Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage = 2;
+                            echoesTailTipStage = 2;
                         }
-                        if (Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 2 && shootCount == 0 && Vector2.Distance(Projectile.Center, Main.projectile[mPlayer.echoesTailTip].Center) <= 1200f)
+                        if (echoesTailTipStage == 2 && shootCount == 0)
                         {
-                            shootCount = 30;
-                            returnTail = true;
-                        }
-                        if (Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 2 && shootCount == 0 && Vector2.Distance(Projectile.Center, Main.projectile[mPlayer.echoesTailTip].Center) > 1200f)
-                        {
-                            shootCount = 30;
-                            Main.NewText("The tip is out of reach!");
+                            if (Vector2.Distance(Projectile.Center, Main.projectile[mPlayer.echoesTailTip].Center) <= 75f * 16f)
+                            {
+                                shootCount = 30;
+                                returnTail = true;
+                            }
+                            else
+                            {
+                                shootCount = 30;
+                                Main.NewText("The tip is out of reach!");
+                            }
                         }
                     }
                 }
@@ -166,6 +168,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         mPlayer.standControlStyle = MyPlayer.StandControlStyle.Manual;
                     }
                 }
+                if (tailUseTimer > 0)
+                    currentAnimationState = AnimationState.SecondaryAbility;
 
                 if (SecondSpecialKeyPressed(false) && mPlayer.echoesTier >= 3 && actChangeCooldown <= 0 && !evolve && Projectile.owner == Main.myPlayer)
                 {
@@ -191,8 +195,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing)
                 {
-                    attackFrames = true;
                     PlayPunchSound();
+                    currentAnimationState = AnimationState.Attack;
                     if (shootCount <= 0)
                     {
                         shootCount += newPunchTime;
@@ -212,20 +216,25 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 {
                     if (Main.mouseRight && Projectile.owner == Main.myPlayer && !remoteMode && !returnToPlayer && !returnTail)
                     {
-                        if (Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage != 2)
+                        int echoesTailTipStage = Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage;
+                        if (echoesTailTipStage != 2)
                         {
                             shootCount = 30;
                             Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage = 2;
+                            echoesTailTipStage = 2;
                         }
-                        if (Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 2 && shootCount == 0 && Vector2.Distance(Projectile.Center, Main.projectile[mPlayer.echoesTailTip].Center) <= 1200f)
+                        if (echoesTailTipStage == 2 && shootCount == 0)
                         {
-                            shootCount = 30;
-                            returnTail = true;
-                        }
-                        if (Main.projectile[mPlayer.echoesTailTip].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipStage == 2 && shootCount == 0 && Vector2.Distance(Projectile.Center, Main.projectile[mPlayer.echoesTailTip].Center) > 1200f)
-                        {
-                            shootCount = 30;
-                            Main.NewText("The tip is out of reach!");
+                            if (Vector2.Distance(Projectile.Center, Main.projectile[mPlayer.echoesTailTip].Center) <= 75f * 16f)
+                            {
+                                shootCount = 30;
+                                returnTail = true;
+                            }
+                            else
+                            {
+                                shootCount = 30;
+                                Main.NewText("The tip is out of reach!");
+                            }
                         }
                     }
                 }
@@ -245,10 +254,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                 }
                 if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
-                {
-                    attackFrames = false;
-                    idleFrames = true;
-                }
+                    currentAnimationState = AnimationState.Idle;
+                if (tailUseTimer > 0)
+                    currentAnimationState = AnimationState.SecondaryAbility;
                 if (!mouseControlled)
                     MovementAI(Projectile.Center + new Vector2(100f * Projectile.spriteDirection, 0f), 0f);
 
@@ -316,7 +324,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 evolve = true;
                 Projectile.Kill();
             }
-
         }
 
         private void MovementAI(Vector2 target, float speed)
@@ -335,31 +342,22 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override void SelectAnimation()
         {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
-            }
-            if (idleFrames)
-            {
-                attackFrames = false;
-                PlayAnimation("Idle");
-            }
-            if (mPlayer.posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Pose");
-            }
-            if (tailUseTimer > 0)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Shoot");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
 
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
+                PlayAnimation("Pose");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
+                PlayAnimation("ThreeFreeze");
         }
 
         public override void PlayAnimation(string animationName)
@@ -371,22 +369,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "EchoesACT2_" + pathAddition + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
-            if (animationName == "Shoot")
-            {
+            else if (animationName == "Shoot")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
+
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(tailUseTimer);

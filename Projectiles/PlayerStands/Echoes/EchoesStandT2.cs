@@ -51,7 +51,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 remoteMode = true;
             if (Projectile.ai[0] == 2f)
                 returnToPlayer = true;
-            idleFrames = true;
+            currentAnimationState = AnimationState.Idle;
         }
 
         public override void AI()
@@ -97,7 +97,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && rightClickCooldown <= 0 && !targetFound && !returnToPlayer) //right-click ability activation
                 {
@@ -172,7 +172,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                     rightClickCooldown += 90;
                 }
-                if (!attackFrames && !returnToPlayer)
+                if (!attacking && !returnToPlayer)
                     StayBehind();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
@@ -194,7 +194,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                     if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing)
                     {
-                        attackFrames = true;
+                        currentAnimationState = AnimationState.Attack;
                         PlayPunchSound();
                         if (shootCount <= 0)
                         {
@@ -211,10 +211,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         }
                     }
                     if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
-                    {
-                        attackFrames = false;
-                        idleFrames = true;
-                    }
+                        currentAnimationState = AnimationState.Idle;
                     if (!mouseControlled)
                         MovementAI(Projectile.Center + new Vector2(100f * Projectile.spriteDirection, 0f), 0f);
 
@@ -328,45 +325,33 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override void SelectAnimation()
         {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (mPlayer.posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-
             if (Main.netMode != NetmodeID.Server)
                 standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "EchoesACT1_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
         public override void SendExtraStates(BinaryWriter writer)
         {

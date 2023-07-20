@@ -21,11 +21,22 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override string PoseSoundName => "SilverChariot";
         public override string SpawnSoundName => "Silver Chariot";
         public override StandAttackType StandType => StandAttackType.Melee;
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
         private const int AfterImagesLimit = 5;
 
         private bool parryFrames = false;
-        private bool Shirtless = false;
+        private bool shirtless = false;
         private float punchMovementSpeed = 5f;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            Secondary,
+            Parry,
+            Pose
+        }
 
         public override void AI()
         {
@@ -40,36 +51,29 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            mPlayer.silverChariotShirtless = Shirtless;
-
-            if (secondaryAbilityFrames || parryFrames)
+            mPlayer.silverChariotShirtless = shirtless;
+            if (secondaryAbility || parryFrames)
             {
                 if (mouseX > player.position.X)
                     player.direction = 1;
-                if (mouseX < player.position.X)
+                else
                     player.direction = -1;
             }
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && !secondaryAbilityFrames && Projectile.owner == Main.myPlayer)
-                {
+                if (Main.mouseLeft && !secondaryAbility && Projectile.owner == Main.myPlayer)
                     Punch(punchMovementSpeed);
-                }
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                    {
-                        idleFrames = true;
-                        attackFrames = false;
-                    }
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (Main.mouseRight && !attackFrames && Projectile.owner == Main.myPlayer)
+                if (Main.mouseRight && !attacking && Projectile.owner == Main.myPlayer)
                 {
-                    idleFrames = false;
-                    attackFrames = false;
-                    secondaryAbilityFrames = true;
+                    secondaryAbility = true;
                     Projectile.netUpdate = true;
+                    currentAnimationState = AnimationState.Secondary;
                     Rectangle parryRectangle = new Rectangle((int)Projectile.Center.X + (4 * Projectile.direction), (int)Projectile.Center.Y - 29, 16, 54);
                     for (int p = 0; p < Main.maxProjectiles; p++)
                     {
@@ -79,7 +83,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                             if (parryRectangle.Intersects(otherProj.Hitbox) && otherProj.type != Projectile.type && !otherProj.friendly && !otherProj.GetGlobalProjectile<JoJoGlobalProjectile>().exceptionForSCParry)
                             {
                                 parryFrames = true;
-                                secondaryAbilityFrames = false;
+                                secondaryAbility = false;
                                 otherProj.owner = Projectile.owner;
                                 otherProj.damage += (int)(otherProj.damage * mPlayer.standDamageBoosts) - otherProj.damage;
                                 otherProj.damage *= 2;
@@ -100,6 +104,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         {
                             if (!npc.townNPC && !npc.friendly && !npc.immortal && !npc.hide && parryRectangle.Intersects(npc.Hitbox))
                             {
+                                parryFrames = true;
+                                secondaryAbility = false;
                                 int damage = (int)(npc.damage * 2 * mPlayer.standDamageBoosts);
                                 NPC.HitInfo hitInfo = new NPC.HitInfo()
                                 {
@@ -109,8 +115,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                                 };
                                 npc.StrikeNPC(hitInfo);
                                 SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 10, 2, damage, player.direction);
-                                secondaryAbilityFrames = false;
-                                parryFrames = true;
+
                                 SoundStyle npcHit4 = SoundID.NPCHit4;
                                 npcHit4.Pitch = Main.rand.Next(4, 6 + 1) / 10f;
                                 SoundEngine.PlaySound(npcHit4, Projectile.Center);
@@ -120,10 +125,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     }
                 }
                 if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
-                    secondaryAbilityFrames = false;
-                if (!attackFrames && !parryFrames)
+                    secondaryAbility = false;
+                if (!attacking && !parryFrames)
                 {
-                    if (!secondaryAbilityFrames)
+                    if (!secondaryAbility)
                         StayBehind();
                     else
                         GoInFront();
@@ -131,8 +136,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
                 if (SpecialKeyPressed())
                 {
-                    Shirtless = !Shirtless;
-                    if (Shirtless)
+                    shirtless = !shirtless;
+                    if (shirtless)
                     {
                         punchMovementSpeed = 7.5f;
                         if (!player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] == 0)
@@ -146,129 +151,76 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                         }
                     }
                     else
-                    {
                         punchMovementSpeed = 5f;
-                    }
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }
+
+            if (parryFrames)
+                currentAnimationState = AnimationState.Parry;
         }
 
         public override void SelectAnimation()
         {
-            if (parryFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                attackFrames = false;
-                secondaryAbilityFrames = false;
-                PlayAnimation("Parry");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (attackFrames)
-            {
-                idleFrames = false;
-                PlayAnimation("Attack");
-            }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Secondary)
                 PlayAnimation("Secondary");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Parry)
+                PlayAnimation("Parry");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void AnimationCompleted(string animationName)
         {
-            if (animationName == "Parry")
+            if (animationName == "Parry" || animationName == "ShirtlessParry")
             {
-                idleFrames = true;
-                parryFrames = false;
-            }
-            if (animationName == "ShirtlessParry")
-            {
-                idleFrames = true;
+                currentAnimationState = AnimationState.Idle;
                 parryFrames = false;
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
-            string pathAddition = "";
-            if (Shirtless)
-                pathAddition = "Shirtless_";
-
+            string pathAddition = shirtless ? "Shirtless_" : string.Empty;
             if (Main.netMode != NetmodeID.Server)
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/SilverChariot/SilverChariot_" + pathAddition + animationName);
 
-            if (!Shirtless)
-            {
-                if (animationName == "Idle")
-                {
-                    AnimateStand(animationName, 4, 30, true);
-                }
-                if (animationName == "Attack")
-                {
-                    AnimateStand(animationName, 5, newPunchTime, true);
-                }
-                if (animationName == "Secondary")
-                {
-                    AnimateStand(animationName, 1, 1, true);
-                }
-                if (animationName == "Parry")
-                {
-                    AnimateStand(animationName, 6, 3, false);
-                }
-                if (animationName == "Pose")
-                {
-                    AnimateStand(animationName, 1, 10, true);
-                }
-            }
-            else
-            {
-                if (animationName == "Idle")
-                {
-                    AnimateStand("Shirtless" + animationName, 4, 30, true);
-                }
-                if (animationName == "Attack")
-                {
-                    AnimateStand("Shirtless" + animationName, 5, newPunchTime, true);
-                }
-                if (animationName == "Secondary")
-                {
-                    AnimateStand("Shirtless" + animationName, 1, 1, true);
-                }
-                if (animationName == "Parry")
-                {
-                    AnimateStand("Shirtless" + animationName, 6, 3, false);
-                }
-                if (animationName == "Pose")
-                {
-                    AnimateStand(animationName, 1, 10, true);
-                }
-            }
+            if (animationName == "Idle")
+                AnimateStand(animationName, 4, 30, true);
+            else if (animationName == "Attack")
+                AnimateStand(animationName, 5, newPunchTime, true);
+            else if (animationName == "Secondary")
+                AnimateStand(animationName, 1, 1, true);
+            else if (animationName == "Parry")
+                AnimateStand(animationName, 6, 3, false);
+            else if (animationName == "Pose")
+                AnimateStand(animationName, 1, 10, true);
         }
+
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(parryFrames);
-            writer.Write(Shirtless);
+            writer.Write(shirtless);
         }
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             parryFrames = reader.ReadBoolean();
-            Shirtless = reader.ReadBoolean();
+            shirtless = reader.ReadBoolean();
         }
     }
 }

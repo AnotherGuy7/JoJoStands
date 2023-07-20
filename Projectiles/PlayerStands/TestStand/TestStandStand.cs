@@ -15,7 +15,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private int timestopPoseTimer = 0;
-        private bool attacking = false;
 
         /*ripple effect info
         private int rippleCount = 3;
@@ -52,8 +51,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             if (timestopPoseTimer > 0)
             {
                 timestopPoseTimer--;
-                idleFrames = false;
-                attacking = false;
                 Projectile.frame = 6;
                 Main.mouseLeft = false;
                 Main.mouseRight = false;
@@ -63,23 +60,15 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
+                if (player.whoAmI == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                    {
+                    if (Main.mouseLeft)
+                        Punch();
+                    else
                         attacking = false;
-                        currentAnimationState = StandClass.AnimationState.Attack;
-                    }
                 }
                 if (!attacking)
-                {
                     StayBehind();
-                    currentAnimationState = StandClass.AnimationState.Idle;
-                }
                 /*i
                 }f (rippleEffectTimer <= 0)
                 {
@@ -100,16 +89,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                 Projectile.frame = 0;
                 Projectile.frameCounter = 0;
                 oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
 
             if (currentAnimationState == StandClass.AnimationState.Idle)
-            {
                 PlayAnimation("Idle");
-            }
             else if (currentAnimationState == StandClass.AnimationState.Attack)
-            {
                 PlayAnimation("Attack");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -118,13 +104,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TestStand/TestStand_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 2, 30, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
         }
     }
 }

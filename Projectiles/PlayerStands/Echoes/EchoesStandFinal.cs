@@ -23,6 +23,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override Vector2 StandOffset => new Vector2(10, 0);
         public override Vector2 ManualIdleHoverOffset => new Vector2(0, -10);
         public override StandAttackType StandType => StandAttackType.Melee;
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
 
         private const int ActNumber = 3;
         private int targetPlayer = -1;
@@ -36,11 +38,19 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private bool playedThreeFreezeThudSound = false;
         private bool threeFreezeTargetFound = false;
 
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            ThreeFreeze,
+            Pose
+        }
+
         public override void ExtraSpawnEffects()
         {
             if (Projectile.ai[0] == 2f)
                 returnToPlayer = true;
-            idleFrames = true;
+            currentAnimationState = AnimationState.Idle;
         }
 
         public override void AI()
@@ -69,6 +79,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     player.direction = 1;
                 else
                     player.direction = -1;
+                currentAnimationState = AnimationState.ThreeFreeze;
             }
             if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
                 threeFreeze = false;
@@ -82,9 +93,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                     StayBehind();
                 if (threeFreeze)
                     GoInFront();
@@ -94,7 +105,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     playedThreeFreezeThudSound = false;
                 }
 
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing && !attackFrames) //3freeze activation
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing && !attacking)      //3freeze activation
                 {
                     threeFreeze = true;
                     Projectile.frame = 0;
@@ -229,28 +240,22 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
-            if (threeFreeze)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.ThreeFreeze)
                 PlayAnimation("ThreeFreeze");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -259,22 +264,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "EchoesACT3_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
-            if (animationName == "ThreeFreeze")
-            {
+            else if (animationName == "ThreeFreeze")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
+
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(targetNPC);

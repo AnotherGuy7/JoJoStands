@@ -48,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility)
                 {
                     Punch();
                     if (Main.rand.NextBool(7))
@@ -67,11 +67,11 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
-                    if (!secondaryAbilityFrames)
+                    if (!secondaryAbility)
                     {
                         StayBehind();
                         Projectile.direction = Projectile.spriteDirection = player.direction;
@@ -86,7 +86,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                                 Projectile.direction = -1;
                             Projectile.spriteDirection = Projectile.direction;
                         }
-                        secondaryAbilityFrames = false;
+                        secondaryAbility = false;
                     }
                 }
                 if (bubbleTargetIndex != -1 && (Main.npc[bubbleTargetIndex] == null || !Main.npc[bubbleTargetIndex].active || SpecialKeyPressed(false)))
@@ -94,9 +94,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
 
                 if (Main.mouseRight && !playerHasAbilityCooldown && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
-                    idleFrames = false;
-                    attackFrames = false;
-                    secondaryAbilityFrames = true;
+                    secondaryAbility = true;
+                    currentAnimationState = AnimationState.SecondaryAbility;
                     highVelocityBubbleChargeUpTimer++;
                     if (highVelocityBubbleChargeUpTimer >= 60)
                     {
@@ -199,28 +198,22 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
-            }
-            if (idleFrames)
-            {
-                PlayAnimation("Idle");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
 
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Pose");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
-            }
+            else if (currentAnimationState == AnimationState.Pose)
+                PlayAnimation("Pose");
         }
 
         public override void PlayAnimation(string animationName)
@@ -229,21 +222,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/SoftAndWetGoBeyond/SoftAndWetGoBeyond_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 5, 6, true, 0, 3);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 2, true);
-            }
         }
     }
 }

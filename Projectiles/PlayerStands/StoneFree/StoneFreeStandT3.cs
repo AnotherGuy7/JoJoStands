@@ -21,6 +21,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         public override string PoseSoundName => "StoneFree";
         public override string SpawnSoundName => "Stone Free";
         public override StandAttackType StandType => StandAttackType.Melee;
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
 
         private bool stringConnectorPlaced = false;
         private Vector2 firstStringPos;
@@ -33,6 +35,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         private const int Bind = 2;
         private const int TiedTogetherAbility = 3;
         private const float MaxTrapDistance = 35f * 16f;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            ExtendedBarrage,
+            StringHold,
+            Pose
+        }
 
         public override void AI()
         {
@@ -58,11 +69,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         lifeTimeMultiplier = 1.8f;
                     }
                     Punch(punchLifeTimeMultiplier: lifeTimeMultiplier);
+                    if (extendedBarrage)
+                        currentAnimationState = AnimationState.ExtendedBarrage;
                 }
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && shootCount <= 0 && !playerHasAbilityCooldown)
                 {
@@ -107,6 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                 holdingStringNPC = player.ownedProjectileCounts[ModContent.ProjectileType<StoneFreeTiedTogetherString>()] > 0;
                 if (holdingStringNPC)
                 {
+                    currentAnimationState = AnimationState.StringHold;
                     if (Main.projectile[heldStringProjectileIndex].active)
                     {
                         float direction = player.Center.X - Main.projectile[heldStringProjectileIndex].Center.X;
@@ -143,10 +157,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         StoneFreeAbilityWheel.CloseAbilityWheel();
                 }
 
-                if (!attackFrames && !holdingStringNPC)
-                {
+                if (!attacking && !holdingStringNPC)
                     StayBehind();
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
@@ -172,28 +184,24 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                if (!extendedBarrage)
-                    PlayAnimation("Attack");
-                else
-                    PlayAnimation("ExtendedAttack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (holdingStringNPC)
-            {
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.ExtendedBarrage)
+                PlayAnimation("ExtendedAttack");
+            else if (currentAnimationState == AnimationState.StringHold)
                 PlayAnimation("StringHold");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -202,25 +210,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "ExtendedAttack")
-            {
+            else if (animationName == "ExtendedAttack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "StringHold")
-            {
+            else if (animationName == "StringHold")
                 AnimateStand(animationName, 1, 40, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 60, true);
-            }
         }
     }
 }

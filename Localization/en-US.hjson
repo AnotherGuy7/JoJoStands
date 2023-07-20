@@ -1417,7 +1417,7 @@ Mods: {
 					Left-click to punch enemies at a really fast rate and right-click to flick a bullet!
 					Special: Switch to Restoration Mode
 					Second Special: Enter an unstoppable rage!
-					Left-click in Restoration Mode to perform a restorative barrage
+					Left-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state.
 					Right-click on an NPC or player while in Restoration Mode to restore them to their natural states.
 					Right-clicking elsewhere will restore the states of all other impacted objects.
 					Punching tiles while in Resotration Mode breaks the tiles.
@@ -1433,6 +1433,7 @@ Mods: {
 					Left-click to punch enemies at a really fast rate!
 					Special: Switch to Restoration Mode
 					Left-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state.
+					Items of rarity Orange and above cannot be uncrafted at this tier.
 					Used in Stand Slot
 					'''
 			}
@@ -1443,9 +1444,10 @@ Mods: {
 					'''
 					Left-click to punch enemies at a really fast rate and right-click to flick a bullet!
 					Special: Switch to Restoration Mode
-					Left-click in Restoration Mode to perform a restorative barrage
+					Left-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state.
 					Right-click in restoration mode to restore the states of all impacted objects.
 					Punching tiles while in Resotration Mode breaks the tiles.
+					Items of rarity Light Red and above cannot be uncrafted at this tier.
 					Used in Stand Slot
 					'''
 			}
@@ -1457,11 +1459,12 @@ Mods: {
 					Left-click to punch enemies at a really fast rate and right-click to flick a bullet!
 					Special: Switch to Restoration Mode
 					Second Special: Enter an unstoppable rage!
-					Left-click in Restoration Mode to perform a restorative barrage
+					Left-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state.
 					Right-click on an NPC or player while in Restoration Mode to restore them to their natural states.
 					Right-clicking elsewhere will restore the states of all other impacted objects.
 					Punching tiles while in Resotration Mode breaks the tiles.
 					While in a Rampage, restorations will become improper, turning restored enemies to stone.
+					Items of rarity Lime and above cannot be uncrafted at this tier.
 					Used in Stand Slot
 					'''
 			}

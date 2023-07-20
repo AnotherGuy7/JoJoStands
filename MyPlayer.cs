@@ -273,8 +273,11 @@ namespace JoJoStands
             Part4
         }
 
-        public void ItemBreak(Item item)
+        public void ItemBreak(Item item, int maxRarity)
         {
+            if (item.rare >= maxRarity)
+                return;
+
             if (crazyDiamonUncraftCooldown <= 0)
             {
                 List<Recipe> howManyRecipesHere = new List<Recipe>();

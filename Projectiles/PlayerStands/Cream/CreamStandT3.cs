@@ -20,12 +20,24 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override string SpawnSoundName => "Cream";
         public override Vector2 StandOffset => Vector2.Zero;
         public override StandAttackType StandType => StandAttackType.Melee;
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
 
         private Vector2 velocityAddition;
         private Vector2 velocity;
-        private int framechangecounter = 0;
+        private int creamCustomFrameCounter = 0;
         private int dashproj = 0;
         private bool dashprojspawn = false;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            ExposedIdle,
+            Transform,
+            TransformToVoid,
+            Pose
+        }
 
         public override void AI()
         {
@@ -47,8 +59,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
+                    currentAnimationState = AnimationState.Attack;
                     Projectile.netUpdate = true;
                     float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
                     Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
@@ -64,13 +75,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     velocityAddition *= 5f + mPlayer.standTier;
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                     if (mouseDistance > 40f)
-                    {
                         Projectile.velocity = player.velocity + velocityAddition;
-                    }
-                    if (mouseDistance <= 40f)
-                    {
+                    else
                         Projectile.velocity = Vector2.Zero;
-                    }
                     if (shootCount <= 0 && Projectile.frame == 2)
                     {
                         shootCount += newPunchTime / 2;
@@ -89,9 +96,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
                     StayBehind();
                 }
@@ -106,8 +113,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     mPlayer.creamFrame = 0;
                     if (mPlayer.creamExposedMode)
                         mPlayer.creamExposedToVoid = true;
-
-                    if (!mPlayer.creamExposedMode)
+                    else
                     {
                         mPlayer.creamNormalToExposed = true;
                         mPlayer.creamNormalToVoid = true;
@@ -189,7 +195,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             if (mPlayer.creamExposedToVoid)
             {
-                PlayAnimation("Transform2");
+                PlayAnimation("TransformToVoid");
                 if (mPlayer.creamFrame >= 7 && !mPlayer.creamAnimationReverse)
                 {
                     mPlayer.creamExposedToVoid = false;
@@ -199,22 +205,25 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     shootVelocity *= 5f;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, shootVelocity, ModContent.ProjectileType<Void>(), (int)((PunchDamage * 0.5f) * mPlayer.standDamageBoosts), 6f, player.whoAmI);
                 }
-                if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse && mPlayer.creamNormalToExposed)
+                if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse)
                 {
-                    mPlayer.creamNormalToExposed = false;
-                    mPlayer.creamAnimationReverse = false;
-                }
-                if (mPlayer.creamFrame <= 0 && mPlayer.creamAnimationReverse && mPlayer.creamExposedToVoid)
-                {
-                    mPlayer.creamExposedToVoid = false;
-                    if (!mPlayer.creamNormalToVoid)
-                        mPlayer.creamAnimationReverse = false;
-
-                    if (mPlayer.creamNormalToVoid)
+                    if (mPlayer.creamNormalToExposed)
                     {
-                        mPlayer.creamFrame = 5;
-                        mPlayer.creamNormalToExposed = true;
-                        mPlayer.creamNormalToVoid = false;
+                        mPlayer.creamNormalToExposed = false;
+                        mPlayer.creamAnimationReverse = false;
+                    }
+                    if (mPlayer.creamExposedToVoid)
+                    {
+                        mPlayer.creamExposedToVoid = false;
+                        if (!mPlayer.creamNormalToVoid)
+                            mPlayer.creamAnimationReverse = false;
+
+                        if (mPlayer.creamNormalToVoid)
+                        {
+                            mPlayer.creamFrame = 5;
+                            mPlayer.creamNormalToExposed = true;
+                            mPlayer.creamNormalToVoid = false;
+                        }
                     }
                 }
             }
@@ -231,26 +240,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             if (mPlayer.creamExposedToVoid || mPlayer.creamNormalToExposed)
             {
+                creamCustomFrameCounter += 1;
+                if (creamCustomFrameCounter >= 15)
+                {
+                    mPlayer.creamFrame += mPlayer.creamAnimationReverse ? -1 : 1;
+                    creamCustomFrameCounter = 0;
+                }
                 Projectile.frame = mPlayer.creamFrame;
-                if (mPlayer.creamAnimationReverse)
-                {
-                    framechangecounter += 1;
-                    if (framechangecounter == 15)
-                    {
-                        mPlayer.creamFrame -= 1;
-                        framechangecounter = 0;
-                    }
-                }
-                if (!mPlayer.creamAnimationReverse)
-                {
-                    framechangecounter += 1;
-                    if (framechangecounter == 15)
-                    {
-                        mPlayer.creamFrame += 1;
-                        framechangecounter = 0;
-                    }
-                }
             }
+            if (mPlayer.creamNormalToExposed)
+                currentAnimationState = AnimationState.Transform;
+            else if (mPlayer.creamExposedToVoid)
+                currentAnimationState = AnimationState.TransformToVoid;
+            else if (mPlayer.creamExposedMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid || mPlayer.creamDash)
+                currentAnimationState = AnimationState.ExposedIdle;
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
             {
                 BasicPunchAI();
@@ -293,28 +296,28 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override void SelectAnimation()
         {
+            if (oldAnimationState != currentAnimationState)
+            {
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
+            }
+
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (attackFrames && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
-            {
-                idleFrames = false;
-                PlayAnimation("Attack");
-            }
-            if (idleFrames && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
-            {
-                attackFrames = false;
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamExposedMode)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
-            if (mPlayer.creamExposedMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid || mPlayer.creamDash)
-            {
-                PlayAnimation("Idle2");
-            }
+            else if (currentAnimationState == AnimationState.Transform)
+                PlayAnimation("Transform");
+            else if (currentAnimationState == AnimationState.TransformToVoid)
+                PlayAnimation("TransformToVoid");
+            else if (currentAnimationState == AnimationState.ExposedIdle)
+                PlayAnimation("ExposedIdle");
         }
 
         public override void PlayAnimation(string animationName)
@@ -323,29 +326,17 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Cream/Cream_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 30, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime / 2, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 2, true);
-            }
-            if (animationName == "Transform2")
-            {
+            else if (animationName == "TransformToVoid")
                 AnimateStand(animationName, 8, 99999, true);
-            }
-            if (animationName == "Transform")
-            {
+            else if (animationName == "Transform")
                 AnimateStand(animationName, 6, 9999, true);
-            }
-            if (animationName == "Idle2")
-            {
+            else if (animationName == "ExposedIdle")
                 AnimateStand(animationName, 4, 30, true);
-            }
         }
 
         public override void StandKillEffects()

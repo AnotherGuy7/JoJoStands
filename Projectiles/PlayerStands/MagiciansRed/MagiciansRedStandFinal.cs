@@ -24,6 +24,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         private int ChanceToDebuff = 60;
         private int DebuffDuration = 8 * 60;
         private int secondRingTimer = 0;
+        public static readonly SoundStyle RedBindSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RedBind");
+        public static readonly SoundStyle CrossfireHurricaneSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/CrossfireHurricaneSpecial");
 
         public override void AI()
         {
@@ -38,24 +40,23 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!attackFrames)
+            if (!attacking)
                 StayBehind();
             else
                 GoInFront();
 
-            bool redBindActive = secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<RedBind>()] != 0;
+            secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<RedBind>()] != 0;
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !redBindActive)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility)
                 {
                     if (!mPlayer.canStandBasicAttack)
                     {
-                        idleFrames = true;
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                         return;
                     }
 
-                    attackFrames = true;
+                    currentAnimationState = AnimationState.Attack;
                     Projectile.netUpdate = true;
                     if (shootCount <= 0)
                     {
@@ -74,17 +75,14 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                    {
-                        idleFrames = true;
-                        attackFrames = false;
-                    }
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer && !redBindActive && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                if (Main.mouseRight && Projectile.owner == Main.myPlayer && !secondaryAbility && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
-                    secondaryAbilityFrames = true;
+                    secondaryAbility = true;
                     if (JoJoStands.SoundsLoaded)
                     {
-                        SoundStyle redBind = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RedBind");
+                        SoundStyle redBind = RedBindSound;
                         redBind.Volume = JoJoStands.ModSoundsVolume;
                         SoundEngine.PlaySound(redBind, Projectile.position);
                     }
@@ -113,9 +111,9 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     }
                     if (JoJoStands.SoundsLoaded)
                     {
-                        SoundStyle crossFireHurricane = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/CrossfireHurricaneSpecial");
-                        crossFireHurricane.Volume = JoJoStands.ModSoundsVolume;
-                        SoundEngine.PlaySound(crossFireHurricane, Projectile.Center);
+                        SoundStyle crossfireHurricaneSound = CrossfireHurricaneSound;
+                        crossfireHurricaneSound.Volume = JoJoStands.ModSoundsVolume;
+                        SoundEngine.PlaySound(crossfireHurricaneSound, Projectile.Center);
                     }
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(45));
                     secondRingTimer = 1;
@@ -143,9 +141,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 NPC target = FindNearestTarget(350f);
                 if (target != null)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
-
+                    currentAnimationState = AnimationState.Attack;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.position.X < 0f)
                         Projectile.spriteDirection = Projectile.direction = -1;
@@ -173,10 +169,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     }
                 }
                 else
-                {
-                    idleFrames = true;
-                    attackFrames = false;
-                }
+                    currentAnimationState = AnimationState.Idle;
             }
 
             if (Main.rand.Next(0, 5 + 1) == 0)
@@ -189,29 +182,22 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                secondaryAbilityFrames = false;
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -220,21 +206,13 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 15, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newShootTime / 2, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 4, 15, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 2, true);
-            }
         }
     }
 }

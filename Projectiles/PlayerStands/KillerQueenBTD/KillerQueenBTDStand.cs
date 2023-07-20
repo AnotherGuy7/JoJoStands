@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             DrawOriginOffsetY = -HalfStandHeight;
             int newBubbleDamage = (int)(bubbleDamage * mPlayer.standDamageBoosts);
 
-            if (!attackFrames)
+            if (!attacking)
                 StayBehind();
             else
                 GoInFront();
@@ -375,12 +375,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 {
                     if (!mPlayer.canStandBasicAttack)
                     {
-                        idleFrames = true;
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                         return;
                     }
 
-                    attackFrames = true;
+                    currentAnimationState = AnimationState.Attack;
                     Projectile.netUpdate = true;
                     if (Projectile.frame == 4 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
                     {
@@ -401,29 +400,25 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     if (Projectile.frame >= 5)
                         Projectile.frame = 0;
                 }
-                else if (!secondaryAbilityFrames)
+                else if (!secondaryAbility)
                 {
                     if (player.whoAmI == Main.myPlayer)
-                    {
-                        idleFrames = true;
-                        attackFrames = false;
-                    }
+                        currentAnimationState = AnimationState.Idle;
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f && shootCount <= 0)
                 {
-                    secondaryAbilityFrames = true;
+                    secondaryAbility = true;
                     Projectile.ai[0] = 1f;      //to detonate all bombos
                     SoundEngine.PlaySound(kqClickSound);
                     shootCount += 45;
                 }
-                if (secondaryAbilityFrames && Projectile.ai[0] == 1f)
+                if (secondaryAbility && Projectile.ai[0] == 1f)
                 {
-                    if (Projectile.frame >= 2)
+                    currentAnimationState = AnimationState.SecondaryAbility;
+                    if (Projectile.frame >= 3)
                     {
                         Projectile.ai[0] = 0f;
-                        idleFrames = true;
-                        attackFrames = false;
-                        secondaryAbilityFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                     }
                 }
             }
@@ -432,14 +427,13 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 NPC target = FindNearestTarget(350f);
                 if (target != null)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
+                    currentAnimationState = AnimationState.Attack;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
                         Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
 
-                    if (attackFrames && Projectile.frame == 4 && shootCount <= 0)
+                    if (attacking && Projectile.frame == 4 && shootCount <= 0)
                     {
                         if (Main.myPlayer == Projectile.owner)
                         {
@@ -457,10 +451,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     }
                 }
                 else
-                {
-                    idleFrames = true;
-                    attackFrames = false;
-                }
+                    currentAnimationState = AnimationState.Idle;
             }
         }
 
@@ -496,22 +487,20 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -520,17 +509,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/KillerQueenBTD/KQBTD_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 2, 30, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 6, newShootTime / 2, false);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 4, newShootTime / 4, false);
-            }
         }
     }
 }

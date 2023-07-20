@@ -51,27 +51,23 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
+                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility)
                 {
                     Punch();
                 }
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
                     StayBehind();
                 }
-                if (!attackFrames && Projectile.owner == Main.myPlayer)
+                if (!attacking && Projectile.owner == Main.myPlayer)
                 {
                     if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && mPlayer.chosenAbility == 0)
-                    {
-                        idleFrames = false;
-                        attackFrames = false;
-                        secondaryAbilityFrames = true;
-                    }
+                        secondaryAbility = true;
 
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, player.Center);
                     bool mouseOnPlatform = TileID.Sets.Platforms[Main.tile[(int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f)].TileType];
@@ -138,11 +134,10 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         GoldExperienceAbilityWheel.CloseAbilityWheel();
                 }
 
-                if (secondaryAbilityFrames)
+                if (secondaryAbility)
                 {
-                    idleFrames = false;
-                    attackFrames = false;
                     Projectile.netUpdate = true;
+                    currentAnimationState = AnimationState.SecondaryAbility;
                     if (Projectile.frame == 8 && shootCount <= 0)
                     {
                         shootCount += newPunchTime;
@@ -155,7 +150,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<GoldExperienceBeam>(), newPunchDamage + 11, 6f, Projectile.owner);
                         Main.projectile[projIndex].netUpdate = true;
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(3));
-                        secondaryAbilityFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                     }
                 }
             }
@@ -173,29 +168,22 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                secondaryAbilityFrames = false;
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -204,21 +192,13 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/GoldExperienceRequiem/GER_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 11, 6, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 6, true);
-            }
         }
     }
 }

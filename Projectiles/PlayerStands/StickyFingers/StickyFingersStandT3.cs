@@ -45,7 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                secondaryAbility = secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] != 0;
+                secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] != 0;
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0 && !zipperAmbush)
                 {
                     Punch();
@@ -53,12 +53,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                    {
-                        attackFrames = false;
-                        idleFrames = true;
-                    }
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
                     if (!secondaryAbility)
                         StayBehind();
@@ -139,7 +136,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                         player.AddBuff(ModContent.BuffType<SurpriseAttack>(), 5 * 60);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(20));
                         if (JoJoStands.SoundsLoaded)
-                            SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                            SoundEngine.PlaySound(StickyFingersStandFinal.ZipperSound);
                     }
                 }
                 if (SpecialKeyPressed() && shootCount <= 0 && !secondaryAbility && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersTraversalZipper>()] == 0 && !zipperAmbush)
@@ -171,37 +168,28 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
         public override bool PreDrawExtras()
         {
-            if (zipperAmbush)
-                Projectile.alpha = 0;
-            else
-                Projectile.alpha = 255;
+            Projectile.alpha = zipperAmbush ? 0 : 255;
             return true;
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -210,21 +198,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 30, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 1, 10, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
     }
 }

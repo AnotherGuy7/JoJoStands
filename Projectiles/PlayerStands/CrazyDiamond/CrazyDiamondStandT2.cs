@@ -21,6 +21,17 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         public override string PoseSoundName => "CrazyDiamond";
         public override string SpawnSoundName => "Crazy Diamond";
         public override StandAttackType StandType => StandAttackType.Melee;
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            Flick,
+            Healing,
+            Pose
+        }
 
         private bool flickFrames = false;
         private bool resetFrame = false;
@@ -56,9 +67,9 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                     StayBehind();
                 if (flickFrames)
                     StayBehindWithAbility();
@@ -196,41 +207,31 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (flickFrames)
-            {
-                if (!resetFrame)
-                {
-                    resetFrame = true;
-                    Projectile.frame = 0;
-                    Projectile.frameCounter = 0;
-                }
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Flick)
                 PlayAnimation("Flick");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Healing)
+                PlayAnimation("Heal");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void AnimationCompleted(string animationName)
         {
             if (resetFrame && animationName == "Flick")
             {
-                idleFrames = true;
+                currentAnimationState = AnimationState.Idle;
                 flickFrames = false;
                 resetFrame = false;
             }
@@ -246,21 +247,13 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/CrazyDiamond", "CrazyDiamond_" + pathAddition + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Flick")
-            {
+            else if (animationName == "Flick")
                 AnimateStand(animationName, 4, 10, false);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 4, 12, true);
-            }
         }
 
         public override void SendExtraStates(BinaryWriter writer)

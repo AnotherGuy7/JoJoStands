@@ -21,9 +21,19 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override StandAttackType StandType => StandAttackType.Melee;
         public override string PoseSoundName => "OnceWeDecideToKillItsDone";
         public override string SpawnSoundName => "The Grateful Dead";
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
 
         private bool grabFrames = false;
-        private bool secondaryFrames = false;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            SecondaryAbility,
+            Grab,
+            Pose
+        }
 
         public override void AI()
         {
@@ -47,12 +57,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames && !secondaryFrames && !grabFrames)
-                {
+                if (!attacking && !secondaryAbility && !grabFrames)
                     StayBehind();
-                }
+
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && shootCount <= 0 && !grabFrames)
                 {
                     Projectile.velocity = Main.MouseWorld - Projectile.position;
@@ -69,7 +78,8 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
 
-                    secondaryFrames = true;
+                    secondaryAbility = true;
+                    currentAnimationState = AnimationState.SecondaryAbility;
                     Rectangle grabRect = new Rectangle((int)Projectile.Center.X + (40 * Projectile.direction), (int)Projectile.Center.Y - HalfStandHeight, 40, HalfStandHeight * 2);
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
@@ -94,6 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     npc.position = Projectile.position + new Vector2(5f * Projectile.direction, -(2f * npc.height) / 3f);
                     npc.velocity = Vector2.Zero;
                     npc.AddBuff(ModContent.BuffType<RapidAging>(), 2);
+                    currentAnimationState = AnimationState.Grab;
                     if (!npc.active || Vector2.Distance(player.Center, Projectile.Center) > newMaxDistance * 1.5f)
                     {
                         shootCount += 30;
@@ -103,12 +114,12 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                     Projectile.netUpdate = true;
                     LimitDistance();
                 }
-                if (!Main.mouseRight && (grabFrames || secondaryFrames) && Projectile.owner == Main.myPlayer)
+                if (!Main.mouseRight && (grabFrames || secondaryAbility) && Projectile.owner == Main.myPlayer)
                 {
                     shootCount += 30;
                     grabFrames = false;
                     Projectile.ai[0] = -1f;
-                    secondaryFrames = false;
+                    secondaryAbility = false;
                     Projectile.netUpdate = true;
                 }
             }
@@ -135,35 +146,24 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                PlayAnimation("Idle");
-            }
-            if (secondaryFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Secondary");
-            }
-            if (grabFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                secondaryFrames = false;
-                PlayAnimation("Grab");
 
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
+                PlayAnimation("Secondary");
+            else if (currentAnimationState == AnimationState.Grab)
+                PlayAnimation("Grab");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -172,25 +172,15 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 1, 1, true);
-            }
-            if (animationName == "Grab")
-            {
-                AnimateStand(animationName, 3, 12, true, 2, 2);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Grab")
+                AnimateStand(animationName, 3, 6, true, 2, 2);
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 12, true);
-            }
         }
 
     }

@@ -19,12 +19,22 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         public override string PoseSoundName => "StoneFree";
         public override string SpawnSoundName => "Stone Free";
         public override StandAttackType StandType => StandAttackType.Melee;
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
 
         private bool stringConnectorPlaced = false;
         private Vector2 firstStringPos;
         private bool extendedBarrage = false;
 
         private const float MaxTrapDistance = 30f * 16f;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            ExtendedBarrage,
+            Pose
+        }
 
         public override void AI()
         {
@@ -50,11 +60,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         lifeTimeMultiplier = 1.8f;
                     }
                     Punch(punchLifeTimeMultiplier: lifeTimeMultiplier);
+                    if (extendedBarrage)
+                        currentAnimationState = AnimationState.ExtendedBarrage;
                 }
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && shootCount <= 0)
                 {
@@ -89,7 +101,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                     extendedBarrage = !extendedBarrage;
                     Projectile.netUpdate = true;
                 }
-                if (!attackFrames)
+                if (!attacking)
                     StayBehind();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
@@ -110,24 +122,22 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                if (!extendedBarrage)
-                    PlayAnimation("Attack");
-                else
-                    PlayAnimation("ExtendedAttack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.ExtendedBarrage)
+                PlayAnimation("ExtendedAttack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -136,21 +146,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StoneFree/StoneFree_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "ExtendedAttack")
-            {
+            else if (animationName == "ExtendedAttack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 60, true);
-            }
         }
     }
 }

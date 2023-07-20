@@ -66,9 +66,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 else
                 {
                     if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                        currentAnimationState = AnimationState.Idle;
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
                     StayBehind();
                 }
@@ -79,8 +79,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 NPC target = FindNearestTarget(9f * 16f);
                 if (target != null)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
+                    currentAnimationState = AnimationState.Attack;
                     PlayPunchSound();
 
                     Vector2 velocity = (target.position + new Vector2(0f, -4f)) - Projectile.position;
@@ -112,14 +111,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                     }
                 }
                 else
-                {
-                    attackFrames = false;
-                    idleFrames = true;
-                }
-                if (target == null || (!attackFrames && idleFrames))
-                {
+                    currentAnimationState = AnimationState.Idle;
+                if (target == null || !attacking)
                     StayBehind();
-                }
             }
         }
 
@@ -141,15 +135,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
         }
 
         public override void PlayAnimation(string animationName)
@@ -158,13 +155,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
                 standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Tusk", "TuskAct4_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
         }
     }
 }
