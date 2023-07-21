@@ -90,14 +90,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing && !returnToPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft && !mPlayer.posing && !returnToPlayer)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && rightClickCooldown <= 0 && !targetFound && !returnToPlayer) //right-click ability activation
                 {
@@ -307,6 +311,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             }
             if (player.teleporting)
                 Projectile.position = player.position;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private void MovementAI(Vector2 target, float speed)

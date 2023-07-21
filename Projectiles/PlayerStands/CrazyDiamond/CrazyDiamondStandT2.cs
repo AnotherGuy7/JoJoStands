@@ -60,15 +60,20 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             mPlayer.crazyDiamondRestorationMode = restorationMode;
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !flickFrames)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft && !flickFrames)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
+
                 if (!attacking)
                     StayBehind();
                 if (flickFrames)
@@ -139,7 +144,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
                     if (Main.mouseRight && restorationEffectStartTimer <= 0 && mPlayer.crazyDiamondDestroyedTileData.Count > 0 && !playerHasAbilityCooldown && Projectile.owner == Main.myPlayer)
                     {
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/CrazyDiamondRestore"));
+                        SoundEngine.PlaySound(CrazyDiamondStandFinal.RestorationSound);
                         restorationEffectStartTimer += 180;
                         restoringObjects = true;
                     }
@@ -175,6 +180,8 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 BasicPunchAI();
             if (player.teleporting)
                 Projectile.position = player.position;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private int GetPlayerAmmo(Player player)

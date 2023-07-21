@@ -107,7 +107,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                     if (mouseX > Projectile.position.X)
                         Projectile.direction = 1;
-                    if (mouseX < Projectile.position.X)
+                    else
                         Projectile.direction = -1;
 
                     Projectile.spriteDirection = Projectile.direction;

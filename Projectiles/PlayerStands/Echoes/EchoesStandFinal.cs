@@ -86,14 +86,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !returnToPlayer)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !threeFreeze && !mPlayer.posing)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft && !threeFreeze && !mPlayer.posing)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (!attacking)
                     StayBehind();
@@ -109,6 +113,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 {
                     threeFreeze = true;
                     Projectile.frame = 0;
+                    currentAnimationState = AnimationState.ThreeFreeze;
                     bool enemyAffectedByThreeFreeze = false;
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
@@ -223,6 +228,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             if (player.teleporting)
                 Projectile.position = player.position;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void StandKillEffects()
@@ -252,10 +259,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 PlayAnimation("Idle");
             else if (currentAnimationState == AnimationState.Attack)
                 PlayAnimation("Attack");
-            else if (currentAnimationState == AnimationState.Pose)
-                PlayAnimation("Pose");
             else if (currentAnimationState == AnimationState.ThreeFreeze)
                 PlayAnimation("ThreeFreeze");
+            else if (currentAnimationState == AnimationState.Pose)
+                PlayAnimation("Pose");
         }
 
         public override void PlayAnimation(string animationName)

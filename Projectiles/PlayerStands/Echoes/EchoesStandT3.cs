@@ -29,7 +29,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         private const float RemoteRange = 75 * 16;
 
         private int tailUseTimer = 0;
-        private int holdSpecial = 0;
+        private int rightClickHoldTimer = 0;
         private int echoesTailTipType = 1;
         private int actChangeCooldown = 30;
 
@@ -84,33 +84,39 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing && !returnToPlayer && !returnTail && tailUseTimer == 0)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        currentAnimationState = AnimationState.Idle;
-                }
-                if (Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] == 0 && !returnToPlayer && tailUseTimer == 0 && !returnTail && shootCount <= 0)
-                {
-                    if (Main.mouseRight) //right-click ability 
-                        holdSpecial++;
-                    else if (Projectile.owner == Main.myPlayer && holdSpecial > 0 && holdSpecial < 60)
+                    if (Main.mouseLeft && !mPlayer.posing && !returnToPlayer && !returnTail && tailUseTimer == 0)
                     {
-                        holdSpecial = 0;
-                        shootCount = 30;
-                        echoesTailTipType++;
-                        if (echoesTailTipType >= 5)
-                            echoesTailTipType = 1;
-                        Main.NewText(EffectNames[echoesTailTipType - 1], EffectColors[echoesTailTipType - 1]);
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
+                    if (player.ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] == 0 && !returnToPlayer && tailUseTimer == 0 && !returnTail && shootCount <= 0)
+                    {
+                        if (Main.mouseRight)        //right-click ability 
+                            rightClickHoldTimer++;
+                        else if (rightClickHoldTimer > 0 && rightClickHoldTimer < 60)
+                        {
+                            rightClickHoldTimer = 0;
+                            shootCount = 30;
+                            echoesTailTipType++;
+                            if (echoesTailTipType >= 5)
+                                echoesTailTipType = 1;
 
+                            Main.NewText(EffectNames[echoesTailTipType - 1], EffectColors[echoesTailTipType - 1]);
+
+                        }
                     }
                 }
-                if (holdSpecial >= 60)
+
+                if (rightClickHoldTimer >= 60)
                 {
-                    holdSpecial = 0;
+                    rightClickHoldTimer = 0;
                     Projectile.frame = 0;
                     tailUseTimer += 60;
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
@@ -179,11 +185,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote && !returnToPlayer && !returnTail)
             {
+                rightClickHoldTimer = 0;
                 float distance = Vector2.Distance(Projectile.Center, Main.MouseWorld);
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
-                holdSpecial = 0;
                 Projectile.rotation = Projectile.velocity.X * 0.05f;
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing)
                 {
@@ -264,7 +270,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer && !returnTail)        //Automode
             {
-                holdSpecial = 0;
+                rightClickHoldTimer = 0;
                 remoteMode = false;
                 BasicPunchAI();
             }
@@ -301,7 +307,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             if (returnToPlayer)
             {
-                holdSpecial = 0;
+                rightClickHoldTimer = 0;
                 Projectile.tileCollide = false;
                 MovementAI(player.Center, 8f + player.moveSpeed * 2);
             }
@@ -309,12 +315,12 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (returnTail)
             {
                 Projectile.tileCollide = false;
-                holdSpecial = 0;
+                rightClickHoldTimer = 0;
             }
 
             if (player.teleporting)
             {
-                holdSpecial = 0;
+                rightClickHoldTimer = 0;
                 Projectile.position = player.position;
                 returnTail = false;
             }
@@ -324,6 +330,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 evolve = true;
                 Projectile.Kill();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private void MovementAI(Vector2 target, float speed)
@@ -354,10 +362,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 PlayAnimation("Idle");
             else if (currentAnimationState == AnimationState.Attack)
                 PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
+                PlayAnimation("Shoot");
             else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            else if (currentAnimationState == AnimationState.SecondaryAbility)
-                PlayAnimation("ThreeFreeze");
         }
 
         public override void PlayAnimation(string animationName)

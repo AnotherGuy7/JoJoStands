@@ -42,43 +42,44 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    if (!mPlayer.canStandBasicAttack)
-                        return;
-
-                    currentAnimationState = AnimationState.Attack;
-                    if (shootCount <= 0)
+                    if (Main.mouseLeft)
                     {
-                        shootCount += newShootTime;
-                        int direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
+                        if (!mPlayer.canStandBasicAttack)
+                            return;
 
-                        float numberProjectiles = 3;        //incraeses by 1 each tier
-                        float rotation = MathHelper.ToRadians(15);      //increases by 5 every tier
-                        float randomSpeedOffset = (100f + Main.rand.NextFloat(-6f, 6f)) / 100f;
-                        for (int i = 0; i < numberProjectiles; i++)
+                        attacking = true;
+                        currentAnimationState = AnimationState.Attack;
+                        if (shootCount <= 0)
                         {
-                            Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                            perturbedSpeed *= randomSpeedOffset;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 2f, player.whoAmI);
-                            Main.projectile[projIndex].netUpdate = true;
+                            shootCount += newShootTime;
+                            int direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+
+                            float numberProjectiles = 3;        //incraeses by 1 each tier
+                            float rotation = MathHelper.ToRadians(15);      //increases by 5 every tier
+                            float randomSpeedOffset = (100f + Main.rand.NextFloat(-6f, 6f)) / 100f;
+                            for (int i = 0; i < numberProjectiles; i++)
+                            {
+                                Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                                perturbedSpeed *= randomSpeedOffset;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 2f, player.whoAmI);
+                                Main.projectile[projIndex].netUpdate = true;
+                            }
+                            SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
+                            Projectile.netUpdate = true;
+                            if (player.velocity.X == 0f)
+                                player.ChangeDir(direction);
                         }
-                        SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
-                        Projectile.netUpdate = true;
-                        if (player.velocity.X == 0f)
-                            player.ChangeDir(direction);
                     }
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    else
                     {
-                        currentAnimationState = AnimationState.Idle;
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
                     }
                 }

@@ -60,8 +60,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                         if (Main.MouseWorld.X > Projectile.Center.X)
                             ability = 0f;
-                        if (Main.MouseWorld.X < Projectile.Center.X)
+                        else
                             ability = 3f;
+
                         Projectile.velocity = Main.MouseWorld - Projectile.Center;
                         Projectile.velocity.Normalize();
                         Projectile.velocity *= 12f;

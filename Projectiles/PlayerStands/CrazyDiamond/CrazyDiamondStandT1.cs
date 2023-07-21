@@ -48,9 +48,15 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 if (player.whoAmI == Main.myPlayer)
                 {
                     if (Main.mouseLeft)
+                    {
+                        currentAnimationState = AnimationState.Attack;
                         Punch();
+                    }
                     else
+                    {
                         attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (!attacking)
                     StayBehind();
@@ -79,6 +85,8 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 BasicPunchAI();
             if (player.teleporting)
                 Projectile.position = player.position;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
 

@@ -50,38 +50,45 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && mPlayer.canStandBasicAttack && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    currentAnimationState = AnimationState.Attack;
-                    Projectile.netUpdate = true;
-                    if (shootCount <= 0)
+                    if (Main.mouseLeft && mPlayer.canStandBasicAttack)
                     {
-                        shootCount += newShootTime;
-                        int direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
-
-                        float numberProjectiles = 4;        //incraeses by 1 each tier
-                        float rotation = MathHelper.ToRadians(20);      //increases by 3 every tier
-                        float randomSpeedOffset = Main.rand.NextFloat(-6f, 6f);
-                        for (int i = 0; i < numberProjectiles; i++)
-                        {
-                            Vector2 perturbedSpeed = new Vector2(shootVel.X + randomSpeedOffset, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 2f, player.whoAmI);
-                            Main.projectile[projIndex].netUpdate = true;
-                        }
-                        SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
+                        attacking = true;
+                        currentAnimationState = AnimationState.Attack;
                         Projectile.netUpdate = true;
-                        if (player.velocity.X == 0f)
-                            player.ChangeDir(direction);
+                        if (shootCount <= 0)
+                        {
+                            shootCount += newShootTime;
+                            int direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+
+                            float numberProjectiles = 4;        //incraeses by 1 each tier
+                            float rotation = MathHelper.ToRadians(20);      //increases by 3 every tier
+                            float randomSpeedOffset = Main.rand.NextFloat(-6f, 6f);
+                            for (int i = 0; i < numberProjectiles; i++)
+                            {
+                                Vector2 perturbedSpeed = new Vector2(shootVel.X + randomSpeedOffset, shootVel.Y).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, perturbedSpeed, ModContent.ProjectileType<Emerald>(), newProjectileDamage, 2f, player.whoAmI);
+                                Main.projectile[projIndex].netUpdate = true;
+                            }
+                            SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
+                            Projectile.netUpdate = true;
+                            if (player.velocity.X == 0f)
+                                player.ChangeDir(direction);
+                        }
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
                     }
                 }
-                if (!Main.mouseLeft && player.whoAmI == Main.myPlayer)        //The reason it's not an else is because it would count the owner part too
-                    currentAnimationState = AnimationState.Idle;
 
                 if (!attacking)
                     StayBehind();

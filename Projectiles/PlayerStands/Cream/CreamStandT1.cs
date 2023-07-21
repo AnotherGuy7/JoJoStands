@@ -23,7 +23,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public new AnimationState currentAnimationState;
         public new AnimationState oldAnimationState;
 
-        private Vector2 velocityAddition;
         private Vector2 velocity;
         private int dashproj = 0;
         private bool dashprojspawn = false;
@@ -54,56 +53,55 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !mPlayer.creamDash)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    currentAnimationState = AnimationState.Attack;
-                    Projectile.netUpdate = true;
-                    float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
-                    Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-
-                    if (mouseX > Projectile.position.X)
-                        Projectile.direction = 1;
-                    if (mouseX < Projectile.position.X)
-                        Projectile.direction = -1;
-
-                    Projectile.spriteDirection = Projectile.direction;
-
-                    velocityAddition = Main.MouseWorld - Projectile.position;
-                    velocityAddition.Normalize();
-                    velocityAddition *= 5f + mPlayer.standTier;
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-                    if (mouseDistance > 40f)
+                    if (Main.mouseLeft && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
                     {
-                        Projectile.velocity = player.velocity + velocityAddition;
-                    }
-                    if (mouseDistance <= 40f)
-                    {
-                        Projectile.velocity = Vector2.Zero;
-                    }
-                    if (shootCount <= 0 && Projectile.frame == 2)
-                    {
-                        shootCount += newPunchTime / 2;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
-                        Main.projectile[projIndex].netUpdate = true;
+                        attacking = true;
+                        currentAnimationState = AnimationState.Attack;
                         Projectile.netUpdate = true;
+                        float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
+                        Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
+                        if (mouseX > Projectile.position.X)
+                            Projectile.direction = 1;
+                        else
+                            Projectile.direction = -1;
+
+                        Projectile.spriteDirection = Projectile.direction;
+                        Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
+                        velocityAddition.Normalize();
+                        velocityAddition *= 5f + mPlayer.standTier;
+                        float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+                        if (mouseDistance > 40f)
+                            Projectile.velocity = player.velocity + velocityAddition;
+                        else
+                            Projectile.velocity = Vector2.Zero;
+                        if (shootCount <= 0 && Projectile.frame == 2)
+                        {
+                            shootCount += newPunchTime / 2;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                        }
+                        LimitDistance();
                     }
-                    LimitDistance();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        currentAnimationState = AnimationState.Idle;
+                    else
+                    {
+                        if (player.whoAmI == Main.myPlayer)
+                        {
+                            attacking = false;
+                            currentAnimationState = AnimationState.Idle;
+                        }
+                    }
                 }
                 if (!attacking)
-                {
                     StayBehind();
-                }
                 if (Main.mouseRight && !Main.mouseLeft && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamVoidMode! && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash && mPlayer.voidCounter >= 4 && Projectile.owner == Main.myPlayer)
                 {
                     mPlayer.voidCounter -= 4;
@@ -165,6 +163,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)

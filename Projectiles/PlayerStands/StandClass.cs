@@ -1287,7 +1287,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <param name="frameAmount">The amount of frames the spritesheet contains.</param>
         /// <param name="frameCounterLimit">The amoutn of updates that pass before the frame changes.</param>
         /// <param name="loop">Whether or not the animation should loop. If false, currentAnimationDone becomes true at animation completion.</param>
-        public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loop)
+        public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loop)       //We pass in animation names instead of currentstate because AnimationState can vary wildly.
         {
             Projectile.frameCounter++;
             Main.projFrames[Projectile.type] = frameAmount;

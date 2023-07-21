@@ -41,18 +41,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
-                {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        currentAnimationState = AnimationState.Idle;
-                }
-                if (!attacking)
-                    StayBehind();
-
                 if (Projectile.owner == Main.myPlayer)
                 {
                     /*if (SpecialKeyPressed(false))
@@ -64,6 +52,16 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                         }
                         Main.NewText("Ability: " + abilityNames[mPlayer.chosenAbility]);
                     }*/
+                    if (Main.mouseLeft)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
 
                     if (SpecialKeyPressed(false))
                     {
@@ -117,11 +115,16 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                         regencounter = 0;
                     }
                 }
+                if (!attacking)
+                    StayBehind();
+
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override bool PreKill(int timeLeft)

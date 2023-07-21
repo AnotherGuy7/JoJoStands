@@ -23,7 +23,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public new AnimationState currentAnimationState;
         public new AnimationState oldAnimationState;
 
-        private Vector2 velocityAddition;
         private Vector2 velocity;
         private int creamCustomFrameCounter = 0;
         private int dashproj = 0;
@@ -59,20 +58,19 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
                 {
+                    attacking = true;
                     currentAnimationState = AnimationState.Attack;
                     Projectile.netUpdate = true;
 
                     float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
                     Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-
                     if (mouseX > Projectile.position.X)
                         Projectile.direction = 1;
-                    if (mouseX < Projectile.position.X)
+                    else
                         Projectile.direction = -1;
 
                     Projectile.spriteDirection = Projectile.direction;
-
-                    velocityAddition = Main.MouseWorld - Projectile.position;
+                    Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
                     velocityAddition.Normalize();
                     velocityAddition *= 5f + mPlayer.standTier;
 
@@ -102,9 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                         currentAnimationState = AnimationState.Idle;
                 }
                 if (!attacking)
-                {
                     StayBehind();
-                }
                 if (SecondSpecialKeyPressed() && !mPlayer.creamExposedMode && player.ownedProjectileCounts[ModContent.ProjectileType<ExposingCream>()] <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamDash && Projectile.owner == Main.myPlayer)
                 {
                     mPlayer.creamFrame = 0;
@@ -179,7 +175,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
             if (mPlayer.creamNormalToExposed)
             {
-
                 if (mPlayer.creamFrame >= 5 && !mPlayer.creamAnimationReverse)
                 {
                     if (mPlayer.creamNormalToVoid)
@@ -261,6 +256,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
@@ -306,20 +303,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 Projectile.netUpdate = true;
             }
 
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
             else if (currentAnimationState == AnimationState.Attack)
                 PlayAnimation("Attack");
-            else if (currentAnimationState == AnimationState.Pose)
-                PlayAnimation("Pose");
             else if (currentAnimationState == AnimationState.Transform)
                 PlayAnimation("Transform");
             else if (currentAnimationState == AnimationState.TransformToVoid)
                 PlayAnimation("TransformToVoid");
             else if (currentAnimationState == AnimationState.ExposedIdle)
                 PlayAnimation("ExposedIdle");
+            else if (currentAnimationState == AnimationState.Pose)
+                PlayAnimation("Pose");
         }
 
         public override void PlayAnimation(string animationName)
