@@ -34,9 +34,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         private readonly Vector2 ArmOrigin = new Vector2(4f, 12f);
 
         private bool stealFrames = false;
-        private bool waitingForEnemyFrames = false;
+        private bool waitingForStealEnemy = false;
         private int waitingForEnemyFramesButInt = 0;
-        private bool gunRevealFrames = false;
+        private bool revealingGun = false;
         private int armFrame = 0;
         private int armFrameCounter = 0;
         private float armRotation = 0;
@@ -77,7 +77,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!waitingForEnemyFrames && waitingForEnemyFramesButInt > 0)
+            if (!waitingForStealEnemy && waitingForEnemyFramesButInt > 0)
                 waitingForEnemyFramesButInt--;
 
             if (waitingForEnemyFramesButInt > 0)
@@ -93,39 +93,43 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility && !stealFrames)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft && !secondaryAbility && !stealFrames)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
-                }
-                if (Main.mouseRight && shootCount <= 0 && !secondaryAbility && Projectile.owner == Main.myPlayer)
-                {
-                    Projectile.frame = 0;
-                    secondaryAbility = true;
+                    }
+                    if (Main.mouseRight && shootCount <= 0 && !secondaryAbility)
+                    {
+                        Projectile.frame = 0;
+                        secondaryAbility = true;
+                    }
                 }
                 if (secondaryAbility)
                 {
-                    Main.mouseLeft = false;
-                    if (Projectile.frame >= 4)
+                    player.direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
+                    currentAnimationState = AnimationState.Secondary;
+                    if (Projectile.frame >= 4 && shootCount <= 0)
                     {
-                        shootCount += 120;
+                        shootCount += 30;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
-                        shootVel *= 8f;
+                        shootVel *= 10f;
                         int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<MeltYourHeart>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
                         Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
-                        secondaryAbility = false;
                     }
                 }
-                if (!attacking && !stealFrames && !waitingForEnemyFrames && !gunRevealFrames && waitingForEnemyFramesButInt == 0)
+                if (!attacking && !stealFrames && !waitingForStealEnemy && !revealingGun && waitingForEnemyFramesButInt == 0)
                 {
                     if (!secondaryAbility)
                         StayBehind();
@@ -145,7 +149,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                         Projectile.velocity = player.velocity + Projectile.velocity;
                     else
                         Projectile.velocity = Vector2.Zero;
-                    waitingForEnemyFrames = true;
+                    waitingForStealEnemy = true;
+                    currentAnimationState = AnimationState.Steal;
+                    Projectile.frame = 0;
+                    Projectile.frameCounter = 0;
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
                         NPC npc = Main.npc[n];
@@ -177,6 +184,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 }
                 if (stealFrames && Projectile.ai[0] != -1f)
                 {
+                    currentAnimationState = AnimationState.Steal;
                     Projectile.velocity = Vector2.Zero;
                     NPC npc = Main.npc[(int)Projectile.ai[0]];
                     npc.direction = -Projectile.direction;
@@ -205,6 +213,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                 }
                 if (stealFrames && Projectile.ai[1] != -1f)
                 {
+                    currentAnimationState = AnimationState.Steal;
                     Projectile.velocity = Vector2.Zero;
                     Player otherPlayer = Main.player[(int)Projectile.ai[1]];
                     otherPlayer.direction = -Projectile.direction;
@@ -229,23 +238,23 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     }
                     LimitDistance();
                 }
-                if (!SpecialKeyCurrent() && stealFrames || !SpecialKeyCurrent() && waitingForEnemyFrames || Projectile.ai[1] != -1f)
+                if (!SpecialKeyCurrent() && stealFrames || !SpecialKeyCurrent() && waitingForStealEnemy || Projectile.ai[1] != -1f)
                 {
                     stealFrames = false;
-                    waitingForEnemyFrames = false;
+                    waitingForStealEnemy = false;
                     Projectile.ai[0] = -1f;
                     Projectile.ai[1] = -1f;
                     shootCount += 30;
+                    currentAnimationState = AnimationState.Idle;
                 }
 
-                if (SecondSpecialKeyPressed(false) && shootCount <= 0 && !gunRevealFrames && !stealFrames)
+                if (SecondSpecialKeyPressed(false) && shootCount <= 0 && !revealingGun && !stealFrames)
                 {
                     secondaryAbility = false;
-                    waitingForEnemyFrames = false;
+                    waitingForStealEnemy = false;
                     Projectile.frame = 0;
                     Projectile.frameCounter = 0;
-                    gunRevealFrames = true;
-                    currentAnimationState = AnimationState.GunReveal;
+                    revealingGun = true;
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
@@ -287,54 +296,55 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     }
                 }
 
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Vector2 moveVelocity = Main.MouseWorld - Projectile.Center;
-                    moveVelocity.Normalize();
-                    Projectile.velocity.X = moveVelocity.X * 4.5f;
-                    if (aboveTile)
-                        Projectile.velocity.Y += moveVelocity.Y * 2f;
-
-                    if (Vector2.Distance(Projectile.Center, player.Center) >= RemoteControlMaxDistance)
+                    if (Main.mouseLeft)
                     {
-                        Projectile.velocity = player.Center - Projectile.Center;
-                        Projectile.velocity.Normalize();
-                        Projectile.velocity *= 0.8f;
-                    }
-                    Projectile.netUpdate = true;
-                }
-                if (!Main.mouseLeft && Projectile.owner == Main.myPlayer)
-                {
-                    Projectile.velocity.X *= 0.78f;
-                    Projectile.netUpdate = true;
-                }
-                if (Main.mouseRight && canShootAgain && shootCount <= 0 && Projectile.owner == Main.myPlayer)
-                {
-                    armFrame = 1;
-                    shootCount += 15;
-                    armFrameCounter += 3;
-                    canShootAgain = false;
-                    Projectile.direction = 1;
-                    if (mouseX < Projectile.Center.X)
-                        Projectile.direction = -1;
-                    Projectile.spriteDirection = Projectile.direction;
-                    Vector2 shootOffset = new Vector2(2f, -2f);
-                    if (Projectile.direction == 1)
-                        shootOffset.Y = -8f;
+                        Vector2 moveVelocity = Main.MouseWorld - Projectile.Center;
+                        moveVelocity.Normalize();
+                        Projectile.velocity.X = moveVelocity.X * 4.5f;
+                        if (aboveTile)
+                            Projectile.velocity.Y += moveVelocity.Y * 2f;
 
-                    Vector2 bulletSpawnPosition = armPosition + armOffset + shootOffset + (armRotation.ToRotationVector2() * 12f);
-                    Vector2 shootVel = Main.MouseWorld - bulletSpawnPosition;
-                    shootVel.Normalize();
-                    shootVel *= 12f;
-                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
-                    Main.projectile[projIndex].netUpdate = true;
-                    Projectile.netUpdate = true;
-                    Projectile.velocity -= shootVel * 0.02f;
-                    SoundEngine.PlaySound(SoundID.Item41, Projectile.Center);
-                }
-                if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
-                {
-                    canShootAgain = true;
+                        if (Vector2.Distance(Projectile.Center, player.Center) >= RemoteControlMaxDistance)
+                        {
+                            Projectile.velocity = player.Center - Projectile.Center;
+                            Projectile.velocity.Normalize();
+                            Projectile.velocity *= 0.8f;
+                        }
+                        Projectile.netUpdate = true;
+                    }
+                    else
+                    {
+                        Projectile.velocity.X *= 0.78f;
+                        Projectile.netUpdate = true;
+                    }
+                    if (Main.mouseRight && canShootAgain && shootCount <= 0)
+                    {
+                        armFrame = 1;
+                        shootCount += 15;
+                        armFrameCounter += 3;
+                        canShootAgain = false;
+                        Projectile.direction = 1;
+                        if (mouseX < Projectile.Center.X)
+                            Projectile.direction = -1;
+                        Projectile.spriteDirection = Projectile.direction;
+                        Vector2 shootOffset = new Vector2(2f, -2f);
+                        if (Projectile.direction == 1)
+                            shootOffset.Y = -8f;
+
+                        Vector2 bulletSpawnPosition = armPosition + armOffset + shootOffset + (armRotation.ToRotationVector2() * 12f);
+                        Vector2 shootVel = Main.MouseWorld - bulletSpawnPosition;
+                        shootVel.Normalize();
+                        shootVel *= 12f;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bulletSpawnPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner);
+                        Main.projectile[projIndex].netUpdate = true;
+                        Projectile.netUpdate = true;
+                        Projectile.velocity -= shootVel * 0.02f;
+                        SoundEngine.PlaySound(SoundID.Item41, Projectile.Center);
+                    }
+                    if (!Main.mouseRight)
+                        canShootAgain = true;
                 }
                 if (SpecialKeyPressed())
                 {
@@ -397,6 +407,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
                     }
                 }
             }
+            if (revealingGun)
+                currentAnimationState = AnimationState.GunReveal;
         }
 
 
@@ -425,8 +437,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(stealFrames);
-            writer.Write(waitingForEnemyFrames);
-            writer.Write(gunRevealFrames);
+            writer.Write(waitingForStealEnemy);
+            writer.Write(revealingGun);
 
             writer.Write(waitingForEnemyFramesButInt);
             writer.Write(sleepingGasTimer);
@@ -438,8 +450,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             stealFrames = reader.ReadBoolean();
-            waitingForEnemyFrames = reader.ReadBoolean();
-            gunRevealFrames = reader.ReadBoolean();
+            waitingForStealEnemy = reader.ReadBoolean();
+            revealingGun = reader.ReadBoolean();
 
             waitingForEnemyFramesButInt = reader.ReadInt32();
             sleepingGasTimer = reader.ReadInt32();
@@ -476,8 +488,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         {
             if (animationName == "GunReveal")
             {
-                gunRevealFrames = false;
+                revealingGun = false;
                 Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standControlStyle = MyPlayer.StandControlStyle.Remote;
+            }
+            else if (animationName == "Secondary")
+            {
+                secondaryAbility = false;
+                currentAnimationState = AnimationState.Idle;
             }
         }
 
@@ -491,7 +508,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             else if (animationName == "Attack")
                 AnimateStand(animationName, 3, newPunchTime, true);
             else if (animationName == "Secondary")
-                AnimateStand(animationName, 5, 10, true);
+                AnimateStand(animationName, 5, 4, false);
             else if (animationName == "GunReveal")
                 AnimateStand(animationName, 5, 3, false);
             else if (animationName == "RemoteControl")

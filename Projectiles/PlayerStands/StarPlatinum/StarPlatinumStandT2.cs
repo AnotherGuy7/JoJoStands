@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -47,32 +46,34 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] != 0;
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
+                    if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
+                    {
+                        shootCount += 120;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                        if (shootVel == Vector2.Zero)
+                            shootVel = new Vector2(0f, 1f);
+
+                        shootVel.Normalize();
+                        shootVel *= ProjectileSpeed;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);
+                        Main.projectile[projIndex].netUpdate = true;
+                        Projectile.netUpdate = true;
+                    }
                 }
                 if (!attacking)
-                {
                     StayBehindWithAbility();
-                }
-                if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0 && Projectile.owner == Main.myPlayer)
-                {
-                    shootCount += 120;
-                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                    if (shootVel == Vector2.Zero)
-                        shootVel = new Vector2(0f, 1f);
-
-                    shootVel.Normalize();
-                    shootVel *= ProjectileSpeed;
-                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, Projectile.whoAmI);
-                    Main.projectile[projIndex].netUpdate = true;
-                    Projectile.netUpdate = true;
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {

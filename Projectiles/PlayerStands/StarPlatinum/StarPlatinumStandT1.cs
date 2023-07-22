@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 
@@ -17,8 +16,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override string SpawnSoundName => "Star Platinum";
         public override bool CanUsePart4Dye => true;
         public override StandAttackType StandType => StandAttackType.Melee;
-        public new AnimationState currentAnimationState;
-        public new AnimationState oldAnimationState;
 
         public override void AI()
         {
@@ -35,14 +32,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft)
+                        Punch();
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (!attacking)
                     StayBehind();

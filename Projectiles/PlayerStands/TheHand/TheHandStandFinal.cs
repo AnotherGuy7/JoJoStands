@@ -30,7 +30,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         private int chargeTimer = 0;
         private int specialScrapeTimer = 0;
         private bool scrapeMode = false;
-        private int healthAtCharge = 0;
         public static readonly SoundStyle ScrapeSoundEffect = new SoundStyle("JoJoStands/Sounds/GameSounds/BRRR")
         {
             Volume = JoJoStands.ModSoundsVolume
@@ -83,192 +82,198 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
                 if (!scrapeMode)
                 {
-                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility && !scraping)
+                    if (Projectile.owner == Main.myPlayer)
                     {
-                        Punch();
-                    }
-                    else
-                    {
-                        if (player.whoAmI == Main.myPlayer)
+                        if (Main.mouseLeft && !secondaryAbility && !scraping)
+                        {
+                            currentAnimationState = AnimationState.Attack;
+                            Punch();
+                        }
+                        else
+                        {
+                            attacking = false;
                             currentAnimationState = AnimationState.Idle;
-                    }
-                    if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && Projectile.owner == Main.myPlayer)
-                    {
-                        secondaryAbility = true;
-                        currentAnimationState = AnimationState.Charge;
-                        Projectile.netUpdate = true;
-                        if (chargeTimer < 150)
-                            chargeTimer++;
-                    }
-                    if (!Main.mouseRight && chargeTimer != 0 && Projectile.owner == Main.myPlayer)
-                    {
-                        scraping = true;
-                        currentAnimationState = AnimationState.Scrape;
-                        Projectile.netUpdate = true;
-                    }
+                        }
 
-                    if (!Main.mouseRight && chargeTimer != 0 && scraping && Projectile.frame == 1 && Projectile.owner == Main.myPlayer)
-                    {
-                        SoundEngine.PlaySound(ScrapeSoundEffect);
-                        Vector2 distanceToTeleport = Main.MouseWorld - player.position;
-                        distanceToTeleport.Normalize();
-                        distanceToTeleport *= chargeTimer / 30f;
-                        player.velocity += distanceToTeleport * 6f;
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(chargeTimer / 24));       //10s max cooldown
-                        chargeTimer = 0;
+                        if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                        {
+                            secondaryAbility = true;
+                            currentAnimationState = AnimationState.Charge;
+                            Projectile.netUpdate = true;
+                            if (chargeTimer < 150)
+                                chargeTimer++;
+                        }
+                        if (!Main.mouseRight)
+                        {
+                            if (chargeTimer != 0)
+                            {
+                                scraping = true;
+                                currentAnimationState = AnimationState.Scrape;
+                                Projectile.netUpdate = true;
+                                if (Projectile.frame == 1)
+                                {
+                                    SoundEngine.PlaySound(ScrapeSoundEffect);
+                                    Vector2 distanceToTeleport = Main.MouseWorld - player.position;
+                                    distanceToTeleport.Normalize();
+                                    distanceToTeleport *= chargeTimer / 30f;
+                                    player.velocity += distanceToTeleport * 6f;
+                                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(chargeTimer / 24));       //10s max cooldown
+                                    chargeTimer = 0;
+                                }
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility)
+                    if (Projectile.owner == Main.myPlayer)
                     {
-                        if (!player.GetModPlayer<MyPlayer>().canStandBasicAttack)
+                        if (Main.mouseLeft && !secondaryAbility)
                         {
-                            scrapeBarraging = false;
-                            currentAnimationState = AnimationState.Idle;
-                            return;
-                        }
+                            if (!player.GetModPlayer<MyPlayer>().canStandBasicAttack)
+                            {
+                                scrapeBarraging = false;
+                                currentAnimationState = AnimationState.Idle;
+                                return;
+                            }
 
-                        scrapeBarraging = true;
-                        currentAnimationState = AnimationState.ScrapeBarrage;
-                        Projectile.netUpdate = true;
+                            scrapeBarraging = true;
+                            currentAnimationState = AnimationState.ScrapeBarrage;
+                            float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
+                            Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
 
-                        float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
-                        Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
+                            if (mouseX > player.position.X)
+                                player.direction = 1;
+                            else
+                                player.direction = -1;
 
-                        if (mouseX > player.position.X)
-                            player.direction = 1;
-                        else
-                            player.direction = -1;
+                            Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
+                            velocityAddition.Normalize();
+                            velocityAddition *= 5f;
+                            float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+                            if (mouseDistance > 40f)
+                                Projectile.velocity = player.velocity + velocityAddition;
+                            else
+                                Projectile.velocity = Vector2.Zero;
 
-                        Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
-                        velocityAddition.Normalize();
-                        velocityAddition *= 5f;
-                        float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-                        if (mouseDistance > 40f)
-                            Projectile.velocity = player.velocity + velocityAddition;
-                        else
-                            Projectile.velocity = Vector2.Zero;
+                            if (shootCount <= 0 && (Projectile.frame == 1 || Projectile.frame == 4))
+                            {
+                                shootCount += (int)(newPunchTime * 1.2);
+                                Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                                shootVel.Normalize();
+                                shootVel *= ProjectileSpeed;
 
-                        if (shootCount <= 0 && (Projectile.frame == 1 || Projectile.frame == 4))
-                        {
-                            shootCount += (int)(newPunchTime * 1.4);
-                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                            shootVel.Normalize();
-                            shootVel *= ProjectileSpeed;
-
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2.5f * overHeavenDamageBoost), PunchKnockback, Projectile.owner, FistWhoAmI);
-                            Main.projectile[projIndex].netUpdate = true;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2.5f * overHeavenDamageBoost), PunchKnockback, Projectile.owner, FistWhoAmI);
+                                Main.projectile[projIndex].netUpdate = true;
+                                SoundStyle theHandScrapeSound = ScrapeSoundEffect;
+                                theHandScrapeSound.Pitch = Main.rand.NextFloat(0, 0.6f + 1f);
+                                theHandScrapeSound.Volume = JoJoStands.ModSoundsVolume;
+                                SoundEngine.PlaySound(theHandScrapeSound, Projectile.Center);
+                            }
                             Projectile.netUpdate = true;
-                            SoundStyle theHandScrapeSound = ScrapeSoundEffect;
-                            theHandScrapeSound.Pitch = Main.rand.NextFloat(0, 0.8f + 1f);
-                            theHandScrapeSound.Volume = JoJoStands.ModSoundsVolume;
-                            SoundEngine.PlaySound(theHandScrapeSound, Projectile.Center);
+                            LimitDistance();
                         }
-                        LimitDistance();
-                    }
-                    else
-                    {
-                        if (player.whoAmI == Main.myPlayer)
+                        else
                         {
                             currentAnimationState = AnimationState.Idle;
                             scrapeBarraging = false;
                         }
-                    }
-                    if (Main.mouseRight && !playerHasAbilityCooldown)
-                    {
-                        if (mPlayer.playerJustHit)
+                        if (Main.mouseRight && !playerHasAbilityCooldown)
                         {
-                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(3));
+                            if (mPlayer.playerJustHit)
+                            {
+                                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(3));
+                                specialScrapeTimer = 0;
+                            }
+
+                            specialScrapeTimer++;
+                            for (int i = 0; i < Main.maxNPCs; i++)
+                            {
+                                NPC npc = Main.npc[i];
+                                if (!npc.active)
+                                    continue;
+
+                                if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(npc.Center, Projectile.Center) <= 250f && !npc.immortal && !npc.hide && !npc.townNPC)
+                                    npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().highlightedByTheHandMarker = true;
+                            }
+                            Projectile.netUpdate = true;
+                        }
+                        if (!Main.mouseRight && specialScrapeTimer != 0)
+                        {
+                            scraping = true;
+                            currentAnimationState = AnimationState.Scrape;
+                            if (specialScrapeTimer <= 60)
+                            {
+                                SoundEngine.PlaySound(ScrapeSoundEffect);
+                                for (int i = 0; i < Main.maxNPCs; i++)
+                                {
+                                    NPC npc = Main.npc[i];
+                                    if (!npc.active)
+                                        continue;
+
+                                    if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(npc.Center, Projectile.Center) <= 250f && !npc.immortal && !npc.hide && !npc.townNPC)
+                                    {
+                                        Vector2 difference = player.position - npc.position;
+                                        npc.position = player.Center + (-difference / 2f);
+                                    }
+                                }
+                                for (int p = 0; p < Main.maxPlayers; p++)
+                                {
+                                    Player otherPlayer = Main.player[p];
+                                    if (otherPlayer.active)
+                                    {
+                                        if (otherPlayer.team != player.team && otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), Projectile.Center, Main.MouseWorld))
+                                        {
+                                            Vector2 difference = player.position - otherPlayer.position;
+                                            otherPlayer.position = player.Center + (-difference / 2f);
+                                        }
+                                    }
+                                }
+                                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
+                            }
+                            else
+                            {
+                                SoundEngine.PlaySound(ScrapeSoundEffect);
+                                for (int i = 0; i < Main.maxNPCs; i++)
+                                {
+                                    NPC npc = Main.npc[i];
+                                    if (!npc.active)
+                                        continue;
+
+                                    if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(npc.Center, Projectile.Center) <= 250f && !npc.immortal && !npc.hide && !npc.townNPC)
+                                    {
+                                        bool crit = false;
+                                        float manifestedWillEmblemDamageBoost = 1f;
+                                        if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
+                                            crit = true;
+                                        if (mPlayer.manifestedWillEmblem && crit)
+                                            manifestedWillEmblemDamageBoost = 1.5f;
+                                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                                        {
+                                            Damage = (int)(210 * (specialScrapeTimer / 30) * mPlayer.standDamageBoosts * manifestedWillEmblemDamageBoost * overHeavenDamageBoost),
+                                            HitDirection = player.direction,
+                                            Crit = crit
+                                        };
+                                        npc.StrikeNPC(hitInfo);     //damage goes up at a rate of 210dmg/0.5s
+                                        npc.AddBuff(ModContent.BuffType<MissingOrgans>(), 12 * 60);
+                                    }
+                                }
+                                for (int p = 0; p < Main.maxPlayers; p++)
+                                {
+                                    Player otherPlayer = Main.player[p];
+                                    if (otherPlayer.active)
+                                    {
+                                        if (otherPlayer.team != player.team && otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), Projectile.Center, Main.MouseWorld))
+                                        {
+                                            otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " was scraped out of existence by " + player.name + "."), (int)(60 * (specialScrapeTimer / 60) * mPlayer.standDamageBoosts), 1);
+                                            otherPlayer.AddBuff(ModContent.BuffType<MissingOrgans>(), 12 * 60);
+                                        }
+                                    }
+                                }
+                                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(12));
+                            }
                             specialScrapeTimer = 0;
                         }
-
-                        specialScrapeTimer++;
-                        for (int i = 0; i < Main.maxNPCs; i++)
-                        {
-                            NPC npc = Main.npc[i];
-                            if (!npc.active)
-                                continue;
-
-                            if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(npc.Center, Projectile.Center) <= 250f && !npc.immortal && !npc.hide && !npc.townNPC)
-                                npc.GetGlobalNPC<NPCs.JoJoGlobalNPC>().highlightedByTheHandMarker = true;
-                        }
-                    }
-                    if (!Main.mouseRight && specialScrapeTimer != 0)
-                    {
-                        scraping = true;
-                        currentAnimationState = AnimationState.Scrape;
-                        if (specialScrapeTimer <= 60)
-                        {
-                            SoundEngine.PlaySound(ScrapeSoundEffect);
-                            for (int i = 0; i < Main.maxNPCs; i++)
-                            {
-                                NPC npc = Main.npc[i];
-                                if (!npc.active)
-                                    continue;
-
-                                if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(npc.Center, Projectile.Center) <= 250f && !npc.immortal && !npc.hide && !npc.townNPC)
-                                {
-                                    Vector2 difference = player.position - npc.position;
-                                    npc.position = player.Center + (-difference / 2f);
-                                }
-                            }
-                            for (int p = 0; p < Main.maxPlayers; p++)
-                            {
-                                Player otherPlayer = Main.player[p];
-                                if (otherPlayer.active)
-                                {
-                                    if (otherPlayer.team != player.team && otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), Projectile.Center, Main.MouseWorld))
-                                    {
-                                        Vector2 difference = player.position - otherPlayer.position;
-                                        otherPlayer.position = player.Center + (-difference / 2f);
-                                    }
-                                }
-                            }
-                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
-                        }
-                        else
-                        {
-                            SoundEngine.PlaySound(ScrapeSoundEffect);
-                            for (int i = 0; i < Main.maxNPCs; i++)
-                            {
-                                NPC npc = Main.npc[i];
-                                if (!npc.active)
-                                    continue;
-
-                                if (npc.Hitbox.Intersects(rectangle) && Vector2.Distance(npc.Center, Projectile.Center) <= 250f && !npc.immortal && !npc.hide && !npc.townNPC)
-                                {
-                                    bool crit = false;
-                                    float manifestedWillEmblemDamageBoost = 1f;
-                                    if (Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                                        crit = true;
-                                    if (mPlayer.manifestedWillEmblem && crit)
-                                        manifestedWillEmblemDamageBoost = 1.5f;
-                                    NPC.HitInfo hitInfo = new NPC.HitInfo()
-                                    {
-                                        Damage = (int)(210 * (specialScrapeTimer / 30) * mPlayer.standDamageBoosts * manifestedWillEmblemDamageBoost * overHeavenDamageBoost),
-                                        HitDirection = player.direction,
-                                        Crit = crit
-                                    };
-                                    npc.StrikeNPC(hitInfo);     //damage goes up at a rate of 210dmg/0.5s
-                                    npc.AddBuff(ModContent.BuffType<MissingOrgans>(), 12 * 60);
-                                }
-                            }
-                            for (int p = 0; p < Main.maxPlayers; p++)
-                            {
-                                Player otherPlayer = Main.player[p];
-                                if (otherPlayer.active)
-                                {
-                                    if (otherPlayer.team != player.team && otherPlayer.whoAmI != player.whoAmI && Collision.CheckAABBvLineCollision(otherPlayer.position, new Vector2(otherPlayer.width, otherPlayer.height), Projectile.Center, Main.MouseWorld))
-                                    {
-                                        otherPlayer.Hurt(PlayerDeathReason.ByCustomReason(otherPlayer.name + " was scraped out of existence by " + player.name + "."), (int)(60 * (specialScrapeTimer / 60) * mPlayer.standDamageBoosts), 1);
-                                        otherPlayer.AddBuff(ModContent.BuffType<MissingOrgans>(), 12 * 60);
-                                    }
-                                }
-                            }
-                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(12));
-                        }
-                        specialScrapeTimer = 0;
                     }
                 }
                 if (!attacking)
@@ -361,6 +366,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             if (animationName == "Scrape")
             {
                 scraping = false;
+                secondaryAbility = false;
                 currentAnimationState = AnimationState.Idle;
             }
         }
@@ -379,7 +385,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             else if (animationName == "Scrape")
                 AnimateStand(animationName, 2, 10, false);
             else if (animationName == "ScrapeBarrage")
-                AnimateStand(animationName, 7, (int)(newPunchTime * 1.3), true);
+                AnimateStand(animationName, 7, (int)(newPunchTime * 1.2), true);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 12, true);
         }

@@ -56,66 +56,72 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             }
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && !secondaryAbility && Projectile.owner == Main.myPlayer)
-                    Punch();
-                else
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft && !secondaryAbility)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
-                }
-                if (Main.mouseRight && !attacking && Projectile.owner == Main.myPlayer)
-                {
-                    secondaryAbility = true;
-                    Projectile.netUpdate = true;
-                    currentAnimationState = AnimationState.Secondary;
-                    Rectangle parryRectangle = new Rectangle((int)Projectile.Center.X + (4 * Projectile.direction), (int)Projectile.Center.Y - 29, 16, 54);
-                    for (int p = 0; p < Main.maxProjectiles; p++)
-                    {
-                        Projectile otherProj = Main.projectile[p];
-                        if (otherProj.active)
-                        {
-                            if (parryRectangle.Intersects(otherProj.Hitbox) && otherProj.type != Projectile.type && !otherProj.friendly && !otherProj.GetGlobalProjectile<JoJoGlobalProjectile>().exceptionForSCParry)
-                            {
-                                parryFrames = true;
-                                secondaryAbility = false;
-                                otherProj.owner = Projectile.owner;
-                                otherProj.damage += (int)(otherProj.damage * mPlayer.standDamageBoosts) - otherProj.damage;
-                                otherProj.damage *= 2;
-                                otherProj.velocity *= -1;
-                                otherProj.hostile = false;
-                                otherProj.friendly = true;
-                                SyncCall.SyncStandEffectInfo(player.whoAmI, otherProj.whoAmI, 10, 1);
-                            }
-                        }
                     }
-                    for (int n = 0; n < Main.maxNPCs; n++)
+                    if (Main.mouseRight && !attacking)
                     {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                        secondaryAbility = true;
+                        Projectile.netUpdate = true;
+                        currentAnimationState = AnimationState.Secondary;
+                        Rectangle parryRectangle = new Rectangle((int)Projectile.Center.X + (4 * Projectile.direction), (int)Projectile.Center.Y - 29, 16, 54);
+                        for (int p = 0; p < Main.maxProjectiles; p++)
                         {
-                            if (!npc.townNPC && !npc.friendly && !npc.immortal && !npc.hide && parryRectangle.Intersects(npc.Hitbox))
+                            Projectile otherProj = Main.projectile[p];
+                            if (otherProj.active)
                             {
-                                int damage = (int)(npc.damage * 2 * mPlayer.standDamageBoosts);
-                                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                                if (parryRectangle.Intersects(otherProj.Hitbox) && otherProj.type != Projectile.type && !otherProj.friendly && !otherProj.GetGlobalProjectile<JoJoGlobalProjectile>().exceptionForSCParry)
                                 {
-                                    Damage = damage,
-                                    Knockback = 6f,
-                                    HitDirection = player.direction
-                                };
-                                npc.StrikeNPC(hitInfo);
-                                SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 10, 2, damage, player.direction);
-                                secondaryAbility = false;
-                                parryFrames = true;
-                                SoundStyle npcHit4 = SoundID.NPCHit4;
-                                npcHit4.Pitch = Main.rand.Next(4, 6 + 1) / 10f;
-                                SoundEngine.PlaySound(npcHit4, Projectile.Center);
-                                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(9));
+                                    parryFrames = true;
+                                    secondaryAbility = false;
+                                    otherProj.owner = Projectile.owner;
+                                    otherProj.damage += (int)(otherProj.damage * mPlayer.standDamageBoosts) - otherProj.damage;
+                                    otherProj.damage *= 2;
+                                    otherProj.velocity *= -1;
+                                    otherProj.hostile = false;
+                                    otherProj.friendly = true;
+                                    SyncCall.SyncStandEffectInfo(player.whoAmI, otherProj.whoAmI, 10, 1);
+                                }
+                            }
+                        }
+                        for (int n = 0; n < Main.maxNPCs; n++)
+                        {
+                            NPC npc = Main.npc[n];
+                            if (npc.active && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                            {
+                                if (!npc.townNPC && !npc.friendly && !npc.immortal && !npc.hide && parryRectangle.Intersects(npc.Hitbox))
+                                {
+                                    int damage = (int)(npc.damage * 2 * mPlayer.standDamageBoosts);
+                                    NPC.HitInfo hitInfo = new NPC.HitInfo()
+                                    {
+                                        Damage = damage,
+                                        Knockback = 6f,
+                                        HitDirection = player.direction
+                                    };
+                                    npc.StrikeNPC(hitInfo);
+                                    SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 10, 2, damage, player.direction);
+                                    secondaryAbility = false;
+                                    parryFrames = true;
+                                    SoundStyle npcHit4 = SoundID.NPCHit4;
+                                    npcHit4.Pitch = Main.rand.Next(4, 6 + 1) / 10f;
+                                    SoundEngine.PlaySound(npcHit4, Projectile.Center);
+                                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(9));
+                                }
                             }
                         }
                     }
+                    else
+                        secondaryAbility = false;
                 }
-                if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
-                    secondaryAbility = false;
                 if (!attacking && !parryFrames)
                 {
                     if (!secondaryAbility)
@@ -169,7 +175,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             if (animationName == "Idle")
                 AnimateStand(animationName, 4, 30, true);
             else if (animationName == "Attack")
-                AnimateStand(animationName, 5, newPunchTime, true);
+                AnimateStand(animationName, 5, newPunchTime / 2, true);
             else if (animationName == "Secondary")
                 AnimateStand(animationName, 1, 1, true);
             else if (animationName == "Parry")

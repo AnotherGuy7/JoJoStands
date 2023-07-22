@@ -1,5 +1,6 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.NPCs;
+using JoJoStands.Projectiles.PlayerStands.StickyFingers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -21,10 +22,13 @@ namespace JoJoStands.Projectiles
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
         }
 
         private bool living = true;
         private bool playedSound = false;
+        private const float MaxTravelDistance = 40f * 16f;
+        private const float DespawnDistance = 3f * 16f;
 
         public override void AI()       //all this so that the other chain doesn't draw... yare yare. It was mostly just picking out types
         {
@@ -34,72 +38,44 @@ namespace JoJoStands.Projectiles
                 Projectile.Kill();
                 return;
             }
-            float direction = ownerProj.Center.X - Projectile.Center.X;
-            if (direction > 0)
-            {
-                Projectile.direction = -1;
-                ownerProj.direction = -1;
-            }
-            if (direction < 0)
-            {
-                Projectile.direction = 1;
-                ownerProj.direction = 1;
-            }
-            Projectile.spriteDirection = Projectile.direction;
+            Projectile.direction = ownerProj.Center.X < Projectile.Center.X ? 1 : -1;
+            Projectile.spriteDirection = ownerProj.direction = Projectile.direction;
             Vector2 rota = ownerProj.Center - Projectile.Center;
             Projectile.rotation = (-rota * Projectile.direction).ToRotation();
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                SoundEngine.PlaySound(StickyFingersStandFinal.ZipperSound);
                 playedSound = true;
             }
 
             if (Projectile.alpha == 0)
             {
                 if (Projectile.position.X + (float)(Projectile.width / 2) > ownerProj.position.X + (float)(ownerProj.width / 2))
-                {
                     ownerProj.direction = ownerProj.spriteDirection = 1;
-                }
                 else
-                {
                     ownerProj.direction = ownerProj.spriteDirection = -1;
-                }
             }
-            Vector2 vector14 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
-            float num166 = ownerProj.position.X + (float)(ownerProj.width / 2) - vector14.X;
-            float num167 = ownerProj.position.Y - vector14.Y;
-            float num168 = (float)Math.Sqrt((double)(num166 * num166 + num167 * num167));
+            float distanceFromOwner = Vector2.Distance(ownerProj.Center, Projectile.Center);
             if (living)     //while it's living
             {
-                if (num168 > 700f)
-                {
+                if (distanceFromOwner > MaxTravelDistance)
                     living = false;
-                }
                 //Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
                 Projectile.ai[1] += 1f;
                 if (Projectile.ai[1] > 5f)
-                {
                     Projectile.alpha = 0;
-                }
                 if (Projectile.ai[1] >= 10f)
-                {
                     Projectile.ai[1] = 15f;
-                }
             }
-            else if (!living)        //dead stuff
+            else
             {
                 Projectile.tileCollide = false;
-                //Projectile.rotation = (float)Math.Atan2((double)num167, (double)num166) - 1.57f;
-                float num169 = 20f;
-                if (num168 < 50f)
-                {
+                if (distanceFromOwner < DespawnDistance)
                     Projectile.Kill();
-                }
-                num168 = num169 / num168;
-                num166 *= num168;
-                num167 *= num168;
-                Projectile.velocity.X = num166;
-                Projectile.velocity.Y = num167;
+                Vector2 returnVelocity = ownerProj.Center - Projectile.Center;
+                returnVelocity.Normalize();
+                returnVelocity *= 16f;
+                Projectile.velocity = returnVelocity;
             }
         }
 
@@ -131,12 +107,14 @@ namespace JoJoStands.Projectiles
                 if (Main.rand.Next(1, 100 + 1) >= 60)
                     target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
             }
+            living = false;
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             if (info.PvP)
             {
+                living = false;
                 if (Main.rand.Next(1, 100 + 1) <= 50)
                     target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
             }

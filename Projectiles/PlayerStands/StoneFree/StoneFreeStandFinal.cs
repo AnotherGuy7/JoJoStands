@@ -61,76 +61,82 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && !holdingStringNPC && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    float lifeTimeMultiplier = 1f;
-                    if (extendedBarrage)
+                    if (Main.mouseLeft && !holdingStringNPC)
                     {
-                        newPunchDamage = (int)(newPunchDamage * 0.92f);
-                        lifeTimeMultiplier = 1.8f;
+                        currentAnimationState = AnimationState.Attack;
+                        float lifeTimeMultiplier = 1f;
+                        if (extendedBarrage)
+                        {
+                            currentAnimationState = AnimationState.ExtendedBarrage;
+                            newPunchDamage = (int)(newPunchDamage * 0.92f);
+                            lifeTimeMultiplier = 1.8f;
+                        }
+                        Punch(punchLifeTimeMultiplier: lifeTimeMultiplier);
                     }
-                    Punch(punchLifeTimeMultiplier: lifeTimeMultiplier);
-                    if (extendedBarrage)
-                        currentAnimationState = AnimationState.ExtendedBarrage;
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
-                }
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.stoneFreeWeaveAbilityActive && shootCount <= 0 && !playerHasAbilityCooldown)
-                {
-                    if (mPlayer.chosenAbility == StringTraps)
-                    {
-                        shootCount += 30;
-                        if (!stringConnectorPlaced)
-                        {
-                            if (Collision.SolidTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, (int)Main.MouseWorld.Y / 16))
-                            {
-                                stringConnectorPlaced = true;
-                                firstStringPos = Main.MouseWorld;
-                            }
-                        }
-                        else
-                        {
-                            if (Collision.SolidTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, (int)Main.MouseWorld.Y / 16))
-                            {
-                                if (Vector2.Distance(firstStringPos, Main.MouseWorld) >= MaxTrapDistance)
-                                {
-                                    stringConnectorPlaced = false;
-                                    Main.NewText("Your strings do not extend that far.");
-                                    return;
-                                }
-
-                                stringConnectorPlaced = false;
-                                int stringPointIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firstStringPos, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringPoint>(), 0, 0f, player.whoAmI);
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringConnector>(), 0, 0f, player.whoAmI, stringPointIndex, PunchDamage + 29 * (int)mPlayer.standDamageBoosts);
-                            }
-                        }
                     }
-                    else if (mPlayer.chosenAbility == TiedTogetherAbility && !holdingStringNPC)
+
+                    if (Main.mouseRight && !mPlayer.stoneFreeWeaveAbilityActive && shootCount <= 0 && !playerHasAbilityCooldown)
                     {
-                        holdingStringNPC = true;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        shootVel.Normalize();
-                        shootVel *= 12f;
-                        heldStringProjectileIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StoneFreeTiedTogetherString>(), 4, 0f, player.whoAmI, Projectile.whoAmI);
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(4));
+                        if (mPlayer.chosenAbility == StringTraps)
+                        {
+                            shootCount += 30;
+                            if (!stringConnectorPlaced)
+                            {
+                                if (Collision.SolidTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, (int)Main.MouseWorld.Y / 16))
+                                {
+                                    stringConnectorPlaced = true;
+                                    firstStringPos = Main.MouseWorld;
+                                }
+                            }
+                            else
+                            {
+                                if (Collision.SolidTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, (int)Main.MouseWorld.Y / 16))
+                                {
+                                    if (Vector2.Distance(firstStringPos, Main.MouseWorld) >= MaxTrapDistance)
+                                    {
+                                        stringConnectorPlaced = false;
+                                        Main.NewText("Your strings do not extend that far.");
+                                        return;
+                                    }
+
+                                    stringConnectorPlaced = false;
+                                    int stringPointIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firstStringPos, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringPoint>(), 0, 0f, player.whoAmI);
+                                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringConnector>(), 0, 0f, player.whoAmI, stringPointIndex, PunchDamage + 29 * (int)mPlayer.standDamageBoosts);
+                                }
+                            }
+                        }
+                        else if (mPlayer.chosenAbility == TiedTogetherAbility && !holdingStringNPC)
+                        {
+                            holdingStringNPC = true;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            shootVel.Normalize();
+                            shootVel *= 12f;
+                            heldStringProjectileIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StoneFreeTiedTogetherString>(), 4, 0f, player.whoAmI, Projectile.whoAmI);
+                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(4));
+                        }
                     }
                 }
                 holdingStringNPC = player.ownedProjectileCounts[ModContent.ProjectileType<StoneFreeTiedTogetherString>()] > 0;
                 if (holdingStringNPC)
                 {
                     currentAnimationState = AnimationState.StringHold;
+                    int direction = 1;
                     if (Main.projectile[heldStringProjectileIndex].active)
                     {
-                        float direction = player.Center.X - Main.projectile[heldStringProjectileIndex].Center.X;
-                        if (direction > 0)
-                            Projectile.direction = -1;
-                        if (direction < 0)
-                            Projectile.direction = 1;
+                        float xDifference = player.Center.X - Main.projectile[heldStringProjectileIndex].Center.X;
+                        if (xDifference > 0)
+                            direction = -1;
+                        else
+                            direction = 1;
                     }
-                    GoInFront(Projectile.direction);
+                    GoInFront(direction);
+                    Projectile.spriteDirection = Projectile.direction = direction;
                 }
 
                 if (SpecialKeyPressed())
@@ -166,7 +172,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         StoneFreeAbilityWheel.CloseAbilityWheel();
                 }
 
-                if (!attacking)
+                if (!attacking && !holdingStringNPC)
                     StayBehind();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)

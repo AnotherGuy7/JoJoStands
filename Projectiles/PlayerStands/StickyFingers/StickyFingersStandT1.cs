@@ -32,19 +32,19 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft)
+                        Punch();
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
+
                 if (!attacking)
-                {
                     StayBehind();
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {

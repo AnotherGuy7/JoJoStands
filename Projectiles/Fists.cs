@@ -38,6 +38,7 @@ namespace JoJoStands.Projectiles
         private bool playedSound = false;
         private int standType = 0;
         private int standTier = 0;
+        public int extraInfo1 = 0;
 
         public override void SetDefaults()
         {
@@ -263,14 +264,17 @@ namespace JoJoStands.Projectiles
 
             if (standType == KillerQueen)
             {
-                if (standTier == 1)
-                    KillerQueenStandT1.savedTarget = target;
-                if (standTier == 2)
-                    KillerQueenStandT2.savedTarget = target;
-                if (standTier == 3)
-                    KillerQueenStandT3.savedTarget = target;
-                if (standTier == 4)
-                    KillerQueenStandFinal.savedTarget = target;
+                if (Main.myPlayer == Projectile.owner)
+                {
+                    if (standTier == 1)
+                        (Main.projectile[extraInfo1].ModProjectile as KillerQueenStandT1).autoModeTaggedTargetIndex = target.whoAmI;
+                    else if (standTier == 2)
+                        (Main.projectile[extraInfo1].ModProjectile as KillerQueenStandT2).autoModeTaggedTargetIndex = target.whoAmI;
+                    else if (standTier == 3)
+                        (Main.projectile[extraInfo1].ModProjectile as KillerQueenStandT3).autoModeTaggedTargetIndex = target.whoAmI;
+                    else if (standTier == 4)
+                        (Main.projectile[extraInfo1].ModProjectile as KillerQueenStandFinal).autoModeTaggedTargetIndex = target.whoAmI;
+                }
             }
 
             if (standType == KingCrimson)

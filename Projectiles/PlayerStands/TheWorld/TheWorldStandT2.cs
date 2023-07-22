@@ -1,5 +1,4 @@
 using JoJoStands.Buffs.EffectBuff;
-using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
@@ -38,16 +37,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            /*if (Projectile.spriteDirection == 1)
-            {
-                DrawOffsetX = -10;
-            }
-            if (Projectile.spriteDirection == -1)
-            {
-                DrawOffsetX = -60;
-            }
-            DrawOriginOffsetY = -halfStandHeight;*/
-
             if (SpecialKeyPressed() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopStartDelay <= 0)
             {
                 if (!JoJoStands.SoundsLoaded || !JoJoStands.SoundsModAbilityVoicelines)
@@ -84,19 +73,19 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft)
+                        Punch();
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
+
                 if (!attacking)
-                {
                     StayBehind();
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
@@ -131,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             else if (currentAnimationState == AnimationState.Attack)
                 PlayAnimation("Attack");
             else if (currentAnimationState == AnimationState.Special)
-                PlayAnimation("AbiliyPose");
+                PlayAnimation("AbilityPose");
             else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
         }

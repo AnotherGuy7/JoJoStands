@@ -51,48 +51,54 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    float lifeTimeMultiplier = 1f;
-                    if (extendedBarrage)
+                    if (Main.mouseLeft)
                     {
-                        newPunchDamage = (int)(newPunchDamage * 0.92f);
-                        lifeTimeMultiplier = 1.8f;
-                    }
-                    Punch(punchLifeTimeMultiplier: lifeTimeMultiplier);
-                    if (extendedBarrage)
-                        currentAnimationState = AnimationState.ExtendedBarrage;
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        currentAnimationState = AnimationState.Idle;
-                }
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer && shootCount <= 0)
-                {
-                    shootCount += 30;
-                    if (!stringConnectorPlaced)
-                    {
-                        if (Collision.SolidTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, (int)Main.MouseWorld.Y / 16))
+                        currentAnimationState = AnimationState.Attack;
+                        float lifeTimeMultiplier = 1f;
+                        if (extendedBarrage)
                         {
-                            stringConnectorPlaced = true;
-                            firstStringPos = Main.MouseWorld;
+                            newPunchDamage = (int)(newPunchDamage * 0.92f);
+                            lifeTimeMultiplier = 1.8f;
+                            currentAnimationState = AnimationState.ExtendedBarrage;
                         }
+                        Punch(punchLifeTimeMultiplier: lifeTimeMultiplier);
+                        if (extendedBarrage)
+                            currentAnimationState = AnimationState.ExtendedBarrage;
                     }
                     else
                     {
-                        if (Collision.SolidTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, (int)Main.MouseWorld.Y / 16))
-                        {
-                            if (Vector2.Distance(firstStringPos, Main.MouseWorld) >= MaxTrapDistance)
-                            {
-                                stringConnectorPlaced = false;
-                                Main.NewText("Your strings do not extend that far.");
-                                return;
-                            }
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
 
-                            stringConnectorPlaced = false;
-                            int stringPointIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firstStringPos, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringPoint>(), 0, 0f, player.whoAmI);
-                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringConnector>(), 0, 0f, player.whoAmI, stringPointIndex, PunchDamage + 29 * (int)mPlayer.standDamageBoosts);
+                    if (Main.mouseRight && shootCount <= 0)
+                    {
+                        shootCount += 30;
+                        if (!stringConnectorPlaced)
+                        {
+                            if (Collision.SolidTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, (int)Main.MouseWorld.Y / 16))
+                            {
+                                stringConnectorPlaced = true;
+                                firstStringPos = Main.MouseWorld;
+                            }
+                        }
+                        else
+                        {
+                            if (Collision.SolidTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, (int)Main.MouseWorld.Y / 16))
+                            {
+                                if (Vector2.Distance(firstStringPos, Main.MouseWorld) >= MaxTrapDistance)
+                                {
+                                    stringConnectorPlaced = false;
+                                    Main.NewText("Your strings do not extend that far.");
+                                    return;
+                                }
+
+                                stringConnectorPlaced = false;
+                                int stringPointIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firstStringPos, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringPoint>(), 0, 0f, player.whoAmI);
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<StoneFreeStringConnector>(), 0, 0f, player.whoAmI, stringPointIndex, PunchDamage + 29 * (int)mPlayer.standDamageBoosts);
+                            }
                         }
                     }
                 }

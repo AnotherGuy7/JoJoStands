@@ -48,27 +48,31 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                    if (Main.rand.NextBool(7))
+                    if (Main.mouseLeft && !secondaryAbility)
                     {
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
+                        Punch();
+                        if (Main.rand.NextBool(7))
+                        {
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
 
-                        shootVel.Normalize();
-                        shootVel *= 3f;
-                        Vector2 bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(0, 18 + 1) * Projectile.direction, -Main.rand.Next(0, HalfStandHeight - 2 + 1));
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, shootVel, ModContent.ProjectileType<TinyBubble>(), 44, 2f, Projectile.owner, Projectile.whoAmI);
-                        SoundEngine.PlaySound(SoundID.Drip);
+                            shootVel.Normalize();
+                            shootVel *= 3f;
+                            Vector2 bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(0, 18 + 1) * Projectile.direction, -Main.rand.Next(0, HalfStandHeight - 2 + 1));
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, shootVel, ModContent.ProjectileType<TinyBubble>(), 44, 2f, Projectile.owner, Projectile.whoAmI);
+                            SoundEngine.PlaySound(SoundID.Drip);
+                        }
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
                     }
                 }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        currentAnimationState = AnimationState.Idle;
-                }
+
                 if (!attacking)
                 {
                     if (!secondaryAbility)

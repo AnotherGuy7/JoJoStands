@@ -1,6 +1,7 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Networking;
+using JoJoStands.Projectiles.PlayerStands.KillerQueen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -31,8 +32,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         {
             Volume = JoJoStands.ModSoundsVolume
         };
-        private readonly SoundStyle kqClickSound = new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick");
-
 
         private int btdStartDelay = 0;
         private int bubbleDamage = 684;      //not using projectileDamage cause this one changes
@@ -331,7 +330,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
                         Main.time = savedWorldData.worldTime;
                         player.ClearBuff(ModContent.BuffType<BitesTheDust>());
-                        SoundEngine.PlaySound(kqClickSound);
+                        SoundEngine.PlaySound(KillerQueenStandFinal.KillerQueenClickSound);
                         if (Projectile.owner == Main.myPlayer)
                         {
                             SyncCall.SyncBitesTheDust(player.whoAmI, false);
@@ -371,47 +370,51 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    if (!mPlayer.canStandBasicAttack)
+                    if (Main.mouseLeft && Projectile.ai[0] == 0f)
                     {
-                        currentAnimationState = AnimationState.Idle;
-                        return;
-                    }
-
-                    currentAnimationState = AnimationState.Attack;
-                    Projectile.netUpdate = true;
-                    if (Projectile.frame == 4 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
-                    {
-                        if (shootCount <= 0)
+                        if (!mPlayer.canStandBasicAttack)
                         {
-                            shootCount += newShootTime;
-                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                            if (shootVel == Vector2.Zero)
-                                shootVel = new Vector2(0f, 1f);
+                            currentAnimationState = AnimationState.Idle;
+                            return;
+                        }
 
-                            shootVel.Normalize();
-                            shootVel *= ProjectileSpeed;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<ExplosiveBubble>(), newBubbleDamage, 6f, Projectile.owner, 1f, Projectile.whoAmI);
-                            Main.projectile[projIndex].netUpdate = true;
-                            Projectile.netUpdate = true;
+                        attacking = true;
+                        currentAnimationState = AnimationState.Attack;
+                        Projectile.netUpdate = true;
+                        if (Projectile.frame == 4 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
+                        {
+                            if (shootCount <= 0)
+                            {
+                                shootCount += newShootTime;
+                                Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                                if (shootVel == Vector2.Zero)
+                                    shootVel = new Vector2(0f, 1f);
+
+                                shootVel.Normalize();
+                                shootVel *= ProjectileSpeed;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<ExplosiveBubble>(), newBubbleDamage, 6f, Projectile.owner, 1f, Projectile.whoAmI);
+                                Main.projectile[projIndex].netUpdate = true;
+                                Projectile.netUpdate = true;
+                            }
                         }
                     }
-                    if (Projectile.frame >= 5)
-                        Projectile.frame = 0;
-                }
-                else if (!secondaryAbility)
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    else if (!secondaryAbility)
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
+
+                    if (Main.mouseRight && Projectile.ai[0] == 0f && shootCount <= 0)
+                    {
+                        secondaryAbility = true;
+                        Projectile.ai[0] = 1f;      //to detonate all bombos
+                        SoundEngine.PlaySound(KillerQueenStandFinal.KillerQueenClickSound);
+                        shootCount += 45;
+                    }
                 }
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer && Projectile.ai[0] == 0f && shootCount <= 0)
-                {
-                    secondaryAbility = true;
-                    Projectile.ai[0] = 1f;      //to detonate all bombos
-                    SoundEngine.PlaySound(kqClickSound);
-                    shootCount += 45;
-                }
+
                 if (secondaryAbility && Projectile.ai[0] == 1f)
                 {
                     currentAnimationState = AnimationState.SecondaryAbility;
@@ -419,6 +422,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     {
                         Projectile.ai[0] = 0f;
                         currentAnimationState = AnimationState.Idle;
+                        secondaryAbility = false;
                     }
                 }
             }

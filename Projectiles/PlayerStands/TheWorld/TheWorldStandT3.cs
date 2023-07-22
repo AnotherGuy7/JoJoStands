@@ -2,7 +2,6 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Items;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
@@ -79,14 +78,44 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft && !secondaryAbility)
+                        Punch();
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
+
+                    if (Main.mouseRight && player.HasItem(ModContent.ItemType<Knife>()))
+                    {
+                        secondaryAbility = true;
+                        currentAnimationState = AnimationState.SecondaryAbility;
+                        if (shootCount <= 0 && Projectile.frame == 1)
+                        {
+                            shootCount += 26;
+                            float numberOfKnives = 3;
+                            float knivesSpread = MathHelper.ToRadians(15f);
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                            {
+                                shootVel = new Vector2(0f, 1f);
+                            }
+                            shootVel.Normalize();
+                            shootVel *= 100f;
+                            for (int i = 0; i < numberOfKnives; i++)
+                            {
+                                Vector2 shootPosition = Projectile.position + new Vector2(5f, -3f);
+                                Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-knivesSpread, knivesSpread, i / (numberOfKnives - 1))) * 0.2f;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
+                                Main.projectile[projIndex].netUpdate = true;
+                                player.ConsumeItem(ModContent.ItemType<Knife>());
+                                Projectile.netUpdate = true;
+                            }
+                            SoundEngine.PlaySound(SoundID.Item1);
+                        }
+                    }
                 }
                 if (!attacking)
                 {
@@ -104,33 +133,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
                         Projectile.spriteDirection = Projectile.direction;
                         secondaryAbility = false;
-                    }
-                }
-                if (Main.mouseRight && player.HasItem(ModContent.ItemType<Knife>()) && Projectile.owner == Main.myPlayer)
-                {
-                    secondaryAbility = true;
-                    currentAnimationState = AnimationState.SecondaryAbility;
-                    if (shootCount <= 0 && Projectile.frame == 1)
-                    {
-                        shootCount += 26;
-                        float numberOfKnives = 3;
-                        float knivesSpread = MathHelper.ToRadians(15f);
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                        {
-                            shootVel = new Vector2(0f, 1f);
-                        }
-                        shootVel.Normalize();
-                        shootVel *= 100f;
-                        for (int i = 0; i < numberOfKnives; i++)
-                        {
-                            Vector2 shootPosition = Projectile.position + new Vector2(5f, -3f);
-                            Vector2 perturbedSpeed = shootVel.RotatedBy(MathHelper.Lerp(-knivesSpread, knivesSpread, i / (numberOfKnives - 1))) * 0.2f;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
-                            Main.projectile[projIndex].netUpdate = true;
-                            player.ConsumeItem(ModContent.ItemType<Knife>());
-                            Projectile.netUpdate = true;
-                        }
                     }
                 }
                 if (SecondSpecialKeyPressed() && player.HasItem(ModContent.ItemType<Knife>()) && player.CountItem(ModContent.ItemType<Knife>()) >= 45 && Projectile.owner == Main.myPlayer)
@@ -218,7 +220,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
             else if (currentAnimationState == AnimationState.Special)
-                PlayAnimation("AbiliyPose");
+                PlayAnimation("AbilityPose");
             else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
         }

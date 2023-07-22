@@ -45,34 +45,38 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<RedBind>()] != 0;
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    if (!mPlayer.canStandBasicAttack)
+                    if (Main.mouseLeft && !secondaryAbility)
                     {
-                        currentAnimationState = AnimationState.Idle;
-                        return;
-                    }
+                        if (!mPlayer.canStandBasicAttack)
+                        {
+                            currentAnimationState = AnimationState.Idle;
+                            return;
+                        }
 
-                    currentAnimationState = AnimationState.Attack;
-                    Projectile.netUpdate = true;
-                    if (shootCount <= 0)
-                    {
-                        shootCount += newShootTime;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
-                        Main.projectile[projIndex].netUpdate = true;
+                        attacking = true;
+                        currentAnimationState = AnimationState.Attack;
                         Projectile.netUpdate = true;
+                        if (shootCount <= 0)
+                        {
+                            shootCount += newShootTime;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                        }
                     }
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && !secondaryAbility && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
@@ -94,6 +98,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(20));
                     Projectile.netUpdate = true;
                 }
+                if (secondaryAbility)
+                    currentAnimationState = AnimationState.SecondaryAbility;
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {

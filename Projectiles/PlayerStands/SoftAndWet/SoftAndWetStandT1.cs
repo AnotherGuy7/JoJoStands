@@ -37,36 +37,38 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft)
+                    {
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
+                    if (Main.mouseRight)
+                    {
+                        GoInFront();
+                        if (shootCount <= 0)
+                        {
+                            shootCount += 60;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= 3f;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                            SoundEngine.PlaySound(SoundID.SplashWeak);
+                        }
+                    }
                 }
                 if (!attacking)
                     StayBehindWithAbility();
-
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer)
-                {
-                    GoInFront();
-                    if (shootCount <= 0)
-                    {
-                        shootCount += 60;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-
-                        shootVel.Normalize();
-                        shootVel *= 3f;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
-                        Main.projectile[projIndex].netUpdate = true;
-                        Projectile.netUpdate = true;
-                        SoundEngine.PlaySound(SoundID.SplashWeak);
-                    }
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {

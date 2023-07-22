@@ -9,20 +9,19 @@ using JoJoStands.Items.Tiles;
 using JoJoStands.Items.Vampire;
 using JoJoStands.NPCs.Enemies;
 using JoJoStands.NPCs.TownNPCs;
-using JoJoStands.Networking;
+using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using JoJoStands.Projectiles;
 
 namespace JoJoStands.NPCs
 {
@@ -345,7 +344,7 @@ namespace JoJoStands.NPCs
                         Main.player[deathLoopOwner].ClearBuff(ModContent.BuffType<DeathLoop>());
                         taggedForDeathLoop = 0;
                         deathLoopOwner = -1;
-                    }    
+                    }
                 }
             }
             if (taggedForDeathLoop == 0)
@@ -784,7 +783,7 @@ namespace JoJoStands.NPCs
 
         public override void OnKill(NPC npc)
         {
-            if (taggedForDeathLoop > 0 && spawnedByDeathLoop == 0)     
+            if (taggedForDeathLoop > 0 && spawnedByDeathLoop == 0)
             {
                 Player player = Main.player[deathLoopOwner];
                 if (npc.boss && deathLoopOwner == player.whoAmI)
@@ -891,6 +890,9 @@ namespace JoJoStands.NPCs
             if (taggedForDeathLoop > 0)
                 drawColor = Color.Purple;
 
+            if (npc.HasBuff<Stolen>())
+                drawColor = Color.DarkGray;
+
             if (echoesFreezeTarget)
             {
                 if (echoesThreeFreezeTimer == 0)
@@ -916,8 +918,8 @@ namespace JoJoStands.NPCs
             if (npc.HasBuff(ModContent.BuffType<RedBindDebuff>()))
             {
                 float newHeight = npc.height / 18;
-                float newWidht = npc.width / 16;
-                float scale = (newHeight + newWidht) / 2;
+                float newWidth = npc.width / 16;
+                float scale = (newHeight + newWidth) / 2;
                 Texture2D texture = ModContent.Request<Texture2D>("JoJoStands/Extras/BoundByRedBind").Value;
                 spriteBatch.Draw(texture, npc.Center - Main.screenPosition, null, Color.White, npc.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), scale, SpriteEffects.None, 0);
             }
@@ -929,14 +931,13 @@ namespace JoJoStands.NPCs
 
                 Vector2 position = npc.Center - Main.screenPosition;
                 Vector2 origin = new Vector2(textureWidth / 2f, textureHeight / 2f);
-                float scale = npc.width;
+                float scale = npc.width / 3f;
                 if (npc.height > npc.width)
-                    scale = npc.height;
+                    scale = npc.height / 3f;
 
-                scale -= 4f;
                 scale /= (float)textureWidth;
                 scale += (float)Math.Abs(Math.Sin(bindingEmeraldDurationTimer / 100f)) * 0.5f;
-                spriteBatch.Draw(emeraldStringWebTexture, position, null, drawColor, 0f, origin, scale, SpriteEffects.None, 0);
+                spriteBatch.Draw(emeraldStringWebTexture, position - (origin * scale), null, drawColor, 0f, origin, scale, SpriteEffects.None, 0);
             }
             if (boundByStrings)
             {

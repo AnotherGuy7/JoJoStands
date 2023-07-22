@@ -17,8 +17,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override string SpawnSoundName => "Whitesnake";
         public override bool CanUseSaladDye => true;
         public override StandAttackType StandType => StandAttackType.Melee;
-        public new AnimationState currentAnimationState;
-        public new AnimationState oldAnimationState;
 
         public override void AI()
         {
@@ -35,14 +33,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft)
+                        Punch();
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (!attacking)
                     StayBehind();

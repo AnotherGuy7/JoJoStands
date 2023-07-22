@@ -32,14 +32,18 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (!attacking)
                     StayBehind();
@@ -76,7 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             if (animationName == "Idle")
                 AnimateStand(animationName, 4, 30, true);
             else if (animationName == "Attack")
-                AnimateStand(animationName, 5, newPunchTime, true);
+                AnimateStand(animationName, 5, newPunchTime / 2, true);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 12, true);
         }

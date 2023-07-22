@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JoJoStands.NPCs;
+using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -37,7 +38,7 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void UpdateBuffOnNPC(NPC npc)
         {
-            npc.lifeRegen = -npc.lifeMax / 16;
+            npc.lifeRegen = -48 * Main.player[npc.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner].GetModPlayer<MyPlayer>().standTier;
             if (Math.Abs(npc.velocity.X) > savedVelocityX)
                 npc.velocity.X *= 0.8f;
         }

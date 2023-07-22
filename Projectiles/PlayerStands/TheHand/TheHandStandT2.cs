@@ -51,37 +51,48 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbility && !scraping)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft && !secondaryAbility && !scraping)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
-                }
-                if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && player.whoAmI == Main.myPlayer)
-                {
-                    secondaryAbility = true;
-                    Projectile.netUpdate = true;
-                    if (chargeTimer < 150)
-                        chargeTimer++;
-                }
-                if (!Main.mouseRight && chargeTimer != 0 && Projectile.owner == Main.myPlayer)
-                {
-                    scraping = true;
-                    Projectile.netUpdate = true;
-                }
-                if (!Main.mouseRight && chargeTimer != 0 && scraping && Projectile.frame == 1 && Projectile.owner == Main.myPlayer)
-                {
-                    SoundEngine.PlaySound(TheHandStandFinal.ScrapeSoundEffect);
-                    Vector2 distanceToTeleport = Main.MouseWorld - player.position;
-                    distanceToTeleport.Normalize();
-                    distanceToTeleport *= chargeTimer / 60f;
-                    player.velocity += distanceToTeleport * 5f;
+                    }
 
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(chargeTimer / 10));       //15s max cooldown
-                    chargeTimer = 0;
+                    if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                    {
+                        secondaryAbility = true;
+                        Projectile.netUpdate = true;
+                        currentAnimationState = AnimationState.Charge;
+                        if (chargeTimer < 150)
+                            chargeTimer++;
+                    }
+                    if (!Main.mouseRight)
+                    {
+                        if (chargeTimer != 0)
+                        {
+                            scraping = true;
+                            Projectile.netUpdate = true;
+                            if (Projectile.frame == 1)
+                            {
+                                SoundEngine.PlaySound(TheHandStandFinal.ScrapeSoundEffect);
+                                Vector2 distanceToTeleport = Main.MouseWorld - player.position;
+                                distanceToTeleport.Normalize();
+                                distanceToTeleport *= chargeTimer / 60f;
+                                player.velocity += distanceToTeleport * 5f;
+
+                                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(chargeTimer / 10));       //15s max cooldown
+                                chargeTimer = 0;
+                            }
+                        }
+
+                    }
+
                 }
                 if (!attacking)
                 {
@@ -132,8 +143,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             scraping = reader.ReadBoolean();
         }
 
-        private bool resetFrame = false;
-
         public override void SelectAnimation()
         {
             if (oldAnimationState != currentAnimationState)
@@ -161,6 +170,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             if (animationName == "Scrape")
             {
                 scraping = false;
+                secondaryAbility = false;
                 currentAnimationState = AnimationState.Idle;
             }
         }

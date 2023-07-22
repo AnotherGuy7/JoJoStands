@@ -1,18 +1,14 @@
-﻿using System;
+﻿using JoJoStands.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.Buffs.Debuffs;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Projectiles
 {
     public class MeltYourHeart : ModProjectile
     {
         private int dripTimer;
-        private int checkNumber = 0;
 
         public override void SetStaticDefaults()
         {
@@ -32,13 +28,19 @@ namespace JoJoStands.Projectiles
             Projectile.maxPenetrate = -1;
         }
 
+        private const int AttachmentIndex_Top = 1;
+        private const int AttachmentIndex_Bottom = 2;
+        private const int AttachmentIndex_Left = 3;
+        private const int AttachmentIndex_Right = 4;
+
+
         public override void AI()
         {
             if (Projectile.ai[0] != 0f)
             {
                 dripTimer++;
                 DrawOriginOffsetY = -4;
-                if (Projectile.ai[0] == 4f)     //stuck to the top
+                if (Projectile.ai[0] == AttachmentIndex_Top)     //stuck to the top
                 {
                     Projectile.rotation = 0f;
                     Projectile.frameCounter++;
@@ -55,7 +57,12 @@ namespace JoJoStands.Projectiles
                         }
                     }
                 }
-                if (Projectile.ai[0] == 3f)     //stuck to the right
+                else if (Projectile.ai[0] == AttachmentIndex_Bottom)     //stuck to the bottom
+                {
+                    Projectile.frame = 1;
+                    Projectile.rotation = MathHelper.ToRadians(180f);
+                }
+                else if (Projectile.ai[0] == AttachmentIndex_Right)     //stuck to the right
                 {
                     DrawOffsetX = -8;
                     Projectile.frame = 1;
@@ -68,12 +75,7 @@ namespace JoJoStands.Projectiles
                         dripTimer = 0;
                     }
                 }
-                if (Projectile.ai[0] == 2f)     //stuck to the bottom
-                {
-                    Projectile.frame = 1;
-                    Projectile.rotation = MathHelper.ToRadians(180f);
-                }
-                if (Projectile.ai[0] == 1f)     //stuck to the left
+                else if (Projectile.ai[0] == AttachmentIndex_Left)     //stuck to the left
                 {
                     Projectile.frame = 1;
                     Projectile.rotation = MathHelper.ToRadians(90f);
@@ -115,35 +117,25 @@ namespace JoJoStands.Projectiles
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            Projectile.position = (Projectile.position / 16f) * 16;
             for (int i = 0; i < 4; i++)
             {
-                checkNumber = i;
+                int checkNumber = i + 1;
                 int Xadd = 0;
                 int Yadd = 0;
-                if (checkNumber == 0)
-                {
-                    Xadd = 1;
-                    Yadd = 0;
-                }
-                if (checkNumber == 1)
-                {
-                    Xadd = 0;
-                    Yadd = 1;
-                }
-                if (checkNumber == 2)
-                {
-                    Xadd = -1;
-                    Yadd = 0;
-                }
-                if (checkNumber == 3)
-                {
-                    Xadd = 0;
+                if (checkNumber == AttachmentIndex_Top)
                     Yadd = -1;
-                }
-                Tile tileTarget = Main.tile[(int)(Projectile.Center.X /16f) + Xadd, (int)(Projectile.Center.Y / 16f) + Yadd];
+                else if (checkNumber == AttachmentIndex_Bottom)
+                    Yadd = 1;
+                else if (checkNumber == AttachmentIndex_Left)
+                    Xadd = 1;
+                else if (checkNumber == AttachmentIndex_Right)
+                    Xadd = -1;
+
+                Tile tileTarget = Main.tile[(int)(Projectile.Center.X / 16f) + Xadd, (int)(Projectile.Center.Y / 16f) + Yadd];
                 if (tileTarget.HasTile)
                 {
-                    Projectile.ai[0] = checkNumber + 1;
+                    Projectile.ai[0] = checkNumber;
                     Projectile.frame = 0;
                 }
             }

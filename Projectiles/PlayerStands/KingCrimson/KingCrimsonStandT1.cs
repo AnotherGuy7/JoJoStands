@@ -33,53 +33,55 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    currentAnimationState = AnimationState.Attack;
-                    Projectile.netUpdate = true;
-
-                    float rotaY = mouseY - Projectile.Center.Y;
-                    Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-                    if (mouseX > Projectile.position.X)
-                        Projectile.direction = 1;
-                    else
-                        Projectile.direction = -1;
-
-                    Projectile.spriteDirection = Projectile.direction;
-
-                    Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
-                    velocityAddition.Normalize();
-                    velocityAddition *= 5f + mPlayer.standTier;
-
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-                    if (mouseDistance > 40f)
-                        Projectile.velocity = player.velocity + velocityAddition;
-                    else
-                        Projectile.velocity = Vector2.Zero;
-                    if (shootCount <= 0 && (Projectile.frame == 0 || Projectile.frame == 4))
+                    if (Main.mouseLeft && mPlayer.canStandBasicAttack)
                     {
-                        shootCount += newPunchTime / 2;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
-                        Main.projectile[projIndex].netUpdate = true;
+                        attacking = true;
+                        currentAnimationState = AnimationState.Attack;
                         Projectile.netUpdate = true;
+
+                        float rotaY = mouseY - Projectile.Center.Y;
+                        Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
+                        if (mouseX > Projectile.position.X)
+                            Projectile.direction = 1;
+                        else
+                            Projectile.direction = -1;
+
+                        Projectile.spriteDirection = Projectile.direction;
+
+                        Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
+                        velocityAddition.Normalize();
+                        velocityAddition *= 5f + mPlayer.standTier;
+
+                        float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+                        if (mouseDistance > 40f)
+                            Projectile.velocity = player.velocity + velocityAddition;
+                        else
+                            Projectile.velocity = Vector2.Zero;
+                        if (shootCount <= 0 && (Projectile.frame == 0 || Projectile.frame == 4))
+                        {
+                            shootCount += newPunchTime / 2;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                        }
+                        LimitDistance();
                     }
-                    LimitDistance();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (!attacking)
-                {
                     StayBehind();
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {

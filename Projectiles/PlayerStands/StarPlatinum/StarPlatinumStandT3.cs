@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -50,70 +49,72 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] != 0;
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        currentAnimationState = AnimationState.Idle;
-                }
-                if (!attacking)
-                {
-                    StayBehindWithAbility();
-                }
-                if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
-                {
-                    int bulletIndex = GetPlayerAmmo(player);
-                    if (bulletIndex != -1)
+                    if (Main.mouseLeft && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                     {
-                        Item bulletItem = player.inventory[bulletIndex];
-                        if (bulletItem.shoot != -1)
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
+                    if (Main.mouseRight && shootCount <= 0)
+                    {
+                        int bulletIndex = GetPlayerAmmo(player);
+                        if (bulletIndex != -1)
                         {
-                            flickFrames = true;
-                            currentAnimationState = AnimationState.Flick;
-                            if (Projectile.frame == 1)
+                            Item bulletItem = player.inventory[bulletIndex];
+                            if (bulletItem.shoot != -1)
                             {
-                                shootCount += 60;
+                                flickFrames = true;
+                                currentAnimationState = AnimationState.Flick;
+                                if (Projectile.frame == 1)
+                                {
+                                    shootCount += 60;
+                                    Main.mouseLeft = false;
+                                    SoundStyle item41 = SoundID.Item41;
+                                    item41.Pitch = 2.8f;
+                                    SoundEngine.PlaySound(item41, player.Center);
+                                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                                    if (shootVel == Vector2.Zero)
+                                        shootVel = new Vector2(0f, 1f);
+
+                                    shootVel.Normalize();
+                                    shootVel *= 12f;
+                                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
+                                    Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
+                                    Main.projectile[projIndex].netUpdate = true;
+                                    if (bulletItem.type != ItemID.EndlessMusketPouch)
+                                    {
+                                        player.ConsumeItem(bulletItem.type);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
+                            {
+                                shootCount += 120;
                                 Main.mouseLeft = false;
-                                SoundStyle item41 = SoundID.Item41;
-                                item41.Pitch = 2.8f;
-                                SoundEngine.PlaySound(item41, player.Center);
                                 Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                                 if (shootVel == Vector2.Zero)
                                     shootVel = new Vector2(0f, 1f);
 
                                 shootVel.Normalize();
-                                shootVel *= 12f;
-                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
-                                Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
+                                shootVel *= ProjectileSpeed;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts) - 39, 2f, Projectile.owner, Projectile.whoAmI);
                                 Main.projectile[projIndex].netUpdate = true;
-                                if (bulletItem.type != ItemID.EndlessMusketPouch)
-                                {
-                                    player.ConsumeItem(bulletItem.type);
-                                }
+                                Projectile.netUpdate = true;
                             }
                         }
                     }
-                    else
-                    {
-                        if (player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
-                        {
-                            shootCount += 120;
-                            Main.mouseLeft = false;
-                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                            if (shootVel == Vector2.Zero)
-                                shootVel = new Vector2(0f, 1f);
-
-                            shootVel.Normalize();
-                            shootVel *= ProjectileSpeed;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts) - 39, 2f, Projectile.owner, Projectile.whoAmI);
-                            Main.projectile[projIndex].netUpdate = true;
-                            Projectile.netUpdate = true;
-                        }
-                    }
                 }
+                if (!attacking)
+                    StayBehindWithAbility();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
@@ -130,7 +131,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             for (int i = 54; i < 58; i++)       //These are the 4 ammo slots
             {
                 Item Item = player.inventory[i];
-                
+
                 if (Item.ammo == AmmoID.Bullet && Item.stack > 0)
                 {
                     ammoType = i;

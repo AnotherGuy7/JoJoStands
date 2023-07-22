@@ -353,17 +353,10 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void BasicPunchAI()
         {
             Player player = Main.player[Projectile.owner];
-
             if (!attacking)
             {
-                Vector2 position = player.Center;
-                position.X -= (float)((12 + player.width / 2) * player.direction);
-                Projectile.direction = (Projectile.spriteDirection = player.direction);
-                position.Y -= -35f + HalfStandHeight;
-                position += ManualIdleHoverOffset;
-                Projectile.Center = Vector2.Lerp(Projectile.Center, position, 0.2f);
-                Projectile.velocity *= 0.8f;
-                Projectile.rotation = 0;
+                StayBehind();
+                Projectile.spriteDirection = Projectile.direction = player.direction;
             }
 
             float detectionDist = newMaxDistance * 1.2f;
@@ -397,9 +390,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
             }
             else
-            {
                 currentAnimationState = AnimationState.Idle;
-            }
+
             LimitDistance();
         }
 
@@ -430,18 +422,14 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Vector2 areaBehindPlayer = player.Center;
                 currentAnimationState = AnimationState.Idle;
                 if (secondaryAbility)
-                {
                     areaBehindPlayer.X += (float)((12 + player.width / 2) * player.direction);
-                }
                 else
-                {
                     areaBehindPlayer.X -= (float)((12 + player.width / 2) * player.direction);
-                    Projectile.spriteDirection = Projectile.direction = player.direction;
-                }
                 areaBehindPlayer.Y -= -35f + HalfStandHeight;
                 Projectile.Center = Vector2.Lerp(Projectile.Center, areaBehindPlayer, 0.2f);
                 Projectile.velocity *= 0.8f;
                 Projectile.rotation = 0;
+                Projectile.spriteDirection = Projectile.direction = player.direction;
             }
             if (target != null)
             {
@@ -464,14 +452,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                             shootCount += newPunchTime;
                             Vector2 shootVel = target.position - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
                             shootVel.Normalize();
                             if (Projectile.direction == 1)
-                            {
                                 shootVel *= ProjectileSpeed;
-                            }
+
                             int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
@@ -481,13 +466,9 @@ namespace JoJoStands.Projectiles.PlayerStands
                 else if (Main.rand.Next(0, 101) <= 1 && targetDist > punchDetectionDist)
                 {
                     if (itemToConsumeType != -1 && JoJoStands.AutomaticActivations && player.HasItem(itemToConsumeType))
-                    {
                         secondaryAbility = true;
-                    }
                     else if (itemToConsumeType == -1)
-                    {
                         secondaryAbility = true;
-                    }
                 }
 
                 if (secondaryAbility)
@@ -495,9 +476,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     currentAnimationState = AnimationState.SecondaryAbility;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0f)
-                    {
-                        Projectile.spriteDirection = Projectile.direction = -1;
-                    }
+                        Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
 
                     if (shootCount <= 0 && player.ownedProjectileCounts[projToShoot] < shootMax)
@@ -509,23 +488,19 @@ namespace JoJoStands.Projectiles.PlayerStands
                                 shootCount += 28;
                                 Vector2 shootVel = target.position - Projectile.Center - new Vector2(0f, 3f);
                                 if (shootVel == Vector2.Zero)
-                                {
                                     shootVel = new Vector2(0f, 1f);
-                                }
+
                                 shootVel.Normalize();
                                 shootVel *= ProjectileSpeed;
                                 if (gravityAccounting)
-                                {
                                     shootVel.Y -= Projectile.Distance(target.position) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
-                                }
+
                                 int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X + 5f, Projectile.Center.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
                                 Main.projectile[projIndex].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }
                             if (itemToConsumeType != -1)
-                            {
                                 player.ConsumeItem(itemToConsumeType);
-                            }
                         }
                     }
                     if ((!gravityAccounting && player.ownedProjectileCounts[projToShoot] == 0) || targetDist > rangedDetectionDist)     //!gravityAccounting and 0 of that Projectile cause it's usually no gravity projectiles that are just 1 shot (star finger, zipper punch), while things like knives have gravity (meant to be thrown in succession)

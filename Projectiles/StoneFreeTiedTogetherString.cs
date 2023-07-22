@@ -123,7 +123,7 @@ namespace JoJoStands.Projectiles
             }
 
             Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
-            Vector2 linkCenter = ownerProj.Center + new Vector2(12f * ownerProj.direction, 0f);
+            Vector2 linkCenter = ownerProj.Center + new Vector2(28f * ownerProj.direction, -12f);
             Vector2 projectileCenter = Projectile.Center;
             drawColor = lightColor;
 
