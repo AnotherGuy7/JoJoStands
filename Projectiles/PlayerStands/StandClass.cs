@@ -92,6 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public virtual string PoseSoundName { get; } = "";
         public virtual string SpawnSoundName { get; } = "";
         public virtual StandAttackType StandType { get; } = StandAttackType.None;
+        public virtual bool CustomStandDrawing { get; } = false;
         /// <summary>
         /// Whether or not the Stand will use the projectile.alpha field while being drawn. False by default.
         /// </summary>
@@ -161,6 +162,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public float mouseY = 0f;
         public AnimationState currentAnimationState;
         public AnimationState oldAnimationState;
+        public int amountOfFrames;
         //private int rangeIndicatorSize = 0;
         //private int secondaryRangeIndicatorSize = 0;
 
@@ -722,7 +724,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (summonParticleTimer > 0)
             {
                 summonParticleTimer--;
-                int amountOfParticles = Main.rand.Next(1, 2);
+                int amountOfParticles = Main.rand.Next(1, 2 + 1);
                 int[] dustTypes = new int[3] { ModContent.DustType<StandSummonParticles>(), ModContent.DustType<StandSummonShine1>(), ModContent.DustType<StandSummonShine2>() };
                 Vector2 dustSpawnOffset = StandOffset;
                 dustSpawnOffset.X *= Projectile.spriteDirection;
@@ -803,6 +805,12 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         private void DrawStand(Color drawColor)
         {
+            if (CustomStandDrawing)
+            {
+                CustomDrawStand(drawColor);
+                return;
+            }
+
             if (UseProjectileAlpha)
                 drawColor *= Projectile.alpha / 255f;
 
@@ -812,7 +820,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             if (standTexture != null && Main.netMode != NetmodeID.Server)
             {
-                int frameHeight = standTexture.Height / Main.projFrames[Projectile.type];
+                int frameHeight = standTexture.Height / amountOfFrames;
                 Vector2 drawOffset = StandOffset;
                 drawOffset.X *= Projectile.spriteDirection;
                 Vector2 drawPosition = Projectile.Center - Main.screenPosition + drawOffset;
@@ -821,6 +829,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Main.EntitySpriteDraw(standTexture, drawPosition, animRect, drawColor, Projectile.rotation, standOrigin, 1f, effects, 0);
             }
         }
+
+        private void CustomDrawStand(Color drawColor) { }
 
         /// <summary>
         /// Draws the Stands range indicators.
@@ -913,7 +923,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (standTexture == null)
                 return new DrawData();
 
-            int frameHeight = standTexture.Height / Main.projFrames[Projectile.type];
+            int frameHeight = standTexture.Height / amountOfFrames;
             Vector2 drawOffset = StandOffset;
             drawOffset.X *= Projectile.spriteDirection;
             Vector2 drawPosition = Projectile.Center - Main.screenPosition + drawOffset;
@@ -1265,7 +1275,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loop)       //We pass in animation names instead of currentstate because AnimationState can vary wildly.
         {
             Projectile.frameCounter++;
-            Main.projFrames[Projectile.type] = frameAmount;
+            amountOfFrames = frameAmount;
             if (Projectile.frameCounter >= frameCounterLimit)
             {
                 Projectile.frame += 1;
@@ -1297,7 +1307,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loopCertainFrames, int loopFrameStart, int loopFrameEnd)
         {
             Projectile.frameCounter++;
-            Main.projFrames[Projectile.type] = frameAmount;
+            amountOfFrames = frameAmount;
             if (Projectile.frameCounter >= frameCounterLimit)
             {
                 Projectile.frame += 1;

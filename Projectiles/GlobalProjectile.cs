@@ -348,7 +348,7 @@ namespace JoJoStands.Projectiles
                     for (int n = 0; n < Main.maxNPCs; n++)
                     {
                         NPC npc = Main.npc[n];
-                        if (npc.active && !npc.hide && !npc.immortal && !npc.friendly)
+                        if (npc.active && !npc.hide && !npc.immortal && !npc.friendly && npc.lifeMax > 5)
                         {
                             if (projectile.Distance(npc.Center) <= 10 * 16 && npc.whoAmI != target.whoAmI)
                             {

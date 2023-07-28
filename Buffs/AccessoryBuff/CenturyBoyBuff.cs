@@ -11,7 +11,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
 {
     public class CenturyBoyBuff : JoJoBuff
     {
-        private int limitTimer = 36000;       //like 10 minutes
+        private int limitTimer = 10 * 60 * 60;
         private int breathSave = 0;
 
         public override void SetStaticDefaults()
@@ -37,6 +37,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.controlRight = false;
             player.controlUseTile = false;
             player.maxRunSpeed = 0f;
+            player.slotsMinions += 1;
             if (JoJoStands.SecretReferences)
             {
                 limitTimer--;
@@ -57,7 +58,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
                         player.KillMe(PlayerDeathReason.ByCustomReason("The water kept it's constant rythm and " + player.name + " has stopped waiting. And stopped thinking."), player.statLife - 1, 1);
                     else
                         player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " has stopped thinking."), player.statLife - 1, 1);
-                    limitTimer = 36000;
+                    limitTimer = 10 * 60 * 60;
                 }
             }
             if (Main.mouseRight && mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>() && player.HasItem(ItemID.Dynamite) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))

@@ -151,7 +151,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         shootVel.Normalize();
                         shootVel *= 12f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StoneFreeBindString>(), 4, 0f, player.whoAmI, Projectile.whoAmI, 18);
+                        int projectileIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StoneFreeBindString>(), 4, 0f, player.whoAmI, Projectile.whoAmI, 18);
+                        Main.projectile[projectileIndex].netUpdate = true;
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
                     }
 

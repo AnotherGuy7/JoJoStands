@@ -41,7 +41,7 @@ namespace JoJoStands.UI
 
             if (sizeMode >= 4)
                 sizeMode = 3;
-            if (sizeMode <= 0)
+            else if (sizeMode <= 0)
             {
                 sizeMode = 0;
                 visible = false;
@@ -59,7 +59,6 @@ namespace JoJoStands.UI
                 hamonBar.Top.Set(JoJoStands.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
                 changedInConfig = false;
             }
-
 
             base.Update(gameTime);
         }

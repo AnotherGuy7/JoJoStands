@@ -37,6 +37,21 @@ namespace JoJoStands
 
         public override void OnWorldLoad()
         {
+            ResetWorldDependentVariables();
+        }
+
+        public override void ClearWorld()
+        {
+            ResetWorldDependentVariables();
+        }
+
+        public override void OnWorldUnload()
+        {
+            ResetWorldDependentVariables();
+        }
+
+        private void ResetWorldDependentVariables()
+        {
             viralMeteoriteDropped = false;
             vampiricNightQueued = false;
             checkedForVampiricEvent = false;

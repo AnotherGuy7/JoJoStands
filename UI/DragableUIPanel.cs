@@ -55,12 +55,6 @@ namespace JoJoStands.UI
             if (ContainsPoint(Main.MouseScreen))
                 Main.LocalPlayer.mouseInterface = true;
 
-            if (HAlign != 0f || VAlign != 0f)
-            {
-                Left.Set(Main.screenWidth * HAlign, 0f);
-                Top.Set(Main.screenHeight * VAlign, 0f);
-            }
-
             Rectangle parentSpace = Parent.GetDimensions().ToRectangle();
             if (dragging)
             {

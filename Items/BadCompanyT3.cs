@@ -40,7 +40,7 @@ namespace JoJoStands.Items
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            mPlayer.badCompanyTier = StandTier;
+            mPlayer.standTier = StandTier;
             mPlayer.maxBadCompanyUnits = 6 * StandTier;
             if (JoJoStands.SoundsLoaded)
                 SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Bad Company").WithVolumeScale(JoJoStands.ModSoundsVolume));

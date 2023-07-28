@@ -1528,6 +1528,17 @@ Mods: {
 					'''
 			}
 
+			Part4Dye: {
+				DisplayName: Part 4 Dye
+				Tooltip:
+					'''
+					Applies different sprites to certain Stands.
+					Stands affected by this dye are:
+					Star Platinum.
+					Used in the Stand Dye Slot.
+					'''
+			}
+
 			SaladDye: {
 				DisplayName: Salad Dye
 				Tooltip:
@@ -2574,7 +2585,7 @@ Mods: {
 
 			RemixTable: {
 				DisplayName: Remix Table
-				Tooltip: A plain looking DJ�s table, imbued with the Meteoric virus. Allows you to create and modify Stands.
+				Tooltip: A plain looking DJ s table, imbued with the Meteoric virus. Allows you to create and modify Stands.
 			}
 
 			ShotintheDark: {
@@ -3402,11 +3413,6 @@ Mods: {
 
 			ZombieAbilities: {
 				DisplayName: Zombie Abilities
-				Tooltip: ""
-			}
-
-			Part4Dye: {
-				DisplayName: Part4 Dye
 				Tooltip: ""
 			}
 		}

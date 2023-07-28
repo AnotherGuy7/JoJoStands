@@ -120,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 }
                 if (!restorationMode)
                 {
-                    if (Main.mouseRight && !playerHasAbilityCooldown && !flickFrames && !healingFrames && !restorationTargetSelected && shootCount <= 0 && Projectile.owner == Main.myPlayer)
+                    if (Main.mouseRight && !flickFrames && !healingFrames && !restorationTargetSelected && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                     {
                         int bulletIndex = GetPlayerAmmo(player);
                         if (bulletIndex != -1)
@@ -160,7 +160,6 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             SoundEngine.PlaySound(item41, player.Center);
                             if (bulletItem.type != ItemID.EndlessMusketPouch)
                                 player.ConsumeItem(bulletItem.type);
-                            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(4));
                         }
                     }
                 }

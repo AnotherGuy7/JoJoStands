@@ -942,7 +942,7 @@ namespace JoJoStands.NPCs
             if (boundByStrings)
             {
                 Texture2D bombTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/BoundByStrings").Value;
-                Vector2 scale = new Vector2(npc.width, npc.height) / new Vector2(22, 14);
+                Vector2 scale = new Vector2(npc.width / 22f, npc.height / 14f);
                 Vector2 origin = new Vector2(11, 7);
                 spriteBatch.Draw(bombTexture, npc.Center - Main.screenPosition, null, npc.color, npc.rotation, origin, scale, SpriteEffects.None, 0);
             }

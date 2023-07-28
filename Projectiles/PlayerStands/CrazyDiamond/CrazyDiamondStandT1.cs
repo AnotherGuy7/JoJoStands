@@ -69,6 +69,9 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         Main.NewText("Restoration Mode: Disabled");
                 }
             }
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
+                BasicPunchAI();
+
             if (restrationMode)
             {
                 int amountOfDusts = Main.rand.Next(0, 2 + 1);
@@ -81,8 +84,6 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
                 Lighting.AddLight(Projectile.position, 11);
             }
-            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-                BasicPunchAI();
             if (player.teleporting)
                 Projectile.position = player.position;
             if (mPlayer.posing)

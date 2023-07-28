@@ -21,10 +21,6 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
         private const float BaseKickRadius = 24f;
         private const int BaseKickCooldownTime = 120;
         private const int MaxAmountOfDusts = 40;
-        private readonly SoundStyle TinkSound = new SoundStyle(SoundID.Tink.SoundPath)
-        {
-            Pitch = 5f
-        };
 
         private int kickRestTimer = 0;
         private float kickRadius = 0f;
@@ -115,9 +111,9 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                             otherProjectile.penetrate += 1 + (mPlayer.sexPistolsTier / 2);
                             otherProjectile.GetGlobalProjectile<JoJoGlobalProjectile>().kickedBySexPistols = true;
                             otherProjectile.netUpdate = true;
-                            SoundEngine.PlaySound(TinkSound, otherProjectile.Center);
-                            if (JoJoStands.SoundsLoaded)
-                                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/SexPistolsCheer_" + Main.rand.Next(1, 3 + 1)));
+                            SoundEngine.PlaySound(SoundID.Tink.WithPitchOffset(5f), otherProjectile.Center);
+                            if (JoJoStands.SoundsLoaded && player.HasBuff<BulletKickFrenzy>())
+                                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/SexPistolsCheer_" + Main.rand.Next(1, 3 + 1)).WithVolumeScale(0.25f));
                             break;
                         }
                     }

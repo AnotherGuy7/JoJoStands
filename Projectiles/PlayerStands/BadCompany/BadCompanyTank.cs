@@ -2,7 +2,9 @@ using JoJoStands.Dusts;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -25,6 +27,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         }
 
         public override StandAttackType StandType => StandAttackType.Ranged;
+        public override Vector2 StandOffset => new Vector2(8f, -12f);
 
         public int updateTimer = 0;
 
@@ -33,6 +36,10 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         private float shootSpeed = 12f;
         private int shootTime = 0;
         private float speedRandom = 0f;
+        private float barrelRotation;
+        private Texture2D barrelTexture;
+        private readonly Vector2 BarrelOrigin = new Vector2(3, 5);
+        private readonly Vector2 BarrelPlacementOffset = new Vector2(16f, 0f);
 
         public override void AI()
         {
@@ -44,7 +51,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Projectile.frameCounter++;
-            if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
+            if (mPlayer.standOut && mPlayer.standTier != 0)
                 Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
@@ -89,25 +96,29 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 MovementAI();
-                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer && !BadCompanyUnitsUI.Visible)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.MouseWorld.X >= Projectile.position.X)
-                        Projectile.spriteDirection = Projectile.direction = 1;
-                    else
-                        Projectile.spriteDirection = Projectile.direction = -1;
+                    barrelRotation = (Main.MouseWorld - Projectile.Center).ToRotation();
+                    Projectile.direction = 1;
+                    if (Main.MouseWorld.X <= Projectile.position.X)
+                        Projectile.direction = -1;
+                    Projectile.spriteDirection = Projectile.direction;
 
-                    if (shootCount <= 0)
+                    if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer && !BadCompanyUnitsUI.Visible)
                     {
-                        shootCount += shootTime - mPlayer.standSpeedBoosts;
-                        SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
+                        if (shootCount <= 0)
+                        {
+                            shootCount += shootTime - mPlayer.standSpeedBoosts;
+                            SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
 
-                        shootVel.Normalize();
-                        shootVel *= shootSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 1f, Projectile.owner, (int)(projectileDamage * mPlayer.standDamageBoosts));
-                        Main.projectile[projIndex].netUpdate = true;
+                            shootVel.Normalize();
+                            shootVel *= shootSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BadCompanyTankRocket>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 1f, Projectile.owner, (int)(projectileDamage * mPlayer.standDamageBoosts));
+                            Main.projectile[projIndex].netUpdate = true;
+                        }
                     }
                 }
             }
@@ -161,6 +172,36 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             }
         }
 
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(barrelRotation);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            barrelRotation = reader.ReadSingle();
+        }
+
+        public override void PostDrawExtras()
+        {
+            if (barrelTexture == null && Main.netMode != NetmodeID.Server)
+                barrelTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanyTank_Barrel", AssetRequestMode.ImmediateLoad);
+            Vector2 origin = BarrelOrigin;
+            float currentRota = barrelRotation + MathHelper.Pi;
+            SpriteEffects effect = SpriteEffects.None;
+            if (currentRota < MathHelper.PiOver2 || currentRota > MathHelper.Pi * 3 / 2f)
+            {
+                effect = SpriteEffects.FlipVertically;
+                origin = new Vector2(2f, 3f);
+            }
+            Vector2 offset = new Vector2(12f, -1.5f);
+            if (currentAnimationState == AnimationState.Idle && Projectile.frame == 1)
+                offset.Y -= 2;
+            if (Projectile.spriteDirection == -1)
+                offset.Y += 2;
+            Main.EntitySpriteDraw(barrelTexture, Projectile.Center + (offset * new Vector2(Projectile.spriteDirection, 1f)) - Main.screenPosition, null, Color.White, currentRota + MathHelper.Pi, origin, Projectile.scale, effect, 0f);
+        }
+
         public override void Kill(int timeLeft)
         {
             for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
@@ -173,7 +214,6 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         private void MovementAI()       //Pretty much the pet AI
         {
             Player player = Main.player[Projectile.owner];
-            PlayAnimation("Tank");
             Vector2 directionToPlayer = player.Center - Projectile.Center;
             directionToPlayer.Normalize();
             directionToPlayer *= player.moveSpeed;
@@ -196,6 +236,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
 
             if (Projectile.ai[0] == 0f)
             {
+                currentAnimationState = AnimationState.Idle;
                 Projectile.tileCollide = true;
                 if (Projectile.velocity.Y < 6f)
                     Projectile.velocity.Y += 0.3f;
@@ -210,6 +251,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             float distance = Vector2.Distance(player.Center, Projectile.Center);
             if (Projectile.ai[0] == 1f)        //Flying
             {
+                currentAnimationState = AnimationState.Special;
                 if (distance >= MaxFlyingIdleDistance)
                 {
                     if (Math.Abs(player.velocity.X) > 1f || Math.Abs(player.velocity.Y) > 1f)
@@ -233,12 +275,31 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             }
         }
 
+        public override void SelectAnimation()
+        {
+            if (oldAnimationState != currentAnimationState)
+            {
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
+            }
+
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Special)
+                PlayAnimation("Carry");
+        }
+
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanyTank");
+                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/BadCompany/BadCompanyTank_" + animationName);
 
-            AnimateStand(animationName, 2, 36 - (int)Projectile.velocity.X, true);
+            if (animationName == "Idle")
+                AnimateStand(animationName, 2, 15, true);
+            else if (animationName == "Carry")
+                AnimateStand(animationName, 2, 15, true);
         }
     }
 }

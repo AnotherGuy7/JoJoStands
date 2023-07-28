@@ -18,6 +18,7 @@ namespace JoJoStands.Dusts
 
     public class StandSummonShine1 : ModDust
     {
+        private const int FrameWidth = 44;
         private const int FrameHeight = 40;
 
         public override void OnSpawn(Dust dust)
@@ -26,6 +27,7 @@ namespace JoJoStands.Dusts
             dust.noLight = true;
             dust.frame = new Rectangle(0, 0, 44, FrameHeight);
             dust.customData = 0;
+            dust.position -= new Vector2(FrameWidth, FrameHeight) / 2f;
         }
 
         public override bool Update(Dust dust)
@@ -62,6 +64,7 @@ namespace JoJoStands.Dusts
             dust.noLight = true;
             dust.frame = new Rectangle(0, 0, FrameSize, FrameSize);
             dust.customData = 0;
+            dust.position -= new Vector2(FrameSize / 2f);
         }
 
         public override bool Update(Dust dust)

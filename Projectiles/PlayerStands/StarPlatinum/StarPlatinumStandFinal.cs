@@ -117,10 +117,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                     SoundStyle item41 = SoundID.Item41;
                                     item41.Pitch = 2.8f;
                                     SoundEngine.PlaySound(item41, player.Center);
-                                    if (bulletItem.type != ItemID.EndlessMusketPouch)
-                                    {
+                                    if (bulletItem.consumable)
                                         player.ConsumeItem(bulletItem.type);
-                                    }
                                 }
                             }
                         }
@@ -128,7 +126,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                         {
                             if (player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                             {
-                                shootCount += 120;
+                                shootCount += 60;
                                 Main.mouseLeft = false;
                                 Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                                 if (shootVel == Vector2.Zero)

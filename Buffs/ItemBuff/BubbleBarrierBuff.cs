@@ -1,3 +1,4 @@
+using JoJoStands.Buffs.Debuffs;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -22,6 +23,13 @@ namespace JoJoStands.Buffs.ItemBuff
                 if (Main.debuff[i])
                     player.buffImmune[i] = true;
             }
+        }
+
+        public override void OnBuffEnd(Player player)
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            int abilityCooldownTime = 30 - (10 * (mPlayer.standTier - 3));
+            player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(abilityCooldownTime));
         }
     }
 }

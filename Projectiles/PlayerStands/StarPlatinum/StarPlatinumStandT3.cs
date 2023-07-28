@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                         {
                             if (player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                             {
-                                shootCount += 120;
+                                shootCount += 60;
                                 Main.mouseLeft = false;
                                 Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                                 if (shootVel == Vector2.Zero)

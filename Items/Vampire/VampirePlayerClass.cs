@@ -123,11 +123,8 @@ namespace JoJoStands.Items.Vampire
             {
                 if (!noSunBurning)
                 {
-                    Vector3 lightLevel = Lighting.GetColor((int)Player.Center.X / 16, (int)Player.Center.Y / 16).ToVector3();
-                    if (lightLevel.Length() > 1.3f && Main.dayTime && Player.ZoneOverworldHeight && Main.tile[(int)Player.Center.X / 16, (int)Player.Center.Y / 16].WallType == 0)
-                    {
+                    if (Main.dayTime && Player.ZoneOverworldHeight && Main.tile[(int)Player.Center.X / 16, (int)Player.Center.Y / 16].WallType == 0)
                         Player.AddBuff(ModContent.BuffType<Sunburn>(), 2, true);
-                    }
                 }
             }
 
@@ -525,17 +522,11 @@ namespace JoJoStands.Items.Vampire
             if (zombie || vampire)
             {
                 if (Player.lifeRegen > 0)
-                {
                     Player.lifeRegen = 0;
-                }
                 if (Player.lifeRegenTime > 0)
-                {
                     Player.lifeRegenTime = 0;
-                }
                 if (Player.lifeRegenCount > 0)
-                {
                     Player.lifeRegenCount = 0;
-                }
             }
         }
 

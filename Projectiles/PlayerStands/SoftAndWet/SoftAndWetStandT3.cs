@@ -151,10 +151,9 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                         SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound);
                     }
                 }
-                if (SecondSpecialKeyPressed(false) && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
-                    {
+                if (SecondSpecialKeyPressed() && !player.HasBuff<BubbleBarrierBuff>() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+                {
                     player.AddBuff(ModContent.BuffType<BubbleBarrierBuff>(), 15 * 60);
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(35));
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
                 }
             }

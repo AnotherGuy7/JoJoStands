@@ -1,0 +1,16 @@
+- Adjusted Bad Company's spawn effects
+- Adjusted Bad Company's firing mechanics
+- Removed the Ability Cooldown from Crazy Diamond's bullet flick ability
+- Changed Star Finger to allow for more consistent use
+- Fixed Stands not benefitting from All Damage bonuses
+- Fixed Star Platinum consuming endless bullet items
+- Fixed Sex Pistols throwing errors upon kicking bullets with the Sounds Mod enabled
+- Fixed Sex Pistols throwing errors when attempting to change Pistol positions with the Sounds mod enabled
+- Fixed a crash that happens when buffing other players with Believe in Me using Echoes
+- Fixed an improper offset in the Stand Summoning effects
+- Fixed Crazy Diamond Tier 1 not being able to move while in restoration mode and in Auto Mode
+- Fixed multiple Stand-related buffs being able to be right-clicked to force cooldowns
+- Fixed the Viral Meteorite not being able to drop after switching to new worlds in the same session
+- Fixed Sticky Finger's Extended Zipper Punch not connecting to Sticky Fingers while Sticky Fingers is either facing right or facing in a direction opposite of the player
+- Fixed a rare animation bug that caused animations to distort in multiplayer when two players are using the same Stand
+- Fixed a bug that caused Bad Company's animations to flicker and distort when performing a number of actions

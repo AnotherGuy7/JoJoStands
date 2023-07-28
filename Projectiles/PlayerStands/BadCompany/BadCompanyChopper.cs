@@ -19,6 +19,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         }
 
         public override StandAttackType StandType => StandAttackType.Ranged;
+        public override Vector2 StandOffset => new Vector2(-4, 13);
 
         public int updateTimer = 0;
 
@@ -37,7 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             Projectile.frameCounter++;
-            if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
+            if (mPlayer.standOut && mPlayer.standTier != 0)
                 Projectile.timeLeft = 2;
 
             if (updateTimer >= 90)      //an automatic netUpdate so that if something goes wrong it'll at least fix in about a second
@@ -80,26 +81,29 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
                 MovementAI();
-                if (Main.mouseLeft && mPlayer.canStandBasicAttack && player.whoAmI == Main.myPlayer && !BadCompanyUnitsUI.Visible)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.MouseWorld.X >= Projectile.position.X)
-                        Projectile.spriteDirection = Projectile.direction = 1;
-                    else
-                        Projectile.spriteDirection = Projectile.direction = -1;
+                    Projectile.direction = 1;
+                    if (Main.MouseWorld.X <= Projectile.position.X)
+                        Projectile.direction = -1;
+                    Projectile.spriteDirection = Projectile.direction;
 
-                    if (shootCount <= 0)
+                    if (Main.mouseLeft && mPlayer.canStandBasicAttack && !BadCompanyUnitsUI.Visible)
                     {
-                        shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
-                        SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                        Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
-                        Vector2 shootVel = (Main.MouseWorld + chopperInaccuracyVector) - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
+                        if (shootCount <= 0)
+                        {
+                            shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
+                            SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
+                            Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
+                            Vector2 shootVel = (Main.MouseWorld + chopperInaccuracyVector) - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
 
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
-                        Main.projectile[projIndex].netUpdate = true;
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(14f, 20f), shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
+                            Main.projectile[projIndex].netUpdate = true;
+                        }
                     }
                 }
             }
@@ -186,6 +190,13 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     directionToPlayer *= 0.5f * (distance / 160f);
                     Projectile.velocity += directionToPlayer;
                 }
+            }
+            if (Projectile.Center.Y > player.position.Y)
+            {
+                if (Projectile.velocity.Y > 2f)
+                    Projectile.velocity.Y *= -1;
+                else
+                    Projectile.velocity.Y = player.velocity.Y + Main.rand.Next(-4, -2 + 1);
             }
             if (distance >= MaxRange)        //Out of range
             {

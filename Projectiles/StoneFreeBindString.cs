@@ -1,3 +1,4 @@
+using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -64,9 +65,7 @@ namespace JoJoStands.Projectiles
                     Projectile.velocity *= 24f;
                 }
                 else
-                {
                     Projectile.velocity = Vector2.Zero;
-                }
                 Projectile.netUpdate = true;
             }
 
@@ -88,7 +87,7 @@ namespace JoJoStands.Projectiles
             {
                 boundNPC = target;
                 boundToNPC = true;
-                boundNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().boundByStrings = true;
+                boundNPC.GetGlobalNPC<JoJoGlobalNPC>().boundByStrings = true;
                 Projectile.damage = 0;
                 Projectile.timeLeft = (int)Projectile.ai[1] * 60;
             }
@@ -97,7 +96,7 @@ namespace JoJoStands.Projectiles
         public override void Kill(int timeLeft)
         {
             if (boundToNPC && boundNPC != null && boundNPC.life > 0)
-                boundNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().boundByStrings = false;
+                boundNPC.GetGlobalNPC<JoJoGlobalNPC>().boundByStrings = false;
         }
 
         private Texture2D stringTexture;

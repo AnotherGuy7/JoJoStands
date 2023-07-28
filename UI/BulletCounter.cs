@@ -35,7 +35,7 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             int frame = mPlayer.revolverBulletsShot;
-            animRect.Y = frame;
+            animRect.Y = frame * animRect.Height;
 
             spriteBatch.Draw(bulletCounterTexture, UITools.ReformatRectangle(bulletCountUI.GetClippingRectangle(spriteBatch)), animRect, Color.White);
         }

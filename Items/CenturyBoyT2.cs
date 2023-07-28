@@ -1,6 +1,8 @@
+using JoJoStands.Dusts;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -36,7 +38,15 @@ namespace JoJoStands.Items
             mPlayer.standType = 2;
             mPlayer.standName = "CenturyBoy";
             mPlayer.standAccessory = true;
-
+            int amountOfParticles = Main.rand.Next(3, 7 + 1);
+            int[] dustTypes = new int[3] { ModContent.DustType<StandSummonParticles>(), ModContent.DustType<StandSummonShine1>(), ModContent.DustType<StandSummonShine2>() };
+            for (int i = 0; i < amountOfParticles; i++)
+            {
+                int dustType = dustTypes[Main.rand.Next(0, 3)];
+                Dust.NewDust(player.position, player.width, player.height, dustType, Scale: (float)Main.rand.Next(80, 120) / 100f);
+            }
+            if (JoJoStands.SoundsLoaded)
+                SoundEngine.PlaySound(MyPlayer.SummonSound, player.Center);
             return true;
         }
 
