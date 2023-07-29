@@ -127,6 +127,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     if (Main.MouseWorld.X <= Projectile.position.X)
                         Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
+
                     if (Main.mouseLeft && mPlayer.canStandBasicAttack && !BadCompanyUnitsUI.Visible)
                     {
                         NPC targetNPC = null;
@@ -163,15 +164,16 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         {
                             if (shootCount <= 0)
                             {
+                                Vector2 shootPosition = Projectile.Center + (GunPlacementOffset * new Vector2(Projectile.spriteDirection, 1f));
                                 shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
                                 SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                                Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                                Vector2 shootVel = Main.MouseWorld - shootPosition;
                                 if (shootVel == Vector2.Zero)
                                     shootVel = new Vector2(0f, 1f);
 
                                 shootVel.Normalize();
                                 shootVel *= ProjectileSpeed;
-                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + (GunPlacementOffset * new Vector2(Projectile.spriteDirection, 1f)), shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
                                 Main.projectile[projIndex].netUpdate = true;
                             }
                         }
@@ -182,31 +184,43 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
-                NPC target = FindNearestTarget(17f * 16f);
+                float detectionRange = (20f + (4f * mPlayer.standTier)) * 16f;
+                NPC target = FindNearestTarget(detectionRange, new Vector2(0f, -16f));
                 if (target != null)
                 {
                     Projectile.direction = 1;
                     if (target.position.X <= Projectile.position.X)
                         Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
-
+                    Vector2 shootPosition = Projectile.Center + (GunPlacementOffset * new Vector2(Projectile.spriteDirection, 1f));
+                    gunRotation = (target.Center - shootPosition).ToRotation();
                     if (shootCount <= 0)
                     {
                         shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(-3, 3 + 1);
                         SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                        Vector2 shootVel = target.Center - Projectile.Center;
+                        Vector2 shootVel = target.Center - shootPosition;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
                         Main.projectile[projIndex].netUpdate = true;
                     }
                 }
                 else
-                    MovementAI();
+                {
+                    if (Projectile.velocity.X > 0f)
+                        Projectile.spriteDirection = Projectile.direction = 1;
+                    else if (Projectile.velocity.X < 0f)
+                        Projectile.spriteDirection = Projectile.direction = -1;
+
+                    if (Projectile.direction == -1)
+                        gunRotation = MathHelper.Pi;
+                    else
+                        gunRotation = 0f;
+                }
+                MovementAI();
             }
             if (!mPlayer.standOut)
                 Projectile.Kill();
@@ -320,7 +334,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 }
             }
             Projectile.velocity *= 0.99f;
-            if (distance >= 300f)        //Out of range
+            if (distance >= IdleRange + (2f * 16f))        //Out of range
             {
                 Projectile.tileCollide = false;
                 directionToPlayer *= distance / 90f;

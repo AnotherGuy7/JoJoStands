@@ -23,6 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
         private int ChanceToDebuff = 50;
         private int DebuffDuration = 7 * 60;
+        private const float AutoModeDetectionDistance = 28f * 16f;
 
         public override void AI()
         {
@@ -122,7 +123,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
-                NPC target = FindNearestTarget(350f);
+                NPC target = FindNearestTarget(AutoModeDetectionDistance);
                 if (target != null)
                 {
                     currentAnimationState = AnimationState.Attack;

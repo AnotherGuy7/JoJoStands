@@ -39,7 +39,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         private float barrelRotation;
         private Texture2D barrelTexture;
         private readonly Vector2 BarrelOrigin = new Vector2(3, 5);
-        private readonly Vector2 BarrelPlacementOffset = new Vector2(16f, 0f);
+        private readonly Vector2 BarrelPlacementOffset = new Vector2(12f, -1.5f);
 
         public override void AI()
         {
@@ -125,6 +125,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 MovementAI();
+                float detectionDistance = (22 + (2 * mPlayer.standTier)) * 16f;
                 NPC target = null;
                 for (int n = 0; n < Main.maxNPCs; n++)
                 {
@@ -144,6 +145,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         Projectile.spriteDirection = Projectile.direction = 1;
                     else
                         Projectile.spriteDirection = Projectile.direction = -1;
+                    barrelRotation = (target.Center - Projectile.Center).ToRotation();
 
                     if (shootCount <= 0)
                     {
@@ -151,9 +153,8 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                         Vector2 shootVel = target.Center - Projectile.Center;
                         if (shootVel == Vector2.Zero)
-                        {
                             shootVel = new Vector2(0f, 1f);
-                        }
+
                         shootVel.Y -= Projectile.Distance(target.position) / 110f;
                         shootVel.Normalize();
                         shootVel *= shootSpeed;
@@ -161,6 +162,19 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         Main.projectile[projIndex].netUpdate = true;
                     }
                 }
+                else
+                {
+                    if (Projectile.velocity.X > 0f)
+                        Projectile.spriteDirection = Projectile.direction = 1;
+                    else if (Projectile.velocity.X < 0f)
+                        Projectile.spriteDirection = Projectile.direction = -1;
+
+                    if (Projectile.direction == -1)
+                        barrelRotation = MathHelper.Pi;
+                    else
+                        barrelRotation = 0f;
+                }
+
             }
             if (!mPlayer.standOut)
                 Projectile.Kill();
@@ -194,7 +208,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                 effect = SpriteEffects.FlipVertically;
                 origin = new Vector2(2f, 3f);
             }
-            Vector2 offset = new Vector2(12f, -1.5f);
+            Vector2 offset = BarrelPlacementOffset;
             if (currentAnimationState == AnimationState.Idle && Projectile.frame == 1)
                 offset.Y -= 2;
             if (Projectile.spriteDirection == -1)
@@ -219,13 +233,9 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             directionToPlayer *= player.moveSpeed;
             float xDist = Math.Abs(player.position.X - Projectile.position.X);
             if (!WorldGen.SolidTile((int)(player.position.X / 16f), (int)(player.position.Y / 16f) + 4))
-            {
                 Projectile.ai[0] = 1f;
-            }
             else
-            {
                 Projectile.ai[0] = 0f;
-            }
 
             if (Projectile.position.X > player.position.X)
                 Projectile.direction = -1;

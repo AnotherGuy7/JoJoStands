@@ -457,6 +457,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             sleepingGasPosition = new Vector2(reader.ReadSingle(), reader.ReadSingle());
         }
 
+        public override byte SendAnimationState() => (byte)currentAnimationState;
+        public override void ReceiveAnimationState(byte state) => currentAnimationState = (AnimationState)state;
+
         public override void SelectAnimation()
         {
             if (oldAnimationState != currentAnimationState)

@@ -245,6 +245,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             }
         }
 
+        public override byte SendAnimationState() => (byte)currentAnimationState;
+        public override void ReceiveAnimationState(byte state) => currentAnimationState = (AnimationState)state;
+
         public override void SelectAnimation()
         {
             if (oldAnimationState != currentAnimationState)

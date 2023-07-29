@@ -428,7 +428,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
-                NPC target = FindNearestTarget(350f);
+                NPC target = FindNearestTarget(36f * 16f);
                 if (target != null)
                 {
                     currentAnimationState = AnimationState.Attack;

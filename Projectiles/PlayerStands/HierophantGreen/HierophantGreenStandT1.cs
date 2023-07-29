@@ -18,6 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public override string SpawnSoundName => "Hierophant Green";
         public override bool CanUseSaladDye => true;
         public override bool CanUseRangeIndicators => false;
+        private const float AutoModeDetectionDistance = 18f * 16f;
 
         public override void AI()
         {
@@ -92,7 +93,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 StayBehind();
 
-                NPC target = FindNearestTarget(350f);
+                NPC target = FindNearestTarget(AutoModeDetectionDistance);
                 if (target != null)
                 {
                     currentAnimationState = AnimationState.Attack;

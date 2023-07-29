@@ -25,6 +25,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         private bool remoteControlled = false;
 
         private const float MaxRemoteModeDistance = 40f * 16f;
+        private const float AutoModeDetectionDistance = 20f * 16f;
 
         public override void AI()
         {
@@ -212,7 +213,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             {
                 StayBehind();
 
-                NPC target = FindNearestTarget(350f);
+                NPC target = FindNearestTarget(AutoModeDetectionDistance);
                 if (target != null)
                 {
                     currentAnimationState = AnimationState.Attack;

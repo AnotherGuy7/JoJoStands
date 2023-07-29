@@ -31,6 +31,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         private const float MaxRemoteModeDistance = 45f * 16f;
         private const float EmeraldSplashRadius = 20f * 16f;
         private const float AmountOfEmeraldSplashLinks = 35;
+        private const float AutoModeDetectionDistance = 22f * 16f;
 
         public override void AI()
         {
@@ -223,7 +224,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             {
                 StayBehind();
 
-                NPC target = FindNearestTarget(350f);
+                NPC target = FindNearestTarget(AutoModeDetectionDistance);
                 if (target != null)
                 {
                     currentAnimationState = AnimationState.Attack;

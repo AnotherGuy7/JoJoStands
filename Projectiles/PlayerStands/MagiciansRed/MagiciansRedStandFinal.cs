@@ -24,6 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
         private int ChanceToDebuff = 60;
         private int DebuffDuration = 8 * 60;
         private int secondRingTimer = 0;
+        private const float AutoModeDetectionDistance = 30f * 16f;
         public static readonly SoundStyle RedBindSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/RedBind");
         public static readonly SoundStyle CrossfireHurricaneSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/CrossfireHurricaneSpecial");
 
@@ -144,7 +145,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
-                NPC target = FindNearestTarget(350f);
+                NPC target = FindNearestTarget(AutoModeDetectionDistance);
                 if (target != null)
                 {
                     currentAnimationState = AnimationState.Attack;

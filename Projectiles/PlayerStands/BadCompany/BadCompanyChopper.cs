@@ -1,4 +1,5 @@
 using JoJoStands.Dusts;
+using JoJoStands.Items.Tiles;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,6 +28,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
         private int projectileDamage = 0;
         private int shootTime = 0;
         private int chopperInaccuracy = 0;
+        private readonly Vector2 ShootOffset = new Vector2(14f, 20f);
 
         public override void AI()
         {
@@ -92,16 +94,17 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     {
                         if (shootCount <= 0)
                         {
+                            Vector2 shootPosition = Projectile.Center + ShootOffset;
                             shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
                             SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                             Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
-                            Vector2 shootVel = (Main.MouseWorld + chopperInaccuracyVector) - Projectile.Center;
+                            Vector2 shootVel = (Main.MouseWorld + chopperInaccuracyVector) - shootPosition;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(14f, 20f), shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
                             Main.projectile[projIndex].netUpdate = true;
                         }
                     }
@@ -116,7 +119,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                     NPC npc = Main.npc[n];
                     if (npc.active)
                     {
-                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && Projectile.Distance(npc.Center) <= 26f * 16f)
+                        if (!npc.friendly && !npc.immortal && npc.lifeMax > 5 && Projectile.Distance(npc.Center) <= 32f * 16f)
                         {
                             target = npc;
                             break;
@@ -131,17 +134,18 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         Projectile.spriteDirection = Projectile.direction = -1;
                     if (shootCount <= 0)
                     {
+                        Vector2 shootPosition = Projectile.Center + ShootOffset;
                         shootCount += shootTime - mPlayer.standSpeedBoosts + Main.rand.Next(0, 6 + 1);
                         SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
                         Vector2 chopperInaccuracyVector = new Vector2(Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1), Main.rand.Next(-chopperInaccuracy, chopperInaccuracy + 1));
-                        Vector2 shootVel = (target.Center + chopperInaccuracyVector) - Projectile.Center;
+                        Vector2 shootVel = (target.Center + chopperInaccuracyVector) - shootPosition;
                         if (shootVel == Vector2.Zero)
                         {
                             shootVel = new Vector2(0f, 1f);
                         }
                         shootVel.Normalize();
                         shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, shootVel, ModContent.ProjectileType<StandBullet>(), (int)(projectileDamage * mPlayer.standDamageBoosts), 3f, Projectile.owner);
                         Main.projectile[projIndex].netUpdate = true;
                     }
                 }

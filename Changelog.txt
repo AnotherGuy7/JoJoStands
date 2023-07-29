@@ -1,5 +1,6 @@
 - Adjusted Bad Company's spawn effects
 - Adjusted Bad Company's firing mechanics
+- Buffed ranged Stands's Auto Mode detection distances
 - Removed the Ability Cooldown from Crazy Diamond's bullet flick ability
 - Changed Star Finger to allow for more consistent use
 - Fixed Stands not benefitting from All Damage bonuses
@@ -14,3 +15,4 @@
 - Fixed Sticky Finger's Extended Zipper Punch not connecting to Sticky Fingers while Sticky Fingers is either facing right or facing in a direction opposite of the player
 - Fixed a rare animation bug that caused animations to distort in multiplayer when two players are using the same Stand
 - Fixed a bug that caused Bad Company's animations to flicker and distort when performing a number of actions
+- Fixed Bad Company soldiers not being able to detect enemies while grounded while in Auto Mode.

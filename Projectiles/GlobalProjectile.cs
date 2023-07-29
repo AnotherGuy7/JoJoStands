@@ -134,7 +134,7 @@ namespace JoJoStands.Projectiles
                     return false;
                 }
             }
-            if (!mPlayer.timestopActive)
+            else
             {
                 if (timestopFreezeProgress > 0f)
                 {

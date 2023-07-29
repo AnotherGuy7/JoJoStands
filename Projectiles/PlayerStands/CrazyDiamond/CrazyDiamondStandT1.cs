@@ -90,6 +90,8 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 currentAnimationState = AnimationState.Pose;
         }
 
+        public override byte SendAnimationState() => (byte)currentAnimationState;
+        public override void ReceiveAnimationState(byte state) => currentAnimationState = (AnimationState)state;
 
         public override void SelectAnimation()
         {

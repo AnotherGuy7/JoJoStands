@@ -269,6 +269,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 creamdash = false;
             return creamdash;
         }
+
         public override void SendExtraStates(BinaryWriter writer)
         {
             Player player = Main.player[Projectile.owner];
@@ -292,6 +293,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             dashprojspawn = reader.ReadBoolean();
             dashproj = reader.ReadInt32();
         }
+
+        public override byte SendAnimationState() => (byte)currentAnimationState;
+        public override void ReceiveAnimationState(byte state) => currentAnimationState = (AnimationState)state;
 
         public override void SelectAnimation()
         {

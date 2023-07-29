@@ -84,6 +84,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 currentAnimationState = AnimationState.Secondary;
         }
 
+        public override byte SendAnimationState() => (byte)currentAnimationState;
+        public override void ReceiveAnimationState(byte state) => currentAnimationState = (AnimationState)state;
+
         public override void SelectAnimation()
         {
             if (oldAnimationState != currentAnimationState)

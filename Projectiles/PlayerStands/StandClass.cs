@@ -938,7 +938,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void SendExtraAI(BinaryWriter writer)
         {
-            writer.Write((byte)currentAnimationState);
+            writer.Write(attacking);
+            writer.Write(secondaryAbility);
+            writer.Write(SendAnimationState());
             writer.Write(playerHasAbilityCooldown);
             writer.Write(shootCount);
             writer.Write(Projectile.spriteDirection);
@@ -950,7 +952,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
-            currentAnimationState = (AnimationState)reader.ReadByte();
+            attacking = reader.ReadBoolean();
+            secondaryAbility = reader.ReadBoolean();
+            ReceiveAnimationState(reader.ReadByte());
             playerHasAbilityCooldown = reader.ReadBoolean();
             shootCount = reader.ReadInt32();
             Projectile.spriteDirection = reader.ReadInt32();
@@ -975,6 +979,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <param name="reader"></param>
         public virtual void ReceiveExtraStates(BinaryReader reader)
         { }
+
+        public virtual byte SendAnimationState() { return (byte)currentAnimationState; }
+        public virtual void ReceiveAnimationState(byte state) { currentAnimationState = (AnimationState)state; }
 
         /// <summary>
         /// Limits the distance the Stand can travel.
@@ -1116,6 +1123,109 @@ namespace JoJoStands.Projectiles.PlayerStands
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
                             if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                mosthealth = npc.life;
+                            }
+                        }
+                    }
+                    break;
+            }
+            return target;
+        }
+
+        /// <summary>
+        /// Find the closest NPC to the player.
+        /// Criteria for the search is set by the JoJoStands.standSearchType field.
+        /// </summary>
+        /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
+        /// <param name="detectionPositionOffset">An offset to the position used to check whether or not this Stand has line of sight to the target.</param>
+        /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
+        public NPC FindNearestTarget(float maxDetectionRange, Vector2 detectionPositionOffset)
+        {
+            NPC target = null;
+            Player player = Main.player[Projectile.owner];
+            switch (JoJoStands.StandSearchTypeEnum)
+            {
+                case MyPlayer.StandSearchTypeEnum.Bosses:
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center + detectionPositionOffset, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                if (npc.boss)       //is gonna try to detect bosses over anything
+                                {
+                                    target = npc;
+                                    break;
+                                }
+                                else        //if it fails to detect a boss, it'll detect the next best thing
+                                {
+                                    target = npc;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchTypeEnum.Closest:
+                    float closestDistance = maxDetectionRange;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < closestDistance && Collision.CanHitLine(Projectile.Center + detectionPositionOffset, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                closestDistance = distance;
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchTypeEnum.Farthest:
+                    float farthestDistance = 0f;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance > farthestDistance && distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center + detectionPositionOffset, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                farthestDistance = distance;
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchTypeEnum.LeastHealth:
+                    int leasthealth = int.MaxValue;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < maxDetectionRange && npc.life < leasthealth && Collision.CanHitLine(Projectile.Center + detectionPositionOffset, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                            {
+                                target = npc;
+                                leasthealth = npc.life;
+                            }
+                        }
+                    }
+                    break;
+                case MyPlayer.StandSearchTypeEnum.MostHealth:
+                    int mosthealth = 0;
+                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
+                    {
+                        NPC npc = Main.npc[n];
+                        if (npc.active && npc.CanBeChasedBy(this, false))
+                        {
+                            float distance = Vector2.Distance(npc.Center, player.Center);
+                            if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.Center + detectionPositionOffset, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 mosthealth = npc.life;

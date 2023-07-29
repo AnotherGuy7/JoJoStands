@@ -55,6 +55,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
         private const float MaxFlightSpeed = 10f;
         private const float WhirrSoundDistance = 98 * 16f;
         private const float AerosmithHoverHeightOffset = 3.5f * 16f;
+        private const float AutoModeDetectionDistance = 36f * 16f;
         public static SoundEffect AerosmithWhirrSoundEffect;
 
 
@@ -340,7 +341,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             {
                 remoteMode = false;
                 Projectile.rotation = (Projectile.velocity * Projectile.direction).ToRotation();
-                NPC target = FindNearestTarget(28f * 16f);
+                NPC target = FindNearestTarget(AutoModeDetectionDistance);
                 if (target == null)
                 {
                     if (Projectile.Distance(player.Center) < 12 * 16f)
@@ -406,7 +407,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
                         Projectile.netUpdate = true;
                     }
 
-                    if (Projectile.Distance(target.Center) <= 24 * 16f)
+                    if (Projectile.Distance(target.Center) <= AutoModeDetectionDistance - (4 * 16f))
                     {
                         Projectile.velocity *= 0.86f;
                         if (shootCount <= 0 && Main.myPlayer == Projectile.owner)
