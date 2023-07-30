@@ -48,6 +48,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

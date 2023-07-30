@@ -34,7 +34,6 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         }
 
         private bool flickFrames = false;
-        private bool resetFrame = false;
         private bool restorationMode = false;
         private bool restoringObjects = false;
         private int tileRestorationTimer = 0;
@@ -102,14 +101,15 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             }
                         }
                     }
-                    if (flickFrames && shootCount <= 0)
+                    if (flickFrames)
                     {
-                        if (Projectile.frame == 2)
+                        currentAnimationState = AnimationState.Flick;
+                        if (Projectile.frame == 2 && shootCount <= 0)
                         {
                             int bulletIndex = GetPlayerAmmo(player);
                             Item bulletItem = player.inventory[bulletIndex];
 
-                            shootCount += 40;
+                            shootCount += 12;
                             Main.mouseLeft = false;
                             Vector2 shootVel = Main.MouseWorld - (Projectile.Center - new Vector2(0, 18f));
                             if (shootVel == Vector2.Zero)
@@ -238,11 +238,10 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
         public override void AnimationCompleted(string animationName)
         {
-            if (resetFrame && animationName == "Flick")
+            if (animationName == "Flick")
             {
                 currentAnimationState = AnimationState.Idle;
                 flickFrames = false;
-                resetFrame = false;
             }
         }
 

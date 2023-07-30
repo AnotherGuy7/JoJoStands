@@ -131,6 +131,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 else
                     currentAnimationState = AnimationState.Idle;
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

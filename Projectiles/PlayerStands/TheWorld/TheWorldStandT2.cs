@@ -93,6 +93,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             }
             if (abilityPose)
                 currentAnimationState = AnimationState.Special;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SendExtraStates(BinaryWriter writer)

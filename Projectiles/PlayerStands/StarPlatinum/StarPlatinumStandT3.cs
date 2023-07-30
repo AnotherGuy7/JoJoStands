@@ -10,7 +10,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
     {
         public override int PunchDamage => 92;
         public override int PunchTime => 9;
-        public override int AltDamage => 139;
+        public override int AltDamage => 147;
         public override int HalfStandHeight => 37;
         public override int FistWhoAmI => 0;
         public override int TierNumber => 3;
@@ -23,6 +23,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public new AnimationState oldAnimationState;
 
         private bool flickFrames = false;
+        private bool rightClickShot = false;
 
         public new enum AnimationState
         {
@@ -61,44 +62,20 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                         attacking = false;
                         currentAnimationState = AnimationState.Idle;
                     }
-                    if (Main.mouseRight && shootCount <= 0)
+                    if (Main.mouseRight && !rightClickShot && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0 && shootCount <= 0)
                     {
                         int bulletIndex = GetPlayerAmmo(player);
                         if (bulletIndex != -1)
                         {
                             Item bulletItem = player.inventory[bulletIndex];
                             if (bulletItem.shoot != -1)
-                            {
                                 flickFrames = true;
-                                currentAnimationState = AnimationState.Flick;
-                                if (Projectile.frame == 1)
-                                {
-                                    shootCount += 60;
-                                    Main.mouseLeft = false;
-                                    SoundStyle item41 = SoundID.Item41;
-                                    item41.Pitch = 2.8f;
-                                    SoundEngine.PlaySound(item41, player.Center);
-                                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                                    if (shootVel == Vector2.Zero)
-                                        shootVel = new Vector2(0f, 1f);
-
-                                    shootVel.Normalize();
-                                    shootVel *= 12f;
-                                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
-                                    Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
-                                    Main.projectile[projIndex].netUpdate = true;
-                                    if (bulletItem.type != ItemID.EndlessMusketPouch)
-                                    {
-                                        player.ConsumeItem(bulletItem.type);
-                                    }
-                                }
-                            }
                         }
                         else
                         {
                             if (player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                             {
-                                shootCount += 60;
+                                shootCount += 40;
                                 Main.mouseLeft = false;
                                 Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                                 if (shootVel == Vector2.Zero)
@@ -112,9 +89,41 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                             }
                         }
                     }
+                    if (!Main.mouseRight && !flickFrames)
+                        rightClickShot = false;
                 }
                 if (!attacking)
                     StayBehindWithAbility();
+                if (flickFrames)
+                {
+                    currentAnimationState = AnimationState.Flick;
+                    if (Projectile.frame == 1 && !rightClickShot)
+                    {
+                        int bulletIndex = GetPlayerAmmo(player);
+                        if (bulletIndex != -1)
+                        {
+                            Item bulletItem = player.inventory[bulletIndex];
+                            if (bulletItem.shoot != -1)
+                            {
+                                rightClickShot = true;
+                                SoundStyle item41 = SoundID.Item41;
+                                item41.Pitch = 2.8f;
+                                SoundEngine.PlaySound(item41, player.Center);
+                                Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                                if (shootVel == Vector2.Zero)
+                                    shootVel = new Vector2(0f, 1f);
+
+                                shootVel.Normalize();
+                                shootVel *= 12f;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
+                                Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
+                                Main.projectile[projIndex].netUpdate = true;
+                                if (bulletItem.consumable)
+                                    player.ConsumeItem(bulletItem.type);
+                            }
+                        }
+                    }
+                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
@@ -123,6 +132,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
             if (secondaryAbility)
                 currentAnimationState = AnimationState.Secondary;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private int GetPlayerAmmo(Player player)

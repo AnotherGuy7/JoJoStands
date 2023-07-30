@@ -457,6 +457,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 else
                     currentAnimationState = AnimationState.Idle;
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private int CalculateRewindTime()

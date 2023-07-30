@@ -63,8 +63,8 @@ namespace JoJoStands
         /// <summary>
         /// Boosts Stand Dodge Changes. Stand Dodge Changes are added on to by this value.
         /// </summary>
-        public float standDodgeBoosts = 5f;
-        public int standDodgeGuarantee = 1;
+        public float standDodgeChance = 5f;
+        public int standDodgeGuarantee = 0;
         /// <summary>
         /// Boosts Stand Attack Speeds. Stand Speeds are reduced by this value. Lower is better.
         /// </summary>
@@ -382,7 +382,7 @@ namespace JoJoStands
             standAccessoryDefense = 0;
             standArmorPenetration = 0;
             standCritChangeBoosts = 5f;      //standCooldownReductions is in PostUpdateBuffs cause it gets reset before buffs use it
-            standDodgeBoosts = 5f;
+            standDodgeChance = 0f;
 
             towerOfGrayDamageMult = 1f;
 
@@ -1245,7 +1245,7 @@ namespace JoJoStands
                         hermitPurpleHamonBurstLeft = 3;
                         Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(30));
                     }
-                    if (standTier == 4)
+                    else if (standTier == 4)
                     {
                         hermitPurpleHamonBurstLeft = 5;
                         Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(20));
@@ -1253,9 +1253,7 @@ namespace JoJoStands
                     hPlayer.amountOfHamon -= 40;
                 }
                 if (hermitPurpleShootCooldown > 0)
-                {
                     hermitPurpleShootCooldown--;
-                }
 
                 if (standControlStyle == StandControlStyle.Manual)
                 {
@@ -1273,7 +1271,7 @@ namespace JoJoStands
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
                     }
-                    if (standTier == 2)
+                    else if (standTier == 2)
                     {
                         if (Main.mouseLeft && canStandBasicAttack && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
@@ -1298,7 +1296,7 @@ namespace JoJoStands
                             SoundEngine.PlaySound(itemSound, Player.Center);
                         }
                     }
-                    if (standTier == 3)
+                    else if (standTier == 3)
                     {
                         if (Main.mouseLeft && canStandBasicAttack && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
@@ -1320,7 +1318,7 @@ namespace JoJoStands
                             Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, shootVelocity, ModContent.ProjectileType<HermitPurpleGrab>(), (int)(149 * standDamageBoosts), 0f, Player.whoAmI);
                         }
                     }
-                    if (standTier == 4)
+                    else if (standTier == 4)
                     {
                         if (Main.mouseLeft && canStandBasicAttack && hermitPurpleShootCooldown <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<HermitPurpleWhip>()] == 0)
                         {
@@ -1547,6 +1545,8 @@ namespace JoJoStands
         public override void PostUpdateEquips()
         {
             standDamageBoosts = Player.GetDamage(DamageClass.Generic).ApplyTo(standDamageBoosts);
+            if (standDodgeChance > 30f)
+                standDodgeChance = 30f;
         }
 
         private void UpdateShaderStates()
@@ -1887,8 +1887,6 @@ namespace JoJoStands
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
                 Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
             }
-            if (!Player.HasBuff<Dodge>() && standControlStyle == StandControlStyle.Manual && standOut)
-                standDodgeGuarantee += 1;
             if (!Player.shadowDodge)
                 arrowEarringCooldown = 300;
             playerJustHit = true;
@@ -1906,8 +1904,6 @@ namespace JoJoStands
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
                 Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
             }
-            if (!Player.HasBuff<Dodge>() && standControlStyle == StandControlStyle.Manual && standOut)
-                standDodgeGuarantee += 1;
             if (!Player.shadowDodge)
                 arrowEarringCooldown = 300;
         }
@@ -1925,8 +1921,12 @@ namespace JoJoStands
         {
             if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0 && Main.rand.NextFloat(1, 100) <= 50 && remoteDodge > 0)
                 return true;
-            if (Main.rand.NextFloat(1, 100) <= standDodgeBoosts * standDodgeGuarantee && remoteDodge == 0 && standControlStyle == StandControlStyle.Manual && standOut)
+            if ((Main.rand.Next(1, 100) <= standDodgeChance || standDodgeGuarantee > 0) && remoteDodge == 0 && standControlStyle == StandControlStyle.Manual && standOut)
+            {
+                if (standDodgeGuarantee > 0)
+                    standDodgeGuarantee--;
                 return true;
+            }
             if (standControlStyle == StandControlStyle.Manual && standOut && Player.shadowDodge)
                 return true;
             if (Player.HasBuff(ModContent.BuffType<SwanSong>()))

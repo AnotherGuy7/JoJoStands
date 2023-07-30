@@ -142,7 +142,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             int bulletIndex = GetPlayerAmmo(player);
                             Item bulletItem = player.inventory[bulletIndex];
 
-                            shootCount += 40;
+                            shootCount += 8;
                             Main.mouseLeft = false;
                             Vector2 shootVel = Main.MouseWorld - (Projectile.Center - new Vector2(0, 18f));
                             if (shootVel == Vector2.Zero)
@@ -576,7 +576,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
             else if (animationName == "Flick")
-                AnimateStand(animationName, 4, 10, false);
+                AnimateStand(animationName, 4, 6, false);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 4, 10, true);
             else if (animationName == "Heal")

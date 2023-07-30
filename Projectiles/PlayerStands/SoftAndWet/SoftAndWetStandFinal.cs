@@ -308,6 +308,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                     }
                 }
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private readonly Vector2 bubbleTrapOrigin = new Vector2(8f);

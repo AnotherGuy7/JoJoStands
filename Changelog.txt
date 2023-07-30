@@ -1,6 +1,9 @@
 - Adjusted Bad Company's spawn effects
 - Adjusted Bad Company's firing mechanics
 - Buffed ranged Stands's Auto Mode detection distances
+- **Stand Users are no longer immortal while in Manual Mode.**
+- Buffed Star Platinum's Bullet Flick damage by a minor amount
+- Added a Stray Cat buff indicator while Stray Cat is summoned
 - Removed the Ability Cooldown from Crazy Diamond's bullet flick ability
 - Changed Star Finger to allow for more consistent use
 - Fixed Stands not benefitting from All Damage bonuses
@@ -15,4 +18,7 @@
 - Fixed Sticky Finger's Extended Zipper Punch not connecting to Sticky Fingers while Sticky Fingers is either facing right or facing in a direction opposite of the player
 - Fixed a rare animation bug that caused animations to distort in multiplayer when two players are using the same Stand
 - Fixed a bug that caused Bad Company's animations to flicker and distort when performing a number of actions
-- Fixed Bad Company soldiers not being able to detect enemies while grounded while in Auto Mode.
+- Fixed Bad Company soldiers not being able to detect enemies while grounded while in Auto Mode
+- Fixed Grateful Dead not moving for other players when attempting to grab an enemy
+- Fixed a bug that caused the Ability Wheel to display unused icons when going from a wheel with more abilities to a wheel with less
+- Fixed a bug that caused one or more of an Ability Wheel's icons to never appear

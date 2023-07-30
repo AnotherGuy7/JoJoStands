@@ -28,7 +28,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().standDodgeBoosts += 25f;
+            player.GetModPlayer<MyPlayer>().standDodgeChance += 15f;
             player.GetModPlayer<MyPlayer>().siliconLifeformCarapace = true;
         }
     }

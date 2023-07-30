@@ -30,7 +30,7 @@ namespace JoJoStands.Items.Accessories
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standSpeedBoosts += 2;
-            mPlayer.standDodgeBoosts += 10f;
+            mPlayer.standDodgeChance += 10f;
             mPlayer.standCooldownReduction += 0.2f;
             mPlayer.standCritChangeBoosts += 10f;
             mPlayer.standArmorPenetration += 10;

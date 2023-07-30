@@ -27,7 +27,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
         private const float GasDetectionDist = 20 * 16f;
 
-        private bool grabFrames = false;
+        private bool grabbing = false;
         private bool gasActive = false;
         private float gasRange = GasDetectionDist;
 
@@ -92,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !secondaryAbility && !grabFrames)
+                    if (Main.mouseLeft && !secondaryAbility && !grabbing)
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();
@@ -103,11 +103,14 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         currentAnimationState = AnimationState.Idle;
                     }
 
-                    if (Main.mouseRight && !grabFrames && shootCount <= 0)
+                    if (Main.mouseRight && !grabbing && shootCount <= 0)
                     {
+                        Vector2 oldVelocity = Projectile.velocity;
                         Projectile.velocity = Main.MouseWorld - Projectile.position;
                         Projectile.velocity.Normalize();
-                        Projectile.velocity *= 5f;
+                        Projectile.velocity *= 5f + mPlayer.standTier;
+                        if (Projectile.velocity.Length() - oldVelocity.Length() > 0.5f)
+                            Projectile.netUpdate = true;
 
                         float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
                         if (mouseDistance > 40f)
@@ -129,7 +132,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                             {
                                 if (grabRect.Intersects(npc.Hitbox) && !npc.boss && !npc.immortal && !npc.hide)
                                 {
-                                    grabFrames = true;
+                                    grabbing = true;
                                     Projectile.ai[0] = npc.whoAmI;
                                     break;
                                 }
@@ -137,7 +140,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         }
                         LimitDistance();
                     }
-                    if (Main.mouseRight && grabFrames && Projectile.ai[0] != -1f)
+                    if (Main.mouseRight && grabbing && Projectile.ai[0] != -1f)
                     {
                         Projectile.velocity = Vector2.Zero;
                         NPC npc = Main.npc[(int)Projectile.ai[0]];
@@ -150,22 +153,22 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                         if (!npc.active || Vector2.Distance(player.Center, Projectile.Center) > newMaxDistance * 1.5f)
                         {
                             shootCount += 30;
-                            grabFrames = false;
+                            grabbing = false;
                             secondaryAbility = false;
                             Projectile.ai[0] = -1f;
                         }
                         Projectile.netUpdate = true;
                     }
-                    if (!Main.mouseRight && (grabFrames || secondaryAbility))
+                    if (!Main.mouseRight && (grabbing || secondaryAbility))
                     {
                         shootCount += 30;
-                        grabFrames = false;
+                        grabbing = false;
                         Projectile.ai[0] = -1f;
                         secondaryAbility = false;
                         Projectile.netUpdate = true;
                     }
                 }
-                if (!attacking && !secondaryAbility && !grabFrames)
+                if (!attacking && !secondaryAbility && !grabbing)
                     StayBehind();
             }
             if (SpecialKeyPressed() && shootCount <= 0)
@@ -210,13 +213,13 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
         public override void SendExtraStates(BinaryWriter writer)
         {
-            writer.Write(grabFrames);
+            writer.Write(grabbing);
             writer.Write(gasActive);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
-            grabFrames = reader.ReadBoolean();
+            grabbing = reader.ReadBoolean();
             gasActive = reader.ReadBoolean();
         }
 

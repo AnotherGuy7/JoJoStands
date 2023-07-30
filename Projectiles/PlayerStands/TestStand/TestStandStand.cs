@@ -80,6 +80,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = StandClass.AnimationState.Pose;
         }
 
         public override void SelectAnimation()

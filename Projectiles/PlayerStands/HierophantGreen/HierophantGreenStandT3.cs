@@ -95,24 +95,24 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                         attacking = false;
                         currentAnimationState = AnimationState.Idle;
                     }
+
+                    if (Main.mouseRight && shootCount <= 0 && Projectile.scale >= 0.5f && !playerHasAbilityCooldown)
+                    {
+                        shootCount += 30;
+                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                        shootVel.Normalize();
+                        shootVel *= ProjectileSpeed;
+                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BindingEmeraldString>(), newProjectileDamage / 2, 0f, Projectile.owner, 25);
+                        Main.projectile[projIndex].netUpdate = true;
+                        SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
+                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
+                    }
                 }
 
                 if (!attacking)
                     StayBehind();
                 else
                     GoInFront();
-
-                if (Main.mouseRight && shootCount <= 0 && Projectile.scale >= 0.5f && !playerHasAbilityCooldown && Projectile.owner == Main.myPlayer)
-                {
-                    shootCount += 30;
-                    Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                    shootVel.Normalize();
-                    shootVel *= ProjectileSpeed;
-                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<BindingEmeraldString>(), newProjectileDamage / 2, 0f, Projectile.owner, 25);
-                    Main.projectile[projIndex].netUpdate = true;
-                    SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(5));
-                }
 
                 if (SpecialKeyPressed() && player.ownedProjectileCounts[ModContent.ProjectileType<EmeraldStringPointConnector>()] <= 0 && !spawningField)
                 {
@@ -308,6 +308,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                 }
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SendExtraStates(BinaryWriter writer)

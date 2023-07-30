@@ -38,7 +38,6 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
         private bool healingFrames = false;
         private bool flickFrames = false;
-        private bool resetFrame = false;
         private bool blindRage = false;
         private bool healingFramesRepeatTimerOnlyOnce = false;
         private bool returnToOwner = false;
@@ -142,7 +141,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             int bulletIndex = GetPlayerAmmo(player);
                             Item bulletItem = player.inventory[bulletIndex];
 
-                            shootCount += 40;
+                            shootCount += 10;
                             Main.mouseLeft = false;
                             Vector2 shootVel = Main.MouseWorld - (Projectile.Center - new Vector2(0, 18f));
                             if (shootVel == Vector2.Zero)
@@ -555,11 +554,10 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
         public override void AnimationCompleted(string animationName)
         {
-            if (resetFrame && animationName == "Flick")
+            if (animationName == "Flick")
             {
                 currentAnimationState = AnimationState.Idle;
                 flickFrames = false;
-                resetFrame = false;
             }
         }
 
@@ -577,7 +575,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
             else if (animationName == "Flick")
-                AnimateStand(animationName, 4, 10, false);
+                AnimateStand(animationName, 4, 8, false);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 4, 2, true);
             else if (animationName == "Heal")

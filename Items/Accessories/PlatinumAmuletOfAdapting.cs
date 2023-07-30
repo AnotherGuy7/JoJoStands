@@ -29,7 +29,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDodgeBoosts += 10f;
+            player.GetModPlayer<MyPlayer>().standDodgeChance += 10f;
             player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 10f;
         }
 

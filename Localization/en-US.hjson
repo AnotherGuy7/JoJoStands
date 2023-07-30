@@ -499,6 +499,11 @@ Mods: {
 				DisplayName: Top Of The Chain
 				Description: Mods.JoJoStands.Buffs.TopOfTheChain.Description
 			}
+
+			StrayCatBuff: {
+				DisplayName: Stray Cat
+				Description: A Stand born from means unknown, but it fights for you!
+			}
 		}
 
 		Items: {
@@ -563,7 +568,7 @@ Mods: {
 				DisplayName: Amulet of Adapting
 				Tooltip:
 					'''
-					10% increased Stand dodge chance
+					8% increased Stand dodge chance
 					10% increased Stand crit chance
 					'''
 			}
@@ -585,7 +590,7 @@ Mods: {
 
 			GoldAmuletOfEscape: {
 				DisplayName: Amulet of Escape
-				Tooltip: 5% increased Stand dodge chance
+				Tooltip: 4% increased Stand dodge chance
 			}
 
 			GoldAmuletOfFight: {
@@ -633,7 +638,7 @@ Mods: {
 
 			GreaterGoldAmuletOfEscape: {
 				DisplayName: Greater Amulet of Escape
-				Tooltip: 10% increased Stand dodge chance
+				Tooltip: 8% increased Stand dodge chance
 			}
 
 			GreaterGoldAmuletOfFight: {
@@ -663,7 +668,7 @@ Mods: {
 
 			GreaterPlatinumAmuletOfEscape: {
 				DisplayName: Greater Amulet of Escape
-				Tooltip: 10% increased Stand dodge chance
+				Tooltip: 8% increased Stand dodge chance
 			}
 
 			GreaterPlatinumAmuletOfFight: {
@@ -748,7 +753,7 @@ Mods: {
 
 			PlatinumAmuletOfEscape: {
 				DisplayName: Amulet of Escape
-				Tooltip: 5% increased Stand dodge chance
+				Tooltip: 4% increased Stand dodge chance
 			}
 
 			PlatinumAmuletOfFight: {
@@ -792,7 +797,7 @@ Mods: {
 				DisplayName: Silicon Lifeform Carapace
 				Tooltip:
 					'''
-					25% increased Stand dodge chance.
+					15% increased Stand dodge chance.
 					100% increased stand defence bonus
 					Health is slowly drained
 					'''

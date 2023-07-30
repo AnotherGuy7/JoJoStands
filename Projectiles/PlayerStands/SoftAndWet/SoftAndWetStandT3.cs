@@ -158,9 +158,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-            {
                 BasicPunchAI();
-            }
+
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public int GetPlunderBubbleType()

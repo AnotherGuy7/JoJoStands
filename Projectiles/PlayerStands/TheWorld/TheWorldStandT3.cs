@@ -92,6 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     {
                         secondaryAbility = true;
                         currentAnimationState = AnimationState.SecondaryAbility;
+                        Projectile.netUpdate = true;
                         if (shootCount <= 0 && Projectile.frame == 1)
                         {
                             shootCount += 26;
@@ -99,9 +100,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                             float knivesSpread = MathHelper.ToRadians(15f);
                             Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                             if (shootVel == Vector2.Zero)
-                            {
                                 shootVel = new Vector2(0f, 1f);
-                            }
+
                             shootVel.Normalize();
                             shootVel *= 100f;
                             for (int i = 0; i < numberOfKnives; i++)
@@ -111,11 +111,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                                 int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
                                 Main.projectile[projIndex].netUpdate = true;
                                 player.ConsumeItem(ModContent.ItemType<Knife>());
-                                Projectile.netUpdate = true;
                             }
                             SoundEngine.PlaySound(SoundID.Item1);
                         }
                     }
+                    else
+                        secondaryAbility = false;
                 }
                 if (!attacking)
                 {
@@ -127,12 +128,13 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     else
                     {
                         GoInFront();
-                        Projectile.direction = 1;
-                        if (Main.MouseWorld.X < Projectile.position.X)
-                            Projectile.direction = -1;
+                        if (Projectile.owner == Main.myPlayer)
+                        {
+                            if (Main.MouseWorld.X < Projectile.position.X)
+                                Projectile.direction = -1;
 
-                        Projectile.spriteDirection = Projectile.direction;
-                        secondaryAbility = false;
+                            Projectile.spriteDirection = Projectile.direction;
+                        }
                     }
                 }
                 if (SecondSpecialKeyPressed() && player.HasItem(ModContent.ItemType<Knife>()) && player.CountItem(ModContent.ItemType<Knife>()) >= 45 && Projectile.owner == Main.myPlayer)
@@ -191,6 +193,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             }
             if (abilityPose)
                 currentAnimationState = AnimationState.Special;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SendExtraStates(BinaryWriter writer)       //since this is overriden you have to sync the normal stuff

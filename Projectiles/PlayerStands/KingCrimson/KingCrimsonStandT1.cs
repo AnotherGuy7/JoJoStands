@@ -87,6 +87,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

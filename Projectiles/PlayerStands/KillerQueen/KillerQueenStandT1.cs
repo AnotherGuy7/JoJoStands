@@ -230,6 +230,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                 else
                     currentAnimationState = AnimationState.Idle;
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override bool PreDrawExtras()

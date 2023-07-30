@@ -409,6 +409,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             }
             if (revealingGun)
                 currentAnimationState = AnimationState.GunReveal;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
 

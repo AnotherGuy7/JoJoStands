@@ -56,48 +56,52 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !mPlayer.creamDash)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    attacking = true;
-                    currentAnimationState = AnimationState.Attack;
-                    Projectile.netUpdate = true;
-
-                    float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
-                    Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-                    if (mouseX > Projectile.position.X)
-                        Projectile.direction = 1;
-                    else
-                        Projectile.direction = -1;
-
-                    Projectile.spriteDirection = Projectile.direction;
-                    Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
-                    velocityAddition.Normalize();
-                    velocityAddition *= 5f + mPlayer.standTier;
-
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-                    if (mouseDistance > 40f)
-                        Projectile.velocity = player.velocity + velocityAddition;
-                    else
-                        Projectile.velocity = Vector2.Zero;
-                    if (shootCount <= 0 && Projectile.frame == 2)
+                    if (Main.mouseLeft && mPlayer.canStandBasicAttack && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
                     {
-                        shootCount += newPunchTime / 2;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
-                        Main.projectile[projIndex].netUpdate = true;
+                        attacking = true;
+                        currentAnimationState = AnimationState.Attack;
                         Projectile.netUpdate = true;
+
+                        float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
+                        Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
+                        if (mouseX > Projectile.position.X)
+                            Projectile.direction = 1;
+                        else
+                            Projectile.direction = -1;
+
+                        Projectile.spriteDirection = Projectile.direction;
+                        Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
+                        velocityAddition.Normalize();
+                        velocityAddition *= 5f + mPlayer.standTier;
+
+                        float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+                        if (mouseDistance > 40f)
+                            Projectile.velocity = player.velocity + velocityAddition;
+                        else
+                            Projectile.velocity = Vector2.Zero;
+                        if (shootCount <= 0 && Projectile.frame == 2)
+                        {
+                            shootCount += newPunchTime / 2;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                        }
+                        Projectile.netUpdate = true;
+                        LimitDistance();
                     }
-                    LimitDistance();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    else
+                    {
+                        attacking = false;
                         currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (!attacking)
                     StayBehind();
@@ -106,6 +110,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     mPlayer.creamFrame = 0;
                     if (!mPlayer.creamVoidMode)
                         mPlayer.creamNormalToExposed = true;
+                    Projectile.netUpdate = true;
                 }
                 if (SpecialKeyPressed() && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamVoidMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid && !mPlayer.creamDash && Projectile.owner == Main.myPlayer)
                 {
@@ -117,6 +122,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                         mPlayer.creamNormalToExposed = true;
                         mPlayer.creamNormalToVoid = true;
                     }
+                    Projectile.netUpdate = true;
                 }
                 if (Main.mouseRight && !Main.mouseLeft && player.ownedProjectileCounts[ModContent.ProjectileType<Void>()] <= 0 && !mPlayer.creamVoidMode! && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash && mPlayer.voidCounter >= 4 && Projectile.owner == Main.myPlayer)
                 {
@@ -252,10 +258,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 currentAnimationState = AnimationState.TransformToVoid;
             else if (mPlayer.creamExposedMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid || mPlayer.creamDash)
                 currentAnimationState = AnimationState.ExposedIdle;
+
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
-            {
                 BasicPunchAI();
-            }
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;
         }
@@ -275,6 +280,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
+            writer.Write(mPlayer.creamNormalToExposed);
+            writer.Write(mPlayer.creamExposedToVoid);
             writer.Write(mPlayer.creamExposedMode);
             writer.Write(mPlayer.creamVoidMode);
             writer.Write(mPlayer.creamDash);
@@ -287,6 +294,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
+            mPlayer.creamNormalToExposed = reader.ReadBoolean();
+            mPlayer.creamExposedToVoid = reader.ReadBoolean();
             mPlayer.creamExposedMode = reader.ReadBoolean();
             mPlayer.creamVoidMode = reader.ReadBoolean();
             mPlayer.creamDash = reader.ReadBoolean();

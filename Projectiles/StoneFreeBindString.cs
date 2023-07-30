@@ -88,6 +88,8 @@ namespace JoJoStands.Projectiles
                 boundNPC = target;
                 boundToNPC = true;
                 boundNPC.GetGlobalNPC<JoJoGlobalNPC>().boundByStrings = true;
+                if (Projectile.owner == Main.myPlayer)
+                    boundNPC.GetGlobalNPC<JoJoGlobalNPC>().SyncEffect(JoJoGlobalNPC.Sync_BoundByStrings);
                 Projectile.damage = 0;
                 Projectile.timeLeft = (int)Projectile.ai[1] * 60;
             }
@@ -96,7 +98,11 @@ namespace JoJoStands.Projectiles
         public override void Kill(int timeLeft)
         {
             if (boundToNPC && boundNPC != null && boundNPC.life > 0)
+            {
                 boundNPC.GetGlobalNPC<JoJoGlobalNPC>().boundByStrings = false;
+                if (Projectile.owner == Main.myPlayer)
+                    boundNPC.GetGlobalNPC<JoJoGlobalNPC>().SyncEffect(JoJoGlobalNPC.Sync_BoundByStrings);
+            }
         }
 
         private Texture2D stringTexture;

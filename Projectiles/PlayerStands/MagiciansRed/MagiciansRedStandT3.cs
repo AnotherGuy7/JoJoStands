@@ -163,6 +163,8 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 Main.dust[dustIndex].noGravity = true;
                 Main.dust[dustIndex].velocity *= 1.4f;
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

@@ -136,7 +136,7 @@ namespace JoJoStands.UI
 
         public override void Update(GameTime gameTime)
         {
-            Vector2 placementVector = Vector2.Transform(new Vector2(Main.screenWidth - (AbilityWheelSize.X / 2f), Main.screenHeight * VerticalAlignmentPercentage), Main.UIScaleMatrix);
+            Vector2 placementVector = new Vector2(Main.screenWidth - (AbilityWheelSize.X / 2f), Main.screenHeight * VerticalAlignmentPercentage);
             abilityWheel.Left.Set(placementVector.X, 0f);
             abilityWheel.Top.Set(placementVector.Y, 0f);
             if (inputTimer > 0)

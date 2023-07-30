@@ -1,3 +1,4 @@
+using JoJoStands.NPCs;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -8,6 +9,7 @@ namespace JoJoStands.Networking
     public class WorldPacketHandler : PacketHandler
     {
         public const byte VampiricNight = 0;
+        public const byte EnemySync = 1;
 
         public WorldPacketHandler(byte handlerType) : base(handlerType)
         { }
@@ -19,6 +21,9 @@ namespace JoJoStands.Networking
             {
                 case VampiricNight:
                     ReceiveVampiricNight(reader, fromWho);
+                    break;
+                case EnemySync:
+                    ReceiveEnemySync(reader, fromWho);
                     break;
             }
         }
@@ -33,14 +38,36 @@ namespace JoJoStands.Networking
         public void ReceiveVampiricNight(BinaryReader reader, int fromWho)
         {
             bool vampiricNightActive = reader.ReadBoolean();
+            JoJoStandsWorld.VampiricNight = vampiricNightActive;
+            if (Main.netMode == NetmodeID.Server)
+                SendVampiricNight(-1, fromWho, vampiricNightActive);
+        }
+
+        public void SendEnemySync(int toWho, int fromWho, byte effectIndex, bool state, int info, int enemyIndex)
+        {
+            ModPacket packet = CreatePacket(EnemySync);
+            packet.Write(effectIndex);
+            packet.Write(state);
+            packet.Write(info);
+            packet.Write(enemyIndex);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void ReceiveEnemySync(BinaryReader reader, int fromWho)
+        {
+            byte effectIndex = reader.ReadByte();
+            bool state = reader.ReadBoolean();
+            int info = reader.ReadInt32();
+            int enemyIndex = reader.ReadInt32();
+
             if (Main.netMode != NetmodeID.Server)
             {
-                JoJoStandsWorld.VampiricNight = vampiricNightActive;
+                if (Main.npc[enemyIndex] != null && Main.npc[enemyIndex].active)
+                    Main.npc[enemyIndex].GetGlobalNPC<JoJoGlobalNPC>().ReceiveEffect(effectIndex, state, info);
             }
             else
             {
-                JoJoStandsWorld.VampiricNight = vampiricNightActive;
-                SendVampiricNight(-1, fromWho, vampiricNightActive);
+                SendEnemySync(-1, fromWho, effectIndex, state, info, enemyIndex);
             }
         }
     }

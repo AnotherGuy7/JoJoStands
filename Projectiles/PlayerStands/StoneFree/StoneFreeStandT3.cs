@@ -169,6 +169,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SendExtraStates(BinaryWriter writer)

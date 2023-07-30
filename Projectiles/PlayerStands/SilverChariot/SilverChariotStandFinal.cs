@@ -167,6 +167,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
 
             if (parryFrames)
                 currentAnimationState = AnimationState.Parry;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override byte SendAnimationState() => (byte)currentAnimationState;

@@ -49,6 +49,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override byte SendAnimationState() => (byte)currentAnimationState;

@@ -28,7 +28,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDodgeBoosts += 10f;
+            player.GetModPlayer<MyPlayer>().standDodgeChance += 8f;
         }
 
         public override bool CanEquipAccessory(Player player, int slot, bool modded)

@@ -43,15 +43,6 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    /*if (SpecialKeyPressed(false))
-                    {
-                        mPlayer.chosenAbility += 1;
-                        if (mPlayer.chosenAbility >= 4)
-                        {
-                            mPlayer.chosenAbility = 0;
-                        }
-                        Main.NewText("Ability: " + abilityNames[mPlayer.chosenAbility]);
-                    }*/
                     if (Main.mouseLeft)
                     {
                         currentAnimationState = AnimationState.Attack;

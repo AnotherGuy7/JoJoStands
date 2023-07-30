@@ -50,6 +50,8 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

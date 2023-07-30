@@ -52,6 +52,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

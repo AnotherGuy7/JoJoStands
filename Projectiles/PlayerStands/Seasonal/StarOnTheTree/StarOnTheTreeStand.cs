@@ -153,6 +153,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             {
                 PunchAndShootAI(ModContent.ProjectileType<StarFinger>(), shootMax: 1);
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private int GetPlayerAmmo(Player player)

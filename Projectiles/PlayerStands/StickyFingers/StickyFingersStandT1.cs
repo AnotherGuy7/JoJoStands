@@ -50,6 +50,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

@@ -96,6 +96,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     {
                         secondaryAbility = true;
                         currentAnimationState = AnimationState.SecondaryAbility;
+                        Projectile.netUpdate = true;
                         if (shootCount <= 0 && Projectile.frame == 1)
                         {
                             shootCount += 16;       // has to be half if the framecounter + 1 (2 if shootCount goes to -1)
@@ -114,11 +115,12 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                                 int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), shootPosition, perturbedSpeed, ModContent.ProjectileType<KnifeProjectile>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, player.whoAmI);
                                 Main.projectile[projIndex].netUpdate = true;
                                 player.ConsumeItem(ModContent.ItemType<Knife>());
-                                Projectile.netUpdate = true;
                             }
                             SoundEngine.PlaySound(SoundID.Item1);
                         }
                     }
+                    else
+                        secondaryAbility = false;
                 }
 
                 if (!attacking)
@@ -132,12 +134,14 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                     {
                         GoInFront();
                         Projectile.direction = 1;
-                        if (Main.MouseWorld.X < Projectile.position.X)
-                            Projectile.direction = -1;
+                        if (Projectile.owner == Main.myPlayer)
+                        {
+                            if (Main.MouseWorld.X < Projectile.position.X)
+                                Projectile.direction = -1;
 
-                        Projectile.spriteDirection = Projectile.direction;
+                            Projectile.spriteDirection = Projectile.direction;
+                        }
                     }
-                    secondaryAbility = false;
                 }
                 if (SpecialKeyPressed() && player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<RoadRoller>()] == 0)
                 {
@@ -211,6 +215,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
             }
             if (abilityPose)
                 currentAnimationState = AnimationState.Special;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SendExtraStates(BinaryWriter writer)       //since this is overriden you have to sync the normal stuff

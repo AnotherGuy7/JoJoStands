@@ -23,7 +23,7 @@ namespace JoJoStands.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<GEScorpion>(), 1, 0f, Main.myPlayer);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position - new Vector2(0f, 16f), Vector2.Zero, ModContent.ProjectileType<GEScorpion>(), 1, 0f, Main.myPlayer);
             int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch);
             Main.dust[dustIndex].noGravity = true;
         }

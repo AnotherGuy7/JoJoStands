@@ -195,9 +195,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-            {
                 BasicPunchAI();
-            }
+
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

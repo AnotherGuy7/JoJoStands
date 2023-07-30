@@ -60,7 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     }
                     if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                     {
-                        shootCount += 60;
+                        shootCount += 40;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
@@ -82,6 +82,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
             if (secondaryAbility)
                 currentAnimationState = AnimationState.Secondary;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override byte SendAnimationState() => (byte)currentAnimationState;

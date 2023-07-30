@@ -54,7 +54,7 @@ namespace JoJoStands.Items
             if (StandType != 0)
             {
                 TooltipLine tooltipAddition = new TooltipLine(Mod, "Speed", speedType + speed);
-                TooltipLine dodgeTooltipAddition = new TooltipLine(Mod, "Dodge", (int)mPlayer.standDodgeBoosts + "% dodge chance");
+                TooltipLine dodgeTooltipAddition = new TooltipLine(Mod, "Dodge", (int)mPlayer.standDodgeChance + "% dodge chance");
                 tooltips.Add(tooltipAddition);
                 tooltips.Add(dodgeTooltipAddition);
             }

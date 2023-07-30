@@ -159,9 +159,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                 }
             }
             else
-            {
                 BasicPunchAI();
-            }
+
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override bool PreDraw(ref Color drawColor)

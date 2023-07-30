@@ -1,3 +1,4 @@
+using JoJoStands.Items.Dyes;
 using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using System.IO;
@@ -157,6 +158,8 @@ namespace JoJoStands.Networking
             byte oneWhoEquipped = reader.ReadByte();
             Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.type = dyeItemType;
             Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.SetDefaults(dyeItemType);
+            if (Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.ModItem is StandDye)
+                (Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.ModItem as StandDye).UpdateEquippedDye(Main.player[oneWhoEquipped]);
             if (Main.netMode == NetmodeID.Server)
                 SendDyeItem(-1, fromWho, dyeItemType, oneWhoEquipped);
         }

@@ -7,11 +7,13 @@ using JoJoStands.Items.Accessories;
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Items.Tiles;
 using JoJoStands.Items.Vampire;
+using JoJoStands.Networking;
 using JoJoStands.NPCs.Enemies;
 using JoJoStands.NPCs.TownNPCs;
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -22,12 +24,12 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace JoJoStands.NPCs
 {
     public class JoJoGlobalNPC : GlobalNPC
     {
-
         public bool frozenInTime = false;
         public bool affectedbyBtz = false;
         public bool taggedByButterfly = false;
@@ -47,6 +49,7 @@ namespace JoJoStands.NPCs
         public bool hitByCrossfireHurricane = false;
         public bool taggedByCrazyDiamondRestoration = false;
         public bool targetedBySoftAndWet = false;
+        public bool forceDeath = false;
         public int foresightSaveTimer = 0;
         public int foresightPositionIndex = 0;
         public int foresightPositionIndexMax = 0;
@@ -56,7 +59,6 @@ namespace JoJoStands.NPCs
         public int timeskipAIStyle = 0;
         public int lifeRegenIncrement = 0;
         public int lockRegenCounter = 0;
-        public bool forceDeath = false;
         public int btzPositionIndex = 0;
         public int taggedForDeathLoop = 0;
         public int spawnedByDeathLoop = 0;
@@ -109,6 +111,11 @@ namespace JoJoStands.NPCs
         private Vector2 echoesFallingPoint = Vector2.Zero;
 
         private int npcWhoAmI = 0;
+
+        public const byte Sync_AffectedByBTZ = 0;
+        public const byte Sync_TaggedWithPhantomMarker = 1;
+        public const byte Sync_StunnedByBindingEmerald = 2;
+        public const byte Sync_BoundByStrings = 3;
 
         public override bool InstancePerEntity
         {
@@ -873,6 +880,17 @@ namespace JoJoStands.NPCs
 
                 spriteBatch.Draw(texture, drawPosition, null, Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
             }
+
+            if (npc.HasBuff(ModContent.BuffType<LifePunch>()))
+            {
+                int widthRange = npc.width / 8;
+                int heightRange = npc.height / 8;
+                Vector2 randomOffset = new Vector2(Main.rand.Next(-widthRange, widthRange + 1), Main.rand.Next(-heightRange, heightRange + 1));
+                SpriteEffects spriteEffect = SpriteEffects.None;
+                if (npc.direction == 1)
+                    spriteEffect = SpriteEffects.FlipHorizontally;
+                spriteBatch.Draw(TextureAssets.Npc[npc.type].Value, npc.Center - Main.screenPosition + randomOffset + new Vector2(0f, npc.gfxOffY), npc.frame, Color.LightCyan * 0.6f, npc.rotation, new Vector2(npc.width, npc.height) / 2f, npc.scale, spriteEffect, 0f);
+            }
             return true;
         }
 
@@ -893,7 +911,10 @@ namespace JoJoStands.NPCs
             if (npc.HasBuff<Stolen>())
                 drawColor = Color.DarkGray;
 
-            if (echoesFreezeTarget)
+            if (npc.HasBuff(ModContent.BuffType<LifePunch>()))
+                drawColor = Color.LightCyan;
+
+                if (echoesFreezeTarget)
             {
                 if (echoesThreeFreezeTimer == 0)
                     echoesFreezeTarget = false;
@@ -911,6 +932,44 @@ namespace JoJoStands.NPCs
 
             if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))
                 drawColor = Color.Gray;
+        }
+
+        public void SyncEffect(byte effectIndex)
+        {
+            bool state = false;
+            int info = 0;
+            switch (effectIndex)
+            {
+                case Sync_TaggedWithPhantomMarker:
+                    state = taggedWithPhantomMarker;
+                    break;
+                case Sync_StunnedByBindingEmerald:
+                    state = stunnedByBindingEmerald;
+                    info = bindingEmeraldDurationTimer;
+                    break;
+                case Sync_BoundByStrings:
+                    state = boundByStrings;
+                    break;
+            }
+            SyncCall.SyncNPCEffectInfo(Main.myPlayer, effectIndex, state, info, npcWhoAmI);
+        }
+
+        public void ReceiveEffect(byte effectIndex, bool state, int info)
+        {
+            switch (effectIndex)
+            {
+                case Sync_TaggedWithPhantomMarker:
+                    taggedWithPhantomMarker = state;
+                    break;
+                case Sync_StunnedByBindingEmerald:
+                    stunnedByBindingEmerald = state;
+                    bindingEmeraldDurationTimer = info;
+                    break;
+                case Sync_BoundByStrings:
+                    boundByStrings = state;
+                    break;
+            }
+            Main.NewText(effectIndex + "; " + state + "; " + info);
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -1066,6 +1125,7 @@ namespace JoJoStands.NPCs
                 pool.Add(ModContent.NPCType<JackTheRipper>(), 0.02f);
             }
         }
+
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             if (npc.HasBuff(ModContent.BuffType<ImproperRestoration>()))

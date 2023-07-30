@@ -2,6 +2,7 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -86,10 +87,14 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                         }
                         else
                         {
-                            shootCount += 60;
-                            zipperAmbush = true;
-                            savedAmbushPosition = player.position;
-                            player.position = Main.MouseWorld;
+                            if (!playerHasAbilityCooldown)
+                            {
+                                shootCount += 60;
+                                zipperAmbush = true;
+                                savedAmbushPosition = player.position;
+                                player.position = Main.MouseWorld;
+                                Projectile.netUpdate = true;
+                            }
                         }
                         mouseRightJustReleased = false;
                         mouseRightForceRelease = false;
@@ -114,7 +119,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
                     mPlayer.hideAllPlayerLayers = true;
                     mPlayer.stickyFingersAmbushMode = true;
-                    if (Main.mouseRight && shootCount <= 0)
+                    if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                     {
                         zipperAmbush = false;
                         player.immune = true;
@@ -137,6 +142,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                         mPlayer.stickyFingersAmbushMode = false;
                         player.AddBuff(ModContent.BuffType<SurpriseAttack>(), 3 * 60);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(25));
+                        Projectile.netUpdate = true;
                         if (JoJoStands.SoundsLoaded)
                             SoundEngine.PlaySound(StickyFingersStandFinal.ZipperSound);
                     }
@@ -148,6 +154,18 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             }
             if (secondaryAbility)
                 currentAnimationState = AnimationState.SecondaryAbility;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(zipperAmbush);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            zipperAmbush = reader.ReadBoolean();
         }
 
         public override bool PreDrawExtras()

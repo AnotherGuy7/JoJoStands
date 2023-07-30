@@ -59,7 +59,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     {
                         attacking = true;
                         currentAnimationState = AnimationState.Attack;
-                        Projectile.netUpdate = true;
                         float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
                         Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
                         if (mouseX > Projectile.position.X)
@@ -87,17 +86,14 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                             shootVel *= ProjectileSpeed;
                             int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
                             Main.projectile[projIndex].netUpdate = true;
-                            Projectile.netUpdate = true;
                         }
+                        Projectile.netUpdate = true;
                         LimitDistance();
                     }
                     else
                     {
-                        if (player.whoAmI == Main.myPlayer)
-                        {
-                            attacking = false;
-                            currentAnimationState = AnimationState.Idle;
-                        }
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
                     }
                 }
                 if (!attacking)

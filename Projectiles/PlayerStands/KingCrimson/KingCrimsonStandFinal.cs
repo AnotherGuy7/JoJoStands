@@ -252,6 +252,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 BasicPunchAI();
             }
             Projectile.shouldFallThrough = true;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

@@ -7,6 +7,7 @@ using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -69,8 +70,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
                 if (!attacking && Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && mPlayer.chosenAbility == 0)
+                    if (Main.mouseRight && mPlayer.chosenAbility == 0)
+                    {
                         secondaryAbility = true;
+                        Projectile.netUpdate = true;
+                    }
 
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, player.Center);
                     bool mouseOnPlatform = TileID.Sets.Platforms[Main.tile[(int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f)].TileType];
@@ -117,9 +121,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                         }
                     }
                     else
-                    {
                         regencounter = 0;
-                    }
                     if (regencounter > 80)
                     {
                         int healamount = Main.rand.Next(25, 50);
@@ -139,21 +141,21 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
 
                 if (secondaryAbility)
                 {
-                    Projectile.netUpdate = true;
                     currentAnimationState = AnimationState.SecondaryAbility;
                     if (Projectile.frame == 8 && shootCount <= 0)
                     {
-                        shootCount += newPunchTime;
+                        shootCount += 8;
                         Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                         if (shootVel == Vector2.Zero)
                             shootVel = new Vector2(0f, 1f);
 
                         shootVel.Normalize();
-                        shootVel *= 12f;
+                        shootVel *= 16f;
                         int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<GoldExperienceBeam>(), newPunchDamage + 11, 6f, Projectile.owner);
                         Main.projectile[projIndex].netUpdate = true;
-                        player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(3));
-                        currentAnimationState = AnimationState.Idle;
+                        SoundStyle item41 = SoundID.Item41;
+                        item41.Pitch = -0.6f;
+                        SoundEngine.PlaySound(item41, player.Center);
                     }
                 }
             }
@@ -169,6 +171,15 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         {
             GoldExperienceRequiemAbilityWheel.CloseAbilityWheel();
             return true;
+        }
+
+        public override void AnimationCompleted(string animationName)
+        {
+            if (animationName == "Secondary")
+            {
+                secondaryAbility = false;
+                currentAnimationState = AnimationState.Idle;
+            }
         }
 
         public override void SelectAnimation()
@@ -201,7 +212,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
             else if (animationName == "Secondary")
-                AnimateStand(animationName, 11, 6, true);
+                AnimateStand(animationName, 11, 4, false);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 6, true);
         }

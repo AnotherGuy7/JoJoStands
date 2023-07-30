@@ -49,6 +49,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()

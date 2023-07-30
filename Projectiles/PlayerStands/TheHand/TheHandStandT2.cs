@@ -108,6 +108,8 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             }
             if (scraping)
                 currentAnimationState = AnimationState.Scrape;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override bool PreDrawExtras()

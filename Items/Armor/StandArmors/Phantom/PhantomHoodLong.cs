@@ -53,6 +53,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
                                 int projectile = Projectile.NewProjectile(player.GetSource_FromThis(), npc.position, npc.velocity, ModContent.ProjectileType<PhantomMarker>(), 0, 0f, Main.myPlayer, npc.whoAmI);
                                 Main.projectile[projectile].netUpdate = true;
                                 jojoNPC.taggedWithPhantomMarker = true;
+                                jojoNPC.SyncEffect(JoJoGlobalNPC.Sync_TaggedWithPhantomMarker);
                             }
                         }
                     }
