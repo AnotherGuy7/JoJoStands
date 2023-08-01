@@ -16,8 +16,8 @@ namespace JoJoStands.Items.Accessories
 
         public override void SetDefaults()
         {
-            Item.width = 22;
-            Item.height = 18;
+            Item.width = 26;
+            Item.height = 24;
             Item.accessory = true;
             Item.rare = ItemRarityID.Pink;
             Item.value = Item.buyPrice(gold: 4);

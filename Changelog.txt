@@ -1,4 +1,6 @@
 - Added new barrage effects for most Stands
+- Resprited The World
+- Resprited many (but not all) accessories
 - Adjusted Bad Company's spawn effects
 - Adjusted Bad Company's firing mechanics
 - Buffed ranged Stands's Auto Mode detection distances

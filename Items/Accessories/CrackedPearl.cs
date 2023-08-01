@@ -15,7 +15,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void SetDefaults()
         {
-            Item.width = 26;
+            Item.width = 30;
             Item.height = 34;
             Item.maxStack = 1;
             Item.value = Item.buyPrice(gold: 45);
