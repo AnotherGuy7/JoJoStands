@@ -12,15 +12,27 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
         public override string PunchSoundName => "Tusk_Ora";
         public override string PoseSoundName => "TuskAct4";
         public override string SpawnSoundName => "Tusk Act 4";
-        public override bool CanUseSaladDye => true;
-
         public override float MaxDistance => 98f;
         public override int PunchDamage => 162;
         public override int PunchTime => 12;
         public override int HalfStandHeight => 37;
         public override int FistWhoAmI => 0;
         public override int TierNumber => 4;
+        public override bool CanUseAfterImagePunches => true;
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/Tusk/TuskAct4_Punch_";
+        public override Vector2 PunchSize => new Vector2(28, 10);
+        public override PunchSpawnData PunchData => new PunchSpawnData()
+        {
+            standardPunchOffset = new Vector2(6f, 0f),
+            minimumLifeTime = 4,
+            maximumLifeTime = 10,
+            minimumTravelDistance = 22,
+            maximumTravelDistance = 38,
+            bonusAfterimageAmount = 2
+        };
         public override StandAttackType StandType => StandAttackType.Ranged;
+        public override bool CanUseSaladDye => true;
         public override Vector2 StandOffset => new Vector2(10, 0);
 
         private int goldenRectangleEffectTimer = 256;

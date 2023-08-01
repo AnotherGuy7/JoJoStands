@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
@@ -86,11 +87,27 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public virtual Vector2 StandOffset { get; } = new Vector2(15, 0);            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
         public virtual Vector2 ManualIdleHoverOffset { get; } = Vector2.Zero;
+        /// <summary>
+        /// The size of all of the punch textures.
+        /// </summary>
+        public virtual Vector2 PunchSize { get; } = Vector2.Zero;
+        public virtual bool CanUseAfterImagePunches { get; } = false;
+        public virtual PunchSpawnData PunchData { get; } = new PunchSpawnData()
+        {
+            standardPunchOffset = new Vector2(12f, 0f),
+            minimumLifeTime = 5,
+            maximumLifeTime = 12,
+            minimumTravelDistance = 16,
+            maximumTravelDistance = 32,
+            bonusAfterimageAmount = 0
+        };
         public virtual int TierNumber { get; }
         public virtual float PunchKnockback { get; } = 3f;
+        public virtual int AmountOfPunchVariants { get; } = 2;
         public virtual string PunchSoundName { get; } = "";
         public virtual string PoseSoundName { get; } = "";
         public virtual string SpawnSoundName { get; } = "";
+        public virtual string PunchTexturePath { get; } = "";
         public virtual StandAttackType StandType { get; } = StandAttackType.None;
         public virtual bool CustomStandDrawing { get; } = false;
         /// <summary>
@@ -120,22 +137,28 @@ namespace JoJoStands.Projectiles.PlayerStands
             Pose
         }
 
-        public struct AnimationData
+        public struct PunchFrame
         {
-            public int frames;
-            public string textureName;
-            public int frameCounterLimit;
-            public bool loopedAnimation;
-            public int loopStartFrame;
-            public int loopEndFrame;
-
-            public void UpdateFrameCounterLimit(int newLimit)
-            {
-
-            }
+            public Vector2 offset;
+            public Vector2 targetOffset;
+            public int punchAnimationTimeStart;
+            public int punchLifeTime;
+            public bool flipped;
+            public int textureType;
         }
 
-        public int newPunchTime = 0;       //so we don't have to type newPunchTime all the time
+        public struct PunchSpawnData
+        {
+            public Vector2 standardPunchOffset;
+            public int verticalPunchSpreadRange;
+            public int minimumTravelDistance;
+            public int maximumTravelDistance;
+            public int minimumLifeTime;
+            public int maximumLifeTime;
+            public int bonusAfterimageAmount;
+        }
+
+        public int newPunchTime = 0;
         public int newShootTime = 0;
         public float newMaxDistance = 0f;
         public float newAltMaxDistance = 0f;
@@ -145,6 +168,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public Texture2D standTexture;
         public Texture2D standRangeIndicatorTexture;
         public Texture2D secondaryStandRangeIndicatorTexture;
+        public Texture2D[] punchTextures;
 
         public int shootCount = 0;
         public bool attacking = false;
@@ -152,19 +176,22 @@ namespace JoJoStands.Projectiles.PlayerStands
         private bool playedBeginning = false;
         private bool playedSpawnSound = false;
         private bool sentDyePacket = false;
+        private int punchAfterImageAmount = 0;
         private SoundEffectInstance beginningSoundInstance = null;
         private SoundEffectInstance punchingSoundInstance = null;
         private Vector2 rangeIndicatorSize;
         private Vector2 secondaryRangeIndicatorSize;
         private int netUpdateTimer = 0;
-        private int summonParticleTimer = 15;
+        private int summonParticleTimer = 0;
         public float mouseX = 0f;
         public float mouseY = 0f;
         public AnimationState currentAnimationState;
         public AnimationState oldAnimationState;
         public int amountOfFrames;
-        //private int rangeIndicatorSize = 0;
-        //private int secondaryRangeIndicatorSize = 0;
+        private int punchAnimationTimer = 0;
+        private bool nonOwnerInitCheck = false;
+        private List<PunchFrame> backPunchFrames;
+        private List<PunchFrame> frontPunchFrames;
 
         /// <summary>
         /// Checks if the Special bind has just been pressed and there is no cooldown.
@@ -243,7 +270,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         /// <param name="movementSpeed">How fast the Stand moves while it's punching</param>
         /// <param name="punchLifeTimeMultiplier">A multiplier for the punch projectiles' lifetime.</param>
-        public void Punch(float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f)
+        public void Punch(float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f, bool afterImages = true)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -283,6 +310,31 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Main.projectile[projIndex].netUpdate = true;
             }
             LimitDistance();
+            if (afterImages && newPunchTime <= 6)
+            {
+                int afterImageAmount = ((6 - newPunchTime) / 2) + 1;
+                int amountOfPunches = Main.rand.Next(afterImageAmount, afterImageAmount + 1 + 1) + PunchData.bonusAfterimageAmount;
+                punchAfterImageAmount = amountOfPunches;
+                for (int i = 0; i < amountOfPunches; i++)
+                {
+                    bool behind = Main.rand.Next(0, 1 + 1) == 0;
+                    int verticalRange = PunchData.verticalPunchSpreadRange == 0 ? (HalfStandHeight - 6) : PunchData.verticalPunchSpreadRange;
+                    Vector2 punchOffset = new Vector2(PunchData.standardPunchOffset.X * Projectile.spriteDirection, PunchData.standardPunchOffset.Y + Main.rand.Next(-verticalRange, verticalRange + 1));
+                    PunchFrame punchFrame = new PunchFrame()
+                    {
+                        offset = punchOffset,
+                        targetOffset = punchOffset + new Vector2(Main.rand.Next(PunchData.minimumTravelDistance, PunchData.maximumTravelDistance + 1) * Projectile.spriteDirection, 0f),
+                        punchAnimationTimeStart = punchAnimationTimer,
+                        punchLifeTime = Main.rand.Next(PunchData.minimumLifeTime, PunchData.maximumLifeTime + 1),
+                        flipped = Main.rand.Next(0, 1 + 1) == 0,
+                        textureType = Main.rand.Next(0, AmountOfPunchVariants)
+                    };
+                    if (behind)
+                        backPunchFrames.Add(punchFrame);
+                    else
+                        frontPunchFrames.Add(punchFrame);
+                }
+            }
             Projectile.netUpdate = true;
         }
 
@@ -675,7 +727,21 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public override sealed void OnSpawn(IEntitySource source)
         {
+            SpawnEffects();
+        }
+
+        public void SpawnEffects()
+        {
             summonParticleTimer = Main.rand.Next(6, 10 + 1);
+            if ((StandType == StandAttackType.Melee || CanUseAfterImagePunches) && !Main.dedServ)
+            {
+                backPunchFrames = new List<PunchFrame>();
+                frontPunchFrames = new List<PunchFrame>();
+                punchTextures = new Texture2D[AmountOfPunchVariants];
+                for (int v = 0; v < AmountOfPunchVariants; v++)
+                    punchTextures[v] = ModContent.Request<Texture2D>(PunchTexturePath + (v + 1), AssetRequestMode.ImmediateLoad).Value;
+            }
+
             ExtraSpawnEffects();
         }
 
@@ -693,6 +759,8 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (player.whoAmI != Main.myPlayer)
+                UpdateForNonHost();
 
             newPunchTime = PunchTime - mPlayer.standSpeedBoosts;
             newShootTime = ShootTime - mPlayer.standSpeedBoosts;
@@ -717,9 +785,12 @@ namespace JoJoStands.Projectiles.PlayerStands
                 mPlayer.canStandBasicAttack = false;
             if (JoJoStands.SoundsLoaded && mPlayer.standHitTime > 0)
                 mPlayer.standHitTime--;
-
             if (mPlayer.standType != (int)StandType)
                 mPlayer.standType = (int)StandType;
+            if (attacking)
+                punchAnimationTimer++;
+            else
+                punchAnimationTimer = 0;
 
             if (summonParticleTimer > 0)
             {
@@ -755,6 +826,40 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
+        public void UpdateForNonHost()
+        {
+            if (!nonOwnerInitCheck)
+            {
+                nonOwnerInitCheck = true;
+                SpawnEffects();
+            }
+            
+            if (punchAfterImageAmount != 0 && punchAnimationTimer > 0)
+            {
+                int afterImageAmount = punchAfterImageAmount;
+                int amountOfPunches = Main.rand.Next(afterImageAmount, afterImageAmount + 1 + 1) + PunchData.bonusAfterimageAmount;
+                for (int i = 0; i < amountOfPunches; i++)
+                {
+                    bool behind = Main.rand.Next(0, 1 + 1) == 0;
+                    int verticalRange = PunchData.verticalPunchSpreadRange == 0 ? (HalfStandHeight - 6) : PunchData.verticalPunchSpreadRange;
+                    Vector2 punchOffset = new Vector2(PunchData.standardPunchOffset.X * Projectile.spriteDirection, PunchData.standardPunchOffset.Y + Main.rand.Next(-verticalRange, verticalRange + 1));
+                    PunchFrame punchFrame = new PunchFrame()
+                    {
+                        offset = punchOffset,
+                        targetOffset = punchOffset + new Vector2(Main.rand.Next(PunchData.minimumTravelDistance, PunchData.maximumTravelDistance + 1) * Projectile.spriteDirection, 0f),
+                        punchAnimationTimeStart = punchAnimationTimer,
+                        punchLifeTime = Main.rand.Next(PunchData.minimumLifeTime, PunchData.maximumLifeTime + 1),
+                        flipped = Main.rand.Next(0, 1 + 1) == 0,
+                        textureType = Main.rand.Next(0, AmountOfPunchVariants)
+                    };
+                    if (behind)
+                        backPunchFrames.Add(punchFrame);
+                    else
+                        frontPunchFrames.Add(punchFrame);
+                }
+            }
+        }
+
         public void UpdateStandSync()
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -781,6 +886,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             DrawRangeIndicators();       //not affected by dyes since it's starting a new batch with no effect
             SyncAndApplyDyeSlot();
+            PreDrawAfterimagePunches(drawColor);
             DrawStand(drawColor);
 
             return true;
@@ -790,6 +896,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         {
             Main.spriteBatch.End();     //ending the spriteBatch that started in PreDraw
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            PostDrawAfterimagePunches(drawColor);
             PostDrawExtras();
         }
 
@@ -831,6 +938,52 @@ namespace JoJoStands.Projectiles.PlayerStands
         }
 
         private void CustomDrawStand(Color drawColor) { }
+
+        public void PreDrawAfterimagePunches(Color drawColor)
+        {
+            if (punchAnimationTimer <= 0)
+            {
+                if (backPunchFrames != null && backPunchFrames.Count != 0)
+                    backPunchFrames.Clear();
+                return;
+            }
+
+            for (int i = 0; i < backPunchFrames.Count; i++)
+            {
+                float percentageLife = (punchAnimationTimer - backPunchFrames[i].punchAnimationTimeStart) / (float)backPunchFrames[i].punchLifeTime;
+                Vector2 drawPosition = Projectile.Center + Vector2.Lerp(backPunchFrames[i].offset, backPunchFrames[i].targetOffset, percentageLife);
+                SpriteEffects spriteEffects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                Main.EntitySpriteDraw(punchTextures[backPunchFrames[i].textureType], drawPosition - Main.screenPosition, null, drawColor * (1f - (percentageLife * 0.6f)), Projectile.rotation, PunchSize / 2f, Projectile.scale, spriteEffects, 0f);
+                if (percentageLife == 1f)
+                {
+                    backPunchFrames.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
+
+        public void PostDrawAfterimagePunches(Color drawColor)
+        {
+            if (punchAnimationTimer <= 0)
+            {
+                if (frontPunchFrames != null && frontPunchFrames.Count != 0)
+                    frontPunchFrames.Clear();
+                return;
+            }
+
+            for (int i = 0; i < frontPunchFrames.Count; i++)
+            {
+                float percentageLife = (punchAnimationTimer - frontPunchFrames[i].punchAnimationTimeStart) / (float)frontPunchFrames[i].punchLifeTime;
+                Vector2 drawPosition = Projectile.Center + Vector2.Lerp(frontPunchFrames[i].offset, frontPunchFrames[i].targetOffset, percentageLife);
+                SpriteEffects spriteEffects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                Main.EntitySpriteDraw(punchTextures[frontPunchFrames[i].textureType], drawPosition - Main.screenPosition, null, drawColor * (1f - (percentageLife * 0.6f)), Projectile.rotation, PunchSize / 2f, Projectile.scale, spriteEffects, 0f);
+                if (percentageLife == 1f)
+                {
+                    frontPunchFrames.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
 
         /// <summary>
         /// Draws the Stands range indicators.
@@ -947,6 +1100,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             writer.Write(Projectile.rotation);
             writer.Write(mouseX);
             writer.Write(mouseY);
+            writer.Write((short)punchAfterImageAmount);
             SendExtraStates(writer);
         }
 
@@ -961,6 +1115,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             Projectile.rotation = reader.ReadSingle();
             mouseX = reader.ReadSingle();
             mouseY = reader.ReadSingle();
+            punchAfterImageAmount = reader.ReadInt16();
             ReceiveExtraStates(reader);
         }
 

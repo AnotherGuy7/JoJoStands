@@ -53,7 +53,7 @@ namespace JoJoStands.UI
         {
             Player player = Main.LocalPlayer;
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            int frame = (int)(mPlayer.goldenSpinCounter / 300f) * 12;
+            int frame = (int)((mPlayer.goldenSpinCounter / 300f) * 12f);
             frame += 1;
             if (frame >= 12)
                 frame = 11;

@@ -23,6 +23,9 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
         public override string PunchSoundName => "SoftAndWet_Ora";
         public override string PoseSoundName => "SoftAndWet";
         public override string SpawnSoundName => "Soft and Wet";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/SoftAndWet/SoftAndWet_Punch_";
+        public override Vector2 PunchSize => new Vector2(36, 8);
         public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()

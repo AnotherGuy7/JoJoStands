@@ -18,10 +18,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override int HalfStandHeight => 39;
         public override int FistWhoAmI => 4;
         public override int TierNumber => 4;
-        public override StandAttackType StandType => StandAttackType.Melee;
         public override string PunchSoundName => "Ari";
         public override string PoseSoundName => "Arrivederci";
         public override string SpawnSoundName => "Sticky Fingers";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/StickyFingers/StickyFingers_Punch_";
+        public override Vector2 PunchSize => new Vector2(38, 12);
+        public override StandAttackType StandType => StandAttackType.Melee;
         public override bool UseProjectileAlpha => true;
         public static readonly SoundStyle ZipperSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip");
 

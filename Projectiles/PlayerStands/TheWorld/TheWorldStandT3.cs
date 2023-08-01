@@ -21,6 +21,18 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override string PunchSoundName => "Muda";
         public override string PoseSoundName => "ComeAsCloseAsYouLike";
         public override string SpawnSoundName => "The World";
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/TheWorld/TheWorld_Punch_";
+        public override Vector2 PunchSize => new Vector2(28, 12);
+        public override PunchSpawnData PunchData => new PunchSpawnData()
+        {
+            standardPunchOffset = new Vector2(12f, 6f),
+            minimumLifeTime = 5,
+            maximumLifeTime = 12,
+            minimumTravelDistance = 16,
+            maximumTravelDistance = 32,
+            bonusAfterimageAmount = 0
+        };
         public override bool CanUseSaladDye => true;
         public override StandAttackType StandType => StandAttackType.Melee;
 
@@ -231,17 +243,11 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
         public override void PlayAnimation(string animationName)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.netMode != NetmodeID.Server)
                 standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/TheWorld", "TheWorld_" + animationName);
 
             if (animationName == "Idle")
-            {
-                if (mPlayer.currentTextureDye == MyPlayer.StandTextureDye.Salad)
-                    AnimateStand(animationName, 4, 15, true);
-                else
-                    AnimateStand(animationName, 2, 30, true);
-            }
+                AnimateStand(animationName, 4, 15, true);
             else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
             else if (animationName == "Secondary")

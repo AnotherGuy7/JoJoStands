@@ -21,6 +21,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override int TierNumber => 3;
         public override string PoseSoundName => "NobodyCanFoolMeTwice";
         public override string SpawnSoundName => "The Hand";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/TheHand/TheHand_Punch_";
+        public override Vector2 PunchSize => new Vector2(40, 12);
         public override StandAttackType StandType => StandAttackType.Melee;
         public new AnimationState currentAnimationState;
         public new AnimationState oldAnimationState;
@@ -384,7 +387,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
             else if (animationName == "Charge")
-                AnimateStand(animationName, 4, 15, true);
+                AnimateStand(animationName, 4, 5, true);
             else if (animationName == "Scrape")
                 AnimateStand(animationName, 2, 10, false);
             else if (animationName == "ScrapeBarrage")

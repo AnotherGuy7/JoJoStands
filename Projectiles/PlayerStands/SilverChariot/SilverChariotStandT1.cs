@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,6 +16,18 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override int TierNumber => 1;
         public override string PoseSoundName => "SilverChariot";
         public override string SpawnSoundName => "Silver Chariot";
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/SilverChariot/SilverChariot_Stab_";
+        public override Vector2 PunchSize => new Vector2(20, 10);
+        public override PunchSpawnData PunchData => new PunchSpawnData()
+        {
+            standardPunchOffset = new Vector2(6f, 0f),
+            minimumLifeTime = 6,
+            maximumLifeTime = 12,
+            minimumTravelDistance = 20,
+            maximumTravelDistance = 48,
+            bonusAfterimageAmount = 0
+        };
         public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()

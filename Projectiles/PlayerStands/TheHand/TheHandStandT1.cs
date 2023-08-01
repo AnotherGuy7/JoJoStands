@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
@@ -15,6 +16,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override int TierNumber => 1;
         public override string PoseSoundName => "NobodyCanFoolMeTwice";
         public override string SpawnSoundName => "The Hand";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/TheHand/TheHand_Punch_";
+        public override Vector2 PunchSize => new Vector2(40, 12);
         public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()

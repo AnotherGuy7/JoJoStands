@@ -19,6 +19,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int FistWhoAmI => 8;
         public override int TierNumber => 3;
         public override Vector2 StandOffset => new Vector2(17, 0);
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/GratefulDead/GratefulDead_Punch_";
+        public override Vector2 PunchSize => new Vector2(36, 20);
         public override StandAttackType StandType => StandAttackType.Melee;
         public override string PoseSoundName => "OnceWeDecideToKillItsDone";
         public override string SpawnSoundName => "The Grateful Dead";

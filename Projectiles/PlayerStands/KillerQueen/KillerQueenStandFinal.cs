@@ -20,8 +20,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override float MaxAltDistance => 16 * 16;     //about 10 tiles
         public override string PoseSoundName => "IWouldntLose";
         public override string SpawnSoundName => "Killer Queen";
-        public override bool CanUseSaladDye => true;
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/KillerQueen/KillerQueen_Punch_";
+        public override Vector2 PunchSize => new Vector2(32, 10);
         public override StandAttackType StandType => StandAttackType.Melee;
+        public override bool CanUseSaladDye => true;
         public static readonly SoundStyle KillerQueenClickSound = new SoundStyle("JoJoStands/Sounds/GameSounds/KQButtonClick");
         private const float AutomaticExplosionDetectionDistance = 3 * 16f;
         private const int AnimationStallFrameAmount = 3;

@@ -22,6 +22,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override float MaxDistance => 148f;      //1.5x the normal range cause Koichi is really reliable guy (C) Proos <3
         public override Vector2 StandOffset => new Vector2(10, 0);
         public override Vector2 ManualIdleHoverOffset => new Vector2(0, -30);
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/Echoes/EchoesACT2_Punch_";
+        public override Vector2 PunchSize => new Vector2(22, 8);
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private const int ActNumber = 2;

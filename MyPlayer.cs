@@ -108,7 +108,7 @@ namespace JoJoStands
         public bool wearingEpitaph = false;
         public bool wearingTitaniumMask = false;
         public bool achievedInfiniteSpin = false;
-        public bool revived = false;
+        public bool revivedByPokerChip = false;
         public bool standOut = false;
         public bool chlorositeShortEqquipped = false;
         public bool crystalArmorSetEquipped = false;
@@ -762,7 +762,7 @@ namespace JoJoStands
                 sealedPokerDeckCooldown--;
             if (familyPhotoEffectTimer > 0)
                 familyPhotoEffectTimer--;
-            if (!revived && Player.HasItem(ModContent.ItemType<PokerChip>()) || zippedHandEquipped && !zippedHandDeath)
+            if (!revivedByPokerChip && Player.HasItem(ModContent.ItemType<PokerChip>()) || zippedHandEquipped && !zippedHandDeath)
                 notDeadYet = true;
             else
                 notDeadYet = false;
@@ -1523,10 +1523,10 @@ namespace JoJoStands
                 standCritChangeBoosts -= 10f;
             }
 
-            if (revived && !Player.HasBuff(ModContent.BuffType<ArtificialSoul>()))
+            if (revivedByPokerChip && !Player.HasBuff(ModContent.BuffType<ArtificialSoul>()))
             {
                 Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + "'s artificial soul has left him."), Player.statLife + 1, Player.direction);
-                revived = false;
+                revivedByPokerChip = false;
             }
         }
 
@@ -1937,6 +1937,45 @@ namespace JoJoStands
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)       //that 1 last frame before you completely die
         {
+            if (Player.HasBuff(ModContent.BuffType<Pierced>()))
+            {
+                receivedArrowShard = false;
+                piercedTimer = 36000;
+            }
+            if (!revivedByPokerChip && Player.HasItem(ModContent.ItemType<PokerChip>()))
+            {
+                revivedByPokerChip = true;
+                Player.AddBuff(ModContent.BuffType<ArtificialSoul>(), 3600);
+                Player.ConsumeItem(ModContent.ItemType<PokerChip>(), true);
+                Main.NewText("The chip has given you new life!");
+                return false;
+            }
+            if (zippedHandEquipped && !zippedHandDeath)
+            {
+                if (!Player.HasItem(ModContent.ItemType<PokerChip>()) || revivedByPokerChip)
+                {
+                    Player.AddBuff(ModContent.BuffType<SwanSong>(), 7 * 60);
+                    Player.statLife = 100;
+                    Player.HealEffect(100);
+                    return false;
+                }
+            }
+            if (backToZeroActive)
+            {
+                return false;
+            }
+
+
+            standOut = false;
+            revivedByPokerChip = false;
+            standChangingLocked = false;
+            standRespawnQueued = true;
+            forceShutDownEffect = true;
+            return true;
+        }
+
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
             if (Player.whoAmI == Main.myPlayer && !notDeadYet)
             {
                 if (JoJoStands.DeathSoundID == JoJoStands.DeathSoundType.Roundabout)
@@ -1953,42 +1992,6 @@ namespace JoJoStands
                 if (JoJoStands.DeathSoundID != JoJoStands.DeathSoundType.Roundabout)
                     ToBeContinued.Visible = true;
             }
-
-            if (Player.HasBuff(ModContent.BuffType<Pierced>()))
-            {
-                receivedArrowShard = false;
-                piercedTimer = 36000;
-            }
-            if (!revived && Player.HasItem(ModContent.ItemType<PokerChip>()))
-            {
-                revived = true;
-                Player.AddBuff(ModContent.BuffType<ArtificialSoul>(), 3600);
-                Player.ConsumeItem(ModContent.ItemType<PokerChip>(), true);
-                Main.NewText("The chip has given you new life!");
-                return false;
-            }
-            if (zippedHandEquipped && !zippedHandDeath)
-            {
-                if (!Player.HasItem(ModContent.ItemType<PokerChip>()) || revived)
-                {
-                    Player.AddBuff(ModContent.BuffType<SwanSong>(), 7 * 60);
-                    Player.statLife = 100;
-                    Player.HealEffect(100);
-                    return false;
-                }
-            }
-            if (backToZeroActive)
-            {
-                return false;
-            }
-
-
-            standOut = false;
-            revived = false;
-            standChangingLocked = false;
-            standRespawnQueued = true;
-            forceShutDownEffect = true;
-            return true;
         }
 
         public override void UpdateDead()

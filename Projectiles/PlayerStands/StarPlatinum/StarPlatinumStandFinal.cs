@@ -1,6 +1,5 @@
 using JoJoStands.Buffs.EffectBuff;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -19,6 +18,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override string PunchSoundName => "Ora";
         public override string PoseSoundName => "YareYareDaze";
         public override string SpawnSoundName => "Star Platinum";
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/StarPlatinum/StarPlatinum_Punch_";
+        public override Vector2 PunchSize => new Vector2(44, 12);
         public override bool CanUsePart4Dye => true;
         public override StandAttackType StandType => StandAttackType.Melee;
         public new AnimationState currentAnimationState;

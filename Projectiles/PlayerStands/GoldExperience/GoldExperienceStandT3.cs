@@ -20,6 +20,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
         public override string PunchSoundName => "GER_Muda";
         public override string PoseSoundName => "TheresADreamInMyHeart";
         public override string SpawnSoundName => "Gold Experience";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/GoldExperience/GoldExperience_Punch_";
+        public override Vector2 PunchSize => new Vector2(18, 10);
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private string[] abilityNames = new string[3] { "Frog", "Tree", "Butterfly" };

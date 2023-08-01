@@ -210,7 +210,6 @@ namespace JoJoStands
             PoseHotKey = KeybindLoader.RegisterKeybind(Instance, "Pose", Keys.V);
             StandAutoModeHotKey = KeybindLoader.RegisterKeybind(Instance, "Stand Auto Mode", Keys.C);
 
-
             if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
                 JoJoStandsShaders.LoadShaders();
         }

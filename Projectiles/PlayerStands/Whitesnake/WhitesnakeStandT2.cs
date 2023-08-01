@@ -21,8 +21,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override float MaxDistance => 148f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities
         public override string PoseSoundName => "YouWereTwoSecondsTooLate";
         public override string SpawnSoundName => "Whitesnake";
-        public override bool CanUseSaladDye => true;
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/Whitesnake/Whitesnake_Punch_";
+        public override Vector2 PunchSize => new Vector2(26, 8);
         public override StandAttackType StandType => StandAttackType.Melee;
+        public override bool CanUseSaladDye => true;
         public new AnimationState currentAnimationState;
         public new AnimationState oldAnimationState;
 

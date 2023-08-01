@@ -15,6 +15,9 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         public override string PunchSoundName => "Dora";
         public override string PoseSoundName => "CrazyDiamond";
         public override string SpawnSoundName => "Crazy Diamond";
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/CrazyDiamond/CrazyDiamond_Punch_";
+        public override Vector2 PunchSize => new Vector2(28, 8);
         public override StandAttackType StandType => StandAttackType.Melee;
         public new AnimationState currentAnimationState;
         public new AnimationState oldAnimationState;

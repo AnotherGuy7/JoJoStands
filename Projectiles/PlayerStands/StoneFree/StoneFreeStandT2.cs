@@ -18,6 +18,18 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         public override string PunchSoundName => "StoneFree_Ora";
         public override string PoseSoundName => "StoneFree";
         public override string SpawnSoundName => "Stone Free";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/StoneFree/StoneFree_Punch_";
+        public override Vector2 PunchSize => new Vector2(32, 8);
+        public override PunchSpawnData PunchData => new PunchSpawnData()
+        {
+            standardPunchOffset = new Vector2(6f, 0f),
+            minimumLifeTime = 5,
+            maximumLifeTime = 12,
+            minimumTravelDistance = 20,
+            maximumTravelDistance = 48,
+            bonusAfterimageAmount = 0
+        };
         public override StandAttackType StandType => StandAttackType.Melee;
         public new AnimationState currentAnimationState;
         public new AnimationState oldAnimationState;

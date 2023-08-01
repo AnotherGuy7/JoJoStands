@@ -1,3 +1,4 @@
+- Added new barrage effects for most Stands
 - Adjusted Bad Company's spawn effects
 - Adjusted Bad Company's firing mechanics
 - Buffed ranged Stands's Auto Mode detection distances
@@ -22,3 +23,4 @@
 - Fixed Grateful Dead not moving for other players when attempting to grab an enemy
 - Fixed a bug that caused the Ability Wheel to display unused icons when going from a wheel with more abilities to a wheel with less
 - Fixed a bug that caused one or more of an Ability Wheel's icons to never appear
+- Fixed the Golden Spin Meter not showing its frames properly

@@ -22,6 +22,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override string SpawnSoundName => "Echoes Act 3";
         public override Vector2 StandOffset => new Vector2(10, 0);
         public override Vector2 ManualIdleHoverOffset => new Vector2(0, -10);
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/Echoes/EchoesACT3_Punch_";
+        public override Vector2 PunchSize => new Vector2(26, 8);
         public override StandAttackType StandType => StandAttackType.Melee;
         public new AnimationState currentAnimationState;
         public new AnimationState oldAnimationState;

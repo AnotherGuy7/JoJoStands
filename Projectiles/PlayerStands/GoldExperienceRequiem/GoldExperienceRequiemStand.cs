@@ -25,6 +25,18 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
         public override string PunchSoundName => "GER_Muda";
         public override string PoseSoundName => "ThisIsRequiem";
         public override string SpawnSoundName => "Gold Experience Requiem";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/GoldExperienceRequiem/GER_Punch_";
+        public override Vector2 PunchSize => new Vector2(22, 12);
+        public override PunchSpawnData PunchData => new PunchSpawnData()
+        {
+            standardPunchOffset = new Vector2(12f, 0f),
+            minimumLifeTime = 5,
+            maximumLifeTime = 12,
+            minimumTravelDistance = 20,
+            maximumTravelDistance = 40,
+            bonusAfterimageAmount = 0
+        };
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private int regencounter = 0;
