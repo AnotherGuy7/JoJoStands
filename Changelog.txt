@@ -1,19 +1,25 @@
-JoJoStands v2.4.1 Changelog:
+JoJoStands v2.4.4 Changelog:
 Ported to 1.4.4
 
 - Added the Part 4 Dye
 - Added new barrage effects for most Stands
 - Resprited The World
 - Resprited many (but not all) accessories
+- Recolored Bad Company's soldiers, tanks, and choppers
 - Adjusted Bad Company's spawn effects
 - Adjusted Bad Company's firing mechanics
-- Buffed ranged Stands's Auto Mode detection distances
+- Buffed ranged Stands's Auto Mode detection distances by almost double for every Stand
 - **Stand Users are no longer immortal while in Manual Mode.**
 - Buffed Star Platinum's Bullet Flick damage by a minor amount
+- Removed Crazy Diamond's bullet flick cooldown
+- Removed Sticky Fingers' Zipper Punch cooldown
 - Added a Stray Cat buff indicator while Stray Cat is summoned
 - Removed the Ability Cooldown from Crazy Diamond's bullet flick ability
 - Changed Star Finger to allow for more consistent use
+- Nerfed the Stand Dodge mechanic heavily. Stand Dodge chances now cap at 30%
 - Expanded Mod Dye tooltips to include which Stands get changed
+- Improved Stand networking yet again! Stands should seem overall way less choppy for other players!
+- Fixed Soft & Wet's Bubble Barrier cooldown applies when using the ability and not after it ends
 - Fixed Stand Dyes not applying to Stands unless re-applied
 - Fixed Echoes not switching back to Act 1 from Act 2
 - Fixed Grateful Dead's inability to punch at T2
@@ -25,6 +31,7 @@ Ported to 1.4.4
 - Fixed Crazy Diamond being able to consistently duplicate items using its uncraft ability
 - Fixed an uncommon issue that caused a single ability wheel background piece to not appear
 - Fixed the Ability Wheel not always being able to be scrolled on
+- Fixed the Ability Wheel going off-screen at non 100% UI Scales
 - Fixed Stands not benefitting from All Damage bonuses
 - Fixed Star Platinum consuming endless bullet items
 - Fixed Sex Pistols throwing errors upon kicking bullets with the Sounds Mod enabled
@@ -42,3 +49,4 @@ Ported to 1.4.4
 - Fixed a bug that caused the Ability Wheel to display unused icons when going from a wheel with more abilities to a wheel with less
 - Fixed a bug that caused one or more of an Ability Wheel's icons to never appear
 - Fixed the Golden Spin Meter not showing its frames properly
+- Fixed the Bullet Counter not properly showing its frames

@@ -216,12 +216,18 @@ namespace JoJoStands
 
         public override void Close()
         {
-            timestopImmune.Clear();
-            timestopOverrideStands.Clear();
-            standTier1List.Clear();
-            standProjectileList.Clear();
-            christmasStands.Clear();
-            testStandPassword.Clear();
+            if (timestopImmune != null)
+                timestopImmune.Clear();
+            if (timestopOverrideStands != null)
+                timestopOverrideStands.Clear();
+            if (standTier1List != null)
+                standTier1List.Clear();
+            if (standProjectileList != null)
+                standProjectileList.Clear();
+            if (christmasStands != null)
+                christmasStands.Clear();
+            if (testStandPassword != null)
+                testStandPassword.Clear();
 
             base.Close();
         }

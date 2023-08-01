@@ -787,7 +787,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 mPlayer.standHitTime--;
             if (mPlayer.standType != (int)StandType)
                 mPlayer.standType = (int)StandType;
-            if (attacking)
+            if (attacking && (StandType == StandAttackType.Melee || CanUseAfterImagePunches))
                 punchAnimationTimer++;
             else
                 punchAnimationTimer = 0;
@@ -834,7 +834,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 SpawnEffects();
             }
             
-            if (punchAfterImageAmount != 0 && punchAnimationTimer > 0)
+            if ((StandType == StandAttackType.Melee || CanUseAfterImagePunches) && punchAfterImageAmount != 0 && punchAnimationTimer > 0)
             {
                 int afterImageAmount = punchAfterImageAmount;
                 int amountOfPunches = Main.rand.Next(afterImageAmount, afterImageAmount + 1 + 1) + PunchData.bonusAfterimageAmount;
@@ -941,6 +941,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void PreDrawAfterimagePunches(Color drawColor)
         {
+            if (!(StandType == StandAttackType.Melee || CanUseAfterImagePunches))
+                return;
+
             if (punchAnimationTimer <= 0)
             {
                 if (backPunchFrames != null && backPunchFrames.Count != 0)
@@ -964,6 +967,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void PostDrawAfterimagePunches(Color drawColor)
         {
+            if (!(StandType == StandAttackType.Melee || CanUseAfterImagePunches))
+                return;
+
             if (punchAnimationTimer <= 0)
             {
                 if (frontPunchFrames != null && frontPunchFrames.Count != 0)
