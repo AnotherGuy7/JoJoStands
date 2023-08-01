@@ -1,11 +1,8 @@
+using JoJoStands.Buffs.AccessoryBuff;
 using JoJoStands.Buffs.Debuffs;
-using JoJoStands.Items.Vampire;
-using JoJoStands.NPCs;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Hamon
@@ -33,38 +30,21 @@ namespace JoJoStands.Items.Hamon
         {
             Player player = Main.LocalPlayer;
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             bool specialPressed = false;
             if (!Main.dedServ)
                 specialPressed = JoJoStands.SpecialHotKey.Current;
 
+            if (player.breath <= 1)
+                return;
+
             if (specialPressed)
             {
-                if (vPlayer.zombie || vPlayer.vampire)
-                {
-                    player.AddBuff(ModContent.BuffType<Sunburn>(), 5 * 60);
-                    return;
-                }
-                if (player.breath <= 1)
-                    return;
 
                 increaseCounter++;
                 player.velocity.X /= 3f;
                 hamonPlayer.hamonIncreaseCounter = 0;
                 hamonPlayer.chargingHamon = true;
-                int dustIndex = Dust.NewDust(player.position - (Vector2.One * 2), player.width + 4, player.height + 4, 169, Scale: Main._rand.Next(80, 120 + 1) / 100f);
-                Main.dust[dustIndex].noGravity = true;
-                Main.dust[dustIndex].velocity = new Vector2(0f, Main._rand.Next(-6, -2) / 10f);
-                if (hamonPlayer.learnedHamonSkills[HamonPlayer.PoisonCancellation])
-                {
-                    for (int b = 0; b < player.buffType.Length; b++)
-                    {
-                        if (player.buffType[b] == BuffID.Poisoned)
-                        {
-                            player.buffTime[b] -= 5;
-                        }
-                    }
-                }
+                Dust.NewDust(player.position, player.width, player.height, 169, player.velocity.X * -0.5f, player.velocity.Y * -0.5f);
                 if (increaseCounter % 10 == 0 && player.breath != player.breathMax)
                     player.breath -= 4;
             }
@@ -91,7 +71,7 @@ namespace JoJoStands.Items.Hamon
 
         public override void ModifyHitPvp(Player player, Player target, ref Player.HurtModifiers modifiers)
         {
-            if (target.HasBuff(ModContent.BuffType<Buffs.AccessoryBuff.Vampire>()))
+            if (modifiers.PvP && target.HasBuff(ModContent.BuffType<Vampire>()))
             {
                 modifiers.FinalDamage *= 1.3f;
                 target.AddBuff(ModContent.BuffType<Sunburn>(), 90);
@@ -150,13 +130,6 @@ namespace JoJoStands.Items.Hamon
             {
                 damage *= 1.5f;
             }
-        }
-
-        public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
-        {
-            HamonPlayer hPlayer = player.GetModPlayer<HamonPlayer>();
-            if (hPlayer.learnedHamonSkills[HamonPlayer.SunTag] && target.GetGlobalNPC<JoJoGlobalNPC>().sunTagged)
-                modifiers.FinalDamage *= 1.15f;
         }
 
         public override void ModifyWeaponKnockback(Player player, ref StatModifier knockback)

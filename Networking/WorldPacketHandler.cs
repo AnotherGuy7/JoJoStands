@@ -8,7 +8,6 @@ namespace JoJoStands.Networking
 {
     public class WorldPacketHandler : PacketHandler
     {
-        public const byte VampiricNight = 0;
         public const byte EnemySync = 1;
 
         public WorldPacketHandler(byte handlerType) : base(handlerType)
@@ -19,28 +18,10 @@ namespace JoJoStands.Networking
             byte messageType = reader.ReadByte();
             switch (messageType)
             {
-                case VampiricNight:
-                    ReceiveVampiricNight(reader, fromWho);
-                    break;
                 case EnemySync:
                     ReceiveEnemySync(reader, fromWho);
                     break;
             }
-        }
-
-        public void SendVampiricNight(int toWho, int fromWho, bool active)         //OR packet.Write(Main.player[fromWho].GetModPlayer<MyPlayer>().TheWorldEffect);  if you want to simplify using the method
-        {
-            ModPacket packet = CreatePacket(VampiricNight);
-            packet.Write(active);
-            packet.Send(toWho, fromWho);
-        }
-
-        public void ReceiveVampiricNight(BinaryReader reader, int fromWho)
-        {
-            bool vampiricNightActive = reader.ReadBoolean();
-            JoJoStandsWorld.VampiricNight = vampiricNightActive;
-            if (Main.netMode == NetmodeID.Server)
-                SendVampiricNight(-1, fromWho, vampiricNightActive);
         }
 
         public void SendEnemySync(int toWho, int fromWho, byte effectIndex, bool state, int info, int enemyIndex)

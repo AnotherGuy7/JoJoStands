@@ -3,7 +3,6 @@ using JoJoStands.Items.Tiles;
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.Bestiary;
@@ -32,7 +31,6 @@ namespace JoJoStands.NPCs.TownNPCs
             NPC.Happiness.SetBiomeAffection<HallowBiome>(AffectionLevel.Dislike);
             NPC.Happiness.SetNPCAffection<Priest>(AffectionLevel.Like);
             NPC.Happiness.SetNPCAffection<MarineBiologist>(AffectionLevel.Hate);
-            NPC.Happiness.SetNPCAffection<HamonMaster>(AffectionLevel.Hate);
             NPC.Happiness.SetNPCAffection(579, AffectionLevel.Like);
             NPC.Happiness.SetNPCAffection(NPCID.PartyGirl, AffectionLevel.Like);
             NPC.Happiness.SetNPCAffection(NPCID.Merchant, AffectionLevel.Dislike);

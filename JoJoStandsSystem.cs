@@ -18,9 +18,7 @@ namespace JoJoStands
         public static BetUI betUI;
         public static SexPistolsUI sexPistolsUI;
         public static VoidBar VoidBarUI;
-        public static HamonSkillTree HamonSkillTreeUI;
         public static BadCompanyUnitsUI UnitsUI;
-        public static ZombieSkillTree ZombieSkillTreeUI;
         public static StoneFreeAbilityWheel StoneFreeAbilityWheelUI;
         public static GoldExperienceAbilityWheel GoldExperienceAbilityWheelUI;
         public static GoldExperienceRequiemAbilityWheel GoldExperienceRequiemAbilityWheelUI;
@@ -87,20 +85,10 @@ namespace JoJoStands
                 _voidbarUI = new UserInterface();
                 _voidbarUI.SetState(VoidBarUI);
 
-                HamonSkillTreeUI = new HamonSkillTree();
-                HamonSkillTreeUI.Activate();
-                _hamonSkillTreeUI = new UserInterface();
-                _hamonSkillTreeUI.SetState(HamonSkillTreeUI);
-
                 UnitsUI = new BadCompanyUnitsUI();
                 UnitsUI.Activate();
                 _unitsUI = new UserInterface();
                 _unitsUI.SetState(UnitsUI);
-
-                ZombieSkillTreeUI = new ZombieSkillTree();
-                ZombieSkillTreeUI.Activate();
-                _zombieSkillTreeUI = new UserInterface();
-                _zombieSkillTreeUI.SetState(ZombieSkillTreeUI);
 
                 StoneFreeAbilityWheelUI = new StoneFreeAbilityWheel();
                 StoneFreeAbilityWheelUI.Activate();
@@ -134,9 +122,7 @@ namespace JoJoStands
             betUI = null;
             sexPistolsUI = null;
             VoidBarUI = null;
-            HamonSkillTreeUI = null;
             UnitsUI = null;
-            ZombieSkillTreeUI = null;
             StoneFreeAbilityWheelUI = null;
             GlobalMouseTextPanelUI = null;
             for (int i = 0; i < StoneFreeAbilityWheel.stoneFreeAbilityWheel.abilityButtons.Length; i++)
@@ -224,14 +210,8 @@ namespace JoJoStands
             if (VoidBar.Visible)
                 _voidbarUI.Update(gameTime);
 
-            if (HamonSkillTree.Visible)
-                _hamonSkillTreeUI.Update(gameTime);
-
             if (BadCompanyUnitsUI.Visible)
                 _unitsUI.Update(gameTime);
-
-            if (ZombieSkillTree.Visible)
-                _zombieSkillTreeUI.Update(gameTime);
 
             if (StoneFreeAbilityWheel.Visible)
                 _stoneFreeAbilityWheelUI.Update(gameTime);
@@ -277,14 +257,8 @@ namespace JoJoStands
             if (VoidBar.Visible)
                 _voidbarUI.Draw(Main.spriteBatch, new GameTime());
 
-            if (HamonSkillTree.Visible)
-                _hamonSkillTreeUI.Draw(Main.spriteBatch, new GameTime());
-
             if (BadCompanyUnitsUI.Visible)
                 _unitsUI.Draw(Main.spriteBatch, new GameTime());
-
-            if (ZombieSkillTree.Visible)
-                _zombieSkillTreeUI.Draw(Main.spriteBatch, new GameTime());
 
             if (StoneFreeAbilityWheel.Visible)
                 _stoneFreeAbilityWheelUI.Draw(Main.spriteBatch, new GameTime());

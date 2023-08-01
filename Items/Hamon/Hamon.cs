@@ -1,8 +1,8 @@
 using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Projectiles;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Hamon
@@ -10,12 +10,6 @@ namespace JoJoStands.Items.Hamon
     public class Hamon : HamonDamageClass
     {
         public override bool affectedByHamonScaling => true;
-
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("Hamon");
-            // Tooltip.SetDefault("Punch enemies with the power that circulates in you. \nExperience goes up after each conquer...\nSpecial: Hamon Breathing");
-        }
 
         public override void SafeSetDefaults()
         {
@@ -38,42 +32,34 @@ namespace JoJoStands.Items.Hamon
             Item.shootSpeed = 15f;
         }
 
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
-            Player player = Main.player[Main.myPlayer];
-            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-
-            if (hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing])
-            {
-                TooltipLine tooltipAddition = new TooltipLine(Mod, "Damage", "Hold Right-Click for more than " + (4 / hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing]) + " seconds to heal life! (Requires more than " + hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing] + " Hamon)");
-                tooltips.Add(tooltipAddition);
-            }
-        }
-
         private int healTimer = 0;
 
         public override void HoldItem(Player player)
         {
             HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-
+            hamonPlayer.learnedHamon = true;
+            UI.HamonBar.ShowHamonBar();
             ChargeHamon();
-            if (player.whoAmI == Main.myPlayer && hamonPlayer.learnedHamonSkills.ContainsKey(HamonPlayer.HamonItemHealing) && hamonPlayer.learnedHamonSkills[HamonPlayer.HamonItemHealing])
+            if (player.whoAmI == Main.myPlayer)
             {
-                if (Main.mouseRight && hamonPlayer.amountOfHamon >= hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing])
+                if (hamonPlayer.amountOfHamon < 5)
+                    return;
+
+                if (Main.mouseRight)
                 {
                     healTimer++;
                     if (Main.rand.Next(0, 2) == 0)
                     {
-                        int dustIndex = Dust.NewDust(player.position, player.width, player.height, 169, SpeedY: Main.rand.NextFloat(-0.6f, 1f));
+                        int dustIndex = Dust.NewDust(player.position, player.width, player.height, DustID.IchorTorch, SpeedY: Main.rand.NextFloat(-0.6f, 1f));
                         Main.dust[dustIndex].noGravity = true;
                     }
                 }
-                if (healTimer >= (4 * 60) / hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing])
+                if (healTimer >= 3 * 60)
                 {
-                    int healamount = Main.rand.Next(10 + (5 * hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing]), 20 * hamonPlayer.hamonSkillLevels[HamonPlayer.HamonItemHealing]);
+                    int healamount = Main.rand.Next(15, 24);
                     player.HealEffect(healamount);
                     player.statLife += healamount;
-                    hamonPlayer.amountOfHamon -= hamonPlayer.hamonAmountRequirements[HamonPlayer.HamonItemHealing];
+                    hamonPlayer.amountOfHamon -= 5;
                     healTimer = 0;
                 }
                 if (Main.mouseRightRelease)
@@ -82,12 +68,6 @@ namespace JoJoStands.Items.Hamon
             if (player.statLife <= 25)
                 player.AddBuff(ModContent.BuffType<RUUUN>(), 360);
         }
-
-        /*public override void OnCraft(Recipe recipe)       //Re-enable for patch
-        {
-            Main.LocalPlayer.GetModPlayer<HamonPlayer>().learnedHamon = true;
-            UI.HamonBar.ShowHamonBar();
-        }*/
 
         public override void AddRecipes()
         {

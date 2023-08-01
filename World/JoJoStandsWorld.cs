@@ -14,21 +14,14 @@ namespace JoJoStands
     public class JoJoStandsWorld : ModSystem
     {
         private bool viralMeteoriteDropped = false;
-        private bool vampiricNightQueued = false;
-        private bool checkedForVampiricEvent = false;
-        private bool vampiricNightComplete = false;
-        private int vampiricNightStartTimer = 0;
         private int viralMeteoriteIntroductionTimer = 0;
 
         public static bool VisitedViralMeteorite = false;
         public static bool ViralMeteoriteIntroduced = false;
-        public static bool VampiricNight = false;
         public static Point ViralMeteoriteCenter;
         public static int viralMeteoriteTiles = 0;
 
         private const string Tag_MeteorDropped = "meteorDropped";
-        private const string Tag_VampiricNight = "vampiricNight";
-        private const string Tag_VampiricNightComplete = "vampiricNightComplete";
         private const string Tag_ViralMeteoriteCenterX = "viralMeteoriteCenterX";
         private const string Tag_ViralMeteoriteCenterY = "viralMeteoriteCenterY";
         private const string Tag_ViralMeteoriteVisited = "viralMeteoriteVisited";
@@ -53,15 +46,10 @@ namespace JoJoStands
         private void ResetWorldDependentVariables()
         {
             viralMeteoriteDropped = false;
-            vampiricNightQueued = false;
-            checkedForVampiricEvent = false;
-            vampiricNightComplete = false;
-            vampiricNightStartTimer = 0;
             viralMeteoriteIntroductionTimer = 0;
 
             VisitedViralMeteorite = false;
             ViralMeteoriteIntroduced = false;
-            VampiricNight = false;
             ViralMeteoriteCenter = Point.Zero;
             viralMeteoriteTiles = 0;
         }
@@ -69,8 +57,6 @@ namespace JoJoStands
         public override void SaveWorldData(TagCompound tag)
         {
             tag.Add(Tag_MeteorDropped, viralMeteoriteDropped);
-            tag.Add(Tag_VampiricNight, VampiricNight);
-            tag.Add(Tag_VampiricNightComplete, vampiricNightComplete);
             tag.Add(Tag_ViralMeteoriteCenterX, ViralMeteoriteCenter.X);
             tag.Add(Tag_ViralMeteoriteCenterY, ViralMeteoriteCenter.Y);
             tag.Add(Tag_ViralMeteoriteVisited, VisitedViralMeteorite);
@@ -80,8 +66,6 @@ namespace JoJoStands
         public override void LoadWorldData(TagCompound tag)
         {
             viralMeteoriteDropped = tag.GetBool(Tag_MeteorDropped);
-            VampiricNight = tag.GetBool(Tag_VampiricNight);
-            vampiricNightComplete = tag.GetBool(Tag_VampiricNightComplete);
             ViralMeteoriteCenter = new Point(tag.GetInt(Tag_ViralMeteoriteCenterX), tag.GetInt(Tag_ViralMeteoriteCenterY));
             VisitedViralMeteorite = tag.GetBool(Tag_ViralMeteoriteVisited);
             ViralMeteoriteIntroduced = tag.GetBool(Tag_ViralMeteoriteIntroZoneVisited);
@@ -114,44 +98,6 @@ namespace JoJoStands
                 {
                     viralMeteoriteIntroductionTimer = 0;
                     JoJoStandsShaders.DeactivateShader(JoJoStandsShaders.ViralMeteoriteEffect);
-                }
-            }
-
-            if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer != 0)      //Below this, the code only updates for the owner.
-                return;
-
-            if (!Main.dayTime)
-            {
-                if (!checkedForVampiricEvent && !vampiricNightComplete && NPC.downedBoss1 && !VampiricNight)
-                {
-                    checkedForVampiricEvent = true;
-                    if (Main.rand.Next(1, 100 + 1) <= 9)
-                    {
-                        vampiricNightQueued = true;
-                        SyncCall.DisplayText("You feel the dirt under you rumbling slightly...", WorldEventTextColor);
-                    }
-                }
-                if (vampiricNightQueued)
-                {
-                    vampiricNightStartTimer++;
-                    if (vampiricNightStartTimer >= 20 * 60)
-                    {
-                        VampiricNight = true;
-                        vampiricNightQueued = false;
-                        vampiricNightStartTimer = 0;
-                        SyncCall.DisplayText("Dio's Minions have arrived!", WorldEventTextColor);
-                        SyncCall.SyncVampiricNight(Main.myPlayer, VampiricNight);
-                    }
-                }
-            }
-            else
-            {
-                checkedForVampiricEvent = false;
-                if (VampiricNight)
-                {
-                    VampiricNight = false;
-                    vampiricNightComplete = true;
-                    Main.NewText("The zombies have been pushed back!", WorldEventTextColor);
                 }
             }
         }

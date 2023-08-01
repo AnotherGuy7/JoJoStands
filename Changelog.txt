@@ -1,3 +1,7 @@
+JoJoStands v2.4.1 Changelog:
+Ported to 1.4.4
+
+- Added the Part 4 Dye
 - Added new barrage effects for most Stands
 - Resprited The World
 - Resprited many (but not all) accessories
@@ -9,6 +13,18 @@
 - Added a Stray Cat buff indicator while Stray Cat is summoned
 - Removed the Ability Cooldown from Crazy Diamond's bullet flick ability
 - Changed Star Finger to allow for more consistent use
+- Expanded Mod Dye tooltips to include which Stands get changed
+- Fixed Stand Dyes not applying to Stands unless re-applied
+- Fixed Echoes not switching back to Act 1 from Act 2
+- Fixed Grateful Dead's inability to punch at T2
+- Fixed Echoes Act 3's pose quote
+- Fixed Stands not being affected by dye effects while being desummoned
+- Fixed the Void Bar not showing up
+- Fixed Wills to Escape not dropping in the Caverns
+- Fixed the game crashing when trying to add the Believe in Me SFX to players using Echoes
+- Fixed Crazy Diamond being able to consistently duplicate items using its uncraft ability
+- Fixed an uncommon issue that caused a single ability wheel background piece to not appear
+- Fixed the Ability Wheel not always being able to be scrolled on
 - Fixed Stands not benefitting from All Damage bonuses
 - Fixed Star Platinum consuming endless bullet items
 - Fixed Sex Pistols throwing errors upon kicking bullets with the Sounds Mod enabled
