@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Accessories
             /* Tooltip.SetDefault("Every fifth hit on enemies with Stand Attacks deal more damage." +
                 "\nAttacks affected by this accessory ignore defense."); */
             Item.ResearchUnlockCount = 1;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SealedPokerDeck>();
         }
 
         public override void SetDefaults()

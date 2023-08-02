@@ -23,6 +23,7 @@ namespace JoJoStands.Items
         {
             // DisplayName.SetDefault("The World (Final Tier)");       //To refer to things like "Special during Timestop" where you press special and special again a little later, use "Double-Tap Special"
             // Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to throw knives! \nSpecial: Stop time for 9 seconds!\nSpecial during Timestop: Throw a Road Roller during a timestop!\nSecond Special: Stop time and surround an enemy with knives!\nUsed in Stand Slot");
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<StarPlatinumFinal>();
         }
 
         public override void SetDefaults()

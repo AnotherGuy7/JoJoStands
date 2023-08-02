@@ -53,6 +53,7 @@ namespace JoJoStands
         public static bool TimestopEffects = false;
         public static bool RangeIndicators = false;
         public static bool AutomaticActivations = false;
+        public static bool StandAimAssist = false;
         public static bool SecretReferences = false;
         public static int StandSlotPositionX;
         public static int StandSlotPositionY;
@@ -216,12 +217,18 @@ namespace JoJoStands
 
         public override void Close()
         {
-            timestopImmune.Clear();
-            timestopOverrideStands.Clear();
-            standTier1List.Clear();
-            standProjectileList.Clear();
-            christmasStands.Clear();
-            testStandPassword.Clear();
+            if (timestopImmune != null)
+                timestopImmune.Clear();
+            if (timestopOverrideStands != null)
+                timestopOverrideStands.Clear();
+            if (standTier1List != null)
+                standTier1List.Clear();
+            if (standProjectileList != null)
+                standProjectileList.Clear();
+            if (christmasStands != null)
+                christmasStands.Clear();
+            if (testStandPassword != null)
+                testStandPassword.Clear();
 
             base.Close();
         }
@@ -286,35 +293,35 @@ namespace JoJoStands
             {
                 ItemID.CobaltBar,
                 ItemID.PalladiumBar,
-            }); 
+            });
             RecipeGroup.RegisterGroup("JoJoStandsCobalt-TierBar", CobaltTierGroup);
 
             RecipeGroup GoldTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Gold-Tier Bar", new int[]
             {
                 ItemID.GoldBar,
                 ItemID.PlatinumBar,
-            }); 
+            });
             RecipeGroup.RegisterGroup("JoJoStandsGold-TierBar", GoldTierGroup);
 
             RecipeGroup SilverTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Silver-Tier Bar", new int[]
             {
                 ItemID.SilverBar,
                 ItemID.TungstenBar,
-            }); 
+            });
             RecipeGroup.RegisterGroup("JoJoStandsSilver-TierBar", SilverTierGroup);
 
             RecipeGroup IronTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Iron-Tier Bar", new int[]
-{
+            {
                 ItemID.IronBar,
                 ItemID.LeadBar,
-});
+            });
             RecipeGroup.RegisterGroup("JoJoStandsIron-TierBar", IronTierGroup);
 
             RecipeGroup EvilBarGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Evil Bar", new int[]
             {
                 ItemID.DemoniteBar,
                 ItemID.CrimtaneBar,
-            }); 
+            });
             RecipeGroup.RegisterGroup("JoJoStandsEvilBar", EvilBarGroup);
 
             RecipeGroup RottenVertebraeGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Rotten Chunk or Vertebrae", new int[]
@@ -359,11 +366,11 @@ namespace JoJoStands
             });
             RecipeGroup.RegisterGroup("JoJoStandsCrown", CrownGroup);
 
-            RecipeGroup WatchGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Gold Watch or Platinum Watch", new int[] 
-{
+            RecipeGroup WatchGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Gold Watch or Platinum Watch", new int[]
+            {
                 ItemID.GoldWatch,
                 ItemID.PlatinumWatch,
-});
+            });
             RecipeGroup.RegisterGroup("JoJoStandsWatch", WatchGroup);
         }
 

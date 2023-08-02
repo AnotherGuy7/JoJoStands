@@ -15,6 +15,7 @@ namespace JoJoStands.Items.CraftingMaterials
             // Tooltip.SetDefault("A physical outlook upon the world, destructive and erratic.");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(7, 14));
             Item.ResearchUnlockCount = 25;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<WillToChange>();
         }
 
         public override void SetDefaults()

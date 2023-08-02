@@ -4,7 +4,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands.Items.CraftingMaterials
 {
@@ -16,6 +15,7 @@ namespace JoJoStands.Items.CraftingMaterials
             // DisplayName.SetDefault("Tainted Lifeforce");
             // Tooltip.SetDefault("The aura of someone remorselessly wicked");
             Item.ResearchUnlockCount = 3;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<CaringLifeforce>();
         }
 
         public override void SetDefaults()
@@ -29,7 +29,7 @@ namespace JoJoStands.Items.CraftingMaterials
 
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            Texture2D texture = (Texture2D)Request<Texture2D>("JoJoStands/Items/CraftingMaterials/" + Name);
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Items/CraftingMaterials/" + Name);
             DrawAnimation drawAnim = Main.itemAnimations[Item.type];
             Rectangle sourceRect = drawAnim.GetFrame(texture);
             spriteBatch.Draw(texture, Item.Center - Main.screenPosition + new Vector2(0f, 1f), sourceRect, Color.White, 0f, new Vector2(texture.Width / 2f, Item.height / 2f), 1f, SpriteEffects.None, 0);     //animates faster than the normal animation???
@@ -45,8 +45,8 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemType<WillToEscape>(), 3)
-                .AddIngredient(ItemType<WillToDestroy>(), 3)
+                .AddIngredient(ModContent.ItemType<WillToEscape>(), 3)
+                .AddIngredient(ModContent.ItemType<WillToDestroy>(), 3)
                 .AddIngredient(ItemID.SoulofNight, 3)
                 .AddIngredient(ItemID.Ectoplasm, 4)
                 .Register();

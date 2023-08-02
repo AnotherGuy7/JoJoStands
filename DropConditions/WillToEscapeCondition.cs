@@ -17,7 +17,7 @@ namespace JoJoStands.DropConditions
         public bool CanDrop(DropAttemptInfo info)
         {
             if (!info.IsInSimulation)
-                return info.player.ZoneNormalCaverns;
+                return info.player.ZoneRockLayerHeight && !info.player.ZoneJungle && !info.player.ZoneSnow && !info.player.ZoneDesert && !info.player.ZoneDungeon;
 
             return false;
         }

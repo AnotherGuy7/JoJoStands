@@ -725,7 +725,6 @@ namespace JoJoStands
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
         {
             List<Item> startingItems = new List<Item>();
-
             if (Main.rand.Next(1, 5 + 1) == 1)
             {
                 int inheritanceStandChance = Main.rand.Next(0, JoJoStands.standTier1List.Count);

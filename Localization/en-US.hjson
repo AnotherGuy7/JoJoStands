@@ -3914,6 +3914,11 @@ Mods: {
 					Label: Sounds Mod Ability Voicelines
 					Tooltip: Whether or not you want to hear ability voicelines. These voicelines cause a delay in the activation of abilities! (Only works with the Sounds Mod!)
 				}
+
+				StandAimAssist: {
+					Label: Stand Aim Assist
+					Tooltip: Determines whether or not Stands should automatically lock onto targets your mouse is hovering over instead of attacking toward the mouse.
+				}
 			}
 
 			DeathSoundType: {

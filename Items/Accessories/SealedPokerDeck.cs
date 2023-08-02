@@ -12,6 +12,7 @@ namespace JoJoStands.Items.Accessories
             /* Tooltip.SetDefault("Every 5 seconds, Stand Attacks deal 25% more damage." +
                 "\nStand Attacks affected by this accessory are guaranteed critical strikes."); */
             Item.ResearchUnlockCount = 1;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<UnderbossPhone>();
         }
 
         public override void SetDefaults()

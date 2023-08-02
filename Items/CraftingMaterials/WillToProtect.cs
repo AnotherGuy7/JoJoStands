@@ -15,6 +15,7 @@ namespace JoJoStands.Items.CraftingMaterials
             // Tooltip.SetDefault("A physical outlook upon the world, defensive and caring.");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(7, 15));
             Item.ResearchUnlockCount = 25;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<WillToFight>();
         }
 
         public override void SetDefaults()

@@ -27,7 +27,7 @@ namespace JoJoStands
 
         [DefaultValue(true)]
         [Label("Respawn With Stand Out")]
-        [Tooltip("Determiens whether or not you want to always respawn with your Stand out.")]
+        [Tooltip("Determines whether or not you want to always respawn with your Stand out.")]
         public bool RespawnWithStandOut;
 
         [DefaultValue(true)]
@@ -62,8 +62,13 @@ namespace JoJoStands
 
         [DefaultValue(true)]
         [Label("Color Change Effects")]
-        [Tooltip("Determiens whether or not you want to see the world color changes.")]
+        [Tooltip("Determines whether or not you want to see the world color changes.")]
         public bool ColorChangeEffects;
+
+        [DefaultValue(true)]
+        [Label("Stand Aim Assist")]
+        [Tooltip("Determines whether or not Stands should automatically lock onto targets your mouse is hovering over instead of attacking toward the mouse.")]
+        public bool StandAimAssist;
 
         [DefaultValue(false)]
         [Label("Hidden References")]
@@ -130,6 +135,7 @@ namespace JoJoStands
             JoJoStands.StandSlotPositionY = StandSlotPositionY;
             JoJoStands.HamonBarPositionX = HamonBarPositionX;
             JoJoStands.HamonBarPositionY = HamonBarPositionY;
+            JoJoStands.StandAimAssist = StandAimAssist;
             JoJoStands.SecretReferences = SecretReferences;
             JoJoStands.ModSoundsVolume = soundVolume / 100f;
             HamonPlayer.HamonEffects = HamonEffects;
