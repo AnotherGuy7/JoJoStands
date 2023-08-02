@@ -1,3 +1,4 @@
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -22,6 +23,8 @@ namespace JoJoStands.Items.Accessories
             Item.value = Item.buyPrice(gold: 6);
             Item.maxStack = 1;
         }
+
+        private int dustSpawnTimer = 0;
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {

@@ -1,3 +1,4 @@
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -29,6 +30,7 @@ namespace JoJoStands.Items.Accessories
             player.GetModPlayer<MyPlayer>().vampiricBangleEquipped = true;
             player.GetModPlayer<MyPlayer>().familyPhotoEquipped = true;
         }
+
         public override void AddRecipes()
         {
             CreateRecipe()

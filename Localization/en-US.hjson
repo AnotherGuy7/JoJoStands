@@ -3420,6 +3420,31 @@ Mods: {
 				DisplayName: Zombie Abilities
 				Tooltip: ""
 			}
+
+			IceCream: {
+				DisplayName: Ice Cream
+				Tooltip: ""
+			}
+
+			Polaroid: {
+				DisplayName: Polaroid
+				Tooltip: ""
+			}
+
+			StickyHand: {
+				DisplayName: Sticky Hand
+				Tooltip: ""
+			}
+
+			Teacup: {
+				DisplayName: Teacup
+				Tooltip: ""
+			}
+
+			ViralPearlEarring: {
+				DisplayName: Viral Pearl Earring
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {

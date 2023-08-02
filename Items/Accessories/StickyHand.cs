@@ -1,3 +1,4 @@
+using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -36,7 +37,7 @@ namespace JoJoStands.Items.Accessories
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<SiliconLifeformCarapace>())
                 .AddIngredient(ModContent.ItemType<ZippedHand>())
-                .AddTile(ModContent.TileType<RemixTable>())
+                .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
         }
     }
