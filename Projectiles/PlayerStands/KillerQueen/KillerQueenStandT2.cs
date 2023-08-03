@@ -216,7 +216,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                         if (Main.myPlayer == Projectile.owner)
                         {
                             shootCount += newPunchTime;
-                            Vector2 shootVel = target.position - Projectile.Center;
+                            Vector2 shootVel = target.Center - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
 

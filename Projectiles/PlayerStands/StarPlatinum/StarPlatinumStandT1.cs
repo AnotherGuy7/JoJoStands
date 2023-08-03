@@ -50,9 +50,8 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     StayBehind();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-            {
                 BasicPunchAI();
-            }
+
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;
         }

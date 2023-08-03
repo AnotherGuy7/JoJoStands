@@ -101,7 +101,7 @@ namespace JoJoStands.Projectiles.NPCStands
                     Projectile.spriteDirection = Projectile.direction = -1;
                 }
                 Projectile.spriteDirection = Projectile.direction;
-                Vector2 shootVel = target.position - Projectile.Center;
+                Vector2 shootVel = target.Center - Projectile.Center;
                 if (shootVel == Vector2.Zero)
                 {
                     shootVel = new Vector2(0f, 1f);

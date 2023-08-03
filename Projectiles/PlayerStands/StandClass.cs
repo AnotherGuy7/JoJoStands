@@ -451,6 +451,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 attacking = false;
                 currentAnimationState = AnimationState.Idle;
+                StopSounds();
             }
 
             LimitDistance();
@@ -464,8 +465,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <param name="projToShoot">The type of Projectile that the sSand will shoot.</param>
         /// <param name="itemToConsumeType">The type of Item that will be consumed whenever the Stand uses its secondary ability.</param>
         /// <param name="gravityAccounting">Whether or not the Stand should account for gravity when using its secondary ability.</param>
+        /// <param name="shootChance">The chance of using the secondary ability that this Stand has.</param>
         /// <param name="shootMax">The limit on the amount of the same Projectile that the Stand can use with its secondary ability.</param>
-        public void PunchAndShootAI(int projToShoot, int itemToConsumeType = -1, bool gravityAccounting = false, int shootMax = 999)
+        public void PunchAndShootAI(int projToShoot, int itemToConsumeType = -1, bool gravityAccounting = false, int shootChance = 1, int shootMax = 999)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -481,8 +483,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (targetDist > punchDetectionDist || secondaryAbility || target == null)
             {
                 attacking = false;
-                Vector2 areaBehindPlayer = player.Center;
                 currentAnimationState = AnimationState.Idle;
+                Vector2 areaBehindPlayer = player.Center;
                 if (secondaryAbility)
                     areaBehindPlayer.X += (float)((12 + player.width / 2) * player.direction);
                 else
@@ -492,6 +494,9 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Projectile.velocity *= 0.8f;
                 Projectile.rotation = 0;
                 Projectile.spriteDirection = Projectile.direction = player.direction;
+                StopSounds();
+                if (target == null && secondaryAbility)
+                    secondaryAbility = false;
             }
             if (target != null)
             {
@@ -501,7 +506,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     {
                         Punch(target.Center);
                     }
-                    else if (Main.rand.Next(0, 101) <= 1)
+                    else if (Main.rand.Next(1, 100 + 1) <= shootChance)
                     {
                         if (itemToConsumeType != -1 && JoJoStands.AutomaticActivations && player.HasItem(itemToConsumeType))
                             secondaryAbility = true;
@@ -509,8 +514,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             secondaryAbility = true;
                     }
                 }
-
-                if (secondaryAbility)
+                else
                 {
                     currentAnimationState = AnimationState.SecondaryAbility;
                     Projectile.direction = 1;
@@ -525,7 +529,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             if (shootCount <= 0)
                             {
                                 shootCount += 28;
-                                Vector2 shootVel = target.position - Projectile.Center - new Vector2(0f, 3f);
+                                Vector2 shootVel = target.Center - Projectile.Center;
                                 if (shootVel == Vector2.Zero)
                                     shootVel = new Vector2(0f, 1f);
 
@@ -534,7 +538,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                                 if (gravityAccounting)
                                     shootVel.Y -= Projectile.Distance(target.position) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
 
-                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X + 5f, Projectile.Center.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
                                 Main.projectile[projIndex].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }

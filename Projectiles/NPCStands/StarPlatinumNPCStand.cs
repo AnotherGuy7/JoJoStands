@@ -120,7 +120,7 @@ namespace JoJoStands.Projectiles.NPCStands
                 if (Projectile.ai[1] == 0f)
                 {
                     Projectile.ai[1] = 1f;
-                    Vector2 shootVel = target.position - Projectile.Center;
+                    Vector2 shootVel = target.Center - Projectile.Center;
                     if (shootVel == Vector2.Zero)
                         shootVel = new Vector2(0f, 1f);
 

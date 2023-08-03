@@ -271,7 +271,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 currentAnimationState = AnimationState.ExposedIdle;
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
+            {
                 BasicPunchAI();
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else
+                    currentAnimationState = AnimationState.Attack;
+            }
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;
         }

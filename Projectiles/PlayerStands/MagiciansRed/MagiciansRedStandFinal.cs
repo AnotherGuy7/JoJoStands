@@ -41,14 +41,14 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!attacking)
-                StayBehind();
-            else
-                GoInFront();
-
             secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<RedBind>()] != 0;
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
+                if (!attacking)
+                    StayBehind();
+                else
+                    GoInFront();
+
                 if (Projectile.owner == Main.myPlayer)
                 {
                     if (Main.mouseLeft && !secondaryAbility)
@@ -148,13 +148,11 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 NPC target = FindNearestTarget(AutoModeDetectionDistance);
                 if (target != null)
                 {
+                    attacking = true;
                     currentAnimationState = AnimationState.Attack;
-                    Projectile.direction = 1;
-                    if (target.position.X - Projectile.position.X < 0f)
-                        Projectile.spriteDirection = Projectile.direction = -1;
-
-                    Projectile.spriteDirection = Projectile.direction;
-
+                    int direction = target.Center.X < Projectile.Center.X ? -1 : 1;
+                    GoInFront(direction);
+                    Projectile.spriteDirection = Projectile.direction = direction;
                     Projectile.velocity = target.Center - Projectile.Center;
                     Projectile.velocity.Normalize();
                     Projectile.velocity *= 4f;
@@ -163,7 +161,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                         if (Main.myPlayer == Projectile.owner)
                         {
                             shootCount += newShootTime;
-                            Vector2 shootVel = target.position - Projectile.Center;
+                            Vector2 shootVel = target.Center - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
 
@@ -176,7 +174,11 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                     }
                 }
                 else
+                {
+                    StayBehind();
+                    attacking = false;
                     currentAnimationState = AnimationState.Idle;
+                }
             }
 
             if (Main.rand.Next(0, 5 + 1) == 0)
