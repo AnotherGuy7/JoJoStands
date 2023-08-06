@@ -1,6 +1,7 @@
 using JoJoStands.Items;
 using JoJoStands.Items.Tiles;
 using JoJoStands.Projectiles;
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -67,14 +68,7 @@ namespace JoJoStands.NPCs.TownNPCs
             return Main.hardMode && numTownNPCs >= 5;
         }
 
-        public override List<string> SetNPCNameList()
-        {
-            List<string> possibleNames = new List<string>
-            {
-                "D'Arby"
-            };
-            return possibleNames;
-        }
+        public override List<string> SetNPCNameList() => new List<string> { "D'Arby" };
 
         public override void SetChatButtons(ref string button, ref string button2)
         {
@@ -85,13 +79,9 @@ namespace JoJoStands.NPCs.TownNPCs
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)
         {
             if (firstButton)
-            {
                 shopName = "Shop";
-            }
             else
-            {
-                UI.BetUI.Visible = true;
-            }
+                BetUI.Visible = true;
         }
 
         public override void AddShops()
@@ -107,6 +97,7 @@ namespace JoJoStands.NPCs.TownNPCs
             {
                 npcShop.Add(itemTypes[i]);
             }
+            npcShop.Register();
         }
 
         public override string GetChat()

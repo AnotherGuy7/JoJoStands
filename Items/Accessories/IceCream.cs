@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Ice Cream");
-            /* Tooltip.SetDefault("Every fifth hit on enemies with Stand Attacks deal more damage." +
-                "\nAttacks affected by this accessory ignore defense.\n15% increased stand damage\n50% increased stand crit damage"); */
+            /* Tooltip.SetDefault("Every eigth hit on enemies with Stand Attacks is a guaranteed critical strike hit." +
+                "70% increased stand crit damage. Stand Crit chances are reduced by 10%."); */
             Item.ResearchUnlockCount = 1;
         }
 
@@ -28,9 +28,8 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().underbossPhoneEquipped = true;
-            player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.15f;
-            player.GetModPlayer<MyPlayer>().manifestedWillEmblem = true;
+            player.GetModPlayer<MyPlayer>().iceCreamEquipped = true;
+            player.GetModPlayer<MyPlayer>().standCritChangeBoosts -= 0.1f;
             player.AddBuff(ModContent.BuffType<CooledOut>(), 2);
         }
 
@@ -39,8 +38,8 @@ namespace JoJoStands.Items.Accessories
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<UnderbossPhone>())
                 .AddIngredient(ModContent.ItemType<ManifestedWillEmblem>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
                 .AddIngredient(ModContent.ItemType<IceCubes>(), 5)
+                .AddTile(TileID.TinkerersWorkbench)
                 .Register();
         }
     }

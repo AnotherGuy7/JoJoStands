@@ -39,11 +39,6 @@ namespace JoJoStands.Projectiles
             target.immune[Projectile.owner] = 0;
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 modifiers.SetCrit();
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
         }
 
         public override void Kill(int timeLeft)

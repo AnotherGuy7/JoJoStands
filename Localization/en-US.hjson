@@ -3423,27 +3423,52 @@ Mods: {
 
 			IceCream: {
 				DisplayName: Ice Cream
-				Tooltip: ""
+				Tooltip:
+					'''
+					Every eigth hit on enemies with Stand Attacks is a guaranteed Critical Strike hit.
+					70% increased stand crit damage. Stand Crit chances are reduced by 10%.
+					'''
 			}
 
 			Polaroid: {
 				DisplayName: Polaroid
-				Tooltip: ""
+				Tooltip:
+					'''
+					Stand kills build up to 5 tokens. Tokens grant 50% damage negation for a single hit.
+					Allows Stand Attacks to perform life steal.
+					40% increased damage to user when not carrying a token.
+					Gaining tokens has a cooldown of 5s.
+					'''
 			}
 
 			StickyHand: {
 				DisplayName: Sticky Hand
-				Tooltip: ""
+				Tooltip:
+					'''
+					20% increased Stand dodge chance and Stand Defense bonuses are doubled.
+					Health is slowly drained for 30s after being hit.
+					Allows you to make a last stand before death.
+					During the last stand phase, damage and critial strike chances are doubled.
+					'''
 			}
 
 			Teacup: {
-				DisplayName: Teacup
-				Tooltip: ""
+				DisplayName: Herbal Teacup
+				Tooltip:
+					'''
+					The next 10 ranged stand attacks will be buffed, recovering at one attack per second while at rest.
+					Stand Damage is increased by 3% for every enemy around you and damage gains are multiplied by 12% while a boss is active.
+					'''
 			}
 
 			ViralPearlEarring: {
 				DisplayName: Viral Pearl Earring
-				Tooltip: ""
+				Tooltip:
+					'''
+					When attacking enemies with Stand Attacks, 10% of damage against enemies is transmitted to nearby enemies.
+					Transmitted damage is doubled and the infection is spread if the is user not damaged for a long time.
+					Punching enemies with Stands can infect enemies with a virus.
+					'''
 			}
 		}
 

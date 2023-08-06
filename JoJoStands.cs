@@ -111,6 +111,8 @@ namespace JoJoStands
             SexPistolsUI.sexPistolsUITexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/SexPistolsUI", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBarBar", AssetRequestMode.ImmediateLoad);
+            PolaroidTokenLayer.MenacingTextureSpritesheet = Request<Texture2D>("JoJoStands/Extras/MenacingIcons", AssetRequestMode.ImmediateLoad).Value;
+
 
             AerosmithStandFinal.AerosmithWhirrSoundEffect = (SoundEffect)Request<SoundEffect>("JoJoStands/Sounds/GameSounds/AerosmithWhirr", AssetRequestMode.ImmediateLoad);
 
@@ -119,9 +121,11 @@ namespace JoJoStands
                 ProjectileType<BombBubble>(),
                 ProjectileType<ControllableNail>(),
                 ProjectileType<CrossfireHurricaneAnkh>(),
+                ProjectileType<DollyDaggerBeam>(),
                 ProjectileType<Emerald>(),
                 ProjectileType<FireAnkh>(),
                 ProjectileType<Fists>(),
+                ProjectileType<GoldExperienceBeam>(),
                 ProjectileType<HermitPurpleGrab>(),
                 ProjectileType<HermitPurpleWhip>(),
                 ProjectileType<HighVelocityBubble>(),
@@ -133,7 +137,9 @@ namespace JoJoStands
                 ProjectileType<PlunderBubble>(),
                 ProjectileType<StandBullet>(),
                 ProjectileType<StarFinger>(),
+                ProjectileType<StickyFingersFistExtended>(),
                 ProjectileType<TinyBubble>(),
+                ProjectileType<TrackerBubble>(),
                 ProjectileType<Projectiles.PlayerStands.Cream.Void>(),
                 ProjectileType<DashVoid>(),
             };

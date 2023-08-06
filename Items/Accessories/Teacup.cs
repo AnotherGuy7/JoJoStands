@@ -1,4 +1,3 @@
-using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,7 +9,7 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Teacup");
-            // Tooltip.SetDefault("Next 10 ranged stand attacks will be buffed\nRecover one attack per second while at rest.\nStand Damage is increased by 2% for every enemy around you.");
+            // Tooltip.SetDefault("Next 10 ranged stand attacks will be buffed\nRecover one attack per second while at rest.\nStand Damage is increased by 3% for every enemy around you and damage gains are multiplied by 12% when a boss is around you.");
             Item.ResearchUnlockCount = 1;
         }
 
@@ -29,12 +28,20 @@ namespace JoJoStands.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             MyPlayer myPlayer = player.GetModPlayer<MyPlayer>();
+            float totalMultiplier = 1f;
+            bool bossExists = false;
             for (int n = 0; n < Main.maxNPCs; n++)
             {
                 NPC npc = Main.npc[n];
                 if (npc.active && npc.lifeMax > 5 && !npc.townNPC && !npc.friendly && !npc.SpawnedFromStatue && npc.Distance(player.Center) <= 48 * 16)
-                    myPlayer.standDamageBoosts += 0.02f;
+                {
+                    if (npc.boss)
+                        bossExists = true;
+
+                    totalMultiplier += 0.03f;
+                }
             }
+            myPlayer.standDamageBoosts += bossExists ? totalMultiplier * 1.12f : totalMultiplier;
             dustSpawnTimer++;
             player.GetModPlayer<MyPlayer>().herbalTeaBag = true;
             if (dustSpawnTimer >= 2)
@@ -48,12 +55,13 @@ namespace JoJoStands.Items.Accessories
                 }
             }
         }
+
         public override void AddRecipes()
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<SoothingSpiritDisc>())
                 .AddIngredient(ModContent.ItemType<HerbalTeaBag>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
+                .AddTile(TileID.TinkerersWorkbench)
                 .Register();
         }
     }

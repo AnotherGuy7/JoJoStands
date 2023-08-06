@@ -1,3 +1,4 @@
+using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
@@ -11,7 +12,7 @@ namespace JoJoStands.Items.Accessories
         {
             // DisplayName.SetDefault("Viral Pearl Earring");
             /* Tooltip.SetDefault("When attacking enemies with Stand Attacks, 10% of damage against enemies is transmitted to nearby enemies." +
-                "\nTransmitted damage is doubled if user not damaged for a long time.\nPunching enemies with Stands can infect enemies with a virus."); */
+                "\nTransmitted damage is doubled and the infection is spread if user not damaged for a long time.\nPunching enemies with Stands can infect enemies with a virus."); */
             Item.ResearchUnlockCount = 1;
         }
 
@@ -27,15 +28,16 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().arrowEarringEquipped = true;
-            player.GetModPlayer<MyPlayer>().crackedPearlEquipped = true;
+            player.GetModPlayer<MyPlayer>().viralPearlEarringEquipped = true;
         }
+
         public override void AddRecipes()
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<ArrowEarring>())
                 .AddIngredient(ModContent.ItemType<CrackedPearl>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
+                .AddIngredient(ModContent.ItemType<ChlorositeBar>(), 2)
+                .AddTile(TileID.TinkerersWorkbench)
                 .Register();
         }
     }

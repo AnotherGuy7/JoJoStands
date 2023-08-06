@@ -13,7 +13,6 @@ using JoJoStands.NPCs.TownNPCs;
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -24,7 +23,6 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace JoJoStands.NPCs
 {
@@ -216,11 +214,11 @@ namespace JoJoStands.NPCs
                 }
                 if (npc.type == ModContent.NPCType<MarineBiologist>())
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FamilyPhoto>(), 1));
-                if (npc.type == NPCID.BigMimicCrimson)
+                else if (npc.type == NPCID.BigMimicCrimson)
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<VampiricBangle>(), 4));
-                if (npc.type == NPCID.BigMimicCorruption)
+                else if (npc.type == NPCID.BigMimicCorruption)
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SiliconLifeformCarapace>(), 4));
-                if (npc.type == NPCID.BigMimicHallow)
+                else if (npc.type == NPCID.BigMimicHallow)
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SoothingSpiritDisc>(), 4));
             }
         }
@@ -575,9 +573,7 @@ namespace JoJoStands.NPCs
                 if (playerPositionOnSkip == Vector2.Zero)
                 {
                     if (Main.netMode == NetmodeID.SinglePlayer)
-                    {
                         playerPositionOnSkip = Main.player[Main.myPlayer].position;
-                    }
                     else
                     {
                         int chosenPlayerIndex = 0;
@@ -914,7 +910,7 @@ namespace JoJoStands.NPCs
             if (npc.HasBuff(ModContent.BuffType<LifePunch>()))
                 drawColor = Color.LightCyan;
 
-                if (echoesFreezeTarget)
+            if (echoesFreezeTarget)
             {
                 if (echoesThreeFreezeTimer == 0)
                     echoesFreezeTarget = false;

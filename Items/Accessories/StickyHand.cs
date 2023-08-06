@@ -1,4 +1,3 @@
-using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,9 +9,9 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Sticky Hand");
-            /* Tooltip.SetDefault("25% increased Stand dodge chance." +
-                "\n100% increased stand defence bonus" +
-                "\nHealth is slowly drained\nAllows you to make a last stand before death.\nDuring the last stand phase, damage and critial strike chances are doubled."); */
+            /* Tooltip.SetDefault("20% increased Stand dodge chance." +
+                "\nStand Defense bonuses are doubled." +
+                "\nHealth is slowly drained for 30s after being hit.\nAllows you to make a last stand before death.\nDuring the last stand phase, damage and critial strike chances are doubled."); */
             Item.ResearchUnlockCount = 1;
         }
 
@@ -28,16 +27,15 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().standDodgeChance += 15f;
-            player.GetModPlayer<MyPlayer>().siliconLifeformCarapace = true;
-            player.GetModPlayer<MyPlayer>().zippedHandEquipped = true;
+            player.GetModPlayer<MyPlayer>().standDodgeChance += 20f;
+            player.GetModPlayer<MyPlayer>().stickyHandEquipped = true;
         }
         public override void AddRecipes()
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<SiliconLifeformCarapace>())
                 .AddIngredient(ModContent.ItemType<ZippedHand>())
-                .AddTile(ModContent.TileType<RemixTableTile>())
+                .AddTile(TileID.TinkerersWorkbench)
                 .Register();
         }
     }

@@ -65,14 +65,7 @@ namespace JoJoStands.NPCs.TownNPCs
             return true;
         }
 
-        public override List<string> SetNPCNameList()
-        {
-            List<string> possibleNames = new List<string>
-            {
-                "Zeppeli"
-            };
-            return possibleNames;
-        }
+        public override List<string> SetNPCNameList() => new List<string> { "Zeppeli" };
 
         public override void SetChatButtons(ref string button, ref string button2)
         {

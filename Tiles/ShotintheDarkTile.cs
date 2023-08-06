@@ -30,10 +30,5 @@ namespace JoJoStands.Tiles
             // name.SetDefault("Shot in the Dark");
             AddMapEntry(new Color(120, 85, 60), name);
         }
-
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(null, i * 16, j * 16, 4, 4, ModContent.ItemType<ShotintheDark>());
-        }
     }
 }

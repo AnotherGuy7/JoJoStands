@@ -88,11 +88,6 @@ namespace JoJoStands.Projectiles
             target.GetGlobalNPC<JoJoGlobalNPC>().crossfireHurricaneEffectTimer = (5 + (3 * (mPlayer.standTier - 3))) * 60;
             if (Main.rand.Next(0, 101) < 50f)
                 target.AddBuff(BuffID.OnFire, 300);
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(0, 101) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
         }
     }
 }

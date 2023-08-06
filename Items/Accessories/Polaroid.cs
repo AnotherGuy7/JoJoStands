@@ -10,8 +10,11 @@ namespace JoJoStands.Items.Accessories
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Polaroid");
-            /* Tooltip.SetDefault("Successful Stand Melee Attacks reduce damage taken.\nAllows Stand Attacks to perform life steal." +
-                "\n33% increased damage to user!"); */
+            /* Tooltip.SetDefault("Stand kills build up to 5 tokens. Tokens grant 50% damage negation for a single hit.
+             * Allows Stand Attacks to perform life steal.
+               40% increased damage to user when not carrying a token.
+               Gaining tokens has a cooldown of 5s.
+            */
             Item.ResearchUnlockCount = 1;
         }
 
@@ -27,8 +30,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<MyPlayer>().vampiricBangleEquipped = true;
-            player.GetModPlayer<MyPlayer>().familyPhotoEquipped = true;
+            player.GetModPlayer<MyPlayer>().polaroidEquipped = true;
         }
 
         public override void AddRecipes()

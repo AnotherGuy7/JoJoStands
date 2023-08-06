@@ -80,7 +80,7 @@ namespace JoJoStands.Items
                 if (PlayerInput.Triggers.Current.SmartSelect)
                     return true;
 
-                if (Item.potion || Item.mountType != MountID.None)      //default value for mountType is -1
+                if (Item.potion || Item.mountType != MountID.None || (player.controlHook && !player.miscEquips[4].IsAir))      //default value for mountType is -1
                     return true;
 
                 if (!player.controlMount && Item.mountType != MountID.None)        //if the player isn't pressing controlMount AND the Item's mount is actually something, 

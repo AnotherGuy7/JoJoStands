@@ -182,6 +182,7 @@ namespace JoJoStands
             PitchVariance = 0.1f,
             Variants = new int[4] { 1, 2, 3, 4 }
         };
+        public List<TokenData> polaroidTokenData = new List<TokenData>();
 
         public string standName = "";
         public string poseSoundName = "";       //This is for JoJoStandsSounds
@@ -239,6 +240,17 @@ namespace JoJoStands
         public int sealedPokerDeckCooldown = 0;
         public bool requiemArrow = false;
         public bool overHeaven = false; // haha (C) Proos :)
+        public bool iceCreamEquipped = false;
+        public int iceCreamEnemyHitCount = 0;
+        public bool polaroidEquipped = false;
+        public int polaroidTokens = 0;
+        public int polaroidTokenGainTimer = 0;
+        public int[] polaroidTokenAnimationTimers = new int[5];
+        public Vector2[] polaroidTokenPositionOffsets = new Vector2[5]; 
+        public bool stickyHandEquipped = false;
+        public int stickyHandHealthLossTimer = 0;
+        public bool diedWithStickyHand = false;
+        public bool viralPearlEarringEquipped = false;
         public bool centuryBoyActive = false;
 
         private bool notDeadYet = false;
@@ -272,6 +284,24 @@ namespace JoJoStands
             None,
             Salad,
             Part4
+        }
+
+        public struct TokenData
+        {
+            public int frameIndex;
+            public Vector2 offset;
+
+            public TokenData(Vector2 offset)
+            {
+                frameIndex = Main.rand.Next(0, 2 + 1);
+                this.offset = offset;
+            }
+
+            public TokenData(int frameIndex, Vector2 offset)
+            {
+                this.frameIndex = frameIndex;
+                this.offset = offset;
+            }
         }
 
         public void ItemBreak(Item item, int maxRarity)
@@ -397,7 +427,10 @@ namespace JoJoStands
             familyPhotoEquipped = false;
             underbossPhoneEquipped = false;
             sealedPokerDeckEquipped = false;
-            requiemArrow = false;
+            iceCreamEquipped = false;
+            polaroidEquipped = false;
+            stickyHandEquipped = false;
+            viralPearlEarringEquipped = false;
             overHeaven = false;
             collideY = false;
         }
@@ -761,7 +794,11 @@ namespace JoJoStands
                 sealedPokerDeckCooldown--;
             if (familyPhotoEffectTimer > 0)
                 familyPhotoEffectTimer--;
-            if (!revivedByPokerChip && Player.HasItem(ModContent.ItemType<PokerChip>()) || zippedHandEquipped && !zippedHandDeath)
+            if (polaroidTokenGainTimer > 0)
+                polaroidTokenGainTimer--;
+            if (stickyHandEquipped && stickyHandHealthLossTimer > 0)
+                stickyHandHealthLossTimer--;
+            if ((!revivedByPokerChip && Player.HasItem(ModContent.ItemType<PokerChip>())) || (zippedHandEquipped && !zippedHandDeath) || (stickyHandEquipped && !diedWithStickyHand))
                 notDeadYet = true;
             else
                 notDeadYet = false;
@@ -772,6 +809,15 @@ namespace JoJoStands
                     Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), Player.statLifeMax, 0, false);
                     zippedHandDeath = false;
                 }
+            }
+            if (diedWithStickyHand)
+            {
+                if (!Player.HasBuff(ModContent.BuffType<SwanSong>()))
+                {
+                    Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), Player.statLifeMax, 0, false);
+                    diedWithStickyHand = false;
+                }
+
             }
             if (standOut)
             {
@@ -1617,7 +1663,7 @@ namespace JoJoStands
         {
             if (standOut)
             {
-                if (siliconLifeformCarapace)
+                if (siliconLifeformCarapace || (stickyHandEquipped && stickyHandHealthLossTimer > 0))
                 {
                     if (Player.lifeRegen > 0)
                         Player.lifeRegen = 0;
@@ -1635,6 +1681,8 @@ namespace JoJoStands
         {
             if (siliconLifeformCarapace && standOut)
                 regen = 0f;
+            if (stickyHandEquipped && stickyHandHealthLossTimer > 0 && standOut)
+                regen = 0f;
         }
 
         public override void PostUpdateMiscEffects()
@@ -1650,7 +1698,7 @@ namespace JoJoStands
                 standAccessoryDefense /= 2;
             }
 
-            if (siliconLifeformCarapace)
+            if (siliconLifeformCarapace || stickyHandEquipped)
             {
                 standAccessoryDefense *= 2;
                 standDefenseToAdd *= 2;
@@ -1788,18 +1836,6 @@ namespace JoJoStands
 
         public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
         {
-            if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
-                modifiers.FinalDamage *= 2;
-            if (stoneFreeWeaveAbilityActive)
-                modifiers.FinalDamage *= 0.93f;
-            if (Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
-                modifiers.FinalDamage *= 0.8f;
-            if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                modifiers.FinalDamage *= 0.1f;
-            if (vampiricBangleEquipped)
-                modifiers.FinalDamage *= 1.33f;
-            if (familyPhotoEffectTimer > 0)
-                modifiers.FinalDamage *= 0.66f;
             if (Player.HasBuff<LockActiveBuff>() && npc.HasBuff<Locked>())
             {
                 if (npc.boss)
@@ -1807,20 +1843,6 @@ namespace JoJoStands
                 else
                     modifiers.FinalDamage *= 1f - (standTier * 0.1f);
             }
-        }
-
-        public override void ModifyHitByProjectile(Projectile proj, ref Player.HurtModifiers modifiers)
-        {
-            if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
-                modifiers.FinalDamage *= 2;
-            if (stoneFreeWeaveAbilityActive || Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
-                modifiers.FinalDamage *= 0.8f;
-            if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                modifiers.FinalDamage *= 0.1f;
-            if (vampiricBangleEquipped)
-                modifiers.FinalDamage *= 1.33f;
-            if (familyPhotoEffectTimer > 0)
-                modifiers.FinalDamage *= 0.66f;
         }
 
         public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
@@ -1879,15 +1901,10 @@ namespace JoJoStands
                 }
                 hermitPurpleHamonBurstLeft -= 1;
             }
-            if (Player.HasBuff<ZipperDodge>())
-            {
-                if (JoJoStands.SoundsLoaded)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
-                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
-                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
-            }
             if (!Player.shadowDodge)
                 arrowEarringCooldown = 300;
+            if (stickyHandEquipped)
+                stickyHandHealthLossTimer = 30 * 60;
             playerJustHit = true;
             playerJustHitTime = 2;
         }
@@ -1896,19 +1913,34 @@ namespace JoJoStands
         {
             playerJustHit = true;
             playerJustHitTime = 2;
-            if (Player.HasBuff<ZipperDodge>())
-            {
-                if (JoJoStands.SoundsLoaded)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
-                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
-                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
-            }
             if (!Player.shadowDodge)
                 arrowEarringCooldown = 300;
+            if (stickyHandEquipped)
+                stickyHandHealthLossTimer = 30 * 60;
         }
 
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
+            if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
+                modifiers.FinalDamage *= 2;
+            if (stoneFreeWeaveAbilityActive || Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
+                modifiers.FinalDamage *= 0.8f;
+            if (Player.HasBuff(ModContent.BuffType<ImproperRestoration>()))
+                modifiers.FinalDamage *= 0.1f;
+            if (vampiricBangleEquipped)
+                modifiers.FinalDamage *= 1.33f;
+            if (familyPhotoEffectTimer > 0)
+                modifiers.FinalDamage *= 0.66f;
+            if (polaroidEquipped)
+            {
+                if (polaroidTokens > 0)
+                {
+                    polaroidTokens--;
+                    modifiers.FinalDamage *= 0.5f;
+                }
+                else
+                    modifiers.FinalDamage *= 1.4f;
+            }
             if (modifiers.PvP)
             {
                 if (JoJoStands.StandPvPMode && Main.netMode != NetmodeID.SinglePlayer && standOut)
@@ -1930,6 +1962,14 @@ namespace JoJoStands
                 return true;
             if (Player.HasBuff(ModContent.BuffType<SwanSong>()))
                 return true;
+            if (Player.HasBuff<ZipperDodge>() && Player.whoAmI == Main.myPlayer)
+            {
+                if (JoJoStands.SoundsLoaded)
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
+                Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
+                return true;
+            }
 
             return base.ImmuneTo(damageSource, cooldownCounter, dodgeable);
         }
@@ -1949,13 +1989,32 @@ namespace JoJoStands
                 Main.NewText("The chip has given you new life!");
                 return false;
             }
-            if (zippedHandEquipped && !zippedHandDeath)
+            if (!stickyHandEquipped && zippedHandEquipped && !zippedHandDeath)
             {
-                if (!Player.HasItem(ModContent.ItemType<PokerChip>()) || revivedByPokerChip)
+                if ((!Player.HasItem(ModContent.ItemType<PokerChip>()) || revivedByPokerChip) && !diedWithStickyHand)
                 {
                     Player.AddBuff(ModContent.BuffType<SwanSong>(), 7 * 60);
                     Player.statLife = 100;
                     Player.HealEffect(100);
+                    return false;
+                }
+            }
+            if (stickyHandEquipped && !diedWithStickyHand)
+            {
+                if (!Player.HasItem(ModContent.ItemType<PokerChip>()) || revivedByPokerChip)
+                {
+                    Player.AddBuff(ModContent.BuffType<SwanSong>(), 15 * 60);
+                    if (Player.statLifeMax >= 150)
+                    {
+                        Player.statLife = 150;
+                        Player.HealEffect(150);
+                    }
+                    else
+                    {
+                        Player.statLife = Player.statLifeMax;
+                        Player.HealEffect(Player.statLifeMax);
+                    }
+
                     return false;
                 }
             }
