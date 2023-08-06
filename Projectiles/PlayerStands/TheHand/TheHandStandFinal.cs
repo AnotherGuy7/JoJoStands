@@ -290,6 +290,10 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else
+                    currentAnimationState = AnimationState.Attack;
             }
             if (scraping)
                 currentAnimationState = AnimationState.Scrape;

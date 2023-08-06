@@ -72,19 +72,14 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             return Main.hardMode;
         }
 
-        public override List<string> SetNPCNameList()
-        {
-            List<string> possibleNames = new List<string>();
+        public override List<string> SetNPCNameList() => new List<string> { "Pucci" };
 
-            possibleNames.Add("Pucci");
-
-            return possibleNames;
-        }
 
         public override void SetChatButtons(ref string button, ref string button2)      //Allows you to set the text for the buttons that appear on this town NPC's chat window. 
         {
             button = "Buy Stands";      //this defines the buy button name
         }
+
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)       //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
         {
             if (firstButton)
@@ -95,6 +90,9 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
         {
             for (int i = 0; i < items.Length; i++)
             {
+                if (items[i] == null || items[i].IsAir)
+                    break;
+
                 items[i].value = Item.buyPrice(0, 50, 0, 0);
             }
         }
@@ -106,6 +104,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             {
                 npcShop.Add(JoJoStands.standTier1List[i]);
             }
+            npcShop.Register();
         }
 
         public override string GetChat()       //Allows you to give this town NPC a chat message when a player talks to it.

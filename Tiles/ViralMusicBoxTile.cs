@@ -27,10 +27,5 @@ namespace JoJoStands.Tiles
             // name.SetDefault("Viral Music Box");
             AddMapEntry(Color.Silver, name);
         }
-
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(null, i * 16, j * 16, 4, 4, ModContent.ItemType<ViralMusicBox>());
-        }
     }
 }

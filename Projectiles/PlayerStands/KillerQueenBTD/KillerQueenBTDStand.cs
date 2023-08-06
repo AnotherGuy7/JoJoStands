@@ -97,11 +97,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             DrawOriginOffsetY = -HalfStandHeight;
             int newBubbleDamage = (int)(bubbleDamage * mPlayer.standDamageBoosts);
 
-            if (!attacking)
-                StayBehind();
-            else
-                GoInFront();
-
             bitesTheDustActive = player.HasBuff(ModContent.BuffType<BitesTheDust>());
             if (!bitesTheDustActive && saveDataCreated)
                 saveDataCreated = false;
@@ -370,6 +365,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
+                if (!attacking)
+                    StayBehind();
+                else
+                    GoInFront();
+
                 if (Projectile.owner == Main.myPlayer)
                 {
                     if (Main.mouseLeft && Projectile.ai[0] == 0f)
@@ -428,21 +428,20 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
-                NPC target = FindNearestTarget(36f * 16f);
+                NPC target = FindNearestTarget(46f * 16f);
                 if (target != null)
                 {
+                    attacking = true;
                     currentAnimationState = AnimationState.Attack;
-                    Projectile.direction = 1;
-                    if (target.position.X - Projectile.Center.X < 0)
-                        Projectile.direction = -1;
-                    Projectile.spriteDirection = Projectile.direction;
-
+                    int direction = target.Center.X < Projectile.Center.X ? -1 : 1;
+                    GoInFront(direction);
+                    Projectile.spriteDirection = Projectile.direction = direction;
                     if (attacking && Projectile.frame == 4 && shootCount <= 0)
                     {
                         if (Main.myPlayer == Projectile.owner)
                         {
                             shootCount += newShootTime;
-                            Vector2 shootVel = target.position - Projectile.Center;
+                            Vector2 shootVel = target.Center - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
 
@@ -455,7 +454,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     }
                 }
                 else
+                {
+                    StayBehind();
+                    attacking = false;
                     currentAnimationState = AnimationState.Idle;
+                }
             }
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;
@@ -485,11 +488,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
             bitesTheDustActivated = reader.ReadBoolean();
         }
 
-        /*public override void AnimationCompleted(string animationName)
+        public override void AnimationCompleted(string animationName)
         {
             if (animationName == "Attack")
-                Projectile.frame = 5;
-        }*/
+                Projectile.frame = 1;
+        }
 
         public override void SelectAnimation()
         {

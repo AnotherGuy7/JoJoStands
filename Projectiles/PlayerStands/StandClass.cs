@@ -103,7 +103,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         };
         public virtual int TierNumber { get; }
         public virtual float PunchKnockback { get; } = 3f;
-        public virtual int AmountOfPunchVariants { get; } = 2;
+        public virtual int AmountOfPunchVariants { get; } = 0;
         public virtual string PunchSoundName { get; } = "";
         public virtual string PoseSoundName { get; } = "";
         public virtual string SpawnSoundName { get; } = "";
@@ -174,7 +174,6 @@ namespace JoJoStands.Projectiles.PlayerStands
         public bool attacking = false;
         public bool secondaryAbility = false;
         private bool playedBeginning = false;
-        private bool playedSpawnSound = false;
         private bool sentDyePacket = false;
         private int punchAfterImageAmount = 0;
         private SoundEffectInstance beginningSoundInstance = null;
@@ -190,6 +189,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public int amountOfFrames;
         private int punchAnimationTimer = 0;
         private bool nonOwnerInitCheck = false;
+        private bool canUsePunchAfterImages = false;
         private List<PunchFrame> backPunchFrames;
         private List<PunchFrame> frontPunchFrames;
 
@@ -264,13 +264,43 @@ namespace JoJoStands.Projectiles.PlayerStands
         }
 
         /// <summary>
-        /// Has the Stand switch to its attack state and punch.
+        /// Has the Stand switch to its attack state and punch toward the mouse.
         /// Damage, knockback, and punch speed depend on the punchDamage, punchKnockback, and punchTime fields respectively.
         /// Stand ID and Stand Tier Number are passed into the fist Projectile.
         /// </summary>
         /// <param name="movementSpeed">How fast the Stand moves while it's punching</param>
         /// <param name="punchLifeTimeMultiplier">A multiplier for the punch projectiles' lifetime.</param>
         public void Punch(float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f, bool afterImages = true)
+        {
+            Vector2 targetPosition = Main.MouseWorld;
+            if (JoJoStands.StandAimAssist)
+            {
+                float lowestDistance = 4f * 16f;
+                for (int n = 0; n < Main.maxNPCs; n++)
+                {
+                    NPC npc = Main.npc[n];
+                    if (npc.active && npc.CanBeChasedBy(this, false))
+                    {
+                        float distance = Vector2.Distance(npc.Center, Main.MouseWorld);
+                        if (distance < lowestDistance && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                        {
+                            targetPosition = npc.Center;
+                            lowestDistance = distance;
+                        }
+                    }
+                }
+            }
+            Punch(targetPosition, movementSpeed, punchLifeTimeMultiplier, afterImages);
+        }
+
+        /// <summary>
+        /// Has the Stand switch to its attack state and punch toward the input direction.
+        /// Damage, knockback, and punch speed depend on the punchDamage, punchKnockback, and punchTime fields respectively.
+        /// Stand ID and Stand Tier Number are passed into the fist Projectile.
+        /// </summary>
+        /// <param name="movementSpeed">How fast the Stand moves while it's punching</param>
+        /// <param name="punchLifeTimeMultiplier">A multiplier for the punch projectiles' lifetime.</param>
+        public void Punch(Vector2 targetPosition, float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f, bool afterImages = true)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -282,15 +312,15 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             attacking = true;
             currentAnimationState = AnimationState.Attack;
-            float rotaY = mouseY - Projectile.Center.Y;
+            float rotaY = targetPosition.Y - Projectile.Center.Y;
             Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-            Vector2 velocityAddition = Main.MouseWorld - Projectile.Center;
+            Vector2 velocityAddition = targetPosition - Projectile.Center;
             velocityAddition.Normalize();
             velocityAddition *= movementSpeed + mPlayer.standTier;
 
-            Projectile.spriteDirection = Projectile.direction = mouseX > Projectile.Center.X ? 1 : -1;
-            float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-            if (mouseDistance > 2.5f * 16f)
+            Projectile.spriteDirection = Projectile.direction = targetPosition.X > Projectile.Center.X ? 1 : -1;
+            float targetDistance = Vector2.Distance(targetPosition, Projectile.Center);
+            if (targetDistance > 16f)
                 Projectile.velocity = player.velocity + velocityAddition;
             else
                 Projectile.velocity = Vector2.Zero;
@@ -299,7 +329,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (shootCount <= 0)
             {
                 shootCount += newPunchTime;
-                Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                Vector2 shootVel = targetPosition - Projectile.Center;
                 if (shootVel == Vector2.Zero)
                     shootVel = new Vector2(0f, 1f);
 
@@ -416,35 +446,13 @@ namespace JoJoStands.Projectiles.PlayerStands
             float detectionDist = newMaxDistance * 1.2f;
             NPC target = FindNearestTarget(detectionDist);
             if (target != null)
-            {
-                currentAnimationState = AnimationState.Attack;
-                Projectile.direction = 1;
-                if (target.position.X - Projectile.Center.X <= 0f)
-                    Projectile.direction = -1;
-                Projectile.spriteDirection = Projectile.direction;
-
-                Vector2 velocity = target.position - Projectile.Center;
-                velocity.Normalize();
-                Projectile.velocity = velocity * 4f;
-                if (shootCount <= 0)
-                {
-                    if (Main.myPlayer == Projectile.owner)
-                    {
-                        PlayPunchSound();
-                        shootCount += newPunchTime;
-                        Vector2 shootVel = target.position - Projectile.Center;
-                        shootVel.Normalize();
-                        if (Projectile.direction == 1)
-                            shootVel *= ProjectileSpeed;
-
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
-                        Main.projectile[projIndex].netUpdate = true;
-                        Projectile.netUpdate = true;
-                    }
-                }
-            }
+                Punch(target.Center);
             else
+            {
+                attacking = false;
                 currentAnimationState = AnimationState.Idle;
+                StopSounds();
+            }
 
             LimitDistance();
         }
@@ -457,8 +465,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <param name="projToShoot">The type of Projectile that the sSand will shoot.</param>
         /// <param name="itemToConsumeType">The type of Item that will be consumed whenever the Stand uses its secondary ability.</param>
         /// <param name="gravityAccounting">Whether or not the Stand should account for gravity when using its secondary ability.</param>
+        /// <param name="shootChance">The chance of using the secondary ability that this Stand has.</param>
         /// <param name="shootMax">The limit on the amount of the same Projectile that the Stand can use with its secondary ability.</param>
-        public void PunchAndShootAI(int projToShoot, int itemToConsumeType = -1, bool gravityAccounting = false, int shootMax = 999)
+        public void PunchAndShootAI(int projToShoot, int itemToConsumeType = -1, bool gravityAccounting = false, int shootChance = 1, int shootMax = 999)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -473,8 +482,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             if (targetDist > punchDetectionDist || secondaryAbility || target == null)
             {
-                Vector2 areaBehindPlayer = player.Center;
+                attacking = false;
                 currentAnimationState = AnimationState.Idle;
+                Vector2 areaBehindPlayer = player.Center;
                 if (secondaryAbility)
                     areaBehindPlayer.X += (float)((12 + player.width / 2) * player.direction);
                 else
@@ -484,48 +494,27 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Projectile.velocity *= 0.8f;
                 Projectile.rotation = 0;
                 Projectile.spriteDirection = Projectile.direction = player.direction;
+                StopSounds();
+                if (target == null && secondaryAbility)
+                    secondaryAbility = false;
             }
             if (target != null)
             {
-                if (targetDist < punchDetectionDist && !secondaryAbility)
+                if (!secondaryAbility)
                 {
-                    currentAnimationState = AnimationState.Attack;
-                    Projectile.direction = 1;
-                    if (target.position.X - Projectile.Center.X < 0f)
-                        Projectile.direction = -1;
-                    Projectile.spriteDirection = Projectile.direction;
-
-                    Vector2 velocity = target.position - Projectile.Center;
-                    velocity.Normalize();
-                    Projectile.velocity = velocity * 4f;
-                    if (shootCount <= 0)
+                    if (targetDist < punchDetectionDist)
                     {
-                        if (Main.myPlayer == Projectile.owner)
-                        {
-                            PlayPunchSound();
-                            shootCount += newPunchTime;
-                            Vector2 shootVel = target.position - Projectile.Center;
-                            if (shootVel == Vector2.Zero)
-                                shootVel = new Vector2(0f, 1f);
-                            shootVel.Normalize();
-                            if (Projectile.direction == 1)
-                                shootVel *= ProjectileSpeed;
-
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
-                            Main.projectile[projIndex].netUpdate = true;
-                            Projectile.netUpdate = true;
-                        }
+                        Punch(target.Center);
+                    }
+                    else if (Main.rand.Next(1, 100 + 1) <= shootChance)
+                    {
+                        if (itemToConsumeType != -1 && JoJoStands.AutomaticActivations && player.HasItem(itemToConsumeType))
+                            secondaryAbility = true;
+                        else if (itemToConsumeType == -1)
+                            secondaryAbility = true;
                     }
                 }
-                else if (Main.rand.Next(0, 101) <= 1 && targetDist > punchDetectionDist)
-                {
-                    if (itemToConsumeType != -1 && JoJoStands.AutomaticActivations && player.HasItem(itemToConsumeType))
-                        secondaryAbility = true;
-                    else if (itemToConsumeType == -1)
-                        secondaryAbility = true;
-                }
-
-                if (secondaryAbility)
+                else
                 {
                     currentAnimationState = AnimationState.SecondaryAbility;
                     Projectile.direction = 1;
@@ -540,7 +529,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                             if (shootCount <= 0)
                             {
                                 shootCount += 28;
-                                Vector2 shootVel = target.position - Projectile.Center - new Vector2(0f, 3f);
+                                Vector2 shootVel = target.Center - Projectile.Center;
                                 if (shootVel == Vector2.Zero)
                                     shootVel = new Vector2(0f, 1f);
 
@@ -549,7 +538,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                                 if (gravityAccounting)
                                     shootVel.Y -= Projectile.Distance(target.position) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
 
-                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X + 5f, Projectile.Center.Y - 3f, shootVel.X, shootVel.Y, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
                                 Main.projectile[projIndex].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }
@@ -733,13 +722,24 @@ namespace JoJoStands.Projectiles.PlayerStands
         public void SpawnEffects()
         {
             summonParticleTimer = Main.rand.Next(6, 10 + 1);
-            if ((StandType == StandAttackType.Melee || CanUseAfterImagePunches) && !Main.dedServ)
+            canUsePunchAfterImages = (StandType == StandAttackType.Melee || CanUseAfterImagePunches) && AmountOfPunchVariants > 0;
+            if (canUsePunchAfterImages && !Main.dedServ)
             {
                 backPunchFrames = new List<PunchFrame>();
                 frontPunchFrames = new List<PunchFrame>();
                 punchTextures = new Texture2D[AmountOfPunchVariants];
                 for (int v = 0; v < AmountOfPunchVariants; v++)
                     punchTextures[v] = ModContent.Request<Texture2D>(PunchTexturePath + (v + 1), AssetRequestMode.ImmediateLoad).Value;
+            }
+
+            if (JoJoStands.SoundsLoaded)
+            {
+                if (SpawnSoundName != "")
+                {
+                    SoundStyle spawnSound = new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/" + SpawnSoundName);
+                    spawnSound.Volume = JoJoStands.ModSoundsVolume;
+                    SoundEngine.PlaySound(spawnSound, Projectile.Center);
+                }
             }
 
             ExtraSpawnEffects();
@@ -787,7 +787,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 mPlayer.standHitTime--;
             if (mPlayer.standType != (int)StandType)
                 mPlayer.standType = (int)StandType;
-            if (attacking && (StandType == StandAttackType.Melee || CanUseAfterImagePunches))
+            if (attacking && canUsePunchAfterImages)
                 punchAnimationTimer++;
             else
                 punchAnimationTimer = 0;
@@ -813,28 +813,20 @@ namespace JoJoStands.Projectiles.PlayerStands
                 if (Math.Abs((int)secondaryRangeIndicatorSize.X - (int)newAltMaxDistance) > 1)
                     secondaryStandRangeIndicatorTexture = GenerateRangeIndicatorTexture((int)newAltMaxDistance, 2);
             }
-
-            if (JoJoStands.SoundsLoaded)
-            {
-                if (SpawnSoundName != "" && !playedSpawnSound)
-                {
-                    SoundStyle spawnSound = new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/" + SpawnSoundName);
-                    spawnSound.Volume = JoJoStands.ModSoundsVolume;
-                    SoundEngine.PlaySound(spawnSound, Projectile.Center);
-                    playedSpawnSound = true;
-                }
-            }
         }
 
         public void UpdateForNonHost()
         {
+            if (Main.dedServ)
+                return;
+
             if (!nonOwnerInitCheck)
             {
                 nonOwnerInitCheck = true;
                 SpawnEffects();
             }
             
-            if ((StandType == StandAttackType.Melee || CanUseAfterImagePunches) && punchAfterImageAmount != 0 && punchAnimationTimer > 0)
+            if (punchAfterImageAmount != 0 && punchAnimationTimer > 0)
             {
                 int afterImageAmount = punchAfterImageAmount;
                 int amountOfPunches = Main.rand.Next(afterImageAmount, afterImageAmount + 1 + 1) + PunchData.bonusAfterimageAmount;
@@ -941,7 +933,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void PreDrawAfterimagePunches(Color drawColor)
         {
-            if (!(StandType == StandAttackType.Melee || CanUseAfterImagePunches))
+            if (!canUsePunchAfterImages)
                 return;
 
             if (punchAnimationTimer <= 0)
@@ -967,7 +959,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
         public void PostDrawAfterimagePunches(Color drawColor)
         {
-            if (!(StandType == StandAttackType.Melee || CanUseAfterImagePunches))
+            if (!canUsePunchAfterImages)
                 return;
 
             if (punchAnimationTimer <= 0)
@@ -1219,13 +1211,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                                     target = npc;
                                     break;
                                 }
-                                else        //if it fails to detect a boss, it'll detect the next best thing
-                                {
-                                    target = npc;
-                                }
                             }
                         }
                     }
+                    if (target == null)
+                        target = FindNearestTarget(MyPlayer.StandSearchTypeEnum.Closest, maxDetectionRange);
                     break;
                 case MyPlayer.StandSearchTypeEnum.Closest:
                     float closestDistance = maxDetectionRange;
@@ -1322,13 +1312,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                                     target = npc;
                                     break;
                                 }
-                                else        //if it fails to detect a boss, it'll detect the next best thing
-                                {
-                                    target = npc;
-                                }
                             }
                         }
                     }
+                    if (target == null)
+                        target = FindNearestTarget(MyPlayer.StandSearchTypeEnum.Closest, maxDetectionRange);
                     break;
                 case MyPlayer.StandSearchTypeEnum.Closest:
                     float closestDistance = maxDetectionRange;
@@ -1424,13 +1412,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                                     target = npc;
                                     break;
                                 }
-                                else        //if it fails to detect a boss, it'll detect the next best thing
-                                {
-                                    target = npc;
-                                }
                             }
                         }
                     }
+                    if (target == null)
+                        target = FindNearestTarget(MyPlayer.StandSearchTypeEnum.Closest, maxDetectionRange);
                     break;
                 case MyPlayer.StandSearchTypeEnum.Closest:
                     float closestDistance = maxDetectionRange;

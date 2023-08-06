@@ -62,9 +62,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
                     StayBehind();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-            {
                 BasicPunchAI();
-            }
+
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;
         }

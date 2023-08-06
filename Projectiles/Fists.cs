@@ -349,12 +349,6 @@ namespace JoJoStands.Projectiles
             if (standType == Cream)
                 target.AddBuff(ModContent.BuffType<MissingOrgans>(), 2*(int)standTier * 60);
 
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
-
             if (!target.boss && standType != TowerOfGray)
             {
                 target.velocity.X *= 0.2f;
@@ -509,15 +503,6 @@ namespace JoJoStands.Projectiles
                         mTarget.echoesSoundIntensity += soundIntensity;
                     SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<SMACK>(), 10 * 60);
                     SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 2, maxDamage, soundIntensity, mPlayer.standDamageBoosts, 0f);
-                }
-            }
-
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.NextFloat(1, 100 + 1) <= 40)
-                {
-                    target.AddBuff(ModContent.BuffType<Infected>(), 5 * 60);
-                    SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<Infected>(), 5 * 60);
                 }
             }
         }

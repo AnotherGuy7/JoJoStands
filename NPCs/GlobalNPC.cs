@@ -207,11 +207,11 @@ namespace JoJoStands.NPCs
                 }
                 if (npc.type == ModContent.NPCType<MarineBiologist>())
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FamilyPhoto>(), 1));
-                if (npc.type == NPCID.BigMimicCrimson)
+                else if (npc.type == NPCID.BigMimicCrimson)
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<VampiricBangle>(), 4));
-                if (npc.type == NPCID.BigMimicCorruption)
+                else if (npc.type == NPCID.BigMimicCorruption)
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SiliconLifeformCarapace>(), 4));
-                if (npc.type == NPCID.BigMimicHallow)
+                else if (npc.type == NPCID.BigMimicHallow)
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SoothingSpiritDisc>(), 4));
             }
         }
@@ -552,9 +552,7 @@ namespace JoJoStands.NPCs
                 if (playerPositionOnSkip == Vector2.Zero)
                 {
                     if (Main.netMode == NetmodeID.SinglePlayer)
-                    {
                         playerPositionOnSkip = Main.player[Main.myPlayer].position;
-                    }
                     else
                     {
                         int chosenPlayerIndex = 0;

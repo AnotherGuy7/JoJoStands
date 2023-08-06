@@ -31,10 +31,5 @@ namespace JoJoStands.Tiles
             // name.SetDefault("I Wouldn't Lose");
             AddMapEntry(new Color(120, 85, 60), name);
         }
-
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(null, i * 16, j * 16, 4, 4, ModContent.ItemType<IWouldntLose>());
-        }
     }
 }

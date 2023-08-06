@@ -96,22 +96,33 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     {
                         attacking = true;
                         currentAnimationState = AnimationState.Attack;
-                        Projectile.netUpdate = true;
+                        Vector2 targetPosition = Main.MouseWorld;
+                        if (JoJoStands.StandAimAssist)
+                        {
+                            float lowestDistance = 4f * 16f;
+                            for (int n = 0; n < Main.maxNPCs; n++)
+                            {
+                                NPC npc = Main.npc[n];
+                                if (npc.active && npc.CanBeChasedBy(this, false))
+                                {
+                                    float distance = Vector2.Distance(npc.Center, Main.MouseWorld);
+                                    if (distance < lowestDistance && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                                    {
+                                        targetPosition = npc.Center;
+                                        lowestDistance = distance;
+                                    }
+                                }
+                            }
+                        }
 
-                        float rotaY = mouseY - Projectile.Center.Y;
+                        float rotaY = targetPosition.Y - Projectile.Center.Y;
                         Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-
-                        if (mouseX > Projectile.position.X)
-                            Projectile.direction = 1;
-                        else
-                            Projectile.direction = -1;
-
-                        Projectile.spriteDirection = Projectile.direction;
-                        Vector2 velocityAddition = new Vector2(mouseX, mouseY) - Projectile.position;
+                        Projectile.spriteDirection = Projectile.direction = targetPosition.X > Projectile.Center.X ? 1 : -1;
+                        Vector2 velocityAddition = new Vector2(targetPosition.X, targetPosition.Y) - Projectile.position;
                         velocityAddition.Normalize();
                         velocityAddition *= 5f + mPlayer.standTier;
-                        float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-                        if (mouseDistance > 40f)
+                        float mouseDistance = Vector2.Distance(targetPosition, Projectile.Center);
+                        if (mouseDistance > 12f)
                             Projectile.velocity = player.velocity + velocityAddition;
                         else
                             Projectile.velocity = Vector2.Zero;
@@ -119,7 +130,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                         if (shootCount <= 0 && (Projectile.frame == 0 || Projectile.frame == 4))
                         {
                             shootCount += newPunchTime / 2;
-                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            Vector2 shootVel = targetPosition - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
 
@@ -127,9 +138,9 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                             shootVel *= ProjectileSpeed;
                             int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
                             Main.projectile[projIndex].netUpdate = true;
-                            Projectile.netUpdate = true;
                         }
                         LimitDistance();
+                        Projectile.netUpdate = true;
                     }
                     else
                     {

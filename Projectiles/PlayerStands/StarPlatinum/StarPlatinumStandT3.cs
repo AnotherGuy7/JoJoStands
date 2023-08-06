@@ -131,6 +131,12 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 PunchAndShootAI(ModContent.ProjectileType<StarFinger>(), shootMax: 1);
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else if (attacking)
+                    currentAnimationState = AnimationState.Attack;
+                else if (secondaryAbility)
+                    currentAnimationState = AnimationState.Secondary;
             }
 
             if (secondaryAbility)

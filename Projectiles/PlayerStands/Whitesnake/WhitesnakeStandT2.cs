@@ -230,6 +230,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else
+                    currentAnimationState = AnimationState.Attack;
             }
             if (revealingGun)
                 currentAnimationState = AnimationState.GunReveal;

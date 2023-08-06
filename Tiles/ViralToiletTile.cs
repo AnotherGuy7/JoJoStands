@@ -27,10 +27,5 @@ namespace JoJoStands.Tiles
             b = 0.126f;
             Lighting.AddLight(new Vector2(i, j), r / 2f, g / 2f, b / 2f);
         }
-
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(null, i * 16, j * 16, 4, 4, ModContent.ItemType<ViralToilet>());
-        }
     }
 }

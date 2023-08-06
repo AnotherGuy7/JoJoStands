@@ -46,22 +46,15 @@ namespace JoJoStands.Tiles
                 frame++;
                 frameCounter = 0;
                 if (frame >= 13)
-                {
                     frame = 0;
-                }
             }
         }
 
         public override bool RightClick(int i, int j)
         {
             Player player = Main.player[Main.myPlayer];
-            player.AddBuff(ModContent.BuffType<StrongWill>(), 300 * 60);
+            player.AddBuff(ModContent.BuffType<StrongWill>(), 10 * 60 * 60);
             return true;
-        }
-
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(null, i * 16, j * 16, 4, 4, ModContent.ItemType<TarotTable>());
         }
     }
 }

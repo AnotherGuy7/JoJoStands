@@ -28,10 +28,5 @@ namespace JoJoStands.Tiles
             // name.SetDefault("Blood for the King");
             AddMapEntry(new Color(120, 85, 60), name);
         }
-
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(null, i * 16, j * 16, 4, 4, ModContent.ItemType<BloodForTheKing>());
-        }
     }
 }

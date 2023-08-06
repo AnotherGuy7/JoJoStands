@@ -67,11 +67,6 @@ namespace JoJoStands.Projectiles
                 modifiers.SetCrit();
             if (Main.rand.Next(0, 101) <= Projectile.ai[0])
                 target.AddBuff(BuffID.OnFire, (int)Projectile.ai[1]);
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
         }
     }
 }

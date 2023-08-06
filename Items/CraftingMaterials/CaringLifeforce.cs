@@ -16,6 +16,7 @@ namespace JoJoStands.Items.CraftingMaterials
             // DisplayName.SetDefault("Caring Lifeforce");
             // Tooltip.SetDefault("The spirit of someone whose only wish is to help");
             Item.ResearchUnlockCount = 3;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<TaintedLifeforce>();
         }
 
         public override void SetDefaults()

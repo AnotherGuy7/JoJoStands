@@ -23,6 +23,7 @@ namespace JoJoStands.Items
         {
             // DisplayName.SetDefault("The World (Tier 2)");
             // Tooltip.SetDefault("Punch enemies at a really fast rate! \nSpecial: Stop time for 2 seconds!\nUsed in Stand Slot");
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<StarPlatinumT2>();
         }
 
         public override void SetDefaults()

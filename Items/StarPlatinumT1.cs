@@ -18,6 +18,7 @@ namespace JoJoStands.Items
         {
             // DisplayName.SetDefault("Star Platinum (Tier 1)");
             // Tooltip.SetDefault("Punch enemies at a really fast rate.\nUsed in Stand Slot");
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<TheWorldT1>();
         }
 
         public override void SetDefaults()

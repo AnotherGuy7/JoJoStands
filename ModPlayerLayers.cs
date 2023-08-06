@@ -2,6 +2,7 @@
 using JoJoStands.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
@@ -467,6 +468,51 @@ namespace JoJoStands
                 drawInfo.DrawDataCache.Add(drawData);
                 DrawData overlayData = new DrawData(bubbleOveralyTexture, drawPlayer.Center.ToPoint().ToVector2() - Main.screenPosition, null, drawColor * 0.5f, MathHelper.ToRadians(mPlayer.softAndWetBubbleRotation), BubbleBarrierOrigin, 1f, SpriteEffects.None, 0);
                 drawInfo.DrawDataCache.Add(overlayData);
+            }
+        }
+    }
+
+    public class PolaroidTokenLayer : PlayerDrawLayer
+    {
+        public static Texture2D MenacingTextureSpritesheet;
+        public override Position GetDefaultPosition()
+        {
+            return new AfterParent(PlayerDrawLayers.FrontAccFront);
+        }
+
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
+            Player drawPlayer = drawInfo.drawPlayer;
+            MyPlayer mPlayer = drawPlayer.GetModPlayer<MyPlayer>();
+            if (drawPlayer.active && mPlayer.polaroidEquipped && mPlayer.polaroidTokens > 0 && drawPlayer.whoAmI == Main.myPlayer)
+            {
+                if (mPlayer.polaroidTokens > mPlayer.polaroidTokenData.Count)
+                {
+                    int direction = Main.rand.Next(0, 1 + 1);
+                    if (direction == 0)
+                        direction = -1;
+                    int offset = direction == 1 ? drawPlayer.width : 0;
+                    Vector2 randomOffset = new Vector2((Main.rand.Next(4, 8 + 1) * direction) + offset, Main.rand.Next(-4, drawPlayer.height + 4 + 1));
+                    mPlayer.polaroidTokenData.Add(new MyPlayer.TokenData(randomOffset));
+                }
+                else if (mPlayer.polaroidTokens < mPlayer.polaroidTokenData.Count)
+                    mPlayer.polaroidTokenData.RemoveAt(mPlayer.polaroidTokenData.Count - 1);
+
+                for (int i = 0; i < mPlayer.polaroidTokenData.Count; i++)
+                {
+                    mPlayer.polaroidTokenAnimationTimers[i]++;
+                    if (mPlayer.polaroidTokenAnimationTimers[i] > 4)
+                    {
+                        mPlayer.polaroidTokenPositionOffsets[i] = new Vector2(Main.rand.Next(-2, 2 + 1), Main.rand.Next(-2, 2 + 1));
+                        mPlayer.polaroidTokenAnimationTimers[i] = 0;
+                    }
+                    Vector2 drawPos = drawPlayer.position + mPlayer.polaroidTokenData[i].offset + mPlayer.polaroidTokenPositionOffsets[i] - Main.screenPosition;
+                    Rectangle animRect = new Rectangle(0, mPlayer.polaroidTokenData[i].frameIndex * 20, 16, 20);
+                    Color drawColor = Lighting.GetColor(new Point((int)(drawInfo.Center.X / 16f), (int)(drawInfo.Center.Y / 16f)));
+
+                    DrawData drawData = new DrawData(MenacingTextureSpritesheet, drawPos, animRect, drawColor, drawPlayer.fullRotation, new Vector2(8f, 10f), 1f, SpriteEffects.None, 0);
+                    drawInfo.DrawDataCache.Add(drawData);
+                }
             }
         }
     }

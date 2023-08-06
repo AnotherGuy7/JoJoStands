@@ -91,23 +91,21 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
-                StayBehind();
-
                 NPC target = FindNearestTarget(AutoModeDetectionDistance);
                 if (target != null)
                 {
+                    attacking = true;
                     currentAnimationState = AnimationState.Attack;
-                    Projectile.direction = 1;
-                    if (target.position.X - Projectile.Center.X < 0)
-                        Projectile.direction = -1;
-                    Projectile.spriteDirection = Projectile.direction;
+                    int direction = target.Center.X < Projectile.Center.X ? -1 : 1;
+                    GoInFront(direction);
+                    Projectile.spriteDirection = Projectile.direction = direction;
                     if (shootCount <= 0)
                     {
                         shootCount += newShootTime;
                         SoundEngine.PlaySound(SoundID.Item21, Projectile.position);
                         if (Main.myPlayer == Projectile.owner)
                         {
-                            Vector2 shootVel = target.position - Projectile.Center;
+                            Vector2 shootVel = target.Center - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
 
@@ -129,7 +127,11 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                 }
                 else
+                {
+                    StayBehind();
+                    attacking = false;
                     currentAnimationState = AnimationState.Idle;
+                }
             }
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;

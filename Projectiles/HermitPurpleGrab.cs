@@ -138,11 +138,6 @@ namespace JoJoStands.Projectiles
                 modifiers.SetCrit();
             if (!target.boss && !target.immortal && living)
                 heldNPC = target;
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

@@ -38,6 +38,7 @@ namespace JoJoStands.Items.Accessories
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<StandEmblem>())
                 .AddRecipeGroup("JoJoStandsCursedIchor", 15)
+                .AddIngredient(ItemID.HallowedBar, 2)
                 .AddIngredient(ModContent.ItemType<WillToFight>())
                 .AddIngredient(ModContent.ItemType<WillToProtect>())
                 .AddIngredient(ModContent.ItemType<WillToChange>())

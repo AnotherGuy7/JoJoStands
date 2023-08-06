@@ -174,6 +174,17 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
+                if (zipperAmbush)
+                {
+                    zipperAmbush = false;
+                    mPlayer.stickyFingersAmbushMode = false;
+                    Vector2 ambushVelocity = savedAmbushPosition - player.position;
+                    ambushVelocity.Normalize();
+                    ambushVelocity *= 6f;
+                    player.position = savedAmbushPosition;
+                    player.velocity = ambushVelocity;
+                    savedAmbushPosition = Vector2.Zero;
+                }
                 PunchAndShootAI(ModContent.ProjectileType<StickyFingersFistExtended>(), shootMax: 1);
             }
             if (secondaryAbility)

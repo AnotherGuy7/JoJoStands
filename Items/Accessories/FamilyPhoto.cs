@@ -19,7 +19,7 @@ namespace JoJoStands.Items.Accessories
             Item.height = 32;
             Item.accessory = true;
             Item.rare = ItemRarityID.Blue;
-            Item.value = Item.buyPrice(silver: 25);
+            Item.value = Item.buyPrice(silver: 5);
             Item.maxStack = 1;
         }
 

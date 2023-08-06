@@ -16,6 +16,7 @@ namespace JoJoStands.Items.CraftingMaterials
             // DisplayName.SetDefault("Righteous Lifeforce");
             // Tooltip.SetDefault("The power of someone who sets things right");
             Item.ResearchUnlockCount = 3;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<DeterminedLifeforce>();
         }
 
         public override void SetDefaults()

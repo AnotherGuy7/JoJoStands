@@ -102,11 +102,6 @@ namespace JoJoStands.Projectiles
                 target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = Projectile.owner;
                 target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
             }
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
             living = false;
         }
 

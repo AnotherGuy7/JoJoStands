@@ -495,6 +495,10 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 healingFramesRepeatTimer = 0;
                 healingFramesRepeatTimerOnlyOnce = false;
                 BasicPunchAI();
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else
+                    currentAnimationState = AnimationState.Attack;
             }
             if (player.teleporting)
                 Projectile.position = player.position;

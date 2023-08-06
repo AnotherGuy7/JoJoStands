@@ -23,6 +23,7 @@ namespace JoJoStands.Items
         {
             // DisplayName.SetDefault("Star Platinum (Final Tier)");
             // Tooltip.SetDefault("Left-click to punch enemies at a really fast rate and right-click to flick a bullet!\nIf there are no bullets in your inventory, Star Finger will be used instead.\nSpecial: Stop time for 4 seconds!\nUsed in Stand Slot");
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<TheWorldFinal>();
         }
 
         public override void SetDefaults()

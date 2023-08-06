@@ -29,20 +29,13 @@ namespace JoJoStands.Tiles
         public override void AnimateTile(ref int frame, ref int frameCounter)
         {
             frameCounter++;
-            if (frameCounter >= 12)
+            if (frameCounter >= 8)
             {
                 frame++;
                 frameCounter = 0;
                 if (frame >= 6)
-                {
                     frame = 0;
-                }
             }
-        }
-
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(null, i * 16, j * 16, 4, 4, ModContent.ItemType<RemixTable>());
         }
     }
 }

@@ -15,7 +15,11 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void UpdateBuffOnPlayer(Player player)
         {
-            player.GetModPlayer<MyPlayer>().zippedHandDeath = true;
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.zippedHandEquipped)
+                mPlayer.zippedHandDeath = true;
+            if (mPlayer.stickyHandEquipped)
+                mPlayer.diedWithStickyHand = true;
             player.GetModPlayer<MyPlayer>().standDamageBoosts *= 2f;
             player.GetModPlayer<MyPlayer>().standCritChangeBoosts *= 2f;
         }

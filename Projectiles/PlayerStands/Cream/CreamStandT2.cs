@@ -60,26 +60,40 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     {
                         attacking = true;
                         currentAnimationState = AnimationState.Attack;
-                        float rotaY = Main.MouseWorld.Y - Projectile.Center.Y;
+                        Vector2 targetPosition = Main.MouseWorld;
+                        if (JoJoStands.StandAimAssist)
+                        {
+                            float lowestDistance = 4f * 16f;
+                            for (int n = 0; n < Main.maxNPCs; n++)
+                            {
+                                NPC npc = Main.npc[n];
+                                if (npc.active && npc.CanBeChasedBy(this, false))
+                                {
+                                    float distance = Vector2.Distance(npc.Center, Main.MouseWorld);
+                                    if (distance < lowestDistance && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                                    {
+                                        targetPosition = npc.Center;
+                                        lowestDistance = distance;
+                                    }
+                                }
+                            }
+                        }
+                        float rotaY = targetPosition.Y - Projectile.Center.Y;
                         Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-                        if (mouseX > Projectile.position.X)
-                            Projectile.direction = 1;
-                        else
-                            Projectile.direction = -1;
-
-                        Projectile.spriteDirection = Projectile.direction;
-                        Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
+                        Projectile.spriteDirection = Projectile.direction = targetPosition.X > Projectile.Center.X ? 1 : -1;
+                        Vector2 velocityAddition = targetPosition - Projectile.position;
                         velocityAddition.Normalize();
                         velocityAddition *= 5f + mPlayer.standTier;
-                        float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-                        if (mouseDistance > 40f)
+
+                        float mouseDistance = Vector2.Distance(targetPosition, Projectile.Center);
+                        if (mouseDistance > 12f)
                             Projectile.velocity = player.velocity + velocityAddition;
                         else
                             Projectile.velocity = Vector2.Zero;
                         if (shootCount <= 0 && Projectile.frame == 2)
                         {
                             shootCount += newPunchTime / 2;
-                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            Vector2 shootVel = targetPosition - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
 
@@ -119,7 +133,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     mPlayer.creamDash = true;
                 }
             }
-            float distance = Vector2.Distance(player.Center, Projectile.Center);
+            float playerDistance = Vector2.Distance(player.Center, Projectile.Center);
             if (mPlayer.creamDash)
             {
                 if (Projectile.owner == Main.myPlayer && !dashprojspawn && player.ownedProjectileCounts[ModContent.ProjectileType<DashVoid>()] <= 0)
@@ -145,7 +159,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     Projectile.velocity.Normalize();
                     Projectile.velocity *= 6f + mPlayer.creamTier + player.moveSpeed;
                     Projectile.netUpdate = true;
-                    if (distance <= 40f)
+                    if (playerDistance <= 40f)
                     {
                         SoundEngine.PlaySound(SoundID.Item78);
                         mPlayer.voidCounter += 2;
@@ -160,9 +174,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                 Vector2 vector = Main.projectile[dashproj].Center;
                 Projectile.Center = Vector2.Lerp(Projectile.Center, vector, 1f);
                 Projectile.hide = true;
-                if (Vector2.Distance(velocity, Projectile.Center) <= 10f || distance >= 800f || player.dead || !mPlayer.standOut || distance >= 1200f)
+                if (Vector2.Distance(velocity, Projectile.Center) <= 10f || playerDistance >= 800f || player.dead || !mPlayer.standOut || playerDistance >= 1200f)
                 {
-                    if (mPlayer.creamDash && distance >= 1200f)
+                    if (mPlayer.creamDash && playerDistance >= 1200f)
                         mPlayer.standOut = false;
                     Main.projectile[dashproj].Kill();
                     SoundEngine.PlaySound(SoundID.Item78);
@@ -251,6 +265,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !mPlayer.creamVoidMode && !mPlayer.creamExposedMode && !mPlayer.creamExposedToVoid && !mPlayer.creamNormalToExposed && !mPlayer.creamDash)
             {
                 BasicPunchAI();
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else
+                    currentAnimationState = AnimationState.Attack;
             }
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;

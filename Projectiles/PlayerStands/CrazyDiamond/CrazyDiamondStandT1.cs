@@ -73,7 +73,13 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
+            {
                 BasicPunchAI();
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else
+                    currentAnimationState = AnimationState.Attack;
+            }
 
             if (restrationMode)
             {

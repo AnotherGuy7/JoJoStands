@@ -186,6 +186,10 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else
+                    currentAnimationState = AnimationState.Attack;
             }
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;

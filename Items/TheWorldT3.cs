@@ -23,6 +23,7 @@ namespace JoJoStands.Items
         {
             // DisplayName.SetDefault("The World (Tier 3)");
             // Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw knives! \nSpecial: Stop time for 5 seconds!\nSecond Special: Stop time and surround an enemy with knives!\nNote: Hunter's Knives are made with 1 iron bar at a furnace and are required in order to throw knives.\nUsed in Stand Slot");
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<StarPlatinumT3>();
         }
 
         public override void SetDefaults()
