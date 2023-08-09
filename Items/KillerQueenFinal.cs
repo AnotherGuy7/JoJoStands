@@ -49,7 +49,7 @@ namespace JoJoStands.Items
                     {
                         Item.type = ModContent.ItemType<KillerQueenBTD>();
                         Item.SetDefaults(ModContent.ItemType<KillerQueenBTD>());
-                        SoundEngine.PlaySound(SoundID.Grab);
+                        SoundEngine.PlaySound(SoundID.Grab, player.Center);
                         mPlayer.revertTimer += 30;
                     }
                 }

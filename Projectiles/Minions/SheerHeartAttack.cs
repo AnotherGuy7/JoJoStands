@@ -79,7 +79,7 @@ namespace JoJoStands.Projectiles.Minions
 
                 if (!saidKocchiwomiro)
                 {
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Kocchiwomiro"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Kocchiwomiro"), Projectile.Center);
                     saidKocchiwomiro = true;
                 }
                 Projectile.direction = 1;
@@ -196,7 +196,7 @@ namespace JoJoStands.Projectiles.Minions
                     SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, otherPlayer.whoAmI, 3, bombDamage, hitDirection, 0f, 0f);
                 }
             }
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
         }
 
         public override bool PreDraw(ref Color drawColor)

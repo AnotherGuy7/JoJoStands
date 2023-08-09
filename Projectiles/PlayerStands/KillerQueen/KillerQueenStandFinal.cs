@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                         touchedNPC = true;
                                         foundNPCTarget = true;
                                         npc.GetGlobalNPC<JoJoGlobalNPC>().taggedByKillerQueen = true;
-                                        SoundEngine.PlaySound(KillerQueenClickSound);
+                                        SoundEngine.PlaySound(KillerQueenClickSound, Projectile.Center);
                                         break;
                                     }
                                 }
@@ -100,7 +100,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                                     shootCount += 20;
                                     touchedTile = true;
                                     savedPosition = Main.MouseWorld;
-                                    SoundEngine.PlaySound(KillerQueenClickSound);
+                                    SoundEngine.PlaySound(KillerQueenClickSound, Projectile.Center);
                                 }
                             }
                         }
@@ -188,7 +188,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             currentAnimationState = AnimationState.SecondaryAbility;
                             autoModeTriggerTimer++;
                             if (autoModeTriggerTimer == 5)
-                                SoundEngine.PlaySound(KillerQueenClickSound);
+                                SoundEngine.PlaySound(KillerQueenClickSound, Projectile.Center);
 
                             if (autoModeTriggerTimer >= 90)
                             {

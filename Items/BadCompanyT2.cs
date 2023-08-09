@@ -43,7 +43,7 @@ namespace JoJoStands.Items
             mPlayer.standTier = StandTier;
             mPlayer.maxBadCompanyUnits = 6 * StandTier;
             if (JoJoStands.SoundsLoaded)
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Bad Company").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Bad Company").WithVolumeScale(JoJoStands.ModSoundsVolume), player.Center);
             return true;
         }
 

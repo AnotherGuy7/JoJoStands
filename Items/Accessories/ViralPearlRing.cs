@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.HandsOn)]
     public class ViralPearlRing : ModItem
     {
         public override void SetStaticDefaults()

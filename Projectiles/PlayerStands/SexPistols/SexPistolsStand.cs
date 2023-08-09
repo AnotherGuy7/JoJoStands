@@ -113,7 +113,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SexPistols
                             otherProjectile.netUpdate = true;
                             SoundEngine.PlaySound(SoundID.Tink.WithPitchOffset(5f), otherProjectile.Center);
                             if (JoJoStands.SoundsLoaded && player.HasBuff<BulletKickFrenzy>())
-                                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/SexPistolsCheer_" + Main.rand.Next(1, 3 + 1)).WithVolumeScale(0.25f));
+                                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/SexPistolsCheer_" + Main.rand.Next(1, 3 + 1)).WithVolumeScale(0.25f), Projectile.Center);
                             break;
                         }
                     }

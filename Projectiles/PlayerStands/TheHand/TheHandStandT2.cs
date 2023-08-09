@@ -83,7 +83,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             Projectile.netUpdate = true;
                             if (Projectile.frame == 1)
                             {
-                                SoundEngine.PlaySound(TheHandStandFinal.ScrapeSoundEffect);
+                                SoundEngine.PlaySound(TheHandStandFinal.ScrapeSoundEffect, Projectile.Center);
                                 Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                                 distanceToTeleport.Normalize();
                                 distanceToTeleport *= chargeTimer / 60f;

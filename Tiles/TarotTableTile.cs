@@ -1,7 +1,7 @@
 using JoJoStands.Buffs.PlayerBuffs;
-using JoJoStands.Items.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -54,6 +54,7 @@ namespace JoJoStands.Tiles
         {
             Player player = Main.player[Main.myPlayer];
             player.AddBuff(ModContent.BuffType<StrongWill>(), 10 * 60 * 60);
+            SoundEngine.PlaySound(SoundID.Item4);
             return true;
         }
     }

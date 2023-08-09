@@ -1,1 +1,17 @@
+- Added Stand Aim Assist 
+- Added five new mixed accessories
+- Resprited many accessories, old and new
+- Updated a few Stand icons for consistency
+- Updated Stand Auto Mode AI for most Stands!
 - Buffed Tarot Table (effect now lasts 10m)
+- The Will to Escape can now also drop in caverns that are not pure
+- Added multiple Shimmer interactions for many mod items
+- Fixed NPCs not selling items properly
+- Fixed Stands not animating properly while in Auto Mode
+- Fixed the Zipper Dodge buff making players immortal indefinitely
+- Fixed hooks in the hook slot not being able to be used while controlling Stands in Manual Mode
+- Fixed Mod Tiles dropping duplicates when broken
+- Fixed Sticky Fingers staying hidden after switching to Auto Mode
+- Fixed the Poker Deck accessory boosting Stand Damage by 2125%
+
+- Note: The Stand Mouse reaction distance has been decreased to allow for more precise punches, so Stands may or may not feel a bit odd. The end goal of this change is to make them more reactive in general.

@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Waist)]
     public class FamilyPhoto : ModItem
     {
         public override void SetStaticDefaults()

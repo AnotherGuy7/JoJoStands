@@ -167,7 +167,7 @@ namespace JoJoStands.Projectiles
                                 extraInfo2 = Main.rand.Next(0, 360)
                             };
                             visualEffects.Add(boingEffect);
-                            SoundEngine.PlaySound(boingSound);
+                            SoundEngine.PlaySound(boingSound, Projectile.Center);
                         }
                     }
 
@@ -182,7 +182,7 @@ namespace JoJoStands.Projectiles
                                 npc.velocity.Normalize();
                                 npc.velocity.Y *= -16f;
                                 npc.netUpdate = true;
-                                SoundEngine.PlaySound(boing2Sound);
+                                SoundEngine.PlaySound(boing2Sound, Projectile.Center);
                             }
                         }
                     }
@@ -196,7 +196,7 @@ namespace JoJoStands.Projectiles
                             player.velocity = player.position - new Vector2(player.position.X, player.position.Y - 100f);
                             player.velocity.Normalize();
                             player.velocity.Y *= -24f;
-                            SoundEngine.PlaySound(boing2Sound);
+                            SoundEngine.PlaySound(boing2Sound, Projectile.Center);
                         }
                     }
                     if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -216,7 +216,7 @@ namespace JoJoStands.Projectiles
                                     players.velocity = players.position - new Vector2(players.position.X, players.position.Y - 100f);
                                     players.velocity.Normalize();
                                     players.velocity.Y *= -24f;
-                                    SoundEngine.PlaySound(boing2Sound);
+                                    SoundEngine.PlaySound(boing2Sound, Projectile.Center);
                                 }
                             }
                         }
@@ -314,12 +314,12 @@ namespace JoJoStands.Projectiles
                     DustSpawn(DustID.IceTorch, WoooshEffectDistance);
                     if (!SoundEngine.TryGetActiveSound(soundSlotID, out activeSound))
                     {
-                        soundSlotID = SoundEngine.PlaySound(woooshSound);
+                        soundSlotID = SoundEngine.PlaySound(woooshSound, Projectile.Center);
                     }
                     else
                     {
                         if (!activeSound.IsPlaying)
-                            soundSlotID = SoundEngine.PlaySound(woooshSound);
+                            soundSlotID = SoundEngine.PlaySound(woooshSound, Projectile.Center);
                     }
 
                     visualSoundEffectSpawnTimer++;
@@ -380,12 +380,12 @@ namespace JoJoStands.Projectiles
                     DustSpawn(DustID.RedTorch, SizzleEffectDistance);
                     if (!SoundEngine.TryGetActiveSound(soundSlotID, out activeSound))
                     {
-                        soundSlotID = SoundEngine.PlaySound(sizzleSound);
+                        soundSlotID = SoundEngine.PlaySound(sizzleSound, Projectile.Center);
                     }
                     else
                     {
                         if (!activeSound.IsPlaying)
-                            soundSlotID = SoundEngine.PlaySound(sizzleSound);
+                            soundSlotID = SoundEngine.PlaySound(sizzleSound, Projectile.Center);
                     }
 
                     visualSoundEffectSpawnTimer++;

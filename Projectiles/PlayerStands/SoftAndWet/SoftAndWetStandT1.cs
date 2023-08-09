@@ -66,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                             int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
-                            SoundEngine.PlaySound(SoundID.SplashWeak);
+                            SoundEngine.PlaySound(SoundID.SplashWeak, Projectile.Center);
                         }
                     }
                 }

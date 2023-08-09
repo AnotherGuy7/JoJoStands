@@ -39,7 +39,7 @@ namespace JoJoStands.Items
             mPlayer.standName = "HermitPurple";
             mPlayer.poseSoundName = "HermitPurple";
             if (JoJoStands.SoundsLoaded)
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Hermit Purple").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Hermit Purple").WithVolumeScale(JoJoStands.ModSoundsVolume), player.Center);
             return true;
         }
 

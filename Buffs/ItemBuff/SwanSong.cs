@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 
 namespace JoJoStands.Buffs.ItemBuff
@@ -22,6 +23,11 @@ namespace JoJoStands.Buffs.ItemBuff
                 mPlayer.diedWithStickyHand = true;
             player.GetModPlayer<MyPlayer>().standDamageBoosts *= 2f;
             player.GetModPlayer<MyPlayer>().standCritChangeBoosts *= 2f;
+        }
+
+        public override void OnBuffEnd(Player player)
+        {
+            player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " could no longer live."), player.statLifeMax, 0, false);
         }
     }
 }

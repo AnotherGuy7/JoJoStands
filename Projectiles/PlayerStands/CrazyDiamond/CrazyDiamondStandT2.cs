@@ -146,7 +146,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
                     if (Main.mouseRight && restorationEffectStartTimer <= 0 && mPlayer.crazyDiamondDestroyedTileData.Count > 0 && !playerHasAbilityCooldown && Projectile.owner == Main.myPlayer)
                     {
-                        SoundEngine.PlaySound(CrazyDiamondStandFinal.RestorationSound);
+                        SoundEngine.PlaySound(CrazyDiamondStandFinal.RestorationSound, Projectile.Center);
                         restorationEffectStartTimer += 180;
                         restoringObjects = true;
                     }

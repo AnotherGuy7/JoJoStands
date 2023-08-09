@@ -52,6 +52,13 @@ namespace JoJoStands.Projectiles
             Projectile.netImportant = true;
         }
 
+        public readonly SoundStyle PunchLandSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land")
+        {
+            Volume = 0.6f,
+            Pitch = 0f,
+            PitchVariance = 0.2f
+        };
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -60,7 +67,7 @@ namespace JoJoStands.Projectiles
             standTier = mPlayer.standTier;
             if (!playedSound && mPlayer.standName != "TowerOfGray")
             {
-                SoundEngine.PlaySound(SoundID.Item1);
+                SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                 playedSound = true;
             }
 
@@ -76,13 +83,7 @@ namespace JoJoStands.Projectiles
                             int dust = Dust.NewDust(otherProj.position + otherProj.velocity, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f);
                             Main.dust[dust].noGravity = true;
                             if (JoJoStands.Sounds && Main.netMode != NetmodeID.Server)
-                            {
-                                SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
-                                punchSound.Volume = 0.6f;
-                                punchSound.Pitch = 0f;
-                                punchSound.PitchVariance = 0.2f;
-                                SoundEngine.PlaySound(punchSound, Projectile.Center);
-                            }
+                                SoundEngine.PlaySound(PunchLandSound, Projectile.Center);
                         }
                         else if (otherProj.type == ModContent.ProjectileType<KnifeProjectile>())
                         {
@@ -90,13 +91,7 @@ namespace JoJoStands.Projectiles
                             otherProj.velocity = Projectile.velocity * 0.8f;
                             SoundEngine.PlaySound(SoundID.Tink, Projectile.Center);
                             if (JoJoStands.Sounds && Main.netMode != NetmodeID.Server)
-                            {
-                                SoundStyle punchSound = new SoundStyle("JoJoStands/Sounds/GameSounds/Punch_land");
-                                punchSound.Volume = 0.5f;
-                                punchSound.Pitch = 0f;
-                                punchSound.PitchVariance = 0.2f;
-                                SoundEngine.PlaySound(punchSound, Projectile.Center);
-                            }
+                                SoundEngine.PlaySound(PunchLandSound.WithVolumeScale(0.5f), Projectile.Center);
                         }
                     }
                 }

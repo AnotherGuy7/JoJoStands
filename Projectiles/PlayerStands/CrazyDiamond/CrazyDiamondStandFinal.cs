@@ -243,7 +243,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
                         if (!restorationTargetSelected)
                         {
-                            SoundEngine.PlaySound(RestorationSound);
+                            SoundEngine.PlaySound(RestorationSound, Projectile.Center);
                             restorationEffectStartTimer += 180;
                             restoringObjects = true;
                             restoredEnemies = false;

@@ -44,7 +44,7 @@ namespace JoJoStands.Projectiles
             Projectile.rotation = (-rota * Projectile.direction).ToRotation();
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(StickyFingersStandFinal.ZipperSound);
+                SoundEngine.PlaySound(StickyFingersStandFinal.ZipperSound, Projectile.Center);
                 playedSound = true;
             }
 

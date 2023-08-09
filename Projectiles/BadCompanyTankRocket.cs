@@ -78,7 +78,7 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
         }
     }
 }

@@ -38,6 +38,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.controlUseTile = false;
             player.maxRunSpeed = 0f;
             player.slotsMinions += 1;
+            player.GetDamage(DamageClass.Summon) *= 0.7f;
             if (JoJoStands.SecretReferences)
             {
                 limitTimer--;
@@ -63,7 +64,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             }
             if (Main.mouseRight && mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>() && player.HasItem(ItemID.Dynamite) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
             {
-                SoundEngine.PlaySound(SoundID.Item62);
+                SoundEngine.PlaySound(SoundID.Item62, player.Center);
                 var explosion = Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ProjectileID.GrenadeIII, 49, 8f, Main.myPlayer);
                 Main.projectile[explosion].timeLeft = 2;
                 Main.projectile[explosion].netUpdate = true;

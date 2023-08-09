@@ -40,7 +40,7 @@ namespace JoJoStands.Projectiles
                     mPlayer.tuskShootCooldown += 35 - mPlayer.standSpeedBoosts;
                     SoundStyle shootSound = SoundID.Item67;
                     shootSound.Volume = 0.33f;
-                    SoundEngine.PlaySound(shootSound);
+                    SoundEngine.PlaySound(shootSound, Projectile.Center);
                     Vector2 shootVelocity = Main.MouseWorld - Projectile.Center;
                     shootVelocity.Normalize();
                     shootVelocity *= 4f;

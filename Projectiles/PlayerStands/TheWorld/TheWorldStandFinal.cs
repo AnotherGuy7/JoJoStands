@@ -129,7 +129,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                                 Main.projectile[projIndex].netUpdate = true;
                                 player.ConsumeItem(ModContent.ItemType<Knife>());
                             }
-                            SoundEngine.PlaySound(SoundID.Item1);
+                            SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                         }
                     }
                     else
@@ -159,7 +159,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                 if (SpecialKeyPressed() && player.HasBuff(ModContent.BuffType<TheWorldBuff>()) && timestopPoseTimer <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<RoadRoller>()] == 0)
                 {
                     if (JoJoStands.SoundsLoaded)
-                        SoundEngine.PlaySound(RoadRollerSound);
+                        SoundEngine.PlaySound(RoadRollerSound, Projectile.Center);
 
                     shootCount += 12;
                     Vector2 shootVel = Main.MouseWorld - Projectile.Center;
