@@ -12,7 +12,7 @@ namespace JoJoStands.Buffs.Debuffs
             // Description.SetDefault("Your stand disc has been stolen!");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void UpdateBuffOnPlayer(Player player)

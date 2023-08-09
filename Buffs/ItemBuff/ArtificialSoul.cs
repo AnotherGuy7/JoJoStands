@@ -10,7 +10,7 @@ namespace JoJoStands.Buffs.ItemBuff
         {
             // DisplayName.SetDefault("Artificial Soul");
             // Description.SetDefault("An artificial soul has been given to you!");
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
             Main.debuff[Type] = true;
         }
 
