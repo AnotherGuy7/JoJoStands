@@ -89,7 +89,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 {
                     player.AddBuff(ModContent.BuffType<Rampage>(), 2);
                     EmoteBubble.NewBubble(1, new WorldUIAnchor(player), 5 * 60);
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"), Projectile.Center);
                 }
             }
 
@@ -242,7 +242,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
                         if (!restorationTargetSelected)
                         {
-                            SoundEngine.PlaySound(CrazyDiamondStandFinal.RestorationSound);
+                            SoundEngine.PlaySound(CrazyDiamondStandFinal.RestorationSound, Projectile.Center);
                             restorationEffectStartTimer += 180;
                             restoringObjects = true;
                             restoredEnemies = false;

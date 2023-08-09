@@ -66,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                             shootVel *= 3f;
                             Vector2 bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(0, 18 + 1) * Projectile.direction, -Main.rand.Next(0, HalfStandHeight - 2 + 1));
                             Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, shootVel, ModContent.ProjectileType<TinyBubble>(), 44, 2f, Projectile.owner, Projectile.whoAmI);
-                            SoundEngine.PlaySound(SoundID.Drip);
+                            SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
                         }
                     }
                     else
@@ -118,7 +118,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                         Main.projectile[hvb].netUpdate = true;
                         Projectile.netUpdate = true;
                         highVelocityBubbleChargeUpTimer = 0;
-                        SoundEngine.PlaySound(SoundID.Item130);
+                        SoundEngine.PlaySound(SoundID.Item130, Projectile.Center);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(8));
                     }
                 }
@@ -152,7 +152,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                         int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, bubbleVelocity, ModContent.ProjectileType<TrackerBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, 0, bubbleTargetIndex);
                         Main.projectile[projIndex].netUpdate = true;
                     }
-                    SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound);
+                    SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound, Projectile.Center);
                 }
                 if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer)
                 {

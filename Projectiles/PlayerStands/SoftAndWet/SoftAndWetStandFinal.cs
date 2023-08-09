@@ -82,7 +82,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                             shootVel *= 3f;
                             Vector2 bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(0, 18 + 1) * Projectile.direction, -Main.rand.Next(0, HalfStandHeight - 2 + 1));
                             Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, shootVel, ModContent.ProjectileType<TinyBubble>(), 32, 2f, Projectile.owner, Projectile.whoAmI);
-                            SoundEngine.PlaySound(SoundID.Drip);
+                            SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
                         }
                     }
                     else
@@ -114,7 +114,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                                     {
                                         bombPositions[amountOfBubbleBombs] = Main.MouseWorld;
                                         amountOfBubbleBombs++;
-                                        SoundEngine.PlaySound(SoundID.SplashWeak);
+                                        SoundEngine.PlaySound(SoundID.SplashWeak, Projectile.Center);
                                     }
                                     rightClickTimer = 0;
                                 }
@@ -218,7 +218,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                         int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
                         Main.projectile[projIndex].netUpdate = true;
                         Projectile.netUpdate = true;
-                        SoundEngine.PlaySound(SoundID.Item85);
+                        SoundEngine.PlaySound(SoundID.Item85, Projectile.Center);
                     }
                 }
 
@@ -261,7 +261,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                             int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, bubbleVelocity, ModContent.ProjectileType<ControllableBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts * 0.9f), 2f, Projectile.owner);
                             Main.projectile[projIndex].netUpdate = true;
                         }
-                        SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound);
+                        SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound, Projectile.Center);
                     }
                 }
 

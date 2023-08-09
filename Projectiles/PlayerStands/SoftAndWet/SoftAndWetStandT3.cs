@@ -67,7 +67,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                         Punch();
                         if (Main.rand.NextBool(14))
                         {
-                            SoundEngine.PlaySound(SoundID.Drip);
+                            SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
                             Vector2 shootVel = Main.MouseWorld - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
@@ -104,7 +104,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                             int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
-                            SoundEngine.PlaySound(SoundID.Item85);
+                            SoundEngine.PlaySound(SoundID.Item85, Projectile.Center);
                         }
                     }
                     else
@@ -151,7 +151,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                             int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, bubbleVelocity, ModContent.ProjectileType<ControllableBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts * 0.9f), 2f, Projectile.owner);
                             Main.projectile[projIndex].netUpdate = true;
                         }
-                        SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound);
+                        SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound, Projectile.Center);
                     }
                 }
                 if (SecondSpecialKeyPressed() && !player.HasBuff<BubbleBarrierBuff>() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))

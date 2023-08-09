@@ -123,7 +123,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             {
                 if (Projectile.owner == Main.myPlayer && !dashprojspawn && player.ownedProjectileCounts[ModContent.ProjectileType<DashVoid>()] <= 0)
                 {
-                    SoundEngine.PlaySound(SoundID.Item78);
+                    SoundEngine.PlaySound(SoundID.Item78, Projectile.Center);
                     Vector2 shootVelocity = Main.MouseWorld - Projectile.Center;
                     velocity = Main.MouseWorld;
                     if (shootVelocity == Vector2.Zero)
@@ -146,7 +146,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     Projectile.netUpdate = true;
                     if (playerDistance <= 40f)
                     {
-                        SoundEngine.PlaySound(SoundID.Item78);
+                        SoundEngine.PlaySound(SoundID.Item78, Projectile.Center);
                         mPlayer.voidCounter += 2;
                         mPlayer.creamDash = false;
                         dashprojspawn = false;
@@ -164,7 +164,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     if (mPlayer.creamDash && playerDistance >= 1200f)
                         mPlayer.standOut = false;
                     Main.projectile[dashproj].Kill();
-                    SoundEngine.PlaySound(SoundID.Item78);
+                    SoundEngine.PlaySound(SoundID.Item78, Projectile.Center);
                 }
             }
             if (mPlayer.creamExposedMode && !mPlayer.creamNormalToExposed && !mPlayer.creamExposedToVoid || mPlayer.creamDash)

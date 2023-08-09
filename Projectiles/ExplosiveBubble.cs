@@ -134,7 +134,7 @@ namespace JoJoStands.Projectiles
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " got careless around one of KQ's bombs."), bombDamage, hitDirection);
                 }
             }
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
 
             for (int i = 0; i < 60; i++)
             {

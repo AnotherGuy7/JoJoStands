@@ -195,7 +195,7 @@ namespace JoJoStands.Projectiles
                     int dustIndex = Dust.NewDust(spawnPos, Projectile.width, Projectile.height, DustID.Cloud, velocity.X * 0.8f, velocity.Y * 0.8f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
                     Main.dust[dustIndex].noGravity = true;
                 }
-                SoundEngine.PlaySound(PopSound);
+                SoundEngine.PlaySound(PopSound, Projectile.Center);
             }
             else
             {
@@ -240,7 +240,7 @@ namespace JoJoStands.Projectiles
                         }
                     }
                 }
-                SoundEngine.PlaySound(SoundID.Item14);
+                SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
             }
         }
     }

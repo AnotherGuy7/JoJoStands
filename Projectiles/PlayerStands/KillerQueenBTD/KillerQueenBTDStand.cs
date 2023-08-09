@@ -325,7 +325,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
                         Main.time = savedWorldData.worldTime;
                         player.ClearBuff(ModContent.BuffType<BitesTheDust>());
-                        SoundEngine.PlaySound(KillerQueenStandFinal.KillerQueenClickSound);
+                        SoundEngine.PlaySound(KillerQueenStandFinal.KillerQueenClickSound, Projectile.Center);
                         if (Projectile.owner == Main.myPlayer)
                         {
                             SyncCall.SyncBitesTheDust(player.whoAmI, false);
@@ -410,7 +410,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                     {
                         secondaryAbility = true;
                         Projectile.ai[0] = 1f;      //to detonate all bombos
-                        SoundEngine.PlaySound(KillerQueenStandFinal.KillerQueenClickSound);
+                        SoundEngine.PlaySound(KillerQueenStandFinal.KillerQueenClickSound, Projectile.Center);
                         shootCount += 45;
                     }
                 }

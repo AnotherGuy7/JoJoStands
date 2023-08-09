@@ -115,7 +115,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                                 Projectile.netUpdate = true;
                                 if (Projectile.frame == 1)
                                 {
-                                    SoundEngine.PlaySound(ScrapeSoundEffect);
+                                    SoundEngine.PlaySound(ScrapeSoundEffect, Projectile.Center);
                                     Vector2 distanceToTeleport = Main.MouseWorld - player.position;
                                     distanceToTeleport.Normalize();
                                     distanceToTeleport *= chargeTimer / 30f;
@@ -207,7 +207,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             currentAnimationState = AnimationState.Scrape;
                             if (specialScrapeTimer <= 60)
                             {
-                                SoundEngine.PlaySound(ScrapeSoundEffect);
+                                SoundEngine.PlaySound(ScrapeSoundEffect, Projectile.Center);
                                 for (int i = 0; i < Main.maxNPCs; i++)
                                 {
                                     NPC npc = Main.npc[i];
@@ -236,7 +236,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                             }
                             else
                             {
-                                SoundEngine.PlaySound(ScrapeSoundEffect);
+                                SoundEngine.PlaySound(ScrapeSoundEffect, Projectile.Center);
                                 for (int i = 0; i < Main.maxNPCs; i++)
                                 {
                                     NPC npc = Main.npc[i];

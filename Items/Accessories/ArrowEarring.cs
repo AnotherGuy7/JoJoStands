@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Front)]
     public class ArrowEarring : ModItem
     {
         public override void SetStaticDefaults()

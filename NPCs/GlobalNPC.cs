@@ -268,34 +268,12 @@ namespace JoJoStands.NPCs
             }
         }
 
-        public override void ModifyActiveShop(NPC npc, string shopName, Item[] items)
+        public override void ModifyShop(NPCShop shop)
         {
-            Player player = Main.player[Main.myPlayer];
-            if (npc.type == NPCID.Merchant)
+            if (shop.NpcType == NPCID.Merchant)
+                shop.Add(ModContent.ItemType<Sunscreen>());
+            else if (shop.NpcType == NPCID.Painter)
             {
-                for (int i = 0; i < items.Length; i++)
-                {
-                    if (items[i].IsAir)
-                    {
-                        items[i].SetDefaults(ModContent.ItemType<Sunscreen>());
-                        break;
-                    }
-                }
-            }
-            if (npc.type == NPCID.TravellingMerchant && ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss))
-            {
-                for (int i = 0; i < items.Length; i++)
-                {
-                    if (items[i].IsAir)
-                    {
-                        items[i].SetDefaults(ModContent.ItemType<ViralPearlRing>());
-                        break;
-                    }
-                }
-            }
-            if (npc.type == NPCID.Painter)
-            {
-                int additionIndex = 0;
                 int[] painterShopAdditions = new int[5]
                 {
                     ModContent.ItemType<IWouldntLose>(),
@@ -304,17 +282,14 @@ namespace JoJoStands.NPCs
                     ModContent.ItemType<ShotintheDark>(),
                     ModContent.ItemType<BloodForTheKing>()
                 };
-                for (int i = 0; i < items.Length; i++)
-                {
-                    if (items[i].IsAir)
-                    {
-                        items[i].SetDefaults(painterShopAdditions[additionIndex]);
-                        additionIndex += 1;
-                        if (additionIndex >= painterShopAdditions.Length)
-                            break;
-                    }
-                }
+                for (int i = 0; i < painterShopAdditions.Length; i++)
+                    shop.Add(painterShopAdditions[i]);
             }
+        }
+
+        public override void ModifyActiveShop(NPC npc, string shopName, Item[] items)
+        {
+            Player player = Main.player[Main.myPlayer];
             for (int n = 0; n < Main.maxNPCs; n++)
             {
                 NPC otherNPC = Main.npc[n];
@@ -328,6 +303,15 @@ namespace JoJoStands.NPCs
                         ItemSelect.value += (int)(ItemSelect.value * 0.2f);
                     }
                 }
+            }
+        }
+
+        public override void SetupTravelShop(int[] shop, ref int nextSlot)
+        {
+            if ((Main.hardMode && Main.rand.Next(0, 101) >= 90) || NPC.downedPlantBoss)
+            {
+                shop[nextSlot] = ModContent.ItemType<ViralPearlRing>();
+                nextSlot++;
             }
         }
 

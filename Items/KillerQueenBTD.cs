@@ -51,7 +51,7 @@ namespace JoJoStands.Items
                 {
                     Item.type = ModContent.ItemType<KillerQueenFinal>();
                     Item.SetDefaults(ModContent.ItemType<KillerQueenFinal>());
-                    SoundEngine.PlaySound(SoundID.Grab);
+                    SoundEngine.PlaySound(SoundID.Grab, player.Center);
                     mPlayer.revertTimer += 30;
                 }
             }

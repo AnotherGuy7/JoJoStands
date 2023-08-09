@@ -125,7 +125,7 @@ namespace JoJoStands.Projectiles
                     npc.StrikeNPC(hitInfo);
                 }
             }
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
 
             for (int i = 0; i < 60; i++)
             {

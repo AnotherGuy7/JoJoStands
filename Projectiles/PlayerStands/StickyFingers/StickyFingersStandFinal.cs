@@ -148,7 +148,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(15));
                         Projectile.netUpdate = true;
                         if (JoJoStands.SoundsLoaded)
-                            SoundEngine.PlaySound(ZipperSound);
+                            SoundEngine.PlaySound(ZipperSound, Projectile.Center);
                     }
                 }
                 if (SpecialKeyPressed() && shootCount <= 0 && !secondaryAbility && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersTraversalZipper>()] == 0 && !zipperAmbush)

@@ -1,4 +1,5 @@
-﻿using JoJoStands.Buffs.ItemBuff;
+﻿using JoJoStands.Buffs.AccessoryBuff;
+using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -224,6 +225,12 @@ namespace JoJoStands
                     shader.Apply(null);
                 }
                 Color drawColor = Lighting.GetColor((int)((drawInfo.Position.X + drawPlayer.width / 2f) / 16f), (int)((drawInfo.Position.Y + drawPlayer.height / 2f) / 16f));
+                if (drawPlayer.HasBuff<CenturyBoyBuff>())
+                {
+                    drawColor *= 0.6f;
+                    drawColor.A = 255;
+                }
+
                 DrawData drawData = new DrawData(texture, vector, drawPlayer.bodyFrame, drawColor, drawPlayer.bodyRotation, new Vector2(texture.Width / 2f, drawPlayer.height / 2f), 1f, effects, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }

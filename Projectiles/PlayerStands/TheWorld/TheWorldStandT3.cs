@@ -124,7 +124,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
                                 Main.projectile[projIndex].netUpdate = true;
                                 player.ConsumeItem(ModContent.ItemType<Knife>());
                             }
-                            SoundEngine.PlaySound(SoundID.Item1);
+                            SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                         }
                     }
                     else

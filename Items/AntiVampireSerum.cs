@@ -47,7 +47,6 @@ namespace JoJoStands.Items
             vPlayer.perfectBeing = false;
             vPlayer.anyMaskForm = false;
             SoundEngine.PlaySound(SoundID.Item3, player.Center);
-            //SoundEngine.PlaySound(2, player.Center, 3);
 
 
             if (player.HasBuff(ModContent.BuffType<Buffs.AccessoryBuff.Vampire>()))

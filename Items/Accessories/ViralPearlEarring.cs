@@ -1,11 +1,11 @@
 using JoJoStands.Items.CraftingMaterials;
-using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Front)]
     public class ViralPearlEarring : ModItem
     {
         public override void SetStaticDefaults()

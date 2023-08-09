@@ -31,7 +31,7 @@ namespace JoJoStands.Projectiles
         {
             if (!playedSound)
             {
-                SoundEngine.PlaySound(SoundID.Item20);
+                SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
                 playedSound = true;
             }
             if (Projectile.wet || Projectile.honeyWet)

@@ -103,7 +103,7 @@ namespace JoJoStands.Projectiles
 				expr_1747D_cp_0.velocity.Y = expr_1747D_cp_0.velocity.Y - 1f;
 			}*/
 
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
         }
     }
 }

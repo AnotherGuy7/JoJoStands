@@ -60,13 +60,13 @@ namespace JoJoStands.Items
             {
                 reloadCounter = 60;
                 if (JoJoStands.Sounds)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Reload60"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Reload60"), player.Center);
             }
             if (specialPressed && reloadCounter <= 1 && player.whoAmI == Main.myPlayer)
             {
                 reloadCounter = 30;
                 if (JoJoStands.Sounds)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Reload30"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Reload30"), player.Center);
             }
             if (reloadCounter == 1)
             {

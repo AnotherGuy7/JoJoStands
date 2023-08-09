@@ -145,10 +145,10 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     if (JoJoStands.SoundsLoaded && !playedThreeFreezeSound)
                     {
                         playedThreeFreezeSound = true;
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze").WithVolumeScale(JoJoStands.ModSoundsVolume), Projectile.Center);
                     }
                     if (JoJoStands.SoundsLoaded && !playedThreeFreezeThudSound && enemyAffectedByThreeFreeze)
-                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze_Thud").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                        SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EchoesActThreeFreeze_Thud").WithVolumeScale(JoJoStands.ModSoundsVolume), Projectile.Center);
                     playedThreeFreezeThudSound = enemyAffectedByThreeFreeze;
                 }
                 if (SpecialKeyPressed() && Projectile.owner == Main.myPlayer)       //3freeze barrgage activation

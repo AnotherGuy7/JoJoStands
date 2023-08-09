@@ -344,7 +344,7 @@ namespace JoJoStands
 
                         if (item.type != ItemID.IronBar && item.type != ItemID.LeadBar)
                         {
-                            SoundEngine.PlaySound(SoundID.Grab);
+                            SoundEngine.PlaySound(SoundID.Grab, Player.Center);
                             howManyRecipesHere.Add(Main.recipe[r1]);
                             for (int i = 0; i < Main.recipe[r1].createItem.stack; i++)
                                 Player.ConsumeItem(item.type);
@@ -354,7 +354,7 @@ namespace JoJoStands
                         }
                         else if (item.type == ItemID.IronBar)
                         {
-                            SoundEngine.PlaySound(SoundID.Grab);
+                            SoundEngine.PlaySound(SoundID.Grab, Player.Center);
                             Player.ConsumeItem(item.type);
                             Player.QuickSpawnItem(Player.InheritSource(Player), ItemID.IronOre, 3);
                             crazyDiamonUncraftCooldown = 5;
@@ -362,7 +362,7 @@ namespace JoJoStands
                         }
                         else if (item.type == ItemID.LeadBar)
                         {
-                            SoundEngine.PlaySound(SoundID.Grab);
+                            SoundEngine.PlaySound(SoundID.Grab, Player.Center);
                             Player.ConsumeItem(item.type);
                             Player.QuickSpawnItem(Player.InheritSource(Player), ItemID.LeadOre, 3);
                             crazyDiamonUncraftCooldown = 5;
@@ -529,7 +529,7 @@ namespace JoJoStands
             if (JoJoStands.PoseHotKey.JustPressed && !posing && !Player.HasBuff(ModContent.BuffType<Rampage>()))
             {
                 if (JoJoStands.Sounds)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/PoseSound"), Player.Center);
                 posing = true;
                 SyncCall.SyncPoseState(Player.whoAmI, true);
             }
@@ -753,6 +753,12 @@ namespace JoJoStands
                 }
                 Main.spriteBatch.Draw(texture, Player.Center - new Vector2(0f, Player.height / 2) - Main.screenPosition, animRect, Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0);
             }
+            if (Player.HasBuff<CenturyBoyBuff>())
+            {
+                r *= 0.6f;
+                g *= 0.6f;
+                b *= 0.6f;
+            }
         }
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
@@ -798,27 +804,6 @@ namespace JoJoStands
                 polaroidTokenGainTimer--;
             if (stickyHandEquipped && stickyHandHealthLossTimer > 0)
                 stickyHandHealthLossTimer--;
-            if ((!revivedByPokerChip && Player.HasItem(ModContent.ItemType<PokerChip>())) || (zippedHandEquipped && !zippedHandDeath) || (stickyHandEquipped && !diedWithStickyHand))
-                notDeadYet = true;
-            else
-                notDeadYet = false;
-            if (zippedHandDeath)
-            {
-                if (!Player.HasBuff(ModContent.BuffType<SwanSong>()))
-                {
-                    Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), Player.statLifeMax, 0, false);
-                    zippedHandDeath = false;
-                }
-            }
-            if (diedWithStickyHand)
-            {
-                if (!Player.HasBuff(ModContent.BuffType<SwanSong>()))
-                {
-                    Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + " could no longer live."), Player.statLifeMax, 0, false);
-                    diedWithStickyHand = false;
-                }
-
-            }
             if (standOut)
             {
                 if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
@@ -1082,7 +1067,7 @@ namespace JoJoStands
                                 int soundNumber = amountOfSexPistolsPlaced;
                                 if (soundNumber >= 4)
                                     soundNumber += 1;
-                                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/SexPistols_" + soundNumber));
+                                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/SexPistols_" + soundNumber), Player.Center);
                             }
                             if (amountOfSexPistolsPlaced >= 6)
                                 amountOfSexPistolsPlaced = 0;
@@ -1164,7 +1149,7 @@ namespace JoJoStands
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundStyle shootSound = SoundID.Item67;
                         shootSound.Volume = 0.33f;
-                        SoundEngine.PlaySound(shootSound);
+                        SoundEngine.PlaySound(shootSound, Player.Center);
                         Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();      //to normalize is to turn it into a direction under 1 but greater than 0
                         shootVelocity *= 12f;       //multiply the angle by the speed to get the effect
@@ -1190,7 +1175,7 @@ namespace JoJoStands
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundStyle shootSound = SoundID.Item67;
                         shootSound.Volume = 0.33f;
-                        SoundEngine.PlaySound(shootSound);
+                        SoundEngine.PlaySound(shootSound, Player.Center);
                         Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
@@ -1216,7 +1201,7 @@ namespace JoJoStands
                         tuskShootCooldown += 35 - standSpeedBoosts;
                         SoundStyle shootSound = SoundID.Item67;
                         shootSound.Volume = 0.33f;
-                        SoundEngine.PlaySound(shootSound);
+                        SoundEngine.PlaySound(shootSound, Player.Center);
                         Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 4f;
@@ -1225,7 +1210,7 @@ namespace JoJoStands
                     if (Main.mouseRight && Player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>()] <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] <= 0 && tuskShootCooldown <= 0 && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                     {
                         tuskShootCooldown += 60 - standSpeedBoosts;
-                        SoundEngine.PlaySound(SoundID.Item78);
+                        SoundEngine.PlaySound(SoundID.Item78, Player.Center);
                         Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 1.1f;
@@ -1234,7 +1219,7 @@ namespace JoJoStands
                     if (specialJustPressed && Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<ArmWormholeNail>()] <= 0 && tuskShootCooldown <= 0 && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                     {
                         tuskShootCooldown += 120 - standSpeedBoosts;
-                        SoundEngine.PlaySound(SoundID.Item78);
+                        SoundEngine.PlaySound(SoundID.Item78, Player.Center);
                         Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                         shootVelocity.Normalize();
                         shootVelocity *= 5f;
@@ -1253,7 +1238,7 @@ namespace JoJoStands
                                 Player.direction = -1;
                             Player.channel = true;
                             tuskShootCooldown += 15 - standSpeedBoosts;
-                            SoundEngine.PlaySound(SoundID.Item67);
+                            SoundEngine.PlaySound(SoundID.Item67, Player.Center);
                             Vector2 shootVelocity = Main.MouseWorld - Player.Center;
                             shootVelocity.Normalize();
                             shootVelocity *= 4f;
@@ -1567,12 +1552,6 @@ namespace JoJoStands
                 standSpeedBoosts += 2;
                 standCritChangeBoosts -= 10f;
             }
-
-            if (revivedByPokerChip && !Player.HasBuff(ModContent.BuffType<ArtificialSoul>()))
-            {
-                Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + "'s artificial soul has left him."), Player.statLife + 1, Player.direction);
-                revivedByPokerChip = false;
-            }
         }
 
         public override void PostUpdate()
@@ -1652,9 +1631,17 @@ namespace JoJoStands
                         Filters.Scene.Activate(JoJoStandsShaders.BattlePaletteSwitchEffect);
                         JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BattlePaletteSwitchEffect, (int)JoJoStands.ColorChangeStyleEnum.NormalToLightGreen);
                     }
+                    if (Player.HasBuff(ModContent.BuffType<SwanSong>()) && !JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect))
+                    {
+                        Filters.Scene.Activate(JoJoStandsShaders.BattlePaletteSwitchEffect);
+                        JoJoStandsShaders.ChangeShaderUseProgress(JoJoStandsShaders.BattlePaletteSwitchEffect, (int)JoJoStands.ColorChangeStyleEnum.NormalToRed);
+                    }
                 }
 
-                if (!JoJoStandsWorld.VampiricNight && JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) || (JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect) && !JoJoStands.ColorChangeEffects))
+                bool colorChangeEffectsActive = JoJoStandsWorld.VampiricNight || Player.HasBuff(ModContent.BuffType<SwanSong>());
+                if (!JoJoStands.ColorChangeEffects)
+                    colorChangeEffectsActive = false;
+                if (!colorChangeEffectsActive && JoJoStandsShaders.ShaderActive(JoJoStandsShaders.BattlePaletteSwitchEffect))
                     Filters.Scene[JoJoStandsShaders.BattlePaletteSwitchEffect].Deactivate();
             }
         }
@@ -1965,7 +1952,7 @@ namespace JoJoStands
             if (Player.HasBuff<ZipperDodge>() && Player.whoAmI == Main.myPlayer)
             {
                 if (JoJoStands.SoundsLoaded)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"), Player.Center);
                 Player.ClearBuff(ModContent.BuffType<ZipperDodge>());
                 Player.AddBuff(ModContent.BuffType<AbilityCooldown>(), AbilityCooldownTime(10 - (2 * (standTier - 2))));
                 return true;
@@ -1981,47 +1968,56 @@ namespace JoJoStands
                 receivedArrowShard = false;
                 piercedTimer = 36000;
             }
-            if (!revivedByPokerChip && Player.HasItem(ModContent.ItemType<PokerChip>()))
+            bool revivedPreviously = zippedHandDeath || diedWithStickyHand || revivedByPokerChip;
+            if (!revivedPreviously)
             {
-                revivedByPokerChip = true;
-                Player.AddBuff(ModContent.BuffType<ArtificialSoul>(), 3600);
-                Player.ConsumeItem(ModContent.ItemType<PokerChip>(), true);
-                Main.NewText("The chip has given you new life!");
-                return false;
-            }
-            if (!stickyHandEquipped && zippedHandEquipped && !zippedHandDeath)
-            {
-                if ((!Player.HasItem(ModContent.ItemType<PokerChip>()) || revivedByPokerChip) && !diedWithStickyHand)
+                if (stickyHandEquipped)
                 {
-                    Player.AddBuff(ModContent.BuffType<SwanSong>(), 7 * 60);
-                    Player.statLife = 100;
-                    Player.HealEffect(100);
-                    return false;
+                    if (!diedWithStickyHand)
+                    {
+                        notDeadYet = true;
+                        diedWithStickyHand = true;
+                        Player.AddBuff(ModContent.BuffType<SwanSong>(), 20 * 60);
+                        if (Player.statLifeMax >= 150)
+                        {
+                            Player.statLife = 150;
+                            Player.HealEffect(150);
+                        }
+                        else
+                        {
+                            Player.statLife = Player.statLifeMax;
+                            Player.HealEffect(Player.statLifeMax);
+                        }
+                        return false;
+                    }
                 }
-            }
-            if (stickyHandEquipped && !diedWithStickyHand)
-            {
-                if (!Player.HasItem(ModContent.ItemType<PokerChip>()) || revivedByPokerChip)
+                else if (zippedHandEquipped)
                 {
-                    Player.AddBuff(ModContent.BuffType<SwanSong>(), 15 * 60);
-                    if (Player.statLifeMax >= 150)
+                    if (!zippedHandDeath)
                     {
-                        Player.statLife = 150;
-                        Player.HealEffect(150);
+                        notDeadYet = true;
+                        zippedHandDeath = true;
+                        Player.AddBuff(ModContent.BuffType<SwanSong>(), 10 * 60);
+                        Player.statLife = 100;
+                        Player.HealEffect(100);
+                        return false;
                     }
-                    else
+                }
+                else if (Player.HasItem(ModContent.ItemType<PokerChip>()))
+                {
+                    if (!revivedByPokerChip)
                     {
-                        Player.statLife = Player.statLifeMax;
-                        Player.HealEffect(Player.statLifeMax);
+                        notDeadYet = true;
+                        revivedByPokerChip = true;
+                        Player.AddBuff(ModContent.BuffType<ArtificialSoul>(), 60 * 60);
+                        Player.ConsumeItem(ModContent.ItemType<PokerChip>(), true);
+                        Main.NewText("The chip has given you new life!");
+                        return false;
                     }
-
-                    return false;
                 }
             }
             if (backToZeroActive)
-            {
                 return false;
-            }
 
 
             standOut = false;
@@ -2080,6 +2076,10 @@ namespace JoJoStands
             creamExposedToVoid = false;
             creamDash = false;
             creamFrame = 0;
+            revivedByPokerChip = false;
+            diedWithStickyHand = false;
+            zippedHandDeath = false;
+            notDeadYet = false;
 
             if (Player.whoAmI == Main.myPlayer && JoJoStands.DeathSoundID == JoJoStands.DeathSoundType.Roundabout)
             {

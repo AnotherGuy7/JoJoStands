@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class GreaterGoldAmuletOfControl : ModItem
     {
         public override void SetStaticDefaults()

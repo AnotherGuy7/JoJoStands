@@ -69,7 +69,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     mPlayer.creamFrame = 7;
                     mPlayer.creamExposedToVoid = true;
                     mPlayer.creamAnimationReverse = true;
-                    SoundEngine.PlaySound(SoundID.Item78);
+                    SoundEngine.PlaySound(SoundID.Item78, Projectile.Center);
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
                     shootVelocity.Normalize();
                     shootVelocity *= 5f;
