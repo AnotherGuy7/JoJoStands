@@ -11,7 +11,7 @@ namespace JoJoStands.Buffs.ItemBuff
             // Description.SetDefault("Almost anything that passes through this sphere is disintegrated into nothingness!");
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void UpdateBuffOnPlayer(Player player)

@@ -15,7 +15,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void UpdateBuffOnPlayer(Player player)
