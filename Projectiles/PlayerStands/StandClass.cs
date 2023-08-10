@@ -340,7 +340,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Main.projectile[projIndex].netUpdate = true;
             }
             LimitDistance();
-            if (afterImages && newPunchTime <= 6)
+            if (afterImages && newPunchTime <= 6 && canUsePunchAfterImages)
             {
                 int afterImageAmount = ((6 - newPunchTime) / 2) + 1;
                 int amountOfPunches = Main.rand.Next(afterImageAmount, afterImageAmount + 1 + 1) + PunchData.bonusAfterimageAmount;
