@@ -187,6 +187,12 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
+                if (grabbing || secondaryAbility)
+                {
+                    grabbing = false;
+                    secondaryAbility = false;
+                    Projectile.ai[0] = -1f;
+                }
                 BasicPunchAI();
                 if (!attacking)
                     currentAnimationState = AnimationState.Idle;

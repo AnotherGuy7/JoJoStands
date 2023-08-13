@@ -185,7 +185,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             drawColor *= Projectile.alpha / 255f;
             if (standTexture != null && Main.netMode != NetmodeID.Server)
             {
-                int frameHeight = standTexture.Height / Main.projFrames[Projectile.type];
+                int frameHeight = standTexture.Height / amountOfFrames;
                 Main.EntitySpriteDraw(standTexture, Projectile.Center - Main.screenPosition + new Vector2(DrawOffsetX / 2f, 0f), new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight), drawColor, 0f, new Vector2(standTexture.Width / 2f, frameHeight / 2f), 1f, effects, 0);
             }
         }
