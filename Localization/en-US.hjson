@@ -507,7 +507,7 @@ Mods: {
 
 			DuelingSpirit: {
 				DisplayName: Dueling Spirit
-				Description: Mods.JoJoStands.Buffs.DuelingSpirit.Description
+				Description: You are ready to fight again!
 			}
 		}
 
