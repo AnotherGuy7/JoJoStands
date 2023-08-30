@@ -1,4 +1,3 @@
-using JoJoStands.Items.Dyes;
 using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using System.IO;
@@ -21,6 +20,7 @@ namespace JoJoStands.Networking
         public const byte StandEffectInfo = 8;
         public const byte OtherPlayerDebuffInfo = 9;
         public const byte OtherPlayerExtraEffect = 10;
+        public const byte MandomActivated = 11;
         //public const byte Sounds = 6;
 
         public PlayerPacketHandler(byte handlerType) : base(handlerType)
@@ -60,6 +60,9 @@ namespace JoJoStands.Networking
                     break;
                 case OtherPlayerExtraEffect:
                     ReceiveOtherPlayerExtraEffect(reader, fromWho);
+                    break;
+                case MandomActivated:
+                    RecieveMandomInfo(reader, fromWho);
                     break;
             }
         }
@@ -158,8 +161,6 @@ namespace JoJoStands.Networking
             byte oneWhoEquipped = reader.ReadByte();
             Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.type = dyeItemType;
             Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.SetDefaults(dyeItemType);
-            if (Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.ModItem is StandDye)
-                (Main.player[oneWhoEquipped].GetModPlayer<MyPlayer>().StandDyeSlot.SlotItem.ModItem as StandDye).UpdateEquippedDye(Main.player[oneWhoEquipped]);
             if (Main.netMode == NetmodeID.Server)
                 SendDyeItem(-1, fromWho, dyeItemType, oneWhoEquipped);
         }
@@ -418,6 +419,31 @@ namespace JoJoStands.Networking
 
             if (Main.netMode == NetmodeID.Server)
                 SendOtherPlayerExtraEffect(-1, fromWho, whoAmI, targetPlayerWhoAmI, effectType, int1, int2, float1, float2);
+        }
+        public void SendMandomInfo(int toWho, int target, int fromWho, float PlayerX, float PlayerY, int Health, int Direction)
+        {
+            ModPacket packet = CreatePacket(MandomActivated);
+            packet.Write(target);
+            packet.Write(PlayerX);
+            packet.Write(PlayerY);
+            packet.Write(Health);
+            packet.Write(Direction);
+            packet.Send(toWho, fromWho);
+        }
+
+        public void RecieveMandomInfo(BinaryReader reader, int fromWho)
+        {
+            int targetWhoAmI = reader.ReadInt32();
+            float PosX = reader.ReadSingle();
+            float PosY = reader.ReadSingle();
+            int Health = reader.ReadInt32();
+            int Direction = reader.ReadInt32();
+            Vector2 Position = new Vector2(PosX, PosY);
+            Main.player[targetWhoAmI].position = Position;
+            Main.player[targetWhoAmI].statLife = Health;
+            Main.player[targetWhoAmI].ChangeDir(Direction);
+            if (Main.netMode == NetmodeID.Server)
+                SendMandomInfo(-1, targetWhoAmI, fromWho, PosX, PosY, Health, Direction);
         }
     }
 }

@@ -182,12 +182,6 @@ namespace JoJoStands.Networking
                 ModNetHandler.PlayerSync.SendStandEffectInfo(256, whoAmI, (byte)whoAmI, targetWhoAmI, fistWhoAmI, stat1, stat2, stat3, stat4, stat5);
         }
 
-        public static void SyncNPCEffectInfo(int whoAmI, byte effectIndex, bool state, int info, int npcWhoAmI)
-        {
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModNetHandler.WorldSync.SendEnemySync(256, whoAmI, effectIndex, state, info, npcWhoAmI);
-        }
-
         public static void SyncOtherPlayerDebuff(int whoAmI, int targetPlayerWhoAmI, int debuffType, int debuffTime)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -204,6 +198,11 @@ namespace JoJoStands.Networking
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 ModNetHandler.WorldSync.SendVampiricNight(256, whoAmI, active);
+        }
+        public static void SyncMandomActivation(int whoAmI, int TargetPlayerWhoAmI, float PlayerX, float PlayerY, int Health, int Direction)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                ModNetHandler.PlayerSync.SendMandomInfo(256, TargetPlayerWhoAmI, whoAmI, PlayerX, PlayerY, Health, Direction);
         }
     }
 }
