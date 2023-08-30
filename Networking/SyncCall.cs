@@ -205,5 +205,11 @@ namespace JoJoStands.Networking
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 ModNetHandler.WorldSync.SendVampiricNight(256, whoAmI, active);
         }
+        
+        public static void SyncMandomActivation(int whoAmI, int TargetPlayerWhoAmI, float PlayerX, float PlayerY, int Health, int Direction)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                ModNetHandler.PlayerSync.SendMandomInfo(256, TargetPlayerWhoAmI, whoAmI, PlayerX, PlayerY, Health, Direction);
+        }
     }
 }
