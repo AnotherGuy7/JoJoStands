@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace JoJoStands.Items
+namespace JoJoStands.Items.Seasonal
 {
     public class FreeDomT1 : StandItemClass
     {
