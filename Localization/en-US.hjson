@@ -504,6 +504,11 @@ Mods: {
 				DisplayName: Stray Cat
 				Description: A Stand born from means unknown, but it fights for you!
 			}
+
+			DuelingSpirit: {
+				DisplayName: Dueling Spirit
+				Description: You are ready to fight again!
+			}
 		}
 
 		Items: {
@@ -3216,6 +3221,26 @@ Mods: {
 					'''
 			}
 
+			MandomT1: {
+				DisplayName: Mandom (Tier 1)
+				Tooltip: Special: Rewind time by 6 seconds.
+			}
+
+			FreeDomT1: {
+				DisplayName: FreeDom (Tier 1)
+				Tooltip: Special: Rewind time by 6 seconds (American style!).
+			}
+
+			PearlJamT1: {
+				DisplayName: Pearl Jam (Tier 1)
+				Tooltip: left click to toss a plate of spaghetti to heal yourself and others!
+			}
+
+			PearlJamT2: {
+				DisplayName: Pearl Jam (Tier 1)
+				Tooltip: left click to toss a plate of Tomato-Mozzarella to heal yourself and others!
+			}
+
 			BlackUmbrella: {
 				DisplayName: Black Umbrella
 				Tooltip: ""
@@ -3784,6 +3809,12 @@ Mods: {
 			VampiricVeinGrab.DisplayName: Vampiric Vein Grab
 			VampiricVeinSpike.DisplayName: Vampiric Vein Spike
 			ZeppeliHamonPunches.DisplayName: Zeppeli Hamon Punches
+			HealingSpaghetti.DisplayName: Healing Spaghetti
+			HealingTomatoMozzarella.DisplayName: Healing Tomato Mozzarella
+			MandomStandT1.DisplayName: Mandom Stand T1
+			FreeDomStandT1.DisplayName: FreeDom Stand T1
+			PearlJamStandT1.DisplayName: Pearl Jam Stand T1
+			PearlJamStandT2.DisplayName: Pearl Jam Stand T2
 		}
 
 		Biomes: {
