@@ -7,5 +7,6 @@ The Discord Link can also be found in the forum post
 
 Credits:
 The JoJoStands Contributors: Placement, Phil, Techno, Blu, Hey Mister, Joser, Niker, D.Storm, Benney, NekroSektor, Ozi, StringsArn'tRealNumbers, Xenon, Com-Obie, Gundam_Belphagor, KrimsonHeadshot, Sicco-Jo, Pyther, Prooooooos21, Sewer Creature, Bruhimsons, Archerous, SolarSunne, and F-3r.
+Translators: Puffline (Russian)
 Alana Gilston, for making TerraUI which helped us make the Stand Slot
 The ExampleMod devs, cause it's a good everything reference

@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.NPCs.TownNPCs
@@ -80,7 +81,7 @@ namespace JoJoStands.NPCs.TownNPCs
                 if (mPlayer.awaitingViralMeteoriteTip)
                 {
                     mPlayer.awaitingViralMeteoriteTip = false;
-                    Main.npcChatText = "Did you feel that too? It felt as if a certain force were pulling us toward the meteor. That is no ordinary meteor, we must find it immediately. If that meteorite happened to be a Viral Meteorite, we must take care of that virus as soon as possible before it falls into the wrong hands again. Make sure to check the entire surface of the world for it. If you can't find it, check your sky islands and chasms as well. Hurry!";
+                    Main.npcChatText = Language.GetText("JotaroCustomDialogue.ViralMeteoriteTip").Value;
                     return;
                 }
 
