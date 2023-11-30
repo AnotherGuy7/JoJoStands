@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace JoJoStands.Items
 {
@@ -84,13 +85,16 @@ namespace JoJoStands.Items
         public override void RightClick(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.StandSlot.SlotItem.type != 0)
+            if (mPlayer.timestopActive || mPlayer.standChangingLocked)
+                return;
+
+            if (mPlayer.StandSlot.SlotItem.type != ItemID.None)
             {
                 player.QuickSpawnItem(player.GetSource_FromThis(), mPlayer.StandSlot.SlotItem.type);
                 mPlayer.StandSlot.SlotItem.type = Item.type;
                 mPlayer.StandSlot.SlotItem.SetDefaults(Item.type);
             }
-            if (mPlayer.StandSlot.SlotItem.type == 0)
+            else
             {
                 mPlayer.StandSlot.SlotItem.type = Item.type;
                 mPlayer.StandSlot.SlotItem.SetDefaults(Item.type);

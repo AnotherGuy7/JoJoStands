@@ -3,8 +3,8 @@ Mods: {
 		#This is what displays during all of an NPC's happiness levels. Note that the localization key for these should always be TownNPCMood.*NPCName*.*Mood* or else it won't display properly.
 		TownNPCMood: {
 			Gambler: {
-				Content: Жизнь здесь намного менее напряженная, чем была в Египте.
-				NoHome: Иногда я могу жульничать, но я больше никогда не буду жульничать, если ты дашь мне место для ночлега!
+				Content: Жизнь здесь намного спокойнее, чем была в Египте.
+				NoHome: Иногда я могу жульничать, но я больше никогда не буду это делать, если ты дашь мне место для ночлега!
 				LoveSpace: Мне нравится, что у меня есть место для хранения всех моих карточек, а еще лучше - моих наград!
 				FarFromHome: Здесь вообще не с кем играть в азартные игры.
 				DislikeCrowded: Возможно, здесь слишком много людей, чтобы я мог обмануть их в азартной игре.
@@ -16,7 +16,7 @@ Mods: {
 				LikeNPC: "{NPCName} действительно умеет играть в азартные игры!"
 				LoveNPC: Этот человек, {NPCName} жульничает так же хорошо, как и я! Играть в азартные игры с {NPCName} это все равно, что играть против самого себя!
 				DislikeNPC: "{NPCName} очень подозрительно относится ко мне, а мне не нравятся люди, которые относятся ко мне с подозрением."
-				HateNPC: "{NPCName} НЕ разрешается играть со мной в азартные игры. Этот человек довольно восприимчив в играх с высокими ставками. Уведи {NPCName} отсюда!"
+				HateNPC: Я НЕ разрешу {NPCName} играть со мной в азартные игры. Этот человек довольно восприимчив в играх с высокими ставками. Уведи {NPCName} отсюда!
 			}
 
 			HamonMaster: {
@@ -115,8 +115,8 @@ Mods: {
 			}
 
 			Dead: {
-				DisplayName: Mods.JoJoStands.BuffName.Мертв
-				Description: Mods.JoJoStands.BuffDescription.Мертв
+				DisplayName: Mods.JoJoStands.BuffName.Dead
+				Description: Mods.JoJoStands.BuffDescription.Dead
 			}
 
 			ImproperRestoration: {
@@ -141,7 +141,7 @@ Mods: {
 
 			MissingOrgans: {
 				DisplayName: Отсутствующие Органы!
-				Description: Части вашего тела были выцарапаны!
+				Description: Части вашего тела было стерто!
 			}
 
 			ParchedDebuff: {
@@ -195,8 +195,8 @@ Mods: {
 			}
 
 			Zipped: {
-				DisplayName: Застегнут!
-				Description: На вашем теле застегнута молния, кровь быстро проливается!
+				DisplayName: Расстегнут!
+				Description: На вашем теле появилась расстегнутая молния, кровь быстро проливается!
 			}
 
 			BacktoZero: {
@@ -259,7 +259,7 @@ Mods: {
 			}
 
 			ThreeFreezeBarrage: {
-				DisplayName: 3 Замораживающий Барраж
+				DisplayName: Три-Фриз Барраж
 				Description: Каждый из ваших ударов намного тяжелее, чем может показаться!
 			}
 
@@ -384,17 +384,17 @@ Mods: {
 			}
 
 			JoJoBuff: {
-				DisplayName: Mods.JoJoStands.BuffName.ДжоДжоБафф
-				Description: Mods.JoJoStands.BuffDescription.ДжоДжоБафф
+				DisplayName: Mods.JoJoStands.BuffName.JoJoBuff
+				Description: Mods.JoJoStands.BuffDescription.JoJoBuff
 			}
 
 			JonathanPetBuff: {
-				DisplayName: Питомец Джонатан
+				DisplayName: Питомец-Джонатан
 				Description: Он верит в тебя.
 			}
 
 			SpeedWagonPetBuff: {
-				DisplayName: Питомец Спидвагон
+				DisplayName: Питомец-Спидвагон
 				Description: Он болеет за тебя.
 			}
 
@@ -436,79 +436,79 @@ Mods: {
 			}
 
 			DyingVampire: {
-				DisplayName: Dying Vampire
+				DisplayName: Умирающий вампир
 				Description: Mods.JoJoStands.Buffs.DyingVampire.Description
 			}
 
 			Zombie: {
-				DisplayName: Zombie
+				DisplayName: Зомби
 				Description: Mods.JoJoStands.Buffs.Zombie.Description
 			}
 
 			Lacerated: {
-				DisplayName: Lacerated
+				DisplayName: Разорван
 				Description: Mods.JoJoStands.Buffs.Lacerated.Description
 			}
 
 			WoooshDebuff: {
-				DisplayName: Wooosh Debuff
+				DisplayName: Вууух дебафф
 				Description: Mods.JoJoStands.Buffs.WoooshDebuff.Description
 			}
 
 			FinalPush: {
-				DisplayName: Final Push
+				DisplayName: Финальный толчок
 				Description: Mods.JoJoStands.Buffs.FinalPush.Description
 			}
 
 			HamonWeaponImbueBuff: {
-				DisplayName: Хамон Weapon Imbue Buff
+				DisplayName: Насыщающий бафф Хамона с оружием
 				Description: Mods.JoJoStands.Buffs.HamonWeaponImbueBuff.Description
 			}
 
 			KnifeAmalgamation: {
-				DisplayName: Knife Amalgamation
+				DisplayName: Объединение ножей
 				Description: Mods.JoJoStands.Buffs.KnifeAmalgamation.Description
 			}
 
 			ProtectiveFilmBuff: {
-				DisplayName: Protective Film Buff
+				DisplayName: Защитная пленка
 				Description: Mods.JoJoStands.Buffs.ProtectiveFilmBuff.Description
 			}
 
 			SunscreenBuff: {
-				DisplayName: Sunscreen Buff
+				DisplayName: Крем от загара
 				Description: Mods.JoJoStands.Buffs.SunscreenBuff.Description
 			}
 
 			UltraSunscreenBuff: {
-				DisplayName: Ultra Sunscreen Buff
+				DisplayName: Ультра-Крем от загара
 				Description: Mods.JoJoStands.Buffs.UltraSunscreenBuff.Description
 			}
 
 			DioPetBuff: {
-				DisplayName: Dio Питомец Buff
+				DisplayName: Питомец-Дио
 				Description: Mods.JoJoStands.Buffs.DioPetBuff.Description
 			}
 
 			ZeppeliPetBuff: {
-				DisplayName: Zeppeli Питомец Buff
+				DisplayName: Питомец-Цеппели
 				Description: Mods.JoJoStands.Buffs.ZeppeliPetBuff.Description
 			}
 
 			TopOfTheChain: {
-				DisplayName: Top Of The Chain
+				DisplayName: Вершина пищевой цепи
 				Description: Mods.JoJoStands.Buffs.TopOfTheChain.Description
 			}
 
 			StrayCatBuff: {
-				DisplayName: Бродячий Кот
+				DisplayName: Стрэй-Кэт
 				Description: Стенд, рожденный неизвестным способом, но он сражается за вас!
 			}
 		}
 
 		Items: {
 			AjaStone: {
-				DisplayName: Красный Камень Айя
+				DisplayName: Красный Камень Эйша
 				Tooltip: Носите этот камень, чтобы ходить по воде, повышайте свои регенеративные способности и увеличивайте свой максимальный Хамон!
 			}
 
@@ -846,7 +846,7 @@ Mods: {
 			}
 
 			ZippedHand: {
-				DisplayName: Застегнутая Рука
+				DisplayName: Отстегнутая Рука
 				Tooltip:
 					'''
 					Позволяет вам дать последний бой перед смертью.
@@ -939,7 +939,7 @@ Mods: {
 			}
 
 			AdamantiteAlloyHelmetLong: {
-				DisplayName: Шлем из Адамантитавого Сплава (Даль. Атака)
+				DisplayName: Шлем из Адамантитового Сплава (Даль. Атака)
 				Tooltip:
 					'''
 					Шлем, сплавленный с вирусным метеоритом, расширяет возможности пользователя.
@@ -949,7 +949,7 @@ Mods: {
 			}
 
 			AdamantiteAlloyHelmetNeutral: {
-				DisplayName: Шлем из Адамантитавого Сплава (Нейтрал. Атака)
+				DisplayName: Шлем из Адамантитового Сплава (Нейтрал. Атака)
 				Tooltip:
 					'''
 					Шлем, сплавленный с вирусным метеоритом, расширяет возможности пользователя.
@@ -959,7 +959,7 @@ Mods: {
 			}
 
 			AdamantiteAlloyHelmetShort: {
-				DisplayName: Шлем из Адамантитавого Сплава (Ближ. Атака)
+				DisplayName: Шлем из Адамантитового Сплава (Ближ. Атака)
 				Tooltip:
 					'''
 					Шлем, сплавленный с вирусным метеоритом, расширяет возможности пользователя.
@@ -1419,7 +1419,7 @@ Mods: {
 				DisplayName: Крейзи-Даймонд (Последний Уровень)
 				Tooltip:
 					'''
-					ЛКМ, чтобы ударять врагов очень быстро, и ПКМ, чтобы выпустить пулю!
+					ЛКМ, чтобы ударять врагов очень быстро и ПКМ, чтобы выпустить пулю!
 					Спец. : Переключение в режим Восстановления
 					Второй Спец. : Войти в неудержимую ярость!
 					ЛКМ в режиме Восстановления для выполнения Восстановительного Барража и ПКМ, чтобы восстановить предмет до состояния компонентов.
@@ -1435,7 +1435,7 @@ Mods: {
 				DisplayName: Крейзи-Даймонд (1 Уровень)
 				Tooltip:
 					'''
-					ЛКМ, чтобы ударять врагов очень быстро,!
+					ЛКМ, чтобы ударять врагов очень быстро!
 					Спец. : Переключение в режим Восстановления
 					ЛКМ в режиме Восстановления для выполнения Восстановительного Барража и ПКМ, чтобы восстановить предмет до состояния компонентов.
 					Предметы Оранжевой редкости и выше не могут быть восстановлены до компонентов на этом уровне.
@@ -1447,7 +1447,7 @@ Mods: {
 				DisplayName: Крейзи-Даймонд (2 Уровень)
 				Tooltip:
 					'''
-					ЛКМ, чтобы ударять врагов очень быстро, и ПКМ, чтобы выпустить пулю!
+					ЛКМ, чтобы ударять врагов очень быстро и ПКМ, чтобы выпустить пулю!
 					Спец. : Переключение в режим Восстановления
 					ЛКМ в режиме Восстановления для выполнения Восстановительного Барража и ПКМ, чтобы восстановить предмет до состояния компонентов.
 					ПКМ в режиме Восстановления, для восстановления состояния всех затронутых объектов.
@@ -1461,7 +1461,7 @@ Mods: {
 				DisplayName: Крейзи-Даймонд (3 Уровень)
 				Tooltip:
 					'''
-					ЛКМ, чтобы ударять врагов очень быстро, и ПКМ, чтобы выпустить пулю!
+					ЛКМ, чтобы ударять врагов очень быстро и ПКМ, чтобы выпустить пулю!
 					Спец. : Переключение в режим Восстановления
 					Второй Спец. : Войти в неудержимую ярость!
 					ЛКМ в режиме Восстановления для выполнения Восстановительного Барража и ПКМ, чтобы восстановить предмет до состояния компонентов.
@@ -1568,7 +1568,7 @@ Mods: {
 			}
 
 			EchoesAct0: {
-				DisplayName: Эхо (АКТ 0)
+				DisplayName: Эхос (АКТ 0)
 				Tooltip:
 					'''
 					ЛКМ для... Броска?
@@ -1577,7 +1577,7 @@ Mods: {
 			}
 
 			EchoesAct1: {
-				DisplayName: Эхо (АКТ 1)
+				DisplayName: Эхос (АКТ 1)
 				Tooltip:
 					'''
 					ЛКМ, чтобы ударять врагов очень быстро!
@@ -1588,7 +1588,7 @@ Mods: {
 			}
 
 			EchoesAct2: {
-				DisplayName: Эхо (АКТ 2)
+				DisplayName: Эхос (АКТ 2)
 				Tooltip:
 					'''
 					ЛКМ, чтобы ударять врагов очень быстро!
@@ -1600,14 +1600,14 @@ Mods: {
 			}
 
 			EchoesAct3: {
-				DisplayName: Эхо (АКТ 3)
+				DisplayName: Эхос (АКТ 3)
 				Tooltip:
 					'''
 					ЛКМ, чтобы ударять врагов очень быстро!
-					ПКМ: Три-Замри! Пригвоздите любого врага к земле!
-					Спец. : Три-Замри Барраж! Обычные атаки наносят три заморозки на короткое время!
+					ПКМ: Три-Фриз! Пригвоздите любого врага к земле!
+					Спец. : Три-Фриз Барраж! Обычные атаки наносят три заморозки на короткое время!
 					Второй Спец. : Переключает на предыдущий акт!
-					Враги, помеченные Три-Замри, со временем получают урон.
+					Враги, помеченные Три-Фриз, со временем получают урон.
 					'''
 			}
 
@@ -1674,7 +1674,7 @@ Mods: {
 				DisplayName: Голд-Экспириенс (Последний Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы использовать способности!
+					Бьет врагов очень быстро и ПКМ, чтобы использовать способности!
 					Спец. : Открывает/Закрывает Колесо Способностей
 					Пассив. : Барраж врагов может нанести им Удар Жизни
 					Используется в слоте для Стенда
@@ -1685,7 +1685,7 @@ Mods: {
 				DisplayName: Голд-Экспириенс (Реквием)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы использовать выбранные способности!
+					Бьет врагов очень быстро и ПКМ, чтобы использовать выбранные способности!
 					Спец. : Используйте возврат к нулю, чтобы свести на нет действия всех врагов, которые прикоснулись к вам!
 					Второй Спец. : Открывает/Закрывает Колесо Способностей
 					Используется в слоте для Стенда
@@ -1705,7 +1705,7 @@ Mods: {
 				DisplayName: Голд-Экспириенс (2 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы использовать способности!
+					Бьет врагов очень быстро и ПКМ, чтобы использовать способности!
 					Спец. : Открывает/Закрывает Колесо Способностей
 					Используется в слоте для Стенда
 					'''
@@ -1715,7 +1715,7 @@ Mods: {
 				DisplayName: Голд-Экспириенс (3 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы использовать способности!
+					Бьет врагов очень быстро и ПКМ, чтобы использовать способности!
 					Спец. : Открывает/Закрывает Колесо Способностей
 					Пассив. : Барраж врагов может нанести им Удар Жизни
 					Используется в слоте для Стенда
@@ -1775,7 +1775,7 @@ Mods: {
 			}
 
 			Hamon: {
-				DisplayName: Hamon
+				DisplayName: Хамон
 				Tooltip:
 					'''
 					Бейте врагов той силой, которая циркулирует в вас.
@@ -1906,7 +1906,7 @@ Mods: {
 			}
 
 			KillerQueenBTD: {
-				DisplayName: Киллер-Квин (Бродячий Кот)
+				DisplayName: Киллер-Квин (Стрэй-Кэт)
 				Tooltip:
 					'''
 					ЛКМ, чтобы стрелять пузырями и ПКМ, чтобы подорвать их!
@@ -2010,7 +2010,7 @@ Mods: {
 			}
 
 			LockFinal: {
-				DisplayName: Замок (Последний Уровень)
+				DisplayName: Зе-Лок (Последний Уровень)
 				Tooltip:
 					'''
 					Заставляйте людей, которые причинили вам вред, испытывать чувство вины!
@@ -2019,17 +2019,17 @@ Mods: {
 			}
 
 			LockT1: {
-				DisplayName: Замок (1 Уровень)
+				DisplayName: Зе-Лок (1 Уровень)
 				Tooltip: Заставляйте людей, которые причинили вам вред, испытывать чувство вины!
 			}
 
 			LockT2: {
-				DisplayName: Замок (2 Уровень)
+				DisplayName: Зе-Лок (2 Уровень)
 				Tooltip: Заставляйте людей, которые причинили вам вред, испытывать чувство вины!
 			}
 
 			LockT3: {
-				DisplayName: Замок (3 Уровень)
+				DisplayName: Зе-Лок (3 Уровень)
 				Tooltip:
 					'''
 					Заставляйте людей, которые причинили вам вред, испытывать чувство вины!
@@ -2158,7 +2158,7 @@ Mods: {
 				DisplayName: Стар-Он-Зе-Три
 				Tooltip:
 					'''
-					ЛКМ, чтобы ударять врагов очень быстро, и ПКМ, чтобы выпустить пулю!
+					ЛКМ, чтобы ударять врагов очень быстро и ПКМ, чтобы выпустить пулю!
 					Если в инвентаре нет пуль, будет использован Стар-Фингер.
 					Спец. : Останавливает время на 4 секунды!
 					Используется в слоте для Стенда
@@ -2254,7 +2254,7 @@ Mods: {
 			}
 
 			SlowDancersSaddle: {
-				DisplayName: Седло Медленного Танцора
+				DisplayName: Седло Слоу-Дэнсера
 				Tooltip: Синее седло, которое принадлежит гоночной лошади...
 			}
 
@@ -2262,7 +2262,7 @@ Mods: {
 				DisplayName: Софт-н-Вет  (Последний Уровень)
 				Tooltip:
 					'''
-					Бьет врагов довольно быстро, и ПКМ в пустом месте, чтобы создать Пузырь Грабежа, или держите ПКМ на плитке, чтобы вырастить Пузырь-Бомбу!
+					Бьет врагов довольно быстро и ПКМ в пустом месте, чтобы создать Пузырь Грабежа, или держите ПКМ на плитке, чтобы вырастить Пузырь-Бомбу!
 					Спец. : Наступление Пузыря
 					Второй Спец. : Барьер Пузырей!
 					Пассив. : Генерация Пузырей
@@ -2275,13 +2275,13 @@ Mods: {
 			}
 
 			SoftAndWetGoBeyond: {
-				DisplayName: Софт-н-Вет  (Гоу-Бейонд!)
+				DisplayName: Софт-н-Вет (Гоу-Бейонд!)
 				Tooltip:
 					'''
-					Бьет врагов довольно быстро, и держите ПКМ, чтобы создать Несуществующий Пузырь!
+					Бьет врагов довольно быстро и держите ПКМ, чтобы создать Несуществующий Пузырь!
 					Спец. : Выберите цель для отслеживания с помощью Пузырей
 					Второй Спец. : Барьер Пузырей!
-					Пассив. : Генерация Пузырей & Bubble Offensive
+					Пассив. : Генерация Пузырей и Атакующий пузырь
 					Генерация Пузырей позволяет Софт-н-Вет генерировать пузыри в Барраже.
 					Наступление Пузыря создает пузыри вокруг Софт-н-Вет, которыми можно управлять.
 					При выслеживании врага с помощью пузырей, пузыри, созданные в Наступлении Пузырей будут взрываться при контакте с этим врагом.
@@ -2293,7 +2293,7 @@ Mods: {
 				DisplayName: Софт-н-Вет  (1 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов довольно быстро, и ПКМ, чтобы создать Пузырь Грабежа!
+					Бьет врагов довольно быстро и ПКМ, чтобы создать Пузырь Грабежа!
 					Используется в слоте для Стенда
 					'''
 			}
@@ -2302,7 +2302,7 @@ Mods: {
 				DisplayName: Софт-н-Вет  (2 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов довольно быстро, и ПКМ, чтобы создать Пузырь Грабежа!
+					Бьет врагов довольно быстро и ПКМ, чтобы создать Пузырь Грабежа!
 					Второй Спец. : Барьер Пузырей!
 					Используется в слоте для Стенда
 					'''
@@ -2312,8 +2312,8 @@ Mods: {
 				DisplayName: Софт-н-Вет  (3 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов довольно быстро, и ПКМ, чтобы создать Пузырь Грабежа!
-					Спец. : Bubble Offensive
+					Бьет врагов довольно быстро и ПКМ, чтобы создать Пузырь Грабежа!
+					Спец. : Атакующий пузырь
 					Второй Спец. : Барьер Пузырей!
 					Пассив. : Генерация Пузырей
 					Наступление Пузыря создает пузыри вокруг Софт-н-Вет, которыми можно управлять.
@@ -2338,7 +2338,7 @@ Mods: {
 				DisplayName: Стар-Платинум (Последний Уровень)
 				Tooltip:
 					'''
-					ЛКМ, чтобы ударять врагов очень быстро, и ПКМ, чтобы выпустить пулю!
+					ЛКМ, чтобы ударять врагов очень быстро и ПКМ, чтобы выпустить пулю!
 					Если в инвентаре нет пуль, будет использован Стар-Фингер.
 					Спец. : Останавливает время на 4 секунды!
 					Используется в слоте для Стенда
@@ -2349,7 +2349,7 @@ Mods: {
 				DisplayName: Стар-Платинум (1 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро,.
+					Бьет врагов очень быстро.
 					Используется в слоте для Стенда
 					'''
 			}
@@ -2358,7 +2358,7 @@ Mods: {
 				DisplayName: Стар-Платинум (2 Уровень)
 				Tooltip:
 					'''
-					ЛКМ, чтобы ударять врагов очень быстро, и ПКМ, чтобы использовать Стар-Фингер!
+					ЛКМ, чтобы ударять врагов очень быстро и ПКМ, чтобы использовать Стар-Фингер!
 					Используется в слоте для Стенда
 					'''
 			}
@@ -2367,7 +2367,7 @@ Mods: {
 				DisplayName: Стар-Платинум (3 Уровень)
 				Tooltip:
 					'''
-					ЛКМ, чтобы ударять врагов очень быстро, и ПКМ, чтобы выпустить пулю!
+					ЛКМ, чтобы ударять врагов очень быстро и ПКМ, чтобы выпустить пулю!
 					Если в инвентаре нет пуль, будет использован Стар-Фингер.
 					Используется в слоте для Стенда
 					'''
@@ -2386,7 +2386,7 @@ Mods: {
 				DisplayName: Стики-Фингерс (Последний Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и расстегивает их! ПКМ, чтобы использовать удлиненный удар!
+					Бьет врагов очень быстро и расстегивает их! ПКМ, чтобы использовать удлиненный удар!
 					Держите ПКМ на плитке, чтобы спрятаться и удивить своих врагов!
 					Спец. : Залезьте в застежку и выйдите в направлении мыши, на дистанцию 30 плиток!
 					Второй Спец. : Приготовьтесь уклониться от атаки!
@@ -2398,7 +2398,7 @@ Mods: {
 				DisplayName: Стики-Фингерс (1 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и расстегивает их!
+					Бьет врагов очень быстро и расстегивает их!
 					Используется в слоте для Стенда
 					'''
 			}
@@ -2407,7 +2407,7 @@ Mods: {
 				DisplayName: Стики-Фингерс (2 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и расстегивает их! ПКМ, чтобы использовать удлиненный удар!
+					Бьет врагов очень быстро и расстегивает их! ПКМ, чтобы использовать удлиненный удар!
 					Держите ПКМ на плитке, чтобы спрятаться и удивить своих врагов!
 					Используется в слоте для Стенда
 					'''
@@ -2417,7 +2417,7 @@ Mods: {
 				DisplayName: Стики-Фингерс (3 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и расстегивает их! ПКМ, чтобы использовать удлиненный удар!
+					Бьет врагов очень быстро и расстегивает их! ПКМ, чтобы использовать удлиненный удар!
 					Держите ПКМ на плитке, чтобы спрятаться и удивить своих врагов!
 					Спец. : Залезьте в застежку и выйдите в направлении мыши, на дистанцию 30 плиток!
 					Второй Спец. : Приготовьтесь уклониться от атаки!
@@ -2429,7 +2429,7 @@ Mods: {
 				DisplayName: Стоун-Фри (Последний Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы создать нитевую ловушку!
+					Бьет врагов очень быстро и ПКМ, чтобы создать нитевую ловушку!
 					Спец. : Эта способность задается в Колесе Способностей.
 					Второй Спец. : Включает Колесо Способностей.
 					Используется в слоте для Стенда
@@ -2440,7 +2440,7 @@ Mods: {
 				DisplayName: Стоун-Фри (1 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро,!
+					Бьет врагов очень быстро!
 					Используется в слоте для Стенда
 					'''
 			}
@@ -2449,7 +2449,7 @@ Mods: {
 				DisplayName: Стоун-Фри (2 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ на две плитки, чтобы создать нитевую ловушку!
+					Бьет врагов очень быстро и ПКМ на две плитки, чтобы создать нитевую ловушку!
 					Используется в слоте для Стенда
 					'''
 			}
@@ -2458,7 +2458,7 @@ Mods: {
 				DisplayName: Стоун-Фри (3 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы создать нитевую ловушку!
+					Бьет врагов очень быстро и ПКМ, чтобы создать нитевую ловушку!
 					Спец. : Эта способность задается в Колесе Способностей.
 					Второй Спец. : Включает Колесо Способностей.
 					Используется в слоте для Стенда
@@ -2466,7 +2466,7 @@ Mods: {
 			}
 
 			StrayCat: {
-				DisplayName: Бродячий Кот
+				DisplayName: Стрэй-Кэт
 				Tooltip: Странное растение, которое каким-то образом является кошкой. Оно может пускать невидимые глазу пузыри и способно вызывать мяуканье, наносящее урон.
 			}
 
@@ -2479,12 +2479,12 @@ Mods: {
 				DisplayName: Зе-Хенд (Последний Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы прорваться сквозь пространство!
+					Бьет врагов очень быстро и ПКМ, чтобы прорваться сквозь пространство!
 					Спец. : Переключение в режим Стирания
 					ЛКМ в режиме Стирания, чтобы стереть то, что находится перед тобой!
 					ПКМ в режиме Стирания, чтобы зарядить стирание.
 					Если стирание заряжается менее 1 секунды, любые враги, попавшие под стирание, будут направлены в вашу сторону.
-					Если стирание заряжается более 1 секунды, стирание становится летальным и наносит 210 урона / 0.5с!
+					Если стирание заряжается более 1 секунды, стирание становится летальным и наносит 210 урона / 0.5 сек!
 					Враги в зоне стирания помечены синим.
 					Попадание по вам во время зарядки стирания, прерывает стирание.
 					Используется в слоте для Стенда
@@ -2495,7 +2495,7 @@ Mods: {
 				DisplayName: Зе-Хенд (1 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро,!
+					Бьет врагов очень быстро!
 					Используется в слоте для Стенда
 					'''
 			}
@@ -2504,7 +2504,7 @@ Mods: {
 				DisplayName: Зе-Хенд (2 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы прорваться сквозь пространство!
+					Бьет врагов очень быстро и ПКМ, чтобы прорваться сквозь пространство!
 					Используется в слоте для Стенда
 					'''
 			}
@@ -2513,12 +2513,12 @@ Mods: {
 				DisplayName: Зе-Хенд (3 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы прорваться сквозь пространство!
+					Бьет врагов очень быстро и ПКМ, чтобы прорваться сквозь пространство!
 					Спец. : Переключение в режим Стирания
 					ЛКМ в режиме Стирания, чтобы стереть то, что находится перед тобой!
 					ПКМ в режиме Стирания, чтобы зарядить стирание.
 					Если стирание заряжается менее 1 секунды, любые враги, попавшие под стирание, будут направлены в вашу сторону.
-					Если стирание заряжается более 1 секунды, стирание становится летальным и наносит 145 урона / 0.5с!
+					Если стирание заряжается более 1 секунды, стирание становится летальным и наносит 145 урона / 0.5 сек!
 					Враги в зоне стирания помечены синим.
 					Попадание по вам во время зарядки стирания, прерывает стирание.
 					Используется в слоте для Стенда
@@ -2526,10 +2526,10 @@ Mods: {
 			}
 
 			TheWorldFinal: {
-				DisplayName: За-Вардо (Последний Уровень)
+				DisplayName: Зе-Ворлд (Последний Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы метнуть ножи! 
+					Бьет врагов очень быстро и ПКМ, чтобы метнуть ножи! 
 					Спец. : Останавливает время на 9 секунд!
 					Спец. во время остановки времени: Кидает Дорожный Каток!
 					Второй Спец. : Останавливайте время и убивайте врагов ножами!
@@ -2538,29 +2538,29 @@ Mods: {
 			}
 
 			TheWorldT1: {
-				DisplayName: За-Вардо (1 Уровень)
+				DisplayName: Зе-Ворлд (1 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро,!
+					Бьет врагов очень быстро!
 					Используется в слоте для Стенда
 					'''
 			}
 
 			TheWorldT2: {
-				DisplayName: За-Вардо (2 Уровень)
+				DisplayName: Зе-Ворлд (2 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро,! 
+					Бьет врагов очень быстро! 
 					Спец. : Останавливает время на 2 секунды!
 					Используется в слоте для Стенда
 					'''
 			}
 
 			TheWorldT3: {
-				DisplayName: За-Вардо (3 Уровень)
+				DisplayName: Зе-Ворлд (3 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы метнуть ножи! 
+					Бьет врагов очень быстро и ПКМ, чтобы метнуть ножи! 
 					Спец. : Останавливает время на 5 секунд!
 					Второй Спец. : Останавливайте время и убивайте врагов ножами!
 					Note: Охотничьи ножи сделаны из 1 железного/свинцового слитка на наковальне и нужны для их метания.
@@ -2711,7 +2711,7 @@ Mods: {
 			}
 
 			AchtungBaby: {
-				DisplayName: Ахтунговый Ребенок
+				DisplayName: Ахтунг-Бейби
 				Tooltip: Делает вас невидимым!
 			}
 
@@ -3174,7 +3174,7 @@ Mods: {
 				DisplayName: Вайт-Снейк (Последний Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы кинуть немного яда!
+					Бьет врагов очень быстро и ПКМ, чтобы кинуть немного яда!
 					Спец. : Забирайте диски любого врага!
 					Второй Спец. : Дистанционное Управление
 					В режиме Дистант. Управления: ЛКМ, чтобы двигаться и ПКМ, чтобы стрелять во врагов из пистолета!
@@ -3187,7 +3187,7 @@ Mods: {
 				DisplayName: Вайт-Снейк (1 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро,!
+					Бьет врагов очень быстро!
 					Используется в слоте для Стенда
 					'''
 			}
@@ -3196,7 +3196,7 @@ Mods: {
 				DisplayName: Вайт-Снейк (2 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы кинуть немного яда!
+					Бьет врагов очень быстро и ПКМ, чтобы кинуть немного яда!
 					Второй Спец. : Дистанционное Управление
 					В режиме Дистант. Управления: ЛКМ, чтобы двигаться и ПКМ, чтобы стрелять во врагов из пистолета!
 					Используется в слоте для Стенда
@@ -3207,7 +3207,7 @@ Mods: {
 				DisplayName: Вайт-Снейк (3 Уровень)
 				Tooltip:
 					'''
-					Бьет врагов очень быстро, и ПКМ, чтобы кинуть немного яда!
+					Бьет врагов очень быстро и ПКМ, чтобы кинуть немного яда!
 					Спец. : Забирайте диски любого врага!
 					Второй Спец. : Дистанционное Управление
 					В режиме Дистант. Управления: ЛКМ, чтобы двигаться и ПКМ, чтобы стрелять во врагов из пистолета!
@@ -3257,167 +3257,167 @@ Mods: {
 			}
 
 			AstroRemainsChestplate: {
-				DisplayName: Astro Remains Chestplate
+				DisplayName: Нагрудник из Астро-Остатков
 				Tooltip: ""
 			}
 
 			AstroRemainsGreaves: {
-				DisplayName: Astro Remains Greaves
+				DisplayName: Поножи из Астро-Остатков
 				Tooltip: ""
 			}
 
 			AstroRemainsSkull: {
-				DisplayName: Astro Remains Skull
+				DisplayName: Череп из Астро-Остатков
 				Tooltip: ""
 			}
 
 			DefiledChestplate: {
-				DisplayName: Defiled Chestplate
+				DisplayName: Оскверненный нагрудник
 				Tooltip: ""
 			}
 
 			DefiledGreaves: {
-				DisplayName: Defiled Greaves
+				DisplayName: Оскверненные поножи
 				Tooltip: ""
 			}
 
 			DefiledMask: {
-				DisplayName: Defiled Mask
+				DisplayName: Оскверненная маска
 				Tooltip: ""
 			}
 
 			IronSlopChestplate: {
-				DisplayName: Iron Slop Chestplate
+				DisplayName: Железно-Глиняный Нагрудник
 				Tooltip: ""
 			}
 
 			IronSlopHelmet: {
-				DisplayName: Iron Slop Helmet
+				DisplayName: Железно-Глиняный Шлем
 				Tooltip: ""
 			}
 
 			IronSlopShorts: {
-				DisplayName: Iron Slop Shorts
+				DisplayName: Железно-Глиняные Шорты
 				Tooltip: ""
 			}
 
 			RustedGladiatorBoots: {
-				DisplayName: Rusted Gladiator Boots
+				DisplayName: Ржавые Гладиаторские Ботинки
 				Tooltip: ""
 			}
 
 			RustedGladiatorChestplate: {
-				DisplayName: Rusted Gladiator Chestplate
+				DisplayName: Ржавый Гладиаторский Нагрудник
 				Tooltip: ""
 			}
 
 			RustedGladiatorHelmet: {
-				DisplayName: Rusted Gladiator Helmet
+				DisplayName: Ржавый Гладиаторский Шлем
 				Tooltip: ""
 			}
 
 			VisceralChestplate: {
-				DisplayName: Visceral Chestplate
+				DisplayName: Висцеральный Нагрудник
 				Tooltip: ""
 			}
 
 			VisceralGreaves: {
-				DisplayName: Visceral Greaves
+				DisplayName: Висцеральные Поножи
 				Tooltip: ""
 			}
 
 			VisceralHelmet: {
-				DisplayName: Visceral Helmet
+				DisplayName: Висцеральный Шлем
 				Tooltip: ""
 			}
 
 			WoodenMask: {
-				DisplayName: Wooden Mask
+				DisplayName: Деревянная Маска
 				Tooltip: ""
 			}
 
 			DioDagger: {
-				DisplayName: Dio Dagger
+				DisplayName: Нож Дио
 				Tooltip: ""
 			}
 
 			ChainedClaw: {
-				DisplayName: Chained Claw
+				DisplayName: Цепной Коготь
 				Tooltip: ""
 			}
 
 			ChainedKunai: {
-				DisplayName: Chained Kunai
+				DisplayName: Цепной Кунай
 				Tooltip: ""
 			}
 
 			HamonizedFirework: {
-				DisplayName: Hamonized Firework
+				DisplayName: Хамонизированный Феерверк
 				Tooltip: ""
 			}
 
 			HamonizedWaterBalloon: {
-				DisplayName: Hamonized Water Balloon
+				DisplayName: Хамонизированный Шар с Водой
 				Tooltip: ""
 			}
 
 			MetallicNunchucks: {
-				DisplayName: Metallic Nunchucks
+				DisplayName: Металлические Нунчаки
 				Tooltip: ""
 			}
 
 			SilkGloves: {
-				DisplayName: Silk Gloves
+				DisplayName: Шелковые Перчатки
 				Tooltip: ""
 			}
 
 			ThreadedGloves: {
-				DisplayName: Threaded Gloves
+				DisplayName: Перчатки с Резьбой
 				Tooltip: ""
 			}
 
 			OrnateGlassofWine: {
-				DisplayName: Ornate Glassof Wine
+				DisplayName: Украшенный Стакан Вина
 				Tooltip: ""
 			}
 
 			TatteredLetter: {
-				DisplayName: Tattered Letter
+				DisplayName: Потрепанное Письмо
 				Tooltip: ""
 			}
 
 			EntrailAbilities: {
-				DisplayName: Entrail Abilities
+				DisplayName: Способности Внутренностей
 				Tooltip: ""
 			}
 
 			KnifeWielder: {
-				DisplayName: Knife Wielder
+				DisplayName: Ножевые Способности Зомби
 				Tooltip: ""
 			}
 
 			Sunscreen: {
-				DisplayName: Sunscreen
+				DisplayName: Крем от Загара
 				Tooltip: ""
 			}
 
 			UltraSunscreen: {
-				DisplayName: Ultra Sunscreen
+				DisplayName: Ультра Крем от Загара
 				Tooltip: ""
 			}
 
 			VampireAbilities: {
-				DisplayName: Vampire Abilities
+				DisplayName: Вампирские Способности
 				Tooltip: ""
 			}
 
 			WitheringAbilities: {
-				DisplayName: Withering Abilities
+				DisplayName: Увядающие способности
 				Tooltip: ""
 			}
 
 			ZombieAbilities: {
-				DisplayName: Zombie Abilities
+				DisplayName: Способности Зомби
 				Tooltip: ""
 			}
 
@@ -3473,9 +3473,9 @@ Mods: {
 		}
 
 		NPCs: {
-			HighwayStar.DisplayName: Хайвев-Стар
-			MatureStrayCat.DisplayName: Взрослый Бродячий Кот
-			StrayCat.DisplayName: Бродячий Кот
+			HighwayStar.DisplayName: Хайвей-Стар
+			MatureStrayCat.DisplayName: Созревший Стрэй-Кэт
+			StrayCat.DisplayName: Стрэй-Кэт
 			ViralMiner.DisplayName: Вирусный Шахтер
 			Yoshihiro.DisplayName: Йошихиро
 			Yuya.DisplayName: Юя
@@ -3564,7 +3564,7 @@ Mods: {
 					FarFromHome: Я слишком далеко от дома.
 					LoveSpace: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LoveSpace}"
 					DislikeCrowded: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.DislikeCrowded}"
-					HateCrowded: I hate how crowded I am.
+					HateCrowded: Я ненавижу, когда рядом так тесно.
 					LoveBiome: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LoveBiome}"
 					LikeBiome: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LikeBiome}"
 					HateBiome: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.HateBiome}"
@@ -3794,20 +3794,20 @@ Mods: {
 		}
 
 		Tiles: {
-			// BloodForTheKingTile.MapEntry: Blood for the King
-			// IWouldntLoseTile.MapEntry: I Wouldn't Lose
-			// OfficersRegretTile.MapEntry: Officer's Regret
-			// QuietLifeTile.MapEntry: Quiet Life
-			// RemixTableTile.MapEntry: Remix Table
-			// ShotintheDarkTile.MapEntry: Shot in the Dark
-			// TarotTableTile.MapEntry: Tarot Table
-			// ViralMeteoriteTile.MapEntry: Viral Meteorite
-			// ViralMusicBoxTile.MapEntry: Viral Music Box
+			BloodForTheKingTile.MapEntry: Кровь за Короля
+			IWouldntLoseTile.MapEntry: Я не проиграю
+			OfficersRegretTile.MapEntry: Сожаление Офицера
+			QuietLifeTile.MapEntry: Спокойная Жизнь
+			RemixTableTile.MapEntry: Диджейский столик
+			ShotintheDarkTile.MapEntry: Выстрел в темноте
+			TarotTableTile.MapEntry: Стол Тарот
+			ViralMeteoriteTile.MapEntry: Вирусный Метеорит
+			ViralMusicBoxTile.MapEntry: Вирусная Музыкальная Шкатулочка
 		}
 
 		Keybinds: {
 			"Special Ability.DisplayName": Спец. Способность
-			// "Second Special Ability.DisplayName": Second  Special  Ability
+			"Second Special Ability.DisplayName": Вторая Спец. Способность
 			"Stand Out.DisplayName": Призыв Стенда
 			Pose.DisplayName: Поза
 			"Stand Auto Mode.DisplayName": Авто-Режим Стенда
@@ -3837,7 +3837,7 @@ Mods: {
 
 				AutomaticActivations: {
 					Label: Автоматическое Использование
-					Tooltip: Определяет, хотите ли вы, чтобы способности активировались автоматически, или нет. Например: Бомбы Киллер-Квин или Ножи (в Авто Режиме) За-Вардо
+					Tooltip: Определяет, хотите ли вы, чтобы способности активировались автоматически, или нет. Например: Бомбы Киллер-Квин или Ножи (в Авто Режиме) Зе-Ворлд
 				}
 
 				RespawnWithStandOut: {
@@ -3877,7 +3877,7 @@ Mods: {
 
 				ColorChangeEffects: {
 					Label: Эффекты Смены Цвета
-					Tooltip: Определяет, хотите ли вы видеть изменения цвета За-Вардо или нет.
+					Tooltip: Определяет, хотите ли вы видеть изменения цвета Зе-Ворлд или нет.
 				}
 
 				SecretReferences: {
@@ -3993,109 +3993,109 @@ Mods: {
 		}
 
 		NPCDialogue: {
-			// MarineBiologist1: Yare yare daze... I just can't have a normal day, can I
-			// MarineBiologist2: Now that Kira has been dealt with, I can go back to the SPW.
-			// MarineBiologist3: I came here looking for a stand user... Do you know who that might be?
-			// MarineBiologist4: Back in Egypt, my team and I had to kill a psychotic time-stopping vampire, You might have a similar issue here, {0}
-			// MarineBiologist5: All stand users eventually meet, I guess that's why I'm here
-			// Priest1: I sell stand discs to people who want them... Want one?
-			// Priest2: My White Snake is the only stand capable of defeating Star Platinum right now...
-			// Priest3: That boy will pay for ruining my perfect universe!
-			// Priest4: Weather Report and his stand... what a nuisance.
-			// Priest5: Jolyne will never see me coming after I obtain heaven...
-			// Priest6: You seem like you could've been a fitting servant for DIO... If only you were in Egypt at the time.
-			// Priest7: You know... I was able to get Star Platinum from Jotaro... Interested?
-			// Gambler1: Why don't you try to bet? C'mon, I'll even go easy on you!
-			// Gambler2: I should've played... How could I have been fooled by such an obvious bluff...
-			// Gambler3: I believe it was a gamblers instinct that led me to this goldmine of items.
-			// Gambler4: Cheating? It's only cheating if you're caught!
-			// Gambler5: I am D'Arby, the worlds greatest gambler!
-			// HamonMasterTrainingStart: Do you feel that? That is the power of your Hamon. Ask me whenever you feel like you're ready to learn something new, I've got lots of skills I can pass on to you.
-			// HamonMasterTrainingStartSpecial: Amazing! You truly have the capability to become a master Hamon User! Your untapped Hamon is far beyond what I had expected it to be. Tell me, were your predecessors Hamon Users too?
-			/* HamonmasterTrainPrompt:
+			MarineBiologist1: Яре-яре дазе... У меня просто не может быть нормального дня, не так ли
+			MarineBiologist2: Теперь, когда мы разобрались с Кирой, я могу вернуться в Фонд Спидвагона.
+			MarineBiologist3: Я пришел сюда в поисках хозяина Стенда... Ты случайно не знаешь, кто бы это мог быть?
+			MarineBiologist4: Там, в Египте, мне и моей команде пришлось убить вампира-психа, останавливающего время, возможно, у тебя здесь аналогичная проблема, {0}
+			MarineBiologist5: Все хозяева Стендов в конце концов встречаются, думаю, именно поэтому я здесь
+			Priest1: Я продаю диски Стендов людям, которые их хотят... Хочешь один?
+			Priest2: Мой Вайт-Снейк - единственный Стенд, способный победить Стар-Платинум...
+			Priest3: Тот мальчик заплатит за то, что разрушил мою идеальную вселенную!
+			Priest4: Визер-Репорт и его стенд... Большая проблема.
+			Priest5: Джолин никогда не увидит моего прихода после того, как я попаду в рай...
+			Priest6: Похоже, ты мог бы стать подходящим слугой для ДИО... Если бы ты был тогда в Египте.
+			Priest7: Знаешь... Мне удалось получить Стар-Платинум от Джотаро... Заинтересовался?
+			Gambler1: Почему бы тебе не попробовать сделать ставку? Давай, я даже буду с тобой помягче!
+			Gambler2: Я должен был играть... Как я мог попасться на такой очевидный блеф?..
+			Gambler3: Я думаю, что именно инстинкт азартного игрока привел меня к этой золотой жиле предметов.
+			Gambler4: Жульничество? Это будет жульничеством только если ты меня на этом поймаешь!
+			Gambler5: Я - Д'Арби, лучший игрок в азартные игры на всем белом свете!
+			HamonMasterTrainingStart: Ты это чувствуешь? В этом сила твоего Хамона. Спрашивай меня всякий раз, когда почувствуешь, что готов научиться чему-то новому, у меня есть много навыков, которыми я могу с тобой поделиться.
+			HamonMasterTrainingStartSpecial: Удивительно! У тебя действительно есть возможность стать мастером Хамона! Твой неиспользованный Хамон намного превосходит тот, что я ожидал. Скажи, твои предшественники тоже пользовались Хамоном?
+			HamonmasterTrainPrompt:
 				'''
-				Oh? You seem like you have untapped potential in you. Tell me, would you like to learn Hamon? Don't worry, I've trained some of the finest warriors there are in this world.
-				Bring me 5 Sun Droplets and I can show you how to take advantage of your unknown Hamon abilities.
-				''' */
-			// HamonMaster1: Excuse me, {0}, would you happen to have some wine, preferably in a bottle? I had some, but it spilled.
-			// HamonMaster2: I hope you are looking out for vampires, {0}. I have devoted my entire life to hunting them down.
-			// HamonMaster3: Welcome back, friend. Are you here to train in the ways of Hamon?
-			// HamonMaster4: Master Tonpetty told me I would meet my end if I completed my training... will it be here, in this strange land?
-			// HamonMaster5: When you have free time, could you come back? I made a salad, with copious amounts of pepper, of course, and nobody else wants it.
-			// HamonMasterEvil1: Something has changed about you... you have used the power of the Stone Mask for yourself, have you not? Get out of my sight.
-			// HamonMasterEvil2: You are a vampire now, are you not? How many people have you killed?! What did you say? 'How many breads have I eaten?' You monster.
+				Ох? Кажется, в тебе есть скрытый потенциал. Скажи мне, ты хотел бы обучиться Хамону? Не волнуйся, я обучил одних из лучших воинов, какие только есть в этом мире.
+				Принеси мне 5 Солнечных Капель, и я покажу тебе, как пользоваться твоими скрытыми способностями Хамона.
+				'''
+			HamonMaster1: Эй, {0}, у тебя случайно не найдется немного вина, желательно в бутылке? У меня было немного вина, но оно разлилось.
+			HamonMaster2: Я надеюсь, ты не дружишь с вампирами, {0}. Я посвятил всю свою жизнь охоте на них.
+			HamonMaster3: С возвращением, друг. Ты здесь для того, чтобы обучаться Хамону?
+			HamonMaster4: Мастер Тонпетти сказал мне, что я встречу свой конец, если завершу обучение... Произойдет ли это здесь, в этой чужой стране?
+			HamonMaster5: Когда у тебя будет свободное время, не мог бы ты вернуться? Я приготовил салат, конечно, с большим количеством перца, и никто не хочет его есть.
+			HamonMasterEvil1: Что-то в тебе изменилось... ты использовал силу Каменной Маски на себе, не так ли? Убирайся с глаз моих долой.
+			HamonMasterEvil2: Теперь ты вампир, не так ли? Сколько людей ты убил?! Что ты сказал? 'Сколько хлеба я съел?' Ты монстр.
 		}
 
 		NPCFlavorText: {
-			// MarineBiologist: Affiliate of the SpeedWagon Foundation and an expert in Stand research. He passed by for an unknown reason, or was he perhaps attracted here by a certain force?
-			// Gambler: Came all the way from Egypt after losing a life or death bet. He repeatedly promises to never cheat again.
-			// HamonMaster: A master of a certain ancient style called 'Hamon' in search of an apprentice to pass on his knowledge to. Loves red wine!
-			// Priest: A Priest visiting from Florida who came here after hearing of a certain someone's arrival. He says he's trying to achieve heaven... What does that even mean?
+			MarineBiologist: Партнер Фонда Спидвагона и эксперт по исследованию Стендов. Он проходил мимо по неизвестной причине, или, возможно, его привлекла сюда некая сила?
+			Gambler: Проделав весь этот путь из Египта, проиграв пари не на жизнь, а на смерть. Он неоднократно обещает никогда больше не жульничать.
+			HamonMaster: Обладатель некоего древнего боевого стиля под названием 'Хамон'. В поисках ученика, которому он мог бы передать свои знания. Обожает красное вино!
+			Priest: Священник, приехавший из Флориды, который прибыл сюда, услышав о прибытии некоего человека. Он говорит, что пытается попасть в рай... Что это вообще значит?
 		}
 
 		NPCButtonText: {
-			// StandHelp: Stand Help
-			// BuyStands: Buy Stands
-			// BuyItems: Buy Items
-			// Gamble: Gamble
-			// LearnSkills: Learn Hamon Skills
+			StandHelp: Помощь по Стендам
+			BuyStands: Купить Стенды
+			BuyItems: Купить Предметы
+			Gamble: Сыграть
+			LearnSkills: Обучиться Навыкам Хамона
 		}
 
 		MiscText: {
-			// HamonBarOOB: You can only choose numbers between 0-3!
-			// DioEvent: Dio's Minions have arrived!
-			// TestStandNotWorthy: You are not worthy.
-			// TimestopForceEnd: The user has left, and time has begun to move once more...
-			// StandSlotNoStand: There is no Stand in the Stand Slot!
-			// StandSlotFullMinions: There are no available minion slots!
-			// StandSlotSummonError: Something went wrong while summoning the Stand.
-			// PokerChipRevive: The chip has given you new life!
-			// CrazyDiamondTileWarning: Tile destruction limit reached!
-			// CrazyDiamongTargetOOR: That target is too far.
-			// EchoesEvolve: Oh? Echoes is evolving!
-			// EchoesMouseHint: Select a target with the mouse.
-			// EchoesTipOOR: The tip is out of reach!
-			// GoldExperienceRequiemMouseHint: Right-click an enemy to target.
-			// StoneFreeStringOOR: Your strings do not extend that far.
-			// AbilityWheelHint: *To use the Ability Wheel, use the numbers 1-x OR hover over the ability wheel with your cursor and scroll up or down!*
-			// GamblerCheatWin: *D'Arby is sweating a lot and is looking like very, very pale...\nPlease don't tell Jotaro! I'll give you 2x the money!
-			// GamblerCheatLose: I'm no cheater! You're accusing the me of the past! I'm a whole new gambler now!
-			// GamblerNoGameCheat: What am I cheating at? We're not even betting!
-			// GamblerNoBetWarning: It wouldn't be gambling without some loss and gain.
-			// GamblerActiveBetWarning: Before we start another gamble, let's finish this one first.
-			// GambleCardGameHint1: Click the card you'd like to switch out
-			// GamblerCheatHint: *D'Arby smiles...
-			// GamblerBetLose: Damn it... No! How is this possible!? Fine, just take the coins, I have much more anyway.
-			// GamblerBetWin: Thanks for the coins!
-			// ViralMeteoriteIntro1: A faint spiritual connection can be sensed nearby.
-			// ViralMeteoriteIntro2: Your mind and soul resonate with the area around you...
+			HamonBarOOB: Вы можете выбрать только 0-3!
+			DioEvent: Миньоны Дио прибыли!
+			TestStandNotWorthy: Вы недостоины.
+			TimestopForceEnd: Игрок вышел, и время снова пошло своим чередом...
+			StandSlotNoStand: В слоте для Стенда нет Стенда!
+			StandSlotFullMinions: Свободных слотов для миньонов не осталось!
+			StandSlotSummonError: Что-то пошло не так при вызове Стенда.
+			PokerChipRevive: Фишка подарила вам новую жизнь!
+			CrazyDiamondTileWarning: Достигнут лимит уничтожения плиток!
+			CrazyDiamongTargetOOR: Цель слишком далеко.
+			EchoesEvolve: Ох? Эхос эволюционировал!
+			EchoesMouseHint: Выберите цель с помощью мыши
+			EchoesTipOOR: Записка вне досягаемости!
+			GoldExperienceRequiemMouseHint: ПКМ на враге, чтобы нацелиться
+			StoneFreeStringOOR: Ваши нити не тянутся так далеко.
+			AbilityWheelHint: *Чтобы использовать колесо способностей, нажимайте цифры от 1 до X или наведите курсор на колесо способностей и прокрутите вверх или вниз!*
+			GamblerCheatWin: *Д'Арби сильно потеет и выглядит очень, очень бледным...\nПожалуйста, не рассказывай Джотаро! Я дам тебе в 2 раза больше денег!
+			GamblerCheatLose: Я не жулик! Ты обвиняешь прошлого меня! Теперь я совершенно новый игрок!
+			GamblerNoGameCheat: В чем я жульничал? Мы еще даже не играли!
+			GamblerNoBetWarning: Это не было бы азартной игрой без каких-либо потерь и выигрышей.
+			GamblerActiveBetWarning: Прежде чем мы сделаем новую ставку, давай сначала закончим эту игру.
+			GambleCardGameHint1: Нажмите на карту, которую вы хотите заменить
+			GamblerCheatHint: *Д'Арби улыбается...
+			GamblerBetLose: Черт... Нет! Как это возможно!? Ладно, просто забирай монеты, у меня их все равно еще много.
+			GamblerBetWin: Спасибо за монеты!
+			ViralMeteoriteIntro1: Слабая духовная связь чувствуется поблизости.
+			ViralMeteoriteIntro2: Ваши разум и душа резонируют с окружающим вас пространством...
 		}
 
 		JotaroCustomDialogue: {
-			// ArrowShard: You seem... reliable. Here, I want you to take this and use it on yourself when you can, I think you'll like what happens when you do.
+			ArrowShard: Ты кажешься... Надежным. Вот, я хочу, чтобы ты взял это и использовал на себе, когда сможешь. Я думаю, тебе понравится то, что произойдет, когда ты это сделаешь.
 			ViralMeteoriteTip: Ты тоже это чувствуешь? Кажется, будто какая-то сила тянет нас к метеориту. Это не обычный метеорит, мы должны немедленно найти его. Если этот метеорит окажется вирусным, то мы должны позаботиться об этом вирусе как можно скорее, пока он снова не попал не в те руки. Обязательно найди и проверь этот метеорит. Ищи его по всей поверхности земного шара. Если ты не сможешь его найти, проверь небесные острова и пропасти. Поторопись!
 			Hamon: Я мало что слышал об этом, но старик сказал мне, что Хамон - это универсальное использование солнечной энергии. Исходя из того, что он мне рассказал, Хамон может увеличить твои физические возможности и использоваться как в обороне, так и в нападении, причем исцеление является одним из его наиболее полезных применений. Если все это правда, то неудивительно, что старик прожил так долго.
 			StarPlatinumT1: Ты шутишь? Ты действительно спрашиваешь о моем Стенде? Ох... Что ж, думаю, я тот, кто знает о Стендах больше всех здесь. Я расскажу тебе все, что смогу.\nЯре-яре, ты только что пробудил Стар-Платинум? Я ожидал большего от своего подражателя. На своих первом и втором уровнях, Стар-Платинум - это ничто иное, как пара супер быстрых кулаков, но когда ты достигнешь третьего и четвертого уровней, все становится немного интереснее.
 			StarPlatinumT2: Теперь, на втором уровне, Стар-Платинум может использовать Стар-Фингер, атаку средней дальности, которую ты можешь использовать для атаки на расстоянии. Лично я редко использовал этот прием, но он может быть полезен в определенных ситуациях.
 			StarPlatinumT3: Твой Стар-Платинум становится все сильнее и сильнее. Альтернативой Стар-Фингер, о котором ты узнал не так давно, может быть удар по пуле. Стар-Платинум может выпустить пулю простым ударом по ней, и она будет превышать скорость выстрела из пистолета. Когда я использовал этот прием, это оказалось более надежной способностью.
-			StarPlatinumFinal: На четвертом уровне Стар-Платинум пробуждает свою дремлющую способность - Стар-Платинум: За-Вардо. Я узнал об этом во время своей поездки в Египет в 80-х годах, но даже я не знаю, почему и Стар-Платинум, и За-Вардо могут останавливать время, хотя в любом случае это определенно сработало в мою пользу.
+			StarPlatinumFinal: На четвертом уровне Стар-Платинум пробуждает свою дремлющую способность - Стар-Платинум: Зе-Ворлд. Я узнал об этом во время своей поездки в Египет в 80-х годах, но даже я не знаю, почему и Стар-Платинум, и Зе-Ворлд могут останавливать время, хотя в любом случае это определенно сработало в мою пользу.
 			HierophantGreenT1: Твой стенд... Он был у одного из моих старых друзей. 'Никто не может отразить изумрудный всплеск', - сказал он. Тебе решать, верно ли это утверждение или нет. \nТо, чего Хирофанту не хватает в силе, он заполняет количеством. Главная способность Хирофант-Грин - испускать тонну изумрудных осколков за раз, но, к сожалению, они наносят очень небольшой урон.
 			HierophantGreenT2: Теперь у тебя есть возможность стрелять проводами, которые обматывают и парализуют твоих врагов. Враги, запутанные в твоих проводах, некоторое время не смогут двигаться, так что используй это время с умом. Теперь Хирофант-Грином можно управлять на гораздо больших расстояниях, ты можешь воспользоваться этим, чтобы установить растяжки и стрелять с выгодных позиций.
 			HierophantGreenT3Final: Ох, 20-метровый изумрудный всплеск. Старик сказал мне, что мой старый друг использовал его во время боя с ДИО. Он устанавливает множество растяжек вокруг игрока, покрывая около 30 плиток, но ценой невозможности нормально использовать свой Хирофант-Грин.
-			TheWorldT1: ...Убери от меня эту штуку... Что ж, думаю, я мог бы немного рассказать тебе об этом Стенде, учитывая, что он того же типа, что и мой Стар-Платинум, но мне это не нравится. \nНа своем первом уровне, я думаю, За-Вардо сможет только наносить удары, как Стар-Платинум, становясь сильнее и быстрее на втором. Поговори со мной снова, когда он немного окрепнет.
-			TheWorldT2: Теперь, когда твой За-Вардо стал немного сильнее, я бы предположил, что он научился своей фирменной способности останавливать время, хотя я не уверен, почему он не научился этому раньше. Используй свой спец. клавишу, чтобы активировать способность.
-			TheWorldT3: Теперь, когда За-Вардо находится на третьем уровне, он может метать смертоносные ножи. Я почти уверен, что те монстры снаружи недостаточно умны, чтобы спрятать Шонен Джамп под одеждой, так что ножи будут довольно эффективны.
-			TheWorldFinal: Теперь это тот За-Вардо, которого я помню. Ты полностью изучил предел силы За-Вардо и теперь можешь остановить время на 9 секунд, бросая град ножей в своих врагов. Ты даже можешь швырять дорожные катки в своих врагов, пока время остановлено! Сделай мне одолжение и держись от меня подальше.
+			TheWorldT1: ...Убери от меня эту штуку... Что ж, думаю, я мог бы немного рассказать тебе об этом Стенде, учитывая, что он того же типа, что и мой Стар-Платинум, но мне это не нравится. \nНа своем первом уровне, я думаю, Зе-Ворлд сможет только наносить удары, как Стар-Платинум, становясь сильнее и быстрее на втором. Поговори со мной снова, когда он немного окрепнет.
+			TheWorldT2: Теперь, когда твой Зе-Ворлд стал немного сильнее, я бы предположил, что он научился своей фирменной способности останавливать время, хотя я не уверен, почему он не научился этому раньше. Используй свой спец. клавишу, чтобы активировать способность.
+			TheWorldT3: Теперь, когда Зе-Ворлд находится на третьем уровне, он может метать смертоносные ножи. Я почти уверен, что те монстры снаружи недостаточно умны, чтобы спрятать Шонен Джамп под одеждой, так что ножи будут довольно эффективны.
+			TheWorldFinal: Теперь это тот Зе-Ворлд, которого я помню. Ты полностью изучил предел силы Зе-Ворлд и теперь можешь остановить время на 9 секунд, бросая град ножей в своих врагов. Ты даже можешь швырять дорожные катки в своих врагов, пока время остановлено! Сделай мне одолжение и держись от меня подальше.
 			KillerQueenT1T2: Этот Стенд... Я уверен, что уничтожил его владельца... или, по крайней мере, это сделала 'скорая помощь'. Что ж, в любом случае, Киллер-Квин может превращать вещи в бомбы. Не физически, но прикосновение к любому предмету заставит того, кто к нему прикоснется, взорваться. \nКиллер-Квин может наносить шквал ударов, как и большинство Стендов такого типа, но он также может вызвать контролируемую детонацию на твердом... Блоке. Этот взрыв способен нанести урон врагам, но не земле. Кроме того, будь осторожен, чтобы не подорваться.
 			KillerQueenT3Final: Ты разблокировал способность - сердечный приступ, - у него нет слабых мест. Это маленькая штука, похожая на танк, которая преследует врагов, и даже мой Стар-Платинум не смог его уничтожить. Это совершенно уникальная способность... На четвертом уровне время восстановления для сердечного приступа уменьшается, и ты сможешь посылать его чаще.
 			KillerQueenBTD: Ты открыл для себя еще одну силу... Байт-Зе-Даст. Байт-Зе-Даст позволяет отмотать время назад к моменту, когда ты впервые активировал эту способность. Это полезно для уклонения от смертельных событий, которые, как ты знаешь, произойдут в будущем. Во всяком случае, теоретически, мы знаем так много только из-за того, как вел себя его первоначальный владелец перед своими... Последними мгновениями.
 			AchtungBaby: Чт... Честно говоря, я не собираюсь спрашивать, как это вообще возможно. Может, универсальный разрыв привел к тому, что Стенд перешел на солнцезащитные очки. В любом случае, этот Стенд делает тебя невидимым.
 			GoldExperienceT1: Ох, этот Стенд... Стенд, как там его звали, Харуно... нет, Джорно Джованны. Никогда не приходилось слишком часто расспрашивать его об этом. Что я точно знаю, так это то, что у него есть способность с огромным потенциалом - способность создавать жизнь. \nВ своем нынешнем состоянии Голд-Экспириенс может сделать не так уж много. На данный момент ты можешь создать лягушку, которая будет контратаковать любого, кто ударит вас. Странный способ отразить атаку, но, тем не менее, он работает.
 			GoldExperienceT2: Теперь Голд-Экспириенс открыл возможность создавать барьеры. Эти барьеры на самом деле являются деревьями, но они все равно обеспечивают защиту от нападений, как если бы они были стенами.
-			GoldExperienceT3: Ох, эта способность... теперь ты можешь активизировать чувства твоего врага так быстро, что у него появится ощущение выхода из тела, если ты понимаешь, к чему я клоню. Это также замедляет работу их физических тел. Наряду с этим, ты можешь создать бабочек, которые будут защищать добычу, которую несет враг, чтобы они не были уничтожены во время сражения с вами. Если ты не понимаешь, что я имею в виду, то это удваивает шансы получить добычу с врага.
+			GoldExperienceT3: Ох, эта способность... теперь ты можешь активизировать чувства твоего врага так быстро что у него появится ощущение выхода из тела, если ты понимаешь, к чему я клоню. Это также замедляет работу их физических тел. Наряду с этим, ты можешь создать бабочек, которые будут защищать добычу, которую несет враг, чтобы они не были уничтожены во время сражения с вами. Если ты не понимаешь, что я имею в виду, то это удваивает шансы получить добычу с врага.
 			GoldExperienceFinal: Возможно, лучшая способность Голд-Экспириенс, - восстановление конечностей, - была разблокирована. С помощью этой способности ты можешь восстановить свое здоровье, залечив свои раны. Остался только еще один шаг...
 			GoldExperienceRequiem: Итак, вот что происходит, когда стрела привязывается к Стенду. Голд-Экспириенс Реквием был выпущен на свободу, и его силы принадлежат тебе. Его новыми способностями являются многократное зацикливание смерти врага, а также возможность отменять действия врагов, которые прикоснулись к тебе. Когда это происходит, они возвращаются туда, откуда пришли.
-			TuskAct1: Таинственная сила Спина... это напоминает мне о Хамоне. В любом случае, у Таска есть способности, похожие на Стенд Эхо. С каждым новым уровнем Таск получает новую способность во время Спина. Цель каждого пользователя Спина - получить бесконечный Спин. Думаешь, ты сможешь это сделать, " + player.name + "? \nТаск был несколько слаб, когда все начиналось, он мог стрелять ногтями только как пулями из пистолета. Я имею в виду твои ногти на руках и ногах. Не волнуйся, они снова отрастут.
+			TuskAct1: Таинственная сила Спина... это напоминает мне о Хамоне. В любом случае, у Таска есть способности, похожие на Стенд Эхос. С каждым новым уровнем Таск получает новую способность во время Спина. Цель каждого пользователя Спина - получить бесконечный Спин. Думаешь, ты сможешь это сделать, " + player.name + "? \nТаск был несколько слаб, когда все начиналось, он мог стрелять ногтями только как пулями из пистолета. Я имею в виду твои ногти на руках и ногах. Не волнуйся, они снова отрастут.
 			TuskAct2: Таск 2 Акта познал силу Голден-Ректенгл и теперь может стрелять ногтями, которые можно направлять на цели. Ты приближаешься к бесконечному Спину.
 			TuskAct3: 3 Акт позволяет тебе выстрелить ногтем, что создает червоточину, через которую ты затем можешь пройти. Это позволяет совершать прыжки по врагам. Убедись, что ты стреляешь только в том случае, если у тебя нет сомнений.
 			TuskAct4: Таск 4 Акта обрел силу бесконечного Спина и может заставлять врагов... Бесконечно вращаться. Наряду с этим, Акт 4 теперь может проявляться в более сильной форме, чем в трех других Актах, что позволяет ему наносить удары по врагам. Однако загвоздка в том, что ты должен получить энергию вращения, используя Медленного Танцора... Но в любом случае, поздравляю с получением такой силы. Я уверен, что это был долгий и трудный путь.
@@ -4126,7 +4126,7 @@ Mods: {
 			TheHandFinal: Зе-Хенд достиг своего максимального потенциала и стал мощнее, чем когда-либо. Конечно, ты кажешься умнее предыдущего пользователя Зе-Хенд. Я не имею ввиду, что он был плохим ребенком или что-то в этом роде. Интересно, где он сейчас?..
 			GratefulDeadT1: Просто глядя на этот стенд, я чувствую как старею. Это способность Грейтфул-Дэд, так что будь осторожен, используя его рядом с людьми, которые близки тебе.\nСейчас Грейтфул-Дэд может только наносить удары. Не совсем необычно. Просто продолжай идти.
 			GratefulDeadT2: Теперь Грейтфул-Дэд может захватить цель и состарить ее. Время старения зависит от того, как долго ты держишь врага. Не обменивайся рукопожатиями.
-			GratefulDeadT3: Что ж, этот Стенд только что стал еще большей угрозой для любых твоих союзников, потому что теперь он может распространять эффект старения в виде тумана. Это происходит не так быстро, но теперь сразу несколько целей могут быть состарены.
+			GratefulDeadT3: Что ж, этот Стенд только что стал еще большей угрозой для любых твоих союзников, потому что теперь он может распространять эффект старения в виде тумана. Это происходит не так быстро но теперь сразу несколько целей могут быть состарены.
 			GratefulDeadFinal: Наконец, Грейтфул-Дэд обрел максимум своих сил. Просто... Держись от меня на расстоянии нескольких метров. У меня уже есть пара седых волосков.
 			LockT1T2: Ох. Зе-Лок. Мне жаль, что тебе приходится пользоваться им... Погоди-ка. Зе-Лок обладает способностью в буквальном смысле отягощать сердца других чувством вины. Используй его, и все, что причиняет тебе вред, начнет ощущать этот огромный вес. Некоторые вещи могут быть невосприимчивы к силе Зе-Лока, но их невосприимчивость можно преодолеть.
 			LockT3Final: Зе-Лок теперь может заставить других чувствовать себя виноватыми без каких-либо действий против тебя... Причиняя себе вред, ты передаешь вину ближайшим врагам. Используй эту способность с осторожностью.
@@ -4134,7 +4134,7 @@ Mods: {
 			WhitesnakeT2: Теперь Вайт-Снейк может выделять клейкое вещество, которое наносит урон врагам и прилипает к поверхностям. Это не самый приятный опыт для тех, кто пострадал от этого. Ты также заметишь, что теперь ты можешь отослать Вайт-Снейка подальше от себя, и что у него есть оружие. По мере того как ты будешь становиться сильнее, эта способность будет помогать тебе все больше и больше, имей это в виду.
 			WhitesnakeT3: Вайт-Снейк разблокировал возможность красть диски Стендов у противников. Если твой враг не является пользователем Стенда, то на несколько мгновений он потеряет способность мыслить. Если это так, то ты временно отключишь их Стенд - ты можшь сделать это, нажав и удерживая " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0]
 			WhitesnakeFinal: Из-за твоей раздражающей настойчивости, Вайт-Снейк достиг своего максимального потенциала. А теперь держи его подальше от меня... Я серьезно.
-			SilverChariotT1: Ох, Сильвер-Чариот. Еще один стенд, принадлежавший моему другу, товарищу по крестовому походу "Звездной пыли". Если ты думаешь, что у меня нелепая прическа, то тебе нужно увидеть его. В любом случае, Сильвер-Чариот владеет рапирой с молниеносной скоростью и убийственной точностью.\nНа данный момент Сильвер-Чариот может наносить удары только своей рапирой. Как бы невпечатляюще это ни звучало, удары наносятся чрезвычайно быстро, почти незаметно для глаза.
+			SilverChariotT1: Ох, Сильвер-Чариот. Еще один стенд, принадлежавший моему другу, товарищу по крестовому походу "Звездной пыли". Если ты думаешь, что у меня нелепая прическа, то тебе нужно увидеть его. В любом случае, Сильвер-Чариот владеет рапирой с молниеносной скоростью и убийственной точностью.\nНа данный момент Сильвер-Чариот может наносить удары только своей рапирой. Как бы невпечатляюще это ни звучало, удары наносятся чрезвычайно быстро почти незаметно для глаза.
 			SilverChariotT2: Вдобавок к своему колющему удару, Сильвер-Чариот теперь может отражать снаряды обратно в вашего врага с помощью своей рапиры, почти так же, как если бы играл в бейсбол или теннис.
 			SilverChariotT3: На этом этапе, Сильвер-Чариот теперь может сбросить свою броню и стать настолько быстрым, что сможет создавать остаточные изображения. Это позволяет Сильвер-Чариот двигаться значительно быстрее, но ты также получаешь больше урона. Используй эту способность с осторожностью.
 			SilverChariotFinal: Сильвер-Чариот достиг своего пика возможностей. По мощи этот Стенд соперничает с легендарными фехтовальщиками древности и твоими самыми жестокими врагами. Интересно, что произошло бы, если бы этот Стенд изменил форму или что-то в этом роде.
@@ -4167,10 +4167,10 @@ Mods: {
 			TowerOfGrayT2: Жук стал сильнее... Яре яре. Теперь он может двигаться с сумасшедшей скоростью, даже мой Стар-Платинум с трудом поспевает за ним. Тавер-Оф-Грей теперь должен быть способен пронзать врагов со скоростью пули. Это полезно, но, честно говоря, немного отвратительно.
 			TowerOfGrayT3: У старика, который обладал этим Стендом, были некоторые нездоровые наклонности. Ему нравилось вырывать языки у своих жертв, используя безумную точность для подлых удовольствий. Я до сих пор содрогаюсь при мысли о той ночи. Как бы то ни было, 'Тавер-Оф-Грей' способен вырывать языки сразу у множества людей, как неудачный шашлык-кебаб... Просто не бери в голову подобных идей, ладно?
 			TowerOfGrayFinal: Похоже, ты достиг наивысшего потенциала своего Стенда. Этот прокалывающий язык - оружие, которое было бы глупо игнорировать. А теперь, если это все, я отправлюсь в путь. Я бы хотел держаться подальше от этой штуки.
-			EchoesAct0: Хммм? Это что, яйцо? Погоди-ка, я уже видел его раньше... Может это он? Да, это Эхо! Или, по крайней мере, так будет. Если ты хочешь получить больше от этого Стенда, тебе придется расти вместе с ним. Тебе понадобится сильная воля, чтобы эволюционировать, и немалая храбрость, чтобы привести это яйцо в бой.
-			EchoesAct1: Я удивлен, что ты зашел так далеко. Похоже, я недооценил твою силу воли. Это Эхо 1 акта. Хотя он может быть слабым, способность Эхо - это то, в чем заключается его истинная сила. Ты должен уметь создавать звуковые эффекты для тех, к кому прикасаешься. Это может либо ослабить врага, либо успокоить друга. Что бы ты ни делал, просто не забудь немного пошуметь. Если ты хочешь еще больше развить свои способности, я бы порекомендовал принять участие с 1 актом в опасной схватке. Может быть, попробовать те жуткие механические глаза, которые я видел летящими в небе.
-			EchoesAct2: Ты выжил. Отлично. Теперь все становится интереснее. Эхо 2 акта способен использовать твои звуковые эффекты и заставить их нанести реальный ущерб. Используя кончик хвоста, ты сможешь разместить эти звуковые эффекты там, где захочешь. Ты должен быть в состоянии лучше контролировать поле боя. Однако, если ты хочешь еще больше расширить свои возможности, тебе придется столкнуться с самой серьезной проблемой на данный момент. Кое-кто рассказал мне об одном причудливом храме под джунглями. Попробуй проверить его.
-			EchoesAct3: Ты вырос. Это Эхо, акт 3, его окончательная форма! Ты вскоре обнаружишь, что эта форма в значительной степени заменяет дальность действия на мощность. Теперь у тебя должна быть возможность использовать 'Три-Фриз'! Это делает одиночную мишень чрезвычайно тяжелой, удерживая ее на месте. Это надежная способность. Твоя тяжелая работа принесла свои плоды. Если когда-нибудь придет время, я надеюсь, что смогу положиться на тебя.
+			EchoesAct0: Хммм? Это что, яйцо? Погоди-ка, я уже видел его раньше... Может это он? Да, это Эхос! Или, по крайней мере, так будет. Если ты хочешь получить больше от этого Стенда, тебе придется расти вместе с ним. Тебе понадобится сильная воля, чтобы эволюционировать, и немалая храбрость, чтобы привести это яйцо в бой.
+			EchoesAct1: Я удивлен, что ты зашел так далеко. Похоже, я недооценил твою силу воли. Это Эхос 1 акта. Хотя он может быть слабым, способность Эхос - это то, в чем заключается его истинная сила. Ты должен уметь создавать звуковые эффекты для тех, к кому прикасаешься. Это может либо ослабить врага, либо успокоить друга. Что бы ты ни делал, просто не забудь немного пошуметь. Если ты хочешь еще больше развить свои способности, я бы порекомендовал принять участие с 1 актом в опасной схватке. Может быть, попробовать те жуткие механические глаза, которые я видел летящими в небе.
+			EchoesAct2: Ты выжил. Отлично. Теперь все становится интереснее. Эхос 2 акта способен использовать твои звуковые эффекты и заставить их нанести реальный ущерб. Используя кончик хвоста, ты сможешь разместить эти звуковые эффекты там, где захочешь. Ты должен быть в состоянии лучше контролировать поле боя. Однако, если ты хочешь еще больше расширить свои возможности, тебе придется столкнуться с самой серьезной проблемой на данный момент. Кое-кто рассказал мне об одном причудливом храме под джунглями. Попробуй проверить его.
+			EchoesAct3: Ты вырос. Это Эхос, акт 3, его окончательная форма! Ты вскоре обнаружишь, что эта форма в значительной степени заменяет дальность действия на мощность. Теперь у тебя должна быть возможность использовать 'Три-Фриз'! Это делает одиночную мишень чрезвычайно тяжелой, удерживая ее на месте. Это надежная способность. Твоя тяжелая работа принесла свои плоды. Если когда-нибудь придет время, я надеюсь, что смогу положиться на тебя.
 			StandHelpText0: Установи Стенд в 'Stand slot', затем нажми "Stand help", и я расскажу тебе, что он может делать и как получить его уровни, или продолжайте нажимать "Stand help", и я расскажу тебе, как получить определенные предметы и выполнить определенные действия.
 			StandHelpText1: Чтобы использовать Спец. способности Стенда, в настройках управления тебе нужно привязать клавишу к "JoJoStands: Special", затем, когда стенд активирован, нажми клавишу, чтобы использовать Спец. способности
 			StandHelpText2: Стрелы Реквиема можно создать, получив вирусную жемчужину и объединив ее со стрелой Стенда. Это происходит потому, что все задействованные вирусные метеориты начинают трансформироваться и все вместе находят другое применение.

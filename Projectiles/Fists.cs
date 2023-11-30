@@ -242,7 +242,7 @@ namespace JoJoStands.Projectiles
                     target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
             }
 
-            if (standType == GoldExperienceRequiem)
+            else if (standType == GoldExperienceRequiem)
             {
                 target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
                 if (mPlayer.backToZeroActive)
@@ -252,28 +252,13 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (standType == StickyFingers)
+            else if (standType == StickyFingers)
             {
                 target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
                 target.AddBuff(ModContent.BuffType<Zipped>(), (2 * (int)standTier) * 60);
             }
 
-            if (standType == KillerQueen)
-            {
-                if (Main.myPlayer == Projectile.owner)
-                {
-                    if (standTier == 1)
-                        (Main.projectile[extraInfo1].ModProjectile as KillerQueenStandT1).autoModeTaggedTargetIndex = target.whoAmI;
-                    else if (standTier == 2)
-                        (Main.projectile[extraInfo1].ModProjectile as KillerQueenStandT2).autoModeTaggedTargetIndex = target.whoAmI;
-                    else if (standTier == 3)
-                        (Main.projectile[extraInfo1].ModProjectile as KillerQueenStandT3).autoModeTaggedTargetIndex = target.whoAmI;
-                    else if (standTier == 4)
-                        (Main.projectile[extraInfo1].ModProjectile as KillerQueenStandFinal).autoModeTaggedTargetIndex = target.whoAmI;
-                }
-            }
-
-            if (standType == KingCrimson)
+            else if (standType == KingCrimson)
             {
                 JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
                 modifiers.FinalDamage *= jojoNPC.kingCrimsonDonutMultiplier;
@@ -288,10 +273,10 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (standType == TheHand)
+            else if (standType == TheHand)
                 target.AddBuff(ModContent.BuffType<MissingOrgans>(), (4 + (int)standTier) * 60);
 
-            if (standType == TowerOfGray)
+            else if (standType == TowerOfGray)
             {
                 if (mPlayer.towerOfGrayDamageMult != 1f)
                 {
@@ -300,20 +285,20 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (standType == GratefulDead)
+            else if (standType == GratefulDead)
             {
                 target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
                 SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 8, player.whoAmI);
                 target.AddBuff(ModContent.BuffType<Aging>(), (7 + ((int)standTier * 2)) * 60);
             }
 
-            if (standType == Whitesnake)
+            else if (standType == Whitesnake)
             {
                 if (Main.rand.Next(1, 100 + 1) >= 94)
                     target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
             }
 
-            if (standType == SilverChariot)
+            else if (standType == SilverChariot)
             {
                 if (Main.rand.Next(1, 100 + 1) >= 75)
                 {
@@ -322,7 +307,7 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (standType == CrazyDiamond && mPlayer.crazyDiamondRestorationMode && !target.HasBuff(ModContent.BuffType<ImproperRestoration>()))
+            else if (standType == CrazyDiamond && mPlayer.crazyDiamondRestorationMode && !target.HasBuff(ModContent.BuffType<ImproperRestoration>()))
             {
                 target.AddBuff(ModContent.BuffType<Restoration>(), 60);
                 target.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondPunchCount += 1;
@@ -342,16 +327,16 @@ namespace JoJoStands.Projectiles
                 }
             }
 
-            if (standType == Cream)
+            else if (standType == Cream)
                 target.AddBuff(ModContent.BuffType<MissingOrgans>(), 2*(int)standTier * 60);
 
-            if (!target.boss && standType != TowerOfGray)
+            else if (standType != TowerOfGray && !target.boss)
             {
                 target.velocity.X *= 0.2f;
                 SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 0);
             }
 
-            if (standType == Echoes)
+            else if (standType == Echoes)
             {
                 if (mPlayer.echoesTier == 3)
                 {

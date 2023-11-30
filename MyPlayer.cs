@@ -547,10 +547,9 @@ namespace JoJoStands
             }
             if (JoJoStands.SpecialHotKey.Current && standAccessory)
             {
-                if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
-                {
+                if ((StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>()) && !Player.HasBuff<AbilityCooldown>())
                     Player.AddBuff(ModContent.BuffType<CenturyBoyBuff>(), 2, true);
-                }
+
                 if (StandSlot.SlotItem.type == ModContent.ItemType<LockT3>() && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
                     for (int n = 0; n < Main.maxNPCs; n++)
@@ -807,11 +806,12 @@ namespace JoJoStands
                 stickyHandHealthLossTimer--;
             if (standOut)
             {
-                if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
-                    centuryBoyActive = true;
+                if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>())
+                    standTier = 1;
+                else if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
+                    standTier = 2;
             }
-            if (StandSlot.SlotItem.type != ModContent.ItemType<CenturyBoyT1>() && StandSlot.SlotItem.type != ModContent.ItemType<CenturyBoyT2>() && standOut)
-                centuryBoyActive = false;
+            centuryBoyActive = standOut && (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>());
             if (standAccessory)
             {
                 Player.slotsMinions += 1;
@@ -1127,6 +1127,7 @@ namespace JoJoStands
                 if (tuskShootCooldown > 0)
                     tuskShootCooldown--;
 
+                standName = "TuskAct" + equippedTuskAct;
                 if (tuskActNumber <= 3)
                 {
                     if (Player.ownedProjectileCounts[Mod.Find<ModProjectile>("TuskAct" + tuskActNumber + "Pet").Type] <= 0)
@@ -1783,7 +1784,6 @@ namespace JoJoStands
             creamDash = false;
             creamFrame = 0;
 
-            standTier = 0;
             echoesTier = 0;
             stickyFingersAmbushMode = false;
 
@@ -1946,8 +1946,8 @@ namespace JoJoStands
                     standDodgeGuarantee--;
                 return true;
             }
-            if (standControlStyle == StandControlStyle.Manual && standOut && Player.shadowDodge)
-                return true;
+            /*if (standControlStyle == StandControlStyle.Manual && standOut && Player.shadowDodge)
+                return true;*/
             if (Player.HasBuff(ModContent.BuffType<SwanSong>()))
                 return true;
             if (Player.HasBuff<ZipperDodge>() && Player.whoAmI == Main.myPlayer)

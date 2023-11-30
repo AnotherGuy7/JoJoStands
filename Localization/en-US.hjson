@@ -1312,6 +1312,8 @@ Mods: {
 				Tooltip:
 					'''
 					Use the special ability key to make yourself immune to damage, but unable to move or use items.
+					This ability can only be used for up to 30s.
+					Ability Cooldown time is based on use time.
 					Used in Stand Slot.
 					'''
 			}
@@ -1321,7 +1323,10 @@ Mods: {
 				Tooltip:
 					'''
 					Use the special ability key to make yourself immune to damage, but unable to move or use items.
+					This ability can only be used for up to 1m.
 					Special + Right-click: Set off an explosion! (Dynamite required)
+					This explosion carries triple the damage of your highest-damage weapon.
+					Ability Cooldown time is based on use time.
 					Used in Stand Slot.
 					'''
 			}
