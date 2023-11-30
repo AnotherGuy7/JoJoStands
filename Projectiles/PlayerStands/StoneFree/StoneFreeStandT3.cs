@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.StoneFree
@@ -111,7 +112,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
                                     if (Vector2.Distance(firstStringPos, Main.MouseWorld) >= MaxTrapDistance)
                                     {
                                         stringConnectorPlaced = false;
-                                        Main.NewText("Your strings do not extend that far.");
+                                        Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.StoneFreeStringOOR").Value);
                                         return;
                                     }
 

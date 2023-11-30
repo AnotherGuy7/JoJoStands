@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -41,7 +42,7 @@ namespace JoJoStands.Items
             if (Main.mouseRight && !Main.dayTime && NPC.downedBoss1 && !JoJoStandsWorld.VampiricNight)
             {
                 JoJoStandsWorld.VampiricNight = true;
-                Main.NewText("Dio's Minions have arrived!", new Color(50, 255, 130));
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.DioEvent").Value, new Color(50, 255, 130));
                 SoundStyle item15 = SoundID.Item15;
                 item15.Pitch = -1.9f;
                 SoundEngine.PlaySound(item15, player.Center);

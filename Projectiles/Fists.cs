@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -142,7 +143,7 @@ namespace JoJoStands.Projectiles
                                     {
                                         if (mPlayer.crazyDiamondMessageCooldown <= 0)
                                         {
-                                            Main.NewText("Tile destruction limit reached!");
+                                            Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.CrazyDiamondTileWarning").Value);
                                             mPlayer.crazyDiamondMessageCooldown += 180;
                                         }
                                     }
@@ -150,7 +151,7 @@ namespace JoJoStands.Projectiles
                             }
                             if (mPlayer.crazyDiamondDestroyedTileData.Count < 100 * standTier && mPlayer.crazyDiamondMessageCooldown <= 0 && targetTile.TileType == TileID.LihzahrdBrick)
                             {
-                                Main.NewText("Tile is Unbreakable");
+                                Main.NewText("Tile is Unbreakable.");
                                 mPlayer.crazyDiamondMessageCooldown += 180;
                             }
                         }

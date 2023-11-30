@@ -1,3 +1,4 @@
+using Humanizer;
 using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Items.Hamon;
 using JoJoStands.Items.Vampire;
@@ -8,6 +9,7 @@ using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.NPCs.TownNPCs
@@ -56,7 +58,7 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-                new FlavorTextBestiaryInfoElement("A master of a certain ancient style called 'Hamon' in search of an apprentice to pass on his knowledge to. Loves red wine!")
+                new FlavorTextBestiaryInfoElement(Language.GetText("Mods.JoJoStands.NPCFlavorText.HamonMaster").Value)
             });
         }
 
@@ -69,7 +71,7 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = "Learn Skills";
+            button = Language.GetText("Mods.JoJoStands.NPCButtonText.LearnSkills").Value;
         }
 
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)
@@ -92,18 +94,17 @@ namespace JoJoStands.NPCs.TownNPCs
                     hPlayer.skillPointsAvailable = 1;
 
                     if (Main.rand.Next(1, 3 + 1) != 1)
-                        Main.npcChatText = "Do you feel that? That is the power of your Hamon. Ask me whenever you feel like you're ready to learn something new, I've got lots of skills I can pass on to you.";
+                        Main.npcChatText = Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMasterTrainingStart").Value;
                     else
                     {
                         hPlayer.skillPointsAvailable = 3;
-                        Main.npcChatText = "Amazing! You truly have the capability to become a master Hamon User! Your untapped Hamon is far beyond what I had expected it to be. Tell me, were your predecessors Hamon Users too?";
+                        Main.npcChatText = Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMasterTrainingStartSpecial").Value;
                     }
                     HamonBar.ShowHamonBar();
                 }
                 else
                 {
-                    Main.npcChatText = "Oh? You seem like you have untapped potential in you. Tell me, would you like to learn Hamon? Don't worry, I've trained some of the finest warriors there are in this world.\n" +
-                                        "Bring me 5 Sun Droplets and I can show you how to take advantage of your unknown Hamon abilities.";
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMasterTrainPrompt").Value;
                 }
             }
         }
@@ -114,20 +115,20 @@ namespace JoJoStands.NPCs.TownNPCs
             VampirePlayer vPlayer = player.GetModPlayer<VampirePlayer>();
             if (!vPlayer.vampire)
             {
-                switch (Main.rand.Next(0, 4 + 1))
+                switch (Main.rand.Next(0, 3 + 1))
                 {
                     case 0:
-                        return "Excuse me, " + player.name + ", would you happen to have some wine, preferably in a bottle? I had some, but it spilled.";
+                        return Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMaster1").Value.FormatWith(player.name);
                     case 1:
-                        return "I hope you are looking out for vampires, " + player.name + ". I have devoted my entire life to hunting them down.";
+                        return Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMaster2").Value.FormatWith(player.name);
                     case 2:
-                        return "Welcome back, friend. Are you here to train in the ways of Hamon?";
+                        return Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMaster3").Value;
                     case 3:
-                        return "Master Tonpetty told me I would meet my end if I completed my training... will it be here, in this strange land?";
+                        return Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMaster4").Value;
                     case 4:
-                        return "When you have free time, could you come back? I made a salad, with copious amounts of pepper, of course, and nobody else wants it.";
-                    default:        //When would this one even appear?
-                        return "When you have free time, could you come back? I made a salad, with copious amounts of pepper, of course, and nobody else wants it.";
+                        return Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMaster5").Value;
+                    default:
+                        return Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMaster5").Value;
                 }
             }
             else
@@ -135,11 +136,11 @@ namespace JoJoStands.NPCs.TownNPCs
                 switch (Main.rand.Next(0, 1 + 1))
                 {
                     case 0:
-                        return "Something has changed about you... you have used the power of the Stone Mask for yourself, have you not? Get out of my sight.";
+                        return Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMasterEvil1").Value;
                     case 1:
-                        return "You are a vampire now, are you not? How many people have you killed?! What did you say? 'How many breads have I eaten?' You monster.";
+                        return Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMasterEvil2").Value;
                     default:
-                        return "Something has changed about you... you have used the power of the Stone Mask for yourself, have you not? Get out of my sight.";
+                        return Language.GetText("Mods.JoJoStands.NPCDialogue.HamonMasterEvil2").Value;
                 }
             }
         }

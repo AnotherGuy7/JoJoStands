@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.World
@@ -23,7 +24,7 @@ namespace JoJoStands.World
                 if (!JoJoStandsWorld.VisitedViralMeteorite)
                 {
                     JoJoStandsWorld.VisitedViralMeteorite = true;
-                    Main.NewText("Your mind and soul resonate with the area around you...", JoJoStandsWorld.WorldEventTextColor);
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.ViralMeteoriteIntro2").Value, JoJoStandsWorld.WorldEventTextColor);
                 }
             }
         }

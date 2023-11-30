@@ -3974,7 +3974,7 @@ Mods: {
 				}
 
 				PvPMode: {
-					Label: Pv P Mode
+					Label: PvP Mode
 					Tooltip:
 						'''
 						Determines whether or not to enable PvP interactions and damage calculations.
@@ -3993,12 +3993,93 @@ Mods: {
 		}
 
 		NPCDialogue: {
+			MarineBiologist1: Yare yare daze... I just can't have a normal day, can I
+			MarineBiologist2: Now that Kira has been dealt with, I can go back to the SPW.
+			MarineBiologist3: I came here looking for a stand user... Do you know who that might be?
+			MarineBiologist4: Back in Egypt, my team and I had to kill a psychotic time-stopping vampire, You might have a similar issue here, {0}
+			MarineBiologist5: All stand users eventually meet, I guess that's why I'm here
+			Priest1: I sell stand discs to people who want them... Want one?
+			Priest2: My White Snake is the only stand capable of defeating Star Platinum right now...
+			Priest3: That boy will pay for ruining my perfect universe!
+			Priest4: Weather Report and his stand... what a nuisance.
+			Priest5: Jolyne will never see me coming after I obtain heaven...
+			Priest6: You seem like you could've been a fitting servant for DIO... If only you were in Egypt at the time.
+			Priest7: You know... I was able to get Star Platinum from Jotaro... Interested?
+			Gambler1: Why don't you try to bet? C'mon, I'll even go easy on you!
+			Gambler2: I should've played... How could I have been fooled by such an obvious bluff...
+			Gambler3: I believe it was a gamblers instinct that led me to this goldmine of items.
+			Gambler4: Cheating? It's only cheating if you're caught!
+			Gambler5: I am D'Arby, the worlds greatest gambler!
+			HamonMasterTrainingStart: Do you feel that? That is the power of your Hamon. Ask me whenever you feel like you're ready to learn something new, I've got lots of skills I can pass on to you.
+			HamonMasterTrainingStartSpecial: Amazing! You truly have the capability to become a master Hamon User! Your untapped Hamon is far beyond what I had expected it to be. Tell me, were your predecessors Hamon Users too?
+			HamonmasterTrainPrompt:
+				'''
+				Oh? You seem like you have untapped potential in you. Tell me, would you like to learn Hamon? Don't worry, I've trained some of the finest warriors there are in this world.
+				Bring me 5 Sun Droplets and I can show you how to take advantage of your unknown Hamon abilities.
+				'''
+			HamonMaster1: Excuse me, {0}, would you happen to have some wine, preferably in a bottle? I had some, but it spilled.
+			HamonMaster2: I hope you are looking out for vampires, {0}. I have devoted my entire life to hunting them down.
+			HamonMaster3: Welcome back, friend. Are you here to train in the ways of Hamon?
+			HamonMaster4: Master Tonpetty told me I would meet my end if I completed my training... will it be here, in this strange land?
+			HamonMaster5: When you have free time, could you come back? I made a salad, with copious amounts of pepper, of course, and nobody else wants it.
+			HamonMasterEvil1: Something has changed about you... you have used the power of the Stone Mask for yourself, have you not? Get out of my sight.
+			HamonMasterEvil2: You are a vampire now, are you not? How many people have you killed?! What did you say? 'How many breads have I eaten?' You monster.
+		}
+
+		NPCFlavorText: {
+			MarineBiologist: Affiliate of the SpeedWagon Foundation and an expert in Stand research. He passed by for an unknown reason, or was he perhaps attracted here by a certain force?
+			Gambler: Came all the way from Egypt after losing a life or death bet. He repeatedly promises to never cheat again.
+			HamonMaster: A master of a certain ancient style called 'Hamon' in search of an apprentice to pass on his knowledge to. Loves red wine!
+			Priest: A Priest visiting from Florida who came here after hearing of a certain someone's arrival. He says he's trying to achieve heaven... What does that even mean?
+		}
+
+		NPCButtonText: {
+			StandHelp: Stand Help
+			BuyStands: Buy Stands
+			BuyItems: Buy Items
+			Gamble: Gamble
+			LearnSkills: Learn Hamon Skills
+		}
+
+		MiscText: {
+			HamonBarOOB: You can only choose numbers between 0-3!
+			DioEvent: Dio's Minions have arrived!
+			TestStandNotWorthy: You are not worthy.
+			TimestopForceEnd: The user has left, and time has begun to move once more...
+			StandSlotNoStand: There is no Stand in the Stand Slot!
+			StandSlotFullMinions: There are no available minion slots!
+			StandSlotSummonError: Something went wrong while summoning the Stand.
+			PokerChipRevive: The chip has given you new life!
+			CrazyDiamondTileWarning: Tile destruction limit reached!
+			CrazyDiamongTargetOOR: That target is too far.
+			EchoesEvolve: Oh? Echoes is evolving!
+			EchoesMouseHint: Select a target with the mouse.
+			EchoesTipOOR: The tip is out of reach!
+			GoldExperienceRequiemMouseHint: Right-click an enemy to target.
+			StoneFreeStringOOR: Your strings do not extend that far.
+			AbilityWheelHint: *To use the Ability Wheel, use the numbers 1-x OR hover over the ability wheel with your cursor and scroll up or down!*
+			GamblerCheatWin: *D'Arby is sweating a lot and is looking like very, very pale...\nPlease don't tell Jotaro! I'll give you 2x the money!
+			GamblerCheatLose: I'm no cheater! You're accusing the me of the past! I'm a whole new gambler now!
+			GamblerNoGameCheat: What am I cheating at? We're not even betting!
+			GamblerNoBetWarning: It wouldn't be gambling without some loss and gain.
+			GamblerActiveBetWarning: Before we start another gamble, let's finish this one first.
+			GambleCardGameHint1: Click the card you'd like to switch out
+			GamblerCheatHint: *D'Arby smiles...
+			GamblerBetLose: Damn it... No! How is this possible!? Fine, just take the coins, I have much more anyway.
+			GamblerBetWin: Thanks for the coins!
+			ViralMeteoriteIntro1: A faint spiritual connection can be sensed nearby.
+			ViralMeteoriteIntro2: Your mind and soul resonate with the area around you...
 		}
 
 		JotaroCustomDialogue: {
+			ArrowShard: You seem... reliable. Here, I want you to take this and use it on yourself when you can, I think you'll like what happens when you do.
 			ViralMeteoriteTip: Did you feel that too? It felt as if a certain force were pulling us toward the meteor. That is no ordinary meteor, we must find it immediately. If that meteorite happened to be a Viral Meteorite, we must take care of that virus as soon as possible before it falls into the wrong hands again. Make sure to check the entire surface of the world for it. If you can't find it, check your sky islands and chasms as well. Hurry!
 			Hamon: I haven't heard much about it, but that old man tells me that Hamon is a versatile use of sun-like energy. From what he's told me, it can increase your physical capabilities and be used defensively or offensively, healing being one of its most useful uses. If that's all true, it's no wonder that man has lived this long.
-			StarPlatinumT1: You trying to mock me by asking about my own stand? What a pain... Well, I guess I'd be the one to know the most about it. I'll tell you what I can.\nGood grief, you've only just awoken Star Platinum? I expected better of a copycat like yourself. In its first or second tier, Star Platinum is nothing but a glorified pair of floating fists, but things get a bit more interesting as you reach its third and fourth tier.
+			StarPlatinumT1:
+				'''
+				You trying to mock me by asking about my own stand? What a pain... Well, I guess I'd be the one to know the most about it. I'll tell you what I can.
+				Good grief, you've only just awoken Star Platinum? I expected better of a copycat like yourself. In its first or second tier, Star Platinum is nothing but a glorified pair of floating fists, but things get a bit more interesting as you reach its third and fourth tier.
+				'''
 			StarPlatinumT2: Now in its second tier, Star Platinum has the ability to use Star Finger, a medium-range attack that you can use to attack from a distance. I've personally rarely used this move, but it can be useful in certain situations.
 			StarPlatinumT3: Your Star Platinum just keeps getting stronger and stronger. An alternative to the Star Finger you learned not long ago could be flicking bullets. Star Platinum can launch a bullet with a simple flick at a speed faster than that of a gun. It ended up being a more reliable ability when I used it.
 			StarPlatinumFinal: At its fourth tier, Star Platinum awakens its dormant ability, Star Platinum: The World. I learned this on my trip to Egypt in the 80s, but even I don't know why both Star Platinum and The World can stop time, though it sure worked out in my favor either way.

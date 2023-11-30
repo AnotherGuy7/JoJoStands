@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -239,14 +240,14 @@ namespace JoJoStands.UI
                 accuseOfCheating = true;
                 won = cheating;
                 if (won)
-                    Main.NewText("*D'Arby is sweating a lot and is looking like very, very pale...\nPlease don't tell Jotaro! I'll give you 2x the money!");
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerCheatWin").Value);
                 else
-                    Main.NewText("I'm no cheater! You're accusing the me of the past! I'm a whole new gambler now!");
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerCheatLose").Value);
                 GameEnd();
 
             }
             if (chosenGame == 0)
-                Main.NewText("What am I cheating at? We're not even betting!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerNoGameCheat").Value);
         }
 
         private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -263,10 +264,10 @@ namespace JoJoStands.UI
                 chosenGame = Main.rand.Next(1, 4);
 
             else
-                Main.NewText("It wouldn't be gambling without some loss and gain.");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerNoBetWarning").Value);
 
             if (chosenGame != 0)
-                Main.NewText("We are already betting... Can't you see that?");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerActiveBetWarning").Value);
         }
 
         private void RockButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -296,7 +297,7 @@ namespace JoJoStands.UI
 
         private void DrawPileClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            Main.NewText("Click the card you'd like to switch out");
+            Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GambleCardGameHint1").Value);
             if (!swappedOutCard)
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
@@ -559,7 +560,7 @@ namespace JoJoStands.UI
             if (resultCounter >= 180)
             {
                 if (!accuseOfCheating && cheating)
-                    Main.NewText("*D'Arby smiles...");
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerCheatHint").Value);
 
                 GameEnd();
             }
@@ -586,14 +587,14 @@ namespace JoJoStands.UI
                     player.QuickSpawnItem(null, ItemID.GoldCoin, gCoins * multiplier);
 
                 if (!cheating)
-                    Main.NewText("Dang it... No! How is this possible!? Fine, just take the coins, I have much more anyway.");
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerBetLose").Value);
                 pCoins = 0;
                 gCoins = 0;
 
             }
             else
             {
-                Main.NewText("Thanks for the coins!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerBetWin").Value);
                 for (int c = 0; c < Main.InventorySlotsTotal; c++)
                 {
                     if (player.inventory[c].type == ItemID.PlatinumCoin)

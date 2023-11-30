@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
@@ -189,7 +190,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                             {
                                 if (Vector2.Distance(Projectile.Center, npc.Center) > 200f)
                                 {
-                                    Main.NewText("That target is too far.");
+                                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.CrazyDiamondTargetOOR").Value);
                                     break;
                                 }
 
@@ -223,7 +224,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                                     {
                                         if (Vector2.Distance(Projectile.Center, otherPlayer.Center) > 200f)
                                         {
-                                            Main.NewText("That target is too far.");
+                                            Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.CrazyDiamondTargetOOR").Value);
                                             break;
                                         }
 

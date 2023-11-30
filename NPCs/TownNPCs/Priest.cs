@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indicate the folder where it is to be read from, so you the texture will load correctly
@@ -52,7 +53,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
-                new FlavorTextBestiaryInfoElement("A Priest visiting from Florida who came here after hearing of a certain someone's arrival. He says he's trying to achieve heaven... What does that even mean?")
+                new FlavorTextBestiaryInfoElement(Language.GetText("Mods.JoJoStands.NPCFlavorText.Priest").Value)
             });
         }
 
@@ -78,7 +79,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
 
         public override void SetChatButtons(ref string button, ref string button2)      //Allows you to set the text for the buttons that appear on this town NPC's chat window. 
         {
-            button = "Buy Stands";      //this defines the buy button name
+            button = Language.GetText("Mods.JoJoStands.NPCButtonText.BuyStands").Value;
         }
 
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)       //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
@@ -113,19 +114,19 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             switch (Main.rand.Next(6))    //this are the messages when you talk to the NPC, if you want to add more cases, you first need to change the Main.rand to the number of cases (default is included!)
             {
                 case 0:
-                    return "I sell stand discs to people who want them... Want one?";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Priest1").Value;
                 case 1:
-                    return "My White Snake is the only stand capable of defeating Star Platinum right now...";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Priest2").Value;
                 case 2:
-                    return "That boy will pay for ruining my perfect universe!";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Priest3").Value;
                 case 3:
-                    return "Weather Report and his stand... what a nuisance";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Priest4").Value;
                 case 4:
-                    return "Jolyne will never see me coming after I obtain heaven...";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Priest5").Value;
                 case 5:
-                    return "You seem like you could've been a fitting servant for DIO... If only you were in Egypt at the time.";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Priest6").Value;
                 default:
-                    return "You know... I was able to get Star Platinum from Jotaro... Interested?";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Priest7").Value;
 
             }
         }
