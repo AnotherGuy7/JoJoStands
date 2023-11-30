@@ -30,7 +30,7 @@ namespace JoJoStands.Buffs.AccessoryBuff
             player.GetAttackSpeed(DamageClass.Generic) *= 1.5f;
 
             Vector3 lightLevel = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16).ToVector3();
-            if (lightLevel.Length() > 1.3f && Main.dayTime && Main.tile[(int)player.Center.X / 16, (int)player.Center.Y / 16].WallType == 0)
+            if (lightLevel.Length() > 1.3f && Main.dayTime && (player.ZoneOverworldHeight || player.ZoneSkyHeight) && Main.tile[(int)player.Center.X / 16, (int)player.Center.Y / 16].WallType == 0)
                 player.AddBuff(ModContent.BuffType<Sunburn>(), 2);
         }
 

@@ -12,6 +12,7 @@
 - Fixed Grateful Dead being stuck on its grabbing animation if switching to auto mode
 - Fixed Star Finger hurting friendly NPCs
 - Fixed Silver Chariot afterimages seeming blurry
+- Fixed players being able to get Sunburn in caves during the daytime
 - Fixed a few sprite inconsistencies on some Stands
 
 - Note: The Stand Mouse reaction distance has been decreased to allow for more precise punches, so Stands may or may not feel a bit odd. The end goal of this change is to make them more reactive in general.
