@@ -635,22 +635,24 @@ namespace JoJoStands.Projectiles.PlayerStands
             if (PunchSoundName != "" && punchingSoundInstance == null)
                 InitializeSounds();
 
+            int volumeApexDistance = 16 * 16;       //So that if the Player gets close enough the volume doesn't go higher but instead stays at that volume
+            int travelDist = 40 * 16;
+            float distanceFromSource = MathHelper.Clamp(Vector2.Distance(Main.LocalPlayer.position, Projectile.Center) - volumeApexDistance, 0, travelDist);
+
             if (PunchSoundName != "")
             {
                 if (beginningSoundInstance != null)
                 {
                     if (!playedBeginning)
                     {
-                        //beginningSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                        beginningSoundInstance.Volume = JoJoStands.ModSoundsVolume;
+                        beginningSoundInstance.Volume = ((travelDist - distanceFromSource) / (float)travelDist) * JoJoStands.ModSoundsVolume;
                         beginningSoundInstance.Play();                 //if there is no other way to have this play for everyone, send a packet with that sound type so that it plays for everyone
                         SoundInstanceGarbageCollector.Track(beginningSoundInstance);
                         playedBeginning = true;
                     }
                     if (playedBeginning && beginningSoundInstance.State == SoundState.Stopped)
                     {
-                        //punchingSoundInstance.Play();     //is this not just beginningSoundInstance.Play()?
-                        punchingSoundInstance.Volume = JoJoStands.ModSoundsVolume;
+                        punchingSoundInstance.Volume = ((travelDist - distanceFromSource) / (float)travelDist) * JoJoStands.ModSoundsVolume;
                         punchingSoundInstance.Play();
                         SoundInstanceGarbageCollector.Track(punchingSoundInstance);
                         SyncSounds();

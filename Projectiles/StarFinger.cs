@@ -82,7 +82,7 @@ namespace JoJoStands.Projectiles
 
         public override bool? CanHitNPC(NPC target)
         {
-            return amountOfPierces > 0;
+            return !target.townNPC && amountOfPierces > 0;
         }
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -121,12 +121,7 @@ namespace JoJoStands.Projectiles
                 offset = new Vector2(-31f, -2f);
 
             if (Main.netMode != NetmodeID.Server)
-            {
-                if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().currentTextureDye == MyPlayer.StandTextureDye.Part4)
-                    starFingerPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFingerPart_P4").Value;
-                else
-                    starFingerPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFingerPart").Value;
-            }
+                starFingerPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFingerPart").Value;
 
 
             Vector2 linkCenter = ownerProj.Center + offset;
@@ -142,9 +137,7 @@ namespace JoJoStands.Projectiles
                 Main.EntitySpriteDraw(starFingerPartTexture, pos, new Rectangle(0, 0, starFingerPartTexture.Width, starFingerPartTexture.Height), lightColor, rotation, new Vector2(starFingerPartTexture.Width * 0.5f, starFingerPartTexture.Height * 0.5f), Projectile.scale, SpriteEffects.None, 0);
             }
 
-            Texture2D projectileTexture = Main.player[Projectile.owner].GetModPlayer<MyPlayer>().currentTextureDye == MyPlayer.StandTextureDye.Part4
-                ? ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFinger_P4").Value : ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFinger").Value;
-
+            Texture2D projectileTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFinger").Value;
             Main.EntitySpriteDraw(projectileTexture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, FingerOrigin, Projectile.scale, SpriteEffects.None, 0f);
             return false;
         }

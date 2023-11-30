@@ -7,6 +7,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Echoes
@@ -125,7 +126,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_2>(), 1f);
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandT2>(), 0, 0f, Main.myPlayer, 2f);
-                Main.NewText("Oh? Echoes is evolving!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesEvolve").Value);
             }
         }
 

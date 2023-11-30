@@ -42,6 +42,7 @@ namespace JoJoStands.Items
             mPlayer.standType = 2;
             mPlayer.equippedTuskAct = StandTier;
             mPlayer.tuskActNumber = StandTier;
+            mPlayer.standName = "TuskAct3";
             return true;
         }
 

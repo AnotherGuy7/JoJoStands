@@ -9,6 +9,7 @@ using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.NPCs.TownNPCs
@@ -57,7 +58,7 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
-                new FlavorTextBestiaryInfoElement("Came all the way from Egypt after losing a life or death bet. He repeatedly promises to never cheat again.")
+                new FlavorTextBestiaryInfoElement(Language.GetText("Mods.JoJoStands.NPCFlavorText.Gambler").Value)
             });
         }
 
@@ -70,8 +71,8 @@ namespace JoJoStands.NPCs.TownNPCs
 
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = "Buy Items";
-            button2 = "Bet";
+            button = Language.GetText("Mods.JoJoStands.NPCButtonText.BuyItems").Value;
+            button2 = Language.GetText("Mods.JoJoStands.NPCButtonText.Gamble").Value;
         }
 
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)
@@ -103,15 +104,15 @@ namespace JoJoStands.NPCs.TownNPCs
             switch (Main.rand.Next(4))
             {
                 case 0:
-                    return "Why don't you try to bet? C'mon, I'll even go easy on you!";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler1").Value;
                 case 1:
-                    return "I should've played... How could I have been fooled by such an obvious bluff...";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler2").Value;
                 case 2:
-                    return "I believe it was a gamblers instinct that led me to this goldmine of items.";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler3").Value;
                 case 3:
-                    return "Cheating? It's only cheating if you're caught!";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler4").Value;
                 default:
-                    return "I am D'Arby, the worlds greatest gambler!";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler5").Value;
             }
         }
 

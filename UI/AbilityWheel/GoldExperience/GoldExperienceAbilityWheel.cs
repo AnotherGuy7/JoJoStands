@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.Localization;
 
 namespace JoJoStands.UI
 {
@@ -68,7 +69,7 @@ namespace JoJoStands.UI
             Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().hotbarLocked = true;
             if (!Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().abilityWheelTipDisplayed)
             {
-                Main.NewText("*To use the Ability Wheel, use the numbers 1-x OR hover over the ability wheel with your cursor and scroll up or down!*", Color.Gold);
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.AbilityWheelHint").Value, Color.Gold);
                 Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().abilityWheelTipDisplayed = true;
             }
         }

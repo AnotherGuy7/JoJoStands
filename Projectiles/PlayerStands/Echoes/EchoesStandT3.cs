@@ -6,6 +6,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Echoes
@@ -157,7 +158,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                             else
                             {
                                 shootCount = 30;
-                                Main.NewText("The tip is out of reach!");
+                                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesTipOOR").Value);
                             }
                         }
                     }
@@ -242,7 +243,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                             else
                             {
                                 shootCount = 30;
-                                Main.NewText("The tip is out of reach!");
+                                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesTipOOR").Value);
                             }
                         }
                     }
@@ -438,7 +439,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesAct3>();
                 mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesAct3>());
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandFinal>(), 0, 0f, Main.myPlayer, 2f);
-                Main.NewText("Oh? Echoes is evolving!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesEvolve").Value);
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT2_Gore>(), 1f);
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
             }

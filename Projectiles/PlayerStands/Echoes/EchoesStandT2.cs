@@ -10,6 +10,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Echoes
@@ -125,7 +126,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                 else
                                 {
                                     messageCooldown += 90;
-                                    Main.NewText("Target too far");
+                                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.CrazyDiamondTargetOOR").Value);
                                 }
                             }
                             else
@@ -133,7 +134,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                 if (messageCooldown <= 0)
                                 {
                                     messageCooldown += 90;
-                                    Main.NewText("Select the target with mouse");
+                                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesMouseHint").Value);
                                 }
                             }
                         }
@@ -160,7 +161,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                     else
                                     {
                                         messageCooldown += 90;
-                                        Main.NewText("Target too far");
+                                        Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.CrazyDiamondTargetOOR").Value);
                                     }
                                 }
                                 else
@@ -168,7 +169,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                     if (messageCooldown <= 0)
                                     {
                                         messageCooldown += 90;
-                                        Main.NewText("Select the target with mouse");
+                                        Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesMouseHint").Value);
                                     }
                                 }
                             }
@@ -406,7 +407,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesAct2>();
                 mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesAct2>());
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandT3>(), 0, 0f, Main.myPlayer, remoteModeOnSpawn);
-                Main.NewText("Oh? Echoes is evolving!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesEvolve").Value);
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT1_Gore_1>(), 1f);
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT1_Gore_2>(), 1f);
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);

@@ -2,6 +2,7 @@ using JoJoStands.Items.Hamon;
 using JoJoStands.UI;
 using System.ComponentModel;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader.Config;
 using static JoJoStands.JoJoStands;
 using static JoJoStands.MyPlayer;
@@ -151,12 +152,12 @@ namespace JoJoStands
             AbilityWheel.VerticalAlignmentPercentage = AbilityWheelYPos / 100f;
             if (HamonBarSize >= 4)
             {
-                Main.NewText("You can only choose numbers between 0-3!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.HamonBarOOB").Value);
                 HamonBarSize = 3;
             }
             if (HamonBarSize <= -1)
             {
-                Main.NewText("You can only choose numbers between 0-3!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.HamonBarOOB").Value);
                 HamonBarSize = 0;
                 HamonBar.visible = false;
             }

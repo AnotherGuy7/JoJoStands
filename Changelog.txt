@@ -1,17 +1,17 @@
-- Added Stand Aim Assist 
-- Added five new mixed accessories
-- Resprited many accessories, old and new
-- Updated a few Stand icons for consistency
-- Updated Stand Auto Mode AI for most Stands!
-- Buffed Tarot Table (effect now lasts 10m)
-- The Will to Escape can now also drop in caverns that are not pure
-- Added multiple Shimmer interactions for many mod items
-- Fixed NPCs not selling items properly
-- Fixed Stands not animating properly while in Auto Mode
-- Fixed the Zipper Dodge buff making players immortal indefinitely
-- Fixed hooks in the hook slot not being able to be used while controlling Stands in Manual Mode
-- Fixed Mod Tiles dropping duplicates when broken
-- Fixed Sticky Fingers staying hidden after switching to Auto Mode
-- Fixed the Poker Deck accessory boosting Stand Damage by 2125%
+- Added localization support!
+- Added Russian translations (Thank you Puffline for translating the mod to Russian!)
+- Removed the 30% summon damage Century Boy nerf
+- Added limitations to Century Boy's ability
+- Buffed Century Boy's alternate-special
+- Fixed Killer Queen not being able to punch unless Killer Queen were spawned immediately upon loading a world
+- Fixed a bug that allowed multiple Stands to be used at once
+- Fixed all Tusk acts constantly despawning in Multiplayer
+- Fixed Stand punch sounds playing universally in Multiplayer while in Auto Mode
+- Fixed Century Boy not benefitting from Stand Tier boosts
+- Fixed Stands permanently granting Holy Protection when using the Hallowed Armor set
+- Fixed Grateful Dead being stuck on its grabbing animation if switching to auto mode
+- Fixed Star Finger hurting friendly NPCs
+- Fixed Silver Chariot afterimages seeming blurry
+- Fixed a few sprite inconsistencies on some Stands
 
 - Note: The Stand Mouse reaction distance has been decreased to allow for more precise punches, so Stands may or may not feel a bit odd. The end goal of this change is to make them more reactive in general.

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -91,7 +92,7 @@ namespace JoJoStands
                     if (!ViralMeteoriteIntroduced)
                     {
                         ViralMeteoriteIntroduced = true;
-                        Main.NewText("A faint spiritual connection can be sensed nearby.", WorldEventTextColor);
+                        Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.ViralMeteoriteIntro1").Value, WorldEventTextColor);
                     }
                 }
                 else

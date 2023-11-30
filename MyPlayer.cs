@@ -26,6 +26,7 @@ using Terraria.GameInput;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
@@ -481,12 +482,12 @@ namespace JoJoStands
                         MyPlayer otherModPlayer = otherPlayer.GetModPlayer<MyPlayer>();
                         if (mPlayer.timestopActive && !otherPlayer.HasBuff(ModContent.BuffType<TheWorldBuff>()))       //if everyone has the effect and no one has the owner buff, turn it off
                         {
-                            Main.NewText("The user has left, and time has begun to move once more...");
+                            Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.TimestopForceEnd").Value);
                             otherModPlayer.timestopActive = false;
                         }
                         if (mPlayer.timeskipActive && !otherPlayer.HasBuff(ModContent.BuffType<SkippingTime>()))
                         {
-                            Main.NewText("The user has left, and time has begun to move once more...");
+                            Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.TimestopForceEnd").Value);
                             otherModPlayer.timeskipActive = false;
                         }
                         if (mPlayer.backToZeroActive && !otherPlayer.HasBuff(ModContent.BuffType<BacktoZero>()))
@@ -546,10 +547,9 @@ namespace JoJoStands
             }
             if (JoJoStands.SpecialHotKey.Current && standAccessory)
             {
-                if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
-                {
+                if ((StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>()) && !Player.HasBuff<AbilityCooldown>())
                     Player.AddBuff(ModContent.BuffType<CenturyBoyBuff>(), 2, true);
-                }
+
                 if (StandSlot.SlotItem.type == ModContent.ItemType<LockT3>() && !Player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 {
                     for (int n = 0; n < Main.maxNPCs; n++)
@@ -827,11 +827,12 @@ namespace JoJoStands
             }
             if (standOut)
             {
-                if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
-                    centuryBoyActive = true;
+                if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>())
+                    standTier = 1;
+                else if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
+                    standTier = 2;
             }
-            if (StandSlot.SlotItem.type != ModContent.ItemType<CenturyBoyT1>() && StandSlot.SlotItem.type != ModContent.ItemType<CenturyBoyT2>() && standOut)
-                centuryBoyActive = false;
+            centuryBoyActive = standOut && (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>());
             if (standAccessory)
             {
                 Player.slotsMinions += 1;
@@ -1147,6 +1148,7 @@ namespace JoJoStands
                 if (tuskShootCooldown > 0)
                     tuskShootCooldown--;
 
+                standName = "TuskAct" + equippedTuskAct;
                 if (tuskActNumber <= 3)
                 {
                     if (Player.ownedProjectileCounts[Mod.Find<ModProjectile>("TuskAct" + tuskActNumber + "Pet").Type] <= 0)
@@ -1739,21 +1741,21 @@ namespace JoJoStands
                 if (!JoJoStands.FanStandsLoaded)
                 {
                     standOut = false;
-                    Main.NewText("There is no Stand in the Stand Slot!", Color.Red);
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.StandSlotNoStand").Value, Color.Red);
                     return;
                 }
             }
 
             if (Player.maxMinions - Player.slotsMinions < 1)
             {
-                Main.NewText("There are no available minion slots!", Color.Red);
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.StandSlotFullMinions").Value, Color.Red);
                 standOut = false;
                 return;
             }
 
             if (!(inputItem.ModItem is StandItemClass))
             {
-                Main.NewText("Something went wrong while summoning the Stand.", Color.Red);
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.StandSlotSummonError").Value, Color.Red);
                 return;
             }
 
@@ -1803,7 +1805,6 @@ namespace JoJoStands
             creamDash = false;
             creamFrame = 0;
 
-            standTier = 0;
             echoesTier = 0;
             stickyFingersAmbushMode = false;
 
@@ -1966,8 +1967,8 @@ namespace JoJoStands
                     standDodgeGuarantee--;
                 return true;
             }
-            if (standControlStyle == StandControlStyle.Manual && standOut && Player.shadowDodge)
-                return true;
+            /*if (standControlStyle == StandControlStyle.Manual && standOut && Player.shadowDodge)
+                return true;*/
             if (Player.HasBuff(ModContent.BuffType<SwanSong>()))
                 return true;
             if (Player.HasBuff<ZipperDodge>() && Player.whoAmI == Main.myPlayer)
@@ -2032,7 +2033,7 @@ namespace JoJoStands
                         revivedByPokerChip = true;
                         Player.AddBuff(ModContent.BuffType<ArtificialSoul>(), 60 * 60);
                         Player.ConsumeItem(ModContent.ItemType<PokerChip>(), true);
-                        Main.NewText("The chip has given you new life!");
+                        Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.PokerChipNewLife").Value);
                         return false;
                     }
                 }

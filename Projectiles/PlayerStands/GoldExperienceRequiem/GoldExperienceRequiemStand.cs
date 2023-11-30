@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
@@ -119,7 +120,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                             if (!targetSuccess)
                             {
                                 shootCount += 15;
-                                Main.NewText("Right-Click the enemy to target");
+                                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GoldExperienceRequiemMouseHint").Value);
                             }
                         }
                         else if (mPlayer.chosenAbility == 3 && player.velocity == Vector2.Zero)

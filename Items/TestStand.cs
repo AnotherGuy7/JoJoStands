@@ -3,6 +3,7 @@ using JoJoStands.Projectiles.PlayerStands.TestStand;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -66,7 +67,7 @@ namespace JoJoStands.Items
             }
             else
             {
-                Main.NewText("You are not worthy.", Color.Red);
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.TestStandNotWorthy").Value, Color.Red);
                 player.GetModPlayer<MyPlayer>().standOut = false;
                 SyncCall.SyncStandOut(player.whoAmI, false, "", 0);
             }
