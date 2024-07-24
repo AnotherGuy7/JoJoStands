@@ -14,7 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
         public override float PunchKnockback => 2f;
         public override int PunchTime => 22;
         public override int HalfStandHeight => 36;
-        public override int FistWhoAmI => 11;
+        public override int FistID => 11;
         public override int TierNumber => 4;
         public override string PoseSoundName => "Cream";
         public override string SpawnSoundName => "Cream";
@@ -101,7 +101,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistID);
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                         }

@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
         public override int PunchDamage => 162;
         public override int PunchTime => 12;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 0;
+        public override int FistID => 0;
         public override int TierNumber => 4;
         public override bool CanUseAfterImagePunches => true;
         public override int AmountOfPunchVariants => 2;

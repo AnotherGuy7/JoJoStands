@@ -455,7 +455,7 @@ namespace JoJoStands
     {
         public override Position GetDefaultPosition()
         {
-            return new AfterParent(PlayerDrawLayers.FaceAcc);
+            return new AfterParent(PlayerDrawLayers.AfterLastVanillaLayer.Layer1);
         }
 
         private readonly Vector2 BubbleBarrierOrigin = new Vector2(30);

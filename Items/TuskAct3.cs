@@ -12,6 +12,7 @@ namespace JoJoStands.Items
         public override int StandSpeed => 180;
         public override int StandType => 2;
         public override int StandTier => 3;
+        public override string StandIdentifierName => "TuskAct3";
         public override Color StandTierDisplayColor => TuskAct4.TuskTierColor;
 
         public override void SetStaticDefaults()

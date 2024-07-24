@@ -4,7 +4,6 @@ using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.DataStructures;
 using JoJoStands.Networking;
 using JoJoStands.NPCs;
-using JoJoStands.Projectiles.PlayerStands.KillerQueen;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -328,7 +327,7 @@ namespace JoJoStands.Projectiles
             }
 
             else if (standType == Cream)
-                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 2*(int)standTier * 60);
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 2 * (int)standTier * 60);
 
             else if (standType != TowerOfGray && !target.boss)
             {

@@ -280,7 +280,7 @@ Mods: {
 
 			BubbleBarrierBuff: {
 				DisplayName: Bubble Barrier
-				Description: A protective bubble surrounds you. Increases defense, makes you immune to physical debuffs, and allows you to glide around!
+				Description: A protective bubble surrounds you. Increases defense, makes you immune to debuffs, and allows you to glide around!
 			}
 
 			BulletKickFrenzy: {
@@ -4072,26 +4072,6 @@ Mods: {
 			GamblerCheatHint: *D'Arby smiles...
 			GamblerBetLose: Damn it... No! How is this possible!? Fine, just take the coins, I have much more anyway.
 			GamblerBetWin: Thanks for the coins!
-			GamblerRoShamBoDesc:
-				'''
-				Ro-Sham-Bo
-				Choose the symbol you believe would beat Darby's.
-				Rock beats scissors, scissors beat paper, paper beats rock.
-				'''
-			GamblerRollingGameDesc:
-				'''
-				Dice Roll
-				Roll dice and hit certain results to win. Winning results are either:
-				All three dice are the same value above three
-				All three dice add up to six
-				All three dice are above three
-				'''
-			GamblerMiniPokerDesc:
-				'''
-				Mini Poker
-				Pull random cards and compare numbers against Darby to determine the winner.
-				If you are unhappy with your first two cards, click the deck on the right to replace a card.
-				'''
 			ViralMeteoriteIntro1: A faint spiritual connection can be sensed nearby.
 			ViralMeteoriteIntro2: Your mind and soul resonate with the area around you...
 		}

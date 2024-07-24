@@ -79,9 +79,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public virtual int AltDamage { get; }
         /// <summary>
-        /// This Stand's fist whoAmI. The whoAmI is passed in through the fists' ai[0] array.
+        /// This Stand's fist integer ID. This value sets myPlayer.standFistsType which is used to identify Stands in Fists.
         /// </summary>
-        public virtual int FistWhoAmI { get; }        //this is used in Fists.cs for effects
+        public virtual int FistID { get; }        //this is used in Fists.cs for effects
         /// <summary>
         /// The Stand's X offset while drawn. This value is halved, so multiply by 2 if trying to apply a direct and known constant offset.
         /// </summary>
@@ -335,7 +335,7 @@ namespace JoJoStands.Projectiles.PlayerStands
 
                 shootVel.Normalize();
                 shootVel *= ProjectileSpeed;
-                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
+                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistID, TierNumber);
                 Main.projectile[projIndex].timeLeft = (int)(Main.projectile[projIndex].timeLeft * punchLifeTimeMultiplier);
                 Main.projectile[projIndex].netUpdate = true;
             }
@@ -366,6 +366,86 @@ namespace JoJoStands.Projectiles.PlayerStands
                 }
             }
             Projectile.netUpdate = true;
+        }
+
+        /// <summary>
+        /// Has the Stand switch to its attack state and punch toward the input direction.
+        /// Provides a way to input custom fists with their own separate logic.
+        /// Damage, knockback, and punch speed depend on the punchDamage, punchKnockback, and punchTime fields respectively.
+        /// Stand ID and Stand Tier Number are passed into the fist Projectile.
+        /// </summary>
+        /// <param name="customPunchType">The projectile type of the custom fist</param>
+        /// <param name="movementSpeed">How fast the Stand moves while it's punching</param>
+        /// <param name="punchLifeTimeMultiplier">A multiplier for the punch projectiles' lifetime.</param>
+        public int Punch(int customPunchType, Vector2 targetPosition, float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f, bool afterImages = true)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            int punchIndex = -1;
+            if (!mPlayer.canStandBasicAttack)
+            {
+                currentAnimationState = AnimationState.Idle;
+                return punchIndex;
+            }
+
+            attacking = true;
+            currentAnimationState = AnimationState.Attack;
+            float rotaY = targetPosition.Y - Projectile.Center.Y;
+            Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
+            Vector2 velocityAddition = targetPosition - Projectile.Center;
+            velocityAddition.Normalize();
+            velocityAddition *= movementSpeed + mPlayer.standTier;
+
+            Projectile.spriteDirection = Projectile.direction = targetPosition.X > Projectile.Center.X ? 1 : -1;
+            float targetDistance = Vector2.Distance(targetPosition, Projectile.Center);
+            if (targetDistance > 16f)
+                Projectile.velocity = player.velocity + velocityAddition;
+            else
+                Projectile.velocity = Vector2.Zero;
+
+            PlayPunchSound();
+            if (shootCount <= 0)
+            {
+                shootCount += newPunchTime;
+                Vector2 shootVel = targetPosition - Projectile.Center;
+                if (shootVel == Vector2.Zero)
+                    shootVel = new Vector2(0f, 1f);
+
+                shootVel.Normalize();
+                shootVel *= ProjectileSpeed;
+                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, customPunchType, newPunchDamage, PunchKnockback, Projectile.owner, FistID, TierNumber);
+                Main.projectile[projIndex].timeLeft = (int)(Main.projectile[projIndex].timeLeft * punchLifeTimeMultiplier);
+                Main.projectile[projIndex].netUpdate = true;
+                punchIndex = projIndex;
+            }
+            LimitDistance();
+            if (afterImages && newPunchTime <= 6 && canUsePunchAfterImages)
+            {
+                int afterImageAmount = ((6 - newPunchTime) / 2) + 1;
+                int amountOfPunches = Main.rand.Next(afterImageAmount, afterImageAmount + 1 + 1) + PunchData.bonusAfterimageAmount;
+                punchAfterImageAmount = amountOfPunches;
+                for (int i = 0; i < amountOfPunches; i++)
+                {
+                    bool behind = Main.rand.Next(0, 1 + 1) == 0;
+                    int verticalRange = PunchData.verticalPunchSpreadRange == 0 ? (HalfStandHeight - 6) : PunchData.verticalPunchSpreadRange;
+                    Vector2 punchOffset = new Vector2(PunchData.standardPunchOffset.X * Projectile.spriteDirection, PunchData.standardPunchOffset.Y + Main.rand.Next(-verticalRange, verticalRange + 1));
+                    PunchFrame punchFrame = new PunchFrame()
+                    {
+                        offset = punchOffset,
+                        targetOffset = punchOffset + new Vector2(Main.rand.Next(PunchData.minimumTravelDistance, PunchData.maximumTravelDistance + 1) * Projectile.spriteDirection, 0f),
+                        punchAnimationTimeStart = punchAnimationTimer,
+                        punchLifeTime = Main.rand.Next(PunchData.minimumLifeTime, PunchData.maximumLifeTime + 1),
+                        flipped = Main.rand.Next(0, 1 + 1) == 0,
+                        textureType = Main.rand.Next(0, AmountOfPunchVariants)
+                    };
+                    if (behind)
+                        backPunchFrames.Add(punchFrame);
+                    else
+                        frontPunchFrames.Add(punchFrame);
+                }
+            }
+            Projectile.netUpdate = true;
+            return punchIndex;
         }
 
         /// <summary>
@@ -776,7 +856,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 mouseX = Main.MouseWorld.X;
                 mouseY = Main.MouseWorld.Y;
             }
-            mPlayer.standFistsType = FistWhoAmI;
+            mPlayer.standFistsType = FistID;
             mPlayer.standTier = TierNumber;
             mPlayer.poseSoundName = PoseSoundName;
             if (newPunchTime <= 2)
@@ -927,7 +1007,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Vector2 drawPosition = Projectile.Center - Main.screenPosition + drawOffset;
                 Rectangle animRect = new Rectangle(0, frameHeight * Projectile.frame, standTexture.Width, frameHeight);
                 Vector2 standOrigin = new Vector2(standTexture.Width / 2f, frameHeight / 2f);
-                Main.EntitySpriteDraw(standTexture, drawPosition, animRect, drawColor, Projectile.rotation, standOrigin, 1f, effects, 0);
+                Main.EntitySpriteDraw(standTexture, drawPosition, animRect, drawColor, Projectile.rotation, standOrigin, Projectile.scale, effects, 0);
             }
         }
 

@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override int PunchDamage => 17;
         public override int PunchTime => 14;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 7;
+        public override int FistID => 7;
         public override int TierNumber => 1;
         public override string PoseSoundName => "NobodyCanFoolMeTwice";
         public override string SpawnSoundName => "The Hand";

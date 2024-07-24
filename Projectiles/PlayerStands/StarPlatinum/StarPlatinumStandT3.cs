@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override int PunchTime => 9;
         public override int AltDamage => 147;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 0;
+        public override int FistID => 0;
         public override int TierNumber => 3;
         public override string PunchSoundName => "Ora";
         public override string PoseSoundName => "YareYareDaze";

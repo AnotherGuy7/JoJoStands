@@ -10,7 +10,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         public override int PunchDamage => 21;
         public override int PunchTime => 12;
         public override int HalfStandHeight => 51;
-        public override int FistWhoAmI => 12;
+        public override int FistID => 12;
         public override int TierNumber => 1;
         public override string PunchSoundName => "Dora";
         public override string PoseSoundName => "CrazyDiamond";

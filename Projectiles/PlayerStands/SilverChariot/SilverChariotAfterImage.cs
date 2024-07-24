@@ -30,7 +30,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override int PunchDamage => 26;
         public override int PunchTime => 9;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 10;
+        public override int FistID => 10;
         public override bool UseProjectileAlpha => true;
         public override StandAttackType StandType => StandAttackType.Melee;
         public new AnimationState currentAnimationState;

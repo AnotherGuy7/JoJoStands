@@ -663,11 +663,10 @@ namespace JoJoStands
             if (Main.playerInventory)
             {
                 float origScale = Main.inventoryScale;
-
                 Main.inventoryScale = 0.85f;
 
-                int slotPosX = JoJoStands.StandSlotPositionX * (Main.screenWidth / 100);
-                int slotPosY = JoJoStands.StandSlotPositionY * (Main.screenHeight / 100);
+                int slotPosX = (int)(JoJoStands.StandSlotPositionX * (Main.screenWidth / 100) * Main.UIScale);
+                int slotPosY = (int)(JoJoStands.StandSlotPositionY * (Main.screenHeight / 100) * Main.UIScale);
 
                 StandSlot.Position = new Vector2(slotPosX, slotPosY);
                 StandDyeSlot.Position = new Vector2(slotPosX - 60f, slotPosY);
@@ -767,10 +766,10 @@ namespace JoJoStands
             if (Main.rand.Next(1, 5 + 1) == 1)
             {
                 int inheritanceStandChance = Main.rand.Next(0, JoJoStands.standTier1List.Count);
-                Item standTier1 = new Item();
-                standTier1.SetDefaults(JoJoStands.standTier1List[inheritanceStandChance]);
-                standTier1.stack = 1;
-                startingItems.Add(standTier1);
+                Item tier1Stand = new Item();
+                tier1Stand.SetDefaults(JoJoStands.standTier1List[inheritanceStandChance]);
+                tier1Stand.stack = 1;
+                startingItems.Add(tier1Stand);
             }
             return startingItems;
         }
@@ -1763,13 +1762,13 @@ namespace JoJoStands
 
             standOut = true;
             standTier = standItem.StandTier;
-            standName = standItem.StandProjectileName;
+            standName = standItem.StandIdentifierName;
 
             if (!standItem.ManualStandSpawning(Player))
             {
-                string standClassName = standItem.StandProjectileName + "StandT" + standItem.StandTier;
+                string standClassName = standItem.StandIdentifierName + "StandT" + standItem.StandTier;
                 if (standClassName.Contains("T4"))
-                    standClassName = standItem.StandProjectileName + "StandFinal";
+                    standClassName = standItem.StandIdentifierName + "StandFinal";
 
                 int standProjectileType = Mod.Find<ModProjectile>(standClassName).Type;
                 Projectile.NewProjectile(inputItem.GetSource_FromThis(), Player.position, Player.velocity, standProjectileType, 0, 0f, Main.myPlayer);

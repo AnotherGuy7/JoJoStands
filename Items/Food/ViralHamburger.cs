@@ -28,6 +28,8 @@ namespace JoJoStands.Items.Food
             Item.useStyle = ItemUseStyleID.EatFood;
             Item.holdStyle = ItemHoldStyleID.HoldFront;
             Item.consumable = true;
+            Item.buffType = ModContent.BuffType<StrongWill>();
+            Item.buffTime = (5 * 60) * 60;
         }
 
         public override void HoldStyle(Player player, Rectangle heldItemFrame)
@@ -43,7 +45,6 @@ namespace JoJoStands.Items.Food
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(ModContent.BuffType<StrongWill>(), (5 * 60) * 60);
             player.AddBuff(ModContent.BuffType<SharpMind>(), (5 * 60) * 60);
             player.AddBuff(ModContent.BuffType<QuickThinking>(), (5 * 60) * 60);
             player.AddBuff(ModContent.BuffType<MentalFortitude>(), (5 * 60) * 60);

@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
     {
         public override int PunchDamage => 108;
         public override int PunchTime => 2;
-        public override int FistWhoAmI => 15;
+        public override int FistID => 15;
         public override int TierNumber => 1;
         public override StandAttackType StandType => StandAttackType.Melee;
         public override bool CanUseRangeIndicators => false;

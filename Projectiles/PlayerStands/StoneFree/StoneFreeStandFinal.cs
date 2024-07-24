@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
         public override int PunchDamage => 65;
         public override int PunchTime => 10;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 0;
+        public override int FistID => 0;
         public override int TierNumber => 4;
         public override string PunchSoundName => "StoneFree_Ora";
         public override string PoseSoundName => "StoneFree";

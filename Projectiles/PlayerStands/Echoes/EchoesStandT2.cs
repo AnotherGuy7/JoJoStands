@@ -20,7 +20,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override int PunchDamage => 4;
         public override int PunchTime => 16;
         public override int HalfStandHeight => 30;
-        public override int FistWhoAmI => 15;
+        public override int FistID => 15;
         public override int TierNumber => 2;
         public override string PoseSoundName => "EchoesAct1";
         public override string SpawnSoundName => "Echoes Act 1";
@@ -210,7 +210,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistID, TierNumber);
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                         }

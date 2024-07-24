@@ -10,12 +10,10 @@ namespace JoJoStands.Items
 {
     public class LockT2 : StandItemClass
     {
-        public override string Texture
-        {
-            get { return Mod.Name + "/Items/LockT1"; }
-        }
+        public override string Texture => Mod.Name + "/Items/LockT1";
 
         public override int StandTier => 2;
+        public override string StandIdentifierName => "Lock";
         public override Color StandTierDisplayColor => Color.LightGray;
 
         public override void SetStaticDefaults()
