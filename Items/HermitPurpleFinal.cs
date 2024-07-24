@@ -13,6 +13,7 @@ namespace JoJoStands.Items
         public override int StandSpeed => 25;
         public override int StandType => 1;
         public override int StandTier => 4;
+        public override string StandIdentifierName => "HermitPurple";
         public override Color StandTierDisplayColor => Color.Magenta;
 
         public override string Texture

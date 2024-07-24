@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
         public override int PunchDamage => 78;
         public override int PunchTime => 11;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 7;
+        public override int FistID => 7;
         public override int TierNumber => 4;
         public override string PoseSoundName => "NobodyCanFoolMeTwice";
         public override string SpawnSoundName => "The Hand";
@@ -166,7 +166,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                                 shootVel.Normalize();
                                 shootVel *= ProjectileSpeed;
 
-                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2.5f * overHeavenDamageBoost), PunchKnockback, Projectile.owner, FistWhoAmI);
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 2.5f * overHeavenDamageBoost), PunchKnockback, Projectile.owner, FistID);
                                 Main.projectile[projIndex].netUpdate = true;
                                 SoundStyle theHandScrapeSound = ScrapeSoundEffect;
                                 theHandScrapeSound.Pitch = Main.rand.NextFloat(0, 0.6f + 1f);

@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override float PunchKnockback => 3f;
         public override int PunchTime => 24;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
         public override int HalfStandHeight => 32;
-        public override int FistWhoAmI => 6;
+        public override int FistID => 6;
         public override int TierNumber => 2;
         public override Vector2 StandOffset => Vector2.Zero;
         public override string PoseSoundName => "AllThatRemainsAreTheResults";
@@ -136,7 +136,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistID);
                             Main.projectile[projIndex].netUpdate = true;
                         }
                         LimitDistance();
@@ -242,9 +242,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                     StayBehind();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-            {
                 BasicPunchAI();
-            }
+
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;
         }

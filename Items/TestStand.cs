@@ -11,7 +11,7 @@ namespace JoJoStands.Items
     public class TestStand : StandItemClass
     {
         public override int StandType => 1;
-        public override string StandProjectileName => "TestStand";
+        public override string StandIdentifierName => "TestStand";
         public override int StandSpeed => 12;
 
         public override void SetStaticDefaults()

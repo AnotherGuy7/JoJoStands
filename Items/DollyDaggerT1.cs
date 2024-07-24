@@ -11,7 +11,7 @@ namespace JoJoStands.Items
     public class DollyDaggerT1 : StandItemClass
     {
         public override int StandTierDisplayOffset => 1;
-        public override string StandProjectileName => "DollyDagger";
+        public override string StandIdentifierName => "DollyDagger";
 
         public override void SetStaticDefaults()
         {

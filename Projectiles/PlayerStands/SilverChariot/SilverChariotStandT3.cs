@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
         public override int PunchDamage => 51;
         public override int PunchTime => 8;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 10;
+        public override int FistID => 10;
         public override int TierNumber => 3;
         public override string PoseSoundName => "SilverChariot";
         public override string SpawnSoundName => "Silver Chariot";

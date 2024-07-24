@@ -16,7 +16,7 @@ namespace JoJoStands.Items
         }
 
         public override int StandTier => 2;
-        public override string StandProjectileName => "CenturyBoy";
+        public override string StandIdentifierName => "CenturyBoy";
         public override Color StandTierDisplayColor => Color.Cyan;
 
         public override void SetStaticDefaults()

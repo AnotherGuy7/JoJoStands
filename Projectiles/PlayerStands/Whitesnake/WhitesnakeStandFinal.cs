@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
         public override int AltDamage => 82;
         public override int PunchTime => 11;
         public override int HalfStandHeight => 44;
-        public override int FistWhoAmI => 9;
+        public override int FistID => 9;
         public override int TierNumber => 4;
         public override Vector2 StandOffset => new Vector2(11, 0);
         public override float MaxDistance => 148f;      //1.5x the normal range cause Whitesnake is considered a long-range stand with melee capabilities

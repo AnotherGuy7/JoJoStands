@@ -14,7 +14,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
         public override int AltDamage => 183;
         public override int PunchTime => 13;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 5;
+        public override int FistID => 5;
         public override int TierNumber => 2;
         public override float MaxAltDistance => 12 * 16;
         public override string PoseSoundName => "IWouldntLose";
@@ -200,6 +200,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
 
                 if (target != null)
                 {
+                    attacking = true;
                     currentAnimationState = AnimationState.Attack;
                     Projectile.direction = 1;
                     if (target.position.X - Projectile.Center.X < 0)
@@ -224,15 +225,19 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
                             if (Projectile.direction == 1)
                                 shootVel *= ProjectileSpeed;
 
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), 3f, Projectile.owner, FistWhoAmI, TierNumber);
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newPunchDamage * 0.9f), 3f, Projectile.owner, FistID, TierNumber);
                             (Main.projectile[projIndex].ModProjectile as Fists).extraInfo1 = Projectile.whoAmI;
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                         }
                     }
+                    LimitDistance();
                 }
                 else
+                {
+                    attacking = false;
                     currentAnimationState = AnimationState.Idle;
+                }
             }
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;

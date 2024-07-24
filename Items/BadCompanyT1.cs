@@ -11,7 +11,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 90;
         public override int StandType => 2;
-        public override string StandProjectileName => "BadCompany";
+        public override string StandIdentifierName => "BadCompany";
         public override int StandTier => 1;
 
         public override void SetStaticDefaults()

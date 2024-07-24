@@ -11,7 +11,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 12;
         public override int StandType => 1;
-        public override string StandProjectileName => "GratefulDead";
+        public override string StandIdentifierName => "GratefulDead";
         public override int StandTier => 3;
         public override Color StandTierDisplayColor => GratefulDeadFinal.GratefulDeadTierColor;
 

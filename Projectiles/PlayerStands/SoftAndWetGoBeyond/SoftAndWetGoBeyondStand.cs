@@ -19,7 +19,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
         public override int HalfStandHeight => 38;
         public override int AltDamage => 85;
         public override Vector2 StandOffset => new Vector2(27, 0);
-        public override int FistWhoAmI => 0;
+        public override int FistID => 0;
         public override int TierNumber => 5;
         public override string PunchSoundName => "SoftAndWet_Ora";
         public override string PoseSoundName => "SoftAndWet";
@@ -189,12 +189,10 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                         }
                     }
                 }
-                if (SecondSpecialKeyPressed() && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+                if (SecondSpecialKeyPressed() && !player.HasBuff<BubbleBarrierBuff>() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
                 {
-                    player.AddBuff(ModContent.BuffType<BubbleBarrierBuff>(), 10 * 60);
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
-                    Vector2 playerFollow = Vector2.Zero;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, playerFollow, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
+                    player.AddBuff(ModContent.BuffType<BubbleBarrierBuff>(), 25 * 60);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)

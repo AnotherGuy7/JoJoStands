@@ -39,7 +39,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
         public override int ProjectileDamage => 36;
         public override int ShootTime => 10;
-        public override int FistWhoAmI => 13;
+        public override int FistID => 13;
         public override int TierNumber => 3;
         public override string PoseSoundName => "TowerOfGray";
         public override string SpawnSoundName => "Tower of Gray";
@@ -325,7 +325,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
                                 shootVel.Normalize();
                                 shootVel *= 0f;
-                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * 0.5f), 3f, Projectile.owner, FistWhoAmI, TierNumber);
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * 0.5f), 3f, Projectile.owner, FistID, TierNumber);
                                 Main.projectile[projIndex].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }
@@ -464,7 +464,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
             shootVel.Normalize();
             shootVel *= 0f;
-            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * mPlayer.towerOfGrayDamageMult), 3f, Projectile.owner, FistWhoAmI, TierNumber);
+            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), (int)(newProjectileDamage * mPlayer.towerOfGrayDamageMult), 3f, Projectile.owner, FistID, TierNumber);
             Main.projectile[projIndex].netUpdate = true;
             Projectile.netUpdate = true;
         }

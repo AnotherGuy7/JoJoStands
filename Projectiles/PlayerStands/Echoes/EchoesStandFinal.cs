@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override int PunchDamage => 68;
         public override int PunchTime => 10;
         public override int HalfStandHeight => 28;
-        public override int FistWhoAmI => 15;
+        public override int FistID => 15;
         public override int TierNumber => 4;
         public override string PoseSoundName => "EchoesAct3";
         public override string SpawnSoundName => "Echoes Act 3";

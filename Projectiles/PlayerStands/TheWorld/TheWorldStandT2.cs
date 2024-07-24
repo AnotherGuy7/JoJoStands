@@ -13,7 +13,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override int PunchDamage => 42;
         public override int PunchTime => 12;
         public override int HalfStandHeight => 44;
-        public override int FistWhoAmI => 1;
+        public override int FistID => 1;
         public override int TierNumber => 2;
         public override string PunchSoundName => "Muda";
         public override string PoseSoundName => "ComeAsCloseAsYouLike";

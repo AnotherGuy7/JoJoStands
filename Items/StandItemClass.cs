@@ -24,7 +24,7 @@ namespace JoJoStands.Items
         /// <summary>
         /// The stand's name.
         /// </summary>
-        public virtual string StandProjectileName { get; }
+        public virtual string StandIdentifierName { get; }
         /// <summary>
         /// The amount of tiers to offset the display by. A Display Offset of 1 would show the tier one tier higher than the StandTier value.
         /// </summary>
@@ -59,7 +59,7 @@ namespace JoJoStands.Items
                 tooltips.Add(tooltipAddition);
                 tooltips.Add(dodgeTooltipAddition);
             }
-            if (StandProjectileName == "Cream")
+            if (StandIdentifierName == "Cream")
             {
                 TooltipLine creamWariningTooltipAddition = new TooltipLine(Mod, "Warning", "Warning! Cream's abilities are extremely destructive to the area around!");
                 creamWariningTooltipAddition.OverrideColor = Color.Red;
