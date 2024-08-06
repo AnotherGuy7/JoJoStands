@@ -11,6 +11,7 @@ using JoJoStands.Mounts;
 using JoJoStands.Networking;
 using JoJoStands.NPCs;
 using JoJoStands.Projectiles;
+using JoJoStands.Projectiles.PlayerStands;
 using JoJoStands.Projectiles.PlayerStands.BadCompany;
 using JoJoStands.Projectiles.PlayerStands.SilverChariot;
 using JoJoStands.Projectiles.PlayerStands.Tusk;
@@ -634,6 +635,24 @@ namespace JoJoStands
             StandDyeSlot.BackOpacity = .8f;
             StandDyeSlot.SlotItem = new Item();
             StandDyeSlot.SlotItem.SetDefaults(0);
+            StandDyeSlot.Click += OnStandDyeSlotClick;
+        }
+
+        private bool OnStandDyeSlotClick(UIObject sender, TerraUI.MouseButtonEventArgs e)
+        {
+            MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
+            if (Main.mouseItem.ModItem is StandDye)
+                (Main.mouseItem.ModItem as StandDye).OnEquipDye(Main.LocalPlayer);
+            if (mPlayer.standOut)
+            {
+                for (int p = 0; p < Main.maxProjectiles; p++)
+                {
+                    Projectile projectile = Main.projectile[p];
+                    if (projectile.ModProjectile is StandClass && projectile.owner == Main.LocalPlayer.whoAmI)
+                        (projectile.ModProjectile as StandClass).OnDyeChanged();
+                }
+            }
+            return false;
         }
 
         public override void SaveData(TagCompound tag)
@@ -686,11 +705,7 @@ namespace JoJoStands
                         mPlayer.StandSlot.Update();
 
                     if (Main.mouseItem.IsAir || Main.mouseItem.dye != 0 || Main.mouseItem.ModItem is StandDye)
-                    {
                         mPlayer.StandDyeSlot.Update();
-                        if (Main.mouseItem.ModItem is StandDye)
-                            (Main.mouseItem.ModItem as StandDye).OnEquipDye(Main.LocalPlayer);
-                    }
                 }
 
                 Main.inventoryScale = origScale;
@@ -810,6 +825,17 @@ namespace JoJoStands
                 else if (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>())
                     standTier = 2;
             }
+            else
+            {
+                crazyDiamondRestorationMode = false;
+                crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
+                crazyDiamondMessageCooldown = 0;
+                crazyDiamondDestroyedTileData.Clear();
+
+                echoesTier = 0;
+                currentEchoesAct = 0;
+            }
+
             centuryBoyActive = standOut && (StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT1>() || StandSlot.SlotItem.type == ModContent.ItemType<CenturyBoyT2>());
             if (standAccessory)
             {
@@ -948,17 +974,6 @@ namespace JoJoStands
                 }
             }
 
-            if (!standOut)
-            {
-                crazyDiamondRestorationMode = false;
-                crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
-                crazyDiamondMessageCooldown = 0;
-                crazyDiamondDestroyedTileData.Clear();
-
-                echoesTier = 0;
-                currentEchoesAct = 0;
-            }
-
             if (crazyDiamondMessageCooldown > 0)
                 crazyDiamondMessageCooldown--;
 
@@ -1027,7 +1042,7 @@ namespace JoJoStands
             else
                 echoesDamageTimer1 = 60;
 
-            if (sexPistolsTier != 0)        //Sex Pistols stuff
+            if (sexPistolsTier != 0 && !Player.dead)        //Sex Pistols stuff
             {
                 if (standControlStyle == StandControlStyle.Auto)
                     SexPistolsUI.Visible = true;
@@ -1092,7 +1107,7 @@ namespace JoJoStands
                 }
             }
 
-            if (equippedTuskAct != 0 && Player.whoAmI == Main.myPlayer)     //Tusk stuff
+            if (equippedTuskAct != 0 && !Player.dead && Player.whoAmI == Main.myPlayer)     //Tusk stuff
             {
                 bool specialJustPressed = false;
                 if (!Main.dedServ)
@@ -1130,9 +1145,7 @@ namespace JoJoStands
                 if (tuskActNumber <= 3)
                 {
                     if (Player.ownedProjectileCounts[Mod.Find<ModProjectile>("TuskAct" + tuskActNumber + "Pet").Type] <= 0)
-                    {
                         Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position, Player.velocity, Mod.Find<ModProjectile>("TuskAct" + tuskActNumber + "Pet").Type, 0, 0f, Main.myPlayer);
-                    }
                 }
                 else
                 {
@@ -1262,7 +1275,7 @@ namespace JoJoStands
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<WormholeNail>()] > 0)
                     tuskShootCooldown = 30;
             }
-            if (standName == "HermitPurple" && standTier != 0 && Player.whoAmI == Main.myPlayer)
+            if (standName == "HermitPurple" && standTier != 0 && !Player.dead && Player.whoAmI == Main.myPlayer)
             {
                 bool specialJustPressed = false;
                 if (!Main.dedServ)
@@ -1785,14 +1798,11 @@ namespace JoJoStands
 
             echoesTier = 0;
             stickyFingersAmbushMode = false;
+            equippedTuskAct = 0;
+            tuskActNumber = 0;
 
             if (StoneFreeAbilityWheel.Visible)
                 StoneFreeAbilityWheel.CloseAbilityWheel();
-            if (equippedTuskAct != 0)
-            {
-                equippedTuskAct = 0;
-                tuskActNumber = 0;
-            }
             standKeyPressTimer += 30;
             SyncCall.SyncStandOut(Player.whoAmI, false, "", 0);
         }

@@ -50,7 +50,7 @@ namespace JoJoStands.Projectiles.Pets
             Projectile.velocity *= 0.8f;
             Projectile.spriteDirection = Projectile.direction = player.direction;
 
-            if (!mPlayer.standOut)
+            if (!mPlayer.standOut || player.dead)
                 Projectile.Kill();
 
             Projectile.frameCounter++;

@@ -14,7 +14,7 @@ namespace JoJoStands.Items.Dyes
 
         public virtual void OnUnEquipDye(Player player)
         {
-            player.GetModPlayer<MyPlayer>().dyePathAddition = "";
+            player.GetModPlayer<MyPlayer>().dyePathAddition = string.Empty;
         }
 
         public virtual void UpdateEquippedDye(Player player)

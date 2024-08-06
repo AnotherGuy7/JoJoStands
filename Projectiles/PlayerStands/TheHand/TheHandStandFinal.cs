@@ -178,6 +178,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                         }
                         else
                         {
+                            attacking = false;
                             currentAnimationState = AnimationState.Idle;
                             scrapeBarraging = false;
                         }

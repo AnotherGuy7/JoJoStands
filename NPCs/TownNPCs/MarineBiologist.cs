@@ -137,7 +137,7 @@ namespace JoJoStands.NPCs.TownNPCs
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.GoldExperienceRequiem").Value;
 
                 else if (standSlotItemType == ModContent.ItemType<TuskAct1>())
-                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.TuskAct1").Value;
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.TuskAct1").Value.FormatWith(Main.LocalPlayer.name);
                 else if (standSlotItemType == ModContent.ItemType<TuskAct2>())
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.TuskAct2").Value;
                 else if (standSlotItemType == ModContent.ItemType<TuskAct3>())

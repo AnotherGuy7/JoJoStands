@@ -1,5 +1,7 @@
 using JoJoStands.Buffs.EffectBuff;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -197,6 +199,22 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 }
             }
             return ammoType;
+        }
+
+        public override void OnDyeChanged()
+        {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            punchTextures = new Texture2D[AmountOfPunchVariants];
+            if (mPlayer.currentTextureDye == MyPlayer.StandTextureDye.Part4)
+            {
+                for (int v = 0; v < AmountOfPunchVariants; v++)
+                    punchTextures[v] = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StarPlatinum/Part4/StarPlatinum_Punch_" + (v + 1), AssetRequestMode.ImmediateLoad).Value;
+            }
+            else
+            {
+                for (int v = 0; v < AmountOfPunchVariants; v++)
+                    punchTextures[v] = ModContent.Request<Texture2D>(PunchTexturePath + (v + 1), AssetRequestMode.ImmediateLoad).Value;
+            }
         }
 
         public override byte SendAnimationState() => (byte)currentAnimationState;
