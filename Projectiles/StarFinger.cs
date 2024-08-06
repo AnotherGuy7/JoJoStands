@@ -123,7 +123,6 @@ namespace JoJoStands.Projectiles
             if (Main.netMode != NetmodeID.Server)
                 starFingerPartTexture = ModContent.Request<Texture2D>("JoJoStands/Projectiles/StarFingerPart").Value;
 
-
             Vector2 linkCenter = ownerProj.Center + offset;
             Vector2 normalizedVelocity = Projectile.velocity;
             normalizedVelocity.Normalize();

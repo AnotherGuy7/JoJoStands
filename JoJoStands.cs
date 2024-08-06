@@ -110,6 +110,7 @@ namespace JoJoStands
             GoldenSpinMeter.goldenRectangleSpinLineTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/GoldenSpinMeterLine", AssetRequestMode.ImmediateLoad);
             SexPistolsUI.sexPistolsUITexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/SexPistolsUI", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar", AssetRequestMode.ImmediateLoad);
+            VoidBar.VoidBarBarOutlineTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar_BarOutline", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBarBar", AssetRequestMode.ImmediateLoad);
             PolaroidTokenLayer.MenacingTextureSpritesheet = Request<Texture2D>("JoJoStands/Extras/MenacingIcons", AssetRequestMode.ImmediateLoad).Value;
 

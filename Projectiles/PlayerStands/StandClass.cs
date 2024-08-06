@@ -801,6 +801,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             SpawnEffects();
         }
 
+        public virtual void OnDyeChanged() { }
+
         public void SpawnEffects()
         {
             summonParticleTimer = Main.rand.Next(6, 10 + 1);
@@ -812,6 +814,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 punchTextures = new Texture2D[AmountOfPunchVariants];
                 for (int v = 0; v < AmountOfPunchVariants; v++)
                     punchTextures[v] = ModContent.Request<Texture2D>(PunchTexturePath + (v + 1), AssetRequestMode.ImmediateLoad).Value;
+                if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().usingStandTextureDye)
+                    OnDyeChanged();
             }
 
             if (JoJoStands.SoundsLoaded)

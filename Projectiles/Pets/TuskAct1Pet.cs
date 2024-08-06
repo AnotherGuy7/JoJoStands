@@ -68,7 +68,7 @@ namespace JoJoStands.Projectiles.Pets
                     player.direction = -1;
             }
 
-            if (!mPlayer.standOut)
+            if (!mPlayer.standOut || player.dead)
                 Projectile.Kill();
 
             float maximumDistance = 4f;

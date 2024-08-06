@@ -15,6 +15,14 @@ namespace JoJoStands.Items.Dyes
             Item.value = Item.buyPrice(silver: 25);
         }
 
+        public override void OnEquipDye(Player player)
+        {
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.usingStandTextureDye = true;
+            mPlayer.currentTextureDye = MyPlayer.StandTextureDye.Salad;
+            base.OnEquipDye(player);
+        }
+
         public override void UpdateEquippedDye(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
