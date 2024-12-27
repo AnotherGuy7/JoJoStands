@@ -24,7 +24,7 @@ namespace JoJoStands.Projectiles
 
 
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             //Bubble explosion effects
             for (int i = 0; i < 30; i++)

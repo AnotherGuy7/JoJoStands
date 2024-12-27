@@ -39,7 +39,7 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             int dustType = explosionDustTypes[Main.rand.Next(0, explosionDustTypes.Length)];
             for (int i = 0; i < 60; i++)

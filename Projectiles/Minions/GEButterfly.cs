@@ -130,7 +130,7 @@ namespace JoJoStands.Projectiles.Minions
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
             {

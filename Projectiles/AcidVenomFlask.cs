@@ -41,7 +41,7 @@ namespace JoJoStands.Projectiles
             target.AddBuff(BuffID.Venom, 300);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item107, Projectile.Center);
             Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.oldVelocity * 0.2f, 704);

@@ -125,7 +125,7 @@ namespace JoJoStands.Projectiles
             zeppeli.FaceTarget();
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             HamonMaster.punchesActive = false;
         }

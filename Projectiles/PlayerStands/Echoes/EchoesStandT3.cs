@@ -113,7 +113,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                 echoesTailTipType = 1;
 
                             Main.NewText(EffectNames[echoesTailTipType - 1], EffectColors[echoesTailTipType - 1]);
-
                         }
                     }
                 }

@@ -216,7 +216,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Main.EntitySpriteDraw(barrelTexture, Projectile.Center + (offset * new Vector2(Projectile.spriteDirection, 1f)) - Main.screenPosition, null, Color.White, currentRota + MathHelper.Pi, origin, Projectile.scale, effect, 0f);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 16, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));

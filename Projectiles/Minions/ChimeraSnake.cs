@@ -78,7 +78,7 @@ namespace JoJoStands.Projectiles.Minions
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.NPCDeath5, Projectile.Center);
         }

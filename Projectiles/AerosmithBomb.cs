@@ -28,7 +28,7 @@ namespace JoJoStands.Projectiles
         private const float ExplosionRadius = 6f * 16f;
         private bool crit = false;
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < 30; i++)
             {

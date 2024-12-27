@@ -138,7 +138,7 @@ namespace JoJoStands.Projectiles.NPCStands
             SelectFrame();
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             SPActive = false;
         }

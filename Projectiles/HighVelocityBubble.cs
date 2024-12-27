@@ -79,7 +79,7 @@ namespace JoJoStands.Projectiles
             modifiers.FinalDamage += target.defense / 2;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

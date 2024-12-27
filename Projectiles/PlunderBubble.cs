@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles
                 target.AddBuff(BuffID.Obstructed, 4 * 60);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Cloud, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
         }

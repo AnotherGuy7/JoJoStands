@@ -95,6 +95,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     else
                     {
                         attacking = false;
+                        flickFrames = false;
                         currentAnimationState = AnimationState.Idle;
                     }
                 }

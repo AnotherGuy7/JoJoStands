@@ -46,7 +46,7 @@ namespace JoJoStands.Projectiles
             return Projectile.ai[0] == 0f;      //If the balloon is set to explode on impact, then it's true, if it's not, then, well, it's not.
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             float radius = 5f * 16f;
             for (int i = 0; i < 60; i++)
