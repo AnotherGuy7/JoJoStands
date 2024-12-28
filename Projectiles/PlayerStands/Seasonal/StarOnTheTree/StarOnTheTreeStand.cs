@@ -95,7 +95,6 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     else
                     {
                         attacking = false;
-                        flickFrames = false;
                         currentAnimationState = AnimationState.Idle;
                     }
                 }
@@ -152,6 +151,10 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                         }
                     }
                 }
+                else if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
+                    flickFrames = false;
+                if (flickFrames)
+                    currentAnimationState = AnimationState.Flick;
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
@@ -229,7 +232,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
             else if (animationName == "Flick")
-                AnimateStand(animationName, 4, 10, false);
+                AnimateStand(animationName, 4, 5, false);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 2, 12, true);
         }

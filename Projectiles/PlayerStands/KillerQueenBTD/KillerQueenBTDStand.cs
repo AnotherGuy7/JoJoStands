@@ -49,7 +49,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
         private bool bitesTheDustActivated;
         private PlayerData[] savedPlayerDatas;
         private WorldData savedWorldData;
-        private bool saveDataCreated = false;       //For use with all clients that aren't 
+        private bool saveDataCreated = false;       //For use with all clients that aren't
+        private float btdStartTime = 0f;
 
         public struct PlayerData
         {
@@ -65,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
         public struct WorldData
         {
-            public double worldTime;
+            public float worldTime;
             public NPCData[] npcData;
         }
 
@@ -174,7 +175,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 mPlayer.standChangingLocked = true;
 
                 savedWorldData = new WorldData();
-                savedWorldData.worldTime = Main.time;
+                savedWorldData.worldTime = Utils.GetDayTimeAs24FloatStartingFromMidnight();
                 savedWorldData.npcData = new NPCData[Main.maxNPCs];
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
@@ -187,7 +188,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                         savedWorldData.npcData[i].velocity = npc.velocity;
                         savedWorldData.npcData[i].health = npc.life;
                         savedWorldData.npcData[i].direction = npc.direction;
-                        savedWorldData.npcData[i].ai = npc.ai;
+                        savedWorldData.npcData[i].ai = (float[])npc.ai.Clone();
                         savedWorldData.npcData[i].active = true;
                     }
                 }
@@ -207,6 +208,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 else
                     btdStartDelay = 205;
                 Projectile.netUpdate = true;
+                btdStartTime = Utils.GetDayTimeAs24FloatStartingFromMidnight();
             }
             if (JoJoStands.SoundsLoaded && !bitesTheDustActivated && btdStartDelay > 0)
             {
@@ -255,7 +257,8 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 mPlayer.biteTheDustEffectProgress = (float)currentRewindTime / (float)totalRewindTime;
                 if (Main.netMode == NetmodeID.MultiplayerClient && Projectile.owner != Main.myPlayer)
                     Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().biteTheDustEffectProgress = (float)currentRewindTime / (float)totalRewindTime;
-                Main.time = MathHelper.Lerp((float)Main.time, (float)savedWorldData.worldTime, mPlayer.biteTheDustEffectProgress);
+
+                mPlayer.bitesTheDustNewTime = (MathHelper.Lerp(btdStartTime, savedWorldData.worldTime, mPlayer.biteTheDustEffectProgress)) % 24f;        //range from 0 - 24
                 if (btdRevertTimer >= btdRevertTime)
                 {
                     btdRevertTime = (int)(btdRevertTime * 0.8f);
@@ -323,7 +326,6 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                             }
                         }
 
-                        Main.time = savedWorldData.worldTime;
                         player.ClearBuff(ModContent.BuffType<BitesTheDust>());
                         SoundEngine.PlaySound(KillerQueenStandFinal.KillerQueenClickSound, Projectile.Center);
                         if (Projectile.owner == Main.myPlayer)
@@ -474,6 +476,14 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
                 currentTimeAmount = (int)(currentTimeAmount * 0.8);
             }
             return rewindTime;
+        }
+
+        private float MidnightFloat24AsDayTime(float militaryFormatTime)
+        {
+            if (Main.dayTime)
+                return (militaryFormatTime - 4.5f) * (15f / 54000f);
+
+            return (militaryFormatTime - 19.5f) * (9f / 32400f);
         }
 
         public override void SendExtraStates(BinaryWriter writer)

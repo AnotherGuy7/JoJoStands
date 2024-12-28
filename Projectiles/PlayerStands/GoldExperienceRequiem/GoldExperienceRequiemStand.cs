@@ -147,9 +147,9 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
                 if (SecondSpecialKeyPressed(false))
                 {
                     if (!GoldExperienceRequiemAbilityWheel.Visible)
-                        GoldExperienceAbilityWheel.OpenAbilityWheel(mPlayer, 5);
+                        GoldExperienceRequiemAbilityWheel.OpenAbilityWheel(mPlayer, 4);
                     else
-                        GoldExperienceAbilityWheel.CloseAbilityWheel();
+                        GoldExperienceRequiemAbilityWheel.CloseAbilityWheel();
                 }
 
                 if (secondaryAbility)
