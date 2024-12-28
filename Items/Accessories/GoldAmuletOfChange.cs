@@ -7,14 +7,15 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class GoldAmuletOfChange : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Change");
-            Tooltip.SetDefault("5% increased Stand crit chance");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Amulet of Change");
+            // Tooltip.SetDefault("5% increased Stand crit chance");
+            Item.ResearchUnlockCount = 1;
         }
         public override void SetDefaults()
         {

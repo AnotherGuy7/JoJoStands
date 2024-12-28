@@ -15,10 +15,10 @@ namespace JoJoStands.UI
     public class AbilityWheel : UIState
     {
         public static MyPlayer mPlayer;
-        public static float VAlign = 0.5f;
-        public static float HAlign = 0.9f;
+        public static float VerticalAlignmentPercentage = 0.5f;
         private readonly int WheelFadeTime = 4 * 60;
         private readonly int WheelFadeDivider = 3 * 60;
+        public readonly Vector2 AbilityWheelSize = new Vector2(54f);
 
         public virtual string centerTexturePath { get; }
         public virtual string[] abilityNames { get; }
@@ -78,11 +78,10 @@ namespace JoJoStands.UI
             abilityWheel.Height.Set(120f, 0f);
             abilityWheel.BackgroundColor = Color.Transparent;
             abilityWheel.BorderColor = Color.Transparent;
-            abilityWheel.OnScrollWheel += MouseScroll;
 
-            wheelCenter = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelCenter", AssetRequestMode.ImmediateLoad), Vector2.Zero, new Vector2(54f), Color.White, 1f, 1f);
+            wheelCenter = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelCenter", AssetRequestMode.ImmediateLoad), Vector2.Zero, AbilityWheelSize, Color.White, 1f, 1f);
             wheelCenter.SetButtonPosiiton(new Vector2(60f));
-            wheelCenter.SetButtonSize(new Vector2(54f));
+            wheelCenter.SetButtonSize(AbilityWheelSize);
             wheelCenter.SetOverlayImage((Texture2D)ModContent.Request<Texture2D>(centerTexturePath, AssetRequestMode.ImmediateLoad), 0.15f);
             wheelCenter.owner = abilityWheel;
             wheelCenter.respondToFocus = false;
@@ -91,10 +90,9 @@ namespace JoJoStands.UI
             abilityButtons = new AdjustableButton[amountOfAbilities];
             for (int i = 0; i < amountOfAbilities; i++)
             {
-                abilityButtons[i] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelPiece"), wheelCenter.buttonCenter + (IndexToRadianPosition(i, 6) * wheelSpace), new Vector2(38f), Color.White, 1f, 1f);
+                abilityButtons[i] = new AdjustableButton(ModContent.Request<Texture2D>("JoJoStands/UI/AbilityWheel/WheelPiece", AssetRequestMode.ImmediateLoad), wheelCenter.buttonCenter + (IndexToRadianPosition(i, 6) * wheelSpace), new Vector2(38f), Color.White, 1f, 1f);
                 abilityButtons[i].SetOverlayImage((Texture2D)ModContent.Request<Texture2D>(buttonTexturePath + abilityTextureNames[i], AssetRequestMode.ImmediateLoad), 0.15f);
-                abilityButtons[i].OnClick += ClickedAbility;
-                abilityButtons[i].OnScrollWheel += MouseScroll;
+                abilityButtons[i].OnLeftClick += ClickedAbility;
                 //abilityButtons[i].owner = abilityWheel;
                 abilityWheel.Append(abilityButtons[i]);
             }
@@ -113,41 +111,6 @@ namespace JoJoStands.UI
 
         public virtual void ExtraInitialize()
         { }
-
-        private void MouseScroll(UIMouseEvent evt, UIElement listeningElement)
-        {
-            if (IsMouseHovering && inputTimer <= 0)
-            {
-                //inputTimer += 3;
-                int newScrollValue = Mouse.GetState().ScrollWheelValue;
-                int wheelDifference = previousScrollValue - newScrollValue;
-                previousScrollValue = newScrollValue;
-
-                if (wheelDifference > 0)
-                {
-                    mPlayer.chosenAbility -= 1;
-                    if (mPlayer.chosenAbility < 0)
-                        mPlayer.chosenAbility = abilitiesShown - 1;
-                }
-                else
-                {
-                    mPlayer.chosenAbility += 1;
-                    if (mPlayer.chosenAbility > abilitiesShown - 1)
-                        mPlayer.chosenAbility = 0;
-                }
-                abilityChanged = true;
-                abilityNameText.SetText(abilityNames[mPlayer.chosenAbility]);
-                alphaTimer = WheelFadeTime;
-
-                for (int i = 0; i < abilitiesShown; i++)
-                {
-                    AdjustableButton button = abilityButtons[i];
-                    button.drawColor = Color.Gray;
-                    if (i == mPlayer.chosenAbility)
-                        button.drawColor = Color.White;
-                }
-            }
-        }
 
         private void ClickedAbility(UIMouseEvent evt, UIElement listeningElement)
         {
@@ -173,13 +136,45 @@ namespace JoJoStands.UI
 
         public override void Update(GameTime gameTime)
         {
-            abilityWheel.HAlign = HAlign;
-            abilityWheel.VAlign = VAlign;
+            Vector2 placementVector = new Vector2(Main.screenWidth - (AbilityWheelSize.X / 2f), Main.screenHeight * VerticalAlignmentPercentage);
+            abilityWheel.Left.Set(placementVector.X, 0f);
+            abilityWheel.Top.Set(placementVector.Y, 0f);
             if (inputTimer > 0)
                 inputTimer--;
             if (alphaTimer > 0)
                 alphaTimer--;
-            wheelCenterPosition = new Vector2(Main.screenWidth * abilityWheel.HAlign, Main.screenHeight * abilityWheel.VAlign);
+            wheelCenterPosition = new Vector2(placementVector.X, placementVector.Y);
+
+            int newScrollValue = Mouse.GetState().ScrollWheelValue;
+            int wheelDifference = previousScrollValue - newScrollValue;
+            if (wheelDifference != 0 && Vector2.Distance(wheelCenterPosition, Main.MouseScreen) < 60f && inputTimer <= 0)
+            {
+                //inputTimer += 3;
+                previousScrollValue = newScrollValue;
+                if (wheelDifference > 0)
+                {
+                    mPlayer.chosenAbility -= 1;
+                    if (mPlayer.chosenAbility < 0)
+                        mPlayer.chosenAbility = abilitiesShown - 1;
+                }
+                else
+                {
+                    mPlayer.chosenAbility += 1;
+                    if (mPlayer.chosenAbility > abilitiesShown - 1)
+                        mPlayer.chosenAbility = 0;
+                }
+                abilityChanged = true;
+                abilityNameText.SetText(abilityNames[mPlayer.chosenAbility]);
+                alphaTimer = WheelFadeTime;
+
+                for (int i = 0; i < abilitiesShown; i++)
+                {
+                    AdjustableButton button = abilityButtons[i];
+                    button.drawColor = Color.Gray;
+                    if (i == mPlayer.chosenAbility)
+                        button.drawColor = Color.White;
+                }
+            }
 
             if (abilityChanged)
             {

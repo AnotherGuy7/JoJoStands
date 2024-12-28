@@ -7,14 +7,15 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class GoldAmuletOfManipulation : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Manipulation");
-            Tooltip.SetDefault("20% Stand Ability cooldown reduction\n10 increased Stand armor penetration");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Amulet of Manipulation");
+            // Tooltip.SetDefault("20% Stand Ability cooldown reduction\n10 increased Stand armor penetration");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

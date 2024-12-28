@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -11,17 +12,32 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
     {
         public override int PunchDamage => 92;
         public override int PunchTime => 9;
-        public override int AltDamage => 139;
+        public override int AltDamage => 147;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 0;
+        public override int FistID => 0;
         public override int TierNumber => 3;
         public override string PunchSoundName => "Ora";
         public override string PoseSoundName => "YareYareDaze";
         public override string SpawnSoundName => "Star Platinum";
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/StarPlatinum/StarPlatinum_Punch_";
+        public override Vector2 PunchSize => new Vector2(44, 12);
+        public override bool CanUsePart4Dye => true;
         public override StandAttackType StandType => StandAttackType.Melee;
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
 
         private bool flickFrames = false;
-        private bool resetFrame = false;
+        private bool rightClickShot = false;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            Secondary,
+            Flick,
+            Pose
+        }
 
         public override void AI()
         {
@@ -38,34 +54,63 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] != 0;
-
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
+                secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] != 0;
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                {
-                    StayBehindWithAbility();
-                }
-                if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
-                {
-                    int bulletIndex = GetPlayerAmmo(player);
-                    if (bulletIndex != -1)
+                    if (Main.mouseLeft && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                     {
-                        Item bulletItem = player.inventory[bulletIndex];
-                        if (bulletItem.shoot != -1)
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
+                    if (Main.mouseRight && !rightClickShot && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0 && shootCount <= 0)
+                    {
+                        int bulletIndex = GetPlayerAmmo(player);
+                        if (bulletIndex != -1)
                         {
-                            flickFrames = true;
-                            if (Projectile.frame == 1)
+                            Item bulletItem = player.inventory[bulletIndex];
+                            if (bulletItem.shoot != -1)
+                                flickFrames = true;
+                        }
+                        else
+                        {
+                            if (player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                             {
-                                shootCount += 60;
+                                shootCount += 40;
                                 Main.mouseLeft = false;
+                                Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                                if (shootVel == Vector2.Zero)
+                                    shootVel = new Vector2(0f, 1f);
+
+                                shootVel.Normalize();
+                                shootVel *= ProjectileSpeed;
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts) - 39, 2f, Projectile.owner, Projectile.whoAmI);
+                                Main.projectile[projIndex].netUpdate = true;
+                                Projectile.netUpdate = true;
+                            }
+                        }
+                    }
+                    if (!Main.mouseRight && !flickFrames)
+                        rightClickShot = false;
+                }
+                if (!attacking)
+                    StayBehindWithAbility();
+                if (flickFrames)
+                {
+                    currentAnimationState = AnimationState.Flick;
+                    if (Projectile.frame == 1 && !rightClickShot)
+                    {
+                        int bulletIndex = GetPlayerAmmo(player);
+                        if (bulletIndex != -1)
+                        {
+                            Item bulletItem = player.inventory[bulletIndex];
+                            if (bulletItem.shoot != -1)
+                            {
+                                rightClickShot = true;
                                 SoundStyle item41 = SoundID.Item41;
                                 item41.Pitch = 2.8f;
                                 SoundEngine.PlaySound(item41, player.Center);
@@ -78,28 +123,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                 int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, bulletItem.shoot, (int)(AltDamage * mPlayer.standDamageBoosts), bulletItem.knockBack, Projectile.owner, Projectile.whoAmI);
                                 Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().kickedByStarPlatinum = true;
                                 Main.projectile[projIndex].netUpdate = true;
-                                if (bulletItem.type != ItemID.EndlessMusketPouch)
-                                {
+                                if (bulletItem.consumable)
                                     player.ConsumeItem(bulletItem.type);
-                                }
                             }
-                        }
-                    }
-                    else
-                    {
-                        if (player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
-                        {
-                            shootCount += 120;
-                            Main.mouseLeft = false;
-                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                            if (shootVel == Vector2.Zero)
-                                shootVel = new Vector2(0f, 1f);
-
-                            shootVel.Normalize();
-                            shootVel *= ProjectileSpeed;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StarFinger>(), (int)(AltDamage * mPlayer.standDamageBoosts) - 39, 2f, Projectile.owner, Projectile.whoAmI);
-                            Main.projectile[projIndex].netUpdate = true;
-                            Projectile.netUpdate = true;
                         }
                     }
                 }
@@ -107,7 +133,18 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 PunchAndShootAI(ModContent.ProjectileType<StarFinger>(), shootMax: 1);
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else if (attacking)
+                    currentAnimationState = AnimationState.Attack;
+                else if (secondaryAbility)
+                    currentAnimationState = AnimationState.Secondary;
             }
+
+            if (secondaryAbility)
+                currentAnimationState = AnimationState.Secondary;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private int GetPlayerAmmo(Player player)
@@ -116,7 +153,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             for (int i = 54; i < 58; i++)       //These are the 4 ammo slots
             {
                 Item Item = player.inventory[i];
-                
+
                 if (Item.ammo == AmmoID.Bullet && Item.stack > 0)
                 {
                     ammoType = i;
@@ -138,80 +175,67 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             return ammoType;
         }
 
+        public override void OnDyeChanged()
+        {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            punchTextures = new Texture2D[AmountOfPunchVariants];
+            if (mPlayer.currentTextureDye == MyPlayer.StandTextureDye.Part4)
+            {
+                for (int v = 0; v < AmountOfPunchVariants; v++)
+                    punchTextures[v] = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StarPlatinum/Part4/StarPlatinum_Punch_" + (v + 1), AssetRequestMode.ImmediateLoad).Value;
+            }
+            else
+            {
+                for (int v = 0; v < AmountOfPunchVariants; v++)
+                    punchTextures[v] = ModContent.Request<Texture2D>(PunchTexturePath + (v + 1), AssetRequestMode.ImmediateLoad).Value;
+            }
+        }
+
+        public override byte SendAnimationState() => (byte)currentAnimationState;
+        public override void ReceiveAnimationState(byte state) => currentAnimationState = (AnimationState)state;
+
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
-            }
-            if (idleFrames)
-            {
-                attackFrames = false;
-                PlayAnimation("Idle");
-            }
-            if (flickFrames)
-            {
-                if (!resetFrame)
-                {
-                    Projectile.frame = 0;
-                    Projectile.frameCounter = 0;
-                    resetFrame = true;
-                }
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Flick");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Pose");
                 Projectile.frame = 0;
-                if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
-                {
-                    secondaryAbilityFrames = false;
-                }
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Flick)
+                PlayAnimation("Flick");
+            else if (currentAnimationState == AnimationState.Secondary || currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void AnimationCompleted(string animationName)
         {
-            if (resetFrame && animationName == "Flick")
+            if (animationName == "Flick")
             {
-                idleFrames = true;
+                currentAnimationState = AnimationState.Idle;
                 flickFrames = false;
-                resetFrame = false;
             }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/StarPlatinum", "StarPlatinum_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Flick")
-            {
+            else if (animationName == "Flick")
                 AnimateStand(animationName, 4, 10, false);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 2, 12, true);
-            }
         }
     }
 }

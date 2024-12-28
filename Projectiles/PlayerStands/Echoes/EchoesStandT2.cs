@@ -10,6 +10,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Echoes
@@ -19,7 +20,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
         public override int PunchDamage => 4;
         public override int PunchTime => 16;
         public override int HalfStandHeight => 30;
-        public override int FistWhoAmI => 15;
+        public override int FistID => 15;
         public override int TierNumber => 2;
         public override string PoseSoundName => "EchoesAct1";
         public override string SpawnSoundName => "Echoes Act 1";
@@ -51,7 +52,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 remoteMode = true;
             if (Projectile.ai[0] == 2f)
                 returnToPlayer = true;
-            idleFrames = true;
+            currentAnimationState = AnimationState.Idle;
         }
 
         public override void AI()
@@ -90,14 +91,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing && !returnToPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
+                    if (Main.mouseLeft && !mPlayer.posing && !returnToPlayer)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
                 }
                 if (Main.mouseRight && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && rightClickCooldown <= 0 && !targetFound && !returnToPlayer) //right-click ability activation
                 {
@@ -121,7 +126,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                 else
                                 {
                                     messageCooldown += 90;
-                                    Main.NewText("Target too far");
+                                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.CrazyDiamondTargetOOR").Value);
                                 }
                             }
                             else
@@ -129,7 +134,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                 if (messageCooldown <= 0)
                                 {
                                     messageCooldown += 90;
-                                    Main.NewText("Select the target with mouse");
+                                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesMouseHint").Value);
                                 }
                             }
                         }
@@ -156,7 +161,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                     else
                                     {
                                         messageCooldown += 90;
-                                        Main.NewText("Target too far");
+                                        Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.CrazyDiamondTargetOOR").Value);
                                     }
                                 }
                                 else
@@ -164,7 +169,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                                     if (messageCooldown <= 0)
                                     {
                                         messageCooldown += 90;
-                                        Main.NewText("Select the target with mouse");
+                                        Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesMouseHint").Value);
                                     }
                                 }
                             }
@@ -172,7 +177,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                     rightClickCooldown += 90;
                 }
-                if (!attackFrames && !returnToPlayer)
+                if (!attacking && !returnToPlayer)
                     StayBehind();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
@@ -194,7 +199,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                     if (Main.mouseRight && Projectile.owner == Main.myPlayer && !mPlayer.posing)
                     {
-                        attackFrames = true;
+                        currentAnimationState = AnimationState.Attack;
                         PlayPunchSound();
                         if (shootCount <= 0)
                         {
@@ -205,16 +210,13 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
                             shootVel.Normalize();
                             shootVel *= ProjectileSpeed;
-                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI, TierNumber);
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistID, TierNumber);
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                         }
                     }
                     if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
-                    {
-                        attackFrames = false;
-                        idleFrames = true;
-                    }
+                        currentAnimationState = AnimationState.Idle;
                     if (!mouseControlled)
                         MovementAI(Projectile.Center + new Vector2(100f * Projectile.spriteDirection, 0f), 0f);
 
@@ -303,13 +305,15 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Projectile.tileCollide = false;
                 MovementAI(player.Center, 8f + player.moveSpeed * 2);
             }
-            if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && Main.hardMode && mPlayer.EchoesAct2EvolutionProgress >= 10000)
+            if (player.HasBuff(ModContent.BuffType<StrongWill>()) && mPlayer.echoesTier == 2 && Main.hardMode && mPlayer.echoesACT2EvolutionProgress >= 10000)
             {
                 evolve = true;
                 Projectile.Kill();
             }
             if (player.teleporting)
                 Projectile.position = player.position;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private void MovementAI(Vector2 target, float speed)
@@ -328,45 +332,33 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override void SelectAnimation()
         {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (mPlayer.posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "/EchoesAct1_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/Echoes", "EchoesACT1_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
         public override void SendExtraStates(BinaryWriter writer)
         {
@@ -411,11 +403,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             if (evolve)
             {
                 player.maxMinions += 1;
-                mPlayer.EchoesAct2EvolutionProgress = 0;
+                mPlayer.echoesACT2EvolutionProgress = 0;
                 mPlayer.StandSlot.SlotItem.type = ModContent.ItemType<EchoesAct2>();
                 mPlayer.StandSlot.SlotItem.SetDefaults(ModContent.ItemType<EchoesAct2>());
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandT3>(), 0, 0f, Main.myPlayer, remoteModeOnSpawn);
-                Main.NewText("Oh? Echoes is evolving!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesEvolve").Value);
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT1_Gore_1>(), 1f);
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT1_Gore_2>(), 1f);
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);

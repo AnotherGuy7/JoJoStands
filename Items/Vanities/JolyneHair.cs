@@ -8,10 +8,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jolyne Hair");
-            Tooltip.SetDefault("A wig with layered buns and braids suited to those who fight for their freedoms.");
+            // DisplayName.SetDefault("Jolyne Hair");
+            // Tooltip.SetDefault("A wig with layered buns and braids suited to those who fight for their freedoms.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

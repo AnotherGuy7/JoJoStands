@@ -7,8 +7,8 @@ namespace JoJoStands.Buffs.Debuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Red Bind");
-            Description.SetDefault("You are bound by fire...");
+            // DisplayName.SetDefault("Red Bind");
+            // Description.SetDefault("You are bound by fire...");
             Main.persistentBuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;

@@ -70,21 +70,16 @@ namespace JoJoStands.Projectiles
             Main.dust[dustIndex].noGravity = true;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
-            damage += target.defense / 2;
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
+                modifiers.SetCrit();
+            modifiers.FinalDamage += target.defense / 2;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -120,10 +115,17 @@ namespace JoJoStands.Projectiles
                 if (npc.active && npc.lifeMax > 5 && !npc.friendly && !npc.hide && !npc.immortal && npc.Distance(Projectile.Center) <= ExplosionRadius)
                 {
                     int hitDirection = npc.position.X - Projectile.position.X > 0 ? 1 : -1;
-                    npc.StrikeNPC((int)(650 * mPlayer.standDamageBoosts), 0f, hitDirection, crit);
+                    NPC.HitInfo hitInfo = new NPC.HitInfo()
+                    {
+                        Damage = (int)(650 * mPlayer.standDamageBoosts),
+                        Knockback = 0f,
+                        HitDirection = hitDirection,
+                        Crit = crit
+                    };
+                    npc.StrikeNPC(hitInfo);
                 }
             }
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
 
             for (int i = 0; i < 60; i++)
             {

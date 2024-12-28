@@ -40,13 +40,10 @@ float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
 	//float4 textureColors = tex2D(uImage1, coords.xy);
 	
 	if (coords.y < uOpacity)
-	{
 		color.a = 1.0;
-	}
 	else
-	{
 		color.rgb = lerp(topColor, bottomColor, coords.y);
-	}
+	
 	return color;
 }
 

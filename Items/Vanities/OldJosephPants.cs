@@ -8,9 +8,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Old Man's Pants");
-            Tooltip.SetDefault("Dirty brown pants. At least he shoes look nice!");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Old Man's Pants");
+            // Tooltip.SetDefault("Dirty brown pants. At least he shoes look nice!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

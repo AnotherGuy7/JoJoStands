@@ -8,8 +8,8 @@ namespace JoJoStands.Items.Seasonal
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Stab yourself with this to for a 55% chance to give yourself a Christmas stand!.. or so it seemed?\nEat this arrow to gain a Christmas Stand.");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("Stab yourself with this to for a 55% chance to give yourself a Christmas stand!.. or so it seemed?\nEat this arrow to gain a Christmas Stand.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

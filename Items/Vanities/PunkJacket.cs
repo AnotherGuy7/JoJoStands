@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Punk Jacket");
-            Tooltip.SetDefault("Fit for one with a golden heart!");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Punk Jacket");
+            // Tooltip.SetDefault("Fit for one with a golden heart!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

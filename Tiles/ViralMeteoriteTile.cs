@@ -2,6 +2,7 @@ using JoJoStands.Items.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Tiles
@@ -19,13 +20,12 @@ namespace JoJoStands.Tiles
 
             HitSound = SoundID.Tink;
             DustType = DustID.Silver;
-            ItemDrop = ModContent.ItemType<ViralMeteorite>();
             MineResist = 3f;
             MinPick = 65;
 
             TileID.Sets.DisableSmartCursor[Type] = true;
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Viral Meteorite");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Viral Meteorite");
             AddMapEntry(Color.LightGray, name);
         }
 

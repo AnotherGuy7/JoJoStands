@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.EffectBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Frozen in Time");
-            Description.SetDefault("You have been stopped along with time");
+            // DisplayName.SetDefault("Frozen in Time");
+            // Description.SetDefault("You have been stopped along with time");
             Main.buffNoTimeDisplay[Type] = true;
             Main.debuff[Type] = true;       //so that it can't be canceled
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
@@ -18,6 +18,9 @@ namespace JoJoStands.Buffs.EffectBuff
         public override void UpdateBuffOnPlayer(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (mPlayer.immuneToTimestopEffects)
+                return;
+
             player.controlUseItem = false;
             player.dashType = 0;
             player.bodyVelocity = Vector2.Zero;

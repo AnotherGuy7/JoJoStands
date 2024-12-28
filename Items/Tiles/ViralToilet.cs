@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Tiles
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A toilet in which the toilet itself is a living creature.");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A toilet in which the toilet itself is a living creature.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

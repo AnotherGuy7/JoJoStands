@@ -9,9 +9,9 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Meteorite Bar");
-            Tooltip.SetDefault("You feel your soul interacting with the metal.");
-            SacrificeTotal = 25;
+            // DisplayName.SetDefault("Viral Meteorite Bar");
+            // Tooltip.SetDefault("You feel your soul interacting with the metal.");
+            Item.ResearchUnlockCount = 25;
         }
 
         public override void SetDefaults()

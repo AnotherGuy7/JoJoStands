@@ -47,13 +47,13 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             int plunderType = (int)Projectile.ai[0];
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
 
             if (plunderType == Plunder_None && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
             {
@@ -78,21 +78,16 @@ namespace JoJoStands.Projectiles
                         target.AddBuff(ModContent.BuffType<Infected>(), 280);
                 }
             }
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Player player = Main.player[Projectile.owner];
             if (Main.rand.NextBool(10) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 target.AddBuff(BuffID.Obstructed, 4 * 60);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.Cloud, Projectile.velocity.X * -0.5f, Projectile.velocity.Y * -0.5f);
         }

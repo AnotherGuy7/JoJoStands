@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Adamantite Alloy Helmet (Short-Ranged)");
-            Tooltip.SetDefault("A helmet fused with Viral Meteorite to empower the user.\n8% Stand Crit Chance\n12% Stand Damage");
+            // DisplayName.SetDefault("Adamantite Alloy Helmet (Short-Ranged)");
+            // Tooltip.SetDefault("A helmet fused with Viral Meteorite to empower the user.\n8% Stand Crit Chance\n12% Stand Damage");
         }
 
         public override void SetDefaults()

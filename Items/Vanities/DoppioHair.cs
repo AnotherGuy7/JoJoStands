@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Doppio's Hair");
-            Tooltip.SetDefault("Hair that turns inside-out; The other style has black dots and seems longer...");
+            // DisplayName.SetDefault("Doppio's Hair");
+            // Tooltip.SetDefault("Hair that turns inside-out; The other style has black dots and seems longer...");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -12,7 +12,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
         public override float PunchKnockback => 2f;
         public override int PunchTime => 26;      //KC's punch timings are based on it's frame, so punchTime has to be 3 frames longer than the duration of the frame KC punches in
         public override int HalfStandHeight => 32;
-        public override int FistWhoAmI => 6;
+        public override int FistID => 6;
         public override int TierNumber => 1;
         public override Vector2 StandOffset => Vector2.Zero;
         public override string PoseSoundName => "AllThatRemainsAreTheResults";
@@ -33,79 +33,90 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && mPlayer.canStandBasicAttack)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
-                    Projectile.netUpdate = true;
-
-                    float rotaY = mouseY - Projectile.Center.Y;
-                    Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
-                    if (mouseX > Projectile.position.X)
-                        Projectile.direction = 1;
-                    else
-                        Projectile.direction = -1;
-
-                    Projectile.spriteDirection = Projectile.direction;
-
-                    Vector2 velocityAddition = Main.MouseWorld - Projectile.position;
-                    velocityAddition.Normalize();
-                    velocityAddition *= 5f + mPlayer.standTier;
-
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-                    if (mouseDistance > 40f)
-                        Projectile.velocity = player.velocity + velocityAddition;
-                    else
-                        Projectile.velocity = Vector2.Zero;
-                    if (shootCount <= 0 && (Projectile.frame == 0 || Projectile.frame == 4))
+                    if (Main.mouseLeft && mPlayer.canStandBasicAttack)
                     {
-                        shootCount += newPunchTime / 2;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
+                        attacking = true;
+                        currentAnimationState = AnimationState.Attack;
+                        Vector2 targetPosition = Main.MouseWorld;
+                        if (JoJoStands.StandAimAssist)
+                        {
+                            float lowestDistance = 4f * 16f;
+                            for (int n = 0; n < Main.maxNPCs; n++)
+                            {
+                                NPC npc = Main.npc[n];
+                                if (npc.active && npc.CanBeChasedBy(this, false))
+                                {
+                                    float distance = Vector2.Distance(npc.Center, Main.MouseWorld);
+                                    if (distance < lowestDistance && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
+                                    {
+                                        targetPosition = npc.Center;
+                                        lowestDistance = distance;
+                                    }
+                                }
+                            }
+                        }
 
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistWhoAmI);
-                        Main.projectile[projIndex].netUpdate = true;
+                        float rotaY = targetPosition.Y - Projectile.Center.Y;
+                        Projectile.rotation = MathHelper.ToRadians((rotaY * Projectile.spriteDirection) / 6f);
+                        Projectile.spriteDirection = Projectile.direction = targetPosition.X > Projectile.Center.X ? 1 : -1;
+                        Vector2 velocityAddition = new Vector2(targetPosition.X, targetPosition.Y) - Projectile.position;
+                        velocityAddition.Normalize();
+                        velocityAddition *= 5f + mPlayer.standTier;
+                        float targetDistance = Vector2.Distance(targetPosition, Projectile.Center);
+                        if (targetDistance > 12)
+                            Projectile.velocity = player.velocity + velocityAddition;
+                        else
+                            Projectile.velocity = Vector2.Zero;
+
+                        if (shootCount <= 0 && (Projectile.frame == 0 || Projectile.frame == 4))
+                        {
+                            shootCount += newPunchTime / 2;
+                            Vector2 shootVel = targetPosition - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<Fists>(), newPunchDamage, PunchKnockback, Projectile.owner, FistID);
+                            Main.projectile[projIndex].netUpdate = true;
+                        }
+                        LimitDistance();
                         Projectile.netUpdate = true;
                     }
-                    LimitDistance();
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
                 }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                {
+                if (!attacking)
                     StayBehind();
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-            {
                 BasicPunchAI();
-            }
+
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -114,17 +125,11 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/KingCrimson/KingCrimson_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 15, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 6, newPunchTime / 2, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 2, true);
-            }
         }
     }
 }

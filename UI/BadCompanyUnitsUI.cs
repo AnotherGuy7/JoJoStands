@@ -36,8 +36,7 @@ namespace JoJoStands.UI
         public override void Update(GameTime gameTime)
         {
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
-
-            if (mPlayer.badCompanyTier == 0)
+            if (!mPlayer.standOut)
                 Visible = false;
 
             unitsLeftText.SetText("Units Left: " + mPlayer.badCompanyUnitsLeft);
@@ -51,8 +50,8 @@ namespace JoJoStands.UI
         public override void OnInitialize()
         {
             UnitsUIPanel = new DragableUIPanel();
-            UnitsUIPanel.HAlign = 0.9f;
-            UnitsUIPanel.VAlign = 0.9f;
+            UnitsUIPanel.Left.Set(Main.screenWidth * 0.9f, 0f);
+            UnitsUIPanel.Top.Set(Main.screenHeight * 0.9f, 0f);
             UnitsUIPanel.Width.Set(180f, 0f);
             UnitsUIPanel.Height.Set(180f, 0f);
 
@@ -84,7 +83,7 @@ namespace JoJoStands.UI
             subtractSoldierButton.VAlign = soldiersActiveText.VAlign;
             subtractSoldierButton.Width.Set(leftButtonTexture.Value.Width, 0f);
             subtractSoldierButton.Height.Set(leftButtonTexture.Value.Height, 0f);
-            subtractSoldierButton.OnClick += OnClickSubtractSoldierButton;
+            subtractSoldierButton.OnLeftClick += OnClickSubtractSoldierButton;
             UnitsUIPanel.Append(subtractSoldierButton);
 
             Asset<Texture2D> rightButtonTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/RightArrow", AssetRequestMode.ImmediateLoad);
@@ -93,7 +92,7 @@ namespace JoJoStands.UI
             addSoldierButton.VAlign = soldiersActiveText.VAlign;
             addSoldierButton.Width.Set(rightButtonTexture.Value.Width, 0f);
             addSoldierButton.Height.Set(rightButtonTexture.Value.Height, 0f);
-            addSoldierButton.OnClick += OnClickAddSoldierButton;
+            addSoldierButton.OnLeftClick += OnClickAddSoldierButton;
             UnitsUIPanel.Append(addSoldierButton);
 
             Asset<Texture2D> tankTextureImage = ModContent.Request<Texture2D>("JoJoStands/Extras/UnitsUITank", AssetRequestMode.ImmediateLoad);
@@ -116,7 +115,7 @@ namespace JoJoStands.UI
             subtractTankButton.VAlign = tanksActiveText.VAlign;
             subtractTankButton.Width.Set(leftButtonTexture.Value.Width, 0f);
             subtractTankButton.Height.Set(leftButtonTexture.Value.Height, 0f);
-            subtractTankButton.OnClick += OnClickSubtractTankButton;
+            subtractTankButton.OnLeftClick += OnClickSubtractTankButton;
             UnitsUIPanel.Append(subtractTankButton);
 
             addTankButton = new UIImageButton(rightButtonTexture);
@@ -124,7 +123,7 @@ namespace JoJoStands.UI
             addTankButton.VAlign = tanksActiveText.VAlign;
             addTankButton.Width.Set(rightButtonTexture.Value.Width, 0f);
             addTankButton.Height.Set(rightButtonTexture.Value.Height, 0f);
-            addTankButton.OnClick += OnClickAddTankButton;
+            addTankButton.OnLeftClick += OnClickAddTankButton;
             UnitsUIPanel.Append(addTankButton);
 
             Asset<Texture2D> chopperTextureImage = ModContent.Request<Texture2D>("JoJoStands/Extras/UnitsUIChopper", AssetRequestMode.ImmediateLoad);
@@ -147,7 +146,7 @@ namespace JoJoStands.UI
             subtractChopperButton.VAlign = choppersActiveText.VAlign;
             subtractChopperButton.Width.Set(leftButtonTexture.Value.Width, 0f);
             subtractChopperButton.Height.Set(leftButtonTexture.Value.Height, 0f);
-            subtractChopperButton.OnClick += OnClickSubtractChopperButton;
+            subtractChopperButton.OnLeftClick += OnClickSubtractChopperButton;
             UnitsUIPanel.Append(subtractChopperButton);
 
             addChopperButton = new UIImageButton(rightButtonTexture);
@@ -155,7 +154,7 @@ namespace JoJoStands.UI
             addChopperButton.VAlign = choppersActiveText.VAlign;
             addChopperButton.Width.Set(rightButtonTexture.Value.Width, 0f);
             addChopperButton.Height.Set(rightButtonTexture.Value.Height, 0f);
-            addChopperButton.OnClick += OnClickAddChopperButton;
+            addChopperButton.OnLeftClick += OnClickAddChopperButton;
             UnitsUIPanel.Append(addChopperButton);
 
             Asset<Texture2D> XButtonTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/XButton", AssetRequestMode.ImmediateLoad);
@@ -164,7 +163,7 @@ namespace JoJoStands.UI
             subtractAllSoldiersButton.VAlign = soldiersActiveText.VAlign + 0.2f;
             subtractAllSoldiersButton.Width.Set(XButtonTexture.Value.Width, 0f);
             subtractAllSoldiersButton.Height.Set(XButtonTexture.Value.Height, 0f);
-            subtractAllSoldiersButton.OnClick += OnClickSubtractAllSoldiers;
+            subtractAllSoldiersButton.OnLeftClick += OnClickSubtractAllSoldiers;
             UnitsUIPanel.Append(subtractAllSoldiersButton);
 
             subtractAllTanksButton = new UIImageButton(XButtonTexture);
@@ -172,7 +171,7 @@ namespace JoJoStands.UI
             subtractAllTanksButton.VAlign = tanksActiveText.VAlign + 0.2f;
             subtractAllTanksButton.Width.Set(XButtonTexture.Value.Width, 0f);
             subtractAllTanksButton.Height.Set(XButtonTexture.Value.Height, 0f);
-            subtractAllTanksButton.OnClick += OnClickSubtractAllTanks;
+            subtractAllTanksButton.OnLeftClick += OnClickSubtractAllTanks;
             UnitsUIPanel.Append(subtractAllTanksButton);
 
             subtractAllChoppersButton = new UIImageButton(XButtonTexture);
@@ -180,7 +179,7 @@ namespace JoJoStands.UI
             subtractAllChoppersButton.VAlign = choppersActiveText.VAlign + 0.2f;
             subtractAllChoppersButton.Width.Set(XButtonTexture.Value.Width, 0f);
             subtractAllChoppersButton.Height.Set(XButtonTexture.Value.Height, 0f);
-            subtractAllChoppersButton.OnClick += OnClickSubtractAllChoppers;
+            subtractAllChoppersButton.OnLeftClick += OnClickSubtractAllChoppers;
             UnitsUIPanel.Append(subtractAllChoppersButton);
 
             Append(UnitsUIPanel);
@@ -191,9 +190,7 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!Main.gamePaused)
-            {
                 mPlayer.badCompanySoldiers = 0;
-            }
         }
 
         private void OnClickSubtractAllTanks(UIMouseEvent evt, UIElement listeningElement)
@@ -201,9 +198,7 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!Main.gamePaused)
-            {
                 mPlayer.badCompanyTanks = 0;
-            }
         }
 
         private void OnClickSubtractAllChoppers(UIMouseEvent evt, UIElement listeningElement)
@@ -211,9 +206,7 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (!Main.gamePaused)
-            {
                 mPlayer.badCompanyChoppers = 0;
-            }
         }
 
         private void OnClickSubtractSoldierButton(UIMouseEvent evt, UIElement listeningElement)
@@ -221,7 +214,7 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyTier == 0)
+            if (mPlayer.standTier == 0)
                 return;
 
             if (mPlayer.badCompanySoldiers > 0 && !Main.gamePaused)
@@ -233,7 +226,7 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyTier == 0)
+            if (mPlayer.standTier == 0)
                 return;
 
             if (mPlayer.badCompanyUnitsLeft >= 1 && !Main.gamePaused)
@@ -245,10 +238,10 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyTier == 0)
+            if (mPlayer.standTier == 0)
                 return;
 
-            if (mPlayer.badCompanyTier >= 2)
+            if (mPlayer.standTier >= 2)
             {
                 if (mPlayer.badCompanyTanks > 0 && !Main.gamePaused) 
                     mPlayer.badCompanyTanks--;
@@ -260,10 +253,10 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyTier == 0)
+            if (mPlayer.standTier == 0)
                 return;
 
-            if (mPlayer.badCompanyTier >= 2 && !Main.gamePaused)
+            if (mPlayer.standTier >= 2 && !Main.gamePaused)
             {
                 if (mPlayer.badCompanyUnitsLeft >= 4)
                     mPlayer.badCompanyTanks++;
@@ -275,10 +268,10 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyTier == 0)
+            if (mPlayer.standTier == 0)
                 return;
 
-            if (mPlayer.badCompanyTier >= 3)
+            if (mPlayer.standTier >= 3)
             {
                 if (mPlayer.badCompanyChoppers > 0 && !Main.gamePaused)
                     mPlayer.badCompanyChoppers--;
@@ -290,10 +283,10 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            if (mPlayer.badCompanyTier == 0)
+            if (mPlayer.standTier == 0)
                 return;
 
-            if (mPlayer.badCompanyTier >= 3)
+            if (mPlayer.standTier >= 3)
             {
                 if (mPlayer.badCompanyUnitsLeft >= 6 && !Main.gamePaused)
                     mPlayer.badCompanyChoppers++;

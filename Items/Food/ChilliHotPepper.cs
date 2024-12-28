@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A stand that absorbs electricity to become stronger and faster. It was caught and crushed into a fine powder, which was then sprinkled on this red hot chili pepper.");
-            SacrificeTotal = 89987;
+            // Tooltip.SetDefault("A stand that absorbs electricity to become stronger and faster. It was caught and crushed into a fine powder, which was then sprinkled on this red hot chili pepper.");
+            Item.ResearchUnlockCount = 89987;
         }
 
         public override void SetDefaults()

@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Pompous Shirt");
-            Tooltip.SetDefault("A lavender shirt, with a green tie and Union Jack patch. Very tacky.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Pompous Shirt");
+            // Tooltip.SetDefault("A lavender shirt, with a green tie and Union Jack patch. Very tacky.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

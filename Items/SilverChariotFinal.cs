@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 7;
         public override int StandType => 1;
-        public override string StandProjectileName => "SilverChariot";
+        public override string StandIdentifierName => "SilverChariot";
         public override int StandTier => 4;
         public override Color StandTierDisplayColor => Color.LightGray;
 
@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Silver Chariot (Final Tier)");
-            Tooltip.SetDefault("Left-click to stab enemies and right-click to parry enemies and projectiles away!\nSpecial: Take SC's armor off! (All player damage received is doubled!)\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Silver Chariot (Final Tier)");
+            // Tooltip.SetDefault("Left-click to stab enemies and right-click to parry enemies and projectiles away!\nSpecial: Take SC's armor off! (All player damage received is doubled!)\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

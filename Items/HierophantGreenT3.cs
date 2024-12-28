@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 20;
         public override int StandType => 2;
-        public override string StandProjectileName => "HierophantGreen";
+        public override string StandIdentifierName => "HierophantGreen";
         public override int StandTier => 3;
         public override Color StandTierDisplayColor => Color.LawnGreen;
 
@@ -21,9 +21,9 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hierophant Green (Tier 3)");
-            Tooltip.SetDefault("Left-click to release a flurry of emeralds and right-click to throw a binding emerald string!\nSpecial: 20 Meter Emerald Splash!\nSecond Special: Remote Control" +
-                "\nWhile in Remote Mode: Left-click to move and right-click to release a flurry of emeralds!\nRemote Mode Special: Set tripwires for your enemies!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Hierophant Green (Tier 3)");
+            /* Tooltip.SetDefault("Left-click to release a flurry of emeralds and right-click to throw a binding emerald string!\nSpecial: 20 Meter Emerald Splash!\nSecond Special: Remote Control" +
+                "\nWhile in Remote Mode: Left-click to move and right-click to release a flurry of emeralds!\nRemote Mode Special: Set tripwires for your enemies!\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

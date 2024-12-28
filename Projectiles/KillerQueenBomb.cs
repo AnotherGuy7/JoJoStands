@@ -28,7 +28,7 @@ namespace JoJoStands.Projectiles
         private const float ExplosionRadius = 5.5f * 16f;
         private bool crit = false;
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             //Normal grenade explosion effects
             for (int i = 0; i < 30; i++)
@@ -59,6 +59,7 @@ namespace JoJoStands.Projectiles
             for (int n = 0; n < Main.maxNPCs; n++)
             {
                 MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+                bool crit = false;
                 if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                     crit = true;
                 NPC npc = Main.npc[n];
@@ -66,7 +67,14 @@ namespace JoJoStands.Projectiles
                 {
                     if (Projectile.ai[1] != 0f && npc.whoAmI == Projectile.ai[1])
                     {
-                        npc.StrikeNPC((int)(Projectile.ai[0] * 1.2f), 7f, npc.direction, crit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = (int)(Projectile.ai[0] * 1.2f),
+                            Knockback = 7f,
+                            HitDirection = npc.direction,
+                            Crit = crit
+                        };
+                        npc.StrikeNPC(hitInfo);
                         continue;
                     }
 
@@ -76,7 +84,14 @@ namespace JoJoStands.Projectiles
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
 
-                        npc.StrikeNPC((int)Projectile.ai[0], 7f, hitDirection, crit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = (int)Projectile.ai[0],
+                            Knockback = 7f,
+                            HitDirection = hitDirection,
+                            Crit = crit
+                        };
+                        npc.StrikeNPC(hitInfo);
                     }
                 }
             }
@@ -101,7 +116,7 @@ namespace JoJoStands.Projectiles
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " got careless around one of KQ's bombs."), bombDamage, hitDirection);
                 }
             }
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
         }
     }
 }

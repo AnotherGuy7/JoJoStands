@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Fortuneteller Pants");
-            Tooltip.SetDefault("A pair of pants with a grey waist piece.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Fortuneteller Pants");
+            // Tooltip.SetDefault("A pair of pants with a grey waist piece.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

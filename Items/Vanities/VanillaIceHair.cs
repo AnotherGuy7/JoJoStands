@@ -8,10 +8,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Vampire Acolyte Hair");
-            Tooltip.SetDefault("Styled in the image of Lord DIO!");
+            // DisplayName.SetDefault("Vampire Acolyte Hair");
+            // Tooltip.SetDefault("Styled in the image of Lord DIO!");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

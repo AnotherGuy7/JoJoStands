@@ -11,8 +11,8 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Missing Organs!");
-            Description.SetDefault("Parts of your body have been scraped away!");
+            // DisplayName.SetDefault("Missing Organs!");
+            // Description.SetDefault("Parts of your body have been scraped away!");
             Main.debuff[Type] = true;
         }
 

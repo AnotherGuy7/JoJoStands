@@ -14,16 +14,30 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override int PunchTime => 8;
         public override int AltDamage => 84;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 0;
+        public override int FistID => 0;
         public override int TierNumber => 4;
         public override string PunchSoundName => "Ora";
         public override string PoseSoundName => "YareYareDaze";
         public override string SpawnSoundName => "Star Platinum";
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/StarPlatinum/StarPlatinum_Punch_";
+        public override Vector2 PunchSize => new Vector2(44, 12);
         public override StandAttackType StandType => StandAttackType.Melee;
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
 
         private int timestopStartDelay = 0;
         private bool flickFrames = false;
         private bool resetFrame = false;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            Secondary,
+            Flick,
+            Pose
+        }
 
         public override void AI()
         {
@@ -50,9 +64,9 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                     timestopStartDelay = 240;
                 else
                 {
-                    SoundStyle zawarudo = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/StarPlatinumTheWorld");
-                    zawarudo.Volume = JoJoStands.ModSoundsVolume;
-                    SoundEngine.PlaySound(zawarudo, Projectile.position);
+                    SoundStyle starPlatinumTheWorld = StarPlatinumStandFinal.StarPlatinumTheWorldSound;
+                    starPlatinumTheWorld.Volume = JoJoStands.ModSoundsVolume;
+                    SoundEngine.PlaySound(starPlatinumTheWorld, Projectile.position);
                     timestopStartDelay = 1;
                 }
             }
@@ -70,21 +84,23 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] != 0;
-
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
+                secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] != 0;
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
+                    if (Main.mouseLeft && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
                 }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                {
+                if (!attacking)
                     StayBehindWithAbility();
-                }
+
                 if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
                     int bulletIndex = GetPlayerAmmo(player);
@@ -112,9 +128,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                                 item41.Pitch = 2.8f;
                                 SoundEngine.PlaySound(item41, player.Center);
                                 if (bulletItem.type != ItemID.EndlessMusketPouch)
-                                {
                                     player.ConsumeItem(bulletItem.type);
-                                }
 
                             }
                         }
@@ -137,11 +151,17 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                         }
                     }
                 }
+                else if (!Main.mouseRight && Projectile.owner == Main.myPlayer)
+                    flickFrames = false;
+                if (flickFrames)
+                    currentAnimationState = AnimationState.Flick;
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 PunchAndShootAI(ModContent.ProjectileType<StarFinger>(), shootMax: 1);
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private int GetPlayerAmmo(Player player)
@@ -174,52 +194,29 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
-            }
-            if (idleFrames)
-            {
-                attackFrames = false;
-                PlayAnimation("Idle");
-            }
-            if (flickFrames)
-            {
-                if (!resetFrame)
-                {
-                    Projectile.frame = 0;
-                    Projectile.frameCounter = 0;
-                    resetFrame = true;
-                }
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Flick");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Pose");
                 Projectile.frame = 0;
-                if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
-                {
-                    secondaryAbilityFrames = false;
-                }
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Flick)
+                PlayAnimation("Flick");
+            else if (currentAnimationState == AnimationState.Secondary || currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void AnimationCompleted(string animationName)
         {
             if (resetFrame && animationName == "Flick")
             {
-                idleFrames = true;
+                currentAnimationState = AnimationState.Idle;
                 flickFrames = false;
                 resetFrame = false;
             }
@@ -231,21 +228,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/Seasonal/StarOnTheTree/StarOnTheTree_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Flick")
-            {
-                AnimateStand(animationName, 4, 10, false);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Flick")
+                AnimateStand(animationName, 4, 5, false);
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 2, 12, true);
-            }
         }
     }
 }

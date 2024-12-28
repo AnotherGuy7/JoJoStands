@@ -13,17 +13,17 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 11;
         public override int StandType => 1;
-        public override string StandProjectileName => "GoldExperienceRequiem";
+        public override string StandIdentifierName => "GoldExperienceRequiem";
         public override int StandTier => 5;
         public override Color StandTierDisplayColor => Color.Orange;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Gold Experience (Requiem)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use the chosen abilities!" +
+            // DisplayName.SetDefault("Gold Experience (Requiem)");
+            /* Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use the chosen abilities!" +
                 "\nSpecial: Use Back to Zero to nullify the actions of all enemies who touch you!" +
                 "\nSecond Special: Opens/Hides the Ability Wheel" +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

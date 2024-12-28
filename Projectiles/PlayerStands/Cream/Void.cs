@@ -69,7 +69,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
                     mPlayer.creamFrame = 7;
                     mPlayer.creamExposedToVoid = true;
                     mPlayer.creamAnimationReverse = true;
-                    SoundEngine.PlaySound(SoundID.Item78);
+                    SoundEngine.PlaySound(SoundID.Item78, Projectile.Center);
                     Vector2 shootVelocity = Main.MouseWorld - player.position;
                     shootVelocity.Normalize();
                     shootVelocity *= 5f;
@@ -194,30 +194,26 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
         }
 
-        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
-        {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             target.AddBuff(ModContent.BuffType<MissingOrgans>(), 120 * mPlayer.creamTier);
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-            target.AddBuff(ModContent.BuffType<MissingOrgans>(), 60 * mPlayer.creamTier);
+            if (info.PvP)
+            {
+                MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 60 * mPlayer.creamTier);
+            }
         }
 
         public override bool? CanHitNPC(NPC target)
@@ -241,7 +237,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             return true;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

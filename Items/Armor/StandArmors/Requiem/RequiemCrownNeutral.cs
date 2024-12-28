@@ -11,9 +11,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Requiem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Requiem Crown (Neutral)");
-            Tooltip.SetDefault("A crown made from the finest materials space has offered so far.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Requiem Crown (Neutral)");
+            // Tooltip.SetDefault("A crown made from the finest materials space has offered so far.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

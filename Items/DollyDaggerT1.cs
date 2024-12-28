@@ -11,12 +11,12 @@ namespace JoJoStands.Items
     public class DollyDaggerT1 : StandItemClass
     {
         public override int StandTierDisplayOffset => 1;
-        public override string StandProjectileName => "DollyDagger";
+        public override string StandIdentifierName => "DollyDagger";
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Dolly Dagger (Tier 1)");
-            Tooltip.SetDefault("As an Item: Left-click to use this as a dagger to stab enemies!\nIn the Stand Slot: Equip it to nullify and reflect 35% of all damage!");
+            // DisplayName.SetDefault("Dolly Dagger (Tier 1)");
+            // Tooltip.SetDefault("As an Item: Left-click to use this as a dagger to stab enemies!\nIn the Stand Slot: Equip it to nullify and reflect 35% of all damage!");
         }
 
         public override void SetDefaults()

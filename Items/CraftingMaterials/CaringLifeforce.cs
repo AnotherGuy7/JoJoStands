@@ -13,9 +13,10 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(8, 4));
-            DisplayName.SetDefault("Caring Lifeforce");
-            Tooltip.SetDefault("The spirit of someone whose only wish is to help");
-            SacrificeTotal = 3;
+            // DisplayName.SetDefault("Caring Lifeforce");
+            // Tooltip.SetDefault("The spirit of someone whose only wish is to help");
+            Item.ResearchUnlockCount = 3;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<TaintedLifeforce>();
         }
 
         public override void SetDefaults()

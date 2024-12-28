@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 13;
         public override int StandType => 1;
-        public override string StandProjectileName => "TheHand";
+        public override string StandIdentifierName => "TheHand";
         public override int StandTier => 2;
         public override Color StandTierDisplayColor => TheHandFinal.TheHandTierColor;
 
@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("The Hand (Tier 2)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to scrape away space!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("The Hand (Tier 2)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to scrape away space!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

@@ -14,8 +14,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Purple Revolver");
-            Tooltip.SetDefault("A restored six-shooter, in full working order. Press the special key to reload.");
+            // DisplayName.SetDefault("Purple Revolver");
+            // Tooltip.SetDefault("A restored six-shooter, in full working order. Press the special key to reload.");
         }
 
         public override void SetDefaults()
@@ -55,13 +55,13 @@ namespace JoJoStands.Items
             {
                 reloadCounter = 180;
                 if (JoJoStands.Sounds)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Reload180"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Reload180"), player.Center);
             }
             if (specialPressed && reloadCounter <= 1 && player.whoAmI == Main.myPlayer)
             {
                 reloadCounter = 120;
                 if (JoJoStands.Sounds)
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Reload120"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Reload120"), player.Center);
             }
             if (reloadCounter == 1)
             {

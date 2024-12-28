@@ -9,8 +9,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Crystal");
-            Description.SetDefault("A mystical gold-silver crystal is watching over you.");
+            // DisplayName.SetDefault("Viral Crystal");
+            // Description.SetDefault("A mystical gold-silver crystal is watching over you.");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

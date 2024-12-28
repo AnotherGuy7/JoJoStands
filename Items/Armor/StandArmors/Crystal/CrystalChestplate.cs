@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crystal Chestplate");
-            Tooltip.SetDefault("A shiny chestplate that uses crystals to sharpen your soul...\n+10% Stand Crit Chance");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Crystal Chestplate");
+            // Tooltip.SetDefault("A shiny chestplate that uses crystals to sharpen your soul...\n+10% Stand Crit Chance");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

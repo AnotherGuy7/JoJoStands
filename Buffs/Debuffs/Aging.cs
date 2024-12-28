@@ -9,8 +9,8 @@ namespace JoJoStands.Buffs.Debuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Aging");
-            Description.SetDefault("Your knees are shaking, you feel powerless and tired.");
+            // DisplayName.SetDefault("Aging");
+            // Description.SetDefault("Your knees are shaking, you feel powerless and tired.");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }
@@ -32,7 +32,7 @@ namespace JoJoStands.Buffs.Debuffs
             player.moveSpeed *= 0.94f;
             player.GetDamage(DamageClass.Generic) *= 0.75f;
             player.GetDamage(DamageClass.Generic) *= 0.5f;
-            player.statDefense = (int)(player.statDefense * 0.8f);
+            player.statDefense *= 0.8f;
 
             if (player.ZoneSnow || player.ZoneSkyHeight)
                 damageMultiplication = 0;

@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Narancia's Wig");
-            Tooltip.SetDefault("A wig resembling the hairstyle of Narancia Ghirga. Smells like gunpowder.");
+            // DisplayName.SetDefault("Narancia's Wig");
+            // Tooltip.SetDefault("A wig resembling the hairstyle of Narancia Ghirga. Smells like gunpowder.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

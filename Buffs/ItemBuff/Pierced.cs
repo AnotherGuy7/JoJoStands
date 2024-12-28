@@ -7,10 +7,10 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Pierced!");
-            Description.SetDefault("You have been pierced by an arrow shard!");
+            // DisplayName.SetDefault("Pierced!");
+            // Description.SetDefault("You have been pierced by an arrow shard!");
             Main.debuff[Type] = true;
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void UpdateBuffOnPlayer(Player player)

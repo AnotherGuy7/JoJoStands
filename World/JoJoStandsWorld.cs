@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -29,6 +30,21 @@ namespace JoJoStands
         public static readonly Color WorldEventTextColor = new Color(50, 255, 130);
 
         public override void OnWorldLoad()
+        {
+            ResetWorldDependentVariables();
+        }
+
+        public override void ClearWorld()
+        {
+            ResetWorldDependentVariables();
+        }
+
+        public override void OnWorldUnload()
+        {
+            ResetWorldDependentVariables();
+        }
+
+        private void ResetWorldDependentVariables()
         {
             viralMeteoriteDropped = false;
             viralMeteoriteIntroductionTimer = 0;
@@ -76,7 +92,7 @@ namespace JoJoStands
                     if (!ViralMeteoriteIntroduced)
                     {
                         ViralMeteoriteIntroduced = true;
-                        Main.NewText("A faint spiritual connection can be sensed nearby.", WorldEventTextColor);
+                        Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.ViralMeteoriteIntro1").Value, WorldEventTextColor);
                     }
                 }
                 else

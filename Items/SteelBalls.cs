@@ -12,9 +12,9 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Steel Balls");
-            Tooltip.SetDefault("These steel balls have been passed down from generation to generation...\nRequires 5 hamon to throw effectively.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Steel Balls");
+            // Tooltip.SetDefault("These steel balls have been passed down from generation to generation...\nRequires 5 hamon to throw effectively.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

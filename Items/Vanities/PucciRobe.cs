@@ -17,9 +17,9 @@ namespace JoJoStands.Items.Vanities
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Priest Robes");
-            Tooltip.SetDefault("Large dark robes with a cross centered in the front.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Priest Robes");
+            // Tooltip.SetDefault("Large dark robes with a cross centered in the front.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -130,7 +130,7 @@ namespace JoJoStands.Projectiles.Minions
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
             {
@@ -139,7 +139,7 @@ namespace JoJoStands.Projectiles.Minions
             SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.position);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.GetGlobalNPC<JoJoGlobalNPC>().taggedByButterfly = true;
         }

@@ -11,13 +11,13 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 90;
         public override int StandType => 2;
-        public override string StandProjectileName => "BadCompany";
+        public override string StandIdentifierName => "BadCompany";
         public override int StandTier => 1;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bad Company (Tier 1)");
-            Tooltip.SetDefault("Left-click to have your troops shoot toward your mouse and right-click to choose your army!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Bad Company (Tier 1)");
+            // Tooltip.SetDefault("Left-click to have your troops shoot toward your mouse and right-click to choose your army!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -35,10 +35,10 @@ namespace JoJoStands.Items
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
-            mPlayer.badCompanyTier = StandTier;
+            mPlayer.standTier = StandTier;
             mPlayer.maxBadCompanyUnits = 6 * StandTier;
             if (JoJoStands.SoundsLoaded)
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Bad Company").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Bad Company").WithVolumeScale(JoJoStands.ModSoundsVolume), player.Center);
             return true;
         }
 

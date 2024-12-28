@@ -13,7 +13,7 @@ namespace JoJoStands.Items.Armor.VampirismArmors
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("The mask now merged with the stone seems to give off tremendous power...");
+            // Tooltip.SetDefault("The mask now merged with the stone seems to give off tremendous power...");
         }
 
         public override void SetDefaults()

@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Tabi");
-            Tooltip.SetDefault("A pair of light boots from a surprisingly nimble meteor, powered by a strange virus.\nProvides a 4% Stand Crit Chance boost");
+            // DisplayName.SetDefault("Viral Tabi");
+            // Tooltip.SetDefault("A pair of light boots from a surprisingly nimble meteor, powered by a strange virus.\nProvides a 4% Stand Crit Chance boost");
         }
 
         public override void SetDefaults()

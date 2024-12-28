@@ -72,27 +72,22 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
 
             target.immune[Projectile.owner] = 0;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             target.GetGlobalNPC<JoJoGlobalNPC>().hitByCrossfireHurricane = true;
             target.GetGlobalNPC<JoJoGlobalNPC>().crossfireHurricaneEffectTimer = (5 + (3 * (mPlayer.standTier - 3))) * 60;
             if (Main.rand.Next(0, 101) < 50f)
                 target.AddBuff(BuffID.OnFire, 300);
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(0, 101) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
         }
     }
 }

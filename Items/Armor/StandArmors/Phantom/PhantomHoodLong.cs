@@ -14,8 +14,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Phantom Hood (Long-Ranged)");
-            Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.\n+18% Stand Damage\n+15% Stand Crit chance");
+            // DisplayName.SetDefault("Phantom Hood (Long-Ranged)");
+            // Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.\n+18% Stand Damage\n+15% Stand Crit chance");
         }
 
         public override void SetDefaults()
@@ -53,6 +53,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
                                 int projectile = Projectile.NewProjectile(player.GetSource_FromThis(), npc.position, npc.velocity, ModContent.ProjectileType<PhantomMarker>(), 0, 0f, Main.myPlayer, npc.whoAmI);
                                 Main.projectile[projectile].netUpdate = true;
                                 jojoNPC.taggedWithPhantomMarker = true;
+                                jojoNPC.SyncEffect(JoJoGlobalNPC.Sync_TaggedWithPhantomMarker);
                             }
                         }
                     }

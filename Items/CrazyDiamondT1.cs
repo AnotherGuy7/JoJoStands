@@ -10,19 +10,19 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 12;
         public override int StandType => 1;
-        public override string StandProjectileName => "CrazyDiamond";
+        public override string StandIdentifierName => "CrazyDiamond";
         public override int StandTier => 1;
         public override Color StandTierDisplayColor => CrazyDiamondFinal.CrazyDiamondTierColor;
 
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crazy Diamond (Tier 1)");
-            Tooltip.SetDefault(
+            // DisplayName.SetDefault("Crazy Diamond (Tier 1)");
+            /* Tooltip.SetDefault(
                 "Left-click to punch enemies at a really fast rate!" +
                 "\nSpecial: Switch to Restoration Mode" +
                 "\nLeft-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state." +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

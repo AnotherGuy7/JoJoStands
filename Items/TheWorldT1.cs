@@ -10,14 +10,15 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 13;
         public override int StandType => 1;
-        public override string StandProjectileName => "TheWorld";
+        public override string StandIdentifierName => "TheWorld";
         public override int StandTier => 1;
         public override Color StandTierDisplayColor => Color.Yellow;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("The World (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("The World (Tier 1)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<StarPlatinumT1>();
         }
 
         public override void SetDefaults()

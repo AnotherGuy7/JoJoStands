@@ -7,8 +7,8 @@ namespace JoJoStands.Buffs.Debuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Parched!");
-            Description.SetDefault("You could really use a drink right now...");
+            // DisplayName.SetDefault("Parched!");
+            // Description.SetDefault("You could really use a drink right now...");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }
@@ -16,7 +16,7 @@ namespace JoJoStands.Buffs.Debuffs
         public override void UpdateBuffOnPlayer(Player player)
         {
             player.moveSpeed *= 0.8f;
-            player.statDefense = (int)(player.statDefense * 0.85f);
+            player.statDefense *= 0.85f;
         }
 
         public override void OnApply(NPC npc)

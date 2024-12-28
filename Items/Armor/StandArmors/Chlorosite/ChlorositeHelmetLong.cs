@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Chlorosite
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Chlorosite Helmet (Long-Ranged)");
-            Tooltip.SetDefault("A helmet that is made with Chlorophyte infused with an otherworldly virus.\n15% Stand Damage");
+            // DisplayName.SetDefault("Chlorosite Helmet (Long-Ranged)");
+            // Tooltip.SetDefault("A helmet that is made with Chlorophyte infused with an otherworldly virus.\n15% Stand Damage");
         }
 
         public override void SetDefaults()

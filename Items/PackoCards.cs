@@ -9,9 +9,9 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Pack'o'Cards");
-            Tooltip.SetDefault("D'Arby's favorite set of cards... It's best to throw them at enemies!");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Pack'o'Cards");
+            // Tooltip.SetDefault("D'Arby's favorite set of cards... It's best to throw them at enemies!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

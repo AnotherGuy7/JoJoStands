@@ -11,8 +11,8 @@ namespace JoJoStands.Buffs.EffectBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Back to Zero");
-            Description.SetDefault("Enemies that hurt you never touched you at all...");
+            // DisplayName.SetDefault("Back to Zero");
+            // Description.SetDefault("Enemies that hurt you never touched you at all...");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

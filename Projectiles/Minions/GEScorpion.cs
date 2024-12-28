@@ -139,21 +139,21 @@ namespace JoJoStands.Projectiles.Minions
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (damage <= 75)
+            if (modifiers.FinalDamage.Base <= 75)
             {
-                damage = target.damage - Main.rand.Next(0, 2);
+                modifiers.FinalDamage.Base = target.damage - Main.rand.Next(0, 2);
                 target.AddBuff(BuffID.Poisoned, 120);
             }
-            if (damage > 75)
+            else
             {
-                damage = 75;
+                modifiers.FinalDamage.Base = 75;
                 Projectile.Kill();
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
             {

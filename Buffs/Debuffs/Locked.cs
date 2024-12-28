@@ -7,8 +7,8 @@ namespace JoJoStands.Buffs.Debuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Locked");
-            Description.SetDefault("Your guilt is increasing and it hurts.");
+            // DisplayName.SetDefault("Locked");
+            // Description.SetDefault("Your guilt is increasing and it hurts.");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
         }
@@ -31,7 +31,12 @@ namespace JoJoStands.Buffs.Debuffs
                 int defence = lockCrit ? 4 : 2;
                 int lockDamage = !npc.boss ? 4 : 2;
                 jojoNPC.lifeRegenIncrement += lockDamage;
-                npc.StrikeNPC((int)(jojoNPC.lifeRegenIncrement * jojoNPC.theLockDamageBoost) + npc.defense / defence, 0f, 0, lockCrit);
+                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                {
+                    Damage = (int)(jojoNPC.lifeRegenIncrement * jojoNPC.theLockDamageBoost) + npc.defense / defence,
+                    Crit = lockCrit
+                };
+                npc.StrikeNPC(hitInfo);
             }
         }
 

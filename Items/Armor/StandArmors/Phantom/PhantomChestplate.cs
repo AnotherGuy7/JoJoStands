@@ -11,9 +11,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Phantom Chestplate");
-            Tooltip.SetDefault("A bright, glowing chestplate made with an adaptable virus and ectoplasm.\n+8% Stand Crit Chance\n+1 Stand Speed\n12% Incoming Damage Reduction");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Phantom Chestplate");
+            // Tooltip.SetDefault("A bright, glowing chestplate made with an adaptable virus and ectoplasm.\n+8% Stand Crit Chance\n+1 Stand Speed\n12% Incoming Damage Reduction");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

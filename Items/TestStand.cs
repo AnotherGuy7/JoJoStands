@@ -3,6 +3,7 @@ using JoJoStands.Projectiles.PlayerStands.TestStand;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items
@@ -10,13 +11,13 @@ namespace JoJoStands.Items
     public class TestStand : StandItemClass
     {
         public override int StandType => 1;
-        public override string StandProjectileName => "TestStand";
+        public override string StandIdentifierName => "TestStand";
         public override int StandSpeed => 12;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Test Stand");
-            Tooltip.SetDefault("A faceless stand with unknown abilities...");
+            // DisplayName.SetDefault("Test Stand");
+            // Tooltip.SetDefault("A faceless stand with unknown abilities...");
         }
 
         public override void SetDefaults()
@@ -66,7 +67,7 @@ namespace JoJoStands.Items
             }
             else
             {
-                Main.NewText("You are not worthy.", Color.Red);
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.TestStandNotWorthy").Value, Color.Red);
                 player.GetModPlayer<MyPlayer>().standOut = false;
                 SyncCall.SyncStandOut(player.whoAmI, false, "", 0);
             }

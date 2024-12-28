@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Surprise Attack");
-            Description.SetDefault("You have the upper edge and you know just how to prove it.");
+            // DisplayName.SetDefault("Surprise Attack");
+            // Description.SetDefault("You have the upper edge and you know just how to prove it.");
         }
 
         public override void UpdateBuffOnPlayer(Player player)

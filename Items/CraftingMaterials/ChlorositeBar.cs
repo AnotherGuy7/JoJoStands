@@ -8,9 +8,9 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Chlorosite Bar");
-            Tooltip.SetDefault("A gem of nature corrupted by an otherworldly virus...");
-            SacrificeTotal = 25;
+            // DisplayName.SetDefault("Chlorosite Bar");
+            // Tooltip.SetDefault("A gem of nature corrupted by an otherworldly virus...");
+            Item.ResearchUnlockCount = 25;
         }
 
         public override void SetDefaults()

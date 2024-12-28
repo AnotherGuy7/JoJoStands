@@ -8,10 +8,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jotaro's Cap (Alt)");
-            Tooltip.SetDefault("No one truly knows whether the back is hat or hair...");
+            // DisplayName.SetDefault("Jotaro's Cap (Alt)");
+            // Tooltip.SetDefault("No one truly knows whether the back is hat or hair...");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

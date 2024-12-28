@@ -19,11 +19,14 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
         public override int HalfStandHeight => 38;
         public override int AltDamage => 85;
         public override Vector2 StandOffset => new Vector2(27, 0);
-        public override int FistWhoAmI => 0;
+        public override int FistID => 0;
         public override int TierNumber => 5;
         public override string PunchSoundName => "SoftAndWet_Ora";
         public override string PoseSoundName => "SoftAndWet";
         public override string SpawnSoundName => "Soft and Wet";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/SoftAndWetGoBeyond/SoftAndWetGoBeyond_Punch_";
+        public override Vector2 PunchSize => new Vector2(36, 8);
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private const float BubbleSpawnRadius = 24 * 16f;
@@ -48,30 +51,34 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryAbilityFrames)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                    if (Main.rand.NextBool(7))
+                    if (Main.mouseLeft && !secondaryAbility)
                     {
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
+                        Punch();
+                        if (Main.rand.NextBool(7))
+                        {
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
 
-                        shootVel.Normalize();
-                        shootVel *= 3f;
-                        Vector2 bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(0, 18 + 1) * Projectile.direction, -Main.rand.Next(0, HalfStandHeight - 2 + 1));
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, shootVel, ModContent.ProjectileType<TinyBubble>(), 44, 2f, Projectile.owner, Projectile.whoAmI);
-                        SoundEngine.PlaySound(SoundID.Drip);
+                            shootVel.Normalize();
+                            shootVel *= 3f;
+                            Vector2 bubbleSpawnPosition = Projectile.Center + new Vector2(Main.rand.Next(0, 18 + 1) * Projectile.direction, -Main.rand.Next(0, HalfStandHeight - 2 + 1));
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, shootVel, ModContent.ProjectileType<TinyBubble>(), 44, 2f, Projectile.owner, Projectile.whoAmI);
+                            SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
+                        }
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
                     }
                 }
-                else
+
+                if (!attacking)
                 {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                {
-                    if (!secondaryAbilityFrames)
+                    if (!secondaryAbility)
                     {
                         StayBehind();
                         Projectile.direction = Projectile.spriteDirection = player.direction;
@@ -86,7 +93,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                                 Projectile.direction = -1;
                             Projectile.spriteDirection = Projectile.direction;
                         }
-                        secondaryAbilityFrames = false;
+                        secondaryAbility = false;
                     }
                 }
                 if (bubbleTargetIndex != -1 && (Main.npc[bubbleTargetIndex] == null || !Main.npc[bubbleTargetIndex].active || SpecialKeyPressed(false)))
@@ -94,9 +101,8 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
 
                 if (Main.mouseRight && !playerHasAbilityCooldown && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                 {
-                    idleFrames = false;
-                    attackFrames = false;
-                    secondaryAbilityFrames = true;
+                    secondaryAbility = true;
+                    currentAnimationState = AnimationState.SecondaryAbility;
                     highVelocityBubbleChargeUpTimer++;
                     if (highVelocityBubbleChargeUpTimer >= 60)
                     {
@@ -112,7 +118,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                         Main.projectile[hvb].netUpdate = true;
                         Projectile.netUpdate = true;
                         highVelocityBubbleChargeUpTimer = 0;
-                        SoundEngine.PlaySound(SoundID.Item130);
+                        SoundEngine.PlaySound(SoundID.Item130, Projectile.Center);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(8));
                     }
                 }
@@ -146,7 +152,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                         int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), bubbleSpawnPosition, bubbleVelocity, ModContent.ProjectileType<TrackerBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, 0, bubbleTargetIndex);
                         Main.projectile[projIndex].netUpdate = true;
                     }
-                    SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound);
+                    SoundEngine.PlaySound(BubbleFieldBubbleSpawnSound, Projectile.Center);
                 }
                 if (SpecialKeyPressed(false) && Projectile.owner == Main.myPlayer)
                 {
@@ -183,44 +189,37 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                         }
                     }
                 }
-                if (SecondSpecialKeyPressed() && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
+                if (SecondSpecialKeyPressed() && !player.HasBuff<BubbleBarrierBuff>() && !player.HasBuff(ModContent.BuffType<TheWorldBuff>()))
                 {
-                    player.AddBuff(ModContent.BuffType<BubbleBarrierBuff>(), 10 * 60);
-                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
-                    Vector2 playerFollow = Vector2.Zero;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, playerFollow, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
+                    player.AddBuff(ModContent.BuffType<BubbleBarrierBuff>(), 25 * 60);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<BubbleBarrier>(), 0, 0f, Projectile.owner, Projectile.whoAmI);
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-            {
                 BasicPunchAI();
-            }
+
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
-            }
-            if (idleFrames)
-            {
-                PlayAnimation("Idle");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
 
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Pose");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
-            }
+            else if (currentAnimationState == AnimationState.Pose)
+                PlayAnimation("Pose");
         }
 
         public override void PlayAnimation(string animationName)
@@ -229,21 +228,13 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/SoftAndWetGoBeyond/SoftAndWetGoBeyond_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 5, 6, true, 0, 3);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 2, true);
-            }
         }
     }
 }

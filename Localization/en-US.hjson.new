@@ -498,7 +498,7 @@ Mods: {
 					You are the beast to be feared the most, and no one will take that spot.
 					Increased stats for the duration of the battle.
 					'''
-			}
+		}
 		}
 
 		Items: {
@@ -3502,7 +3502,7 @@ Mods: {
 					Left-click to... throw?
 					Only for those with the strongest of wills.
 					'''
-			}
+		}
 		}
 
 		NPCs: {

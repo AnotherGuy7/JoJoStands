@@ -59,7 +59,12 @@ namespace JoJoStands.Projectiles
                 {
                     if (Collision.CheckAABBvLineCollision(npc.position, new Vector2(npc.width, npc.height), Projectile.Center, linkedProjectile.Center))
                     {
-                        npc.StrikeNPC((int)Projectile.ai[1], 0f, -npc.direction);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = (int)Projectile.ai[1],
+                            HitDirection = -npc.direction
+                        };
+                        npc.StrikeNPC(hitInfo);
                         objectHit = true;
                         attackTimes--;
                         if (attackTimes <= 0)

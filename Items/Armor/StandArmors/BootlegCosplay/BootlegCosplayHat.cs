@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bootleg Cosplay Hat");
-            Tooltip.SetDefault("A hat that tends to merge with your hair.\n+4% Stand Critical Hit Chance");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Bootleg Cosplay Hat");
+            // Tooltip.SetDefault("A hat that tends to merge with your hair.\n+4% Stand Critical Hit Chance");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

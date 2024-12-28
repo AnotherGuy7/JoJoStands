@@ -35,7 +35,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             }
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.standOut && mPlayer.badCompanyTier != 0)
+            if (mPlayer.standOut && mPlayer.standTier != 0)
             {
                 Projectile.timeLeft = 2;
             }

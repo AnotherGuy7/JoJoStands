@@ -9,8 +9,8 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Road Roller Keys");
-            Tooltip.SetDefault("Keys for a Road Roller!");
+            // DisplayName.SetDefault("Road Roller Keys");
+            // Tooltip.SetDefault("Keys for a Road Roller!");
         }
 
         public override void SetDefaults()

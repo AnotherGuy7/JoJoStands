@@ -1,4 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Projectiles.PlayerStands.StickyFingers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -57,7 +58,7 @@ namespace JoJoStands.Projectiles
             float dist = Vector2.Distance(player.Center, Projectile.Center);
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                SoundEngine.PlaySound(StickyFingersStandFinal.ZipperSound, Projectile.Center);
                 playedSound = true;
             }
 
@@ -134,7 +135,7 @@ namespace JoJoStands.Projectiles
             }
             return true;
         }
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
             player.fallStart = (int)player.position.Y;

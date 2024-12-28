@@ -13,7 +13,6 @@ namespace JoJoStands.Tiles
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileLighted[Type] = true;
-            ItemDrop = ModContent.ItemType<ViralBrick>();
 
             AddMapEntry(new Color(200, 200, 200));
         }

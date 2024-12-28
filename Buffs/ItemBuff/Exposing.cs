@@ -7,10 +7,10 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Exposed Form");
-            Description.SetDefault("You are more vulnurable to enemy attacks but you recover Void faster.");
+            // DisplayName.SetDefault("Exposed Form");
+            // Description.SetDefault("You are more vulnurable to enemy attacks but you recover Void faster.");
             Main.buffNoTimeDisplay[Type] = true;
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void UpdateBuffOnPlayer(Player player)

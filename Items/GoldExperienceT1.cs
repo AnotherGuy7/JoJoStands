@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 14;
         public override int StandType => 1;
-        public override string StandProjectileName => "GoldExperience";
+        public override string StandIdentifierName => "GoldExperience";
         public override int StandTier => 1;
         public override Color StandTierDisplayColor => Color.Orange;
 
@@ -21,9 +21,9 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Gold Experience (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a frog!" +
-                "\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Gold Experience (Tier 1)");
+            /* Tooltip.SetDefault("Punch enemies at a fast rate and right-click to create a frog!" +
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

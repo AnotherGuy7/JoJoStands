@@ -8,9 +8,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Old Man's Shirt");
-            Tooltip.SetDefault("A yellow, roughed up shirt that looks as if it were part of a long adventure.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Old Man's Shirt");
+            // Tooltip.SetDefault("A yellow, roughed up shirt that looks as if it were part of a long adventure.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

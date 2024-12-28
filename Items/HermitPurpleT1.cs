@@ -13,12 +13,13 @@ namespace JoJoStands.Items
         public override int StandSpeed => 40;
         public override int StandType => 1;
         public override int StandTier => 1;
+        public override string StandIdentifierName => "HermitPurple";
         public override Color StandTierDisplayColor => Color.Magenta;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hermit Purple (Tier 1)");
-            Tooltip.SetDefault("Left-click to use Hermit Purple as a whip!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Hermit Purple (Tier 1)");
+            // Tooltip.SetDefault("Left-click to use Hermit Purple as a whip!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -39,7 +40,7 @@ namespace JoJoStands.Items
             mPlayer.standName = "HermitPurple";
             mPlayer.poseSoundName = "HermitPurple";
             if (JoJoStands.SoundsLoaded)
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Hermit Purple").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Hermit Purple").WithVolumeScale(JoJoStands.ModSoundsVolume), player.Center);
             return true;
         }
 

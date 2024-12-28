@@ -7,6 +7,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.Echoes
@@ -15,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
     {
         public override int PunchDamage => 108;
         public override int PunchTime => 2;
-        public override int FistWhoAmI => 15;
+        public override int FistID => 15;
         public override int TierNumber => 1;
         public override StandAttackType StandType => StandAttackType.Melee;
         public override bool CanUseRangeIndicators => false;
@@ -60,8 +61,9 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                         if (Main.MouseWorld.X > Projectile.Center.X)
                             ability = 0f;
-                        if (Main.MouseWorld.X < Projectile.Center.X)
+                        else
                             ability = 3f;
+
                         Projectile.velocity = Main.MouseWorld - Projectile.Center;
                         Projectile.velocity.Normalize();
                         Projectile.velocity *= 12f;
@@ -124,7 +126,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_2>(), 1f);
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.ProjectileType<EchoesStandT2>(), 0, 0f, Main.myPlayer, 2f);
-                Main.NewText("Oh? Echoes is evolving!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.EchoesEvolve").Value);
             }
         }
 
@@ -132,42 +134,36 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
 
         public override bool CanHitPvp(Player target) => thrown ? true : false;
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            Player player = Main.player[Projectile.owner];
-            if (player.HasBuff(ModContent.BuffType<StrongWill>()))
+            if (info.PvP)
             {
-                evolve = true;
-                Projectile.Kill();
-            }
-            if (!player.HasBuff(ModContent.BuffType<StrongWill>()))
-            {
-                thrown = false;
-                Projectile.alpha = 255;
-                rotationAdd = 0f;
-                Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_3>(), 1f);
-                SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
+                Player player = Main.player[Projectile.owner];
+                if (player.HasBuff(ModContent.BuffType<StrongWill>()))
+                {
+                    evolve = true;
+                    Projectile.Kill();
+                }
+                else
+                {
+                    thrown = false;
+                    Projectile.alpha = 255;
+                    rotationAdd = 0f;
+                    Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, ModContent.GoreType<ACT0_Gore_3>(), 1f);
+                    SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
+                }
             }
         }
 
-        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
-        {
-            Player player = Main.player[Projectile.owner];
-            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            damage /= 2;
-            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
-        }
-
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
             if (player.HasBuff(ModContent.BuffType<StrongWill>()))

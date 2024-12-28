@@ -9,15 +9,15 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Zipped Hand");
-            Tooltip.SetDefault("Allows you to make a last stand before death.\nDuring the last stand phase, damage and critial strike chances are doubled.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Zipped Hand");
+            // Tooltip.SetDefault("Allows you to make a last stand before death.\nDuring the last stand phase, damage and critial strike chances are doubled.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.width = 18;
-            Item.height = 28;
+            Item.width = 22;
+            Item.height = 36;
             Item.accessory = true;
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.buyPrice(gold: 1);

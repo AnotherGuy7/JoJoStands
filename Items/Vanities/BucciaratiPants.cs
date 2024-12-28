@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Zipper Patterned Pants");
-            Tooltip.SetDefault("A pair of white pants, patterned with many zippers.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Zipper Patterned Pants");
+            // Tooltip.SetDefault("A pair of white pants, patterned with many zippers.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

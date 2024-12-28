@@ -67,16 +67,11 @@ namespace JoJoStands.Projectiles
             int dustIndex = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 202, Projectile.velocity.X * -0.3f, Projectile.velocity.Y * -0.3f);
             Main.dust[dustIndex].noGravity = true;
         }
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
+                modifiers.SetCrit();
         }
     }
 }

@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bootleg Cosplay Pants");
-            Tooltip.SetDefault("Pants that, when worn, give you the feeling that you're someone else. Unfortunately, they didn't cost 100000 yen...\n+4% Stand Critical Hit Chance");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Bootleg Cosplay Pants");
+            // Tooltip.SetDefault("Pants that, when worn, give you the feeling that you're someone else. Unfortunately, they didn't cost 100000 yen...\n+4% Stand Critical Hit Chance");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

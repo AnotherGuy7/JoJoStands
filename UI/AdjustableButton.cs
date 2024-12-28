@@ -41,10 +41,10 @@ namespace JoJoStands.UI
 
         public AdjustableButton(Asset<Texture2D> texture, Vector2 position, Vector2 size, Color color, bool respondToFocusInput, float focusScale = 1.15f) : base(texture)
         {
-            buttonImage = (Texture2D)texture;
+            buttonImage = texture.Value;
             SetButtonPosiiton(position);
             defaultSize = size;
-            textureSize = texture.Size();
+            textureSize = buttonImage.Size();
             drawColor = color;
             imageScale = 1f;
             rotation = 0f;
@@ -58,10 +58,10 @@ namespace JoJoStands.UI
 
         public AdjustableButton(Asset<Texture2D> texture, Vector2 position, Vector2 size, Color color, float defaultAlpha = 0.4f, float activeAlpha = 1f, bool respondToFocusInput = true, float focusScale = 1.15f) : base(texture)
         {
-            buttonImage = (Texture2D)texture;
+            buttonImage = texture.Value;
             SetButtonPosiiton(position);
             defaultSize = size;
-            textureSize = ((Texture2D)texture).Size();
+            textureSize = buttonImage.Size();
             drawColor = color;
             imageScale = 1f;
             rotation = 0f;

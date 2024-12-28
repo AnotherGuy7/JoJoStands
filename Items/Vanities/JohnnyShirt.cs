@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jockey's Top");
-            Tooltip.SetDefault("A sky blue top worn by a famous horse jockey. Makes you want to spin.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Jockey's Top");
+            // Tooltip.SetDefault("A sky blue top worn by a famous horse jockey. Makes you want to spin.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -10,14 +10,14 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Makes you invisible!");
+            // Tooltip.SetDefault("Makes you invisible!");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = false;
             /*ArmorIDs.Body.Sets.HidesTopSkin[Item.bodySlot] = true;
             ArmorIDs.Body.Sets.HidesBottomSkin[Item.bodySlot] = true;
             ArmorIDs.Body.Sets.HidesArms[Item.bodySlot] = true;
             ArmorIDs.Legs.Sets.HidesTopSkin[Item.legSlot] = true;
             ArmorIDs.Legs.Sets.HidesBottomSkin[Item.legSlot] = true;*/
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

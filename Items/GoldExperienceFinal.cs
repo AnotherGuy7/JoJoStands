@@ -12,17 +12,17 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 11;
         public override int StandType => 1;
-        public override string StandProjectileName => "GoldExperience";
+        public override string StandIdentifierName => "GoldExperience";
         public override int StandTier => 4;
         public override Color StandTierDisplayColor => Color.Orange;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Gold Experience (Final Tier)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use abilities!" +
+            // DisplayName.SetDefault("Gold Experience (Final Tier)");
+            /* Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to use abilities!" +
                 "\nSpecial: Opens/Hides the Ability Wheel" +
                 "\nPassive: Barraging enemies may inflict them with Life Punch" +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

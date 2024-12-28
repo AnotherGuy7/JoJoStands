@@ -11,9 +11,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Alloys
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Adamantite Alloy Helmet (Neutral)");
-            Tooltip.SetDefault("A helmet fused with Viral Meteorite to empower the user.\nNote: This helmet makes a set when paired with the rest of the default Adamantite set.\nStand stat buffs change depending on stand type.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Adamantite Alloy Helmet (Neutral)");
+            // Tooltip.SetDefault("A helmet fused with Viral Meteorite to empower the user.\nNote: This helmet makes a set when paired with the rest of the default Adamantite set.\nStand stat buffs change depending on stand type.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

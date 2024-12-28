@@ -10,14 +10,14 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 13;
         public override int StandType => 1;
-        public override string StandProjectileName => "StoneFree";
+        public override string StandIdentifierName => "StoneFree";
         public override int StandTier => 1;
         public override Color StandTierDisplayColor => Color.MediumAquamarine;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stone Free (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Stone Free (Tier 1)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

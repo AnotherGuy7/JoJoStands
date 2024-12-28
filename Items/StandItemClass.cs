@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace JoJoStands.Items
 {
@@ -23,7 +24,7 @@ namespace JoJoStands.Items
         /// <summary>
         /// The stand's name.
         /// </summary>
-        public virtual string StandProjectileName { get; }
+        public virtual string StandIdentifierName { get; }
         /// <summary>
         /// The amount of tiers to offset the display by. A Display Offset of 1 would show the tier one tier higher than the StandTier value.
         /// </summary>
@@ -54,11 +55,11 @@ namespace JoJoStands.Items
             if (StandType != 0)
             {
                 TooltipLine tooltipAddition = new TooltipLine(Mod, "Speed", speedType + speed);
-                TooltipLine dodgeTooltipAddition = new TooltipLine(Mod, "Dodge", (int)mPlayer.standDodgeBoosts + "% dodge chance");
+                TooltipLine dodgeTooltipAddition = new TooltipLine(Mod, "Dodge", (int)mPlayer.standDodgeChance + "% dodge chance");
                 tooltips.Add(tooltipAddition);
                 tooltips.Add(dodgeTooltipAddition);
             }
-            if (StandProjectileName == "Cream")
+            if (StandIdentifierName == "Cream")
             {
                 TooltipLine creamWariningTooltipAddition = new TooltipLine(Mod, "Warning", "Warning! Cream's abilities are extremely destructive to the area around!");
                 creamWariningTooltipAddition.OverrideColor = Color.Red;
@@ -84,13 +85,16 @@ namespace JoJoStands.Items
         public override void RightClick(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.StandSlot.SlotItem.type != 0)
+            if (mPlayer.timestopActive || mPlayer.standChangingLocked)
+                return;
+
+            if (mPlayer.StandSlot.SlotItem.type != ItemID.None)
             {
                 player.QuickSpawnItem(player.GetSource_FromThis(), mPlayer.StandSlot.SlotItem.type);
                 mPlayer.StandSlot.SlotItem.type = Item.type;
                 mPlayer.StandSlot.SlotItem.SetDefaults(Item.type);
             }
-            if (mPlayer.StandSlot.SlotItem.type == 0)
+            else
             {
                 mPlayer.StandSlot.SlotItem.type = Item.type;
                 mPlayer.StandSlot.SlotItem.SetDefaults(Item.type);

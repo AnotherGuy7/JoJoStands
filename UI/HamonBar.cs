@@ -41,7 +41,7 @@ namespace JoJoStands.UI
 
             if (sizeMode >= 4)
                 sizeMode = 3;
-            if (sizeMode <= 0)
+            else if (sizeMode <= 0)
             {
                 sizeMode = 0;
                 visible = false;
@@ -59,7 +59,6 @@ namespace JoJoStands.UI
                 hamonBar.Top.Set(JoJoStands.HamonBarPositionY * (Main.screenHeight * 0.01f), 0f);
                 changedInConfig = false;
             }
-
 
             base.Update(gameTime);
         }
@@ -94,11 +93,7 @@ namespace JoJoStands.UI
             int frame = (int)MathHelper.Clamp(hamonPlayer.amountOfHamon / 12, 1, 23) - 1;
             animRect.Y = frame * animRect.Height;
 
-            float scaleInverse = 1f - (Main.UIScale - 1f);
-            Rectangle clippingRect = hamonBar.GetClippingRectangle(spriteBatch);
-            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
-            Rectangle destinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
-            spriteBatch.Draw(hamonBarTexture, destinationRect, animRect, Color.Yellow);
+            spriteBatch.Draw(hamonBarTexture, UITools.ReformatRectangle(hamonBar.GetClippingRectangle(spriteBatch)), animRect, Color.Yellow);
         }
     }
 }

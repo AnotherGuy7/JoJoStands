@@ -9,8 +9,8 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Viral Meteorite turned into dust. Tastes pretty good!");
-            SacrificeTotal = 50;
+            // Tooltip.SetDefault("Viral Meteorite turned into dust. Tastes pretty good!");
+            Item.ResearchUnlockCount = 50;
         }
 
         public override void SetDefaults()

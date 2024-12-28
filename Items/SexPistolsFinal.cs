@@ -17,14 +17,14 @@ namespace JoJoStands.Items
         }
 
         public override int StandTier => 4;
-        public override string StandProjectileName => "SexPistols";
+        public override string StandIdentifierName => "SexPistols";
         public static readonly Color SexPistolsTierColor = new Color(238, 190, 58);
         public override Color StandTierDisplayColor => SexPistolsTierColor;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sex Pistols (Final Tier)");
-            Tooltip.SetDefault("Use a gun and have Sex Pistols kick the bullet!\nIncreases bullet damages by 20% and adds two penetration points.\nSpecial: Configure all Sex Pistols's placement!\nSecond Special: Bullet Kick Frenzy\nAuto Mode: Bullets that go near enemies will automatically be re-adjusted toward the enemy!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Sex Pistols (Final Tier)");
+            // Tooltip.SetDefault("Use a gun and have Sex Pistols kick the bullet!\nIncreases bullet damages by 20% and adds two penetration points.\nSpecial: Configure all Sex Pistols's placement!\nSecond Special: Bullet Kick Frenzy\nAuto Mode: Bullets that go near enemies will automatically be re-adjusted toward the enemy!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -52,7 +52,7 @@ namespace JoJoStands.Items
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<SexPistolsStand>(), 0, 0f, Main.myPlayer, i + 1);
             }
             if (JoJoStands.SoundsLoaded)
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Sex Pistols").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Sex Pistols").WithVolumeScale(JoJoStands.ModSoundsVolume), player.Center);
             return true;
         }
 

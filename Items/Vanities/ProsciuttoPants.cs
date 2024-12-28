@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Brotherly Pants");
-            Tooltip.SetDefault("Navy pants with white stripes, and a few grey hairs.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Brotherly Pants");
+            // Tooltip.SetDefault("Navy pants with white stripes, and a few grey hairs.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

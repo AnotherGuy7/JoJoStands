@@ -9,8 +9,8 @@ namespace JoJoStands.Buffs.ItemBuff
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Dodged!");
-            Description.SetDefault("It was close call!");
+            // DisplayName.SetDefault("Dodged!");
+            // Description.SetDefault("It was close call!");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

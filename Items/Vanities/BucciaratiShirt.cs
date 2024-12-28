@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Zipper Patterned Suit");
-            Tooltip.SetDefault("A white suit adorned  with several golden zippers, and a large chest window.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Zipper Patterned Suit");
+            // Tooltip.SetDefault("A white suit adorned  with several golden zippers, and a large chest window.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

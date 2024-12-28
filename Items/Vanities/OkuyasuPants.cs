@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Okuyasu's Pants");
-            Tooltip.SetDefault("A pair of pants worn by Okuyasu Nijimura, with two belts.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Okuyasu's Pants");
+            // Tooltip.SetDefault("A pair of pants worn by Okuyasu Nijimura, with two belts.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

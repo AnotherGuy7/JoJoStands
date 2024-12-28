@@ -10,9 +10,9 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 9));
-            Tooltip.SetDefault("This soul seems to make things slower around you");
-            DisplayName.SetDefault("Soul of Time");
-            SacrificeTotal = 5;
+            // Tooltip.SetDefault("This soul seems to make things slower around you");
+            // DisplayName.SetDefault("Soul of Time");
+            Item.ResearchUnlockCount = 5;
         }
 
         public override void SetDefaults()

@@ -1,6 +1,8 @@
+using JoJoStands.Buffs.ItemBuff;
 using JoJoStands.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -35,9 +37,15 @@ namespace JoJoStands.Projectiles.Minions
         private bool canShoot = false;
         private int shootCount = 0;
 
+        public override void OnSpawn(IEntitySource source)
+        {
+            for (int i = 0; i < Main.rand.Next(4, 8 + 1); i++)
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+        }
+
         public override void AI()       ////I really just ported over the Stray Cat NPC AI
         {
-            SelectFrame();
+            AnimateMinion();
             Player player = Main.player[Projectile.owner];
             Projectile.damage = 0;
             Projectile.timeLeft = 2;
@@ -47,30 +55,30 @@ namespace JoJoStands.Projectiles.Minions
             NPC target = null;
             if (target == null)
             {
-                for (int k = 0; k < Main.maxNPCs; k++)
+                for (int n = 0; n < Main.maxNPCs; n++)
                 {
-                    NPC potentialTarget = Main.npc[k];
+                    NPC potentialTarget = Main.npc[n];
                     if (potentialTarget.active && !potentialTarget.dontTakeDamage && !potentialTarget.friendly && potentialTarget.lifeMax > 5 && potentialTarget.type != NPCID.TargetDummy && potentialTarget.type != NPCID.CultistTablet && !potentialTarget.townNPC && Projectile.Distance(potentialTarget.Center) <= 400f)
-                    {
                         target = potentialTarget;
-                    }
                 }
             }
-            if (player.HeldItem.type == ModContent.ItemType<StrayCat>() && player.altFunctionUse == 2)
-            {
+            if ((player.HeldItem.type == ModContent.ItemType<StrayCat>() && player.altFunctionUse == 2) || !player.HasBuff(ModContent.BuffType<StrayCatBuff>()))
                 Projectile.Kill();
+
+            if (!Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height))
+                Projectile.velocity.Y += 0.3f;
+            else
+            {
+                if (Projectile.velocity.Y > 0f)
+                    Projectile.velocity.Y = 0f;
             }
-            Projectile.velocity.Y = 2f;
             if (target != null)
             {
                 if (Projectile.ai[1] == 0f)
-                {
                     Projectile.ai[0]++;
-                }
+
                 if (Projectile.ai[0] > 0f && Projectile.ai[1] == 1f)
-                {
                     Projectile.ai[0]--;
-                }
                 if (Projectile.ai[0] >= 210f)
                 {
                     Projectile.ai[0] = 209f;
@@ -109,7 +117,13 @@ namespace JoJoStands.Projectiles.Minions
             return false;
         }
 
-        public void SelectFrame()
+        public override void OnKill(int timeLeft)
+        {
+            for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, Main.rand.NextFloat(-0.3f, 1f + 0.3f), Main.rand.NextFloat(-0.3f, 0.3f + 1f), Scale: Main.rand.NextFloat(-1f, 1f + 1f));
+        }
+
+        public void AnimateMinion()
         {
             if (Projectile.ai[1] == 1f)
             {
@@ -120,9 +134,8 @@ namespace JoJoStands.Projectiles.Minions
                     Projectile.frameCounter = 0;
                 }
                 if (!canShoot && Projectile.frame == 5)
-                {
                     canShoot = true;
-                }
+
                 if (Projectile.frame >= 6)
                 {
                     Projectile.frame = 0;

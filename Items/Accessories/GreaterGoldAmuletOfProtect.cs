@@ -7,15 +7,17 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class GreaterGoldAmuletOfProtect : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Greater Amulet of Protect");
-            Tooltip.SetDefault("Increased defense while the Stand is out");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Greater Amulet of Protect");
+            // Tooltip.SetDefault("Increased defense while the Stand is out\nOnly boosts defense while in Manual Mode.");
+            Item.ResearchUnlockCount = 1;
         }
+
         public override void SetDefaults()
         {
             Item.width = 16;
@@ -45,6 +47,7 @@ namespace JoJoStands.Items.Accessories
             }
             return !alternateAmuletEquipped;
         }
+
         public override void AddRecipes()
         {
             CreateRecipe()

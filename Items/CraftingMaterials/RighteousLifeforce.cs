@@ -13,9 +13,10 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(8, 4));
-            DisplayName.SetDefault("Righteous Lifeforce");
-            Tooltip.SetDefault("The power of someone who sets things right");
-            SacrificeTotal = 3;
+            // DisplayName.SetDefault("Righteous Lifeforce");
+            // Tooltip.SetDefault("The power of someone who sets things right");
+            Item.ResearchUnlockCount = 3;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<DeterminedLifeforce>();
         }
 
         public override void SetDefaults()

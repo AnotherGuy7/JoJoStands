@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
@@ -10,12 +11,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override int PunchDamage => 15;
         public override int PunchTime => 14;
         public override int HalfStandHeight => 39;
-        public override int FistWhoAmI => 4;
+        public override int FistID => 4;
         public override int TierNumber => 1;
-        public override StandAttackType StandType => StandAttackType.Melee;
         public override string PunchSoundName => "Ari";
         public override string PoseSoundName => "Arrivederci";
         public override string SpawnSoundName => "Sticky Fingers";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/StickyFingers/StickyFingers_Punch_";
+        public override Vector2 PunchSize => new Vector2(38, 12);
+        public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
         {
@@ -32,44 +36,44 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
+                    if (Main.mouseLeft)
+                        Punch();
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
                 }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                {
+
+                if (!attacking)
                     StayBehind();
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -78,17 +82,11 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 30, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
     }
 }

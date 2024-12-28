@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 13;
         public override int StandType => 1;
-        public override string StandProjectileName => "KillerQueen";
+        public override string StandIdentifierName => "KillerQueen";
         public override int StandTier => 2;
         public override Color StandTierDisplayColor => Color.LightPink;
 
@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Killer Queen (1st Bomb Tier 2)");
-            Tooltip.SetDefault("Left-click to punch and right-click to trigger any block!\nRange: 12 blocks\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Killer Queen (1st Bomb Tier 2)");
+            // Tooltip.SetDefault("Left-click to punch and right-click to trigger any block!\nRange: 12 blocks\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

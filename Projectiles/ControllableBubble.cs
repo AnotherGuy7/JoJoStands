@@ -131,13 +131,13 @@ namespace JoJoStands.Projectiles
             explosionTimer = reader.ReadByte();
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             int plunderType = (int)Projectile.ai[0];
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
 
             if (plunderType == PlunderBubble.Plunder_None && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
             {
@@ -162,21 +162,16 @@ namespace JoJoStands.Projectiles
                         target.AddBuff(ModContent.BuffType<Infected>(), 280);
                 }
             }
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) <= 40)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Player player = Main.player[Projectile.owner];
             if (Main.rand.NextBool(10) && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                 target.AddBuff(BuffID.Obstructed, 4 * 60);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (Projectile.ai[1] == 0f)
             {
@@ -190,7 +185,7 @@ namespace JoJoStands.Projectiles
                     int dustIndex = Dust.NewDust(spawnPos, Projectile.width, Projectile.height, DustID.Cloud, velocity.X * 0.8f, velocity.Y * 0.8f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
                     Main.dust[dustIndex].noGravity = true;
                 }
-                SoundEngine.PlaySound(PopSound);
+                SoundEngine.PlaySound(PopSound, Projectile.Center);
             }
             else
             {
@@ -224,11 +219,18 @@ namespace JoJoStands.Projectiles
                             if (npc.position.X - Projectile.position.X > 0)
                                 hitDirection = 1;
 
-                            npc.StrikeNPC(Projectile.damage * 2, 9f, hitDirection, crit);
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = Projectile.damage * 2,
+                                Knockback = 9f,
+                                HitDirection = hitDirection,
+                                Crit = crit
+                            };
+                            npc.StrikeNPC(hitInfo);
                         }
                     }
                 }
-                SoundEngine.PlaySound(SoundID.Item14);
+                SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
             }
         }
     }

@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Brotherly Wig");
-            Tooltip.SetDefault("A slicked back blond wig, resembling a certain assassin.");
+            // DisplayName.SetDefault("Brotherly Wig");
+            // Tooltip.SetDefault("A slicked back blond wig, resembling a certain assassin.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -10,8 +10,8 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Asphyxiating");
-            Description.SetDefault("The air has been plundered from your lungs...");
+            // DisplayName.SetDefault("Asphyxiating");
+            // Description.SetDefault("The air has been plundered from your lungs...");
             Main.debuff[Type] = true;
             Main.pvpBuff[Type] = true;
         }

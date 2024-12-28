@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("DIO's Pants");
-            Tooltip.SetDefault("A pair of stylish yellow pants, with heart-adorned knees as well as tassels from the waist.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("DIO's Pants");
+            // Tooltip.SetDefault("A pair of stylish yellow pants, with heart-adorned knees as well as tassels from the waist.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

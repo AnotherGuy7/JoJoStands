@@ -95,7 +95,13 @@ namespace JoJoStands.Mounts
                     {
                         if (npc.lifeMax > 5 && !npc.townNPC && !npc.friendly && !npc.immortal && !npc.hide && roadRollerRect.Intersects(npc.Hitbox))
                         {
-                            npc.StrikeNPC(35 + (int)(positiveVel * 2f), 7f + positiveVel, player.direction);
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = 35 + (int)(positiveVel * 2f),
+                                Knockback = 7f + positiveVel,
+                                HitDirection = player.direction
+                            };
+                            npc.StrikeNPC(hitInfo);
                             player.velocity *= 0.5f;
                         }
                     }

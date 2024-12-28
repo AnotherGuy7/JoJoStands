@@ -11,7 +11,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 2;
         public override int StandType => 1;
-        public override string StandProjectileName => "Echoes";
+        public override string StandIdentifierName => "Echoes";
         public override int StandTier => 1;
         public override int StandTierDisplayOffset => -1;
         public override Color StandTierDisplayColor => Color.LightGreen;
@@ -22,8 +22,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Echoes (ACT 0)");
-            Tooltip.SetDefault("Left-click to... throw?\nOnly for those with the strongest of wills.");
+            // DisplayName.SetDefault("Echoes (ACT 0)");
+            // Tooltip.SetDefault("Left-click to... throw?\nOnly for those with the strongest of wills.");
         }
 
         public override void SetDefaults()

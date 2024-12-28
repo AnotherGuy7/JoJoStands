@@ -10,9 +10,9 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Yoyo");
-            Tooltip.SetDefault("A deadly yoyo with small spikes to cut and infect your enemies.\nInflicts Infected upon enemy hit.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Viral Yoyo");
+            // Tooltip.SetDefault("A deadly yoyo with small spikes to cut and infect your enemies.\nInflicts Infected upon enemy hit.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.HamonArmors.Training
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamon Training Hat");
-            Tooltip.SetDefault("A comfy hat that gives your head a clear concious...\nIncreases Hamon Damage by 5%");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Hamon Training Hat");
+            // Tooltip.SetDefault("A comfy hat that gives your head a clear concious...\nIncreases Hamon Damage by 5%");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

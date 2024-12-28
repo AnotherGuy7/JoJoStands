@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Crystal
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crystal Helmet (Long-Ranged)");
-            Tooltip.SetDefault("A helmet made to empower the force of the wills\n8% Stand Damage");
+            // DisplayName.SetDefault("Crystal Helmet (Long-Ranged)");
+            // Tooltip.SetDefault("A helmet made to empower the force of the wills\n8% Stand Damage");
         }
 
         public override void SetDefaults()

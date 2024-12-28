@@ -8,10 +8,11 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sealed Poker Deck");
-            Tooltip.SetDefault("Every 5 seconds, Stand Attacks deal 25% more damage." +
-                "\nStand Attacks affected by this accessory are guaranteed critical strikes.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Sealed Poker Deck");
+            /* Tooltip.SetDefault("Every 5 seconds, Stand Attacks deal 25% more damage." +
+                "\nStand Attacks affected by this accessory are guaranteed critical strikes."); */
+            Item.ResearchUnlockCount = 1;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<UnderbossPhone>();
         }
 
         public override void SetDefaults()

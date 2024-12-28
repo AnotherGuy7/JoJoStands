@@ -11,17 +11,17 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 12;
         public override int StandType => 2;
-        public override string StandProjectileName => "TowerOfGray";
+        public override string StandIdentifierName => "TowerOfGray";
         public override int StandTier => 1;
         public override Color StandTierDisplayColor => Color.RosyBrown;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Tower of Gray (Tier 1)");
-            Tooltip.SetDefault("Pierce your enemies with a sharp stinger!" +
+            // DisplayName.SetDefault("Tower of Gray (Tier 1)");
+            /* Tooltip.SetDefault("Pierce your enemies with a sharp stinger!" +
                 "\nSpecial: Remote Control" +
                 "\nPassive: Attack ignores 10 enemy defence" +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

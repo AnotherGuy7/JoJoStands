@@ -10,14 +10,14 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 14;
         public override int StandType => 2;
-        public override string StandProjectileName => "Whitesnake";
+        public override string StandIdentifierName => "Whitesnake";
         public override int StandTier => 1;
         public override Color StandTierDisplayColor => WhitesnakeFinal.WhitesnakeTierColor;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Whitesnake (Tier 1)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Whitesnake (Tier 1)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

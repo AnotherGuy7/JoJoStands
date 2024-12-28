@@ -12,7 +12,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 10;
         public override int StandType => 1;
-        public override string StandProjectileName => "StoneFree";
+        public override string StandIdentifierName => "StoneFree";
         public override int StandTier => 4;
         public override Color StandTierDisplayColor => Color.MediumAquamarine;
 
@@ -23,8 +23,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stone Free (Final Tier)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to create a string trap!\nSpecial: This ability is set by the ability selected in the Abiliy Wheel.\nSecond Special: Toggles the Ability Wheel.\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Stone Free (Final Tier)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate and right-click to create a string trap!\nSpecial: This ability is set by the ability selected in the Abiliy Wheel.\nSecond Special: Toggles the Ability Wheel.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

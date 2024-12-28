@@ -8,9 +8,9 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Pearl");
-            Tooltip.SetDefault("A shiny red pearl that seems to react strongly to your stand.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Viral Pearl");
+            // Tooltip.SetDefault("A shiny red pearl that seems to react strongly to your stand.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

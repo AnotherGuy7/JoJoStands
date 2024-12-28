@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 16;
         public override int StandType => 2;
-        public override string StandProjectileName => "MagiciansRed";
+        public override string StandIdentifierName => "MagiciansRed";
         public override int StandTier => 3;
         public override Color StandTierDisplayColor => MagiciansRedFinal.MagiciansRedTierColor;
 
@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Magicians Red (Tier 3)");
-            Tooltip.SetDefault("Shoot flaming ankhs at the enemies and right-click to grab an enemy!\nSpecial: Crossfire Hurricane!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Magicians Red (Tier 3)");
+            // Tooltip.SetDefault("Shoot flaming ankhs at the enemies and right-click to grab an enemy!\nSpecial: Crossfire Hurricane!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

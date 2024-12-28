@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mista's Cap");
-            Tooltip.SetDefault("A patterned red and white hat, with an arrow in the center. It has a secret pocket for bullets.");
+            // DisplayName.SetDefault("Mista's Cap");
+            // Tooltip.SetDefault("A patterned red and white hat, with an arrow in the center. It has a secret pocket for bullets.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

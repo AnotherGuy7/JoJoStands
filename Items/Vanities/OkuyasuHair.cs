@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Okuyasu Wig");
-            Tooltip.SetDefault("A wig in the hairstyle of Okuyasu Nijimura, minus the facial scars.");
+            // DisplayName.SetDefault("Okuyasu Wig");
+            // Tooltip.SetDefault("A wig in the hairstyle of Okuyasu Nijimura, minus the facial scars.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.PlayerBuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Quick Thinking");
-            Description.SetDefault("You are much quicker on knowing what to do and how to do it.\nStand Speed incrased by 1.");
+            // DisplayName.SetDefault("Quick Thinking");
+            // Description.SetDefault("You are much quicker on knowing what to do and how to do it.\nStand Speed incrased by 1.");
             Main.buffNoTimeDisplay[Type] = false;
         }
 

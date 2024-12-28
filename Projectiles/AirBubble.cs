@@ -47,12 +47,12 @@ namespace JoJoStands.Projectiles
             }*/
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             Projectile.Kill();
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < 15; i++)
             {

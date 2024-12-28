@@ -54,22 +54,18 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
-            damage = 0;
+                modifiers.SetCrit();
+            modifiers.FinalDamage *= 0;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            bool crit = false;
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             for (int i = 0; i < 30; i++)
@@ -108,7 +104,14 @@ namespace JoJoStands.Projectiles
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
 
-                        npc.StrikeNPC(Projectile.damage, 7f, hitDirection, crit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = Projectile.damage,
+                            Knockback = 7f,
+                            HitDirection = hitDirection,
+                            Crit = crit
+                        };
+                        npc.StrikeNPC(hitInfo);
                     }
                 }
             }
@@ -131,7 +134,7 @@ namespace JoJoStands.Projectiles
                     player.Hurt(PlayerDeathReason.ByCustomReason(player.name + " got careless around one of KQ's bombs."), bombDamage, hitDirection);
                 }
             }
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
 
             for (int i = 0; i < 60; i++)
             {

@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 13;
         public override int StandType => 2;
-        public override string StandProjectileName => "Whitesnake";
+        public override string StandIdentifierName => "Whitesnake";
         public override int StandTier => 2;
         public override Color StandTierDisplayColor => WhitesnakeFinal.WhitesnakeTierColor;
 
@@ -21,9 +21,9 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Whitesnake (Tier 2)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw some acid!\nSecond Special: Remote Control" +
-                "\nWhile in Remote Mode: Left-click to move and right-click shoot enemies with a pistol!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Whitesnake (Tier 2)");
+            /* Tooltip.SetDefault("Punch enemies at a really fast rate and right click to throw some acid!\nSecond Special: Remote Control" +
+                "\nWhile in Remote Mode: Left-click to move and right-click shoot enemies with a pistol!\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

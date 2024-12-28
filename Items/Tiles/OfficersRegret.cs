@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Tiles
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Officer's Regret");
-            Tooltip.SetDefault("`D. Storm`");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Officer's Regret");
+            // Tooltip.SetDefault("`D. Storm`");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

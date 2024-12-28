@@ -12,8 +12,8 @@ namespace JoJoStands.Buffs.Debuffs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Spin");
-            Description.SetDefault("You're being infinitely spun... There's no hope in surviving.");
+            // DisplayName.SetDefault("Spin");
+            // Description.SetDefault("You're being infinitely spun... There's no hope in surviving.");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             Main.persistentBuff[Type] = true;

@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 9;
         public override int StandType => 1;
-        public override string StandProjectileName => "CrazyDiamond";
+        public override string StandIdentifierName => "CrazyDiamond";
         public override int StandTier => 4;
         public static readonly Color CrazyDiamondTierColor = new Color(163, 211, 231);
         public override Color StandTierDisplayColor => CrazyDiamondTierColor;
@@ -22,8 +22,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Crazy Diamond (Final Tier)");
-            Tooltip.SetDefault(
+            // DisplayName.SetDefault("Crazy Diamond (Final Tier)");
+            /* Tooltip.SetDefault(
                 "Left-click to punch enemies at a really fast rate and right-click to flick a bullet!" +
                 "\nSpecial: Switch to Restoration Mode" +
                 "\nSecond Special: Enter an unstoppable rage!" +
@@ -32,7 +32,7 @@ namespace JoJoStands.Items
                 "\nRight-clicking elsewhere will restore the states of all other impacted objects." +
                 "\nPunching tiles while in Resotration Mode breaks the tiles." +
                 "\nWhile in a Rampage, restorations will become improper, turning restored enemies to stone." +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

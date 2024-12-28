@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kakyoin's Coat");
-            Tooltip.SetDefault("A green coat!");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Kakyoin's Coat");
+            // Tooltip.SetDefault("A green coat!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -12,13 +12,14 @@ namespace JoJoStands.Items
         public override int StandSpeed => 15;
         public override int StandType => 2;
         public override int StandTier => 1;
+        public override string StandIdentifierName => "TuskAct1";
         public override Color StandTierDisplayColor => TuskAct4.TuskTierColor;
 
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Tusk (ACT 1)");
-            Tooltip.SetDefault("Left-click to shoot nails at enemies and right-click to spin your nails in front of you to use as a melee weapon!");
+            // DisplayName.SetDefault("Tusk (ACT 1)");
+            // Tooltip.SetDefault("Left-click to shoot nails at enemies and right-click to spin your nails in front of you to use as a melee weapon!");
         }
 
         public override void SetDefaults()
@@ -43,6 +44,7 @@ namespace JoJoStands.Items
             mPlayer.standType = 2;
             mPlayer.equippedTuskAct = StandTier;
             mPlayer.tuskActNumber = StandTier;
+            mPlayer.standName = "TuskAct1";
             return true;
         }
 

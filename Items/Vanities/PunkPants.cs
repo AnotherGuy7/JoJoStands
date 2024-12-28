@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Punk Pants");
-            Tooltip.SetDefault("Perfect for chasing serial killers!");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Punk Pants");
+            // Tooltip.SetDefault("Perfect for chasing serial killers!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

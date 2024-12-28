@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Tiles
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Meteorite");
-            Tooltip.SetDefault("A concentrated cluster of a foreign virus...\nPlace near Meteorite to spread the Viral Meteorite.");
-            SacrificeTotal = 100;
+            // DisplayName.SetDefault("Viral Meteorite");
+            // Tooltip.SetDefault("A concentrated cluster of a foreign virus...\nPlace near Meteorite to spread the Viral Meteorite.");
+            Item.ResearchUnlockCount = 100;
         }
 
         public override void SetDefaults()

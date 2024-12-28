@@ -94,17 +94,14 @@ namespace JoJoStands.Projectiles.Pets
             {
                 if (Projectile.rotation > (float)Math.PI)
                     Projectile.rotation -= (float)Math.Tau;
+
                 if (Projectile.rotation > -0.005f && Projectile.rotation < 0.005f)
-                {
                     Projectile.rotation = 0f;
-                }
                 else
-                {
                     Projectile.rotation *= 0.96f;
-                }
             }
 
-            if (!mPlayer.standOut)
+            if (!mPlayer.standOut || player.dead)
                 Projectile.Kill();
 
             Projectile.frameCounter++;

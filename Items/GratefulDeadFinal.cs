@@ -11,7 +11,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 11;
         public override int StandType => 1;
-        public override string StandProjectileName => "GratefulDead";
+        public override string StandIdentifierName => "GratefulDead";
         public override int StandTier => 4;
         public static Color GratefulDeadTierColor = new Color(181, 174, 225);
         public override Color StandTierDisplayColor => GratefulDeadTierColor;
@@ -23,8 +23,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Grateful Dead (Final Tier)");
-            Tooltip.SetDefault("Punch enemies to make them age and right-click to grab them!\nSpecial: Spread Gas\nMore effective on hot biomes.\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Grateful Dead (Final Tier)");
+            // Tooltip.SetDefault("Punch enemies to make them age and right-click to grab them!\nSpecial: Spread Gas\nMore effective on hot biomes.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

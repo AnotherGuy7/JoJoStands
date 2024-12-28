@@ -7,12 +7,10 @@ namespace JoJoStands.Buffs.EffectBuff
 {
     public class Restoration : JoJoBuff
     {
-        public override string Texture => "Terraria/Images/Buff_" + BuffID.Lifeforce;
-
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Restoration");
-            Description.SetDefault("Your wounds are being healed right before your eyes!");
+            // DisplayName.SetDefault("Restoration");
+            // Description.SetDefault("Your wounds are being healed right before your eyes!");
         }
 
         public override void UpdateBuffOnPlayer(Player player)

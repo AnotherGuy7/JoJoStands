@@ -13,9 +13,10 @@ namespace JoJoStands.Items.CraftingMaterials
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(8, 4));
-            DisplayName.SetDefault("Determined Lifeforce");
-            Tooltip.SetDefault("The soul of someone who's always determined");
-            SacrificeTotal = 2;
+            // DisplayName.SetDefault("Determined Lifeforce");
+            // Tooltip.SetDefault("The soul of someone who's always determined");
+            Item.ResearchUnlockCount = 2;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<RighteousLifeforce>();
         }
 
         public override void SetDefaults()

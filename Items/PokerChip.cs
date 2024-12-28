@@ -8,8 +8,8 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A poker chip said to have a soul inside...");
-            SacrificeTotal = 5;
+            // Tooltip.SetDefault("A poker chip said to have a soul inside...");
+            Item.ResearchUnlockCount = 5;
         }
 
         public override void SetDefaults()

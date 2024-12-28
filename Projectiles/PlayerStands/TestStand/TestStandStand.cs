@@ -1,7 +1,5 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.EffectBuff;
-using JoJoStands.Buffs.ItemBuff;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
@@ -24,6 +22,15 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
         private int rippleSpeed = 15;
         private float distortStrength = 100f;*/
 
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            Secondary,
+            Special,
+            Pose
+        }
+
         public override void AI()
         {
             SelectAnimation();
@@ -44,8 +51,6 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             if (timestopPoseTimer > 0)
             {
                 timestopPoseTimer--;
-                idleFrames = false;
-                attackFrames = false;
                 Projectile.frame = 6;
                 Main.mouseLeft = false;
                 Main.mouseRight = false;
@@ -55,20 +60,17 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && player.whoAmI == Main.myPlayer)
+                if (player.whoAmI == Main.myPlayer)
                 {
-                    Punch();
+                    if (Main.mouseLeft)
+                        Punch();
+                    else
+                        attacking = false;
                 }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                {
+                if (!attacking)
                     StayBehind();
-                }
-                /*if (rippleEffectTimer <= 0)
+                /*i
+                }f (rippleEffectTimer <= 0)
                 {
                     Filters.Scene["Shockwave"].Deactivate();
                     rippleEffectTimer = 0;
@@ -78,20 +80,24 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = StandClass.AnimationState.Pose;
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == StandClass.AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
+            else if (currentAnimationState == StandClass.AnimationState.Attack)
+                PlayAnimation("Attack");
         }
 
         public override void PlayAnimation(string animationName)
@@ -100,13 +106,9 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/TestStand/TestStand_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 2, 30, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
         }
     }
 }

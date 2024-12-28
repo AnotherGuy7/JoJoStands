@@ -11,7 +11,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 10;
         public override int StandType => 1;
-        public override string StandProjectileName => "SoftAndWet";
+        public override string StandIdentifierName => "SoftAndWet";
         public override int StandTier => 4;
         public override Color StandTierDisplayColor => Color.LightBlue;
 
@@ -22,8 +22,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Soft and Wet (Final Tier)");
-            Tooltip.SetDefault("Punch enemies at a fast rate and right-click on empty space to create a Plunder Bubble or hold right-click on a tile to plant a bubble bomb!" +
+            // DisplayName.SetDefault("Soft and Wet (Final Tier)");
+            /* Tooltip.SetDefault("Punch enemies at a fast rate and right-click on empty space to create a Plunder Bubble or hold right-click on a tile to plant a bubble bomb!" +
                 "\nSpecial: Bubble Offensive" +
                 "\nSecond Special: Bubble Barrier!" +
                 "\nPassive: Bubble Generation" +
@@ -31,7 +31,7 @@ namespace JoJoStands.Items
                 "\nBubbles in Bubble Offensive mode can be detonated." +
                 "\nBubbles in Bubble Offensive can plunder debuff effects from enemies and tiles." +
                 "\nBubble Generation allows Soft & Wet to generate bubbles while barraging." +
-                "\nUsed in Stand Slot");
+                "\nUsed in Stand Slot"); */
         }
 
         public override void SetDefaults()

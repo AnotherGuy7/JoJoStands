@@ -13,6 +13,7 @@ namespace JoJoStands.Items
         public override int StandSpeed => 30;
         public override int StandType => 1;
         public override int StandTier => 3;
+        public override string StandIdentifierName => "HermitPurple";
         public override Color StandTierDisplayColor => Color.Magenta;
 
         public override string Texture
@@ -22,8 +23,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hermit Purple (Tier 3)");
-            Tooltip.SetDefault("Left-click to use Hermit Purple as a whip and right-click to grab enemies and slowly crush them!\nSpecial: Overcharge Hermit Purple so that enemies that hurt you get blown away!\nPassive: Enemies are hurt when they hurt you and get inflicted Sunburn!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Hermit Purple (Tier 3)");
+            // Tooltip.SetDefault("Left-click to use Hermit Purple as a whip and right-click to grab enemies and slowly crush them!\nSpecial: Overcharge Hermit Purple so that enemies that hurt you get blown away!\nPassive: Enemies are hurt when they hurt you and get inflicted Sunburn!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -44,7 +45,7 @@ namespace JoJoStands.Items
             mPlayer.standName = "HermitPurple";
             mPlayer.poseSoundName = "HermitPurple";
             if (JoJoStands.SoundsLoaded)
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Hermit Purple").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Hermit Purple").WithVolumeScale(JoJoStands.ModSoundsVolume), player.Center);
             return true;
         }
 

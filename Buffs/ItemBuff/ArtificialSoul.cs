@@ -8,16 +8,16 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Artificial Soul");
-            Description.SetDefault("An artificial soul has been given to you!");
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = false;
+            // DisplayName.SetDefault("Artificial Soul");
+            // Description.SetDefault("An artificial soul has been given to you!");
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
             Main.debuff[Type] = true;
         }
 
         public override void OnBuffEnd(Player player)
         {
             player.KillMe(PlayerDeathReason.ByCustomReason(player.name + "'s artificial soul has left them."), player.statLife + 1, player.direction);
-            player.GetModPlayer<MyPlayer>().revived = false;
+            player.GetModPlayer<MyPlayer>().revivedByPokerChip = false;
         }
     }
 }

@@ -1,3 +1,4 @@
+using JoJoStands.NPCs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -64,9 +65,7 @@ namespace JoJoStands.Projectiles
                     Projectile.velocity *= 24f;
                 }
                 else
-                {
                     Projectile.velocity = Vector2.Zero;
-                }
                 Projectile.netUpdate = true;
             }
 
@@ -82,22 +81,28 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (target.active && target.life > 0 && !target.hide && !target.immortal)
             {
                 boundNPC = target;
                 boundToNPC = true;
-                boundNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().boundByStrings = true;
+                boundNPC.GetGlobalNPC<JoJoGlobalNPC>().boundByStrings = true;
+                if (Projectile.owner == Main.myPlayer)
+                    boundNPC.GetGlobalNPC<JoJoGlobalNPC>().SyncEffect(JoJoGlobalNPC.Sync_BoundByStrings);
                 Projectile.damage = 0;
                 Projectile.timeLeft = (int)Projectile.ai[1] * 60;
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (boundToNPC && boundNPC != null && boundNPC.life > 0)
-                boundNPC.GetGlobalNPC<NPCs.JoJoGlobalNPC>().boundByStrings = false;
+            {
+                boundNPC.GetGlobalNPC<JoJoGlobalNPC>().boundByStrings = false;
+                if (Projectile.owner == Main.myPlayer)
+                    boundNPC.GetGlobalNPC<JoJoGlobalNPC>().SyncEffect(JoJoGlobalNPC.Sync_BoundByStrings);
+            }
         }
 
         private Texture2D stringTexture;

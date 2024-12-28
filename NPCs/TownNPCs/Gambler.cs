@@ -1,11 +1,16 @@
 using JoJoStands.Items;
 using JoJoStands.Items.Tiles;
 using JoJoStands.Projectiles;
+using JoJoStands.UI;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace JoJoStands.NPCs.TownNPCs
@@ -54,50 +59,45 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
-                new FlavorTextBestiaryInfoElement("Came all the way from Egypt after losing a life or death bet. He repeatedly promises to never cheat again.")
+                new FlavorTextBestiaryInfoElement(Language.GetText("Mods.JoJoStands.NPCFlavorText.Gambler").Value)
             });
         }
 
-        public override bool CanTownNPCSpawn(int numTownNPCs, int money)
+        public override bool CanTownNPCSpawn(int numTownNPCs)/* tModPorter Suggestion: Copy the implementation of NPC.SpawnAllowed_Merchant in vanilla if you to count money, and be sure to set a flag when unlocked, so you don't count every tick. */
         {
             return Main.hardMode && numTownNPCs >= 5;
         }
 
-        public override List<string> SetNPCNameList()
-        {
-            List<string> possibleNames = new List<string>();
-
-            possibleNames.Add("D'Arby");
-
-            return possibleNames;
-        }
+        public override List<string> SetNPCNameList() => new List<string> { "D'Arby" };
 
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = "Buy Items";
-            button2 = "Bet";
+            button = Language.GetText("Mods.JoJoStands.NPCButtonText.BuyItems").Value;
+            button2 = Language.GetText("Mods.JoJoStands.NPCButtonText.Gamble").Value;
         }
 
-        public override void OnChatButtonClicked(bool firstButton, ref bool openShop)
+        public override void OnChatButtonClicked(bool firstButton, ref string shopName)
         {
             if (firstButton)
-            {
-                openShop = true;
-            }
+                shopName = "Shop";
             else
-            {
-                UI.BetUI.Visible = true;
-            }
+                BetUI.Visible = true;
         }
 
-        public override void SetupShop(Chest shop, ref int nextSlot)
+        public override void AddShops()
         {
-            shop.item[nextSlot].SetDefaults(ModContent.ItemType<PackoCards>());
-            nextSlot++;
-            shop.item[nextSlot].SetDefaults(ModContent.ItemType<PokerChip>());
-            nextSlot++;
-            shop.item[nextSlot].SetDefaults(ModContent.ItemType<TarotTable>());
-            nextSlot++;
+            NPCShop npcShop = new NPCShop(Type);
+            int[] itemTypes = new int[3]
+            {
+                ModContent.ItemType<PackoCards>(),
+                ModContent.ItemType<PokerChip>(),
+                ModContent.ItemType<TarotTable>()
+            };
+            for (int i = 0; i < itemTypes.Length; i++)       //auto builds the list of items, also sets their price to 50 gold without affecting original items
+            {
+                npcShop.Add(itemTypes[i]);
+            }
+            npcShop.Register();
         }
 
         public override string GetChat()
@@ -105,15 +105,15 @@ namespace JoJoStands.NPCs.TownNPCs
             switch (Main.rand.Next(4))
             {
                 case 0:
-                    return "Why don't you try to bet? C'mon, I'll even go easy on you!";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler1").Value;
                 case 1:
-                    return "I should've played... How could I have been fooled by such an obvious bluff...";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler2").Value;
                 case 2:
-                    return "I believe it was a gamblers instinct that led me to this goldmine of items.";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler3").Value;
                 case 3:
-                    return "Cheating? It's only cheating if you're caught!";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler4").Value;
                 default:
-                    return "I am D'Arby, the worlds greatest gambler!";
+                    return Language.GetText("Mods.JoJoStands.NPCDialogue.Gambler5").Value;
             }
         }
 
@@ -127,10 +127,11 @@ namespace JoJoStands.NPCs.TownNPCs
         {
             cooldown = 1;
         }
-        public override void DrawTownAttackGun(ref float scale, ref int Item, ref int closeness)
+
+        public override void DrawTownAttackGun(ref Texture2D item, ref Rectangle itemFrame, ref float scale, ref int horizontalHoldoutOffset)/* tModPorter Note: closeness is now horizontalHoldoutOffset, use 'horizontalHoldoutOffset = Main.DrawPlayerItemPos(1f, itemtype) - originalClosenessValue' to adjust to the change. See docs for how to use hook with an item type. */
         {
             scale = 1f;
-            closeness = 15;
+            horizontalHoldoutOffset = (int)Main.DrawPlayerItemPos(1f, ModContent.ItemType<PackoCards>()).Y - 15;
         }
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)

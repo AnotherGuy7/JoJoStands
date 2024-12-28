@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Magent Magent's Pants");
-            Tooltip.SetDefault("A slightly worn pair of magenta pants. Patched up from an explosion");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Magent Magent's Pants");
+            // Tooltip.SetDefault("A slightly worn pair of magenta pants. Patched up from an explosion");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

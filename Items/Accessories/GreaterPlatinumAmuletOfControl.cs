@@ -7,14 +7,15 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class GreaterPlatinumAmuletOfControl : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Greater Amulet of Control");
-            Tooltip.SetDefault("10% Stand Ability cooldown reduction");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Greater Amulet of Control");
+            // Tooltip.SetDefault("10% Stand Ability cooldown reduction");
+            Item.ResearchUnlockCount = 1;
         }
         public override void SetDefaults()
         {

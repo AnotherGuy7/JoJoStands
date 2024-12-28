@@ -11,14 +11,14 @@ namespace JoJoStands.Buffs.EffectBuff
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("WOOOSH!");
-            Description.SetDefault("Tailwind increases your speed!");
+            // DisplayName.SetDefault("WOOOSH!");
+            // Description.SetDefault("Tailwind increases your speed!");
         }
         public override void UpdateBuffOnPlayer(Player player)
         {
             player.moveSpeed *= 1.5f;
-            if (player.HasBuff(ModContent.BuffType<WhooshDebuff>()))
-                player.ClearBuff(ModContent.BuffType<WhooshDebuff>());
+            if (player.HasBuff(ModContent.BuffType<WoooshDebuff>()))
+                player.ClearBuff(ModContent.BuffType<WoooshDebuff>());
         }
     }
 }

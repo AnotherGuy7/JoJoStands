@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Magent Magent's Cap");
-            Tooltip.SetDefault("A magenta colored hat, resembling a magician's. It makes you zone out.");
+            // DisplayName.SetDefault("Magent Magent's Cap");
+            // Tooltip.SetDefault("A magenta colored hat, resembling a magician's. It makes you zone out.");
             ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

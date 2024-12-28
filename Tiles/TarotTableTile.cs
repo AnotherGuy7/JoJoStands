@@ -1,8 +1,9 @@
 using JoJoStands.Buffs.PlayerBuffs;
-using JoJoStands.Items.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -31,8 +32,8 @@ namespace JoJoStands.Tiles
             };
             TileObjectData.addTile(Type);
 
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Tarot Table");
+            LocalizedText name = CreateMapEntryName();
+            // name.SetDefault("Tarot Table");
             AddMapEntry(Color.Brown, name);
         }
 
@@ -45,22 +46,16 @@ namespace JoJoStands.Tiles
                 frame++;
                 frameCounter = 0;
                 if (frame >= 13)
-                {
                     frame = 0;
-                }
             }
         }
 
         public override bool RightClick(int i, int j)
         {
             Player player = Main.player[Main.myPlayer];
-            player.AddBuff(ModContent.BuffType<StrongWill>(), 300 * 60);
+            player.AddBuff(ModContent.BuffType<StrongWill>(), 10 * 60 * 60);
+            SoundEngine.PlaySound(SoundID.Item4);
             return true;
-        }
-
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(null, i * 16, j * 16, 4, 4, ModContent.ItemType<TarotTable>());
         }
     }
 }

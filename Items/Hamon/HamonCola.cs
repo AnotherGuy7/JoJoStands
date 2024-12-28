@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Hamon
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Hamon-Infused Cola");
-            Tooltip.SetDefault("Drink this hamon-infused cola to feel stronger or shoot it all at your enemies!");
-            SacrificeTotal = 15;
+            // DisplayName.SetDefault("Hamon-Infused Cola");
+            // Tooltip.SetDefault("Drink this hamon-infused cola to feel stronger or shoot it all at your enemies!");
+            Item.ResearchUnlockCount = 15;
         }
 
         public override void SetDefaults()

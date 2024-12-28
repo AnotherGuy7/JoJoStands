@@ -11,18 +11,18 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 16;
         public override int StandType => 1;
-        public override string StandProjectileName => "Echoes";
+        public override string StandIdentifierName => "Echoes";
         public override int StandTier => 2;
         public override int StandTierDisplayOffset => -1;
         public override Color StandTierDisplayColor => Color.LightGreen;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Echoes (ACT 1)");
-            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate!" +
+            // DisplayName.SetDefault("Echoes (ACT 1)");
+            /* Tooltip.SetDefault("Left-click to punch enemies at a really fast rate!" +
                 "\nRight-click: Tag an entity with a sound!" +
                 "\nSpecial: Remote Control" +
-                "\nPassive: Attacking enemies applies SMACK to them, dealing damage over time.");
+                "\nPassive: Attacking enemies applies SMACK to them, dealing damage over time."); */
         }
 
         public override void SetDefaults()

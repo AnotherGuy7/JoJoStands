@@ -9,8 +9,8 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A hammer that, when wielded, hits with tremendous force.\nHurts enemies near the player when used.");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A hammer that, when wielded, hits with tremendous force.\nHurts enemies near the player when used.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()
@@ -39,7 +39,15 @@ namespace JoJoStands.Items
                     if (npc.active)
                     {
                         if (npc.Distance(player.position) <= 8f * 16f && npc.lifeMax > 5 && !npc.friendly && !npc.immortal && !npc.hide)
-                            npc.StrikeNPC(18, 12f, player.direction);
+                        {
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = 18,
+                                Knockback = 12f,
+                                HitDirection = player.direction
+                            };
+                            npc.StrikeNPC(hitInfo);
+                        }
                     }
                 }
             }

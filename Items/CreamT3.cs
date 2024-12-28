@@ -16,14 +16,14 @@ namespace JoJoStands.Items
 
         public override int StandSpeed => 24;
         public override int StandType => 1;
-        public override string StandProjectileName => "Cream";
+        public override string StandIdentifierName => "Cream";
         public override int StandTier => 3;
         public override Color StandTierDisplayColor => Color.MediumPurple;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Cream (Tier 3)");
-            Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash!\nSpecial: Completely become a ball of Void and consume everything in your way!\nSecond Special: Envelop yourself in Void!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Cream (Tier 3)");
+            // Tooltip.SetDefault("Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash!\nSpecial: Completely become a ball of Void and consume everything in your way!\nSecond Special: Envelop yourself in Void!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

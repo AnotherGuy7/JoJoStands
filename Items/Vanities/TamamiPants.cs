@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Pompous Pants");
-            Tooltip.SetDefault("A pair of dark pants. The only normal part of this outfit.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Pompous Pants");
+            // Tooltip.SetDefault("A pair of dark pants. The only normal part of this outfit.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

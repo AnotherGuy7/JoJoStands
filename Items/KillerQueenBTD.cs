@@ -16,7 +16,7 @@ namespace JoJoStands.Items
         public override int StandSpeed => 30;
         public override int StandType => 2;
         public override int StandTier => 5;
-        public override string StandProjectileName => "KillerQueenBTD";
+        public override string StandIdentifierName => "KillerQueenBTD";
         public override Color StandTierDisplayColor => Color.LightPink;
 
         public override string Texture
@@ -26,8 +26,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Killer Queen (Stray Cat)");
-            Tooltip.SetDefault("Left-click to shoot bubbles and right-click to detonate them!\nSpecial: Bite The Dust!\nRight-Click while holding the Item to revert back to Killer Queen Final (You can revert back to BTD)\nNote: Manually detonating bubble bombs doubles damage!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Killer Queen (Stray Cat)");
+            // Tooltip.SetDefault("Left-click to shoot bubbles and right-click to detonate them!\nSpecial: Bite The Dust!\nRight-Click while holding the Item to revert back to Killer Queen Final (You can revert back to BTD)\nNote: Manually detonating bubble bombs doubles damage!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -51,7 +51,7 @@ namespace JoJoStands.Items
                 {
                     Item.type = ModContent.ItemType<KillerQueenFinal>();
                     Item.SetDefaults(ModContent.ItemType<KillerQueenFinal>());
-                    SoundEngine.PlaySound(SoundID.Grab);
+                    SoundEngine.PlaySound(SoundID.Grab, player.Center);
                     mPlayer.revertTimer += 30;
                 }
             }

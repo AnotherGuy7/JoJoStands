@@ -167,7 +167,7 @@ namespace JoJoStands.Projectiles
                                 extraInfo2 = Main.rand.Next(0, 360)
                             };
                             visualEffects.Add(boingEffect);
-                            SoundEngine.PlaySound(boingSound);
+                            SoundEngine.PlaySound(boingSound, Projectile.Center);
                         }
                     }
 
@@ -182,7 +182,7 @@ namespace JoJoStands.Projectiles
                                 npc.velocity.Normalize();
                                 npc.velocity.Y *= -16f;
                                 npc.netUpdate = true;
-                                SoundEngine.PlaySound(boing2Sound);
+                                SoundEngine.PlaySound(boing2Sound, Projectile.Center);
                             }
                         }
                     }
@@ -196,7 +196,7 @@ namespace JoJoStands.Projectiles
                             player.velocity = player.position - new Vector2(player.position.X, player.position.Y - 100f);
                             player.velocity.Normalize();
                             player.velocity.Y *= -24f;
-                            SoundEngine.PlaySound(boing2Sound);
+                            SoundEngine.PlaySound(boing2Sound, Projectile.Center);
                         }
                     }
                     if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -216,7 +216,7 @@ namespace JoJoStands.Projectiles
                                     players.velocity = players.position - new Vector2(players.position.X, players.position.Y - 100f);
                                     players.velocity.Normalize();
                                     players.velocity.Y *= -24f;
-                                    SoundEngine.PlaySound(boing2Sound);
+                                    SoundEngine.PlaySound(boing2Sound, Projectile.Center);
                                 }
                             }
                         }
@@ -314,12 +314,12 @@ namespace JoJoStands.Projectiles
                     DustSpawn(DustID.IceTorch, WoooshEffectDistance);
                     if (!SoundEngine.TryGetActiveSound(soundSlotID, out activeSound))
                     {
-                        soundSlotID = SoundEngine.PlaySound(woooshSound);
+                        soundSlotID = SoundEngine.PlaySound(woooshSound, Projectile.Center);
                     }
                     else
                     {
                         if (!activeSound.IsPlaying)
-                            soundSlotID = SoundEngine.PlaySound(woooshSound);
+                            soundSlotID = SoundEngine.PlaySound(woooshSound, Projectile.Center);
                     }
 
                     visualSoundEffectSpawnTimer++;
@@ -345,7 +345,7 @@ namespace JoJoStands.Projectiles
                     {
                         NPC npc = Main.npc[n];
                         if (npc.active && !npc.hide && !npc.immortal && !npc.townNPC && Vector2.Distance(Projectile.Center, npc.Center) <= WoooshEffectDistance)
-                            npc.AddBuff(ModContent.BuffType<WhooshDebuff>(), 600);
+                            npc.AddBuff(ModContent.BuffType<WoooshDebuff>(), 600);
                     }
                     if (player.active && Vector2.Distance(Projectile.Center, player.Center) <= WoooshEffectDistance)
                         player.AddBuff(ModContent.BuffType<Whoosh>(), 600);
@@ -357,7 +357,7 @@ namespace JoJoStands.Projectiles
                             if (players.active && players.whoAmI != Projectile.owner && Vector2.Distance(Projectile.Center, players.Center) <= WoooshEffectDistance)
                             {
                                 if (players.hostile && player.hostile && player.InOpposingTeam(players))
-                                    players.AddBuff(ModContent.BuffType<WhooshDebuff>(), 300);
+                                    players.AddBuff(ModContent.BuffType<WoooshDebuff>(), 300);
                                 if (!players.hostile || !player.hostile || players.hostile && player.hostile && !player.InOpposingTeam(players))
                                     players.AddBuff(ModContent.BuffType<Whoosh>(), 600);
                             }
@@ -380,12 +380,12 @@ namespace JoJoStands.Projectiles
                     DustSpawn(DustID.RedTorch, SizzleEffectDistance);
                     if (!SoundEngine.TryGetActiveSound(soundSlotID, out activeSound))
                     {
-                        soundSlotID = SoundEngine.PlaySound(sizzleSound);
+                        soundSlotID = SoundEngine.PlaySound(sizzleSound, Projectile.Center);
                     }
                     else
                     {
                         if (!activeSound.IsPlaying)
-                            soundSlotID = SoundEngine.PlaySound(sizzleSound);
+                            soundSlotID = SoundEngine.PlaySound(sizzleSound, Projectile.Center);
                     }
 
                     visualSoundEffectSpawnTimer++;
@@ -420,7 +420,14 @@ namespace JoJoStands.Projectiles
                                 if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier == 4)
                                     damage1 = 68;
                                 int damage2 = (int)Main.rand.NextFloat((int)(damage1 * mPlayer.standDamageBoosts * 0.85f), (int)(damage1 * mPlayer.standDamageBoosts * 1.15f)) + npc.defense / defence;
-                                npc.StrikeNPC(damage2, 0f, 0, crit);
+                                NPC.HitInfo hitInfo = new NPC.HitInfo()
+                                {
+                                    Damage = damage2,
+                                    Knockback = 0f,
+                                    HitDirection = 0,
+                                    Crit = crit
+                                };
+                                npc.StrikeNPC(hitInfo);
                                 npc.AddBuff(BuffID.OnFire, 600);
                                 if (mPlayer.crackedPearlEquipped)
                                 {
@@ -449,9 +456,9 @@ namespace JoJoStands.Projectiles
                                     if (players.hostile && player.hostile && player.InOpposingTeam(players))
                                     {
                                         if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier == 3)
-                                            players.Hurt(PlayerDeathReason.ByCustomReason(players.name + " could no longer live."), (int)Main.rand.NextFloat((int)(22 * mPlayer.standDamageBoosts * 0.85f), (int)(22 * mPlayer.standDamageBoosts * 1.15f)) + players.statDefense, 0, true, false, false);
+                                            players.Hurt(PlayerDeathReason.ByCustomReason(players.name + " could no longer live."), (int)Main.rand.NextFloat((int)(22 * mPlayer.standDamageBoosts * 0.85f), (int)(22 * mPlayer.standDamageBoosts * 1.15f)) + players.statDefense, 0, true);
                                         if (Projectile.GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier == 4)
-                                            players.Hurt(PlayerDeathReason.ByCustomReason(players.name + " could no longer live."), (int)Main.rand.NextFloat((int)(34 * mPlayer.standDamageBoosts * 0.85f), (int)(34 * mPlayer.standDamageBoosts * 1.15f)) + players.statDefense, 0, true, false, false);
+                                            players.Hurt(PlayerDeathReason.ByCustomReason(players.name + " could no longer live."), (int)Main.rand.NextFloat((int)(34 * mPlayer.standDamageBoosts * 0.85f), (int)(34 * mPlayer.standDamageBoosts * 1.15f)) + players.statDefense, 0, true);
                                         players.AddBuff(BuffID.OnFire, 300);
                                         if (mPlayer.crackedPearlEquipped)
                                         {
@@ -619,7 +626,7 @@ namespace JoJoStands.Projectiles
         public override bool CanHitPvp(Player target) => false;
         public override bool? CanHitNPC(NPC target) => false;
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

@@ -67,7 +67,7 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (!target.boss && !target.hide && !target.immortal)
                 target.AddBuff(ModContent.BuffType<RedBindDebuff>(), (int)Projectile.ai[1]);
@@ -75,10 +75,13 @@ namespace JoJoStands.Projectiles
             Projectile.Kill();
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            target.AddBuff(ModContent.BuffType<RedBindDebuff>(), (int)Projectile.ai[1]);
-            Projectile.Kill();
+            if (info.PvP)
+            {
+                target.AddBuff(ModContent.BuffType<RedBindDebuff>(), (int)Projectile.ai[1]);
+                Projectile.Kill();
+            }
         }
 
         public override bool PreDraw(ref Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)

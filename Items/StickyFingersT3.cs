@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 12;
         public override int StandType => 1;
-        public override string StandProjectileName => "StickyFingers";
+        public override string StandIdentifierName => "StickyFingers";
         public override int StandTier => 3;
         public override Color StandTierDisplayColor => StickyFingersFinal.StickyFingersTierColor;
 
@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sticky Fingers (Tier 3)");
-            Tooltip.SetDefault("Punch enemies at a really fast rate and zip them open! Right-click to use an extended punch!\nHold Right-Click on a tile to hide in it and surprise your enemies!\nSpecial: Zip in the direction of your mouse for a distance of 30 tiles!\nSecond Special: Prepare to dodge an attack!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Sticky Fingers (Tier 3)");
+            // Tooltip.SetDefault("Punch enemies at a really fast rate and zip them open! Right-click to use an extended punch!\nHold Right-Click on a tile to hide in it and surprise your enemies!\nSpecial: Zip in the direction of your mouse for a distance of 30 tiles!\nSecond Special: Prepare to dodge an attack!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Doppio's Shirt");
-            Tooltip.SetDefault("A purple shirt with many holes in it. Looks like it's been ripped from the inside multiple times...");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Doppio's Shirt");
+            // Tooltip.SetDefault("A purple shirt with many holes in it. Looks like it's been ripped from the inside multiple times...");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

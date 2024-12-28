@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kira's Pants");
-            Tooltip.SetDefault("A simple pair of pants for a quiet lifestyle.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Kira's Pants");
+            // Tooltip.SetDefault("A simple pair of pants for a quiet lifestyle.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

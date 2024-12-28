@@ -6,8 +6,8 @@ namespace JoJoStands.Buffs.PlayerBuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mental Fortitude");
-            Description.SetDefault("Your will is unbreakable.\nDefense increased by 3.");
+            // DisplayName.SetDefault("Mental Fortitude");
+            // Description.SetDefault("Your will is unbreakable.\nDefense increased by 3.");
             Main.buffNoTimeDisplay[Type] = false;
         }
 

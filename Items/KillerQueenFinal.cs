@@ -12,7 +12,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 11;
         public override int StandType => 1;
-        public override string StandProjectileName => "KillerQueen";
+        public override string StandIdentifierName => "KillerQueen";
         public override int StandTier => 4;
         public override Color StandTierDisplayColor => Color.LightPink;
 
@@ -23,8 +23,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Killer Queen (1st Bomb Final Tier)");
-            Tooltip.SetDefault("Left-click to punch and right-click to trigger any block!\nRange: 16 blocks\nSpecial: Sheer Heart Attack!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Killer Queen (1st Bomb Final Tier)");
+            // Tooltip.SetDefault("Left-click to punch and right-click to trigger any block!\nRange: 16 blocks\nSpecial: Sheer Heart Attack!\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()
@@ -49,7 +49,7 @@ namespace JoJoStands.Items
                     {
                         Item.type = ModContent.ItemType<KillerQueenBTD>();
                         Item.SetDefaults(ModContent.ItemType<KillerQueenBTD>());
-                        SoundEngine.PlaySound(SoundID.Grab);
+                        SoundEngine.PlaySound(SoundID.Grab, player.Center);
                         mPlayer.revertTimer += 30;
                     }
                 }

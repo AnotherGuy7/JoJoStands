@@ -1,4 +1,4 @@
-﻿Mods: {
+Mods: {
 	JoJoStands: {
 		#This is what displays during all of an NPC's happiness levels. Note that the localization key for these should always be TownNPCMood.*NPCName*.*Mood* or else it won't display properly.
 		TownNPCMood: {
@@ -10,30 +10,29 @@
 				DislikeCrowded: There may be a little too many people for me to cheat in a gamble.
 				HateCrowded: There are too many spying eyes around me for me to make my move...
 				LikeBiome: "{BiomeName} seems like a place where a lot of gambling goes on."
-				LoveBiome: "Environments like {BiomeName} remind me of where I used to live before that day."
+				LoveBiome: Environments like {BiomeName} remind me of where I used to live before that day.
 				DislikeBiome: "{BiomeName} has unique traits to it... But those traits don't suit that of a gambler!"
-				HateBiome: "I really despise living in {BiomeName}. I'd rather relive a certain bet than stay here any longer."
+				HateBiome: I really despise living in {BiomeName}. I'd rather relive a certain bet than stay here any longer.
 				LikeNPC: "{NPCName} really knows how to gamble!"
-				LoveNPC: "That {NPCName} cheats just as well as I do! Gambling with {NPCName} is like gambling against myself!"
+				LoveNPC: That {NPCName} cheats just as well as I do! Gambling with {NPCName} is like gambling against myself!
 				DislikeNPC: "{NPCName} is very suspicious of me, and I don't like people who are suspicious of me."
 				HateNPC: "{NPCName} is NOT allowed to gamble with me. They're rather perceptive in a high-stakes bet. Get them away from here!"
 			}
+
 			HamonMaster: {
-				Content: 
-				NoHome: 
-				LoveSpace: 
-				FarFromHome: 
-				DislikeCrowded: 
-				HateCrowded: 
+				Content: NoHome:
+				LoveSpace: FarFromHome:
+				DislikeCrowded: HateCrowded:
 				LikeBiome: ""
 				LoveBiome: ""
-				DislikeBiome: "" 
+				DislikeBiome: ""
 				HateBiome: ""
 				LikeNPC: ""
 				LoveNPC: ""
-				DislikeNPC: "" 
+				DislikeNPC: ""
 				HateNPC: ""
 			}
+
 			MarineBiologist: {
 				Content: This area reminds me of Morioh, with its lively scenery and chaos.
 				NoHome: While I was brought here by certain matters you wouldn't understand, a place to stay would help me while I'm here.
@@ -43,29 +42,4236 @@
 				HateCrowded: It's too dangerous for me to stay here with this many people around. If I get targeted by another Stand User, I'm not sure I'd be able to keep the casualties low.
 				LikeBiome: "{BiomeName} has some interesting locations I'd like to check out."
 				LoveBiome: "{BiomeName} habitat seems to have a large variety of marine life. I'd like to research them while I'm here."
-				DislikeBiome: "Normally I'm not very picky about where I stay, but {BiomeName} sure has a lot of faults."
-				HateBiome: "Good grief, this {BiomeName} reminds me of Egypt and the journey we all went through to kill DIO. I hate it."
-				LikeNPC: "That {NPCName} guy seems to know a thing or two about marine life."
+				DislikeBiome: Normally I'm not very picky about where I stay, but {BiomeName} sure has a lot of faults.
+				HateBiome: Good grief, this {BiomeName} reminds me of Egypt and the journey we all went through to kill DIO. I hate it.
+				LikeNPC: That {NPCName} guy seems to know a thing or two about marine life.
 				LoveNPC: "{NPCName} seems like they'd be a good associate for the SPW."
 				DislikeNPC: "{NPCName} is really getting on my nerves."
 				HateNPC: "{NPCName} emanates a bad aura... They're dangerous."
 			}
+
 			Priest: {
 				Content: Compared to the prison, this place is not so bad.
 				NoHome: If you could direct me toward some shelter, Fate will smile upon you and repay you in full for your kindness.
 				LoveSpace: Tell me, do you believe it was 'Gravity' that brought me to this spacious village? I certainly do.
 				FarFromHome: I don't need you to guide back to my home. Fate will guide me right back to it.
 				DislikeCrowded: There's starting to be a little too many people here, no?
-				HateCrowded: Such a crowd of people is bound to bring its own share of sins. We must separate ourselves so as to not 
+				HateCrowded: Such a crowd of people is bound to bring its own share of sins. We must separate ourselves so as to not
 				LikeBiome: "{BiomeName} is a place with admirable qualities."
-				LoveBiome: "God's will has blessed me with a home in {BiomeName}! DIO would've loved to reside here!"
-				DislikeBiome: "I wouldn't normally live in {BiomeName}, but if this is where I must live then I believe a certain Gravity must've pushed here for a special reason."
+				LoveBiome: God's will has blessed me with a home in {BiomeName}! DIO would've loved to reside here!
+				DislikeBiome: I wouldn't normally live in {BiomeName}, but if this is where I must live then I believe a certain Gravity must've pushed here for a special reason.
 				HateBiome: "{BiomeName} is not where I had expected my Gravity to take me. This must be some sort of trial I'm expected to overcome."
 				LikeNPC: "{NPCName} is a follower of Fate. They're at least respectable in that regard."
-				LoveNPC: "It must've been Gravity that allowed me and {NPCName} to meet."
-				DislikeNPC: "The Fate in store for {NPCName} will not be a good one." 
+				LoveNPC: It must've been Gravity that allowed me and {NPCName} to meet.
+				DislikeNPC: The Fate in store for {NPCName} will not be a good one.
 				HateNPC: "2, 3, 5, 7, 11... Oh, I didn't realize you were there. I overheard {NPCName} disregarding the power of Gravity and almost lost my temper there."
 			}
+		}
+
+		Buffs: {
+			AjaVampire: {
+				DisplayName: Aja Vampire
+				Description: You are now an immortal, ultimate being!
+			}
+
+			CenturyBoyBuff: {
+				DisplayName: 20th Century Boy
+				Description: You are being protected!
+			}
+
+			Vampire: {
+				DisplayName: Vampire
+				Description: You are now a vampire... Stay away from the sun!
+			}
+
+			ViralBeetleBuff: {
+				DisplayName: Viral Beetle
+				Description: The otherworldy virus you have conquered now manifested itself and protects you.
+			}
+
+			ViralCrystalBuff: {
+				DisplayName: Viral Crystal
+				Description: A mystical gold-silver crystal is watching over you.
+			}
+
+			AbilityCooldown: {
+				DisplayName: Ability Cooldown
+				Description: You can no longer use any stand abilities...
+			}
+
+			AffectedByBtZ: {
+				DisplayName: Zero
+				Description: You are stuck at zero.
+			}
+
+			Aging: {
+				DisplayName: Aging
+				Description: Your knees are shaking, you feel powerless and tired.
+			}
+
+			Asphyxiating: {
+				DisplayName: Asphyxiating
+				Description: The air has been plundered from your lungs...
+			}
+
+			Dead: {
+				DisplayName: Mods.JoJoStands.BuffName.Dead
+				Description: Mods.JoJoStands.BuffDescription.Dead
+			}
+
+			ImproperRestoration: {
+				DisplayName: Improper Restoration
+				Description: Things didn't go as planned while healing.
+			}
+
+			Infected: {
+				DisplayName: Infected
+				Description: Some sort of otherworldly virus is spreading inside your body.
+			}
+
+			LifePunch: {
+				DisplayName: Life Punched
+				Description: Your senses are accellarated and your body can't keep up with you!
+			}
+
+			Locked: {
+				DisplayName: Locked
+				Description: Your guilt is increasing and it hurts.
+			}
+
+			MissingOrgans: {
+				DisplayName: Missing Organs!
+				Description: Parts of your body have been scraped away!
+			}
+
+			ParchedDebuff: {
+				DisplayName: Parched!
+				Description: You could really use a drink right now...
+			}
+
+			RapidAging: {
+				DisplayName: Rapid Aging
+				Description: You can feel your entire life energy leaving.
+			}
+
+			RedBindDebuff: {
+				DisplayName: Red Bind
+				Description: You are bound by fire...
+			}
+
+			SMACK: {
+				DisplayName: SMACK!
+				Description: It's just unbearable! The sounds in your head is getting louder!
+			}
+
+			SpaceFreeze: {
+				DisplayName: Space Freeze!
+				Description: You went too high and are now going to stay in space for the rest of eternity... Have a good time!
+			}
+
+			Spin: {
+				DisplayName: Spin
+				Description: You're being infinitely spun... There's no hope in surviving.
+			}
+
+			Stolen: {
+				DisplayName: Stolen
+				Description: Your stand disc has been stolen!
+			}
+
+			Sunburn: {
+				DisplayName: Sunburn
+				Description: You're burning in the sunlight!
+			}
+
+			TimeSkipConfusion: {
+				DisplayName: Time has skipped?
+				Description: What you just saw was your future self.
+			}
+
+			WhooshDebuff: {
+				DisplayName: WOOOSH!
+				Description: You are going aganist the wind. Speed is reduced.
+			}
+
+			Zipped: {
+				DisplayName: Zipped!
+				Description: A zipper has been placed on your body, blood is spilling quickly!
+			}
+
+			BacktoZero: {
+				DisplayName: Back to Zero
+				Description: Enemies that hurt you never touched you at all...
+			}
+
+			BelieveInMe: {
+				DisplayName: Believe in me!
+				Description: You are ready to stand for such a reliable guy to the end!
+			}
+
+			BitesTheDust: {
+				DisplayName: Bites The Dust
+				Description: The ultimate weapon against failure.
+			}
+
+			DeathLoop: {
+				DisplayName: Death Loop
+				Description: The targetted enemy will go through endless deaths upon death...
+			}
+
+			ForeseenDebuff: {
+				DisplayName: Foreseen
+				Description: Your actions have already been seen...
+			}
+
+			ForesightBuff: {
+				DisplayName: Foresight
+				Description: You are staring into the future...
+			}
+
+			FrozeninTime: {
+				DisplayName: Frozen in Time
+				Description: You have been stopped along with time
+			}
+
+			Rampage: {
+				DisplayName: Rampage
+				Description:
+					'''
+					What happened, did someone make fun of your hair? You're filled with rage!
+					Damage is doubled and punch speed is increased, but range and movement speed is halved!
+					'''
+			}
+
+			Restoration: {
+				DisplayName: Restoration
+				Description: Your wounds are being healed right before your eyes!
+			}
+
+			SkippingTime: {
+				DisplayName: Skipping Time
+				Description: Time is skipping
+			}
+
+			TheWorldBuff: {
+				DisplayName: The World
+				Description: Time... has been stopped!
+			}
+
+			ThreeFreezeBarrage: {
+				DisplayName: 3 Freeze Barrage
+				Description: Each of your punches is much harder than it might seem!
+			}
+
+			Whoosh: {
+				DisplayName: WOOOSH!
+				Description: Tailwind increases your speed!
+			}
+
+			ArtificialSoul: {
+				DisplayName: Artificial Soul
+				Description: An artificial soul has been given to you!
+			}
+
+			BadCompanyActiveBuff: {
+				DisplayName: Bad Company
+				Description: An entire Stand army at your command!
+			}
+
+			BubbleBarrierBuff: {
+				DisplayName: Bubble Barrier
+				Description: A protective bubble surrounds you. Increases defense, makes you immune to physical debuffs, and allows you to glide around!
+			}
+
+			BulletKickFrenzy: {
+				DisplayName: Bullet Kick Frenzy
+				Description: The Sex Pistols are ready to kick any amount of bullets!
+			}
+
+			CooledOut: {
+				DisplayName: Cooled Out
+				Description: You lowered your body temperature.
+			}
+
+			Dodge: {
+				DisplayName: Dodged!
+				Description: It was close call!
+			}
+
+			DollyDaggerActiveBuff: {
+				DisplayName: Dolly Dagger
+				Description: When hit, a certain percentage of damage is reflected back to the enemy.
+			}
+
+			Exposing: {
+				DisplayName: Exposed Form
+				Description: You are more vulnurable to enemy attacks but you recover Void faster.
+			}
+
+			HamonChargedI: {
+				DisplayName: Hamon Charged I
+				Description: The large amount of Hamon in you is increasing your physical abilities.
+			}
+
+			HamonChargedII: {
+				DisplayName: Hamon Charged II
+				Description: The large amount of Hamon in you is increasing your physical abilities.
+			}
+
+			Intangible: {
+				DisplayName: Intangible!
+				Description: Zip through blocks for 2 minutes!
+			}
+
+			LockActiveBuff: {
+				DisplayName: Lock
+				Description: Enemies that hit you will feel the weight of their guilt.
+			}
+
+			Pierced: {
+				DisplayName: Pierced!
+				Description: You have been pierced by an arrow shard!
+			}
+
+			PowerfulStrike: {
+				DisplayName: Powerful Strike
+				Description: Your next attack deals 6x more damage.
+			}
+
+			Reinforcements: {
+				DisplayName: Reinforcements
+				Description: Reinforcements have arrived!
+			}
+
+			RoadRollerBuff: {
+				DisplayName: Road Roller
+				Description: A destroyer of lands, capable of flattening the world. ROAD ROLLER DA!
+			}
+
+			RUUUN: {
+				DisplayName: RUUUN!
+				Description: The Secret Joestar Technique- there's no shame!
+			}
+
+			SlowDancerBuff: {
+				DisplayName: Slow Dancer
+				Description: A fast horse capable of generating large amounts of spin energy.
+			}
+
+			SphericalVoid: {
+				DisplayName: Spherical Void
+				Description: Almost anything that passes through this sphere is disintegrated into nothingness!
+			}
+
+			SurpriseAttack: {
+				DisplayName: Surprise Attack
+				Description: You have the upper edge and you know just how to prove it.
+			}
+
+			SwanSong: {
+				DisplayName: Swan Song
+				Description: You're not dead just yet...
+			}
+
+			Weave: {
+				DisplayName: Weave
+				Description: These strings create a sheet as strong as metal when woven together... and you're wrapped in it!
+			}
+
+			ZipperDodge: {
+				DisplayName: Zipper Dodge
+				Description: You predict the movements of your enemies and zip away at yourself to dodge!
+			}
+
+			JoJoBuff: {
+				DisplayName: Mods.JoJoStands.BuffName.JoJoBuff
+				Description: Mods.JoJoStands.BuffDescription.JoJoBuff
+			}
+
+			JonathanPetBuff: {
+				DisplayName: Jonathan Pet
+				Description: He believes in you.
+			}
+
+			SpeedWagonPetBuff: {
+				DisplayName: Speedwagon Pet
+				Description: He's rooting for you.
+			}
+
+			CoordinatedEyes: {
+				DisplayName: Coordinated Eyes
+				Description: Your eyes are able to focus on everything, thus, your stand can now go even farther. (+1 Tile Range Radius)
+			}
+
+			MentalFortitude: {
+				DisplayName: Mental Fortitude
+				Description:
+					'''
+					Your will is unbreakable.
+					Defense increased by 3.
+					'''
+			}
+
+			QuickThinking: {
+				DisplayName: Quick Thinking
+				Description:
+					'''
+					You are much quicker on knowing what to do and how to do it.
+					Stand Speed incrased by 1.
+					'''
+			}
+
+			SharpMind: {
+				DisplayName: Sharp Mind
+				Description: Your mental reflexes have sharpened and thus, your Stand Crit Chance increased by 10%
+			}
+
+			StrongWill: {
+				DisplayName: Strong Will
+				Description:
+					'''
+					You feel as if you and your stand can do anything!
+					+10% Increased Stand Damage
+					'''
+			}
+
+			DyingVampire: {
+				DisplayName: Dying Vampire
+				Description: Mods.JoJoStands.Buffs.DyingVampire.Description
+			}
+
+			Zombie: {
+				DisplayName: Zombie
+				Description: Mods.JoJoStands.Buffs.Zombie.Description
+			}
+
+			Lacerated: {
+				DisplayName: Lacerated
+				Description: Mods.JoJoStands.Buffs.Lacerated.Description
+			}
+
+			WoooshDebuff: {
+				DisplayName: Wooosh Debuff
+				Description: Mods.JoJoStands.Buffs.WoooshDebuff.Description
+			}
+
+			FinalPush: {
+				DisplayName: Final Push
+				Description: Mods.JoJoStands.Buffs.FinalPush.Description
+			}
+
+			HamonWeaponImbueBuff: {
+				DisplayName: Hamon Weapon Imbue Buff
+				Description: Mods.JoJoStands.Buffs.HamonWeaponImbueBuff.Description
+			}
+
+			KnifeAmalgamation: {
+				DisplayName: Knife Amalgamation
+				Description: Mods.JoJoStands.Buffs.KnifeAmalgamation.Description
+			}
+
+			ProtectiveFilmBuff: {
+				DisplayName: Protective Film Buff
+				Description: Mods.JoJoStands.Buffs.ProtectiveFilmBuff.Description
+			}
+
+			SunscreenBuff: {
+				DisplayName: Sunscreen Buff
+				Description: Mods.JoJoStands.Buffs.SunscreenBuff.Description
+			}
+
+			UltraSunscreenBuff: {
+				DisplayName: Ultra Sunscreen Buff
+				Description: Mods.JoJoStands.Buffs.UltraSunscreenBuff.Description
+			}
+
+			DioPetBuff: {
+				DisplayName: Dio Pet Buff
+				Description: Mods.JoJoStands.Buffs.DioPetBuff.Description
+			}
+
+			ZeppeliPetBuff: {
+				DisplayName: Zeppeli Pet Buff
+				Description: Mods.JoJoStands.Buffs.ZeppeliPetBuff.Description
+			}
+
+			TopOfTheChain: {
+				DisplayName: Top Of The Chain
+				Description: Mods.JoJoStands.Buffs.TopOfTheChain.Description
+			}
+
+			StrayCatBuff: {
+				DisplayName: Stray Cat
+				Description: A Stand born from means unknown, but it fights for you!
+			}
+		}
+
+		Items: {
+			AjaStone: {
+				DisplayName: Red Stone of Aja
+				Tooltip: Wear this stone to walk on water, increase your regenerative capabilities, and increase your max hamon!
+			}
+
+			ArrowEarring: {
+				DisplayName: Arrow Earring
+				Tooltip:
+					'''
+					When attacking enemies with Stand Attacks, 10% of damage against enemies is transmitted to nearby enemies.
+					Transmitted damage is doubled if user not damaged for a long time.
+					'''
+			}
+
+			AwakenedAmulet: {
+				DisplayName: Awakened Amulet
+				Tooltip:
+					'''
+					An amulet that perfectly represents and enchances the form of the soul.
+					2 increased Stand Speed
+					10% increased Stand dodge chance
+					20% Stand Ability cooldown reduction
+					10% increased Stand crit chance
+					10 increased Stand armor penetration
+					Increased defense while the Stand is out
+					'''
+			}
+
+			CrackedPearl: {
+				DisplayName: Cracked Pearl
+				Tooltip:
+					'''
+					A pearl that cracked during the removal process from the ring. It seems to leak a peculiar virus constantly.
+					When worn: Punching enemies with Stands can infect enemies with the virus.
+					'''
+			}
+
+			Epitaph: {
+				DisplayName: Epitaph
+				Tooltip: Wearing this makes you want to use a frog as a phone
+			}
+
+			FamilyPhoto: {
+				DisplayName: Family Photo
+				Tooltip: Successful Stand Melee Attacks reduce damage taken.
+			}
+
+			FightingSpiritEmblem: {
+				DisplayName: Fighting Spirit Emblem
+				Tooltip:
+					'''
+					15% increased stand damage.
+					Damage to the same target increases Stand Damage by 1% up to 30%.
+					Hitting another enemy reduces this counter by 6%. 
+					'''
+			}
+
+			GoldAmuletOfAdapting: {
+				DisplayName: Amulet of Adapting
+				Tooltip:
+					'''
+					8% increased Stand dodge chance
+					10% increased Stand crit chance
+					'''
+			}
+
+			GoldAmuletOfChange: {
+				DisplayName: Amulet of Change
+				Tooltip: 5% increased Stand crit chance
+			}
+
+			GoldAmuletOfControl: {
+				DisplayName: Amulet of Control
+				Tooltip: 5% Stand Ability cooldown reduction
+			}
+
+			GoldAmuletOfDestroy: {
+				DisplayName: Amulet of Destroy
+				Tooltip: 5 increased Stand armor penetration
+			}
+
+			GoldAmuletOfEscape: {
+				DisplayName: Amulet of Escape
+				Tooltip: 4% increased Stand dodge chance
+			}
+
+			GoldAmuletOfFight: {
+				DisplayName: Amulet of Fight
+				Tooltip: 1 increased Stand Speed
+			}
+
+			GoldAmuletOfManipulation: {
+				DisplayName: Amulet of Manipulation
+				Tooltip:
+					'''
+					20% Stand Ability cooldown reduction
+					10 increased Stand armor penetration
+					'''
+			}
+
+			GoldAmuletOfProtect: {
+				DisplayName: Amulet of Protect
+				Tooltip: Increased Defense while Stand is out.
+			}
+
+			GoldAmuletOfServing: {
+				DisplayName: Amulet of Serving
+				Tooltip:
+					'''
+					2 increased Stand Speed
+					Increased defense while the Stand is out
+					'''
+			}
+
+			GreaterGoldAmuletOfChange: {
+				DisplayName: Greater Amulet of Change
+				Tooltip: 10% increased Stand crit chance
+			}
+
+			GreaterGoldAmuletOfControl: {
+				DisplayName: Greater Amulet of Control
+				Tooltip: 10% Stand Ability cooldown reduction
+			}
+
+			GreaterGoldAmuletOfDestroy: {
+				DisplayName: Greater Amulet of Destroy
+				Tooltip: 10 increased Stand armor penetration
+			}
+
+			GreaterGoldAmuletOfEscape: {
+				DisplayName: Greater Amulet of Escape
+				Tooltip: 8% increased Stand dodge chance
+			}
+
+			GreaterGoldAmuletOfFight: {
+				DisplayName: Greater Amulet of Fight
+				Tooltip: 2 increased Stand Speed
+			}
+
+			GreaterGoldAmuletOfProtect: {
+				DisplayName: Greater Amulet of Protect
+				Tooltip: Increased defense while the Stand is out
+			}
+
+			GreaterPlatinumAmuletOfChange: {
+				DisplayName: Greater Amulet of Change
+				Tooltip: 10% increased Stand crit chance
+			}
+
+			GreaterPlatinumAmuletOfControl: {
+				DisplayName: Greater Amulet of Control
+				Tooltip: 10% Stand Ability cooldown reduction
+			}
+
+			GreaterPlatinumAmuletOfDestroy: {
+				DisplayName: Greater Amulet of Destroy
+				Tooltip: 10 increased Stand armor penetration
+			}
+
+			GreaterPlatinumAmuletOfEscape: {
+				DisplayName: Greater Amulet of Escape
+				Tooltip: 8% increased Stand dodge chance
+			}
+
+			GreaterPlatinumAmuletOfFight: {
+				DisplayName: Greater Amulet of Fight
+				Tooltip: 2 increased Stand Speed
+			}
+
+			GreaterPlatinumAmuletOfProtect: {
+				DisplayName: Greater Amulet of Protect
+				Tooltip: Increased defense while the Stand is out
+			}
+
+			HamonEmblem: {
+				DisplayName: Hamon Emblem
+				Tooltip: 15% increased hamon damage
+			}
+
+			HeartHeadband: {
+				DisplayName: Heart Headband
+				Tooltip:
+					'''
+					A headband worn by a truly loyal warrior.
+					When worn, while Cream is in void mode, Cream will bounce off of tiles rather than destroy them. Decreases Stand Damage by 8%.
+					'''
+			}
+
+			HerbalTeaBag: {
+				DisplayName: Herbal Tea Bag
+				Tooltip:
+					'''
+					Next 10 ranged stand attacks will be buffed
+					Recover one attack per second while at rest
+					'''
+			}
+
+			IcedCup: {
+				DisplayName: Iced Water
+				Tooltip: Water with ice in it, perfect to stay hydrated and cool.
+			}
+
+			ManifestedWillEmblem: {
+				DisplayName: Manifested Will Emblem
+				Tooltip:
+					'''
+					15% increased stand damage
+					50% increased stand crit damage
+					'''
+			}
+
+			OverheavenArrowShard: {
+				DisplayName: Overheaven Arrow Shard
+				Tooltip:
+					'''
+					Has unique effects on some Stands.
+					Accessory's Effect also works in Vanity Slots
+					'''
+			}
+
+			PlatinumAmuletOfAdapting: {
+				DisplayName: Amulet of Adapting
+				Tooltip:
+					'''
+					10% increased Stand dodge chance
+					10% increased Stand crit chance
+					'''
+			}
+
+			PlatinumAmuletOfChange: {
+				DisplayName: Amulet of Change
+				Tooltip: 5% increased Stand crit chance
+			}
+
+			PlatinumAmuletOfControl: {
+				DisplayName: Amulet of Control
+				Tooltip: 5% Stand Ability cooldown reduction
+			}
+
+			PlatinumAmuletOfDestroy: {
+				DisplayName: Amulet of Destroy
+				Tooltip: 5 increased Stand armor penetration
+			}
+
+			PlatinumAmuletOfEscape: {
+				DisplayName: Amulet of Escape
+				Tooltip: 4% increased Stand dodge chance
+			}
+
+			PlatinumAmuletOfFight: {
+				DisplayName: Amulet of Fight
+				Tooltip: 1 increased Stand Speed
+			}
+
+			PlatinumAmuletOfManipulation: {
+				DisplayName: Amulet of Manipulation
+				Tooltip:
+					'''
+					20% Stand Ability cooldown reduction
+					10 increased Stand armor penetration
+					'''
+			}
+
+			PlatinumAmuletOfProtect: {
+				DisplayName: Amulet of Protect
+				Tooltip: Increased defense while Stand is out
+			}
+
+			PlatinumAmuletOfServing: {
+				DisplayName: Amulet of Serving
+				Tooltip:
+					'''
+					2 increased Stand Speed
+					Increased defense while the Stand is out
+					'''
+			}
+
+			SealedPokerDeck: {
+				DisplayName: Sealed Poker Deck
+				Tooltip:
+					'''
+					Every 5 seconds, Stand Attacks deal 25% more damage.
+					Stand Attacks affected by this accessory are guaranteed critical strikes.
+					'''
+			}
+
+			SiliconLifeformCarapace: {
+				DisplayName: Silicon Lifeform Carapace
+				Tooltip:
+					'''
+					15% increased Stand dodge chance.
+					100% increased stand defence bonus
+					Health is slowly drained
+					'''
+			}
+
+			SoothingSpiritDisc: {
+				DisplayName: Soothing Spirit Disc
+				Tooltip: Stand Damage is increased by 2% for every enemy around you.
+			}
+
+			StandEmblem: {
+				DisplayName: Stand Emblem
+				Tooltip: 15% increased stand damage
+			}
+
+			TheFirstNapkin: {
+				DisplayName: The First Napkin
+				Tooltip:
+					'''
+					Every kill reduces the Stand Ability Cooldown by 1s.
+					Reduces Ability Cooldown times by 8%.
+					'''
+			}
+
+			UnderbossPhone: {
+				DisplayName: Underboss Phone
+				Tooltip:
+					'''
+					Every fifth hit on enemies with Stand Attacks deal more damage.
+					Attacks affected by this accessory ignore defense.
+					'''
+			}
+
+			VampiricBangle: {
+				DisplayName: Vampiric Bangle
+				Tooltip:
+					'''
+					Allows Stand Attacks to perform life steal.
+					33% increased damage to user!
+					'''
+			}
+
+			ViralPearlRing: {
+				DisplayName: Viral Pearl Ring
+				Tooltip: Right Click to remove the Pearl. Be careful not to break it!
+			}
+
+			ZippedHand: {
+				DisplayName: Zipped Hand
+				Tooltip:
+					'''
+					Allows you to make a last stand before death.
+					During the last stand phase, damage and critial strike chances are doubled.
+					'''
+			}
+
+			AerosmithFinal: {
+				DisplayName: Aerosmith (Final Tier)
+				Tooltip:
+					'''
+					Left-click to move and right-click to shoot bullets at the enemies!
+					Special: Remote Control
+					Second Special: Drop a bomb on enemies!
+					Passive: Carbon Radar
+					The farther the stand is from you, the less damage it does.
+					Used in Stand Slot
+					'''
+			}
+
+			AerosmithT1: {
+				DisplayName: Aerosmith (Tier 1)
+				Tooltip:
+					'''
+					Left-click to move and right-click to shoot bullets at the enemies!
+
+					Special: Remote Control
+					The farther the stand is from you, the less damage it does.
+					Used in Stand Slot
+					'''
+			}
+
+			AerosmithT2: {
+				DisplayName: Aerosmith (Tier 2)
+				Tooltip:
+					'''
+					Left-click to move and right-click to shoot bullets at the enemies!
+					Special: Remote Control
+					Second Special: Drop a bomb on enemies!
+
+					The farther the stand is from you, the less damage it does.
+					Used in Stand Slot
+					'''
+			}
+
+			AerosmithT3: {
+				DisplayName: Aerosmith (Tier 3)
+				Tooltip:
+					'''
+					Left-click to move and right-click to shoot bullets at the enemies!
+					Special: Remote Control
+					Second Special: Drop a bomb on enemies!
+					Passive: Carbon Radar
+					The farther the stand is from you, the less damage it does.
+					Used in Stand Slot
+					'''
+			}
+
+			AntiVampireSerum: {
+				DisplayName: Anti-Vampirism Serum
+				Tooltip: A serum infused with Hamon made to cure those who have fallen to the power of the masks.
+			}
+
+			HamonTrainingArmor: {
+				DisplayName: Hamon Training Vest
+				Tooltip:
+					'''
+					You can feel your lungs becoming mightier...
+					Increases Hamon Damage by 10%
+					'''
+			}
+
+			HamonTrainingHelmet: {
+				DisplayName: Hamon Training Hat
+				Tooltip:
+					'''
+					A comfy hat that gives your head a clear concious...
+					Increases Hamon Damage by 5%
+					'''
+			}
+
+			HamonTrainingLeggings: {
+				DisplayName: Hamon Training Leggings
+				Tooltip:
+					'''
+					You can feel a light rush in your legs...
+					Increases Hamon Damage by 5%
+					Increases movement speed
+					'''
+			}
+
+			AdamantiteAlloyHelmetLong: {
+				DisplayName: Adamantite Alloy Helmet (Long-Ranged)
+				Tooltip:
+					'''
+					A helmet fused with Viral Meteorite to empower the user.
+					12% Stand Crit Chance
+					18% Stand Damage
+					'''
+			}
+
+			AdamantiteAlloyHelmetNeutral: {
+				DisplayName: Adamantite Alloy Helmet (Neutral)
+				Tooltip:
+					'''
+					A helmet fused with Viral Meteorite to empower the user.
+					Note: This helmet makes a set when paired with the rest of the default Adamantite set.
+					Stand stat buffs change depending on stand type.
+					'''
+			}
+
+			AdamantiteAlloyHelmetShort: {
+				DisplayName: Adamantite Alloy Helmet (Short-Ranged)
+				Tooltip:
+					'''
+					A helmet fused with Viral Meteorite to empower the user.
+					8% Stand Crit Chance
+					12% Stand Damage
+					'''
+			}
+
+			TitaniumAlloyMaskLong: {
+				DisplayName: Titanium Alloy Mask (Long-Ranged)
+				Tooltip:
+					'''
+					A mask fused with Viral Meteorite to empower the user.
+					10% Stand Crit Chance
+					15% Stand Damage
+					'''
+			}
+
+			TitaniumAlloyMaskNeutral: {
+				DisplayName: Titanium Alloy Mask (Neutral)
+				Tooltip:
+					'''
+					A mask fused with Viral Meteorite to empower the user.
+					Note: This helmet makes a set when paired with the rest of the default Titanium set.
+					Stand stat buffs change depending on stand type.
+					'''
+			}
+
+			TitaniumAlloyMaskShort: {
+				DisplayName: Titanium Alloy Mask (Short-Ranged)
+				Tooltip:
+					'''
+					A mask fused with Viral Meteorite to empower the user.
+					3 Stand Speed
+					10% Stand Damage
+					'''
+			}
+
+			BootlegCosplayCoat: {
+				DisplayName: Bootleg Cosplay Coat
+				Tooltip:
+					'''
+					A coat that's the length of a robe but still counts as a coat.
+					+1 Stand Speed
+					'''
+			}
+
+			BootlegCosplayHat: {
+				DisplayName: Bootleg Cosplay Hat
+				Tooltip:
+					'''
+					A hat that tends to merge with your hair.
+					+4% Stand Critical Hit Chance
+					'''
+			}
+
+			BootlegCosplayPants: {
+				DisplayName: Bootleg Cosplay Pants
+				Tooltip:
+					'''
+					Pants that, when worn, give you the feeling that you're someone else. Unfortunately, they didn't cost 100000 yen...
+					+4% Stand Critical Hit Chance
+					'''
+			}
+
+			ChlorositeChestplate: {
+				DisplayName: Chlorosite Chestplate
+				Tooltip:
+					'''
+					A chestplate that is made with Chlorophyte infused with an otherworldly virus.
+					+7% Stand Crit Chance
+					+6% Stand Damage
+					'''
+			}
+
+			ChlorositeHelmetLong: {
+				DisplayName: Chlorosite Helmet (Long-Ranged)
+				Tooltip:
+					'''
+					A helmet that is made with Chlorophyte infused with an otherworldly virus.
+					15% Stand Damage
+					'''
+			}
+
+			ChlorositeHelmetNeutral: {
+				DisplayName: Chlorosite Helmet (Neutral)
+				Tooltip: A helmet that is made with Chlorophyte infused with an otherworldly virus.
+			}
+
+			ChlorositeHelmetShort: {
+				DisplayName: Chlorosite Helmet (Short-Ranged)
+				Tooltip:
+					'''
+					A helmet that is made with Chlorophyte infused with an otherworldly virus.
+					15% Stand Damage
+					'''
+			}
+
+			ChlorositeLeggings: {
+				DisplayName: Chlorosite Greaves
+				Tooltip:
+					'''
+					A couple of greaves that is made with Chlorophyte infused with an otherworldly virus.
+					8% movement speed
+					9% Stand Crit Chance
+					'''
+			}
+
+			CrystalChestplate: {
+				DisplayName: Crystal Chestplate
+				Tooltip:
+					'''
+					A shiny chestplate that uses crystals to sharpen your soul...
+					+10% Stand Crit Chance
+					'''
+			}
+
+			CrystalHelmetLong: {
+				DisplayName: Crystal Helmet (Long-Ranged)
+				Tooltip:
+					'''
+					A helmet made to empower the force of the wills
+					8% Stand Damage
+					'''
+			}
+
+			CrystalHelmetNeutral: {
+				DisplayName: Crystal Helmet (Neutral)
+				Tooltip:
+					'''
+					A helmet made to empower the force of the wills
+					Stand stat buffs change depending on stand type.
+					'''
+			}
+
+			CrystalHelmetShort: {
+				DisplayName: Crystal Helmet (Short-Ranged)
+				Tooltip:
+					'''
+					A helmet made to empower the force of the wills
+					+2 Stand Speed
+					'''
+			}
+
+			CrystalLeggings: {
+				DisplayName: Crystal Leggings
+				Tooltip:
+					'''
+					Leggings made out of crystal.
+					12% movement speed
+					'''
+			}
+
+			PhantomChestplate: {
+				DisplayName: Phantom Chestplate
+				Tooltip:
+					'''
+					A bright, glowing chestplate made with an adaptable virus and ectoplasm.
+					+8% Stand Crit Chance
+					+1 Stand Speed
+					12% Incoming Damage Reduction
+					'''
+			}
+
+			PhantomHoodLong: {
+				DisplayName: Phantom Hood (Long-Ranged)
+				Tooltip:
+					'''
+					A helmet that is made with Ectoplasm infused with an otherworldly virus.
+					+18% Stand Damage
+					+15% Stand Crit chance
+					'''
+			}
+
+			PhantomHoodNeutral: {
+				DisplayName: Phantom Hood (Neutral)
+				Tooltip: A helmet that is made with Ectoplasm infused with an otherworldly virus.
+			}
+
+			PhantomHoodShort: {
+				DisplayName: Phantom Hood (Short-Ranged)
+				Tooltip:
+					'''
+					A helmet that is made with Ectoplasm infused with an otherworldly virus.
+					+18% Stand Damage
+					+1 Stand Speed
+					'''
+			}
+
+			PhantomLeggings: {
+				DisplayName: Phantom Greaves
+				Tooltip:
+					'''
+					A couple of greaves that is made with ectoplasm and a strong virus.
+					+10% Movement Speed
+					+5% Stand Crit Chance
+					'''
+			}
+
+			RequiemChestplate: {
+				DisplayName: Requiem Chestplate
+				Tooltip:
+					'''
+					A chestplate made with the finest alloy of Luminite and Viral Meteorite.
+					+10% Stand Crit Chance
+					+3 Stand Speed
+					5% Incoming Damage Reduction
+					'''
+			}
+
+			RequiemCrownLong: {
+				DisplayName: Requiem Crown (Long-Ranged)
+				Tooltip:
+					'''
+					A crown made from the finest materials space has offered so far.
+					+18% Stand Crit Chance
+					+22% Stand Damage
+					+1 Stand Speed
+					'''
+			}
+
+			RequiemCrownNeutral: {
+				DisplayName: Requiem Crown (Neutral)
+				Tooltip: A crown made from the finest materials space has offered so far.
+			}
+
+			RequiemCrownShort: {
+				DisplayName: Requiem Crown (Short-Ranged)
+				Tooltip:
+					'''
+					A crown made from the finest materials space has offered so far.
+					+25% Stand Damage
+					+3 tiles radius
+					+10% Incoming Damage Reduction
+					Minor Life Regen boost
+					'''
+			}
+
+			RequiemGreaves: {
+				DisplayName: Requiem Greaves
+				Tooltip:
+					'''
+					Greaves made with the finest metal out there, enchanced with Viral Meteorite.
+					+8% Stand Crit Chance
+					+14% Movement Speed
+					'''
+			}
+
+			ViralArmorHelmetMelee: {
+				DisplayName: Viral Helmet (Short-Range)
+				Tooltip:
+					'''
+					A helmet created from a far-off alloy, in the style of a far-off equipment.
+					Stand Speed Increase: -1
+					'''
+			}
+
+			ViralArmorHelmetNeutral: {
+				DisplayName: Viral Helmet (Neutral)
+				Tooltip:
+					'''
+					A helmet created from a meteor, powered up by a strange virus. 
+					The helmet seems to morph depending on your soul...
+					Stand stat buffs change depending on stand type.
+					'''
+			}
+
+			ViralArmorHelmetRanged: {
+				DisplayName: Viral Helmet (Long-Range)
+				Tooltip:
+					'''
+					A helmet created from a meteor, powered up by a strange virus.
+					Stand Damage Increase: +5%
+					'''
+			}
+
+			ViralArmorKaruta: {
+				DisplayName: Viral Karuta
+				Tooltip:
+					'''
+					A suit of armor made from a mysterious meteoric alloy, powered up by a strange virus.
+					Provides a 4% Stand Crit Chance boost
+					'''
+			}
+
+			ViralArmorTabi: {
+				DisplayName: Viral Tabi
+				Tooltip:
+					'''
+					A pair of light boots from a surprisingly nimble meteor, powered by a strange virus.
+					Provides a 4% Stand Crit Chance boost
+					'''
+			}
+
+			AjaStoneMask: {
+				DisplayName: Aja Stone Mask
+				Tooltip: The mask now merged with the stone seems to give off tremendous power...
+			}
+
+			StoneMask: {
+				DisplayName: Stone Mask
+				Tooltip: An odd archaeological find. When worn, you gain superhuman abilities, but burns you in the sunlight.
+			}
+
+			ArrowShard: {
+				DisplayName: Arrow Shard
+				Tooltip: Stab yourself with this to slowly manifest a stand!
+			}
+
+			BadCompanyFinal: {
+				DisplayName: Bad Company (Final Tier)
+				Tooltip:
+					'''
+					Left-click to have your troops shoot toward your mouse and right-click to choose your army!
+					Special: Order an arial bombing on the land around you and call in soldier reinforcements!
+					Used in Stand Slot
+					'''
+			}
+
+			BadCompanyT1: {
+				DisplayName: Bad Company (Tier 1)
+				Tooltip:
+					'''
+					Left-click to have your troops shoot toward your mouse and right-click to choose your army!
+					Used in Stand Slot
+					'''
+			}
+
+			BadCompanyT2: {
+				DisplayName: Bad Company (Tier 2)
+				Tooltip:
+					'''
+					Left-click to have your troops shoot toward your mouse and right-click to choose your army!
+					Used in Stand Slot
+					'''
+			}
+
+			BadCompanyT3: {
+				DisplayName: Bad Company (Tier 3)
+				Tooltip:
+					'''
+					Left-click to have your troops shoot toward your mouse and right-click to choose your army!
+					Special: Order an arial bombing on the land around you and call in soldier reinforcements!
+					Used in Stand Slot
+					'''
+			}
+
+			CenturyBoyT1: {
+				DisplayName: 20th Century Boy (Tier 1)
+				Tooltip:
+					'''
+					Use the special ability key to make yourself immune to damage, but unable to move or use items.
+					This ability can only be used for up to 30s.
+					Ability Cooldown time is based on use time.
+					Used in Stand Slot.
+					'''
+			}
+
+			CenturyBoyT2: {
+				DisplayName: 20th Century Boy (Tier 2)
+				Tooltip:
+					'''
+					Use the special ability key to make yourself immune to damage, but unable to move or use items.
+					This ability can only be used for up to 1m.
+					Special + Right-click: Set off an explosion! (Dynamite required)
+					This explosion carries triple the damage of your highest-damage weapon.
+					Ability Cooldown time is based on use time.
+					Used in Stand Slot.
+					'''
+			}
+
+			CaringLifeforce: {
+				DisplayName: Caring Lifeforce
+				Tooltip: The spirit of someone whose only wish is to help
+			}
+
+			ChlorositeBar: {
+				DisplayName: Chlorosite Bar
+				Tooltip: A gem of nature corrupted by an otherworldly virus...
+			}
+
+			DeterminedLifeforce: {
+				DisplayName: Determined Lifeforce
+				Tooltip: The soul of someone who's always determined
+			}
+
+			Hand: {
+				DisplayName: Hand
+				Tooltip: A hand that a certain individual would kill for.
+			}
+
+			RighteousLifeforce: {
+				DisplayName: Righteous Lifeforce
+				Tooltip: The power of someone who sets things right
+			}
+
+			SoulofTime: {
+				DisplayName: Soul of Time
+				Tooltip: This soul seems to make things slower around you
+			}
+
+			SunDroplet: {
+				DisplayName: Sun Droplet
+				Tooltip:
+					'''
+					A warm droplet... It seems to react to you.
+					Used for creating Hamon weapons.
+					'''
+			}
+
+			TaintedLifeforce: {
+				DisplayName: Tainted Lifeforce
+				Tooltip: The aura of someone remorselessly wicked
+			}
+
+			ViralMeteoriteBar: {
+				DisplayName: Viral Meteorite Bar
+				Tooltip: You feel your soul interacting with the metal.
+			}
+
+			ViralPearl: {
+				DisplayName: Viral Pearl
+				Tooltip: A shiny red pearl that seems to react strongly to your stand.
+			}
+
+			ViralPowder: {
+				DisplayName: Viral Powder
+				Tooltip: Viral Meteorite turned into dust. Tastes pretty good!
+			}
+
+			WillToChange: {
+				DisplayName: Will to Change
+				Tooltip: A physical outlook upon the world, morphing and changing.
+			}
+
+			WillToControl: {
+				DisplayName: Will to Control
+				Tooltip: A physical outlook upon the world, heavy and overbearing.
+			}
+
+			WillToDestroy: {
+				DisplayName: Will to Destroy
+				Tooltip: A physical outlook upon the world, destructive and erratic.
+			}
+
+			WillToEscape: {
+				DisplayName: Will to Escape
+				Tooltip: A physical outlook upon the world, fleeting and vague.
+			}
+
+			WillToFight: {
+				DisplayName: Will to Fight
+				Tooltip: A physical outlook upon the world, aggressive and fiery.
+			}
+
+			WillToProtect: {
+				DisplayName: Will to Protect
+				Tooltip: A physical outlook upon the world, defensive and caring.
+			}
+
+			CrazyDiamondFinal: {
+				DisplayName: Crazy Diamond (Final Tier)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate and right-click to flick a bullet!
+					Special: Switch to Restoration Mode
+					Second Special: Enter an unstoppable rage!
+					Left-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state.
+					Right-click on an NPC or player while in Restoration Mode to restore them to their natural states.
+					Right-clicking elsewhere will restore the states of all other impacted objects.
+					Punching tiles while in Resotration Mode breaks the tiles.
+					While in a Rampage, restorations will become improper, turning restored enemies to stone.
+					Used in Stand Slot
+					'''
+			}
+
+			CrazyDiamondT1: {
+				DisplayName: Crazy Diamond (Tier 1)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate!
+					Special: Switch to Restoration Mode
+					Left-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state.
+					Items of rarity Orange and above cannot be uncrafted at this tier.
+					Used in Stand Slot
+					'''
+			}
+
+			CrazyDiamondT2: {
+				DisplayName: Crazy Diamond (Tier 2)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate and right-click to flick a bullet!
+					Special: Switch to Restoration Mode
+					Left-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state.
+					Right-click in restoration mode to restore the states of all impacted objects.
+					Punching tiles while in Resotration Mode breaks the tiles.
+					Items of rarity Light Red and above cannot be uncrafted at this tier.
+					Used in Stand Slot
+					'''
+			}
+
+			CrazyDiamondT3: {
+				DisplayName: Crazy Diamond (Tier 3)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate and right-click to flick a bullet!
+					Special: Switch to Restoration Mode
+					Second Special: Enter an unstoppable rage!
+					Left-click in Restoration Mode to perform a restorative barrage and right-click to restore your item to it's component state.
+					Right-click on an NPC or player while in Restoration Mode to restore them to their natural states.
+					Right-clicking elsewhere will restore the states of all other impacted objects.
+					Punching tiles while in Resotration Mode breaks the tiles.
+					While in a Rampage, restorations will become improper, turning restored enemies to stone.
+					Items of rarity Lime and above cannot be uncrafted at this tier.
+					Used in Stand Slot
+					'''
+			}
+
+			CreamFinal: {
+				DisplayName: Cream (Final Tier)
+				Tooltip:
+					'''
+					Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash!
+					Special: Completely become a ball of Void and consume everything in your way!
+					Second Special: Envelop yourself in Void!
+					Used in Stand Slot
+					'''
+			}
+
+			CreamT1: {
+				DisplayName: Cream (Tier 1)
+				Tooltip:
+					'''
+					Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash!
+					Used in Stand Slot
+					'''
+			}
+
+			CreamT2: {
+				DisplayName: Cream (Tier 2)
+				Tooltip:
+					'''
+					Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash!
+					Special: Completely become a ball of Void and consume everything in your way!
+					Used in Stand Slot
+					'''
+			}
+
+			CreamT3: {
+				DisplayName: Cream (Tier 3)
+				Tooltip:
+					'''
+					Chop an enemy with a powerful chop and right-click to consume 4 of Void Gauge to do Cream dash!
+					Special: Completely become a ball of Void and consume everything in your way!
+					Second Special: Envelop yourself in Void!
+					Used in Stand Slot
+					'''
+			}
+
+			DollyDaggerT1: {
+				DisplayName: Dolly Dagger (Tier 1)
+				Tooltip:
+					'''
+					As an Item: Left-click to use this as a dagger to stab enemies!
+					In the Stand Slot: Equip it to nullify and reflect 35% of all damage!
+					'''
+			}
+
+			DollyDaggerT2: {
+				DisplayName: Dolly Dagger (Tier 2)
+				Tooltip:
+					'''
+					As an Item: Left-click to use this as a dagger to stab enemies and right-click to stab yourself and reflect damage to the nearest enemy!
+					In the Stand Slot: Equip it to nullify and reflect 70% of all damage!
+					'''
+			}
+
+			Part4Dye: {
+				DisplayName: Part 4 Dye
+				Tooltip:
+					'''
+					Applies different sprites to certain Stands.
+					Stands affected by this dye are:
+					Star Platinum.
+					Used in the Stand Dye Slot.
+					'''
+			}
+
+			SaladDye: {
+				DisplayName: Salad Dye
+				Tooltip:
+					'''
+					Applies different sprites to certain Stands.
+					Stands affected by this dye are:
+					The World, Killer Queen, Hierophant Green,
+					Tusk Act 4 and Whitesnake. 
+					Used in the Stand Dye Slot.
+					'''
+			}
+
+			StandDye: {
+				DisplayName: Stand Dye
+				Tooltip:
+					'''
+					Applies different sprites to certain Stands.
+					Stands affected by this dye are:
+					Star Platinum.
+					Used in the Stand Dye Slot.
+					'''
+			}
+
+			EchoesAct0: {
+				DisplayName: Echoes (ACT 0)
+				Tooltip:
+					'''
+					Left-click to... throw?
+					Only for those with the strongest of wills.
+					'''
+			}
+
+			EchoesAct1: {
+				DisplayName: Echoes (ACT 1)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate!
+					Right-click: Tag an entity with a sound!
+					Special: Remote Control
+					Passive: Attacking enemies applies SMACK to them, dealing damage over time.
+					'''
+			}
+
+			EchoesAct2: {
+				DisplayName: Echoes (ACT 2)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate!
+					Right-click: Scroll through Sound Effects!
+					Hold right-click: Create an aura with the chosen Sound Effect!
+					Special: Remote Control
+					Second Special: Switch to previous acts!
+					'''
+			}
+
+			EchoesAct3: {
+				DisplayName: Echoes (ACT 3)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate!
+					Right-click: Three Freeze! Pin any enemy to the ground!
+					Special: Three Freeze Barrage! Normal attacks inflict Three Freeze for a short time!
+					Second Special: Switch to previous acts!
+					Enemies pinned by Three Freeze take damage over time.
+					'''
+			}
+
+			EctoPearl: {
+				DisplayName: Ecto Pearl
+				Tooltip:
+					'''
+					A otherworldly pearl that has been inherited by a trapped soul from the dungeon.
+					Permanently incrases stand range radius by 0.5 tiles
+					'''
+			}
+
+			ChilliHotPepper: {
+				DisplayName: Chilli Hot Pepper
+				Tooltip: A stand that absorbs electricity to become stronger and faster. It was caught and crushed into a fine powder, which was then sprinkled on this red hot chili pepper.
+			}
+
+			ViralChickenLeg: {
+				DisplayName: Viral Chicken Leg
+				Tooltip:
+					'''
+					A dry, breaded (chicken?) leg that, when eaten, makes you feel much better.
+					Boosts Stand Speed and player defense for 3m.
+					'''
+			}
+
+			ViralCupcake: {
+				DisplayName: Viral Cupcake
+				Tooltip:
+					'''
+					A well-made cupcake on a tiny plate, all with a tiny viral structure on top!
+					Boosts Stand Damage and Stand Crit Chances for 2m.
+					'''
+			}
+
+			ViralHamburger: {
+				DisplayName: Viral Hamburger
+				Tooltip:
+					'''
+					A regular ol' hamburger... but sprinkled with Viral Powder!
+					Boosts Stand Damage, Stand Crit Chance, Stand Speed, and player defense for 5m.
+					'''
+			}
+
+			ViralPunch: {
+				DisplayName: Viral Punch
+				Tooltip:
+					'''
+					A golden, sour, yet refreshing drink that boosts your mental capabilities somehow.
+					Boosts Stand Damage and Stand Speed for 2m.
+					'''
+			}
+
+			ViralSteak: {
+				DisplayName: Viral Steak
+				Tooltip:
+					'''
+					An already warm, juicy, and medium-rare steak.
+					Boosts Stand Range and Stand Damage for 3m.
+					'''
+			}
+
+			GoldExperienceFinal: {
+				DisplayName: Gold Experience (Final Tier)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to use abilities!
+					Special: Opens/Hides the Ability Wheel
+					Passive: Barraging enemies may inflict them with Life Punch
+					Used in Stand Slot
+					'''
+			}
+
+			GoldExperienceRequiem: {
+				DisplayName: Gold Experience (Requiem)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to use the chosen abilities!
+					Special: Use Back to Zero to nullify the actions of all enemies who touch you!
+					Second Special: Opens/Hides the Ability Wheel
+					Used in Stand Slot
+					'''
+			}
+
+			GoldExperienceT1: {
+				DisplayName: Gold Experience (Tier 1)
+				Tooltip:
+					'''
+					Punch enemies at a fast rate and right-click to create a frog!
+					Used in Stand Slot
+					'''
+			}
+
+			GoldExperienceT2: {
+				DisplayName: Gold Experience (Tier 2)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to use abilities!
+					Special: Opens/Hides the Ability Wheel
+					Used in Stand Slot
+					'''
+			}
+
+			GoldExperienceT3: {
+				DisplayName: Gold Experience (Tier 3)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to use abilities!
+					Special: Opens/Hides the Ability Wheel
+					Passive: Barraging enemies may inflict them with Life Punch
+					Used in Stand Slot
+					'''
+			}
+
+			GratefulDeadFinal: {
+				DisplayName: Grateful Dead (Final Tier)
+				Tooltip:
+					'''
+					Punch enemies to make them age and right-click to grab them!
+					Special: Spread Gas
+					More effective on hot biomes.
+					Used in Stand Slot
+					'''
+			}
+
+			GratefulDeadT1: {
+				DisplayName: Grateful Dead (Tier 1)
+				Tooltip:
+					'''
+					Punch enemies and make them age!
+					More effective on hot biomes.
+					Used in Stand Slot
+					'''
+			}
+
+			GratefulDeadT2: {
+				DisplayName: Grateful Dead (Tier 2)
+				Tooltip:
+					'''
+					Punch enemies to make them age and right-click to grab them!
+					More effective on hot biomes.
+					Used in Stand Slot
+					'''
+			}
+
+			GratefulDeadT3: {
+				DisplayName: Grateful Dead (Tier 3)
+				Tooltip:
+					'''
+					Punch enemies to make them age and right-click to grab them!
+					Special: Spread Gas
+					More effective on hot biomes.
+					Used in Stand Slot
+					'''
+			}
+
+			Clackers: {
+				DisplayName: Clacker Balls
+				Tooltip:
+					'''
+					These clackers are now deadly weapons while infused with Hamon.
+					Right-click requires more than 5 hamon
+					Special: Hamon Breathing
+					'''
+			}
+
+			Hamon: {
+				DisplayName: Hamon
+				Tooltip:
+					'''
+					Punch enemies with the power that circulates in you.
+					Hold right-click to regenerate health!
+					Experience goes up after each conquer...
+					Special: Hamon Breathing
+					'''
+			}
+
+			HamonCola: {
+				DisplayName: Hamon-Infused Cola
+				Tooltip: Drink this hamon-infused cola to feel stronger or shoot it all at your enemies!
+			}
+
+			HamonTequila: {
+				DisplayName: Hamon-Infused Tequila
+				Tooltip: Drink this hamon-infused tequila to feel stronger, healthier, and tougher... or shoot it all at your enemies!
+			}
+
+			HamonVino: {
+				DisplayName: Hamon-Infused Vino
+				Tooltip: Drink this hamon-infused vino to feel stronger and healthier or shoot it all at your enemies!
+			}
+
+			SoapyGlove: {
+				DisplayName: Soapy Glove
+				Tooltip:
+					'''
+					Shoot controllable bubbles! 
+					Experience goes up after each conquer...
+					Right-click requires more than 3 hamon
+					Special: Hamon Breathing
+					Note: Being below 15% health allows you to use Blood Bubbles
+					'''
+			}
+
+			HermitPurpleFinal: {
+				DisplayName: Hermit Purple (Final Tier)
+				Tooltip:
+					'''
+					Left-click to use Hermit Purple as a whip and right-click to grab enemies and slowly crush them!
+					Special: Overcharge Hermit Purple so that enemies that hurt you get blown away!
+					Passive: Enemies are hurt when they hurt you and get inflicted Sunburn!
+					Used in Stand Slot
+					'''
+			}
+
+			HermitPurpleT1: {
+				DisplayName: Hermit Purple (Tier 1)
+				Tooltip:
+					'''
+					Left-click to use Hermit Purple as a whip!
+					Used in Stand Slot
+					'''
+			}
+
+			HermitPurpleT2: {
+				DisplayName: Hermit Purple (Tier 2)
+				Tooltip:
+					'''
+					Left-click to use Hermit Purple as a whip and right-click to grab enemies and slowly crush them!
+					Passive: Enemies are hurt when they hurt you and get inflicted Sunburn!
+					Used in Stand Slot
+					'''
+			}
+
+			HermitPurpleT3: {
+				DisplayName: Hermit Purple (Tier 3)
+				Tooltip:
+					'''
+					Left-click to use Hermit Purple as a whip and right-click to grab enemies and slowly crush them!
+					Special: Overcharge Hermit Purple so that enemies that hurt you get blown away!
+					Passive: Enemies are hurt when they hurt you and get inflicted Sunburn!
+					Used in Stand Slot
+					'''
+			}
+
+			HierophantGreenFinal: {
+				DisplayName: Hierophant Green (Final Tier)
+				Tooltip:
+					'''
+					Left-click to release a flurry of emeralds and right-click to throw a binding emerald string!
+					Special: 20 Meter Emerald Splash!
+					Second Special: Remote Control
+					While in Remote Mode: Left-click to move and right-click to release a flurry of emeralds!
+					Remote Mode Special: Set tripwires for your enemies!
+					Used in Stand Slot
+					'''
+			}
+
+			HierophantGreenT1: {
+				DisplayName: Hierophant Green (Tier 1)
+				Tooltip:
+					'''
+					Left-click to release a flurry of emeralds!
+					Used in Stand Slot
+					'''
+			}
+
+			HierophantGreenT2: {
+				DisplayName: Hierophant Green (Tier 2)
+				Tooltip:
+					'''
+					Left-click to release a flurry of emeralds and right-click to throw a binding emerald string!
+					Second Special: Remote Control
+					While in Remote Mode: Left-click to move and right-click to release a flurry of emeralds!
+					Remote Mode Special: Set tripwires for your enemies!
+					Used in Stand Slot
+					'''
+			}
+
+			HierophantGreenT3: {
+				DisplayName: Hierophant Green (Tier 3)
+				Tooltip:
+					'''
+					Left-click to release a flurry of emeralds and right-click to throw a binding emerald string!
+					Special: 20 Meter Emerald Splash!
+					Second Special: Remote Control
+					While in Remote Mode: Left-click to move and right-click to release a flurry of emeralds!
+					Remote Mode Special: Set tripwires for your enemies!
+					Used in Stand Slot
+					'''
+			}
+
+			IceCubes: {
+				DisplayName: Ice Cubes
+				Tooltip: Ice cubes that are in perfect size for eating.
+			}
+
+			KillerQueenBTD: {
+				DisplayName: Killer Queen (Stray Cat)
+				Tooltip:
+					'''
+					Left-click to shoot bubbles and right-click to detonate them!
+					Special: Bite The Dust!
+					Right-Click while holding the Item to revert back to Killer Queen Final (You can revert back to BTD)
+					Note: Manually detonating bubble bombs doubles damage!
+					Used in Stand Slot
+					'''
+			}
+
+			KillerQueenFinal: {
+				DisplayName: Killer Queen (1st Bomb Final Tier)
+				Tooltip:
+					'''
+					Left-click to punch and right-click to trigger any block!
+					Range: 16 blocks
+					Special: Sheer Heart Attack!
+					Used in Stand Slot
+					'''
+			}
+
+			KillerQueenT1: {
+				DisplayName: Killer Queen (1st Bomb Tier 1)
+				Tooltip:
+					'''
+					Left-click to punch and right-click to trigger any block!
+					Range: 10 blocks
+					Used in Stand Slot
+					'''
+			}
+
+			KillerQueenT2: {
+				DisplayName: Killer Queen (1st Bomb Tier 2)
+				Tooltip:
+					'''
+					Left-click to punch and right-click to trigger any block!
+					Range: 12 blocks
+					Used in Stand Slot
+					'''
+			}
+
+			KillerQueenT3: {
+				DisplayName: Killer Queen (1st Bomb Tier 3)
+				Tooltip:
+					'''
+					Left-click to punch and right-click to trigger any block!
+					Range: 14 blocks
+					Special: Sheer Heart Attack!
+					Used in Stand Slot
+					'''
+			}
+
+			KingCrimsonFinal: {
+				DisplayName: King Crimson (Final Tier)
+				Tooltip:
+					'''
+					Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!
+					Special: Skip 10 seconds of time!
+					Second Special: Use Epitaph for 9 seconds!
+					Passive: Consecutive Donuts deal greater damage.
+					Used in Stand Slot
+					'''
+			}
+
+			KingCrimsonT1: {
+				DisplayName: King Crimson (Tier 1)
+				Tooltip:
+					'''
+					Donut enemies with a powerful punch!
+					Passive: Consecutive Donuts deal greater damage.
+					Used in Stand Slot
+					'''
+			}
+
+			KingCrimsonT2: {
+				DisplayName: King Crimson (Tier 2)
+				Tooltip:
+					'''
+					Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!
+					Special: Skip 2 seconds of time!
+					Passive: Consecutive Donuts deal greater damage.
+					Used in Stand Slot
+					'''
+			}
+
+			KingCrimsonT3: {
+				DisplayName: King Crimson (Tier 3)
+				Tooltip:
+					'''
+					Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!
+					Special: Skip 5 seconds of time!
+					Second Special: Use Epitaph for 4 seconds!
+					Passive: Consecutive Donuts deal greater damage.
+					Used in Stand Slot
+					'''
+			}
+
+			Knife: {
+				DisplayName: Hunter's Knife
+				Tooltip: A sharp knife that is best suited to be thrown.
+			}
+
+			LockFinal: {
+				DisplayName: The Lock (Final Tier)
+				Tooltip:
+					'''
+					Make people that harm you overwhelmed with Guilt! 
+					Special: Damage yourself and make everyone in a 40 tile radius guilty about it.
+					'''
+			}
+
+			LockT1: {
+				DisplayName: The Lock (Tier 1)
+				Tooltip: Make people that harm you overwhelmed with Guilt!
+			}
+
+			LockT2: {
+				DisplayName: The Lock (Tier 2)
+				Tooltip: Make people that harm you overwhelmed with Guilt!
+			}
+
+			LockT3: {
+				DisplayName: The Lock (Tier 3)
+				Tooltip:
+					'''
+					Make people that harm you overwhelmed with Guilt! 
+					Special: Damage yourself and make everyone in a 40 tile radius guilty about it.
+					'''
+			}
+
+			LuckPluck: {
+				DisplayName: Luck and Pluck
+				Tooltip: The sword of an old gladiator.
+			}
+
+			MagiciansRedFinal: {
+				DisplayName: Magicians Red (Final Tier)
+				Tooltip:
+					'''
+					Shoot flaming ankhs at the enemies and right-click to grab an enemy!
+					Special: Crossfire Hurricane!
+					Used in Stand Slot
+					'''
+			}
+
+			MagiciansRedT1: {
+				DisplayName: Magicians Red (Tier 1)
+				Tooltip:
+					'''
+					Shoot flaming ankhs at the enemies!
+					Used in Stand Slot
+					'''
+			}
+
+			MagiciansRedT2: {
+				DisplayName: Magicians Red (Tier 2)
+				Tooltip:
+					'''
+					Shoot flaming ankhs at the enemies and right-click to bind an enemy!
+					Used in Stand Slot
+					'''
+			}
+
+			MagiciansRedT3: {
+				DisplayName: Magicians Red (Tier 3)
+				Tooltip:
+					'''
+					Shoot flaming ankhs at the enemies and right-click to grab an enemy!
+					Special: Crossfire Hurricane!
+					Used in Stand Slot
+					'''
+			}
+
+			ModifiedPurpleRevolver: {
+				DisplayName: Modified Revolver
+				Tooltip: A revolver packing more of a punch than before. Press the special key to reload.
+			}
+
+			PackoCards: {
+				DisplayName: Pack'o'Cards
+				Tooltip: D'Arby's favorite set of cards... It's best to throw them at enemies!
+			}
+
+			ArcheologyJournal: {
+				DisplayName: Archeology Journal
+				Tooltip:
+					'''
+					A journal which contains info and sketches of a familiar stone mask.
+					Summons a Mini Jonathan Joestar
+					'''
+			}
+
+			WoodenCane: {
+				DisplayName: Wooden Cane
+				Tooltip:
+					'''
+					An old, wooden cane that Was used by the coolest guy ever.
+					Summons a Mini Robert E.O. Speedwagon
+					'''
+			}
+
+			PokerChip: {
+				DisplayName: Poker Chip
+				Tooltip: A poker chip said to have a soul inside...
+			}
+
+			PurpleRevolver: {
+				DisplayName: Purple Revolver
+				Tooltip: A restored six-shooter, in full working order. Press the special key to reload.
+			}
+
+			RequiemArrow: {
+				DisplayName: Requiem Arrow
+				Tooltip: This mysterious arrow is used to maximize some stands' potential.
+			}
+
+			RoadRollerKeys: {
+				DisplayName: Road Roller Keys
+				Tooltip: Keys for a Road Roller!
+			}
+
+			RustyRevolver: {
+				DisplayName: Rusty Revolver
+				Tooltip: An antique revolver, rusted by time. It still functions.
+			}
+
+			GingerbreadArrow: {
+				DisplayName: Gingerbread Arrow
+				Tooltip:
+					'''
+					Stab yourself with this to for a 55% chance to give yourself a Christmas stand!.. or so it seemed?
+					Eat this arrow to gain a Christmas Stand.
+					'''
+			}
+
+			KingClaus: {
+				DisplayName: Agent Crimson
+				Tooltip:
+					'''
+					Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!
+					Consecutive Donuts deal greater damage.
+					Special: Skip 10 seconds of time!
+					Second Special: Use Epitaph for 9 seconds!
+					Used in Stand Slot
+					'''
+			}
+
+			StarOnTheTree: {
+				DisplayName: Star On The Tree
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate and right-click to flick a bullet!
+					If there are no bullets in your inventory, Star Finger will be used instead.
+					Special: Stop time for 4 seconds!
+					Used in Stand Slot
+					'''
+			}
+
+			SexPistolsFinal: {
+				DisplayName: Sex Pistols (Final Tier)
+				Tooltip:
+					'''
+					Use a gun and have Sex Pistols kick the bullet!
+					Increases bullet damages by 20% and adds two penetration points.
+					Special: Configure all Sex Pistols's placement!
+					Second Special: Bullet Kick Frenzy
+					Auto Mode: Bullets that go near enemies will automatically be re-adjusted toward the enemy!
+					Used in Stand Slot
+					'''
+			}
+
+			SexPistolsT1: {
+				DisplayName: Sex Pistols (Tier 1)
+				Tooltip:
+					'''
+					Use a gun and have Sex Pistols kick the bullet!
+					Increases bullet damages by 5% and adds one penetration point.
+					Special: Configure all Sex Pistols's placement!
+					Auto Mode: Bullets that go near enemies will automatically be re-adjusted toward the enemy!
+					Used in Stand Slot
+					'''
+			}
+
+			SexPistolsT2: {
+				DisplayName: Sex Pistols (Tier 2)
+				Tooltip:
+					'''
+					Use a gun and have Sex Pistols kick the bullet!
+					Increases bullet damages by 10% and adds one penetration point.
+					Special: Configure all Sex Pistols's placement!
+					Auto Mode: Bullets that go near enemies will automatically be re-adjusted toward the enemy!
+					Used in Stand Slot
+					'''
+			}
+
+			SexPistolsT3: {
+				DisplayName: Sex Pistols (Tier 3)
+				Tooltip:
+					'''
+					Use a gun and have Sex Pistols kick the bullet!
+					Increases bullet damages by 15% and adds two penetration points.
+					Special: Configure all Sex Pistols's placement!
+					Second Special: Bullet Kick Frenzy
+					Auto Mode: Bullets that go near enemies will automatically be re-adjusted toward the enemy!
+					Used in Stand Slot
+					'''
+			}
+
+			SilverChariotFinal: {
+				DisplayName: Silver Chariot (Final Tier)
+				Tooltip:
+					'''
+					Left-click to stab enemies and right-click to parry enemies and projectiles away!
+					Special: Take SC's armor off! (All player damage received is doubled!)
+					Used in Stand Slot
+					'''
+			}
+
+			SilverChariotT1: {
+				DisplayName: Silver Chariot (Tier 1)
+				Tooltip:
+					'''
+					Left-click to stab enemies!
+					Used in Stand Slot
+					'''
+			}
+
+			SilverChariotT2: {
+				DisplayName: Silver Chariot (Tier 2)
+				Tooltip:
+					'''
+					Left-click to stab enemies and right-click to parry enemies and projectiles away!
+					Used in Stand Slot
+					'''
+			}
+
+			SilverChariotT3: {
+				DisplayName: Silver Chariot (Tier 3)
+				Tooltip:
+					'''
+					Left-click to stab enemies and right-click to parry enemies and projectiles away!
+					Special: Take SC's armor off! (All player damage received is doubled!)
+					Used in Stand Slot
+					'''
+			}
+
+			SlowDancersSaddle: {
+				DisplayName: Slow Dancer's Saddle
+				Tooltip: A blue saddle that belongs to a fast race horse...
+			}
+
+			SoftAndWetFinal: {
+				DisplayName: Soft and Wet (Final Tier)
+				Tooltip:
+					'''
+					Punch enemies at a fast rate and right-click on empty space to create a Plunder Bubble or hold right-click on a tile to plant a bubble bomb!
+					Special: Bubble Offensive
+					Second Special: Bubble Barrier!
+					Passive: Bubble Generation
+					Bubble Offensive creates bubbles around Soft & Wet that can be manipulated.
+					Bubbles in Bubble Offensive mode can be detonated.
+					Bubbles in Bubble Offensive can plunder debuff effects from enemies and tiles.
+					Bubble Generation allows Soft & Wet to generate bubbles while barraging.
+					Used in Stand Slot
+					'''
+			}
+
+			SoftAndWetGoBeyond: {
+				DisplayName: Soft and Wet (Go Beyond!)
+				Tooltip:
+					'''
+					Punch enemies at a fast rate and hold right-click to create a non-existent bubble!
+					Special: Select a target to track with bubbles
+					Second Special: Bubble Barrier!
+					Passive: Bubble Generation & Bubble Offensive
+					Bubble Generation allows Soft & Wet to generate bubbles while barraging.
+					Bubble Offensive creates bubbles around Soft & Wet that can be manipulated.
+					While tracking an enemy with bubbles, bubbles formed by Bubble Offensive will explode on contact with that enemy.
+					Used in Stand Slot
+					'''
+			}
+
+			SoftAndWetT1: {
+				DisplayName: Soft and Wet (Tier 1)
+				Tooltip:
+					'''
+					Punch enemies at a fast rate and right-click to create a Plunder Bubble!
+					Used in Stand Slot
+					'''
+			}
+
+			SoftAndWetT2: {
+				DisplayName: Soft and Wet (Tier 2)
+				Tooltip:
+					'''
+					Punch enemies at a fast rate and right-click to create a Plunder Bubble!
+					Second Special: Bubble Barrier!
+					Used in Stand Slot
+					'''
+			}
+
+			SoftAndWetT3: {
+				DisplayName: Soft and Wet (Tier 3)
+				Tooltip:
+					'''
+					Punch enemies at a fast rate and right-click to create a Plunder Bubble!
+					Special: Bubble Offensive
+					Second Special: Bubble Barrier!
+					Passive: Bubble Generation
+					Bubble Offensive creates bubbles around Soft & Wet that can be manipulated.
+					Bubbles in Bubble Offensive mode can be detonated.
+					Bubbles in Bubble Offensive can plunder debuff effects from enemies and tiles.
+					Bubble Generation allows Soft & Wet to generate bubbles while barraging.
+					Used in Stand Slot
+					'''
+			}
+
+			StandArrow: {
+				DisplayName: Stand Arrow
+				Tooltip: Stab yourself with this to for a 55% chance to give yourself a stand!
+			}
+
+			StandItemClass: {
+				DisplayName: Stand Item Class
+				Tooltip: ""
+			}
+
+			StarPlatinumFinal: {
+				DisplayName: Star Platinum (Final Tier)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate and right-click to flick a bullet!
+					If there are no bullets in your inventory, Star Finger will be used instead.
+					Special: Stop time for 4 seconds!
+					Used in Stand Slot
+					'''
+			}
+
+			StarPlatinumT1: {
+				DisplayName: Star Platinum (Tier 1)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate.
+					Used in Stand Slot
+					'''
+			}
+
+			StarPlatinumT2: {
+				DisplayName: Star Platinum (Tier 2)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate and right-click to use Star Finger!
+					Used in Stand Slot
+					'''
+			}
+
+			StarPlatinumT3: {
+				DisplayName: Star Platinum (Tier 3)
+				Tooltip:
+					'''
+					Left-click to punch enemies at a really fast rate and right-click to flick a bullet!
+					If there are no bullets in your inventory, Star Finger will be used instead.
+					Used in Stand Slot
+					'''
+			}
+
+			SteelBalls: {
+				DisplayName: Steel Balls
+				Tooltip:
+					'''
+					These steel balls have been passed down from generation to generation...
+					Requires 5 hamon to throw effectively.
+					'''
+			}
+
+			StickyFingersFinal: {
+				DisplayName: Sticky Fingers (Final Tier)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and zip them open! Right-click to use an extended punch!
+					Hold Right-Click on a tile to hide in it and surprise your enemies!
+					Special: Zip in the direction of your mouse for a distance of 30 tiles!
+					Second Special: Prepare to dodge an attack!
+					Used in Stand Slot
+					'''
+			}
+
+			StickyFingersT1: {
+				DisplayName: Sticky Fingers (Tier 1)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and zip them open!
+					Used in Stand Slot
+					'''
+			}
+
+			StickyFingersT2: {
+				DisplayName: Sticky Fingers (Tier 2)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and zip them open! Right-click to use an extended punch!
+					Hold Right-Click on a tile to hide in it and surprise your enemies!
+					Used in Stand Slot
+					'''
+			}
+
+			StickyFingersT3: {
+				DisplayName: Sticky Fingers (Tier 3)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and zip them open! Right-click to use an extended punch!
+					Hold Right-Click on a tile to hide in it and surprise your enemies!
+					Special: Zip in the direction of your mouse for a distance of 30 tiles!
+					Second Special: Prepare to dodge an attack!
+					Used in Stand Slot
+					'''
+			}
+
+			StoneFreeFinal: {
+				DisplayName: Stone Free (Final Tier)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to create a string trap!
+					Special: This ability is set by the ability selected in the Abiliy Wheel.
+					Second Special: Toggles the Ability Wheel.
+					Used in Stand Slot
+					'''
+			}
+
+			StoneFreeT1: {
+				DisplayName: Stone Free (Tier 1)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate!
+					Used in Stand Slot
+					'''
+			}
+
+			StoneFreeT2: {
+				DisplayName: Stone Free (Tier 2)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click two tiles to create a string trap!
+					Used in Stand Slot
+					'''
+			}
+
+			StoneFreeT3: {
+				DisplayName: Stone Free (Tier 3)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to create a string trap!
+					Special: This ability is set by the ability selected in the Abiliy Wheel.
+					Second Special: Toggles the Ability Wheel.
+					Used in Stand Slot
+					'''
+			}
+
+			StrayCat: {
+				DisplayName: Stray Cat
+				Tooltip: An odd plant that is somehow a cat. It can fire bubbles invisible to the eye and is capable of causing meowsive damage.
+			}
+
+			TestStand: {
+				DisplayName: Test Stand
+				Tooltip: A faceless stand with unknown abilities...
+			}
+
+			TheHandFinal: {
+				DisplayName: The Hand (Final Tier)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to scrape away space!
+					Special: Switch to Scrape Mode
+					Left-click in Scrape Mode to scrape in front of you!
+					Right-Click in Scrape Mode to charge up a scrape.
+					If the scrape is charged up for less than 1s, any enemies in the scrape will be scraped toward you.
+					If the scrape is charged for more than 1s, the scrape becomes lethal and charges damage at a rate of 210dmg / 0.5s!
+					Enemies in scrape range are marked blue.
+					Being hit while charging a scrape disrupts the scrape.
+					Used in Stand Slot
+					'''
+			}
+
+			TheHandT1: {
+				DisplayName: The Hand (Tier 1)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate!
+					Used in Stand Slot
+					'''
+			}
+
+			TheHandT2: {
+				DisplayName: The Hand (Tier 2)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to scrape away space!
+					Used in Stand Slot
+					'''
+			}
+
+			TheHandT3: {
+				DisplayName: The Hand (Tier 3)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to scrape away space!
+					Special: Switch to Scrape Mode
+					Left-click in Scrape Mode to scrape in front of you!
+					Right-Click in Scrape Mode to charge up a scrape.
+					If the scrape is charged up for less than 1s, any enemies in the scrape will be scraped toward you.
+					If the scrape is charged for more than 1s, the scrape becomes lethal and charges damage at a rate of 145dmg / 0.5s!
+					Enemies in scrape range are marked blue.
+					Being hit while charging a scrape disrupts the scrape.
+					Used in Stand Slot
+					'''
+			}
+
+			TheWorldFinal: {
+				DisplayName: The World (Final Tier)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right-click to throw knives! 
+					Special: Stop time for 9 seconds!
+					Special during Timestop: Throw a Road Roller during a timestop!
+					Second Special: Stop time and surround an enemy with knives!
+					Used in Stand Slot
+					'''
+			}
+
+			TheWorldT1: {
+				DisplayName: The World (Tier 1)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate!
+					Used in Stand Slot
+					'''
+			}
+
+			TheWorldT2: {
+				DisplayName: The World (Tier 2)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate! 
+					Special: Stop time for 2 seconds!
+					Used in Stand Slot
+					'''
+			}
+
+			TheWorldT3: {
+				DisplayName: The World (Tier 3)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right click to throw knives! 
+					Special: Stop time for 5 seconds!
+					Second Special: Stop time and surround an enemy with knives!
+					Note: Hunter's Knives are made with 1 iron bar at a furnace and are required in order to throw knives.
+					Used in Stand Slot
+					'''
+			}
+
+			BloodForTheKing: {
+				DisplayName: Blood for the King
+				Tooltip: `D.Storm`
+			}
+
+			IWouldntLose: {
+				DisplayName: I Wouldn't Lose
+				Tooltip: `D.Storm`
+			}
+
+			OfficersRegret: {
+				DisplayName: Officer's Regret
+				Tooltip: `D. Storm`
+			}
+
+			QuietLife: {
+				DisplayName: Quiet Life
+				Tooltip: `D.Storm`
+			}
+
+			RemixTable: {
+				DisplayName: Remix Table
+				Tooltip: A plain looking DJ s table, imbued with the Meteoric virus. Allows you to create and modify Stands.
+			}
+
+			ShotintheDark: {
+				DisplayName: Shot in the Dark
+				Tooltip: `D.Storm`
+			}
+
+			TarotTable: {
+				DisplayName: Tarot Table
+				Tooltip: A table that reacts to Stand Users, granting them greater power as they wish it.
+			}
+
+			ViralBrick: {
+				DisplayName: Viral Brick
+				Tooltip: A gold brick. Though it's alive!
+			}
+
+			ViralMeteorite: {
+				DisplayName: Viral Meteorite
+				Tooltip:
+					'''
+					A concentrated cluster of a foreign virus...
+					Place near Meteorite to spread the Viral Meteorite.
+					'''
+			}
+
+			ViralMusicBox: {
+				DisplayName: Viral Music Box
+				Tooltip: A music box with a tune encrypted into it.
+			}
+
+			ViralToilet: {
+				DisplayName: Viral Toilet
+				Tooltip: A toilet in which the toilet itself is a living creature.
+			}
+
+			TowerOfGrayFinal: {
+				DisplayName: Tower of Gray (Final Tier)
+				Tooltip:
+					'''
+					Pierce your enemies with a sharp stinger and tear right through them with right-click!
+					Special: Remote Control
+					Second Special: Pierce every enemy in the area with tongue-tearing stinger!
+					Passive: Attack ignores 40 enemy defence
+					Used in Stand Slot
+					'''
+			}
+
+			TowerOfGrayT1: {
+				DisplayName: Tower of Gray (Tier 1)
+				Tooltip:
+					'''
+					Pierce your enemies with a sharp stinger!
+					Special: Remote Control
+					Passive: Attack ignores 10 enemy defence
+					Used in Stand Slot
+					'''
+			}
+
+			TowerOfGrayT2: {
+				DisplayName: Tower of Gray (Tier 2)
+				Tooltip:
+					'''
+					Pierce your enemies with a sharp stinger and tear through them with right-click!
+					Special: Remote Control
+					Passive: Attack ignores 20 enemy defence
+					Used in Stand Slot
+					'''
+			}
+
+			TowerOfGrayT3: {
+				DisplayName: Tower of Gray (Tier 3)
+				Tooltip:
+					'''
+					Pierce your enemies with a sharp stinger and tear through them with right-click!
+					Special: Remote Control
+					Second Special: Pierce every enemy in the area with tongue-tearing stinger!
+					Passive: Attack ignores 30 enemy defense
+					Used in Stand Slot
+					'''
+			}
+
+			TuskAct1: {
+				DisplayName: Tusk (ACT 1)
+				Tooltip: Left-click to shoot nails at enemies and right-click to spin your nails in front of you to use as a melee weapon!
+			}
+
+			TuskAct2: {
+				DisplayName: Tusk (ACT 2)
+				Tooltip:
+					'''
+					Hold left-click to shoot and control a spinning nail and right-click to spin your nails in front of you to use as a melee weapon!
+					Second Special: Switch to previous acts!
+					'''
+			}
+
+			TuskAct3: {
+				DisplayName: Tusk (ACT 3)
+				Tooltip:
+					'''
+					Hold left-click to shoot and control a spinning nail and right-click to shoot a slow wormhole to shoot out of!
+					Special: Create a wormhole to travel in!
+					Second Special: Switch to previous acts!
+					'''
+			}
+
+			TuskAct4: {
+				DisplayName: Tusk (ACT 4)
+				Tooltip:
+					'''
+					Use the infinite energy inside you...
+					While in Manual Mode: Left-click to deliver a flurry of punches with TA4.
+					While in Auto Mode: Hold left-click to shoot and control a spinning nail and right-click to shoot an infinite spin nail!
+					Special: Switch to previous acts!
+					Note: To use Tusk Act 4, Spin Energy must be built up by first running at full speed with Slow Dancer.
+					Slow Dancer can be summoned using the Slow Dancer's Saddle item.
+					'''
+			}
+
+			AchtungBaby: {
+				DisplayName: Achtung Baby
+				Tooltip: Makes you invisible!
+			}
+
+			AvdolHair: {
+				DisplayName: Fortuneteller Wig
+				Tooltip: A wig, styled after a fortuneteller, and Stand user.
+			}
+
+			AvdolPants: {
+				DisplayName: Fortuneteller Pants
+				Tooltip: A pair of pants with a grey waist piece.
+			}
+
+			AvdolShirt: {
+				DisplayName: Fortuneteller Robes
+				Tooltip: Large red robes, accessorized with a golden necklace.
+			}
+
+			BucciaratiHair: {
+				DisplayName: Bowl-Haired Wig
+				Tooltip: A black wig in a bowl cut style, resembling a certain mafioso.
+			}
+
+			BucciaratiPants: {
+				DisplayName: Zipper Patterned Pants
+				Tooltip: A pair of white pants, patterned with many zippers.
+			}
+
+			BucciaratiShirt: {
+				DisplayName: Zipper Patterned Suit
+				Tooltip: A white suit adorned  with several golden zippers, and a large chest window.
+			}
+
+			DarkCape: {
+				DisplayName: Dark Cape
+				Tooltip: A fancy cape worn during the 1800's.
+			}
+
+			DarkTopHat: {
+				DisplayName: Dark Top Hat
+				Tooltip: A top hat worn most during the 1800's.
+			}
+
+			DiavoloHair: {
+				DisplayName: Diavolo's Hair
+				Tooltip: The outside-in part of Doppio's Hair...
+			}
+
+			DiavoloNet: {
+				DisplayName: Diavolo's Net
+				Tooltip: Large red robes, accessorized with a golden necklace.
+			}
+
+			DiavoloPants: {
+				DisplayName: Diavolo's Pants
+				Tooltip: A pair of stylish yellow pants, with heart-adorned knees as well as tassels from the waist.
+			}
+
+			DIOHair: {
+				DisplayName: DIO's Hair
+				Tooltip: Hair fit for the 'Ruler of Humanity', with a headband.
+			}
+
+			DIOJacket: {
+				DisplayName: DIO's Jacket
+				Tooltip: An open-front jacket. The undershirt is skintight.
+			}
+
+			DIOPants: {
+				DisplayName: DIO's Pants
+				Tooltip: A pair of stylish yellow pants, with heart-adorned knees as well as tassels from the waist.
+			}
+
+			DoppioHair: {
+				DisplayName: Doppio's Hair
+				Tooltip: Hair that turns inside-out; The other style has black dots and seems longer...
+			}
+
+			DoppioPants: {
+				DisplayName: Doppio's Pants
+				Tooltip: A pair of stylish purple pants, popular in Italy and fit for a boss's most trusted employee.
+			}
+
+			DoppioShirt: {
+				DisplayName: Doppio's Shirt
+				Tooltip: A purple shirt with many holes in it. Looks like it's been ripped from the inside multiple times...
+			}
+
+			GiornoHair: {
+				DisplayName: Italian Wig
+				Tooltip: A wig, fashioned into a unique hairstyle with three loops in the front.
+			}
+
+			GiornoPants: {
+				DisplayName: Mafioso Pants
+				Tooltip: A surprisingly normal pair of pants, pink in color.
+			}
+
+			GiornoShirt: {
+				DisplayName: Mafioso Suit
+				Tooltip: A pink suit with a large, heart-shaped chest window.
+			}
+
+			JohnnyHat: {
+				DisplayName: Jockey's Bandana
+				Tooltip: A sky blue bandana, adorned with stars. There is a horseshoe in the center.
+			}
+
+			JohnnyPants: {
+				DisplayName: Jockey's Pants
+				Tooltip: A pair of sky blue pants, adorned with stars. There's almost no damage.
+			}
+
+			JohnnyShirt: {
+				DisplayName: Jockey's Top
+				Tooltip: A sky blue top worn by a famous horse jockey. Makes you want to spin.
+			}
+
+			JolyneHair: {
+				DisplayName: Jolyne Hair
+				Tooltip: A wig with layered buns and braids suited to those who fight for their freedoms.
+			}
+
+			JolynePants: {
+				DisplayName: Jolyne Pants
+				Tooltip: A pair of pants sporting a webbed design and along with heeled boots.
+			}
+
+			JolyneShirt: {
+				DisplayName: Jolyne Shirt
+				Tooltip: Clothing designed to allow flexibility. Has a spider-web design all around it too!
+			}
+
+			JonathanPants: {
+				DisplayName: Jonathan Pants
+				Tooltip: The pair of pants that started a generation of fighters.
+			}
+
+			JonathanTop: {
+				DisplayName: Jonathan Top
+				Tooltip: A blue shirt with shoulderpads to protect its wearer from any harm that comes their way.
+			}
+
+			Jotaro200000YenPants: {
+				DisplayName: Jotaro's 200K Yen Pants
+				Tooltip: An expensive pair of pants. Be careful not to rip them.
+			}
+
+			JotaroAltCap: {
+				DisplayName: Jotaro's Cap (Alt)
+				Tooltip: No one truly knows whether the back is hat or hair...
+			}
+
+			JotaroAltCoat: {
+				DisplayName: Jotaro's Coat (Alt)
+				Tooltip: A blue school uniform. Also very unique.
+			}
+
+			JotaroAltPants: {
+				DisplayName: Jotaro's 200K Yen Pants (Alt)
+				Tooltip: A pair of pants with a blue waist piece.
+			}
+
+			JotaroCap: {
+				DisplayName: Jotaro's Cap
+				Tooltip: Is it hat or hair? Yare Yare Daze...
+			}
+
+			JotaroCoat: {
+				DisplayName: Jotaro's Coat
+				Tooltip: A black school uniform. Very unique.
+			}
+
+			KakyoinCoat: {
+				DisplayName: Kakyoin's Coat
+				Tooltip: A green coat!
+			}
+
+			KakyoinHair: {
+				DisplayName: Kakyoin's Hair
+				Tooltip: Gross red hair. Smells of ducks...
+			}
+
+			KakyoinPants: {
+				DisplayName: Kakyoin's Pants
+				Tooltip: Green pants!
+			}
+
+			KiraHair: {
+				DisplayName: Kira's Hair
+				Tooltip: Perfectly average blond hair.
+			}
+
+			KiraPants: {
+				DisplayName: Kira's Pants
+				Tooltip: A simple pair of pants for a quiet lifestyle.
+			}
+
+			KiraShirt: {
+				DisplayName: Kira's Shirt
+				Tooltip: A well-tended jacket, perfect for work.
+			}
+
+			KoichiHair: {
+				DisplayName: Koichi's Hair
+				Tooltip: ""
+			}
+
+			KoichiPants: {
+				DisplayName: Koichi's Pants
+				Tooltip: ""
+			}
+
+			KoichiShirt: {
+				DisplayName: Koichi's Shirt
+				Tooltip: ""
+			}
+
+			KosakuHair: {
+				DisplayName: Kira's (Kosaku) Hair
+				Tooltip: A new hairstyle for a man with confidence.
+			}
+
+			KosakuPants: {
+				DisplayName: Kira's (Kosaku) Pants
+				Tooltip: A nice pair of pants, for any time of day.
+			}
+
+			KosakuShirt: {
+				DisplayName: Kira's (Kosaku) Shirt
+				Tooltip: A nice jacket, complete with custom tie.
+			}
+
+			MagentMagentCoat: {
+				DisplayName: Magent Magent's Coat
+				Tooltip: A bizarre magenta suit, resembling a magician's. Has several pockets for tricks and dynamite.
+			}
+
+			MagentMagentHat: {
+				DisplayName: Magent Magent's Cap
+				Tooltip: A magenta colored hat, resembling a magician's. It makes you zone out.
+			}
+
+			MagentMagentPants: {
+				DisplayName: Magent Magent's Pants
+				Tooltip: A slightly worn pair of magenta pants. Patched up from an explosion
+			}
+
+			MistaHat: {
+				DisplayName: Mista's Cap
+				Tooltip: A patterned red and white hat, with an arrow in the center. It has a secret pocket for bullets.
+			}
+
+			MistaPants: {
+				DisplayName: Mista's Pants
+				Tooltip: A tacky pair of red pants with black boots. Your fashion sense is odd.
+			}
+
+			MistaShirt: {
+				DisplayName: Mista's Shirt
+				Tooltip: A blue and white patterned shirt, seemingly patched up from bullet holes.
+			}
+
+			NaranciaHair: {
+				DisplayName: Narancia's Wig
+				Tooltip: A wig resembling the hairstyle of Narancia Ghirga. Smells like gunpowder.
+			}
+
+			NaranciaPants: {
+				DisplayName: Narancia's Pants
+				Tooltip: Dark, slim-fitting pants paired with an orange skirt. The shoes are surprisingly durable.
+			}
+
+			NaranciaShirt: {
+				DisplayName: Narancia's Vest
+				Tooltip: A dark, slim-fitting vest with a collar and straps. Perfect for flexing your arms like a runway.
+			}
+
+			OkuyasuHair: {
+				DisplayName: Okuyasu Wig
+				Tooltip: A wig in the hairstyle of Okuyasu Nijimura, minus the facial scars.
+			}
+
+			OkuyasuPants: {
+				DisplayName: Okuyasu's Pants
+				Tooltip: A pair of pants worn by Okuyasu Nijimura, with two belts.
+			}
+
+			OkuyasuShirt: {
+				DisplayName: Okuyasu Uniform
+				Tooltip: A school uniform worn by Okuyasu Nijimura, adorned with money symbols.
+			}
+
+			OldJosephHat: {
+				DisplayName: Old Man's Hat
+				Tooltip: A western hat. Comes with a beard!
+			}
+
+			OldJosephPants: {
+				DisplayName: Old Man's Pants
+				Tooltip: Dirty brown pants. At least he shoes look nice!
+			}
+
+			OldJosephShirt: {
+				DisplayName: Old Man's Shirt
+				Tooltip: A yellow, roughed up shirt that looks as if it were part of a long adventure.
+			}
+
+			PolnareffHair: {
+				DisplayName: Polnareff's Hair
+				Tooltip: Wear this to feel like a masterful swordsman.
+			}
+
+			ProsciuttoHair: {
+				DisplayName: Brotherly Wig
+				Tooltip: A slicked back blond wig, resembling a certain assassin.
+			}
+
+			ProsciuttoPants: {
+				DisplayName: Brotherly Pants
+				Tooltip: Navy pants with white stripes, and a few grey hairs.
+			}
+
+			ProsciuttoShirt: {
+				DisplayName: Brotherly Suit
+				Tooltip: A navy suit with white stripes.
+			}
+
+			PucciHair: {
+				DisplayName: Priest Hairdo
+				Tooltip: The hairstyle of a priest devoted to two entities.
+			}
+
+			PucciRobe: {
+				DisplayName: Priest Robes
+				Tooltip: Large dark robes with a cross centered in the front.
+			}
+
+			PunkJacket: {
+				DisplayName: Punk Jacket
+				Tooltip: Fit for one with a golden heart!
+			}
+
+			PunkPants: {
+				DisplayName: Punk Pants
+				Tooltip: Perfect for chasing serial killers!
+			}
+
+			PunkPompadour: {
+				DisplayName: Punk Pompadour
+				Tooltip: Be careful what you say about this do...
+			}
+
+			SailorHat: {
+				DisplayName: Sailor Hat
+				Tooltip: "'This hat belongs to who?'"
+			}
+
+			SailorPants: {
+				DisplayName: Sailor Trousers
+				Tooltip: Complete with a pair of 7,980 yen sneakers!
+			}
+
+			SailorShirt: {
+				DisplayName: Sailor Shirt
+				Tooltip: A shirt tailored for a unique body.
+			}
+
+			TamamiHair: {
+				DisplayName: Pompous Hair
+				Tooltip: A wig in a large puffed up hairstyle, worn by a scam artist.
+			}
+
+			TamamiPants: {
+				DisplayName: Pompous Pants
+				Tooltip: A pair of dark pants. The only normal part of this outfit.
+			}
+
+			TamamiShirt: {
+				DisplayName: Pompous Shirt
+				Tooltip: A lavender shirt, with a green tie and Union Jack patch. Very tacky.
+			}
+
+			VanillaIceBoots: {
+				DisplayName: Vampiric Acolyte Boots
+				Tooltip: Made to mercilessly kick the enemies of Lord DIO!
+			}
+
+			VanillaIceHair: {
+				DisplayName: Vampire Acolyte Hair
+				Tooltip: Styled in the image of Lord DIO!
+			}
+
+			VanillaIceLeotard: {
+				DisplayName: Vampiric Acolyte Leotard
+				Tooltip: Fashioned to appease Lord DIO!
+			}
+
+			ViralAxe: {
+				DisplayName: Viral Axe
+				Tooltip:
+					'''
+					An axe that seems to bind to the user.
+					Spawns living infected wood shrapnel upon chopping a tree.
+					'''
+			}
+
+			ViralBow: {
+				DisplayName: Viral Bow
+				Tooltip:
+					'''
+					A bow that injects Viral Meteroite into its ammo.
+					All arrows shot become Viral Arrows that chase down all enemies.
+					'''
+			}
+
+			ViralBroadsword: {
+				DisplayName: Viral Broadsword
+				Tooltip: A shiny sword that gives you the might to swing effortlessly...
+			}
+
+			ViralHammer: {
+				DisplayName: Viral Hammer
+				Tooltip:
+					'''
+					A hammer that, when wielded, hits with tremendous force.
+					Hurts enemies near the player when used.
+					'''
+			}
+
+			ViralPickaxe: {
+				DisplayName: Viral Pickaxe
+				Tooltip: A gold pickaxe that progressively increases mining speed.
+			}
+
+			ViralShortsword: {
+				DisplayName: Viral Shortsword
+				Tooltip: A shiny but tiny sword that gives you the speed and strength to dash away!
+			}
+
+			ViralStaff: {
+				DisplayName: Viral Staff
+				Tooltip:
+					'''
+					A gold and well designed staff.
+					Shoots enemy chasing orbs.
+					'''
+			}
+
+			ViralYoYo: {
+				DisplayName: Viral Yoyo
+				Tooltip:
+					'''
+					A deadly yoyo with small spikes to cut and infect your enemies.
+					Inflicts Infected upon enemy hit.
+					'''
+			}
+
+			WhitesnakeFinal: {
+				DisplayName: Whitesnake (Final Tier)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right click to throw some acid!
+					Special: Take any enemy's discs!
+					Second Special: Remote Control
+					While in Remote Mode: Left-click to move and right-click shoot enemies with a pistol!
+					Remote Mode Special: Create an aura that puts enemies to sleep!
+					Used in Stand Slot
+					'''
+			}
+
+			WhitesnakeT1: {
+				DisplayName: Whitesnake (Tier 1)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate!
+					Used in Stand Slot
+					'''
+			}
+
+			WhitesnakeT2: {
+				DisplayName: Whitesnake (Tier 2)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right click to throw some acid!
+					Second Special: Remote Control
+					While in Remote Mode: Left-click to move and right-click shoot enemies with a pistol!
+					Used in Stand Slot
+					'''
+			}
+
+			WhitesnakeT3: {
+				DisplayName: Whitesnake (Tier 3)
+				Tooltip:
+					'''
+					Punch enemies at a really fast rate and right click to throw some acid!
+					Special: Take any enemy's discs!
+					Second Special: Remote Control
+					While in Remote Mode: Left-click to move and right-click shoot enemies with a pistol!
+					Remote Mode Special: Create an aura that puts enemies to sleep!
+					Used in Stand Slot
+					'''
+			}
+
+			BlackUmbrella: {
+				DisplayName: Black Umbrella
+				Tooltip: ""
+			}
+
+			BloodiedMonocle: {
+				DisplayName: Bloodied Monocle
+				Tooltip: ""
+			}
+
+			DiosScarf: {
+				DisplayName: Dios Scarf
+				Tooltip: ""
+			}
+
+			DoobiesSkull: {
+				DisplayName: Doobies Skull
+				Tooltip: ""
+			}
+
+			MoonEmblem: {
+				DisplayName: Moon Emblem
+				Tooltip: ""
+			}
+
+			MoorburnChestplate: {
+				DisplayName: Moorburn Chestplate
+				Tooltip: ""
+			}
+
+			MoorburnGreaves: {
+				DisplayName: Moorburn Greaves
+				Tooltip: ""
+			}
+
+			MoorburnHeadband: {
+				DisplayName: Moorburn Headband
+				Tooltip: ""
+			}
+
+			AstroRemainsChestplate: {
+				DisplayName: Astro Remains Chestplate
+				Tooltip: ""
+			}
+
+			AstroRemainsGreaves: {
+				DisplayName: Astro Remains Greaves
+				Tooltip: ""
+			}
+
+			AstroRemainsSkull: {
+				DisplayName: Astro Remains Skull
+				Tooltip: ""
+			}
+
+			DefiledChestplate: {
+				DisplayName: Defiled Chestplate
+				Tooltip: ""
+			}
+
+			DefiledGreaves: {
+				DisplayName: Defiled Greaves
+				Tooltip: ""
+			}
+
+			DefiledMask: {
+				DisplayName: Defiled Mask
+				Tooltip: ""
+			}
+
+			IronSlopChestplate: {
+				DisplayName: Iron Slop Chestplate
+				Tooltip: ""
+			}
+
+			IronSlopHelmet: {
+				DisplayName: Iron Slop Helmet
+				Tooltip: ""
+			}
+
+			IronSlopShorts: {
+				DisplayName: Iron Slop Shorts
+				Tooltip: ""
+			}
+
+			RustedGladiatorBoots: {
+				DisplayName: Rusted Gladiator Boots
+				Tooltip: ""
+			}
+
+			RustedGladiatorChestplate: {
+				DisplayName: Rusted Gladiator Chestplate
+				Tooltip: ""
+			}
+
+			RustedGladiatorHelmet: {
+				DisplayName: Rusted Gladiator Helmet
+				Tooltip: ""
+			}
+
+			VisceralChestplate: {
+				DisplayName: Visceral Chestplate
+				Tooltip: ""
+			}
+
+			VisceralGreaves: {
+				DisplayName: Visceral Greaves
+				Tooltip: ""
+			}
+
+			VisceralHelmet: {
+				DisplayName: Visceral Helmet
+				Tooltip: ""
+			}
+
+			WoodenMask: {
+				DisplayName: Wooden Mask
+				Tooltip: ""
+			}
+
+			DioDagger: {
+				DisplayName: Dio Dagger
+				Tooltip: ""
+			}
+
+			ChainedClaw: {
+				DisplayName: Chained Claw
+				Tooltip: ""
+			}
+
+			ChainedKunai: {
+				DisplayName: Chained Kunai
+				Tooltip: ""
+			}
+
+			HamonizedFirework: {
+				DisplayName: Hamonized Firework
+				Tooltip: ""
+			}
+
+			HamonizedWaterBalloon: {
+				DisplayName: Hamonized Water Balloon
+				Tooltip: ""
+			}
+
+			MetallicNunchucks: {
+				DisplayName: Metallic Nunchucks
+				Tooltip: ""
+			}
+
+			SilkGloves: {
+				DisplayName: Silk Gloves
+				Tooltip: ""
+			}
+
+			ThreadedGloves: {
+				DisplayName: Threaded Gloves
+				Tooltip: ""
+			}
+
+			OrnateGlassofWine: {
+				DisplayName: Ornate Glassof Wine
+				Tooltip: ""
+			}
+
+			TatteredLetter: {
+				DisplayName: Tattered Letter
+				Tooltip: ""
+			}
+
+			EntrailAbilities: {
+				DisplayName: Entrail Abilities
+				Tooltip: ""
+			}
+
+			KnifeWielder: {
+				DisplayName: Knife Wielder
+				Tooltip: ""
+			}
+
+			Sunscreen: {
+				DisplayName: Sunscreen
+				Tooltip: ""
+			}
+
+			UltraSunscreen: {
+				DisplayName: Ultra Sunscreen
+				Tooltip: ""
+			}
+
+			VampireAbilities: {
+				DisplayName: Vampire Abilities
+				Tooltip: ""
+			}
+
+			WitheringAbilities: {
+				DisplayName: Withering Abilities
+				Tooltip: ""
+			}
+
+			ZombieAbilities: {
+				DisplayName: Zombie Abilities
+				Tooltip: ""
+			}
+
+			IceCream: {
+				DisplayName: Ice Cream
+				Tooltip:
+					'''
+					Every eigth hit on enemies with Stand Attacks is a guaranteed Critical Strike hit.
+					70% increased stand crit damage. Stand Crit chances are reduced by 10%.
+					'''
+			}
+
+			Polaroid: {
+				DisplayName: Polaroid
+				Tooltip:
+					'''
+					Stand kills build up to 5 tokens. Tokens grant 50% damage negation for a single hit.
+					Allows Stand Attacks to perform life steal.
+					40% increased damage to user when not carrying a token.
+					Gaining tokens has a cooldown of 5s.
+					'''
+			}
+
+			StickyHand: {
+				DisplayName: Sticky Hand
+				Tooltip:
+					'''
+					20% increased Stand dodge chance and Stand Defense bonuses are doubled.
+					Health is slowly drained for 30s after being hit.
+					Allows you to make a last stand before death.
+					During the last stand phase, damage and critial strike chances are doubled.
+					'''
+			}
+
+			Teacup: {
+				DisplayName: Herbal Teacup
+				Tooltip:
+					'''
+					The next 10 ranged stand attacks will be buffed, recovering at one attack per second while at rest.
+					Stand Damage is increased by 3% for every enemy around you and damage gains are multiplied by 12% while a boss is active.
+					'''
+			}
+
+			ViralPearlEarring: {
+				DisplayName: Viral Pearl Earring
+				Tooltip:
+					'''
+					When attacking enemies with Stand Attacks, 10% of damage against enemies is transmitted to nearby enemies.
+					Transmitted damage is doubled and the infection is spread if the is user not damaged for a long time.
+					Punching enemies with Stands can infect enemies with a virus.
+					'''
+			}
+		}
+
+		NPCs: {
+			HighwayStar.DisplayName: Highway Star
+			MatureStrayCat.DisplayName: Mature Stray Cat
+			StrayCat.DisplayName: Stray Cat
+			ViralMiner.DisplayName: Viral Miner
+			Yoshihiro.DisplayName: Yoshihiro
+			Yuya.DisplayName: Yuya
+
+			Gambler: {
+				DisplayName: Gambler
+
+				TownNPCMood: {
+					Content: "{$Mods.JoJoStands.TownNPCMood.Gambler.Content}"
+					NoHome: "{$Mods.JoJoStands.TownNPCMood.Gambler.NoHome}"
+					FarFromHome: "{$Mods.JoJoStands.TownNPCMood.Gambler.FarFromHome}"
+					LoveSpace: "{$Mods.JoJoStands.TownNPCMood.Gambler.LoveSpace}"
+					DislikeCrowded: "{$Mods.JoJoStands.TownNPCMood.Gambler.DislikeCrowded}"
+					HateCrowded: "{$Mods.JoJoStands.TownNPCMood.Gambler.HateCrowded}"
+					LoveBiome: "{$Mods.JoJoStands.TownNPCMood.Gambler.LoveBiome}"
+					DislikeBiome: "{$Mods.JoJoStands.TownNPCMood.Gambler.DislikeBiome}"
+					HateBiome: "{$Mods.JoJoStands.TownNPCMood.Gambler.HateBiome}"
+					LikeNPC: "{$Mods.JoJoStands.TownNPCMood.Gambler.LikeNPC}"
+					DislikeNPC: "{$Mods.JoJoStands.TownNPCMood.Gambler.DislikeNPC}"
+					HateNPC: "{$Mods.JoJoStands.TownNPCMood.Gambler.HateNPC}"
+					LikeNPC_Princess: I like {NPCName}.
+					Princess_LovesNPC: I like {NPCName}.
+				}
+			}
+
+			MarineBiologist: {
+				DisplayName: Marine Biologist
+
+				TownNPCMood: {
+					Content: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.Content}"
+					NoHome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.NoHome}"
+					FarFromHome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.FarFromHome}"
+					LoveSpace: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.LoveSpace}"
+					DislikeCrowded: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.DislikeCrowded}"
+					HateCrowded: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.HateCrowded}"
+					LoveBiome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.LoveBiome}"
+					LikeBiome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.LikeBiome}"
+					DislikeBiome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.DislikeBiome}"
+					HateBiome: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.HateBiome}"
+					LikeNPC: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.LikeNPC}"
+					DislikeNPC: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.DislikeNPC}"
+					HateNPC: "{$Mods.JoJoStands.TownNPCMood.MarineBiologist.HateNPC}"
+					LikeNPC_Princess: I like {NPCName}.
+					Princess_LovesNPC: I like {NPCName}.
+				}
+			}
+
+			Priest: {
+				DisplayName: Priest
+
+				TownNPCMood: {
+					Content: "{$Mods.JoJoStands.TownNPCMood.Priest.Content}"
+					NoHome: "{$Mods.JoJoStands.TownNPCMood.Priest.NoHome}"
+					FarFromHome: "{$Mods.JoJoStands.TownNPCMood.Priest.FarFromHome}"
+					LoveSpace: "{$Mods.JoJoStands.TownNPCMood.Priest.LoveSpace}"
+					DislikeCrowded: "{$Mods.JoJoStands.TownNPCMood.Priest.DislikeCrowded}"
+					HateCrowded: "{$Mods.JoJoStands.TownNPCMood.Priest.HateCrowded}"
+					LoveBiome: "{$Mods.JoJoStands.TownNPCMood.Priest.LoveBiome}"
+					LikeBiome: "{$Mods.JoJoStands.TownNPCMood.Priest.LikeBiome}"
+					DislikeBiome: "{$Mods.JoJoStands.TownNPCMood.Priest.DislikeBiome}"
+					HateBiome: "{$Mods.JoJoStands.TownNPCMood.Priest.HateBiome}"
+					LikeNPC: "{$Mods.JoJoStands.TownNPCMood.Priest.LikeNPC}"
+					DislikeNPC: "{$Mods.JoJoStands.TownNPCMood.Priest.DislikeNPC}"
+					HateNPC: "{$Mods.JoJoStands.TownNPCMood.Priest.HateNPC}"
+					LikeNPC_Princess: I like {NPCName}.
+					Princess_LovesNPC: I like {NPCName}.
+				}
+			}
+
+			BaldZombie.DisplayName: Bald Zombie
+			ChimeraBird.DisplayName: Chimera Bird
+			Doobie.DisplayName: Doobie
+			DoobiesChimeraSnake.DisplayName: Doobies Chimera Snake
+			DoobiesSnake.DisplayName: Doobies Snake
+			GladiatorZombie.DisplayName: Gladiator Zombie
+			JackTheRipper.DisplayName: Jack The Ripper
+			WangChan.DisplayName: Wang Chan
+			ZombieRat.DisplayName: Zombie Rat
+
+			HamonMaster: {
+				DisplayName: Hamon Master
+
+				TownNPCMood: {
+					Content: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.Content}"
+					NoHome: I hate not having a home.
+					FarFromHome: I am too far from home.
+					LoveSpace: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LoveSpace}"
+					DislikeCrowded: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.DislikeCrowded}"
+					HateCrowded: I hate how crowded I am.
+					LoveBiome: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LoveBiome}"
+					LikeBiome: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LikeBiome}"
+					HateBiome: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.HateBiome}"
+					LikeNPC: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.LikeNPC}"
+					DislikeNPC: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.DislikeNPC}"
+					HateNPC: "{$Mods.JoJoStands.TownNPCMood.HamonMaster.HateNPC}"
+					LikeNPC_Princess: I like {NPCName}.
+					Princess_LovesNPC: I like {NPCName}.
+				}
+			}
+		}
+
+		Projectiles: {
+			AerosmithBomb.DisplayName: Aerosmith Bomb
+			AirBubble.DisplayName: Air Bubble
+			ArmWormholeNail.DisplayName: Arm Wormhole Nail
+			BadCompanyBomb.DisplayName: Bad Company Bomb
+			BadCompanyTankRocket.DisplayName: Bad Company Tank Rocket
+			BindingEmeraldString.DisplayName: Binding Emerald String
+			BombBubble.DisplayName: Bomb Bubble
+			BubbleBarrier.DisplayName: Bubble Barrier
+			BubbleTrap.DisplayName: Bubble Trap
+			CardProjectile.DisplayName: Card Projectile
+			ChargedClackerProjectile.DisplayName: Charged Clacker Projectile
+			ClackerProjectile.DisplayName: Clacker Projectile
+			ControllableBubble.DisplayName: Controllable Bubble
+			ControllableNail.DisplayName: Controllable Nail
+			CrossfireHurricaneAnkh.DisplayName: Crossfire Hurricane Ankh
+			CrystalShard.DisplayName: Crystal Shard
+			CutterHamonBubble.DisplayName: Cutter Hamon Bubble
+			Disc.DisplayName: Disc
+			DollyDaggerBeam.DisplayName: Dolly Dagger Beam
+			EchoesTailTip.DisplayName: Echoes Tail Tip
+			Emerald.DisplayName: Emerald
+			EmeraldStringPoint.DisplayName: Emerald String Point
+			EmeraldStringPointConnector.DisplayName: Emerald String Point Connector
+			ExplosiveBubble.DisplayName: Explosive Bubble
+			FireAnkh.DisplayName: Fire Ankh
+			Fists.DisplayName: Fists
+			GoldExperienceBeam.DisplayName: Gold Experience Beam
+			HamonBloodBubble.DisplayName: Hamon Blood Bubble
+			HamonBubble.DisplayName: Hamon Bubble
+			HamonPunches.DisplayName: Hamon Punches
+			HamonSodaBottleCap.DisplayName: Hamon Soda Bottle Cap
+			HamonTequilaBottleCap.DisplayName: Hamon Tequila Bottle Cap
+			HamonVinoBottleCap.DisplayName: Hamon Vino Bottle Cap
+			HermitPurpleGrab.DisplayName: Hermit Purple Grab
+			HermitPurpleHook.DisplayName: Hermit Purple Hook
+			HermitPurpleWhip.DisplayName: Hermit Purple Whip
+			HighVelocityBubble.DisplayName: High Velocity Bubble
+			InfiniteSpinNail.DisplayName: Infinite Spin Nail
+			KillerQueenBomb.DisplayName: Killer Queen Bomb
+			KnifeProjectile.DisplayName: Knife Projectile
+			MeltYourHeart.DisplayName: Melt Your Heart
+			MeltYourHeartDrip.DisplayName: Melt Your Heart Drip
+			MinerLightning.DisplayName: Miner Lightning
+			GEButterfly.DisplayName: G E Butterfly
+			GEFrog.DisplayName: G E Frog
+			GEScorpion.DisplayName: G E Scorpion
+			GETree.DisplayName: G E Tree
+			MatureStrayCatMinion.DisplayName: Mature Stray Cat Minion
+			NPCStandFists.DisplayName: N P C Stand Fists
+			SheerHeartAttack.DisplayName: Sheer Heart Attack
+			ViralCrystal.DisplayName: Viral Crystal
+			Nail.DisplayName: Nail
+			NailSlasher.DisplayName: Nail Slasher
+			StarPlatinumNPCStand.DisplayName: Star Platinum N P C Stand
+			WhitesnakeNPCStand.DisplayName: Whitesnake N P C Stand
+			JonathanPet.DisplayName: Jonathan Pet
+			SpeedWagonPet.DisplayName: Speed Wagon Pet
+			TuskAct1Pet.DisplayName: Tusk Act1 Pet
+			TuskAct2Pet.DisplayName: Tusk Act2 Pet
+			TuskAct3Pet.DisplayName: Tusk Act3 Pet
+			PhantomMarker.DisplayName: Phantom Marker
+			AerosmithStandFinal.DisplayName: Aerosmith Stand Final
+			AerosmithStandT1.DisplayName: Aerosmith Stand T1
+			AerosmithStandT2.DisplayName: Aerosmith Stand T2
+			AerosmithStandT3.DisplayName: Aerosmith Stand T3
+			BadCompanyBomberPlane.DisplayName: Bad Company Bomber Plane
+			BadCompanyChopper.DisplayName: Bad Company Chopper
+			BadCompanySoldier.DisplayName: Bad Company Soldier
+			BadCompanyTank.DisplayName: Bad Company Tank
+			CrazyDiamondStandFinal.DisplayName: Crazy Diamond Stand Final
+			CrazyDiamondStandT1.DisplayName: Crazy Diamond Stand T1
+			CrazyDiamondStandT2.DisplayName: Crazy Diamond Stand T2
+			CrazyDiamondStandT3.DisplayName: Crazy Diamond Stand T3
+			CreamStandFinal.DisplayName: Cream Stand Final
+			CreamStandT1.DisplayName: Cream Stand T1
+			CreamStandT2.DisplayName: Cream Stand T2
+			CreamStandT3.DisplayName: Cream Stand T3
+			DashVoid.DisplayName: Dash Void
+			ExposingCream.DisplayName: Exposing Cream
+			Void.DisplayName: Void
+			EchoesStandFinal.DisplayName: Echoes Stand Final
+			EchoesStandT1.DisplayName: Echoes Stand T1
+			EchoesStandT2.DisplayName: Echoes Stand T2
+			EchoesStandT3.DisplayName: Echoes Stand T3
+			GoldExperienceStandFinal.DisplayName: Gold Experience Stand Final
+			GoldExperienceStandT1.DisplayName: Gold Experience Stand T1
+			GoldExperienceStandT2.DisplayName: Gold Experience Stand T2
+			GoldExperienceStandT3.DisplayName: Gold Experience Stand T3
+			GoldExperienceRequiemStand.DisplayName: Gold Experience Requiem Stand
+			GratefulDeadStandFinal.DisplayName: Grateful Dead Stand Final
+			GratefulDeadStandT1.DisplayName: Grateful Dead Stand T1
+			GratefulDeadStandT2.DisplayName: Grateful Dead Stand T2
+			GratefulDeadStandT3.DisplayName: Grateful Dead Stand T3
+			HierophantGreenStandFinal.DisplayName: Hierophant Green Stand Final
+			HierophantGreenStandT2.DisplayName: Hierophant Green Stand T2
+			HierophantGreenStandT3.DisplayName: Hierophant Green Stand T3
+			HierophantGreenStandT1.DisplayName: Hierophant Green Stand T1
+			KillerQueenStandFinal.DisplayName: Killer Queen Stand Final
+			KillerQueenStandT1.DisplayName: Killer Queen Stand T1
+			KillerQueenStandT2.DisplayName: Killer Queen Stand T2
+			KillerQueenStandT3.DisplayName: Killer Queen Stand T3
+			KillerQueenBTDStand.DisplayName: Killer Queen B T D Stand
+			KingClausStand.DisplayName: King Claus Stand
+			KingCrimsonStandFinal.DisplayName: King Crimson Stand Final
+			KingCrimsonStandT1.DisplayName: King Crimson Stand T1
+			KingCrimsonStandT2.DisplayName: King Crimson Stand T2
+			KingCrimsonStandT3.DisplayName: King Crimson Stand T3
+			MagiciansRedStandFinal.DisplayName: Magicians Red Stand Final
+			MagiciansRedStandT1.DisplayName: Magicians Red Stand T1
+			MagiciansRedStandT2.DisplayName: Magicians Red Stand T2
+			MagiciansRedStandT3.DisplayName: Magicians Red Stand T3
+			SexPistolsStand.DisplayName: Sex Pistols Stand
+			SilverChariotAfterImage.DisplayName: Silver Chariot After Image
+			SilverChariotStandFinal.DisplayName: Silver Chariot Stand Final
+			SilverChariotStandT1.DisplayName: Silver Chariot Stand T1
+			SilverChariotStandT2.DisplayName: Silver Chariot Stand T2
+			SilverChariotStandT3.DisplayName: Silver Chariot Stand T3
+			SoftAndWetStandFinal.DisplayName: Soft And Wet Stand Final
+			SoftAndWetStandT1.DisplayName: Soft And Wet Stand T1
+			SoftAndWetStandT2.DisplayName: Soft And Wet Stand T2
+			SoftAndWetStandT3.DisplayName: Soft And Wet Stand T3
+			SoftAndWetGoBeyondStand.DisplayName: Soft And Wet Go Beyond Stand
+			StarOnTheTreeStand.DisplayName: Star On The Tree Stand
+			StarPlatinumStandFinal.DisplayName: Star Platinum Stand Final
+			StarPlatinumStandT1.DisplayName: Star Platinum Stand T1
+			StarPlatinumStandT2.DisplayName: Star Platinum Stand T2
+			StarPlatinumStandT3.DisplayName: Star Platinum Stand T3
+			StickyFingersStandFinal.DisplayName: Sticky Fingers Stand Final
+			StickyFingersStandT1.DisplayName: Sticky Fingers Stand T1
+			StickyFingersStandT2.DisplayName: Sticky Fingers Stand T2
+			StickyFingersStandT3.DisplayName: Sticky Fingers Stand T3
+			StoneFreeStandFinal.DisplayName: Stone Free Stand Final
+			StoneFreeStandT1.DisplayName: Stone Free Stand T1
+			StoneFreeStandT2.DisplayName: Stone Free Stand T2
+			StoneFreeStandT3.DisplayName: Stone Free Stand T3
+			TestStandStand.DisplayName: Test Stand Stand
+			TheHandStandFinal.DisplayName: The Hand Stand Final
+			TheHandStandT1.DisplayName: The Hand Stand T1
+			TheHandStandT2.DisplayName: The Hand Stand T2
+			TheHandStandT3.DisplayName: The Hand Stand T3
+			TheWorldStandFinal.DisplayName: The World Stand Final
+			TheWorldStandT1.DisplayName: The World Stand T1
+			TheWorldStandT2.DisplayName: The World Stand T2
+			TheWorldStandT3.DisplayName: The World Stand T3
+			TowerOfGrayStandFinal.DisplayName: Tower Of Gray Stand Final
+			TowerOfGrayStandT1.DisplayName: Tower Of Gray Stand T1
+			TowerOfGrayStandT2.DisplayName: Tower Of Gray Stand T2
+			TowerOfGrayStandT3.DisplayName: Tower Of Gray Stand T3
+			TuskAct4Stand.DisplayName: Tusk Act4 Stand
+			WhitesnakeStandFinal.DisplayName: Whitesnake Stand Final
+			WhitesnakeStandT1.DisplayName: Whitesnake Stand T1
+			WhitesnakeStandT2.DisplayName: Whitesnake Stand T2
+			WhitesnakeStandT3.DisplayName: Whitesnake Stand T3
+			PlunderBubble.DisplayName: Plunder Bubble
+			PressurizedBlood.DisplayName: Pressurized Blood
+			RedBind.DisplayName: Red Bind
+			RoadRoller.DisplayName: Road Roller
+			SPBullet.DisplayName: S P Bullet
+			StandBullet.DisplayName: Stand Bullet
+			StarFinger.DisplayName: Star Finger
+			SteelBallProjectile.DisplayName: Steel Ball Projectile
+			StickyFingersFistExtended.DisplayName: Sticky Fingers Fist Extended
+			StickyFingersTraversalZipper.DisplayName: Sticky Fingers Traversal Zipper
+			StoneFreeBindString.DisplayName: Stone Free Bind String
+			StoneFreeStringConnector.DisplayName: Stone Free String Connector
+			StoneFreeStringPoint.DisplayName: Stone Free String Point
+			StoneFreeTiedTogetherString.DisplayName: Stone Free Tied Together String
+			TinyBubble.DisplayName: Tiny Bubble
+			TrackerBubble.DisplayName: Tracker Bubble
+			ViralArrow.DisplayName: Viral Arrow
+			ViralBeetleProjectile.DisplayName: Viral Beetle Projectile
+			ViralBroadswordProjectile.DisplayName: Viral Broadsword Projectile
+			ViralCrystalProjectile.DisplayName: Viral Crystal Projectile
+			ViralPearlProjectile.DisplayName: Viral Pearl Projectile
+			ViralStaffProjectile.DisplayName: Viral Staff Projectile
+			ViralWoodSharpnel.DisplayName: Viral Wood Sharpnel
+			ViralYoYoProjectile.DisplayName: Viral Yo Yo Projectile
+			WormholeNail.DisplayName: Wormhole Nail
+			Yosarrow.DisplayName: Yosarrow
+			AcidicBile.DisplayName: Acidic Bile
+			AcidVenomFlask.DisplayName: Acid Venom Flask
+			AcidVenomFlaskGas.DisplayName: Acid Venom Flask Gas
+			ChainedClawProjectile.DisplayName: Chained Claw Projectile
+			ChainedKunaiProjectile.DisplayName: Chained Kunai Projectile
+			ChainedKunaiSwinging.DisplayName: Chained Kunai Swinging
+			ExtendedZombieGrab.DisplayName: Extended Zombie Grab
+			HamonizedFireworkProjectile.DisplayName: Hamonized Firework Projectile
+			HamonizedWaterBalloonProjectile.DisplayName: Hamonized Water Balloon Projectile
+			HamonShockwaveSpike.DisplayName: Hamon Shockwave Spike
+			JackKnife.DisplayName: Jack Knife
+			KnifeSlashes.DisplayName: Knife Slashes
+			MetallicNunchucksProjectile.DisplayName: Metallic Nunchucks Projectile
+			MetallicNunchucksSwinging.DisplayName: Metallic Nunchucks Swinging
+			ChimeraSnake.DisplayName: Chimera Snake
+			WarriorZombie.DisplayName: Warrior Zombie
+			DioPet.DisplayName: Dio Pet
+			ZeppeliPet.DisplayName: Zeppeli Pet
+			SilkPunches.DisplayName: Silk Punches
+			SpaceRipperStingyEyes.DisplayName: Space Ripper Stingy Eyes
+			SunShackle.DisplayName: Sun Shackle
+			ThreadedGlovePunches.DisplayName: Threaded Glove Punches
+			VampiricPunch.DisplayName: Vampiric Punch
+			VampiricSlash.DisplayName: Vampiric Slash
+			VampiricVeinGrab.DisplayName: Vampiric Vein Grab
+			VampiricVeinSpike.DisplayName: Vampiric Vein Spike
+			ZeppeliHamonPunches.DisplayName: Zeppeli Hamon Punches
+		}
+
+		Biomes: {
+			ViralMeteoriteBiome: {
+				DisplayName: Viral Meteorite Biome
+				TownNPCDialogueName: the Viral Meteorite Biome
+			}
+		}
+
+		Tiles: {
+			BloodForTheKingTile.MapEntry: Blood for the King
+			IWouldntLoseTile.MapEntry: I Wouldn't Lose
+			OfficersRegretTile.MapEntry: Officer's Regret
+			QuietLifeTile.MapEntry: Quiet Life
+			RemixTableTile.MapEntry: Remix Table
+			ShotintheDarkTile.MapEntry: Shot in the Dark
+			TarotTableTile.MapEntry: Tarot Table
+			ViralMeteoriteTile.MapEntry: Viral Meteorite
+			ViralMusicBoxTile.MapEntry: Viral Music Box
+		}
+
+		Keybinds: {
+			"Special Ability.DisplayName": Special  Ability
+			"Second Special Ability.DisplayName": Second  Special  Ability
+			"Stand Out.DisplayName": Stand  Out
+			Pose.DisplayName: Pose
+			"Stand Auto Mode.DisplayName": Stand  Auto  Mode
+		}
+
+		Conditions: {
+			EntrailAbilitiesCondition: Mods.JoJoStands.Conditions.EntrailAbilitiesCondition
+			KnifeWielderCondition: Mods.JoJoStands.Conditions.KnifeWielderCondition
+			VampireAbilitiesCondition: Mods.JoJoStands.Conditions.VampireAbilitiesCondition
+			WitheringAbilitiesCondition: Mods.JoJoStands.Conditions.WitheringAbilitiesCondition
+			ZombieAbilitiesCondition: Mods.JoJoStands.Conditions.ZombieAbilitiesCondition
+		}
+
+		Configs: {
+			CustomizableOptions: {
+				DisplayName: Customizable Options
+
+				deathSound: {
+					Label: Death Sound Options
+					Tooltip: Allows you to choose which deathsound to use
+				}
+
+				Sounds: {
+					Label: Sounds
+					Tooltip: Determines whether or not you want to hear custom sounds or vanilla sounds.
+				}
+
+				AutomaticActivations: {
+					Label: Automatic Usages
+					Tooltip: Determines whether or not you want abilities to automatically activate, such as Killer Queen's bomb and The World's (Auto Mode) Knives
+				}
+
+				RespawnWithStandOut: {
+					Label: Respawn With Stand Out
+					Tooltip: Determiens whether or not you want to always respawn with your Stand out.
+				}
+
+				AbilityWheelDescriptions: {
+					Label: Ability Wheel Ability Tooltips
+					Tooltip: Whether or not you want ability descriptions to pop up whenever you hover over an ability in the Ability Wheel.
+				}
+
+				HamonEffects: {
+					Label: Hamon Effects
+					Tooltip: Determines whether or not you want to see Hamon effects.
+				}
+
+				RangeIndicators: {
+					Label: Range Indicators
+					Tooltip: Determines whether or not you want to see the range indicators for stands that need them.
+				}
+
+				TimestopEffects: {
+					Label: Timestop Effects
+					Tooltip: Determines whether or not you want to see the timestop effects.
+				}
+
+				TimeskipEffects: {
+					Label: Timeskip Effects
+					Tooltip: Determines whether or not you want to see the timeskip effects.
+				}
+
+				BitetheDustEffects: {
+					Label: Bite the Dust Effects
+					Tooltip: Determines whether or not you want to see the bite the dust effects.
+				}
+
+				ColorChangeEffects: {
+					Label: Color Change Effects
+					Tooltip: Determiens whether or not you want to see the world color changes.
+				}
+
+				SecretReferences: {
+					Label: Hidden References
+					Tooltip: Whether or not you want to see hidden references. (Some of these references can cause you to die!)
+				}
+
+				RangeIndicatorVisibility: {
+					Label: Range Indicator Visibility
+					Tooltip: Allows you to choose how transparent the Range Indicator is.
+				}
+
+				StandSlotPositionX: {
+					Label: Stand Slot X Position
+					Tooltip: ""
+				}
+
+				StandSlotPositionY: {
+					Label: Stand Slot Y Position
+					Tooltip: ""
+				}
+
+				HamonBarSize: {
+					Label: Hamon Bar Size
+					Tooltip: ""
+				}
+
+				HamonBarPositionX: {
+					Label: Hamon Bar X Position
+					Tooltip: ""
+				}
+
+				HamonBarPositionY: {
+					Label: Hamon Bar Y Position
+					Tooltip: ""
+				}
+
+				AbilityWheelXPos: {
+					Label: Ability Wheel X Position
+					Tooltip: ""
+				}
+
+				AbilityWheelYPos: {
+					Label: Ability Wheel Y Position
+					Tooltip: ""
+				}
+
+				soundVolume: {
+					Label: Sound Volume
+					Tooltip: Volume of barrage sounds
+				}
+
+				StandSearchTypeEnum: {
+					Label: Stand Auto Mode Targetting Preference
+					Tooltip: Select the type of enemy your Stand should prioritize first when in Auto Mode!
+				}
+
+				abilityVoicelines: {
+					Label: Sounds Mod Ability Voicelines
+					Tooltip: Whether or not you want to hear ability voicelines. These voicelines cause a delay in the activation of abilities! (Only works with the Sounds Mod!)
+				}
+
+				StandAimAssist: {
+					Label: Stand Aim Assist
+					Tooltip: Determines whether or not Stands should automatically lock onto targets your mouse is hovering over instead of attacking toward the mouse.
+				}
+			}
+
+			DeathSoundType: {
+				Tooltip: ""
+				None.Label: None
+				Roundabout.Label: Roundabout
+				Caesar.Label: Caesar
+				KonoMeAmareriMaroreriMerareMaro.Label: Kono Me Amareri Maroreri Merare Maro
+				LastTrainHome.Label: Last Train Home
+				KingCrimsonNoNorioKu.Label: King Crimson No Norio Ku
+			}
+
+			StandSearchTypeEnum: {
+				Tooltip: ""
+				Bosses.Label: Bosses
+				Closest.Label: Closest
+				Farthest.Label: Farthest
+				LeastHealth.Label: Least Health
+				MostHealth.Label: Most Health
+			}
+
+			CustomizableServerOptions: {
+				DisplayName: Customizable Server Options
+
+				standSyncFrequency: {
+					Label: Stand Sync Frequency
+					Tooltip: Throttles how often the Stand is synced. Can have negative effects on network stability on higher frequencies.
+				}
+
+				PvPMode: {
+					Label: PvP Mode
+					Tooltip:
+						'''
+						Determines whether or not to enable PvP interactions and damage calculations.
+						Useful for increasing the length of Stand fights and enabling
+						'''
+				}
+			}
+
+			StandSyncFrequency: {
+				Tooltip: ""
+				Sparingly.Label: Sparingly
+				SemiFrequently.Label: Semi Frequently
+				Frequently.Label: Frequently
+				Always.Label: Always
+			}
+		}
+
+		NPCDialogue: {
+			MarineBiologist1: Yare yare daze... I just can't have a normal day, can I
+			MarineBiologist2: Now that Kira has been dealt with, I can go back to the SPW.
+			MarineBiologist3: I came here looking for a stand user... Do you know who that might be?
+			MarineBiologist4: Back in Egypt, my team and I had to kill a psychotic time-stopping vampire, You might have a similar issue here, {0}
+			MarineBiologist5: All stand users eventually meet, I guess that's why I'm here
+			Priest1: I sell stand discs to people who want them... Want one?
+			Priest2: My White Snake is the only stand capable of defeating Star Platinum right now...
+			Priest3: That boy will pay for ruining my perfect universe!
+			Priest4: Weather Report and his stand... what a nuisance.
+			Priest5: Jolyne will never see me coming after I obtain heaven...
+			Priest6: You seem like you could've been a fitting servant for DIO... If only you were in Egypt at the time.
+			Priest7: You know... I was able to get Star Platinum from Jotaro... Interested?
+			Gambler1: Why don't you try to bet? C'mon, I'll even go easy on you!
+			Gambler2: I should've played... How could I have been fooled by such an obvious bluff...
+			Gambler3: I believe it was a gamblers instinct that led me to this goldmine of items.
+			Gambler4: Cheating? It's only cheating if you're caught!
+			Gambler5: I am D'Arby, the worlds greatest gambler!
+			HamonMasterTrainingStart: Do you feel that? That is the power of your Hamon. Ask me whenever you feel like you're ready to learn something new, I've got lots of skills I can pass on to you.
+			HamonMasterTrainingStartSpecial: Amazing! You truly have the capability to become a master Hamon User! Your untapped Hamon is far beyond what I had expected it to be. Tell me, were your predecessors Hamon Users too?
+			HamonmasterTrainPrompt:
+				'''
+				Oh? You seem like you have untapped potential in you. Tell me, would you like to learn Hamon? Don't worry, I've trained some of the finest warriors there are in this world.
+				Bring me 5 Sun Droplets and I can show you how to take advantage of your unknown Hamon abilities.
+				'''
+			HamonMaster1: Excuse me, {0}, would you happen to have some wine, preferably in a bottle? I had some, but it spilled.
+			HamonMaster2: I hope you are looking out for vampires, {0}. I have devoted my entire life to hunting them down.
+			HamonMaster3: Welcome back, friend. Are you here to train in the ways of Hamon?
+			HamonMaster4: Master Tonpetty told me I would meet my end if I completed my training... will it be here, in this strange land?
+			HamonMaster5: When you have free time, could you come back? I made a salad, with copious amounts of pepper, of course, and nobody else wants it.
+			HamonMasterEvil1: Something has changed about you... you have used the power of the Stone Mask for yourself, have you not? Get out of my sight.
+			HamonMasterEvil2: You are a vampire now, are you not? How many people have you killed?! What did you say? 'How many breads have I eaten?' You monster.
+		}
+
+		NPCFlavorText: {
+			MarineBiologist: Affiliate of the SpeedWagon Foundation and an expert in Stand research. He passed by for an unknown reason, or was he perhaps attracted here by a certain force?
+			Gambler: Came all the way from Egypt after losing a life or death bet. He repeatedly promises to never cheat again.
+			HamonMaster: A master of a certain ancient style called 'Hamon' in search of an apprentice to pass on his knowledge to. Loves red wine!
+			Priest: A Priest visiting from Florida who came here after hearing of a certain someone's arrival. He says he's trying to achieve heaven... What does that even mean?
+		}
+
+		NPCButtonText: {
+			StandHelp: Stand Help
+			BuyStands: Buy Stands
+			BuyItems: Buy Items
+			Gamble: Gamble
+			LearnSkills: Learn Hamon Skills
+		}
+
+		MiscText: {
+			HamonBarOOB: You can only choose numbers between 0-3!
+			DioEvent: Dio's Minions have arrived!
+			TestStandNotWorthy: You are not worthy.
+			TimestopForceEnd: The user has left, and time has begun to move once more...
+			StandSlotNoStand: There is no Stand in the Stand Slot!
+			StandSlotFullMinions: There are no available minion slots!
+			StandSlotSummonError: Something went wrong while summoning the Stand.
+			PokerChipRevive: The chip has given you new life!
+			CrazyDiamondTileWarning: Tile destruction limit reached!
+			CrazyDiamongTargetOOR: That target is too far.
+			EchoesEvolve: Oh? Echoes is evolving!
+			EchoesMouseHint: Select a target with the mouse.
+			EchoesTipOOR: The tip is out of reach!
+			GoldExperienceRequiemMouseHint: Right-click an enemy to target.
+			StoneFreeStringOOR: Your strings do not extend that far.
+			AbilityWheelHint: *To use the Ability Wheel, use the numbers 1-x OR hover over the ability wheel with your cursor and scroll up or down!*
+			GamblerCheatWin: *D'Arby is sweating a lot and is looking like very, very pale...* Please don't tell Jotaro! I'll give you 2x the money!
+			GamblerCheatLose: I'm no cheater! You're accusing the me of the past! I'm a whole new gambler now!
+			GamblerNoGameCheat: What am I cheating at? We're not even betting!
+			GamblerNoBetWarning: It wouldn't be gambling without some loss and gain.
+			GamblerActiveBetWarning: Before we start another gamble, let's finish this one first.
+			GambleCardGameHint1: Click the card you'd like to switch out
+			GamblerCheatHint: *D'Arby smiles...
+			GamblerBetLose: Damn it... No! How is this possible!? Fine, just take the coins, I have much more anyway.
+			GamblerBetWin: Thanks for the coins!
+			GamblerRoShamBoDesc:
+				'''
+				Ro-Sham-Bo
+				Choose the symbol you believe would beat Darby's.
+				Rock beats scissors, scissors beat paper, paper beats rock.
+				'''
+			GamblerRollingGameDesc:
+				'''
+				Dice Roll
+				Roll dice and hit certain results to win. Winning results are either:
+				All three dice are the same value above three
+				All three dice add up to six
+				All three dice are above three
+				'''
+			GamblerMiniPokerDesc:
+				'''
+				Mini Poker
+				Pull random cards and compare numbers against Darby to determine the winner.
+				If you are unhappy with your first two cards, click the deck on the right to replace a card.
+				'''
+			ViralMeteoriteIntro1: A faint spiritual connection can be sensed nearby.
+			ViralMeteoriteIntro2: Your mind and soul resonate with the area around you...
+		}
+
+		JotaroCustomDialogue: {
+			ArrowShard: You seem... reliable. Here, I want you to take this and use it on yourself when you can, I think you'll like what happens when you do.
+			ViralMeteoriteTip: Did you feel that too? It felt as if a certain force were pulling us toward the meteor. That is no ordinary meteor, we must find it immediately. If that meteorite happened to be a Viral Meteorite, we must take care of that virus as soon as possible before it falls into the wrong hands again. Make sure to check the entire surface of the world for it. If you can't find it, check your sky islands and chasms as well. Hurry!
+			Hamon: I haven't heard much about it, but that old man tells me that Hamon is a versatile use of sun-like energy. From what he's told me, it can increase your physical capabilities and be used defensively or offensively, healing being one of its most useful uses. If that's all true, it's no wonder that man has lived this long.
+			StarPlatinumT1:
+				'''
+				You trying to mock me by asking about my own stand? What a pain... Well, I guess I'd be the one to know the most about it. I'll tell you what I can.
+				Good grief, you've only just awoken Star Platinum? I expected better of a copycat like yourself. In its first or second tier, Star Platinum is nothing but a glorified pair of floating fists, but things get a bit more interesting as you reach its third and fourth tier.
+				'''
+			StarPlatinumT2: Now in its second tier, Star Platinum has the ability to use Star Finger, a medium-range attack that you can use to attack from a distance. I've personally rarely used this move, but it can be useful in certain situations.
+			StarPlatinumT3: Your Star Platinum just keeps getting stronger and stronger. An alternative to the Star Finger you learned not long ago could be flicking bullets. Star Platinum can launch a bullet with a simple flick at a speed faster than that of a gun. It ended up being a more reliable ability when I used it.
+			StarPlatinumFinal: At its fourth tier, Star Platinum awakens its dormant ability, Star Platinum: The World. I learned this on my trip to Egypt in the 80s, but even I don't know why both Star Platinum and The World can stop time, though it sure worked out in my favor either way.
+			HierophantGreenT1:
+				'''
+				Your stand... one of my old friends had it. 'Nobody can deflect the emerald splash' he said. It's up to you to find out if that statement's true or not.
+				What Hierophant lacks in power, it makes up for in quantity. Hierophant Green's main ability is to send out a ton of emerald splashes at a time, but unfortunately they do a very little amount of damage.
+				'''
+			HierophantGreenT2: You now have the ability to shoot wires that wrap and paralyze your enemies. Enemies that are wrapped in your wires will not be able to move for a short time, so use that time wisely. Hierophant Green is also able to be controlled at much farther distances now, so take advantage of that to set up tripwires and shoot from advantageous positions.
+			HierophantGreenT3Final: Ah, 20m Emerald Splash. The Old Man told me that my old friend used it during our fight against DIO. It sets up multiple tripwires around the player, covering about 30 tiles but at the cost of not being able to normally use your Hierophant Green.
+			TheWorldT1:
+				'''
+				...Get that thing away from me... Well, I guess I could tell you a bit about it, considering it's the same type of stand as my Star Platinum, but I won't enjoy it.
+				In its first tier, I would guess that The World would just be able to punch, like Star Platinum, while getting stronger and faster in its second. Talk to me again when it's a bit stronger.
+				'''
+			TheWorldT2: Now that your The World got a bit stronger, I would assume that it learned its signature ability Time Stop, although I'm not sure why it doesn't learn it sooner. Use your special key to activate it.
+			TheWorldT3: Now that The World is at its third tier, The World can to throw deadly knives. I'm pretty sure those monsters outside aren't smart enough to hide Shonen Jump underneath their clothes, so the knives are pretty effective.
+			TheWorldFinal: Now this is The World I remember. You have fully learned The World's extents, and can now stop time for 9 seconds while throwing flurrys of knives at your enemies. You can even throw Road Rollers at your enemies while time is stopped too! Do me a favor and stay away from me.
+			KillerQueenT1T2:
+				'''
+				That stand... I'm sure I destroyed its user... or, at least, that ambulance did. Well, either way, Killer Queen can turn things into bombs. Not physically, but any object, when touched, will make whoever's touching it explode.
+				Killer Queen can throw out a barrage of punches, like most stands of its type, but it can also trigger a controlled detonation on a solid... block. This explosion has the power to damage enemies, but not the ground. Also, be careful not to blow yourself up.
+				'''
+			KillerQueenT3Final: You've unlocked Sheer Heart Attack- it has no weaknesses. It's a small tank-like thing that pursues enemies, and even my Star Platinum wasn't able to destroy it. It's quite a unique ability... In it's fourth tier the cooldown for Sheer Heart Attack decreases and you will be able to send him out more.
+			KillerQueenBTD: You've unlocked yet another power... Bites The Dust. Bites the Dust allows you to rewind time back to the moment you first activated the ability. It's useful for dodging lethal events that you know will happen in the future, in theory anyway. We only know this much because of the way its original user acted before his... final moments.
+			AchtungBaby: Wha... Frankly, I'm not gonna ask how that's even possible. Perhaps the universal rupture caused the stand's power to transfer into the sunglasses. Either way, that Stand makes you invisible.
+			GoldExperienceT1:
+				'''
+				Ah, that stand... The stand of, what was his name, Haruno... no, Giorno Giovanna. Never got to ask him about it too much. What I do know is that it has an ability with extreme potential- the ability to create life.
+				In its current state, Gold Experience can only do so much. For now, you can create a frog that will counterattack anyone who strikes you. A strange way to counter an attack, but it works nonetheless.
+				'''
+			GoldExperienceT2: Now, Gold Experience has unlocked the ability to create barriers for you. These barriers are actually trees, but they still offer protection from attacks, as if they were walls.
+			GoldExperienceT3: Ah, that ability... now you can accelerate the senses of your enemy so fast that they have quite the out of body experience, if you catch my drift. It also slows their physical bodies down. Along with that, you can create butterflies that will protect the loot an enemy is carrying, so that they don't get destroyed while fighting you. If you don't know what I mean, it doubles the chances of enemy loot.
+			GoldExperienceFinal: Gold Experience's arguably best ability, Limb Recreation, has been unlocked. With this, you can regenerate your health by healing your wounds. Only one more step...
+			GoldExperienceRequiem: So this is what happens when the arrow binds to your Stand. Gold Experience Requiem has been unleashed, and its powers are yours. Its new abilities are the ability to loop an enemy's death multiple times as well as the ability to cancel the actions of enemies that touch you. When that happens, they return to where they came from.
+			TuskAct1:
+				'''
+				The mysterious force of the Spin... it reminds me of Hamon. Anyways, Tusk has Acts similar to the stand Echoes. Each act gains a new ability with the Spin. Every Spin user's goal is to attain the Infinite Spin. Think you can do it, {0}? 
+				Tusk was somewhat weak when it began, only being able to fire nails like a bullet from a gun. By the way, I don't mean the metal kind of nails. I mean your fingernails and toenails. Don't worry, they grow back.
+				'''
+			TuskAct2: Tusk Act 2 has learned the power of the Golden Rectangle, and can now fire nail bullets that can be guided towards targets. You move closer to the Infinite Spin.
+			TuskAct3: Act 3 allows you to fire a nail what creates a wormhole, which you can then travel through. This allows you to get the jump on enemies. Make sure you only fire if you have no doubts.
+			TuskAct4: Tusk Act 4 has found the power of the Infinite Spin, and can cause enemies to... infinitely spin. Along with that, Act 4 can now manifest into a stronger form than the other three acts, allowing it to punch enemies. The catch is that you have to gain rotational energy using Slow Dancer though... But congratulations on obtaining such a power. I'm sure it was a long and roundabout path.
+			StickyFingersT1:
+				'''
+					While zippers may seem like quite the mundane ability to have, Sticky Fingers is a stand that lets you use them to their absolute maximum potential. Figure out how to use the zippers, and your enemies will be saying Arrivederci, very quickly.
+				At first, Sticky Fingers isn't the most powerful of Stands though it does allow you to unzip your enemies as it punches. Keep it going, don't let your resolve waver, and power up further.
+				'''
+			StickyFingersT2: If you haven't already noticed the versatility of your Stand, you will soon. You can now unzip your own arms to punch targets outside of your Stand Range. On top of that, you can also hide inside of tiles to sneak up on enemies. This is only the beginning for your abilities, keep getting stronger and you'll find many more uses for your zippers.
+			StickyFingersT3: Would you look at that, you can place zippers on yourself. Funny how you could use your ability on yourself while others like Josuke can't. In any case, that ability will come in handy if you ever want to dodge an incoming attack. Another thing you might have already noticed is you can zip through the ground at high speeds. That'll sure help you traverse.
+			StickyFingersT4: Sticky Fingers sure became a Stand no one would want to mess with. You can attack from far, hide in tiles, unzip yourself to dodge attacks, and even move around through tiles. If a Stand User with that Stand were to have faced off against us back in Egypt, we could've been in some serious trouble.
+			SexPistolsT1: Ah, good grief... this, well, these, are Sex Pistols. They're six, sentient, bullet-shaped stands that will stay around the area you want them to. Whenever a bullet goes near them, they will redirect that bullet to the nearest enemy. Sex Pistols never gained any new or extreme abilities, but each of your upgrades increases your guns power. More efficiency means more rounds out, and more bodies.
+			SexPistolsT2: The pistols should be able to kick bullets with even greater force now. Did I tell you that the Pistols need to eat?
+			SexPistolsT3: Faster and faster the chamber goes, can you keep up long enough to keep firing? Pressing " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + " will allow your pistols to go into a frenzy, where they would kick bullets until the end.
+			SexPistolsFinal: Sex Pistols has reached max power, they come back to you almost instantly now. Just remember to keep some food in your pockets...
+			KingCrimsonT1:
+				'''
+				The power of King Crimson falls to you now. A powerful stand that strikes at the speed of a sledgehammer. Learn its speeds and take control of its immense power.
+					Right now, King Crimson is only capable of striking opponents. This isn't at all a bad thing, because of how King Crimson attacks. King Crimson strikes with such ferocity that it has been shown to tear holes opponents in people, and the attacks have such force that you will fly forward when attacks come out.
+				'''
+			KingCrimsonT2: King Crimson has acquired its signature ability of skipping time. It's a strange ability in concept, so here's a summary- you can remove the cause from the effect. Jump past time itself, confuse your enemies, and take your place at the apex of creation. And now that it can use its signurature ability, it can also perform 'Quick Timeskips' when needed, mainly while it's blocking enemies.
+			KingCrimsonT3Final: Congrats, it seems you've unlocked the power of Epitaph. Epitaph is able to look into the future, so you can anticipate your enemies moves and prepare for them in advance.
+			CenturyBoyT1: This Stand has no weaknesses, defensively. Century Boy is the ultimate physical defense- when you activate it, the stand mounts itself on your body and you are impervious to all harm. This does have one minor weakness... you lose the ability to move. Do with that what you will.
+			CenturyBoyT2: Looks like you learned that starting a dynamite then going invincible hurts your enemies and not you. What was stopping you from doing this earlier?
+			DollyDaggerT1: Intel from the SPW suggests that this stand merely reflects 35% of damage taken. Hm. We're lucky to have never faced against this Stand.
+			DollyDaggerT2: Now that you've honed your Dolly Dagger, it can relflect about 70% of damage taken. Even I would have trouble fighting you with that amount of reflection. Oh, you can also stab yourself with the dagger to send that damage to the nearest enemy. That stand of yours has lots of potential.
+			MagiciansRedT1: Ah, Magician's Red. The original owner of this Stand was the man who taught me about Stands in the first place. You can manipulate fire and create Ankhs to burn your enemies to ash.
+			MagiciansRedT2: Magician's Red can now use Red Bind, a technique to restrain enemies with your fire. Don't ask me how that doesn't burn through them.
+			MagiciansRedT3Final: Now, Magician's Red has relearned all of its abilities. With Crossfire Hurricane, you can launch a volley of Ankhs and overwhelm your enemies.
+			AerosmithT1: Aerosmith may appear to be nothing more than a model plane, but don't be fooled. It has potential to be extremely powerful and agile. Let loose a hellstorm of bullets and turn your foes into a pincushion.
+			AerosmithT2: Now, Aerosmith can drop bombs on your enemies. Light them up brighter than before!
+			AerosmithT3Final: With this, Aerosmith can now find enemies using a CO2 detecting radar. If it breathes, make sure it won't anymore.
+			TheHandT1: Right now, The Hand is weak, only able to punch your opponents. It may be a good punch, but there's not much else right now.
+			TheHandT2: The Hand can now use its signature ability... its right hand. You can use The Hand's hand to scrape away space itself and teleport short distances. The Hand can now cause enemies to, perhaps, lose a few organs.
+			TheHandT3: With your increased mastery of The Hand, you can now pull enemies towards you by tapping " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + ", and you can perform a very powerful attack with The Hand's Hand by holding" + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + ", given that they are in range.
+			TheHandFinal: The Hand has reached its maximum potential, and is more powerful than ever. Of course, you seem to be smarter than its previous user. I'm not saying he was a bad kid, or anything. Wonder where he is now...
+			GratefulDeadT1:
+				'''
+				Just seeing that Stand is making me feel older than I already am. That's the ability of Grateful Dead, so be careful using it around people you wanna keep around.
+				Right now, Grateful Dead can only punch things. Not exactly unusual. Just keep going.
+				'''
+			GratefulDeadT2: Now, Grateful Dead can grab a target and forcefully age them. The amount of time aged depends on how long you hold them. Don't do handshakes.
+			GratefulDeadT3: So, this Stand just became even more of a safety hazard to any allies, because now it can spread the aging effect as a mist. It's not as immediate, but now multiple people can be aged forwards at once.
+			GratefulDeadFinal: Finally, Grateful Dead is at maximum power. Just... stay a few feet away from me. I already have a couple of gray hairs.
+			LockT1T2: Oh. The Lock. I feel bad that you have to use this one... wait a minute. The Lock has the ability to make others' hearts heavy with guilt, literally. Use it, and anything that harms you will start to feel that immense weight. Some things may be immune to that guilt, and it can be overcome.
+			LockT3Final: The Lock can now force others to feel guilty without any action against you... by harming yourself. Use this ability with caution.
+			WhitesnakeT1:
+				'''
+				Okay, you need to step away before I crush you. Get that Stand out of my sight. If you think I'm joking, come and find out.
+				*sigh* Well, fine. Whitesnake, at this stage, can only throw punches. That's it.
+				'''
+			WhitesnakeT2: Now, Whitesnake can secrete a gooey substance that damages enemies and sticks to surfaces. It's not a pleasant experience for those affected. You'll also notice that you can send Whitesnake farther away from you now, and that it has a gun. As you get stronger, that ability will help you out more and more, keep that in mind.
+			WhitesnakeT3: Whitesnake has unlocked the ability to steal discs from opponents. If your enemy isn't a Stand user, then they'll be devoid of thought for a few moments. If they are, then you'll disable their Stand temporarily- do all of this by pressing and holding " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0]
+			WhitesnakeFinal: Due to your annoying persistence, Whitesnake has reached its maximum potential. Now, keep it away from me, I mean it.
+			SilverChariotT1:
+				'''
+				Ah, Silver Chariot. Another Stand that belonged to a friend of mine, a fellow Stardust Crusader. You think my hair is ridiculous, you should have seen his. Anyways, Silver Chariot wields a rapier with lightning speed and deadly precision.
+				At the moment, Silver Chariot can only stab with its rapier. However underwhelming that may sound, the stabs come out extremely quick, almost invisible to the eye.
+				'''
+			SilverChariotT2: On top of your stabbing flurry, Silver Chariot can now deflect projectiles back at your enemy with it's rapier, almost as if it's playing a game of baseball, or tennis.
+			SilverChariotT3: At this stage, Silver Chariot can now shed its armor to become so fast it can create afterimages. What this does for you is allows Silver Chariot to move significantly faster, but you also take more damage. Use this carefully.
+			SilverChariotFinal: Silver Chariot has reached the highest peak it can. The power of this stand alone rivals legendary swordsmen of old, and your toughest enemies. I wonder what would happen if this Stand were to change form or something.
+			CreamT1:
+				'''
+				That Stand makes me... nervous, and I cannot tell you why. Anyways, uh, Cream can harness the void and erase things, almost like that blockhead friend of Josuke's.
+				Just like the rest, Cream cannot do very much at this stage. It can throw a mean chop though, and it can cause enemies to lose their organs. Literally. It can also dash toward enemies in its Void form.
+				'''
+			CreamT2: Cream has gained the ability to, well, eat you. Specifically, you can enter the void by pressing " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + " and riding in Cream like an interdimensional ball of sorts. To control Cream in this state, use your 'left-click' to guide it. The downsides are that you have a limited time in there, indicated by the Void Gauge, and you are effectively blind while in the void, so know where your target is beforehand. Once that time runs out, Cream pukes you out. I am being serious.
+			CreamT3: As a way to quickly refill your Void Gauge, Cream can consume you and fly about. On top of that, your void offensive now lasts longer, and once it runs out, Cream automatically enters that defensive recharge state instead of being puked out.
+			CreamFinal: At this final point, Cream can stay in the void for even longer. Once it runs out, you will still enter the recharge state rather than being puked out. Actually, I wonder if you could use this to fire yourself like a cannon... questions for another day.
+			HermitPurpleT1:
+				'''
+				Never in my life did I think I would see another Stand user with Hermit Purple. That Stand is special because the last owner I knew, my gramps, was a Hamon user as well, which makes it unique in that he used both in tandem. I wonder, do you have that ability?
+				At the moment, Hermit Purple is nothing more than a mass of vines. You can certainly hit people with them. It will certainly be more effective than getting mauled.
+				'''
+			HermitPurpleT2: Well, it seems my initial question has been answered. Hermit Purple coils around you, and anything that opts to attack you will be met with quite the burn. On top of that, now you can grab and pull enemies into their eventual doom by 'clicking and holding right-click'.
+			HermitPurpleT3: Your connection to Hermit Purple grows like rampant vines You can now press " + JoJoStands.SpecialHotKey.GetAssignedKeys()[0] + " to overcharge Hermit Purple with Hamon and power up your passive counter. The next three things that hit you will not only feel the burn, but they will take damage and get knocked away.
+			HermitPurpleFinal: Hermit Purple is as strong as it will ever be, thanks to you. I know that the old man would never have come close, as long as he lived. I still have no idea how he managed to survive as long as he did.
+			BadCompanyT1:
+				'''
+				That Stand... I've never seen it before, though I do remember some descriptions of a Stand like this from Josuke a while back.
+				According to Josuke, that Stand was able to summon armies of soldiers, tanks, and attack helicopters, though I'd imagine that at this stage, soldiers would be all you could handle. I'll have to ask Josuke for greater details on this Stand.
+				'''
+			BadCompanyT2: Your Stand, Bad Company, should now be able to summon more troops, as well as summon tanks. Your troops should also be much stronger now that they've gained combat experience.
+			BadCompanyT3: According to Josuke, by now, you should be able to summon attack helicopters. Those helicopters would be your greatest asset, but don't depend on them too much. This is just a guess but, if you can summon attack helicopters, what's stopping you from summoning war planes?
+			BadCompanyFinal: This Stand is surely something to be afraid of. You now have a small militia under your command, with soldiers, tanks, attack helicopters, and war planes under your command. It amazes me that Josuke was able to survive that battle.
+			StoneFreeT1:
+				'''
+				That's... my daughter's stand. Its power allows you to turn it into string. While that may sound very mundane or useless, trust me when I say that it is no joke.
+				At this point, Stone Free has not gained the ability to do much besides punching, but it's quite the punch, if I do say so myself.
+				'''
+			StoneFreeT2: Stone Free has started to tap into its unraveling abilities. This one, specifically, allows you to weave a trap between two tiles for any unsuspecting foes. It may not seem like much now, but when used properly it can be an incredibly deadly weapon.
+			StoneFreeT3: Your strings have strengthened considerably. Now, you can use Stone Free's threads to bind enemies, stopping them in their tracks. Who knows, you may be able to bind them and drag them to you as well.
+			StoneFreeFinal: This final power-up from Stone Free allows you to weave Stone Free's thread into a strong shield to protect yourself from harm. Now, go forth and spin a legendary tale with this power!
+			SoftAndWetT1:
+				'''
+				Did you let a bubble loose in here? Be careful not to let it pop near me. Those bubbles are capable of taking something from whatever they pop next to, and I'd prefer to keep my eyesight.
+				On top of that, the bubbles can apply those stolen properties to anything they pop close to. Have you tried holding a torch out and shooting a bubble? I wonder what would happen if those sorts of bubbles popped.
+				'''
+			SoftAndWetT2: Hmm. Seems these bubbles are more durable than I thought. With your ability, I'm sure you can create larger, defensive bubbles now. You should be able to coat yourself in one, giving you some welcome protection.
+			SoftAndWetT3: Soft & Wet can now create bubbles while in the heat of battle. They seem to do a great deal of damage on impact, making you quite the threat. Your bubbles are getting more and more powerful, I wonder if there's a certain force behind their abilities?
+			SoftAndWetFinal: This power! It can't be. It seems the bubbles can now be used to plant bombs in the ground. This kind of power seems unsettlingly familiar. We'll chalk this up to coincidence. For now.
+			SoftAndWetGoBeyond:
+				'''
+				Good grief, you really did go beyond your normal capabilities. I've seen this type of explosive power before, back in Morioh, but it's changed. Evolved. It 'goes beyond' nature.
+				Your bubbles are not 'just' bubbles. They're actually a thin line spinning at incredible speeds. If this line reaches a vanishing point, there's no telling what your bubbles can achieve. They could transcend logic, itself. How terrifying... Not only that, you can control when they explode, which would be useful for you and deadly for the target.
+				'''
+			CrazyDiamondT1: Is that- so it is... That is Crazy Diamond, the stand of a kid with a good heart, and a strange do... Just do not tell him I said that. Like many Stands, Crazy Diamond packs quite the punch, but do not let that fool you. Beneath its tough exterior, it harbors a kind ability. You can restore anything you touch, heal wounds, and even revert things into their original parts. Stands like these have the power to do a lot of good.
+			CrazyDiamondT2: This brings back memories. You should now be able to flick bullets using Crazy Diamond's immense power. It may not be a real ability, but you should be able to break through just about anything with a nice bullet. As for your restoration ability, remember you can restore anything of value. Keep in mind however that this Stand isn't capable of bringing things back from the dead.
+			CrazyDiamondT3: Good grief... It looks like the angry ticks of that punk are simply rooted into Crazy Diamond. To be safe, I'll refrain from mentioning anything about your hair. You are now capable of breaking into an uncontrollable rage, allowing Crazy Diamond to enter a state of anger and empowerment at the cost of speed. Using restoration mode in such a state is bound to be a mess. In other news, your restoration should be a lot more potent now, capable of bringing back anyone from the brink of defeat.
+			CrazyDiamondFinal: Well, it looks like you've gotten the hang of Crazy Diamond. It has gotten much stronger too. You and your Stand sure do remind me of my time in Morioh. All I ask is that you use this ability to protect those who need it, and punish those who threaten them. A golden heart is needed to use Crazy Diamond to its fullest potential. I'm sure you have what it takes.
+			TowerOfGrayT1: Ugh... I thought I would never have to see that nasty bug again. This is one of the first Stands we encountered on our way to Egypt. You will have to forgive my disgust. Anyway, Tower of Gray is capable of traveling far distances, all while attacking with its piercing tongue. Do with that what you will.
+			TowerOfGrayT2: The bug has gotten stronger... good grief. It can now move at crazy speeds, even my Star Platinum has trouble keeping up with it. Tower of Gray should now be able to tear through enemies like a bullet. Its useful, if not a bit gruesome.
+			TowerOfGrayT3: The old man who possessed that Stand had some sick tendencies. He enjoyed taking the tongues out of his victims, using the insane precision for dastardly pleasures. I still shudder at the thought of that night. Anyway, Tower of Gray is capable of tearing out the tongues of a whole lot of people at once, like an unfortunate shish-kabob... Just do not get any ideas, okay?
+			TowerOfGrayFinal: It seems you have reached your Stand's highest potential. It's piercing tongue is a weapon one would be a fool to ignore. Now, if that is all, I will be on my way. I would like to keep my distance from that thing.
+			EchoesAct0: Hmmm? Is that an egg? Wait, I have seen this before... Could it be? Yes, this is Echoes! Or, at least, it will be. If you are looking to get more out of this Stand, you are going to have to grow alongside it. You will need a Strong Will to evolve, and a whole lot of bravery to bring an egg into battle.
+			EchoesAct1: I'm surprised you've made it this far. It seems I underestimated your willpower. This is Echoes Act 1. While it may be weak, Echoes' ability is where it's true strength lies. You should be able to generate sound effects on those you touch. This can either debilitate an enemy, or reassure a friend. Whatever you do, just be sure to make some noise. If you are looking to grow your abilities further, I would recommend taking Act 1 into a dangerous fight. Maybe try those creepy mechanical eyes I have seen floating around.
+			EchoesAct2: You survived. Good. Now things are getting interesting. Echoes Act 2 is able to take those sounds effects of yours and make them do some real damage. Using the tip of it is tail, you will be able to place these sound effects wherever you want. You should be able to take better control of the battlefield. However, if you are looking to push your capabilities even further, you will need to face your greatest challenge yet. Others are telling me about this bizarre temple underneath the jungle. Try checking that out.
+			EchoesAct3: You have grown. This is Echoes Act 3, it's final form! You'll find that this form heavily exchanges range for power. You should now have the ability to use Three Freeze! This makes a single target extremely heavy, keeping them in place. It is a reliable ability. Your hard work has paid off. If the time ever comes, I hope I can rely on you.
+			StandHelpText0: Have a stand Item in the 'Stand Slot' then press 'Stand Help' and I'll tell you what it can do and how to get it's tiers OR keep pressing 'Stand Help' and I'll tell you how to get specific items and do certain actions.
+			StandHelpText1: To use Stand Specials, in controls, you need to bind a key to 'JoJoStands: Special' then while the stand is activated you press the key to use the special
+			StandHelpText2: Requiem Arrows can be obtained by getting a viral pearl and merging it with a Stand Arrow. This happens because all the Viral Meteorite involved starts to morph and have a different use alltogether.
+			StandHelpText3: To move during another users timestop, hold a time-stopping capable stand and use it's timestop. If the duration of your timestop exceeds the duration of the other users timestop, you can take over that users timestop as well!
+			StandHelpText4: You can dye your stand by putting a dye in the 'Dye Slot.'
+			StandHelpText5: To use a stand you have to put it in the 'Stand Slot' then press the 'Stand Out' bind, which you have to bind a key to in 'Controls.'
+			StandHelpText6: Most stands will require crafting materials called 'Wills' in order to be made. You can get the Will to Fight in Forests during Daytime, the Will to Protect in Forests at night, the Will to Change in the Jungle, the Will to Control in the Corruption/Crimson, the Will to Destory in the Underworld, and finally, the Will to Escape from the dungeon.
+			ArrowShardText: You seem... reliable. Here, I want you to take this and use it on yourself when you can, I think you'll like what happens when you do.
 		}
 	}
 }

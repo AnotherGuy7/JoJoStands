@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jolyne Shirt");
-            Tooltip.SetDefault("Clothing designed to allow flexibility. Has a spider-web design all around it too!");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Jolyne Shirt");
+            // Tooltip.SetDefault("Clothing designed to allow flexibility. Has a spider-web design all around it too!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

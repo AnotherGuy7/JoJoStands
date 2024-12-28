@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 9;
         public override int StandType => 1;
-        public override string StandProjectileName => "StarPlatinum";
+        public override string StandIdentifierName => "StarPlatinum";
         public override int StandTier => 3;
         public override Color StandTierDisplayColor => Color.LightPink;
 
@@ -21,8 +21,9 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Star Platinum (Tier 3)");
-            Tooltip.SetDefault("Left-click to punch enemies at a really fast rate and right-click to flick a bullet!\nIf there are no bullets in your inventory, Star Finger will be used instead.\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Star Platinum (Tier 3)");
+            // Tooltip.SetDefault("Left-click to punch enemies at a really fast rate and right-click to flick a bullet!\nIf there are no bullets in your inventory, Star Finger will be used instead.\nUsed in Stand Slot");
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<TheWorldT3>();
         }
 
         public override void SetDefaults()

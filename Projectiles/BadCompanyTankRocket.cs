@@ -33,7 +33,7 @@ namespace JoJoStands.Projectiles
         private const float ExplosionRadius = 4f * 16f;
         private bool crit = false;
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -52,6 +52,7 @@ namespace JoJoStands.Projectiles
                 dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Alpha: 100, Scale: 1.5f);
                 Main.dust[dustIndex].velocity *= 3f;
             }
+            bool crit = false;
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             for (int n = 0; n < Main.maxNPCs; n++)
@@ -65,12 +66,19 @@ namespace JoJoStands.Projectiles
                         if (npc.position.X - Projectile.position.X > 0)
                             hitDirection = 1;
 
-                        npc.StrikeNPC(Projectile.damage, 8f, hitDirection, crit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = Projectile.damage,
+                            Knockback = 8f,
+                            HitDirection = hitDirection,
+                            Crit = crit
+                        };
+                        npc.StrikeNPC(hitInfo);
                     }
                 }
             }
 
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
         }
     }
 }

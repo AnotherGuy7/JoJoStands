@@ -25,7 +25,7 @@ namespace JoJoStands.Projectiles
             Projectile.maxPenetrate = 2;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Items.Hamon.HamonPlayer hamonPlayer = Main.player[Projectile.owner].GetModPlayer<Items.Hamon.HamonPlayer>();
             if (hamonPlayer.amountOfHamon >= 5 && Main.rand.Next(0, 101) <= 25)

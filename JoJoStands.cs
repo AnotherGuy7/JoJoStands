@@ -53,6 +53,7 @@ namespace JoJoStands
         public static bool TimestopEffects = false;
         public static bool RangeIndicators = false;
         public static bool AutomaticActivations = false;
+        public static bool StandAimAssist = false;
         public static bool SecretReferences = false;
         public static int StandSlotPositionX;
         public static int StandSlotPositionY;
@@ -109,7 +110,10 @@ namespace JoJoStands
             GoldenSpinMeter.goldenRectangleSpinLineTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/GoldenSpinMeterLine", AssetRequestMode.ImmediateLoad);
             SexPistolsUI.sexPistolsUITexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/SexPistolsUI", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar", AssetRequestMode.ImmediateLoad);
+            VoidBar.VoidBarBarOutlineTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar_BarOutline", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBarBar", AssetRequestMode.ImmediateLoad);
+            PolaroidTokenLayer.MenacingTextureSpritesheet = Request<Texture2D>("JoJoStands/Extras/MenacingIcons", AssetRequestMode.ImmediateLoad).Value;
+
 
             AerosmithStandFinal.AerosmithWhirrSoundEffect = (SoundEffect)Request<SoundEffect>("JoJoStands/Sounds/GameSounds/AerosmithWhirr", AssetRequestMode.ImmediateLoad);
 
@@ -118,9 +122,11 @@ namespace JoJoStands
                 ProjectileType<BombBubble>(),
                 ProjectileType<ControllableNail>(),
                 ProjectileType<CrossfireHurricaneAnkh>(),
+                ProjectileType<DollyDaggerBeam>(),
                 ProjectileType<Emerald>(),
                 ProjectileType<FireAnkh>(),
                 ProjectileType<Fists>(),
+                ProjectileType<GoldExperienceBeam>(),
                 ProjectileType<HermitPurpleGrab>(),
                 ProjectileType<HermitPurpleWhip>(),
                 ProjectileType<HighVelocityBubble>(),
@@ -132,7 +138,9 @@ namespace JoJoStands
                 ProjectileType<PlunderBubble>(),
                 ProjectileType<StandBullet>(),
                 ProjectileType<StarFinger>(),
+                ProjectileType<StickyFingersFistExtended>(),
                 ProjectileType<TinyBubble>(),
+                ProjectileType<TrackerBubble>(),
                 ProjectileType<Projectiles.PlayerStands.Cream.Void>(),
                 ProjectileType<DashVoid>(),
             };
@@ -210,19 +218,24 @@ namespace JoJoStands
             PoseHotKey = KeybindLoader.RegisterKeybind(Instance, "Pose", Keys.V);
             StandAutoModeHotKey = KeybindLoader.RegisterKeybind(Instance, "Stand Auto Mode", Keys.C);
 
-
             if (!Main.dedServ)      //Manages resource loading cause the server isn't able to load resources
                 JoJoStandsShaders.LoadShaders();
         }
 
         public override void Close()
         {
-            timestopImmune.Clear();
-            timestopOverrideStands.Clear();
-            standTier1List.Clear();
-            standProjectileList.Clear();
-            christmasStands.Clear();
-            testStandPassword.Clear();
+            if (timestopImmune != null)
+                timestopImmune.Clear();
+            if (timestopOverrideStands != null)
+                timestopOverrideStands.Clear();
+            if (standTier1List != null)
+                standTier1List.Clear();
+            if (standProjectileList != null)
+                standProjectileList.Clear();
+            if (christmasStands != null)
+                christmasStands.Clear();
+            if (testStandPassword != null)
+                testStandPassword.Clear();
 
             base.Close();
         }
@@ -256,7 +269,7 @@ namespace JoJoStands
             Instance = null;
         }
 
-        public override void AddRecipeGroups()
+        public override void AddRecipeGroups()/* tModPorter Note: Removed. Use ModSystem.AddRecipeGroups */
         {
             RecipeGroup willsGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "Wills", new int[]
             {
@@ -287,35 +300,35 @@ namespace JoJoStands
             {
                 ItemID.CobaltBar,
                 ItemID.PalladiumBar,
-            }); 
+            });
             RecipeGroup.RegisterGroup("JoJoStandsCobalt-TierBar", CobaltTierGroup);
 
             RecipeGroup GoldTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Gold-Tier Bar", new int[]
             {
                 ItemID.GoldBar,
                 ItemID.PlatinumBar,
-            }); 
+            });
             RecipeGroup.RegisterGroup("JoJoStandsGold-TierBar", GoldTierGroup);
 
             RecipeGroup SilverTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Silver-Tier Bar", new int[]
             {
                 ItemID.SilverBar,
                 ItemID.TungstenBar,
-            }); 
+            });
             RecipeGroup.RegisterGroup("JoJoStandsSilver-TierBar", SilverTierGroup);
 
             RecipeGroup IronTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Iron-Tier Bar", new int[]
-{
+            {
                 ItemID.IronBar,
                 ItemID.LeadBar,
-});
+            });
             RecipeGroup.RegisterGroup("JoJoStandsIron-TierBar", IronTierGroup);
 
             RecipeGroup EvilBarGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Evil Bar", new int[]
             {
                 ItemID.DemoniteBar,
                 ItemID.CrimtaneBar,
-            }); 
+            });
             RecipeGroup.RegisterGroup("JoJoStandsEvilBar", EvilBarGroup);
 
             RecipeGroup RottenVertebraeGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Rotten Chunk or Vertebrae", new int[]
@@ -360,11 +373,11 @@ namespace JoJoStands
             });
             RecipeGroup.RegisterGroup("JoJoStandsCrown", CrownGroup);
 
-            RecipeGroup WatchGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Gold Watch or Platinum Watch", new int[] 
-{
+            RecipeGroup WatchGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Gold Watch or Platinum Watch", new int[]
+            {
                 ItemID.GoldWatch,
                 ItemID.PlatinumWatch,
-});
+            });
             RecipeGroup.RegisterGroup("JoJoStandsWatch", WatchGroup);
         }
 

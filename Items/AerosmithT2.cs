@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 12;
         public override int StandType => 2;
-        public override string StandProjectileName => "Aerosmith";
+        public override string StandIdentifierName => "Aerosmith";
         public override int StandTier => 2;
         public override Color StandTierDisplayColor => AerosmithFinal.AerosmithTierColor;
 
@@ -21,8 +21,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Aerosmith (Tier 2)");
-            Tooltip.SetDefault("Left-click to move and right-click to shoot bullets at the enemies!\nSpecial: Remote Control\nSecond Special: Drop a bomb on enemies!\n\nThe farther the stand is from you, the less damage it does.\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Aerosmith (Tier 2)");
+            // Tooltip.SetDefault("Left-click to move and right-click to shoot bullets at the enemies!\nSpecial: Remote Control\nSecond Special: Drop a bomb on enemies!\n\nThe farther the stand is from you, the less damage it does.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

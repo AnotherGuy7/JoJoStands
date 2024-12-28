@@ -10,8 +10,8 @@ namespace JoJoStands.Items.Armor.StandArmors.Viral
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Helmet (Neutral)");
-            Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus. \nThe helmet seems to morph depending on your soul...\nStand stat buffs change depending on stand type.");
+            // DisplayName.SetDefault("Viral Helmet (Neutral)");
+            // Tooltip.SetDefault("A helmet created from a meteor, powered up by a strange virus. \nThe helmet seems to morph depending on your soul...\nStand stat buffs change depending on stand type.");
         }
 
         public override void SetDefaults()

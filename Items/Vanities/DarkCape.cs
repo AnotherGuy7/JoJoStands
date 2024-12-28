@@ -8,8 +8,8 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A fancy cape worn during the 1800's.");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A fancy cape worn during the 1800's.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

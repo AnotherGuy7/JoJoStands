@@ -9,8 +9,8 @@ namespace JoJoStands.Buffs.AccessoryBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Viral Beetle");
-            Description.SetDefault("The otherworldy virus you have conquered now manifested itself and protects you.");
+            // DisplayName.SetDefault("Viral Beetle");
+            // Description.SetDefault("The otherworldy virus you have conquered now manifested itself and protects you.");
             Main.buffNoTimeDisplay[Type] = true;
         }
 

@@ -18,7 +18,7 @@ namespace JoJoStands.Projectiles
             Projectile.ignoreWater = true;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<Infected>(), 360);
             Lighting.AddLight(Projectile.Center, 0.5f, 0.5f, 0.25f);

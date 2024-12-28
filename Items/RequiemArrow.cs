@@ -9,9 +9,9 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Requiem Arrow");
-            Tooltip.SetDefault("This mysterious arrow is used to maximize some stands' potential.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Requiem Arrow");
+            // Tooltip.SetDefault("This mysterious arrow is used to maximize some stands' potential.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

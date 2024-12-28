@@ -1,5 +1,6 @@
 using JoJoStands.Buffs.Debuffs;
 using JoJoStands.NPCs;
+using JoJoStands.Projectiles.PlayerStands.StickyFingers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -21,10 +22,13 @@ namespace JoJoStands.Projectiles
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
+            Projectile.penetrate = -1;
         }
 
         private bool living = true;
         private bool playedSound = false;
+        private const float MaxTravelDistance = 40f * 16f;
+        private const float DespawnDistance = 3f * 16f;
 
         public override void AI()       //all this so that the other chain doesn't draw... yare yare. It was mostly just picking out types
         {
@@ -34,72 +38,44 @@ namespace JoJoStands.Projectiles
                 Projectile.Kill();
                 return;
             }
-            float direction = ownerProj.Center.X - Projectile.Center.X;
-            if (direction > 0)
-            {
-                Projectile.direction = -1;
-                ownerProj.direction = -1;
-            }
-            if (direction < 0)
-            {
-                Projectile.direction = 1;
-                ownerProj.direction = 1;
-            }
-            Projectile.spriteDirection = Projectile.direction;
+            Projectile.direction = ownerProj.Center.X < Projectile.Center.X ? 1 : -1;
+            Projectile.spriteDirection = ownerProj.direction = Projectile.direction;
             Vector2 rota = ownerProj.Center - Projectile.Center;
             Projectile.rotation = (-rota * Projectile.direction).ToRotation();
             if (!playedSound && JoJoStands.SoundsLoaded)
             {
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                SoundEngine.PlaySound(StickyFingersStandFinal.ZipperSound, Projectile.Center);
                 playedSound = true;
             }
 
             if (Projectile.alpha == 0)
             {
                 if (Projectile.position.X + (float)(Projectile.width / 2) > ownerProj.position.X + (float)(ownerProj.width / 2))
-                {
                     ownerProj.direction = ownerProj.spriteDirection = 1;
-                }
                 else
-                {
                     ownerProj.direction = ownerProj.spriteDirection = -1;
-                }
             }
-            Vector2 vector14 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
-            float num166 = ownerProj.position.X + (float)(ownerProj.width / 2) - vector14.X;
-            float num167 = ownerProj.position.Y - vector14.Y;
-            float num168 = (float)Math.Sqrt((double)(num166 * num166 + num167 * num167));
+            float distanceFromOwner = Vector2.Distance(ownerProj.Center, Projectile.Center);
             if (living)     //while it's living
             {
-                if (num168 > 700f)
-                {
+                if (distanceFromOwner > MaxTravelDistance)
                     living = false;
-                }
                 //Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
                 Projectile.ai[1] += 1f;
                 if (Projectile.ai[1] > 5f)
-                {
                     Projectile.alpha = 0;
-                }
                 if (Projectile.ai[1] >= 10f)
-                {
                     Projectile.ai[1] = 15f;
-                }
             }
-            else if (!living)        //dead stuff
+            else
             {
                 Projectile.tileCollide = false;
-                //Projectile.rotation = (float)Math.Atan2((double)num167, (double)num166) - 1.57f;
-                float num169 = 20f;
-                if (num168 < 50f)
-                {
+                if (distanceFromOwner < DespawnDistance)
                     Projectile.Kill();
-                }
-                num168 = num169 / num168;
-                num166 *= num168;
-                num167 *= num168;
-                Projectile.velocity.X = num166;
-                Projectile.velocity.Y = num167;
+                Vector2 returnVelocity = ownerProj.Center - Projectile.Center;
+                returnVelocity.Normalize();
+                returnVelocity *= 16f;
+                Projectile.velocity = returnVelocity;
             }
         }
 
@@ -109,15 +85,15 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -126,38 +102,30 @@ namespace JoJoStands.Projectiles
                 target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = Projectile.owner;
                 target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
             }
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
+            living = false;
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            if (Main.rand.Next(0, 101) <= 50)
-                target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
+            if (info.PvP)
+            {
+                living = false;
+                if (Main.rand.Next(1, 100 + 1) <= 50)
+                    target.AddBuff(ModContent.BuffType<Zipped>(), 5 * 60);
+            }
         }
 
         private Texture2D stickyFingersZipperPart;
 
         public override bool PreDraw(ref Color lightColor)     //once again, TMOd help-with-code saves the day (Scalie)
         {
-            Player player = Main.player[Projectile.owner];
             Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
-            Vector2 ownerCenterOffset = Vector2.Zero;
-            if (ownerProj.spriteDirection == -1)
-            {
-                ownerCenterOffset = new Vector2(-16f, -10f);
-                if (ownerProj.spriteDirection != player.direction)
-                    ownerCenterOffset += new Vector2(50f, 0f);
-            }
+            Vector2 ownerCenterOffset;
             if (ownerProj.spriteDirection == 1)
-            {
-                ownerCenterOffset = new Vector2(4f, -4.5f);
-                if (ownerProj.spriteDirection != player.direction)
-                    ownerCenterOffset += new Vector2(-50f, 0f);
-            }
+                ownerCenterOffset = new Vector2(4f, -4f);
+            else
+                ownerCenterOffset = new Vector2(-12f, -6f);
+
             if (Main.netMode != NetmodeID.Server)
                 stickyFingersZipperPart = ModContent.Request<Texture2D>("JoJoStands/Projectiles/Zipper_Part").Value;
 

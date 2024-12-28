@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Tiles
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Remix Table");
-            Tooltip.SetDefault("A plain looking DJ’s table, imbued with the Meteoric virus. Allows you to create and modify Stands.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Remix Table");
+            // Tooltip.SetDefault("A plain looking DJ’s table, imbued with the Meteoric virus. Allows you to create and modify Stands.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

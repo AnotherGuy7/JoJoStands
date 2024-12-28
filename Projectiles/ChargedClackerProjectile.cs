@@ -32,7 +32,7 @@ namespace JoJoStands.Projectiles
             Main.projFrames[Projectile.type] = 3;
         }
 
-        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             if (target.HasBuff(ModContent.BuffType<Vampire>()))
                 target.AddBuff(ModContent.BuffType<Sunburn>(), 240);

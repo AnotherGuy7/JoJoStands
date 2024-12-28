@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Narancia's Pants");
-            Tooltip.SetDefault("Dark, slim-fitting pants paired with an orange skirt. The shoes are surprisingly durable.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Narancia's Pants");
+            // Tooltip.SetDefault("Dark, slim-fitting pants paired with an orange skirt. The shoes are surprisingly durable.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

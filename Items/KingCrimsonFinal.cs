@@ -10,7 +10,7 @@ namespace JoJoStands.Items
     {
         public override int StandSpeed => 20;
         public override int StandType => 1;
-        public override string StandProjectileName => "KingCrimson";
+        public override string StandIdentifierName => "KingCrimson";
         public override int StandTier => 4;
         public static readonly Color KingCrimsonTierColor = new Color(254, 142, 152);
         public override Color StandTierDisplayColor => KingCrimsonTierColor;
@@ -22,8 +22,8 @@ namespace JoJoStands.Items
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("King Crimson (Final Tier)");
-            Tooltip.SetDefault("Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!\nSpecial: Skip 10 seconds of time!\nSecond Special: Use Epitaph for 9 seconds!\nPassive: Consecutive Donuts deal greater damage.\nUsed in Stand Slot");
+            // DisplayName.SetDefault("King Crimson (Final Tier)");
+            // Tooltip.SetDefault("Donut enemies with a powerful punch and hold right-click to block off enemies and reposition!\nSpecial: Skip 10 seconds of time!\nSecond Special: Use Epitaph for 9 seconds!\nPassive: Consecutive Donuts deal greater damage.\nUsed in Stand Slot");
         }
 
         public override void SetDefaults()

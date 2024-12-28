@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jolyne Pants");
-            Tooltip.SetDefault("A pair of pants sporting a webbed design and along with heeled boots.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Jolyne Pants");
+            // Tooltip.SetDefault("A pair of pants sporting a webbed design and along with heeled boots.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

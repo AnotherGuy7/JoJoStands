@@ -9,8 +9,8 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A headband worn by a truly loyal warrior.\nWhen worn, while Cream is in void mode, Cream will bounce off of tiles rather than destroy them. Decreases Stand Damage by 8%.");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A headband worn by a truly loyal warrior.\nWhen worn, while Cream is in void mode, Cream will bounce off of tiles rather than destroy them. Decreases Stand Damage by 8%.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

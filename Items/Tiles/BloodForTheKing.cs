@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Tiles
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blood for the King");
-            Tooltip.SetDefault("`D.Storm`");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Blood for the King");
+            // Tooltip.SetDefault("`D.Storm`");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

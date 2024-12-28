@@ -168,20 +168,19 @@ namespace JoJoStands.Projectiles.Minions
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (damage <= maxReflection)
+            if (modifiers.FinalDamage.Base <= maxReflection)
+                modifiers.FinalDamage.Base = target.damage - Main.rand.Next(0, 3);
+
+            if (modifiers.FinalDamage.Base > maxReflection)
             {
-                damage = target.damage - Main.rand.Next(0, 3);
-            }
-            if (damage > maxReflection)
-            {
-                damage = maxReflection;
+                modifiers.FinalDamage.Base = maxReflection;
                 Projectile.Kill();
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
             {

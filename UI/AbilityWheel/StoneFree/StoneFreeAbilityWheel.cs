@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.Localization;
 
 namespace JoJoStands.UI
 {
@@ -54,13 +55,15 @@ namespace JoJoStands.UI
 
             StoneFreeAbilityWheel wheel = stoneFreeAbilityWheel;
             wheel.abilitiesShown = amountOfAbilities;
-            for (int i = 0; i < amountOfAbilities; i++)
+            for (int i = 0; i < AmountOfAbilities; i++)
             {
                 wheel.abilityButtons[i].SetButtonPosiiton(wheel.wheelCenter.buttonPosition + (wheel.IndexToRadianPosition(i, wheel.abilitiesShown, wheel.wheelRotation) * wheel.wheelSpace));
-                if (i >= wheel.abilitiesShown)
+                if (i >= amountOfAbilities)
                     wheel.abilityButtons[i].invisible = true;
+                else
+                    wheel.abilityButtons[i].invisible = false;
             }
-            wheel.wheelCenterPosition = new Vector2(Main.screenWidth * wheel.abilityWheel.HAlign, Main.screenHeight * wheel.abilityWheel.VAlign);
+            wheel.wheelCenterPosition = new Vector2(Main.screenWidth - (wheel.AbilityWheelSize.X / 2f), Main.screenHeight * VerticalAlignmentPercentage);
             wheel.abilityNameText.SetText(wheel.abilityNames[0]);
             wheel.abilityNameText.Left.Pixels = wheel.wheelCenterPosition.X + wheel.wheelCenter.buttonPosition.X;
             wheel.abilityNameText.Top.Pixels = wheel.wheelCenterPosition.Y + wheel.wheelCenter.buttonPosition.Y + 60f;
@@ -69,7 +72,7 @@ namespace JoJoStands.UI
             Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().hotbarLocked = true;
             if (!Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().abilityWheelTipDisplayed)
             {
-                Main.NewText("*To use the Ability Wheel, use the numbers 1-x OR hover over the ability wheel with your cursor and scroll up or down!*", Color.Gold);
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.AbilityWheelHint").Value, Color.Gold);
                 Main.player[Main.myPlayer].GetModPlayer<MyPlayer>().abilityWheelTipDisplayed = true;
             }
         }

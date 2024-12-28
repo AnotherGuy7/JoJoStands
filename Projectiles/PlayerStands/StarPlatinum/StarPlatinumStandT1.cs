@@ -1,4 +1,6 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,11 +13,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
         public override int PunchDamage => 23;
         public override int PunchTime => 11;
         public override int HalfStandHeight => 37;
-        public override int FistWhoAmI => 0;
+        public override int FistID => 0;
         public override int TierNumber => 1;
         public override string PunchSoundName => "Ora";
         public override string PoseSoundName => "YareYareDaze";
         public override string SpawnSoundName => "Star Platinum";
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/StarPlatinum/StarPlatinum_Punch_";
+        public override Vector2 PunchSize => new Vector2(44, 12);
+        public override bool CanUsePart4Dye => true;
         public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
@@ -33,62 +39,71 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
+                    if (Main.mouseLeft)
+                        Punch();
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
                 }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                {
+                if (!attacking)
                     StayBehind();
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-            {
                 BasicPunchAI();
+
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
+        }
+
+        public override void OnDyeChanged()
+        {
+            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+            punchTextures = new Texture2D[AmountOfPunchVariants];
+            if (mPlayer.currentTextureDye == MyPlayer.StandTextureDye.Part4)
+            {
+                for (int v = 0; v < AmountOfPunchVariants; v++)
+                    punchTextures[v] = ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StarPlatinum/Part4/StarPlatinum_Punch_" + (v + 1), AssetRequestMode.ImmediateLoad).Value;
+            }
+            else
+            {
+                for (int v = 0; v < AmountOfPunchVariants; v++)
+                    punchTextures[v] = ModContent.Request<Texture2D>(PunchTexturePath + (v + 1), AssetRequestMode.ImmediateLoad).Value;
             }
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StarPlatinum/StarPlatinum_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/StarPlatinum", "StarPlatinum_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 2, 12, true);
-            }
         }
     }
 }

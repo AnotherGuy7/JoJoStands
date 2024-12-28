@@ -10,12 +10,26 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
         public override int PunchDamage => 21;
         public override int PunchTime => 12;
         public override int HalfStandHeight => 51;
-        public override int FistWhoAmI => 12;
+        public override int FistID => 12;
         public override int TierNumber => 1;
         public override string PunchSoundName => "Dora";
         public override string PoseSoundName => "CrazyDiamond";
         public override string SpawnSoundName => "Crazy Diamond";
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/CrazyDiamond/CrazyDiamond_Punch_";
+        public override Vector2 PunchSize => new Vector2(28, 8);
         public override StandAttackType StandType => StandAttackType.Melee;
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            Flick,
+            Healing,
+            Pose
+        }
 
         private bool restrationMode = false;
 
@@ -34,16 +48,20 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             mPlayer.crazyDiamondRestorationMode = restrationMode;
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (player.whoAmI == Main.myPlayer)
                 {
-                    Punch();
+                    if (Main.mouseLeft)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
                 }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
+                if (!attacking)
                     StayBehind();
                 if (SpecialKeyPressed(false))
                 {
@@ -54,6 +72,15 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                         Main.NewText("Restoration Mode: Disabled");
                 }
             }
+            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
+            {
+                BasicPunchAI();
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else
+                    currentAnimationState = AnimationState.Attack;
+            }
+
             if (restrationMode)
             {
                 int amountOfDusts = Main.rand.Next(0, 2 + 1);
@@ -66,31 +93,35 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
 
                 Lighting.AddLight(Projectile.position, 11);
             }
-            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-                BasicPunchAI();
             if (player.teleporting)
                 Projectile.position = player.position;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
+        public override byte SendAnimationState() => (byte)currentAnimationState;
+        public override void ReceiveAnimationState(byte state) => currentAnimationState = (AnimationState)state;
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Flick)
+                PlayAnimation("Flick");
+            else if (currentAnimationState == AnimationState.Healing)
+                PlayAnimation("Heal");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -100,20 +131,14 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
                 pathAddition = "Restoration_";
 
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/CrazyDiamond", "/CrazyDiamond_" + pathAddition + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/CrazyDiamond", "CrazyDiamond_" + pathAddition + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 4, 12, true);
-            }
         }
         public override void SendExtraStates(BinaryWriter writer)
         {

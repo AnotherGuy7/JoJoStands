@@ -8,10 +8,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sailor Hat");
-            Tooltip.SetDefault("'This hat belongs to who?'");
+            // DisplayName.SetDefault("Sailor Hat");
+            // Tooltip.SetDefault("'This hat belongs to who?'");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

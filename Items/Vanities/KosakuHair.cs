@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kira's (Kosaku) Hair");
-            Tooltip.SetDefault("A new hairstyle for a man with confidence.");
+            // DisplayName.SetDefault("Kira's (Kosaku) Hair");
+            // Tooltip.SetDefault("A new hairstyle for a man with confidence.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

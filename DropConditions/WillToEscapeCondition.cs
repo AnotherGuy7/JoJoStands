@@ -6,7 +6,7 @@ namespace JoJoStands.DropConditions
     {
         public string GetConditionDescription()
         {
-            return "Drops while Underground";
+            return "Drops while in the Caverns";
         }
 
         public bool CanShowItemDropInUI()
@@ -17,7 +17,7 @@ namespace JoJoStands.DropConditions
         public bool CanDrop(DropAttemptInfo info)
         {
             if (!info.IsInSimulation)
-                return info.player.ZoneNormalUnderground;
+                return info.player.ZoneRockLayerHeight && !info.player.ZoneJungle && !info.player.ZoneSnow && !info.player.ZoneDesert && !info.player.ZoneDungeon;
 
             return false;
         }

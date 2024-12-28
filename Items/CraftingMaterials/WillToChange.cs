@@ -11,10 +11,11 @@ namespace JoJoStands.Items.CraftingMaterials
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Will to Change");
-            Tooltip.SetDefault("A physical outlook upon the world, morphing and changing.");
+            // DisplayName.SetDefault("Will to Change");
+            // Tooltip.SetDefault("A physical outlook upon the world, morphing and changing.");
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(7, 15));
-            SacrificeTotal = 25;
+            Item.ResearchUnlockCount = 25;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<WillToDestroy>();
         }
 
         public override void SetDefaults()

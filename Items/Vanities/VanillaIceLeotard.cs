@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Vampiric Acolyte Leotard");
-            Tooltip.SetDefault("Fashioned to appease Lord DIO!");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Vampiric Acolyte Leotard");
+            // Tooltip.SetDefault("Fashioned to appease Lord DIO!");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

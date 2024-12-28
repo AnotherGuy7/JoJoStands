@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Road Roller");
-            Description.SetDefault("A destroyer of lands, capable of flattening the world. ROAD ROLLER DA!");
+            // DisplayName.SetDefault("Road Roller");
+            // Description.SetDefault("A destroyer of lands, capable of flattening the world. ROAD ROLLER DA!");
             Main.buffNoTimeDisplay[Type] = true;
             Main.buffNoSave[Type] = true;
         }

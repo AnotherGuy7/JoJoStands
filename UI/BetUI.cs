@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -12,73 +13,82 @@ namespace JoJoStands.UI
 {
     public class BetUI : UIState      //where you left off, finish adding D'Arby cheating in games and make it noticable, make Game 3
     {
-        public DragableUIPanel Bet;
-        public UIPanel playArea;
-        public UIText pCoinText;
-        public UIText gCoinText;
+        public UIPanel Bet;
+        private UIPanel playArea;
+        private UIText pCoinText;
+        private UIText gCoinText;
+        public static bool Visible;
+
+        private const int Game_RoShamBo = 1;
+        private const int Game_RollingGame = 2;
+        private const int Game_MiniPoker = 3;
+
+        private Texture2D[] roShamBoHands;
+        string[] roShamBoHandPaths = new string[6]
+        {
+            "JoJoStands/Extras/Rock_Right",
+            "JoJoStands/Extras/Paper_Right",
+            "JoJoStands/Extras/Scissors_Right",
+            "JoJoStands/Extras/Rock_Left",
+            "JoJoStands/Extras/Paper_Left",
+            "JoJoStands/Extras/Scissors_Left"
+        };
 
         //1st minigame stuff
-        public UIImageButton rockButton;
-        public UIImageButton paperButton;
-        public UIImageButton scissorsButton;
-        public UIImage playerResult;
-        public UIImage npcResult;
-        public int playerChoice = 0;
-        public int randomSign = 0;
+        private UIImageButton rockButton;
+        private UIImageButton paperButton;
+        private UIImageButton scissorsButton;
+        private UIImage playerResult;
+        private UIImage npcResult;
+        private int playerChoice = 0;
+        private int enemyChoice = 0;
 
         //2nd minigame stuff
-        public Asset<Texture2D> dieTexture1;
-        public Asset<Texture2D> dieTexture2;
-        public Asset<Texture2D> dieTexture3;
-        public UIImageButton rollButton;
-        public UIText rollText;
-        public UIImage rollResult1;
-        public UIImage rollResult2;
-        public UIImage rollResult3;
-        public bool Rolling = false;
-        public int rollTurn = 0;        //1 is player, 2 is NPC
-        public int rollCounter = 0;
-        public int roll1;
-        public int roll2;
-        public int roll3;
+        private Asset<Texture2D>[] dieTextureAssets;
+        private UIImageButton rollButton;
+        private UIText rollText;
+        private UIImage[] dieRollResults;
+        private bool rollingDie = false;
+        private int rollTurn = 0;        //1 is player, 2 is NPC
+        private int rollCounter = 0;
+        private int[] rollValues;
 
-        public Asset<Texture2D> playerCardTexture1;
-        public Asset<Texture2D> playerCardTexture2;
-        public Asset<Texture2D> npcCardTexture1;
-        public Asset<Texture2D> npcCardTexture2;
-        public UIImageButton drawPile;
-        public UIImageButton PlayerCard1Button;
-        public UIImageButton PlayerCard2Button;
-        public UIImage NPCCard1Image;
-        public UIImage NPCCard2Image;
-        public UIImageButton ShowCardsButton;
-        public int playerCard1;
-        public int playerCard2;
-        public int NPCCard1;
-        public int NPCCard2;
-        public bool waitingForCardSwap = false;
-        public bool swappeOutCard = false;
-        public bool showingCards = false;
+        private Asset<Texture2D> playerCardTexture1;
+        private Asset<Texture2D> playerCardTexture2;
+        private Asset<Texture2D> npcCardTexture1;
+        private Asset<Texture2D> npcCardTexture2;
+        private UIImageButton drawPile;
+        private UIImageButton PlayerCard1Button;
+        private UIImageButton PlayerCard2Button;
+        private UIImage NPCCard1Image;
+        private UIImage NPCCard2Image;
+        private UIImageButton ShowCardsButton;
+        private int playerCard1;
+        private int playerCard2;
+        private int NPCCard1;
+        private int NPCCard2;
+        private bool waitingForCardSwap = false;
+        private bool swappedOutCard = false;
+        private bool showingCards = false;
 
-        public bool won = false;
-        public int chosenGame = 0;
-        public static bool Visible;
-        public int resultCounter = 0;
-        public bool buttonsInitialized = false;
-        public bool resultsInitialized = false;
-        public int cheatChance = 0; //every win, cheat chance goes up by a random number of 2-7
-        public bool accuseOfCheating = false;
-        public static bool cheating = false;
+        private bool won = false;
+        private int chosenGame = 0;
+        private int resultCounter = 0;
+        private bool buttonsInitialized = false;
+        private bool resultsInitialized = false;
+        private int cheatChance = 0; //every win, cheat chance goes up by a random number of 2-7
+        private bool accuseOfCheating = false;
+        private bool cheating = false;
 
-        public int pCoins = 0;
-        public int gCoins = 0;
+        private int pCoins = 0;
+        private int gCoins = 0;
+        private UIImageButton gameHelpButton;
 
         public override void Update(GameTime gameTime)
         {
             if (chosenGame != 0)
-            {
                 GameActive();
-            }
+
             pCoinText.SetText("Betting: " + pCoins + " Platinum Coins");
             gCoinText.SetText("Betting: " + gCoins + " Gold Coins");
             base.Update(gameTime);
@@ -90,7 +100,16 @@ namespace JoJoStands.UI
             Asset<Texture2D> DownArrow = ModContent.Request<Texture2D>("JoJoStands/Extras/DownArrow", AssetRequestMode.ImmediateLoad);
             Asset<Texture2D> playTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonPlay", AssetRequestMode.ImmediateLoad);
 
-            Bet = new DragableUIPanel();
+            roShamBoHands = new Texture2D[6];
+            for (int i = 0; i < 6; i++)
+            {
+                roShamBoHands[i] = (Texture2D)ModContent.Request<Texture2D>(roShamBoHandPaths[i], AssetRequestMode.ImmediateLoad);
+            }
+            rollValues = new int[3];
+            dieTextureAssets = new Asset<Texture2D>[3];
+            dieRollResults = new UIImage[3];
+
+            Bet = new UIPanel();
             Bet.HAlign = 0.5f;
             Bet.VAlign = 0.5f;
             Bet.Width.Set(470f, 0f);
@@ -110,7 +129,7 @@ namespace JoJoStands.UI
             betButton.Left.Set(30f, 0f);
             betButton.Width.Set(22f, 0f);
             betButton.Height.Set(22f, 0f);
-            betButton.OnClick += new MouseEvent(BetButtonClicked);
+            betButton.OnLeftClick += new MouseEvent(BetButtonClicked);
             Bet.Append(betButton);
 
             Asset<Texture2D> closeTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonDelete", AssetRequestMode.ImmediateLoad);
@@ -119,7 +138,7 @@ namespace JoJoStands.UI
             closeButton.Left.Set(0f, 0f);
             closeButton.Width.Set(22f, 0f);
             closeButton.Height.Set(22f, 0f);
-            closeButton.OnClick += new MouseEvent(CloseButtonClicked);
+            closeButton.OnLeftClick += new MouseEvent(CloseButtonClicked);
             Bet.Append(closeButton);
 
             UIImageButton pCoinButton = new UIImageButton(UpArrow);
@@ -127,7 +146,7 @@ namespace JoJoStands.UI
             pCoinButton.Left.Set(5f, 0f);
             pCoinButton.Width.Set(22f, 0f);
             pCoinButton.Height.Set(14f, 0f);
-            pCoinButton.OnClick += new MouseEvent(PlatinumCoinButtonClicked);
+            pCoinButton.OnLeftClick += new MouseEvent(PlatinumCoinButtonClicked);
             Bet.Append(pCoinButton);
 
             UIImageButton nPCoinButton = new UIImageButton(DownArrow);
@@ -135,7 +154,7 @@ namespace JoJoStands.UI
             nPCoinButton.Left.Set(5f, 0f);
             nPCoinButton.Width.Set(22f, 0f);
             nPCoinButton.Height.Set(14f, 0f);
-            nPCoinButton.OnClick += new MouseEvent(NPlatinumCoinButtonClicked);
+            nPCoinButton.OnLeftClick += new MouseEvent(NPlatinumCoinButtonClicked);
             Bet.Append(nPCoinButton);
 
             UIImageButton gCoinButton = new UIImageButton(UpArrow);
@@ -143,7 +162,7 @@ namespace JoJoStands.UI
             gCoinButton.Left.Set(5f, 0f);
             gCoinButton.Width.Set(22f, 0f);
             gCoinButton.Height.Set(14f, 0f);
-            gCoinButton.OnClick += new MouseEvent(GoldCoinButtonClicked);
+            gCoinButton.OnLeftClick += new MouseEvent(GoldCoinButtonClicked);
             Bet.Append(gCoinButton);
 
             UIImageButton nGCoinButton = new UIImageButton(DownArrow);
@@ -151,7 +170,7 @@ namespace JoJoStands.UI
             nGCoinButton.Left.Set(5f, 0f);
             nGCoinButton.Width.Set(22f, 0f);
             nGCoinButton.Height.Set(14f, 0f);
-            nGCoinButton.OnClick += new MouseEvent(NGoldCoinButtonClicked);
+            nGCoinButton.OnLeftClick += new MouseEvent(NGoldCoinButtonClicked);
             Bet.Append(nGCoinButton);
 
             UIImageButton accuseButton = new UIImageButton(playTexture);
@@ -159,14 +178,21 @@ namespace JoJoStands.UI
             accuseButton.Left.Set(210f, 0f);
             accuseButton.Width.Set(playTexture.Value.Width, 0f);
             accuseButton.Height.Set(playTexture.Value.Height, 0f);
-            accuseButton.OnClick += new MouseEvent(AccuseButtonClicked);
+            accuseButton.OnLeftClick += new MouseEvent(AccuseButtonClicked);
             Bet.Append(accuseButton);
 
+            UIText gambleText = new UIText("Gamble");
+            gambleText.Top.Set(265f, 0f);
+            gambleText.Left.Set(60f, 0f);
+            Bet.Append(gambleText);
 
-            UIText GambleText = new UIText("Gamble");
-            GambleText.Top.Set(265f, 0f);
-            GambleText.Left.Set(60f, 0f);
-            Bet.Append(GambleText);
+            Asset<Texture2D> helpTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/UI_QuestionMark", AssetRequestMode.ImmediateLoad);
+            gameHelpButton = new UIImageButton(helpTexture);
+            gameHelpButton.HAlign = 1f;
+            gameHelpButton.VAlign = 0f;
+            gameHelpButton.Width.Set(32, 0f);
+            gameHelpButton.Height.Set(32, 0f);
+            gameHelpButton.OnLeftClick += GameHelpButtonClicked;
 
             pCoinText = new UIText("0");
             pCoinText.Top.Set(110f, 0f);
@@ -192,18 +218,14 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             SoundEngine.PlaySound(SoundID.MenuTick);
             if (player.CountItem(ItemID.PlatinumCoin) > pCoins && chosenGame == 0)
-            {
                 pCoins += 1;
-            }
         }
 
         private void NPlatinumCoinButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             SoundEngine.PlaySound(SoundID.MenuTick);
             if (pCoins > 0 && chosenGame == 0)
-            {
                 pCoins -= 1;
-            }
         }
 
         private void GoldCoinButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -211,44 +233,45 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             SoundEngine.PlaySound(SoundID.MenuTick);
             if (player.CountItem(ItemID.GoldCoin) > gCoins && chosenGame == 0)
-            {
                 gCoins += 1;
-            }
         }
 
         private void NGoldCoinButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             SoundEngine.PlaySound(SoundID.MenuTick);
             if (gCoins > 0 && chosenGame == 0)
-            {
                 gCoins -= 1;
-            }
         }
 
         private void AccuseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             SoundEngine.PlaySound(SoundID.MenuTick);
-            if (chosenGame != 0)
+            if (chosenGame == 0)
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerNoGameCheat").Value);
+            else if (chosenGame != 0)
             {
                 accuseOfCheating = true;
-                if (cheating)
-                {
-                    won = true;
-                    Main.NewText("*D'Arby is sweating a lot and is looking like very, very pale...\nPlease don't tell Jotaro! I'll give you 2x the money!");
-
-                }
-                if (!cheating)
-                {
-                    won = false;
-                    Main.NewText("I'm no cheater! You're accusing the me of the past! I'm a whole new gambler now!");
-                }
+                won = cheating;
+                if (won)
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerCheatWin").Value);
+                else
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerCheatLose").Value);
                 GameEnd();
+            }
+        }
 
-            }
+        private void GameHelpButtonClicked(UIMouseEvent evt, UIElement listeningElement)
+        {
+            SoundEngine.PlaySound(SoundID.MenuTick);
             if (chosenGame == 0)
-            {
-                Main.NewText("What am I cheating at? We're not even betting!");
-            }
+                return;
+
+            if (chosenGame == Game_RoShamBo)
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerRoShamBoDesc").Value);
+            else if (chosenGame == Game_RollingGame)
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerRollingGameDesc").Value);
+            else if (chosenGame == Game_MiniPoker)
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerMiniPokerDesc").Value);
         }
 
         private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -260,15 +283,20 @@ namespace JoJoStands.UI
 
         private void BetButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            Player player = Main.player[Main.myPlayer];
             SoundEngine.PlaySound(SoundID.MenuTick);
-            if (pCoins != 0 || gCoins != 0 && chosenGame == 0)
-                chosenGame = Main.rand.Next(1, 4);
-            else
-                Main.NewText("It wouldn't be gambling without some loss and gain.");
-
             if (chosenGame != 0)
-                Main.NewText("We are already betting... Can't you see that?");
+            {
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerActiveBetWarning").Value);
+                return;
+            }
+
+            if ((pCoins != 0 || gCoins != 0) && chosenGame == 0)
+            {
+                chosenGame = Main.rand.Next(1, 4);
+                playArea.Append(gameHelpButton);
+            }
+            else if (pCoins == 0 && gCoins == 0)
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerNoBetWarning").Value);
         }
 
         private void RockButtonClicked(UIMouseEvent evt, UIElement listeningElement)
@@ -292,43 +320,43 @@ namespace JoJoStands.UI
         private void RollButtonClicked(UIMouseEvent evt, UIElement listeningElement)
         {
             SoundEngine.PlaySound(SoundID.MenuTick);
-            Rolling = true;
+            rollingDie = true;
             rollButton.Remove();
         }
 
         private void DrawPileClicked(UIMouseEvent evt, UIElement listeningElement)
         {
-            Main.NewText("Click the card you'd like to switch out");
-            if (!swappeOutCard)
+            if (!swappedOutCard)
             {
-                SoundEngine.PlaySound(SoundID.MenuTick);
                 waitingForCardSwap = true;
+                SoundEngine.PlaySound(SoundID.MenuTick);
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GambleCardGameHint1").Value);
             }
         }
 
         private void SwapOutCard1(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (waitingForCardSwap && !swappeOutCard)
+            if (waitingForCardSwap && !swappedOutCard)
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
-                playerCard1 = Main.rand.Next(1, 11);
-                playerCardTexture1 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + playerCard1 + "s" + Main.rand.Next(1, 5));
+                playerCard1 = Main.rand.Next(1, 10 + 1);
+                playerCardTexture1 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + playerCard1 + "s" + Main.rand.Next(1, 5), AssetRequestMode.ImmediateLoad);
                 PlayerCard1Button.SetImage(playerCardTexture1);
                 waitingForCardSwap = false;
-                swappeOutCard = true;
+                swappedOutCard = true;
             }
         }
 
         private void SwapOutCard2(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (waitingForCardSwap && !swappeOutCard)
+            if (waitingForCardSwap && !swappedOutCard)
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
-                playerCard2 = Main.rand.Next(1, 11);
-                playerCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + playerCard2 + "s" + Main.rand.Next(1, 5));
+                playerCard2 = Main.rand.Next(1, 10 + 1);
+                playerCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + playerCard2 + "s" + Main.rand.Next(1, 5), AssetRequestMode.ImmediateLoad);
                 PlayerCard2Button.SetImage(playerCardTexture2);
                 waitingForCardSwap = false;
-                swappeOutCard = true;
+                swappedOutCard = true;
             }
         }
 
@@ -341,19 +369,18 @@ namespace JoJoStands.UI
 
         private void GameActive()
         {
-            if (chosenGame == 1)        //Ro-Sham-Bo game
+            if (chosenGame == Game_RoShamBo)        //Ro-Sham-Bo game
             {
                 if (!buttonsInitialized)
                 {
-                    ReInitialize(1);
+                    ReInitialize(Game_RoShamBo);
                     buttonsInitialized = true;
                 }
-                if (randomSign == 0)
-                {
-                    randomSign = Main.rand.Next(1, 4);
-                }
+
                 if (playerChoice != 0)      //1 is rock, 2 is paper, 3 is scissor
                 {
+                    if (enemyChoice == 0)
+                        enemyChoice = Main.rand.Next(1, 3 + 1);
                     if (!resultsInitialized)
                     {
                         ReInitialize(4);
@@ -366,23 +393,22 @@ namespace JoJoStands.UI
                         scissorsButton.Remove();
                         buttonsInitialized = false;
                     }
-                    if ((playerChoice == 1 && randomSign == 2) || (playerChoice == 2 && randomSign == 3) || (playerChoice == 3 && randomSign == 1))
+                    if ((playerChoice == 1 && enemyChoice == 2) || (playerChoice == 2 && enemyChoice == 3) || (playerChoice == 3 && enemyChoice == 1))
                     {
                         resultCounter++;
                         won = false;
                     }
-                    if ((playerChoice == 2 && randomSign == 1) || (playerChoice == 3 && randomSign == 2) || (playerChoice == 1 && randomSign == 3))
+                    else if ((playerChoice == 2 && enemyChoice == 1) || (playerChoice == 3 && enemyChoice == 2) || (playerChoice == 1 && enemyChoice == 3))
                     {
                         resultCounter++;
                         won = true;
                     }
-                    if (playerChoice == randomSign)
+                    else if (playerChoice == enemyChoice)
                     {
                         resultCounter++;
                         if (resultCounter >= 160)
                         {
                             resultCounter = 0;
-                            randomSign = 0;
                             playerChoice = 0;
                             playerResult.Remove();
                             npcResult.Remove();
@@ -391,11 +417,12 @@ namespace JoJoStands.UI
                     }
                 }
             }
-            if (chosenGame == 2)        //the rolling game
+            else if (chosenGame == Game_RollingGame)        //the rolling game
             {
-                dieTexture1 = ModContent.Request<Texture2D>("JoJoStands/Extras/Die_" + roll1);
-                dieTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/Die_" + roll2);
-                dieTexture3 = ModContent.Request<Texture2D>("JoJoStands/Extras/Die_" + roll3);
+                for (int i = 0; i < 3; i++)
+                {
+                    dieTextureAssets[i] = ModContent.Request<Texture2D>("JoJoStands/Extras/Die_" + rollValues[i], AssetRequestMode.ImmediateLoad);
+                }
 
                 if (!buttonsInitialized)
                 {
@@ -403,146 +430,118 @@ namespace JoJoStands.UI
                     buttonsInitialized = true;
                     rollTurn = 1;
                 }
-                if (Rolling)
+                if (rollingDie)
                 {
-                    rollCounter++;
-                    if (!resultsInitialized)
+                    if (rollCounter < 90)
+                        rollCounter++;
+
+                    if (resultsInitialized)
+                    {
+                        for (int i = 0; i < 3; i++)
+                        {
+                            dieRollResults[i].SetImage(dieTextureAssets[i]);
+                            dieRollResults[i].Left.Pixels = 30f + (45 * i);
+                            dieRollResults[i].Top.Pixels = 104f;
+                            rollValues[i] = Main.rand.Next(1, 6 + 1);
+                        }
+                    }
+                    else
                     {
                         ReInitialize(5);
                         resultsInitialized = true;
                     }
-                    if (resultsInitialized)
-                    {
-                        rollResult1.SetImage(dieTexture1);
-                        rollResult2.SetImage(dieTexture2);
-                        rollResult3.SetImage(dieTexture3);
 
-                        rollResult1.Left.Pixels += Main.rand.Next(-1, 2);
-                        rollResult2.Left.Pixels += Main.rand.Next(-1, 2);
-                        rollResult3.Left.Pixels += Main.rand.Next(-1, 2);
-                        rollResult1.Top.Pixels += Main.rand.Next(-1, 2);
-                        rollResult2.Top.Pixels += Main.rand.Next(-1, 2);
-                        rollResult3.Top.Pixels += Main.rand.Next(-1, 2);
-
-                        roll1 = Main.rand.Next(1, 7);
-                        roll2 = Main.rand.Next(1, 7);
-                        roll3 = Main.rand.Next(1, 7);
-
-                        rollResult1.Left.Pixels = 20f;
-                        rollResult2.Left.Pixels = 70f;
-                        rollResult3.Left.Pixels = 110f;
-                        rollResult1.Top.Pixels = rollResult2.Top.Pixels = rollResult3.Top.Pixels = 104f;
-                    }
                     if (rollTurn == 1)      //if it's your turn
-                    {
                         rollText.SetText("You are Rolling...");
-                    }
-                    if (rollTurn == 2)      //if it's D'Arbys turn
-                    {
+                    else if (rollTurn == 2)      //if it's D'Arbys turn
                         rollText.SetText("D'Arby is Rolling...");
-                    }
-                    if (rollCounter >= 90)
+
+                    if (rollCounter == 90)
                     {
-                        if (rollTurn == 2 && Main.rand.Next(0, 100) <= cheatChance)
+                        if (rollTurn == 2 && Main.rand.Next(0, 100 + 1) <= cheatChance)
                         {
                             cheating = true;
-                            roll1 = 6;
-                            roll2 = 6;
-                            roll3 = 6;
-                            dieTexture1 = dieTexture2 = dieTexture3 = ModContent.Request<Texture2D>("JoJoStands/Extras/WeightedDie");
+                            for (int i = 0; i < 3; i++)
+                            {
+                                rollValues[i] = 6;
+                                dieTextureAssets[i] = ModContent.Request<Texture2D>("JoJoStands/Extras/WeightedDie", AssetRequestMode.ImmediateLoad);
+                            }
                         }
-                        rollResult1.Left.Pixels = 20f;
-                        rollResult2.Left.Pixels = 70f;
-                        rollResult3.Left.Pixels = 110f;
-                        rollResult1.Top.Pixels = rollResult2.Top.Pixels = rollResult3.Top.Pixels = 104f;
-                        Rolling = false;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            dieRollResults[i].Left.Pixels = 30f + (45 * i);
+                            dieRollResults[i].Top.Pixels = 104f;
+                        }
+                        rollingDie = false;
                         rollText.SetText("");
                     }
                 }
                 if (rollCounter == 90)
                 {
-                    rollResult1.SetImage(dieTexture1);      //so that it doesn't stay stuck at the previous numbers
-                    rollResult2.SetImage(dieTexture2);
-                    rollResult3.SetImage(dieTexture3);
-
+                    for (int i = 0; i < 3; i++)
+                    {
+                        dieRollResults[i].SetImage(dieTextureAssets[i]);
+                    }
                     resultCounter++;
                     if (rollTurn == 1 && resultCounter >= 160)
                     {
-                        if (roll1 == roll2 && roll2 == roll3 && (roll3 == 4 || roll3 == 5 || roll3 == 6))
-                        {
+                        if (rollValues[0] == rollValues[1] && rollValues[1] == rollValues[2] && (rollValues[2] == 4 || rollValues[2] == 5 || rollValues[2] == 6))
                             won = true;
-                        }
-                        else if ((roll1 + roll2 + roll3) == 6)
-                        {
+                        else if ((rollValues[0] + rollValues[1] + rollValues[2]) == 6)
                             won = true;
-                        }
-                        else if (roll1 > 3 && roll2 > 3 && roll3 > 3)
-                        {
+                        else if (rollValues[0] > 3 && rollValues[1] > 3 && rollValues[2] > 3)
                             won = true;
-                        }
-                        else if (roll1 == roll2 && roll2 == roll3 && (roll3 == 1 || roll3 == 2 || roll3 == 3))
-                        {
+                        else if (rollValues[0] == rollValues[1] && rollValues[1] == rollValues[2] && (rollValues[2] == 1 || rollValues[2] == 2 || rollValues[2] == 3))
                             won = false;
-                        }
-                        else if (roll1 <= 3 && roll2 <= 3 && roll3 <= 3)
-                        {
+                        else if (rollValues[0] <= 3 && rollValues[1] <= 3 && rollValues[2] <= 3)
                             won = false;
-                        }
                         else
                         {
-                            rollResult1.Remove();
-                            rollResult2.Remove();
-                            rollResult3.Remove();
+                            for (int i = 0; i < 3; i++)
+                            {
+                                dieRollResults[i].Remove();
+                            }
                             resultCounter = 0;
                             rollTurn = 2;
-                            roll1 = 0;
-                            roll2 = 0;
-                            roll3 = 0;
+                            rollValues[0] = 0;
+                            rollValues[1] = 0;
+                            rollValues[2] = 0;
                             rollCounter = 0;
                             resultCounter = 0;
-                            Rolling = true;
+                            rollingDie = true;
                             resultsInitialized = false;
                         }
                     }
                     if (rollTurn == 2 && resultCounter >= 160)
                     {
-                        if (roll1 == roll2 && roll2 == roll3 && (roll3 == 4 || roll3 == 5 || roll3 == 6))
-                        {
+                        if (rollValues[0] == rollValues[1] && rollValues[1] == rollValues[2] && (rollValues[2] == 4 || rollValues[2] == 5 || rollValues[2] == 6))
                             won = false;
-                        }
-                        else if ((roll1 + roll2 + roll3) == 6)
-                        {
+                        else if ((rollValues[0] + rollValues[1] + rollValues[2]) == 6)
                             won = false;
-                        }
-                        else if (roll1 > 3 && roll2 > 3 && roll3 > 3)
-                        {
+                        else if (rollValues[0] > 3 && rollValues[1] > 3 && rollValues[2] > 3)
                             won = false;
-                        }
-                        else if (roll1 == roll2 && roll2 == roll3 && (roll3 == 1 || roll3 == 2 || roll3 == 3))
-                        {
+                        else if (rollValues[0] == rollValues[1] && rollValues[1] == rollValues[2] && (rollValues[2] == 1 || rollValues[2] == 2 || rollValues[2] == 3))
                             won = true;
-                        }
-                        else if (roll1 <= 3 && roll2 <= 3 && roll3 <= 3)
-                        {
+                        else if (rollValues[0] <= 3 && rollValues[1] <= 3 && rollValues[2] <= 3)
                             won = true;
-                        }
                         else
                         {
-                            rollResult1.Remove();
-                            rollResult2.Remove();
-                            rollResult3.Remove();
-                            roll1 = 0;
-                            roll2 = 0;
-                            roll3 = 0;
+                            for (int i = 0; i < 3; i++)
+                            {
+                                dieRollResults[i].Remove();
+                            }
+                            rollValues[0] = 0;
+                            rollValues[1] = 0;
+                            rollValues[2] = 0;
                             buttonsInitialized = false;
-                            rollCounter = 0;
                             resultsInitialized = false;
                             resultCounter = 0;
+                            rollCounter = 0;
                         }
                     }
                 }
             }
-            if (chosenGame == 3)        //the mini-poker game
+            else if (chosenGame == Game_MiniPoker)        //the mini-poker game
             {
                 if (!buttonsInitialized)
                 {
@@ -550,15 +549,15 @@ namespace JoJoStands.UI
                     playerCard2 = Main.rand.Next(1, 11);
                     NPCCard1 = Main.rand.Next(1, 11);
                     NPCCard2 = Main.rand.Next(1, 11);
-                    if (Main.rand.Next(0, 100) <= cheatChance)
+                    if (Main.rand.Next(0, 100 + 1) <= cheatChance)
                     {
                         cheating = true;
                         NPCCard1 = NPCCard2 = 10;
                     }
-                    playerCardTexture1 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + playerCard1 + "s" + Main.rand.Next(1, 5));
-                    playerCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + playerCard2 + "s" + Main.rand.Next(1, 5));
-                    npcCardTexture1 = npcCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_back");
-                    ReInitialize(3);
+                    playerCardTexture1 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + playerCard1 + "s" + Main.rand.Next(1, 5), AssetRequestMode.ImmediateLoad);
+                    playerCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + playerCard2 + "s" + Main.rand.Next(1, 5), AssetRequestMode.ImmediateLoad);
+                    npcCardTexture1 = npcCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_back", AssetRequestMode.ImmediateLoad);
+                    ReInitialize(Game_MiniPoker);
                     buttonsInitialized = true;
                 }
 
@@ -567,42 +566,33 @@ namespace JoJoStands.UI
                     resultCounter++;
                     if (npcCardTexture1 == ModContent.Request<Texture2D>("JoJoStands/Extras/card_back"))
                     {
-                        if (!cheating)
-                        {
-                            npcCardTexture1 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + NPCCard1 + "s" + Main.rand.Next(1, 5));
-                            npcCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + NPCCard2 + "s" + Main.rand.Next(1, 5));
-                        }
                         if (cheating)
+                            npcCardTexture1 = npcCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/cheatCard_" + Main.rand.Next(1, 5), AssetRequestMode.ImmediateLoad);
+                        else
                         {
-                            npcCardTexture1 = npcCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/cheatCard_" + Main.rand.Next(1, 5));
+                            npcCardTexture1 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + NPCCard1 + "s" + Main.rand.Next(1, 5), AssetRequestMode.ImmediateLoad);
+                            npcCardTexture2 = ModContent.Request<Texture2D>("JoJoStands/Extras/card_" + NPCCard2 + "s" + Main.rand.Next(1, 5), AssetRequestMode.ImmediateLoad);
                         }
                         NPCCard1Image.SetImage(npcCardTexture1);
                         NPCCard2Image.SetImage(npcCardTexture2);
                     }
                     if ((playerCard1 + playerCard2) > (NPCCard1 + NPCCard2))
-                    {
                         won = true;
-                    }
-                    if ((playerCard1 + playerCard2) < (NPCCard1 + NPCCard2))
-                    {
+                    else if ((playerCard1 + playerCard2) < (NPCCard1 + NPCCard2))
                         won = false;
-                    }
-                    if ((playerCard1 + playerCard2) == (NPCCard1 + NPCCard2))
+                    else
                     {
                         resultCounter++;
                         if (resultCounter >= 160)
-                        {
                             resultCounter = 0;
-                        }
                     }
                 }
             }
             if (resultCounter >= 180)
             {
                 if (!accuseOfCheating && cheating)
-                {
-                    Main.NewText("*D'Arby smiles...");
-                }
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerCheatHint").Value);
+
                 GameEnd();
             }
         }
@@ -612,57 +602,37 @@ namespace JoJoStands.UI
             Player player = Main.player[Main.myPlayer];
             playerChoice = 0;
             resultCounter = 0;
-            randomSign = 0;
+            enemyChoice = 0;
 
             if (won)
             {
                 cheatChance += Main.rand.Next(2, 8);
-                if (pCoins != 0)
-                {
-                    //Item.NewItem(player.position, ItemID.PlatinumCoin, pCoins);
-                    player.QuickSpawnItem(null, ItemID.PlatinumCoin, pCoins);
-                }
-                if (gCoins != 0)
-                {
-                    //Item.NewItem(player.position, ItemID.GoldCoin, gCoins);
-                    player.QuickSpawnItem(null, ItemID.GoldCoin, gCoins);
-
-                }
+                int multiplier = 1;
                 if (accuseOfCheating && cheating)
-                {
-                    if (pCoins != 0)
-                    {
-                        //Item.NewItem(player.position, ItemID.PlatinumCoin, pCoins * 2);
-                        player.QuickSpawnItem(null, ItemID.PlatinumCoin, pCoins * 2);
-                    }
-                    if (gCoins != 0)
-                    {
-                        //Item.NewItem(player.position, ItemID.GoldCoin, gCoins * 2);
-                        player.QuickSpawnItem(null, ItemID.GoldCoin, gCoins * 2);
-                    }
-                }
+                    multiplier = 2;
+
+                if (pCoins != 0)
+                    player.QuickSpawnItem(null, ItemID.PlatinumCoin, pCoins * multiplier);
+
+                if (gCoins != 0)
+                    player.QuickSpawnItem(null, ItemID.GoldCoin, gCoins * multiplier);
+
                 if (!cheating)
-                {
-                    Main.NewText("Dang it... No! How is this possible!? Fine, just take the coins, I have much more anyway.");
-                }
+                    Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerBetLose").Value);
                 pCoins = 0;
                 gCoins = 0;
 
             }
             else
             {
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.GamblerBetWin").Value);
                 for (int c = 0; c < Main.InventorySlotsTotal; c++)
                 {
                     if (player.inventory[c].type == ItemID.PlatinumCoin)
-                    {
                         player.inventory[c].stack -= pCoins;
-                    }
                     if (player.inventory[c].type == ItemID.GoldCoin)
-                    {
                         player.inventory[c].stack -= gCoins;
-                    }
                 }
-                Main.NewText("Thanks for the coins!");
                 pCoins = 0;
                 gCoins = 0;
             }
@@ -671,12 +641,9 @@ namespace JoJoStands.UI
                 cheatChance = 0;
                 cheating = false;
             }
-            if (accuseOfCheating)
-            {
-                accuseOfCheating = false;
-            }
+            accuseOfCheating = false;
 
-            if (chosenGame == 1)
+            if (chosenGame == Game_RoShamBo)
             {
                 if (resultsInitialized)
                 {
@@ -684,9 +651,8 @@ namespace JoJoStands.UI
                     npcResult.Remove();
                     resultsInitialized = false;
                 }
-                chosenGame = 0;     //here in each one so that chosenGame doesn't turn 0 first
             }
-            if (chosenGame == 2)
+            else if (chosenGame == Game_RollingGame)
             {
                 if (buttonsInitialized)
                 {
@@ -696,20 +662,20 @@ namespace JoJoStands.UI
                 }
                 if (resultsInitialized)
                 {
-                    rollResult1.Remove();
-                    rollResult2.Remove();
-                    rollResult3.Remove();
                     resultsInitialized = false;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        dieRollResults[i].Remove();
+                    }
                 }
-                roll1 = 0;
-                roll2 = 0;
-                roll3 = 0;
+                rollValues[0] = 0;
+                rollValues[1] = 0;
+                rollValues[2] = 0;
                 rollTurn = 0;
-                Rolling = false;
-                chosenGame = 0;
+                rollingDie = false;
                 rollCounter = 0;
             }
-            if (chosenGame == 3)
+            else if (chosenGame == Game_MiniPoker)
             {
                 if (buttonsInitialized)
                 {
@@ -725,45 +691,46 @@ namespace JoJoStands.UI
                 playerCard2 = 0;
                 NPCCard1 = 0;
                 NPCCard2 = 0;
-                chosenGame = 0;
                 waitingForCardSwap = false;
                 showingCards = false;
-                swappeOutCard = false;
+                swappedOutCard = false;
             }
+            chosenGame = 0;
+            gameHelpButton.Remove();
         }
 
-        public void ReInitialize(int set)
+        private void ReInitialize(int set)
         {
-            if (set == 1)       //Rock Paper Scissors buttons
+            if (set == Game_RoShamBo)       //Rock Paper Scissors buttons
             {
                 Asset<Texture2D> rockTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Rock", AssetRequestMode.ImmediateLoad);
                 rockButton = new UIImageButton(rockTexture);
                 rockButton.HAlign = 0.2f;
-                rockButton.VAlign = 0.3f;
-                rockButton.Width.Set(30f, 0f);
-                rockButton.Height.Set(30f, 0f);
-                rockButton.OnClick += new MouseEvent(RockButtonClicked);
+                rockButton.VAlign = 0.2f;
+                rockButton.Width.Set(32f, 0f);
+                rockButton.Height.Set(32f, 0f);
+                rockButton.OnLeftClick += new MouseEvent(RockButtonClicked);
                 playArea.Append(rockButton);
 
                 Asset<Texture2D> paperTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Paper", AssetRequestMode.ImmediateLoad);
                 paperButton = new UIImageButton(paperTexture);
                 paperButton.HAlign = 0.2f;
-                paperButton.VAlign = 0.6f;
-                paperButton.Width.Set(30f, 0f);
-                paperButton.Height.Set(30f, 0f);
-                paperButton.OnClick += new MouseEvent(PaperButtonClicked);
+                paperButton.VAlign = 0.5f;
+                paperButton.Width.Set(32f, 0f);
+                paperButton.Height.Set(32f, 0f);
+                paperButton.OnLeftClick += new MouseEvent(PaperButtonClicked);
                 playArea.Append(paperButton);
 
                 Asset<Texture2D> scissorTexture = ModContent.Request<Texture2D>("JoJoStands/Extras/Scissors", AssetRequestMode.ImmediateLoad);
                 scissorsButton = new UIImageButton(scissorTexture);
                 scissorsButton.HAlign = 0.2f;
-                scissorsButton.VAlign = 0.9f;
-                scissorsButton.Width.Set(30f, 0f);
-                scissorsButton.Height.Set(30f, 0f);
-                scissorsButton.OnClick += new MouseEvent(ScissorButtonClicked);
+                scissorsButton.VAlign = 0.8f;
+                scissorsButton.Width.Set(32f, 0f);
+                scissorsButton.Height.Set(32f, 0f);
+                scissorsButton.OnLeftClick += new MouseEvent(ScissorButtonClicked);
                 playArea.Append(scissorsButton);
             }
-            else if (set == 2)      //Roll button
+            else if (set == Game_RollingGame)      //Roll button
             {
                 Asset<Texture2D> playTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonPlay", AssetRequestMode.ImmediateLoad);
                 rollButton = new UIImageButton(playTexture);
@@ -771,7 +738,7 @@ namespace JoJoStands.UI
                 rollButton.VAlign = 0.8f;
                 rollButton.Width.Set(60f, 0f);
                 rollButton.Height.Set(30f, 0f);
-                rollButton.OnClick += new MouseEvent(RollButtonClicked);
+                rollButton.OnLeftClick += new MouseEvent(RollButtonClicked);
                 playArea.Append(rollButton);
 
                 rollText = new UIText("Roll");
@@ -779,86 +746,62 @@ namespace JoJoStands.UI
                 rollText.VAlign = 0.76f;
                 playArea.Append(rollText);
             }
-            else if (set == 3)
+            else if (set == Game_MiniPoker)
             {
+                Main.NewText("G");
                 drawPile = new UIImageButton(ModContent.Request<Texture2D>("JoJoStands/Extras/card_back", AssetRequestMode.ImmediateLoad));
-                drawPile.HAlign = 0.9f;
+                drawPile.HAlign = 0.95f;
                 drawPile.VAlign = 0.4f;
                 drawPile.Height.Set(58f, 0f);
                 drawPile.Width.Set(42f, 0f);
                 drawPile.SetVisibility(1f, 1f);
-                drawPile.OnClick += new MouseEvent(DrawPileClicked);
+                drawPile.OnLeftClick += new MouseEvent(DrawPileClicked);
                 playArea.Append(drawPile);
 
                 PlayerCard1Button = new UIImageButton(playerCardTexture1);
-                PlayerCard1Button.HAlign = 0.15f;
+                PlayerCard1Button.HAlign = 0.05f;
                 PlayerCard1Button.VAlign = 0.7f;
                 PlayerCard1Button.Height.Set(playerCardTexture1.Value.Height, 0f);
                 PlayerCard1Button.Width.Set(playerCardTexture1.Value.Width, 0f);
                 PlayerCard1Button.SetVisibility(1f, 1f);
-                PlayerCard1Button.OnClick += new MouseEvent(SwapOutCard1);
+                PlayerCard1Button.OnLeftClick += new MouseEvent(SwapOutCard1);
                 playArea.Append(PlayerCard1Button);
 
                 PlayerCard2Button = new UIImageButton(playerCardTexture2);
-                PlayerCard2Button.HAlign = 0.55f;
+                PlayerCard2Button.HAlign = 0.4f;
                 PlayerCard2Button.VAlign = 0.7f;
                 PlayerCard2Button.Height.Set(playerCardTexture2.Value.Height, 0f);
                 PlayerCard2Button.Width.Set(playerCardTexture2.Value.Width, 0f);
                 PlayerCard2Button.SetVisibility(1f, 1f);
-                PlayerCard2Button.OnClick += new MouseEvent(SwapOutCard2);
+                PlayerCard2Button.OnLeftClick += new MouseEvent(SwapOutCard2);
                 playArea.Append(PlayerCard2Button);
 
                 NPCCard1Image = new UIImage(npcCardTexture1);
-                NPCCard1Image.HAlign = 0.15f;
+                NPCCard1Image.HAlign = 0.05f;
                 NPCCard1Image.VAlign = 0.3f;
                 NPCCard1Image.Height.Set(npcCardTexture1.Value.Height, 0f);
                 NPCCard1Image.Width.Set(npcCardTexture1.Value.Width, 0f);
                 playArea.Append(NPCCard1Image);
 
                 NPCCard2Image = new UIImage(npcCardTexture2);
-                NPCCard2Image.HAlign = 0.55f;
+                NPCCard2Image.HAlign = 0.4f;
                 NPCCard2Image.VAlign = 0.3f;
                 NPCCard2Image.Height.Set(npcCardTexture2.Value.Height, 0f);
                 NPCCard2Image.Width.Set(npcCardTexture2.Value.Width, 0f);
                 playArea.Append(NPCCard2Image);
 
                 ShowCardsButton = new UIImageButton(ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonPlay", AssetRequestMode.ImmediateLoad));
-                ShowCardsButton.HAlign = 0.9f;
+                ShowCardsButton.HAlign = 0.95f;
                 ShowCardsButton.VAlign = 0.65f;
                 ShowCardsButton.Height.Set(30f, 0f);
                 ShowCardsButton.Width.Set(30f, 0f);
-                ShowCardsButton.OnClick += new MouseEvent(ShowCardsClicked);
+                ShowCardsButton.OnLeftClick += new MouseEvent(ShowCardsClicked);
                 playArea.Append(ShowCardsButton);
             }
             else if (set == 4)      //Result UIImages of Rock, Paper, Scissors
             {
-                Texture2D playerResultTexture = null;       //1 variable cause if not, you'd have to type out much more if's for what each vairable could be
-                Texture2D npcResultTexture = null;
-                if (playerChoice == 1)
-                {
-                    playerResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Rock_Right", AssetRequestMode.ImmediateLoad);
-                }
-                if (playerChoice == 2)
-                {
-                    playerResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Paper_Right", AssetRequestMode.ImmediateLoad);
-                }
-                if (playerChoice == 3)
-                {
-                    playerResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Scissors_Right", AssetRequestMode.ImmediateLoad);
-                }
-
-                if (randomSign == 1)
-                {
-                    npcResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Rock_Left", AssetRequestMode.ImmediateLoad);
-                }
-                if (randomSign == 2)
-                {
-                    npcResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Paper_Left", AssetRequestMode.ImmediateLoad);
-                }
-                if (randomSign == 3)
-                {
-                    npcResultTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Extras/Scissors_Left", AssetRequestMode.ImmediateLoad);
-                }
+                Texture2D playerResultTexture = roShamBoHands[playerChoice - 1];       //1 variable cause if not, you'd have to type out much more if's for what each vairable could be
+                Texture2D npcResultTexture = roShamBoHands[enemyChoice - 1 + 3];
 
                 if (playerResultTexture != null)
                 {
@@ -881,26 +824,15 @@ namespace JoJoStands.UI
             }
             else if (set == 5)      //Rolling results
             {
-                rollResult1 = new UIImage(dieTexture1);
-                rollResult1.Top.Set(104f, 0f);
-                rollResult1.Left.Set(20f, 0f);
-                rollResult1.Height.Set(dieTexture1.Value.Height, 0f);
-                rollResult1.Width.Set(dieTexture1.Value.Width, 0f);
-                playArea.Append(rollResult1);
-
-                rollResult2 = new UIImage(dieTexture2);
-                rollResult2.Top.Set(104f, 0f);
-                rollResult2.Left.Set(70f, 0f);
-                rollResult2.Height.Set(dieTexture2.Value.Height, 0f);
-                rollResult2.Width.Set(dieTexture2.Value.Width, 0f);
-                playArea.Append(rollResult2);
-
-                rollResult3 = new UIImage(dieTexture3);
-                rollResult3.Top.Set(104f, 0f);
-                rollResult3.Left.Set(110f, 0f);
-                rollResult3.Height.Set(dieTexture3.Value.Height, 0f);
-                rollResult3.Width.Set(dieTexture3.Value.Width, 0f);
-                playArea.Append(rollResult3);
+                for (int i = 0; i < 3; i++)
+                {
+                    dieRollResults[i] = new UIImage(dieTextureAssets[i]);
+                    dieRollResults[i].Left.Set(30f + (45 * i), 0f);
+                    dieRollResults[i].Top.Set(104f, 0f);
+                    dieRollResults[i].Height.Set(dieTextureAssets[i].Value.Height, 0f);
+                    dieRollResults[i].Width.Set(dieTextureAssets[i].Value.Width, 0f);
+                    playArea.Append(dieRollResults[i]);
+                }
             }
         }
     }

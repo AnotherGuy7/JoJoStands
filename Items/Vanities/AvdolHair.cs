@@ -8,10 +8,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Fortuneteller Wig");
-            Tooltip.SetDefault("A wig, styled after a fortuneteller, and Stand user.");
+            // DisplayName.SetDefault("Fortuneteller Wig");
+            // Tooltip.SetDefault("A wig, styled after a fortuneteller, and Stand user.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

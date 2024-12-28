@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An already warm, juicy, and medium-rare steak.\nBoosts Stand Range and Stand Damage for 3m.");
-            SacrificeTotal = 5;
+            // Tooltip.SetDefault("An already warm, juicy, and medium-rare steak.\nBoosts Stand Range and Stand Damage for 3m.");
+            Item.ResearchUnlockCount = 5;
         }
 
         public override void SetDefaults()
@@ -28,6 +28,8 @@ namespace JoJoStands.Items.Food
             Item.useStyle = ItemUseStyleID.EatFood;
             Item.holdStyle = ItemHoldStyleID.HoldFront;
             Item.consumable = true;
+            Item.buffType = ModContent.BuffType<CoordinatedEyes>();
+            Item.buffTime = (3 * 60) * 60;
         }
 
         public override void HoldStyle(Player player, Rectangle heldItemFrame)
@@ -43,8 +45,7 @@ namespace JoJoStands.Items.Food
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(ModContent.BuffType<CoordinatedEyes>(), 180 * 60);
-            player.AddBuff(ModContent.BuffType<StrongWill>(), 180 * 60);
+            player.AddBuff(ModContent.BuffType<StrongWill>(), (3 * 60) * 60);
         }
 
         public override void AddRecipes()

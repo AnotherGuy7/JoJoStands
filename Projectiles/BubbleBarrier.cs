@@ -38,7 +38,7 @@ namespace JoJoStands.Projectiles
                     otherProj.hostile = false;
                     otherProj.friendly = true;
                     otherProj.velocity *= -1f;
-                    SoundEngine.PlaySound(SoundID.SplashWeak);
+                    SoundEngine.PlaySound(SoundID.SplashWeak, Projectile.Center);
                 }
             }
         }

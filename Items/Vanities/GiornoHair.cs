@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Italian Wig");
-            Tooltip.SetDefault("A wig, fashioned into a unique hairstyle with three loops in the front.");
+            // DisplayName.SetDefault("Italian Wig");
+            // Tooltip.SetDefault("A wig, fashioned into a unique hairstyle with three loops in the front.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

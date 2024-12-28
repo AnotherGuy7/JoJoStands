@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Kira's Hair");
-            Tooltip.SetDefault("Perfectly average blond hair.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Kira's Hair");
+            // Tooltip.SetDefault("Perfectly average blond hair.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A regular ol' hamburger... but sprinkled with Viral Powder!\nBoosts Stand Damage, Stand Crit Chance, Stand Speed, and player defense for 5m.");
-            SacrificeTotal = 5;
+            // Tooltip.SetDefault("A regular ol' hamburger... but sprinkled with Viral Powder!\nBoosts Stand Damage, Stand Crit Chance, Stand Speed, and player defense for 5m.");
+            Item.ResearchUnlockCount = 5;
         }
 
         public override void SetDefaults()
@@ -28,6 +28,8 @@ namespace JoJoStands.Items.Food
             Item.useStyle = ItemUseStyleID.EatFood;
             Item.holdStyle = ItemHoldStyleID.HoldFront;
             Item.consumable = true;
+            Item.buffType = ModContent.BuffType<StrongWill>();
+            Item.buffTime = (5 * 60) * 60;
         }
 
         public override void HoldStyle(Player player, Rectangle heldItemFrame)
@@ -43,7 +45,6 @@ namespace JoJoStands.Items.Food
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(ModContent.BuffType<StrongWill>(), (5 * 60) * 60);
             player.AddBuff(ModContent.BuffType<SharpMind>(), (5 * 60) * 60);
             player.AddBuff(ModContent.BuffType<QuickThinking>(), (5 * 60) * 60);
             player.AddBuff(ModContent.BuffType<MentalFortitude>(), (5 * 60) * 60);

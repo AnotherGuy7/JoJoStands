@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
@@ -8,12 +9,24 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
         public override int PunchDamage => 19;
         public override int PunchTime => 13;
         public override int HalfStandHeight => 44;
-        public override int FistWhoAmI => 1;
+        public override int FistID => 1;
         public override int TierNumber => 1;
         public override string PunchSoundName => "Muda";
         public override string PoseSoundName => "ComeAsCloseAsYouLike";
         public override string SpawnSoundName => "The World";
         public override bool CanUseSaladDye => true;
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/TheWorld/TheWorld_Punch_";
+        public override Vector2 PunchSize => new Vector2(28, 12);
+        public override PunchSpawnData PunchData => new PunchSpawnData()
+        {
+            standardPunchOffset = new Vector2(12f, 6f),
+            minimumLifeTime = 5,
+            maximumLifeTime = 12,
+            minimumTravelDistance = 16,
+            maximumTravelDistance = 32,
+            bonusAfterimageAmount = 0
+        };
         public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
@@ -31,67 +44,56 @@ namespace JoJoStands.Projectiles.PlayerStands.TheWorld
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
+                    if (Main.mouseLeft)
+                        Punch();
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
                 }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                {
+                if (!attacking)
                     StayBehind();
-                }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/TheWorld", "/TheWorld_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/TheWorld", "TheWorld_" + animationName);
 
             if (animationName == "Idle")
-            {
-                if (mPlayer.currentTextureDye == MyPlayer.StandTextureDye.Salad)
-                    AnimateStand(animationName, 4, 15, true);
-                else
-                    AnimateStand(animationName, 2, 30, true);
-            }
-            if (animationName == "Attack")
-            {
+                AnimateStand(animationName, 4, 15, true);
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
     }
 }

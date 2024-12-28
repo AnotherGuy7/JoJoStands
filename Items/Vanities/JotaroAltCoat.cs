@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jotaro's Coat (Alt)");
-            Tooltip.SetDefault("A blue school uniform. Also very unique.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Jotaro's Coat (Alt)");
+            // Tooltip.SetDefault("A blue school uniform. Also very unique.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

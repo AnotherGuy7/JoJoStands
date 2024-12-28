@@ -13,12 +13,15 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
         public override int PunchDamage => 16;
         public override int PunchTime => 14;
         public override int HalfStandHeight => 35;
-        public override int FistWhoAmI => 2;
+        public override int FistID => 2;
         public override int TierNumber => 1;
         public override Vector2 StandOffset => new Vector2(17, 0);
         public override string PunchSoundName => "GER_Muda";
         public override string PoseSoundName => "TheresADreamInMyHeart";
         public override string SpawnSoundName => "Gold Experience";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/GoldExperience/GoldExperience_Punch_";
+        public override Vector2 PunchSize => new Vector2(18, 10);
         public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
@@ -36,19 +39,22 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
+                    if (Main.mouseLeft)
+                    {
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
                 }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                {
+                if (!attacking)
                     StayBehind();
-                }
+
                 if (Main.mouseRight && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()) && Projectile.owner == Main.myPlayer)
                 {
                     int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<GEFrog>(), 1, 0f, Projectile.owner, TierNumber, TierNumber - 1f);
@@ -60,26 +66,26 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
             {
                 BasicPunchAI();
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -88,17 +94,11 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/GoldExperience/GoldExperience_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 30, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 12, true);
-            }
         }
     }
 }

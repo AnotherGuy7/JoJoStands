@@ -81,7 +81,12 @@ namespace JoJoStands.Projectiles
                 {
                     strangleTimer = 0;
                     int strangleDamage = (int)(((30f * 16f) - (ownerProj.Distance(heldNPC.Center))) / (30f * 16f)) * 64;
-                    heldNPC.StrikeNPC(strangleDamage, 0f, -heldNPC.direction);
+                    NPC.HitInfo hitInfo = new NPC.HitInfo()
+                    {
+                        Damage = strangleDamage,
+                        HitDirection = -heldNPC.direction
+                    };
+                    heldNPC.StrikeNPC(hitInfo);
                 }
             }
 
@@ -118,7 +123,7 @@ namespace JoJoStands.Projectiles
             }
 
             Projectile ownerProj = Main.projectile[(int)Projectile.ai[0]];
-            Vector2 linkCenter = ownerProj.Center + new Vector2(12f * ownerProj.direction, 0f);
+            Vector2 linkCenter = ownerProj.Center + new Vector2(28f * ownerProj.direction, -12f);
             Vector2 projectileCenter = Projectile.Center;
             drawColor = lightColor;
 
@@ -141,7 +146,7 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (heldNPC == null)
                 heldNPC = target;

@@ -9,10 +9,10 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Pompous Hair");
-            Tooltip.SetDefault("A wig in a large puffed up hairstyle, worn by a scam artist.");
+            // DisplayName.SetDefault("Pompous Hair");
+            // Tooltip.SetDefault("A wig in a large puffed up hairstyle, worn by a scam artist.");
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = true;
-            SacrificeTotal = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Okuyasu Uniform");
-            Tooltip.SetDefault("A school uniform worn by Okuyasu Nijimura, adorned with money symbols.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Okuyasu Uniform");
+            // Tooltip.SetDefault("A school uniform worn by Okuyasu Nijimura, adorned with money symbols.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

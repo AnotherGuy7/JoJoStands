@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles
             return false;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int d = 0; d < 10; d++)
             {
@@ -106,7 +106,7 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
         }

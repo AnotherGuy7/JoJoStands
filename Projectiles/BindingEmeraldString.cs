@@ -32,9 +32,7 @@ namespace JoJoStands.Projectiles
                 Projectile.frame += 1;
                 Projectile.frameCounter = 0;
                 if (Projectile.frame >= Main.projFrames[Projectile.type])
-                {
                     Projectile.frame = 0;
-                }
             }
 
             Projectile.rotation = Projectile.velocity.ToRotation();
@@ -45,7 +43,7 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (!target.noGravity)
                 target.velocity.X = 0f;
@@ -53,6 +51,8 @@ namespace JoJoStands.Projectiles
                 target.velocity = Vector2.Zero;
             target.GetGlobalNPC<JoJoGlobalNPC>().stunnedByBindingEmerald = true;
             target.GetGlobalNPC<JoJoGlobalNPC>().bindingEmeraldDurationTimer = (int)Projectile.ai[0] * 60;
+            if (Projectile.owner == Main.myPlayer)
+                target.GetGlobalNPC<JoJoGlobalNPC>().SyncEffect(JoJoGlobalNPC.Sync_StunnedByBindingEmerald);
         }
     }
 }

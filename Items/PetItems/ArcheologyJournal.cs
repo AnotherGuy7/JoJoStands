@@ -11,8 +11,8 @@ namespace JoJoStands.Items.PetItems
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A journal which contains info and sketches of a familiar stone mask.\nSummons a Mini Jonathan Joestar");
-            SacrificeTotal = 1;
+            // Tooltip.SetDefault("A journal which contains info and sketches of a familiar stone mask.\nSummons a Mini Jonathan Joestar");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

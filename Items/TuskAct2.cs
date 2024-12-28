@@ -12,12 +12,13 @@ namespace JoJoStands.Items
         public override int StandSpeed => 35;
         public override int StandType => 2;
         public override int StandTier => 2;
+        public override string StandIdentifierName => "TuskAct2";
         public override Color StandTierDisplayColor => TuskAct4.TuskTierColor;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Tusk (ACT 2)");
-            Tooltip.SetDefault("Hold left-click to shoot and control a spinning nail and right-click to spin your nails in front of you to use as a melee weapon!\nSecond Special: Switch to previous acts!");
+            // DisplayName.SetDefault("Tusk (ACT 2)");
+            // Tooltip.SetDefault("Hold left-click to shoot and control a spinning nail and right-click to spin your nails in front of you to use as a melee weapon!\nSecond Special: Switch to previous acts!");
         }
 
         public override void SetDefaults()
@@ -42,6 +43,7 @@ namespace JoJoStands.Items
             mPlayer.standType = 2;
             mPlayer.equippedTuskAct = StandTier;
             mPlayer.tuskActNumber = StandTier;
+            mPlayer.standName = "TuskAct2";
             return true;
         }
 

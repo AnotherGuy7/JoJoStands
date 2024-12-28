@@ -79,7 +79,7 @@ namespace JoJoStands.Projectiles.Minions
 
                 if (!saidKocchiwomiro)
                 {
-                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Kocchiwomiro"));
+                    SoundEngine.PlaySound(new SoundStyle("JoJoStands/Sounds/GameSounds/Kocchiwomiro"), Projectile.Center);
                     saidKocchiwomiro = true;
                 }
                 Projectile.direction = 1;
@@ -119,6 +119,7 @@ namespace JoJoStands.Projectiles.Minions
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            bool crit = false;
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
                 crit = true;
             int bombDamage = (int)(350 * mPlayer.standDamageBoosts);
@@ -164,7 +165,14 @@ namespace JoJoStands.Projectiles.Minions
                         int critMultiplayer = 0;
                         if (crit)
                             critMultiplayer = 1;
-                        npc.StrikeNPC(bombDamage, 7f, hitDirection, crit);
+                        NPC.HitInfo hitInfo = new NPC.HitInfo()
+                        {
+                            Damage = bombDamage,
+                            Knockback = 7f,
+                            HitDirection = hitDirection,
+                            Crit = crit
+                        };
+                        npc.StrikeNPC(hitInfo);
                         SyncCall.SyncStandEffectInfo(player.whoAmI, npc.whoAmI, 5, critMultiplayer, bombDamage, hitDirection);
                     }
                 }
@@ -188,7 +196,7 @@ namespace JoJoStands.Projectiles.Minions
                     SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, otherPlayer.whoAmI, 3, bombDamage, hitDirection, 0f, 0f);
                 }
             }
-            SoundEngine.PlaySound(SoundID.Item62);
+            SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
         }
 
         public override bool PreDraw(ref Color drawColor)
@@ -205,7 +213,7 @@ namespace JoJoStands.Projectiles.Minions
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.immune[Projectile.owner] = 0;
             Explode();
@@ -217,7 +225,7 @@ namespace JoJoStands.Projectiles.Minions
             npcTarget = null;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

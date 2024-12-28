@@ -2,6 +2,7 @@ using JoJoStands.Items.Hamon;
 using JoJoStands.UI;
 using System.ComponentModel;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader.Config;
 using static JoJoStands.JoJoStands;
 using static JoJoStands.MyPlayer;
@@ -27,7 +28,7 @@ namespace JoJoStands
 
         [DefaultValue(true)]
         [Label("Respawn With Stand Out")]
-        [Tooltip("Determiens whether or not you want to always respawn with your Stand out.")]
+        [Tooltip("Determines whether or not you want to always respawn with your Stand out.")]
         public bool RespawnWithStandOut;
 
         [DefaultValue(true)]
@@ -62,8 +63,13 @@ namespace JoJoStands
 
         [DefaultValue(true)]
         [Label("Color Change Effects")]
-        [Tooltip("Determiens whether or not you want to see the world color changes.")]
+        [Tooltip("Determines whether or not you want to see the world color changes.")]
         public bool ColorChangeEffects;
+
+        [DefaultValue(true)]
+        [Label("Stand Aim Assist")]
+        [Tooltip("Determines whether or not Stands should automatically lock onto targets your mouse is hovering over instead of attacking toward the mouse.")]
+        public bool StandAimAssist;
 
         [DefaultValue(false)]
         [Label("Hidden References")]
@@ -130,6 +136,7 @@ namespace JoJoStands
             JoJoStands.StandSlotPositionY = StandSlotPositionY;
             JoJoStands.HamonBarPositionX = HamonBarPositionX;
             JoJoStands.HamonBarPositionY = HamonBarPositionY;
+            JoJoStands.StandAimAssist = StandAimAssist;
             JoJoStands.SecretReferences = SecretReferences;
             JoJoStands.ModSoundsVolume = soundVolume / 100f;
             HamonPlayer.HamonEffects = HamonEffects;
@@ -142,16 +149,15 @@ namespace JoJoStands
             JoJoStands.RespawnWithStandOut = RespawnWithStandOut;
             JoJoStands.AbilityWheelDescriptions = AbilityWheelDescriptions;
             JoJoStands.SoundsModAbilityVoicelines = abilityVoicelines;
-            AbilityWheel.VAlign = AbilityWheelYPos / 100f;
-            AbilityWheel.HAlign = AbilityWheelXPos / 100f;
+            AbilityWheel.VerticalAlignmentPercentage = AbilityWheelYPos / 100f;
             if (HamonBarSize >= 4)
             {
-                Main.NewText("You can only choose numbers between 0-3!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.HamonBarOOB").Value);
                 HamonBarSize = 3;
             }
             if (HamonBarSize <= -1)
             {
-                Main.NewText("You can only choose numbers between 0-3!");
+                Main.NewText(Language.GetText("Mods.JoJoStands.MiscText.HamonBarOOB").Value);
                 HamonBarSize = 0;
                 HamonBar.visible = false;
             }

@@ -2,6 +2,7 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Buffs.ItemBuff;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -15,12 +16,15 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
         public override int AltDamage => 31;
         public override int PunchTime => 13;
         public override int HalfStandHeight => 39;
-        public override int FistWhoAmI => 4;
+        public override int FistID => 4;
         public override int TierNumber => 2;
-        public override StandAttackType StandType => StandAttackType.Melee;
         public override string PunchSoundName => "Ari";
         public override string PoseSoundName => "Arrivederci";
         public override string SpawnSoundName => "Sticky Fingers";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/StickyFingers/StickyFingers_Punch_";
+        public override Vector2 PunchSize => new Vector2(38, 12);
+        public override StandAttackType StandType => StandAttackType.Melee;
         public override bool UseProjectileAlpha => true;
 
         private int mouseRightHoldTimer = 0;
@@ -45,64 +49,67 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                secondaryAbility = secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] != 0;
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0 && !zipperAmbush)
+                secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] != 0;
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0 && !zipperAmbush)
+                        Punch();
+                    else
                     {
-                        attackFrames = false;
-                        idleFrames = true;
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
+
+                    if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0 && !zipperAmbush && !playerHasAbilityCooldown)
+                    {
+                        mouseRightHoldTimer++;
+                        mouseRightPressed = true;
+                        mouseRightJustReleased = false;
+                        if (mouseRightHoldTimer >= 60)
+                            mouseRightForceRelease = true;
+                    }
+                    if (Main.mouseRightRelease && !mouseRightJustReleased && mouseRightPressed && mouseRightHoldTimer >= 5)
+                    {
+                        mouseRightPressed = false;
+                        mouseRightJustReleased = true;
+                    }
+                    if (mouseRightJustReleased || mouseRightForceRelease)
+                    {
+                        if (mouseRightHoldTimer < 60 || Vector2.Distance(Main.MouseWorld, player.Center) >= 4 * 16f)
+                        {
+                            shootCount += 20;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersFistExtended>(), (int)(AltDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                        }
+                        else
+                        {
+                            if (!playerHasAbilityCooldown)
+                            {
+                                shootCount += 60;
+                                zipperAmbush = true;
+                                savedAmbushPosition = player.position;
+                                player.position = Main.MouseWorld;
+                                Projectile.netUpdate = true;
+                            }
+                        }
+                        mouseRightJustReleased = false;
+                        mouseRightForceRelease = false;
+                        mouseRightHoldTimer = 0;
                     }
                 }
-                if (!attackFrames)
+                if (!attacking)
                 {
                     if (!secondaryAbility)
                         StayBehind();
                     else
                         GoInFront();
-                }
-                if (Main.mouseRight && shootCount <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0 && !zipperAmbush && !playerHasAbilityCooldown && Projectile.owner == Main.myPlayer)
-                {
-                    mouseRightHoldTimer++;
-                    mouseRightPressed = true;
-                    mouseRightJustReleased = false;
-                    if (mouseRightHoldTimer >= 60)
-                        mouseRightForceRelease = true;
-                }
-                if (Main.mouseRightRelease && !mouseRightJustReleased && mouseRightPressed && mouseRightHoldTimer >= 5 && Projectile.owner == Main.myPlayer)
-                {
-                    mouseRightPressed = false;
-                    mouseRightJustReleased = true;
-                }
-                if ((mouseRightJustReleased || mouseRightForceRelease) && Projectile.owner == Main.myPlayer)
-                {
-                    if (mouseRightHoldTimer < 60 || Vector2.Distance(Main.MouseWorld, player.Center) >= 4 * 16f)
-                    {
-                        shootCount += 120;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<StickyFingersFistExtended>(), (int)(AltDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
-                        Main.projectile[projIndex].netUpdate = true;
-                        Projectile.netUpdate = true;
-                    }
-                    else
-                    {
-                        shootCount += 60;
-                        zipperAmbush = true;
-                        savedAmbushPosition = player.position;
-                        player.position = Main.MouseWorld;
-                    }
-                    mouseRightJustReleased = false;
-                    mouseRightForceRelease = false;
-                    mouseRightHoldTimer = 0;
                 }
                 if (zipperAmbush)
                 {
@@ -110,17 +117,17 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                     player.immuneTime = 2;
                     player.shadowDodge = true;
                     player.shadowDodgeCount = -100f;
-                    for (int i = 0; i < Main.maxNPCTypes; i++)
+                    for (int i = 0; i < NPCID.Count; i++)
                         player.npcTypeNoAggro[i] = true;
 
                     mPlayer.hideAllPlayerLayers = true;
                     mPlayer.stickyFingersAmbushMode = true;
-                    if (Main.mouseRight && shootCount <= 0)
+                    if (Main.mouseRight && shootCount <= 0 && Projectile.owner == Main.myPlayer)
                     {
                         zipperAmbush = false;
                         player.immune = true;
                         player.immuneTime = 15;
-                        for (int i = 0; i < Main.maxNPCTypes; i++)
+                        for (int i = 0; i < NPCID.Count; i++)
                             player.npcTypeNoAggro[i] = false;
 
                         Vector2 ambushVelocity = savedAmbushPosition - player.position;
@@ -138,50 +145,67 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                         mPlayer.stickyFingersAmbushMode = false;
                         player.AddBuff(ModContent.BuffType<SurpriseAttack>(), 3 * 60);
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(25));
+                        Projectile.netUpdate = true;
                         if (JoJoStands.SoundsLoaded)
-                            SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/Zip"));
+                            SoundEngine.PlaySound(StickyFingersStandFinal.ZipperSound, Projectile.Center);
                     }
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
+                if (zipperAmbush)
+                {
+                    zipperAmbush = false;
+                    mPlayer.stickyFingersAmbushMode = false;
+                    Vector2 ambushVelocity = savedAmbushPosition - player.position;
+                    ambushVelocity.Normalize();
+                    ambushVelocity *= 6f;
+                    player.position = savedAmbushPosition;
+                    player.velocity = ambushVelocity;
+                    savedAmbushPosition = Vector2.Zero;
+                }
                 PunchAndShootAI(ModContent.ProjectileType<StickyFingersFistExtended>(), shootMax: 1);
             }
+            if (secondaryAbility)
+                currentAnimationState = AnimationState.SecondaryAbility;
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(zipperAmbush);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            zipperAmbush = reader.ReadBoolean();
         }
 
         public override bool PreDrawExtras()
         {
-            if (zipperAmbush)
-                Projectile.alpha = 0;
-            else
-                Projectile.alpha = 255;
+            Projectile.alpha = zipperAmbush ? 0 : 255;
             return true;
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (secondaryAbilityFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
                 PlayAnimation("Secondary");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -190,21 +214,13 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/StickyFingers/StickyFingers_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 30, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 1, 10, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 10, true);
-            }
         }
     }
 }

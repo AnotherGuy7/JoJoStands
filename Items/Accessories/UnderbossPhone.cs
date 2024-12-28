@@ -8,16 +8,17 @@ namespace JoJoStands.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Underboss Phone");
-            Tooltip.SetDefault("Every fifth hit on enemies with Stand Attacks deal more damage." +
-                "\nAttacks affected by this accessory ignore defense.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Underboss Phone");
+            /* Tooltip.SetDefault("Every fifth hit on enemies with Stand Attacks deal more damage." +
+                "\nAttacks affected by this accessory ignore defense."); */
+            Item.ResearchUnlockCount = 1;
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SealedPokerDeck>();
         }
 
         public override void SetDefaults()
         {
-            Item.width = 30;
-            Item.height = 30;
+            Item.width = 36;
+            Item.height = 34;
             Item.accessory = true;
             Item.rare = ItemRarityID.LightRed;
             Item.value = Item.buyPrice(gold: 2);

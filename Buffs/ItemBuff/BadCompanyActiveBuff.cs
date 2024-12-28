@@ -4,8 +4,8 @@ namespace JoJoStands.Buffs.ItemBuff
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bad Company");
-            Description.SetDefault("An entire Stand army at your command!");
+            // DisplayName.SetDefault("Bad Company");
+            // Description.SetDefault("An entire Stand army at your command!");
         }
     }
 }

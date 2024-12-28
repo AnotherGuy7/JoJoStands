@@ -10,13 +10,8 @@ namespace JoJoStands.Items
 {
     public class LockT1 : StandItemClass
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("The Lock (Tier 1)");
-            Tooltip.SetDefault("Make people that harm you overwhelmed with Guilt!");
-        }
-
         public override int StandTier => 1;
+        public override string StandIdentifierName => "Lock";
         public override Color StandTierDisplayColor => Color.LightGray;
 
         public override void SetDefaults()

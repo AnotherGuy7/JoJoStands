@@ -11,8 +11,8 @@ namespace JoJoStands.Items.Food
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("A dry, breaded (chicken?) leg that, when eaten, makes you feel much better.\nBoosts Stand Speed and player defense for 3m.");
-            SacrificeTotal = 5;
+            // Tooltip.SetDefault("A dry, breaded (chicken?) leg that, when eaten, makes you feel much better.\nBoosts Stand Speed and player defense for 3m.");
+            Item.ResearchUnlockCount = 5;
         }
 
         public override void SetDefaults()
@@ -28,6 +28,8 @@ namespace JoJoStands.Items.Food
             Item.useStyle = ItemUseStyleID.EatFood;
             Item.holdStyle = ItemHoldStyleID.HoldFront;
             Item.consumable = true;
+            Item.buffType = ModContent.BuffType<QuickThinking>();
+            Item.buffTime = (3 * 60) * 60;
         }
 
         public override void HoldStyle(Player player, Rectangle heldItemFrame)
@@ -43,7 +45,6 @@ namespace JoJoStands.Items.Food
 
         public override void OnConsumeItem(Player player)
         {
-            player.AddBuff(ModContent.BuffType<QuickThinking>(), (3 * 60) * 60);
             player.AddBuff(ModContent.BuffType<MentalFortitude>(), (3 * 60) * 60);
         }
 

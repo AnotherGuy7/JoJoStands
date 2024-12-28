@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mafioso Suit");
-            Tooltip.SetDefault("A pink suit with a large, heart-shaped chest window.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Mafioso Suit");
+            // Tooltip.SetDefault("A pink suit with a large, heart-shaped chest window.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

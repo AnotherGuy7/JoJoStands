@@ -21,9 +21,9 @@ namespace JoJoStands.Projectiles
             Projectile.penetrate = 3;
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ModContent.ProjectileType<GEScorpion>(), 1, 0f, Main.myPlayer);
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position - new Vector2(0f, 16f), Vector2.Zero, ModContent.ProjectileType<GEScorpion>(), 1, 0f, Main.myPlayer);
             int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IchorTorch);
             Main.dust[dustIndex].noGravity = true;
         }
@@ -33,17 +33,12 @@ namespace JoJoStands.Projectiles
             Projectile.rotation = Projectile.velocity.ToRotation();
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
-            if (mPlayer.crackedPearlEquipped)
-            {
-                if (Main.rand.Next(1, 100 + 1) >= 60)
-                    target.AddBuff(ModContent.BuffType<Infected>(), 10 * 60);
-            }
+                modifiers.SetCrit();
         }
     }
 }

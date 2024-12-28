@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("DIO's Jacket");
-            Tooltip.SetDefault("An open-front jacket. The undershirt is skintight.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("DIO's Jacket");
+            // Tooltip.SetDefault("An open-front jacket. The undershirt is skintight.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

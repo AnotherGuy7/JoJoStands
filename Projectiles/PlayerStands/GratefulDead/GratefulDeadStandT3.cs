@@ -16,19 +16,32 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
         public override int PunchDamage => 67;
         public override int PunchTime => 12;
         public override int HalfStandHeight => 34;
-        public override int FistWhoAmI => 8;
+        public override int FistID => 8;
         public override int TierNumber => 3;
         public override Vector2 StandOffset => new Vector2(17, 0);
+        public override int AmountOfPunchVariants => 3;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/GratefulDead/GratefulDead_Punch_";
+        public override Vector2 PunchSize => new Vector2(36, 20);
         public override StandAttackType StandType => StandAttackType.Melee;
         public override string PoseSoundName => "OnceWeDecideToKillItsDone";
         public override string SpawnSoundName => "The Grateful Dead";
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
 
         private const float GasDetectionDist = 20 * 16f;
 
-        public bool grabFrames = false;
-        public bool secondaryFrames = false;
-        public bool gasActive = false;
-        public float gasRange = GasDetectionDist;
+        private bool grabbing = false;
+        private bool gasActive = false;
+        private float gasRange = GasDetectionDist;
+
+        public new enum AnimationState
+        {
+            Idle,
+            Attack,
+            SecondaryAbility,
+            Grab,
+            Pose
+        }
 
         public override void AI()
         {
@@ -80,77 +93,86 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !secondaryFrames && !grabFrames)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames && !secondaryFrames && !grabFrames)
-                {
-                    StayBehind();
-                }
-                if (Main.mouseRight && !grabFrames && shootCount <= 0 && Projectile.owner == Main.myPlayer)
-                {
-                    Projectile.velocity = Main.MouseWorld - Projectile.position;
-                    Projectile.velocity.Normalize();
-                    Projectile.velocity *= 5f;
-
-                    float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
-                    if (mouseDistance > 40f)
-                        Projectile.velocity = player.velocity + Projectile.velocity;
-                    else
-                        Projectile.velocity = Vector2.Zero;
-                    Projectile.direction = 1;
-                    if (mouseX < Projectile.Center.X)
-                        Projectile.direction = -1;
-                    Projectile.spriteDirection = Projectile.direction;
-
-                    secondaryFrames = true;
-                    Rectangle grabRect = new Rectangle((int)Projectile.Center.X + (40 * Projectile.direction), (int)Projectile.Center.Y - HalfStandHeight, 40, HalfStandHeight * 2);
-                    for (int n = 0; n < Main.maxNPCs; n++)
+                    if (Main.mouseLeft && !secondaryAbility && !grabbing)
                     {
-                        NPC npc = Main.npc[n];
-                        if (npc.active)
+                        currentAnimationState = AnimationState.Attack;
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
+
+                    if (Main.mouseRight && !grabbing && shootCount <= 0)
+                    {
+                        Vector2 oldVelocity = Projectile.velocity;
+                        Projectile.velocity = Main.MouseWorld - Projectile.position;
+                        Projectile.velocity.Normalize();
+                        Projectile.velocity *= 5f + mPlayer.standTier;
+                        if (Projectile.velocity.Length() - oldVelocity.Length() > 0.5f)
+                            Projectile.netUpdate = true;
+
+                        float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);
+                        if (mouseDistance > 40f)
+                            Projectile.velocity = player.velocity + Projectile.velocity;
+                        else
+                            Projectile.velocity = Vector2.Zero;
+                        Projectile.direction = 1;
+                        if (mouseX < Projectile.Center.X)
+                            Projectile.direction = -1;
+                        Projectile.spriteDirection = Projectile.direction;
+
+                        secondaryAbility = true;
+                        currentAnimationState = AnimationState.SecondaryAbility;
+                        Rectangle grabRect = new Rectangle((int)Projectile.Center.X + (40 * Projectile.direction), (int)Projectile.Center.Y - HalfStandHeight, 40, HalfStandHeight * 2);
+                        for (int n = 0; n < Main.maxNPCs; n++)
                         {
-                            if (grabRect.Intersects(npc.Hitbox) && !npc.boss && !npc.immortal && !npc.hide)
+                            NPC npc = Main.npc[n];
+                            if (npc.active)
                             {
-                                grabFrames = true;
-                                Projectile.ai[0] = npc.whoAmI;
-                                break;
+                                if (grabRect.Intersects(npc.Hitbox) && !npc.boss && !npc.immortal && !npc.hide)
+                                {
+                                    grabbing = true;
+                                    Projectile.ai[0] = npc.whoAmI;
+                                    break;
+                                }
                             }
                         }
+                        LimitDistance();
                     }
-                    LimitDistance();
-                }
-                if (Main.mouseRight && grabFrames && Projectile.ai[0] != -1f && Projectile.owner == Main.myPlayer)
-                {
-                    Projectile.velocity = Vector2.Zero;
-                    NPC npc = Main.npc[(int)Projectile.ai[0]];
-                    npc.direction = -Projectile.direction;
-                    npc.position = Projectile.position + new Vector2(5f * Projectile.direction, -(2f * npc.height) / 3f);
-                    npc.velocity = Vector2.Zero;
-                    npc.AddBuff(ModContent.BuffType<RapidAging>(), 2);
-                    if (!npc.active || Vector2.Distance(player.Center, Projectile.Center) > newMaxDistance * 1.5f)
+                    if (Main.mouseRight && grabbing && Projectile.ai[0] != -1f)
+                    {
+                        Projectile.velocity = Vector2.Zero;
+                        NPC npc = Main.npc[(int)Projectile.ai[0]];
+                        npc.direction = -Projectile.direction;
+                        npc.position = Projectile.position + new Vector2(5f * Projectile.direction, -(2f * npc.height) / 3f);
+                        npc.velocity = Vector2.Zero;
+                        npc.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = Projectile.owner;
+                        npc.AddBuff(ModContent.BuffType<RapidAging>(), 2);
+                        currentAnimationState = AnimationState.Grab;
+                        if (!npc.active || Vector2.Distance(player.Center, Projectile.Center) > newMaxDistance * 1.5f)
+                        {
+                            shootCount += 30;
+                            grabbing = false;
+                            secondaryAbility = false;
+                            Projectile.ai[0] = -1f;
+                        }
+                        Projectile.netUpdate = true;
+                    }
+                    if (!Main.mouseRight && (grabbing || secondaryAbility))
                     {
                         shootCount += 30;
-                        grabFrames = false;
+                        grabbing = false;
                         Projectile.ai[0] = -1f;
+                        secondaryAbility = false;
+                        Projectile.netUpdate = true;
                     }
-                    Projectile.netUpdate = true;
-                    LimitDistance();
                 }
-                if (!Main.mouseRight && (grabFrames || secondaryFrames) && Projectile.owner == Main.myPlayer)
-                {
-                    shootCount += 30;
-                    grabFrames = false;
-                    Projectile.ai[0] = -1f;
-                    secondaryFrames = false;
-                    Projectile.netUpdate = true;
-                }
+                if (!attacking && !secondaryAbility && !grabbing)
+                    StayBehind();
             }
             if (SpecialKeyPressed() && shootCount <= 0)
             {
@@ -163,8 +185,20 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
+                if (grabbing || secondaryAbility)
+                {
+                    grabbing = false;
+                    secondaryAbility = false;
+                    Projectile.ai[0] = -1f;
+                }
                 BasicPunchAI();
+                if (!attacking)
+                    currentAnimationState = AnimationState.Idle;
+                else
+                    currentAnimationState = AnimationState.Attack;
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         private float gasTextureSize;
@@ -192,13 +226,13 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
 
         public override void SendExtraStates(BinaryWriter writer)
         {
-            writer.Write(grabFrames);
+            writer.Write(grabbing);
             writer.Write(gasActive);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
-            grabFrames = reader.ReadBoolean();
+            grabbing = reader.ReadBoolean();
             gasActive = reader.ReadBoolean();
         }
 
@@ -207,37 +241,29 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             return false;
         }
 
+        public override byte SendAnimationState() => (byte)currentAnimationState;
+        public override void ReceiveAnimationState(byte state) => currentAnimationState = (AnimationState)state;
+
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                PlayAnimation("Idle");
-            }
-            if (secondaryFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                PlayAnimation("Secondary");
-            }
-            if (grabFrames)
-            {
-                idleFrames = false;
-                attackFrames = false;
-                secondaryFrames = false;
-                PlayAnimation("Grab");
 
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
+                PlayAnimation("Secondary");
+            else if (currentAnimationState == AnimationState.Grab)
+                PlayAnimation("Grab");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -246,26 +272,15 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/GratefulDead/GratefulDead_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Secondary")
-            {
+            else if (animationName == "Secondary")
                 AnimateStand(animationName, 1, 1, true);
-            }
-            if (animationName == "Grab")
-            {
-                AnimateStand(animationName, 3, 12, true, 2, 2);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Grab")
+                AnimateStand(animationName, 3, 6, true, 2, 2);
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 12, true);
-            }
         }
-
     }
 }

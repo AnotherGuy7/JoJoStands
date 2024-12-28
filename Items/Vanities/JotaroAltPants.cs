@@ -9,9 +9,9 @@ namespace JoJoStands.Items.Vanities
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Jotaro's 200K Yen Pants (Alt)");
-            Tooltip.SetDefault("A pair of pants with a blue waist piece.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Jotaro's 200K Yen Pants (Alt)");
+            // Tooltip.SetDefault("A pair of pants with a blue waist piece.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

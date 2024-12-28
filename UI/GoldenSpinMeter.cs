@@ -53,17 +53,14 @@ namespace JoJoStands.UI
         {
             Player player = Main.LocalPlayer;
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            int frame = (int)(mPlayer.goldenSpinCounter / 300f) * 12;
+            int frame = (int)((mPlayer.goldenSpinCounter / 300f) * 12f);
             frame += 1;
             if (frame >= 12)
                 frame = 11;
 
             animRect.Y = frame * animRect.Height;
 
-            float scaleInverse = 1f - (Main.UIScale - 1f);
-            Rectangle clippingRect = spinMeter.GetClippingRectangle(spriteBatch);
-            Point transformedPosition = Vector2.Transform(clippingRect.Location.ToVector2(), Matrix.Invert(Main.UIScaleMatrix)).ToPoint();
-            Rectangle mainUIdestinationRect = new Rectangle(transformedPosition.X, transformedPosition.Y, (int)(clippingRect.Width * scaleInverse), (int)(clippingRect.Height * scaleInverse));
+            Rectangle mainUIdestinationRect = UITools.ReformatRectangle(spinMeter.GetClippingRectangle(spriteBatch));
             spriteBatch.Draw(goldenRectangleTexture, mainUIdestinationRect, animRect, Color.Wheat);
             spriteBatch.Draw(goldenRectangleSpinLineTexture, mainUIdestinationRect, animRect, Color.Wheat);
         }

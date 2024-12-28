@@ -6,13 +6,10 @@ namespace JoJoStands.Buffs.Debuffs
 {
     public class ImproperRestoration : JoJoBuff
     {
-
-        public override string Texture => "Terraria/Images/Buff_" + BuffID.Stoned;
-
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Improper Restoration");
-            Description.SetDefault("Things didn't go as planned while healing.");
+            // DisplayName.SetDefault("Improper Restoration");
+            // Description.SetDefault("Things didn't go as planned while healing.");
             Main.debuff[Type] = true;
         }
 

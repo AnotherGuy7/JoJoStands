@@ -13,12 +13,12 @@ namespace JoJoStands.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sex Pistols (Tier 1)");
-            Tooltip.SetDefault("Use a gun and have Sex Pistols kick the bullet!\nIncreases bullet damages by 5% and adds one penetration point.\nSpecial: Configure all Sex Pistols's placement!\nAuto Mode: Bullets that go near enemies will automatically be re-adjusted toward the enemy!\nUsed in Stand Slot");
+            // DisplayName.SetDefault("Sex Pistols (Tier 1)");
+            // Tooltip.SetDefault("Use a gun and have Sex Pistols kick the bullet!\nIncreases bullet damages by 5% and adds one penetration point.\nSpecial: Configure all Sex Pistols's placement!\nAuto Mode: Bullets that go near enemies will automatically be re-adjusted toward the enemy!\nUsed in Stand Slot");
         }
 
         public override int StandTier => 1;
-        public override string StandProjectileName => "SexPistols";
+        public override string StandIdentifierName => "SexPistols";
         public override Color StandTierDisplayColor => SexPistolsFinal.SexPistolsTierColor;
         //In Manual Mode: You set 6 points that Sex Pistols will go to (in relation to the player) and whenever a bullet gets in that Sex Pistols's range, it gets kicked and redirected toward the nearest enemy. 
         //In Auto Mode: The Sex Pistols automatically kick the bullet whenever a new bullet is created.
@@ -49,7 +49,7 @@ namespace JoJoStands.Items
                 Projectile.NewProjectile(player.GetSource_FromThis(), player.position, Vector2.Zero, ModContent.ProjectileType<SexPistolsStand>(), 0, 0f, Main.myPlayer, i + 1);
             }
             if (JoJoStands.SoundsLoaded)
-                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Sex Pistols").WithVolumeScale(JoJoStands.ModSoundsVolume));
+                SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SummonCries/Sex Pistols").WithVolumeScale(JoJoStands.ModSoundsVolume), player.Center);
             return true;
         }
 

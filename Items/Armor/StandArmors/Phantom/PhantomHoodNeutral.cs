@@ -15,9 +15,9 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Phantom Hood (Neutral)");
-            Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Phantom Hood (Neutral)");
+            // Tooltip.SetDefault("A helmet that is made with Ectoplasm infused with an otherworldly virus.");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()
@@ -40,7 +40,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
 
             //Giving NPCs the markers
             detectionTimer++;
-            if (detectionTimer >= 10 * 60 && player.whoAmI == Main.myPlayer)
+            if (detectionTimer >= 10 * 60)
             {
                 if (player.whoAmI == Main.myPlayer)
                 {
@@ -55,6 +55,7 @@ namespace JoJoStands.Items.Armor.StandArmors.Phantom
                                 int projectile = Projectile.NewProjectile(player.GetSource_FromThis(), npc.position, npc.velocity, ModContent.ProjectileType<PhantomMarker>(), 0, 0f, Main.myPlayer, npc.whoAmI);
                                 Main.projectile[projectile].netUpdate = true;
                                 jojoNPC.taggedWithPhantomMarker = true;
+                                jojoNPC.SyncEffect(JoJoGlobalNPC.Sync_TaggedWithPhantomMarker);
                             }
                         }
                     }

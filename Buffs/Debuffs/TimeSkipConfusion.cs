@@ -8,8 +8,8 @@ namespace JoJoStands.Buffs.Debuffs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Time has skipped?");
-            Description.SetDefault("What you just saw was your future self.");
+            // DisplayName.SetDefault("Time has skipped?");
+            // Description.SetDefault("What you just saw was your future self.");
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
         }

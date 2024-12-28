@@ -1,14 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\tModLoader.targets" />
   <PropertyGroup>
     <AssemblyName>JoJoStands</AssemblyName>
-    <TargetFramework>net6.0</TargetFramework>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>latest</LangVersion>
-    <Platforms>AnyCPU;ARM64</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+    <None Remove="Effects\LayeredColorStaticEffect.fx" />
   </ItemGroup>
 </Project>

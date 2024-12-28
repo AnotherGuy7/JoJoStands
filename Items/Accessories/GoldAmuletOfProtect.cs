@@ -7,15 +7,17 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class GoldAmuletOfProtect : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Protect");
-            Tooltip.SetDefault("Increased Defense while Stand is out.");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Amulet of Protect");
+            // Tooltip.SetDefault("Increased Defense while Stand is out.\nOnly boosts defense while in Manual Mode.");
+            Item.ResearchUnlockCount = 1;
         }
+
         public override void SetDefaults()
         {
             Item.width = 16;

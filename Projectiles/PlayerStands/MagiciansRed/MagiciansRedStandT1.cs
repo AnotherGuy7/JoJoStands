@@ -21,6 +21,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
         private int ChanceToDebuff = 25;
         private int DebuffDuration = 5 * 60;
+        private const float AutoModeDetectionDistance = 24f * 16f;
 
         public override void AI()
         {
@@ -35,69 +36,65 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (!attackFrames)
-                StayBehind();
-            else
-                GoInFront();
-
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
-                {
-                    if (!mPlayer.canStandBasicAttack)
-                    {
-                        idleFrames = true;
-                        attackFrames = false;
-                        return;
-                    }
-
-                    attackFrames = true;
-                    if (shootCount <= 0)
-                    {
-                        shootCount += newShootTime;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
-                        Main.projectile[projIndex].netUpdate = true;
-                        Projectile.netUpdate = true;
-                    }
-                }
+                if (!attacking)
+                    StayBehind();
                 else
+                    GoInFront();
+
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    if (player.whoAmI == Main.myPlayer)
+                    if (Main.mouseLeft)
                     {
-                        idleFrames = true;
-                        attackFrames = false;
+                        if (!mPlayer.canStandBasicAttack)
+                        {
+                            currentAnimationState = AnimationState.Idle;
+                            return;
+                        }
+
+                        attacking = true;
+                        currentAnimationState = AnimationState.Attack;
+                        if (shootCount <= 0)
+                        {
+                            shootCount += newShootTime;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<FireAnkh>(), newProjectileDamage, 3f, Projectile.owner, ChanceToDebuff, DebuffDuration);
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                        }
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
                     }
                 }
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
-                NPC target = FindNearestTarget(350f);
+                NPC target = FindNearestTarget(AutoModeDetectionDistance);
                 if (target != null)
                 {
-                    attackFrames = true;
-                    idleFrames = false;
-
-                    Projectile.direction = 1;
-                    if (target.position.X - Projectile.Center.X < 0f)
-                        Projectile.direction = -1;
-                    Projectile.spriteDirection = Projectile.direction;
-
+                    attacking = true;
+                    currentAnimationState = AnimationState.Attack;
+                    int direction = target.Center.X < Projectile.Center.X ? -1 : 1;
+                    GoInFront(direction);
+                    Projectile.spriteDirection = Projectile.direction = direction;
                     Projectile.velocity = target.Center - Projectile.Center;
                     Projectile.velocity.Normalize();
                     Projectile.velocity *= 4f;
-
                     if (shootCount <= 0)
                     {
                         if (Main.myPlayer == Projectile.owner)
                         {
                             shootCount += newShootTime;
-                            Vector2 shootVel = target.position - Projectile.Center;
+                            Vector2 shootVel = target.Center - Projectile.Center;
                             if (shootVel == Vector2.Zero)
                                 shootVel = new Vector2(0f, 1f);
 
@@ -111,8 +108,9 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 }
                 else
                 {
-                    idleFrames = true;
-                    attackFrames = false;
+                    StayBehind();
+                    attacking = false;
+                    currentAnimationState = AnimationState.Idle;
                 }
             }
 
@@ -122,26 +120,26 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 Main.dust[dustIndex].noGravity = true;
                 Main.dust[dustIndex].velocity *= 1.4f;
             }
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
-                attackFrames = false;
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -150,17 +148,11 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/MagiciansRed/MagiciansRed_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 15, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newShootTime / 2, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 2, true);
-            }
         }
     }
 }

@@ -10,9 +10,9 @@ namespace JoJoStands.Items.Armor.StandArmors.BootlegCosplay
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bootleg Cosplay Coat");
-            Tooltip.SetDefault("A coat that's the length of a robe but still counts as a coat.\n+1 Stand Speed");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Bootleg Cosplay Coat");
+            // Tooltip.SetDefault("A coat that's the length of a robe but still counts as a coat.\n+1 Stand Speed");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

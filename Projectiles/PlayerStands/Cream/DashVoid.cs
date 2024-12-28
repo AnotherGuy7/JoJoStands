@@ -108,30 +108,26 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
+                modifiers.SetCrit();
         }
 
-        public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
-        {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-            if (Main.rand.Next(1, 100 + 1) <= mPlayer.standCritChangeBoosts)
-                crit = true;
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             target.AddBuff(ModContent.BuffType<MissingOrgans>(), 120 * mPlayer.creamTier);
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
-            target.AddBuff(ModContent.BuffType<MissingOrgans>(), 60 * mPlayer.creamTier);
+            if (info.PvP)
+            {
+                MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 60 * mPlayer.creamTier);
+            }
         }
 
         public override bool? CanHitNPC(NPC target)
@@ -141,7 +137,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             if (tiledestroycooldown >= 20)
                 Projectile.Kill();
 
@@ -158,7 +153,6 @@ namespace JoJoStands.Projectiles.PlayerStands.Cream
 
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
-            MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             width = Projectile.width/4;
             height = Projectile.height/4;
             fallThrough = true;

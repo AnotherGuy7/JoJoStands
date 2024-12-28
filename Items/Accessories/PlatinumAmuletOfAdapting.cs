@@ -7,14 +7,15 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class PlatinumAmuletOfAdapting : ModItem
     {
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(10, 4));
-            DisplayName.SetDefault("Amulet of Adapting");
-            Tooltip.SetDefault("10% increased Stand dodge chance\n10% increased Stand crit chance");
-            SacrificeTotal = 1;
+            // DisplayName.SetDefault("Amulet of Adapting");
+            // Tooltip.SetDefault("10% increased Stand dodge chance\n10% increased Stand crit chance");
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()
@@ -29,7 +30,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<MyPlayer>().standDodgeBoosts += 10f;
+            player.GetModPlayer<MyPlayer>().standDodgeChance += 10f;
             player.GetModPlayer<MyPlayer>().standCritChangeBoosts += 10f;
         }
 

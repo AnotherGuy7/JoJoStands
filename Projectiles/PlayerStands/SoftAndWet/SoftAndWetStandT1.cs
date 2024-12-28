@@ -15,11 +15,14 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
         public override int HalfStandHeight => 38;
         public override int AltDamage => TierNumber * 15;
         public override Vector2 StandOffset => new Vector2(27, 0);
-        public override int FistWhoAmI => 0;
+        public override int FistID => 0;
         public override int TierNumber => 1;
         public override string PunchSoundName => "SoftAndWet_Ora";
         public override string PoseSoundName => "SoftAndWet";
         public override string SpawnSoundName => "Soft and Wet";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/SoftAndWet/SoftAndWet_Punch_";
+        public override Vector2 PunchSize => new Vector2(36, 8);
         public override StandAttackType StandType => StandAttackType.Melee;
 
         public override void AI()
@@ -37,42 +40,44 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                secondaryAbilityFrames = player.ownedProjectileCounts[ModContent.ProjectileType<PlunderBubble>()] != 0;
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (Projectile.owner == Main.myPlayer)
                 {
-                    Punch();
-                }
-                else
-                {
-                    if (player.whoAmI == Main.myPlayer)
-                        attackFrames = false;
-                }
-                if (!attackFrames)
-                    StayBehindWithAbility();
-
-                if (Main.mouseRight && Projectile.owner == Main.myPlayer)
-                {
-                    GoInFront();
-                    if (shootCount <= 0)
+                    if (Main.mouseLeft)
                     {
-                        shootCount += 60;
-                        Vector2 shootVel = Main.MouseWorld - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
+                        Punch();
+                    }
+                    else
+                    {
+                        attacking = false;
+                        currentAnimationState = AnimationState.Idle;
+                    }
+                    if (Main.mouseRight)
+                    {
+                        GoInFront();
+                        if (shootCount <= 0)
+                        {
+                            shootCount += 60;
+                            Vector2 shootVel = Main.MouseWorld - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
 
-                        shootVel.Normalize();
-                        shootVel *= 3f;
-                        int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
-                        Main.projectile[projIndex].netUpdate = true;
-                        Projectile.netUpdate = true;
-                        SoundEngine.PlaySound(SoundID.SplashWeak);
+                            shootVel.Normalize();
+                            shootVel *= 3f;
+                            int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<PlunderBubble>(), (int)(AltDamage * mPlayer.standDamageBoosts), 2f, Projectile.owner, GetPlunderBubbleType());
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                            SoundEngine.PlaySound(SoundID.SplashWeak, Projectile.Center);
+                        }
                     }
                 }
+                if (!attacking)
+                    StayBehindWithAbility();
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-            {
                 BasicPunchAI();
-            }
+
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
         }
 
         public int GetPlunderBubbleType()
@@ -98,21 +103,20 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
 
         public override void SelectAnimation()
         {
-            if (attackFrames)
+            if (oldAnimationState != currentAnimationState)
             {
-                idleFrames = false;
-                PlayAnimation("Attack");
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
             }
-            if (idleFrames)
-            {
+
+            if (currentAnimationState == AnimationState.Idle)
                 PlayAnimation("Idle");
-            }
-            if (Main.player[Projectile.owner].GetModPlayer<MyPlayer>().posing)
-            {
-                idleFrames = false;
-                attackFrames = false;
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
-            }
         }
 
         public override void PlayAnimation(string animationName)
@@ -121,17 +125,11 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
                 standTexture = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PlayerStands/SoftAndWet/SoftAndWet_" + animationName);
 
             if (animationName == "Idle")
-            {
                 AnimateStand(animationName, 4, 12, true);
-            }
-            if (animationName == "Attack")
-            {
+            else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
-            }
-            if (animationName == "Pose")
-            {
+            else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 2, true);
-            }
         }
     }
 }
