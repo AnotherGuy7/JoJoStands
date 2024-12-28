@@ -96,6 +96,7 @@ namespace JoJoStands
         public int chosenAbility = 0;
         public int timeSkipEffectTransitionTimer = 0;
         public float biteTheDustEffectProgress = 0f;
+        public float bitesTheDustNewTime = 0f;
         public int poseFrameCounter = 0;
         public int menacingFrames = 0;
         public int slowDancerSprintTime = 0;
@@ -1593,6 +1594,19 @@ namespace JoJoStands
                 Player.KillMe(PlayerDeathReason.ByCustomReason(Player.name + "'s artificial soul has left him."), Player.statLife + 1, Player.direction);
                 revivedByPokerChip = false;
             }
+            if (bitesTheDustActive)
+            {
+                Main.time = MidnightFloat24AsDayTime(bitesTheDustNewTime);
+                Main.dayTime = Main.time < Main.dayLength;
+            }
+        }
+
+        private float MidnightFloat24AsDayTime(float militaryFormatTime)
+        {
+            if (Main.dayTime)
+                return (militaryFormatTime - 4.5f) * (54000f / 15f);
+
+            return (militaryFormatTime - 19.5f) * (32400f / 9f);
         }
 
         public override void PostUpdate()
@@ -1613,7 +1627,6 @@ namespace JoJoStands
             if (standDodgeChance > 30f)
                 standDodgeChance = 30f;
         }
-
         private void UpdateShaderStates()
         {
             if (!Main.dedServ && Player.whoAmI == Main.myPlayer)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside
@@ -2077,6 +2090,8 @@ namespace JoJoStands
                 if (JoJoStands.DeathSoundID != JoJoStands.DeathSoundType.Roundabout)
                     ToBeContinued.Visible = true;
             }
+            if ((timestopActive || Player.HasBuff<TheWorldBuff>()) && timestopOwner)
+                JoJoStandsEffectUtils.EndTimestop(Player);
         }
 
         public override void UpdateDead()

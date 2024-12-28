@@ -626,7 +626,7 @@ namespace JoJoStands.Projectiles
         public override bool CanHitPvp(Player target) => false;
         public override bool? CanHitNPC(NPC target) => false;
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();

@@ -181,7 +181,7 @@ namespace JoJoStands.Projectiles
                 target.AddBuff(BuffID.Obstructed, 4 * 60);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (!explosiveBubble)
             {

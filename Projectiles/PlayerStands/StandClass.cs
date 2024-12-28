@@ -1015,7 +1015,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
-        private void CustomDrawStand(Color drawColor) { }
+        public virtual void CustomDrawStand(Color drawColor) { }
 
         public void PreDrawAfterimagePunches(Color drawColor)
         {
@@ -1130,7 +1130,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         { }
 
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             MyPlayer mPlayer = Main.player[Projectile.owner].GetModPlayer<MyPlayer>();
             mPlayer.standType = 0;

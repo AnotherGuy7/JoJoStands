@@ -115,7 +115,7 @@ namespace JoJoStands.Projectiles.NPCStands
             }
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             whitesnakeActive = false;
         }

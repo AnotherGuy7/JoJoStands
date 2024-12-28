@@ -38,7 +38,7 @@ namespace JoJoStands.Projectiles
                 modifiers.SetCrit();
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < 15; i++)
             {

@@ -271,7 +271,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
             Main.EntitySpriteDraw(gunTexture, Projectile.Center + (GunPlacementOffset * new Vector2(Projectile.spriteDirection, 1f)) - Main.screenPosition, null, Color.White, currentRota + MathHelper.Pi, origin, Projectile.scale, effect, 0f);
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             for (int i = 0; i < Main.rand.Next(2, 5 + 1); i++)
             {

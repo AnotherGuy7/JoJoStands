@@ -245,13 +245,13 @@ namespace JoJoStands.NPCs.TownNPCs
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.CreamFinal").Value;
 
                 else if (standSlotItemType == ModContent.ItemType<HermitPurpleT1>())
-                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.").Value;
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HermitPurpleT1").Value;
                 else if (standSlotItemType == ModContent.ItemType<HermitPurpleT2>())
-                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.").Value;
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HermitPurpleT2").Value;
                 else if (standSlotItemType == ModContent.ItemType<HermitPurpleT3>())
-                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.").Value;
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HermitPurpleT3").Value;
                 else if (standSlotItemType == ModContent.ItemType<HermitPurpleFinal>())
-                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.").Value;
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HermitPurpleFinal").Value;
 
                 else if (standSlotItemType == ModContent.ItemType<BadCompanyT1>())
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.BadCompanyT1").Value;
