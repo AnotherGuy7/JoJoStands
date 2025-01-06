@@ -102,7 +102,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     }
                     if (player.ownedProjectileCounts[ModContent.ProjectileType<EchoesTailTip>()] == 0 && !returnToPlayer && tailUseTimer == 0 && !returnTail && shootCount <= 0)
                     {
-                        if (Main.mouseRight)        //right-click ability 
+                        if (Main.mouseRight)        //right-click ability
                             rightClickHoldTimer++;
                         else if (rightClickHoldTimer > 0 && rightClickHoldTimer < 60)
                         {

@@ -20,6 +20,7 @@
 - Fixed the draw card button in Darby's Mini Poker minigame suggesting a card switch when none is available
 - Fixed many formatting issues with Jotaro's dialogue
 - Fixed Stand Attacks being able to destroy the Eternia portal
+- Fixed Killer Queen's sprite when "clicking" while using the Salad Dye
 
 - Slaves of Fear (Tier 1) can now be summoned properly
 - Fixed Cool Out standing too close to the player

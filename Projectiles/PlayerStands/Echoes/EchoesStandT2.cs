@@ -223,7 +223,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                     LimitDistance(RemoteRange);
                 }
             }
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer) //automode
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && !returnToPlayer)        //automode
             {
                 remoteMode = false;
                 BasicPunchAI();
