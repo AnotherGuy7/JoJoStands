@@ -127,7 +127,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                         shootVel = new Vector2(0f, 1f);
                     shootVel.Normalize();
                     shootVel *= 8f;
-                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<EchoesTailTip>(), (int)(AltDamage * mPlayer.standDamageBoosts), 6f, Projectile.owner, Projectile.whoAmI);
+                    int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<EchoesTailTip>(), newAltDamage, 6f, Projectile.owner, Projectile.whoAmI);
                     Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipTier = mPlayer.echoesTier;
                     Main.projectile[projIndex].GetGlobalProjectile<JoJoGlobalProjectile>().echoesTailTipType = echoesTailTipType;
                     Main.projectile[projIndex].netUpdate = true;

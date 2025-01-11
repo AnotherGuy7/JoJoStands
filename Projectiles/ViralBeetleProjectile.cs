@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace JoJoStands.Projectiles
 {
@@ -102,7 +103,7 @@ namespace JoJoStands.Projectiles
         {
             for (int d = 0; d < 10; d++)
             {
-                Main.dust[Dust.NewDust(Projectile.Center + new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f)), Projectile.width, Projectile.height, 232)].noGravity = true;
+                Main.dust[Dust.NewDust(Projectile.Center + new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f)), Projectile.width, Projectile.height, DustID.GoldCritter)].noGravity = true;
             }
         }
 
