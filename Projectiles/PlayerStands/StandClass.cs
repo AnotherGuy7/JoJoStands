@@ -164,6 +164,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         public float newAltMaxDistance = 0f;
         public int newPunchDamage = 0;
         public int newProjectileDamage = 0;
+        public int newAltDamage = 0;
         public bool playerHasAbilityCooldown = false;
         public Texture2D standTexture;
         public Texture2D standRangeIndicatorTexture;
@@ -618,7 +619,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                                 if (gravityAccounting)
                                     shootVel.Y -= Projectile.Distance(target.position) / 110f;        //Adding force with the distance of the enemy / 110 (Dividing by 110 cause if not it's gonna fly straight up)
 
-                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, projToShoot, (int)((AltDamage * mPlayer.standDamageBoosts) * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
+                                int projIndex = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, projToShoot, (int)(newAltDamage * 0.9f), 2f, Projectile.owner, Projectile.whoAmI, TierNumber);
                                 Main.projectile[projIndex].netUpdate = true;
                                 Projectile.netUpdate = true;
                             }
@@ -854,6 +855,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             newAltMaxDistance = MaxAltDistance + mPlayer.standRangeBoosts;
             newPunchDamage = (int)(PunchDamage * mPlayer.standDamageBoosts);
             newProjectileDamage = (int)(ProjectileDamage * mPlayer.standDamageBoosts);
+            newAltDamage = (int)(AltDamage * mPlayer.standDamageBoosts);
             playerHasAbilityCooldown = player.HasBuff(ModContent.BuffType<AbilityCooldown>());
             if (Projectile.owner == Main.myPlayer)
             {
