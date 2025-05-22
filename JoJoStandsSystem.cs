@@ -1,10 +1,14 @@
-﻿using JoJoStands.UI;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using static Terraria.ModLoader.ModContent;
 
 namespace JoJoStands
 {
@@ -175,6 +179,118 @@ namespace JoJoStands
             GoldExperienceAbilityWheel.CloseAbilityWheel();
             GoldExperienceRequiemAbilityWheel.CloseAbilityWheel();
             StoneFreeAbilityWheel.CloseAbilityWheel();
+        }
+
+        public override void AddRecipeGroups()
+        {
+            RecipeGroup willsGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "Wills", new int[]
+            {
+                ItemType<WillToFight>(),
+                ItemType<WillToChange>(),
+                ItemType<WillToControl>(),
+                ItemType<WillToDestroy>(),
+                ItemType<WillToEscape>(),
+                ItemType<WillToProtect>()
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsWills", willsGroup);
+
+            RecipeGroup AdamantiteTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Adamantite-Tier Bar", new int[]
+            {
+                ItemID.AdamantiteBar,
+                ItemID.TitaniumBar,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsAdamantite-TierBar", AdamantiteTierGroup);
+
+            RecipeGroup MythrilTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Mythril-Tier Bar", new int[]
+            {
+                ItemID.MythrilBar,
+                ItemID.OrichalcumBar,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsMythril-TierBar", MythrilTierGroup);
+
+            RecipeGroup CobaltTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Cobalt-Tier Bar", new int[]
+            {
+                ItemID.CobaltBar,
+                ItemID.PalladiumBar,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsCobalt-TierBar", CobaltTierGroup);
+
+            RecipeGroup GoldTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Gold-Tier Bar", new int[]
+            {
+                ItemID.GoldBar,
+                ItemID.PlatinumBar,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsGold-TierBar", GoldTierGroup);
+
+            RecipeGroup SilverTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Silver-Tier Bar", new int[]
+            {
+                ItemID.SilverBar,
+                ItemID.TungstenBar,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsSilver-TierBar", SilverTierGroup);
+
+            RecipeGroup IronTierGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Iron-Tier Bar", new int[]
+            {
+                ItemID.IronBar,
+                ItemID.LeadBar,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsIron-TierBar", IronTierGroup);
+
+            RecipeGroup EvilBarGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Evil Bar", new int[]
+            {
+                ItemID.DemoniteBar,
+                ItemID.CrimtaneBar,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsEvilBar", EvilBarGroup);
+
+            RecipeGroup RottenVertebraeGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Rotten Chunk or Vertebrae", new int[]
+            {
+                ItemID.RottenChunk,
+                ItemID.Vertebrae,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsRottenVertebrae", RottenVertebraeGroup);
+
+            RecipeGroup ShadowTissueGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Shadow Scale or Tissue Sample", new int[]
+            {
+                ItemID.ShadowScale,
+                ItemID.TissueSample,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsShadowTissue", ShadowTissueGroup);
+
+            RecipeGroup CursedIchorGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Cursed Flame or Ichor", new int[]
+            {
+                ItemID.CursedFlame,
+                ItemID.Ichor,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsCursedIchor", CursedIchorGroup);
+
+            RecipeGroup EvilBulletGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Cursed Bullet or Ichor Bullet", new int[]
+            {
+                ItemID.CursedBullet,
+                ItemID.IchorBullet,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsEvilBullet", EvilBulletGroup);
+
+            RecipeGroup SilverBulletGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Silver Bullet or Tungsten Bullet", new int[]
+            {
+                ItemID.SilverBullet,
+                ItemID.TungstenBullet,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsSilverBullet", SilverBulletGroup);
+
+            RecipeGroup CrownGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Crown", new int[]
+            {
+                ItemID.GoldCrown,
+                ItemID.PlatinumCrown,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsCrown", CrownGroup);
+
+            RecipeGroup WatchGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Gold Watch or Platinum Watch", new int[]
+            {
+                ItemID.GoldWatch,
+                ItemID.PlatinumWatch,
+            });
+            RecipeGroup.RegisterGroup("JoJoStandsWatch", WatchGroup);
         }
 
         public override void PostDrawInterface(SpriteBatch spriteBatch)

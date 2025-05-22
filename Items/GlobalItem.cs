@@ -215,6 +215,7 @@ namespace JoJoStands.Items
             }
             return base.ReforgePrice(item, ref reforgePrice, ref canApplyDiscount);
         }
+
         public override void AddRecipes()
         {
             Recipe revolverRecipe = Recipe.Create(ItemID.Revolver);
