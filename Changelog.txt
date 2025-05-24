@@ -1,2 +1,1 @@
-- Removed Part 1 Beta content
-- Due to the response of the beta content, the Part 1 Beta will instead be available as a separate mod in the Workshop in the following weeks.
+- Minor update for Fan Stand compatibility

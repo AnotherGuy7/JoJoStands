@@ -896,9 +896,9 @@ namespace JoJoStands.Projectiles.PlayerStands
 
             if (JoJoStands.RangeIndicators && CanUseRangeIndicators && newMaxDistance > 0)
             {
-                if (Math.Abs((int)rangeIndicatorSize.X - (int)newMaxDistance) > 1)     //Comparing via subtraction to have a minimum error count of 1
+                if (newMaxDistance > 0 && Math.Abs((int)rangeIndicatorSize.X - (int)newMaxDistance) > 1)     //Comparing via subtraction to have a minimum error count of 1
                     standRangeIndicatorTexture = GenerateRangeIndicatorTexture((int)newMaxDistance);
-                if (Math.Abs((int)secondaryRangeIndicatorSize.X - (int)newAltMaxDistance) > 1)
+                if (newAltMaxDistance > 0 && Math.Abs((int)secondaryRangeIndicatorSize.X - (int)newAltMaxDistance) > 1)
                     secondaryStandRangeIndicatorTexture = GenerateRangeIndicatorTexture((int)newAltMaxDistance, 2);
             }
         }
