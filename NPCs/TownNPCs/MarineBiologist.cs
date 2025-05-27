@@ -310,7 +310,10 @@ namespace JoJoStands.NPCs.TownNPCs
                 else if (standSlotItemType == ModContent.ItemType<EchoesAct3>())
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.EchoesAct3").Value;
                 else if (JoJoStands.FanStandsLoaded)
-                    Main.npcChatText = Language.GetText("Mods.JoJoFanStands.JotaroCustomDialogue." + mPlayer.standName + "T" + mPlayer.standTier).Value;
+                {
+                    string suffix = mPlayer.standTier == 4 ? "Final" : ("T" + mPlayer.standTier);      //Needs requiem support
+                    Main.npcChatText = Language.GetText("Mods.JoJoFanStands.JotaroCustomDialogue." + mPlayer.standName + suffix).Value;
+                }
 
                 if (mPlayer.StandSlot.SlotItem.IsAir)
                 {
