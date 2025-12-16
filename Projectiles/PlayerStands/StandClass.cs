@@ -40,7 +40,28 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public virtual void ExtraSetDefaults()
         { }
+        
+        public override bool PreAI()
+        {
+            // Forces the penetration to -1 (infinite penetration).
+            // This prevents the Stand projectile from being deleted by the system when it touches an enemy due to penetration loss.
+            Projectile.penetrate = -1; 
+            return true; // Return true to allow the AI logic to continue.
+        }
+        
+        // This method determines whether the projectile can hit an NPC.
+        public override bool? CanHitNPC(NPC target)
+        {
+            // Return false directly.
+            // This means the "Stand Body" projectile will never deal contact damage to enemies.         
+            return false; 
+        }
 
+        // If the mod has PvP logic, it is best to disable PvP contact damage as well.
+        public override bool CanHitPvp(Player target)
+        {
+            return false;
+        }
         public override string Texture => Mod.Name + "/Extras/EmptyTexture";
         /// <summary>
         /// How fast the projectile the Stand shoots goes. Usually at 16f.

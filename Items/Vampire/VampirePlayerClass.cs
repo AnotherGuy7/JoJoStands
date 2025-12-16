@@ -231,11 +231,11 @@ namespace JoJoStands.Items.Vampire
                         {
                             buriedUndergroundHealthRegenTimer = 0;
 
-                            int healthRegained = (int)(Player.statLifeMax * (0.04f * GetSkillLevel(UndergroundRecovery)));
-                            if (Player.statLife + healthRegained <= Player.statLifeMax)
+                            int healthRegained = (int)(Player.statLifeMax2 * (0.04f * GetSkillLevel(UndergroundRecovery)));
+                            if (Player.statLife + healthRegained <= Player.statLifeMax2)
                                 Player.statLife += healthRegained;
                             else
-                                Player.statLife = Player.statLifeMax;
+                                Player.statLife = Player.statLifeMax2;
                             Player.HealEffect(healthRegained);
                         }
                         Player.controlUseItem = false;
@@ -285,14 +285,14 @@ namespace JoJoStands.Items.Vampire
                 if (calculatedLifeSteal < 0)
                     return;
 
-                if (calculatedLifeSteal < Player.statLifeMax - Player.statLife)
+                if (calculatedLifeSteal < Player.statLifeMax2 - Player.statLife)
                 {
                     Player.statLife += calculatedLifeSteal;
                     Player.HealEffect(calculatedLifeSteal, true);
                 }
-                if (calculatedLifeSteal >= Player.statLifeMax - Player.statLife)
+                if (calculatedLifeSteal >= Player.statLifeMax2 - Player.statLife)
                 {
-                    calculatedLifeSteal = Player.statLifeMax - Player.statLife;
+                    calculatedLifeSteal = Player.statLifeMax2 - Player.statLife;
                     Player.statLife += (int)(calculatedLifeSteal);
                     Player.HealEffect(calculatedLifeSteal, true);
                 }
@@ -327,14 +327,14 @@ namespace JoJoStands.Items.Vampire
                 if (calculatedLifeSteal < 0)
                     return;
 
-                if (calculatedLifeSteal < Player.statLifeMax - Player.statLife)
+                if (calculatedLifeSteal < Player.statLifeMax2 - Player.statLife)
                 {
                     Player.statLife += calculatedLifeSteal;
                     Player.HealEffect(calculatedLifeSteal, true);
                 }
-                if (calculatedLifeSteal >= Player.statLifeMax - Player.statLife)
+                if (calculatedLifeSteal >= Player.statLifeMax2 - Player.statLife)
                 {
-                    calculatedLifeSteal = Player.statLifeMax - Player.statLife;
+                    calculatedLifeSteal = Player.statLifeMax2 - Player.statLife;
                     Player.statLife += (int)(calculatedLifeSteal);
                     Player.HealEffect(calculatedLifeSteal, true);
                 }
@@ -569,7 +569,7 @@ namespace JoJoStands.Items.Vampire
                 if (Main.rand.Next(0, 100 + 1) <= 30)
                 {
                     Player.AddBuff(ModContent.BuffType<FinalPush>(), 2 * 60 * 60);
-                    Player.statLife = (int)(Player.statLifeMax * 0.3f);
+                    Player.statLife = (int)(Player.statLifeMax2 * 0.3f);
                     return false;
                 }
             }
