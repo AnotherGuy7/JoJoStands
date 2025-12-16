@@ -3948,21 +3948,65 @@ Mods: {
 
 			DeathSoundType: {
 				Tooltip: ""
-				None.Label: Нет
-				Roundabout.Label: РондаБаут
-				Caesar.Label: Цезарь
-				KonoMeAmareriMaroreriMerareMaro.Label: Коно-Ме-Амарери-Марорери-Мераре-Маро
-				LastTrainHome.Label: Ласт-Трейн-Хом
-				KingCrimsonNoNorioKu.Label: Кинг-Кримзон Но-Норио-Ку
+
+				None: {
+					Label: Нет
+					// Tooltip: ""
+				}
+
+				Roundabout: {
+					Label: РондаБаут
+					// Tooltip: ""
+				}
+
+				Caesar: {
+					Label: Цезарь
+					// Tooltip: ""
+				}
+
+				KonoMeAmareriMaroreriMerareMaro: {
+					Label: Коно-Ме-Амарери-Марорери-Мераре-Маро
+					// Tooltip: ""
+				}
+
+				LastTrainHome: {
+					Label: Ласт-Трейн-Хом
+					// Tooltip: ""
+				}
+
+				KingCrimsonNoNorioKu: {
+					Label: Кинг-Кримзон Но-Норио-Ку
+					// Tooltip: ""
+				}
 			}
 
 			StandSearchTypeEnum: {
 				Tooltip: ""
-				Bosses.Label: Боссы
-				Closest.Label: Ближайшие
-				Farthest.Label: Дальние
-				LeastHealth.Label: Меньше Здоровья
-				MostHealth.Label: Больше Здоровья
+
+				Bosses: {
+					Label: Боссы
+					// Tooltip: ""
+				}
+
+				Closest: {
+					Label: Ближайшие
+					// Tooltip: ""
+				}
+
+				Farthest: {
+					Label: Дальние
+					// Tooltip: ""
+				}
+
+				LeastHealth: {
+					Label: Меньше Здоровья
+					// Tooltip: ""
+				}
+
+				MostHealth: {
+					Label: Больше Здоровья
+					// Tooltip: ""
+				}
 			}
 
 			CustomizableServerOptions: {
@@ -3985,10 +4029,26 @@ Mods: {
 
 			StandSyncFrequency: {
 				Tooltip: ""
-				Sparingly.Label: Умеренно
-				SemiFrequently.Label: Получасто
-				Frequently.Label: Часто
-				Always.Label: Постоянно
+
+				Sparingly: {
+					Label: Умеренно
+					// Tooltip: ""
+				}
+
+				SemiFrequently: {
+					Label: Получасто
+					// Tooltip: ""
+				}
+
+				Frequently: {
+					Label: Часто
+					// Tooltip: ""
+				}
+
+				Always: {
+					Label: Постоянно
+					// Tooltip: ""
+				}
 			}
 		}
 

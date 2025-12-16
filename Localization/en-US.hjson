@@ -3953,21 +3953,65 @@ Mods: {
 
 			DeathSoundType: {
 				Tooltip: ""
-				None.Label: None
-				Roundabout.Label: Roundabout
-				Caesar.Label: Caesar
-				KonoMeAmareriMaroreriMerareMaro.Label: Kono Me Amareri Maroreri Merare Maro
-				LastTrainHome.Label: Last Train Home
-				KingCrimsonNoNorioKu.Label: King Crimson No Norio Ku
+
+				None: {
+					Label: None
+					Tooltip: ""
+				}
+
+				Roundabout: {
+					Label: Roundabout
+					Tooltip: ""
+				}
+
+				Caesar: {
+					Label: Caesar
+					Tooltip: ""
+				}
+
+				KonoMeAmareriMaroreriMerareMaro: {
+					Label: Kono Me Amareri Maroreri Merare Maro
+					Tooltip: ""
+				}
+
+				LastTrainHome: {
+					Label: Last Train Home
+					Tooltip: ""
+				}
+
+				KingCrimsonNoNorioKu: {
+					Label: King Crimson No Norio Ku
+					Tooltip: ""
+				}
 			}
 
 			StandSearchTypeEnum: {
 				Tooltip: ""
-				Bosses.Label: Bosses
-				Closest.Label: Closest
-				Farthest.Label: Farthest
-				LeastHealth.Label: Least Health
-				MostHealth.Label: Most Health
+
+				Bosses: {
+					Label: Bosses
+					Tooltip: ""
+				}
+
+				Closest: {
+					Label: Closest
+					Tooltip: ""
+				}
+
+				Farthest: {
+					Label: Farthest
+					Tooltip: ""
+				}
+
+				LeastHealth: {
+					Label: Least Health
+					Tooltip: ""
+				}
+
+				MostHealth: {
+					Label: Most Health
+					Tooltip: ""
+				}
 			}
 
 			CustomizableServerOptions: {
@@ -3990,10 +4034,26 @@ Mods: {
 
 			StandSyncFrequency: {
 				Tooltip: ""
-				Sparingly.Label: Sparingly
-				SemiFrequently.Label: Semi Frequently
-				Frequently.Label: Frequently
-				Always.Label: Always
+
+				Sparingly: {
+					Label: Sparingly
+					Tooltip: ""
+				}
+
+				SemiFrequently: {
+					Label: Semi Frequently
+					Tooltip: ""
+				}
+
+				Frequently: {
+					Label: Frequently
+					Tooltip: ""
+				}
+
+				Always: {
+					Label: Always
+					Tooltip: ""
+				}
 			}
 		}
 
@@ -4265,7 +4325,7 @@ Mods: {
 			VirtualInsanityT3:
 				'''
 				Fascinating. The stronger this stand gets, the more unfamiliar the energy it exudes becomes. Well, no matter the case, your stand has definitely grown in strength.
-				Due to that, you seem to have reached the full potential for each of your weapons. That pent up energy seems to push those weapons to their absolute limit. I suppose it’s a good thing the reserve of energy your stand can tap into has been increased. Perhaps you can do more while in that state...
+				Due to that, you seem to have reached the full potential for each of your weapons. That pent up energy seems to push those weapons to their absolute limit. I suppose itï¿½s a good thing the reserve of energy your stand can tap into has been increased. Perhaps you can do more while in that state...
 				'''
 			VirtualInsanityFinal:
 				'''

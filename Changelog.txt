@@ -1,1 +1,1 @@
-- Minor update for Fan Stand compatibility
+- Minor bug fixes
