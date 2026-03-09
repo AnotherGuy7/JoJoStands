@@ -171,7 +171,7 @@ namespace JoJoStands
 
         public bool ZoneViralMeteorite;
 
-        public UIItemSlot StandSlot;
+        public StandSlot StandSlot;
         public UIItemSlot StandDyeSlot;
 
         public Vector2 VoidCamPosition;
@@ -627,7 +627,7 @@ namespace JoJoStands
 
         public override void Initialize()
         {
-            StandSlot = new UIItemSlot(Vector2.Zero, hoverText: "Enter Stand Here", scaleToInventory: true);
+            StandSlot = new StandSlot(Vector2.Zero, hoverText: "Enter Stand Here", scaleToInventory: true);
             StandSlot.BackOpacity = .8f;
             StandSlot.SlotItem = new Item();
             StandSlot.SlotItem.SetDefaults(0);

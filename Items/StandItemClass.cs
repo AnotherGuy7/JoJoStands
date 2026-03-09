@@ -115,5 +115,23 @@ namespace JoJoStands.Items
         {
             return false;
         }
+
+        /// <summary>
+        /// Called when this stand item is equipped into the stand slot.
+        /// </summary>
+        /// <param name="player">The player equipping the stand.</param>
+        public virtual void OnEquip(Player player)
+        {
+
+        }
+
+        /// <summary>
+        /// Called when this stand item is unequipped from the stand slot.
+        /// </summary>
+        /// <param name="player">The player unequipping the stand.</param>
+        public virtual void OnUnequip(Player player)
+        {
+
+        }
     }
 }
