@@ -42,6 +42,9 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
 
         private int ActiveFrameCount => (CanDeflect && DeflectMode) ? DeflectFrameCount : IdleFrameCount;
 
+        private float _patrolOffset = 0f;
+        private float _patrolDirection = 1f;
+
         private NPC LockedTarget
         {
             get
@@ -89,6 +92,17 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
             }
 
             DrawScanRing(mPlayer);
+
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
+            {
+                HoverNearPlayer(player);
+
+                if (CanRedirectShots)
+                    DoRedirectMode(mPlayer);
+                if (CanDeflect && DeflectMode)
+                    DoDeflectMode(mPlayer);
+                return;
+            }
 
             if (Projectile.owner == Main.myPlayer)
                 HandleInput(player, mPlayer);
@@ -247,7 +261,6 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
                 if (!IsFriendlyRangedShot(other))
                     continue;
 
-                // Only redirect projectiles the stand physically touches
                 if (Vector2.Distance(other.Center, Projectile.Center) > InteractRadius)
                     continue;
 
@@ -275,7 +288,6 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
                 if (!IsEnemyProjectile(other))
                     continue;
 
-                // Only deflect projectiles the stand physically touches
                 if (Vector2.Distance(other.Center, Projectile.Center) > InteractRadius)
                     continue;
 
@@ -344,6 +356,43 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
                 if (d < bestDist) { bestDist = d; best = n; }
             }
             return best;
+        }
+
+        private void HoverNearPlayer(Player player)
+        {
+            const float hoverHeightOffset = 3.5f * 16f;
+            const float maxFlySpeed = 10f;
+            const float patrolRange = 3f * 16f;
+            const float patrolSpeed = 0.18f;
+            Vector2 hoverBase = player.Center + new Vector2(0f, -hoverHeightOffset);
+            _patrolOffset += patrolSpeed * _patrolDirection;
+            if (_patrolOffset >= patrolRange)
+            {
+                _patrolOffset = patrolRange;
+                _patrolDirection = -1f;
+            }
+            else if (_patrolOffset <= -patrolRange)
+            {
+                _patrolOffset = -patrolRange;
+                _patrolDirection = 1f;
+            }
+            Vector2 hoverTarget = hoverBase + new Vector2(_patrolOffset, 0f);
+            if (Projectile.Distance(player.Center) > 16 * 16f)
+            {
+                Projectile.tileCollide = false;
+                Projectile.velocity = player.Center - Projectile.Center;
+                Projectile.velocity.Normalize();
+                Projectile.velocity *= maxFlySpeed + player.moveSpeed;
+                Projectile.netUpdate = true;
+            }
+            else
+            {
+                Vector2 toTarget = hoverTarget - Projectile.Center;
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, toTarget * 0.12f, 0.15f);
+                Projectile.tileCollide = false;
+                Projectile.netUpdate = true;
+            }
+            Projectile.rotation = LerpAngle(Projectile.rotation, 0f, RotationLerpSpeed * 0.5f);
         }
 
         public void SetLockedTarget(int npcWhoAmI)
