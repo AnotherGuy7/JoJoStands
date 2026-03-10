@@ -168,7 +168,8 @@ namespace JoJoStands
                 ItemType<CrazyDiamondT1>(),
                 ItemType<TowerOfGrayT1>(),
                 ItemType<SoftAndWetT1>(),
-                ItemType<EchoesAct0>()
+                ItemType<EchoesAct0>(),
+                ItemType<ManhattanTransferT1>()
             };
 
             timestopImmune = new List<int>()
