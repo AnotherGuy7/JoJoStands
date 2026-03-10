@@ -202,14 +202,17 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
 
         private void DrawScanRing(MyPlayer mPlayer)
         {
-            // Ring shows the movement range around the player, not the stand
             float range = StandRange(mPlayer);
+            Player player = Main.player[Projectile.owner];
+            float distFromEdge = range - Vector2.Distance(Projectile.Center, player.Center);
+            bool nearBorder = distFromEdge <= 40f;
+            if (!hasTarget && !nearBorder)
+                return;
             int ringDusts = 36;
             for (int i = 0; i < ringDusts; i++)
             {
                 if (Main.rand.NextBool(4))
                     continue;
-                Player player = Main.player[Projectile.owner];
                 float rot = MathHelper.ToRadians((360f / ringDusts) * i);
                 Vector2 dp = player.Center + rot.ToRotationVector2() * range;
                 int di = Dust.NewDust(dp, 1, 1, DustID.Electric);
