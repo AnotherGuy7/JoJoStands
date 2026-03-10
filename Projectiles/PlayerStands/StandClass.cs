@@ -292,7 +292,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         /// <param name="movementSpeed">How fast the Stand moves while it's punching</param>
         /// <param name="punchLifeTimeMultiplier">A multiplier for the punch projectiles' lifetime.</param>
-        public void Punch(float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f, bool afterImages = true)
+        public void Punch(float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f, bool afterImages = true, bool playPunchSound = true)
         {
             Vector2 targetPosition = Main.MouseWorld;
             if (JoJoStands.StandAimAssist)
@@ -312,7 +312,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                     }
                 }
             }
-            Punch(targetPosition, movementSpeed, punchLifeTimeMultiplier, afterImages);
+            Punch(targetPosition, movementSpeed, punchLifeTimeMultiplier, afterImages, playPunchSound);
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         /// <param name="movementSpeed">How fast the Stand moves while it's punching</param>
         /// <param name="punchLifeTimeMultiplier">A multiplier for the punch projectiles' lifetime.</param>
-        public void Punch(Vector2 targetPosition, float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f, bool afterImages = true)
+        public void Punch(Vector2 targetPosition, float movementSpeed = 5f, float punchLifeTimeMultiplier = 1f, bool afterImages = true, bool playPunchSound = true)
         {
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -347,7 +347,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             else
                 Projectile.velocity = Vector2.Zero;
 
-            PlayPunchSound();
+            if(playPunchSound)
+                PlayPunchSound();
+            
             if (shootCount <= 0)
             {
                 shootCount += newPunchTime;
