@@ -11,7 +11,7 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
 {
     public abstract class ManhattanTransferStand : StandClass
     {
-        private const int RedirectCooldown = 30;
+        protected virtual int RedirectCooldown => 30;
         private const float RedirectSpeed = 18f;
         private const int FrameSpeed = 12;
         private const float FlySpeed = 10f;
@@ -259,7 +259,7 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
                 SpawnRedirectDusts(other.Center);
                 SoundEngine.PlaySound(SoundID.Tink.WithPitchOffset(3f), other.Center);
 
-                redirectTimer += RedirectCooldown - (2 * mPlayer.standSpeedBoosts);
+                redirectTimer += Math.Max(0, RedirectCooldown - (2 * mPlayer.standSpeedBoosts));
                 break;
             }
         }
