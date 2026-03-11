@@ -13,6 +13,7 @@ using JoJoStands.NPCs;
 using JoJoStands.Projectiles;
 using JoJoStands.Projectiles.PlayerStands;
 using JoJoStands.Projectiles.PlayerStands.BadCompany;
+using JoJoStands.Projectiles.PlayerStands.ManhattanTransfer;
 using JoJoStands.Projectiles.PlayerStands.SilverChariot;
 using JoJoStands.Projectiles.PlayerStands.Tusk;
 using JoJoStands.UI;
@@ -46,6 +47,7 @@ namespace JoJoStands
         public int timestopEffectDurationTimer = 0;
         public int sexPistolsLeft = 6;
         public int sexPistolsTier = 0;
+        public int manhattanTier = 0;
         public int revolverBulletsShot = 0;
         public int sexPistolsRecoveryTimer = 0;
         public int aerosmithWhoAmI = 0;
@@ -1794,6 +1796,7 @@ namespace JoJoStands
             standTier = 0;
             standDefenseToAdd = 0;
             sexPistolsTier = 0;
+            manhattanTier = 0;
             stoneFreeWeaveAbilityActive = false;
             hotbarLocked = false;
 
@@ -2085,6 +2088,7 @@ namespace JoJoStands
             standTier = 0;
             standDefenseToAdd = 0;
             sexPistolsTier = 0;
+            manhattanTier = 0;
             stoneFreeWeaveAbilityActive = false;
 
             crazyDiamondRestorationMode = false;
