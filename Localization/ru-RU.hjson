@@ -2215,6 +2215,55 @@ Mods: {
 					'''
 			}
 
+			ManhattanTransferFinal: {
+				// DisplayName: Manhattan Transfer (Final Tier)
+				/* Tooltip:
+					'''
+					Shoot Manhattan Transfer and have it home in on your enemies!
+					Right Click: Adjust Manhattan Transfer's position.
+					Special: Hover on an enemy and lock-in Manhattan Transfer to them!
+					Second Special: Change Manhattan Transfer to Deflector Mode, allowing it to reflect projectiles!
+					Auto Mode: Floats around on top of players head.
+					Used in Stand Slot
+					''' */
+			}
+
+			ManhattanTransferT1: {
+				// DisplayName: Manhattan Transfer (Tier 1)
+				/* Tooltip:
+					'''
+					Shoot Manhattan Transfer and have it home in on your enemies!
+					Right Click: Adjust Manhattan Transfer's position.
+					Auto Mode: Floats around on top of players head.
+					Used in Stand Slot
+					''' */
+			}
+
+			ManhattanTransferT2: {
+				// DisplayName: Manhattan Transfer (Tier 2)
+				/* Tooltip:
+					'''
+					Shoot Manhattan Transfer and have it home in on your enemies!
+					Right Click: Adjust Manhattan Transfer's position.
+					Special: Hover on an enemy and lock-in Manhattan Transfer to them!
+					Auto Mode: Floats around on top of players head.
+					Used in Stand Slot
+					''' */
+			}
+
+			ManhattanTransferT3: {
+				// DisplayName: Manhattan Transfer (Tier 3)
+				/* Tooltip:
+					'''
+					Shoot Manhattan Transfer and have it home in on your enemies!
+					Right Click: Adjust Manhattan Transfer's position.
+					Special: Hover on an enemy and lock-in Manhattan Transfer to them!
+					Second Special: Change Manhattan Transfer to Deflector Mode, allowing it to reflect projectiles!
+					Auto Mode: Floats around on top of players head.
+					Used in Stand Slot
+					''' */
+			}
+
 			SilverChariotFinal: {
 				DisplayName: Сильвер-Чариот (Последний Уровень)
 				Tooltip:
@@ -3784,6 +3833,10 @@ Mods: {
 			// VampiricVeinGrab.DisplayName: Vampiric Vein Grab
 			// VampiricVeinSpike.DisplayName: Vampiric Vein Spike
 			// ZeppeliHamonPunches.DisplayName: Zeppeli Hamon Punches
+			// ManhattanTransferStandFinal.DisplayName: Manhattan Transfer Stand Final
+			// ManhattanTransferStandT1.DisplayName: Manhattan Transfer Stand T1
+			// ManhattanTransferStandT2.DisplayName: Manhattan Transfer Stand T2
+			// ManhattanTransferStandT3.DisplayName: Manhattan Transfer Stand T3
 		}
 
 		Biomes: {
@@ -3948,21 +4001,65 @@ Mods: {
 
 			DeathSoundType: {
 				Tooltip: ""
-				None.Label: Нет
-				Roundabout.Label: РондаБаут
-				Caesar.Label: Цезарь
-				KonoMeAmareriMaroreriMerareMaro.Label: Коно-Ме-Амарери-Марорери-Мераре-Маро
-				LastTrainHome.Label: Ласт-Трейн-Хом
-				KingCrimsonNoNorioKu.Label: Кинг-Кримзон Но-Норио-Ку
+
+				None: {
+					Label: Нет
+					// Tooltip: ""
+				}
+
+				Roundabout: {
+					Label: РондаБаут
+					// Tooltip: ""
+				}
+
+				Caesar: {
+					Label: Цезарь
+					// Tooltip: ""
+				}
+
+				KonoMeAmareriMaroreriMerareMaro: {
+					Label: Коно-Ме-Амарери-Марорери-Мераре-Маро
+					// Tooltip: ""
+				}
+
+				LastTrainHome: {
+					Label: Ласт-Трейн-Хом
+					// Tooltip: ""
+				}
+
+				KingCrimsonNoNorioKu: {
+					Label: Кинг-Кримзон Но-Норио-Ку
+					// Tooltip: ""
+				}
 			}
 
 			StandSearchTypeEnum: {
 				Tooltip: ""
-				Bosses.Label: Боссы
-				Closest.Label: Ближайшие
-				Farthest.Label: Дальние
-				LeastHealth.Label: Меньше Здоровья
-				MostHealth.Label: Больше Здоровья
+
+				Bosses: {
+					Label: Боссы
+					// Tooltip: ""
+				}
+
+				Closest: {
+					Label: Ближайшие
+					// Tooltip: ""
+				}
+
+				Farthest: {
+					Label: Дальние
+					// Tooltip: ""
+				}
+
+				LeastHealth: {
+					Label: Меньше Здоровья
+					// Tooltip: ""
+				}
+
+				MostHealth: {
+					Label: Больше Здоровья
+					// Tooltip: ""
+				}
 			}
 
 			CustomizableServerOptions: {
@@ -3985,10 +4082,26 @@ Mods: {
 
 			StandSyncFrequency: {
 				Tooltip: ""
-				Sparingly.Label: Умеренно
-				SemiFrequently.Label: Получасто
-				Frequently.Label: Часто
-				Always.Label: Постоянно
+
+				Sparingly: {
+					Label: Умеренно
+					// Tooltip: ""
+				}
+
+				SemiFrequently: {
+					Label: Получасто
+					// Tooltip: ""
+				}
+
+				Frequently: {
+					Label: Часто
+					// Tooltip: ""
+				}
+
+				Always: {
+					Label: Постоянно
+					// Tooltip: ""
+				}
 			}
 		}
 
@@ -4283,6 +4396,10 @@ Mods: {
 			EchoesAct1: Я удивлен, что ты зашел так далеко. Похоже, я недооценил твою силу воли. Это Эхос 1 акта. Хотя он может быть слабым, способность Эхос - это то, в чем заключается его истинная сила. Ты должен уметь создавать звуковые эффекты для тех, к кому прикасаешься. Это может либо ослабить врага, либо успокоить друга. Что бы ты ни делал, просто не забудь немного пошуметь. Если ты хочешь еще больше развить свои способности, я бы порекомендовал принять участие с 1 актом в опасной схватке. Может быть, попробовать те жуткие механические глаза, которые я видел летящими в небе.
 			EchoesAct2: Ты выжил. Отлично. Теперь все становится интереснее. Эхос 2 акта способен использовать твои звуковые эффекты и заставить их нанести реальный ущерб. Используя кончик хвоста, ты сможешь разместить эти звуковые эффекты там, где захочешь. Ты должен быть в состоянии лучше контролировать поле боя. Однако, если ты хочешь еще больше расширить свои возможности, тебе придется столкнуться с самой серьезной проблемой на данный момент. Кое-кто рассказал мне об одном причудливом храме под джунглями. Попробуй проверить его.
 			EchoesAct3: Ты вырос. Это Эхос, акт 3, его окончательная форма! Ты вскоре обнаружишь, что эта форма в значительной степени заменяет дальность действия на мощность. Теперь у тебя должна быть возможность использовать 'Три-Фриз'! Это делает одиночную мишень чрезвычайно тяжелой, удерживая ее на месте. Это надежная способность. Твоя тяжелая работа принесла свои плоды. Если когда-нибудь придет время, я надеюсь, что смогу положиться на тебя.
+			// ManhattanTransferT1: Good grief... This stand had taken some close shots at me before. I don't want to see it again. Manhattan Transfer is a stand that can redirect bullets with extreme precision. It may not be the most powerful stand, but it sure is a pain to deal with. It really has the capabilities to Control a few people and push them into a corner.
+			// ManhattanTransferT2: I see that it can redirect bullets at a faster rate now. Seems like it will also be growing its range, so you should be able to Control a larger area with it. You should be able to have control on it enough to lock into your adversaries. Just try to not shoot yourself with it, the guy using this had to make a good Escape.
+			// ManhattanTransferT3: Your capabilities with this stand have truly grown. You should have enough mastery to redirect bullets that are aimed at you as well. However, I do not think you will be able to redirect both your own and your enemies' bullets at the same time, so be careful when you find yourself in a crossfire. Watch yourself as well, the user of this stand was a very Tainted person.
+			// ManhattanTransferFinal: Very well. I see that you have reached the full potential of this stand. It is quite a powerful stand, and I hope you use it wisely. I would like to avoid getting in the sticky situation it brought me again, so please keep it away from me.
 			StandHelpText0: Установи Стенд в 'Stand slot', затем нажми "Stand help", и я расскажу тебе, что он может делать и как получить его уровни, или продолжайте нажимать "Stand help", и я расскажу тебе, как получить определенные предметы и выполнить определенные действия.
 			StandHelpText1: Чтобы использовать Спец. способности Стенда, в настройках управления тебе нужно привязать клавишу к "JoJoStands: Special", затем, когда стенд активирован, нажми клавишу, чтобы использовать Спец. способности
 			StandHelpText2: Стрелы Реквиема можно создать, получив вирусную жемчужину и объединив ее со стрелой Стенда. Это происходит потому, что все задействованные вирусные метеориты начинают трансформироваться и все вместе находят другое применение.
