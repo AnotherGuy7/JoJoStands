@@ -108,6 +108,9 @@ namespace JoJoStands
         public int softAndWetBubbleRotation;
         public int standDesummonTimer = 0;
 
+        public float heyYaDodgeChance = 0f;
+        public float heyYaDropRateBonus = 0f;
+
         public int crazyDiamonUncraftCooldown = 0;
 
         public bool wearingEpitaph = false;
@@ -420,6 +423,9 @@ namespace JoJoStands
             standDodgeChance = 0f;
 
             towerOfGrayDamageMult = 1f;
+
+            heyYaDodgeChance = 0f;
+            heyYaDropRateBonus = 0f;
 
             siliconLifeformCarapace = false;
             manifestedWillEmblem = false;
@@ -1805,6 +1811,9 @@ namespace JoJoStands
             crazyDiamondMessageCooldown = 0;
             crazyDiamondDestroyedTileData.Clear();
 
+            heyYaDodgeChance = 0;
+            heyYaDropRateBonus = 0;
+
             creamTier = 0;
             voidCounter = 0;
             creamNormalToExposed = false;
@@ -1935,6 +1944,13 @@ namespace JoJoStands
 
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
+            if(heyYaDodgeChance > 0 && Main.rand.NextFloat(1, 100) <= heyYaDodgeChance)
+            {
+                modifiers.FinalDamage *= 0f;
+                //if (JoJoStands.SoundsLoaded)
+                //    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/HeyYaDodge"), Player.Center);
+                return;
+            }
             if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
                 modifiers.FinalDamage *= 2;
             if (stoneFreeWeaveAbilityActive || Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
