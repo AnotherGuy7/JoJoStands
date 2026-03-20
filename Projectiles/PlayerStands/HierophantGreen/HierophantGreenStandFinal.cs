@@ -32,6 +32,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
         private const float EmeraldSplashRadius = 24f * 16f;
         private const float AmountOfEmeraldSplashLinks = 50;
         private const float AutoModeDetectionDistance = 24f * 16f;
+        private int specialPoseTimer = 0;
+        private bool syncSpecialPosing = false;
 
         public override void AI()
         {
@@ -116,6 +118,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     spawningField = true;
                     formPosition = Projectile.position;
+                    specialPoseTimer = 180;
                     if (JoJoStands.SoundsLoaded)
                         SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/EmeraldSplash"), Projectile.Center);
                 }
@@ -125,6 +128,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     remoteControlled = true;
                     mPlayer.standControlStyle = MyPlayer.StandControlStyle.Remote;
                 }
+                syncSpecialPosing = specialPoseTimer > 0;
             }
             else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
             {
@@ -224,7 +228,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 {
                     attacking = true;
                     currentAnimationState = AnimationState.Attack;
-                    int direction =  target.Center.X < Projectile.Center.X ? -1 : 1;
+                    int direction = target.Center.X < Projectile.Center.X ? -1 : 1;
                     GoInFront(direction);
                     Projectile.spriteDirection = Projectile.direction = direction;
                     if (shootCount <= 0)
@@ -313,16 +317,29 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             }
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;
+            if (syncSpecialPosing)
+            {
+                if (mPlayer.standControlStyle != MyPlayer.StandControlStyle.Manual)
+                {
+                    syncSpecialPosing = false;
+                    specialPoseTimer = 0;
+                }
+
+                currentAnimationState = AnimationState.Special;
+                specialPoseTimer--;
+            }
         }
 
         public override void SendExtraStates(BinaryWriter writer)
         {
             writer.Write(remoteControlled);
+            writer.Write(syncSpecialPosing);
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             remoteControlled = reader.ReadBoolean();
+            syncSpecialPosing = reader.ReadBoolean();
         }
 
         public override void SelectAnimation()
@@ -339,6 +356,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 PlayAnimation("Idle");
             else if (currentAnimationState == AnimationState.Attack)
                 PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.Special)
+                PlayAnimation("Special");
             else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
         }
@@ -354,6 +373,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 AnimateStand(animationName, 3, 15, true);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 2, 15, true);
+            else if (animationName == "Special")
+                AnimateStand(animationName, 8, 15, false);
         }
     }
 }

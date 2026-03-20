@@ -232,7 +232,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
             else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
             else if (animationName == "Secondary")
-                AnimateStand(animationName, 5, 6, true, 0, 3);
+                AnimateStand(animationName, 5, 6, 0, 3);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 2, true);
         }

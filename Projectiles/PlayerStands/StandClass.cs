@@ -1672,7 +1672,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <param name="loopCertainFrames">Determines whether or not the Stand will loop in certain frames.</param>
         /// <param name="loopFrameStart">The frame where the loop will start at.</param>
         /// <param name="loopFrameEnd">The frame which will cause the loop to restart.</param>
-        public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, bool loopCertainFrames, int loopFrameStart, int loopFrameEnd)
+        public void AnimateStand(string stateName, int frameAmount, int frameCounterLimit, int loopFrameStart, int loopFrameEnd)
         {
             Projectile.frameCounter++;
             amountOfFrames = frameAmount;
@@ -1681,11 +1681,8 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Projectile.frame += 1;
                 Projectile.frameCounter = 0;
             }
-            if (loopCertainFrames)
-            {
-                if (Projectile.frame >= loopFrameEnd)
-                    Projectile.frame = loopFrameStart;
-            }
+            if (Projectile.frame >= loopFrameEnd)
+                Projectile.frame = loopFrameStart;
         }
     }
 }
