@@ -1250,25 +1250,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <summary>
         /// Limits the distance the Stand can travel.
         /// </summary>
-        public void LimitDistance()
-        {
-            Player player = Main.player[Projectile.owner];
-
-            Vector2 direction = player.Center - Projectile.Center;
-            float distanceFromPlayer = direction.Length();
-            if (distanceFromPlayer >= newMaxDistance)
-            {
-                direction.Normalize();
-                Projectile.Center = player.Center + (-direction * newMaxDistance);
-                if (Math.Abs(Projectile.Center.X + Projectile.velocity.X - player.Center.X) > newMaxDistance - (Projectile.width / 2f))     //Controls the separate vector components
-                    Projectile.velocity.X = player.velocity.X;
-                if (Math.Abs(Projectile.Center.Y + Projectile.velocity.Y - player.Center.Y) > newMaxDistance - HalfStandHeight)
-                    Projectile.velocity.Y = player.velocity.Y;
-
-                if (distanceFromPlayer >= newMaxDistance + 16)
-                    Projectile.Center = player.Center;
-            }
-        }
+        public void LimitDistance() => LimitDistance(newMaxDistance, false);        //newMaxDistance is post range modifiers calculations
 
         /// <summary>
         /// Limits the distance the Stand can travel.
@@ -1302,99 +1284,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
         /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
-        public NPC FindNearestTarget(float maxDetectionRange)
-        {
-            NPC target = null;
-            Player player = Main.player[Projectile.owner];
-            switch (JoJoStands.StandSearchTypeEnum)
-            {
-                case MyPlayer.StandSearchTypeEnum.Bosses:
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                if (npc.boss)       //is gonna try to detect bosses over anything
-                                {
-                                    target = npc;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (target == null)
-                        target = FindNearestTarget(MyPlayer.StandSearchTypeEnum.Closest, maxDetectionRange);
-                    break;
-                case MyPlayer.StandSearchTypeEnum.Closest:
-                    float closestDistance = maxDetectionRange;
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < closestDistance && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                target = npc;
-                                closestDistance = distance;
-                            }
-                        }
-                    }
-                    break;
-                case MyPlayer.StandSearchTypeEnum.Farthest:
-                    float farthestDistance = 0f;
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance > farthestDistance && distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                target = npc;
-                                farthestDistance = distance;
-                            }
-                        }
-                    }
-                    break;
-                case MyPlayer.StandSearchTypeEnum.LeastHealth:
-                    int leasthealth = int.MaxValue;
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && npc.life < leasthealth && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                target = npc;
-                                leasthealth = npc.life;
-                            }
-                        }
-                    }
-                    break;
-                case MyPlayer.StandSearchTypeEnum.MostHealth:
-                    int mosthealth = 0;
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                target = npc;
-                                mosthealth = npc.life;
-                            }
-                        }
-                    }
-                    break;
-            }
-            return target;
-        }
+        public NPC FindNearestTarget(float maxDetectionRange) => FindNearestTarget(JoJoStands.StandSearchTypeEnum, maxDetectionRange, Vector2.Zero);
 
         /// <summary>
         /// Find the closest NPC to the player.
@@ -1403,11 +1293,11 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
         /// <param name="detectionPositionOffset">An offset to the position used to check whether or not this Stand has line of sight to the target.</param>
         /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
-        public NPC FindNearestTarget(float maxDetectionRange, Vector2 detectionPositionOffset)
+        public NPC FindNearestTarget(MyPlayer.StandSearchTypeEnum searchType, float maxDetectionRange, Vector2 detectionPositionOffset)
         {
             NPC target = null;
             Player player = Main.player[Projectile.owner];
-            switch (JoJoStands.StandSearchTypeEnum)
+            switch (searchType)
             {
                 case MyPlayer.StandSearchTypeEnum.Bosses:
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
@@ -1427,8 +1317,9 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     if (target == null)
-                        target = FindNearestTarget(MyPlayer.StandSearchTypeEnum.Closest, maxDetectionRange);
+                        target = FindNearestTarget(MyPlayer.StandSearchTypeEnum.Closest, maxDetectionRange, detectionPositionOffset);
                     break;
+
                 case MyPlayer.StandSearchTypeEnum.Closest:
                     float closestDistance = maxDetectionRange;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
@@ -1445,6 +1336,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
+
                 case MyPlayer.StandSearchTypeEnum.Farthest:
                     float farthestDistance = 0f;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
@@ -1461,6 +1353,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
+
                 case MyPlayer.StandSearchTypeEnum.LeastHealth:
                     int leasthealth = int.MaxValue;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
@@ -1477,6 +1370,7 @@ namespace JoJoStands.Projectiles.PlayerStands
                         }
                     }
                     break;
+
                 case MyPlayer.StandSearchTypeEnum.MostHealth:
                     int mosthealth = 0;
                     for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
@@ -1486,106 +1380,6 @@ namespace JoJoStands.Projectiles.PlayerStands
                         {
                             float distance = Vector2.Distance(npc.Center, player.Center);
                             if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.Center + detectionPositionOffset, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                target = npc;
-                                mosthealth = npc.life;
-                            }
-                        }
-                    }
-                    break;
-            }
-            return target;
-        }
-
-        /// <summary>
-        /// Finds the closest NPC to the player with the given search type.
-        /// </summary>
-        /// <param name="searchType">The search type criteria to search with</param>
-        /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
-        /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
-        public NPC FindNearestTarget(MyPlayer.StandSearchTypeEnum searchType, float maxDetectionRange)
-        {
-            NPC target = null;
-            Player player = Main.player[Projectile.owner];
-            switch (searchType)
-            {
-                case MyPlayer.StandSearchTypeEnum.Bosses:
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                if (npc.boss)       //is gonna try to detect bosses over anything
-                                {
-                                    target = npc;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (target == null)
-                        target = FindNearestTarget(MyPlayer.StandSearchTypeEnum.Closest, maxDetectionRange);
-                    break;
-                case MyPlayer.StandSearchTypeEnum.Closest:
-                    float closestDistance = maxDetectionRange;
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < closestDistance && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                target = npc;
-                                closestDistance = distance;
-                            }
-                        }
-                    }
-                    break;
-                case MyPlayer.StandSearchTypeEnum.Farthest:
-                    float farthestDistance = 0f;
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance > farthestDistance && distance < maxDetectionRange && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                target = npc;
-                                farthestDistance = distance;
-                            }
-                        }
-                    }
-                    break;
-                case MyPlayer.StandSearchTypeEnum.LeastHealth:
-                    int leasthealth = int.MaxValue;
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && npc.life < leasthealth && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
-                            {
-                                target = npc;
-                                leasthealth = npc.life;
-                            }
-                        }
-                    }
-                    break;
-                case MyPlayer.StandSearchTypeEnum.MostHealth:
-                    int mosthealth = 0;
-                    for (int n = 0; n < Main.maxNPCs; n++)       //the targeting system
-                    {
-                        NPC npc = Main.npc[n];
-                        if (npc.active && npc.CanBeChasedBy(this, false))
-                        {
-                            float distance = Vector2.Distance(npc.Center, player.Center);
-                            if (distance < maxDetectionRange && npc.life >= mosthealth && Collision.CanHitLine(Projectile.Center, Projectile.width, Projectile.height, npc.position, npc.width, npc.height) && npc.lifeMax > 5 && !npc.immortal && !npc.hide && !npc.townNPC && !npc.friendly)
                             {
                                 target = npc;
                                 mosthealth = npc.life;
