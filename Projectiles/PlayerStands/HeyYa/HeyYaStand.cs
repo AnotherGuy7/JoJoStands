@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -9,10 +10,69 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 {
+    public class HeyYaSpeechBubble
+    {
+        public string Text;
+        public Vector2 WorldPosition;
+        public int TimeLeft;
+        public int MaxTime;
+        public Color TextColor;
+
+        public const int DefaultDuration = 240;
+
+        public HeyYaSpeechBubble(string text, Vector2 worldPos, Color color, int duration = DefaultDuration)
+        {
+            Text = text;
+            WorldPosition = worldPos;
+            MaxTime = duration;
+            TimeLeft = duration;
+            TextColor = color;
+        }
+    }
+
     public abstract class HeyYaStand : StandClass
     {
+        private static readonly List<HeyYaSpeechBubble> _bubbles = new List<HeyYaSpeechBubble>();
+
+        public static void DrawBubbles(SpriteBatch spriteBatch)
+        {
+            for (int i = _bubbles.Count - 1; i >= 0; i--)
+            {
+                var b = _bubbles[i];
+                b.TimeLeft--;
+                if (b.TimeLeft <= 0) { _bubbles.RemoveAt(i); continue; }
+
+                b.WorldPosition.Y -= 0.18f;
+
+                float progress = (float)b.TimeLeft / b.MaxTime;
+                float alpha = progress < 0.25f ? (progress / 0.25f) : 1f;
+                alpha = MathHelper.Clamp(alpha, 0f, 1f);
+
+                Vector2 screenPos = b.WorldPosition - Main.screenPosition;
+
+                Vector2 textSize = Terraria.GameContent.FontAssets.MouseText.Value.MeasureString(b.Text);
+                Vector2 boxPos = screenPos - textSize * 0.5f - new Vector2(6f, 4f);
+                Vector2 boxSize = textSize + new Vector2(12f, 8f);
+
+                Utils.DrawInvBG(spriteBatch,
+                    new Rectangle((int)boxPos.X, (int)boxPos.Y, (int)boxSize.X, (int)boxSize.Y),
+                    new Color(30, 30, 50, (int)(200 * alpha)));
+
+                Utils.DrawBorderString(
+                    spriteBatch,
+                    b.Text,
+                    screenPos,
+                    b.TextColor * alpha,
+                    1f,
+                    0.5f,
+                    0.5f);
+            }
+        }
+
         protected abstract string IdleTexture { get; }
-        protected virtual int IdleFrameCount => 4;
+        protected virtual string JumpTexture => IdleTexture;
+        protected virtual int IdleFrameCount => 2;
+        protected virtual int JumpFrameCount => 1;
 
         protected abstract int Tier { get; }
 
@@ -23,31 +83,21 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
         private static readonly int[] PumpedBuffs =
         {
-            BuffID.Panic,       // T1 – Panic!
-            BuffID.Battle,      // T2 – Battle (use your mod buff if custom)
-            BuffID.Rage,        // T3 – Rage
-            BuffID.Wrath,       // T4 – Wrath
-            BuffID.Inferno,     // T5 – Inferno
+            BuffID.Panic, BuffID.Battle, BuffID.Rage, BuffID.Wrath, BuffID.Inferno,
         };
-
         private static readonly int[] ChillBuffs =
         {
-            BuffID.Sunflower,           // T1 – Happy!
-            BuffID.Calm,            // T2 – Calm
-            BuffID.Fishing,         // T3 – Fishing
-            BuffID.Shine,           // T4 – Shine
-            BuffID.Regeneration,    // T5 – Regeneration
+            BuffID.Sunflower, BuffID.Calm, BuffID.Fishing, BuffID.Shine, BuffID.Regeneration,
         };
 
         private const int FrameSpeed = 12;
-        private const float HoverHeight = 3.5f * 16f;
-        private const float MaxFlySpeed = 10f;
-        private const float PatrolRange = 3f * 16f;
-        private const float PatrolSpeed = 0.18f;
-        private const float RotLerpSpeed = 0.18f;
+        private const float MaxFlySpeed = 18f;
+        private const float FollowLerp = 0.35f;
+        private const float BehindOffset = 2f;
 
-        private float _patrolOffset = 0f;
-        private float _patrolDir = 1f;
+        private bool _isJumping = false;
+        private int _jumpTimer = 0;
+        private const int JumpAnimDuration = 40;
 
         private readonly Dictionary<string, int> _adviceCooldowns = new Dictionary<string, int>();
         private const int AdviceCooldown = 600;
@@ -58,7 +108,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = IdleFrameCount;
+            Main.projFrames[Projectile.type] = Math.Max(IdleFrameCount, JumpFrameCount);
         }
 
         public override void SetDefaults()
@@ -78,105 +128,122 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            Projectile.frameCounter++;
-            if (Projectile.frameCounter >= FrameSpeed)
-            {
-                Projectile.frameCounter = 0;
-                Projectile.frame = (Projectile.frame + 1) % IdleFrameCount;
-            }
-
-            HoverNearPlayer(player);
-
+            UpdateJumpState(player);
+            AnimateFrames();
+            FollowBehindPlayer(player);
             ApplyBuffs(player);
-
             ApplyPassiveStats(mPlayer);
 
             if (Projectile.owner == Main.myPlayer)
             {
                 TickAdviceCooldowns();
                 CheckAdviceTriggers(player);
+
+                if (SpecialKeyPressed())
+                    ToggleMode();
+            }
+        }
+
+        private void UpdateJumpState(Player player)
+        {
+            bool inAir = player.velocity.Y != 0f;
+
+            if (inAir && !_isJumping)
+            {
+                _isJumping = true;
+                _jumpTimer = 0;
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                Projectile.netUpdate = true;
+            }
+            else if (!inAir && _isJumping)
+            {
+                _jumpTimer++;
+                if (_jumpTimer >= JumpAnimDuration)
+                {
+                    _isJumping = false;
+                    _jumpTimer = 0;
+                    Projectile.frame = 0;
+                    Projectile.frameCounter = 0;
+                    Projectile.netUpdate = true;
+                }
+            }
+        }
+
+        private void AnimateFrames()
+        {
+            int frameCount = _isJumping ? JumpFrameCount : IdleFrameCount;
+
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= FrameSpeed)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame = (Projectile.frame + 1) % frameCount;
+            }
+        }
+
+        private void FollowBehindPlayer(Player player)
+        {
+            float dirSign = player.direction;
+            Vector2 target = player.Center + new Vector2(-dirSign * BehindOffset, 0f);
+
+            if (Vector2.Distance(Projectile.Center, target) > 16f * 20f)
+            {
+                Projectile.Center = target;
+                Projectile.velocity = Vector2.Zero;
+            }
+            else
+            {
+                Projectile.velocity = (target - Projectile.Center) * FollowLerp;
             }
 
-            if (Projectile.owner == Main.myPlayer && SpecialKeyPressed())
-                ToggleMode();
+            Projectile.rotation = 0f;
+            Projectile.tileCollide = false;
+            Projectile.netUpdate = true;
         }
 
         private void ApplyBuffs(Player player)
         {
             int[] pool = ChillMode ? ChillBuffs : PumpedBuffs;
             for (int i = 0; i <= Tier && i < pool.Length; i++)
-            {
                 if (pool[i] > 0)
                     player.AddBuff(pool[i], 2);
-            }
         }
 
         private void ApplyPassiveStats(MyPlayer mPlayer)
         {
             Player player = Main.player[Projectile.owner];
-
             player.GetCritChance(DamageClass.Generic) += CritBonus[Tier];
-
             player.fishingSkill += FishingPower[Tier];
-
             mPlayer.heyYaDodgeChance = DodgeChance[Tier];
-
             mPlayer.heyYaDropRateBonus = DropRateBonus[Tier];
-
             player.noFallDmg = true;
-
-            //mPlayer.heyYaImmuneToCheapTrick = true;
         }
 
         private void ToggleMode()
         {
             Projectile.ai[0] = ChillMode ? 0f : 1f;
-            string modeMsg = ChillMode
-                ? "Let's take a breather!"
-                : "Time for some action!";
-            if (Projectile.owner == Main.myPlayer)
-                Main.NewText(modeMsg, 255, 220, 50);
-
+            string modeMsg = ChillMode ? "Let's take a breather!" : "Time for some action!";
+            SpawnBubble(modeMsg, new Color(255, 220, 50));
             SoundEngine.PlaySound(SoundID.Item9, Projectile.Center);
             Projectile.frame = 0;
             Projectile.frameCounter = 0;
             Projectile.netUpdate = true;
         }
 
-        private void HoverNearPlayer(Player player)
+        private void SpawnBubble(string text, Color color, int duration = HeyYaSpeechBubble.DefaultDuration)
         {
-            Vector2 hoverBase = player.Center + new Vector2(0f, -HoverHeight);
-            _patrolOffset += PatrolSpeed * _patrolDir;
-            if (_patrolOffset >= PatrolRange)
-            {
-                _patrolOffset = PatrolRange;
-                _patrolDir = -1f;
-            }
-            else if (_patrolOffset <= -PatrolRange)
-            {
-                _patrolOffset = -PatrolRange;
-                _patrolDir = 1f;
-            }
+            if (Projectile.owner != Main.myPlayer) return;
 
-            Vector2 hoverTarget = hoverBase + new Vector2(_patrolOffset, 0f);
+            Vector2 pos = Projectile.Center + new Vector2(0f, -40f);
+            _bubbles.Add(new HeyYaSpeechBubble(text, pos, color, duration));
+        }
 
-            if (Projectile.Distance(player.Center) > 16 * 16f)
-            {
-                Projectile.tileCollide = false;
-                Projectile.velocity = player.Center - Projectile.Center;
-                Projectile.velocity.Normalize();
-                Projectile.velocity *= MaxFlySpeed + player.moveSpeed;
-                Projectile.netUpdate = true;
-            }
-            else
-            {
-                Vector2 toTarget = hoverTarget - Projectile.Center;
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, toTarget * 0.12f, 0.15f);
-                Projectile.tileCollide = false;
-                Projectile.netUpdate = true;
-            }
-
-            Projectile.rotation = LerpAngle(Projectile.rotation, 0f, RotLerpSpeed * 0.5f);
+        private void TrySayAdvice(string key, string message)
+        {
+            if (_adviceCooldowns.ContainsKey(key)) return;
+            _adviceCooldowns[key] = AdviceCooldown;
+            SpawnBubble(message, new Color(100, 220, 255), HeyYaSpeechBubble.DefaultDuration * 2);
         }
 
         private void TickAdviceCooldowns()
@@ -195,10 +262,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC n = Main.npc[i];
-                if (!n.active || !n.boss)
-                    continue;
-
-                string bossKey = "boss_" + n.type;
+                if (!n.active || !n.boss) continue;
 
                 if (!_adviceCooldowns.ContainsKey("summoned_" + n.type))
                 {
@@ -207,14 +271,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                     SayBossAdvice(n.type);
                 }
             }
-        }
-
-        private void TrySayAdvice(string key, string message)
-        {
-            if (_adviceCooldowns.ContainsKey(key))
-                return;
-            _adviceCooldowns[key] = AdviceCooldown;
-            Main.NewText(message, 100, 220, 255);
         }
 
         private void SayBossAdvice(int npcType)
@@ -285,14 +341,21 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Asset<Texture2D> texAsset = ModContent.Request<Texture2D>(IdleTexture);
+            string texPath = _isJumping ? JumpTexture : IdleTexture;
+            int frameCount = _isJumping ? JumpFrameCount : IdleFrameCount;
+
+            Asset<Texture2D> texAsset = ModContent.Request<Texture2D>(texPath);
             Texture2D tex = texAsset.Value;
-            int frameHeight = tex.Height / IdleFrameCount;
-            Rectangle source = new Rectangle(0, Projectile.frame * frameHeight, tex.Width, frameHeight);
+            int frameHeight = tex.Height / frameCount;
+            int safeFrame = Projectile.frame % frameCount;
+            Rectangle source = new Rectangle(0, safeFrame * frameHeight, tex.Width, frameHeight);
             Vector2 origin = new Vector2(tex.Width / 2f, frameHeight / 2f);
             Vector2 drawPos = Projectile.Center - Main.screenPosition;
 
-            Main.EntitySpriteDraw(tex, drawPos, source, lightColor, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None);
+            Player player = Main.player[Projectile.owner];
+            SpriteEffects fx = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            Main.EntitySpriteDraw(tex, drawPos, source, lightColor, Projectile.rotation, origin, Projectile.scale, fx);
             return false;
         }
 
@@ -300,22 +363,14 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
         public override void SendExtraAI(System.IO.BinaryWriter writer)
         {
-            writer.Write(_patrolOffset);
-            writer.Write(_patrolDir);
+            writer.Write(_isJumping);
+            writer.Write(_jumpTimer);
         }
 
         public override void ReceiveExtraAI(System.IO.BinaryReader reader)
         {
-            _patrolOffset = reader.ReadSingle();
-            _patrolDir = reader.ReadSingle();
-        }
-
-        private static float LerpAngle(float from, float to, float amount)
-        {
-            float diff = to - from;
-            while (diff > MathHelper.Pi) diff -= MathHelper.TwoPi;
-            while (diff < -MathHelper.Pi) diff += MathHelper.TwoPi;
-            return from + diff * amount;
+            _isJumping = reader.ReadBoolean();
+            _jumpTimer = reader.ReadInt32();
         }
     }
 }
