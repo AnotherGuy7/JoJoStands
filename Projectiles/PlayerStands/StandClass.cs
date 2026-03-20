@@ -1291,6 +1291,14 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// Criteria for the search is set by the JoJoStands.standSearchType field.
         /// </summary>
         /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
+        /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
+        public NPC FindNearestTarget(float maxDetectionRange, Vector2 detectionPositionOffset) => FindNearestTarget(JoJoStands.StandSearchTypeEnum, maxDetectionRange, detectionPositionOffset);
+
+        /// <summary>
+        /// Find the closest NPC to the player.
+        /// Criteria for the search is set by the JoJoStands.standSearchType field.
+        /// </summary>
+        /// <param name="maxDetectionRange">The max distance (in pixels) to search</param>
         /// <param name="detectionPositionOffset">An offset to the position used to check whether or not this Stand has line of sight to the target.</param>
         /// <returns>The NPC that is closest to the player and follows the given criteria.</returns>
         public NPC FindNearestTarget(MyPlayer.StandSearchTypeEnum searchType, float maxDetectionRange, Vector2 detectionPositionOffset)
