@@ -2220,6 +2220,55 @@ Mods: {
 					'''
 			}
 
+			ManhattanTransferFinal: {
+				DisplayName: Manhattan Transfer (Final Tier)
+				Tooltip:
+					'''
+					Shoot Manhattan Transfer and have it home in on your enemies!
+					Right Click: Adjust Manhattan Transfer's position.
+					Special: Hover on an enemy and lock-in Manhattan Transfer to them!
+					Second Special: Change Manhattan Transfer to Deflector Mode, allowing it to reflect projectiles!
+					Auto Mode: Floats around on top of players head.
+					Used in Stand Slot
+					'''
+			}
+
+			ManhattanTransferT1: {
+				DisplayName: Manhattan Transfer (Tier 1)
+				Tooltip:
+					'''
+					Shoot Manhattan Transfer and have it home in on your enemies!
+					Right Click: Adjust Manhattan Transfer's position.
+					Auto Mode: Floats around on top of players head.
+					Used in Stand Slot
+					'''
+			}
+
+			ManhattanTransferT2: {
+				DisplayName: Manhattan Transfer (Tier 2)
+				Tooltip:
+					'''
+					Shoot Manhattan Transfer and have it home in on your enemies!
+					Right Click: Adjust Manhattan Transfer's position.
+					Special: Hover on an enemy and lock-in Manhattan Transfer to them!
+					Auto Mode: Floats around on top of players head.
+					Used in Stand Slot
+					'''
+			}
+
+			ManhattanTransferT3: {
+				DisplayName: Manhattan Transfer (Tier 3)
+				Tooltip:
+					'''
+					Shoot Manhattan Transfer and have it home in on your enemies!
+					Right Click: Adjust Manhattan Transfer's position.
+					Special: Hover on an enemy and lock-in Manhattan Transfer to them!
+					Second Special: Change Manhattan Transfer to Deflector Mode, allowing it to reflect projectiles!
+					Auto Mode: Floats around on top of players head.
+					Used in Stand Slot
+					'''
+			}
+
 			SilverChariotFinal: {
 				DisplayName: Silver Chariot (Final Tier)
 				Tooltip:
@@ -3789,6 +3838,10 @@ Mods: {
 			VampiricVeinGrab.DisplayName: Vampiric Vein Grab
 			VampiricVeinSpike.DisplayName: Vampiric Vein Spike
 			ZeppeliHamonPunches.DisplayName: Zeppeli Hamon Punches
+			ManhattanTransferStandFinal.DisplayName: Manhattan Transfer Stand Final
+			ManhattanTransferStandT1.DisplayName: Manhattan Transfer Stand T1
+			ManhattanTransferStandT2.DisplayName: Manhattan Transfer Stand T2
+			ManhattanTransferStandT3.DisplayName: Manhattan Transfer Stand T3
 		}
 
 		Biomes: {
@@ -4344,6 +4397,10 @@ Mods: {
 			EchoesAct1: I'm surprised you've made it this far. It seems I underestimated your willpower. This is Echoes Act 1. While it may be weak, Echoes' ability is where it's true strength lies. You should be able to generate sound effects on those you touch. This can either debilitate an enemy, or reassure a friend. Whatever you do, just be sure to make some noise. If you are looking to grow your abilities further, I would recommend taking Act 1 into a dangerous fight. Maybe try those creepy mechanical eyes I have seen floating around.
 			EchoesAct2: You survived. Good. Now things are getting interesting. Echoes Act 2 is able to take those sounds effects of yours and make them do some real damage. Using the tip of it is tail, you will be able to place these sound effects wherever you want. You should be able to take better control of the battlefield. However, if you are looking to push your capabilities even further, you will need to face your greatest challenge yet. Others are telling me about this bizarre temple underneath the jungle. Try checking that out.
 			EchoesAct3: You have grown. This is Echoes Act 3, it's final form! You'll find that this form heavily exchanges range for power. You should now have the ability to use Three Freeze! This makes a single target extremely heavy, keeping them in place. It is a reliable ability. Your hard work has paid off. If the time ever comes, I hope I can rely on you.
+			ManhattanTransferT1: Good grief... This stand had taken some close shots at me before. I don't want to see it again. Manhattan Transfer is a stand that can redirect bullets with extreme precision. It may not be the most powerful stand, but it sure is a pain to deal with. It really has the capabilities to Control a few people and push them into a corner.
+			ManhattanTransferT2: I see that it can redirect bullets at a faster rate now. Seems like it will also be growing its range, so you should be able to Control a larger area with it. You should be able to have control on it enough to lock into your adversaries. Just try to not shoot yourself with it, the guy using this had to make a good Escape.
+			ManhattanTransferT3: Your capabilities with this stand have truly grown. You should have enough mastery to redirect bullets that are aimed at you as well. However, I do not think you will be able to redirect both your own and your enemies' bullets at the same time, so be careful when you find yourself in a crossfire. Watch yourself as well, the user of this stand was a very Tainted person.
+			ManhattanTransferFinal: Very well. I see that you have reached the full potential of this stand. It is quite a powerful stand, and I hope you use it wisely. I would like to avoid getting in the sticky situation it brought me again, so please keep it away from me.
 			StandHelpText0: Have a stand Item in the 'Stand Slot' then press 'Stand Help' and I'll tell you what it can do and how to get it's tiers OR keep pressing 'Stand Help' and I'll tell you how to get specific items and do certain actions.
 			StandHelpText1: To use Stand Specials, in controls, you need to bind a key to 'JoJoStands: Special' then while the stand is activated you press the key to use the special
 			StandHelpText2: Requiem Arrows can be obtained by getting a viral pearl and merging it with a Stand Arrow. This happens because all the Viral Meteorite involved starts to morph and have a different use alltogether.

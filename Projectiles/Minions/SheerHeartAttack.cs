@@ -105,6 +105,18 @@ namespace JoJoStands.Projectiles.Minions
                     Projectile.rotation = velocity.ToRotation();
                     Projectile.velocity = velocity * 3f;
                 }
+
+                if (npcTarget.getRect().Contains(Projectile.Hitbox))
+                {
+                    npcTarget.immune[Projectile.owner] = 0;
+                    Explode();
+
+                    enemiesHit++;
+                    if (enemiesHit >= 5)
+                        Projectile.Kill();
+
+                    npcTarget = null;
+                }
             }
 
             netUpdateTimer++;
@@ -211,18 +223,6 @@ namespace JoJoStands.Projectiles.Minions
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);        //starting a draw with dyes that work
-        }
-
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            target.immune[Projectile.owner] = 0;
-            Explode();
-
-            enemiesHit++;
-            if (enemiesHit >= 5)
-                Projectile.Kill();
-
-            npcTarget = null;
         }
 
         public override void OnKill(int timeLeft)
