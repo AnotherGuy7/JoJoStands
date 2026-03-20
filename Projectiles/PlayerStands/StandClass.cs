@@ -107,7 +107,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// The Stand's X offset while drawn. This value is halved, so multiply by 2 if trying to apply a direct and known constant offset.
         /// </summary>
         public virtual Vector2 StandOffset { get; } = new Vector2(15, 0);            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
-        public virtual Vector2 ManualIdleHoverOffset { get; } = Vector2.Zero;
+        public virtual Vector2 ManualIdleHoverOffset { get; }
         /// <summary>
         /// The size of all of the punch textures.
         /// </summary>
@@ -1257,6 +1257,9 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public void LimitDistance(float maxDistance, bool affectedByRangeModifiers = false)
         {
+            if (MaxDistance == 0f)
+                return;
+
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (affectedByRangeModifiers)
