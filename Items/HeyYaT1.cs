@@ -12,7 +12,7 @@ namespace JoJoStands.Items
 {
     public class HeyYaT1 : StandItemClass
     {
-        public override int StandTier => 2;
+        public override int StandTier => 1;
         public override string StandIdentifierName => "HeyYa";
         public override Color StandTierDisplayColor => HeyYaStandT1.HeyYaTierColor;
 
