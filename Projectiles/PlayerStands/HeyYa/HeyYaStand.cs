@@ -66,6 +66,47 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         private int _idleLineInterval = 0;
         private static readonly Random _rand = new Random();
 
+        private static readonly int[] PumpedBuffPool =
+        {
+            BuffID.Battle,   // tier 0
+            BuffID.Rage,     // tier 1
+            BuffID.Wrath,    // tier 2
+            BuffID.Panic,    // tier 3
+            BuffID.Inferno,  // tier 4
+        };
+        private static readonly string[] PumpedBuffNames =
+        {
+            "Raaaah!!!",
+            "Where is your Rage!",
+            "Where is your Wrath!",
+            "Rush time!",
+            "You are flaming!",
+        };
+
+        private static readonly int[] ChillBuffPool =
+        {
+            BuffID.Sunflower,    // tier 0
+            BuffID.Calm,         // tier 1
+            BuffID.Fishing,      // tier 2
+            BuffID.Shine,        // tier 3
+            BuffID.Regeneration, // tier 4
+        };
+        private static readonly string[] ChillBuffNames =
+        {
+            "Sunflowers...",
+            "Could use a breather, eh?",
+            "Trust on your luck, fish...",
+            "I can see a lot better now!",
+            "Rest your muscles!",
+        };
+
+        private bool ChillMode => Projectile.ai[0] == 1f;
+        private int SelectedBuffIndex
+        {
+            get => (int)Projectile.ai[1];
+            set => Projectile.ai[1] = value;
+        }
+
         private static List<string> WrapText(string text, float scale)
         {
             var font = Terraria.GameContent.FontAssets.MouseText.Value;
@@ -145,23 +186,11 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         private static readonly float[] DodgeChance = { 5f, 10f, 15f, 20f, 25f };
         private static readonly int[] FishingPower = { 5, 10, 15, 20, 25 };
 
-        private static readonly int[] PumpedBuffs =
-        {
-            BuffID.Panic, BuffID.Battle, BuffID.Rage, BuffID.Wrath, BuffID.Inferno,
-        };
-        private static readonly int[] ChillBuffs =
-        {
-            BuffID.Sunflower, BuffID.Calm, BuffID.Fishing, BuffID.Shine, BuffID.Regeneration,
-        };
-
         private const float BehindOffset = 24f;
-        private const float MaxFlySpeed = 18f;
         private const float FollowLerp = 0.35f;
 
         private readonly Dictionary<string, int> _adviceCooldowns = new Dictionary<string, int>();
         private const int AdviceCooldown = 600;
-
-        private bool ChillMode => Projectile.ai[0] == 1f;
 
         public override void SetStaticDefaults()
         {
@@ -198,7 +227,14 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
+            {
                 standTexture = (Texture2D)ModContent.Request<Texture2D>(TextureRoot + "_" + animationName);
+
+                int frameCount = animationName == "Idle" ? IdleFrameCount
+                               : animationName == "Jump" ? JumpFrameCount
+                               : 1;
+                Projectile.height = standTexture.Height / frameCount;
+            }
 
             if (animationName == "Idle")
                 AnimateStand(animationName, IdleFrameCount, IdleFrameSpeed, true);
@@ -225,7 +261,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
             SelectAnimation();
             FollowBehindPlayer(player);
-            ApplyBuffs(player);
+            ApplySelectedBuff(player);
             ApplyPassiveStats(mPlayer);
 
             if (Projectile.owner == Main.myPlayer)
@@ -236,7 +272,58 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
                 if (SpecialKeyPressed())
                     ToggleMode();
+
+                if (SecondSpecialKeyPressed(false))
+                    CycleSelectedBuff();
             }
+        }
+
+        private void ToggleMode()
+        {
+            Projectile.ai[0] = ChillMode ? 0f : 1f;
+            SelectedBuffIndex = 0;
+            string modeMsg = ChillMode ? "Let's take a breather!" : "Time for some action!";
+            SpawnBubble(modeMsg, new Color(255, 220, 50));
+            SoundEngine.PlaySound(SoundID.Chat, Projectile.Center);
+            Projectile.frame = 0;
+            Projectile.frameCounter = 0;
+            Projectile.netUpdate = true;
+        }
+
+        private void CycleSelectedBuff()
+        {
+            int maxIndex = Math.Min(Tier, (ChillMode ? ChillBuffPool.Length : PumpedBuffPool.Length) - 1);
+            SelectedBuffIndex = (SelectedBuffIndex + 1) % (maxIndex + 1);
+
+            string buffName = ChillMode
+                ? ChillBuffNames[SelectedBuffIndex]
+                : PumpedBuffNames[SelectedBuffIndex];
+
+            SpawnBubble(buffName, new Color(100, 220, 255));
+
+            SoundEngine.PlaySound(SoundID.Item9, Projectile.Center);
+            int dustCount = 30;
+            for (int k = 0; k < dustCount; k++)
+            {
+                float rot = MathHelper.ToRadians((360f / dustCount) * k);
+                Vector2 dp = Projectile.Center + rot.ToRotationVector2() * 24f;
+                int di = Dust.NewDust(dp, 1, 1, DustID.Electric);
+                Main.dust[di].noGravity = true;
+                Main.dust[di].velocity = rot.ToRotationVector2() * 3f;
+            }
+
+            Projectile.netUpdate = true;
+        }
+
+        private void ApplySelectedBuff(Player player)
+        {
+            int[] pool = ChillMode ? ChillBuffPool : PumpedBuffPool;
+            int idx = SelectedBuffIndex;
+            if (idx < 0 || idx > Tier || idx >= pool.Length)
+                return;
+
+            if (pool[idx] > 0)
+                player.AddBuff(pool[idx], 2);
         }
 
         private void ResetIdleLineTimer()
@@ -268,18 +355,11 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             }
             else
                 Projectile.velocity = (target - Projectile.Center) * FollowLerp;
+
             Projectile.spriteDirection = player.direction;
             Projectile.rotation = 0f;
             Projectile.tileCollide = false;
             Projectile.netUpdate = true;
-        }
-
-        private void ApplyBuffs(Player player)
-        {
-            int[] pool = ChillMode ? ChillBuffs : PumpedBuffs;
-            for (int i = 0; i <= Tier && i < pool.Length; i++)
-                if (pool[i] > 0)
-                    player.AddBuff(pool[i], 2);
         }
 
         private void ApplyPassiveStats(MyPlayer mPlayer)
@@ -290,17 +370,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             mPlayer.heyYaDodgeChance = DodgeChance[Tier];
             mPlayer.heyYaDropRateBonus = DropRateBonus[Tier];
             player.noFallDmg = true;
-        }
-
-        private void ToggleMode()
-        {
-            Projectile.ai[0] = ChillMode ? 0f : 1f;
-            string modeMsg = ChillMode ? "Let's take a breather!" : "Time for some action!";
-            SpawnBubble(modeMsg, new Color(255, 220, 50));
-            SoundEngine.PlaySound(SoundID.Chat, Projectile.Center);
-            Projectile.frame = 0;
-            Projectile.frameCounter = 0;
-            Projectile.netUpdate = true;
         }
 
         private void SpawnBubble(string text, Color color, int duration = HeyYaSpeechBubble.DefaultDuration)
@@ -420,11 +489,13 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         public override void SendExtraAI(System.IO.BinaryWriter writer)
         {
             writer.Write((byte)currentAnimationState);
+            writer.Write((byte)SelectedBuffIndex);
         }
 
         public override void ReceiveExtraAI(System.IO.BinaryReader reader)
         {
             currentAnimationState = (AnimationState)reader.ReadByte();
+            SelectedBuffIndex = reader.ReadByte();
         }
     }
 }

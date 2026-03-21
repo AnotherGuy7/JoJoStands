@@ -10,9 +10,10 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class HeyYaT1 : StandItemClass
+    public class HeyYaT3 : StandItemClass
     {
-        public override int StandTier => 2;
+        public override string Texture => Mod.Name + "/Items/HeyYaT1";
+        public override int StandTier => 3;
         public override string StandIdentifierName => "HeyYa";
         public override Color StandTierDisplayColor => HeyYaStandT1.HeyYaTierColor;
 
@@ -35,7 +36,7 @@ namespace JoJoStands.Items
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standType = 2;
             Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero,
-                ModContent.ProjectileType<HeyYaStandT1>(), 0, 0f, Main.myPlayer);
+                ModContent.ProjectileType<HeyYaStandT3>(), 0, 0f, Main.myPlayer);
             return true;
         }
 
