@@ -34,6 +34,15 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
     public abstract class HeyYaStand : StandClass
     {
+        public new enum AnimationState
+        {
+            Idle,
+            Jump,
+            Pose
+        }
+        public new AnimationState currentAnimationState;
+        public new AnimationState oldAnimationState;
+
         private static readonly List<HeyYaSpeechBubble> _bubbles = new List<HeyYaSpeechBubble>();
 
         private const float BubbleTextScale = 0.7f;
@@ -122,10 +131,12 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             }
         }
 
-        protected abstract string IdleTexture { get; }
-        protected virtual string JumpTexture => IdleTexture;
+        protected abstract string TextureRoot { get; }
+
         protected virtual int IdleFrameCount => 2;
-        protected virtual int JumpFrameCount => 1;
+        protected virtual int IdleFrameSpeed => 12;
+        protected virtual int JumpFrameCount => 4;
+        protected virtual int JumpFrameSpeed => 12;
 
         protected abstract int Tier { get; }
 
@@ -143,21 +154,14 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             BuffID.Sunflower, BuffID.Calm, BuffID.Fishing, BuffID.Shine, BuffID.Regeneration,
         };
 
-        private const int FrameSpeed = 12;
+        private const float BehindOffset = 8f;
         private const float MaxFlySpeed = 18f;
         private const float FollowLerp = 0.35f;
-        private const float BehindOffset = 2f;
-
-        private bool _isJumping = false;
-        private int _jumpTimer = 0;
-        private const int JumpAnimDuration = 40;
 
         private readonly Dictionary<string, int> _adviceCooldowns = new Dictionary<string, int>();
         private const int AdviceCooldown = 600;
 
         private bool ChillMode => Projectile.ai[0] == 1f;
-
-        public override string Texture => IdleTexture;
 
         public override void SetStaticDefaults()
         {
@@ -174,6 +178,36 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             ResetIdleLineTimer();
         }
 
+        public override void SelectAnimation()
+        {
+            if (oldAnimationState != currentAnimationState)
+            {
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
+            }
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Jump)
+                PlayAnimation("Jump");
+            else if (currentAnimationState == AnimationState.Pose)
+                PlayAnimation("Pose");
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = (Texture2D)ModContent.Request<Texture2D>(TextureRoot + "_" + animationName);
+
+            if (animationName == "Idle")
+                AnimateStand(animationName, IdleFrameCount, IdleFrameSpeed, true);
+            else if (animationName == "Jump")
+                AnimateStand(animationName, JumpFrameCount, JumpFrameSpeed, true);
+            else if (animationName == "Pose")
+                AnimateStand(animationName, 1, 12, true);
+        }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -182,8 +216,15 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            UpdateJumpState(player);
-            AnimateFrames();
+            // Choose animation state
+            if (mPlayer.posing)
+                currentAnimationState = AnimationState.Pose;
+            else if (player.velocity.Y != 0f)
+                currentAnimationState = AnimationState.Jump;
+            else
+                currentAnimationState = AnimationState.Idle;
+
+            SelectAnimation();
             FollowBehindPlayer(player);
             ApplyBuffs(player);
             ApplyPassiveStats(mPlayer);
@@ -201,7 +242,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
         private void ResetIdleLineTimer()
         {
-            // 60 ticks/sec * 60 sec = 3600 ticks per minute
             _idleLineInterval = _rand.Next(3600 * 5, 3600 * 10);
             _idleLineTimer = 0;
         }
@@ -215,44 +255,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                 SpawnBubble(line, new Color(255, 255, 255));
                 SoundEngine.PlaySound(SoundID.Chat, Projectile.Center);
                 ResetIdleLineTimer();
-            }
-        }
-
-        private void UpdateJumpState(Player player)
-        {
-            bool inAir = player.velocity.Y != 0f;
-
-            if (inAir && !_isJumping)
-            {
-                _isJumping = true;
-                _jumpTimer = 0;
-                Projectile.frame = 0;
-                Projectile.frameCounter = 0;
-                Projectile.netUpdate = true;
-            }
-            else if (!inAir && _isJumping)
-            {
-                _jumpTimer++;
-                if (_jumpTimer >= JumpAnimDuration)
-                {
-                    _isJumping = false;
-                    _jumpTimer = 0;
-                    Projectile.frame = 0;
-                    Projectile.frameCounter = 0;
-                    Projectile.netUpdate = true;
-                }
-            }
-        }
-
-        private void AnimateFrames()
-        {
-            int frameCount = _isJumping ? JumpFrameCount : IdleFrameCount;
-
-            Projectile.frameCounter++;
-            if (Projectile.frameCounter >= FrameSpeed)
-            {
-                Projectile.frameCounter = 0;
-                Projectile.frame = (Projectile.frame + 1) % frameCount;
             }
         }
 
@@ -308,7 +310,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         private void SpawnBubble(string text, Color color, int duration = HeyYaSpeechBubble.DefaultDuration)
         {
             if (Projectile.owner != Main.myPlayer) return;
-
             Vector2 pos = Projectile.Center + new Vector2(0f, -40f);
             _bubbles.Add(new HeyYaSpeechBubble(text, pos, color, Projectile, duration));
         }
@@ -418,38 +419,16 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             }
         }
 
-        public override bool PreDraw(ref Color lightColor)
-        {
-            string texPath = _isJumping ? JumpTexture : IdleTexture;
-            int frameCount = _isJumping ? JumpFrameCount : IdleFrameCount;
-
-            Asset<Texture2D> texAsset = ModContent.Request<Texture2D>(texPath);
-            Texture2D tex = texAsset.Value;
-            int frameHeight = tex.Height / frameCount;
-            int safeFrame = Projectile.frame % frameCount;
-            Rectangle source = new Rectangle(0, safeFrame * frameHeight, tex.Width, frameHeight);
-            Vector2 origin = new Vector2(tex.Width / 2f, frameHeight / 2f);
-            Vector2 drawPos = Projectile.Center - Main.screenPosition;
-
-            Player player = Main.player[Projectile.owner];
-            SpriteEffects fx = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-
-            Main.EntitySpriteDraw(tex, drawPos, source, lightColor, Projectile.rotation, origin, Projectile.scale, fx);
-            return false;
-        }
-
         public override bool OnTileCollide(Vector2 oldVelocity) => false;
 
         public override void SendExtraAI(System.IO.BinaryWriter writer)
         {
-            writer.Write(_isJumping);
-            writer.Write(_jumpTimer);
+            writer.Write((byte)currentAnimationState);
         }
 
         public override void ReceiveExtraAI(System.IO.BinaryReader reader)
         {
-            _isJumping = reader.ReadBoolean();
-            _jumpTimer = reader.ReadInt32();
+            currentAnimationState = (AnimationState)reader.ReadByte();
         }
     }
 }
