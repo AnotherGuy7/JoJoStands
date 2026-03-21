@@ -283,7 +283,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             Projectile.ai[0] = ChillMode ? 0f : 1f;
             SelectedBuffIndex = 0;
             string modeMsg = ChillMode ? "Let's take a breather!" : "Time for some action!";
-            SpawnBubble(modeMsg, new Color(255, 220, 50));
+            SpawnBubble(modeMsg, new Color(255, 220, 50), 80);
             SoundEngine.PlaySound(SoundID.Chat, Projectile.Center);
             Projectile.frame = 0;
             Projectile.frameCounter = 0;
@@ -299,7 +299,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                 ? ChillBuffNames[SelectedBuffIndex]
                 : PumpedBuffNames[SelectedBuffIndex];
 
-            SpawnBubble(buffName, new Color(100, 220, 255));
+            SpawnBubble(buffName, new Color(100, 220, 255), 80);
 
             SoundEngine.PlaySound(SoundID.Item9, Projectile.Center);
             int dustCount = 30;
