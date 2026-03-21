@@ -34,8 +34,40 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
     {
         private static readonly List<HeyYaSpeechBubble> _bubbles = new List<HeyYaSpeechBubble>();
 
+        private const float BubbleTextScale = 0.7f;
+        private const int BubbleMaxLineWidth = 160;
+
+        private static List<string> WrapText(string text, float scale)
+        {
+            var font = Terraria.GameContent.FontAssets.MouseText.Value;
+            var words = text.Split(' ');
+            var lines = new List<string>();
+            string current = "";
+
+            foreach (var word in words)
+            {
+                string test = current.Length == 0 ? word : current + " " + word;
+                if (font.MeasureString(test).X * scale > BubbleMaxLineWidth && current.Length > 0)
+                {
+                    lines.Add(current);
+                    current = word;
+                }
+                else
+                {
+                    current = test;
+                }
+            }
+            if (current.Length > 0)
+                lines.Add(current);
+
+            return lines;
+        }
+
         public static void DrawBubbles(SpriteBatch spriteBatch)
         {
+            var font = Terraria.GameContent.FontAssets.MouseText.Value;
+            float lineHeight = font.MeasureString("A").Y * BubbleTextScale;
+
             for (int i = _bubbles.Count - 1; i >= 0; i--)
             {
                 var b = _bubbles[i];
@@ -49,23 +81,21 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                 alpha = MathHelper.Clamp(alpha, 0f, 1f);
 
                 Vector2 screenPos = b.WorldPosition - Main.screenPosition;
+                List<string> lines = WrapText(b.Text, BubbleTextScale);
+                float totalHeight = lines.Count * lineHeight;
 
-                Vector2 textSize = Terraria.GameContent.FontAssets.MouseText.Value.MeasureString(b.Text);
-                Vector2 boxPos = screenPos - textSize * 0.5f - new Vector2(6f, 4f);
-                Vector2 boxSize = textSize + new Vector2(12f, 8f);
-
-                Utils.DrawInvBG(spriteBatch,
-                    new Rectangle((int)boxPos.X, (int)boxPos.Y, (int)boxSize.X, (int)boxSize.Y),
-                    new Color(30, 30, 50, (int)(200 * alpha)));
-
-                Utils.DrawBorderString(
-                    spriteBatch,
-                    b.Text,
-                    screenPos,
-                    b.TextColor * alpha,
-                    1f,
-                    0.5f,
-                    0.5f);
+                for (int l = 0; l < lines.Count; l++)
+                {
+                    float lineY = screenPos.Y - totalHeight * 0.5f + l * lineHeight;
+                    Utils.DrawBorderString(
+                        spriteBatch,
+                        lines[l],
+                        new Vector2(screenPos.X, lineY),
+                        b.TextColor * alpha,
+                        BubbleTextScale,
+                        0.5f,
+                        0f);
+                }
             }
         }
 
