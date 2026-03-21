@@ -154,7 +154,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             BuffID.Sunflower, BuffID.Calm, BuffID.Fishing, BuffID.Shine, BuffID.Regeneration,
         };
 
-        private const float BehindOffset = 16f;
+        private const float BehindOffset = 24f;
         private const float MaxFlySpeed = 18f;
         private const float FollowLerp = 0.35f;
 

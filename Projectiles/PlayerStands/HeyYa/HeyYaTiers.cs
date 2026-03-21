@@ -13,8 +13,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Projectile.width = 28;
-            Projectile.height = 38;
         }
     }
 
@@ -26,8 +24,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Projectile.width = 28;
-            Projectile.height = 38;
         }
     }
 
@@ -39,8 +35,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Projectile.width = 28;
-            Projectile.height = 38;
         }
     }
 
@@ -52,8 +46,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Projectile.width = 28;
-            Projectile.height = 38;
         }
     }
 
@@ -65,8 +57,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Projectile.width = 28;
-            Projectile.height = 38;
         }
     }
 }
