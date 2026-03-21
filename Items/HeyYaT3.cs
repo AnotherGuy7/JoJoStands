@@ -44,8 +44,11 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<StandArrow>())
-                .AddIngredient(ModContent.ItemType<WillToControl>())
+                .AddIngredient(ModContent.ItemType<HeyYaT2>())
+                .AddIngredient(ItemID.HallowedBar, 16)
+                .AddIngredient(ItemID.PinkPearl, 1)
+                .AddIngredient(ModContent.ItemType<WillToProtect>(),2)
+                .AddIngredient(ModContent.ItemType<WillToChange>(),2)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
         }

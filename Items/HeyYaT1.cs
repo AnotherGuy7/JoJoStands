@@ -44,7 +44,7 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<StandArrow>())
-                .AddIngredient(ModContent.ItemType<WillToControl>())
+                .AddIngredient(ModContent.ItemType<WillToProtect>())
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
         }
