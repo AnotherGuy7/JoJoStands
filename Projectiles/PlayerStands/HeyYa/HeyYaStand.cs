@@ -154,7 +154,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             BuffID.Sunflower, BuffID.Calm, BuffID.Fishing, BuffID.Shine, BuffID.Regeneration,
         };
 
-        private const float BehindOffset = 8f;
+        private const float BehindOffset = 16f;
         private const float MaxFlySpeed = 18f;
         private const float FollowLerp = 0.35f;
 
@@ -216,7 +216,6 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            // Choose animation state
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;
             else if (player.velocity.Y != 0f)
@@ -262,17 +261,14 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         {
             float dirSign = player.direction;
             Vector2 target = player.Center + new Vector2(-dirSign * BehindOffset, 0f);
-
             if (Vector2.Distance(Projectile.Center, target) > 16f * 20f)
             {
                 Projectile.Center = target;
                 Projectile.velocity = Vector2.Zero;
             }
             else
-            {
                 Projectile.velocity = (target - Projectile.Center) * FollowLerp;
-            }
-
+            Projectile.spriteDirection = player.direction;
             Projectile.rotation = 0f;
             Projectile.tileCollide = false;
             Projectile.netUpdate = true;
