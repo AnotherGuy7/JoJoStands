@@ -39,6 +39,24 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         private const float BubbleTextScale = 0.7f;
         private const int BubbleMaxLineWidth = 160;
 
+        private static readonly string[] IdleLines =
+        {
+            "Hey, ya!",
+            "Don't let your guard down out there.",
+            "I've got a good feeling about today!",
+            "Stay sharp. You never know what's around the corner.",
+            "You doing alright? You look a little tired.",
+            "Man, this place is something else...",
+            "I'm right here if you need me!",
+            "Keep moving. Standing still never helped anyone.",
+            "Something feels off... stay alert.",
+            "You know, I think we make a pretty good team.",
+        };
+
+        private int _idleLineTimer = 0;
+        private int _idleLineInterval = 0;
+        private static readonly Random _rand = new Random();
+
         private static List<string> WrapText(string text, float scale)
         {
             var font = Terraria.GameContent.FontAssets.MouseText.Value;
@@ -153,6 +171,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
+            ResetIdleLineTimer();
         }
 
         public override void AI()
@@ -173,9 +192,29 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             {
                 TickAdviceCooldowns();
                 CheckAdviceTriggers(player);
+                TickIdleLines();
 
                 if (SpecialKeyPressed())
                     ToggleMode();
+            }
+        }
+
+        private void ResetIdleLineTimer()
+        {
+            // 60 ticks/sec * 60 sec = 3600 ticks per minute
+            _idleLineInterval = _rand.Next(3600 * 5, 3600 * 10);
+            _idleLineTimer = 0;
+        }
+
+        private void TickIdleLines()
+        {
+            _idleLineTimer++;
+            if (_idleLineTimer >= _idleLineInterval)
+            {
+                string line = IdleLines[_rand.Next(IdleLines.Length)];
+                SpawnBubble(line, new Color(255, 255, 255));
+                SoundEngine.PlaySound(SoundID.Chat, Projectile.Center);
+                ResetIdleLineTimer();
             }
         }
 
@@ -260,7 +299,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             Projectile.ai[0] = ChillMode ? 0f : 1f;
             string modeMsg = ChillMode ? "Let's take a breather!" : "Time for some action!";
             SpawnBubble(modeMsg, new Color(255, 220, 50));
-            SoundEngine.PlaySound(SoundID.Item9, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Chat, Projectile.Center);
             Projectile.frame = 0;
             Projectile.frameCounter = 0;
             Projectile.netUpdate = true;
@@ -279,6 +318,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             if (_adviceCooldowns.ContainsKey(key)) return false;
             _adviceCooldowns[key] = AdviceCooldown;
             SpawnBubble(message, new Color(100, 220, 255), HeyYaSpeechBubble.DefaultDuration * 2);
+            SoundEngine.PlaySound(SoundID.Chat, Projectile.Center);
             return true;
         }
 
