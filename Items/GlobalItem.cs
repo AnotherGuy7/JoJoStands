@@ -60,7 +60,7 @@ namespace JoJoStands.Items
                 Main.projectile[projectileIndex].GetGlobalProjectile<JoJoGlobalProjectile>().autoModeSexPistols = true;
                 return false;
             }
-            else if (mPlayer.manhattanTier != 0)
+            else if (mPlayer.manhattanTier != 0 || mPlayer.heyYaTier != 0)
             {
                 Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
                 return false;
@@ -80,7 +80,7 @@ namespace JoJoStands.Items
         public override bool CanUseItem(Item Item, Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            if (mPlayer.standOut && mPlayer.standControlStyle != MyPlayer.StandControlStyle.Auto && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory && mPlayer.manhattanTier == 0)
+            if (mPlayer.standOut && mPlayer.standControlStyle != MyPlayer.StandControlStyle.Auto && mPlayer.sexPistolsTier == 0 && !mPlayer.standAccessory && mPlayer.manhattanTier == 0 && mPlayer.heyYaTier == 0)
             {
                 if (PlayerInput.Triggers.Current.SmartSelect)
                     return true;

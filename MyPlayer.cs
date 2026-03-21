@@ -48,6 +48,7 @@ namespace JoJoStands
         public int sexPistolsLeft = 6;
         public int sexPistolsTier = 0;
         public int manhattanTier = 0;
+        public int heyYaTier = 0;
         public int revolverBulletsShot = 0;
         public int sexPistolsRecoveryTimer = 0;
         public int aerosmithWhoAmI = 0;
@@ -1803,6 +1804,7 @@ namespace JoJoStands
             standDefenseToAdd = 0;
             sexPistolsTier = 0;
             manhattanTier = 0;
+            heyYaTier = 0;
             stoneFreeWeaveAbilityActive = false;
             hotbarLocked = false;
 
@@ -2105,6 +2107,7 @@ namespace JoJoStands
             standDefenseToAdd = 0;
             sexPistolsTier = 0;
             manhattanTier = 0;
+            heyYaTier = 0;
             stoneFreeWeaveAbilityActive = false;
 
             crazyDiamondRestorationMode = false;
