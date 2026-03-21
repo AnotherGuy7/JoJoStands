@@ -17,16 +17,18 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         public int TimeLeft;
         public int MaxTime;
         public Color TextColor;
+        public Projectile Owner;
 
         public const int DefaultDuration = 240;
 
-        public HeyYaSpeechBubble(string text, Vector2 worldPos, Color color, int duration = DefaultDuration)
+        public HeyYaSpeechBubble(string text, Vector2 worldPos, Color color, Projectile owner, int duration = DefaultDuration)
         {
             Text = text;
             WorldPosition = worldPos;
             MaxTime = duration;
             TimeLeft = duration;
             TextColor = color;
+            Owner = owner;
         }
     }
 
@@ -74,7 +76,10 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                 b.TimeLeft--;
                 if (b.TimeLeft <= 0) { _bubbles.RemoveAt(i); continue; }
 
-                b.WorldPosition.Y -= 0.18f;
+                if (b.Owner != null && b.Owner.active)
+                    b.WorldPosition = b.Owner.Center + new Vector2(0f, -40f);
+                else
+                    b.WorldPosition.Y -= 0.18f;
 
                 float progress = (float)b.TimeLeft / b.MaxTime;
                 float alpha = progress < 0.25f ? (progress / 0.25f) : 1f;
@@ -266,7 +271,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             if (Projectile.owner != Main.myPlayer) return;
 
             Vector2 pos = Projectile.Center + new Vector2(0f, -40f);
-            _bubbles.Add(new HeyYaSpeechBubble(text, pos, color, duration));
+            _bubbles.Add(new HeyYaSpeechBubble(text, pos, color, Projectile, duration));
         }
 
         private bool TrySayAdvice(string key, string message)
