@@ -278,7 +278,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             else if (animationName == "Secondary")
                 AnimateStand(animationName, 1, 1, true);
             else if (animationName == "Grab")
-                AnimateStand(animationName, 3, 6, true, 2, 2);
+                AnimateStand(animationName, 3, 6, 2, 2);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 12, true);
         }

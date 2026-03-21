@@ -23,7 +23,6 @@ namespace JoJoStands.Projectiles
         }
 
         private const float ExplosionRadius = 6f * 16f;
-        private bool crit = false;
 
         public override void AI()
         {
@@ -142,7 +141,7 @@ namespace JoJoStands.Projectiles
                 Vector2 spawnPos = Projectile.Center + (circlePos.ToRotationVector2() * 50f);
                 Vector2 velocity = spawnPos - Projectile.Center;
                 velocity.Normalize();
-                Dust dustIndex = Dust.NewDustPerfect(spawnPos, 21, velocity * 4f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
+                Dust dustIndex = Dust.NewDustPerfect(spawnPos, DustID.VilePowder, velocity * 4f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
                 dustIndex.noGravity = true;
             }
         }
