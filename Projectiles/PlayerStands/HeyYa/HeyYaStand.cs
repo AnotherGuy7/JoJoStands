@@ -269,11 +269,12 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             _bubbles.Add(new HeyYaSpeechBubble(text, pos, color, duration));
         }
 
-        private void TrySayAdvice(string key, string message)
+        private bool TrySayAdvice(string key, string message)
         {
-            if (_adviceCooldowns.ContainsKey(key)) return;
+            if (_adviceCooldowns.ContainsKey(key)) return false;
             _adviceCooldowns[key] = AdviceCooldown;
             SpawnBubble(message, new Color(100, 220, 255), HeyYaSpeechBubble.DefaultDuration * 2);
+            return true;
         }
 
         private void TickAdviceCooldowns()
@@ -297,75 +298,78 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                 if (!_adviceCooldowns.ContainsKey("summoned_" + n.type))
                 {
                     _adviceCooldowns["summoned_" + n.type] = AdviceCooldown * 10;
-                    TrySayAdvice("summoned_any", "There's nothing but good luck in your bag! Let's do this!");
-                    SayBossAdvice(n.type);
+                    bool hadSpecific = SayBossAdvice(n.type);
+                    if (!hadSpecific)
+                        TrySayAdvice("summoned_any", "There's nothing but good luck in your bag! Let's do this!");
                 }
             }
         }
 
-        private void SayBossAdvice(int npcType)
+        private bool SayBossAdvice(int npcType)
         {
             switch (npcType)
             {
                 case NPCID.KingSlime:
                     TrySayAdvice("ks_1", "Can this big guy only move vertically by jumping? If you get up high enough, it shouldn't be able to reach you easily!");
-                    break;
+                    return true;
                 case NPCID.EyeofCthulhu:
                     TrySayAdvice("eoc_1", "When it lunges at you, it should help to run in a straight line-- this big eye doesn't seem to know how to lead the target!");
-                    break;
+                    return true;
                 case NPCID.EaterofWorldsHead:
                 case NPCID.EaterofWorldsBody:
                 case NPCID.EaterofWorldsTail:
                     TrySayAdvice("eow_1", "Get this worm out of its element. Fight it on the surface.");
-                    break;
+                    return true;
                 case NPCID.BrainofCthulhu:
                     TrySayAdvice("boc_1", "This one seems to be lighter than the others. Hit it with something fast and hard to beat it back!");
                     TrySayAdvice("boc_2", "Those eye things give me a bad feeling… They'll probably do something nasty if they hit you!");
                     TrySayAdvice("boc_3", "It seems like the fakes aren't as solid as the original…");
-                    break;
+                    return true;
                 case NPCID.QueenBee:
                     TrySayAdvice("qb_1", "Those charges are only horizontal, right? Then can't we just jump out of the way?");
                     TrySayAdvice("qb_2", "Those bees it's shooting out don't look too durable. If we have something that can pierce them, can't we just get them out of the way and still hit the big one?");
-                    break;
+                    return true;
                 case NPCID.SkeletronHead:
                     TrySayAdvice("sk_1", "It looks like it's just attacking recklessly while it's spinning… Maybe you can hit it harder when it does that?");
-                    break;
+                    return true;
                 case NPCID.WallofFlesh:
                     TrySayAdvice("wof_1", "Go for the eyes!");
                     TrySayAdvice("wof_2", "Keep your distance, but don't go too far, or it'll pull you back!");
-                    break;
+                    return true;
                 case NPCID.TheDestroyer:
                     TrySayAdvice("dst_1", "Getting swarmed is a bad idea in any context! It should be best to take out the probes before you go back to damaging the worm.");
-                    break;
+                    return true;
                 case NPCID.Retinazer:
                 case NPCID.Spazmatism:
                     TrySayAdvice("twn_1", "With a good horse and some flat ground, I think you should be able to just barely outrun these guys.");
-                    break;
+                    return true;
                 case NPCID.SkeletronPrime:
                     TrySayAdvice("skp_1", "That laser looks a bit tough to dodge… Maybe you should smash it up first?");
                     TrySayAdvice("skp_2", "It looks like the bombs only bounce if they hit solid ground. It should help to fight it pretty high up.");
-                    break;
+                    return true;
                 case NPCID.Plantera:
                     TrySayAdvice("pla_1", "It looks like it's just moving in a straight line after you, and it's pretty slow… Can't we just run circles around it?");
                     TrySayAdvice("pla_2", "Those bouncy spiky thingies don't look like they can cover much ground vertically… Maybe try staying higher up?");
-                    break;
+                    return true;
                 case NPCID.Golem:
                     TrySayAdvice("gol_1", "Looks like those fists aren't entirely connected to the main body. How about we… dis-arm him?");
                     TrySayAdvice("gol_2", "Looks like the head is detachable… Once it does that, it'll probably just be a race to the finish!");
-                    break;
+                    return true;
                 case NPCID.DukeFishron:
                     TrySayAdvice("df_1", "It doesn't look like he can turn while he's charging! Try to dodge at a right angle from where he's aiming!");
                     TrySayAdvice("df_2", "Those bubbles don't look very durable! A fast, wide-hitting weapon should swat 'em out of the air!");
-                    break;
+                    return true;
                 case NPCID.CultistBoss:
                     TrySayAdvice("lc_1", "The fakes have round eyes. The real one looks angry, and he's got a stripe on his hood.");
                     TrySayAdvice("lc_2", "I think you can swat down the sparkly blue bolts with a weapon, that should come in handy!");
-                    break;
+                    return true;
                 case NPCID.MoonLordCore:
                     TrySayAdvice("ml_1", "That big laser looks like it packs a punch! I wouldn't want to get hit by that if I were you!");
                     TrySayAdvice("ml_2", "There's no way this guy doesn't have something up his sleeve for when we knock those eyes out. Maybe we should try to get them all out at once?");
                     TrySayAdvice("ml_3", "I doubt that you can escape the big guy, because he'll just warp over to you. But it looks like the eyeballs, once they're detached, are another story.");
-                    break;
+                    return true;
+                default:
+                    return false;
             }
         }
 
