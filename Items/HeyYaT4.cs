@@ -10,10 +10,10 @@ using Terraria.ModLoader;
 
 namespace JoJoStands.Items
 {
-    public class HeyYaFinal : StandItemClass
+    public class HeyYaT4 : StandItemClass
     {
         public override string Texture => Mod.Name + "/Items/HeyYaT1";
-        public override int StandTier => 5;
+        public override int StandTier => 4;
         public override string StandIdentifierName => "HeyYa";
         public override Color StandTierDisplayColor => HeyYaStandT1.HeyYaTierColor;
 
@@ -36,7 +36,7 @@ namespace JoJoStands.Items
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standType = 2;
             Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero,
-                ModContent.ProjectileType<HeyYaStandT5>(), 0, 0f, Main.myPlayer);
+                ModContent.ProjectileType<HeyYaStandT4>(), 0, 0f, Main.myPlayer);
             mPlayer.standHasNoPrimary = true;
             return true;
         }
@@ -45,12 +45,8 @@ namespace JoJoStands.Items
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<HeyYaT4>())
-                .AddIngredient(ItemID.Ectoplasm, 8)
-                .AddIngredient(ItemID.LadyBug, 1)
+                .AddIngredient(ItemID.ChlorophyteBar, 15)
                 .AddIngredient(ItemID.GardenGnome, 1)
-                .AddIngredient(ItemID.PinkPearl, 1)
-                .AddIngredient(ModContent.ItemType<WillToProtect>())
-                .AddIngredient(ModContent.ItemType<WillToChange>())
                 .AddIngredient(ModContent.ItemType<CaringLifeforce>())
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
