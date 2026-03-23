@@ -37,7 +37,7 @@ namespace JoJoStands.Items
             mPlayer.standType = 2;
             Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero,
                 ModContent.ProjectileType<HeyYaStandT4>(), 0, 0f, Main.myPlayer);
-            mPlayer.heyYaTier = StandTier;
+            mPlayer.standHasNoPrimary = true;
             return true;
         }
 

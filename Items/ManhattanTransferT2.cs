@@ -35,7 +35,7 @@ namespace JoJoStands.Items
         public override bool ManualStandSpawning(Player player)
         {
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            mPlayer.manhattanTier = StandTier;
+            mPlayer.standHasNoPrimary = true;
             mPlayer.standType = 2;
             Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<ManhattanTransferStandT2>(), 0, 0f, Main.myPlayer);
             return true;

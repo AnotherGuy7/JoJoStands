@@ -47,8 +47,6 @@ namespace JoJoStands
         public int timestopEffectDurationTimer = 0;
         public int sexPistolsLeft = 6;
         public int sexPistolsTier = 0;
-        public int manhattanTier = 0;
-        public int heyYaTier = 0;
         public int revolverBulletsShot = 0;
         public int sexPistolsRecoveryTimer = 0;
         public int aerosmithWhoAmI = 0;
@@ -227,6 +225,11 @@ namespace JoJoStands
         public float towerOfGrayDamageMult = 1f;
 
         public int standTarget = -1;
+
+        /// <summary>
+        /// Set to true by stands that have no left-click primary attack.
+        /// </summary>
+        public bool standHasNoPrimary = false;
 
         public bool siliconLifeformCarapace = false;
         public bool manifestedWillEmblem = false;
@@ -1802,9 +1805,7 @@ namespace JoJoStands
             standType = 0;
             standTier = 0;
             standDefenseToAdd = 0;
-            sexPistolsTier = 0;
-            manhattanTier = 0;
-            heyYaTier = 0;
+            standHasNoPrimary = true;
             stoneFreeWeaveAbilityActive = false;
             hotbarLocked = false;
 
@@ -2106,8 +2107,7 @@ namespace JoJoStands
             standTier = 0;
             standDefenseToAdd = 0;
             sexPistolsTier = 0;
-            manhattanTier = 0;
-            heyYaTier = 0;
+            standHasNoPrimary = true;
             stoneFreeWeaveAbilityActive = false;
 
             crazyDiamondRestorationMode = false;
