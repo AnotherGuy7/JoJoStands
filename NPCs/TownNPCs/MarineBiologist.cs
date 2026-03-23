@@ -325,6 +325,8 @@ namespace JoJoStands.NPCs.TownNPCs
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaT2").Value;
                 else if (standSlotItemType == ModContent.ItemType<HeyYaT3>())
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaT3").Value;
+                else if (standSlotItemType == ModContent.ItemType<HeyYaT4>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaT4").Value;
                 else if (standSlotItemType == ModContent.ItemType<HeyYaFinal>())
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaFinal").Value;
 

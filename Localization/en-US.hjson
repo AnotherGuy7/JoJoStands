@@ -2312,6 +2312,17 @@ Mods: {
 					'''
 			}
 
+			HeyYaT4: {
+				DisplayName: Hey Ya (Tier 4)
+				Tooltip:
+					'''
+					Just by association with it, increase your luck!
+					Special: Change if your luck is passive or aggressive!
+					Second Special: Change what buff your passive or aggressive luck will provide!
+					Used in Stand Slot
+					'''
+			}
+
 			SilverChariotFinal: {
 				DisplayName: Silver Chariot (Final Tier)
 				Tooltip:
@@ -3889,6 +3900,7 @@ Mods: {
 			HeyYaStandT1.DisplayName: Hey Ya Stand T1
 			HeyYaStandT2.DisplayName: Hey Ya Stand T2
 			HeyYaStandT3.DisplayName: Hey Ya Stand T3
+			HeyYaStandT4.DisplayName: Hey Ya Stand T4
 		}
 
 		Biomes: {
@@ -4451,7 +4463,8 @@ Mods: {
 			HeyYaT1: This stand does not seem to have any power. But I feel like just because you are associated with it, you may get lucky. What you are lucky on should depend on your mood. Try using it in different situations and see what happens. You can possibly increase its potential by encountering a lucky creature, maybe a Ladybug.
 			HeyYaT2: Seems like I was right. Your luck seems to be increasing. I don't know how to explain it, but you should be able to feel it. Just remember that with great luck comes great responsibility. After a ladybug, maybe try a rarer item, one that would be considered very lucky, such as a rare pearl.
 			HeyYaT3: You should have an even wider range of lucky situations you can find yourself in now. I think this is as far as you can go with natural luck. An artificial luck such as a Garden Gnome may be of help.
-			HeyYaFinal: Your luck has reached its peak. I hope you use it wisely, and not just for gambling or something. I don't want to have to deal with the consequences of that.
+			HeyYaT4: I feel like your luck should have reached its peak. But something tells me you can go even further by combining all the lucky things you had so far.
+			HeyYaFinal: Your luck truly has reached its peak this time. I hope you use it wisely, and not just for gambling or something. I don't want to have to deal with the consequences of something like that again.
 			StandHelpText0: Have a stand Item in the 'Stand Slot' then press 'Stand Help' and I'll tell you what it can do and how to get it's tiers OR keep pressing 'Stand Help' and I'll tell you how to get specific items and do certain actions.
 			StandHelpText1: To use Stand Specials, in controls, you need to bind a key to 'JoJoStands: Special' then while the stand is activated you press the key to use the special
 			StandHelpText2: Requiem Arrows can be obtained by getting a viral pearl and merging it with a Stand Arrow. This happens because all the Viral Meteorite involved starts to morph and have a different use alltogether.
