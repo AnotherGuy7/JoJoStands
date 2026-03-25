@@ -2229,6 +2229,7 @@ Mods: {
 					Special: Hover on an enemy and lock-in Manhattan Transfer to them!
 					Second Special: Change Manhattan Transfer to Deflector Mode, allowing it to reflect projectiles!
 					Auto Mode: Floats around on top of players head.
+					Note: Right-click on Manhattan Transfer to change between global and relative positioning!
 					Used in Stand Slot
 					'''
 			}
@@ -2240,6 +2241,7 @@ Mods: {
 					Shoot Manhattan Transfer and have it home in on your enemies!
 					Right Click: Adjust Manhattan Transfer's position.
 					Auto Mode: Floats around on top of players head.
+					Note: Right-click on Manhattan Transfer to change between global and relative positioning!
 					Used in Stand Slot
 					'''
 			}
@@ -2252,6 +2254,7 @@ Mods: {
 					Right Click: Adjust Manhattan Transfer's position.
 					Special: Hover on an enemy and lock-in Manhattan Transfer to them!
 					Auto Mode: Floats around on top of players head.
+					Note: Right-click on Manhattan Transfer to change between global and relative positioning!
 					Used in Stand Slot
 					'''
 			}
@@ -2265,6 +2268,7 @@ Mods: {
 					Special: Hover on an enemy and lock-in Manhattan Transfer to them!
 					Second Special: Change Manhattan Transfer to Deflector Mode, allowing it to reflect projectiles!
 					Auto Mode: Floats around on top of players head.
+					Note: Right-click on Manhattan Transfer to change between global and relative positioning!
 					Used in Stand Slot
 					'''
 			}
