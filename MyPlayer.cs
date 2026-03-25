@@ -47,7 +47,6 @@ namespace JoJoStands
         public int timestopEffectDurationTimer = 0;
         public int sexPistolsLeft = 6;
         public int sexPistolsTier = 0;
-        public int manhattanTier = 0;
         public int revolverBulletsShot = 0;
         public int sexPistolsRecoveryTimer = 0;
         public int aerosmithWhoAmI = 0;
@@ -107,6 +106,9 @@ namespace JoJoStands
         public StandControlStyle standControlStyle;
         public int softAndWetBubbleRotation;
         public int standDesummonTimer = 0;
+
+        public float heyYaDodgeChance = 0f;
+        public float heyYaDropRateBonus = 0f;
 
         public int crazyDiamonUncraftCooldown = 0;
 
@@ -223,6 +225,11 @@ namespace JoJoStands
         public float towerOfGrayDamageMult = 1f;
 
         public int standTarget = -1;
+
+        /// <summary>
+        /// Set to true by stands that have no left-click primary attack.
+        /// </summary>
+        public bool standHasNoPrimary = false;
 
         public bool siliconLifeformCarapace = false;
         public bool manifestedWillEmblem = false;
@@ -420,6 +427,9 @@ namespace JoJoStands
             standDodgeChance = 0f;
 
             towerOfGrayDamageMult = 1f;
+
+            heyYaDodgeChance = 0f;
+            heyYaDropRateBonus = 0f;
 
             siliconLifeformCarapace = false;
             manifestedWillEmblem = false;
@@ -1815,8 +1825,7 @@ namespace JoJoStands
             standType = 0;
             standTier = 0;
             standDefenseToAdd = 0;
-            sexPistolsTier = 0;
-            manhattanTier = 0;
+            standHasNoPrimary = true;
             stoneFreeWeaveAbilityActive = false;
             hotbarLocked = false;
 
@@ -1824,6 +1833,9 @@ namespace JoJoStands
             crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
             crazyDiamondMessageCooldown = 0;
             crazyDiamondDestroyedTileData.Clear();
+
+            heyYaDodgeChance = 0;
+            heyYaDropRateBonus = 0;
 
             creamTier = 0;
             voidCounter = 0;
@@ -1955,6 +1967,13 @@ namespace JoJoStands
 
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
+            if(heyYaDodgeChance > 0 && Main.rand.NextFloat(1, 100) <= heyYaDodgeChance)
+            {
+                modifiers.FinalDamage *= 0f;
+                //if (JoJoStands.SoundsLoaded)
+                //    SoundEngine.PlaySound(new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/HeyYaDodge"), Player.Center);
+                return;
+            }
             if (silverChariotShirtless || Player.ownedProjectileCounts[ModContent.ProjectileType<SilverChariotAfterImage>()] > 0 || Player.HasBuff<Exposing>())
                 modifiers.FinalDamage *= 2;
             if (stoneFreeWeaveAbilityActive || Player.HasBuff(ModContent.BuffType<BelieveInMe>()))
@@ -2108,7 +2127,7 @@ namespace JoJoStands
             standTier = 0;
             standDefenseToAdd = 0;
             sexPistolsTier = 0;
-            manhattanTier = 0;
+            standHasNoPrimary = true;
             stoneFreeWeaveAbilityActive = false;
 
             crazyDiamondRestorationMode = false;

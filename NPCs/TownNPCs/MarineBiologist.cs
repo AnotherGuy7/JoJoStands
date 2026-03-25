@@ -318,6 +318,17 @@ namespace JoJoStands.NPCs.TownNPCs
                 else if (standSlotItemType == ModContent.ItemType<ManhattanTransferFinal>())
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.ManhattanTransferFinal").Value;
 
+                else if (standSlotItemType == ModContent.ItemType<HeyYaT1>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaT1").Value;
+                else if (standSlotItemType == ModContent.ItemType<HeyYaT2>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaT2").Value;
+                else if (standSlotItemType == ModContent.ItemType<HeyYaT3>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaT3").Value;
+                else if (standSlotItemType == ModContent.ItemType<HeyYaT4>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaT4").Value;
+                else if (standSlotItemType == ModContent.ItemType<HeyYaFinal>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaFinal").Value;
+
                 else if (JoJoStands.FanStandsLoaded)
                 {
                     string suffix = mPlayer.standTier == 4 ? "Final" : ("T" + mPlayer.standTier);      //Needs support for T5

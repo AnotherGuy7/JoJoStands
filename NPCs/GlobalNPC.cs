@@ -776,6 +776,14 @@ namespace JoJoStands.NPCs
                 int spawnedNPC = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.position.X, (int)npc.position.Y, npc.type);
                 Main.npc[spawnedNPC].GetGlobalNPC<JoJoGlobalNPC>().spawnedByDeathLoop = npc.GetGlobalNPC<JoJoGlobalNPC>().spawnedByDeathLoop - 1;
             }
+
+            MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
+            if (mPlayer.standOut && mPlayer.heyYaDropRateBonus > 0f) // && !npc.boss maybe
+            {
+                float chance = mPlayer.heyYaDropRateBonus / 100f;
+                if (Main.rand.NextFloat() < chance)
+                    npc.NPCLoot();
+            }
         }
 
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

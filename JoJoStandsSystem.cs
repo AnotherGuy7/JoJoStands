@@ -1,4 +1,5 @@
 ﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Projectiles.PlayerStands.HeyYa;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -283,6 +284,7 @@ namespace JoJoStands
         {
             MyPlayer mPlayer = Main.LocalPlayer.GetModPlayer<MyPlayer>();
             mPlayer.Draw(spriteBatch);
+            HeyYaStand.DrawBubbles(spriteBatch);
         }
 
         public override void UpdateUI(GameTime gameTime)

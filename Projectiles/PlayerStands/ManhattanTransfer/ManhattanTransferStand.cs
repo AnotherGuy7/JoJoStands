@@ -37,6 +37,9 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
 
         private Vector2 targetPosition = Vector2.Zero;
         private bool hasTarget = false;
+        private Vector2 relativeOffset;
+        private bool relativePositionLock;
+        private int relativeActionTimer = 0;
 
         private bool DeflectMode => Projectile.ai[0] == 1f;
 
@@ -125,6 +128,7 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
                 if (dist <= FlySpeed)
                 {
                     Projectile.Center = targetPosition;
+                    relativeOffset = Projectile.Center - player.Center;
                     hasTarget = false;
                     Projectile.velocity = Vector2.Zero;
                     Projectile.netUpdate = true;
@@ -156,18 +160,46 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
 
         private void HandleInput(Player player, MyPlayer mPlayer)
         {
-            if (Main.mouseRight && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
+            if (relativeActionTimer > 0)
+                relativeActionTimer--;
+
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {
-                Vector2 toMouse = Main.MouseWorld - player.Center;
-                float range = StandRange(mPlayer);
-                if (toMouse.Length() > range)
+                if (Main.mouseRight)
                 {
-                    toMouse.Normalize();
-                    toMouse *= range;
+                    if (relativeActionTimer <= 0 && Vector2.Distance(Main.MouseWorld, Projectile.Center) <= 2f * 16f)
+                    {
+                        relativeActionTimer = 30;
+                        relativePositionLock = !relativePositionLock;
+                        if (relativePositionLock)
+                        {
+                            relativeOffset = Projectile.Center - player.Center;
+                            Main.NewText("Positioning Mode: Relative");
+                        }
+                        else
+                            Main.NewText("Positioning Mode: Global");
+                    }
+                    else
+                    {
+                        Vector2 toMouse = Main.MouseWorld - player.Center;
+                        float range = StandRange(mPlayer);
+                        if (toMouse.Length() > range)
+                        {
+                            toMouse.Normalize();
+                            toMouse *= range;
+                        }
+                        targetPosition = player.Center + toMouse;
+                        relativeOffset = Projectile.Center - player.Center;
+                        hasTarget = true;
+                        Projectile.netUpdate = true;
+                        relativeActionTimer = 60;
+                    }
                 }
-                targetPosition = player.Center + toMouse;
-                hasTarget = true;
-                Projectile.netUpdate = true;
+            }
+
+            if (!hasTarget && relativePositionLock)
+            {
+                Projectile.Center = player.Center + relativeOffset;
             }
 
             if (SpecialKeyPressed())
@@ -202,7 +234,7 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
             {
                 ToggleDeflectMode();
                 SoundEngine.PlaySound(SoundID.Item9, Projectile.Center);
-                int dustCount = 30;
+                int dustCount = 60;
                 for (int k = 0; k < dustCount; k++)
                 {
                     float rot = MathHelper.ToRadians((360f / dustCount) * k);
@@ -222,7 +254,8 @@ namespace JoJoStands.Projectiles.PlayerStands.ManhattanTransfer
             bool nearBorder = distFromEdge <= 40f;
             if (!hasTarget && !nearBorder)
                 return;
-            int ringDusts = 36;
+
+            int ringDusts = 90;
             for (int i = 0; i < ringDusts; i++)
             {
                 if (Main.rand.NextBool(4))

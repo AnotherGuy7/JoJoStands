@@ -14,7 +14,7 @@ namespace JoJoStands.Items
         public override int StandSpeed => 11;
         public override int StandType => 1;
         public override string StandIdentifierName => "GoldExperienceRequiem";
-        public override int StandTier => 5;
+        public override int StandTier => 6;
         public override Color StandTierDisplayColor => Color.Orange;
 
         public override void SetStaticDefaults()
