@@ -15,7 +15,7 @@ namespace JoJoStands.Items
 
         public override int StandSpeed => 30;
         public override int StandType => 2;
-        public override int StandTier => 5;
+        public override int StandTier => 6;
         public override string StandIdentifierName => "KillerQueenBTD";
         public override Color StandTierDisplayColor => Color.LightPink;
 

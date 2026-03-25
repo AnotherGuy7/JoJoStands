@@ -13,7 +13,7 @@ namespace JoJoStands.Items
         public override int StandSpeed => 9;
         public override int StandType => 1;
         public override string StandIdentifierName => "SoftAndWet";
-        public override int StandTier => 5;
+        public override int StandTier => 6;
         public override Color StandTierDisplayColor => Color.LightBlue;
 
         public override string Texture
