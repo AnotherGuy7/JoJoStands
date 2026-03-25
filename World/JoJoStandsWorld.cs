@@ -4,6 +4,7 @@ using JoJoStands.Networking;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using System;
+using System.Reflection;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -35,6 +36,9 @@ namespace JoJoStands
         private const string Tag_ViralMeteoriteVisited = "viralMeteoriteVisited";
         private const string Tag_ViralMeteoriteIntroZoneVisited = "viralMeteoriteIntroduced";
         public static readonly Color WorldEventTextColor = new Color(50, 255, 130);
+
+        private static MethodInfo _anyActiveMethod = null;
+        private static bool _subworldLibChecked = false;
 
         public override void OnWorldLoad()
         {
@@ -90,6 +94,9 @@ namespace JoJoStands
 
         public override void PreUpdateWorld()
         {
+            if (IsInSubworld())
+                return;
+
             if (NPC.downedBoss3 && !viralMeteoriteDropped && Main.dayTime)
             {
                 DropViralMeteorite();
@@ -426,6 +433,30 @@ namespace JoJoStands
             player.crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);
             player.crazyDiamondMessageCooldown = 0;
             player.crazyDiamondDestroyedTileData.Clear();
+        }
+
+        private static bool IsInSubworld()
+        {
+            if (!_subworldLibChecked)
+            {
+                _subworldLibChecked = true;
+                if (ModLoader.TryGetMod("SubworldLibrary", out Mod subworldLib))
+                {
+                    Type subworldSystem = subworldLib.Code.GetType("SubworldLibrary.SubworldSystem");
+                    foreach (MethodInfo method in subworldSystem?.GetMethods() ?? Array.Empty<MethodInfo>())
+                    {
+                        if (method.Name == "AnyActive" && method.GetParameters().Length == 0 && !method.IsGenericMethod)
+                        {
+                            _anyActiveMethod = method;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (_anyActiveMethod == null)
+                return false;
+            bool result = (bool)_anyActiveMethod.Invoke(null, null);
+            return result;
         }
     }
 }
