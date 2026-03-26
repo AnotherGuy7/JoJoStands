@@ -60,11 +60,6 @@ namespace JoJoStands.Items
                 Main.projectile[projectileIndex].GetGlobalProjectile<JoJoGlobalProjectile>().autoModeSexPistols = true;
                 return false;
             }
-            else if (mPlayer.standHasNoPrimary)
-            {
-                Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, type, damage, knockback, player.whoAmI);
-                return false;
-            }
             return true;
         }
 

@@ -44,7 +44,7 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<HeyYaT4>())
+                .AddIngredient(ModContent.ItemType<HeyYaT3>())
                 .AddIngredient(ItemID.ChlorophyteBar, 15)
                 .AddIngredient(ItemID.GardenGnome, 1)
                 .AddIngredient(ModContent.ItemType<CaringLifeforce>())
