@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -34,6 +33,11 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
     public abstract class HeyYaStand : StandClass
     {
+        public override bool? CanCutTiles()
+        {
+            return false;
+        }
+
         public new enum AnimationState
         {
             Idle,
@@ -44,6 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         public new AnimationState oldAnimationState;
 
         private static readonly List<HeyYaSpeechBubble> _bubbles = new List<HeyYaSpeechBubble>();
+        private static readonly HashSet<HeyYaStand> _activeStands = new HashSet<HeyYaStand>();
 
         private const float BubbleTextScale = 0.7f;
         private const int BubbleMaxLineWidth = 160;
@@ -106,6 +111,24 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             get => (int)Projectile.ai[1];
             set => Projectile.ai[1] = value;
         }
+
+        private readonly HashSet<int> _bossesSeenLastTick = new HashSet<int>();
+        private readonly HashSet<int> _congratulatedBosses = new HashSet<int>();
+
+        private bool _invasionWasActive = false;
+        private int _lastInvasionType = 0;
+
+        private bool _sandstormWasActive = false;
+        private bool _rainWasActive = false;
+        private bool _stormWasActive = false;
+        private bool _blizzardWasActive = false;
+        private bool _bloodMoonWasActive = false;
+        private bool _eclipseWasActive = false;
+        private bool _pumpkinMoonWasActive = false;
+        private bool _frostMoonWasActive = false;
+        private bool _slimeRainWasActive = false;
+        private bool _windyWasActive = false;
+        private bool _lanternNightWasActive = false;
 
         private static List<string> WrapText(string text, float scale)
         {
@@ -205,6 +228,13 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
             ResetIdleLineTimer();
+            if (Projectile.owner == Main.myPlayer)
+                _activeStands.Add(this);
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            _activeStands.Remove(this);
         }
 
         public override void SelectAnimation()
@@ -216,12 +246,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                 oldAnimationState = currentAnimationState;
                 Projectile.netUpdate = true;
             }
-            if (currentAnimationState == AnimationState.Idle)
-                PlayAnimation("Idle");
-            else if (currentAnimationState == AnimationState.Jump)
-                PlayAnimation("Jump");
-            else if (currentAnimationState == AnimationState.Pose)
-                PlayAnimation("Pose");
+            if (currentAnimationState == AnimationState.Idle) PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Jump) PlayAnimation("Jump");
+            else if (currentAnimationState == AnimationState.Pose) PlayAnimation("Pose");
         }
 
         public override void PlayAnimation(string animationName)
@@ -236,12 +263,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                 Projectile.height = standTexture.Height / frameCount;
             }
 
-            if (animationName == "Idle")
-                AnimateStand(animationName, IdleFrameCount, IdleFrameSpeed, true);
-            else if (animationName == "Jump")
-                AnimateStand(animationName, JumpFrameCount, JumpFrameSpeed, true);
-            else if (animationName == "Pose")
-                AnimateStand(animationName, 1, 12, true);
+            if (animationName == "Idle") AnimateStand(animationName, IdleFrameCount, IdleFrameSpeed, true);
+            else if (animationName == "Jump") AnimateStand(animationName, JumpFrameCount, JumpFrameSpeed, true);
+            else if (animationName == "Pose") AnimateStand(animationName, 1, 12, true);
         }
 
         public override void AI()
@@ -252,12 +276,9 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
-            if (mPlayer.posing)
-                currentAnimationState = AnimationState.Pose;
-            else if (player.velocity.Y != 0f)
-                currentAnimationState = AnimationState.Jump;
-            else
-                currentAnimationState = AnimationState.Idle;
+            if (mPlayer.posing) currentAnimationState = AnimationState.Pose;
+            else if (player.velocity.Y != 0f) currentAnimationState = AnimationState.Jump;
+            else currentAnimationState = AnimationState.Idle;
 
             SelectAnimation();
             FollowBehindPlayer(player);
@@ -268,6 +289,18 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             {
                 TickAdviceCooldowns();
                 CheckAdviceTriggers(player);
+                CheckSandstorm();
+                CheckRain();
+                CheckThunderstorm();
+                CheckBlizzard();
+                CheckBloodMoon();
+                CheckEclipse();
+                CheckPumpkinMoon();
+                CheckFrostMoon();
+                CheckSlimeRain();
+                CheckWindy();
+                CheckLanternNight();
+                CheckInvasion();
                 TickIdleLines();
 
                 if (SpecialKeyPressed())
@@ -300,8 +333,8 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                 : PumpedBuffNames[SelectedBuffIndex];
 
             SpawnBubble(buffName, new Color(100, 220, 255), 80);
-
             SoundEngine.PlaySound(SoundID.Item9, Projectile.Center);
+
             int dustCount = 30;
             for (int k = 0; k < dustCount; k++)
             {
@@ -319,16 +352,14 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         {
             int[] pool = ChillMode ? ChillBuffPool : PumpedBuffPool;
             int idx = SelectedBuffIndex;
-            if (idx < 0 || idx > Tier || idx >= pool.Length)
-                return;
-
+            if (idx < 0 || idx > Tier || idx >= pool.Length) return;
             if (pool[idx] > 0)
                 player.AddBuff(pool[idx], 2);
         }
 
         private void ResetIdleLineTimer()
         {
-            _idleLineInterval = _rand.Next(3600 * 5, 3600 * 10);
+            _idleLineInterval = _rand.Next(3600 * 1, 3600 * 5);
             _idleLineTimer = 0;
         }
 
@@ -348,6 +379,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
         {
             float dirSign = player.direction;
             Vector2 target = player.Center + new Vector2(-dirSign * BehindOffset, 0f);
+
             if (Vector2.Distance(Projectile.Center, target) > 16f * 20f)
             {
                 Projectile.Center = target;
@@ -399,8 +431,252 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
             }
         }
 
+        private void CheckBossDefeats()
+        {
+            var bossesThisTick = new HashSet<int>();
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                NPC n = Main.npc[i];
+                if (n.active && n.boss)
+                    bossesThisTick.Add(n.type);
+            }
+            foreach (int bossType in _bossesSeenLastTick)
+            {
+                if (!bossesThisTick.Contains(bossType) && !_congratulatedBosses.Contains(bossType))
+                {
+                    _congratulatedBosses.Add(bossType);
+                    SpawnBubble("That big galoot didn't stand a chance against you!", new Color(255, 215, 0), HeyYaSpeechBubble.DefaultDuration * 2);
+                    SoundEngine.PlaySound(SoundID.Chat, Projectile.Center);
+                    break;
+                }
+            }
+
+            _bossesSeenLastTick.Clear();
+            foreach (int t in bossesThisTick)
+                _bossesSeenLastTick.Add(t);
+        }
+
+        private void CheckSandstorm()
+        {
+            bool sandActive = Terraria.GameContent.Events.Sandstorm.Happening;
+            if (sandActive && !_sandstormWasActive)
+                TrySayAdvice("sandstorm_start", "Watch out, the desert's windy today!");
+            else if (!sandActive && _sandstormWasActive)
+                TrySayAdvice("sandstorm_end", "Phew, that sandstorm finally died down.");
+            _sandstormWasActive = sandActive;
+        }
+
+        private void CheckRain()
+        {
+            bool rainActive = Main.raining;
+            if (rainActive && !_rainWasActive)
+            {
+                string[] lines =
+                {
+                    "Looks like rain's coming in. Watch your footing out there!",
+                    "A little rain never hurt anyone... probably.",
+                    "Stay sharp -- wet ground means slippery slopes!",
+                };
+                TrySayAdvice("rain_start", lines[Main.rand.Next(lines.Length)]);
+            }
+            else if (!rainActive && _rainWasActive)
+                TrySayAdvice("rain_end", "Finally clearing up. Good weather for a fight!");
+            _rainWasActive = rainActive;
+        }
+
+        private void CheckThunderstorm()
+        {
+            bool stormActive = Main.raining && Main.maxRaining >= 0.8f;
+            if (stormActive && !_stormWasActive)
+            {
+                string[] lines =
+                {
+                    "Stay out of open ground -- that lightning looks mean!",
+                    "This storm's no joke. Eyes open and keep moving!",
+                    "I've got a bad feeling about all this lightning...",
+                };
+                TrySayAdvice("storm_start", lines[Main.rand.Next(lines.Length)]);
+            }
+            else if (!stormActive && _stormWasActive && Main.raining)
+                TrySayAdvice("storm_ease", "Storm's easing up a bit. Still raining, but at least no more lightning!");
+            _stormWasActive = stormActive;
+        }
+
+        private void CheckBlizzard()
+        {
+            bool blizzardActive = Main.LocalPlayer.ZoneSnow && Main.raining;
+            if (blizzardActive && !_blizzardWasActive)
+            {
+                string[] lines =
+                {
+                    "Bundle up tight -- this blizzard's no weather for a stroll!",
+                    "A blizzard out here? Visibility's gonna be rough.",
+                    "Wind chill's something fierce. Don't let it slow you down!",
+                };
+                TrySayAdvice("blizzard_start", lines[Main.rand.Next(lines.Length)]);
+            }
+            else if (!blizzardActive && _blizzardWasActive)
+                TrySayAdvice("blizzard_end", "The blizzard's passed. Cold, but at least you can see again!");
+            _blizzardWasActive = blizzardActive;
+        }
+
+        private void CheckBloodMoon()
+        {
+            bool bloodActive = Main.bloodMoon;
+            if (bloodActive && !_bloodMoonWasActive)
+            {
+                string[] lines =
+                {
+                    "The moon's gone red. Never a good sign -- brace yourself!",
+                    "Blood moon tonight. Lock the doors... if you had any!",
+                    "Something about that red sky makes me want to keep moving.",
+                    "Hey, whatever comes out tonight -- we'll handle it together!",
+                };
+                TrySayAdvice("blood_moon_start", lines[Main.rand.Next(lines.Length)]);
+            }
+            else if (!bloodActive && _bloodMoonWasActive)
+                TrySayAdvice("blood_moon_end", "Sun's coming up. Made it through another blood moon -- lucky us!");
+            _bloodMoonWasActive = bloodActive;
+        }
+
+        private void CheckEclipse()
+        {
+            bool eclipseActive = Main.eclipse;
+            if (eclipseActive && !_eclipseWasActive)
+            {
+                string[] lines =
+                {
+                    "The sun's gone dark! Whatever crawls out in this -- it won't be friendly.",
+                    "A solar eclipse? I've heard stories about what comes with these...",
+                    "Midday and it's dark as night. This is gonna get rough!",
+                };
+                TrySayAdvice("eclipse_start", lines[Main.rand.Next(lines.Length)]);
+            }
+            else if (!eclipseActive && _eclipseWasActive)
+                TrySayAdvice("eclipse_end", "The sun's back! Survived an eclipse -- now that's lucky.");
+            _eclipseWasActive = eclipseActive;
+        }
+
+        private void CheckPumpkinMoon()
+        {
+            bool pumpkinActive = Main.pumpkinMoon;
+            if (pumpkinActive && !_pumpkinMoonWasActive)
+            {
+                string[] lines =
+                {
+                    "Pumpkins and moonlight -- spooky out there tonight!",
+                    "Halloween came early. Those things are no joke, stay sharp!",
+                    "I can smell the trouble already. Let's make some luck!",
+                };
+                TrySayAdvice("pumpkin_moon_start", lines[Main.rand.Next(lines.Length)]);
+            }
+            _pumpkinMoonWasActive = pumpkinActive;
+        }
+
+        private void CheckFrostMoon()
+        {
+            bool frostActive = Main.snowMoon;
+            if (frostActive && !_frostMoonWasActive)
+            {
+                string[] lines =
+                {
+                    "Cold and creepy -- the frost moon brings out the worst!",
+                    "Even the monsters are dressed for winter tonight. Stay warm!",
+                    "A frost moon... I prefer my luck warm, not frozen.",
+                };
+                TrySayAdvice("frost_moon_start", lines[Main.rand.Next(lines.Length)]);
+            }
+            _frostMoonWasActive = frostActive;
+        }
+
+        private void CheckSlimeRain()
+        {
+            bool slimeActive = Main.slimeRain;
+            if (slimeActive && !_slimeRainWasActive)
+            {
+                string[] lines =
+                {
+                    "It's raining slimes?! Only us, I swear.",
+                    "Watch your head -- those things bounce!",
+                    "Of all the weather we could get... at least it's funny.",
+                };
+                TrySayAdvice("slime_rain_start", lines[Main.rand.Next(lines.Length)]);
+            }
+            else if (!slimeActive && _slimeRainWasActive)
+                TrySayAdvice("slime_rain_end", "Slime rain's over. Ground's a mess but we're alright!");
+            _slimeRainWasActive = slimeActive;
+        }
+
+        private void CheckWindy()
+        {
+            bool windyActive = Math.Abs(Main.windSpeedCurrent) >= 0.5f;
+            if (windyActive && !_windyWasActive)
+            {
+                string[] lines =
+                {
+                    "Hold onto your hat -- it's really blowing out there!",
+                    "This wind could knock you sideways. Watch your jumps!",
+                    "Windy day. Projectiles are gonna go a little funny, heads up.",
+                };
+                TrySayAdvice("windy_start", lines[Main.rand.Next(lines.Length)]);
+            }
+            else if (!windyActive && _windyWasActive)
+                TrySayAdvice("windy_end", "Wind's died down. Much better!");
+            _windyWasActive = windyActive;
+        }
+
+        private void CheckLanternNight()
+        {
+            //bool lanternActive = Main.lanternNight;
+            //if (lanternActive && !_lanternNightWasActive)
+            //{
+            //    string[] lines =
+            //    {
+            //        "Look at all those lanterns... what a peaceful night. Don't waste it!",
+            //        "Lantern night -- even luck feels a little brighter tonight.",
+            //        "Beautiful out. Almost makes you forget what we've been through, huh?",
+            //    };
+            //    TrySayAdvice("lantern_night_start", lines[Main.rand.Next(lines.Length)]);
+            //}
+            //_lanternNightWasActive = lanternActive;
+        }
+
+        public static void NotifyOwnerViralMeteoriteLanded()
+        {
+            foreach (var s in _activeStands) s.OnViralMeteoriteLanded();
+        }
+
+        internal void OnViralMeteoriteLanded()
+        {
+            TrySayAdvice("viral_meteor_land", "How lucky, a treasure from the sky for us!");
+        }
+
+        private void CheckInvasion()
+        {
+            bool invasionActive = Main.invasionType > 0 && Main.invasionProgressMax > 0;
+
+            if (invasionActive && !_invasionWasActive)
+            {
+                _lastInvasionType = Main.invasionType;
+                TrySayAdvice("invasion_start_" + _lastInvasionType,
+                    "You've got luck and the home field advantage, let's go!");
+            }
+            else if (!invasionActive && _invasionWasActive)
+            {
+                bool won = Main.invasionProgressWave > 0;
+                if (won)
+                    TrySayAdvice("invasion_win_" + _lastInvasionType, "Great job beating 'em back!");
+                else
+                    TrySayAdvice("invasion_lose_" + _lastInvasionType, "Looks like we lucked out -- they're giving up!");
+            }
+
+            _invasionWasActive = invasionActive;
+        }
+
         private void CheckAdviceTriggers(Player player)
         {
+            CheckBossDefeats();
+
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC n = Main.npc[i];
