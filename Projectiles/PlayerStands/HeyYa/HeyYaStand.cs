@@ -432,21 +432,42 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                     TrySayAdvice("eow_1", "Get this worm out of its element. Fight it on the surface.");
                     return true;
                 case NPCID.BrainofCthulhu:
-                    TrySayAdvice("boc_1", "This one seems to be lighter than the others. Hit it with something fast and hard to beat it back!");
-                    TrySayAdvice("boc_2", "Those eye things give me a bad feeling… They'll probably do something nasty if they hit you!");
-                    TrySayAdvice("boc_3", "It seems like the fakes aren't as solid as the original…");
-                    return true;
+                    {
+                        var bocAdvice = new (string, string)[]
+                        {
+                            ("boc_1", "This one seems to be lighter than the others. Hit it with something fast and hard to beat it back!"),
+                            ("boc_2", "Those eye things give me a bad feeling… They'll probably do something nasty if they hit you!"),
+                            ("boc_3", "It seems like the fakes aren't as solid as the original…"),
+                        };
+                        var (key, text) = bocAdvice[Main.rand.Next(bocAdvice.Length)];
+                        TrySayAdvice(key, text);
+                        return true;
+                    }
                 case NPCID.QueenBee:
-                    TrySayAdvice("qb_1", "Those charges are only horizontal, right? Then can't we just jump out of the way?");
-                    TrySayAdvice("qb_2", "Those bees it's shooting out don't look too durable. If we have something that can pierce them, can't we just get them out of the way and still hit the big one?");
-                    return true;
+                    {
+                        var qbAdvice = new (string, string)[]
+                        {
+                            ("qb_1", "Those charges are only horizontal, right? Then can't we just jump out of the way?"),
+                            ("qb_2", "Those bees it's shooting out don't look too durable. If we have something that can pierce them, can't we just get them out of the way and still hit the big one?"),
+                        };
+                        var (key, text) = qbAdvice[Main.rand.Next(qbAdvice.Length)];
+                        TrySayAdvice(key, text);
+                        return true;
+                    }
                 case NPCID.SkeletronHead:
                     TrySayAdvice("sk_1", "It looks like it's just attacking recklessly while it's spinning… Maybe you can hit it harder when it does that?");
                     return true;
                 case NPCID.WallofFlesh:
-                    TrySayAdvice("wof_1", "Go for the eyes!");
-                    TrySayAdvice("wof_2", "Keep your distance, but don't go too far, or it'll pull you back!");
-                    return true;
+                    {
+                        var wofAdvice = new (string, string)[]
+                        {
+                            ("wof_1", "Go for the eyes!"),
+                            ("wof_2", "Keep your distance, but don't go too far, or it'll pull you back!"),
+                        };
+                        var (key, text) = wofAdvice[Main.rand.Next(wofAdvice.Length)];
+                        TrySayAdvice(key, text);
+                        return true;
+                    }
                 case NPCID.TheDestroyer:
                     TrySayAdvice("dst_1", "Getting swarmed is a bad idea in any context! It should be best to take out the probes before you go back to damaging the worm.");
                     return true;
@@ -455,30 +476,72 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
                     TrySayAdvice("twn_1", "With a good horse and some flat ground, I think you should be able to just barely outrun these guys.");
                     return true;
                 case NPCID.SkeletronPrime:
-                    TrySayAdvice("skp_1", "That laser looks a bit tough to dodge… Maybe you should smash it up first?");
-                    TrySayAdvice("skp_2", "It looks like the bombs only bounce if they hit solid ground. It should help to fight it pretty high up.");
-                    return true;
+                    {
+                        var skpAdvice = new (string, string)[]
+                        {
+                            ("skp_1", "That laser looks a bit tough to dodge… Maybe you should smash it up first?"),
+                            ("skp_2", "It looks like the bombs only bounce if they hit solid ground. It should help to fight it pretty high up."),
+                        };
+                        var (key, text) = skpAdvice[Main.rand.Next(skpAdvice.Length)];
+                        TrySayAdvice(key, text);
+                        return true;
+                    }
                 case NPCID.Plantera:
-                    TrySayAdvice("pla_1", "It looks like it's just moving in a straight line after you, and it's pretty slow… Can't we just run circles around it?");
-                    TrySayAdvice("pla_2", "Those bouncy spiky thingies don't look like they can cover much ground vertically… Maybe try staying higher up?");
-                    return true;
+                    {
+                        var plaAdvice = new (string, string)[]
+                        {
+                            ("pla_1", "It looks like it's just moving in a straight line after you, and it's pretty slow… Can't we just run circles around it?"),
+                            ("pla_2", "Those bouncy spiky thingies don't look like they can cover much ground vertically… Maybe try staying higher up?"),
+                        };
+                        var (key, text) = plaAdvice[Main.rand.Next(plaAdvice.Length)];
+                        TrySayAdvice(key, text);
+                        return true;
+                    }
                 case NPCID.Golem:
-                    TrySayAdvice("gol_1", "Looks like those fists aren't entirely connected to the main body. How about we… dis-arm him?");
-                    TrySayAdvice("gol_2", "Looks like the head is detachable… Once it does that, it'll probably just be a race to the finish!");
-                    return true;
+                    {
+                        var golAdvice = new (string, string)[]
+                        {
+                            ("gol_1", "Looks like those fists aren't entirely connected to the main body. How about we… dis-arm him?"),
+                            ("gol_2", "Looks like the head is detachable… Once it does that, it'll probably just be a race to the finish!"),
+                        };
+                        var (key, text) = golAdvice[Main.rand.Next(golAdvice.Length)];
+                        TrySayAdvice(key, text);
+                        return true;
+                    }
                 case NPCID.DukeFishron:
-                    TrySayAdvice("df_1", "It doesn't look like he can turn while he's charging! Try to dodge at a right angle from where he's aiming!");
-                    TrySayAdvice("df_2", "Those bubbles don't look very durable! A fast, wide-hitting weapon should swat 'em out of the air!");
-                    return true;
+                    {
+                        var dfAdvice = new (string, string)[]
+                        {
+                            ("df_1", "It doesn't look like he can turn while he's charging! Try to dodge at a right angle from where he's aiming!"),
+                            ("df_2", "Those bubbles don't look very durable! A fast, wide-hitting weapon should swat 'em out of the air!"),
+                        };
+                        var (key, text) = dfAdvice[Main.rand.Next(dfAdvice.Length)];
+                        TrySayAdvice(key, text);
+                        return true;
+                    }
                 case NPCID.CultistBoss:
-                    TrySayAdvice("lc_1", "The fakes have round eyes. The real one looks angry, and he's got a stripe on his hood.");
-                    TrySayAdvice("lc_2", "I think you can swat down the sparkly blue bolts with a weapon, that should come in handy!");
-                    return true;
+                    {
+                        var lcAdvice = new (string, string)[]
+                        {
+                            ("lc_1", "The fakes have round eyes. The real one looks angry, and he's got a stripe on his hood."),
+                            ("lc_2", "I think you can swat down the sparkly blue bolts with a weapon, that should come in handy!"),
+                        };
+                        var (key, text) = lcAdvice[Main.rand.Next(lcAdvice.Length)];
+                        TrySayAdvice(key, text);
+                        return true;
+                    }
                 case NPCID.MoonLordCore:
-                    TrySayAdvice("ml_1", "That big laser looks like it packs a punch! I wouldn't want to get hit by that if I were you!");
-                    TrySayAdvice("ml_2", "There's no way this guy doesn't have something up his sleeve for when we knock those eyes out. Maybe we should try to get them all out at once?");
-                    TrySayAdvice("ml_3", "I doubt that you can escape the big guy, because he'll just warp over to you. But it looks like the eyeballs, once they're detached, are another story.");
-                    return true;
+                    {
+                        var mlAdvice = new (string, string)[]
+                        {
+                            ("ml_1", "That big laser looks like it packs a punch! I wouldn't want to get hit by that if I were you!"),
+                            ("ml_2", "There's no way this guy doesn't have something up his sleeve for when we knock those eyes out. Maybe we should try to get them all out at once?"),
+                            ("ml_3", "I doubt that you can escape the big guy, because he'll just warp over to you. But it looks like the eyeballs, once they're detached, are another story."),
+                        };
+                        var (key, text) = mlAdvice[Main.rand.Next(mlAdvice.Length)];
+                        TrySayAdvice(key, text);
+                        return true;
+                    }
                 default:
                     return false;
             }
