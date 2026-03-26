@@ -1825,7 +1825,7 @@ namespace JoJoStands
             standType = 0;
             standTier = 0;
             standDefenseToAdd = 0;
-            standHasNoPrimary = true;
+            standHasNoPrimary = false;
             stoneFreeWeaveAbilityActive = false;
             hotbarLocked = false;
 
@@ -2127,7 +2127,7 @@ namespace JoJoStands
             standTier = 0;
             standDefenseToAdd = 0;
             sexPistolsTier = 0;
-            standHasNoPrimary = true;
+            standHasNoPrimary = false;
             stoneFreeWeaveAbilityActive = false;
 
             crazyDiamondRestorationMode = false;

@@ -1,6 +1,7 @@
 using JoJoStands.DataStructures;
 using JoJoStands.Items;
 using JoJoStands.Networking;
+using JoJoStands.Projectiles.PlayerStands.HeyYa;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using System;
@@ -138,6 +139,7 @@ namespace JoJoStands
 
         public static void DropViralMeteorite()        //directly from Terraria/WorldGen.cs, about 22~~
         {
+            HeyYaStand.NotifyOwnerViralMeteoriteLanded();
             bool droppedMeteorite = true;
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
