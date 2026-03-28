@@ -50,7 +50,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
         protected override bool CanReleaseVirus => true;
         protected override bool CanInfectOnHit => true;
-        protected override bool CanAOEBurst => false;
+        protected override bool CanAOEBurst => true;
 
         public override void SetDefaults()
         {
