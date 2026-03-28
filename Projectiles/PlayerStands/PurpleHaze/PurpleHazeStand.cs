@@ -86,6 +86,10 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 PlayAnimation("Idle");
             else if (currentAnimationState == AnimationState.Attack)
                 PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
+                PlayAnimation("CapsuleShot");
+            else if (currentAnimationState == AnimationState.Special)
+                PlayAnimation("Special");
             else if (currentAnimationState == AnimationState.Pose)
                 PlayAnimation("Pose");
         }
@@ -99,8 +103,12 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 AnimateStand(animationName, 4, 12, true);
             else if (animationName == "Attack")
                 AnimateStand(animationName, 4, newPunchTime, true);
+            else if (animationName == "CapsuleShot")
+                AnimateStand(animationName, 11, 15, true);
+            else if (animationName == "Special")
+                AnimateStand(animationName, 13, 15, true);
             else if (animationName == "Pose")
-                AnimateStand(animationName, 2, 12, true);
+                AnimateStand(animationName, 1, 600, true);
         }
     }
 }
