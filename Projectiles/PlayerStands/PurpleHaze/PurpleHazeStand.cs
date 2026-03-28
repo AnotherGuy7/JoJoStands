@@ -49,11 +49,17 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 {
                     if (Main.mouseLeft)
                         Punch();
+                    else if (Main.mouseRight)
+                    {
+                        SecondaryAttack();
+                    }
                     else
                     {
                         attacking = false;
                         currentAnimationState = AnimationState.Idle;
                     }
+                    if (SpecialKeyPressed())
+                        SpecialAttack();
                 }
                 if (!attacking)
                     StayBehind();
@@ -63,6 +69,16 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
             if (mPlayer.posing)
                 currentAnimationState = AnimationState.Pose;
+        }
+
+        private void SecondaryAttack()
+        {
+
+        }
+
+        private void SpecialAttack()
+        {
+
         }
 
         public override void OnDyeChanged()
