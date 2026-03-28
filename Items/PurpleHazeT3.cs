@@ -13,7 +13,6 @@ namespace JoJoStands.Items
     public class PurpleHazeT3 : StandItemClass
     {
         public override string Texture => Mod.Name + "/Items/PurpleHazeT1";
-
         public override int StandTier => 3;
         public override string StandIdentifierName => "PurpleHaze";
         public override Color StandTierDisplayColor => ManhattanTransferFinal.ManhattanTransferTierColor;

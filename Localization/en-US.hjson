@@ -3582,6 +3582,26 @@ Mods: {
 					Punching enemies with Stands can infect enemies with a virus.
 					'''
 			}
+
+			PurpleHazeFinal: {
+				DisplayName: Purple Haze Final
+				Tooltip: ""
+			}
+
+			PurpleHazeT1: {
+				DisplayName: Purple Haze T1
+				Tooltip: ""
+			}
+
+			PurpleHazeT2: {
+				DisplayName: Purple Haze T2
+				Tooltip: ""
+			}
+
+			PurpleHazeT3: {
+				DisplayName: Purple Haze T3
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -3906,6 +3926,10 @@ Mods: {
 			HeyYaStandT3.DisplayName: Hey Ya Stand T3
 			HeyYaStandT4.DisplayName: Hey Ya Stand T4
 			HeyYaStandT5.DisplayName: Hey Ya Stand T5
+			PurpleHazeStandFinal.DisplayName: Purple Haze Stand Final
+			PurpleHazeStandT1.DisplayName: Purple Haze Stand T1
+			PurpleHazeStandT2.DisplayName: Purple Haze Stand T2
+			PurpleHazeStandT3.DisplayName: Purple Haze Stand T3
 		}
 
 		Biomes: {

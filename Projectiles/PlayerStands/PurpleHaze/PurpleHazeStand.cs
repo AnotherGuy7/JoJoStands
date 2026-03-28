@@ -28,7 +28,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override int TierNumber => 1;
         public override string PoseSoundName => "PurpleHazePose";
         public override string SpawnSoundName => "PurpleHaze";
-        public override int AmountOfPunchVariants => 3;
+        public override int AmountOfPunchVariants => 2;
         public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/PurpleHaze/PurpleHaze_Punch_";
         public override Vector2 PunchSize => new Vector2(44, 12);
         public override bool CanUsePart4Dye => false;
@@ -416,7 +416,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             if (animationName == "Idle")
                 AnimateStand(animationName, 4, 12, true);
             else if (animationName == "Attack")
-                AnimateStand(animationName, 4, newPunchTime, true);
+                AnimateStand(animationName, 6, newPunchTime / 2, true);
             else if (animationName == "CapsuleShot")
                 AnimateStand(animationName, 11, 15, true);
             else if (animationName == "Special")

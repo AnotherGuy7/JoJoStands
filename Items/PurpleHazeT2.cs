@@ -8,6 +8,7 @@ namespace JoJoStands.Items
 {
     public class PurpleHazeT2 : StandItemClass
     {
+        public override string Texture => Mod.Name + "/Items/PurpleHazeT1";
         public override int StandSpeed => 15;
         public override int StandType => 1;
         public override string StandIdentifierName => "PurpleHaze";
