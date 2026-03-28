@@ -82,7 +82,46 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
         private void SecondaryAttack()
         {
-            // TODO
+            attacking = true;
+            currentAnimationState = AnimationState.SecondaryAbility;
+
+            Projectile.spriteDirection = Projectile.direction =
+                Main.MouseWorld.X > Projectile.Center.X ? 1 : -1;
+
+            StayBehind();
+            currentAnimationState = AnimationState.SecondaryAbility;
+
+            if (shootCount > 0)
+                return;
+
+            if (Projectile.owner != Main.myPlayer)
+                return;
+
+            shootCount += newShootTime > 0 ? newShootTime : 30;
+
+            Vector2 toMouse = Main.MouseWorld - Projectile.Center;
+            float horizontalDist = System.MathF.Abs(toMouse.X);
+
+            float throwSpeedX = 12f * Projectile.spriteDirection;
+
+            float timeToTarget = horizontalDist / System.MathF.Abs(throwSpeedX);
+            float throwSpeedY = (toMouse.Y - 0.5f * 0.55f * timeToTarget * timeToTarget) / timeToTarget;
+
+            throwSpeedY = MathHelper.Clamp(throwSpeedY, -18f, -2f);
+
+            Vector2 throwVelocity = new Vector2(throwSpeedX, throwSpeedY);
+
+            int projIndex = Projectile.NewProjectile(
+                Projectile.GetSource_FromThis(),
+                Projectile.Center,
+                throwVelocity,
+                ModContent.ProjectileType<PurpleHazeCapsule>(),
+                newPunchDamage,
+                2f,
+                Projectile.owner
+            );
+            Main.projectile[projIndex].netUpdate = true;
+            Projectile.netUpdate = true;
         }
 
         private void TryStartSpecial()
