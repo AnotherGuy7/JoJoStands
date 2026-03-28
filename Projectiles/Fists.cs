@@ -33,6 +33,7 @@ namespace JoJoStands.Projectiles
         public const byte TowerOfGray = 13;     //"fist"
         public const byte SoftAndWet = 14;
         public const byte Echoes = 15;
+        public const byte PurpleHaze = 16;
 
         private bool onlyOnce = false;
         private bool playedSound = false;
@@ -383,6 +384,12 @@ namespace JoJoStands.Projectiles
                     SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
                 }
             }
+
+            else if (standType == PurpleHaze)
+            {
+
+            }
+
 
             if (mPlayer.standFistsType != TowerOfGray && mPlayer.familyPhotoEquipped && mPlayer.familyPhotoEffectTimer < 30 && mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
             {

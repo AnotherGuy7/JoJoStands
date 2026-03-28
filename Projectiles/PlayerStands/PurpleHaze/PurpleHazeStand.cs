@@ -24,7 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override int PunchDamage => 23;
         public override int PunchTime => 11;
         public override int HalfStandHeight => 37;
-        public override int FistID => 0;
+        public override int FistID => Fists.PurpleHaze;
         public override int TierNumber => 1;
         public override string PoseSoundName => "PurpleHazePose";
         public override string SpawnSoundName => "PurpleHaze";
