@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using JoJoStands.Items.CraftingMaterials;
+using JoJoStands.Tiles;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -30,6 +32,18 @@ namespace JoJoStands.Items
         {
             player.AddBuff(ModContent.BuffType<Buffs.ItemBuff.HazeVirusImmunity>(), 60 * 60);
             return true;
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Frog, 2)
+                .AddIngredient(ItemID.FlaskofPoison)
+                .AddIngredient(ItemID.Bottle)
+                .AddIngredient(ItemID.Stinger)
+                .AddIngredient(ModContent.ItemType<DormantVirusSample>())
+                .AddTile(TileID.Bottles)
+                .Register();
         }
     }
 }

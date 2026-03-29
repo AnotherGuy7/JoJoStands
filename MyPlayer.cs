@@ -155,6 +155,7 @@ namespace JoJoStands
         public bool collideY = false;
         public int purpleHazeCapsules = 6;
         public int purpleHazePunchCounter = 0;
+        public bool hazeVirusFilter = false;
 
         public bool immuneToTimestopEffects = false;
         public bool timestopActive;
@@ -419,6 +420,8 @@ namespace JoJoStands
             currentTextureDye = StandTextureDye.None;
             if (StandDyeSlot.SlotItem.ModItem is StandDye)
                 (StandDyeSlot.SlotItem.ModItem as StandDye).UpdateEquippedDye(Player);
+
+            hazeVirusFilter = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;

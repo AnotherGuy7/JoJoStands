@@ -803,6 +803,11 @@ namespace JoJoStands.NPCs
                         vPlayer.vampiricLevel += 1;
                 }
             }
+            if (npc.HasBuff(ModContent.BuffType<HazeVirus>()) || npc.HasBuff(ModContent.BuffType<ConcentratedHazeVirus>()))
+            {
+                if (Main.rand.NextBool(4))
+                    Item.NewItem(npc.GetSource_Loot(), npc.getRect(), ModContent.ItemType<DormantVirusSample>());
+            }
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
             if (mPlayer.standOut && mPlayer.heyYaDropRateBonus > 0f) // && !npc.boss maybe
             {

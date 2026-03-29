@@ -26,8 +26,7 @@ namespace JoJoStands.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.buffImmune[ModContent.BuffType<Buffs.Debuffs.HazeVirus>()] = true;
-            player.buffImmune[ModContent.BuffType<Buffs.Debuffs.ConcentratedHazeVirus>()] = true;
+            player.GetModPlayer<MyPlayer>().hazeVirusFilter = true;
         }
 
         public override void AddRecipes()
