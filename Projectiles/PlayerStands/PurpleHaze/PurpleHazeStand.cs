@@ -6,6 +6,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using System.IO;
 
 namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 {
@@ -19,6 +20,13 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         private NPC specialTarget = null;
         private bool specialAnimationStarted = false;
         private bool burstFired = false;
+        private bool rampageActive = false;
+        private int rampageDuration = 0;
+        private NPC rampageTarget = null;
+        private float rampageDamageMultiplier = 1.75f;
+        private bool rampageCanHitPlayer = false;
+        private int rampageTargetSwitchTimer = 0;
+        private bool rampageAppliedDamageBoost = false;
 
         public override float MaxDistance => 98f;
         public override int PunchDamage => 23;
@@ -53,31 +61,43 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 return;
             }
 
-            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
+            if (!rampageActive && !specialActive)
             {
-                if (Projectile.owner == Main.myPlayer)
+                if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
                 {
-                    if (Main.mouseLeft)
-                        Punch();
-                    else if (Main.mouseRight)
-                        SecondaryAttack();
-                    else
+                    if (Projectile.owner == Main.myPlayer)
                     {
-                        attacking = false;
-                        currentAnimationState = AnimationState.Idle;
+                        if (Main.mouseLeft)
+                            Punch();
+                        else if (Main.mouseRight)
+                            SecondaryAttack();
+                        else
+                        {
+                            attacking = false;
+                            currentAnimationState = AnimationState.Idle;
+                        }
+
+                        if (SpecialKeyPressed())
+                            TryStartSpecial();
                     }
-
-                    if (SpecialKeyPressed())
-                        TryStartSpecial();
+                    if (!attacking)
+                        StayBehind();
                 }
-                if (!attacking)
-                    StayBehind();
-            }
-            else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
-                BasicPunchAI();
+                else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
+                    BasicPunchAI();
 
-            if (mPlayer.posing)
-                currentAnimationState = AnimationState.Pose;
+                if (mPlayer.posing)
+                    currentAnimationState = AnimationState.Pose;
+            }
+
+            if (rampageActive)
+            {
+                HandleRampage();
+                return;
+            }
+
+            if (SecondSpecialKeyPressed() && TierNumber >= 3 && !rampageActive && !specialActive)
+                TryStartRampage();
         }
 
         private void SecondaryAttack()
@@ -406,6 +426,218 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             }
         }
 
+        private void TryStartRampage()
+        {
+            rampageActive = true;
+            rampageDuration = TierNumber >= 4 ? 45 * 60 : 30 * 60;
+            rampageTarget = null;
+            rampageCanHitPlayer = false;
+            rampageTargetSwitchTimer = 0;
+            rampageAppliedDamageBoost = false;
+
+            Main.player[Projectile.owner].AddBuff(
+                ModContent.BuffType<AbilityCooldown>(),
+                rampageDuration + 300
+            );
+
+            Projectile.netUpdate = true;
+        }
+
+        private void HandleRampage()
+        {
+            if (rampageDuration <= 0)
+            {
+                EndRampage();
+                return;
+            }
+
+            rampageDuration--;
+            rampageTargetSwitchTimer--;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (!rampageAppliedDamageBoost)
+            {
+                rampageAppliedDamageBoost = true;
+                newPunchDamage = (int)(newPunchDamage * rampageDamageMultiplier);
+            }
+            else
+            {
+                newPunchDamage = (int)(PunchDamage * mPlayer.standDamageBoosts * rampageDamageMultiplier);
+            }
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                if (Main.rand.NextBool(3))
+                {
+                    Dust.NewDust(
+                        Projectile.Center - new Vector2(Projectile.width / 2f, HalfStandHeight),
+                        Projectile.width,
+                        HalfStandHeight * 2,
+                        DustID.PurpleTorch,
+                        Main.rand.NextFloat(-2f, 2f),
+                        Main.rand.NextFloat(-3f, -1f),
+                        0,
+                        new Color(200, 100, 255),
+                        Main.rand.NextFloat(1.2f, 2.2f)
+                    );
+                }
+            }
+
+            if (rampageTargetSwitchTimer <= 0)
+            {
+                rampageTargetSwitchTimer = 40;
+                rampageTarget = FindRampageTarget(player);
+                rampageCanHitPlayer = rampageTarget == null;
+            }
+
+            if (!rampageCanHitPlayer && (rampageTarget == null || !rampageTarget.active || rampageTarget.life <= 0))
+            {
+                rampageTarget = FindRampageTarget(player);
+                rampageCanHitPlayer = rampageTarget == null;
+            }
+
+            if (!rampageCanHitPlayer && rampageTarget != null)
+            {
+                attacking = true;
+                currentAnimationState = AnimationState.Attack;
+                Projectile.spriteDirection = Projectile.direction =
+                    rampageTarget.Center.X > Projectile.Center.X ? 1 : -1;
+
+                Vector2 toTarget = rampageTarget.Center - Projectile.Center;
+                float dist = toTarget.Length();
+
+                if (dist > 24f)
+                {
+                    toTarget.Normalize();
+                    Projectile.velocity = toTarget * 14f;
+                }
+                else
+                {
+                    Projectile.velocity = Vector2.Zero;
+                    if (shootCount <= 0)
+                    {
+                        shootCount += newPunchTime;
+                        Vector2 shootVel = rampageTarget.Center - Projectile.Center;
+                        if (shootVel == Vector2.Zero)
+                            shootVel = new Vector2(0f, 1f);
+                        shootVel.Normalize();
+                        shootVel *= ProjectileSpeed;
+
+                        if (Projectile.owner == Main.myPlayer)
+                        {
+                            int projIndex = Projectile.NewProjectile(
+                                Projectile.GetSource_FromThis(),
+                                Projectile.Center,
+                                shootVel,
+                                ModContent.ProjectileType<Fists>(),
+                                newPunchDamage,
+                                PunchKnockback,
+                                Projectile.owner,
+                                FistID,
+                                TierNumber
+                            );
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+                        }
+                    }
+                }
+            }
+            else if (rampageCanHitPlayer)
+            {
+                attacking = true;
+                currentAnimationState = AnimationState.Attack;
+                Projectile.spriteDirection = Projectile.direction =
+                    player.Center.X > Projectile.Center.X ? 1 : -1;
+
+                Vector2 toPlayer = player.Center - Projectile.Center;
+                float dist = toPlayer.Length();
+
+                if (dist > 24f)
+                {
+                    toPlayer.Normalize();
+                    Projectile.velocity = toPlayer * 14f;
+                }
+                else
+                {
+                    Projectile.velocity = Vector2.Zero;
+                    if (shootCount <= 0 && Projectile.owner == Main.myPlayer)
+                    {
+                        shootCount += newPunchTime;
+                        int dmg = newPunchDamage / 3;
+                        player.Hurt(
+                            Terraria.DataStructures.PlayerDeathReason.ByProjectile(Projectile.owner, Projectile.whoAmI),
+                            dmg,
+                            Projectile.direction,
+                            pvp: false,
+                            quiet: false,
+                            cooldownCounter: -1
+                        );
+                    }
+                }
+            }
+
+            LimitDistance(newMaxDistance * 6f);
+        }
+
+        private NPC FindRampageTarget(Player player)
+        {
+            NPC bestEnemy = null;
+            float closestEnemyDist = float.MaxValue;
+
+            NPC bestTownNPC = null;
+            float closestTownDist = float.MaxValue;
+
+            for (int n = 0; n < Main.maxNPCs; n++)
+            {
+                NPC npc = Main.npc[n];
+                if (!npc.active || npc.life <= 0)
+                    continue;
+
+                float dist = Vector2.Distance(npc.Center, Projectile.Center);
+
+                if (!npc.friendly && !npc.townNPC && npc.lifeMax > 5 && !npc.immortal && !npc.hide && npc.CanBeChasedBy(this, false))
+                {
+                    if (dist < closestEnemyDist)
+                    {
+                        closestEnemyDist = dist;
+                        bestEnemy = npc;
+                    }
+                }
+                else if (npc.townNPC || npc.friendly)
+                {
+                    if (dist < closestTownDist)
+                    {
+                        closestTownDist = dist;
+                        bestTownNPC = npc;
+                    }
+                }
+            }
+
+            if (bestEnemy != null)
+                return bestEnemy;
+
+            if (bestTownNPC != null)
+                return bestTownNPC;
+
+            return null;
+        }
+
+        private void EndRampage()
+        {
+            rampageActive = false;
+            rampageTarget = null;
+            rampageDuration = 0;
+            rampageCanHitPlayer = false;
+            rampageTargetSwitchTimer = 0;
+            rampageAppliedDamageBoost = false;
+            attacking = false;
+            currentAnimationState = AnimationState.Idle;
+            Projectile.velocity = Vector2.Zero;
+            Projectile.netUpdate = true;
+        }
+
         private void EndSpecial()
         {
             specialActive = false;
@@ -462,6 +694,20 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 AnimateStand(animationName, 13, 15, false);
             else if (animationName == "Pose")
                 AnimateStand(animationName, 1, 600, true);
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(rampageActive);
+            writer.Write(rampageDuration);
+            writer.Write(rampageCanHitPlayer);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            rampageActive = reader.ReadBoolean();
+            rampageDuration = reader.ReadInt32();
+            rampageCanHitPlayer = reader.ReadBoolean();
         }
     }
 }
