@@ -496,6 +496,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standHasNoPrimary = true;
+            player.AddBuff(ModContent.BuffType<Buffs.EffectBuff.Rampage>(), rampageDuration);
         }
 
         private void HandleRampage()
@@ -750,6 +751,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standHasNoPrimary = false;
+            player.ClearBuff(ModContent.BuffType<Buffs.EffectBuff.Rampage>());
         }
 
         private void EndSpecial()
