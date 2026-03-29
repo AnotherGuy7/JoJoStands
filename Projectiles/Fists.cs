@@ -330,12 +330,6 @@ namespace JoJoStands.Projectiles
             else if (standType == Cream)
                 target.AddBuff(ModContent.BuffType<MissingOrgans>(), 2 * (int)standTier * 60);
 
-            else if (standType != TowerOfGray && !target.boss)
-            {
-                target.velocity.X *= 0.2f;
-                SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 0);
-            }
-
             else if (standType == Echoes)
             {
                 if (mPlayer.echoesTier == 3)
@@ -392,6 +386,12 @@ namespace JoJoStands.Projectiles
                     mPlayer.purpleHazeCapsules--;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<HazeVirusCloud>(), 0, 0f, player.whoAmI);
                 }
+            }
+
+            if (standType != TowerOfGray && !target.boss)
+            {
+                target.velocity.X *= 0.2f;
+                SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 0);
             }
 
 
@@ -494,6 +494,15 @@ namespace JoJoStands.Projectiles
                         mTarget.echoesSoundIntensity += soundIntensity;
                     SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<SMACK>(), 10 * 60);
                     SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 2, maxDamage, soundIntensity, mPlayer.standDamageBoosts, 0f);
+                }
+            }
+
+            else if (standType == PurpleHaze)
+            {
+                if (mPlayer.purpleHazeCapsules > 0)
+                {
+                    mPlayer.purpleHazeCapsules--;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<HazeVirusCloud>(), 0, 0f, player.whoAmI);
                 }
             }
         }

@@ -509,6 +509,11 @@ Mods: {
 				// DisplayName: Haze Virus
 				// Description: Mods.JoJoStands.Buffs.HazeVirus.Description
 			}
+
+			ConcentratedHazeVirus: {
+				// DisplayName: Concentrated Haze Virus
+				// Description: Mods.JoJoStands.Buffs.ConcentratedHazeVirus.Description
+			}
 		}
 
 		Items: {

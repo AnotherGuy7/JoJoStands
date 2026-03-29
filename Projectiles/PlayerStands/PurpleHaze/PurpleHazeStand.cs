@@ -44,7 +44,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override bool CanUsePart4Dye => false;
         public override StandAttackType StandType => StandAttackType.Melee;
 
-        private const int CapsuleRegenTime = 60;
+        private const int CapsuleRegenTime = 150;
         private int capsuleTimer = CapsuleRegenTime;
 
         public override void ExtraSpawnEffects()
@@ -261,7 +261,17 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 {
                     burstFired = true;
                     if (Projectile.owner == Main.myPlayer)
+                    {
+                        int virusCount = 8;
+                        for (int i = 0; i < virusCount; i++)
+                        {
+                            float angle = MathHelper.TwoPi / virusCount * i;
+                            Vector2 virusVel = new Vector2(8f * 16f, 0f).RotatedBy(angle);
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + virusVel, Vector2.Zero, ModContent.ProjectileType<HazeVirusCloud>(), 0, 0f, Projectile.owner);
+                        }
                         FireMushroomCloud();
+                        specialTarget.AddBuff(ModContent.BuffType<ConcentratedHazeVirus>(), 30 * 60);
+                    }
                 }
                 if (Projectile.frame >= 12 && burstFired)
                     EndSpecial();
@@ -440,23 +450,12 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                     230, new Color(60, 5, 100), Main.rand.NextFloat(5f, 9f));
                 Main.dust[d].noGravity = true;
             }
-
-            if (CanReleaseVirus)
-            {
-                int virusCount = 8;
-                for (int i = 0; i < virusCount; i++)
-                {
-                    float angle = MathHelper.TwoPi / virusCount * i;
-                    Vector2 virusVel = new Vector2(ProjectileSpeed * 0.6f, 0f).RotatedBy(angle);
-                    // TODO: spawn PurpleHazeVirus projectile
-                }
-            }
         }
 
         private void TryStartRampage()
         {
             rampageActive = true;
-            rampageDuration = TierNumber >= 4 ? 45 * 60 : 30 * 60;
+            rampageDuration = 10 * 60;
             rampageTarget = null;
             rampageCanHitPlayer = false;
             rampageTargetSwitchTimer = 0;
@@ -480,6 +479,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
             rampageDuration--;
             rampageTargetSwitchTimer--;
+            Main.player[Projectile.owner].GetModPlayer<MyPlayer>().purpleHazeCapsules = 6;
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -546,7 +546,6 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                     if (shootCount <= 0 && Projectile.owner == Main.myPlayer)
                     {
                         shootCount += newPunchTime;
-
                         if (rampageTarget.townNPC || rampageTarget.friendly)
                         {
                             NPC.HitInfo hitInfo = new NPC.HitInfo()
@@ -556,6 +555,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                                 HitDirection = Projectile.direction,
                                 Crit = false
                             };
+                            SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                             rampageTarget.StrikeNPC(hitInfo);
                             if (Main.netMode == NetmodeID.MultiplayerClient)
                                 NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, rampageTarget.whoAmI);
@@ -579,6 +579,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                                 FistID,
                                 TierNumber
                             );
+                            SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
                         }
