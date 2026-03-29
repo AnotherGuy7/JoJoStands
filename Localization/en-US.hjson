@@ -504,6 +504,11 @@ Mods: {
 				DisplayName: Stray Cat
 				Description: A Stand born from means unknown, but it fights for you!
 			}
+
+			HazeVirus: {
+				DisplayName: Haze Virus
+				Description: Mods.JoJoStands.Buffs.HazeVirus.Description
+			}
 		}
 
 		Items: {
@@ -3930,6 +3935,8 @@ Mods: {
 			PurpleHazeStandT1.DisplayName: Purple Haze Stand T1
 			PurpleHazeStandT2.DisplayName: Purple Haze Stand T2
 			PurpleHazeStandT3.DisplayName: Purple Haze Stand T3
+			HazeVirusCloud.DisplayName: Haze Virus Cloud
+			PurpleHazeCapsule.DisplayName: Purple Haze Capsule
 		}
 
 		Biomes: {
