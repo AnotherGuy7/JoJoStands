@@ -41,8 +41,11 @@ namespace JoJoStands.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<StandArrow>())
-                .AddIngredient(ModContent.ItemType<WillToProtect>())
+                .AddIngredient(ModContent.ItemType<PurpleHazeT3>())
+                .AddIngredient(ModContent.ItemType<TaintedLifeforce>())
+                .AddIngredient(ModContent.ItemType<ChlorositeBar>(), 6)
+                .AddIngredient(ItemID.VialofVenom, 15)
+                .AddIngredient(ItemID.Ectoplasm, 8)
                 .AddTile(ModContent.TileType<RemixTableTile>())
                 .Register();
         }

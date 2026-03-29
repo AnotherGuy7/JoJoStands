@@ -8,11 +8,15 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override int TierNumber => 1;
         public override int PunchDamage => 23;
         public override int PunchTime => 11;
-        public override float MaxDistance => 98f;
+        public override float MaxDistance => 160f;
 
+        protected override bool CanThrowCapsule => false;
         protected override bool CanReleaseVirus => false;
         protected override bool CanInfectOnHit => false;
         protected override bool CanAOEBurst => false;
+        protected override bool CanRampage => false;
+
+        protected override bool HasJitter => true;
 
         public override void SetDefaults()
         {
@@ -27,11 +31,15 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override int TierNumber => 2;
         public override int PunchDamage => 34;
         public override int PunchTime => 10;
-        public override float MaxDistance => 120f;
+        public override float MaxDistance => 160f;
 
+        protected override bool CanThrowCapsule => true;
         protected override bool CanReleaseVirus => true;
         protected override bool CanInfectOnHit => false;
         protected override bool CanAOEBurst => false;
+        protected override bool CanRampage => false;
+        protected override bool HasJitter => true;
+        protected override bool HasReducedJitter => true;
 
         public override void SetDefaults()
         {
@@ -48,9 +56,13 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override int PunchTime => 9;
         public override float MaxDistance => 140f;
 
+        protected override bool CanThrowCapsule => true;
         protected override bool CanReleaseVirus => true;
         protected override bool CanInfectOnHit => true;
         protected override bool CanAOEBurst => true;
+        protected override bool CanRampage => true;
+
+        protected override bool HasJitter => false;
 
         public override void SetDefaults()
         {
@@ -67,9 +79,14 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override int PunchTime => 8;
         public override float MaxDistance => 160f;
 
+        protected override bool CanThrowCapsule => true;
         protected override bool CanReleaseVirus => true;
         protected override bool CanInfectOnHit => true;
         protected override bool CanAOEBurst => true;
+        protected override bool CanRampage => true;
+
+        // No jitter
+        protected override bool HasJitter => false;
 
         public override void SetDefaults()
         {
