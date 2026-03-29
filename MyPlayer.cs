@@ -154,6 +154,7 @@ namespace JoJoStands
         public bool playerJustHit = false;
         public bool collideY = false;
         public int purpleHazeCapsules = 6;
+        public int purpleHazePunchCounter = 0;
 
         public bool immuneToTimestopEffects = false;
         public bool timestopActive;
@@ -2110,6 +2111,8 @@ namespace JoJoStands
             sexPistolsTier = 0;
             standHasNoPrimary = false;
             stoneFreeWeaveAbilityActive = false;
+
+            purpleHazePunchCounter = 0;
 
             crazyDiamondRestorationMode = false;
             crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);

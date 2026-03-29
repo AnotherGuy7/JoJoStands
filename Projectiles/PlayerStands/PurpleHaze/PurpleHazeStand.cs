@@ -44,7 +44,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override bool CanUsePart4Dye => false;
         public override StandAttackType StandType => StandAttackType.Melee;
 
-        private const int CapsuleRegenTime = 60;
+        private const int CapsuleRegenTime = 120;
         private int capsuleTimer = CapsuleRegenTime;
 
         public override void ExtraSpawnEffects()
@@ -441,14 +441,37 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 Main.dust[d].noGravity = true;
             }
 
-            if (CanReleaseVirus)
+            Player cloudPlayer = Main.player[Projectile.owner];
+            MyPlayer cloudMPlayer = cloudPlayer.GetModPlayer<MyPlayer>();
+
+            int capsulesToSpawn = cloudMPlayer.purpleHazeCapsules;
+            cloudMPlayer.purpleHazeCapsules = 0;
+
+            Projectile.NewProjectile(
+                Projectile.GetSource_FromThis(),
+                blastCenter,
+                Vector2.Zero,
+                ModContent.ProjectileType<HazeVirusCloud>(),
+                newPunchDamage * 3,
+                0f,
+                Projectile.owner
+            );
+            if (CanReleaseVirus && capsulesToSpawn > 0)
             {
-                int virusCount = 8;
+                int virusCount = System.Math.Min(capsulesToSpawn, 8);
                 for (int i = 0; i < virusCount; i++)
                 {
                     float angle = MathHelper.TwoPi / virusCount * i;
                     Vector2 virusVel = new Vector2(ProjectileSpeed * 0.6f, 0f).RotatedBy(angle);
-                    // TODO: spawn PurpleHazeVirus projectile
+                    Projectile.NewProjectile(
+                        Projectile.GetSource_FromThis(),
+                        blastCenter,
+                        virusVel,
+                        ModContent.ProjectileType<HazeVirusCloud>(),
+                        newPunchDamage * 2,
+                        0f,
+                        Projectile.owner
+                    );
                 }
             }
         }
@@ -562,6 +585,26 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                                 Crit = false
                             };
                             rampageTarget.StrikeNPC(hitInfo);
+                            Player rampagePlayer = Main.player[Projectile.owner];
+                            MyPlayer rampageMPlayer = rampagePlayer.GetModPlayer<MyPlayer>();
+                            rampageMPlayer.purpleHazePunchCounter++;
+                            if (rampageMPlayer.purpleHazePunchCounter >= 3)
+                            {
+                                rampageMPlayer.purpleHazePunchCounter = 0;
+                                if (rampageMPlayer.purpleHazeCapsules > 0)
+                                {
+                                    rampageMPlayer.purpleHazeCapsules--;
+                                    Projectile.NewProjectile(
+                                        Projectile.GetSource_FromThis(),
+                                        rampageTarget.Center,
+                                        Vector2.Zero,
+                                        ModContent.ProjectileType<HazeVirusCloud>(),
+                                        0,
+                                        0f,
+                                        Projectile.owner
+                                    );
+                                }
+                            }
                             if (Main.netMode == NetmodeID.MultiplayerClient)
                                 NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, rampageTarget.whoAmI);
                         }
@@ -586,6 +629,24 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                             );
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
+                            Player rampagePlayer = Main.player[Projectile.owner];
+                            MyPlayer rampageMPlayer = rampagePlayer.GetModPlayer<MyPlayer>();
+                            if (rampageMPlayer.purpleHazeCapsules > 0)
+                            {
+                                if (shootCount % (newPunchTime * 3) == 0)
+                                {
+                                    rampageMPlayer.purpleHazeCapsules--;
+                                    Projectile.NewProjectile(
+                                        Projectile.GetSource_FromThis(),
+                                        rampageTarget.Center,
+                                        Vector2.Zero,
+                                        ModContent.ProjectileType<HazeVirusCloud>(),
+                                        0,
+                                        0f,
+                                        Projectile.owner
+                                    );
+                                }
+                            }
                         }
                     }
                 }

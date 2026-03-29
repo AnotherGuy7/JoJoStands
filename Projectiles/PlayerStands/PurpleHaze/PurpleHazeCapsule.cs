@@ -94,23 +94,6 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                     Main.dust[d].noGravity = true;
                 }
             }
-
-            // TODO: Spawn the sub-projectiles
-            // int subCount = 6;
-            // for (int i = 0; i < subCount; i++)
-            // {
-            //     float angle = MathHelper.TwoPi / subCount * i;
-            //     Vector2 subVel = new Vector2(<speed>, 0f).RotatedBy(angle);
-            //     Projectile.NewProjectile(
-            //         Projectile.GetSource_FromThis(),
-            //         position,
-            //         subVel,
-            //         ModContent.ProjectileType<PurpleHazeVirus>(),
-            //         Projectile.damage / 2,
-            //         0f,
-            //         Projectile.owner
-            //     );
-            // }
         }
     }
 }
