@@ -468,6 +468,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             );
 
             Projectile.netUpdate = true;
+            Projectile.tileCollide = false;
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
@@ -681,6 +682,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             rampageAppliedDamageBoost = false;
             attacking = false;
             currentAnimationState = AnimationState.Idle;
+            Projectile.tileCollide = true;
             Projectile.velocity = Vector2.Zero;
             Projectile.netUpdate = true;
 
