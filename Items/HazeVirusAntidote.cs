@@ -30,7 +30,7 @@ namespace JoJoStands.Items
 
         public override bool? UseItem(Player player)
         {
-            player.AddBuff(ModContent.BuffType<Buffs.ItemBuff.HazeVirusImmunity>(), 60 * 60);
+            player.AddBuff(ModContent.BuffType<Buffs.ItemBuff.HazeVirusImmunity>(), 30 * 60);
             return true;
         }
 
