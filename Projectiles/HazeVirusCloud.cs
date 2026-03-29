@@ -2,6 +2,7 @@ using JoJoStands.Buffs.Debuffs;
 using JoJoStands.Dusts;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -25,15 +26,20 @@ namespace JoJoStands.Projectiles
 
         private const float MaxGasRange = 15 * 16;
         private const int ExpansionTimeTicks = 60;
-        private const int ConcentratedThresholdSeconds = 5;
-        private const int InitialBuffTicks = 30 * 60 * 60;
-        private const int ConcentratedThresholdTicks = ConcentratedThresholdSeconds * 60;
+        private const int InitialBuffTicks = 20 * 60;
+        private const int ConcentratedThresholdTicks = 10 * 60;
+
+        private readonly Dictionary<int, ulong> _infectionStartTick = new();
+
+        private static int EntityKey(Entity entity) =>
+            entity is NPC npc ? -(npc.whoAmI + 1) : ((Player)entity).whoAmI;
 
         public override void AI()
         {
             int ticksElapsed = (30 * 60) - Projectile.timeLeft;
-
-            float currentGasRange = MathHelper.Lerp(0, MaxGasRange, Math.Min((float)ticksElapsed / ExpansionTimeTicks, 1f));
+            float currentGasRange = MathHelper.Lerp(
+                0, MaxGasRange,
+                Math.Min((float)ticksElapsed / ExpansionTimeTicks, 1f));
 
             if (Projectile.localAI[0] == 0f)
             {
@@ -57,7 +63,6 @@ namespace JoJoStands.Projectiles
                 NPC npc = Main.npc[n];
                 if (!npc.active || npc.friendly || Projectile.Distance(npc.Center) >= currentGasRange)
                     continue;
-
                 ApplyVirus(npc, hazeVirusType, concentratedType);
             }
 
@@ -66,7 +71,6 @@ namespace JoJoStands.Projectiles
                 Player player = Main.player[p];
                 if (!player.active || player.dead || Projectile.Distance(player.Center) >= currentGasRange)
                     continue;
-
                 ApplyVirus(player, hazeVirusType, concentratedType);
             }
         }
@@ -74,37 +78,66 @@ namespace JoJoStands.Projectiles
         private void ApplyVirus(Entity entity, int virusType, int concentratedType)
         {
             int[] buffTypes = entity is NPC n ? n.buffType : ((Player)entity).buffType;
-            int[] buffTimes = entity is NPC npc ? npc.buffTime : ((Player)entity).buffTime;
 
-            int buffIndex = -1;
-            for (int i = 0; i < 10; i++)
+            bool hasVirus = false;
+            bool hasConcentrated = false;
+
+            for (int i = 0; i < buffTypes.Length; i++)
             {
-                if (buffTypes[i] == virusType) { buffIndex = i; break; }
+                if (buffTypes[i] == virusType) hasVirus = true;
+                if (buffTypes[i] == concentratedType) hasConcentrated = true;
             }
 
-            if (buffIndex >= 0)
+            if (hasConcentrated)
             {
-                int ticksRemaining = buffTimes[buffIndex];
-                int elapsed = InitialBuffTicks - ticksRemaining;
-                if (elapsed >= ConcentratedThresholdTicks)
-                {
-                    if (entity is NPC targetNpc) targetNpc.AddBuff(concentratedType, 30 * 60 * 60);
-                    else ((Player)entity).AddBuff(concentratedType, 30 * 60 * 60);
+                _infectionStartTick.Remove(EntityKey(entity));
+                return;
+            }
 
-                    if (entity is NPC targetN) targetN.DelBuff(buffIndex);
-                    else ((Player)entity).DelBuff(buffIndex);
+            int key = EntityKey(entity);
+
+            if (!hasVirus)
+            {
+                if (entity is NPC npcTarget)
+                    npcTarget.AddBuff(virusType, InitialBuffTicks);
+                else
+                    ((Player)entity).AddBuff(virusType, InitialBuffTicks);
+                _infectionStartTick.TryAdd(key, Main.GameUpdateCount);
+                return;
+            }
+
+            if (!_infectionStartTick.TryGetValue(key, out ulong startTick))
+            {
+                _infectionStartTick[key] = Main.GameUpdateCount;
+                return;
+            }
+
+            ulong elapsed = Main.GameUpdateCount - startTick;
+
+            if (elapsed >= (ulong)ConcentratedThresholdTicks)
+            {
+                if (entity is NPC upgradeNpc)
+                {
+                    int idx = upgradeNpc.FindBuffIndex(virusType);
+                    if (idx >= 0) upgradeNpc.DelBuff(idx);
+                    upgradeNpc.AddBuff(concentratedType, 30 * 60 * 60);
                 }
+                else
+                {
+                    Player upgradePlayer = (Player)entity;
+                    int idx = upgradePlayer.FindBuffIndex(virusType);
+                    if (idx >= 0) upgradePlayer.DelBuff(idx);
+                    upgradePlayer.AddBuff(concentratedType, 30 * 60 * 60);
+                }
+
+                _infectionStartTick.Remove(key);
             }
             else
             {
-                bool hasConcentrated = false;
-                for (int i = 0; i < 10; i++) if (buffTypes[i] == concentratedType) hasConcentrated = true;
-
-                if (!hasConcentrated)
-                {
-                    if (entity is NPC targetNpc) targetNpc.AddBuff(virusType, InitialBuffTicks);
-                    else ((Player)entity).AddBuff(virusType, InitialBuffTicks);
-                }
+                if (entity is NPC refreshNpc)
+                    refreshNpc.AddBuff(virusType, InitialBuffTicks);
+                else
+                    ((Player)entity).AddBuff(virusType, InitialBuffTicks);
             }
         }
     }
