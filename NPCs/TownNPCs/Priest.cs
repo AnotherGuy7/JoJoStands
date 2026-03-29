@@ -40,7 +40,7 @@ namespace JoJoStands.NPCs.TownNPCs            //We need this to basically indica
             NPC.friendly = true;        //this defines if the NPC can hur you or not()
             NPC.width = 18;     //the NPC sprite width
             NPC.height = 46;        //the NPC sprite height
-            NPC.aiStyle = 7;        //this is the NPC ai style, 7 is Pasive Ai
+            NPC.aiStyle = NPCAIStyleID.Passive;        //this is the NPC ai style, 7 is Pasive Ai
             NPC.defense = 27;       //the NPC defense
             NPC.lifeMax = 300;      // the NPC life
             NPC.HitSound = SoundID.NPCHit1;     //the NPC sound when is hit

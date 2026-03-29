@@ -514,6 +514,11 @@ Mods: {
 				DisplayName: Concentrated Haze Virus
 				Description: Mods.JoJoStands.Buffs.ConcentratedHazeVirus.Description
 			}
+
+			HazeVirusImmunity: {
+				DisplayName: Haze Virus Immunity
+				Description: Mods.JoJoStands.Buffs.HazeVirusImmunity.Description
+			}
 		}
 
 		Items: {
@@ -3594,22 +3599,62 @@ Mods: {
 			}
 
 			PurpleHazeFinal: {
-				DisplayName: Purple Haze Final
-				Tooltip: ""
+				DisplayName: Purple Haze (Final Tier)
+				Tooltip: 
+					'''
+					Punch enemies at a fast rate and right-click to chuck a Haze Capsule!
+					Special: Haze Execution
+					Second Special: Rampage
+					Passive: Haze Capsules
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
+					Used in Stand Slot
+					'''
 			}
 
 			PurpleHazeT1: {
-				DisplayName: Purple Haze T1
-				Tooltip: ""
+				DisplayName: Purple Haze (Tier 1)
+				Tooltip: 
+					'''
+					Punch enemies at a fast rate and right-click on empty space to create a Plunder Bubble or hold right-click on a tile to plant a bubble bomb!
+					Special: Bubble Offensive
+					Second Special: Bubble Barrier!
+					Passive: Bubble Generation
+					Bubble Offensive creates bubbles around Soft & Wet that can be manipulated.
+					Bubbles in Bubble Offensive mode can be detonated.
+					Bubbles in Bubble Offensive can plunder debuff effects from enemies and tiles.
+					Bubble Generation allows Soft & Wet to generate bubbles while barraging.
+					Used in Stand Slot
+					'''
 			}
 
 			PurpleHazeT2: {
-				DisplayName: Purple Haze T2
+				DisplayName: Purple Haze (Tier 2)
 				Tooltip: ""
 			}
 
 			PurpleHazeT3: {
-				DisplayName: Purple Haze T3
+				DisplayName: Purple Haze (Tier 3)
+				Tooltip: ""
+			}
+
+			HazeVirusFilter: {
+				DisplayName: Haze Virus Filter
+				Tooltip: ""
+			}
+
+			DormantVirusSample: {
+				DisplayName: Dormant Virus Sample
+				Tooltip: ""
+			}
+
+			FlaskOfPurpleHaze: {
+				DisplayName: Flask Of Purple Haze
+				Tooltip: ""
+			}
+
+			HazeVirusAntidote: {
+				DisplayName: Haze Virus Antidote
 				Tooltip: ""
 			}
 		}
@@ -3942,6 +3987,8 @@ Mods: {
 			PurpleHazeStandT3.DisplayName: Purple Haze Stand T3
 			HazeVirusCloud.DisplayName: Haze Virus Cloud
 			PurpleHazeCapsule.DisplayName: Purple Haze Capsule
+			FlaskOfPurpleHazeProj.DisplayName: Flask Of Purple Haze Proj
+			HazeVirusCloudFlask.DisplayName: Haze Virus Cloud Flask
 		}
 
 		Biomes: {

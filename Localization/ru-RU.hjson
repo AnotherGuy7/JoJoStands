@@ -514,6 +514,11 @@ Mods: {
 				// DisplayName: Concentrated Haze Virus
 				// Description: Mods.JoJoStands.Buffs.ConcentratedHazeVirus.Description
 			}
+
+			HazeVirusImmunity: {
+				// DisplayName: Haze Virus Immunity
+				// Description: Mods.JoJoStands.Buffs.HazeVirusImmunity.Description
+			}
 		}
 
 		Items: {
@@ -2279,7 +2284,7 @@ Mods: {
 			}
 
 			HeyYaFinal: {
-				// DisplayName: Hey Ya (Final Tier)
+				// DisplayName: Hey Ya! (Final Tier)
 				/* Tooltip:
 					'''
 					Just by association with it, increase your luck!
@@ -2290,7 +2295,7 @@ Mods: {
 			}
 
 			HeyYaT1: {
-				// DisplayName: Hey Ya (Tier 1)
+				// DisplayName: Hey Ya! (Tier 1)
 				/* Tooltip:
 					'''
 					Just by association with it, increase your luck!
@@ -2300,7 +2305,7 @@ Mods: {
 			}
 
 			HeyYaT2: {
-				// DisplayName: Hey Ya (Tier 2)
+				// DisplayName: Hey Ya! (Tier 2)
 				/* Tooltip:
 					'''
 					Just by association with it, increase your luck!
@@ -2311,7 +2316,7 @@ Mods: {
 			}
 
 			HeyYaT3: {
-				// DisplayName: Hey Ya (Tier 3)
+				// DisplayName: Hey Ya! (Tier 3)
 				/* Tooltip:
 					'''
 					Just by association with it, increase your luck!
@@ -3607,6 +3612,26 @@ Mods: {
 				// DisplayName: Purple Haze T3
 				// Tooltip: ""
 			}
+
+			HazeVirusFilter: {
+				// DisplayName: Haze Virus Filter
+				// Tooltip: ""
+			}
+
+			DormantVirusSample: {
+				// DisplayName: Dormant Virus Sample
+				// Tooltip: ""
+			}
+
+			FlaskOfPurpleHaze: {
+				// DisplayName: Flask Of Purple Haze
+				// Tooltip: ""
+			}
+
+			HazeVirusAntidote: {
+				// DisplayName: Haze Virus Antidote
+				// Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -3937,6 +3962,8 @@ Mods: {
 			// PurpleHazeStandT3.DisplayName: Purple Haze Stand T3
 			// HazeVirusCloud.DisplayName: Haze Virus Cloud
 			// PurpleHazeCapsule.DisplayName: Purple Haze Capsule
+			// FlaskOfPurpleHazeProj.DisplayName: Flask Of Purple Haze Proj
+			// HazeVirusCloudFlask.DisplayName: Haze Virus Cloud Flask
 		}
 
 		Biomes: {

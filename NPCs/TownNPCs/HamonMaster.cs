@@ -45,7 +45,7 @@ namespace JoJoStands.NPCs.TownNPCs
             NPC.friendly = true;
             NPC.width = 18;
             NPC.height = 46;
-            NPC.aiStyle = 7;
+            NPC.aiStyle = NPCAIStyleID.Passive;
             NPC.defense = 29;
             NPC.lifeMax = 460;
             NPC.HitSound = SoundID.NPCHit1;
