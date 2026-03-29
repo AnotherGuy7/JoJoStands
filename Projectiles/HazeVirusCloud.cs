@@ -28,7 +28,13 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
-            Dust.NewDust(Projectile.position - new Vector2(gasRange / 2), gasRange, gasRange, ModContent.DustType<Dusts.GratefulDeadCloud>());
+            for (int i = 0; i < 3; i++)
+            {
+                float angle = Main.rand.NextFloat(MathHelper.TwoPi);
+                float dist = Main.rand.NextFloat(gasRange);
+                Vector2 dustPos = Projectile.Center + new Vector2((float)System.Math.Cos(angle), (float)System.Math.Sin(angle)) * dist;
+                Dust.NewDust(dustPos, 1, 1, ModContent.DustType<Dusts.GratefulDeadCloud>());
+            }
 
             for (int n = 0; n < Main.maxNPCs; n++)
             {
@@ -36,7 +42,6 @@ namespace JoJoStands.Projectiles
                 if (npc.active && Projectile.Distance(npc.Center) < gasRange)
                     npc.AddBuff(ModContent.BuffType<HazeVirus>(), 30 * 60 * 60);
             }
-
             for (int p = 0; p < Main.maxPlayers; p++)
             {
                 Player otherPlayer = Main.player[p];
