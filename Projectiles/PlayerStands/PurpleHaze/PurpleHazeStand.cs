@@ -468,6 +468,10 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             );
 
             Projectile.netUpdate = true;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.standHasNoPrimary = true;
         }
 
         private void HandleRampage()
@@ -679,6 +683,10 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             currentAnimationState = AnimationState.Idle;
             Projectile.velocity = Vector2.Zero;
             Projectile.netUpdate = true;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.standHasNoPrimary = false;
         }
 
         private void EndSpecial()
