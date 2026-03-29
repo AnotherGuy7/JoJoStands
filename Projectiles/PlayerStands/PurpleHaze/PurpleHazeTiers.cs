@@ -8,7 +8,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override int TierNumber => 1;
         public override int PunchDamage => 23;
         public override int PunchTime => 11;
-        public override float MaxDistance => 98f;
+        public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => false;
         protected override bool CanReleaseVirus => false;
@@ -31,7 +31,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override int TierNumber => 2;
         public override int PunchDamage => 34;
         public override int PunchTime => 10;
-        public override float MaxDistance => 120f;
+        public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => true;
         protected override bool CanReleaseVirus => true;

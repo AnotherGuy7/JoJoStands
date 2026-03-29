@@ -167,12 +167,46 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 attackTarget.X > Projectile.Center.X ? 1 : -1;
 
             StayBehindPoint(attackTarget);
-            currentAnimationState = AnimationState.Attack;
 
             if (shootCount > 0 || Projectile.owner != Main.myPlayer)
                 return;
 
             shootCount = newPunchTime;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (HasJitter && Vector2.Distance(attackTarget, player.Center) <= 48f)
+            {
+                int dmg = newPunchDamage / 3;
+                mPlayer.purpleHazePunchCounter++;
+                if (mPlayer.purpleHazePunchCounter >= 3)
+                {
+                    mPlayer.purpleHazePunchCounter = 0;
+                    if (mPlayer.purpleHazeCapsules > 0)
+                    {
+                        mPlayer.purpleHazeCapsules--;
+                        Projectile.NewProjectile(
+                            Projectile.GetSource_FromThis(),
+                            player.Center,
+                            Vector2.Zero,
+                            ModContent.ProjectileType<HazeVirusCloud>(),
+                            0,
+                            0f,
+                            player.whoAmI
+                        );
+                    }
+                }
+                player.Hurt(
+                    Terraria.DataStructures.PlayerDeathReason.ByProjectile(Projectile.owner, Projectile.whoAmI),
+                    dmg,
+                    Projectile.direction,
+                    pvp: false,
+                    quiet: false,
+                    cooldownCounter: -1
+                );
+                return;
+            }
 
             Vector2 shootVel = attackTarget - Projectile.Center;
             if (shootVel == Vector2.Zero)
