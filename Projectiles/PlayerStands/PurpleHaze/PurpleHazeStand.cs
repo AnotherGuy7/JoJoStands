@@ -7,6 +7,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System.IO;
+using Terraria.Audio;
+using JoJoStands.UI;
 
 namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 {
@@ -42,6 +44,14 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override bool CanUsePart4Dye => false;
         public override StandAttackType StandType => StandAttackType.Melee;
 
+        private const int CapsuleRegenTime = 60;
+        private int capsuleTimer = CapsuleRegenTime;
+
+        public override void StandKillEffects()
+        {
+            CapsuleCounter.Visible = false;
+        }
+
         public override void AI()
         {
             SelectAnimation();
@@ -50,8 +60,19 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             if (shootCount > 0)
                 shootCount--;
 
+
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            if (capsuleTimer > 0)
+            {
+                capsuleTimer--;
+                if (capsuleTimer <= 0 && mPlayer.purpleHazeCapsules <= 6)
+                {
+                    mPlayer.purpleHazeCapsules++;
+                    capsuleTimer = CapsuleRegenTime;
+                }
+            }
+
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
 
@@ -102,6 +123,9 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
         private void SecondaryAttack()
         {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
             attacking = true;
             currentAnimationState = AnimationState.SecondaryAbility;
 
@@ -110,14 +134,10 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
             StayBehind();
             currentAnimationState = AnimationState.SecondaryAbility;
-
-            if (shootCount > 0)
+            if (shootCount > 0 || Projectile.owner != Main.myPlayer || mPlayer.purpleHazeCapsules <= 0)
                 return;
 
-            if (Projectile.owner != Main.myPlayer)
-                return;
-
-            shootCount += newShootTime > 0 ? newShootTime : 30;
+            shootCount = 30;
 
             Vector2 toMouse = Main.MouseWorld - Projectile.Center;
             float horizontalDist = System.MathF.Abs(toMouse.X);
@@ -140,8 +160,10 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 2f,
                 Projectile.owner
             );
+            SoundEngine.PlaySound(SoundID.Item1.WithPitchOffset(1f), Projectile.Center);
             Main.projectile[projIndex].netUpdate = true;
             Projectile.netUpdate = true;
+            mPlayer.purpleHazeCapsules--;
         }
 
         private void TryStartSpecial()

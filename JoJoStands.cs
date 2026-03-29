@@ -109,6 +109,7 @@ namespace JoJoStands
             VoidBar.VoidBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarBarOutlineTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar_BarOutline", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBarBar", AssetRequestMode.ImmediateLoad);
+            CapsuleCounter.CapsuleCounterTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/PurpleHazeCounter", AssetRequestMode.ImmediateLoad);
             PolaroidTokenLayer.MenacingTextureSpritesheet = Request<Texture2D>("JoJoStands/Extras/MenacingIcons", AssetRequestMode.ImmediateLoad).Value;
 
             AerosmithStandFinal.AerosmithWhirrSoundEffect = (SoundEffect)Request<SoundEffect>("JoJoStands/Sounds/GameSounds/AerosmithWhirr", AssetRequestMode.ImmediateLoad);

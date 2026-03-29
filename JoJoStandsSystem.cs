@@ -30,6 +30,7 @@ namespace JoJoStands
         public static GoldExperienceAbilityWheel GoldExperienceAbilityWheelUI;
         public static GoldExperienceRequiemAbilityWheel GoldExperienceRequiemAbilityWheelUI;
         public static GlobalMouseTextPanel GlobalMouseTextPanelUI;
+        public static CapsuleCounter CapsuleCounterUI;
 
         private UserInterface _betUI;
         private UserInterface _hamonbarInterface;
@@ -46,6 +47,7 @@ namespace JoJoStands
         private UserInterface _goldExperienceAbilityWheelUI;
         private UserInterface _goldExperienceRequiemAbilityWheelUI;
         private UserInterface _globalMouseTextPanel;
+        private UserInterface _capsuleCounter;
 
         public override void OnModLoad()
         {
@@ -126,6 +128,11 @@ namespace JoJoStands
                 GlobalMouseTextPanelUI.Activate();
                 _globalMouseTextPanel = new UserInterface();
                 _globalMouseTextPanel.SetState(GlobalMouseTextPanelUI);
+
+                CapsuleCounterUI = new CapsuleCounter();
+                CapsuleCounterUI.Activate();
+                _capsuleCounter = new UserInterface();
+                _capsuleCounter.SetState(CapsuleCounterUI);
             }
         }
 
@@ -144,6 +151,7 @@ namespace JoJoStands
             ZombieSkillTreeUI = null;
             StoneFreeAbilityWheelUI = null;
             GlobalMouseTextPanelUI = null;
+            CapsuleCounterUI = null;
             for (int i = 0; i < StoneFreeAbilityWheel.stoneFreeAbilityWheel.abilityButtons.Length; i++)
                 StoneFreeAbilityWheel.stoneFreeAbilityWheel.abilityButtons[i] = null;
             StoneFreeAbilityWheel.stoneFreeAbilityWheel = null;
@@ -362,6 +370,9 @@ namespace JoJoStands
 
             if (GlobalMouseTextPanelUI.visible)
                 _globalMouseTextPanel.Update(gameTime);
+
+            if (CapsuleCounter.Visible)
+                _capsuleCounter.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)     //from ExampleMod's ExampleUI
@@ -415,6 +426,9 @@ namespace JoJoStands
 
             if (GlobalMouseTextPanelUI.visible)
                 _globalMouseTextPanel.Draw(Main.spriteBatch, new GameTime());
+
+            if (CapsuleCounter.Visible)
+                _capsuleCounter.Draw(Main.spriteBatch, new GameTime());
 
             return true;
         }

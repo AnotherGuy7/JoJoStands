@@ -24,7 +24,6 @@ namespace JoJoStands.Buffs.Debuffs
         {
             int healthASecond = 2 + GetDebuffOwnerModPlayer(npc).standTier;
             npc.lifeRegen -= healthASecond * 2 * 120;
-            npc.buffTime[buffIndex] = 2;
             if (Math.Abs(npc.velocity.X) > 1f)
                 npc.velocity.X *= 0.5f;
         }

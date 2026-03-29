@@ -504,6 +504,11 @@ Mods: {
 				DisplayName: Стрэй-Кэт
 				Description: Стенд, рожденный неизвестным способом, но он сражается за вас!
 			}
+
+			HazeVirus: {
+				// DisplayName: Haze Virus
+				// Description: Mods.JoJoStands.Buffs.HazeVirus.Description
+			}
 		}
 
 		Items: {
@@ -3577,6 +3582,26 @@ Mods: {
 					Удары по врагам Стендом могут заразить их вирусом.
 					'''
 			}
+
+			PurpleHazeFinal: {
+				// DisplayName: Purple Haze Final
+				// Tooltip: ""
+			}
+
+			PurpleHazeT1: {
+				// DisplayName: Purple Haze T1
+				// Tooltip: ""
+			}
+
+			PurpleHazeT2: {
+				// DisplayName: Purple Haze T2
+				// Tooltip: ""
+			}
+
+			PurpleHazeT3: {
+				// DisplayName: Purple Haze T3
+				// Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -3901,6 +3926,12 @@ Mods: {
 			// HeyYaStandT3.DisplayName: Hey Ya Stand T3
 			// HeyYaStandT4.DisplayName: Hey Ya Stand T4
 			// HeyYaStandT5.DisplayName: Hey Ya Stand T5
+			// PurpleHazeStandFinal.DisplayName: Purple Haze Stand Final
+			// PurpleHazeStandT1.DisplayName: Purple Haze Stand T1
+			// PurpleHazeStandT2.DisplayName: Purple Haze Stand T2
+			// PurpleHazeStandT3.DisplayName: Purple Haze Stand T3
+			// HazeVirusCloud.DisplayName: Haze Virus Cloud
+			// PurpleHazeCapsule.DisplayName: Purple Haze Capsule
 		}
 
 		Biomes: {
@@ -4464,11 +4495,11 @@ Mods: {
 			// ManhattanTransferT2: I see that it can redirect bullets at a faster rate now. Seems like it will also be growing its range, so you should be able to Control a larger area with it. You should be able to have control on it enough to lock into your adversaries. Just try to not shoot yourself with it, the guy using this had to make a good Escape.
 			// ManhattanTransferT3: Your capabilities with this stand have truly grown. You should have enough mastery to redirect bullets that are aimed at you as well. However, I do not think you will be able to redirect both your own and your enemies' bullets at the same time, so be careful when you find yourself in a crossfire. Watch yourself as well, the user of this stand was a very Tainted person.
 			// ManhattanTransferFinal: Very well. I see that you have reached the full potential of this stand. It is quite a powerful stand, and I hope you use it wisely. I would like to avoid getting in the sticky situation it brought me again, so please keep it away from me.
-			// HeyYaT1: This stand does not seem to have any power. But I feel like just because you are associated with it, you may get lucky. What you are lucky on should depend on your mood. Try using it in different situations and see what happens. You can possibly increase its potential by encountering a lucky creature, maybe a Ladybug.
-			// HeyYaT2: Seems like I was right. Your luck seems to be increasing. I don't know how to explain it, but you should be able to feel it. Just remember that with great luck comes great responsibility. After a ladybug, maybe try a rarer item, one that would be considered very lucky, such as a rare pearl.
+			// HeyYaT1: This stand does not seem to have any power. But because of it's association to you, you may get lucky. What you are lucky on should depend on your mood. Try using it in different situations and see what happens. You can possibly increase its potential by encountering a lucky creature, maybe a Ladybug.
+			// HeyYaT2: Seems like I was right. If you've had an opponent light up in flames during a fight, it may be no coincidence. Your luck seems to be increasing, you should now be able to feel it. After a ladybug, maybe try a rarer item, one that would be considered very lucky, such as a rare pearl.
 			// HeyYaT3: You should have an even wider range of lucky situations you can find yourself in now. I think this is as far as you can go with natural luck. An artificial luck such as a Garden Gnome may be of help.
-			// HeyYaT4: I feel like your luck should have reached its peak. But something tells me you can go even further by combining all the lucky things you had so far.
-			// HeyYaFinal: Your luck truly has reached its peak this time. I hope you use it wisely, and not just for gambling or something. I don't want to have to deal with the consequences of something like that again.
+			// HeyYaT4: I feel like your luck should have reached its peak. But something tells me you can go even further by combining all the lucky things you had so far. At this point, I'd be surprised at you even missing a bullet.
+			// HeyYaFinal: Your luck truly has reached its peak. I hope you use it wisely, and not just for gambling. I don't want to have to deal with the consequences of something like that again.
 			StandHelpText0: Установи Стенд в 'Stand slot', затем нажми "Stand help", и я расскажу тебе, что он может делать и как получить его уровни, или продолжайте нажимать "Stand help", и я расскажу тебе, как получить определенные предметы и выполнить определенные действия.
 			StandHelpText1: Чтобы использовать Спец. способности Стенда, в настройках управления тебе нужно привязать клавишу к "JoJoStands: Special", затем, когда стенд активирован, нажми клавишу, чтобы использовать Спец. способности
 			StandHelpText2: Стрелы Реквиема можно создать, получив вирусную жемчужину и объединив ее со стрелой Стенда. Это происходит потому, что все задействованные вирусные метеориты начинают трансформироваться и все вместе находят другое применение.
