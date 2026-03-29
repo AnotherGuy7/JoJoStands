@@ -34,7 +34,7 @@ namespace JoJoStands.Projectiles
         {
             Projectile.rotation += 0.15f;
 
-            Projectile.velocity.Y += 0.12f;
+            Projectile.velocity.Y += 0.24f;
 
             if (Main.rand.NextBool(3))
             {
