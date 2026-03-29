@@ -40,6 +40,11 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             }
         }
 
+        public override void OnKill(int timeLeft)
+        {
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<HazeVirusCloud>(), 0, 0f, Projectile.owner);
+        }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             TriggerBurst(Projectile.Center);

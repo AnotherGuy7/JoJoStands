@@ -153,6 +153,7 @@ namespace JoJoStands
         public bool hotbarLocked = false;
         public bool playerJustHit = false;
         public bool collideY = false;
+        public int purpleHazeCapsules = 6;
 
         public bool immuneToTimestopEffects = false;
         public bool timestopActive;

@@ -387,7 +387,11 @@ namespace JoJoStands.Projectiles
 
             else if (standType == PurpleHaze)
             {
-
+                if (mPlayer.purpleHazeCapsules > 0)
+                {
+                    mPlayer.purpleHazeCapsules--;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<HazeVirusCloud>(), 0, 0f, player.whoAmI);
+                }
             }
 
 
