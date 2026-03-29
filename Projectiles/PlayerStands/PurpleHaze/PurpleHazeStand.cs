@@ -516,17 +516,31 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 else
                 {
                     Projectile.velocity = Vector2.Zero;
-                    if (shootCount <= 0)
+                    if (shootCount <= 0 && Projectile.owner == Main.myPlayer)
                     {
                         shootCount += newPunchTime;
-                        Vector2 shootVel = rampageTarget.Center - Projectile.Center;
-                        if (shootVel == Vector2.Zero)
-                            shootVel = new Vector2(0f, 1f);
-                        shootVel.Normalize();
-                        shootVel *= ProjectileSpeed;
 
-                        if (Projectile.owner == Main.myPlayer)
+                        if (rampageTarget.townNPC || rampageTarget.friendly)
                         {
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = newPunchDamage,
+                                Knockback = PunchKnockback,
+                                HitDirection = Projectile.direction,
+                                Crit = false
+                            };
+                            rampageTarget.StrikeNPC(hitInfo);
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, rampageTarget.whoAmI);
+                        }
+                        else
+                        {
+                            Vector2 shootVel = rampageTarget.Center - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+
                             int projIndex = Projectile.NewProjectile(
                                 Projectile.GetSource_FromThis(),
                                 Projectile.Center,
@@ -583,11 +597,13 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
         private NPC FindRampageTarget(Player player)
         {
+            float maxRange = newMaxDistance * 8f;
+
             NPC bestEnemy = null;
-            float closestEnemyDist = float.MaxValue;
+            float closestEnemyDist = maxRange;
 
             NPC bestTownNPC = null;
-            float closestTownDist = float.MaxValue;
+            float closestTownDist = maxRange;
 
             for (int n = 0; n < Main.maxNPCs; n++)
             {
