@@ -34,7 +34,9 @@ namespace JoJoStands.UI
         {
             Player player = Main.player[Main.myPlayer];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
-            int frame = mPlayer.purpleHazeCapsules;
+            int frame = 7 - mPlayer.purpleHazeCapsules;
+            if (frame >= 7)
+                frame = 6;
             animRect.Y = frame * animRect.Height;
 
             spriteBatch.Draw(CapsuleCounterTexture, UITools.ReformatRectangle(capsuleCounterUI.GetClippingRectangle(spriteBatch)), animRect, Color.White);

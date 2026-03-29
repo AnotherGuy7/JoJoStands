@@ -47,6 +47,11 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         private const int CapsuleRegenTime = 60;
         private int capsuleTimer = CapsuleRegenTime;
 
+        public override void ExtraSpawnEffects()
+        {
+            CapsuleCounter.Visible = true;
+        }
+
         public override void StandKillEffects()
         {
             CapsuleCounter.Visible = false;
@@ -60,15 +65,15 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             if (shootCount > 0)
                 shootCount--;
 
-
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             if (capsuleTimer > 0)
             {
                 capsuleTimer--;
-                if (capsuleTimer <= 0 && mPlayer.purpleHazeCapsules <= 6)
+                if (capsuleTimer <= 0)
                 {
-                    mPlayer.purpleHazeCapsules++;
+                    if (mPlayer.purpleHazeCapsules <= 6)
+                        mPlayer.purpleHazeCapsules++;
                     capsuleTimer = CapsuleRegenTime;
                 }
             }
@@ -533,7 +538,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 if (dist > 24f)
                 {
                     toTarget.Normalize();
-                    Projectile.velocity = toTarget * 14f;
+                    Projectile.velocity = toTarget * 6f;
                 }
                 else
                 {
