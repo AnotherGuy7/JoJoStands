@@ -14,9 +14,13 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 {
     public abstract class PurpleHazeStand : StandClass
     {
+        protected virtual bool CanThrowCapsule => false;
         protected virtual bool CanReleaseVirus => false;
         protected virtual bool CanInfectOnHit => false;
         protected virtual bool CanAOEBurst => false;
+        protected virtual bool CanRampage => false;
+        protected virtual bool HasJitter => false;
+        protected virtual bool HasReducedJitter => false;
 
         private bool specialActive = false;
         private NPC specialTarget = null;
@@ -29,6 +33,11 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         private bool rampageCanHitPlayer = false;
         private int rampageTargetSwitchTimer = 0;
         private bool rampageAppliedDamageBoost = false;
+
+        private Vector2 jitterOffset = Vector2.Zero;
+        private int jitterUpdateTimer = 0;
+        private const int JitterUpdateInterval = 8;
+        private const float JitterRadius = 80f;
 
         public override float MaxDistance => 98f;
         public override int PunchDamage => 23;
@@ -67,6 +76,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
             if (capsuleTimer > 0)
             {
                 capsuleTimer--;
@@ -80,6 +90,25 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
             if (mPlayer.standOut)
                 Projectile.timeLeft = 2;
+
+            if (HasJitter && Projectile.owner == Main.myPlayer)
+            {
+                jitterUpdateTimer--;
+                if (jitterUpdateTimer <= 0)
+                {
+                    jitterUpdateTimer = JitterUpdateInterval;
+                    float angle = Main.rand.NextFloat(MathHelper.TwoPi);
+                    float dist = Main.rand.NextFloat(JitterRadius * 0.3f, JitterRadius);
+                    jitterOffset = new Vector2(
+                        System.MathF.Cos(angle) * dist,
+                        System.MathF.Sin(angle) * dist
+                    );
+                }
+            }
+            else if (!HasJitter)
+            {
+                jitterOffset = Vector2.Zero;
+            }
 
             if (specialActive)
             {
@@ -95,7 +124,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                     {
                         if (Main.mouseLeft)
                             Punch();
-                        else if (Main.mouseRight)
+                        else if (Main.mouseRight && CanThrowCapsule)
                             SecondaryAttack();
                         else
                         {
@@ -103,9 +132,13 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                             currentAnimationState = AnimationState.Idle;
                         }
 
-                        if (SpecialKeyPressed())
+                        if (CanAOEBurst && SpecialKeyPressed())
                             TryStartSpecial();
+
+                        if (CanRampage && SecondSpecialKeyPressed() && !rampageActive)
+                            TryStartRampage();
                     }
+
                     if (!attacking)
                         StayBehind();
                 }
@@ -121,9 +154,58 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 HandleRampage();
                 return;
             }
+        }
 
-            if (SecondSpecialKeyPressed() && TierNumber >= 3 && !rampageActive && !specialActive)
-                TryStartRampage();
+        public new void Punch()
+        {
+            attacking = true;
+            currentAnimationState = AnimationState.Attack;
+
+            Vector2 attackTarget = Main.MouseWorld + jitterOffset;
+
+            Projectile.spriteDirection = Projectile.direction =
+                attackTarget.X > Projectile.Center.X ? 1 : -1;
+
+            StayBehindPoint(attackTarget);
+            currentAnimationState = AnimationState.Attack;
+
+            if (shootCount > 0 || Projectile.owner != Main.myPlayer)
+                return;
+
+            shootCount = newPunchTime;
+
+            Vector2 shootVel = attackTarget - Projectile.Center;
+            if (shootVel == Vector2.Zero)
+                shootVel = new Vector2(Projectile.direction, 0f);
+            shootVel.Normalize();
+            shootVel *= ProjectileSpeed;
+
+            int projIndex = Projectile.NewProjectile(
+                Projectile.GetSource_FromThis(),
+                Projectile.Center,
+                shootVel,
+                ModContent.ProjectileType<Fists>(),
+                newPunchDamage,
+                PunchKnockback,
+                Projectile.owner,
+                FistID,
+                TierNumber
+            );
+            Main.projectile[projIndex].netUpdate = true;
+            Projectile.netUpdate = true;
+        }
+
+        private void StayBehindPoint(Vector2 worldPoint)
+        {
+            Vector2 toPoint = worldPoint - Main.player[Projectile.owner].Center;
+            float dist = toPoint.Length();
+            if (dist > newMaxDistance)
+            {
+                toPoint.Normalize();
+                toPoint *= newMaxDistance;
+            }
+            Vector2 desired = Main.player[Projectile.owner].Center + toPoint;
+            Projectile.velocity = (desired - Projectile.Center) * 0.18f;
         }
 
         private void SecondaryAttack()
@@ -139,6 +221,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
             StayBehind();
             currentAnimationState = AnimationState.SecondaryAbility;
+
             if (shootCount > 0 || Projectile.owner != Main.myPlayer || mPlayer.purpleHazeCapsules <= 0)
                 return;
 
@@ -148,10 +231,8 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             float horizontalDist = System.MathF.Abs(toMouse.X);
 
             float throwSpeedX = 12f * Projectile.spriteDirection;
-
             float timeToTarget = horizontalDist / System.MathF.Abs(throwSpeedX);
             float throwSpeedY = (toMouse.Y - 0.5f * 0.55f * timeToTarget * timeToTarget) / timeToTarget;
-
             throwSpeedY = MathHelper.Clamp(throwSpeedY, -18f, -2f);
 
             Vector2 throwVelocity = new Vector2(throwSpeedX, throwSpeedY);
@@ -173,7 +254,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
         private void TryStartSpecial()
         {
-            if (!CanAOEBurst || specialActive)
+            if (specialActive)
                 return;
 
             NPC target = FindNearestTarget(
@@ -205,8 +286,6 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 EndSpecial();
                 return;
             }
-
-            Player player = Main.player[Projectile.owner];
 
             if (!specialAnimationStarted)
             {
@@ -257,6 +336,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                         Main.rand.NextFloat(-shakeAmount, shakeAmount)
                     );
                 }
+
                 if (Projectile.frame >= 10 && !burstFired)
                 {
                     burstFired = true;
@@ -456,6 +536,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 0f,
                 Projectile.owner
             );
+
             if (CanReleaseVirus && capsulesToSpawn > 0)
             {
                 int virusCount = System.Math.Min(capsulesToSpawn, 8);
@@ -630,6 +711,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                             );
                             Main.projectile[projIndex].netUpdate = true;
                             Projectile.netUpdate = true;
+
                             Player rampagePlayer = Main.player[Projectile.owner];
                             MyPlayer rampageMPlayer = rampagePlayer.GetModPlayer<MyPlayer>();
                             if (rampageMPlayer.purpleHazeCapsules > 0)
