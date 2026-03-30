@@ -7,15 +7,16 @@ using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using Terraria.GameContent.Generation;
 using Terraria.IO;
+using System.Linq;
 
 namespace JoJoStands
 {
     public class DevilsPalmPass : GenPass
     {
-        private const int BiomeWidth = 400;
+        private const int BiomeWidth = 300;
         private const int SpikeCount = 8;
-        private const int CraterWidth = 120;
-        private const int CraterDepth = 55;
+        private const int CraterWidth = 100;
+        private const int CraterDepth = 45;
         private const int SpikeHeightMin = 35;
         private const int SpikeHeightMax = 75;
         private const int SpikeBaseWidth = 18;
@@ -29,31 +30,54 @@ namespace JoJoStands
         protected override void ApplyPass(GenerationProgress progress, GameConfiguration config)
         {
             progress.Message = "Shaping the Devil's Palm...";
-
             int worldSurface = (int)Main.worldSurface;
-
             int spawnX = Main.spawnTileX;
             int dungeonX = Main.dungeonX;
 
-            int startX = PickPlacementX(spawnX, dungeonX);
-            if (startX < 0) return;
+            int startX = -1;
+            bool foundSafeSpot = false;
+            int attempts;
+
+            for (attempts = 0; attempts < 500; attempts++)
+            {
+                int candidate = PickPlacementX(spawnX, dungeonX);
+                if (candidate < 0) continue;
+
+                if (Math.Abs(candidate + BiomeWidth / 2 - spawnX) < BiomeWidth) continue;
+                if (Math.Abs(candidate + BiomeWidth / 2 - dungeonX) < BiomeWidth) continue;
+
+                if (candidate < 200 || candidate + BiomeWidth > Main.maxTilesX - 200) continue;
+
+                startX = candidate;
+                foundSafeSpot = true;
+                break;
+            }
+
+            if (!foundSafeSpot)
+            {
+                JoJoStands.Instance.Logger.Warn("Devil's Palm: no valid X position found.");
+                return;
+            }
 
             int endX = startX + BiomeWidth;
-            int centerX = startX + BiomeWidth / 2;
 
             float[] baseHeights = SampleSurface(startX, BiomeWidth, worldSurface);
-
             float[] targetHeights = BuildTargetHeights(baseHeights, BiomeWidth, worldSurface);
 
             FillBiomeTiles(startX, endX, targetHeights, worldSurface);
-
-            PlaceSurfaceDetails(startX, endX, targetHeights);
 
             progress.Message = "Burying the Western City...";
             GenerateUndergroundCity(startX, endX, targetHeights);
 
             progress.Message = "Adding surface details...";
             PlaceSurfaceDetails(startX, endX, targetHeights);
+
+            int actualTop = (int)targetHeights.Min() - 10;
+            int actualBottom = worldSurface + 60;
+            GenVars.structures.AddProtectedStructure(
+                new Rectangle(startX, actualTop, BiomeWidth, actualBottom - actualTop),
+                padding: 6
+            );
         }
 
         private int PickPlacementX(int spawnX, int dungeonX)
