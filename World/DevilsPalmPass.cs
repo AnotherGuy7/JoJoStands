@@ -324,32 +324,42 @@ namespace JoJoStands
 
                     if (normX * normX + normY * normY <= 1f)
                     {
-                        Tile t = Main.tile[x, y];
-                        t.ClearEverything();
+                        Main.tile[x, y].ClearEverything();
                     }
                 }
             }
 
-            for (int x = cavernCenterX - radiusX + 10; x <= cavernCenterX + radiusX - 10; x += WorldGen.genRand.Next(8, 18))
+            for (int x = cavernCenterX - radiusX + 15; x <= cavernCenterX + radiusX - 15; x += WorldGen.genRand.Next(15, 30))
             {
                 for (int y = cavernCenterY - radiusY; y <= cavernCenterY; y++)
                 {
-                    if (InBounds(x, y) && InBounds(x, y - 1))
+                    if (InBounds(x, y) && InBounds(x, y - 1) && Main.tile[x, y - 1].HasTile && !Main.tile[x, y].HasTile)
                     {
-                        if (Main.tile[x, y - 1].HasTile && !Main.tile[x, y].HasTile)
+                        int spireLength = WorldGen.genRand.Next(35, 65);
+                        int baseWidth = WorldGen.genRand.Next(7, 13);
+                        int rootingDepth = 10;
+                        for (int dx = -baseWidth; dx <= baseWidth; dx++)
                         {
-                            int length = WorldGen.genRand.Next(25, 55);
-                            for (int i = 0; i < length; i++)
+                            float dist = Math.Abs(dx) / (float)baseWidth;
+                            float heightAtX = (float)(Math.Pow(1f - dist, 2.5) * spireLength);
+
+                            for (int dy = -rootingDepth; dy < heightAtX; dy++)
                             {
-                                int stalactiteWidth = (length - i) / 6;
-                                for (int w = -stalactiteWidth; w <= stalactiteWidth; w++)
+                                int curX = x + dx;
+                                int curY = y + dy;
+
+                                if (InBounds(curX, curY))
                                 {
-                                    if (InBounds(x + w, y + i))
-                                        WorldGen.PlaceTile(x + w, y + i, TileID.HardenedSand, mute: true, forced: true);
+                                    Tile t = Main.tile[curX, curY];
+                                    t.HasTile = true;
+                                    t.TileType = TileID.HardenedSand;
+                                    t.Slope = 0;
+                                    if (dy < 0)
+                                        t.WallType = WallID.HardenedSand;
                                 }
                             }
-                            break;
                         }
+                        break;
                     }
                 }
             }
@@ -360,9 +370,7 @@ namespace JoJoStands
             for (int i = 0; i < numBuildings; i++)
             {
                 int bX = cavernCenterX - radiusX + 30 + (i * spacing) + WorldGen.genRand.Next(-6, 6);
-
                 int floorY = cavernCenterY + 2;
-
                 int bWidth = WorldGen.genRand.Next(16, 26);
                 int bHeight = WorldGen.genRand.Next(12, 20);
 
