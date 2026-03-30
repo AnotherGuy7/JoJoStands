@@ -306,72 +306,159 @@ namespace JoJoStands
 
         private void GenerateUndergroundCity(int startX, int endX, float[] targetHeights)
         {
-            int numBuildings = WorldGen.genRand.Next(MinBuildings, MaxBuildings + 1);
             int width = endX - startX;
+            int cavernCenterX = startX + width / 2;
+            int cavernCenterY = (int)targetHeights[width / 2] + 160;
+
+            int radiusX = width / 2 - 40;
+            int radiusY = 120;
+
+            for (int x = cavernCenterX - radiusX; x <= cavernCenterX + radiusX; x++)
+            {
+                for (int y = cavernCenterY - radiusY; y <= cavernCenterY; y++)
+                {
+                    if (!InBounds(x, y)) continue;
+
+                    float normX = (x - cavernCenterX) / (float)radiusX;
+                    float normY = (y - cavernCenterY) / (float)radiusY;
+
+                    if (normX * normX + normY * normY <= 1f)
+                    {
+                        Tile t = Main.tile[x, y];
+                        t.ClearEverything();
+                    }
+                }
+            }
+
+            for (int x = cavernCenterX - radiusX + 10; x <= cavernCenterX + radiusX - 10; x += WorldGen.genRand.Next(8, 18))
+            {
+                for (int y = cavernCenterY - radiusY; y <= cavernCenterY; y++)
+                {
+                    if (InBounds(x, y) && InBounds(x, y - 1))
+                    {
+                        if (Main.tile[x, y - 1].HasTile && !Main.tile[x, y].HasTile)
+                        {
+                            int length = WorldGen.genRand.Next(25, 55);
+                            for (int i = 0; i < length; i++)
+                            {
+                                int stalactiteWidth = (length - i) / 6;
+                                for (int w = -stalactiteWidth; w <= stalactiteWidth; w++)
+                                {
+                                    if (InBounds(x + w, y + i))
+                                        WorldGen.PlaceTile(x + w, y + i, TileID.HardenedSand, mute: true, forced: true);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            int numBuildings = WorldGen.genRand.Next(5, 10);
+            int spacing = (radiusX * 2 - 60) / numBuildings;
 
             for (int i = 0; i < numBuildings; i++)
             {
-                int bX = startX + WorldGen.genRand.Next(40, width - 40);
-                int surfY = (int)targetHeights[bX - startX];
-                int bY = surfY + WorldGen.genRand.Next(40, 200);
-                int bWidth = WorldGen.genRand.Next(18, 35);
-                int bHeight = WorldGen.genRand.Next(12, 25);
-                BuildWesternHouse(bX, bY, bWidth, bHeight);
+                int bX = cavernCenterX - radiusX + 30 + (i * spacing) + WorldGen.genRand.Next(-6, 6);
+
+                int floorY = cavernCenterY + 2;
+
+                int bWidth = WorldGen.genRand.Next(16, 26);
+                int bHeight = WorldGen.genRand.Next(12, 20);
+
+                BuildUndergroundHouse(bX, floorY - bHeight, bWidth, bHeight);
             }
         }
 
-        private void BuildWesternHouse(int x, int y, int width, int height)
+        private void BuildUndergroundHouse(int x, int y, int width, int height)
         {
-            ushort frameTile = TileID.WoodBlock;
-            ushort bgWall = WallID.Wood;
+            bool usePearlwood = WorldGen.genRand.NextBool();
+            ushort houseBlock = usePearlwood ? TileID.Pearlwood : TileID.LivingWood;
+            ushort bgWall = usePearlwood ? WallID.Pearlwood : (ushort)78;
+            ushort roofTile = TileID.RedDynastyShingles;
 
-            for (int i = 0; i < width; i++)
+            for (int i = -2; i < width + 2; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     int curX = x + i;
                     int curY = y + j;
+                    if (!InBounds(curX, curY)) continue;
 
+                    if (j == 1)
+                        WorldGen.PlaceTile(curX, curY, roofTile, mute: true, forced: true);
+                    else if (j == 0 && i >= 0 && i < width)
+                        WorldGen.PlaceTile(curX, curY, roofTile, mute: true, forced: true);
+                }
+            }
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 2; j < height; j++)
+                {
+                    int curX = x + i;
+                    int curY = y + j;
                     if (!InBounds(curX, curY)) continue;
 
                     Tile t = Main.tile[curX, curY];
                     t.ClearEverything();
-                    WorldGen.PlaceWall(curX, curY, bgWall, mute: true);
-                    if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
-                        WorldGen.PlaceTile(curX, curY, frameTile, mute: true, forced: true);
+
+                    if (i > 0 && i < width - 1)
+                        WorldGen.PlaceWall(curX, curY, bgWall, mute: true);
+
+                    if (i == 0 || i == width - 1 || j == height - 1)
+                        WorldGen.PlaceTile(curX, curY, houseBlock, mute: true, forced: true);
                 }
             }
 
-            int doorX = x;
-            int doorY = y + height - 2;
+            int floorY = y + height - 2;
+            PlaceDoor(x, floorY);
+            PlaceDoor(x + width - 1, floorY);
 
-            if (InBounds(doorX, doorY) && InBounds(doorX, doorY - 1) && InBounds(doorX, doorY - 2))
+            List<int> availableDecos = new List<int> { 0, 1, 2, 3, 4, 5 };
+            for (int i = 0; i < availableDecos.Count; i++)
             {
-                Main.tile[doorX, doorY].ClearEverything();
-                Main.tile[doorX, doorY - 1].ClearEverything();
-                Main.tile[doorX, doorY - 2].ClearEverything();
-
-                WorldGen.PlaceWall(doorX, doorY, bgWall, mute: true);
-                WorldGen.PlaceWall(doorX, doorY - 1, bgWall, mute: true);
-                WorldGen.PlaceWall(doorX, doorY - 2, bgWall, mute: true);
-
-                WorldGen.PlaceTile(doorX, doorY, TileID.ClosedDoor, mute: true, forced: true);
+                int temp = availableDecos[i];
+                int randomIndex = WorldGen.genRand.Next(i, availableDecos.Count);
+                availableDecos[i] = availableDecos[randomIndex];
+                availableDecos[randomIndex] = temp;
             }
 
-            int chestX = x + width / 2;
-            int chestY = y + height - 2;
-
-            int chestIndex = WorldGen.PlaceChest(chestX, chestY, 21, false, 0);
-            if (chestIndex >= 0 && chestIndex < Main.maxChests)
+            int decoPointer = 0;
+            for (int i = x + 2; i <= x + width - 3 && decoPointer < availableDecos.Count; i += 4)
             {
-                Chest chest = Main.chest[chestIndex];
-
-                chest.item[0].SetDefaults(ItemID.GoldCoin);
-                chest.item[0].stack = WorldGen.genRand.Next(5, 15);
-
+                if (Main.tile[i, floorY].HasTile) continue;
+                int decoChoice = availableDecos[decoPointer];
+                switch (decoChoice)
+                {
+                    case 0:
+                        WorldGen.PlaceTile(i, floorY, TileID.Tables, mute: true);
+                        if (Main.tile[i, floorY].HasTile) WorldGen.PlaceTile(i, floorY - 2, TileID.Candles, mute: true);
+                        break;
+                    case 1: WorldGen.PlaceTile(i, floorY, TileID.Chairs, mute: true); break;
+                    case 2: WorldGen.PlaceTile(i, floorY, TileID.Pianos, mute: true); break;
+                    case 3: WorldGen.PlaceTile(i, floorY, TileID.Bookcases, mute: true); break;
+                    case 4: WorldGen.PlaceChest(i, floorY, 21, false, 0); break;
+                    case 5: WorldGen.PlaceTile(i, floorY, TileID.HatRack, mute: true); break;
+                }
+                decoPointer++;
             }
-            WorldGen.PlaceTile(x + 2, y + height - 4, TileID.Torches, mute: true, forced: true);
-            WorldGen.PlaceTile(x + width - 3, y + height - 4, TileID.Torches, mute: true, forced: true);
+        }
+
+        private void PlaceDoor(int doorX, int floorY)
+        {
+            if (InBounds(doorX, floorY) && InBounds(doorX, floorY - 1) && InBounds(doorX, floorY - 2))
+            {
+                Main.tile[doorX, floorY].ClearEverything();
+                Main.tile[doorX, floorY - 1].ClearEverything();
+                Main.tile[doorX, floorY - 2].ClearEverything();
+
+                WorldGen.PlaceWall(doorX, floorY, WallID.Pearlwood, mute: true);
+                WorldGen.PlaceWall(doorX, floorY - 1, WallID.Pearlwood, mute: true);
+                WorldGen.PlaceWall(doorX, floorY - 2, WallID.Pearlwood, mute: true);
+
+                WorldGen.PlaceTile(doorX, floorY, TileID.ClosedDoor, mute: true, forced: true);
+            }
         }
 
         private void PlaceSurfaceDetails(int startX, int endX, float[] targetHeights)
