@@ -459,44 +459,74 @@ namespace JoJoStands
                 }
             }
 
-            DecorateFloor(groundFurnitureY);
+            DecorateFloor(groundFurnitureY, x, width, y, height, bgWall);
             if (isDuplex)
+                DecorateFloor(midFloorY - 1, x, width, y, height, bgWall);
+        }
+
+        private void DecorateFloor(int floorFurnitureY, int x, int width, int y, int height, ushort bgWall)
+        {
+            List<int> availableDecos = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            for (int i = 0; i < availableDecos.Count; i++)
             {
-                DecorateFloor(midFloorY - 1);
+                int temp = availableDecos[i];
+                int randomIndex = WorldGen.genRand.Next(i, availableDecos.Count);
+                availableDecos[i] = availableDecos[randomIndex];
+                availableDecos[randomIndex] = temp;
             }
 
-            void DecorateFloor(int floorFurnitureY)
+            int center = x + width / 2;
+            int fi = center + WorldGen.genRand.Next(-2, 3);
+            int ceilingY = y + 2;
+            if (InBounds(fi, ceilingY) && !Main.tile[fi, ceilingY].HasTile)
+                WorldGen.PlaceTile(fi, ceilingY, 34, mute: true, style: 2);
+
+            int decoPointer = 0;
+            for (int i = x + 2; i <= x + width - 3 && decoPointer < availableDecos.Count; i += 3)
             {
-                List<int> availableDecos = new List<int> { 0, 1, 2, 3, 4, 5 };
-                for (int i = 0; i < availableDecos.Count; i++)
-                {
-                    int temp = availableDecos[i];
-                    int randomIndex = WorldGen.genRand.Next(i, availableDecos.Count);
-                    availableDecos[i] = availableDecos[randomIndex];
-                    availableDecos[randomIndex] = temp;
-                }
+                if (Main.tile[i, floorFurnitureY + 1].TileType == TileID.Platforms) continue;
+                if (Main.tile[i, floorFurnitureY].HasTile) continue;
 
-                int decoPointer = 0;
-                for (int i = x + 2; i <= x + width - 3 && decoPointer < availableDecos.Count; i += 4)
+                int decoChoice = availableDecos[decoPointer];
+                switch (decoChoice)
                 {
-                    if (Main.tile[i, floorFurnitureY + 1].TileType == TileID.Platforms) continue;
-                    if (Main.tile[i, floorFurnitureY].HasTile) continue;
-
-                    int decoChoice = availableDecos[decoPointer];
-                    switch (decoChoice)
-                    {
-                        case 0:
-                            WorldGen.PlaceTile(i, floorFurnitureY, TileID.Tables, mute: true);
-                            if (Main.tile[i, floorFurnitureY].HasTile) WorldGen.PlaceTile(i, floorFurnitureY - 2, TileID.Candles, mute: true);
-                            break;
-                        case 1: WorldGen.PlaceTile(i, floorFurnitureY, TileID.Chairs, mute: true); break;
-                        case 2: WorldGen.PlaceTile(i, floorFurnitureY, TileID.Pianos, mute: true); break;
-                        case 3: WorldGen.PlaceTile(i, floorFurnitureY, TileID.Bookcases, mute: true); break;
-                        case 4: WorldGen.PlaceChest(i, floorFurnitureY, 21, false, 0); break;
-                        case 5: WorldGen.PlaceTile(i, floorFurnitureY, TileID.HatRack, mute: true); break;
-                    }
-                    decoPointer++;
+                    case 0:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.Tables, mute: true);
+                        break;
+                    case 1:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.Chairs, mute: true);
+                        break;
+                    case 2:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.Pianos, mute: true);
+                        break;
+                    case 3:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.Bookcases, mute: true);
+                        break;
+                    case 4:
+                        WorldGen.PlaceChest(i, floorFurnitureY, 21, false, 0);
+                        break;
+                    case 5:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.GrandfatherClocks, mute: true);
+                        break;
+                    case 6:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.Loom, mute: true);
+                        break;
+                    case 7:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.Dressers, mute: true);
+                        break;
+                    case 8:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.Beds, mute: true);
+                        break;
+                    case 9:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.Tables, mute: true);
+                        if (Main.tile[i, floorFurnitureY].HasTile)
+                            WorldGen.PlaceTile(i, floorFurnitureY - 2, TileID.Candelabras, mute: true);
+                        break;
+                    case 10:
+                        WorldGen.PlaceTile(i, floorFurnitureY, TileID.ClayPot, mute: true);
+                        break;
                 }
+                decoPointer++;
             }
         }
 
