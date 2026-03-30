@@ -6,8 +6,8 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
     public class PurpleHazeStandT1 : PurpleHazeStand
     {
         public override int TierNumber => 1;
-        public override int PunchDamage => 23;
-        public override int PunchTime => 11;
+        public override int PunchDamage => 9;
+        public override int PunchTime => 16;
         public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => false;
@@ -29,8 +29,8 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
     public class PurpleHazeStandT2 : PurpleHazeStand
     {
         public override int TierNumber => 2;
-        public override int PunchDamage => 34;
-        public override int PunchTime => 10;
+        public override int PunchDamage => 29;
+        public override int PunchTime => 15;
         public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => true;
@@ -52,9 +52,9 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
     public class PurpleHazeStandT3 : PurpleHazeStand
     {
         public override int TierNumber => 3;
-        public override int PunchDamage => 48;
-        public override int PunchTime => 9;
-        public override float MaxDistance => 140f;
+        public override int PunchDamage => 49;
+        public override int PunchTime => 13;
+        public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => true;
         protected override bool CanReleaseVirus => true;
@@ -76,7 +76,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
     {
         public override int TierNumber => 4;
         public override int PunchDamage => 65;
-        public override int PunchTime => 8;
+        public override int PunchTime => 13;
         public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => true;

@@ -5,6 +5,7 @@ using JoJoStands.Projectiles;
 using JoJoStands.Projectiles.PlayerStands.Aerosmith;
 using JoJoStands.Projectiles.PlayerStands.Cream;
 using JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem;
+using JoJoStands.Projectiles.PlayerStands.PurpleHaze;
 using JoJoStands.Projectiles.PlayerStands.StarPlatinum;
 using JoJoStands.Projectiles.PlayerStands.TestStand;
 using JoJoStands.Projectiles.PlayerStands.TheWorld;
@@ -140,6 +141,7 @@ namespace JoJoStands
                 ProjectileType<TrackerBubble>(),
                 ProjectileType<Projectiles.PlayerStands.Cream.Void>(),
                 ProjectileType<DashVoid>(),
+                ProjectileType<PurpleHazeCapsule>()
             };
 
             standTier1List = new List<int>
@@ -171,7 +173,8 @@ namespace JoJoStands
                 ItemType<SoftAndWetT1>(),
                 ItemType<EchoesAct0>(),
                 ItemType<ManhattanTransferT1>(),
-                ItemType<HeyYaT1>()
+                ItemType<HeyYaT1>(),
+                ItemType<PurpleHazeT1>()
             };
 
             timestopImmune = new List<int>()

@@ -44,7 +44,7 @@ namespace JoJoStands.NPCs.TownNPCs
             NPC.friendly = true;
             NPC.width = 18; //the NPC sprite width
             NPC.height = 46;  //the NPC sprite height
-            NPC.aiStyle = 7; //this is the NPC ai style, 7 is Pasive Ai
+            NPC.aiStyle = NPCAIStyleID.Passive; //this is the NPC ai style, 7 is Pasive Ai
             NPC.defense = 34;
             NPC.lifeMax = 500;
             NPC.HitSound = SoundID.NPCHit1;
@@ -56,8 +56,8 @@ namespace JoJoStands.NPCs.TownNPCs
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
-				new FlavorTextBestiaryInfoElement(Language.GetText("Mods.JoJoStands.NPCFlavorText.MarineBiologist").Value)
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
+                new FlavorTextBestiaryInfoElement(Language.GetText("Mods.JoJoStands.NPCFlavorText.MarineBiologist").Value)
             });
         }
 
@@ -329,6 +329,15 @@ namespace JoJoStands.NPCs.TownNPCs
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaT4").Value;
                 else if (standSlotItemType == ModContent.ItemType<HeyYaFinal>())
                     Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.HeyYaFinal").Value;
+
+                else if (standSlotItemType == ModContent.ItemType<PurpleHazeT1>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.PurpleHazeT1").Value;
+                else if (standSlotItemType == ModContent.ItemType<PurpleHazeT2>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.PurpleHazeT2").Value;
+                else if (standSlotItemType == ModContent.ItemType<PurpleHazeT3>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.PurpleHazeT3").Value;
+                else if (standSlotItemType == ModContent.ItemType<PurpleHazeFinal>())
+                    Main.npcChatText = Language.GetText("Mods.JoJoStands.JotaroCustomDialogue.PurpleHazeFinal").Value;
 
                 else if (JoJoStands.FanStandsLoaded)
                 {

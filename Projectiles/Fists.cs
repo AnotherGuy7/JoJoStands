@@ -234,181 +234,164 @@ namespace JoJoStands.Projectiles
             if (JoJoStands.SoundsLoaded)
                 mPlayer.standHitTime += 2;
 
-            switch (standType)
+            if (standType == GoldExperience)
             {
-                case GoldExperience:
-                    if (standTier == 3)
-                        target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
-                    else if (standTier == 4)
-                        target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
-                    break;
+                if (standTier == 3)
+                    target.AddBuff(ModContent.BuffType<LifePunch>(), 4 * 60);
+                else if (standTier == 4)
+                    target.AddBuff(ModContent.BuffType<LifePunch>(), 6 * 60);
+            }
 
-                case GoldExperienceRequiem:
-                    target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
-                    if (mPlayer.backToZeroActive)
+            else if (standType == GoldExperienceRequiem)
+            {
+                target.AddBuff(ModContent.BuffType<LifePunch>(), 8 * 60);
+                if (mPlayer.backToZeroActive)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().affectedbyBtz = true;
+                    target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
+                }
+            }
+
+            else if (standType == StickyFingers)
+            {
+                target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
+                target.AddBuff(ModContent.BuffType<Zipped>(), (2 * (int)standTier) * 60);
+            }
+
+            else if (standType == KingCrimson)
+            {
+                JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
+                modifiers.FinalDamage *= jojoNPC.kingCrimsonDonutMultiplier;
+                jojoNPC.kingCrimsonDonutMultiplier += 0.06f;
+
+                if (player.HasBuff(ModContent.BuffType<PowerfulStrike>()))
+                {
+                    modifiers.FinalDamage *= 6;
+                    modifiers.Knockback *= 3f;
+                    jojoNPC.kingCrimsonDonutMultiplier += 0.24f;
+                    player.ClearBuff(ModContent.BuffType<PowerfulStrike>());
+                }
+            }
+
+            else if (standType == TheHand)
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), (4 + (int)standTier) * 60);
+
+            else if (standType == TowerOfGray)
+            {
+                if (mPlayer.towerOfGrayDamageMult != 1f)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 13);
+                }
+            }
+
+            else if (standType == GratefulDead)
+            {
+                target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
+                SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 8, player.whoAmI);
+                target.AddBuff(ModContent.BuffType<Aging>(), (7 + ((int)standTier * 2)) * 60);
+            }
+
+            else if (standType == Whitesnake)
+            {
+                if (Main.rand.Next(1, 100 + 1) >= 94)
+                    target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
+            }
+
+            else if (standType == SilverChariot)
+            {
+                if (Main.rand.Next(1, 100 + 1) >= 75)
+                {
+                    target.AddBuff(BuffID.Bleeding, (5 * (int)standTier) * 60);
+                    Projectile.ArmorPenetration += 5 * (int)standTier;
+                }
+            }
+
+            else if (standType == CrazyDiamond && mPlayer.crazyDiamondRestorationMode && !target.HasBuff(ModContent.BuffType<ImproperRestoration>()))
+            {
+                target.AddBuff(ModContent.BuffType<Restoration>(), 60);
+                target.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondPunchCount += 1;
+                target.GetGlobalNPC<JoJoGlobalNPC>().taggedByCrazyDiamondRestoration = true;
+                target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
+                SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 12);
+
+                Vector2 randomOffset = new Vector2(Main.rand.Next(-12, 12 + 1), Main.rand.Next(-12, 12 + 1));
+                for (int i = 0; i < 15; i++)
+                {
+                    float circlePos = i;
+                    Vector2 spawnPos = Projectile.Center + (circlePos.ToRotationVector2() * 8f) + randomOffset;
+                    Vector2 velocity = spawnPos - Projectile.Center;
+                    velocity.Normalize();
+                    Dust dustIndex = Dust.NewDustPerfect(spawnPos, DustID.IchorTorch, velocity * 0.8f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
+                    dustIndex.noGravity = true;
+                }
+            }
+
+            else if (standType == Cream)
+                target.AddBuff(ModContent.BuffType<MissingOrgans>(), 2 * (int)standTier * 60);
+
+            else if (standType == Echoes)
+            {
+                if (mPlayer.echoesTier == 3)
+                {
+                    if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
                     {
-                        target.GetGlobalNPC<JoJoGlobalNPC>().affectedbyBtz = true;
-                        target.AddBuff(ModContent.BuffType<AffectedByBtZ>(), 2);
+                        int progressAdd = crit ? Projectile.damage * 2 : Projectile.damage;
+                        mPlayer.echoesACT3EvolutionProgress += progressAdd;
                     }
-                    break;
-
-                case StickyFingers:
-                    target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
-                    target.AddBuff(ModContent.BuffType<Zipped>(), (2 * (int)standTier) * 60);
-                    break;
-
-                case KingCrimson:
-                    JoJoGlobalNPC jojoNPC = target.GetGlobalNPC<JoJoGlobalNPC>();
-                    modifiers.FinalDamage *= jojoNPC.kingCrimsonDonutMultiplier;
-                    jojoNPC.kingCrimsonDonutMultiplier += 0.06f;
-
-                    if (player.HasBuff(ModContent.BuffType<PowerfulStrike>()))
+                }
+                else if (mPlayer.echoesTier == 2)
+                {
+                    if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
                     {
-                        modifiers.FinalDamage *= 6;
-                        modifiers.Knockback *= 3f;
-                        jojoNPC.kingCrimsonDonutMultiplier += 0.24f;
-                        player.ClearBuff(ModContent.BuffType<PowerfulStrike>());
+                        int progressAdd = crit ? Projectile.damage * 2 : Projectile.damage;
+                        mPlayer.echoesACT3EvolutionProgress += progressAdd;
                     }
-                    break;
+                }
 
-                case TheHand:
-                    target.AddBuff(ModContent.BuffType<MissingOrgans>(), (4 + (int)standTier) * 60);
-                    break;
-
-                case TowerOfGray:
-                    if (mPlayer.towerOfGrayDamageMult != 1f)
-                    {
-                        target.GetGlobalNPC<JoJoGlobalNPC>().towerOfGrayImmunityFrames = 30;
-                        SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 13);
-                    }
-                    break;
-
-                case GratefulDead:
-                    target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
-                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 8, player.whoAmI);
-                    target.AddBuff(ModContent.BuffType<Aging>(), (7 + ((int)standTier * 2)) * 60);
-                    break;
-
-                case Whitesnake:
-                    if (Main.rand.Next(1, 100 + 1) >= 94)
-                        target.AddBuff(BuffID.Confused, (2 + (int)standTier) * 60);
-                    break;
-
-                case SilverChariot:
-                    if (Main.rand.Next(1, 100 + 1) >= 75)
-                    {
-                        target.AddBuff(BuffID.Bleeding, (5 * (int)standTier) * 60);
-                        Projectile.ArmorPenetration += 5 * (int)standTier;
-                    }
-                    break;
-
-                case CrazyDiamond:
-                    if (mPlayer.crazyDiamondRestorationMode && !target.HasBuff(ModContent.BuffType<ImproperRestoration>()))
-                    {
-                        target.AddBuff(ModContent.BuffType<Restoration>(), 60);
-                        target.GetGlobalNPC<JoJoGlobalNPC>().crazyDiamondPunchCount += 1;
-                        target.GetGlobalNPC<JoJoGlobalNPC>().taggedByCrazyDiamondRestoration = true;
-                        target.GetGlobalNPC<JoJoGlobalNPC>().standDebuffEffectOwner = player.whoAmI;
-                        SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 12);
-
-                        Vector2 randomOffset = new Vector2(Main.rand.Next(-12, 12 + 1), Main.rand.Next(-12, 12 + 1));
-                        for (int i = 0; i < 15; i++)
-                        {
-                            float circlePos = i;
-                            Vector2 spawnPos = Projectile.Center + (circlePos.ToRotationVector2() * 8f) + randomOffset;
-                            Vector2 velocity = spawnPos - Projectile.Center;
-                            velocity.Normalize();
-                            Dust dustIndex = Dust.NewDustPerfect(spawnPos, DustID.IchorTorch, velocity * 0.8f, Scale: Main.rand.NextFloat(0.8f, 2.2f));
-                            dustIndex.noGravity = true;
-                        }
-                    }
-                    break;
-
-                case Cream:
-                    target.AddBuff(ModContent.BuffType<MissingOrgans>(), 2 * (int)standTier * 60);
-                    break;
-
-                case Echoes:
-                    if (mPlayer.echoesTier == 3)
-                    {
-                        if (target.type == NPCID.Golem || target.type == NPCID.GolemFistLeft || target.type == NPCID.GolemFistRight || target.type == NPCID.GolemHead)
-                        {
-                            int progressAdd = crit ? Projectile.damage * 2 : Projectile.damage;
-                            mPlayer.echoesACT3EvolutionProgress += progressAdd;
-                        }
-                    }
-                    else if (mPlayer.echoesTier == 2)
-                    {
-                        if (target.type == NPCID.Retinazer || target.type == NPCID.Spazmatism)
-                        {
-                            int progressAdd = crit ? Projectile.damage * 2 : Projectile.damage;
-                            mPlayer.echoesACT3EvolutionProgress += progressAdd;
-                        }
-                    }
-
-                    if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.currentEchoesAct == 3)
-                    {
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                        if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15)
-                            target.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer += 30;
-                        SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
-                    }
-                    if (mPlayer.currentEchoesAct == 1)
-                    {
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
-                        int maxDamage = 36;
-                        int soundIntensity = 2 + (2 * (mPlayer.echoesTier - 2));
-                        if (mPlayer.echoesTier == 4)
-                            maxDamage = 74;
-                        else if (mPlayer.echoesTier == 3)
-                            maxDamage = 49;
-                        if (!target.boss)
-                            soundIntensity *= 2;
-
-                        target.AddBuff(ModContent.BuffType<SMACK>(), 10 * 60);
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
-                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundMaxIntensity = maxDamage;
-                        if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensity < target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundMaxIntensity)
-                            target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensity += soundIntensity;
-                        SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
-                    }
-                    break;
-
-                case PurpleHaze:
+                if (player.HasBuff(ModContent.BuffType<ThreeFreezeBarrage>()) && mPlayer.currentEchoesAct == 3)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
+                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer <= 15)
+                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesThreeFreezeTimer += 30;
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 3, 0, 0, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                }
+                if (mPlayer.currentEchoesAct == 1)
+                {
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesCrit = mPlayer.standCritChangeBoosts;
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDamageBoost = mPlayer.standDamageBoosts;
+                    int maxDamage = 36;
+                    int soundIntensity = 2 + (2 * (mPlayer.echoesTier - 2));
+                    if (mPlayer.echoesTier == 4)
+                        maxDamage = 74;
+                    else if (mPlayer.echoesTier == 3)
+                        maxDamage = 49;
                     if (!target.boss)
-                    {
-                        target.velocity.X *= 0.2f;
-                        SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 0);
-                    }
-                    mPlayer.purpleHazePunchCounter++;
-                    if (mPlayer.purpleHazePunchCounter >= 3)
-                    {
-                        mPlayer.purpleHazePunchCounter = 0;
-                        if (mPlayer.purpleHazeCapsules > 0)
-                        {
-                            mPlayer.purpleHazeCapsules--;
-                            Projectile.NewProjectile(
-                                Projectile.GetSource_FromThis(),
-                                target.Center,
-                                Vector2.Zero,
-                                ModContent.ProjectileType<HazeVirusCloud>(),
-                                0,
-                                0f,
-                                player.whoAmI
-                            );
-                        }
-                    }
-                    break;
+                        soundIntensity *= 2;
 
-                default:
-                    if (!target.boss)
-                    {
-                        target.velocity.X *= 0.2f;
-                        SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 0);
-                    }
-                    break;
+                    target.AddBuff(ModContent.BuffType<SMACK>(), 10 * 60);
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesDebuffOwner = player.whoAmI;
+                    target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundMaxIntensity = maxDamage;
+                    if (target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensity < target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundMaxIntensity)
+                        target.GetGlobalNPC<JoJoGlobalNPC>().echoesSoundIntensity += soundIntensity;
+                    SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 15, 1, maxDamage, soundIntensity, mPlayer.standCritChangeBoosts, mPlayer.standDamageBoosts);
+                }
+            }
+
+            else if (standType == PurpleHaze)
+            {
+                if (mPlayer.purpleHazeCapsules > 0)
+                {
+                    mPlayer.purpleHazeCapsules--;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<HazeVirusCloud>(), 0, 0f, player.whoAmI);
+                }
+            }
+
+            if (standType != TowerOfGray && !target.boss)
+            {
+                target.velocity.X *= 0.2f;
+                SyncCall.SyncStandEffectInfo(player.whoAmI, target.whoAmI, 0);
             }
 
 
@@ -511,6 +494,15 @@ namespace JoJoStands.Projectiles
                         mTarget.echoesSoundIntensity += soundIntensity;
                     SyncCall.SyncOtherPlayerDebuff(player.whoAmI, target.whoAmI, ModContent.BuffType<SMACK>(), 10 * 60);
                     SyncCall.SyncOtherPlayerExtraEffect(player.whoAmI, target.whoAmI, 2, maxDamage, soundIntensity, mPlayer.standDamageBoosts, 0f);
+                }
+            }
+
+            else if (standType == PurpleHaze)
+            {
+                if (mPlayer.purpleHazeCapsules > 0)
+                {
+                    mPlayer.purpleHazeCapsules--;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<HazeVirusCloud>(), 0, 0f, player.whoAmI);
                 }
             }
         }

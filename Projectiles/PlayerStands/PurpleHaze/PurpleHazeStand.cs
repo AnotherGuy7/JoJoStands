@@ -1,14 +1,13 @@
 ﻿using JoJoStands.Buffs.Debuffs;
+using JoJoStands.UI;
 using Microsoft.Xna.Framework;
-using JoJoStands.Dusts;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.IO;
-using Terraria.Audio;
-using JoJoStands.UI;
 
 namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 {
