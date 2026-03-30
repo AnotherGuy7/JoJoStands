@@ -221,6 +221,27 @@ namespace JoJoStands.NPCs
                 else if (npc.type == NPCID.BigMimicHallow)
                     npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SoothingSpiritDisc>(), 4));
             }
+
+            bool postMech = NPC.downedMechBoss1 || NPC.downedMechBoss2 || NPC.downedMechBoss3;
+
+
+            if (npc.type == NPCID.BigMimicCrimson || npc.type == NPCID.BigMimicCorruption)
+            {
+                var mechCondition = new Conditions.BeatAnyMechBoss();
+                npcLoot.Add(ItemDropRule.ByCondition(mechCondition,
+                    ModContent.ItemType<TommyGun>(),
+                    chanceDenominator: 5
+                ));
+            }
+
+            if (npc.type == NPCID.SnowmanGangsta)
+            {
+                var mechCondition = new Conditions.BeatAnyMechBoss();
+                npcLoot.Add(ItemDropRule.ByCondition(mechCondition,
+                    ModContent.ItemType<TommyGun>(),
+                    chanceDenominator: 50
+                ));
+            }
         }
 
         public override void GetChat(NPC npc, ref string chat)
@@ -301,6 +322,22 @@ namespace JoJoStands.NPCs
                     {
                         Item ItemSelect = player.inventory[i];
                         ItemSelect.value += (int)(ItemSelect.value * 0.2f);
+                    }
+                }
+            }
+
+            if (npc.type == NPCID.ArmsDealer)
+            {
+                bool postMech = NPC.downedMechBoss1 || NPC.downedMechBoss2 || NPC.downedMechBoss3;
+                if (!postMech) return;
+
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (items[i] == null || items[i].type == ItemID.None)
+                    {
+                        items[i] = new Item();
+                        items[i].SetDefaults(ModContent.ItemType<TommyGun>());
+                        break;
                     }
                 }
             }

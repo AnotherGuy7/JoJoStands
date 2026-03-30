@@ -42,6 +42,8 @@ namespace JoJoStands.Projectiles
 
         public bool exceptionForSCParry = false;
 
+        public bool firedByTommyGun = false;
+
         public struct ForesightData
         {
             public Vector2 position;
@@ -443,6 +445,8 @@ namespace JoJoStands.Projectiles
                 if (mPlayer.vampiricBangleEquipped || mPlayer.polaroidEquipped)
                     player.Heal(Main.rand.Next(1, 5 + 1));
             }
+            if (firedByTommyGun)
+                target.AddBuff(BuffID.Slow, 120);
         }
 
         public override bool ShouldUpdatePosition(Projectile Projectile)        //thanks, HellGoesOn for telling me this hook even existed
