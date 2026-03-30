@@ -323,7 +323,16 @@ namespace JoJoStands
                     tile.HasTile = true;
                     tile.TileType = tileType;
                     tile.LiquidAmount = 0;
-                    tile.WallType = WallID.HardenedSand;
+                    bool exposed =
+                        (y > 0 && !Main.tile[x, y - 1].HasTile) ||
+                        (x > 0 && !Main.tile[x - 1, y].HasTile) ||
+                        (x < Main.maxTilesX - 1 && !Main.tile[x + 1, y].HasTile);
+
+                    if (!exposed)
+                        tile.WallType = WallID.HardenedSand;
+                    else
+                        tile.WallType = 0;
+
                 }
             }
         }
