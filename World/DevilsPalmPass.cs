@@ -20,7 +20,7 @@ namespace JoJoStands
         private const int SpikeHeightMin = 35;
         private const int SpikeHeightMax = 75;
         private const int SpikeBaseWidth = 18;
-        private const int BlendMargin = 60;
+        private const int BlendMargin = 15;
 
         private const int MinBuildings = 6;
         private const int MaxBuildings = 12;
@@ -158,16 +158,8 @@ namespace JoJoStands
                 {
                     float dip = (float)(0.5 * (1 - Math.Cos(rel * Math.PI)));
                     float craterY = floorY + CraterDepth * (1f - dip);
-                    target[i] = Math.Max(target[i], craterY);
                     target[i] = craterY;
                 }
-            }
-
-            for (int i = 0; i < width; i++)
-            {
-                float rel = (i - craterCenter) / (float)craterHalf;
-                if (Math.Abs(rel) > 1f)
-                    target[i] = floorY;
             }
 
             foreach (int sc in spikeCenters)
