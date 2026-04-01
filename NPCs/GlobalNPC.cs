@@ -130,6 +130,8 @@ namespace JoJoStands.NPCs
 
         public override void ModifyGlobalLoot(GlobalLoot globalLoot)
         {
+            if (taggedByButterfly)
+                globalLoot.
             if (!Main.npc[npcWhoAmI].SpawnedFromStatue)
             {
                 globalLoot.Add(ItemDropRule.ByCondition(new SunDropletCondition(), ModContent.ItemType<SunDroplet>(), 10, 1, 3));
@@ -148,48 +150,17 @@ namespace JoJoStands.NPCs
 
                 globalLoot.Add(ItemDropRule.ByCondition(new SoulOfTimeCondition(), ModContent.ItemType<SoulofTime>(), 14));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<HerbalTeaBag>(), 40));
+                globalLoot.Add(ItemDropRule.ByCondition(new WillToChangeCondition(), ModContent.ItemType<HerbalTeaBag>(), 80));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsHardmodeDungeonCondition(), ModContent.ItemType<TheFirstNapkin>(), 40));
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsHardmodeDungeonCondition(), ModContent.ItemType<TheFirstNapkin>(), 80));
 
-                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCorruptionCondition(), ModContent.ItemType<SealedPokerDeck>(), 40));      //These two are world-alternates
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCorruptionCondition(), ModContent.ItemType<SealedPokerDeck>(), 80));      //These two are world-alternates
 
-                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCrimsonCondition(), ModContent.ItemType<UnderbossPhone>(), 40));
+                globalLoot.Add(ItemDropRule.ByCondition(new JoJoStandsCrimsonCondition(), ModContent.ItemType<UnderbossPhone>(), 80));
             }
-
-
-            /*IItemDropRule sunDropletRule = new LeadingConditionRule(new SunDropletCondition());
-            sunDropletRule.OnSuccess(new CommonDrop(ModContent.ItemType<SunDroplet>(), 10, 1, 3));
-            globalLoot.Add(sunDropletRule);
-
-            IItemDropRule willToFightRule = new LeadingConditionRule(new WillToFightCondition());
-            willToFightRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToFight>(), 14));
-            globalLoot.Add(willToFightRule);
-
-            IItemDropRule willToProtectRule = new LeadingConditionRule(new WillToProtectCondition());
-            willToProtectRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToProtect>(), 14));
-            globalLoot.Add(willToProtectRule);
-
-            IItemDropRule willToDestroyRule = new LeadingConditionRule(new WillToDestroyCondition());
-            willToDestroyRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToDestroy>(), 14));
-            globalLoot.Add(willToDestroyRule);
-
-            IItemDropRule willToControlRule = new LeadingConditionRule(new WillToControlCondition());
-            willToControlRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToControl>(), 14));
-            globalLoot.Add(willToControlRule);
-
-            IItemDropRule willToEscapeRule = new LeadingConditionRule(new WillToEscapeCondition());
-            willToEscapeRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToEscape>(), 14));
-            globalLoot.Add(willToEscapeRule);
-
-            IItemDropRule willToChangeRule = new LeadingConditionRule(new WillToChangeCondition());
-            willToChangeRule.OnSuccess(new CommonDrop(ModContent.ItemType<WillToChange>(), 14));
-            globalLoot.Add(willToChangeRule);
-
-            IItemDropRule soulOfTimeRule = new LeadingConditionRule(new SoulOfTimeCondition());
-            soulOfTimeRule.OnSuccess(new CommonDrop(ModContent.ItemType<SoulofTime>(), 14));
-            globalLoot.Add(soulOfTimeRule);*/
         }
+
+
 
         /*public override bool SpecialNPCLoot(NPC npc)
         {
@@ -845,6 +816,8 @@ namespace JoJoStands.NPCs
                 if (Main.rand.NextBool(4))
                     Item.NewItem(npc.GetSource_Loot(), npc.getRect(), ModContent.ItemType<DormantVirusSample>());
             }
+
+
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
             if (mPlayer.standOut && mPlayer.heyYaDropRateBonus > 0f) // && !npc.boss maybe
             {
@@ -852,6 +825,9 @@ namespace JoJoStands.NPCs
                 if (Main.rand.NextFloat() < chance)
                     npc.NPCLoot();
             }
+
+            if (taggedByButterfly)
+                npc.NPCLoot();
         }
 
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

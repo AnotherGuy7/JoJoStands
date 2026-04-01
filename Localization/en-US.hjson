@@ -3600,7 +3600,7 @@ Mods: {
 
 			PurpleHazeFinal: {
 				DisplayName: Purple Haze (Final Tier)
-				Tooltip: 
+				Tooltip:
 					'''
 					Punch enemies at a fast rate and right-click to chuck a Haze Capsule!
 					Special: Haze Execution
@@ -3614,28 +3614,39 @@ Mods: {
 
 			PurpleHazeT1: {
 				DisplayName: Purple Haze (Tier 1)
-				Tooltip: 
+				Tooltip:
 					'''
-					Punch enemies at a fast rate and right-click on empty space to create a Plunder Bubble or hold right-click on a tile to plant a bubble bomb!
-					Special: Bubble Offensive
-					Second Special: Bubble Barrier!
-					Passive: Bubble Generation
-					Bubble Offensive creates bubbles around Soft & Wet that can be manipulated.
-					Bubbles in Bubble Offensive mode can be detonated.
-					Bubbles in Bubble Offensive can plunder debuff effects from enemies and tiles.
-					Bubble Generation allows Soft & Wet to generate bubbles while barraging.
+					Send Purple Haze on a rampage toward your mouse.
+					Passive: Haze Capsules
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
 					Used in Stand Slot
 					'''
 			}
 
 			PurpleHazeT2: {
 				DisplayName: Purple Haze (Tier 2)
-				Tooltip: ""
+				Tooltip:
+					'''
+					Send Purple Haze on a rampage toward your mouse and right-click to chuck a Haze Capsule!
+					Passive: Haze Capsules
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
+					Used in Stand Slot
+					'''
 			}
 
 			PurpleHazeT3: {
 				DisplayName: Purple Haze (Tier 3)
-				Tooltip: ""
+				Tooltip:
+					'''
+					Punch enemies at a fast rate and right-click to chuck a Haze Capsule!
+					Passive: Haze Capsules
+					Second Special: Rampage
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
+					Used in Stand Slot
+					'''
 			}
 
 			HazeVirusFilter: {
@@ -3655,6 +3666,11 @@ Mods: {
 
 			HazeVirusAntidote: {
 				DisplayName: Haze Virus Antidote
+				Tooltip: ""
+			}
+
+			TommyGun: {
+				DisplayName: Tommy Gun
 				Tooltip: ""
 			}
 		}

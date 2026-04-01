@@ -13,12 +13,25 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 {
     public abstract class PurpleHazeStand : StandClass
     {
+        /// <summary>
+        /// Secondary
+        /// </summary>
         protected virtual bool CanThrowCapsule => false;
-        protected virtual bool CanReleaseVirus => false;
-        protected virtual bool CanInfectOnHit => false;
+        /// <summary>
+        /// Special
+        /// </summary>
         protected virtual bool CanAOEBurst => false;
+        /// <summary>
+        /// Second Special
+        /// </summary>
         protected virtual bool CanRampage => false;
+        /// <summary>
+        /// T1 has a lot of jitter, T2 has reduced jitter, T3 and above have no jitter
+        /// </summary>
         protected virtual bool HasJitter => false;
+        /// <summary>
+        /// T2 jitter mode
+        /// </summary>
         protected virtual bool HasReducedJitter => false;
 
         private bool specialActive = false;
@@ -570,7 +583,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 Projectile.owner
             );
 
-            if (CanReleaseVirus && capsulesToSpawn > 0)
+            if (capsulesToSpawn > 0)
             {
                 int virusCount = System.Math.Min(capsulesToSpawn, 8);
                 for (int i = 0; i < virusCount; i++)

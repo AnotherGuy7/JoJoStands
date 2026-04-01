@@ -1,5 +1,4 @@
 ﻿using Terraria;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 {
@@ -11,11 +10,8 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => false;
-        protected override bool CanReleaseVirus => false;
-        protected override bool CanInfectOnHit => false;
         protected override bool CanAOEBurst => false;
         protected override bool CanRampage => false;
-
         protected override bool HasJitter => true;
 
         public override void SetDefaults()
@@ -34,8 +30,6 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => true;
-        protected override bool CanReleaseVirus => true;
-        protected override bool CanInfectOnHit => false;
         protected override bool CanAOEBurst => false;
         protected override bool CanRampage => false;
         protected override bool HasJitter => true;
@@ -57,11 +51,8 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => true;
-        protected override bool CanReleaseVirus => true;
-        protected override bool CanInfectOnHit => true;
         protected override bool CanAOEBurst => true;
         protected override bool CanRampage => true;
-
         protected override bool HasJitter => false;
 
         public override void SetDefaults()
@@ -80,8 +71,6 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override float MaxDistance => 160f;
 
         protected override bool CanThrowCapsule => true;
-        protected override bool CanReleaseVirus => true;
-        protected override bool CanInfectOnHit => true;
         protected override bool CanAOEBurst => true;
         protected override bool CanRampage => true;
 
