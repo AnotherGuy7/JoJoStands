@@ -32,12 +32,10 @@ namespace JoJoStands.Items.Accessories
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<GreaterPlatinumAmuletOfEscape>())
-                .AddIngredient(ModContent.ItemType<GreaterPlatinumAmuletOfChange>())
-                .AddIngredient(ModContent.ItemType<WillToChange>(), 2)
-                .AddIngredient(ModContent.ItemType<WillToEscape>(), 2)
-                .AddIngredient(ItemID.Ectoplasm, 5)
-                .AddTile(ModContent.TileType<RemixTableTile>())
+                .AddIngredient(ItemID.Stinger, 4)
+                .AddIngredient(ModContent.ItemType<DormantVirusSample>(), 4)
+                .AddIngredient(ItemID.Ectoplasm, 2)
+                .AddTile(TileID.Anvils)
                 .Register();
         }
     }
