@@ -1,4 +1,3 @@
-using Humanizer;
 using JoJoStands.Dusts;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
