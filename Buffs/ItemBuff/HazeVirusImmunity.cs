@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using JoJoStands.Buffs.Debuffs;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Buffs.ItemBuff
@@ -20,8 +16,8 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void UpdateBuffOnPlayer(Player player)
         {
             // Continuously purge both haze debuffs while this buff is active
-            player.ClearBuff(ModContent.BuffType<Debuffs.HazeVirus>());
-            player.ClearBuff(ModContent.BuffType<Debuffs.ConcentratedHazeVirus>());
+            player.ClearBuff(ModContent.BuffType<HazeVirus>());
+            player.ClearBuff(ModContent.BuffType<ConcentratedHazeVirus>());
         }
     }
 }

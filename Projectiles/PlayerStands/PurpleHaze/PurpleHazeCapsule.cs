@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,6 +9,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
     public class PurpleHazeCapsule : ModProjectile
     {
         private ref float HasBurst => ref Projectile.ai[0];
+        private bool playedSound = false;
 
         public override void SetDefaults()
         {
@@ -24,6 +26,11 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
         public override void AI()
         {
+            if (!playedSound)
+            {
+                playedSound = true;
+                SoundEngine.PlaySound(SoundID.Item106.WithPitchOffset(0.8f), Projectile.Center);
+            }
             Projectile.velocity.Y += 0.55f;
 
             if (Projectile.velocity.Y > 22f)

@@ -130,8 +130,6 @@ namespace JoJoStands.NPCs
 
         public override void ModifyGlobalLoot(GlobalLoot globalLoot)
         {
-            if (taggedByButterfly)
-                globalLoot.
             if (!Main.npc[npcWhoAmI].SpawnedFromStatue)
             {
                 globalLoot.Add(ItemDropRule.ByCondition(new SunDropletCondition(), ModContent.ItemType<SunDroplet>(), 10, 1, 3));
@@ -813,10 +811,9 @@ namespace JoJoStands.NPCs
             }
             if (npc.HasBuff(ModContent.BuffType<HazeVirus>()) || npc.HasBuff(ModContent.BuffType<ConcentratedHazeVirus>()))
             {
-                if (Main.rand.NextBool(4))
+                if (Main.rand.NextBool(12))
                     Item.NewItem(npc.GetSource_Loot(), npc.getRect(), ModContent.ItemType<DormantVirusSample>());
             }
-
 
             MyPlayer mPlayer = Main.player[Main.myPlayer].GetModPlayer<MyPlayer>();
             if (mPlayer.standOut && mPlayer.heyYaDropRateBonus > 0f) // && !npc.boss maybe

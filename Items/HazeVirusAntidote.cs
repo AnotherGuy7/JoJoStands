@@ -1,5 +1,4 @@
 ﻿using JoJoStands.Items.CraftingMaterials;
-using JoJoStands.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

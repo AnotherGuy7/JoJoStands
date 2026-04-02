@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles
@@ -28,6 +30,7 @@ namespace JoJoStands.Projectiles
         private const int ExpansionTimeTicks = 60;
         private const int InitialBuffTicks = 20 * 60;
         private const int ConcentratedThresholdTicks = 10 * 60;
+        private bool playedSound = false;
 
         private readonly Dictionary<int, ulong> _infectionStartTick = new();
 
@@ -36,6 +39,12 @@ namespace JoJoStands.Projectiles
 
         public override void AI()
         {
+            if (!playedSound)
+            {
+                playedSound = true;
+                SoundEngine.PlaySound(SoundID.Item107.WithPitchOffset(1f), Projectile.Center);
+            }
+            Projectile.velocity *= 0.96f;
             int ticksElapsed = (30 * 60) - Projectile.timeLeft;
             float currentGasRange = MathHelper.Lerp(
                 0, MaxGasRange,

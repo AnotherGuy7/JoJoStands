@@ -507,17 +507,17 @@ Mods: {
 
 			HazeVirus: {
 				// DisplayName: Haze Virus
-				// Description: Mods.JoJoStands.Buffs.HazeVirus.Description
+				// Description: Purple Haze's Virus is degrading your body!
 			}
 
 			ConcentratedHazeVirus: {
 				// DisplayName: Concentrated Haze Virus
-				// Description: Mods.JoJoStands.Buffs.ConcentratedHazeVirus.Description
+				// Description: Purple Haze's Virus is rapidly devastating your body!
 			}
 
 			HazeVirusImmunity: {
 				// DisplayName: Haze Virus Immunity
-				// Description: Mods.JoJoStands.Buffs.HazeVirusImmunity.Description
+				// Description: Purple Haze's Virus will not affect you.
 			}
 		}
 
@@ -3611,51 +3611,70 @@ Mods: {
 				// DisplayName: Purple Haze (Tier 1)
 				/* Tooltip:
 					'''
-					Punch enemies at a fast rate and right-click on empty space to create a Plunder Bubble or hold right-click on a tile to plant a bubble bomb!
-					Special: Bubble Offensive
-					Second Special: Bubble Barrier!
-					Passive: Bubble Generation
-					Bubble Offensive creates bubbles around Soft & Wet that can be manipulated.
-					Bubbles in Bubble Offensive mode can be detonated.
-					Bubbles in Bubble Offensive can plunder debuff effects from enemies and tiles.
-					Bubble Generation allows Soft & Wet to generate bubbles while barraging.
+					Send Purple Haze on a rampage toward your mouse.
+					Passive: Haze Capsules
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
 					Used in Stand Slot
 					''' */
 			}
 
 			PurpleHazeT2: {
 				// DisplayName: Purple Haze (Tier 2)
-				// Tooltip: ""
+				/* Tooltip:
+					'''
+					Send Purple Haze on a rampage toward your mouse and right-click to chuck a Haze Capsule!
+					Passive: Haze Capsules
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
+					Used in Stand Slot
+					''' */
 			}
 
 			PurpleHazeT3: {
 				// DisplayName: Purple Haze (Tier 3)
-				// Tooltip: ""
+				/* Tooltip:
+					'''
+					Punch enemies at a fast rate and right-click to chuck a Haze Capsule!
+					Passive: Haze Capsules
+					Second Special: Rampage
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
+					Used in Stand Slot
+					''' */
 			}
 
 			HazeVirusFilter: {
 				// DisplayName: Haze Virus Filter
-				// Tooltip: ""
+				// Tooltip: Grants permanent immunity to the Haze Virus and Concentrated Haze Virus.
 			}
 
 			DormantVirusSample: {
 				// DisplayName: Dormant Virus Sample
-				// Tooltip: ""
+				// Tooltip: A capsule of inactive Haze Virus. It is unkown if the virus can activate again...
 			}
 
 			FlaskOfPurpleHaze: {
 				// DisplayName: Flask Of Purple Haze
-				// Tooltip: ""
+				// Tooltip: Dispense a cloud of Purple Haze's Virus! Throw at enemies, but not at yourself!
 			}
 
 			HazeVirusAntidote: {
 				// DisplayName: Haze Virus Antidote
-				// Tooltip: ""
+				/* Tooltip:
+					'''
+					Grants temporary immunity to the Haze Virus and Concentrated Haze Virus.
+					Consumed on use.
+					''' */
 			}
 
 			TommyGun: {
 				// DisplayName: Tommy Gun
-				// Tooltip: ""
+				/* Tooltip:
+					'''
+					Shoot at enemies to keep them away! Must be reloaded.
+					Experience goes up after each conquer...
+					''' */
 			}
 		}
 
@@ -4516,6 +4535,10 @@ Mods: {
 				Яре яре, ты действительно вышел за рамки своих возможностей. Я видел этот тип взрывной силы раньше, еще в Морио, но сейчас все изменилось. Развит. Это 'выходит за рамки' природы.
 				Твои пузыри - это не 'просто' пузыри. На самом деле они представляют собой тонкую линию, вращающуюся с невероятной скоростью. Если эта линия достигнет точки схода, никто не знает, чего твои пузыри могут достичь. Они могли превзойти саму природу. Как пугающе... Мало того, ты теперь можешь контролировать, когда пузыри будут взрываются, что было бы полезно для тебя, но не полезно для смертельно опасной цели.
 				'''
+			// PurpleHazeT1: How strange, your Stand seems to be more powerful than you can control. That virus in Purple Haze's hands looks like it could be both your greatest weapon yet your biggest weakness. Purple Haze is much stronger than your will in your current state, but learn to take control of your Stand and you will be one of the most deadly Stand Users I know.
+			// PurpleHazeT2: It seems you're getting your Stand under control... Or at least, starting to. That virus can decimate groups of enemies in the blink of an eye with how deadly it is, you can likely use that fact to destory enemies from a range. Keep trying to overcome your Stand's rage, you're improving, and will soon have control over your Stand.
+			// PurpleHazeT3: Good job getting Purple Haze under your control... At least, while it's not in a rampage. Now that you're able to control Purple Haze, I wonder how effective it would be to release all 6 Virus Capsules onto an enemy? You might end up with a much more potent form of that virus.
+			// PurpleHazeFinal: I was right. Now that you have Purple Haze under your control, that virus it carries is your greatest weapon. During rampages, I'm sure the virus is much stronger than normal. You've taken control of your Stand, but I wonder if you can take control of the virus somehow? Either way, I wouldn't want to have to ever face this ability.
 			/* VirtualInsanityT1:
 				'''
 				Good grief, that seems to be a Stand more versatile than most. The energy it radiates seems... different, to say the least.

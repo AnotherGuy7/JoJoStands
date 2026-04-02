@@ -14,7 +14,7 @@ namespace JoJoStands.Items
         public override string StandIdentifierName => "PurpleHaze";
         public override int StandTier => 4;
         public override Color StandTierDisplayColor => PurpleHazeTierColor;
-        public static Color PurpleHazeTierColor => new Color(81, 44, 123);
+        public static Color PurpleHazeTierColor => new Color(183, 111, 193);
 
 
         public override void SetStaticDefaults()

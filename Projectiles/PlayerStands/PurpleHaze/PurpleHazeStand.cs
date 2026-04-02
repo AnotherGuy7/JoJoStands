@@ -1,4 +1,5 @@
 ﻿using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -50,6 +51,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         private int jitterUpdateTimer = 0;
         private const int JitterUpdateInterval = 8;
         private const float JitterRadius = 80f;
+        private bool playedExplosionSound = false;
 
         public override float MaxDistance => 98f;
         public override int PunchDamage => 23;
@@ -58,15 +60,25 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         public override int FistID => Fists.PurpleHaze;
         public override int TierNumber => 1;
         public override string PoseSoundName => "PurpleHazePose";
-        public override string SpawnSoundName => "PurpleHaze";
         public override int AmountOfPunchVariants => 2;
         public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/PurpleHaze/PurpleHaze_Punch_";
         public override Vector2 PunchSize => new Vector2(44, 12);
+        public override int MinimumPunchSpeedForAfterImages => 11 + 4;
         public override bool CanUsePart4Dye => false;
         public override StandAttackType StandType => StandAttackType.Melee;
 
         private const int CapsuleRegenTime = 120;
         private int capsuleTimer = CapsuleRegenTime;
+        public static readonly SoundStyle PurpleHazeExplosionSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/PurpleHazeExplosion");
+        public override PunchSpawnData PunchData { get; } = new PunchSpawnData()
+        {
+            standardPunchOffset = new Vector2(12f, 0f),
+            minimumLifeTime = 5,
+            maximumLifeTime = 12,
+            minimumTravelDistance = 16,
+            maximumTravelDistance = 32,
+            bonusAfterimageAmount = 2
+        };
 
         public override void ExtraSpawnEffects()
         {
@@ -94,7 +106,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 capsuleTimer--;
                 if (capsuleTimer <= 0)
                 {
-                    if (mPlayer.purpleHazeCapsules <= 6)
+                    if (mPlayer.purpleHazeCapsules < 6)
                         mPlayer.purpleHazeCapsules++;
                     capsuleTimer = CapsuleRegenTime;
                 }
@@ -239,6 +251,8 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             );
             Main.projectile[projIndex].netUpdate = true;
             Projectile.netUpdate = true;
+            int afterImageAmount = (MinimumPunchSpeedForAfterImages - newPunchTime) + 1;
+            CreatePunchAfterImages(afterImageAmount);
         }
 
         private void StayBehindPoint(Vector2 worldPoint)
@@ -262,8 +276,9 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             attacking = true;
             currentAnimationState = AnimationState.SecondaryAbility;
 
-            Projectile.spriteDirection = Projectile.direction =
-                Main.MouseWorld.X > Projectile.Center.X ? 1 : -1;
+            int forcedDir = Main.MouseWorld.X > Projectile.Center.X ? 1 : -1;
+            Projectile.spriteDirection = Projectile.direction = forcedDir;
+            player.ChangeDir(forcedDir);
 
             StayBehind();
             currentAnimationState = AnimationState.SecondaryAbility;
@@ -300,7 +315,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
         private void TryStartSpecial()
         {
-            if (specialActive)
+            if (specialActive || playerHasAbilityCooldown)
                 return;
 
             NPC target = FindNearestTarget(
@@ -319,7 +334,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
             Main.player[Projectile.owner].AddBuff(
                 ModContent.BuffType<AbilityCooldown>(),
-                300
+                30 * 60
             );
 
             Projectile.netUpdate = true;
@@ -382,6 +397,15 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                         Main.rand.NextFloat(-shakeAmount, shakeAmount)
                     );
                 }
+
+                int soundFrame = 6;
+                if (JoJoStands.SoundsLoaded && Projectile.frame == soundFrame && !playedExplosionSound)
+                {
+                    playedExplosionSound = true;
+                    SoundEngine.PlaySound(PurpleHazeExplosionSound);
+                }
+                else if (Projectile.frame < soundFrame)
+                    playedExplosionSound = false;
 
                 if (Projectile.frame >= 10 && !burstFired)
                 {
@@ -570,7 +594,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             Player cloudPlayer = Main.player[Projectile.owner];
             MyPlayer cloudMPlayer = cloudPlayer.GetModPlayer<MyPlayer>();
 
-            int capsulesToSpawn = cloudMPlayer.purpleHazeCapsules;
+            int cloudsToSpawn = cloudMPlayer.purpleHazeCapsules;
             cloudMPlayer.purpleHazeCapsules = 0;
 
             Projectile.NewProjectile(
@@ -583,9 +607,9 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 Projectile.owner
             );
 
-            if (capsulesToSpawn > 0)
+            if (cloudsToSpawn > 0)
             {
-                int virusCount = System.Math.Min(capsulesToSpawn, 8);
+                int virusCount = System.Math.Min(cloudsToSpawn, 8);
                 for (int i = 0; i < virusCount; i++)
                 {
                     float angle = MathHelper.TwoPi / virusCount * i;
@@ -606,7 +630,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
         private void TryStartRampage()
         {
             rampageActive = true;
-            rampageDuration = TierNumber >= 4 ? 45 * 60 : 30 * 60;
+            rampageDuration = 10 * 60;
             rampageTarget = null;
             rampageCanHitPlayer = false;
             rampageTargetSwitchTimer = 0;
@@ -614,7 +638,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
 
             Main.player[Projectile.owner].AddBuff(
                 ModContent.BuffType<AbilityCooldown>(),
-                rampageDuration + 300
+                30 * 60
             );
 
             Projectile.netUpdate = true;
@@ -623,7 +647,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
             mPlayer.standHasNoPrimary = true;
-            player.AddBuff(ModContent.BuffType<Buffs.EffectBuff.Rampage>(), rampageDuration);
+            player.AddBuff(ModContent.BuffType<Rampage>(), rampageDuration);
         }
 
         private void HandleRampage()
