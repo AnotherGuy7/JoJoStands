@@ -1,26 +1,38 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using JoJoStands.Buffs.Debuffs;
-using Microsoft.Xna.Framework;
 
 namespace JoJoStands.Projectiles
 {
-    public class StandBullet : ModProjectile 
+    public class StandBullet : ModProjectile
     {
         public override string Texture { get { return "Terraria/Images/Projectile_" + ProjectileID.Bullet; } }
+        private int tileCollisionTimer = 0;
+        private Vector2 spawnPosition;
 
         public override void SetDefaults()
         {
             Projectile.aiStyle = ProjAIStyleID.Arrow;       //It's for bullets too
-            Projectile.friendly = true; 
+            Projectile.friendly = true;
             Projectile.timeLeft = 600;
             AIType = ProjectileID.Bullet;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()
         {
+            if (!Projectile.tileCollide)
+            {
+                if (spawnPosition == Vector2.Zero)
+                    spawnPosition = Projectile.Center;
+
+                tileCollisionTimer++;
+                if (tileCollisionTimer >= 30 || Vector2.Distance(Projectile.Center, spawnPosition) > 4f * 16f)
+                    Projectile.tileCollide = true;
+            }
+
             Lighting.AddLight(Projectile.Center, Color.Orange.ToVector3() * 0.4f);
         }
 
