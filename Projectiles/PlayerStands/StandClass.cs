@@ -40,21 +40,21 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public virtual void ExtraSetDefaults()
         { }
-        
+
         public override bool PreAI()
         {
             // Forces the penetration to -1 (infinite penetration).
             // This prevents the Stand projectile from being deleted by the system when it touches an enemy due to penetration loss.
-            Projectile.penetrate = -1; 
+            Projectile.penetrate = -1;
             return true; // Return true to allow the AI logic to continue.
         }
-        
+
         // This method determines whether the projectile can hit an NPC.
         public override bool? CanHitNPC(NPC target)
         {
             // Return false directly.
             // This means the "Stand Body" projectile will never deal contact damage to enemies.         
-            return false; 
+            return false;
         }
 
         // If the mod has PvP logic, it is best to disable PvP contact damage as well.
@@ -108,6 +108,7 @@ namespace JoJoStands.Projectiles.PlayerStands
         /// </summary>
         public virtual Vector2 StandOffset { get; } = new Vector2(15, 0);            //from an idle frame, get the first pixel from the left and standOffset = distance from that pixel you got to the right edge of the spritesheet - 38
         public virtual Vector2 ManualIdleHoverOffset { get; }
+        public virtual int MinimumPunchSpeedForAfterImages { get; } = 6;
         /// <summary>
         /// The size of all of the punch textures.
         /// </summary>
@@ -347,9 +348,9 @@ namespace JoJoStands.Projectiles.PlayerStands
             else
                 Projectile.velocity = Vector2.Zero;
 
-            if(playPunchSound)
+            if (playPunchSound)
                 PlayPunchSound();
-            
+
             if (shootCount <= 0)
             {
                 shootCount += newPunchTime;
@@ -364,30 +365,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 Main.projectile[projIndex].netUpdate = true;
             }
             LimitDistance();
-            if (afterImages && newPunchTime <= 6 && canUsePunchAfterImages)
+            if (afterImages && newPunchTime <= MinimumPunchSpeedForAfterImages && canUsePunchAfterImages)
             {
-                int afterImageAmount = ((6 - newPunchTime) / 2) + 1;
-                int amountOfPunches = Main.rand.Next(afterImageAmount, afterImageAmount + 1 + 1) + PunchData.bonusAfterimageAmount;
-                punchAfterImageAmount = amountOfPunches;
-                for (int i = 0; i < amountOfPunches; i++)
-                {
-                    bool behind = Main.rand.Next(0, 1 + 1) == 0;
-                    int verticalRange = PunchData.verticalPunchSpreadRange == 0 ? (HalfStandHeight - 6) : PunchData.verticalPunchSpreadRange;
-                    Vector2 punchOffset = new Vector2(PunchData.standardPunchOffset.X * Projectile.spriteDirection, PunchData.standardPunchOffset.Y + Main.rand.Next(-verticalRange, verticalRange + 1));
-                    PunchFrame punchFrame = new PunchFrame()
-                    {
-                        offset = punchOffset,
-                        targetOffset = punchOffset + new Vector2(Main.rand.Next(PunchData.minimumTravelDistance, PunchData.maximumTravelDistance + 1) * Projectile.spriteDirection, 0f),
-                        punchAnimationTimeStart = punchAnimationTimer,
-                        punchLifeTime = Main.rand.Next(PunchData.minimumLifeTime, PunchData.maximumLifeTime + 1),
-                        flipped = Main.rand.Next(0, 1 + 1) == 0,
-                        textureType = Main.rand.Next(0, AmountOfPunchVariants)
-                    };
-                    if (behind)
-                        backPunchFrames.Add(punchFrame);
-                    else
-                        frontPunchFrames.Add(punchFrame);
-                }
+                int afterImageAmount = ((MinimumPunchSpeedForAfterImages - newPunchTime) / 2) + 1;
+                CreatePunchAfterImages(afterImageAmount);
             }
             Projectile.netUpdate = true;
         }
@@ -443,30 +424,10 @@ namespace JoJoStands.Projectiles.PlayerStands
                 punchIndex = projIndex;
             }
             LimitDistance();
-            if (afterImages && newPunchTime <= 6 && canUsePunchAfterImages)
+            if (afterImages && newPunchTime <= MinimumPunchSpeedForAfterImages && canUsePunchAfterImages)
             {
-                int afterImageAmount = ((6 - newPunchTime) / 2) + 1;
-                int amountOfPunches = Main.rand.Next(afterImageAmount, afterImageAmount + 1 + 1) + PunchData.bonusAfterimageAmount;
-                punchAfterImageAmount = amountOfPunches;
-                for (int i = 0; i < amountOfPunches; i++)
-                {
-                    bool behind = Main.rand.Next(0, 1 + 1) == 0;
-                    int verticalRange = PunchData.verticalPunchSpreadRange == 0 ? (HalfStandHeight - 6) : PunchData.verticalPunchSpreadRange;
-                    Vector2 punchOffset = new Vector2(PunchData.standardPunchOffset.X * Projectile.spriteDirection, PunchData.standardPunchOffset.Y + Main.rand.Next(-verticalRange, verticalRange + 1));
-                    PunchFrame punchFrame = new PunchFrame()
-                    {
-                        offset = punchOffset,
-                        targetOffset = punchOffset + new Vector2(Main.rand.Next(PunchData.minimumTravelDistance, PunchData.maximumTravelDistance + 1) * Projectile.spriteDirection, 0f),
-                        punchAnimationTimeStart = punchAnimationTimer,
-                        punchLifeTime = Main.rand.Next(PunchData.minimumLifeTime, PunchData.maximumLifeTime + 1),
-                        flipped = Main.rand.Next(0, 1 + 1) == 0,
-                        textureType = Main.rand.Next(0, AmountOfPunchVariants)
-                    };
-                    if (behind)
-                        backPunchFrames.Add(punchFrame);
-                    else
-                        frontPunchFrames.Add(punchFrame);
-                }
+                int afterImageAmount = ((MinimumPunchSpeedForAfterImages - newPunchTime) / 2) + 1;
+                CreatePunchAfterImages(afterImageAmount);
             }
             Projectile.netUpdate = true;
             return punchIndex;
@@ -926,20 +887,11 @@ namespace JoJoStands.Projectiles.PlayerStands
             }
         }
 
-        public void UpdateForNonHost()
+        public void CreatePunchAfterImages(int afterImageAmount = 0)
         {
-            if (Main.dedServ)
-                return;
-
-            if (!nonOwnerInitCheck)
+            punchAfterImageAmount = afterImageAmount;
+            if (newPunchTime <= MinimumPunchSpeedForAfterImages && canUsePunchAfterImages)
             {
-                nonOwnerInitCheck = true;
-                SpawnEffects();
-            }
-            
-            if (punchAfterImageAmount != 0 && punchAnimationTimer > 0)
-            {
-                int afterImageAmount = punchAfterImageAmount;
                 int amountOfPunches = Main.rand.Next(afterImageAmount, afterImageAmount + 1 + 1) + PunchData.bonusAfterimageAmount;
                 for (int i = 0; i < amountOfPunches; i++)
                 {
@@ -961,6 +913,21 @@ namespace JoJoStands.Projectiles.PlayerStands
                         frontPunchFrames.Add(punchFrame);
                 }
             }
+        }
+
+        public void UpdateForNonHost()
+        {
+            if (Main.dedServ)
+                return;
+
+            if (!nonOwnerInitCheck)
+            {
+                nonOwnerInitCheck = true;
+                SpawnEffects();
+            }
+
+            if (punchAfterImageAmount != 0 && punchAnimationTimer > 0)
+                CreatePunchAfterImages(punchAfterImageAmount);
         }
 
         public void UpdateStandSync()

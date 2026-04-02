@@ -153,6 +153,9 @@ namespace JoJoStands
         public bool hotbarLocked = false;
         public bool playerJustHit = false;
         public bool collideY = false;
+        public int purpleHazeCapsules = 6;
+        public int purpleHazePunchCounter = 0;
+        public bool hazeVirusFilter = false;
 
         public bool immuneToTimestopEffects = false;
         public bool timestopActive;
@@ -417,6 +420,8 @@ namespace JoJoStands
             currentTextureDye = StandTextureDye.None;
             if (StandDyeSlot.SlotItem.ModItem is StandDye)
                 (StandDyeSlot.SlotItem.ModItem as StandDye).UpdateEquippedDye(Player);
+
+            hazeVirusFilter = false;
 
             standDamageBoosts = 1f;
             standRangeBoosts = 0f;
@@ -2129,6 +2134,8 @@ namespace JoJoStands
             sexPistolsTier = 0;
             standHasNoPrimary = false;
             stoneFreeWeaveAbilityActive = false;
+
+            purpleHazePunchCounter = 0;
 
             crazyDiamondRestorationMode = false;
             crazyDiamondDestroyedTileData.ForEach(DestroyedTileData.Restore);

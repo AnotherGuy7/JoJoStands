@@ -5,6 +5,7 @@ using JoJoStands.Projectiles;
 using JoJoStands.Projectiles.PlayerStands.Aerosmith;
 using JoJoStands.Projectiles.PlayerStands.Cream;
 using JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem;
+using JoJoStands.Projectiles.PlayerStands.PurpleHaze;
 using JoJoStands.Projectiles.PlayerStands.StarPlatinum;
 using JoJoStands.Projectiles.PlayerStands.TestStand;
 using JoJoStands.Projectiles.PlayerStands.TheWorld;
@@ -109,6 +110,7 @@ namespace JoJoStands
             VoidBar.VoidBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarBarOutlineTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBar_BarOutline", AssetRequestMode.ImmediateLoad);
             VoidBar.VoidBarBarTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/VoidBarBar", AssetRequestMode.ImmediateLoad);
+            CapsuleCounter.CapsuleCounterTexture = (Texture2D)Request<Texture2D>("JoJoStands/UI/PurpleHazeCounter", AssetRequestMode.ImmediateLoad);
             PolaroidTokenLayer.MenacingTextureSpritesheet = Request<Texture2D>("JoJoStands/Extras/MenacingIcons", AssetRequestMode.ImmediateLoad).Value;
 
             AerosmithStandFinal.AerosmithWhirrSoundEffect = (SoundEffect)Request<SoundEffect>("JoJoStands/Sounds/GameSounds/AerosmithWhirr", AssetRequestMode.ImmediateLoad);
@@ -139,6 +141,7 @@ namespace JoJoStands
                 ProjectileType<TrackerBubble>(),
                 ProjectileType<Projectiles.PlayerStands.Cream.Void>(),
                 ProjectileType<DashVoid>(),
+                ProjectileType<PurpleHazeCapsule>()
             };
 
             standTier1List = new List<int>
@@ -170,7 +173,8 @@ namespace JoJoStands
                 ItemType<SoftAndWetT1>(),
                 ItemType<EchoesAct0>(),
                 ItemType<ManhattanTransferT1>(),
-                ItemType<HeyYaT1>()
+                ItemType<HeyYaT1>(),
+                ItemType<PurpleHazeT1>()
             };
 
             timestopImmune = new List<int>()

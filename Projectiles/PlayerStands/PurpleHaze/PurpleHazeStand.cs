@@ -1,0 +1,981 @@
+﻿using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.EffectBuff;
+using JoJoStands.UI;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System.IO;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
+{
+    public abstract class PurpleHazeStand : StandClass
+    {
+        /// <summary>
+        /// Secondary
+        /// </summary>
+        protected virtual bool CanThrowCapsule => false;
+        /// <summary>
+        /// Special
+        /// </summary>
+        protected virtual bool CanAOEBurst => false;
+        /// <summary>
+        /// Second Special
+        /// </summary>
+        protected virtual bool CanRampage => false;
+        /// <summary>
+        /// T1 has a lot of jitter, T2 has reduced jitter, T3 and above have no jitter
+        /// </summary>
+        protected virtual bool HasJitter => false;
+        /// <summary>
+        /// T2 jitter mode
+        /// </summary>
+        protected virtual bool HasReducedJitter => false;
+
+        private bool specialActive = false;
+        private NPC specialTarget = null;
+        private bool specialAnimationStarted = false;
+        private bool burstFired = false;
+        private bool rampageActive = false;
+        private int rampageDuration = 0;
+        private NPC rampageTarget = null;
+        private float rampageDamageMultiplier = 1.75f;
+        private bool rampageCanHitPlayer = false;
+        private int rampageTargetSwitchTimer = 0;
+        private bool rampageAppliedDamageBoost = false;
+
+        private Vector2 jitterOffset = Vector2.Zero;
+        private int jitterUpdateTimer = 0;
+        private const int JitterUpdateInterval = 8;
+        private const float JitterRadius = 80f;
+        private bool playedExplosionSound = false;
+
+        public override float MaxDistance => 98f;
+        public override int PunchDamage => 23;
+        public override int PunchTime => 11;
+        public override int HalfStandHeight => 37;
+        public override int FistID => Fists.PurpleHaze;
+        public override int TierNumber => 1;
+        public override string PoseSoundName => "PurpleHazePose";
+        public override int AmountOfPunchVariants => 2;
+        public override string PunchTexturePath => "JoJoStands/Projectiles/PlayerStands/PurpleHaze/PurpleHaze_Punch_";
+        public override Vector2 PunchSize => new Vector2(44, 12);
+        public override int MinimumPunchSpeedForAfterImages => 11 + 4;
+        public override bool CanUsePart4Dye => false;
+        public override StandAttackType StandType => StandAttackType.Melee;
+
+        private const int CapsuleRegenTime = 120;
+        private int capsuleTimer = CapsuleRegenTime;
+        public static readonly SoundStyle PurpleHazeExplosionSound = new SoundStyle("JoJoStandsSounds/Sounds/SoundEffects/PurpleHazeExplosion");
+        public override PunchSpawnData PunchData { get; } = new PunchSpawnData()
+        {
+            standardPunchOffset = new Vector2(12f, 0f),
+            minimumLifeTime = 5,
+            maximumLifeTime = 12,
+            minimumTravelDistance = 16,
+            maximumTravelDistance = 32,
+            bonusAfterimageAmount = 2
+        };
+
+        public override void ExtraSpawnEffects()
+        {
+            CapsuleCounter.Visible = true;
+        }
+
+        public override void StandKillEffects()
+        {
+            CapsuleCounter.Visible = false;
+        }
+
+        public override void AI()
+        {
+            SelectAnimation();
+            UpdateStandInfo();
+            UpdateStandSync();
+            if (shootCount > 0)
+                shootCount--;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (capsuleTimer > 0)
+            {
+                capsuleTimer--;
+                if (capsuleTimer <= 0)
+                {
+                    if (mPlayer.purpleHazeCapsules < 6)
+                        mPlayer.purpleHazeCapsules++;
+                    capsuleTimer = CapsuleRegenTime;
+                }
+            }
+
+            if (mPlayer.standOut)
+                Projectile.timeLeft = 2;
+
+            if (HasJitter && Projectile.owner == Main.myPlayer)
+            {
+                jitterUpdateTimer--;
+                if (jitterUpdateTimer <= 0)
+                {
+                    jitterUpdateTimer = JitterUpdateInterval;
+                    float angle = Main.rand.NextFloat(MathHelper.TwoPi);
+                    float dist = Main.rand.NextFloat(JitterRadius * 0.3f, JitterRadius);
+                    jitterOffset = new Vector2(
+                        System.MathF.Cos(angle) * dist,
+                        System.MathF.Sin(angle) * dist
+                    );
+                }
+            }
+            else if (!HasJitter)
+            {
+                jitterOffset = Vector2.Zero;
+            }
+
+            if (specialActive)
+            {
+                HandleSpecialActive();
+                return;
+            }
+
+            if (!rampageActive && !specialActive)
+            {
+                if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual)
+                {
+                    if (Projectile.owner == Main.myPlayer)
+                    {
+                        if (Main.mouseLeft)
+                            Punch();
+                        else if (Main.mouseRight && CanThrowCapsule)
+                            SecondaryAttack();
+                        else
+                        {
+                            attacking = false;
+                            currentAnimationState = AnimationState.Idle;
+                        }
+
+                        if (CanAOEBurst && SpecialKeyPressed())
+                            TryStartSpecial();
+
+                        if (CanRampage && SecondSpecialKeyPressed() && !rampageActive)
+                            TryStartRampage();
+                    }
+
+                    if (!attacking)
+                        StayBehind();
+                }
+                else if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
+                    BasicPunchAI();
+
+                if (mPlayer.posing)
+                    currentAnimationState = AnimationState.Pose;
+            }
+
+            if (rampageActive)
+            {
+                HandleRampage();
+                return;
+            }
+        }
+
+        public new void Punch()
+        {
+            attacking = true;
+            currentAnimationState = AnimationState.Attack;
+
+            Vector2 attackTarget = Main.MouseWorld + jitterOffset;
+
+            Projectile.spriteDirection = Projectile.direction =
+                attackTarget.X > Projectile.Center.X ? 1 : -1;
+
+            StayBehindPoint(attackTarget);
+
+            if (shootCount > 0 || Projectile.owner != Main.myPlayer)
+                return;
+
+            shootCount = newPunchTime;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (HasJitter && Vector2.Distance(attackTarget, player.Center) <= 48f)
+            {
+                int dmg = newPunchDamage / 3;
+                mPlayer.purpleHazePunchCounter++;
+                if (mPlayer.purpleHazePunchCounter >= 3)
+                {
+                    mPlayer.purpleHazePunchCounter = 0;
+                    if (mPlayer.purpleHazeCapsules > 0)
+                    {
+                        mPlayer.purpleHazeCapsules--;
+                        Projectile.NewProjectile(
+                            Projectile.GetSource_FromThis(),
+                            player.Center,
+                            Vector2.Zero,
+                            ModContent.ProjectileType<HazeVirusCloud>(),
+                            0,
+                            0f,
+                            player.whoAmI
+                        );
+                    }
+                }
+                player.Hurt(
+                    Terraria.DataStructures.PlayerDeathReason.ByProjectile(Projectile.owner, Projectile.whoAmI),
+                    dmg,
+                    Projectile.direction,
+                    pvp: false,
+                    quiet: false,
+                    cooldownCounter: -1
+                );
+                return;
+            }
+
+            Vector2 shootVel = attackTarget - Projectile.Center;
+            if (shootVel == Vector2.Zero)
+                shootVel = new Vector2(Projectile.direction, 0f);
+            shootVel.Normalize();
+            shootVel *= ProjectileSpeed;
+
+            int projIndex = Projectile.NewProjectile(
+                Projectile.GetSource_FromThis(),
+                Projectile.Center,
+                shootVel,
+                ModContent.ProjectileType<Fists>(),
+                newPunchDamage,
+                PunchKnockback,
+                Projectile.owner,
+                FistID,
+                TierNumber
+            );
+            Main.projectile[projIndex].netUpdate = true;
+            Projectile.netUpdate = true;
+            int afterImageAmount = (MinimumPunchSpeedForAfterImages - newPunchTime) + 1;
+            CreatePunchAfterImages(afterImageAmount);
+        }
+
+        private void StayBehindPoint(Vector2 worldPoint)
+        {
+            Vector2 toPoint = worldPoint - Main.player[Projectile.owner].Center;
+            float dist = toPoint.Length();
+            if (dist > newMaxDistance)
+            {
+                toPoint.Normalize();
+                toPoint *= newMaxDistance;
+            }
+            Vector2 desired = Main.player[Projectile.owner].Center + toPoint;
+            Projectile.velocity = (desired - Projectile.Center) * 0.18f;
+        }
+
+        private void SecondaryAttack()
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            attacking = true;
+            currentAnimationState = AnimationState.SecondaryAbility;
+
+            int forcedDir = Main.MouseWorld.X > Projectile.Center.X ? 1 : -1;
+            Projectile.spriteDirection = Projectile.direction = forcedDir;
+            player.ChangeDir(forcedDir);
+
+            StayBehind();
+            currentAnimationState = AnimationState.SecondaryAbility;
+
+            if (shootCount > 0 || Projectile.owner != Main.myPlayer || mPlayer.purpleHazeCapsules <= 0)
+                return;
+
+            shootCount = 30;
+
+            Vector2 toMouse = Main.MouseWorld - Projectile.Center;
+            float horizontalDist = System.MathF.Abs(toMouse.X);
+
+            float throwSpeedX = 12f * Projectile.spriteDirection;
+            float timeToTarget = horizontalDist / System.MathF.Abs(throwSpeedX);
+            float throwSpeedY = (toMouse.Y - 0.5f * 0.55f * timeToTarget * timeToTarget) / timeToTarget;
+            throwSpeedY = MathHelper.Clamp(throwSpeedY, -18f, -2f);
+
+            Vector2 throwVelocity = new Vector2(throwSpeedX, throwSpeedY);
+
+            int projIndex = Projectile.NewProjectile(
+                Projectile.GetSource_FromThis(),
+                Projectile.Center,
+                throwVelocity,
+                ModContent.ProjectileType<PurpleHazeCapsule>(),
+                newPunchDamage,
+                2f,
+                Projectile.owner
+            );
+            SoundEngine.PlaySound(SoundID.Item1.WithPitchOffset(1f), Projectile.Center);
+            Main.projectile[projIndex].netUpdate = true;
+            Projectile.netUpdate = true;
+            mPlayer.purpleHazeCapsules--;
+        }
+
+        private void TryStartSpecial()
+        {
+            if (specialActive || playerHasAbilityCooldown)
+                return;
+
+            NPC target = FindNearestTarget(
+                MyPlayer.StandSearchTypeEnum.MostHealth,
+                newMaxDistance * 4f,
+                Vector2.Zero
+            );
+
+            if (target == null)
+                return;
+
+            specialActive = true;
+            specialTarget = target;
+            specialAnimationStarted = false;
+            burstFired = false;
+
+            Main.player[Projectile.owner].AddBuff(
+                ModContent.BuffType<AbilityCooldown>(),
+                30 * 60
+            );
+
+            Projectile.netUpdate = true;
+        }
+
+        private void HandleSpecialActive()
+        {
+            if (specialTarget == null || !specialTarget.active)
+            {
+                EndSpecial();
+                return;
+            }
+
+            if (!specialAnimationStarted)
+            {
+                currentAnimationState = AnimationState.Special;
+                Projectile.spriteDirection = Projectile.direction =
+                    specialTarget.Center.X > Projectile.Center.X ? 1 : -1;
+
+                Vector2 toTarget = specialTarget.Center - Projectile.Center;
+                toTarget.Normalize();
+                Projectile.velocity = toTarget * 18f;
+
+                if (Main.netMode != NetmodeID.Server)
+                {
+                    float shakeAmount = 2.5f;
+                    Projectile.position += new Vector2(
+                        Main.rand.NextFloat(-shakeAmount, shakeAmount),
+                        Main.rand.NextFloat(-shakeAmount, shakeAmount)
+                    );
+                }
+
+                float distToTarget = Vector2.Distance(Projectile.Center, specialTarget.Center);
+                if (distToTarget < 24f)
+                {
+                    specialAnimationStarted = true;
+                    Projectile.velocity = Vector2.Zero;
+                    Projectile.frame = 0;
+                    Projectile.frameCounter = 0;
+                    currentAnimationState = AnimationState.Special;
+                    Projectile.netUpdate = true;
+                }
+            }
+            else
+            {
+                currentAnimationState = AnimationState.Special;
+
+                Vector2 desiredPos = specialTarget.Center - new Vector2(Projectile.width / 2f, Projectile.height / 2f);
+                Projectile.position = Vector2.Lerp(Projectile.position, desiredPos, 0.25f);
+                Projectile.velocity = Vector2.Zero;
+
+                Projectile.spriteDirection = Projectile.direction =
+                    specialTarget.Center.X > Projectile.Center.X ? 1 : -1;
+
+                if (Main.netMode != NetmodeID.Server)
+                {
+                    float shakeAmount = 1.5f;
+                    Projectile.position += new Vector2(
+                        Main.rand.NextFloat(-shakeAmount, shakeAmount),
+                        Main.rand.NextFloat(-shakeAmount, shakeAmount)
+                    );
+                }
+
+                int soundFrame = 6;
+                if (JoJoStands.SoundsLoaded && Projectile.frame == soundFrame && !playedExplosionSound)
+                {
+                    playedExplosionSound = true;
+                    SoundEngine.PlaySound(PurpleHazeExplosionSound);
+                }
+                else if (Projectile.frame < soundFrame)
+                    playedExplosionSound = false;
+
+                if (Projectile.frame >= 10 && !burstFired)
+                {
+                    burstFired = true;
+                    if (Projectile.owner == Main.myPlayer)
+                        FireMushroomCloud();
+                }
+                if (Projectile.frame >= 12 && burstFired)
+                    EndSpecial();
+            }
+        }
+
+        private void FireMushroomCloud()
+        {
+            Vector2 blastCenter = specialTarget.Center;
+            float groundY = blastCenter.Y + specialTarget.height * 0.5f;
+
+            int shockwaveCount = 80;
+            for (int i = 0; i < shockwaveCount; i++)
+            {
+                float angle = MathHelper.TwoPi / shockwaveCount * i;
+                float hSpeed = System.MathF.Cos(angle) * Main.rand.NextFloat(28f, 48f);
+                float vSpeed = System.MathF.Sin(angle) * Main.rand.NextFloat(1f, 3f);
+                Vector2 vel = new Vector2(hSpeed, vSpeed);
+                int d = Dust.NewDust(new Vector2(blastCenter.X, groundY), 0, 0,
+                    DustID.PurpleTorch, vel.X, vel.Y,
+                    0, new Color(200, 100, 255), Main.rand.NextFloat(6f, 10f));
+                Main.dust[d].noGravity = true;
+                Main.dust[d].fadeIn = 0.08f;
+            }
+
+            int shockDebrisCount = 60;
+            for (int i = 0; i < shockDebrisCount; i++)
+            {
+                float angle = MathHelper.TwoPi / shockDebrisCount * i;
+                float hSpeed = System.MathF.Cos(angle) * Main.rand.NextFloat(20f, 40f);
+                float vSpeed = System.MathF.Abs(System.MathF.Sin(angle)) * Main.rand.NextFloat(-2f, 0f);
+                int d = Dust.NewDust(new Vector2(blastCenter.X, groundY + Main.rand.NextFloat(-8f, 8f)),
+                    0, 0, DustID.Smoke, hSpeed, vSpeed,
+                    240, new Color(90, 10, 150), Main.rand.NextFloat(3f, 6f));
+                Main.dust[d].noGravity = true;
+                Main.dust[d].fadeIn = 0.12f;
+            }
+
+            int concussionCount = 72;
+            for (int i = 0; i < concussionCount; i++)
+            {
+                float angle = MathHelper.TwoPi / concussionCount * i;
+                float speed = Main.rand.NextFloat(22f, 38f);
+                Vector2 vel = new Vector2(speed, 0f).RotatedBy(angle);
+                int d = Dust.NewDust(new Vector2(blastCenter.X, groundY), 4, 4,
+                    DustID.Smoke, vel.X, vel.Y,
+                    100, new Color(180, 50, 255), Main.rand.NextFloat(8f, 14f));
+                Main.dust[d].noGravity = true;
+            }
+
+            int baseCount = 90;
+            for (int i = 0; i < baseCount; i++)
+            {
+                float xOffset = Main.rand.NextFloat(-90f, 90f);
+                float riseSpeed = Main.rand.NextFloat(26f, 48f);
+                float wobble = xOffset * 0.06f + Main.rand.NextFloat(-2f, 2f);
+                int d = Dust.NewDust(
+                    new Vector2(blastCenter.X + xOffset, groundY + Main.rand.NextFloat(-10f, 20f)),
+                    6, 6, DustID.Smoke, wobble, -riseSpeed,
+                    130, new Color(160, 30, 230), Main.rand.NextFloat(9f, 16f));
+                Main.dust[d].noGravity = true;
+            }
+
+            int midCount = 80;
+            for (int i = 0; i < midCount; i++)
+            {
+                float xOffset = Main.rand.NextFloat(-55f, 55f);
+                float riseSpeed = Main.rand.NextFloat(22f, 40f);
+                float wobble = xOffset * 0.04f + Main.rand.NextFloat(-1.5f, 1.5f);
+                Vector2 spawnPos = new Vector2(blastCenter.X + xOffset,
+                    groundY - Main.rand.NextFloat(80f, 220f));
+                int d = Dust.NewDust(spawnPos, 6, 6, DustID.Smoke, wobble, -riseSpeed,
+                    140, new Color(140, 20, 210), Main.rand.NextFloat(8f, 14f));
+                Main.dust[d].noGravity = true;
+            }
+
+            int neckCount = 60;
+            for (int i = 0; i < neckCount; i++)
+            {
+                float xOffset = Main.rand.NextFloat(-30f, 30f);
+                float riseSpeed = Main.rand.NextFloat(18f, 32f);
+                Vector2 spawnPos = new Vector2(blastCenter.X + xOffset,
+                    groundY - Main.rand.NextFloat(200f, 380f));
+                int d = Dust.NewDust(spawnPos, 5, 5, DustID.Smoke, xOffset * 0.03f, -riseSpeed,
+                    150, new Color(120, 15, 190), Main.rand.NextFloat(7f, 12f));
+                Main.dust[d].noGravity = true;
+            }
+
+            int coreGlowCount = 48;
+            for (int i = 0; i < coreGlowCount; i++)
+            {
+                float xOffset = Main.rand.NextFloat(-12f, 12f);
+                float riseSpeed = Main.rand.NextFloat(28f, 50f);
+                float yAlong = Main.rand.NextFloat(0f, 400f);
+                int d = Dust.NewDust(
+                    new Vector2(blastCenter.X + xOffset, groundY - yAlong),
+                    0, 0, DustID.PurpleTorch, xOffset * 0.02f, -riseSpeed,
+                    0, new Color(220, 120, 255), Main.rand.NextFloat(8f, 16f));
+                Main.dust[d].noGravity = true;
+                Main.dust[d].fadeIn = 0.02f;
+            }
+
+            float capOriginY = blastCenter.Y - 480f;
+
+            int capBellyCount = 70;
+            for (int i = 0; i < capBellyCount; i++)
+            {
+                float xOffset = Main.rand.NextFloat(-140f, 140f);
+                float curve = -(xOffset * xOffset) * 0.0012f;
+                Vector2 spawnPos = new Vector2(blastCenter.X + xOffset,
+                    capOriginY + 60f + curve + Main.rand.NextFloat(0f, 30f));
+                Vector2 vel = new Vector2(xOffset * 0.055f, Main.rand.NextFloat(-4f, -1f));
+                int d = Dust.NewDust(spawnPos, 10, 10, DustID.Smoke, vel.X, vel.Y,
+                    180, new Color(80, 10, 130), Main.rand.NextFloat(10f, 16f));
+                Main.dust[d].noGravity = true;
+            }
+
+            int capCount = 110;
+            for (int i = 0; i < capCount; i++)
+            {
+                float t = (float)i / (capCount - 1);
+                float angle = MathHelper.ToRadians(-180f + 180f * t);
+                float speed = Main.rand.NextFloat(14f, 30f);
+                Vector2 vel = new Vector2(System.MathF.Cos(angle), System.MathF.Sin(angle)) * speed;
+                Vector2 spawnPos = new Vector2(
+                    blastCenter.X + Main.rand.NextFloat(-40f, 40f),
+                    capOriginY + Main.rand.NextFloat(-30f, 30f)
+                );
+                int d = Dust.NewDust(spawnPos, 12, 12, DustID.Smoke, vel.X, vel.Y,
+                    120, new Color(170, 40, 240), Main.rand.NextFloat(12f, 20f));
+                Main.dust[d].noGravity = true;
+            }
+
+            int capRimCount = 60;
+            for (int i = 0; i < capRimCount; i++)
+            {
+                float t = (float)i / (capRimCount - 1);
+                float angle = MathHelper.ToRadians(-160f + 160f * t);
+                float speed = Main.rand.NextFloat(22f, 38f);
+                Vector2 vel = new Vector2(System.MathF.Cos(angle), System.MathF.Sin(angle)) * speed;
+                Vector2 spawnPos = new Vector2(
+                    blastCenter.X + Main.rand.NextFloat(-50f, 50f),
+                    capOriginY + Main.rand.NextFloat(-40f, 10f)
+                );
+                int d = Dust.NewDust(spawnPos, 14, 14, DustID.Smoke, vel.X, vel.Y,
+                    100, new Color(200, 60, 255), Main.rand.NextFloat(14f, 22f));
+                Main.dust[d].noGravity = true;
+            }
+
+            int glowCount = 56;
+            for (int i = 0; i < glowCount; i++)
+            {
+                float angle = MathHelper.TwoPi / glowCount * i;
+                float speed = Main.rand.NextFloat(12f, 26f);
+                Vector2 vel = new Vector2(System.MathF.Cos(angle), System.MathF.Sin(angle)) * speed;
+                int d = Dust.NewDust(
+                    new Vector2(blastCenter.X, capOriginY), 0, 0,
+                    DustID.PurpleTorch, vel.X, vel.Y,
+                    0, default, Main.rand.NextFloat(14f, 24f));
+                Main.dust[d].noGravity = true;
+                Main.dust[d].fadeIn = 0.03f;
+            }
+
+            int lingerCount = 80;
+            for (int i = 0; i < lingerCount; i++)
+            {
+                Vector2 spawnOffset = new Vector2(
+                    Main.rand.NextFloat(-160f, 160f),
+                    Main.rand.NextFloat(-500f, 60f)
+                );
+                Vector2 vel = new Vector2(
+                    Main.rand.NextFloat(-1.5f, 1.5f),
+                    Main.rand.NextFloat(-2f, -0.3f)
+                );
+                int d = Dust.NewDust(blastCenter + spawnOffset, 0, 0, DustID.Smoke, vel.X, vel.Y,
+                    230, new Color(60, 5, 100), Main.rand.NextFloat(5f, 9f));
+                Main.dust[d].noGravity = true;
+            }
+
+            Player cloudPlayer = Main.player[Projectile.owner];
+            MyPlayer cloudMPlayer = cloudPlayer.GetModPlayer<MyPlayer>();
+
+            int cloudsToSpawn = cloudMPlayer.purpleHazeCapsules;
+            cloudMPlayer.purpleHazeCapsules = 0;
+
+            Projectile.NewProjectile(
+                Projectile.GetSource_FromThis(),
+                blastCenter,
+                Vector2.Zero,
+                ModContent.ProjectileType<HazeVirusCloud>(),
+                newPunchDamage * 3,
+                0f,
+                Projectile.owner
+            );
+
+            if (cloudsToSpawn > 0)
+            {
+                int virusCount = System.Math.Min(cloudsToSpawn, 8);
+                for (int i = 0; i < virusCount; i++)
+                {
+                    float angle = MathHelper.TwoPi / virusCount * i;
+                    Vector2 virusVel = new Vector2(ProjectileSpeed * 0.6f, 0f).RotatedBy(angle);
+                    Projectile.NewProjectile(
+                        Projectile.GetSource_FromThis(),
+                        blastCenter,
+                        virusVel,
+                        ModContent.ProjectileType<HazeVirusCloud>(),
+                        newPunchDamage * 2,
+                        0f,
+                        Projectile.owner
+                    );
+                }
+            }
+        }
+
+        private void TryStartRampage()
+        {
+            rampageActive = true;
+            rampageDuration = 10 * 60;
+            rampageTarget = null;
+            rampageCanHitPlayer = false;
+            rampageTargetSwitchTimer = 0;
+            rampageAppliedDamageBoost = false;
+
+            Main.player[Projectile.owner].AddBuff(
+                ModContent.BuffType<AbilityCooldown>(),
+                30 * 60
+            );
+
+            Projectile.netUpdate = true;
+            Projectile.tileCollide = false;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.standHasNoPrimary = true;
+            player.AddBuff(ModContent.BuffType<Rampage>(), rampageDuration);
+        }
+
+        private void HandleRampage()
+        {
+            if (rampageDuration <= 0)
+            {
+                EndRampage();
+                return;
+            }
+
+            rampageDuration--;
+            rampageTargetSwitchTimer--;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (!rampageAppliedDamageBoost)
+            {
+                rampageAppliedDamageBoost = true;
+                newPunchDamage = (int)(newPunchDamage * rampageDamageMultiplier);
+            }
+            else
+            {
+                newPunchDamage = (int)(PunchDamage * mPlayer.standDamageBoosts * rampageDamageMultiplier);
+            }
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                if (Main.rand.NextBool(3))
+                {
+                    Dust.NewDust(
+                        Projectile.Center - new Vector2(Projectile.width / 2f, HalfStandHeight),
+                        Projectile.width,
+                        HalfStandHeight * 2,
+                        DustID.PurpleTorch,
+                        Main.rand.NextFloat(-2f, 2f),
+                        Main.rand.NextFloat(-3f, -1f),
+                        0,
+                        new Color(200, 100, 255),
+                        Main.rand.NextFloat(1.2f, 2.2f)
+                    );
+                }
+            }
+
+            if (rampageTargetSwitchTimer <= 0)
+            {
+                rampageTargetSwitchTimer = 40;
+                rampageTarget = FindRampageTarget(player);
+                rampageCanHitPlayer = rampageTarget == null;
+            }
+
+            if (!rampageCanHitPlayer && (rampageTarget == null || !rampageTarget.active || rampageTarget.life <= 0))
+            {
+                rampageTarget = FindRampageTarget(player);
+                rampageCanHitPlayer = rampageTarget == null;
+            }
+
+            if (!rampageCanHitPlayer && rampageTarget != null)
+            {
+                attacking = true;
+                currentAnimationState = AnimationState.Attack;
+                Projectile.spriteDirection = Projectile.direction =
+                    rampageTarget.Center.X > Projectile.Center.X ? 1 : -1;
+
+                Vector2 toTarget = rampageTarget.Center - Projectile.Center;
+                float dist = toTarget.Length();
+
+                if (dist > 24f)
+                {
+                    toTarget.Normalize();
+                    Projectile.velocity = toTarget * 6f;
+                }
+                else
+                {
+                    Projectile.velocity = Vector2.Zero;
+                    if (shootCount <= 0 && Projectile.owner == Main.myPlayer)
+                    {
+                        shootCount += newPunchTime;
+
+                        if (rampageTarget.townNPC || rampageTarget.friendly)
+                        {
+                            NPC.HitInfo hitInfo = new NPC.HitInfo()
+                            {
+                                Damage = newPunchDamage,
+                                Knockback = PunchKnockback,
+                                HitDirection = Projectile.direction,
+                                Crit = false
+                            };
+                            rampageTarget.StrikeNPC(hitInfo);
+                            Player rampagePlayer = Main.player[Projectile.owner];
+                            MyPlayer rampageMPlayer = rampagePlayer.GetModPlayer<MyPlayer>();
+                            rampageMPlayer.purpleHazePunchCounter++;
+                            if (rampageMPlayer.purpleHazePunchCounter >= 3)
+                            {
+                                rampageMPlayer.purpleHazePunchCounter = 0;
+                                if (rampageMPlayer.purpleHazeCapsules > 0)
+                                {
+                                    rampageMPlayer.purpleHazeCapsules--;
+                                    Projectile.NewProjectile(
+                                        Projectile.GetSource_FromThis(),
+                                        rampageTarget.Center,
+                                        Vector2.Zero,
+                                        ModContent.ProjectileType<HazeVirusCloud>(),
+                                        0,
+                                        0f,
+                                        Projectile.owner
+                                    );
+                                }
+                            }
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, rampageTarget.whoAmI);
+                        }
+                        else
+                        {
+                            Vector2 shootVel = rampageTarget.Center - Projectile.Center;
+                            if (shootVel == Vector2.Zero)
+                                shootVel = new Vector2(0f, 1f);
+                            shootVel.Normalize();
+                            shootVel *= ProjectileSpeed;
+
+                            int projIndex = Projectile.NewProjectile(
+                                Projectile.GetSource_FromThis(),
+                                Projectile.Center,
+                                shootVel,
+                                ModContent.ProjectileType<Fists>(),
+                                newPunchDamage,
+                                PunchKnockback,
+                                Projectile.owner,
+                                FistID,
+                                TierNumber
+                            );
+                            Main.projectile[projIndex].netUpdate = true;
+                            Projectile.netUpdate = true;
+
+                            Player rampagePlayer = Main.player[Projectile.owner];
+                            MyPlayer rampageMPlayer = rampagePlayer.GetModPlayer<MyPlayer>();
+                            if (rampageMPlayer.purpleHazeCapsules > 0)
+                            {
+                                if (shootCount % (newPunchTime * 3) == 0)
+                                {
+                                    rampageMPlayer.purpleHazeCapsules--;
+                                    Projectile.NewProjectile(
+                                        Projectile.GetSource_FromThis(),
+                                        rampageTarget.Center,
+                                        Vector2.Zero,
+                                        ModContent.ProjectileType<HazeVirusCloud>(),
+                                        0,
+                                        0f,
+                                        Projectile.owner
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (rampageCanHitPlayer)
+            {
+                attacking = true;
+                currentAnimationState = AnimationState.Attack;
+                Projectile.spriteDirection = Projectile.direction =
+                    player.Center.X > Projectile.Center.X ? 1 : -1;
+
+                Vector2 toPlayer = player.Center - Projectile.Center;
+                float dist = toPlayer.Length();
+
+                if (dist > 24f)
+                {
+                    toPlayer.Normalize();
+                    Projectile.velocity = toPlayer * 14f;
+                }
+                else
+                {
+                    Projectile.velocity = Vector2.Zero;
+                    if (shootCount <= 0 && Projectile.owner == Main.myPlayer)
+                    {
+                        shootCount += newPunchTime;
+                        int dmg = newPunchDamage / 3;
+                        player.Hurt(
+                            Terraria.DataStructures.PlayerDeathReason.ByProjectile(Projectile.owner, Projectile.whoAmI),
+                            dmg,
+                            Projectile.direction,
+                            pvp: false,
+                            quiet: false,
+                            cooldownCounter: -1
+                        );
+                    }
+                }
+            }
+
+            LimitDistance(newMaxDistance * 6f);
+        }
+
+        private NPC FindRampageTarget(Player player)
+        {
+            float maxRange = newMaxDistance * 8f;
+
+            NPC bestEnemy = null;
+            float closestEnemyDist = maxRange;
+
+            NPC bestTownNPC = null;
+            float closestTownDist = maxRange;
+
+            for (int n = 0; n < Main.maxNPCs; n++)
+            {
+                NPC npc = Main.npc[n];
+                if (!npc.active || npc.life <= 0)
+                    continue;
+
+                float dist = Vector2.Distance(npc.Center, Projectile.Center);
+
+                if (!npc.friendly && !npc.townNPC && npc.lifeMax > 5 && !npc.immortal && !npc.hide && npc.CanBeChasedBy(this, false))
+                {
+                    if (dist < closestEnemyDist)
+                    {
+                        closestEnemyDist = dist;
+                        bestEnemy = npc;
+                    }
+                }
+                else if (npc.townNPC || npc.friendly)
+                {
+                    if (dist < closestTownDist)
+                    {
+                        closestTownDist = dist;
+                        bestTownNPC = npc;
+                    }
+                }
+            }
+
+            if (bestEnemy != null)
+                return bestEnemy;
+
+            if (bestTownNPC != null)
+                return bestTownNPC;
+
+            return null;
+        }
+
+        private void EndRampage()
+        {
+            rampageActive = false;
+            rampageTarget = null;
+            rampageDuration = 0;
+            rampageCanHitPlayer = false;
+            rampageTargetSwitchTimer = 0;
+            rampageAppliedDamageBoost = false;
+            attacking = false;
+            currentAnimationState = AnimationState.Idle;
+            Projectile.tileCollide = true;
+            Projectile.velocity = Vector2.Zero;
+            Projectile.netUpdate = true;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            mPlayer.standHasNoPrimary = false;
+            player.ClearBuff(ModContent.BuffType<Buffs.EffectBuff.Rampage>());
+        }
+
+        private void EndSpecial()
+        {
+            specialActive = false;
+            specialTarget = null;
+            specialAnimationStarted = false;
+            burstFired = false;
+            attacking = false;
+            currentAnimationState = AnimationState.Idle;
+            Projectile.velocity = Vector2.Zero;
+            Projectile.netUpdate = true;
+        }
+
+        public override void OnDyeChanged()
+        {
+            punchTextures = new Texture2D[AmountOfPunchVariants];
+            for (int v = 0; v < AmountOfPunchVariants; v++)
+                punchTextures[v] = ModContent.Request<Texture2D>(PunchTexturePath + (v + 1), AssetRequestMode.ImmediateLoad).Value;
+        }
+
+        public override void SelectAnimation()
+        {
+            if (oldAnimationState != currentAnimationState)
+            {
+                Projectile.frame = 0;
+                Projectile.frameCounter = 0;
+                oldAnimationState = currentAnimationState;
+                Projectile.netUpdate = true;
+            }
+
+            if (currentAnimationState == AnimationState.Idle)
+                PlayAnimation("Idle");
+            else if (currentAnimationState == AnimationState.Attack)
+                PlayAnimation("Attack");
+            else if (currentAnimationState == AnimationState.SecondaryAbility)
+                PlayAnimation("CapsuleShot");
+            else if (currentAnimationState == AnimationState.Special)
+                PlayAnimation("Special");
+            else if (currentAnimationState == AnimationState.Pose)
+                PlayAnimation("Pose");
+        }
+
+        public override void PlayAnimation(string animationName)
+        {
+            if (Main.netMode != NetmodeID.Server)
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/PurpleHaze", "PurpleHaze_" + animationName);
+
+            if (animationName == "Idle")
+                AnimateStand(animationName, 4, 12, true);
+            else if (animationName == "Attack")
+                AnimateStand(animationName, 6, newPunchTime / 2, true);
+            else if (animationName == "CapsuleShot")
+                AnimateStand(animationName, 11, 15, true);
+            else if (animationName == "Special")
+                AnimateStand(animationName, 13, 15, false);
+            else if (animationName == "Pose")
+                AnimateStand(animationName, 1, 600, true);
+        }
+
+        public override void SendExtraStates(BinaryWriter writer)
+        {
+            writer.Write(rampageActive);
+            writer.Write(rampageDuration);
+            writer.Write(rampageCanHitPlayer);
+        }
+
+        public override void ReceiveExtraStates(BinaryReader reader)
+        {
+            rampageActive = reader.ReadBoolean();
+            rampageDuration = reader.ReadInt32();
+            rampageCanHitPlayer = reader.ReadBoolean();
+        }
+    }
+}

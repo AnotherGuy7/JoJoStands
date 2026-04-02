@@ -504,6 +504,21 @@ Mods: {
 				DisplayName: Stray Cat
 				Description: A Stand born from means unknown, but it fights for you!
 			}
+
+			HazeVirus: {
+				DisplayName: Haze Virus
+				Description: Purple Haze's Virus is degrading your body!
+			}
+
+			ConcentratedHazeVirus: {
+				DisplayName: Concentrated Haze Virus
+				Description: Purple Haze's Virus is rapidly devastating your body!
+			}
+
+			HazeVirusImmunity: {
+				DisplayName: Haze Virus Immunity
+				Description: Purple Haze's Virus will not affect you.
+			}
 		}
 
 		Items: {
@@ -2274,7 +2289,7 @@ Mods: {
 			}
 
 			HeyYaFinal: {
-				DisplayName: Hey Ya (Final Tier)
+				DisplayName: Hey Ya! (Final Tier)
 				Tooltip:
 					'''
 					Just by association with it, increase your luck!
@@ -2285,7 +2300,7 @@ Mods: {
 			}
 
 			HeyYaT1: {
-				DisplayName: Hey Ya (Tier 1)
+				DisplayName: Hey Ya! (Tier 1)
 				Tooltip:
 					'''
 					Just by association with it, increase your luck!
@@ -2295,7 +2310,7 @@ Mods: {
 			}
 
 			HeyYaT2: {
-				DisplayName: Hey Ya (Tier 2)
+				DisplayName: Hey Ya! (Tier 2)
 				Tooltip:
 					'''
 					Just by association with it, increase your luck!
@@ -2306,7 +2321,7 @@ Mods: {
 			}
 
 			HeyYaT3: {
-				DisplayName: Hey Ya (Tier 3)
+				DisplayName: Hey Ya! (Tier 3)
 				Tooltip:
 					'''
 					Just by association with it, increase your luck!
@@ -3582,6 +3597,90 @@ Mods: {
 					Punching enemies with Stands can infect enemies with a virus.
 					'''
 			}
+
+			PurpleHazeFinal: {
+				DisplayName: Purple Haze (Final Tier)
+				Tooltip:
+					'''
+					Punch enemies at a fast rate and right-click to chuck a Haze Capsule!
+					Special: Haze Execution
+					Second Special: Rampage
+					Passive: Haze Capsules
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
+					Used in Stand Slot
+					'''
+			}
+
+			PurpleHazeT1: {
+				DisplayName: Purple Haze (Tier 1)
+				Tooltip:
+					'''
+					Send Purple Haze on a rampage toward your mouse.
+					Passive: Haze Capsules
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
+					Used in Stand Slot
+					'''
+			}
+
+			PurpleHazeT2: {
+				DisplayName: Purple Haze (Tier 2)
+				Tooltip:
+					'''
+					Send Purple Haze on a rampage toward your mouse and right-click to chuck a Haze Capsule!
+					Passive: Haze Capsules
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
+					Used in Stand Slot
+					'''
+			}
+
+			PurpleHazeT3: {
+				DisplayName: Purple Haze (Tier 3)
+				Tooltip:
+					'''
+					Punch enemies at a fast rate and right-click to chuck a Haze Capsule!
+					Passive: Haze Capsules
+					Second Special: Rampage
+					Melee hits landed on entities will create Haze Clouds that infect all entities that interact with the cloud!
+					Haze Clouds will linger for 10s and will spread the virus to nearby entities.
+					Used in Stand Slot
+					'''
+			}
+
+			HazeVirusFilter: {
+				DisplayName: Haze Virus Filter
+				Tooltip: Grants permanent immunity to the Haze Virus and Concentrated Haze Virus.
+			}
+
+			DormantVirusSample: {
+				DisplayName: Dormant Virus Sample
+				Tooltip: A capsule of inactive Haze Virus. It is unkown if the virus can activate again...
+			}
+
+			FlaskOfPurpleHaze: {
+				DisplayName: Flask Of Purple Haze
+				Tooltip: Dispense a cloud of Purple Haze's Virus! Throw at enemies, but not at yourself!
+			}
+
+			HazeVirusAntidote: {
+				DisplayName: Haze Virus Antidote
+				Tooltip:
+					'''
+					Grants temporary immunity to the Haze Virus and Concentrated Haze Virus.
+					Consumed on use.
+					'''
+			}
+
+			TommyGun: {
+				DisplayName: Tommy Gun
+				Tooltip:
+					'''
+					Shoot at enemies to keep them away! Must be reloaded.
+					Experience goes up after each conquer...
+					'''
+			}
 		}
 
 		NPCs: {
@@ -3906,6 +4005,14 @@ Mods: {
 			HeyYaStandT3.DisplayName: Hey Ya Stand T3
 			HeyYaStandT4.DisplayName: Hey Ya Stand T4
 			HeyYaStandT5.DisplayName: Hey Ya Stand T5
+			PurpleHazeStandFinal.DisplayName: Purple Haze Stand Final
+			PurpleHazeStandT1.DisplayName: Purple Haze Stand T1
+			PurpleHazeStandT2.DisplayName: Purple Haze Stand T2
+			PurpleHazeStandT3.DisplayName: Purple Haze Stand T3
+			HazeVirusCloud.DisplayName: Haze Virus Cloud
+			PurpleHazeCapsule.DisplayName: Purple Haze Capsule
+			FlaskOfPurpleHazeProj.DisplayName: Flask Of Purple Haze Proj
+			HazeVirusCloudFlask.DisplayName: Haze Virus Cloud Flask
 		}
 
 		Biomes: {
@@ -4429,6 +4536,10 @@ Mods: {
 				Good grief, you really did go beyond your normal capabilities. I've seen this type of explosive power before, back in Morioh, but it's changed. Evolved. It 'goes beyond' nature.
 				Your bubbles are not 'just' bubbles. They're actually a thin line spinning at incredible speeds. If this line reaches a vanishing point, there's no telling what your bubbles can achieve. They could transcend logic, itself. How terrifying... Not only that, you can control when they explode, which would be useful for you and deadly for the target.
 				'''
+			PurpleHazeT1: How strange, your Stand seems to be more powerful than you can control. That virus in Purple Haze's hands looks like it could be both your greatest weapon yet your biggest weakness. Purple Haze is much stronger than your will in your current state, but learn to take control of your Stand and you will be one of the most deadly Stand Users I know.
+			PurpleHazeT2: It seems you're getting your Stand under control... Or at least, starting to. That virus can decimate groups of enemies in the blink of an eye with how deadly it is, you can likely use that fact to destory enemies from a range. Keep trying to overcome your Stand's rage, you're improving, and will soon have control over your Stand.
+			PurpleHazeT3: Good job getting Purple Haze under your control... At least, while it's not in a rampage. Now that you're able to control Purple Haze, I wonder how effective it would be to release all 6 Virus Capsules onto an enemy? You might end up with a much more potent form of that virus.
+			PurpleHazeFinal: I was right. Now that you have Purple Haze under your control, that virus it carries is your greatest weapon. During rampages, I'm sure the virus is much stronger than normal. You've taken control of your Stand, but I wonder if you can take control of the virus somehow? Either way, I wouldn't want to have to ever face this ability.
 			VirtualInsanityT1:
 				'''
 				Good grief, that seems to be a Stand more versatile than most. The energy it radiates seems... different, to say the least.

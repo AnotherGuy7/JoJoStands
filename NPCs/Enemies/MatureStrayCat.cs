@@ -1,6 +1,7 @@
 using JoJoStands.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -75,7 +76,7 @@ namespace JoJoStands.NPCs.Enemies
                     int projIndex = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center.X, NPC.Center.Y, shootVel.X, shootVel.Y, ModContent.ProjectileType<AirBubble>(), NPC.damage, 1f);
                     Main.projectile[projIndex].netUpdate = true;
                     NPC.ai[2] = 2f;
-
+                    SoundEngine.PlaySound(SoundID.Item85.WithPitchOffset(-0.4f), NPC.Center);
                 }
             }
             if (target.position.X > NPC.position.X)

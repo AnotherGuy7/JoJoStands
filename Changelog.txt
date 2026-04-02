@@ -1,8 +1,4 @@
-- Added Manhattan Transfer Stand (thanks Ozi!)
-- Sheer Heart Attack now works properly again
-- Minor update for Fan Stand compatibility
-- Stone Free has a new icon (thanks 64x64Stacks!)
-- Added a special pose for Hierophant Green's Special (thanks Cryo!)
-- Adjusted vampire life steal logic to better accommodate mods that extend past 500 health (Thanks lyttbm!)
-- Code cleanup for new developers
-- Fixed a bug where Stands may accidentally touch NPCs and die (Thanks lyttbm!)
+- Added Hey Ya! Stand (thanks Ozi!)
+- Manhattan Transfer now has a relative positioning mode
+- Manhattan Transfer can now be obtained via Pucci and the Arrow Shard
+- Fixed bug with Subworld Library where the Viral Meteorite lands in every subworld
