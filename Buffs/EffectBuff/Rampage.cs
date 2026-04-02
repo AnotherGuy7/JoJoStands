@@ -18,6 +18,9 @@ namespace JoJoStands.Buffs.EffectBuff
 
         public override void UpdateBuffOnPlayer(Player player)
         {
+            if (!player.GetModPlayer<MyPlayer>().standOut)
+                player.ClearBuff(Type);
+
             player.GetModPlayer<MyPlayer>().standDamageBoosts += 0.5f;
             player.GetModPlayer<MyPlayer>().standSpeedBoosts += 2;
             player.moveSpeed *= 0.5f;
