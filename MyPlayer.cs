@@ -1626,13 +1626,26 @@ namespace JoJoStands
 
                 if (p.ModProjectile is AnubisStand anubis)
                 {
-                    float stackBonus = anubis.AdaptationStacks * 0.008f;
-                    float total = anubis.BaseMeleeSpeedBonusValue + stackBonus;
-                    Player.GetAttackSpeed(DamageClass.Melee) += total;
+                    bool holdingAnubisBlade = Player.HeldItem.type == ModContent.ItemType<AnubisBladeItem>();
+                    float boostMultiplier = holdingAnubisBlade ? 1.3f : 1.0f;
+
+                    float stackDamage = anubis.AdaptationStacks * 0.01f;
+                    float totalDamage = (anubis.BaseMeleeDamageBonusValue + stackDamage) * boostMultiplier;
+                    Player.GetDamage(DamageClass.Melee) += totalDamage;
+
+                    float stackSpeed = anubis.AdaptationStacks * 0.008f;
+                    float totalSpeed = (anubis.BaseMeleeSpeedBonusValue + stackSpeed) * boostMultiplier;
+                    Player.GetAttackSpeed(DamageClass.Melee) += totalSpeed;
+
+                    float stackCrit = anubis.AdaptationStacks * 0.20f;
+                    float totalCrit = (anubis.BaseCritBonusValue + stackCrit) * boostMultiplier;
+                    Player.GetCritChance(DamageClass.Melee) += totalCrit;
+
                     break;
                 }
             }
         }
+
         private void UpdateShaderStates()
         {
             if (!Main.dedServ && Player.whoAmI == Main.myPlayer)      //if (this isn't the (dedicated server?)) cause shaders don't exist serverside

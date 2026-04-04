@@ -1,4 +1,5 @@
 ﻿using JoJoStands.Buffs.EffectBuff;
+using JoJoStands.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -177,17 +178,20 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
 
         private void ApplyPlayerBoosts(Player player, MyPlayer mPlayer)
         {
-            float stackDamageBonus = Math.Min(AdaptationStacks * DamagePerStack, 1.0f);
-            float totalDamageBonus = BaseMeleeDamageBonusValue + stackDamageBonus;
+            bool holdingAnubisBlade = player.HeldItem.type == ModContent.ItemType<AnubisBladeItem>();
+            float boostMultiplier = holdingAnubisBlade ? 1.3f : 1.0f;
 
+            float stackDamageBonus = Math.Min(AdaptationStacks * DamagePerStack, 1.0f);
+            float totalDamageBonus = (BaseMeleeDamageBonusValue + stackDamageBonus) * boostMultiplier;
             mPlayer.standDamageBoosts += totalDamageBonus;
 
             float stackSpeedBonus = AdaptationStacks * SpeedPerStack;
-            int speedTicks = (int)(BaseMeleeSpeedBonusValue + stackSpeedBonus * 60f);
+            int speedTicks = (int)((BaseMeleeSpeedBonusValue + stackSpeedBonus * 60f) * boostMultiplier);
             mPlayer.standSpeedBoosts += speedTicks;
 
             float stackCritBonus = AdaptationStacks * CritPerStack;
-            mPlayer.standCritChangeBoosts += BaseCritBonusValue + stackCritBonus;
+            float totalCrit = (BaseCritBonusValue + stackCritBonus) * boostMultiplier;
+            mPlayer.standCritChangeBoosts += totalCrit;
         }
 
         private static bool IsHoldingMeleeWeapon(Player player)
