@@ -1,16 +1,18 @@
 using JoJoStands.Buffs.AccessoryBuff;
-using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Buffs.Debuffs;
+using JoJoStands.Buffs.EffectBuff;
 using JoJoStands.Items;
 using JoJoStands.Networking;
+using JoJoStands.NPCs;
+using JoJoStands.Projectiles.PlayerStands.Anubis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
 using Terraria.WorldBuilding;
 
 namespace JoJoStands.Projectiles
@@ -257,6 +259,26 @@ namespace JoJoStands.Projectiles
             if (kickedBySexPistols)
                 Dust.NewDust(Projectile.Center + Projectile.velocity, Projectile.width, Projectile.height, DustID.TreasureSparkle, Projectile.velocity.X * -0.3f, Projectile.velocity.Y * -0.3f);
 
+            if (Projectile.active && !Projectile.friendly && Projectile.hostile)
+            {
+                for (int i = 0; i < Main.maxPlayers; i++)
+                {
+                    AnubisStand anubis = AnubisGlobalNPC.FindAnubisStand(i);
+                    if (anubis == null || !anubis.IsInParryPerfectWindow()) continue;
+
+                    if (Vector2.Distance(Projectile.Center, player.Center) > 180f) continue;
+
+                    Projectile.velocity = -Projectile.velocity;
+                    Projectile.friendly = true;
+                    Projectile.hostile = false;
+                    Projectile.owner = i;
+                    Projectile.damage = (int)(Projectile.damage * 1.5f);
+
+                    SoundEngine.PlaySound(SoundID.Item37, player.Center);
+                    break;
+                }
+            }
+
             return true;
         }
 
@@ -292,6 +314,13 @@ namespace JoJoStands.Projectiles
                 modifiers.FinalDamage *= 0.35f;
             else if (mPlayer.StandSlot.SlotItem.type == ModContent.ItemType<DollyDaggerT2>())
                 modifiers.FinalDamage *= 0.7f;
+            AnubisStand anubis = AnubisGlobalNPC.FindAnubisStand(target.whoAmI);
+            if (anubis == null) return;
+
+            if (anubis.IsInParryPerfectWindow())
+                modifiers.FinalDamage *= 0f;
+            else if (anubis.IsInParryGoodWindow())
+                modifiers.FinalDamage *= 0.5f;
         }
 
         public override void OnHitPlayer(Projectile projectile, Player target, Player.HurtInfo info)

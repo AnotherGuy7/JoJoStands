@@ -27,8 +27,11 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
 
         private const int ArmorShredHitsPerPoint = 3;
         private const int ArmorShredMaxReduction = 20;
-        private const int ParryCritWindowDuration = 180;
-        private const int ParryCooldown = 60;
+        private const int ParryPerfectDuration = 20;
+        private const int ParryGoodDuration = 60;
+        private const int ParryCooldown = 150;
+        private int _parryPerfectTimer;
+        private int _parryGoodTimer;
         private const float ParryRadius = 180f;
         private const int DashDuration = 14;
         private const float DashSpeed = 22f;
@@ -160,7 +163,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
 
             if (_dashTimer > 0)
                 _animState = AnubisAnim.Dash;
-            else if (_parryCooldownTimer > ParryCooldown - 20)
+            else if (IsInParryAnyWindow() || _parryCooldownTimer > ParryCooldown - 20)
                 _animState = AnubisAnim.Parry;
             else
                 _animState = AnubisAnim.Idle;
@@ -170,7 +173,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
             if (_dashTimer <= 0)
                 FollowBehindPlayer(player);
 
-            if (_parryCritTimer > 0 && Main.GameUpdateCount % 12 == 0 && Main.netMode != NetmodeID.Server)
+            if (IsInParryAnyWindow() && Main.GameUpdateCount % 12 == 0 && Main.netMode != NetmodeID.Server)
                 SpawnCritWindowDust();
 
             UpdateStandSync();
@@ -262,32 +265,35 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
         {
             if (_parryCooldownTimer > 0) _parryCooldownTimer--;
             if (_dashCooldownTimer > 0) _dashCooldownTimer--;
-            if (_parryCritTimer > 0) _parryCritTimer--;
+
+            if (_parryPerfectTimer > 0)
+            {
+                _parryPerfectTimer--;
+                if (_parryPerfectTimer == 0)
+                    _parryGoodTimer = ParryGoodDuration;
+            }
+            else if (_parryGoodTimer > 0)
+                _parryGoodTimer--;
         }
 
         private void TryParry(Player player)
         {
-            Projectile reflected = FindParryTarget(player);
-
-            if (reflected != null)
-            {
-                reflected.velocity = -reflected.velocity;
-                reflected.friendly = true;
-                reflected.hostile = false;
-                reflected.owner = Projectile.owner;
-                reflected.damage = (int)(reflected.damage * 1.5f);
-            }
+            _parryPerfectTimer = ParryPerfectDuration;
+            _parryGoodTimer = 0;
+            _parryCooldownTimer = ParryCooldown;
 
             int stackBonus = MaxAdaptationStacks / 2;
             AdaptationStacks = Math.Min(AdaptationStacks + stackBonus, MaxAdaptationStacks);
             _stackDecayTimer = StackDecayDelay;
-            _parryCritTimer = ParryCritWindowDuration;
-            _parryCooldownTimer = ParryCooldown;
 
             SoundEngine.PlaySound(SoundID.Item37, player.Center);
             SpawnParryDust(player.Center);
             Projectile.netUpdate = true;
         }
+
+        public bool IsInParryPerfectWindow() => _parryPerfectTimer > 0;
+        public bool IsInParryGoodWindow() => _parryPerfectTimer == 0 && _parryGoodTimer > 0;
+        public bool IsInParryAnyWindow() => _parryPerfectTimer > 0 || _parryGoodTimer > 0;
 
         private static Projectile FindParryTarget(Player player)
         {
@@ -450,14 +456,16 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
         {
             writer.Write((byte)_animState);
             writer.Write((byte)AdaptationStacks);
-            writer.Write(_parryCritTimer > 0);
+            writer.Write((byte)Math.Min(_parryPerfectTimer, 255));
+            writer.Write((byte)Math.Min(_parryGoodTimer, 255));
         }
 
         public override void ReceiveExtraStates(BinaryReader reader)
         {
             _animState = (AnubisAnim)reader.ReadByte();
             AdaptationStacks = reader.ReadByte();
-            _parryCritTimer = reader.ReadBoolean() ? ParryCritWindowDuration : 0;
+            _parryPerfectTimer = reader.ReadByte();
+            _parryGoodTimer = reader.ReadByte();
         }
 
         public override void OnKill(global::System.Int32 timeLeft)
