@@ -12,6 +12,7 @@ using JoJoStands.Networking;
 using JoJoStands.NPCs;
 using JoJoStands.Projectiles;
 using JoJoStands.Projectiles.PlayerStands;
+using JoJoStands.Projectiles.PlayerStands.Anubis;
 using JoJoStands.Projectiles.PlayerStands.BadCompany;
 using JoJoStands.Projectiles.PlayerStands.ManhattanTransfer;
 using JoJoStands.Projectiles.PlayerStands.SilverChariot;
@@ -1617,6 +1618,20 @@ namespace JoJoStands
             standDamageBoosts = Player.GetDamage(DamageClass.Generic).ApplyTo(standDamageBoosts);
             if (standDodgeChance > 30f)
                 standDodgeChance = 30f;
+
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile p = Main.projectile[i];
+                if (!p.active || p.owner != Player.whoAmI) continue;
+
+                if (p.ModProjectile is AnubisStand anubis)
+                {
+                    float stackBonus = anubis.AdaptationStacks * 0.008f;
+                    float total = anubis.BaseMeleeSpeedBonusValue + stackBonus;
+                    Player.GetAttackSpeed(DamageClass.Melee) += total;
+                    break;
+                }
+            }
         }
         private void UpdateShaderStates()
         {
