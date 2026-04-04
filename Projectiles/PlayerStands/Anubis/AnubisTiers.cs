@@ -5,6 +5,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
 {
     public class AnubisStandT1 : AnubisStand
     {
+        public override int MaxAdaptationStacks => 25;
         protected override string TextureRoot => "JoJoStands/Projectiles/PlayerStands/Anubis/Anubis";
         protected override int IdleFrameCount => 2;
         public override float DashDamageMultiplier => 1.7f;
@@ -15,6 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
 
     public class AnubisStandT2 : AnubisStand
     {
+        public override int MaxAdaptationStacks => 50;
         protected override string TextureRoot => "JoJoStands/Projectiles/PlayerStands/Anubis/Anubis";
         protected override int IdleFrameCount => 2;
         public override float DashDamageMultiplier => 1.9f;
@@ -25,6 +27,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
 
     public class AnubisStandT3 : AnubisStand
     {
+        public override int MaxAdaptationStacks => 75;
         protected override string TextureRoot => "JoJoStands/Projectiles/PlayerStands/Anubis/Anubis";
         protected override int IdleFrameCount => 2;
         public override float DashDamageMultiplier => 2.1f;
@@ -35,6 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
 
     public class AnubisStandT4 : AnubisStand
     {
+        public override int MaxAdaptationStacks => 100;
         protected override string TextureRoot => "JoJoStands/Projectiles/PlayerStands/Anubis/Anubis";
         protected override int IdleFrameCount => 2;
         public override float DashDamageMultiplier => 2.5f;

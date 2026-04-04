@@ -23,6 +23,7 @@ namespace JoJoStands.Buffs.EffectBuff
         {
             Player player = Main.LocalPlayer;
             int stacks = 0;
+            int maxStacks = 0;
 
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
@@ -31,6 +32,7 @@ namespace JoJoStands.Buffs.EffectBuff
                 if (p.ModProjectile is AnubisStand anubis)
                 {
                     stacks = anubis.AdaptationStacks;
+                    maxStacks = anubis.MaxAdaptationStacks;
                     break;
                 }
             }
@@ -42,7 +44,7 @@ namespace JoJoStands.Buffs.EffectBuff
             tip = $"Melee damage: +{dmgBonus:0}%\n" +
                   $"Attack speed: +{speedBonus:0.0}%\n" +
                   $"Crit chance:  +{critBonus:0.0}%\n" +
-                  $"Adaptation stacks: {stacks} / {AnubisStand.MaxAdaptationStacks}";
+                  $"Adaptation stacks: {stacks} / {maxStacks}";
         }
     }
 }

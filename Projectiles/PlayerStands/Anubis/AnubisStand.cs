@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
         public bool IsStandActive => Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standOut
                              && IsHoldingMeleeWeapon(Main.player[Projectile.owner]);
 
-        public const int MaxAdaptationStacks = 100;
+        public abstract int MaxAdaptationStacks { get; }
         private const int StackDecayDelay = 120;
         private const int StackDecayRate = 30;
 
