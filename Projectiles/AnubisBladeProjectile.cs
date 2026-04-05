@@ -20,7 +20,7 @@ namespace JoJoStands.Projectiles
             Projectile.DamageType = DamageClass.Melee;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
-            Projectile.ownerHitCheck = true;
+            Projectile.ownerHitCheck = false;
             Projectile.aiStyle = -1;
             Projectile.scale = 2.5f;
             Projectile.usesLocalNPCImmunity = true;
