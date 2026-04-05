@@ -9,19 +9,20 @@ namespace JoJoStands.NPCs.Enemies
 {
     public class PossessedFarmer : ModNPC
     {
-        private enum State { Roam = 0, Windup = 1, Shoot = 2, Lunge = 3 }
+        private enum State { Roam = 0, Windup = 1, Shoot = 2, Backstep = 3 }
 
         private const float PreferredDist = 240f;
         private const float TooCloseDist = 150f;
         private const float ShootRange = 350f;
-        private const float LungeRange = 200f;
+        private const float BackstepRange = 200f;
 
         private const int WindupDuration = 30;
         private const int ShotsPerBurst = 3;
         private const int FramePerShot = 8;
         private const int RoamCooldown = 120;
-        private const int LungeDuration = 28;
-        private const float LungeSpeed = 11f;
+        private const int BackstepDuration = 100;
+        private const int BackstepCooldown = 180;
+        private const float BackstepSpeed = 30f;
 
         private ref float StateTimer => ref NPC.ai[0];
         private ref float CurrentState => ref NPC.ai[1];
@@ -52,7 +53,6 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void AI()
         {
-            // ── gravity ──────────────────────────────────────────────
             if (!NPC.noGravity)
                 NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y + 0.4f, -20f, 16f);
 
@@ -64,7 +64,10 @@ namespace JoJoStands.NPCs.Enemies
             float dist = toPlayer.Length();
             Vector2 dirToPlayer = dist > 0.001f ? Vector2.Normalize(toPlayer) : Vector2.UnitX;
 
-            NPC.spriteDirection = dirToPlayer.X >= 0 ? 1 : -1;
+            NPC.spriteDirection = dirToPlayer.X >= 0 ? -1 : 1;
+
+            if (localAI[1] > 0) localAI[1]--;
+
             StateTimer++;
 
             switch ((State)(int)CurrentState)
@@ -72,28 +75,51 @@ namespace JoJoStands.NPCs.Enemies
                 case State.Roam: DoRoam(dist, dirToPlayer); break;
                 case State.Windup: DoWindup(dist, dirToPlayer); break;
                 case State.Shoot: DoShoot(dirToPlayer); break;
-                case State.Lunge: DoLunge(); break;
+                case State.Backstep: DoBackstep(); break;
             }
         }
+
+        private float[] localAI => NPC.localAI;
 
         private void DoRoam(float dist, Vector2 dirToPlayer)
         {
             if (dist < TooCloseDist)
+            {
                 NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, -dirToPlayer.X * 3f, 0.15f);
-            else if (dist > PreferredDist)
-                NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, dirToPlayer.X * 2.5f, 0.13f);
+
+                if (localAI[2] == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    localAI[2] = 1;
+                    float spread = MathHelper.ToRadians(Main.rand.NextFloat(-8f, 8f));
+                    Vector2 shootDir = dirToPlayer.RotatedBy(spread);
+                    Projectile.NewProjectile(
+                        NPC.GetSource_FromAI(),
+                        NPC.Center,
+                        shootDir * 11f,
+                        ModContent.ProjectileType<AnubisBladeNPCProjectile>(),
+                        40, 3f, Main.myPlayer);
+                    NPC.netUpdate = true;
+                }
+            }
             else
-                NPC.velocity.X *= 0.88f;
+            {
+                localAI[2] = 0;
+
+                if (dist > PreferredDist)
+                    NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, dirToPlayer.X * 2.5f, 0.13f);
+                else
+                    NPC.velocity.X *= 0.88f;
+            }
 
             if (NPC.collideX)
                 NPC.velocity.Y = -5f;
 
             if (StateTimer < RoamCooldown) return;
 
-            if (dist <= LungeRange)
+            if (dist <= BackstepRange && localAI[1] <= 0)
             {
-                TransitionTo(State.Lunge);
-                NPC.localAI[0] = dirToPlayer.X;
+                localAI[0] = dirToPlayer.X;
+                TransitionTo(State.Backstep);
             }
             else if (dist <= ShootRange)
             {
@@ -107,12 +133,6 @@ namespace JoJoStands.NPCs.Enemies
             if (dist > ShootRange * 1.3f)
             {
                 TransitionTo(State.Roam);
-                return;
-            }
-            if (dist <= LungeRange)
-            {
-                TransitionTo(State.Lunge);
-                NPC.localAI[0] = dirToPlayer.X;
                 return;
             }
 
@@ -142,9 +162,7 @@ namespace JoJoStands.NPCs.Enemies
                     NPC.Center,
                     shootDir * 11f,
                     ModContent.ProjectileType<AnubisBladeNPCProjectile>(),
-                    40,
-                    3f,
-                    Main.myPlayer
+                    40, 3f, Main.myPlayer
                 );
             }
 
@@ -155,20 +173,43 @@ namespace JoJoStands.NPCs.Enemies
                 TransitionTo(State.Roam);
         }
 
-        private void DoLunge()
+        private void DoBackstep()
         {
             if (StateTimer == 1)
             {
-                float lungeX = NPC.localAI[0] >= 0 ? 1f : -1f;
-                NPC.velocity.X = lungeX * LungeSpeed;
-                NPC.velocity.Y = -3.5f;
+                float awayX = localAI[0] >= 0 ? -1f : 1f;
+                NPC.velocity.X = awayX * BackstepSpeed;
+                NPC.velocity.Y = -5f;
                 NPC.netUpdate = true;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    Vector2 dustVel = new Vector2(
+                        Main.rand.NextFloat(-2f, 2f),
+                        Main.rand.NextFloat(-3f, -1f));
+                    int d = Dust.NewDust(NPC.position, NPC.width, NPC.height,
+                        DustID.Smoke, dustVel.X, dustVel.Y, 120, default, 1.3f);
+                    Main.dust[d].noGravity = true;
+                }
             }
 
-            NPC.velocity.X *= 0.94f;
+            if (NPC.collideX && StateTimer > 1 && StateTimer < BackstepDuration - 4)
+                NPC.velocity.Y = -6f;
 
-            if (StateTimer >= LungeDuration)
+            if (StateTimer % 3 == 0)
+            {
+                int d = Dust.NewDust(NPC.position, NPC.width, NPC.height,
+                    DustID.Smoke, -NPC.velocity.X * 0.4f, 0f, 100, default, 1f);
+                Main.dust[d].noGravity = true;
+            }
+
+            NPC.velocity.X *= 0.92f;
+
+            if (StateTimer >= BackstepDuration)
+            {
+                localAI[1] = BackstepCooldown;
                 TransitionTo(State.Roam);
+            }
         }
 
         private void TransitionTo(State next)
