@@ -274,6 +274,8 @@ namespace JoJoStands.Projectiles
                     Projectile.owner = i;
                     Projectile.damage = (int)(Projectile.damage * 1.5f);
 
+                    anubis.GrantPerfectParryStacks();
+
                     SoundEngine.PlaySound(SoundID.Item37, player.Center);
                     break;
                 }

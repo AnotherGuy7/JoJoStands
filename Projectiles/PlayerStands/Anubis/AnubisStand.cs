@@ -57,7 +57,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
         private AnubisAnim _oldAnimState = AnubisAnim.Idle;
 
         protected abstract string TextureRoot { get; }
-        protected virtual int IdleFrameCount => 2;
+        protected virtual int IdleFrameCount => 6;
         protected virtual int IdleFrameSpeed => 12;
         public override int PunchDamage => 0;
         public override int ProjectileDamage => 0;
@@ -108,15 +108,51 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                standTexture = (Texture2D)ModContent.Request<Texture2D>(
-                    TextureRoot + "_" + animationName);
-
+                standTexture = ModContent.Request<Texture2D>(TextureRoot + "_" + animationName).Value;
                 int frameCount = animationName == "Idle" ? IdleFrameCount : 4;
                 Projectile.height = standTexture.Height / frameCount;
             }
-
             int fc = animationName == "Idle" ? IdleFrameCount : 4;
             AnimateStand(animationName, fc, IdleFrameSpeed, true);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            if (standTexture == null) return false;
+
+            int frameHeight = Projectile.height;
+            Rectangle frame = new Rectangle(0, Projectile.frame * frameHeight, standTexture.Width, frameHeight);
+
+            Vector2 origin = new Vector2(standTexture.Width / 2f, frameHeight / 2f);
+            Vector2 drawPos = Projectile.Center - Main.screenPosition;
+
+            int fadeStartY = (int)(frameHeight * 0.70f);
+
+            for (int y = 0; y < frameHeight; y++)
+            {
+                float alpha;
+                if (y < fadeStartY)
+                    alpha = 0.85f;
+                else
+                    alpha = 0.6f * (1f - (float)(y - fadeStartY) / (frameHeight - fadeStartY));
+
+                Rectangle rowSrc = new Rectangle(frame.X, frame.Y + y, standTexture.Width, 1);
+                Vector2 rowPos = drawPos + new Vector2(0f, y - frameHeight / 2f);
+
+                Main.EntitySpriteDraw(
+                    standTexture,
+                    rowPos,
+                    rowSrc,
+                    lightColor * alpha,
+                    Projectile.rotation,
+                    new Vector2(standTexture.Width / 2f, 0f),
+                    Projectile.scale,
+                    Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                    0
+                );
+            }
+
+            return false;
         }
 
         public override void AI()
@@ -160,13 +196,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
                     DecayOneStack();
                 }
             }
-
-            if (_dashTimer > 0)
-                _animState = AnubisAnim.Dash;
-            else if (IsInParryAnyWindow() || _parryCooldownTimer > ParryCooldown - 20)
-                _animState = AnubisAnim.Parry;
-            else
-                _animState = AnubisAnim.Idle;
+            _animState = AnubisAnim.Idle;
 
             SelectAnimation();
 
@@ -281,13 +311,18 @@ namespace JoJoStands.Projectiles.PlayerStands.Anubis
             _parryPerfectTimer = ParryPerfectDuration;
             _parryGoodTimer = 0;
             _parryCooldownTimer = ParryCooldown;
-
-            int stackBonus = MaxAdaptationStacks / 2;
-            AdaptationStacks = Math.Min(AdaptationStacks + stackBonus, MaxAdaptationStacks);
             _stackDecayTimer = StackDecayDelay;
 
             SoundEngine.PlaySound(SoundID.Item37, player.Center);
             SpawnParryDust(player.Center);
+            Projectile.netUpdate = true;
+        }
+
+        public void GrantPerfectParryStacks()
+        {
+            int grant = Math.Max(1, MaxAdaptationStacks / 4);
+            AdaptationStacks = Math.Min(AdaptationStacks + grant, MaxAdaptationStacks);
+            _stackDecayTimer = StackDecayDelay;
             Projectile.netUpdate = true;
         }
 

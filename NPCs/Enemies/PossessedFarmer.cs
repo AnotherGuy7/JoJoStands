@@ -9,6 +9,25 @@ namespace JoJoStands.NPCs.Enemies
 {
     public class PossessedFarmer : ModNPC
     {
+        private enum State { Roam = 0, Windup = 1, Shoot = 2, Lunge = 3 }
+
+        private const float PreferredDist = 240f;
+        private const float TooCloseDist = 150f;
+        private const float ShootRange = 350f;
+        private const float LungeRange = 200f;
+
+        private const int WindupDuration = 30;
+        private const int ShotsPerBurst = 3;
+        private const int FramePerShot = 8;
+        private const int RoamCooldown = 120;
+        private const int LungeDuration = 28;
+        private const float LungeSpeed = 11f;
+
+        private ref float StateTimer => ref NPC.ai[0];
+        private ref float CurrentState => ref NPC.ai[1];
+        private ref float ShotsFired => ref NPC.ai[2];
+        private ref float ShotTimer => ref NPC.ai[3];
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 14;
@@ -18,130 +37,153 @@ namespace JoJoStands.NPCs.Enemies
         {
             NPC.width = 40;
             NPC.height = 60;
-            NPC.damage = 0;
+            NPC.damage = 30;
             NPC.defense = 20;
             NPC.lifeMax = 500;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.value = 500f;
-            NPC.knockBackResist = 0.2f;
-            NPC.aiStyle = 3;
+            NPC.knockBackResist = 0.25f;
+            NPC.aiStyle = 0;
             NPC.friendly = false;
             NPC.noGravity = false;
             NPC.noTileCollide = false;
         }
 
-        private const float PreferredDistance = 220f;
-        private const float TooCloseDistance = 160f;
-        private const float AttackRange = 320f;
-        private const int BurstWindup = 50;
-        private const int ShotsPerBurst = 8;
-        private const int FramesBetweenShots = 6;
-        private const int BurstCooldown = 90;
-
         public override void AI()
         {
+            // ── gravity ──────────────────────────────────────────────
+            if (!NPC.noGravity)
+                NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y + 0.4f, -20f, 16f);
+
             NPC.TargetClosest(true);
             Player target = Main.player[NPC.target];
-            if (!target.active || target.dead)
-                return;
+            if (!target.active || target.dead) return;
 
             Vector2 toPlayer = target.Center - NPC.Center;
-            float distance = toPlayer.Length();
-            Vector2 dirToPlayer = distance > 0.001f ? Vector2.Normalize(toPlayer) : Vector2.UnitX;
+            float dist = toPlayer.Length();
+            Vector2 dirToPlayer = dist > 0.001f ? Vector2.Normalize(toPlayer) : Vector2.UnitX;
 
-            NPC.spriteDirection = dirToPlayer.X > 0 ? 1 : -1;
+            NPC.spriteDirection = dirToPlayer.X >= 0 ? 1 : -1;
+            StateTimer++;
 
-            ref float attackTimer = ref NPC.ai[0];
-            ref float burstShots = ref NPC.ai[1];
-            ref float burstShotTimer = ref NPC.ai[2];
-            ref float state = ref NPC.ai[3];
-
-            if (state == 0f)
+            switch ((State)(int)CurrentState)
             {
-                NPC.aiStyle = 3;
-                AIType = 3;
-
-                if (distance < TooCloseDistance)
-                {
-                    NPC.direction = dirToPlayer.X > 0 ? -1 : 1;
-                    NPC.velocity.X = -dirToPlayer.X * 3.5f;
-                }
-                else if (distance > PreferredDistance)
-                {
-                    NPC.direction = dirToPlayer.X > 0 ? 1 : -1;
-                    NPC.velocity.X = dirToPlayer.X * 3f;
-                }
-                else
-                {
-                    NPC.velocity.X *= 0.85f;
-                }
-
-                if (distance <= AttackRange)
-                {
-                    attackTimer++;
-                    if (attackTimer >= BurstWindup)
-                    {
-                        attackTimer = 0;
-                        burstShots = 0;
-                        burstShotTimer = 0;
-                        state = 1f;
-                        NPC.netUpdate = true;
-                    }
-                }
-                else
-                {
-                    attackTimer = 0;
-                }
+                case State.Roam: DoRoam(dist, dirToPlayer); break;
+                case State.Windup: DoWindup(dist, dirToPlayer); break;
+                case State.Shoot: DoShoot(dirToPlayer); break;
+                case State.Lunge: DoLunge(); break;
             }
-            else if (state == 1f)
+        }
+
+        private void DoRoam(float dist, Vector2 dirToPlayer)
+        {
+            if (dist < TooCloseDist)
+                NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, -dirToPlayer.X * 3f, 0.15f);
+            else if (dist > PreferredDist)
+                NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, dirToPlayer.X * 2.5f, 0.13f);
+            else
+                NPC.velocity.X *= 0.88f;
+
+            if (NPC.collideX)
+                NPC.velocity.Y = -5f;
+
+            if (StateTimer < RoamCooldown) return;
+
+            if (dist <= LungeRange)
             {
-                NPC.aiStyle = 0;
-                NPC.velocity.X *= 0.8f;
-
-                burstShotTimer++;
-                if (burstShotTimer >= FramesBetweenShots)
-                {
-                    burstShotTimer = 0;
-
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        float spread = MathHelper.ToRadians(Main.rand.NextFloat(-6f, 6f));
-                        Vector2 shootDir = dirToPlayer.RotatedBy(spread);
-
-                        Projectile.NewProjectile(
-                            NPC.GetSource_FromAI(),
-                            NPC.Center,
-                            shootDir * 12f,
-                            ModContent.ProjectileType<AnubisBladeNPCProjectile>(),
-                            45,
-                            4f,
-                            Main.myPlayer
-                        );
-                    }
-
-                    burstShots++;
-                    NPC.netUpdate = true;
-
-                    if (burstShots >= ShotsPerBurst)
-                    {
-                        attackTimer = -(BurstCooldown);
-                        burstShots = 0;
-                        state = 0f;
-                        NPC.netUpdate = true;
-                    }
-                }
+                TransitionTo(State.Lunge);
+                NPC.localAI[0] = dirToPlayer.X;
             }
+            else if (dist <= ShootRange)
+            {
+                TransitionTo(State.Windup);
+            }
+        }
+
+        private void DoWindup(float dist, Vector2 dirToPlayer)
+        {
+            NPC.velocity.X *= 0.82f;
+            if (dist > ShootRange * 1.3f)
+            {
+                TransitionTo(State.Roam);
+                return;
+            }
+            if (dist <= LungeRange)
+            {
+                TransitionTo(State.Lunge);
+                NPC.localAI[0] = dirToPlayer.X;
+                return;
+            }
+
+            if (StateTimer >= WindupDuration)
+            {
+                ShotsFired = 0;
+                ShotTimer = FramePerShot;
+                TransitionTo(State.Shoot);
+            }
+        }
+
+        private void DoShoot(Vector2 dirToPlayer)
+        {
+            NPC.velocity.X *= 0.85f;
+            ShotTimer++;
+
+            if (ShotTimer < FramePerShot) return;
+            ShotTimer = 0;
+
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                float spread = MathHelper.ToRadians(Main.rand.NextFloat(-5f, 5f));
+                Vector2 shootDir = dirToPlayer.RotatedBy(spread);
+
+                Projectile.NewProjectile(
+                    NPC.GetSource_FromAI(),
+                    NPC.Center,
+                    shootDir * 11f,
+                    ModContent.ProjectileType<AnubisBladeNPCProjectile>(),
+                    40,
+                    3f,
+                    Main.myPlayer
+                );
+            }
+
+            ShotsFired++;
+            NPC.netUpdate = true;
+
+            if (ShotsFired >= ShotsPerBurst)
+                TransitionTo(State.Roam);
+        }
+
+        private void DoLunge()
+        {
+            if (StateTimer == 1)
+            {
+                float lungeX = NPC.localAI[0] >= 0 ? 1f : -1f;
+                NPC.velocity.X = lungeX * LungeSpeed;
+                NPC.velocity.Y = -3.5f;
+                NPC.netUpdate = true;
+            }
+
+            NPC.velocity.X *= 0.94f;
+
+            if (StateTimer >= LungeDuration)
+                TransitionTo(State.Roam);
+        }
+
+        private void TransitionTo(State next)
+        {
+            CurrentState = (float)next;
+            StateTimer = 0;
+            NPC.netUpdate = true;
         }
 
         public override void FindFrame(int frameHeight)
         {
-            bool isMoving = System.Math.Abs(NPC.velocity.X) > 0.5f;
+            bool moving = System.Math.Abs(NPC.velocity.X) > 0.5f;
+            if (!moving) return;
 
-            if (!isMoving)
-                return;
-
-            NPC.frameCounter += System.Math.Abs(NPC.velocity.X) * 0.5f;
+            NPC.frameCounter += System.Math.Abs(NPC.velocity.X) * 0.45f;
             if (NPC.frameCounter >= 5)
             {
                 NPC.frameCounter = 0;
@@ -169,7 +211,8 @@ namespace JoJoStands.NPCs.Enemies
 
         public override void OnKill()
         {
-            Item.NewItem(NPC.GetSource_Loot(), NPC.getRect(), ModContent.ItemType<AnubisBladeItem>(), 1);
+            Item.NewItem(NPC.GetSource_Loot(), NPC.getRect(),
+                ModContent.ItemType<AnubisBladeItem>(), 1);
         }
     }
 }
