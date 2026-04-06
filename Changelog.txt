@@ -1,4 +1,2 @@
-- Added Hey Ya! Stand (thanks Ozi!)
-- Manhattan Transfer now has a relative positioning mode
-- Manhattan Transfer can now be obtained via Pucci and the Arrow Shard
-- Fixed bug with Subworld Library where the Viral Meteorite lands in every subworld
+- Russian Localization has been updated
+- Saucer Disappearance has been fixed
