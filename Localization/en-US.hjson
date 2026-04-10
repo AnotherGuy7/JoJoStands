@@ -38,7 +38,7 @@ Mods: {
 				NoHome: While I was brought here by certain matters you wouldn't understand, a place to stay would help me while I'm here.
 				LoveSpace: Finally. No distractions or others to interrupt my work.
 				FarFromHome: It looks like I've gone too far. Good grief... Could you point me in the direction of the building?
-				DislikeCrowded: The large amount of people here has me cautious. Who knows... one of these people be enemy Stand users.
+				DislikeCrowded: The large amount of people here has me cautious. Who knows... any one of these people may be Stand Users.
 				HateCrowded: It's too dangerous for me to stay here with this many people around. If I get targeted by another Stand User, I'm not sure I'd be able to keep the casualties low.
 				LikeBiome: "{BiomeName} has some interesting locations I'd like to check out."
 				LoveBiome: "{BiomeName} habitat seems to have a large variety of marine life. I'd like to research them while I'm here."
@@ -4553,7 +4553,7 @@ Mods: {
 			VirtualInsanityT3:
 				'''
 				Fascinating. The stronger this stand gets, the more unfamiliar the energy it exudes becomes. Well, no matter the case, your stand has definitely grown in strength.
-				Due to that, you seem to have reached the full potential for each of your weapons. That pent up energy seems to push those weapons to their absolute limit. I suppose it�s a good thing the reserve of energy your stand can tap into has been increased. Perhaps you can do more while in that state...
+				Due to that, you seem to have reached the full potential for each of your weapons. That pent up energy seems to push those weapons to their absolute limit. I suppose its a good thing the reserve of energy your stand can tap into has been increased. Perhaps you can do more while in that state...
 				'''
 			VirtualInsanityFinal:
 				'''
