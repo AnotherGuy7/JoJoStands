@@ -3681,6 +3681,26 @@ Mods: {
 					Опыт увеличивается с каждой победой...
 					'''
 			}
+
+			NovemberRainFinal: {
+				// DisplayName: November Rain Final
+				// Tooltip: ""
+			}
+
+			NovemberRainT1: {
+				// DisplayName: November Rain T1
+				// Tooltip: ""
+			}
+
+			NovemberRainT2: {
+				// DisplayName: November Rain T2
+				// Tooltip: ""
+			}
+
+			NovemberRainT3: {
+				// DisplayName: November Rain T3
+				// Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -4013,6 +4033,14 @@ Mods: {
 			PurpleHazeCapsule.DisplayName: Капсула Перпл-Хейза
 			FlaskOfPurpleHazeProj.DisplayName: Флакон Перпл-Хейза-Снаряд
 			HazeVirusCloudFlask.DisplayName: Флакон с Облаком Вируса Перпл-Хейза
+			// NovemberRainStandT1.DisplayName: November Rain Stand T1
+			// RainDrop.DisplayName: Rain Drop
+			// PreciseRainDrop.DisplayName: Precise Rain Drop
+			// NovemberRainStandFinal.DisplayName: November Rain Stand Final
+			// NovemberRainStandT2.DisplayName: November Rain Stand T2
+			// NovemberRainStandT3.DisplayName: November Rain Stand T3
+			// RainBarrier.DisplayName: Rain Barrier
+			// ControllableRainDrop.DisplayName: Controllable Rain Drop
 		}
 
 		Biomes: {
