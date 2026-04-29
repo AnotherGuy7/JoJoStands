@@ -1,4 +1,5 @@
 using JoJoStands.Projectiles;
+using JoJoStands.Buffs.Debuffs;
 using System;
 using System.Collections.Generic;
 using JoJoStands;
@@ -14,12 +15,12 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
     public class NovemberRainStandT1 : StandClass
     {
         public override int TierNumber => 1;
-        public override string PoseSoundName => "NovemberRain";
-        public override string SpawnSoundName => "NovemberRain";
+        public override string PoseSoundName => "";
+        public override string SpawnSoundName => "";
         public override StandAttackType StandType => StandAttackType.Melee;
         public override int PunchDamage => 18;
         public override int PunchTime => 8;
-        public override int HalfStandHeight => 37;
+        public override int HalfStandHeight => 96;
         public override float MaxDistance => 80f;
 
         protected virtual float RAIN_W => 155f;
@@ -30,29 +31,116 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         protected virtual int HIT_INTERVAL => 22;
         protected virtual int PRECISE_CD => 7;
         protected const float MAX_UPWARD_RATIO = 0.5f;
-        protected const int TRAP_FORM_TICKS = 120;
-        protected const int TRAP_EXPIRE_TICKS = 600;
+        protected const float STAND_Y_OFFSET = -73f;
+        protected const float STAND_X_OFFSET = -20f;
+        protected const float FIRE_X_OFFSET = 20f;
+        protected const float FIRE_Y_OFFSET = -22f;
 
-        private int preciseTimer = 0;
+        protected virtual int TRAP_SPAWN_TICKS => 0;
+        protected virtual int TRAP_BASE_TICKS => 0;
+        protected virtual int TRAP_MAX_TICKS => 0;
+        protected const int MAX_TRAP_AREAS = 3;
+
+        protected const int CEIL_TOTAL_FRAMES = 15;
+        protected const int CEIL_FRAME_HEIGHT = 20;
+        protected const int CEIL_FRAME_WIDTH  = 18;
+
+        protected const int CEIL_PUDDLE_ANIM_FRAMES = 5;
+        protected const int CEIL_FALL_FRAMES        = 3;
+        protected const int CEIL_IMPACT_FRAMES      = 5;
+
+        protected const int CEIL_PUDDLE_TICKS_PER_FRAME = 18;
+        protected const int CEIL_FALL_TICKS_TOTAL       = 36;
+        protected const int CEIL_IMPACT_TICKS_PER_FRAME = 8;
+
+        protected const int CEIL_OVERLAY_TICKS_PER_FRAME = 9;
+
+        protected const int TRAP_PUDDLE_END = CEIL_PUDDLE_ANIM_FRAMES * CEIL_PUDDLE_TICKS_PER_FRAME;
+        protected const int TRAP_DROP_END   = TRAP_PUDDLE_END + CEIL_FALL_TICKS_TOTAL;
+        protected const int TRAP_CYCLE      = TRAP_DROP_END   + CEIL_IMPACT_FRAMES * CEIL_IMPACT_TICKS_PER_FRAME;
+
+        protected int preciseTimer = 0;
         private int visualTimer = 0;
+        private int trapFormTimer = 0;
 
         protected int[] npcTimers = new int[Main.maxNPCs];
         protected bool[] npcWasInArea = new bool[Main.maxNPCs];
         protected int[] npcStunTimers = new int[Main.maxNPCs];
-        protected Dictionary<long, int> tileRainTimers = new Dictionary<long, int>();
-        protected Dictionary<Vector2, int> activeTrapExpiry = new Dictionary<Vector2, int>();
 
-        protected bool InRainDome(Vector2 pos, float w, float down, float up)
+        public enum SurfaceType { Floor = 0, Ceiling = 1, BackWall = 2 }
+
+        public class TrapSurface
         {
-            float dx = Math.Abs(pos.X - Projectile.Center.X);
-            float dy = pos.Y - Projectile.Center.Y;
-            if (dy <= 0)
-            {
-                float nx = dx / w;
-                float ny = (-dy) / up;
-                return nx * nx + ny * ny < 1f;
-            }
+            public Vector2 WorldPos;
+            public SurfaceType Type;
+            public int DripTimer;
+            public int DripTimerOffset;
+            public bool Triggered;
+            public int DripLandY;
+            public bool DripLandFound;
+        }
+
+        public class TrapArea
+        {
+            public Vector2 Center;
+            public int DurationTicks;
+            public int BaseDuration;
+            public int MaxDuration;
+            public List<TrapSurface> Surfaces = new List<TrapSurface>();
+            public bool PlayerNearby;
+        }
+
+        protected List<TrapArea> ActiveTraps = new List<TrapArea>();
+
+        protected bool InRainDome(Vector2 pos, float w, float down, float up, Vector2 center)
+        {
+            float dx = Math.Abs(pos.X - center.X);
+            float dy = pos.Y - center.Y;
+            if (dy <= 0) { float nx = dx / w; float ny = (-dy) / up; return nx * nx + ny * ny < 1f; }
             return dx < w && dy < down;
+        }
+
+        private int FindDripLandY(Vector2 startWorld)
+        {
+            int tx = (int)(startWorld.X / 16f);
+            int startTY = (int)(startWorld.Y / 16f) + 1;
+            for (int ty = startTY; ty < startTY + 60; ty++)
+            {
+                if (ty < 0 || ty >= Main.maxTilesY) break;
+                var t = Main.tile[tx, ty];
+                if (t.HasTile && (Main.tileSolid[t.TileType] || TileID.Sets.Platforms[t.TileType]))
+                    return ty * 16;
+            }
+            return startTY * 16 + 200;
+        }
+
+        private void HitNPCWithAccessories(Player player, MyPlayer mPlayer, NPC npc, int baseDmg, int direction)
+        {
+            bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
+            if (mPlayer.underbossPhoneEquipped)
+            {
+                mPlayer.underbossPhoneCount++;
+                if (mPlayer.underbossPhoneCount >= 5)
+                {
+                    mPlayer.underbossPhoneCount = 0;
+                    int bonusDmg = (int)(baseDmg * 11.1f);
+                    npc.SimpleStrikeNPC(bonusDmg, direction, crit: true, knockBack: 0f);
+                    for (int d = 0; d < 6; d++)
+                        Dust.NewDust(npc.position, npc.width, npc.height, DustID.TreasureSparkle, 0f, -2f, 0, default, 1.2f);
+                    return;
+                }
+            }
+            if (mPlayer.iceCreamEquipped)
+            {
+                mPlayer.iceCreamEnemyHitCount++;
+                if (mPlayer.iceCreamEnemyHitCount >= 8)
+                {
+                    mPlayer.iceCreamEnemyHitCount = 0;
+                    crit = true;
+                    baseDmg += npc.defense;
+                }
+            }
+            npc.SimpleStrikeNPC(baseDmg, direction, crit: crit, knockBack: 0.8f);
         }
 
         public override void AI()
@@ -69,14 +157,15 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
             SnapAbovePlayer(player);
             ApplyStuns();
+            UpdateTraps(mPlayer, player);
             CheckTrapTriggers(mPlayer);
-            ExpireTraps();
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
-                currentAnimationState = AnimationState.Attack;
-                RainVisuals(RAIN_W, RAIN_DOWN, RAIN_UP);
-                AreaDamage(mPlayer, player);
+                currentAnimationState = AnimationState.Idle;
+                RainVisuals(RAIN_W, RAIN_DOWN, RAIN_UP, Projectile.Center);
+                AreaDamage(mPlayer, player, RAIN_W, RAIN_DOWN, RAIN_UP, HIT_INTERVAL, RAIN_SLOW, Projectile.Center);
+                if (TRAP_SPAWN_TICKS > 0) BuildTraps(player);
             }
             else
             {
@@ -84,32 +173,29 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 {
                     if (Main.mouseLeft && preciseTimer <= 0)
                     {
-                        currentAnimationState = AnimationState.Attack;
-                        FirePrecise(player);
+                        currentAnimationState = AnimationState.Idle;
+                        FirePrecise(mPlayer);
                         preciseTimer = PRECISE_CD;
                     }
-                    else if (!Main.mouseLeft)
-                    {
-                        currentAnimationState = AnimationState.Idle;
-                    }
+                    else currentAnimationState = AnimationState.Idle;
                 }
             }
-
             if (mPlayer.posing) currentAnimationState = AnimationState.Pose;
         }
 
         protected void SnapAbovePlayer(Player player)
         {
-            Projectile.Center = player.Center + new Vector2(0f, -56f);
+            Projectile.Center = player.Center + new Vector2(STAND_X_OFFSET * player.direction, STAND_Y_OFFSET);
             Projectile.velocity = Vector2.Zero;
             Projectile.direction = player.direction;
             Projectile.spriteDirection = player.direction;
         }
 
-        protected void FirePrecise(Player player)
+        protected void FirePrecise(MyPlayer mPlayer)
         {
             if (Projectile.owner != Main.myPlayer) return;
-            Vector2 dir = Main.MouseWorld - Projectile.Center;
+            Vector2 firePos = Projectile.Center + new Vector2(FIRE_X_OFFSET * Projectile.spriteDirection, FIRE_Y_OFFSET);
+            Vector2 dir = Main.MouseWorld - firePos;
             if (dir == Vector2.Zero) dir = new Vector2(0f, 1f);
             if (dir.Y < 0)
             {
@@ -118,33 +204,29 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 if (Math.Abs(dir.X) < 5f) dir.Y = Math.Max(dir.Y, -1.5f);
             }
             dir.Normalize();
-            bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
-            int dmg = crit ? newPunchDamage * 2 : newPunchDamage;
-            int idx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, dir * 11f,
-                ModContent.ProjectileType<PreciseRainDrop>(), dmg, 2f, Main.myPlayer);
+            int idx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firePos, dir * 11f,
+                ModContent.ProjectileType<PreciseRainDrop>(), newPunchDamage, 2f, Main.myPlayer);
             Main.projectile[idx].netUpdate = true;
         }
 
-        protected void FireControllableDrop(Player player)
+        protected void FireControllableDrop(MyPlayer mPlayer)
         {
             if (Projectile.owner != Main.myPlayer) return;
-            Vector2 dir = Main.MouseWorld - Projectile.Center;
-            if (dir == Vector2.Zero) dir = new Vector2(0f, 1f);
-            dir.Normalize();
-            bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
+            Vector2 firePos = Projectile.Center + new Vector2(FIRE_X_OFFSET * Projectile.spriteDirection, FIRE_Y_OFFSET);
+            Vector2 toCursor = Main.MouseWorld - firePos;
+            if (toCursor != Vector2.Zero) toCursor.Normalize();
             int dmg = (int)(newPunchDamage * 3.5f);
-            if (crit) dmg *= 2;
-            int idx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, dir * 14f,
+            int idx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firePos, new Vector2(toCursor.X * 2f, 1.5f),
                 ModContent.ProjectileType<ControllableRainDrop>(), dmg, 3f, Main.myPlayer);
             Main.projectile[idx].netUpdate = true;
         }
 
-        protected void RainVisuals(float w, float down, float up)
+        protected void RainVisuals(float w, float down, float up, Vector2 center)
         {
             visualTimer++;
             if (visualTimer < 2) return;
             visualTimer = 0;
-            Vector2 c = Projectile.Center;
+            Vector2 c = center;
             for (int i = 0; i < 6; i++)
             {
                 float angle = Main.rand.NextFloat(MathHelper.Pi, MathHelper.TwoPi);
@@ -159,45 +241,44 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     4, 18, DustID.Water, Main.rand.NextFloat(-0.2f, 0.2f), Main.rand.NextFloat(12f, 18f), 120, default, Main.rand.NextFloat(0.85f, 1.15f));
                 Main.dust[d].noGravity = true;
             }
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 3; i++)
             {
-                float angle2 = Main.rand.NextFloat(MathHelper.Pi, MathHelper.TwoPi);
-                float r2 = Main.rand.NextFloat(0.4f, 0.85f);
-                int d = Dust.NewDust(new Vector2(c.X + (float)Math.Cos(angle2) * w * r2, c.Y + (float)Math.Sin(angle2) * up * r2),
+                float a2 = Main.rand.NextFloat(MathHelper.Pi, MathHelper.TwoPi);
+                float r2 = Main.rand.NextFloat(0.35f, 0.8f);
+                int d = Dust.NewDust(new Vector2(c.X + (float)Math.Cos(a2) * w * r2, c.Y + (float)Math.Sin(a2) * up * r2),
                     3, 11, DustID.Water, Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.NextFloat(8f, 13f), 160, default, Main.rand.NextFloat(0.55f, 0.75f));
                 Main.dust[d].noGravity = true;
             }
             for (int i = 0; i < 3; i++)
             {
-                int d = Dust.NewDust(new Vector2(c.X + Main.rand.NextFloat(-w * 0.7f, w * 0.7f), c.Y + Main.rand.NextFloat(0f, down * 0.85f)),
+                int d = Dust.NewDust(new Vector2(c.X + Main.rand.NextFloat(-w * 0.65f, w * 0.65f), c.Y + Main.rand.NextFloat(0f, down * 0.85f)),
                     2, 6, DustID.Water, 0f, Main.rand.NextFloat(5f, 9f), 200, default, Main.rand.NextFloat(0.3f, 0.48f));
                 Main.dust[d].noGravity = true;
             }
-            Lighting.AddLight(Projectile.Center, 0.05f, 0.12f, 0.25f);
+            Lighting.AddLight(c, 0.05f, 0.12f, 0.25f);
         }
 
-        protected void AreaDamage(MyPlayer mPlayer, Player player)
+        protected void AreaDamage(MyPlayer mPlayer, Player player, float w, float down, float up, int baseInterval, float slow, Vector2 center)
         {
             if (Projectile.owner != Main.myPlayer) return;
             float boost = Math.Max(0.5f, mPlayer.standDamageBoosts);
-            int interval = Math.Max((int)(HIT_INTERVAL / boost), 8);
+            int interval = Math.Max((int)(baseInterval / boost), 8);
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC npc = Main.npc[i];
-                if (!npc.active || npc.friendly || npc.dontTakeDamage) { npcTimers[i] = 0; npcWasInArea[i] = false; continue; }
-                bool inArea = InRainDome(npc.Center, RAIN_W, RAIN_DOWN, RAIN_UP);
+                if (!npc.active || npc.friendly || npc.dontTakeDamage)
+                { npcTimers[i] = 0; npcWasInArea[i] = false; continue; }
+                bool inArea = InRainDome(npc.Center, w, down, up, center);
                 if (inArea)
                 {
-                    if (!npcWasInArea[i]) { npcWasInArea[i] = true; npcTimers[i] = interval - 1; if (!npc.boss) npc.velocity *= RAIN_SLOW; }
+                    if (!npcWasInArea[i]) { npcWasInArea[i] = true; npcTimers[i] = interval - 1; if (!npc.boss) npc.velocity *= slow; }
                     npcTimers[i]++;
                     if (npcTimers[i] >= interval)
                     {
                         npcTimers[i] = 0;
                         if (Main.rand.NextFloat() < MISS_CHANCE) continue;
-                        if (!npc.boss) npc.velocity *= RAIN_SLOW;
-                        bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
-                        int dmg = crit ? newPunchDamage * 2 : newPunchDamage;
-                        npc.SimpleStrikeNPC(dmg, Projectile.direction, crit: crit, knockBack: 0.8f);
+                        if (!npc.boss) npc.velocity *= slow;
+                        HitNPCWithAccessories(player, mPlayer, npc, newPunchDamage, Projectile.direction);
                         npc.velocity += new Vector2(Projectile.direction * 0.8f, 0.4f);
                         for (int d = 0; d < 4; d++)
                             Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, Main.rand.NextFloat(-2f, 2f), -1.5f, 0, default, 1f);
@@ -208,91 +289,202 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             }
         }
 
-        protected void PassiveTrapBuilder(float w, float down, float up)
+        private bool IsPlatform(int tx, int ty)
         {
-            if (Projectile.owner != Main.myPlayer) return;
-            int tileRange = (int)(w / 16f) + 2;
-            int cx = (int)(Projectile.Center.X / 16f);
-            int cy = (int)(Projectile.Center.Y / 16f);
-            int downTiles = (int)(down / 16f) + 2;
-            int upTiles = (int)(up / 16f) + 2;
+            if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return false;
+            var t = Main.tile[tx, ty];
+            return t.HasTile && TileID.Sets.Platforms[t.TileType];
+        }
 
-            for (int tx = cx - tileRange; tx <= cx + tileRange; tx++)
+        private bool IsSolid(int tx, int ty)
+        {
+            if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return false;
+            var t = Main.tile[tx, ty];
+            return t.HasTile && (Main.tileSolid[t.TileType] || TileID.Sets.Platforms[t.TileType]);
+        }
+
+        private bool IsAir(int tx, int ty)
+        {
+            if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return true;
+            var t = Main.tile[tx, ty];
+            return !t.HasTile || (!Main.tileSolid[t.TileType] && !TileID.Sets.Platforms[t.TileType]);
+        }
+
+        private bool HasWall(int tx, int ty)
+        {
+            if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return false;
+            return Main.tile[tx, ty].WallType > 0;
+        }
+
+        protected List<TrapSurface> ScanSurfaces(Vector2 domeCenter, float w, float down, float up, Vector2 playerCenter)
+        {
+            var surfaces = new List<TrapSurface>();
+            int cx = (int)(domeCenter.X / 16f), cy = (int)(domeCenter.Y / 16f);
+            int rX = (int)(w / 16f) + 2, rDown = (int)(down / 16f) + 2, rUp = (int)(up / 16f) + 2;
+            int playerTileY = (int)(playerCenter.Y / 16f);
+
+            for (int tx = cx - rX; tx <= cx + rX; tx++)
             {
-                for (int ty = cy - upTiles; ty <= cy + downTiles; ty++)
+                for (int ty = cy - rUp; ty <= cy + rDown; ty++)
                 {
                     if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) continue;
-                    Terraria.Tile tile = Main.tile[tx, ty];
-                    bool isPlatform = TileID.Sets.Platforms[tile.TileType];
-                    bool isSolid = tile.HasTile && Main.tileSolid[tile.TileType];
-                    bool hasWall = tile.WallType > 0;
-                    if (!(isPlatform || isSolid || hasWall)) continue;
-                    Vector2 tileWorldPos = new Vector2(tx * 16f + 8f, ty * 16f + 8f);
-                    if (!InRainDome(tileWorldPos, w, down, up)) continue;
-                    long key = ((long)tx << 32) | (uint)ty;
-                    if (!tileRainTimers.ContainsKey(key)) tileRainTimers[key] = 0;
-                    tileRainTimers[key]++;
-                    if (tileRainTimers[key] >= TRAP_FORM_TICKS)
+                    Vector2 tilePos = new Vector2(tx * 16f + 8f, ty * 16f + 8f);
+                    if (!InRainDome(tilePos, w, down, up, domeCenter)) continue;
+                    bool solid = IsSolid(tx, ty);
+                    if (solid)
                     {
-                        tileRainTimers.Remove(key);
-                        Vector2 trapPos = new Vector2(tx * 16f + 8f, ty * 16f);
-                        bool exists = false;
-                        foreach (var kv in activeTrapExpiry)
-                            if (Vector2.Distance(kv.Key, trapPos) < 20f) { exists = true; break; }
-                        if (!exists)
+                        if (ty >= playerTileY && IsAir(tx, ty - 1))
                         {
-                            activeTrapExpiry[trapPos] = TRAP_EXPIRE_TICKS;
-                            for (int d = 0; d < 8; d++)
-                                Dust.NewDust(trapPos - new Vector2(24f, 4f), 48, 8, DustID.Water, Main.rand.NextFloat(-2f, 2f), -1f, 0, default, 1f);
+                            surfaces.Add(new TrapSurface
+                            {
+                                WorldPos = new Vector2(tx * 16f + 8f, ty * 16f + 1f),
+                                Type = SurfaceType.Floor,
+                                DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE)
+                            });
+                        }
+                        else if (ty < playerTileY && IsAir(tx, ty + 1))
+                        {
+                            bool isPlatformTile = IsPlatform(tx, ty);
+                            float ceilBottomY = isPlatformTile ? ty * 16f + 8f + 1f : ty * 16f + 16f + 1f;
+                            int landY = FindDripLandY(new Vector2(tx * 16f + 8f, ceilBottomY));
+                            surfaces.Add(new TrapSurface
+                            {
+                                WorldPos = new Vector2(tx * 16f + 8f, ceilBottomY),
+                                Type = SurfaceType.Ceiling,
+                                DripLandY = landY,
+                                DripLandFound = true,
+                                DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE)
+                            });
+                        }
+                    }
+                    else if (!solid && HasWall(tx, ty))
+                    {
+                        surfaces.Add(new TrapSurface
+                        {
+                            WorldPos = new Vector2(tx * 16f + 8f, ty * 16f + 8f),
+                            Type = SurfaceType.BackWall,
+                            DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE)
+                        });
+                    }
+                }
+            }
+            return surfaces;
+        }
+
+        protected void BuildTraps(Player player)
+        {
+            if (Projectile.owner != Main.myPlayer) return;
+            if (ActiveTraps.Count >= MAX_TRAP_AREAS) return;
+            foreach (var existing in ActiveTraps)
+                if (InRainDome(Projectile.Center, RAIN_W * 0.85f, RAIN_DOWN * 0.85f, RAIN_UP * 0.85f, existing.Center)) return;
+            trapFormTimer++;
+            if (trapFormTimer < TRAP_SPAWN_TICKS) return;
+            trapFormTimer = 0;
+            var surfaces = ScanSurfaces(Projectile.Center, RAIN_W, RAIN_DOWN, RAIN_UP, player.Center);
+            if (surfaces.Count == 0) return;
+            ActiveTraps.Add(new TrapArea
+            {
+                Center = Projectile.Center,
+                DurationTicks = TRAP_BASE_TICKS,
+                BaseDuration = TRAP_BASE_TICKS,
+                MaxDuration = TRAP_MAX_TICKS,
+                Surfaces = surfaces,
+                PlayerNearby = true
+            });
+            Projectile.netUpdate = true;
+            for (int d = 0; d < 10; d++)
+                Dust.NewDust(Projectile.Center + new Vector2(Main.rand.NextFloat(-RAIN_W * 0.5f, RAIN_W * 0.5f), Main.rand.NextFloat(-20f, 20f)),
+                    8, 8, DustID.Water, 0f, -1f, 0, default, 1.2f);
+        }
+
+        protected void UpdateTraps(MyPlayer mPlayer, Player player)
+        {
+            if (Projectile.owner != Main.myPlayer) return;
+            for (int i = ActiveTraps.Count - 1; i >= 0; i--)
+            {
+                var trap = ActiveTraps[i];
+                trap.Surfaces.RemoveAll(s => s.Triggered);
+                if (trap.Surfaces.Count == 0) { ActiveTraps.RemoveAt(i); trapFormTimer = 0; continue; }
+                bool nearby = InRainDome(Projectile.Center, RAIN_W * 1.05f, RAIN_DOWN * 1.05f, RAIN_UP * 1.05f, trap.Center);
+                if (nearby)
+                {
+                    if (!trap.PlayerNearby && trap.DurationTicks < trap.BaseDuration) trap.DurationTicks = trap.BaseDuration;
+                    trap.PlayerNearby = true;
+                    trap.DurationTicks = Math.Min(trap.DurationTicks + 1, trap.MaxDuration);
+                }
+                else
+                {
+                    trap.PlayerNearby = false;
+                    trap.DurationTicks -= 2;
+                    if (trap.DurationTicks <= 0) { ActiveTraps.RemoveAt(i); trapFormTimer = 0; continue; }
+                }
+                foreach (var surf in trap.Surfaces)
+                {
+                    if (surf.Type != SurfaceType.Ceiling || surf.Triggered) continue;
+                    surf.DripTimer++;
+                    int phase = (surf.DripTimer + surf.DripTimerOffset) % TRAP_CYCLE;
+                    if (phase == TRAP_DROP_END)
+                    {
+                        int landY = surf.DripLandFound ? surf.DripLandY : (int)surf.WorldPos.Y + 200;
+                        for (int n = 0; n < Main.maxNPCs; n++)
+                        {
+                            NPC npc = Main.npc[n];
+                            if (!npc.active || npc.friendly || npc.dontTakeDamage) continue;
+                            if (Math.Abs(npc.Center.X - surf.WorldPos.X) < 40f &&
+                                npc.Center.Y > surf.WorldPos.Y &&
+                                npc.Center.Y < landY + 32f)
+                            {
+                                bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
+                                npc.SimpleStrikeNPC((int)(newPunchDamage * 0.5f), Projectile.direction, crit: crit, knockBack: 0f);
+                                Dust.NewDust(new Vector2(surf.WorldPos.X, landY), 16, 8, DustID.Water,
+                                    Main.rand.NextFloat(-3f, 3f), -2f, 0, default, 1.2f);
+                                Projectile.netUpdate = true;
+                            }
                         }
                     }
                 }
             }
-
-            List<long> toRemove = new List<long>();
-            foreach (var kv in tileRainTimers)
-            {
-                int tx2 = (int)((ulong)kv.Key >> 32);
-                int ty2 = (int)(kv.Key & 0xFFFFFFFFL);
-                if (!InRainDome(new Vector2(tx2 * 16f + 8f, ty2 * 16f + 8f), w, down, up)) toRemove.Add(kv.Key);
-            }
-            foreach (var k in toRemove) tileRainTimers.Remove(k);
-        }
-
-        protected void ExpireTraps()
-        {
-            List<Vector2> toExpire = new List<Vector2>();
-            List<Vector2> keys = new List<Vector2>(activeTrapExpiry.Keys);
-            foreach (var k in keys) { activeTrapExpiry[k]--; if (activeTrapExpiry[k] <= 0) toExpire.Add(k); }
-            foreach (var k in toExpire) activeTrapExpiry.Remove(k);
         }
 
         protected void CheckTrapTriggers(MyPlayer mPlayer)
         {
             if (Projectile.owner != Main.myPlayer) return;
-            List<Vector2> toRemove = new List<Vector2>();
-            foreach (var kv in activeTrapExpiry)
+            foreach (var trap in ActiveTraps)
             {
-                Vector2 trapPos = kv.Key;
-                for (int i = 0; i < Main.maxNPCs; i++)
+                foreach (var surf in trap.Surfaces)
                 {
-                    NPC npc = Main.npc[i];
-                    if (!npc.active || npc.friendly || npc.dontTakeDamage) continue;
-                    float ndx = Math.Abs(npc.Center.X - trapPos.X);
-                    float ndy = npc.Center.Y - trapPos.Y;
-                    if (ndx < 48f && ndy > -35f && ndy < 18f)
+                    if (surf.Triggered) continue;
+                    for (int n = 0; n < Main.maxNPCs; n++)
                     {
-                        npc.SimpleStrikeNPC(newPunchDamage * 3, Projectile.direction, crit: false, knockBack: 2f);
-                        npcStunTimers[i] = 90;
-                        for (int d = 0; d < 14; d++)
-                            Dust.NewDust(new Vector2(trapPos.X - 48f, trapPos.Y - 8f), 96, 16, DustID.Water, Main.rand.NextFloat(-3f, 3f), Main.rand.NextFloat(-2f, 0f), 0, default, 1.1f);
-                        toRemove.Add(trapPos);
-                        Projectile.netUpdate = true;
-                        break;
+                        NPC npc = Main.npc[n];
+                        if (!npc.active || npc.friendly || npc.dontTakeDamage) continue;
+                        float ndx = Math.Abs(npc.Center.X - surf.WorldPos.X);
+                        float ndy = npc.Center.Y - surf.WorldPos.Y;
+                        float halfW = Math.Max(npc.width / 2f, 20f);
+                        float halfH = Math.Max(npc.height / 2f, 20f);
+                        bool hit = false;
+                        switch (surf.Type)
+                        {
+                            case SurfaceType.Floor: hit = ndx < halfW + 16f && ndy > -(halfH + 24f) && ndy < 16f; break;
+                            case SurfaceType.Ceiling: hit = ndx < halfW + 16f && ndy > -8f && ndy < halfH + 28f; break;
+                            case SurfaceType.BackWall: hit = ndx < halfW + 8f && Math.Abs(ndy) < halfH + 8f; break;
+                        }
+                        if (hit)
+                        {
+                            surf.Triggered = true;
+                            npc.SimpleStrikeNPC((int)(newPunchDamage * 3f), Projectile.direction, crit: false, knockBack: 2f);
+                            if (!npc.boss) npcStunTimers[n] = 90;
+                            for (int d = 0; d < 14; d++)
+                                Dust.NewDust(surf.WorldPos, 16, 16, DustID.Water,
+                                    Main.rand.NextFloat(-3f, 3f), Main.rand.NextFloat(-2f, 0f), 0, default, 1.1f);
+                            Projectile.netUpdate = true;
+                            break;
+                        }
                     }
                 }
             }
-            foreach (var k in toRemove) activeTrapExpiry.Remove(k);
+            for (int i = ActiveTraps.Count - 1; i >= 0; i--)
+                ActiveTraps[i].Surfaces.RemoveAll(s => s.Triggered);
         }
 
         protected void ApplyStuns()
@@ -310,19 +502,139 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
         public override bool PreDrawExtras()
         {
-            if (activeTrapExpiry.Count > 0 && Main.netMode != NetmodeID.Server)
+            if (ActiveTraps.Count == 0 || Main.netMode == NetmodeID.Server) return true;
+            int loopFrame = (int)(Main.GameUpdateCount / 18) % 4;
+
+            foreach (var trap in ActiveTraps)
             {
-                Texture2D tex = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/PuddleTrap");
-                foreach (var kv in activeTrapExpiry)
+                float alpha = Math.Min(1f, trap.DurationTicks / 80f);
+                Color col = new Color(120, 180, 255, (int)(200 * alpha));
+
+                foreach (var surf in trap.Surfaces)
                 {
-                    float alpha = Math.Min(1f, kv.Value / 60f);
-                    Main.EntitySpriteDraw(tex, kv.Key - Main.screenPosition, null,
-                        new Color(100, 160, 255, (int)(180 * alpha)), 0f,
-                        new Vector2(tex.Width / 2f, tex.Height / 2f),
-                        new Vector2(1.6f, 0.5f), SpriteEffects.None, 0);
+                    if (surf.Triggered) continue;
+                    try
+                    {
+                        if (surf.Type == SurfaceType.Floor)
+                            DrawFloor("JoJoStands/Projectiles/TrapFloor", surf, col, loopFrame);
+                        else if (surf.Type == SurfaceType.BackWall)
+                            DrawBackWall("JoJoStands/Projectiles/TrapBackWall", surf, col, loopFrame);
+                        else if (surf.Type == SurfaceType.Ceiling)
+                            DrawCeiling(surf, col);
+                    }
+                    catch { }
                 }
             }
             return true;
+        }
+
+        private void DrawCeiling(TrapSurface surf, Color col)
+        {
+            try
+            {
+                Texture2D tex = (Texture2D)ModContent.Request<Texture2D>("JoJoStands/Projectiles/TrapCeiling");
+                int fw = CEIL_FRAME_WIDTH;
+                int fh = CEIL_FRAME_HEIGHT;
+
+                int phase = (surf.DripTimer + surf.DripTimerOffset) % TRAP_CYCLE;
+                int landY = surf.DripLandFound ? surf.DripLandY : (int)surf.WorldPos.Y + 200;
+
+                float anchorX   = surf.WorldPos.X - fw * 0.5f;
+                float ceilTopY  = surf.WorldPos.Y - 2f;
+                float floorTopY = landY - fh + 3f;
+
+                Main.EntitySpriteDraw(tex,
+                    new Vector2(anchorX, ceilTopY) - Main.screenPosition,
+                    new Rectangle(0, 0, fw, fh),
+                    col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+
+                if (phase < TRAP_PUDDLE_END)
+                {
+                    int pudFrame = Math.Min(phase / CEIL_PUDDLE_TICKS_PER_FRAME, CEIL_PUDDLE_ANIM_FRAMES - 1);
+                    if (pudFrame > 0)
+                    {
+                        Main.EntitySpriteDraw(tex,
+                            new Vector2(anchorX, ceilTopY) - Main.screenPosition,
+                            new Rectangle(0, pudFrame * fh, fw, fh),
+                            col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    }
+                }
+                else
+                {
+                    int afterForming = phase - TRAP_PUDDLE_END;
+                    int overlayFrame;
+                    if (afterForming < CEIL_OVERLAY_TICKS_PER_FRAME)
+                        overlayFrame = CEIL_PUDDLE_ANIM_FRAMES;
+                    else
+                        overlayFrame = CEIL_PUDDLE_ANIM_FRAMES + 1;
+
+                    Main.EntitySpriteDraw(tex,
+                        new Vector2(anchorX, ceilTopY) - Main.screenPosition,
+                        new Rectangle(0, overlayFrame * fh, fw, fh),
+                        col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+
+                    if (phase < TRAP_DROP_END)
+                    {
+                        float t    = (phase - TRAP_PUDDLE_END) / (float)CEIL_FALL_TICKS_TOTAL;
+                        if (t > 1f) t = 1f;
+                        float ease = t * t;
+                        float topY = ceilTopY + (floorTopY - ceilTopY) * ease;
+
+                        int fIdx = (CEIL_PUDDLE_ANIM_FRAMES + 2) + Math.Min((int)(t * CEIL_FALL_FRAMES), CEIL_FALL_FRAMES - 1);
+                        Main.EntitySpriteDraw(tex,
+                            new Vector2(anchorX, topY) - Main.screenPosition,
+                            new Rectangle(0, fIdx * fh, fw, fh),
+                            col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        int impPhase = phase - TRAP_DROP_END;
+                        int impFrame = Math.Min(impPhase / CEIL_IMPACT_TICKS_PER_FRAME, CEIL_IMPACT_FRAMES - 1);
+                        int fIdx = (CEIL_PUDDLE_ANIM_FRAMES + 2) + CEIL_FALL_FRAMES + impFrame;
+                        Main.EntitySpriteDraw(tex,
+                            new Vector2(anchorX, floorTopY) - Main.screenPosition,
+                            new Rectangle(0, fIdx * fh, fw, fh),
+                            col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void DrawFloor(string texPath, TrapSurface surf, Color col, int loopFrame)
+        {
+            try
+            {
+                Texture2D tex = (Texture2D)ModContent.Request<Texture2D>(texPath);
+                int fc  = Math.Max(tex.Height / Math.Max(tex.Width, 8), 1);
+                int fh  = tex.Height / fc;
+                int f   = loopFrame % fc;
+                float anchorX = surf.WorldPos.X - tex.Width * 0.5f;
+                float topY    = surf.WorldPos.Y - fh;
+                Main.EntitySpriteDraw(tex,
+                    new Vector2(anchorX, topY) - Main.screenPosition,
+                    new Rectangle(0, f * fh, tex.Width, fh),
+                    col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+            }
+            catch { }
+        }
+
+        private void DrawBackWall(string texPath, TrapSurface surf, Color col, int loopFrame)
+        {
+            try
+            {
+                Texture2D tex = (Texture2D)ModContent.Request<Texture2D>(texPath);
+                int fc    = Math.Max(tex.Height / Math.Max(tex.Width, 8), 1);
+                int fh    = tex.Height / fc;
+                int f     = loopFrame % fc;
+                float anchorX = surf.WorldPos.X - tex.Width * 0.5f;
+                float anchorY = surf.WorldPos.Y - fh * 0.5f;
+                Main.EntitySpriteDraw(tex,
+                    new Vector2(anchorX, anchorY) - Main.screenPosition,
+                    new Rectangle(0, f * fh, tex.Width, fh),
+                    col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0);
+            }
+            catch { }
         }
 
         public override void SelectAnimation()
@@ -333,19 +645,17 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 oldAnimationState = currentAnimationState; Projectile.netUpdate = true;
             }
             if (currentAnimationState == AnimationState.Idle) PlayAnimation("Idle");
-            else if (currentAnimationState == AnimationState.Attack) PlayAnimation("Attack");
             else if (currentAnimationState == AnimationState.Pose) PlayAnimation("Pose");
         }
 
         public override void PlayAnimation(string animationName)
         {
             if (Main.netMode != NetmodeID.Server)
-                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/NovemberRain", "NovemberRain_" + animationName);
+                standTexture = GetStandTexture("JoJoStands/Projectiles/PlayerStands/NovemberRain", "NovemberRain_Idle");
             switch (animationName)
             {
-                case "Idle":   AnimateStand(animationName, 4, 12, loop: true); break;
-                case "Attack": AnimateStand(animationName, 4, 8,  loop: true); break;
-                case "Pose":   AnimateStand(animationName, 2, 12, loop: true); break;
+                case "Idle": AnimateStand(animationName, 1, 12, loop: true); break;
+                case "Pose": AnimateStand(animationName, 1, 12, loop: true); break;
             }
         }
     }

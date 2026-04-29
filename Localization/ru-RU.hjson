@@ -519,6 +519,21 @@ Mods: {
 				DisplayName: Иммунитет к Вирусу Перпл-Хейза
 				Description: Вирус Перпл-Хейза не влияет на вас.
 			}
+
+			RainBarrierCooldown: {
+				// Description: Mods.JoJoStands.Buffs.RainBarrierCooldown.Description
+				// DisplayName: Rain Barrier Cooldown
+			}
+
+			MaelstromDrain: {
+				// Description: Mods.JoJoStands.Buffs.MaelstromDrain.Description
+				// DisplayName: Maelstrom Drain
+			}
+
+			MaelstromCooldown: {
+				// Description: Mods.JoJoStands.Buffs.MaelstromCooldown.Description
+				// DisplayName: Maelstrom Cooldown
+			}
 		}
 
 		Items: {

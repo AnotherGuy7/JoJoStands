@@ -11,20 +11,23 @@ namespace JoJoStands.Projectiles
     {
         public override string Texture => "JoJoStands/Projectiles/RainBarrier";
 
-        private const float OUTER_X = 95f;
-        private const float OUTER_Y = 140f;
-        private const float DAMAGE_X = 65f;
-        private const float DAMAGE_Y = 100f;
-        private const float PUSH_X = 98f;
-        private const float PUSH_Y = 145f;
-        private const float DEFLECT_X = 100f;
-        private const float DEFLECT_Y = 148f;
-        private const int DAMAGE_INTERVAL = 8;
-        private const float NORMAL_KB = 5f;
+        private const float BLOCK_X = 52f;
+        private const float BLOCK_Y = 85f;
 
-        private int damageTimer = 0;
+        private const float OUTER_X = 140f;
+        private const float OUTER_Y = 220f;
+
+        private const int OUTER_INTERVAL = 2;
+        private const float OUTER_SLOW = 0.04f;
+
+        private const float DEFLECT_X = 64f;
+        private const float DEFLECT_Y = 100f;
+
+        private const float KNOCKBACK_FORCE = 4f;
+
         private int visualTimer = 0;
-        private Dictionary<int, int> npcDamageTimers = new Dictionary<int, int>();
+        private Dictionary<int, int> outerTimers = new Dictionary<int, int>();
+        private Vector2[] prevNPCPos = new Vector2[Main.maxNPCs];
 
         public override void SetDefaults()
         {
@@ -44,35 +47,67 @@ namespace JoJoStands.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             if (!player.active || player.dead) { Projectile.Kill(); return; }
-
             Projectile.Center = player.Center;
-
             BarrierVisuals();
             DeflectProjectiles();
-            BarrierDamage(player);
-
+            HandleNPCs(player);
             Lighting.AddLight(Projectile.Center, 0.15f, 0.35f, 0.7f);
         }
 
-        private bool InsideOuter(Vector2 center)
+        private bool InBlock(Vector2 p)
         {
-            float nx = (center.X - Projectile.Center.X) / PUSH_X;
-            float ny = (center.Y - Projectile.Center.Y) / PUSH_Y;
+            float nx = (p.X - Projectile.Center.X) / BLOCK_X;
+            float ny = (p.Y - Projectile.Center.Y) / BLOCK_Y;
             return nx * nx + ny * ny < 1f;
         }
 
-        private bool InsideDamage(Vector2 center)
+        private bool InOuter(Vector2 p)
         {
-            float nx = (center.X - Projectile.Center.X) / DAMAGE_X;
-            float ny = (center.Y - Projectile.Center.Y) / DAMAGE_Y;
+            float nx = (p.X - Projectile.Center.X) / OUTER_X;
+            float ny = (p.Y - Projectile.Center.Y) / OUTER_Y;
             return nx * nx + ny * ny < 1f;
         }
 
-        private bool InsideDeflect(Vector2 center)
+        private bool InDeflect(Vector2 p)
         {
-            float nx = (center.X - Projectile.Center.X) / DEFLECT_X;
-            float ny = (center.Y - Projectile.Center.Y) / DEFLECT_Y;
+            float nx = (p.X - Projectile.Center.X) / DEFLECT_X;
+            float ny = (p.Y - Projectile.Center.Y) / DEFLECT_Y;
             return nx * nx + ny * ny < 1f;
+        }
+
+        private float EllipseRadius(Vector2 outDir)
+        {
+            float denom = (outDir.X * outDir.X) / (BLOCK_X * BLOCK_X)
+                        + (outDir.Y * outDir.Y) / (BLOCK_Y * BLOCK_Y);
+            if (denom < 0.00001f) return BLOCK_X;
+            return (float)Math.Sqrt(1.0 / denom);
+        }
+
+        private Vector2 GetOutDir(Vector2 npcCenter)
+        {
+            Vector2 d = npcCenter - Projectile.Center;
+            float len = d.Length();
+            if (len < 1f) d = Vector2.UnitX;
+            else d /= len;
+            return d;
+        }
+
+        private void PushOut(NPC npc)
+        {
+            Vector2 outDir = GetOutDir(npc.Center);
+            float escapeR = EllipseRadius(outDir);
+            npc.Center = Projectile.Center + outDir * (escapeR * 1.08f + npc.width * 0.5f);
+            float dot = Vector2.Dot(npc.velocity, -outDir);
+            if (dot > 0f) npc.velocity += outDir * dot;
+            bool isBrainFight = (npc.type == NPCID.BrainofCthulhu || npc.type == NPCID.Creeper);
+            if (!npc.boss || isBrainFight)
+                npc.velocity += outDir * KNOCKBACK_FORCE;
+        }
+
+        private bool NPCCrossedBoundary(NPC npc, int i)
+        {
+            if (prevNPCPos[i] == Vector2.Zero) return false;
+            return !InBlock(prevNPCPos[i]) && InBlock(npc.Center);
         }
 
         private void BarrierVisuals()
@@ -80,25 +115,27 @@ namespace JoJoStands.Projectiles
             visualTimer++;
             if (visualTimer < 1) return;
             visualTimer = 0;
-
             Vector2 c = Projectile.Center;
-            for (int i = 0; i < 12; i++)
+
+            for (int i = 0; i < 18; i++)
             {
-                float angle = Main.rand.NextFloat(0f, MathHelper.TwoPi);
-                float rx = OUTER_X * (0.75f + Main.rand.NextFloat(0f, 0.25f));
-                float ry = OUTER_Y * (0.75f + Main.rand.NextFloat(0f, 0.25f));
-                Vector2 pos = new Vector2(c.X + (float)Math.Cos(angle) * rx, c.Y + (float)Math.Sin(angle) * ry - OUTER_Y * 0.25f);
-                int d = Dust.NewDust(pos, 3, 16, DustID.Water,
-                    Main.rand.NextFloat(-0.3f, 0.3f), Main.rand.NextFloat(16f, 24f),
-                    60, default, Main.rand.NextFloat(1.0f, 1.5f));
+                float rx = Main.rand.NextFloat(-OUTER_X, OUTER_X);
+                float maxRY = OUTER_Y * (float)Math.Sqrt(Math.Max(0, 1.0 - (rx * rx) / (OUTER_X * OUTER_X)));
+                float ry = Main.rand.NextFloat(-maxRY, maxRY);
+                int d = Dust.NewDust(new Vector2(c.X + rx, c.Y + ry), 2, 2, DustID.Water,
+                    Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.NextFloat(18f, 30f),
+                    60, default, Main.rand.NextFloat(0.8f, 1.3f));
                 Main.dust[d].noGravity = true;
             }
-            for (int i = 0; i < 6; i++)
+
+            for (int i = 0; i < 10; i++)
             {
-                float ox = Main.rand.NextFloat(-OUTER_X * 0.4f, OUTER_X * 0.4f);
-                float oy = Main.rand.NextFloat(-OUTER_Y * 0.7f, OUTER_Y * 0.4f);
-                int d = Dust.NewDust(new Vector2(c.X + ox, c.Y + oy), 2, 12, DustID.Water,
-                    0f, Main.rand.NextFloat(18f, 26f), 50, default, Main.rand.NextFloat(1.1f, 1.6f));
+                float angle = Main.rand.NextFloat(0f, MathHelper.TwoPi);
+                float rx2 = OUTER_X * (0.85f + Main.rand.NextFloat(0f, 0.15f));
+                float ry2 = OUTER_Y * (0.85f + Main.rand.NextFloat(0f, 0.15f));
+                int d = Dust.NewDust(new Vector2(c.X + (float)Math.Cos(angle) * rx2, c.Y + (float)Math.Sin(angle) * ry2),
+                    3, 18, DustID.Water, Main.rand.NextFloat(-0.3f, 0.3f), Main.rand.NextFloat(16f, 24f),
+                    40, default, Main.rand.NextFloat(1.0f, 1.4f));
                 Main.dust[d].noGravity = true;
             }
         }
@@ -109,13 +146,12 @@ namespace JoJoStands.Projectiles
             {
                 Projectile proj = Main.projectile[i];
                 if (!proj.active || !proj.hostile || proj.whoAmI == Projectile.whoAmI) continue;
-
-                if (InsideDeflect(proj.Center))
+                if (InDeflect(proj.Center))
                 {
                     Vector2 diff = proj.Center - Projectile.Center;
                     if (diff == Vector2.Zero) diff = Vector2.UnitX;
                     diff.Normalize();
-                    proj.velocity = diff * proj.velocity.Length() * 0.85f;
+                    proj.velocity = diff * Math.Max(proj.velocity.Length(), 4f) * 0.9f;
                     proj.friendly = true;
                     proj.hostile = false;
                     for (int d = 0; d < 5; d++)
@@ -125,48 +161,50 @@ namespace JoJoStands.Projectiles
             }
         }
 
-        private void BarrierDamage(Player player)
+        private void HandleNPCs(Player player)
         {
             if (Projectile.owner != Main.myPlayer) return;
-
-            damageTimer++;
-
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC npc = Main.npc[i];
-                if (!npc.active || npc.friendly || npc.dontTakeDamage) continue;
-
-                bool inDamage = InsideDamage(npc.Center);
-                bool inOuter = InsideOuter(npc.Center);
-
-                if (inDamage)
+                if (!npc.active || npc.friendly || npc.dontTakeDamage)
                 {
-                    if (!npcDamageTimers.ContainsKey(i)) npcDamageTimers[i] = 0;
-                    npcDamageTimers[i]++;
+                    prevNPCPos[i] = Vector2.Zero;
+                    continue;
+                }
 
-                    if (npcDamageTimers[i] >= DAMAGE_INTERVAL)
+                bool inBlock = InBlock(npc.Center)
+                    || InBlock(new Vector2(npc.position.X, npc.position.Y))
+                    || InBlock(new Vector2(npc.position.X + npc.width, npc.position.Y))
+                    || InBlock(new Vector2(npc.position.X, npc.position.Y + npc.height))
+                    || InBlock(new Vector2(npc.position.X + npc.width, npc.position.Y + npc.height));
+
+                bool crossed = NPCCrossedBoundary(npc, i);
+
+                if (inBlock || crossed)
+                    PushOut(npc);
+
+                prevNPCPos[i] = npc.Center;
+
+                if (InOuter(npc.Center) && !InBlock(npc.Center))
+                {
+                    npc.velocity *= OUTER_SLOW;
+                    if (!outerTimers.ContainsKey(i)) outerTimers[i] = 0;
+                    outerTimers[i]++;
+                    if (outerTimers[i] >= OUTER_INTERVAL)
                     {
-                        npcDamageTimers[i] = 0;
+                        outerTimers[i] = 0;
                         bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
                         npc.SimpleStrikeNPC(Projectile.damage, Projectile.direction, crit: crit, knockBack: 0f);
-
-                        for (int d = 0; d < 5; d++)
+                        for (int d = 0; d < 3; d++)
                             Dust.NewDust(npc.position, npc.width, npc.height,
-                                DustID.Water, Main.rand.NextFloat(-3f, 3f), -2f, 0, default, 1.1f);
+                                DustID.Water, Main.rand.NextFloat(-2f, 2f), -1.5f, 0, default, 1f);
                         Projectile.netUpdate = true;
                     }
                 }
-                else if (inOuter && !inDamage)
-                {
-                    Vector2 diff = npc.Center - Projectile.Center;
-                    if (diff == Vector2.Zero) diff = Vector2.UnitX;
-                    diff.Normalize();
-                    if (!npc.boss) npc.velocity += diff * NORMAL_KB;
-                    if (npcDamageTimers.ContainsKey(i)) npcDamageTimers.Remove(i);
-                }
                 else
                 {
-                    if (npcDamageTimers.ContainsKey(i)) npcDamageTimers.Remove(i);
+                    if (outerTimers.ContainsKey(i)) outerTimers.Remove(i);
                 }
             }
         }
