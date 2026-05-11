@@ -24,6 +24,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         protected override int TRAP_SPAWN_TICKS => 180;
         protected override int TRAP_BASE_TICKS => 720;
         protected override int TRAP_MAX_TICKS => 1200;
+        // Trap
+        protected override int MaxFloorCeilingTraps => 10;
 
         private const int BARRIER_DURATION = 900;
         private const int BARRIER_CD_SECS = 20;
@@ -58,6 +60,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     if (barrierProjIdx >= 0 && barrierProjIdx < Main.maxProjectiles)
                         Main.projectile[barrierProjIdx].Kill();
                     barrierProjIdx = -1;
+                    // Rain Barrier
                     player.AddBuff(ModContent.BuffType<RainBarrierCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
                     Projectile.netUpdate = true;
                 }
@@ -77,7 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     if (Main.mouseLeft && preciseTimer <= 0)
                     {
                         currentAnimationState = AnimationState.Idle;
-                        FirePrecise(mPlayer);
+                        FireThreeStreams(mPlayer);
                         preciseTimer = PRECISE_CD;
                     }
                     else currentAnimationState = AnimationState.Idle;

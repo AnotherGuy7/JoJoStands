@@ -84,7 +84,9 @@ namespace JoJoStands.Projectiles
         {
             float dx = cursorWorld.X - spawnPos.X;
             float horizSign = dx >= 0f ? 1f : -1f;
-            float apexX = spawnPos.X + horizSign * APEX_HORIZ_OFFSET;
+            float horizOff = Math.Min(Math.Abs(dx) * 0.6f, APEX_HORIZ_OFFSET);
+            if (horizOff < 2f) horizOff = 2f;
+            float apexX = spawnPos.X + horizSign * horizOff;
             float apexY = spawnPos.Y + APEX_VERT_OFFSET;
             apexPos = new Vector2(apexX, apexY);
             apexLocked = true;
@@ -198,6 +200,9 @@ namespace JoJoStands.Projectiles
                                     speedCap = MathHelper.Lerp(TRACK_MIN_SPEED, TRACK_MAX_SPEED, dist / TRACK_BRAKE_DIST);
                                 if (along > speedCap) along = speedCap;
                                 if (along < -TRACK_MAX_SPEED * 0.4f) along = -TRACK_MAX_SPEED * 0.4f;
+
+                                if (along > 0f && along > dist - 1f)
+                                    along = Math.Max(0f, dist - 1f);
 
                                 side *= 0.75f;
 

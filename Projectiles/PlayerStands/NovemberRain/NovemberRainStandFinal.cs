@@ -25,6 +25,11 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         protected override int TRAP_SPAWN_TICKS => 120;
         protected override int TRAP_BASE_TICKS => 900;
         protected override int TRAP_MAX_TICKS => 1500;
+        // Trap
+        protected override int MaxFloorCeilingTraps => 12;
+
+        protected override bool IsAreaAbilityActive(MyPlayer mPlayer) =>
+            mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto || maelActive;
 
         private const int BARRIER_DURATION = 900;
         private const int BARRIER_CD_SECS = 20;
@@ -62,9 +67,12 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         private bool IsAirF(int tx, int ty) { if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return true; var t = Main.tile[tx, ty]; return !t.HasTile || (!Main.tileSolid[t.TileType] && !TileID.Sets.Platforms[t.TileType]); }
         private bool HasWallF(int tx, int ty) { if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return false; return Main.tile[tx, ty].WallType > 0; }
 
+        // Maelstrom
         private List<TrapSurface> ScanMaelSurfaces(Vector2 playerCenter)
         {
-            var surfaces = new List<TrapSurface>();
+            var floors    = new List<TrapSurface>();
+            var ceilings  = new List<TrapSurface>();
+            var backWalls = new List<TrapSurface>();
             int cx = (int)(Projectile.Center.X / 16f), cy = (int)(Projectile.Center.Y / 16f);
             int rX = (int)(MAEL_W / 16f) + 2, rDown = (int)(MAEL_DOWN / 16f) + 2, rUp = (int)(MAEL_UP / 16f) + 2;
             int playerTileY = (int)(playerCenter.Y / 16f);
@@ -78,28 +86,29 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     if (solid)
                     {
                         if (ty >= playerTileY && IsAirF(tx, ty - 1))
-                            surfaces.Add(new TrapSurface { WorldPos = new Vector2(tx * 16f + 8f, ty * 16f), Type = SurfaceType.Floor, DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE) });
+                            floors.Add(new TrapSurface { WorldPos = new Vector2(tx * 16f + 8f, ty * 16f), Type = SurfaceType.Floor, DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE) });
                         else if (ty < playerTileY && IsAirF(tx, ty + 1))
                         {
                             bool isPlatformTile = IsPlatformF(tx, ty);
-                            float ceilBottomY = isPlatformTile ? ty * 16f + 8f : ty * 16f + 16f;
-                            int landY = 0;
-                            int stx = tx, startTY = ty + 1;
-                            for (int scanTy = startTY; scanTy < startTY + 60; scanTy++)
-                            {
-                                if (scanTy < 0 || scanTy >= Main.maxTilesY) break;
-                                var tt = Main.tile[stx, scanTy];
-                                if (tt.HasTile && (Main.tileSolid[tt.TileType] || TileID.Sets.Platforms[tt.TileType])) { landY = scanTy * 16; break; }
-                            }
-                            if (landY == 0) landY = (ty + 1) * 16 + 200;
-                            surfaces.Add(new TrapSurface { WorldPos = new Vector2(tx * 16f + 8f, ceilBottomY), Type = SurfaceType.Ceiling, DripLandY = landY, DripLandFound = true, DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE) });
+                            float ceilBottomY = isPlatformTile ? ty * 16f + 8f + 1f : ty * 16f + 16f + 1f;
+                            int landY = FindDripLandY(new Vector2(tx * 16f + 8f, ceilBottomY));
+                            ceilings.Add(new TrapSurface { WorldPos = new Vector2(tx * 16f + 8f, ceilBottomY), Type = SurfaceType.Ceiling, DripLandY = landY, DripLandFound = true, DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE) });
                         }
                     }
                     else if (!solid && HasWallF(tx, ty))
-                        surfaces.Add(new TrapSurface { WorldPos = new Vector2(tx * 16f + 8f, ty * 16f + 8f), Type = SurfaceType.BackWall, DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE) });
+                    {
+                        int landY = FindDripLandY(new Vector2(tx * 16f + 8f, ty * 16f + 16f));
+                        backWalls.Add(new TrapSurface { WorldPos = new Vector2(tx * 16f + 8f, ty * 16f + 8f), Type = SurfaceType.BackWall, DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE), DripLandY = landY, DripLandFound = true });
+                    }
                 }
             }
-            return surfaces;
+
+            var picked = SelectFloorCeilingMix(floors, ceilings, MaxFloorCeilingTraps);
+
+            var output = new List<TrapSurface>(picked.Count + backWalls.Count);
+            output.AddRange(picked);
+            output.AddRange(backWalls);
+            return output;
         }
 
         public override void AI()
@@ -121,6 +130,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
             bool hasDrain = player.HasBuff(ModContent.BuffType<MaelstromDrain>());
             bool hasMaelCD = player.HasBuff(ModContent.BuffType<MaelstromCooldown>());
+            // Rain Barrier
             bool hasBarrierCD = player.HasBuff(ModContent.BuffType<RainBarrierCooldown>());
 
             if (barrierActive)
@@ -169,7 +179,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && preciseTimer <= 0 && canUseRain) { currentAnimationState = AnimationState.Idle; FirePrecise(mPlayer); preciseTimer = PRECISE_CD; }
+                    if (Main.mouseLeft && preciseTimer <= 0 && canUseRain) { currentAnimationState = AnimationState.Idle; FireThreeStreams(mPlayer); preciseTimer = PRECISE_CD; }
                     else currentAnimationState = AnimationState.Idle;
 
                     if (Main.mouseRight && ctrlDropActive == 0 && canUseRain) { FireControllableDrop(mPlayer); ctrlDropActive = 1; }
@@ -226,15 +236,15 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 if (!npc.active || npc.friendly || npc.dontTakeDamage) { maelNpcTimers[i] = 0; maelNpcWas[i] = false; continue; }
                 if (InMaelDome(npc.Center))
                 {
-                    if (!maelNpcWas[i]) { maelNpcWas[i] = true; maelNpcTimers[i] = interval - 1; if (!npc.boss) npc.velocity *= MAEL_SLOW; }
+                    if (!maelNpcWas[i]) { maelNpcWas[i] = true; maelNpcTimers[i] = interval - 1; if (!npc.boss && !npc.immortal) npc.velocity *= MAEL_SLOW; }
                     maelNpcTimers[i]++;
                     if (maelNpcTimers[i] >= interval)
                     {
                         maelNpcTimers[i] = 0;
-                        if (!npc.boss) npc.velocity *= MAEL_SLOW;
+                        if (!npc.boss && !npc.immortal) npc.velocity *= MAEL_SLOW;
                         bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
                         npc.SimpleStrikeNPC(dmgBase, Projectile.direction, crit: crit, knockBack: 1.2f);
-                        npc.velocity += new Vector2(Projectile.direction * 0.8f, 0.4f);
+                        if (!npc.immortal) npc.velocity += new Vector2(Projectile.direction * 0.8f, 0.4f);
                         for (int d = 0; d < 5; d++) Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, Main.rand.NextFloat(-3f, 3f), -2f, 0, default, 1.1f);
                         Projectile.netUpdate = true;
                     }

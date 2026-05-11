@@ -24,6 +24,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         protected override int TRAP_SPAWN_TICKS => 300;
         protected override int TRAP_BASE_TICKS => 600;
         protected override int TRAP_MAX_TICKS => 900;
+        // Trap
+        protected override int MaxFloorCeilingTraps => 8;
 
         public override void AI()
         {
@@ -56,7 +58,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     if (Main.mouseLeft && preciseTimer <= 0)
                     {
                         currentAnimationState = AnimationState.Idle;
-                        FirePrecise(mPlayer);
+                        FireThreeStreams(mPlayer);
                         preciseTimer = PRECISE_CD;
                     }
                     else currentAnimationState = AnimationState.Idle;
