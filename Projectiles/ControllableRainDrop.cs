@@ -285,7 +285,12 @@ namespace JoJoStands.Projectiles
             }
 
             if (Projectile.velocity.LengthSquared() > 0.5f)
-                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            {
+                float tilt = MathHelper.Clamp(Projectile.velocity.X * 0.06f, -0.52f, 0.52f);
+                Projectile.rotation = MathHelper.Lerp(Projectile.rotation, tilt, 0.15f);
+            }
+            else
+                Projectile.rotation = MathHelper.Lerp(Projectile.rotation, 0f, 0.15f);
 
             if (Main.rand.NextBool(2))
             {
