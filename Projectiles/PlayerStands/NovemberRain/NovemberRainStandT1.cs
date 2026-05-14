@@ -21,11 +21,11 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         public override int PunchDamage => 18;
         public override int PunchTime => 8;
         public override int HalfStandHeight => 96;
-        public override float MaxDistance => 80f;
+        public override float MaxDistance => 154f - Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
 
-        protected virtual float RAIN_W => 155f;
-        protected virtual float RAIN_DOWN => 280f;
-        protected virtual float RAIN_UP => 260f;
+        protected virtual float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
+        protected virtual float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 1.5f;
+        protected virtual float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
         protected virtual float RAIN_SLOW => 0.65f;
         protected virtual float MISS_CHANCE => 0.15f;
         protected virtual int HIT_INTERVAL => 22;
@@ -170,8 +170,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 currentAnimationState = AnimationState.Idle;
-                RainVisuals(RAIN_W, RAIN_DOWN, RAIN_UP, Projectile.Center);
-                AreaDamage(mPlayer, player, RAIN_W, RAIN_DOWN, RAIN_UP, HIT_INTERVAL, RAIN_SLOW, Projectile.Center);
+                RainVisuals(RAIN_W, RAIN_DOWN, RAIN_UP, player.Center);
+                AreaDamage(mPlayer, player, RAIN_W, RAIN_DOWN, RAIN_UP, HIT_INTERVAL, RAIN_SLOW, player.Center);
                 if (TRAP_SPAWN_TICKS > 0) BuildTraps(player);
             }
             else
@@ -548,7 +548,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             foreach (var existing in ActiveTraps)
             {
                 if (existing.IsPlaceholder) continue;
-                if (InRainDome(Projectile.Center, RAIN_W * 0.85f, RAIN_DOWN * 0.85f, RAIN_UP * 0.85f, existing.Center))
+                if (InRainDome(player.Center, RAIN_W * 0.85f, RAIN_DOWN * 0.85f, RAIN_UP * 0.85f, existing.Center))
                 {
                     hostArea = existing;
                     break;
@@ -613,18 +613,18 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             foreach (var a in ActiveTraps)
             {
                 if (a.IsPlaceholder) continue;
-                if (Vector2.DistanceSquared(Projectile.Center, a.Center) < minSeparation * minSeparation)
+                if (Vector2.DistanceSquared(player.Center, a.Center) < minSeparation * minSeparation)
                     return;
             }
 
             trapFormTimer++;
             if (trapFormTimer < TRAP_SPAWN_TICKS) return;
             trapFormTimer = 0;
-            var surfaces = ScanSurfaces(Projectile.Center, RAIN_W, RAIN_DOWN, RAIN_UP, player.Center);
+            var surfaces = ScanSurfaces(player.Center, RAIN_W, RAIN_DOWN, RAIN_UP, player.Center);
             if (surfaces.Count == 0) return;
             ActiveTraps.Add(new TrapArea
             {
-                Center = Projectile.Center,
+                Center = player.Center,
                 DurationTicks = TRAP_BASE_TICKS,
                 BaseDuration = TRAP_BASE_TICKS,
                 MaxDuration = TRAP_MAX_TICKS,
@@ -634,7 +634,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             });
             Projectile.netUpdate = true;
             for (int d = 0; d < 10; d++)
-                Dust.NewDust(Projectile.Center + new Vector2(Main.rand.NextFloat(-RAIN_W * 0.5f, RAIN_W * 0.5f), Main.rand.NextFloat(-20f, 20f)),
+                Dust.NewDust(player.Center + new Vector2(Main.rand.NextFloat(-RAIN_W * 0.5f, RAIN_W * 0.5f), Main.rand.NextFloat(-20f, 20f)),
                     8, 8, DustID.Water, 0f, -1f, 0, default, 1.2f);
         }
 
@@ -668,7 +668,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 { ActiveTraps.RemoveAt(i); trapFormTimer = 0; continue; }
 
                 bool nearby = abilityActive &&
-                    InRainDome(Projectile.Center, RAIN_W * 1.05f, RAIN_DOWN * 1.05f, RAIN_UP * 1.05f, trap.Center);
+                    InRainDome(player.Center, RAIN_W * 1.05f, RAIN_DOWN * 1.05f, RAIN_UP * 1.05f, trap.Center);
 
                 if (nearby)
                 {
@@ -897,7 +897,20 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                         {
                             DrawCeiling(surf, col);
                             if (bwTex != null && remain > 0.05f)
-                                DrawBackWallRain(bwTex, surf.WorldPos, surf.DripLandY, surf.DripLandFound, remain, true);
+                            {
+                                int ceilTX = (int)(surf.WorldPos.X / 16f);
+                                int ceilTY = (int)(surf.WorldPos.Y / 16f);
+                                bool hasWallBelow = false;
+                                for (int sy = ceilTY + 1; sy <= ceilTY + 4 && sy < Main.maxTilesY; sy++)
+                                {
+                                    if (ceilTX < 0 || ceilTX >= Main.maxTilesX) break;
+                                    var tt = Main.tile[ceilTX, sy];
+                                    if (tt.HasTile && Main.tileSolid[tt.TileType] && !TileID.Sets.Platforms[tt.TileType]) break;
+                                    if (tt.WallType > 0) { hasWallBelow = true; break; }
+                                }
+                                if (hasWallBelow)
+                                    DrawBackWallRain(bwTex, surf.WorldPos, surf.DripLandY, surf.DripLandFound, remain, true);
+                            }
                         }
                     }
                     catch { }
@@ -1010,7 +1023,30 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             catch { }
         }
 
+        public override void PostDraw(Color lightColor)
+        {
+            if (Main.netMode == 2) return;
+            if (Projectile.owner != Main.myPlayer) return;
+            if (!Main.mouseRight) return;
 
+            Player p = Main.player[Projectile.owner];
+            if (p == null || !p.active || p.dead) return;
+
+            Texture2D px = Terraria.GameContent.TextureAssets.MagicPixel.Value;
+            Vector2 center = p.Center - Main.screenPosition;
+            float alpha = global::JoJoStands.JoJoStands.RangeIndicators
+                ? global::JoJoStands.JoJoStands.RangeIndicatorAlpha
+                : 0.55f;
+            const float CTRL = 260f;
+            Color ctrlCol = new Color(120, 200, 255) * alpha;
+            int points = 720;
+            for (int i = 0; i < points; i++)
+            {
+                float a = (i / (float)points) * MathHelper.TwoPi;
+                Vector2 pos = center + new Vector2((float)Math.Cos(a) * CTRL, (float)Math.Sin(a) * CTRL);
+                Main.EntitySpriteDraw(px, pos, new Rectangle(0, 0, 1, 1), ctrlCol, 0f, new Vector2(0.5f, 0.5f), 3f, SpriteEffects.None, 0);
+            }
+        }
 
         public override void SelectAnimation()
         {

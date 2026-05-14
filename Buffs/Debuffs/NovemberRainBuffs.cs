@@ -16,6 +16,18 @@ namespace JoJoStands.Buffs.Debuffs
         }
     }
 
+    public class RainBarrierActive : JoJoBuff
+    {
+        public override string Texture => "JoJoStands/Buffs/Debuffs/AbilityCooldown";
+
+        public override void SetStaticDefaults()
+        {
+            Main.persistentBuff[Type] = true;
+            Main.debuff[Type] = false;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
+        }
+    }
+
     public class MaelstromCooldown : JoJoBuff
     {
         public override string Texture => "JoJoStands/Buffs/Debuffs/AbilityCooldown";
@@ -24,6 +36,18 @@ namespace JoJoStands.Buffs.Debuffs
         {
             Main.persistentBuff[Type] = true;
             Main.debuff[Type] = true;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
+        }
+    }
+
+    public class MaelstromActive : JoJoBuff
+    {
+        public override string Texture => "JoJoStands/Buffs/Debuffs/AbilityCooldown";
+
+        public override void SetStaticDefaults()
+        {
+            Main.persistentBuff[Type] = true;
+            Main.debuff[Type] = false;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
     }

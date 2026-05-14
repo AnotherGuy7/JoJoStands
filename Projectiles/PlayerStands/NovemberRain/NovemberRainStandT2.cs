@@ -15,9 +15,9 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         public override int TierNumber => 2;
         public override int PunchDamage => 35;
         public override int PunchTime => 7;
-        protected override float RAIN_W => 155f;
-        protected override float RAIN_DOWN => 280f;
-        protected override float RAIN_UP => 260f;
+        protected override float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
+        protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 1.5f;
+        protected override float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
         protected override float RAIN_SLOW => 0.60f;
         protected override int HIT_INTERVAL => 20;
         protected override int PRECISE_CD => 7;
@@ -47,8 +47,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
             {
                 currentAnimationState = AnimationState.Idle;
-                RainVisuals(RAIN_W, RAIN_DOWN, RAIN_UP, Projectile.Center);
-                AreaDamage(mPlayer, player, RAIN_W, RAIN_DOWN, RAIN_UP, HIT_INTERVAL, RAIN_SLOW, Projectile.Center);
+                RainVisuals(RAIN_W, RAIN_DOWN, RAIN_UP, player.Center);
+                AreaDamage(mPlayer, player, RAIN_W, RAIN_DOWN, RAIN_UP, HIT_INTERVAL, RAIN_SLOW, player.Center);
                 BuildTraps(player);
             }
             else

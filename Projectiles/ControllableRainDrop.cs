@@ -32,7 +32,7 @@ namespace JoJoStands.Projectiles
         private const float TRACK_BRAKE_DIST  = 32f;
         private const float TRACK_MIN_SPEED   = 14f;
         private const float CURSOR_LOCK_DIST  = 12f;
-        private const float CURSOR_TIP_Y_OFFSET = 14f;
+        private const float CURSOR_TIP_Y_OFFSET = 3f;
 
         private const float FREE_GRAVITY      = 0.42f;
         private const float CONTROL_RANGE     = 260f;
@@ -49,7 +49,7 @@ namespace JoJoStands.Projectiles
         public override void SetDefaults()
         {
             Projectile.width        = 14;
-            Projectile.height       = 28;
+            Projectile.height       = 6;
             Projectile.friendly     = true;
             Projectile.hostile      = false;
             Projectile.DamageType   = DamageClass.Melee;
@@ -70,13 +70,12 @@ namespace JoJoStands.Projectiles
 
         private bool HitsSolidTile()
         {
+            float bottomCheckY = Projectile.position.Y + Projectile.height - 1f;
             int x0 = (int)(Projectile.position.X / 16f);
-            int x1 = (int)((Projectile.position.X + Projectile.width)  / 16f);
-            int y0 = (int)(Projectile.position.Y / 16f);
-            int y1 = (int)((Projectile.position.Y + Projectile.height) / 16f);
+            int x1 = (int)((Projectile.position.X + Projectile.width) / 16f);
+            int ty = (int)(bottomCheckY / 16f);
             for (int tx = x0; tx <= x1; tx++)
-                for (int ty = y0; ty <= y1; ty++)
-                    if (IsTrueSolid(tx, ty)) return true;
+                if (IsTrueSolid(tx, ty)) return true;
             return false;
         }
 
@@ -160,7 +159,7 @@ namespace JoJoStands.Projectiles
             {
                 if (!released)
                 {
-                    Vector2 standCenter = player.Center + new Vector2(0f, -73f);
+                    Vector2 standCenter = player.Center;
                     bool    inRange     = Vector2.Distance(Projectile.Center, standCenter) < CONTROL_RANGE;
 
                     if (!inRange)
@@ -275,6 +274,40 @@ namespace JoJoStands.Projectiles
             {
                 Projectile.velocity.Y += FREE_GRAVITY;
                 if (Projectile.velocity.Y > 13f) Projectile.velocity.Y = 13f;
+            }
+
+            if (Projectile.owner == Main.myPlayer && !released && Main.mouseRight)
+            {
+                Vector2 cursorPos = Main.MouseWorld + new Vector2(0f, CURSOR_TIP_Y_OFFSET);
+                int cursorTileX = (int)(cursorPos.X / 16f);
+                int cursorTileY = (int)(cursorPos.Y / 16f);
+                bool cursorInSolid = IsTrueSolid(cursorTileX, cursorTileY);
+
+                if (!cursorInSolid)
+                {
+                    int leftTileX = (int)((Projectile.position.X - 2f) / 16f);
+                    int rightTileX = (int)((Projectile.position.X + Projectile.width + 2f) / 16f);
+                    int currTileY = (int)((Projectile.position.Y + Projectile.height) / 16f);
+                    int groundTileY = -1;
+                    for (int ty = currTileY; ty <= currTileY + 3; ty++)
+                    {
+                        bool found = false;
+                        for (int tx = leftTileX; tx <= rightTileX; tx++)
+                        {
+                            if (IsTrueSolid(tx, ty)) { found = true; break; }
+                        }
+                        if (found) { groundTileY = ty; break; }
+                    }
+                    if (groundTileY >= 0)
+                    {
+                        float safeTopY = groundTileY * 16f - Projectile.height - 2f;
+                        if (Projectile.position.Y > safeTopY)
+                        {
+                            Projectile.position.Y = safeTopY;
+                            if (Projectile.velocity.Y > 0f) Projectile.velocity.Y = 0f;
+                        }
+                    }
+                }
             }
 
             if (HitsSolidTile())

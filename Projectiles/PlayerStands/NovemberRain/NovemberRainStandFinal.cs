@@ -16,9 +16,9 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         public override int TierNumber => 4;
         public override int PunchDamage => 95;
         public override int PunchTime => 5;
-        protected override float RAIN_W => 155f;
-        protected override float RAIN_DOWN => 280f;
-        protected override float RAIN_UP => 260f;
+        protected override float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
+        protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 1.5f;
+        protected override float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
         protected override float RAIN_SLOW => 0.50f;
         protected override int HIT_INTERVAL => 16;
         protected override int PRECISE_CD => 5;
@@ -37,12 +37,11 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         private int barrierTimer = 0;
         private int barrierProjIdx = -1;
 
-        private const float MAEL_W = 300f;
+        private const float MAEL_W = 340f;
         private const float MAEL_DOWN = 480f;
         private const float MAEL_UP = 500f;
         private const int MAEL_DURATION = 600;
         private const int MAEL_DRAIN_SECS = 5;
-        private const int MAEL_CD_SECS = 30;
         private const int MAEL_HIT_INTERVAL = 14;
         private const float MAEL_SLOW = 0.20f;
 
@@ -129,13 +128,15 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             CheckTrapTriggers(mPlayer);
 
             bool hasDrain = player.HasBuff(ModContent.BuffType<MaelstromDrain>());
-            bool hasMaelCD = player.HasBuff(ModContent.BuffType<MaelstromCooldown>());
             // Rain Barrier
             bool hasBarrierCD = player.HasBuff(ModContent.BuffType<RainBarrierCooldown>());
+            bool hasMaelCD = hasBarrierCD;
 
             if (barrierActive)
             {
                 barrierTimer++;
+                int bRemaining = BARRIER_DURATION - barrierTimer + 1;
+                if (bRemaining > 0) player.AddBuff(ModContent.BuffType<RainBarrierActive>(), bRemaining);
                 if (barrierTimer >= BARRIER_DURATION)
                 {
                     barrierActive = false; barrierTimer = 0;
@@ -152,12 +153,14 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 MaelstromVisuals();
                 MaelstromDamage(mPlayer, player);
                 MaelstromTraps(player);
+                int mRemaining = MAEL_DURATION - maelTimer + 1;
+                if (mRemaining > 0) player.AddBuff(ModContent.BuffType<MaelstromActive>(), mRemaining);
                 if (maelTimer >= MAEL_DURATION)
                 {
                     maelActive = false; maelTimer = 0;
                     for (int i = 0; i < maelNpcTimers.Length; i++) { maelNpcTimers[i] = 0; maelNpcWas[i] = false; }
                     player.AddBuff(ModContent.BuffType<MaelstromDrain>(), MAEL_DRAIN_SECS * 60);
-                    player.AddBuff(ModContent.BuffType<MaelstromCooldown>(), mPlayer.AbilityCooldownTime(MAEL_CD_SECS));
+                    player.AddBuff(ModContent.BuffType<RainBarrierCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
                     Projectile.netUpdate = true;
                 }
             }
@@ -169,8 +172,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 if (canUseRain)
                 {
                     currentAnimationState = AnimationState.Idle;
-                    RainVisuals(RAIN_W, RAIN_DOWN, RAIN_UP, Projectile.Center);
-                    AreaDamage(mPlayer, player, RAIN_W, RAIN_DOWN, RAIN_UP, HIT_INTERVAL, RAIN_SLOW, Projectile.Center);
+                    RainVisuals(RAIN_W, RAIN_DOWN, RAIN_UP, player.Center);
+                    AreaDamage(mPlayer, player, RAIN_W, RAIN_DOWN, RAIN_UP, HIT_INTERVAL, RAIN_SLOW, player.Center);
                     BuildTraps(player);
                 }
                 else currentAnimationState = AnimationState.Idle;
@@ -185,15 +188,15 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     if (Main.mouseRight && ctrlDropActive == 0 && canUseRain) { FireControllableDrop(mPlayer); ctrlDropActive = 1; }
                     if (!Main.mouseRight) ctrlDropActive = 0;
 
-                    if (SpecialKeyPressed() && !barrierActive && !hasBarrierCD)
+                    if (SpecialKeyPressed() && !barrierActive && !hasBarrierCD && !maelActive)
                     {
                         barrierActive = true; barrierTimer = 0;
-                        barrierProjIdx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero,
+                        barrierProjIdx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
                             ModContent.ProjectileType<RainBarrier>(), newPunchDamage * 2, 0f, Main.myPlayer, Projectile.whoAmI);
                         Main.projectile[barrierProjIdx].netUpdate = true; Projectile.netUpdate = true;
                     }
 
-                    if (SecondSpecialKeyPressed() && !maelActive && !hasMaelCD && !hasDrain)
+                    if (SecondSpecialKeyPressed() && !maelActive && !hasMaelCD && !hasDrain && !barrierActive)
                     { maelActive = true; maelTimer = 0; maelTrapFormTimer = 0; Projectile.netUpdate = true; }
                 }
             }
@@ -219,8 +222,9 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             if (maelVisTimer < 1) return;
             maelVisTimer = 0;
             Vector2 c = Projectile.Center;
-            for (int i = 0; i < 8; i++) { float a = Main.rand.NextFloat(MathHelper.Pi, MathHelper.TwoPi); float r = Main.rand.NextFloat(0.5f, 1.0f); int d = Dust.NewDust(new Vector2(c.X + (float)Math.Cos(a) * MAEL_W * r, c.Y + (float)Math.Sin(a) * MAEL_UP * r), 5, 20, DustID.Water, Main.rand.NextFloat(-0.4f, 0.4f), Main.rand.NextFloat(14f, 22f), 80, default, Main.rand.NextFloat(1.0f, 1.5f)); Main.dust[d].noGravity = true; }
-            for (int i = 0; i < 7; i++) { int d = Dust.NewDust(new Vector2(c.X + Main.rand.NextFloat(-MAEL_W, MAEL_W), c.Y + Main.rand.NextFloat(0f, MAEL_DOWN * 0.6f)), 5, 20, DustID.Water, Main.rand.NextFloat(-0.3f, 0.3f), Main.rand.NextFloat(14f, 22f), 80, default, Main.rand.NextFloat(1.0f, 1.5f)); Main.dust[d].noGravity = true; }
+            for (int i = 0; i < 10; i++) { float a = Main.rand.NextFloat(MathHelper.Pi, MathHelper.TwoPi); float r = Main.rand.NextFloat(0f, 1.0f); int d = Dust.NewDust(new Vector2(c.X + (float)Math.Cos(a) * MAEL_W * r, c.Y + (float)Math.Sin(a) * MAEL_UP * r), 5, 20, DustID.Water, Main.rand.NextFloat(-0.4f, 0.4f), Main.rand.NextFloat(14f, 22f), 80, default, Main.rand.NextFloat(1.0f, 1.5f)); Main.dust[d].noGravity = true; }
+            for (int i = 0; i < 9; i++) { int d = Dust.NewDust(new Vector2(c.X + Main.rand.NextFloat(-MAEL_W, MAEL_W), c.Y + Main.rand.NextFloat(0f, MAEL_DOWN)), 5, 20, DustID.Water, Main.rand.NextFloat(-0.3f, 0.3f), Main.rand.NextFloat(14f, 22f), 80, default, Main.rand.NextFloat(1.0f, 1.5f)); Main.dust[d].noGravity = true; }
+            for (int i = 0; i < 4; i++) { int d = Dust.NewDust(new Vector2(c.X + Main.rand.NextFloat(-MAEL_W * 0.4f, MAEL_W * 0.4f), c.Y + Main.rand.NextFloat(-MAEL_UP * 0.3f, MAEL_DOWN * 0.3f)), 5, 20, DustID.Water, Main.rand.NextFloat(-0.3f, 0.3f), Main.rand.NextFloat(14f, 22f), 80, default, Main.rand.NextFloat(1.0f, 1.5f)); Main.dust[d].noGravity = true; }
             Lighting.AddLight(Projectile.Center, 0.1f, 0.25f, 0.5f);
         }
 
@@ -250,6 +254,27 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     }
                 }
                 else { maelNpcTimers[i] = 0; maelNpcWas[i] = false; }
+            }
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (barrierActive)
+            {
+                if (barrierProjIdx >= 0 && barrierProjIdx < Main.maxProjectiles)
+                    Main.projectile[barrierProjIdx].Kill();
+                barrierActive = false; barrierTimer = 0;
+                player.AddBuff(ModContent.BuffType<RainBarrierCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+            }
+
+            if (maelActive)
+            {
+                maelActive = false; maelTimer = 0;
+                player.AddBuff(ModContent.BuffType<MaelstromDrain>(), MAEL_DRAIN_SECS * 60);
+                player.AddBuff(ModContent.BuffType<RainBarrierCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
             }
         }
     }

@@ -534,6 +534,16 @@ Mods: {
 				Description: Mods.JoJoStands.Buffs.MaelstromCooldown.Description
 				DisplayName: Maelstrom Cooldown
 			}
+
+			MaelstromActive: {
+				DisplayName: Maelstrom Active
+				Description: Mods.JoJoStands.Buffs.MaelstromActive.Description
+			}
+
+			RainBarrierActive: {
+				DisplayName: Rain Barrier Active
+				Description: Mods.JoJoStands.Buffs.RainBarrierActive.Description
+			}
 		}
 
 		Items: {
