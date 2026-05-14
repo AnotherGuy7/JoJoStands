@@ -27,7 +27,7 @@ namespace JoJoStands.Projectiles
             Projectile.height                = 14;
             Projectile.friendly              = true;
             Projectile.hostile               = false;
-            Projectile.DamageType            = DamageClass.Melee;
+            Projectile.DamageType   = DamageClass.Generic;
             Projectile.penetrate             = 1;
             Projectile.timeLeft              = 200;
             Projectile.ignoreWater           = true;
@@ -133,6 +133,15 @@ namespace JoJoStands.Projectiles
                     baseColor * fade, rot, origin,
                     new Vector2(widthScale, stretch), SpriteEffects.None, 0);
             }
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            Player owner = Main.player[Projectile.owner];
+            MyPlayer mp = owner.GetModPlayer<MyPlayer>();
+            bool crit = Main.rand.NextFloat(1, 100 + 1) <= mp.standCritChangeBoosts;
+            if (crit) modifiers.SetCrit();
+            modifiers.SourceDamage *= mp.standDamageBoosts;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) { }

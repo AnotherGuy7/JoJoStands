@@ -38,7 +38,7 @@ namespace JoJoStands.Projectiles
             Projectile.height = 32;
             Projectile.friendly   = true;
             Projectile.hostile    = false;
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.DamageType   = DamageClass.Generic;
             Projectile.penetrate  = -1;
             Projectile.timeLeft   = 900;
             Projectile.ignoreWater = true;
@@ -210,6 +210,8 @@ namespace JoJoStands.Projectiles
         private void HandleNPCs(Player player)
         {
             if (Projectile.owner != Main.myPlayer) return;
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+            int dmgInterval = Math.Max(DAMAGE_INTERVAL - mPlayer.standSpeedBoosts / 2, 1);
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC npc = Main.npc[i];
@@ -259,11 +261,11 @@ namespace JoJoStands.Projectiles
                     npc.velocity *= DAMAGE_SLOW;
                     if (!damageTimers.ContainsKey(i)) damageTimers[i] = 0;
                     damageTimers[i]++;
-                    if (damageTimers[i] >= DAMAGE_INTERVAL)
+                    if (damageTimers[i] >= dmgInterval)
                     {
                         damageTimers[i] = 0;
                         bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
-                        npc.SimpleStrikeNPC(Projectile.damage, Projectile.direction, crit: crit, knockBack: 0f);
+                        player.ApplyDamageToNPC(npc, Projectile.damage, 0f, Projectile.direction, crit, DamageClass.Generic);
                         for (int d = 0; d < 3; d++)
                             Dust.NewDust(npc.position, npc.width, npc.height,
                                 DustID.Water, Main.rand.NextFloat(-2f, 2f), -1.5f, 0, default, 1f);

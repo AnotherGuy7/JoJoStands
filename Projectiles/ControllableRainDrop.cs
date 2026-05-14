@@ -52,7 +52,7 @@ namespace JoJoStands.Projectiles
             Projectile.height       = 6;
             Projectile.friendly     = true;
             Projectile.hostile      = false;
-            Projectile.DamageType   = DamageClass.Melee;
+            Projectile.DamageType   = DamageClass.Generic;
             Projectile.penetrate    = 3;
             Projectile.timeLeft     = 600;
             Projectile.ignoreWater  = true;
@@ -358,6 +358,15 @@ namespace JoJoStands.Projectiles
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height,
                     DustID.Water, Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-3f, -0.5f),
                     0, default, Main.rand.NextFloat(1f, 1.4f));
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            Player owner = Main.player[Projectile.owner];
+            MyPlayer mp = owner.GetModPlayer<MyPlayer>();
+            bool crit = Main.rand.NextFloat(1, 100 + 1) <= mp.standCritChangeBoosts;
+            if (crit) modifiers.SetCrit();
+            modifiers.SourceDamage *= mp.standDamageBoosts;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

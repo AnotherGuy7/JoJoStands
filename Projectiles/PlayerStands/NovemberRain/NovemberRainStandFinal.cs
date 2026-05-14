@@ -17,7 +17,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         public override int PunchDamage => 95;
         public override int PunchTime => 5;
         protected override float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
-        protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 1.5f;
+        protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.8f;
         protected override float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
         protected override float RAIN_SLOW => 0.50f;
         protected override int HIT_INTERVAL => 16;
@@ -129,7 +129,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
             bool hasDrain = player.HasBuff(ModContent.BuffType<MaelstromDrain>());
             // Rain Barrier
-            bool hasBarrierCD = player.HasBuff(ModContent.BuffType<RainBarrierCooldown>());
+            bool hasBarrierCD = player.HasBuff(ModContent.BuffType<AbilityCooldown>());
             bool hasMaelCD = hasBarrierCD;
 
             if (barrierActive)
@@ -142,7 +142,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     barrierActive = false; barrierTimer = 0;
                     if (barrierProjIdx >= 0 && barrierProjIdx < Main.maxProjectiles) Main.projectile[barrierProjIdx].Kill();
                     barrierProjIdx = -1;
-                    player.AddBuff(ModContent.BuffType<RainBarrierCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
                     Projectile.netUpdate = true;
                 }
             }
@@ -160,7 +160,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     maelActive = false; maelTimer = 0;
                     for (int i = 0; i < maelNpcTimers.Length; i++) { maelNpcTimers[i] = 0; maelNpcWas[i] = false; }
                     player.AddBuff(ModContent.BuffType<MaelstromDrain>(), MAEL_DRAIN_SECS * 60);
-                    player.AddBuff(ModContent.BuffType<RainBarrierCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
                     Projectile.netUpdate = true;
                 }
             }
@@ -182,7 +182,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && preciseTimer <= 0 && canUseRain) { currentAnimationState = AnimationState.Idle; FireThreeStreams(mPlayer); preciseTimer = PRECISE_CD; }
+                    if (Main.mouseLeft && preciseTimer <= 0 && canUseRain) { currentAnimationState = AnimationState.Idle; FireThreeStreams(mPlayer); preciseTimer = Math.Max(PRECISE_CD - mPlayer.standSpeedBoosts / 2, 2); }
                     else currentAnimationState = AnimationState.Idle;
 
                     if (Main.mouseRight && ctrlDropActive == 0 && canUseRain) { FireControllableDrop(mPlayer); ctrlDropActive = 1; }
@@ -231,8 +231,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         private void MaelstromDamage(MyPlayer mPlayer, Player player)
         {
             if (Projectile.owner != Main.myPlayer) return;
-            float boost = Math.Max(0.5f, mPlayer.standDamageBoosts);
-            int interval = Math.Max((int)(MAEL_HIT_INTERVAL / boost), 8);
+            int interval = Math.Max(3, (int)(MAEL_HIT_INTERVAL / (1f + mPlayer.standSpeedBoosts * 0.3f)));
             int dmgBase = (int)(newPunchDamage * 1.35f);
             for (int i = 0; i < Main.maxNPCs; i++)
             {
@@ -246,8 +245,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     {
                         maelNpcTimers[i] = 0;
                         if (!npc.boss && !npc.immortal) npc.velocity *= MAEL_SLOW;
-                        bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
-                        npc.SimpleStrikeNPC(dmgBase, Projectile.direction, crit: crit, knockBack: 1.2f);
+                        bool crit = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
+                        player.ApplyDamageToNPC(npc, dmgBase, 1.2f, Projectile.direction, crit, DamageClass.Generic);
                         if (!npc.immortal) npc.velocity += new Vector2(Projectile.direction * 0.8f, 0.4f);
                         for (int d = 0; d < 5; d++) Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, Main.rand.NextFloat(-3f, 3f), -2f, 0, default, 1.1f);
                         Projectile.netUpdate = true;
@@ -267,14 +266,14 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 if (barrierProjIdx >= 0 && barrierProjIdx < Main.maxProjectiles)
                     Main.projectile[barrierProjIdx].Kill();
                 barrierActive = false; barrierTimer = 0;
-                player.AddBuff(ModContent.BuffType<RainBarrierCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
             }
 
             if (maelActive)
             {
                 maelActive = false; maelTimer = 0;
                 player.AddBuff(ModContent.BuffType<MaelstromDrain>(), MAEL_DRAIN_SECS * 60);
-                player.AddBuff(ModContent.BuffType<RainBarrierCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
             }
         }
     }

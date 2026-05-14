@@ -24,7 +24,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         public override float MaxDistance => 154f - Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
 
         protected virtual float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
-        protected virtual float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 1.5f;
+        protected virtual float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.8f;
         protected virtual float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
         protected virtual float RAIN_SLOW => 0.65f;
         protected virtual float MISS_CHANCE => 0.15f;
@@ -123,7 +123,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
         private void HitNPCWithAccessories(Player player, MyPlayer mPlayer, NPC npc, int baseDmg, int direction)
         {
-            bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
+            bool crit = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
             if (mPlayer.underbossPhoneEquipped)
             {
                 mPlayer.underbossPhoneCount++;
@@ -131,7 +131,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 {
                     mPlayer.underbossPhoneCount = 0;
                     int bonusDmg = (int)(baseDmg * 11.1f);
-                    npc.SimpleStrikeNPC(bonusDmg, direction, crit: true, knockBack: 0f);
+                    player.ApplyDamageToNPC(npc, bonusDmg, 0f, direction, true, DamageClass.Generic);
                     for (int d = 0; d < 6; d++)
                         Dust.NewDust(npc.position, npc.width, npc.height, DustID.TreasureSparkle, 0f, -2f, 0, default, 1.2f);
                     return;
@@ -147,7 +147,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     baseDmg += npc.defense;
                 }
             }
-            npc.SimpleStrikeNPC(baseDmg, direction, crit: crit, knockBack: 0.8f);
+            player.ApplyDamageToNPC(npc, baseDmg, 0.8f, direction, crit, DamageClass.Generic);
         }
 
         public override void AI()
@@ -182,7 +182,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     {
                         currentAnimationState = AnimationState.Idle;
                         FireThreeStreams(mPlayer);
-                        preciseTimer = PRECISE_CD;
+                        preciseTimer = Math.Max(PRECISE_CD - mPlayer.standSpeedBoosts / 2, 2);
                     }
                     else currentAnimationState = AnimationState.Idle;
                 }
@@ -346,8 +346,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         protected void AreaDamage(MyPlayer mPlayer, Player player, float w, float down, float up, int baseInterval, float slow, Vector2 center)
         {
             if (Projectile.owner != Main.myPlayer) return;
-            float boost = Math.Max(0.5f, mPlayer.standDamageBoosts);
-            int interval = Math.Max((int)(baseInterval / boost), 8);
+            int interval = Math.Max(3, (int)(baseInterval / (1f + mPlayer.standSpeedBoosts * 0.3f)));
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC npc = Main.npc[i];
@@ -703,8 +702,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                                     npc.Center.Y > surf.WorldPos.Y &&
                                     npc.Center.Y < landY + 32f)
                                 {
-                                    bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
-                                    npc.SimpleStrikeNPC((int)(newPunchDamage * 0.5f), Projectile.direction, crit: crit, knockBack: 0f);
+                                    bool crit = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
+                                    player.ApplyDamageToNPC(npc, (int)(newPunchDamage * 0.5f), 0f, Projectile.direction, crit, DamageClass.Generic);
                                     Dust.NewDust(new Vector2(surf.WorldPos.X, landY), 16, 8, DustID.Water,
                                         Main.rand.NextFloat(-3f, 3f), -2f, 0, default, 1.2f);
                                     Projectile.netUpdate = true;
@@ -720,6 +719,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         protected void CheckTrapTriggers(MyPlayer mPlayer)
         {
             if (Projectile.owner != Main.myPlayer) return;
+            Player player = Main.player[Projectile.owner];
             foreach (var trap in ActiveTraps)
             {
                 foreach (var surf in trap.Surfaces)
@@ -744,7 +744,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                         if (hit)
                         {
                             surf.Triggered = true;
-                            npc.SimpleStrikeNPC((int)(newPunchDamage * 3f), Projectile.direction, crit: false, knockBack: 2f);
+                            player.ApplyDamageToNPC(npc, (int)(newPunchDamage * 3f), 2f, Projectile.direction, false, DamageClass.Generic);
                             if (!npc.boss) npcStunTimers[n] = 90;
                             for (int d = 0; d < 14; d++)
                                 Dust.NewDust(surf.WorldPos, 16, 16, DustID.Water,

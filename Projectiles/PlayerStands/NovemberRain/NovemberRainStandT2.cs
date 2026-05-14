@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         public override int PunchDamage => 35;
         public override int PunchTime => 7;
         protected override float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
-        protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 1.5f;
+        protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.8f;
         protected override float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
         protected override float RAIN_SLOW => 0.60f;
         protected override int HIT_INTERVAL => 20;
@@ -59,7 +59,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     {
                         currentAnimationState = AnimationState.Idle;
                         FireThreeStreams(mPlayer);
-                        preciseTimer = PRECISE_CD;
+                        preciseTimer = Math.Max(PRECISE_CD - mPlayer.standSpeedBoosts / 2, 2);
                     }
                     else currentAnimationState = AnimationState.Idle;
                 }

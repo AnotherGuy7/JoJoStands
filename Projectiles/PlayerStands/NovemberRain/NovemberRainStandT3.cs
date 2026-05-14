@@ -16,7 +16,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         public override int PunchDamage => 68;
         public override int PunchTime => 6;
         protected override float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
-        protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 1.5f;
+        protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.8f;
         protected override float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
         protected override float RAIN_SLOW => 0.55f;
         protected override int HIT_INTERVAL => 18;
@@ -61,7 +61,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                         Main.projectile[barrierProjIdx].Kill();
                     barrierProjIdx = -1;
                     // Rain Barrier
-                    player.AddBuff(ModContent.BuffType<RainBarrierCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
                     Projectile.netUpdate = true;
                 }
             }
@@ -81,7 +81,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     {
                         currentAnimationState = AnimationState.Idle;
                         FireThreeStreams(mPlayer);
-                        preciseTimer = PRECISE_CD;
+                        preciseTimer = Math.Max(PRECISE_CD - mPlayer.standSpeedBoosts / 2, 2);
                     }
                     else currentAnimationState = AnimationState.Idle;
 
@@ -92,7 +92,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     }
                     if (!Main.mouseRight) ctrlDropActive = 0;
 
-                    if (SpecialKeyPressed() && !barrierActive && !player.HasBuff(ModContent.BuffType<RainBarrierCooldown>()))
+                    if (SpecialKeyPressed() && !barrierActive && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                     {
                         barrierActive = true; barrierTimer = 0;
                         barrierProjIdx = Projectile.NewProjectile(
