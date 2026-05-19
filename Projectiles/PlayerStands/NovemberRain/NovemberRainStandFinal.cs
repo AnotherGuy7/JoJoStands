@@ -231,7 +231,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         private void MaelstromDamage(MyPlayer mPlayer, Player player)
         {
             if (Projectile.owner != Main.myPlayer) return;
-            int interval = Math.Max(3, (int)(MAEL_HIT_INTERVAL / (1f + mPlayer.standSpeedBoosts * 0.3f)));
+            int interval = Math.Max(MAEL_HIT_INTERVAL - mPlayer.standSpeedBoosts, 4);
             int dmgBase = (int)(newPunchDamage * 1.35f);
             for (int i = 0; i < Main.maxNPCs; i++)
             {
@@ -245,7 +245,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     {
                         maelNpcTimers[i] = 0;
                         if (!npc.boss && !npc.immortal) npc.velocity *= MAEL_SLOW;
-                        bool crit = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
+                        bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
                         player.ApplyDamageToNPC(npc, dmgBase, 1.2f, Projectile.direction, crit, DamageClass.Generic);
                         if (!npc.immortal) npc.velocity += new Vector2(Projectile.direction * 0.8f, 0.4f);
                         for (int d = 0; d < 5; d++) Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, Main.rand.NextFloat(-3f, 3f), -2f, 0, default, 1.1f);

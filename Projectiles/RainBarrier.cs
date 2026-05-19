@@ -26,6 +26,8 @@ namespace JoJoStands.Projectiles
         private const float DAMAGE_SLOW     = 0.015f;
         private const float KNOCKBACK_FORCE = 2.5f;
         private const float CENTER_Y_OFFSET = 10f;
+        private const float BARRIER_FORWARD_X = 15f;
+        private const float BARRIER_WORLD_X_OFFSET = -5f;
 
         private int visualTimer = 0;
         private Dictionary<int, int> damageTimers = new Dictionary<int, int>();
@@ -52,8 +54,21 @@ namespace JoJoStands.Projectiles
             Player player = Main.player[Projectile.owner];
             if (!player.active || player.dead) { Projectile.Kill(); return; }
 
-            Projectile.Center = new Vector2(player.Center.X, player.Center.Y + CENTER_Y_OFFSET);
-            _pushCenter = player.Center;
+            float anchorX;
+            int standIdx = (int)Projectile.ai[0];
+            if (standIdx >= 0 && standIdx < Main.maxProjectiles
+                && Main.projectile[standIdx].active
+                && Main.projectile[standIdx].owner == Projectile.owner)
+            {
+                anchorX = Main.projectile[standIdx].Center.X + BARRIER_FORWARD_X * player.direction + BARRIER_WORLD_X_OFFSET;
+            }
+            else
+            {
+                anchorX = player.Center.X + (-19f + BARRIER_FORWARD_X) * player.direction + BARRIER_WORLD_X_OFFSET;
+            }
+
+            Projectile.Center = new Vector2(anchorX, player.Center.Y + CENTER_Y_OFFSET);
+            _pushCenter        = new Vector2(anchorX, player.Center.Y);
 
             BarrierVisuals();
             DeflectProjectiles();
@@ -264,8 +279,8 @@ namespace JoJoStands.Projectiles
                     if (damageTimers[i] >= dmgInterval)
                     {
                         damageTimers[i] = 0;
-                        bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
-                        player.ApplyDamageToNPC(npc, Projectile.damage, 0f, Projectile.direction, crit, DamageClass.Generic);
+                        bool crit = Main.rand.NextFloat(1, 100 + 1) <= mPlayer.standCritChangeBoosts;
+                        player.ApplyDamageToNPC(npc, (int)(Projectile.damage * 0.85f), 0f, Projectile.direction, crit, DamageClass.Generic);
                         for (int d = 0; d < 3; d++)
                             Dust.NewDust(npc.position, npc.width, npc.height,
                                 DustID.Water, Main.rand.NextFloat(-2f, 2f), -1.5f, 0, default, 1f);

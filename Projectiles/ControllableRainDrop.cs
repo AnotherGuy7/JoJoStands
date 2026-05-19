@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using JoJoStands.Projectiles.PlayerStands.NovemberRain;
 
 namespace JoJoStands.Projectiles
 {
@@ -98,8 +99,35 @@ namespace JoJoStands.Projectiles
             if (firstFrame)
             {
                 Projectile.velocity = Vector2.Zero;
-                spawnPos = Projectile.Center;
                 firstFrame = false;
+
+                int dirSign = player.direction;
+                Vector2 standPos = player.Center;
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    Projectile sp = Main.projectile[i];
+                    if (sp.active && sp.owner == Projectile.owner
+                        && (sp.type == ModContent.ProjectileType<NovemberRainStandT1>()
+                            || sp.type == ModContent.ProjectileType<NovemberRainStandT2>()
+                            || sp.type == ModContent.ProjectileType<NovemberRainStandT3>()
+                            || sp.type == ModContent.ProjectileType<NovemberRainStandFinal>()))
+                    {
+                        standPos = sp.Center;
+                        dirSign = sp.spriteDirection;
+                        Projectile.spriteDirection = sp.spriteDirection;
+                        Projectile.direction = sp.spriteDirection;
+                        break;
+                    }
+                }
+
+                const float DROP_X_OFFSET = 17f;
+                const float DROP_Y_OFFSET = -21f;
+                Vector2 forcedSpawn = new Vector2(
+                    standPos.X + DROP_X_OFFSET * dirSign,
+                    standPos.Y + DROP_Y_OFFSET);
+
+                Projectile.Center = forcedSpawn;
+                spawnPos = forcedSpawn;
 
                 if (Projectile.owner == Main.myPlayer)
                 {
@@ -122,10 +150,30 @@ namespace JoJoStands.Projectiles
             {
                 spawnTimer++;
 
-                int   dirSign      = player.direction;
-                float coneTipX     = player.Center.X + (-20f) * dirSign + (20f) * dirSign;
-                float coneTipY     = player.Center.Y + (-73f) + (-22f);
-                spawnPos           = new Vector2(coneTipX, coneTipY);
+                const float DROP_X_OFFSET = 17f;
+                const float DROP_Y_OFFSET = -21f;
+                int dirSign2 = player.direction;
+                Vector2 standPos2 = player.Center;
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    Projectile sp = Main.projectile[i];
+                    if (sp.active && sp.owner == Projectile.owner
+                        && (sp.type == ModContent.ProjectileType<NovemberRainStandT1>()
+                            || sp.type == ModContent.ProjectileType<NovemberRainStandT2>()
+                            || sp.type == ModContent.ProjectileType<NovemberRainStandT3>()
+                            || sp.type == ModContent.ProjectileType<NovemberRainStandFinal>()))
+                    {
+                        standPos2 = sp.Center;
+                        dirSign2 = sp.spriteDirection;
+                        Projectile.spriteDirection = sp.spriteDirection;
+                        Projectile.direction = sp.spriteDirection;
+                        break;
+                    }
+                }
+                spawnPos = new Vector2(
+                    standPos2.X + DROP_X_OFFSET * dirSign2,
+                    standPos2.Y + DROP_Y_OFFSET);
+
                 Projectile.Center  = spawnPos;
                 Projectile.velocity = Vector2.Zero;
 
@@ -337,19 +385,23 @@ namespace JoJoStands.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
+            Texture2D tex   = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+            Vector2   origin = new Vector2(tex.Width * 0.5f, tex.Height * 0.5f);
+            Vector2   pos    = Projectile.Center - Main.screenPosition;
+
             if (spawnTimer < SPAWN_GROW_FRAMES)
             {
-                Texture2D tex   = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-                float     t     = (float)spawnTimer / SPAWN_GROW_FRAMES;
-                float     scale = 1f - (1f - t) * (1f - t);
-                Vector2   origin = new Vector2(tex.Width * 0.5f, tex.Height * 0.5f);
-                Vector2   pos    = Projectile.Center - Main.screenPosition;
-
+                float t     = (float)spawnTimer / SPAWN_GROW_FRAMES;
+                float scale = 1f - (1f - t) * (1f - t);
                 Main.EntitySpriteDraw(tex, pos, null, lightColor * t, Projectile.rotation,
                     origin, scale, SpriteEffects.None, 0);
-                return false;
             }
-            return true;
+            else
+            {
+                Main.EntitySpriteDraw(tex, pos, null, lightColor, Projectile.rotation,
+                    origin, 1f, SpriteEffects.None, 0);
+            }
+            return false;
         }
 
         private void SplashDust()
