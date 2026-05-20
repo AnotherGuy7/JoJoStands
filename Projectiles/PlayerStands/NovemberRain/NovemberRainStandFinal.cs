@@ -11,7 +11,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
     public class NovemberRainStandFinal : NovemberRainStandT1
     {
         public override int TierNumber => 4;
-        public override int ProjectileDamage => 114;
+        public override int ProjectileDamage => 118;
         public override int ShootTime => 10;
         public override StandAttackType StandType => StandAttackType.Ranged;
         protected override float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;

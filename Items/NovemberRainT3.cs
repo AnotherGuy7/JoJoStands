@@ -8,8 +8,8 @@ namespace JoJoStands.Items
 {
     public class NovemberRainT3 : StandItemClass
     {
-        public override int StandSpeed => 4;
-        public override int StandType => 1;
+        public override int StandSpeed => 15;
+        public override int StandType => 2;
         public override string StandIdentifierName => "NovemberRain";
         public override int StandTier => 3;
         public override Color StandTierDisplayColor => Color.SkyBlue;
@@ -18,13 +18,13 @@ namespace JoJoStands.Items
 
         public override void SetDefaults()
         {
-            Item.damage = 68;
+            Item.damage = 84;
             Item.width = 32;
             Item.height = 32;
             Item.noUseGraphic = true;
             Item.maxStack = 1;
             Item.value = 0;
-            Item.rare = ItemRarityID.Lime;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()

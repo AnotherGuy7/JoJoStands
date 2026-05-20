@@ -14,8 +14,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         public override int TierNumber => 1;
         public override string PoseSoundName => "";
         public override string SpawnSoundName => "";
-        public override int ProjectileDamage => 14;
-        public override int ShootTime => 25;
+        public override int ProjectileDamage => 21;
+        public override int ShootTime => 30;
         public override int HalfStandHeight => 96;
         public override StandAttackType StandType => StandAttackType.Ranged;
         public override float MaxDistance => 154f - Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
