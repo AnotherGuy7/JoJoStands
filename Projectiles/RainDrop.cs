@@ -28,7 +28,6 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
         public override void AI()
         {
-            // Su damlası görsel efekti
             if (Main.rand.NextBool(3))
             {
                 Dust dust = Dust.NewDustDirect(
@@ -42,7 +41,6 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            // Boss olmayan düşmanları yavaşlat
             if (!target.boss)
                 target.velocity *= SlowMultiplier;
         }
