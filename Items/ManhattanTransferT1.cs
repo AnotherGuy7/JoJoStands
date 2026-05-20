@@ -12,6 +12,7 @@ namespace JoJoStands.Items
     public class ManhattanTransferT1 : StandItemClass
     {
         public override int StandTier => 1;
+        public override int StandType => 2;
         public override string StandIdentifierName => "ManhattanTransfer";
         public override Color StandTierDisplayColor => ManhattanTransferFinal.ManhattanTransferTierColor;
 

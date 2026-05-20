@@ -3,7 +3,6 @@ using JoJoStands.Projectiles.PlayerStands.ManhattanTransfer;
 using JoJoStands.Tiles;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,6 +14,7 @@ namespace JoJoStands.Items
         public override string Texture => Mod.Name + "/Items/ManhattanTransferT1";
 
         public override int StandTier => 2;
+        public override int StandType => 2;
         public override string StandIdentifierName => "ManhattanTransfer";
         public override Color StandTierDisplayColor => ManhattanTransferFinal.ManhattanTransferTierColor;
 
