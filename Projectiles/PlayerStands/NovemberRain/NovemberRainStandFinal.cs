@@ -11,8 +11,9 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
     public class NovemberRainStandFinal : NovemberRainStandT1
     {
         public override int TierNumber => 4;
-        public override int PunchDamage => 95;
-        public override int PunchTime => 5;
+        public override int ProjectileDamage => 114;
+        public override int ShootTime => 10;
+        public override StandAttackType StandType => StandAttackType.Ranged;
         protected override float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
         protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.8f;
         protected override float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
@@ -112,12 +113,13 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             SelectAnimation();
             UpdateStandInfo();
             UpdateStandSync();
+            if (shootCount > 0)
+                shootCount--;
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             if (mPlayer.standOut) Projectile.timeLeft = 2;
-            if (preciseTimer > 0) preciseTimer--;
 
             SnapAbovePlayer(player);
             ApplyStuns();
@@ -179,7 +181,12 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (PlayerLeftClick() && preciseTimer <= 0 && canUseRain) { currentAnimationState = AnimationState.Idle; FireThreeStreams(mPlayer); preciseTimer = Math.Max(PRECISE_CD - mPlayer.standSpeedBoosts / 2, 2); }
+                    if (PlayerLeftClick() && shootCount <= 0)
+                    {
+                        currentAnimationState = AnimationState.Idle;
+                        FireThreeStreams(mPlayer);
+                        shootCount += newShootTime;
+                    }
                     else currentAnimationState = AnimationState.Idle;
 
                     if (Main.mouseRight && ctrlDropActive == 0 && canUseRain) { FireControllableDrop(mPlayer); ctrlDropActive = 1; }
@@ -189,7 +196,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     {
                         barrierActive = true; barrierTimer = 0;
                         barrierProjIdx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
-                            ModContent.ProjectileType<RainBarrier>(), newPunchDamage * 2, 0f, Main.myPlayer, Projectile.whoAmI);
+                            ModContent.ProjectileType<RainBarrier>(), newProjectileDamage * 2, 0f, Main.myPlayer, Projectile.whoAmI);
                         Main.projectile[barrierProjIdx].netUpdate = true; Projectile.netUpdate = true;
                     }
 
@@ -229,7 +236,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         {
             if (Projectile.owner != Main.myPlayer) return;
             int interval = Math.Max(MAEL_HIT_INTERVAL - mPlayer.standSpeedBoosts, 4);
-            int dmgBase = (int)(newPunchDamage * 1.35f);
+            int dmgBase = (int)(newProjectileDamage * 1.35f);
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC npc = Main.npc[i];

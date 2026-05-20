@@ -14,10 +14,10 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         public override int TierNumber => 1;
         public override string PoseSoundName => "";
         public override string SpawnSoundName => "";
-        public override StandAttackType StandType => StandAttackType.Melee;
-        public override int PunchDamage => 18;
-        public override int PunchTime => 8;
+        public override int ProjectileDamage => 14;
+        public override int ShootTime => 25;
         public override int HalfStandHeight => 96;
+        public override StandAttackType StandType => StandAttackType.Ranged;
         public override float MaxDistance => 154f - Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
 
         protected virtual float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
@@ -58,7 +58,6 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         protected const int TRAP_DROP_END = TRAP_PUDDLE_END + CEIL_FALL_TICKS_TOTAL;
         protected const int TRAP_CYCLE = TRAP_DROP_END + CEIL_IMPACT_FRAMES * CEIL_IMPACT_TICKS_PER_FRAME;
 
-        protected int preciseTimer = 0;
         private int visualTimer = 0;
         private int trapFormTimer = 0;
 
@@ -163,12 +162,13 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             SelectAnimation();
             UpdateStandInfo();
             UpdateStandSync();
+            if (shootCount > 0)
+                shootCount--;
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             if (mPlayer.standOut) Projectile.timeLeft = 2;
-            if (preciseTimer > 0) preciseTimer--;
 
             SnapAbovePlayer(player);
             ApplyStuns();
@@ -186,11 +186,11 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (PlayerLeftClick() && preciseTimer <= 0)
+                    if (PlayerLeftClick() && shootCount <= 0)
                     {
                         currentAnimationState = AnimationState.Idle;
                         FireThreeStreams(mPlayer);
-                        preciseTimer = Math.Max(PRECISE_CD - mPlayer.standSpeedBoosts / 2, 2);
+                        shootCount += newShootTime;
                     }
                     else currentAnimationState = AnimationState.Idle;
                 }
@@ -200,7 +200,6 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
         protected void SnapAbovePlayer(Player player)
         {
-
             float standCenterY = (player.position.Y + player.height) + STAND_FROM_FEET_Y;
 
             Projectile.Center = new Vector2(
@@ -252,14 +251,14 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     float vx0 = dir.X * SHOT_SPEED;
                     Vector2 newVel = new Vector2(vx0, maxVy);
                     int idx2 = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firePos, newVel,
-                        ModContent.ProjectileType<PreciseRainDrop>(), newPunchDamage, 2f, Main.myPlayer);
+                        ModContent.ProjectileType<PreciseRainDrop>(), newProjectileDamage, 2f, Main.myPlayer);
                     Main.projectile[idx2].netUpdate = true;
                     return;
                 }
             }
 
             int idx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firePos, dir * SHOT_SPEED,
-                ModContent.ProjectileType<PreciseRainDrop>(), newPunchDamage, 2f, Main.myPlayer);
+                ModContent.ProjectileType<PreciseRainDrop>(), newProjectileDamage, 2f, Main.myPlayer);
             Main.projectile[idx].netUpdate = true;
         }
 
@@ -341,7 +340,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             }
 
             int idx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawn, vel,
-                ModContent.ProjectileType<PreciseRainDrop>(), newPunchDamage, 2f, Main.myPlayer);
+                ModContent.ProjectileType<PreciseRainDrop>(), newProjectileDamage, 2f, Main.myPlayer);
             if (idx >= 0 && idx < Main.maxProjectiles)
                 Main.projectile[idx].netUpdate = true;
         }
@@ -353,7 +352,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             Vector2 firePos = Projectile.Center + new Vector2(FIRE_X_OFFSET * Projectile.spriteDirection, FIRE_Y_OFFSET + 3f);
             Vector2 toCursor = Main.MouseWorld - firePos;
             if (toCursor != Vector2.Zero) toCursor.Normalize();
-            int dmg = (int)(newPunchDamage * 3.5f);
+            int dmg = (int)(newProjectileDamage * 3.5f);
             int idx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), firePos, new Vector2(toCursor.X * 2f, 1.5f),
                 ModContent.ProjectileType<ControllableRainDrop>(), dmg, 3f, Main.myPlayer);
             Main.projectile[idx].netUpdate = true;
@@ -417,7 +416,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                         npcTimers[i] = 0;
                         if (Main.rand.NextFloat() < MISS_CHANCE) continue;
                         if (!npc.boss && !npc.immortal) npc.velocity *= slow;
-                        HitNPCWithAccessories(player, mPlayer, npc, newPunchDamage, Projectile.direction);
+                        HitNPCWithAccessories(player, mPlayer, npc, newProjectileDamage, Projectile.direction);
                         if (!npc.immortal) npc.velocity += new Vector2(Projectile.direction * 0.8f, 0.4f);
                         for (int d = 0; d < 4; d++)
                             Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, Main.rand.NextFloat(-2f, 2f), -1.5f, 0, default, 1f);
@@ -758,7 +757,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                                     npc.Center.Y < landY + 32f)
                                 {
                                     bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
-                                    player.ApplyDamageToNPC(npc, (int)(newPunchDamage * 0.5f), 0f, Projectile.direction, crit, DamageClass.Generic);
+                                    player.ApplyDamageToNPC(npc, (int)(newProjectileDamage * 0.5f), 0f, Projectile.direction, crit, DamageClass.Generic);
                                     Dust.NewDust(new Vector2(surf.WorldPos.X, landY), 16, 8, DustID.Water,
                                         Main.rand.NextFloat(-3f, 3f), -2f, 0, default, 1.2f);
                                     Projectile.netUpdate = true;
@@ -799,7 +798,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                         if (hit)
                         {
                             surf.Triggered = true;
-                            player.ApplyDamageToNPC(npc, (int)(newPunchDamage * 3f), 2f, Projectile.direction, false, DamageClass.Generic);
+                            player.ApplyDamageToNPC(npc, (int)(newProjectileDamage * 3f), 2f, Projectile.direction, false, DamageClass.Generic);
                             if (!npc.boss) npcStunTimers[n] = 90;
                             for (int d = 0; d < 14; d++)
                                 Dust.NewDust(surf.WorldPos, 16, 16, DustID.Water,

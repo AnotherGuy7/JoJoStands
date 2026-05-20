@@ -9,8 +9,9 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
     public class NovemberRainStandT3 : NovemberRainStandT1
     {
         public override int TierNumber => 3;
-        public override int PunchDamage => 68;
-        public override int PunchTime => 6;
+        public override int ProjectileDamage => 84;
+        public override int ShootTime => 15;
+        public override StandAttackType StandType => StandAttackType.Ranged;
         protected override float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
         protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.8f;
         protected override float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
@@ -35,12 +36,13 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             SelectAnimation();
             UpdateStandInfo();
             UpdateStandSync();
+            if (shootCount > 0)
+                shootCount--;
 
             Player player = Main.player[Projectile.owner];
             MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
 
             if (mPlayer.standOut) Projectile.timeLeft = 2;
-            if (preciseTimer > 0) preciseTimer--;
 
             SnapAbovePlayer(player);
             ApplyStuns();
@@ -73,11 +75,11 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (PlayerLeftClick() && preciseTimer <= 0)
+                    if (PlayerLeftClick() && shootCount <= 0)
                     {
                         currentAnimationState = AnimationState.Idle;
                         FireThreeStreams(mPlayer);
-                        preciseTimer = Math.Max(PRECISE_CD - mPlayer.standSpeedBoosts / 2, 2);
+                        shootCount += newShootTime;
                     }
                     else currentAnimationState = AnimationState.Idle;
 
@@ -93,7 +95,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                         barrierActive = true; barrierTimer = 0;
                         barrierProjIdx = Projectile.NewProjectile(
                             Projectile.GetSource_FromThis(), player.Center, Vector2.Zero,
-                            ModContent.ProjectileType<RainBarrier>(), newPunchDamage * 2, 0f, Main.myPlayer, Projectile.whoAmI);
+                            ModContent.ProjectileType<RainBarrier>(), newProjectileDamage * 2, 0f, Main.myPlayer, Projectile.whoAmI);
                         Main.projectile[barrierProjIdx].netUpdate = true;
                         Projectile.netUpdate = true;
                     }
