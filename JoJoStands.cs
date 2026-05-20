@@ -141,7 +141,9 @@ namespace JoJoStands
                 ProjectileType<TrackerBubble>(),
                 ProjectileType<Projectiles.PlayerStands.Cream.Void>(),
                 ProjectileType<DashVoid>(),
-                ProjectileType<PurpleHazeCapsule>()
+                ProjectileType<PurpleHazeCapsule>(),
+                ProjectileType<PreciseRainDrop>(),
+                ProjectileType<ControllableRainDrop>()
             };
 
             standTier1List = new List<int>
@@ -174,7 +176,8 @@ namespace JoJoStands
                 ItemType<EchoesAct0>(),
                 ItemType<ManhattanTransferT1>(),
                 ItemType<HeyYaT1>(),
-                ItemType<PurpleHazeT1>()
+                ItemType<PurpleHazeT1>(),
+                ItemType<NovemberRainT1>()
             };
 
             timestopImmune = new List<int>()
