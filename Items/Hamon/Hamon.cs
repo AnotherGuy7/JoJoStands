@@ -3,6 +3,7 @@ using JoJoStands.Items.CraftingMaterials;
 using JoJoStands.Projectiles;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace JoJoStands.Items.Hamon
@@ -31,7 +32,7 @@ namespace JoJoStands.Items.Hamon
             Item.noWet = true;
             Item.useAnimation = 25;
             Item.useTime = 15;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.channel = true;
             Item.noMelee = true;
             Item.autoReuse = false;

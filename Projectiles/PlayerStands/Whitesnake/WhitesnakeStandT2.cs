@@ -80,7 +80,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !secondaryAbility)
+                    if (PlayerLeftClick() && !secondaryAbility)
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();
@@ -173,7 +173,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
 
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                     {
                         Vector2 moveVelocity = Main.MouseWorld - Projectile.Center;
                         moveVelocity.Normalize();

@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 {
                     if (Projectile.owner == Main.myPlayer)
                     {
-                        if (Main.mouseLeft && !secondaryAbility && !scraping)
+                        if (PlayerLeftClick() && !secondaryAbility && !scraping)
                         {
                             currentAnimationState = AnimationState.Attack;
                             Punch();
@@ -131,7 +131,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TheHand
                 {
                     if (Projectile.owner == Main.myPlayer)
                     {
-                        if (Main.mouseLeft && !secondaryAbility)
+                        if (PlayerLeftClick() && !secondaryAbility)
                         {
                             if (!player.GetModPlayer<MyPlayer>().canStandBasicAttack)
                             {

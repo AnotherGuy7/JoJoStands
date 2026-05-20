@@ -73,7 +73,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Tusk
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                     {
                         Punch();
                     }

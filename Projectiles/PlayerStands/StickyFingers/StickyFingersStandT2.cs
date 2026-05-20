@@ -52,7 +52,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StickyFingers
                 secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] != 0;
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0 && !zipperAmbush)
+                    if (PlayerLeftClick() && player.ownedProjectileCounts[ModContent.ProjectileType<StickyFingersFistExtended>()] == 0 && !zipperAmbush)
                         Punch();
                     else
                     {

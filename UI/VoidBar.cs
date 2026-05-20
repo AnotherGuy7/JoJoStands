@@ -103,7 +103,7 @@ namespace JoJoStands.UI
         /*private void PreDrawVoidCounterGradient(MyPlayer mPlayer, SpriteBatch spriteBatch)
         {
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 
             MiscShaderData voidGradientShader = GameShaders.Misc["JoJoStandsVoidGradient"];
             voidGradientShader.UseOpacity(mPlayer.voidCounter / mPlayer.voidCounterMax);

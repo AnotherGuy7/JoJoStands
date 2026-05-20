@@ -61,7 +61,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && mPlayer.canStandBasicAttack && Projectile.scale >= 0.5f)
+                    if (PlayerLeftClick() && Projectile.scale >= 0.5f)
                     {
                         attacking = true;
                         currentAnimationState = AnimationState.Attack;
@@ -136,7 +136,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                 float halfScreenWidth = (float)Main.screenWidth / 2f;
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (PlayerLeftClick())
                 {
                     Projectile.velocity = Main.MouseWorld - Projectile.Center;
                     Projectile.velocity.Normalize();
@@ -149,7 +149,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HierophantGreen
                     Projectile.spriteDirection = Projectile.direction;
                     LimitDistance(MaxRemoteModeDistance);
                 }
-                if (!Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (!Main.mouseLeft)
                 {
                     Projectile.velocity *= 0.78f;
                     Projectile.netUpdate = true;

@@ -87,7 +87,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
                 secondaryAbility = player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] != 0;
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
+                    if (PlayerLeftClick() && !flickFrames && player.ownedProjectileCounts[ModContent.ProjectileType<StarFinger>()] == 0)
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();

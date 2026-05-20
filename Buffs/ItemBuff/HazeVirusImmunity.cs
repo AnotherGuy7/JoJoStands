@@ -16,8 +16,11 @@ namespace JoJoStands.Buffs.ItemBuff
         public override void UpdateBuffOnPlayer(Player player)
         {
             // Continuously purge both haze debuffs while this buff is active
-            player.ClearBuff(ModContent.BuffType<HazeVirus>());
-            player.ClearBuff(ModContent.BuffType<ConcentratedHazeVirus>());
+            if (player.HasBuff(ModContent.BuffType<HazeVirus>()) || player.HasBuff(ModContent.BuffType<ConcentratedHazeVirus>()))
+            {
+                player.ClearBuff(ModContent.BuffType<HazeVirus>());
+                player.ClearBuff(ModContent.BuffType<ConcentratedHazeVirus>());
+            }
         }
     }
 }

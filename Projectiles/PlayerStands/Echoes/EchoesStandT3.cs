@@ -90,7 +90,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !mPlayer.posing && !returnToPlayer && !returnTail && tailUseTimer == 0)
+                    if (PlayerLeftClick() && !mPlayer.posing && !returnToPlayer && !returnTail && tailUseTimer == 0)
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();
@@ -194,7 +194,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 float halfScreenHeight = (float)Main.screenHeight / 2f;
                 mPlayer.standRemoteModeCameraPosition = Projectile.Center - new Vector2(halfScreenWidth, halfScreenHeight);
                 Projectile.rotation = Projectile.velocity.X * 0.05f;
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !mPlayer.posing)
+                if (PlayerLeftClick() && !mPlayer.posing)
                 {
                     if (distance > 25f)
                         MovementAI(Main.MouseWorld, 8f + player.moveSpeed);

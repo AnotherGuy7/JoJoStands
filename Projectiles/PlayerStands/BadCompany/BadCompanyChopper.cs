@@ -90,7 +90,7 @@ namespace JoJoStands.Projectiles.PlayerStands.BadCompany
                         Projectile.direction = -1;
                     Projectile.spriteDirection = Projectile.direction;
 
-                    if (Main.mouseLeft && mPlayer.canStandBasicAttack && !BadCompanyUnitsUI.Visible)
+                    if (PlayerLeftClick() && !BadCompanyUnitsUI.Visible)
                     {
                         if (shootCount <= 0)
                         {

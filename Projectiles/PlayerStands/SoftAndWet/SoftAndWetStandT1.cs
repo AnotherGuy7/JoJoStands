@@ -42,7 +42,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                     {
                         Punch();
                     }

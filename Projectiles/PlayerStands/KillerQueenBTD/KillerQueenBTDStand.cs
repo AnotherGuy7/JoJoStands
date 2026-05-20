@@ -374,7 +374,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueenBTD
 
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && Projectile.ai[0] == 0f)
+                    if (PlayerLeftClick() && Projectile.ai[0] == 0f)
                     {
                         if (!mPlayer.canStandBasicAttack)
                         {

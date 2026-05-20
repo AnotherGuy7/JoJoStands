@@ -70,7 +70,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SilverChariot
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !secondaryAbility)
+                    if (PlayerLeftClick() && !secondaryAbility)
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();

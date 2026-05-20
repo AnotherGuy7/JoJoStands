@@ -53,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWetGoBeyond
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !secondaryAbility)
+                    if (PlayerLeftClick() && !secondaryAbility)
                     {
                         Punch();
                         if (Main.rand.NextBool(7))

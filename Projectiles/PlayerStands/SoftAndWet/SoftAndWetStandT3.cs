@@ -62,7 +62,7 @@ namespace JoJoStands.Projectiles.PlayerStands.SoftAndWet
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !bubbleMode)
+                    if (PlayerLeftClick() && !bubbleMode)
                     {
                         Punch();
                         if (Main.rand.NextBool(14))

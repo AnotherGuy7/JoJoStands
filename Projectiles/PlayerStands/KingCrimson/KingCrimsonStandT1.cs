@@ -35,7 +35,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && mPlayer.canStandBasicAttack)
+                    if (PlayerLeftClick())
                     {
                         attacking = true;
                         currentAnimationState = AnimationState.Attack;

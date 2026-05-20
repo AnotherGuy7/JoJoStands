@@ -56,7 +56,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
                 {
                     if (Projectile.alpha > 0)
                         Projectile.alpha--;
-                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
+                    if (PlayerLeftClick() && !player.HasBuff(ModContent.BuffType<AbilityCooldown>()))
                     {
                         player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(30));
                         if (Main.MouseWorld.X > Projectile.Center.X)

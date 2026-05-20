@@ -268,6 +268,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             return specialPressed && Projectile.owner == Main.myPlayer;
         }
 
+        public bool PlayerLeftClick() => Main.mouseLeft && Projectile.owner == Main.myPlayer && Main.player[Projectile.owner].GetModPlayer<MyPlayer>().canStandBasicAttack;
+
         /// <summary>
         /// Starts a timestop that lasts x amount of seconds.
         /// </summary>

@@ -23,9 +23,6 @@ namespace JoJoStands.Items
         {
             Item.width = 32;
             Item.height = 32;
-            Item.useTime = 12;
-            Item.useAnimation = 12;
-            Item.useStyle = 5;
             Item.maxStack = 1;
             Item.knockBack = 2f;
             Item.value = 0;

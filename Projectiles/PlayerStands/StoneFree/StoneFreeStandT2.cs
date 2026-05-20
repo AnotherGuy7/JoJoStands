@@ -66,7 +66,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                     {
                         currentAnimationState = AnimationState.Attack;
                         float lifeTimeMultiplier = 1f;

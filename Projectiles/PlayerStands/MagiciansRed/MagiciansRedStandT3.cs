@@ -48,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.MagiciansRed
 
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !secondaryAbility)
+                    if (PlayerLeftClick() && !secondaryAbility)
                     {
                         if (!mPlayer.canStandBasicAttack)
                         {
