@@ -21,9 +21,9 @@ namespace JoJoStands.Items
             Item.useTime = 15;
             Item.useAnimation = 15;
             Item.maxStack = 1;
-            Item.useStyle = 3;
+            Item.useStyle = ItemUseStyleID.Thrust;
             Item.noUseGraphic = true;
-            Item.rare = 8;
+            Item.rare = ItemRarityID.Yellow;
             Item.consumable = true;
             Item.value = Item.buyPrice(0, 10, 0, 0);
         }

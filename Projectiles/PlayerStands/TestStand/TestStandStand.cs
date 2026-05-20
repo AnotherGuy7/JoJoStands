@@ -62,7 +62,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TestStand
             {
                 if (player.whoAmI == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                         Punch();
                     else
                         attacking = false;

@@ -180,7 +180,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
 
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual || mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (PlayerLeftClick())
                 {
                     leftClickCooldown = 10;
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);

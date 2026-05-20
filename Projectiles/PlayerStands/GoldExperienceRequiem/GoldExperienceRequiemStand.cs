@@ -67,7 +67,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperienceRequiem
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !secondaryAbility)
+                    if (PlayerLeftClick() && !secondaryAbility)
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();

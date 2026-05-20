@@ -146,7 +146,7 @@ namespace JoJoStands.Projectiles.PlayerStands.PurpleHaze
                 {
                     if (Projectile.owner == Main.myPlayer)
                     {
-                        if (Main.mouseLeft)
+                        if (PlayerLeftClick())
                             Punch();
                         else if (Main.mouseRight && CanThrowCapsule)
                             SecondaryAttack();

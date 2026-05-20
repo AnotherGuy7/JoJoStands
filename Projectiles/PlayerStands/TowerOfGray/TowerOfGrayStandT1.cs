@@ -130,7 +130,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
 
             Projectile.tileCollide = true;
             NPC target = FindNearestTarget(controlRange);
-            if (!Main.mouseLeft && Projectile.owner == Main.myPlayer)
+            if (!Main.mouseLeft)
                 mouseControlled = false;
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto && target == null || mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual && !mouseControlled && !remoteMode)
                 stinger = false;
@@ -139,7 +139,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             {
                 if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual || mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
                 {
-                    if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                    if (PlayerLeftClick())
                     {
                         mouseControlled = true;
                         float remoteDistanceOffset = remoteMode ? 0f : 20f;

@@ -41,7 +41,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StarPlatinum
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                         Punch();
                     else
                     {

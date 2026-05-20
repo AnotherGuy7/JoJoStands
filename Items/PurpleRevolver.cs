@@ -25,7 +25,7 @@ namespace JoJoStands.Items
             Item.height = 30;
             Item.useTime = 18;
             Item.useAnimation = 18;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.knockBack = 3f;
             Item.value = Item.buyPrice(0, 1, 50, 0);
             Item.rare = ItemRarityID.LightRed;

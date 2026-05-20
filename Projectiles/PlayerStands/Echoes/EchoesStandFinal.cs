@@ -81,7 +81,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Echoes
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !threeFreeze && !mPlayer.posing)
+                    if (PlayerLeftClick() && !threeFreeze && !mPlayer.posing)
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();

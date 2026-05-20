@@ -38,7 +38,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Whitesnake
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                         Punch();
                     else
                     {

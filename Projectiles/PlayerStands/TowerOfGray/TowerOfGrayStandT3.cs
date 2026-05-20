@@ -149,7 +149,7 @@ namespace JoJoStands.Projectiles.PlayerStands.TowerOfGray
             {
                 if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual || mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
                 {
-                    if (Main.mouseLeft && !dashing && targetWhoAmI == -1 && Projectile.owner == Main.myPlayer)
+                    if (PlayerLeftClick() && !dashing && targetWhoAmI == -1 && Projectile.owner == Main.myPlayer)
                     {
                         mouseControlled = true;
                         float remoteDistanceOffset = remoteMode ? 0f : 20f;

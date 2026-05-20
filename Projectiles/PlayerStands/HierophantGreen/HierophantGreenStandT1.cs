@@ -45,7 +45,7 @@ namespace JoJoStands.Projectiles.PlayerStands
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                     {
                         if (!mPlayer.canStandBasicAttack)
                             return;

@@ -94,7 +94,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && mPlayer.canStandBasicAttack && !secondaryAbility && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
+                    if (PlayerLeftClick() && !secondaryAbility && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                     {
                         attacking = true;
                         currentAnimationState = AnimationState.Attack;

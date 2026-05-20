@@ -13,7 +13,6 @@ using JoJoStands.NPCs;
 using JoJoStands.Projectiles;
 using JoJoStands.Projectiles.PlayerStands;
 using JoJoStands.Projectiles.PlayerStands.BadCompany;
-using JoJoStands.Projectiles.PlayerStands.ManhattanTransfer;
 using JoJoStands.Projectiles.PlayerStands.SilverChariot;
 using JoJoStands.Projectiles.PlayerStands.Tusk;
 using JoJoStands.UI;
@@ -261,7 +260,7 @@ namespace JoJoStands
         public int polaroidTokens = 0;
         public int polaroidTokenGainTimer = 0;
         public int[] polaroidTokenAnimationTimers = new int[5];
-        public Vector2[] polaroidTokenPositionOffsets = new Vector2[5]; 
+        public Vector2[] polaroidTokenPositionOffsets = new Vector2[5];
         public bool stickyHandEquipped = false;
         public int stickyHandHealthLossTimer = 0;
         public bool diedWithStickyHand = false;
@@ -644,15 +643,21 @@ namespace JoJoStands
 
         public override void Initialize()
         {
-            StandSlot = new StandSlot(Vector2.Zero, hoverText: "Enter Stand Here", scaleToInventory: true);
-            StandSlot.BackOpacity = .8f;
-            StandSlot.SlotItem = new Item();
-            StandSlot.SlotItem.SetDefaults(0);
+            StandSlot = new StandSlot(Vector2.Zero, hoverText: "Enter Stand Here")
+            {
+                BackOpacity = .8f,
+                SlotItem = new Item(),
+                ScaleToInventory = true
+            };
+            StandSlot.SlotItem.SetDefaults(ItemID.None);
 
-            StandDyeSlot = new UIItemSlot(StandSlot.Position - new Vector2(60f, 0f), 52, context: ItemSlot.Context.EquipDye, "Enter Dye Here", scaleToInventory: true);
-            StandDyeSlot.BackOpacity = .8f;
-            StandDyeSlot.SlotItem = new Item();
-            StandDyeSlot.SlotItem.SetDefaults(0);
+            StandDyeSlot = new UIItemSlot(StandSlot.Position - new Vector2(60f, 0f), 52, context: ItemSlot.Context.EquipDye, "Enter Dye Here")
+            {
+                BackOpacity = .8f,
+                SlotItem = new Item(),
+                ScaleToInventory = true
+            };
+            StandDyeSlot.SlotItem.SetDefaults(ItemID.None);
             StandDyeSlot.Click += OnStandDyeSlotClick;
         }
 
@@ -736,7 +741,7 @@ namespace JoJoStands
                     Main.graphics.GraphicsDevice.SetRenderTarget(null);
 
                     Main.graphics.GraphicsDevice.SetRenderTarget(renderTarget);
-                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 
                     for (int i = 0; i < Main.maxNPCs; i++)
                     {
@@ -750,7 +755,7 @@ namespace JoJoStands
                     timeskipNPCMask = renderTarget;
                     Filters.Scene["TimeSkipEffectShader"].GetShader().UseImage(timeskipNPCMask, 2);
 
-                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
                 }
             }*/
         }
@@ -1952,7 +1957,7 @@ namespace JoJoStands
 
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
-            if(heyYaDodgeChance > 0 && Main.rand.NextFloat(1, 100) <= heyYaDodgeChance)
+            if (heyYaDodgeChance > 0 && Main.rand.NextFloat(1, 100) <= heyYaDodgeChance)
             {
                 modifiers.FinalDamage *= 0f;
                 //if (JoJoStands.SoundsLoaded)

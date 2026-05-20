@@ -72,6 +72,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
                 if (timeskipStartDelay >= 80)
                 {
                     shootCount += 15;
+                    mPlayer.timeskipActive = true;
                     player.AddBuff(ModContent.BuffType<SkippingTime>(), 10 * 60);
                     SoundEngine.PlaySound(KingCrimsonStandFinal.TimeskipSound);
                     SyncCall.SyncTimeskip(player.whoAmI, true);
@@ -87,7 +88,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KingCrimson
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !secondaryAbility && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
+                    if (PlayerLeftClick() && !secondaryAbility && !player.HasBuff(ModContent.BuffType<SkippingTime>()))
                     {
                         attacking = true;
                         currentAnimationState = AnimationState.Attack;

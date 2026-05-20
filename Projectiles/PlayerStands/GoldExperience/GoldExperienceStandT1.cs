@@ -41,7 +41,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GoldExperience
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();

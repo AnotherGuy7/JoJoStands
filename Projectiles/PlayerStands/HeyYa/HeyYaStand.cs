@@ -458,7 +458,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
         private void CheckSandstorm()
         {
-            bool sandActive = Terraria.GameContent.Events.Sandstorm.Happening;
+            bool sandActive = Main.player[Projectile.owner].ZoneDesert && Terraria.GameContent.Events.Sandstorm.Happening;
             if (sandActive && !_sandstormWasActive)
                 TrySayAdvice("sandstorm_start", "Watch out, the desert's windy today!");
             else if (!sandActive && _sandstormWasActive)
@@ -468,7 +468,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
         private void CheckRain()
         {
-            bool rainActive = Main.raining;
+            bool rainActive = !Main.player[Projectile.owner].ZoneDesert && !Main.player[Projectile.owner].ZoneSnow && Main.raining;
             if (rainActive && !_rainWasActive)
             {
                 string[] lines =
@@ -486,7 +486,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
         private void CheckThunderstorm()
         {
-            bool stormActive = Main.raining && Main.maxRaining >= 0.8f;
+            bool stormActive = Main.raining && !Main.player[Projectile.owner].ZoneDesert && !Main.player[Projectile.owner].ZoneSnow && Main.maxRaining >= 0.8f;
             if (stormActive && !_stormWasActive)
             {
                 string[] lines =
@@ -609,7 +609,7 @@ namespace JoJoStands.Projectiles.PlayerStands.HeyYa
 
         private void CheckWindy()
         {
-            bool windyActive = Math.Abs(Main.windSpeedCurrent) >= 0.5f;
+            bool windyActive = !Main.player[Projectile.owner].ZoneDesert && Math.Abs(Main.windSpeedCurrent) >= 0.5f;
             if (windyActive && !_windyWasActive)
             {
                 string[] lines =

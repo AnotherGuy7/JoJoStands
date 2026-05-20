@@ -98,7 +98,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && !flickFrames && !healingFrames && !restorationTargetSelected)
+                    if (PlayerLeftClick() && !flickFrames && !healingFrames && !restorationTargetSelected)
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();

@@ -48,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.StoneFree
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                         Punch();
                     else
                     {

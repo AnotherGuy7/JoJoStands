@@ -1,4 +1,5 @@
-﻿using JoJoStands.Items.CraftingMaterials;
+﻿using JoJoStands.Buffs.ItemBuff;
+using JoJoStands.Items.CraftingMaterials;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -29,7 +30,7 @@ namespace JoJoStands.Items
 
         public override bool? UseItem(Player player)
         {
-            player.AddBuff(ModContent.BuffType<Buffs.ItemBuff.HazeVirusImmunity>(), 30 * 60);
+            player.AddBuff(ModContent.BuffType<HazeVirusImmunity>(), 30 * 60);
             return true;
         }
 

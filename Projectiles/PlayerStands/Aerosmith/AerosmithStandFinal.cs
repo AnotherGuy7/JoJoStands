@@ -174,7 +174,7 @@ namespace JoJoStands.Projectiles.PlayerStands.Aerosmith
             //For Aerosmith the functions are nearly the same so both controls will be bunched up.
             if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Manual || mPlayer.standControlStyle == MyPlayer.StandControlStyle.Remote)
             {
-                if (Main.mouseLeft && Projectile.owner == Main.myPlayer)
+                if (PlayerLeftClick())
                 {
                     leftClickCooldown = 10;
                     float mouseDistance = Vector2.Distance(Main.MouseWorld, Projectile.Center);

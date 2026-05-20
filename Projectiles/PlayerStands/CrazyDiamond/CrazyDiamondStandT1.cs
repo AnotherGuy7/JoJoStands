@@ -50,7 +50,7 @@ namespace JoJoStands.Projectiles.PlayerStands.CrazyDiamond
             {
                 if (player.whoAmI == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();

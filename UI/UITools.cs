@@ -22,7 +22,7 @@ namespace JoJoStands.UI
         public static void DrawUIWithShader(SpriteBatch spriteBatch, MiscShaderData shaderData, Texture2D texture, Rectangle clippingRectangle)
         {
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.UIScaleMatrix);
 
             shaderData.Apply(null);
             spriteBatch.Draw(texture, clippingRectangle, Color.White);

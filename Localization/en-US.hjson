@@ -3651,7 +3651,7 @@ Mods: {
 
 			HazeVirusFilter: {
 				DisplayName: Haze Virus Filter
-				Tooltip: Grants permanent immunity to the Haze Virus and Concentrated Haze Virus.
+				Tooltip: Reduces the deadliness of the Haze Virus by 80%.
 			}
 
 			DormantVirusSample: {

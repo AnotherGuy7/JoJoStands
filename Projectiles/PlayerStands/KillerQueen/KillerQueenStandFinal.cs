@@ -53,7 +53,7 @@ namespace JoJoStands.Projectiles.PlayerStands.KillerQueen
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();

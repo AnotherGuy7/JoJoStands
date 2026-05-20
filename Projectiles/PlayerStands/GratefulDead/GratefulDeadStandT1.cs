@@ -40,7 +40,7 @@ namespace JoJoStands.Projectiles.PlayerStands.GratefulDead
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft)
+                    if (PlayerLeftClick())
                     {
                         currentAnimationState = AnimationState.Attack;
                         Punch();
