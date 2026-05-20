@@ -1,12 +1,5 @@
-using JoJoStands.Projectiles;
-using JoJoStands.Buffs.Debuffs;
 using System;
-using JoJoStands;
-using JoJoStands.Projectiles.PlayerStands;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 {
@@ -55,7 +48,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && preciseTimer <= 0)
+                    if (PlayerLeftClick() && preciseTimer <= 0)
                     {
                         currentAnimationState = AnimationState.Idle;
                         FireThreeStreams(mPlayer);

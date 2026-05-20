@@ -1,11 +1,7 @@
-using JoJoStands.Projectiles;
-using JoJoStands.Buffs.Debuffs;
-using System;
-using System.Collections.Generic;
-using JoJoStands;
-using JoJoStands.Projectiles.PlayerStands;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -36,8 +32,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         protected const float STAND_X_OFFSET = -20f;
         protected const float FIRE_X_OFFSET = 16.5f;
         protected const float FIRE_Y_OFFSET = -34f;
-        protected const float CONE_HALF_W   = 14f;
-        protected const float CONE_HEIGHT   = 18f;
+        protected const float CONE_HALF_W = 14f;
+        protected const float CONE_HEIGHT = 18f;
 
         protected virtual int TRAP_SPAWN_TICKS => 0;
         protected virtual int TRAP_BASE_TICKS => 0;
@@ -46,21 +42,21 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
         protected const int CEIL_TOTAL_FRAMES = 15;
         protected const int CEIL_FRAME_HEIGHT = 20;
-        protected const int CEIL_FRAME_WIDTH  = 18;
+        protected const int CEIL_FRAME_WIDTH = 18;
 
         protected const int CEIL_PUDDLE_ANIM_FRAMES = 5;
-        protected const int CEIL_FALL_FRAMES        = 3;
-        protected const int CEIL_IMPACT_FRAMES      = 5;
+        protected const int CEIL_FALL_FRAMES = 3;
+        protected const int CEIL_IMPACT_FRAMES = 5;
 
         protected const int CEIL_PUDDLE_TICKS_PER_FRAME = 18;
-        protected const int CEIL_FALL_TICKS_TOTAL       = 36;
+        protected const int CEIL_FALL_TICKS_TOTAL = 36;
         protected const int CEIL_IMPACT_TICKS_PER_FRAME = 8;
 
         protected const int CEIL_OVERLAY_TICKS_PER_FRAME = 9;
 
         protected const int TRAP_PUDDLE_END = CEIL_PUDDLE_ANIM_FRAMES * CEIL_PUDDLE_TICKS_PER_FRAME;
-        protected const int TRAP_DROP_END   = TRAP_PUDDLE_END + CEIL_FALL_TICKS_TOTAL;
-        protected const int TRAP_CYCLE      = TRAP_DROP_END   + CEIL_IMPACT_FRAMES * CEIL_IMPACT_TICKS_PER_FRAME;
+        protected const int TRAP_DROP_END = TRAP_PUDDLE_END + CEIL_FALL_TICKS_TOTAL;
+        protected const int TRAP_CYCLE = TRAP_DROP_END + CEIL_IMPACT_FRAMES * CEIL_IMPACT_TICKS_PER_FRAME;
 
         protected int preciseTimer = 0;
         private int visualTimer = 0;
@@ -91,8 +87,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             public int MaxDuration;
             public List<TrapSurface> Surfaces = new List<TrapSurface>();
             public bool PlayerNearby;
-            public int  LayersUsed;
-            public int  LayerTimer;
+            public int LayersUsed;
+            public int LayerTimer;
             public bool ExtraLayerAdded => LayersUsed > 1;
             public bool IsPlaceholder;
             public float FadeOffsetY;
@@ -190,7 +186,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && preciseTimer <= 0)
+                    if (PlayerLeftClick() && preciseTimer <= 0)
                     {
                         currentAnimationState = AnimationState.Idle;
                         FireThreeStreams(mPlayer);
@@ -272,25 +268,25 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         {
             if (Projectile.owner != Main.myPlayer) return;
 
-            float  anchorX     = Projectile.Center.X + FIRE_X_OFFSET * Projectile.spriteDirection;
-            float  anchorY     = Projectile.Center.Y;
+            float anchorX = Projectile.Center.X + FIRE_X_OFFSET * Projectile.spriteDirection;
+            float anchorY = Projectile.Center.Y;
             Vector2 coneBase = new Vector2(anchorX, anchorY + FIRE_Y_OFFSET);
 
             const float WIDE_HALF = 18f;
-            const float TOP_Y     = -8f;
-            float       APEX_Y    =  CONE_HEIGHT;
+            const float TOP_Y = -8f;
+            float APEX_Y = CONE_HEIGHT;
 
             float u = Main.rand.NextFloat();
             float startX = Main.rand.NextBool() ? -WIDE_HALF : WIDE_HALF;
             float spawnX = MathHelper.Lerp(startX, 0f, u);
-            float spawnY = MathHelper.Lerp(TOP_Y,  APEX_Y, u);
+            float spawnY = MathHelper.Lerp(TOP_Y, APEX_Y, u);
             Vector2 spawn = coneBase + new Vector2(spawnX, spawnY);
 
-            const float SHOT_SPEED       = 17f;
-            const float MAX_BALLISTIC    = 60f;
+            const float SHOT_SPEED = 17f;
+            const float MAX_BALLISTIC = 60f;
             const float MAX_UPWARD_SPEED = 11f;
-            const float G                = 0.32f;
-            const float SPEED_MULT       = 1.7f;
+            const float G = 0.32f;
+            const float SPEED_MULT = 1.7f;
 
             Player owner = Main.player[Projectile.owner];
             float maxAimY = owner.Center.Y - 150f;
@@ -305,23 +301,23 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 float ax = Math.Abs(toCursor.X);
                 if (toCursor.Y < -ax * MAX_UPWARD_RATIO)
                 {
-                    float mag   = toCursor.Length();
+                    float mag = toCursor.Length();
                     float signX = Math.Sign(toCursor.X);
                     if (signX == 0f)
                         signX = (aimWorld.X >= anchorX) ? 1f : -1f;
-                    float r    = MAX_UPWARD_RATIO;
+                    float r = MAX_UPWARD_RATIO;
                     float invH = 1f / (float)Math.Sqrt(1f + r * r);
-                    toCursor   = new Vector2(mag * invH * signX, -mag * r * invH);
+                    toCursor = new Vector2(mag * invH * signX, -mag * r * invH);
                 }
             }
 
-            Vector2 target   = coneBase + toCursor;
+            Vector2 target = coneBase + toCursor;
             Vector2 toTarget = target - spawn;
-            float   dist     = toTarget.Length();
-            float   T_fly    = MathHelper.Clamp(dist / SHOT_SPEED, 4f, 28f);
-            float   vx       = toTarget.X / T_fly;
-            float   vy       = toTarget.Y / T_fly - 0.5f * G * T_fly;
-            Vector2 vel      = new Vector2(vx, vy);
+            float dist = toTarget.Length();
+            float T_fly = MathHelper.Clamp(dist / SHOT_SPEED, 4f, 28f);
+            float vx = toTarget.X / T_fly;
+            float vy = toTarget.Y / T_fly - 0.5f * G * T_fly;
+            Vector2 vel = new Vector2(vx, vy);
 
             float spd = vel.Length();
             if (spd > MAX_BALLISTIC) vel *= MAX_BALLISTIC / spd;
@@ -475,8 +471,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
         protected List<TrapSurface> ScanSurfacesLimited(Vector2 domeCenter, float w, float down, float up, Vector2 playerCenter, int maxFC, HashSet<long> excludeTileKeys)
         {
-            var floors    = new List<TrapSurface>();
-            var ceilings  = new List<TrapSurface>();
+            var floors = new List<TrapSurface>();
+            var ceilings = new List<TrapSurface>();
             var backWalls = new List<TrapSurface>();
             int cx = (int)(domeCenter.X / 16f), cy = (int)(domeCenter.Y / 16f);
             int rX = (int)(w / 16f) + 2, rDown = (int)(down / 16f) + 2, rUp = (int)(up / 16f) + 2;
@@ -523,11 +519,11 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                         int landY = FindDripLandY(new Vector2(tx * 16f + 8f, ty * 16f + 16f));
                         backWalls.Add(new TrapSurface
                         {
-                            WorldPos       = new Vector2(tx * 16f + 8f, ty * 16f + 8f),
-                            Type           = SurfaceType.BackWall,
+                            WorldPos = new Vector2(tx * 16f + 8f, ty * 16f + 8f),
+                            Type = SurfaceType.BackWall,
                             DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE),
-                            DripLandY      = landY,
-                            DripLandFound  = true
+                            DripLandY = landY,
+                            DripLandFound = true
                         });
                     }
                 }
@@ -547,7 +543,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             var fPool = new List<TrapSurface>(floors);
             var cPool = new List<TrapSurface>(ceilings);
 
-            int total  = fPool.Count + cPool.Count;
+            int total = fPool.Count + cPool.Count;
             int target = Math.Min(limit, total);
             if (target <= 0) return picked;
 
@@ -555,30 +551,30 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             int wantCeilings;
             if (cPool.Count == 0)
             {
-                wantFloors   = Math.Min(target, fPool.Count);
+                wantFloors = Math.Min(target, fPool.Count);
                 wantCeilings = 0;
             }
             else if (fPool.Count == 0)
             {
-                wantFloors   = 0;
+                wantFloors = 0;
                 wantCeilings = Math.Min(target, cPool.Count);
             }
             else
             {
-                wantFloors   = (int)Math.Round(target * FloorTrapBias);
+                wantFloors = (int)Math.Round(target * FloorTrapBias);
                 wantCeilings = target - wantFloors;
 
                 if (wantFloors > fPool.Count)
                 {
                     wantCeilings += wantFloors - fPool.Count;
-                    wantFloors    = fPool.Count;
+                    wantFloors = fPool.Count;
                 }
                 if (wantCeilings > cPool.Count)
                 {
-                    wantFloors  += wantCeilings - cPool.Count;
+                    wantFloors += wantCeilings - cPool.Count;
                     wantCeilings = cPool.Count;
                 }
-                wantFloors   = Math.Min(wantFloors,   fPool.Count);
+                wantFloors = Math.Min(wantFloors, fPool.Count);
                 wantCeilings = Math.Min(wantCeilings, cPool.Count);
             }
 
@@ -833,10 +829,10 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         }
 
         // Back-wall rain
-        private const float BW_SPEED_MIN      = 0.8f;
-        private const float BW_SPEED_MAX      = 4.0f;
-        private const int   BW_SPAWN_INTERVAL = 200;
-        private const int   BW_PHASE_SPREAD   = 10;
+        private const float BW_SPEED_MIN = 0.8f;
+        private const float BW_SPEED_MAX = 4.0f;
+        private const int BW_SPAWN_INTERVAL = 200;
+        private const int BW_PHASE_SPREAD = 10;
 
         private static float BWRHash(int x, int y, int salt)
         {
@@ -855,20 +851,20 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             float startY = fromCeiling ? startWorldPos.Y - 2f : startWorldPos.Y - 8f;
             float floorY = landFound ? landY - tex.Height : float.MaxValue;
 
-            int now         = (int)Main.GameUpdateCount;
+            int now = (int)Main.GameUpdateCount;
             int phaseOffset = (int)(BWRHash(tileX, tileY, 10) * BW_SPAWN_INTERVAL);
-            int startCycle  = now >= phaseOffset ? (now - phaseOffset) / BW_SPAWN_INTERVAL : 0;
+            int startCycle = now >= phaseOffset ? (now - phaseOffset) / BW_SPAWN_INTERVAL : 0;
 
             for (int di = 0; di <= BW_PHASE_SPREAD; di++)
             {
-                int cycleNum      = startCycle - di;
+                int cycleNum = startCycle - di;
                 if (cycleNum < 0) break;
 
                 int dropStartTick = cycleNum * BW_SPAWN_INTERVAL + phaseOffset;
-                int fallPhase     = now - dropStartTick;
+                int fallPhase = now - dropStartTick;
                 if (fallPhase < 0) continue;
 
-                float speedR    = BWRHash(tileX * 7 + cycleNum, tileY * 11 + cycleNum, 5);
+                float speedR = BWRHash(tileX * 7 + cycleNum, tileY * 11 + cycleNum, 5);
                 float pxPerTick = BW_SPEED_MIN + speedR * (BW_SPEED_MAX - BW_SPEED_MIN);
 
                 float dropY = startY + pxPerTick * fallPhase;
@@ -886,7 +882,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 }
 
                 float xScatterR = BWRHash(tileX * 3 + cycleNum, tileY * 5 + cycleNum, 7);
-                float dropX     = startWorldPos.X - tex.Width * 0.5f + (xScatterR - 0.5f) * 16f;
+                float dropX = startWorldPos.X - tex.Width * 0.5f + (xScatterR - 0.5f) * 16f;
 
                 float fade = Math.Min(1f, fallPhase / 6f);
                 if (fade <= 0f) continue;
@@ -917,7 +913,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                     : 1f;
 
                 var ceilingCols = new System.Collections.Generic.HashSet<int>();
-                var topWallCols  = new System.Collections.Generic.List<int>();
+                var topWallCols = new System.Collections.Generic.List<int>();
                 var topWallSurfs = new System.Collections.Generic.List<TrapSurface>();
 
                 foreach (var surf in trap.Surfaces)
@@ -1001,8 +997,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
                 int phase = (surf.DripTimer + surf.DripTimerOffset) % TRAP_CYCLE;
                 int landY = surf.DripLandFound ? surf.DripLandY : (int)surf.WorldPos.Y + 200;
 
-                float anchorX   = surf.WorldPos.X - fw * 0.5f;
-                float ceilTopY  = surf.WorldPos.Y - 2f;
+                float anchorX = surf.WorldPos.X - fw * 0.5f;
+                float ceilTopY = surf.WorldPos.Y - 2f;
                 float floorTopY = landY - fh + 3f;
 
                 Main.EntitySpriteDraw(tex,
@@ -1037,7 +1033,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
                     if (phase < TRAP_DROP_END)
                     {
-                        float t    = (phase - TRAP_PUDDLE_END) / (float)CEIL_FALL_TICKS_TOTAL;
+                        float t = (phase - TRAP_PUDDLE_END) / (float)CEIL_FALL_TICKS_TOTAL;
                         if (t > 1f) t = 1f;
                         float ease = t * t;
                         float topY = ceilTopY + (floorTopY - ceilTopY) * ease;
@@ -1069,11 +1065,11 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             try
             {
                 Texture2D tex = (Texture2D)ModContent.Request<Texture2D>(texPath);
-                int fc  = Math.Max(tex.Height / Math.Max(tex.Width, 8), 1);
-                int fh  = tex.Height / fc;
-                int f   = loopFrame % fc;
+                int fc = Math.Max(tex.Height / Math.Max(tex.Width, 8), 1);
+                int fh = tex.Height / fc;
+                int f = loopFrame % fc;
                 float anchorX = surf.WorldPos.X - tex.Width * 0.5f;
-                float topY    = surf.WorldPos.Y - fh;
+                float topY = surf.WorldPos.Y - fh;
                 Main.EntitySpriteDraw(tex,
                     new Vector2(anchorX, topY) - Main.screenPosition,
                     new Rectangle(0, f * fh, tex.Width, fh),

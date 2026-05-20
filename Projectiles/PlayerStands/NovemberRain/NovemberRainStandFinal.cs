@@ -1,10 +1,7 @@
-using JoJoStands.Projectiles;
 using JoJoStands.Buffs.Debuffs;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using JoJoStands;
-using JoJoStands.Projectiles.PlayerStands;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -69,8 +66,8 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
         // Maelstrom
         private List<TrapSurface> ScanMaelSurfaces(Vector2 playerCenter)
         {
-            var floors    = new List<TrapSurface>();
-            var ceilings  = new List<TrapSurface>();
+            var floors = new List<TrapSurface>();
+            var ceilings = new List<TrapSurface>();
             var backWalls = new List<TrapSurface>();
             int cx = (int)(Projectile.Center.X / 16f), cy = (int)(Projectile.Center.Y / 16f);
             int rX = (int)(MAEL_W / 16f) + 2, rDown = (int)(MAEL_DOWN / 16f) + 2, rUp = (int)(MAEL_UP / 16f) + 2;
@@ -182,7 +179,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
             {
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    if (Main.mouseLeft && preciseTimer <= 0 && canUseRain) { currentAnimationState = AnimationState.Idle; FireThreeStreams(mPlayer); preciseTimer = Math.Max(PRECISE_CD - mPlayer.standSpeedBoosts / 2, 2); }
+                    if (PlayerLeftClick() && preciseTimer <= 0 && canUseRain) { currentAnimationState = AnimationState.Idle; FireThreeStreams(mPlayer); preciseTimer = Math.Max(PRECISE_CD - mPlayer.standSpeedBoosts / 2, 2); }
                     else currentAnimationState = AnimationState.Idle;
 
                     if (Main.mouseRight && ctrlDropActive == 0 && canUseRain) { FireControllableDrop(mPlayer); ctrlDropActive = 1; }
