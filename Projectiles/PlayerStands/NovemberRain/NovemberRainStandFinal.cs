@@ -1,0 +1,284 @@
+using JoJoStands.Buffs.Debuffs;
+using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
+{
+    public class NovemberRainStandFinal : NovemberRainStandT1
+    {
+        public override int TierNumber => 4;
+        public override int ProjectileDamage => 118;
+        public override int ShootTime => 10;
+        public override StandAttackType StandType => StandAttackType.Ranged;
+        protected override float RAIN_W => 154f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.5f;
+        protected override float RAIN_DOWN => 280f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.8f;
+        protected override float RAIN_UP => 260f + Main.player[Projectile.owner].GetModPlayer<MyPlayer>().standRangeBoosts * 0.4f;
+        protected override float RAIN_SLOW => 0.50f;
+        protected override int HIT_INTERVAL => 16;
+        protected override int PRECISE_CD => 5;
+        protected override int TRAP_SPAWN_TICKS => 120;
+        protected override int TRAP_BASE_TICKS => 900;
+        protected override int TRAP_MAX_TICKS => 1500;
+        // Trap
+        protected override int MaxFloorCeilingTraps => 12;
+
+        protected override bool IsAreaAbilityActive(MyPlayer mPlayer) =>
+            mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto || maelActive;
+
+        private const int BARRIER_DURATION = 900;
+        private const int BARRIER_CD_SECS = 20;
+        private bool barrierActive = false;
+        private int barrierTimer = 0;
+        private int barrierProjIdx = -1;
+
+        private const float MAEL_W = 340f;
+        private const float MAEL_DOWN = 480f;
+        private const float MAEL_UP = 500f;
+        private const int MAEL_DURATION = 600;
+        private const int MAEL_DRAIN_SECS = 5;
+        private const int MAEL_HIT_INTERVAL = 14;
+        private const float MAEL_SLOW = 0.20f;
+
+        private bool maelActive = false;
+        private int maelTimer = 0;
+        private int maelVisTimer = 0;
+        private int[] maelNpcTimers = new int[Main.maxNPCs];
+        private bool[] maelNpcWas = new bool[Main.maxNPCs];
+        private int ctrlDropActive = 0;
+        private int maelTrapFormTimer = 0;
+
+        private bool InMaelDome(Vector2 pos)
+        {
+            float dx = Math.Abs(pos.X - Projectile.Center.X);
+            float dy = pos.Y - Projectile.Center.Y;
+            if (dy <= 0) { float nx = dx / MAEL_W; float ny = (-dy) / MAEL_UP; return nx * nx + ny * ny < 1f; }
+            return dx < MAEL_W && dy < MAEL_DOWN;
+        }
+
+        private bool IsSolidF(int tx, int ty) { if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return false; var t = Main.tile[tx, ty]; return t.HasTile && (Main.tileSolid[t.TileType] || TileID.Sets.Platforms[t.TileType]); }
+        private bool IsPlatformF(int tx, int ty) { if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return false; var t = Main.tile[tx, ty]; return t.HasTile && TileID.Sets.Platforms[t.TileType]; }
+        private bool IsAirF(int tx, int ty) { if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return true; var t = Main.tile[tx, ty]; return !t.HasTile || (!Main.tileSolid[t.TileType] && !TileID.Sets.Platforms[t.TileType]); }
+        private bool HasWallF(int tx, int ty) { if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) return false; return Main.tile[tx, ty].WallType > 0; }
+
+        // Maelstrom
+        private List<TrapSurface> ScanMaelSurfaces(Vector2 playerCenter)
+        {
+            var floors = new List<TrapSurface>();
+            var ceilings = new List<TrapSurface>();
+            var backWalls = new List<TrapSurface>();
+            int cx = (int)(Projectile.Center.X / 16f), cy = (int)(Projectile.Center.Y / 16f);
+            int rX = (int)(MAEL_W / 16f) + 2, rDown = (int)(MAEL_DOWN / 16f) + 2, rUp = (int)(MAEL_UP / 16f) + 2;
+            int playerTileY = (int)(playerCenter.Y / 16f);
+            for (int tx = cx - rX; tx <= cx + rX; tx++)
+            {
+                for (int ty = cy - rUp; ty <= cy + rDown; ty++)
+                {
+                    if (tx < 0 || tx >= Main.maxTilesX || ty < 0 || ty >= Main.maxTilesY) continue;
+                    if (!InMaelDome(new Vector2(tx * 16f + 8f, ty * 16f + 8f))) continue;
+                    bool solid = IsSolidF(tx, ty);
+                    if (solid)
+                    {
+                        if (ty >= playerTileY && IsAirF(tx, ty - 1))
+                            floors.Add(new TrapSurface { WorldPos = new Vector2(tx * 16f + 8f, ty * 16f), Type = SurfaceType.Floor, DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE) });
+                        else if (ty < playerTileY && IsAirF(tx, ty + 1))
+                        {
+                            bool isPlatformTile = IsPlatformF(tx, ty);
+                            float ceilBottomY = isPlatformTile ? ty * 16f + 8f + 1f : ty * 16f + 16f + 1f;
+                            int landY = FindDripLandY(new Vector2(tx * 16f + 8f, ceilBottomY));
+                            ceilings.Add(new TrapSurface { WorldPos = new Vector2(tx * 16f + 8f, ceilBottomY), Type = SurfaceType.Ceiling, DripLandY = landY, DripLandFound = true, DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE) });
+                        }
+                    }
+                    else if (!solid && HasWallF(tx, ty))
+                    {
+                        int landY = FindDripLandY(new Vector2(tx * 16f + 8f, ty * 16f + 16f));
+                        backWalls.Add(new TrapSurface { WorldPos = new Vector2(tx * 16f + 8f, ty * 16f + 8f), Type = SurfaceType.BackWall, DripTimerOffset = Main.rand.Next(0, TRAP_CYCLE), DripLandY = landY, DripLandFound = true });
+                    }
+                }
+            }
+
+            var picked = SelectFloorCeilingMix(floors, ceilings, MaxFloorCeilingTraps);
+
+            var output = new List<TrapSurface>(picked.Count + backWalls.Count);
+            output.AddRange(picked);
+            output.AddRange(backWalls);
+            return output;
+        }
+
+        public override void AI()
+        {
+            SelectAnimation();
+            UpdateStandInfo();
+            UpdateStandSync();
+            if (shootCount > 0)
+                shootCount--;
+
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (mPlayer.standOut) Projectile.timeLeft = 2;
+
+            SnapAbovePlayer(player);
+            ApplyStuns();
+            UpdateTraps(mPlayer, player);
+            CheckTrapTriggers(mPlayer);
+
+            bool hasDrain = player.HasBuff(ModContent.BuffType<MaelstromDrain>());
+            // Rain Barrier
+            bool hasBarrierCD = player.HasBuff(ModContent.BuffType<AbilityCooldown>());
+            bool hasMaelCD = hasBarrierCD;
+
+            if (barrierActive)
+            {
+                barrierTimer++;
+                int bRemaining = BARRIER_DURATION - barrierTimer + 1;
+                if (bRemaining > 0) player.AddBuff(ModContent.BuffType<RainBarrierActive>(), bRemaining);
+                if (barrierTimer >= BARRIER_DURATION)
+                {
+                    barrierActive = false; barrierTimer = 0;
+                    if (barrierProjIdx >= 0 && barrierProjIdx < Main.maxProjectiles) Main.projectile[barrierProjIdx].Kill();
+                    barrierProjIdx = -1;
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+                    Projectile.netUpdate = true;
+                }
+            }
+
+            if (maelActive)
+            {
+                maelTimer++;
+                MaelstromVisuals();
+                MaelstromDamage(mPlayer, player);
+                MaelstromTraps(player);
+                int mRemaining = MAEL_DURATION - maelTimer + 1;
+                if (mRemaining > 0) player.AddBuff(ModContent.BuffType<MaelstromActive>(), mRemaining);
+                if (maelTimer >= MAEL_DURATION)
+                {
+                    maelActive = false; maelTimer = 0;
+                    for (int i = 0; i < maelNpcTimers.Length; i++) { maelNpcTimers[i] = 0; maelNpcWas[i] = false; }
+                    player.AddBuff(ModContent.BuffType<MaelstromDrain>(), MAEL_DRAIN_SECS * 60);
+                    player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+                    Projectile.netUpdate = true;
+                }
+            }
+
+            bool canUseRain = !hasDrain && !maelActive;
+
+            if (mPlayer.standControlStyle == MyPlayer.StandControlStyle.Auto)
+            {
+                if (canUseRain)
+                {
+                    currentAnimationState = AnimationState.Idle;
+                    RainVisuals(RAIN_W, RAIN_DOWN, RAIN_UP, player.Center);
+                    AreaDamage(mPlayer, player, RAIN_W, RAIN_DOWN, RAIN_UP, HIT_INTERVAL, RAIN_SLOW, player.Center);
+                    BuildTraps(player);
+                }
+                else currentAnimationState = AnimationState.Idle;
+            }
+            else
+            {
+                if (Projectile.owner == Main.myPlayer)
+                {
+                    if (PlayerLeftClick() && shootCount <= 0)
+                    {
+                        currentAnimationState = AnimationState.Idle;
+                        FireThreeStreams(mPlayer);
+                        shootCount += newShootTime;
+                    }
+                    else currentAnimationState = AnimationState.Idle;
+
+                    if (Main.mouseRight && ctrlDropActive == 0 && canUseRain) { FireControllableDrop(mPlayer); ctrlDropActive = 1; }
+                    if (!Main.mouseRight) ctrlDropActive = 0;
+
+                    if (SpecialKeyPressed() && !barrierActive && !hasBarrierCD && !maelActive)
+                    {
+                        barrierActive = true; barrierTimer = 0;
+                        barrierProjIdx = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
+                            ModContent.ProjectileType<RainBarrier>(), newProjectileDamage * 2, 0f, Main.myPlayer, Projectile.whoAmI);
+                        Main.projectile[barrierProjIdx].netUpdate = true; Projectile.netUpdate = true;
+                    }
+
+                    if (SecondSpecialKeyPressed() && !maelActive && !hasMaelCD && !hasDrain && !barrierActive)
+                    { maelActive = true; maelTimer = 0; maelTrapFormTimer = 0; Projectile.netUpdate = true; }
+                }
+            }
+
+            if (mPlayer.posing) currentAnimationState = AnimationState.Pose;
+        }
+
+        private void MaelstromTraps(Player player)
+        {
+            if (Projectile.owner != Main.myPlayer || ActiveTraps.Count >= MAX_TRAP_AREAS) return;
+            maelTrapFormTimer++;
+            if (maelTrapFormTimer < TRAP_SPAWN_TICKS) return;
+            maelTrapFormTimer = 0;
+            var surfaces = ScanMaelSurfaces(player.Center);
+            if (surfaces.Count == 0) return;
+            ActiveTraps.Add(new TrapArea { Center = Projectile.Center, DurationTicks = TRAP_BASE_TICKS, BaseDuration = TRAP_BASE_TICKS, MaxDuration = TRAP_MAX_TICKS, Surfaces = surfaces, PlayerNearby = true });
+            Projectile.netUpdate = true;
+        }
+
+        private void MaelstromVisuals()
+        {
+            maelVisTimer++;
+            if (maelVisTimer < 1) return;
+            maelVisTimer = 0;
+            Vector2 c = Projectile.Center;
+            for (int i = 0; i < 10; i++) { float a = Main.rand.NextFloat(MathHelper.Pi, MathHelper.TwoPi); float r = Main.rand.NextFloat(0f, 1.0f); int d = Dust.NewDust(new Vector2(c.X + (float)Math.Cos(a) * MAEL_W * r, c.Y + (float)Math.Sin(a) * MAEL_UP * r), 5, 20, DustID.Water, Main.rand.NextFloat(-0.4f, 0.4f), Main.rand.NextFloat(14f, 22f), 80, default, Main.rand.NextFloat(1.0f, 1.5f)); Main.dust[d].noGravity = true; }
+            for (int i = 0; i < 9; i++) { int d = Dust.NewDust(new Vector2(c.X + Main.rand.NextFloat(-MAEL_W, MAEL_W), c.Y + Main.rand.NextFloat(0f, MAEL_DOWN)), 5, 20, DustID.Water, Main.rand.NextFloat(-0.3f, 0.3f), Main.rand.NextFloat(14f, 22f), 80, default, Main.rand.NextFloat(1.0f, 1.5f)); Main.dust[d].noGravity = true; }
+            for (int i = 0; i < 4; i++) { int d = Dust.NewDust(new Vector2(c.X + Main.rand.NextFloat(-MAEL_W * 0.4f, MAEL_W * 0.4f), c.Y + Main.rand.NextFloat(-MAEL_UP * 0.3f, MAEL_DOWN * 0.3f)), 5, 20, DustID.Water, Main.rand.NextFloat(-0.3f, 0.3f), Main.rand.NextFloat(14f, 22f), 80, default, Main.rand.NextFloat(1.0f, 1.5f)); Main.dust[d].noGravity = true; }
+            Lighting.AddLight(Projectile.Center, 0.1f, 0.25f, 0.5f);
+        }
+
+        private void MaelstromDamage(MyPlayer mPlayer, Player player)
+        {
+            if (Projectile.owner != Main.myPlayer) return;
+            int interval = Math.Max(MAEL_HIT_INTERVAL - mPlayer.standSpeedBoosts, 4);
+            int dmgBase = (int)(newProjectileDamage * 1.35f);
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                NPC npc = Main.npc[i];
+                if (!npc.active || npc.friendly || npc.dontTakeDamage) { maelNpcTimers[i] = 0; maelNpcWas[i] = false; continue; }
+                if (InMaelDome(npc.Center))
+                {
+                    if (!maelNpcWas[i]) { maelNpcWas[i] = true; maelNpcTimers[i] = interval - 1; if (!npc.boss && !npc.immortal) npc.velocity *= MAEL_SLOW; }
+                    maelNpcTimers[i]++;
+                    if (maelNpcTimers[i] >= interval)
+                    {
+                        maelNpcTimers[i] = 0;
+                        if (!npc.boss && !npc.immortal) npc.velocity *= MAEL_SLOW;
+                        bool crit = Main.rand.Next(100) < player.GetTotalCritChance<MeleeDamageClass>();
+                        player.ApplyDamageToNPC(npc, dmgBase, 1.2f, Projectile.direction, crit, DamageClass.Generic);
+                        if (!npc.immortal) npc.velocity += new Vector2(Projectile.direction * 0.8f, 0.4f);
+                        for (int d = 0; d < 5; d++) Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, Main.rand.NextFloat(-3f, 3f), -2f, 0, default, 1.1f);
+                        Projectile.netUpdate = true;
+                    }
+                }
+                else { maelNpcTimers[i] = 0; maelNpcWas[i] = false; }
+            }
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            Player player = Main.player[Projectile.owner];
+            MyPlayer mPlayer = player.GetModPlayer<MyPlayer>();
+
+            if (barrierActive)
+            {
+                if (barrierProjIdx >= 0 && barrierProjIdx < Main.maxProjectiles)
+                    Main.projectile[barrierProjIdx].Kill();
+                barrierActive = false; barrierTimer = 0;
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+            }
+
+            if (maelActive)
+            {
+                maelActive = false; maelTimer = 0;
+                player.AddBuff(ModContent.BuffType<MaelstromDrain>(), MAEL_DRAIN_SECS * 60);
+                player.AddBuff(ModContent.BuffType<AbilityCooldown>(), mPlayer.AbilityCooldownTime(BARRIER_CD_SECS));
+            }
+        }
+    }
+}
