@@ -9,7 +9,7 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
     {
         public override string Texture => "JoJoStands/Projectiles/RainDrop";
 
-        private float SlowMultiplier => Projectile.ai[0]; // StandT'den geçirilir
+        private float SlowMultiplier => Projectile.ai[0];
 
         public override void SetDefaults()
         {
@@ -49,7 +49,6 @@ namespace JoJoStands.Projectiles.PlayerStands.NovemberRain
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            // Zemine çarptığında su sıçraması
             for (int i = 0; i < 3; i++)
             {
                 Dust.NewDust(
