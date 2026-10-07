@@ -65,7 +65,7 @@ namespace JoJoStands.Projectiles
                     bulletsCenturyBoy = true;
             if (projectile.type == ModContent.ProjectileType<Fists>() || projectile.type == ModContent.ProjectileType<PlayerStands.Cream.Void>() || projectile.type == ModContent.ProjectileType<PlayerStands.Cream.DashVoid>() || projectile.type == ModContent.ProjectileType<StarFinger>() || projectile.type == ModContent.ProjectileType<HermitPurpleGrab>() || projectile.type == ModContent.ProjectileType<HermitPurpleHook>() || projectile.type == ModContent.ProjectileType<RedBind>() || projectile.type == ModContent.ProjectileType<BindingEmeraldString>() || projectile.type == ModContent.ProjectileType<StickyFingersFistExtended>() || projectile.type == ModContent.ProjectileType<StoneFreeBindString>() || projectile.type == ModContent.ProjectileType<PhantomMarker>())
                 exceptionForSCParry = true;
-            for (int i = 0; i < JoJoStands.standProjectileList.Count - 1; i++)
+            for (int i = 0; i < JoJoStands.standProjectileList.Count; i++)
             {
                 if (JoJoStands.standProjectileList[i] == projectile.type || kickedByStarPlatinum || kickedBySexPistols || bulletsCenturyBoy)
                 {

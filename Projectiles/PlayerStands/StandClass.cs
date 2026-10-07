@@ -156,7 +156,8 @@ namespace JoJoStands.Projectiles.PlayerStands
             Attack,
             SecondaryAbility,
             Special,
-            Pose
+            Pose,
+            Summon
         }
 
         public struct PunchFrame
