@@ -34,20 +34,11 @@ namespace JoJoStands
         private static MethodInfo _anyActiveMethod = null;
         private static bool _subworldLibChecked = false;
 
-        public override void OnWorldLoad()
-        {
-            ResetWorldDependentVariables();
-        }
+        public override void OnWorldLoad() => ResetWorldDependentVariables();
 
-        public override void ClearWorld()
-        {
-            ResetWorldDependentVariables();
-        }
+        public override void ClearWorld() => ResetWorldDependentVariables();
 
-        public override void OnWorldUnload()
-        {
-            ResetWorldDependentVariables();
-        }
+        public override void OnWorldUnload() => ResetWorldDependentVariables();
 
         private void ResetWorldDependentVariables()
         {

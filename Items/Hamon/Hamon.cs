@@ -36,12 +36,12 @@ namespace JoJoStands.Items.Hamon
 
         public override void HoldItem(Player player)
         {
-            HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
-            hamonPlayer.learnedHamon = true;
-            UI.HamonBar.ShowHamonBar();
-            ChargeHamon();
             if (player.whoAmI == Main.myPlayer)
             {
+                HamonPlayer hamonPlayer = player.GetModPlayer<HamonPlayer>();
+                hamonPlayer.learnedHamon = true;
+                UI.HamonBar.ShowHamonBar();
+                ChargeHamon();
                 if (hamonPlayer.amountOfHamon < 5)
                     return;
 
